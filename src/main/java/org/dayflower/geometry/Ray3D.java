@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -159,7 +162,39 @@ public final class Ray3D implements Node {
 		return Objects.hash(this.origin, this.direction);
 	}
 	
+	/**
+	 * Writes this {@code Ray3D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		this.origin.write(dataOutput);
+		this.direction.write(dataOutput);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code Ray3D} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code Ray3D} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static Ray3D read(final DataInput dataInput) {
+		return new Ray3D(Point3D.read(dataInput), Vector3D.read(dataInput));
+	}
 	
 	/**
 	 * Transforms the {@code Ray3D} {@code rayRHS} with the {@link Matrix44D} {@code matrixLHS}.

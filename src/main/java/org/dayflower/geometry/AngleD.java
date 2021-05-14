@@ -30,6 +30,10 @@ import static org.dayflower.utility.Doubles.toDegrees;
 import static org.dayflower.utility.Doubles.toRadians;
 import static org.dayflower.utility.Doubles.wrapAround;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 /**
@@ -173,6 +177,30 @@ public final class AngleD {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.degrees), Double.valueOf(this.degreesMaximum), Double.valueOf(this.degreesMinimum), Double.valueOf(this.radians), Double.valueOf(this.radiansMaximum), Double.valueOf(this.radiansMinimum));
+	}
+	
+	/**
+	 * Writes this {@code AngleD} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeDouble(this.degrees);
+			dataOutput.writeDouble(this.degreesMinimum);
+			dataOutput.writeDouble(this.degreesMaximum);
+			dataOutput.writeDouble(this.radians);
+			dataOutput.writeDouble(this.radiansMinimum);
+			dataOutput.writeDouble(this.radiansMaximum);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -373,6 +401,33 @@ public final class AngleD {
 		final double newDegreesMaximum = toDegrees(newRadiansMaximum);
 		
 		return new AngleD(newDegrees, newDegreesMinimum, newDegreesMaximum, newRadians, newRadiansMinimum, newRadiansMaximum);
+	}
+	
+	/**
+	 * Returns a new {@code AngleD} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code AngleD} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static AngleD read(final DataInput dataInput) {
+		try {
+			final double degrees = dataInput.readDouble();
+			final double degreesMinimum = dataInput.readDouble();
+			final double degreesMaximum = dataInput.readDouble();
+			final double radians = dataInput.readDouble();
+			final double radiansMinimum = dataInput.readDouble();
+			final double radiansMaximum = dataInput.readDouble();
+			
+			return new AngleD(degrees, degreesMinimum, degreesMaximum, radians, radiansMinimum, radiansMaximum);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

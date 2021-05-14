@@ -30,6 +30,10 @@ import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.positiveModulo;
 import static org.dayflower.utility.Doubles.sin;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -203,6 +207,26 @@ public final class Point2D implements Node {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2));
+	}
+	
+	/**
+	 * Writes this {@code Point2D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeDouble(this.component1);
+			dataOutput.writeDouble(this.component2);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,6 +447,29 @@ public final class Point2D implements Node {
 		final double component2 = min(a.component2, b.component2, c.component2, d.component2);
 		
 		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2D} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code Point2D} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static Point2D read(final DataInput dataInput) {
+		try {
+			final double component1 = dataInput.readDouble();
+			final double component2 = dataInput.readDouble();
+			
+			return new Point2D(component1, component2);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

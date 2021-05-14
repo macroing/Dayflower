@@ -34,6 +34,18 @@ import org.dayflower.node.NodeTraversalException;
  * @author J&#246;rgen Lundgren
  */
 public final class Triangle2D implements Shape2D {
+	/**
+	 * The name of this {@code Triangle2D} class.
+	 */
+	public static final String NAME = "Triangle";
+	
+	/**
+	 * The ID of this {@code Triangle2D} class.
+	 */
+	public static final int ID = 4;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Point2D a;
 	private final Point2D b;
 	private final Point2D c;
@@ -83,6 +95,16 @@ public final class Triangle2D implements Shape2D {
 	 */
 	public Point2D getC() {
 		return this.c;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Triangle2D} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Triangle2D} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**
@@ -164,6 +186,16 @@ public final class Triangle2D implements Shape2D {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Triangle2D} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Triangle2D} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

@@ -36,6 +36,18 @@ import org.dayflower.node.NodeTraversalException;
  * @author J&#246;rgen Lundgren
  */
 public final class Line2I implements Shape2I {
+	/**
+	 * The name of this {@code Line2I} class.
+	 */
+	public static final String NAME = "Line";
+	
+	/**
+	 * The ID of this {@code Line2I} class.
+	 */
+	public static final int ID = 2;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Point2I a;
 	private final Point2I b;
 	
@@ -73,6 +85,16 @@ public final class Line2I implements Shape2I {
 	 */
 	public Point2I getB() {
 		return this.b;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Line2I} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Line2I} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**
@@ -181,6 +203,16 @@ public final class Line2I implements Shape2I {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Line2I} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Line2I} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

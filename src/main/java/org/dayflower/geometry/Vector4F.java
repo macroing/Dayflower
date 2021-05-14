@@ -21,6 +21,10 @@ package org.dayflower.geometry;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.sqrt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -260,6 +264,28 @@ public final class Vector4F implements Node {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3), Float.valueOf(this.component4));
 	}
 	
+	/**
+	 * Writes this {@code Vector4F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeFloat(this.component1);
+			dataOutput.writeFloat(this.component2);
+			dataOutput.writeFloat(this.component3);
+			dataOutput.writeFloat(this.component4);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -364,6 +390,31 @@ public final class Vector4F implements Node {
 	 */
 	public static Vector4F normalize(final Vector4F vector) {
 		return divide(vector, vector.length());
+	}
+	
+	/**
+	 * Returns a new {@code Vector4F} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code Vector4F} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static Vector4F read(final DataInput dataInput) {
+		try {
+			final float component1 = dataInput.readFloat();
+			final float component2 = dataInput.readFloat();
+			final float component3 = dataInput.readFloat();
+			final float component4 = dataInput.readFloat();
+			
+			return new Vector4F(component1, component2, component3, component4);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

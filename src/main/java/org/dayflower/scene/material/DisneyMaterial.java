@@ -2188,7 +2188,7 @@ public final class DisneyMaterial implements Material {
 		 * @param isThin {@code true} if, and only if, the {@link DisneyMaterial} instance should be thin, {@code false} otherwise
 		 * @return this {@code Builder} instance
 		 */
-		public Builder setThis(final boolean isThin) {
+		public Builder setThin(final boolean isThin) {
 			this.isThin = isThin;
 			
 			return this;

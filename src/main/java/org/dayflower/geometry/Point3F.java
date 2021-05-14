@@ -27,6 +27,10 @@ import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.nextDownPBRT;
 import static org.dayflower.utility.Floats.nextUpPBRT;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -307,6 +311,27 @@ public final class Point3F implements Node {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
+	}
+	
+	/**
+	 * Writes this {@code Point3F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeFloat(this.component1);
+			dataOutput.writeFloat(this.component2);
+			dataOutput.writeFloat(this.component3);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -632,6 +657,30 @@ public final class Point3F implements Node {
 		final float component3 = offset.getComponent3() > 0.0F ? nextUpPBRT(pointOffset.component3) : nextDownPBRT(pointOffset.component3);
 		
 		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Point3F} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code Point3F} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static Point3F read(final DataInput dataInput) {
+		try {
+			final float component1 = dataInput.readFloat();
+			final float component2 = dataInput.readFloat();
+			final float component3 = dataInput.readFloat();
+			
+			return new Point3F(component1, component2, component3);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

@@ -40,6 +40,18 @@ import org.dayflower.node.NodeTraversalException;
  * @author J&#246;rgen Lundgren
  */
 public final class Rectangle2D implements Shape2D {
+	/**
+	 * The name of this {@code Rectangle2D} class.
+	 */
+	public static final String NAME = "Rectangle";
+	
+	/**
+	 * The ID of this {@code Rectangle2D} class.
+	 */
+	public static final int ID = 3;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Point2D a;
 	private final Point2D b;
 	private final Point2D c;
@@ -108,6 +120,16 @@ public final class Rectangle2D implements Shape2D {
 	 */
 	public Point2D getD() {
 		return this.d;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Rectangle2D} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Rectangle2D} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**
@@ -226,6 +248,16 @@ public final class Rectangle2D implements Shape2D {
 	 */
 	public double getWidth() {
 		return this.c.getX() - this.a.getX();
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Rectangle2D} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Rectangle2D} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

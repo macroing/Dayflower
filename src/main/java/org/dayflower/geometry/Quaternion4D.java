@@ -25,6 +25,10 @@ import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.sqrt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -248,6 +252,28 @@ public final class Quaternion4D implements Node {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3), Double.valueOf(this.component4));
+	}
+	
+	/**
+	 * Writes this {@code Quaternion4D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeDouble(this.component1);
+			dataOutput.writeDouble(this.component2);
+			dataOutput.writeDouble(this.component3);
+			dataOutput.writeDouble(this.component4);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -669,6 +695,31 @@ public final class Quaternion4D implements Node {
 	 */
 	public static Quaternion4D normalize(final Quaternion4D quaternion) {
 		return divide(quaternion, quaternion.length());
+	}
+	
+	/**
+	 * Returns a new {@code Quaternion4D} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code Quaternion4D} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static Quaternion4D read(final DataInput dataInput) {
+		try {
+			final double component1 = dataInput.readDouble();
+			final double component2 = dataInput.readDouble();
+			final double component3 = dataInput.readDouble();
+			final double component4 = dataInput.readDouble();
+			
+			return new Quaternion4D(component1, component2, component3, component4);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

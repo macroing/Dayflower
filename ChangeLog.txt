@@ -1,3 +1,17 @@
+2021-05-14	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method write(DataOutput) to the classes Circle2D, Circle2F and Circle2I.
+	* ADD:		Add the classes Circle2DReader, Circle2FReader and Circle2IReader.
+	* ADD:		Add the interfaces BoundingVolume3DReader, BoundingVolume3FReader, Shape2DReader, Shape2FReader, Shape2IReader, Shape3DReader and Shape3FReader.
+	* ADD:		Add the methods getName() and getID() to the classes Circle2D, Circle2F, Circle2I, Line2D, Line2F, Line2I, Rectangle2D, Rectangle2F, Rectangle2I, Triangle2D, Triangle2F and Triangle2I.
+	* ADD:		Add the methods getName() and getID() to the interfaces Shape2D, Shape2F and Shape2I.
+	* ADD:		Add an inner class called Builder to the GlassMaterial class.
+	* ADD:		Add an inner class called Builder to the GlossyMaterial class.
+	* ADD:		Add the methods read(DataInput) and write(DataOutput) to the classes Color3D, Color3F, Color4D and Color4F.
+	* ADD:		Add the methods read(DataInput) and write(DataOutput) to the classes AngleD, AngleF, Matrix33D, Matrix33F, Matrix44D, Matrix44F, OrthonormalBasis33D, OrthonormalBasis33F, Point2D, Point2F, Point2I, Point3D, Point3F, Point4D, Point4F, Quaternion4D, Quaternion4F, Ray2D, Ray2F, Ray3D, Ray3F, Vector2D, Vector2F, Vector2I, Vector3D, Vector3F, Vector4D and Vector4F.
+	* ADD:		Add the methods createClearCoatMaterialScene(), createCone3FScene(), createConstructiveSolidGeometry3FScene(), createCylinder3FScene(), createDisk3FScene(), createDisneyMaterialScene(), createGlassMaterialScene() and createGlossyMaterialScene() to the Demo class.
+	* CHANGE:	Change the name of the method setThis(boolean) to setThin(boolean) in the class DisneyMaterial.Builder. It was not correctly spelled.
+
 2021-05-13	Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a class called Ray2D.
@@ -15,5 +29,99 @@
 	* CHANGE:	Change the use of Double.MIN_VALUE to Doubles.MIN_VALUE.
 	* CHANGE:	Change the use of Float.MAX_VALUE to Floats.MAX_VALUE.
 	* CHANGE:	Change the use of Float.MIN_VALUE to Floats.MIN_VALUE.
-	* CHANGE:	Change Doubles.MIN_VALUE from Double.MIN_VALUE to -Double.MAX_VALUE.
-	* CHANGE:	Change Floats.MIN_VALUE from Float.MIN_VALUE to -Float.MAX_VALUE.
+	* CHANGE:	Change the value of Doubles.MIN_VALUE from Double.MIN_VALUE to -Double.MAX_VALUE.
+	* CHANGE:	Change the value of Floats.MIN_VALUE from Float.MIN_VALUE to -Float.MAX_VALUE.
+
+2021-05-09	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Refactor the return type of many methods in ImageD from void to ImageD, such that method chaining can be performed.
+	* CHANGE:	Refactor the return type of many methods in ImageF from void to ImageF, such that method chaining can be performed.
+	* CHANGE:	Refactor the return type of many methods in ByteImageD from void to ByteImageD, such that method chaining can be performed.
+	* CHANGE:	Refactor the return type of many methods in ByteImageF from void to ByteImageF, such that method chaining can be performed.
+	* CHANGE:	Refactor the return type of many methods in IntImageD from void to IntImageD, such that method chaining can be performed.
+	* CHANGE:	Refactor the return type of many methods in IntImageF from void to IntImageF, such that method chaining can be performed.
+	* CHANGE:	Refactor the return type of many methods in PixelImageD from void to PixelImageD, such that method chaining can be performed.
+	* CHANGE:	Refactor the return type of many methods in PixelImageF from void to PixelImageF, such that method chaining can be performed.
+
+2021-05-08	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a constant called TRANSPARENT to the Color4D class.
+	* ADD:		Add a constant called TRANSPARENT to the Color4F class.
+	* ADD:		Add the methods transform(Matrix33D, Point2D) and transformAndDivide(Matrix33D, Point2D) to the Point2D class.
+	* ADD:		Add the methods transform(Matrix33F, Point2F) and transformAndDivide(Matrix33F, Point2F) to the Point2F class.
+	* ADD:		Add the methods transform(Matrix33D, Vector2D) and transformTranspose(Matrix33D, Vector2D) to the Vector2D class.
+	* ADD:		Add the methods transform(Matrix33F, Vector2F) and transformTranspose(Matrix33F, Vector2F) to the Vector2F class.
+	* ADD:		Add the method getColorRGBA(int, int, Function<Point2I, Color4D>) to the ImageD, ByteImageD, IntImageD and PixelImageD classes.
+	* ADD:		Add the method getColorRGBA(int, int, Function<Point2I, Color4F>) to the ImageF, ByteImageF, IntImageF and PixelImageF classes.
+	* ADD:		Add the methods getColorRGBA(Point2D), getColorRGBA(Point2D, PixelOperation), getColorRGBA(Point2D, Function<Point2I, Color4D>) and getColorRGBA(double, double, Function<Point2I, Color4D>) to the ImageD class.
+	* ADD:		Add the methods getColorRGBA(Point2F), getColorRGBA(Point2F, PixelOperation), getColorRGBA(Point2F, Function<Point2I, Color4F>) and getColorRGBA(float, float, Function<Point2I, Color4F>) to the ImageF class.
+	* ADD:		Add a new rotate(AngleD, boolean) method to the ImageD class. The boolean parameter argument, called isWrappingAround, allows for wrapping using PixelOperation.WRAP_AROUND.
+	* ADD:		Add a new rotate(AngleF, boolean) method to the ImageF class. The boolean parameter argument, called isWrappingAround, allows for wrapping using PixelOperation.WRAP_AROUND.
+	* ADD:		Add a class called Matrix33D.
+	* ADD:		Add a class called Matrix33F.
+
+2021-05-07	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method negate(AngleD) to the AngleD class.
+	* ADD:		Add the method negate(AngleF) to the AngleF class.
+	* ADD:		Add the methods add(Point2D, Vector2D), maximum(Point2D, Point2D, Point2D, Point2D) and minimum(Point2D, Point2D, Point2D, Point2D) to the Point2D class.
+	* ADD:		Add the methods add(Point2F, Vector2F), maximum(Point2F, Point2F, Point2F, Point2F) and minimum(Point2F, Point2F, Point2F, Point2F) to the Point2F class.
+	* ADD:		Add the methods rotate(Rectangle2D, AngleD) and translate(Rectangle2D, Vector2D) to the Rectangle2D class.
+	* ADD:		Add the methods rotate(Rectangle2F, AngleF) and translate(Rectangle2F, Vector2F) to the Rectangle2F class.
+	* ADD:		Add the method newImage(int, int) to the ImageD, ByteImageD, IntImageD and PixelImageD classes.
+	* ADD:		Add the method newImage(int, int) to the ImageF, ByteImageF, IntImageF and PixelImageF classes.
+	* ADD:		Add the methods rotate(AngleD), scale(Vector2D) and scale(int, int) to the ImageD class.
+	* ADD:		Add the methods rotate(AngleF), scale(Vector2F) and scale(int, int) to the ImageF class.
+	* ADD:		Add the methods requireRange(double, double, double, String) and requireRange(float, float, float, String) to the ParameterArguments class.
+
+2021-05-06	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method contains(Point2D) to the Line2D class.
+	* ADD:		Add the method contains(Point2F) to the Line2F class.
+	* ADD:		Add the method contains(Point2I) to the Line2I class.
+	* ADD:		Add the methods contains(Point2D), intersection(Rectangle2D, Rectangle2D) and union(Rectangle2D, Rectangle2D) to the Rectangle2D class.
+	* ADD:		Add the methods contains(Point2F), intersection(Rectangle2F, Rectangle2F) and union(Rectangle2F, Rectangle2F) to the Rectangle2F class.
+	* ADD:		Add the methods contains(Point2I) and union(Rectangle2I, Rectangle2I) to the Rectangle2I class.
+	* ADD:		Add the methods fillSimplexFractionalBrownianMotion(), fillSimplexFractionalBrownianMotion(Color3D) and fillSimplexFractionalBrownianMotion(Color3D, double, double, int) to the ImageD class.
+	* ADD:		Add the methods fillSimplexFractionalBrownianMotion(), fillSimplexFractionalBrownianMotion(Color3F) and fillSimplexFractionalBrownianMotion(Color3F, float, float, int) to the ImageF class.
+
+2021-05-05	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods maximum(Point2I, Point2I) and minimum(Point2I, Point2I) to the Point2I class.
+	* ADD:		Add the method intersection(Rectangle2I, Rectangle2I) to the Rectangle2I class.
+	* ADD:		Add the method copy(Rectangle2I) to the ImageD, ImageF, ByteImageD, ByteImageF, IntImageD, IntImageF, PixelImageD and PixelImageF classes.
+	* CHANGE:	Change the algorithm for the methods getHeight() and getWidth() in the Rectangle2D, Rectangle2F and Rectangle2I classes.
+
+2021-05-04	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods fillGradient() and fillGradient(Color3D, Color3D, Color3D, Color3D) to the ImageD class.
+	* ADD:		Add the methods fillGradient() and fillGradient(Color3F, Color3F, Color3F, Color3F) to the ImageF class.
+	* ADD:		Add the constructors Color4D(Color3D, double), Color4D(Color3D, double) and Color4D(double, double) to the Color4D class.
+	* ADD:		Add the constructors Color4F(Color3D, float), Color4F(Color3F, float) and Color4F(float, float) to the Color4F class.
+	* ADD:		Add the methods blendOver(Color4D, Color4D), grayscaleAverage(Color4D), grayscaleComponent1(Color4D), grayscaleComponent2(Color4D), grayscaleComponent3(Color4D), grayscaleLightness(Color4D), grayscaleLuminance(Color4D), grayscaleMaximum(Color4D), grayscaleMinimum(Color4D) and sepia(Color4D) to the Color4D class.
+	* ADD:		Add the methods blendOver(Color4F, Color4F), grayscaleAverage(Color4F), grayscaleComponent1(Color4F), grayscaleComponent2(Color4F), grayscaleComponent3(Color4F), grayscaleLightness(Color4F), grayscaleLuminance(Color4F), grayscaleMaximum(Color4F), grayscaleMinimum(Color4F) and sepia(Color4F) to the Color4F class.
+	* ADD:		Add the methods blendOver(ImageD), grayscaleAverage(), grayscaleComponent1(), grayscaleComponent2(), grayscaleComponent3(), grayscaleLightness(), grayscaleLuminance(), grayscaleMaximum(), grayscaleMinimum(), sepia() and transparency(double) to the ImageD class.
+	* ADD:		Add the methods blendOver(ImageF), grayscaleAverage(), grayscaleComponent1(), grayscaleComponent2(), grayscaleComponent3(), grayscaleLightness(), grayscaleLuminance(), grayscaleMaximum(), grayscaleMinimum(), sepia() and transparency(float) to the ImageF class.
+
+2021-05-03	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods update(BiFunction<Color4D, Point2I, Color4D>) and update(BiFunction<Color4D, Point2I, Color4D>, Rectangle2I) to the ImageD class.
+	* ADD:		Add the methods update(BiFunction<Color4F, Point2I, Color4F>) and update(BiFunction<Color4F, Point2I, Color4F>, Rectangle2I) to the ImageF class.
+	* ADD:		Add the constructor IntImageD(BufferedImage) to the IntImageD class.
+	* ADD:		Add the constructor IntImageF(BufferedImage) to the IntImageF class.
+	* ADD:		Add the methods load(File) and load(String) to the IntImageD class.
+	* ADD:		Add the methods load(File) and load(String) to the IntImageF class.
+
+2021-04-25	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods addAndMultiply(Color3D, Color3D, Color3D) and addAndMultiply(Color3D, Color3D, Color3D, double) to the Color3D class.
+	* ADD:		Add the methods addAndMultiply(Color3F, Color3F, Color3F) and addAndMultiply(Color3F, Color3F, Color3F, float) to the Color3F class.
+
+2021-04-18	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for changing the rendering algorithm in the AbstractGPURenderer and GPURenderer classes.
+
+2021-04-17	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add an inner class called Builder to the DisneyMaterial class.
+	* ADD:		Add an inner class called Builder to the ClearCoatMaterial class.

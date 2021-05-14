@@ -29,5 +29,17 @@ import org.dayflower.node.Node;
  * @author J&#246;rgen Lundgren
  */
 public interface Shape2I extends Node {
+	/**
+	 * Returns a {@code String} with the name of this {@code Shape2I} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Shape2I} instance
+	 */
+	String getName();
 	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Shape2I} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Shape2I} instance
+	 */
+	int getID();
 }

@@ -820,4 +820,308 @@ public final class GlassMaterial implements Material {
 		
 		return array;
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * A {@code Builder} is used to build {@link GlassMaterial} instances.
+	 * <p>
+	 * This class is mutable and not thread-safe.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
+	public static final class Builder {
+		private Modifier modifier;
+		private Texture textureEmission;
+		private Texture textureEta;
+		private Texture textureKR;
+		private Texture textureKT;
+		private Texture textureRoughnessU;
+		private Texture textureRoughnessV;
+		private boolean isRemappingRoughness;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Constructs a new {@code Builder} instance.
+		 */
+		public Builder() {
+			this(new GlassMaterial());
+		}
+		
+		/**
+		 * Constructs a new {@code Builder} instance given {@code glassMaterial}.
+		 * <p>
+		 * If {@code glassMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param glassMaterial a {@link GlassMaterial} instance
+		 * @throws NullPointerException thrown if, and only if, {@code glassMaterial} is {@code null}
+		 */
+		public Builder(final GlassMaterial glassMaterial) {
+			this.modifier = glassMaterial.getModifier();
+			this.textureEmission = glassMaterial.getTextureEmission();
+			this.textureEta = glassMaterial.getTextureEta();
+			this.textureKR = glassMaterial.getTextureKR();
+			this.textureKT = glassMaterial.getTextureKT();
+			this.textureRoughnessU = glassMaterial.getTextureRoughnessU();
+			this.textureRoughnessV = glassMaterial.getTextureRoughnessV();
+			this.isRemappingRoughness = glassMaterial.isRemappingRoughness();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Sets the {@link Modifier} instance.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code modifier} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param modifier the {@code Modifier} instance
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code modifier} is {@code null}
+		 */
+		public Builder setModifier(final Modifier modifier) {
+			this.modifier = Objects.requireNonNull(modifier, "modifier == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the roughness remapping state.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setRemappingRoughness(final boolean isRemappingRoughness) {
+			this.isRemappingRoughness = isRemappingRoughness;
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorEmission a {@link Color3F} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Color3F colorEmission) {
+			return setTextureEmission(new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureEmission the {@code Texture} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Texture textureEmission) {
+			this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the index of refraction (IOR).
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureEta} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureEta the {@code Texture} instance for the index of refraction (IOR)
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureEta} is {@code null}
+		 */
+		public Builder setTextureEta(final Texture textureEta) {
+			this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the index of refraction (IOR).
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatEta a {@code float} for the index of refraction (IOR)
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureEta(final float floatEta) {
+			return setTextureEta(new ConstantTexture(floatEta));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the reflection coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
+		 */
+		public Builder setTextureKR(final Color3F colorKR) {
+			return setTextureKR(new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the reflection coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureKR the {@code Texture} instance for the reflection coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
+		 */
+		public Builder setTextureKR(final Texture textureKR) {
+			this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the transmission coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorKT} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorKT a {@link Color3F} instance for the transmission coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorKT} is {@code null}
+		 */
+		public Builder setTextureKT(final Color3F colorKT) {
+			return setTextureKT(new ConstantTexture(Objects.requireNonNull(colorKT, "colorKT == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the transmission coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureKT} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureKT the {@code Texture} instance for the transmission coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureKT} is {@code null}
+		 */
+		public Builder setTextureKT(final Texture textureKT) {
+			this.textureKT = Objects.requireNonNull(textureKT, "textureKT == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the roughness along the U-axis and the V-axis.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureRoughness} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureRoughness the {@code Texture} instance for the roughness along the U-axis and the V-axis
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureRoughness} is {@code null}
+		 */
+		public Builder setTextureRoughness(final Texture textureRoughness) {
+			setTextureRoughnessU(textureRoughness);
+			setTextureRoughnessV(textureRoughness);
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the roughness along the U-axis and the V-axis.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatRoughness a {@code float} for the roughness along the U-axis and the V-axis
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureRoughness(final float floatRoughness) {
+			return setTextureRoughnessU(new ConstantTexture(floatRoughness));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the roughness along the U-axis.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureRoughnessU} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureRoughnessU the {@code Texture} instance for the roughness along the U-axis
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureRoughnessU} is {@code null}
+		 */
+		public Builder setTextureRoughnessU(final Texture textureRoughnessU) {
+			this.textureRoughnessU = Objects.requireNonNull(textureRoughnessU, "textureRoughnessU == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the roughness along the U-axis.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatRoughnessU a {@code float} for the roughness along the U-axis
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureRoughnessU(final float floatRoughnessU) {
+			return setTextureRoughnessU(new ConstantTexture(floatRoughnessU));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the roughness along the V-axis.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureRoughnessV} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureRoughnessV the {@code Texture} instance for the roughness along the V-axis
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureRoughnessV} is {@code null}
+		 */
+		public Builder setTextureRoughnessV(final Texture textureRoughnessV) {
+			this.textureRoughnessV = Objects.requireNonNull(textureRoughnessV, "textureRoughnessV == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the roughness along the V-axis.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatRoughnessV a {@code float} for the roughness along the V-axis
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureRoughnessV(final float floatRoughnessV) {
+			return setTextureRoughnessV(new ConstantTexture(floatRoughnessV));
+		}
+		
+		/**
+		 * Returns a new {@link GlassMaterial} instance.
+		 * 
+		 * @return a new {@code GlassMaterial} instance
+		 */
+		public GlassMaterial build() {
+			return new GlassMaterial(this.textureKR, this.textureKT, this.textureEmission, this.textureEta, this.textureRoughnessU, this.textureRoughnessV, this.isRemappingRoughness, this.modifier);
+		}
+	}
 }

@@ -23,6 +23,10 @@ import static org.dayflower.utility.Floats.cos;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.sin;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -557,6 +561,40 @@ public final class Matrix44F implements Node {
 		});
 	}
 	
+	/**
+	 * Writes this {@code Matrix44F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeFloat(this.element11);
+			dataOutput.writeFloat(this.element12);
+			dataOutput.writeFloat(this.element13);
+			dataOutput.writeFloat(this.element14);
+			dataOutput.writeFloat(this.element21);
+			dataOutput.writeFloat(this.element22);
+			dataOutput.writeFloat(this.element23);
+			dataOutput.writeFloat(this.element24);
+			dataOutput.writeFloat(this.element31);
+			dataOutput.writeFloat(this.element32);
+			dataOutput.writeFloat(this.element33);
+			dataOutput.writeFloat(this.element34);
+			dataOutput.writeFloat(this.element41);
+			dataOutput.writeFloat(this.element42);
+			dataOutput.writeFloat(this.element43);
+			dataOutput.writeFloat(this.element44);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -690,6 +728,43 @@ public final class Matrix44F implements Node {
 		final float element44 = matrixLHS.element41 * matrixRHS.element14 + matrixLHS.element42 * matrixRHS.element24 + matrixLHS.element43 * matrixRHS.element34 + matrixLHS.element44 * matrixRHS.element44;
 		
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
+	}
+	
+	/**
+	 * Returns a new {@code Matrix44F} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code Matrix44F} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static Matrix44F read(final DataInput dataInput) {
+		try {
+			final float element11 = dataInput.readFloat();
+			final float element12 = dataInput.readFloat();
+			final float element13 = dataInput.readFloat();
+			final float element14 = dataInput.readFloat();
+			final float element21 = dataInput.readFloat();
+			final float element22 = dataInput.readFloat();
+			final float element23 = dataInput.readFloat();
+			final float element24 = dataInput.readFloat();
+			final float element31 = dataInput.readFloat();
+			final float element32 = dataInput.readFloat();
+			final float element33 = dataInput.readFloat();
+			final float element34 = dataInput.readFloat();
+			final float element41 = dataInput.readFloat();
+			final float element42 = dataInput.readFloat();
+			final float element43 = dataInput.readFloat();
+			final float element44 = dataInput.readFloat();
+			
+			return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

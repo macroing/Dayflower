@@ -21,6 +21,9 @@ package org.dayflower.geometry;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.sqrt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -275,6 +278,23 @@ public final class OrthonormalBasis33F implements Node {
 		return Objects.hash(this.u, this.v, this.w);
 	}
 	
+	/**
+	 * Writes this {@code OrthonormalBasis33F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		this.w.write(dataOutput);
+		this.v.write(dataOutput);
+		this.u.write(dataOutput);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -385,6 +405,22 @@ public final class OrthonormalBasis33F implements Node {
 		final Vector3F w = Vector3F.lerp(a.w, b.w, t);
 		
 		return new OrthonormalBasis33F(w, v, u);
+	}
+	
+	/**
+	 * Returns a new {@code OrthonormalBasis33F} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code OrthonormalBasis33F} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static OrthonormalBasis33F read(final DataInput dataInput) {
+		return new OrthonormalBasis33F(Vector3F.read(dataInput), Vector3F.read(dataInput), Vector3F.read(dataInput));
 	}
 	
 	/**

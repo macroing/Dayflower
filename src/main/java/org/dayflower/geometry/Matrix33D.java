@@ -23,6 +23,10 @@ import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.sin;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -322,6 +326,33 @@ public final class Matrix33D implements Node {
 		});
 	}
 	
+	/**
+	 * Writes this {@code Matrix33D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeDouble(this.element11);
+			dataOutput.writeDouble(this.element12);
+			dataOutput.writeDouble(this.element13);
+			dataOutput.writeDouble(this.element21);
+			dataOutput.writeDouble(this.element22);
+			dataOutput.writeDouble(this.element23);
+			dataOutput.writeDouble(this.element31);
+			dataOutput.writeDouble(this.element32);
+			dataOutput.writeDouble(this.element33);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -392,6 +423,36 @@ public final class Matrix33D implements Node {
 		final double element33 = matrixLHS.element31 * matrixRHS.element13 + matrixLHS.element32 * matrixRHS.element23 + matrixLHS.element33 * matrixRHS.element33;
 		
 		return new Matrix33D(element11, element12, element13, element21, element22, element23, element31, element32, element33);
+	}
+	
+	/**
+	 * Returns a new {@code Matrix33D} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code Matrix33D} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static Matrix33D read(final DataInput dataInput) {
+		try {
+			final double element11 = dataInput.readDouble();
+			final double element12 = dataInput.readDouble();
+			final double element13 = dataInput.readDouble();
+			final double element21 = dataInput.readDouble();
+			final double element22 = dataInput.readDouble();
+			final double element23 = dataInput.readDouble();
+			final double element31 = dataInput.readDouble();
+			final double element32 = dataInput.readDouble();
+			final double element33 = dataInput.readDouble();
+			
+			return new Matrix33D(element11, element12, element13, element21, element22, element23, element31, element32, element33);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

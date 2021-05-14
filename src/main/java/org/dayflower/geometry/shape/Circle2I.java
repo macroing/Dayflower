@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry.shape;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2I;
@@ -34,6 +37,18 @@ import org.dayflower.node.NodeTraversalException;
  * @author J&#246;rgen Lundgren
  */
 public final class Circle2I implements Shape2I {
+	/**
+	 * The name of this {@code Circle2I} class.
+	 */
+	public static final String NAME = "Circle";
+	
+	/**
+	 * The ID of this {@code Circle2F} class.
+	 */
+	public static final int ID = 1;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Point2I center;
 	private final int radius;
 	
@@ -95,6 +110,16 @@ public final class Circle2I implements Shape2I {
 	 */
 	public Point2I getCenter() {
 		return this.center;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Circle2I} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Circle2I} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**
@@ -169,6 +194,16 @@ public final class Circle2I implements Shape2I {
 	}
 	
 	/**
+	 * Returns an {@code int} with the ID of this {@code Circle2I} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Circle2I} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
+	}
+	
+	/**
 	 * Returns the radius of this {@code Circle2I} instance.
 	 * 
 	 * @return the radius of this {@code Circle2I} instance
@@ -185,5 +220,28 @@ public final class Circle2I implements Shape2I {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Integer.valueOf(this.radius));
+	}
+	
+	/**
+	 * Writes this {@code Circle2I} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			
+			this.center.write(dataOutput);
+			
+			dataOutput.writeInt(this.radius);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 }

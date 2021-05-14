@@ -20,6 +20,9 @@ package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Floats.equal;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
@@ -36,6 +39,18 @@ import org.dayflower.node.NodeTraversalException;
  * @author J&#246;rgen Lundgren
  */
 public final class Circle2F implements Shape2F {
+	/**
+	 * The name of this {@code Circle2F} class.
+	 */
+	public static final String NAME = "Circle";
+	
+	/**
+	 * The ID of this {@code Circle2F} class.
+	 */
+	public static final int ID = 1;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Point2F center;
 	private final float radius;
 	
@@ -97,6 +112,16 @@ public final class Circle2F implements Shape2F {
 	 */
 	public Point2F getCenter() {
 		return this.center;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Circle2F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Circle2F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**
@@ -180,6 +205,16 @@ public final class Circle2F implements Shape2F {
 	}
 	
 	/**
+	 * Returns an {@code int} with the ID of this {@code Circle2F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Circle2F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Circle2F} instance.
 	 * 
 	 * @return a hash code for this {@code Circle2F} instance
@@ -187,5 +222,28 @@ public final class Circle2F implements Shape2F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Float.valueOf(this.radius));
+	}
+	
+	/**
+	 * Writes this {@code Circle2F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			
+			this.center.write(dataOutput);
+			
+			dataOutput.writeFloat(this.radius);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 }

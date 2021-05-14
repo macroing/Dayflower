@@ -21,6 +21,10 @@ package org.dayflower.geometry;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isZero;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -327,6 +331,28 @@ public final class Point4D implements Node {
 		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3), Double.valueOf(this.component4));
 	}
 	
+	/**
+	 * Writes this {@code Point4D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeDouble(this.component1);
+			dataOutput.writeDouble(this.component2);
+			dataOutput.writeDouble(this.component3);
+			dataOutput.writeDouble(this.component4);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -362,6 +388,31 @@ public final class Point4D implements Node {
 		final double component4 = Doubles.lerp(a.component4, b.component4, t);
 		
 		return new Point4D(component1, component2, component3, component4);
+	}
+	
+	/**
+	 * Returns a new {@code Point4D} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code Point4D} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static Point4D read(final DataInput dataInput) {
+		try {
+			final double component1 = dataInput.readDouble();
+			final double component2 = dataInput.readDouble();
+			final double component3 = dataInput.readDouble();
+			final double component4 = dataInput.readDouble();
+			
+			return new Point4D(component1, component2, component3, component4);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

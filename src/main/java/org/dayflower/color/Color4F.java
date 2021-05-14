@@ -29,6 +29,10 @@ import static org.dayflower.utility.Floats.pow;
 import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.toInt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -964,6 +968,28 @@ public final class Color4F {
 		return packedIntComponentOrder.pack(r, g, b, a);
 	}
 	
+	/**
+	 * Writes this {@code Color4F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeFloat(this.component1);
+			dataOutput.writeFloat(this.component2);
+			dataOutput.writeFloat(this.component3);
+			dataOutput.writeFloat(this.component4);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -1331,6 +1357,31 @@ public final class Color4F {
 		final float component3 = Floats.random();
 		
 		return new Color4F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Color4F} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code Color4F} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static Color4F read(final DataInput dataInput) {
+		try {
+			final float component1 = dataInput.readFloat();
+			final float component2 = dataInput.readFloat();
+			final float component3 = dataInput.readFloat();
+			final float component4 = dataInput.readFloat();
+			
+			return new Color4F(component1, component2, component3, component4);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

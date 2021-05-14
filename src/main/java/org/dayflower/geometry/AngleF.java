@@ -30,6 +30,10 @@ import static org.dayflower.utility.Floats.toDegrees;
 import static org.dayflower.utility.Floats.toRadians;
 import static org.dayflower.utility.Floats.wrapAround;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 /**
@@ -173,6 +177,30 @@ public final class AngleF {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.degrees), Float.valueOf(this.degreesMaximum), Float.valueOf(this.degreesMinimum), Float.valueOf(this.radians), Float.valueOf(this.radiansMaximum), Float.valueOf(this.radiansMinimum));
+	}
+	
+	/**
+	 * Writes this {@code AngleF} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeFloat(this.degrees);
+			dataOutput.writeFloat(this.degreesMinimum);
+			dataOutput.writeFloat(this.degreesMaximum);
+			dataOutput.writeFloat(this.radians);
+			dataOutput.writeFloat(this.radiansMinimum);
+			dataOutput.writeFloat(this.radiansMaximum);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -373,6 +401,33 @@ public final class AngleF {
 		final float newDegreesMaximum = toDegrees(newRadiansMaximum);
 		
 		return new AngleF(newDegrees, newDegreesMinimum, newDegreesMaximum, newRadians, newRadiansMinimum, newRadiansMaximum);
+	}
+	
+	/**
+	 * Returns a new {@code AngleF} instance by reading it from {@code dataInput}.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return a new {@code AngleF} instance by reading it from {@code dataInput}
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static AngleF read(final DataInput dataInput) {
+		try {
+			final float degrees = dataInput.readFloat();
+			final float degreesMinimum = dataInput.readFloat();
+			final float degreesMaximum = dataInput.readFloat();
+			final float radians = dataInput.readFloat();
+			final float radiansMinimum = dataInput.readFloat();
+			final float radiansMaximum = dataInput.readFloat();
+			
+			return new AngleF(degrees, degreesMinimum, degreesMaximum, radians, radiansMinimum, radiansMaximum);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

@@ -16,18 +16,38 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.geometry;
+package org.dayflower.geometry.shape;
 
 import java.io.DataInput;
 import java.io.UncheckedIOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.dayflower.geometry.Shape3D;
+import org.dayflower.geometry.Shape3DReader;
 
 /**
- * A {@code Shape3DReader} reads {@link Shape3D} instances from a {@code DataInput} instance.
+ * A {@code DefaultShape3DReader} is a {@link Shape3DReader} implementation that reads all official {@link Shape3D} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Shape3DReader {
+public final class DefaultShape3DReader implements Shape3DReader {
+	private final Map<Integer, Shape3DReader> shape3DReaders;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code DefaultShape3DReader} instance.
+	 */
+	public DefaultShape3DReader() {
+		this.shape3DReaders = new LinkedHashMap<>();
+		this.shape3DReaders.put(Integer.valueOf(Cone3D.ID), new Cone3DReader());
+		this.shape3DReaders.put(Integer.valueOf(Cylinder3D.ID), new Cylinder3DReader());
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Reads a {@link Shape3D} instance from {@code dataInput}.
 	 * <p>
@@ -48,13 +68,25 @@ public interface Shape3DReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	Shape3D read(final DataInput dataInput, final int id);
+	@Override
+	public Shape3D read(final DataInput dataInput, final int id) {
+		switch(id) {
+			case Cone3D.ID:
+			case Cylinder3D.ID:
+				return this.shape3DReaders.get(Integer.valueOf(id)).read(dataInput, id);
+			default:
+				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));
+		}
+	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code Shape3DReader} instance supports reading {@link Shape3D} instances with an ID of {@code id}, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code DefaultShape3DReader} instance supports reading {@link Shape3D} instances with an ID of {@code id}, {@code false} otherwise.
 	 * 
 	 * @param id the ID of the {@code Shape3D} type to check
-	 * @return {@code true} if, and only if, this {@code Shape3DReader} instance supports reading {@code Shape3D} instances with an ID of {@code id}, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code DefaultShape3DReader} instance supports reading {@code Shape3D} instances with an ID of {@code id}, {@code false} otherwise
 	 */
-	boolean isSupported(final int id);
+	@Override
+	public boolean isSupported(final int id) {
+		return this.shape3DReaders.containsKey(Integer.valueOf(id));
+	}
 }

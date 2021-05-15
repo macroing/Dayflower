@@ -24,6 +24,7 @@ import java.io.UncheckedIOException;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Shape2FReader;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Circle2FReader} is a {@link Shape2FReader} implementation that reads {@link Circle2F} instances from a {@code DataInput} instance.
@@ -48,6 +49,8 @@ public final class Circle2FReader implements Shape2FReader {
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
+	 * If {@code id} is invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
 	 * The ID of the {@code Circle2F} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
@@ -55,11 +58,14 @@ public final class Circle2FReader implements Shape2FReader {
 	 * @param dataInput the {@code DataInput} instance to read from
 	 * @param id the ID of the {@code Circle2F} to read
 	 * @return the {@code Circle2F} instance that was read
+	 * @throws IllegalArgumentException thrown if, and only if, {@code id} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
 	public Circle2F read(final DataInput dataInput, final int id) {
+		ParameterArguments.requireExact(id, Circle2F.ID, "id");
+		
 		try {
 			return new Circle2F(Point2F.read(dataInput), dataInput.readFloat());
 		} catch(final IOException e) {

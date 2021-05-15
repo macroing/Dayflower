@@ -26,6 +26,9 @@ import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
 import static org.dayflower.utility.Doubles.sqrt;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -138,7 +141,7 @@ public final class Cone3D implements Shape3D {
 	 * @param radius the radius
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Cone3D(final AngleD phiMax, double radius) {
+	public Cone3D(final AngleD phiMax, final double radius) {
 		this(phiMax, radius, 1.0D);
 	}
 	
@@ -152,7 +155,7 @@ public final class Cone3D implements Shape3D {
 	 * @param zMax the maximum Z
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Cone3D(final AngleD phiMax, double radius, final double zMax) {
+	public Cone3D(final AngleD phiMax, final double radius, final double zMax) {
 		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
 		this.radius = radius;
 		this.zMax = zMax;
@@ -456,6 +459,30 @@ public final class Cone3D implements Shape3D {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax));
+	}
+	
+	/**
+	 * Writes this {@code Cone3D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			
+			this.phiMax.write(dataOutput);
+			
+			dataOutput.writeDouble(this.radius);
+			dataOutput.writeDouble(this.zMax);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

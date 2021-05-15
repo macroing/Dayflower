@@ -16,18 +16,37 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.geometry;
+package org.dayflower.geometry.shape;
 
 import java.io.DataInput;
 import java.io.UncheckedIOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.dayflower.geometry.Shape2I;
+import org.dayflower.geometry.Shape2IReader;
 
 /**
- * A {@code Shape2IReader} reads {@link Shape2I} instances from a {@code DataInput} instance.
+ * A {@code DefaultShape2IReader} is a {@link Shape2IReader} implementation that reads all official {@link Shape2I} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Shape2IReader {
+public final class DefaultShape2IReader implements Shape2IReader {
+	private final Map<Integer, Shape2IReader> shape2IReaders;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code DefaultShape2IReader} instance.
+	 */
+	public DefaultShape2IReader() {
+		this.shape2IReaders = new LinkedHashMap<>();
+		this.shape2IReaders.put(Integer.valueOf(Circle2I.ID), new Circle2IReader());
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Reads a {@link Shape2I} instance from {@code dataInput}.
 	 * <p>
@@ -48,13 +67,24 @@ public interface Shape2IReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	Shape2I read(final DataInput dataInput, final int id);
+	@Override
+	public Shape2I read(final DataInput dataInput, final int id) {
+		switch(id) {
+			case Circle2I.ID:
+				return this.shape2IReaders.get(Integer.valueOf(id)).read(dataInput, id);
+			default:
+				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));
+		}
+	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code Shape2IReader} instance supports reading {@link Shape2I} instances with an ID of {@code id}, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code DefaultShape2IReader} instance supports reading {@link Shape2I} instances with an ID of {@code id}, {@code false} otherwise.
 	 * 
 	 * @param id the ID of the {@code Shape2I} type to check
-	 * @return {@code true} if, and only if, this {@code Shape2IReader} instance supports reading {@code Shape2I} instances with an ID of {@code id}, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code DefaultShape2IReader} instance supports reading {@code Shape2I} instances with an ID of {@code id}, {@code false} otherwise
 	 */
-	boolean isSupported(final int id);
+	@Override
+	public boolean isSupported(final int id) {
+		return this.shape2IReaders.containsKey(Integer.valueOf(id));
+	}
 }

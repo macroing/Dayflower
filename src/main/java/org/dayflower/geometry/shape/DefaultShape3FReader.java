@@ -44,10 +44,13 @@ public final class DefaultShape3FReader implements Shape3FReader {
 	public DefaultShape3FReader() {
 		this.shape3FReaders = new LinkedHashMap<>();
 		this.shape3FReaders.put(Integer.valueOf(Cone3F.ID), new Cone3FReader());
+		this.shape3FReaders.put(Integer.valueOf(ConstructiveSolidGeometry3F.ID), new ConstructiveSolidGeometry3FReader(this));
 		this.shape3FReaders.put(Integer.valueOf(Curve3F.ID), new Curve3FReader());
 		this.shape3FReaders.put(Integer.valueOf(Curves3F.ID), new Curves3FReader());
 		this.shape3FReaders.put(Integer.valueOf(Cylinder3F.ID), new Cylinder3FReader());
 		this.shape3FReaders.put(Integer.valueOf(Disk3F.ID), new Disk3FReader());
+		this.shape3FReaders.put(Integer.valueOf(Hyperboloid3F.ID), new Hyperboloid3FReader());
+		this.shape3FReaders.put(Integer.valueOf(Paraboloid3F.ID), new Paraboloid3FReader());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,10 +105,13 @@ public final class DefaultShape3FReader implements Shape3FReader {
 	public Shape3F read(final DataInput dataInput, final int id) {
 		switch(id) {
 			case Cone3F.ID:
+			case ConstructiveSolidGeometry3F.ID:
 			case Curve3F.ID:
 			case Curves3F.ID:
 			case Cylinder3F.ID:
 			case Disk3F.ID:
+			case Hyperboloid3F.ID:
+			case Paraboloid3F.ID:
 				return this.shape3FReaders.get(Integer.valueOf(id)).read(dataInput, id);
 			default:
 				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));

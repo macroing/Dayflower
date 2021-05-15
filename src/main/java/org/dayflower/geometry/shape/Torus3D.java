@@ -30,6 +30,9 @@ import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.solveQuartic;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -422,6 +425,28 @@ public final class Torus3D implements Shape3D {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.boundingVolume, Double.valueOf(this.radiusInner), Double.valueOf(this.radiusInnerSquared), Double.valueOf(this.radiusOuter), Double.valueOf(this.radiusOuterSquared));
+	}
+	
+	/**
+	 * Writes this {@code Torus3D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			dataOutput.writeDouble(this.radiusInner);
+			dataOutput.writeDouble(this.radiusOuter);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

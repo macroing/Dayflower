@@ -32,6 +32,9 @@ import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
 import static org.dayflower.utility.Doubles.sqrt;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -177,6 +180,32 @@ public final class Hyperboloid3D implements Shape3D {
 		this.rMax = max(sqrt(a.getX() * a.getX() + a.getY() * a.getY()), sqrt(b.getX() * b.getX() + b.getY() * b.getY()));
 		this.zMax = max(a.getZ(), b.getZ());
 		this.zMin = min(a.getZ(), b.getZ());
+	}
+	
+	/**
+	 * Constructs a new {@code Hyperboloid3D} instance.
+	 * <p>
+	 * If either {@code phiMax}, {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param phiMax the maximum phi
+	 * @param a the {@link Point3D} instance denoted by {@code A}
+	 * @param b the {@link Point3D} instance denoted by {@code B}
+	 * @param aH a {@code double} value
+	 * @param cH a {@code double} value
+	 * @param rMax the maximum radius
+	 * @param zMax the maximum Z value
+	 * @param zMin the minimum Z value
+	 * @throws NullPointerException thrown if, and only if, either {@code phiMax}, {@code a} or {@code b} are {@code null}
+	 */
+	public Hyperboloid3D(final AngleD phiMax, final Point3D a, final Point3D b, final double aH, final double cH, final double rMax, final double zMax, final double zMin) {
+		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
+		this.a = Objects.requireNonNull(a, "a == null");
+		this.b = Objects.requireNonNull(b, "b == null");
+		this.aH = aH;
+		this.cH = cH;
+		this.rMax = rMax;
+		this.zMax = zMax;
+		this.zMin = zMin;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -515,6 +544,36 @@ public final class Hyperboloid3D implements Shape3D {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.phiMax, this.a, this.b, Double.valueOf(this.aH), Double.valueOf(this.cH), Double.valueOf(this.rMax), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
+	}
+	
+	/**
+	 * Writes this {@code Hyperboloid3D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			
+			this.phiMax.write(dataOutput);
+			this.a.write(dataOutput);
+			this.b.write(dataOutput);
+			
+			dataOutput.writeDouble(this.aH);
+			dataOutput.writeDouble(this.cH);
+			dataOutput.writeDouble(this.rMax);
+			dataOutput.writeDouble(this.zMax);
+			dataOutput.writeDouble(this.zMin);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,8 +1,12 @@
 2021-05-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the default methods write(File) and write(String) to the interfaces Shape2D, Shape2F, Shape2I, Shape3D and Shape3F.
+	* ADD:		Add the constructor Hyperboloid3D(AngleD, Point3D, Point3D, double, double, double, double, double) to the Hyperboloid3D class.
+	* ADD:		Add the constructor Hyperboloid3F(AngleF, Point3F, Point3F, float, float, float, float, float) to the Hyperboloid3F class.
+	* ADD:		Add the method write(DataOutput) to the interfaces Shape2D, Shape2F, Shape2I, Shape3D and Shape3F.
 	* ADD:		Add the method read(DataInput) to the interfaces Shape2DReader, Shape2FReader, Shape2IReader, Shape3DReader and Shape3FReader as well as to all classes that implements any of these.
 	* ADD:		Add an IllegalArgumentException to the contract of the method read(DataInput, int) of the interfaces Shape2DReader, Shape2FReader, Shape2IReader, Shape3DReader and Shape3FReader as well as to all classes that implements any of these.
-	* ADD:		Add the method write(DataOutput) to the classes Cone3D, Cone3F, Curve3D, Curve3F, Curves3D, Curves3F, Cylinder3D, Cylinder3F, Disk3D, Disk3F, Line2D, Line2F and Line2I.
+	* ADD:		Add the method write(DataOutput) to the classes Cone3D, Cone3F, ConstructiveSolidGeometry3D, ConstructiveSolidGeometry3F, Curve3D, Curve3F, Curves3D, Curves3F, Cylinder3D, Cylinder3F, Disk3D, Disk3F, Hyperboloid3D, Hyperboloid3F, Line2D, Line2F, Line2I, Paraboloid3D, Paraboloid3F, Plane3D, Plane3F, ProceduralTerrain3D, ProceduralTerrain3F, Rectangle2D, Rectangle2F, Rectangle2I, RectangularCuboid3D, RectangularCuboid3F, Sphere3D, Sphere3F, Torus3D, Torus3F, Triangle2D, Triangle2F, Triangle2I, Triangle3D, Triangle3F, TriangleMesh3D and TriangleMesh3F.
 	* ADD:		Add the classes Cone3DReader, Cone3FReader, Curve3DReader, Curve3FReader, Curves3DReader, Curves3FReader, Cylinder3DReader, Cylinder3FReader, DefaultShape2DReader, DefaultShape2FReader, DefaultShape2IReader, DefaultShape3DReader, DefaultShape3FReader, Disk3DReader, Disk3FReader, Line2DReader, Line2FReader and Line2IReader.
 
 2021-05-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>

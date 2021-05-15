@@ -31,6 +31,9 @@ import static org.dayflower.utility.Floats.getOrAdd;
 import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Floats.toFloat;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -423,6 +426,28 @@ public final class Torus3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.boundingVolume, Float.valueOf(this.radiusInner), Float.valueOf(this.radiusInnerSquared), Float.valueOf(this.radiusOuter), Float.valueOf(this.radiusOuterSquared));
+	}
+	
+	/**
+	 * Writes this {@code Torus3F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			dataOutput.writeFloat(this.radiusInner);
+			dataOutput.writeFloat(this.radiusOuter);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

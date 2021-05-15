@@ -29,6 +29,7 @@ import static org.dayflower.utility.Floats.minOrNaN;
 import static org.dayflower.utility.Ints.padding;
 
 import java.io.BufferedReader;
+import java.io.DataOutput;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -553,6 +554,36 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		return new int[0];
+	}
+	
+	/**
+	 * Writes this {@code TriangleMesh3F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			dataOutput.writeInt(this.triangles.size());
+			
+			for(final Triangle3F triangle : this.triangles) {
+				triangle.write(dataOutput);
+			}
+			
+			dataOutput.writeUTF(this.groupName);
+			dataOutput.writeUTF(this.materialName);
+			dataOutput.writeUTF(this.objectName);
+			dataOutput.writeBoolean(this.isUsingAccelerationStructure);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

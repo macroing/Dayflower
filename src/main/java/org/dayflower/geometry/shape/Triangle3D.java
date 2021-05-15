@@ -22,6 +22,9 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.gamma;
 import static org.dayflower.utility.Doubles.isZero;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -599,6 +602,30 @@ public final class Triangle3D implements Shape3D {
 		return Objects.hash(this.surfaceNormal, this.a, this.b, this.c);
 	}
 	
+	/**
+	 * Writes this {@code Triangle3D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			
+			this.a.write(dataOutput);
+			this.b.write(dataOutput);
+			this.c.write(dataOutput);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -783,6 +810,23 @@ public final class Triangle3D implements Shape3D {
 		@Override
 		public int hashCode() {
 			return Objects.hash(this.orthonormalBasis, this.textureCoordinates, this.position);
+		}
+		
+		/**
+		 * Writes this {@code Vertex3D} instance to {@code dataOutput}.
+		 * <p>
+		 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * <p>
+		 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+		 * 
+		 * @param dataOutput the {@code DataOutput} instance to write to
+		 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+		 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+		 */
+		public void write(final DataOutput dataOutput) {
+			this.textureCoordinates.write(dataOutput);
+			this.position.write(dataOutput);
+			this.orthonormalBasis.write(dataOutput);
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////

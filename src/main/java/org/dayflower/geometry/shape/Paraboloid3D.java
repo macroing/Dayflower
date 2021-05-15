@@ -26,6 +26,9 @@ import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.pow;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -507,6 +510,32 @@ public final class Paraboloid3D implements Shape3D {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
+	}
+	
+	/**
+	 * Writes this {@code Paraboloid3D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			
+			this.phiMax.write(dataOutput);
+			
+			dataOutput.writeDouble(this.radius);
+			dataOutput.writeDouble(this.zMax);
+			dataOutput.writeDouble(this.zMin);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

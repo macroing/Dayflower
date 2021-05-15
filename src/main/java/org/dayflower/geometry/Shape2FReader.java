@@ -35,6 +35,25 @@ public interface Shape2FReader {
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
+	 * If the ID is invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return the {@code Shape2F} instance that was read
+	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	Shape2F read(final DataInput dataInput);
+	
+	/**
+	 * Reads a {@link Shape2F} instance from {@code dataInput}.
+	 * <p>
+	 * Returns the {@code Shape2F} instance that was read.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code id} is invalid, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.

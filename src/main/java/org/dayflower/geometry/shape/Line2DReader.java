@@ -19,6 +19,7 @@
 package org.dayflower.geometry.shape;
 
 import java.io.DataInput;
+import java.io.IOException;
 import java.io.UncheckedIOException;
 
 import org.dayflower.geometry.Point2D;
@@ -40,6 +41,32 @@ public final class Line2DReader implements Shape2DReader {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Reads a {@link Line2D} instance from {@code dataInput}.
+	 * <p>
+	 * Returns the {@code Line2D} instance that was read.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If the ID is invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return the {@code Line2D} instance that was read
+	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public Line2D read(final DataInput dataInput) {
+		try {
+			return read(dataInput, dataInput.readInt());
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
 	
 	/**
 	 * Reads a {@link Line2D} instance from {@code dataInput}.

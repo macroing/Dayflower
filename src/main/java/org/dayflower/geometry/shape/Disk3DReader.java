@@ -49,6 +49,32 @@ public final class Disk3DReader implements Shape3DReader {
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
+	 * If the ID is invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return the {@code Disk3D} instance that was read
+	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public Disk3D read(final DataInput dataInput) {
+		try {
+			return read(dataInput, dataInput.readInt());
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
+	 * Reads a {@link Disk3D} instance from {@code dataInput}.
+	 * <p>
+	 * Returns the {@code Disk3D} instance that was read.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code id} is invalid, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.

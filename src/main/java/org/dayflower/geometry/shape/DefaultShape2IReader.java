@@ -43,6 +43,7 @@ public final class DefaultShape2IReader implements Shape2IReader {
 	public DefaultShape2IReader() {
 		this.shape2IReaders = new LinkedHashMap<>();
 		this.shape2IReaders.put(Integer.valueOf(Circle2I.ID), new Circle2IReader());
+		this.shape2IReaders.put(Integer.valueOf(Line2I.ID), new Line2IReader());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,6 +72,7 @@ public final class DefaultShape2IReader implements Shape2IReader {
 	public Shape2I read(final DataInput dataInput, final int id) {
 		switch(id) {
 			case Circle2I.ID:
+			case Line2I.ID:
 				return this.shape2IReaders.get(Integer.valueOf(id)).read(dataInput, id);
 			default:
 				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));

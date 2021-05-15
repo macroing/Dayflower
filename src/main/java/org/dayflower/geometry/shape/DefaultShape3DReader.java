@@ -43,7 +43,10 @@ public final class DefaultShape3DReader implements Shape3DReader {
 	public DefaultShape3DReader() {
 		this.shape3DReaders = new LinkedHashMap<>();
 		this.shape3DReaders.put(Integer.valueOf(Cone3D.ID), new Cone3DReader());
+		this.shape3DReaders.put(Integer.valueOf(Curve3D.ID), new Curve3DReader());
+		this.shape3DReaders.put(Integer.valueOf(Curves3D.ID), new Curves3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Cylinder3D.ID), new Cylinder3DReader());
+		this.shape3DReaders.put(Integer.valueOf(Disk3D.ID), new Disk3DReader());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +75,10 @@ public final class DefaultShape3DReader implements Shape3DReader {
 	public Shape3D read(final DataInput dataInput, final int id) {
 		switch(id) {
 			case Cone3D.ID:
+			case Curve3D.ID:
+			case Curves3D.ID:
 			case Cylinder3D.ID:
+			case Disk3D.ID:
 				return this.shape3DReaders.get(Integer.valueOf(id)).read(dataInput, id);
 			default:
 				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));

@@ -21,6 +21,9 @@ package org.dayflower.geometry.shape;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.minOrNaN;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -259,6 +262,30 @@ public final class Curves3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.curves);
+	}
+	
+	/**
+	 * Writes this {@code Curves3F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			dataOutput.writeInt(this.curves.size());
+			
+			for(final Curve3F curve : this.curves) {
+				curve.write(dataOutput);
+			}
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

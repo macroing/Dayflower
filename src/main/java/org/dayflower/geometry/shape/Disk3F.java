@@ -25,6 +25,9 @@ import static org.dayflower.utility.Floats.getOrAdd;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.sqrt;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -450,5 +453,30 @@ public final class Disk3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.phiMax, Float.valueOf(this.radiusInner), Float.valueOf(this.radiusOuter), Float.valueOf(this.zMax));
+	}
+	
+	/**
+	 * Writes this {@code Disk3F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			
+			this.phiMax.write(dataOutput);
+			
+			dataOutput.writeFloat(this.radiusInner);
+			dataOutput.writeFloat(this.radiusOuter);
+			dataOutput.writeFloat(this.zMax);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 }

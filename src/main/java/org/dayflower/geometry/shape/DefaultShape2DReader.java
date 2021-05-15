@@ -43,6 +43,7 @@ public final class DefaultShape2DReader implements Shape2DReader {
 	public DefaultShape2DReader() {
 		this.shape2DReaders = new LinkedHashMap<>();
 		this.shape2DReaders.put(Integer.valueOf(Circle2D.ID), new Circle2DReader());
+		this.shape2DReaders.put(Integer.valueOf(Line2D.ID), new Line2DReader());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,6 +72,7 @@ public final class DefaultShape2DReader implements Shape2DReader {
 	public Shape2D read(final DataInput dataInput, final int id) {
 		switch(id) {
 			case Circle2D.ID:
+			case Line2D.ID:
 				return this.shape2DReaders.get(Integer.valueOf(id)).read(dataInput, id);
 			default:
 				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));

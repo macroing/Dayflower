@@ -32,6 +32,9 @@ import static org.dayflower.utility.Doubles.sqrt;
 import static org.dayflower.utility.Doubles.toDouble;
 import static org.dayflower.utility.Ints.saturate;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -423,6 +426,30 @@ public final class Curve3D implements Shape3D {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.data, Double.valueOf(this.uMaximum), Double.valueOf(this.uMinimum));
+	}
+	
+	/**
+	 * Writes this {@code Curve3D} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			
+			this.data.write(dataOutput);
+			
+			dataOutput.writeDouble(this.uMinimum);
+			dataOutput.writeDouble(this.uMaximum);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -955,6 +982,36 @@ public final class Curve3D implements Shape3D {
 		@Override
 		public int hashCode() {
 			return Objects.hash(this.pointA, this.pointB, this.pointC, this.pointD, this.type, this.normalA, this.normalB, Double.valueOf(this.normalAngle), Double.valueOf(this.normalAngleSinReciprocal), Double.valueOf(this.widthA), Double.valueOf(this.widthB));
+		}
+		
+		/**
+		 * Writes this {@code Data} instance to {@code dataOutput}.
+		 * <p>
+		 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * <p>
+		 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+		 * 
+		 * @param dataOutput the {@code DataOutput} instance to write to
+		 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+		 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+		 */
+		public void write(final DataOutput dataOutput) {
+			try {
+				this.pointA.write(dataOutput);
+				this.pointB.write(dataOutput);
+				this.pointC.write(dataOutput);
+				this.pointD.write(dataOutput);
+				
+				dataOutput.writeInt(this.type.ordinal());
+				
+				this.normalA.write(dataOutput);
+				this.normalB.write(dataOutput);
+				
+				dataOutput.writeDouble(this.widthA);
+				dataOutput.writeDouble(this.widthB);
+			} catch(final IOException e) {
+				throw new UncheckedIOException(e);
+			}
 		}
 	}
 	

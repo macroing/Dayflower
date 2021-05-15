@@ -1,8 +1,8 @@
 2021-05-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add an IllegalArgumentException to the contract of the method read(DataInput, int) of the interfaces Shape2DReader, Shape2FReader, Shape2IReader, Shape3DReader and Shape3FReader as well as to all classes that implements any of these.
-	* ADD:		Add the method write(DataOutput) to the classes Cone3D, Cone3F, Cylinder3D and Cylinder3F.
-	* ADD:		Add the classes Cone3DReader, Cone3FReader, Cylinder3DReader, Cylinder3FReader, DefaultShape2DReader, DefaultShape2FReader, DefaultShape2IReader, DefaultShape3DReader and DefaultShape3FReader.
+	* ADD:		Add the method write(DataOutput) to the classes Cone3D, Cone3F, Curve3D, Curve3F, Curves3D, Curves3F, Cylinder3D, Cylinder3F, Disk3D, Disk3F, Line2D, Line2F and Line2I.
+	* ADD:		Add the classes Cone3DReader, Cone3FReader, Curve3DReader, Curve3FReader, Curves3DReader, Curves3FReader, Cylinder3DReader, Cylinder3FReader, DefaultShape2DReader, DefaultShape2FReader, DefaultShape2IReader, DefaultShape3DReader, DefaultShape3FReader, Disk3DReader, Disk3FReader, Line2DReader, Line2FReader and Line2IReader.
 
 2021-05-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

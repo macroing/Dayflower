@@ -9,8 +9,8 @@ Below follows a few lists of features available in the Geometry API.
 #### The Geometry API
 * `AngleD`
 * `AngleF`
-* `BoundingVolume3D`
-* `BoundingVolume3F`
+* `BoundingVolume3D` and `BoundingVolume3DReader`
+* `BoundingVolume3F` and `BoundingVolume3FReader`
 * `Matrix33D`
 * `Matrix33F`
 * `Matrix44D`
@@ -32,11 +32,11 @@ Below follows a few lists of features available in the Geometry API.
 * `Ray3F`
 * `SampleGeneratorD`
 * `SampleGeneratorF`
-* `Shape2D`
-* `Shape2F`
-* `Shape2I`
-* `Shape3D`
-* `Shape3F`
+* `Shape2D` and `Shape2DReader`
+* `Shape2F` and `Shape2FReader`
+* `Shape2I` and `Shape2IReader`
+* `Shape3D` and `Shape3DReader`
+* `Shape3F` and `Shape3FReader`
 * `SurfaceIntersection3D`
 * `SurfaceIntersection3F`
 * `SurfaceIntersector3D`
@@ -63,35 +63,35 @@ Below follows a few lists of features available in the Geometry API.
 * `Rasterizer2I`
 
 #### The Geometry Shape API
-* `Circle2D`
-* `Circle2F`
-* `Circle2I`
-* `Cone3D`
-* `Cone3F`
-* `ConstructiveSolidGeometry3D`
-* `ConstructiveSolidGeometry3F`
-* `Curve3D`
-* `Curve3F`
-* `Curves3D`
-* `Curves3F`
-* `Cylinder3D`
-* `Cylinder3F`
-* `Disk3D`
-* `Disk3F`
-* `Hyperboloid3D`
-* `Hyperboloid3F`
-* `Line2D`
-* `Line2F`
-* `Line2I`
-* `Paraboloid3D`
-* `Paraboloid3F`
-* `Plane3D`
-* `Plane3F`
-* `ProceduralTerrain3D`
-* `ProceduralTerrain3F`
-* `Rectangle2D`
-* `Rectangle2F`
-* `Rectangle2I`
+* `Circle2D` and `Circle2DReader`
+* `Circle2F` and `Circle2FReader`
+* `Circle2I` and `Circle2IReader`
+* `Cone3D` and `Cone3DReader`
+* `Cone3F` and `Cone3FReader`
+* `ConstructiveSolidGeometry3D` and `ConstructiveSolidGeometry3DReader`
+* `ConstructiveSolidGeometry3F` and `ConstructiveSolidGeometry3FReader`
+* `Curve3D` and `Curve3DReader`
+* `Curve3F` and `Curve3FReader`
+* `Curves3D` and `Curves3DReader`
+* `Curves3F` and `Curves3FReader`
+* `Cylinder3D` and `Cylinder3DReader`
+* `Cylinder3F` and `Cylinder3FReader`
+* `Disk3D` and `Disk3DReader`
+* `Disk3F` and `Disk3FReader`
+* `Hyperboloid3D` and `Hyperboloid3DReader`
+* `Hyperboloid3F` and `Hyperboloid3FReader`
+* `Line2D` and `Line2DReader`
+* `Line2F` and `Line2FReader`
+* `Line2I` and `Line2IReader`
+* `Paraboloid3D` and `Paraboloid3DReader`
+* `Paraboloid3F` and `Paraboloid3FReader`
+* `Plane3D` and `Plane3DReader`
+* `Plane3F` and `Plane3FReader`
+* `ProceduralTerrain3D` and `ProceduralTerrain3DReader`
+* `ProceduralTerrain3F` and `ProceduralTerrain3FReader`
+* `Rectangle2D` and `Rectangle2DReader`
+* `Rectangle2F` and `Rectangle2FReader`
+* `Rectangle2I` and `Rectangle2IReader`
 * `RectangularCuboid3D`
 * `RectangularCuboid3F`
 * `Sphere3D`

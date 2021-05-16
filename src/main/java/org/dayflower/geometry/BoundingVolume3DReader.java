@@ -19,6 +19,7 @@
 package org.dayflower.geometry;
 
 import java.io.DataInput;
+import java.io.UncheckedIOException;
 
 /**
  * A {@code BoundingVolume3DReader} reads {@link BoundingVolume3D} instances from a {@code DataInput} instance.
@@ -34,6 +35,27 @@ public interface BoundingVolume3DReader {
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
+	 * If the ID is invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataInput the {@code DataInput} instance to read from
+	 * @return the {@code BoundingVolume3D} instance that was read
+	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
+	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	BoundingVolume3D read(final DataInput dataInput);
+	
+	/**
+	 * Reads a {@link BoundingVolume3D} instance from {@code dataInput}.
+	 * <p>
+	 * Returns the {@code BoundingVolume3D} instance that was read.
+	 * <p>
+	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code id} is invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
 	 * The ID of the {@code BoundingVolume3D} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
@@ -41,6 +63,7 @@ public interface BoundingVolume3DReader {
 	 * @param dataInput the {@code DataInput} instance to read from
 	 * @param id the ID of the {@code BoundingVolume3D} type to read
 	 * @return the {@code BoundingVolume3D} instance that was read
+	 * @throws IllegalArgumentException thrown if, and only if, {@code id} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */

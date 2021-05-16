@@ -1,5 +1,7 @@
 2021-05-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the method read(DataInput) to the interfaces BoundingVolume3DReader and BoundingVolume3FReader.
+	* ADD:		Add an IllegalArgumentException to the contract of the method read(DataInput, int) of the interfaces BoundingVolume3DReader and BoundingVolume3FReader.
 	* ADD:		Add the constructor Rectangle2D(Point2D, Point2D, Point2D, Point2D) to the Rectangle2D class.
 	* ADD:		Add the constructor Rectangle2F(Point2F, Point2F, Point2F, Point2F) to the Rectangle2F class.
 	* ADD:		Add the constructor Rectangle2I(Point2I, Point2I, Point2I, Point2I) to the Rectangle2I class.

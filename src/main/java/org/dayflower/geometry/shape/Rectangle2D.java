@@ -78,9 +78,18 @@ public final class Rectangle2D implements Shape2D {
 		this.d = new Point2D(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
 	}
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private Rectangle2D(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
+	/**
+	 * Constructs a new {@code Rectangle2D} instance based on {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@link Point2D} instance
+	 * @param b a {@code Point2D} instance
+	 * @param c a {@code Point2D} instance
+	 * @param d a {@code Point2D} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public Rectangle2D(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 		this.c = Objects.requireNonNull(c, "c == null");

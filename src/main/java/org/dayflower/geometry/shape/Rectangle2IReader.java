@@ -21,39 +21,31 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-import org.dayflower.geometry.Shape2I;
+import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Shape2IReader;
+import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code DefaultShape2IReader} is a {@link Shape2IReader} implementation that reads all official {@link Shape2I} instances from a {@code DataInput} instance.
+ * A {@code Rectangle2IReader} is a {@link Shape2IReader} implementation that reads {@link Rectangle2I} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DefaultShape2IReader implements Shape2IReader {
-	private final Map<Integer, Shape2IReader> shape2IReaders;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+public final class Rectangle2IReader implements Shape2IReader {
 	/**
-	 * Constructs a new {@code DefaultShape2IReader} instance.
+	 * Constructs a new {@code Rectangle2IReader} instance.
 	 */
-	public DefaultShape2IReader() {
-		this.shape2IReaders = new LinkedHashMap<>();
-		this.shape2IReaders.put(Integer.valueOf(Circle2I.ID), new Circle2IReader());
-		this.shape2IReaders.put(Integer.valueOf(Line2I.ID), new Line2IReader());
-		this.shape2IReaders.put(Integer.valueOf(Rectangle2I.ID), new Rectangle2IReader());
+	public Rectangle2IReader() {
+		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Reads a {@link Shape2I} instance from {@code dataInput}.
+	 * Reads a {@link Rectangle2I} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Shape2I} instance that was read.
+	 * Returns the {@code Rectangle2I} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -62,13 +54,13 @@ public final class DefaultShape2IReader implements Shape2IReader {
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @return the {@code Shape2I} instance that was read
+	 * @return the {@code Rectangle2I} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Shape2I read(final DataInput dataInput) {
+	public Rectangle2I read(final DataInput dataInput) {
 		try {
 			return read(dataInput, dataInput.readInt());
 		} catch(final IOException e) {
@@ -77,9 +69,9 @@ public final class DefaultShape2IReader implements Shape2IReader {
 	}
 	
 	/**
-	 * Reads a {@link Shape2I} instance from {@code dataInput}.
+	 * Reads a {@link Rectangle2I} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Shape2I} instance that was read.
+	 * Returns the {@code Rectangle2I} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -87,35 +79,30 @@ public final class DefaultShape2IReader implements Shape2IReader {
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
-	 * The ID of the {@code Shape2I} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
+	 * The ID of the {@code Rectangle2I} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @param id the ID of the {@code Shape2I} type to read
-	 * @return the {@code Shape2I} instance that was read
+	 * @param id the ID of the {@code Rectangle2I} to read
+	 * @return the {@code Rectangle2I} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, {@code id} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Shape2I read(final DataInput dataInput, final int id) {
-		switch(id) {
-			case Circle2I.ID:
-			case Line2I.ID:
-			case Rectangle2I.ID:
-				return this.shape2IReaders.get(Integer.valueOf(id)).read(dataInput, id);
-			default:
-				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));
-		}
+	public Rectangle2I read(final DataInput dataInput, final int id) {
+		ParameterArguments.requireExact(id, Rectangle2I.ID, "id");
+		
+		return new Rectangle2I(Point2I.read(dataInput), Point2I.read(dataInput), Point2I.read(dataInput), Point2I.read(dataInput));
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code DefaultShape2IReader} instance supports reading {@link Shape2I} instances with an ID of {@code id}, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code id == Rectangle2I.ID}, {@code false} otherwise.
 	 * 
-	 * @param id the ID of the {@code Shape2I} type to check
-	 * @return {@code true} if, and only if, this {@code DefaultShape2IReader} instance supports reading {@code Shape2I} instances with an ID of {@code id}, {@code false} otherwise
+	 * @param id the ID to check
+	 * @return {@code true} if, and only if, {@code id == Rectangle2I.ID}, {@code false} otherwise
 	 */
 	@Override
 	public boolean isSupported(final int id) {
-		return this.shape2IReaders.containsKey(Integer.valueOf(id));
+		return id == Rectangle2I.ID;
 	}
 }

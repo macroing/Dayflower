@@ -76,6 +76,24 @@ public final class Rectangle2I implements Shape2I {
 		this.d = new Point2I(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
 	}
 	
+	/**
+	 * Constructs a new {@code Rectangle2I} instance based on {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@link Point2I} instance
+	 * @param b a {@code Point2I} instance
+	 * @param c a {@code Point2I} instance
+	 * @param d a {@code Point2I} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public Rectangle2I(final Point2I a, final Point2I b, final Point2I c, final Point2I d) {
+		this.a = Objects.requireNonNull(a, "a == null");
+		this.b = Objects.requireNonNull(b, "b == null");
+		this.c = Objects.requireNonNull(c, "c == null");
+		this.d = Objects.requireNonNull(d, "d == null");
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

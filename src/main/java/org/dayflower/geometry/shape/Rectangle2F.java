@@ -78,9 +78,18 @@ public final class Rectangle2F implements Shape2F {
 		this.d = new Point2F(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
 	}
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private Rectangle2F(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
+	/**
+	 * Constructs a new {@code Rectangle2F} instance based on {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@link Point2F} instance
+	 * @param b a {@code Point2F} instance
+	 * @param c a {@code Point2F} instance
+	 * @param d a {@code Point2F} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public Rectangle2F(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 		this.c = Objects.requireNonNull(c, "c == null");

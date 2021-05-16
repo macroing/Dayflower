@@ -1,3 +1,10 @@
+2021-05-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the constructor Rectangle2D(Point2D, Point2D, Point2D, Point2D) to the Rectangle2D class.
+	* ADD:		Add the constructor Rectangle2F(Point2F, Point2F, Point2F, Point2F) to the Rectangle2F class.
+	* ADD:		Add the constructor Rectangle2I(Point2I, Point2I, Point2I, Point2I) to the Rectangle2I class.
+	* ADD:		Add the classes Plane3DReader, Plane3FReader, ProceduralTerrain3DReader, ProceduralTerrain3FReader, Rectangle2DReader, Rectangle2FReader and Rectangle2IReader.
+
 2021-05-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the default methods write(File) and write(String) to the interfaces Shape2D, Shape2F, Shape2I, Shape3D and Shape3F.

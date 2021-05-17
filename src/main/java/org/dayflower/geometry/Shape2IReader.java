@@ -27,7 +27,7 @@ import java.io.UncheckedIOException;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Shape2IReader {
+public interface Shape2IReader extends ShapeReader {
 	/**
 	 * Reads a {@link Shape2I} instance from {@code dataInput}.
 	 * <p>
@@ -45,6 +45,7 @@ public interface Shape2IReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+	@Override
 	Shape2I read(final DataInput dataInput);
 	
 	/**
@@ -67,13 +68,6 @@ public interface Shape2IReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+	@Override
 	Shape2I read(final DataInput dataInput, final int id);
-	
-	/**
-	 * Returns {@code true} if, and only if, this {@code Shape2IReader} instance supports reading {@link Shape2I} instances with an ID of {@code id}, {@code false} otherwise.
-	 * 
-	 * @param id the ID of the {@code Shape2I} type to check
-	 * @return {@code true} if, and only if, this {@code Shape2IReader} instance supports reading {@code Shape2I} instances with an ID of {@code id}, {@code false} otherwise
-	 */
-	boolean isSupported(final int id);
 }

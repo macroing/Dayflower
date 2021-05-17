@@ -24,16 +24,8 @@ import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
 
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
-
-import org.dayflower.node.Node;
 
 /**
  * A {@code Shape3F} denotes a 3-dimensional shape that uses the data type {@code float}.
@@ -43,7 +35,7 @@ import org.dayflower.node.Node;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Shape3F extends Node {
+public interface Shape3F extends Shape {
 	/**
 	 * Returns a {@link BoundingVolume3F} instance that contains this {@code Shape3F} instance.
 	 * 
@@ -67,13 +59,6 @@ public interface Shape3F extends Node {
 	Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code Shape3F} instance.
-	 * 
-	 * @return a {@code String} with the name of this {@code Shape3F} instance
-	 */
-	String getName();
-	
-	/**
 	 * Returns the surface area of this {@code Shape3F} instance.
 	 * 
 	 * @return the surface area of this {@code Shape3F} instance
@@ -94,26 +79,6 @@ public interface Shape3F extends Node {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum);
-	
-	/**
-	 * Returns an {@code int} with the ID of this {@code Shape3F} instance.
-	 * 
-	 * @return an {@code int} with the ID of this {@code Shape3F} instance
-	 */
-	int getID();
-	
-	/**
-	 * Writes this {@code Shape3F} instance to {@code dataOutput}.
-	 * <p>
-	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * 
-	 * @param dataOutput the {@code DataOutput} instance to write to
-	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	void write(final DataOutput dataOutput);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -247,39 +212,5 @@ public interface Shape3F extends Node {
 		}
 		
 		return 0.0F;
-	}
-	
-	/**
-	 * Writes this {@code Shape3F} instance to the file represented by {@code file}.
-	 * <p>
-	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * 
-	 * @param file a {@code File} instance that represents the file to write to
-	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	default void write(final File file) {
-		try(final DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(Objects.requireNonNull(file, "file == null")))) {
-			write(dataOutputStream);
-		} catch(final IOException e) {
-			throw new UncheckedIOException(e);
-		}
-	}
-	
-	/**
-	 * Writes this {@code Shape3F} instance to the file represented by {@code pathname}.
-	 * <p>
-	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * 
-	 * @param pathname a {@code String} that contains the pathname to the file to write to
-	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	default void write(final String pathname) {
-		write(new File(pathname));
 	}
 }

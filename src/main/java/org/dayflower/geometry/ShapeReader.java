@@ -22,16 +22,16 @@ import java.io.DataInput;
 import java.io.UncheckedIOException;
 
 /**
- * A {@code Shape2DReader} reads {@link Shape2D} instances from a {@code DataInput} instance.
+ * A {@code ShapeReader} reads {@link Shape} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Shape2DReader extends ShapeReader {
+public interface ShapeReader {
 	/**
-	 * Reads a {@link Shape2D} instance from {@code dataInput}.
+	 * Reads a {@link Shape} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Shape2D} instance that was read.
+	 * Returns the {@code Shape} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -40,18 +40,17 @@ public interface Shape2DReader extends ShapeReader {
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @return the {@code Shape2D} instance that was read
+	 * @return the {@code Shape} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	@Override
-	Shape2D read(final DataInput dataInput);
+	Shape read(final DataInput dataInput);
 	
 	/**
-	 * Reads a {@link Shape2D} instance from {@code dataInput}.
+	 * Reads a {@link Shape} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Shape2D} instance that was read.
+	 * Returns the {@code Shape} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -59,15 +58,22 @@ public interface Shape2DReader extends ShapeReader {
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
-	 * The ID of the {@code Shape2D} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
+	 * The ID of the {@code Shape} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @param id the ID of the {@code Shape2D} type to read
-	 * @return the {@code Shape2D} instance that was read
+	 * @param id the ID of the {@code Shape} type to read
+	 * @return the {@code Shape} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, {@code id} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	@Override
-	Shape2D read(final DataInput dataInput, final int id);
+	Shape read(final DataInput dataInput, final int id);
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code ShapeReader} instance supports reading {@link Shape} instances with an ID of {@code id}, {@code false} otherwise.
+	 * 
+	 * @param id the ID of the {@code Shape} type to check
+	 * @return {@code true} if, and only if, this {@code ShapeReader} instance supports reading {@code Shape} instances with an ID of {@code id}, {@code false} otherwise
+	 */
+	boolean isSupported(final int id);
 }

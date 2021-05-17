@@ -32,6 +32,7 @@ Below follows a few lists of features available in the Geometry API.
 * `Ray3F`
 * `SampleGeneratorD`
 * `SampleGeneratorF`
+* `Shape` and `ShapeReader`
 * `Shape2D` and `Shape2DReader`
 * `Shape2F` and `Shape2FReader`
 * `Shape2I` and `Shape2IReader`

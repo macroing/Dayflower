@@ -1,6 +1,11 @@
 2021-05-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add an extends clause with ShapeReader to Shape2DReader, Shape2FReader, Shape2IReader, Shape3DReader and Shape3FReader.
+	* ADD:		Add the interfaces Shape and ShapeReader.
 	* ADD:		Add the classes RectangularCuboid3DReader, RectangularCuboid3FReader, Sphere3DReader, Sphere3FReader, Torus3DReader and Torus3FReader.
+	* CHANGE:	Change the extended interface of Shape2D, Shape2F, Shape2I, Shape3D and Shape3F from Node to Shape.
+	* REMOVE:	Remove the methods getName(), getID(), write(DataOutput), write(File) and write(String) from Shape2D, Shape2F, Shape2I, Shape3D and Shape3F.
+	* REMOVE:	Remove the method isSupported(int) from Shape2DReader, Shape2FReader, Shape2IReader, Shape3DReader and Shape3FReader.
 
 2021-05-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

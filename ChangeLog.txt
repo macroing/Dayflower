@@ -155,3 +155,28 @@
 
 	* ADD:		Add an inner class called Builder to the DisneyMaterial class.
 	* ADD:		Add an inner class called Builder to the ClearCoatMaterial class.
+
+2021-04-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method setImage() to the Renderer interface as well as an implementation of it in the AbstractCPURenderer and AbstractGPURenderer classes.
+	* ADD:		Add a class called Demo with methods to create Scene instances for demonstration purposes.
+	* ADD:		Add the methods getAmplitudes(), getWavelengths(), parseSPD(File) and printSPDToJava(File, File) to the classes IrregularSpectralCurveD and IrregularSpectralCurveF.
+	* ADD:		Add the method radicalInverse(int, long) to the classes Doubles and Floats.
+	* ADD:		Add the methods toConstantJavaField(String, double[]) and toConstantJavaField(String, float[]) to the Strings class.
+	* REMOVE:	Remove the Previews class.
+
+2021-04-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Change the resolution of the Distribution2F that is created by the LDRImageLight class from the resolution of the image itself to 32x32.
+
+2021-04-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method pack(int, int, int, int) to the Ints class.
+	* CHANGE:	Update the memory requirement for ClearCoatMaterial, DisneyMaterial, GlassMaterial, GlossyMaterial, MatteMaterial, MetalMaterial, MirrorMaterial, PlasticMaterial and SubstrateMaterial on the GPU.
+
+2021-04-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a dependency to org.macroing.java.
+	* CHANGE:	Update the sun sampling for the PerezLight class.
+	* CHANGE:	The package names of the classes and interfaces in the Utility API that were moved to org.macroing.java were updated.
+	* REMOVE:	Some classes and interfaces in the Utility API were moved to org.macroing.java and therefore removed from the Utility API.

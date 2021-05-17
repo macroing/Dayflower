@@ -1,3 +1,7 @@
+2021-05-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the classes RectangularCuboid3DReader, RectangularCuboid3FReader, Sphere3DReader, Sphere3FReader, Torus3DReader and Torus3FReader.
+
 2021-05-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method read(DataInput) to the interfaces BoundingVolume3DReader and BoundingVolume3FReader.

@@ -1,3 +1,7 @@
+2021-05-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the classes Triangle2DReader, Triangle2FReader and Triangle2IReader.
+
 2021-05-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add an extends clause with ShapeReader to Shape2DReader, Shape2FReader, Shape2IReader, Shape3DReader and Shape3FReader.

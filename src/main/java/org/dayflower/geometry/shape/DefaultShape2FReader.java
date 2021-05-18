@@ -46,6 +46,7 @@ public final class DefaultShape2FReader implements Shape2FReader {
 		this.shape2FReaders.put(Integer.valueOf(Circle2F.ID), new Circle2FReader());
 		this.shape2FReaders.put(Integer.valueOf(Line2F.ID), new Line2FReader());
 		this.shape2FReaders.put(Integer.valueOf(Rectangle2F.ID), new Rectangle2FReader());
+		this.shape2FReaders.put(Integer.valueOf(Triangle2F.ID), new Triangle2FReader());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +103,7 @@ public final class DefaultShape2FReader implements Shape2FReader {
 			case Circle2F.ID:
 			case Line2F.ID:
 			case Rectangle2F.ID:
+			case Triangle2F.ID:
 				return this.shape2FReaders.get(Integer.valueOf(id)).read(dataInput, id);
 			default:
 				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));

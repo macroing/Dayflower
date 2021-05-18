@@ -46,6 +46,7 @@ public final class DefaultShape2DReader implements Shape2DReader {
 		this.shape2DReaders.put(Integer.valueOf(Circle2D.ID), new Circle2DReader());
 		this.shape2DReaders.put(Integer.valueOf(Line2D.ID), new Line2DReader());
 		this.shape2DReaders.put(Integer.valueOf(Rectangle2D.ID), new Rectangle2DReader());
+		this.shape2DReaders.put(Integer.valueOf(Triangle2D.ID), new Triangle2DReader());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +103,7 @@ public final class DefaultShape2DReader implements Shape2DReader {
 			case Circle2D.ID:
 			case Line2D.ID:
 			case Rectangle2D.ID:
+			case Triangle2D.ID:
 				return this.shape2DReaders.get(Integer.valueOf(id)).read(dataInput, id);
 			default:
 				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));

@@ -1,3 +1,7 @@
+2021-05-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Fix a bug in the AbstractMaterialKernel class. The negation flag for the incoming direction was only accounted for in one case.
+
 2021-05-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the classes Triangle2DReader, Triangle2FReader and Triangle2IReader.

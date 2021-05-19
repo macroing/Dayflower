@@ -2758,8 +2758,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float d = (exponent + 1.0F) * pow(normalNormalizedCosThetaAbs, exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float f = doSchlickFresnelDielectric1(outgoingDotNormalNormalized, 1.0F);
-//		final float h = 1.0F / (4.0F * abs(cosThetaOutgoing + -cosThetaIncoming - cosThetaOutgoing * -cosThetaIncoming));
-		final float h = 1.0F / (4.0F * cosThetaIncomingAbs * cosThetaOutgoingAbs);
+		final float h = 1.0F / (4.0F * abs(cosThetaOutgoing + -cosThetaIncoming - cosThetaOutgoing * -cosThetaIncoming));
+//		final float h = 1.0F / (4.0F * cosThetaIncomingAbs * cosThetaOutgoingAbs);
 		
 		final float reflectanceScaleR = doBXDFAshikhminShirleyBRDFGetReflectanceScaleR();
 		final float reflectanceScaleG = doBXDFAshikhminShirleyBRDFGetReflectanceScaleG();
@@ -2813,7 +2813,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float probabilityDensityFunctionValue = (exponent + 1.0F) * pow(normalNormalizedCosThetaAbs, exponent) / (PI * 8.0F * outgoingDotNormalNormalizedAbs);
 		
-		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+		doBXDFResultSetProbabilityDensityFunctionValue(checkIsFinite(probabilityDensityFunctionValue) ? probabilityDensityFunctionValue : 0.0F);
 	}
 	
 	private void doBXDFAshikhminShirleyBRDFSetReflectanceScale(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
@@ -5079,7 +5079,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private void doBXDFResultSetIncomingTransformedFromBSDFResult() {
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(materialBSDFResultGetIncomingX(), materialBSDFResultGetIncomingY(), materialBSDFResultGetIncomingZ());
+		final boolean isNegatingIncoming = doBSDFIsNegatingIncoming();
+		
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(isNegatingIncoming ? -materialBSDFResultGetIncomingX() : materialBSDFResultGetIncomingX(), isNegatingIncoming ? -materialBSDFResultGetIncomingY() : materialBSDFResultGetIncomingY(), isNegatingIncoming ? -materialBSDFResultGetIncomingZ() : materialBSDFResultGetIncomingZ());
 		
 		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
 	}

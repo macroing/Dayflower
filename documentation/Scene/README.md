@@ -184,3 +184,10 @@ The following example demonstrates how the `SubstrateMaterial` can be created an
 new SubstrateMaterial(new Color3F(1.0F, 0.2F, 0.2F));
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SubstrateMaterial.png "SubstrateMaterial")
+
+#### Bullseye Texture Example
+The following example demonstrates how the `BullseyeTexture` can be created and looks visually.
+```java
+new BullseyeTexture(new Color3F(1.0F, 0.2F, 0.2F), new Color3F(0.2F, 1.0F, 0.2F), new Point3F(), 4.0F)
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/BullseyeTexture.png "BullseyeTexture")

@@ -191,3 +191,10 @@ The following example demonstrates how the `BullseyeTexture` can be created and 
 new BullseyeTexture(new Color3F(1.0F, 0.2F, 0.2F), new Color3F(0.2F, 1.0F, 0.2F), new Point3F(), 4.0F);
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/BullseyeTexture.png "BullseyeTexture")
+
+#### Checkerboard Texture Example
+The following example demonstrates how the `CheckerboardTexture` can be created and looks visually.
+```java
+new CheckerboardTexture(new Color3F(1.0F, 0.2F, 0.2F), new Color3F(0.2F, 1.0F, 0.2F), AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F));
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/CheckerboardTexture.png "CheckerboardTexture")

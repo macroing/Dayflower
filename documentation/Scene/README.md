@@ -198,3 +198,24 @@ The following example demonstrates how the `CheckerboardTexture` can be created 
 new CheckerboardTexture(new Color3F(1.0F, 0.2F, 0.2F), new Color3F(0.2F, 1.0F, 0.2F), AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F));
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/CheckerboardTexture.png "CheckerboardTexture")
+
+#### Constant Texture Example
+The following example demonstrates how the `ConstantTexture` can be created and looks visually.
+```java
+new ConstantTexture(new Color3F(1.0F, 0.2F, 0.2F));
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/ConstantTexture.png "ConstantTexture")
+
+#### Marble Texture Example
+The following example demonstrates how the `MarbleTexture` can be created and looks visually.
+```java
+new MarbleTexture();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MarbleTexture.png "MarbleTexture")
+
+#### Simplex Fractional Brownian Motion Texture Example
+The following example demonstrates how the `SimplexFractionalBrownianMotionTexture` can be created and looks visually.
+```java
+new SimplexFractionalBrownianMotionTexture();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SimplexFractionalBrownianMotionTexture.png "SimplexFractionalBrownianMotionTexture")

@@ -122,98 +122,102 @@ public class SceneRadianceExample {
 }
 ```
 
-#### Clear Coat Material Example
+#### Material Examples
+
+###### Clear Coat Material Example
 The following example demonstrates how the `ClearCoatMaterial` can be created and looks visually.
 ```java
 new ClearCoatMaterial(new Color3F(0.5F, 0.01F, 0.01F));
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/ClearCoatMaterial.png "ClearCoatMaterial")
 
-#### Disney Material Example
+###### Disney Material Example
 The following example demonstrates how the `DisneyMaterial` can be created and looks visually.
 ```java
 new DisneyMaterial(new Color3F(255, 127, 80), Color3F.BLACK, Color3F.BLACK, 0.4F, 1.75F, 1.0F, 1.0F, 1.2F, 0.0F, 0.39F, 0.475F, 0.1F, 0.5F, 0.5F, 0.0F);
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/DisneyMaterial.png "DisneyMaterial")
 
-#### Glass Material Example
+###### Glass Material Example
 The following example demonstrates how the `GlassMaterial` can be created and looks visually.
 ```java
 new GlassMaterial();
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/GlassMaterial.png "GlassMaterial")
 
-#### Glossy Material Example
+###### Glossy Material Example
 The following example demonstrates how the `GlossyMaterial` can be created and looks visually.
 ```java
 new GlossyMaterial(new Color3F(0.01F, 0.5F, 0.01F), Color3F.BLACK, 0.1F);
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/GlossyMaterial.png "GlossyMaterial")
 
-#### Matte Material Example
+###### Matte Material Example
 The following example demonstrates how the `MatteMaterial` can be created and looks visually.
 ```java
 new MatteMaterial();
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MatteMaterial.png "MatteMaterial")
 
-#### Metal Material Example
+###### Metal Material Example
 The following example demonstrates how the `MetalMaterial` can be created and looks visually.
 ```java
 new MetalMaterial();
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MetalMaterial.png "MetalMaterial")
 
-#### Mirror Material Example
+###### Mirror Material Example
 The following example demonstrates how the `MirrorMaterial` can be created and looks visually.
 ```java
 new MirrorMaterial(Color3F.GRAY_0_50);
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MirrorMaterial.png "MirrorMaterial")
 
-#### Plastic Material Example
+###### Plastic Material Example
 The following example demonstrates how the `PlasticMaterial` can be created and looks visually.
 ```java
 new PlasticMaterial(new Color3F(0.05F, 0.05F, 1.0F), Color3F.GRAY_0_50);
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/PlasticMaterial.png "PlasticMaterial")
 
-#### Substrate Material Example
+###### Substrate Material Example
 The following example demonstrates how the `SubstrateMaterial` can be created and looks visually.
 ```java
 new SubstrateMaterial(new Color3F(1.0F, 0.2F, 0.2F));
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SubstrateMaterial.png "SubstrateMaterial")
 
-#### Bullseye Texture Example
+#### Texture Examples
+
+###### Bullseye Texture Example
 The following example demonstrates how the `BullseyeTexture` can be created and looks visually.
 ```java
 new BullseyeTexture(new Color3F(1.0F, 0.2F, 0.2F), new Color3F(0.2F, 1.0F, 0.2F), new Point3F(), 4.0F);
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/BullseyeTexture.png "BullseyeTexture")
 
-#### Checkerboard Texture Example
+###### Checkerboard Texture Example
 The following example demonstrates how the `CheckerboardTexture` can be created and looks visually.
 ```java
 new CheckerboardTexture(new Color3F(1.0F, 0.2F, 0.2F), new Color3F(0.2F, 1.0F, 0.2F), AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F));
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/CheckerboardTexture.png "CheckerboardTexture")
 
-#### Constant Texture Example
+###### Constant Texture Example
 The following example demonstrates how the `ConstantTexture` can be created and looks visually.
 ```java
 new ConstantTexture(new Color3F(1.0F, 0.2F, 0.2F));
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/ConstantTexture.png "ConstantTexture")
 
-#### Marble Texture Example
+###### Marble Texture Example
 The following example demonstrates how the `MarbleTexture` can be created and looks visually.
 ```java
 new MarbleTexture();
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MarbleTexture.png "MarbleTexture")
 
-#### Simplex Fractional Brownian Motion Texture Example
+###### Simplex Fractional Brownian Motion Texture Example
 The following example demonstrates how the `SimplexFractionalBrownianMotionTexture` can be created and looks visually.
 ```java
 new SimplexFractionalBrownianMotionTexture();

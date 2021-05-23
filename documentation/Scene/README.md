@@ -122,6 +122,36 @@ public class SceneRadianceExample {
 }
 ```
 
+#### Light Examples
+
+###### Directional Light Example
+The following example demonstrates how the `DirectionalLight` can be created and looks visually.
+```java
+new DirectionalLight(new Transform(), Color3F.WHITE, Vector3F.normalize(new Vector3F(1.0F, 1.0F, 0.0F)));
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/DirectionalLight.png "DirectionalLight")
+
+###### Perez Light Example
+The following example demonstrates how the `PerezLight` can be created and looks visually.
+```java
+new PerezLight();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/PerezLight.png "PerezLight")
+
+###### Point Light Example
+The following example demonstrates how the `PointLight` can be created and looks visually.
+```java
+new PointLight(new Color3F(50.0F), new Point3F(0.0F, 4.0F, -5.0F));
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/PointLight.png "PointLight")
+
+###### Spot Light Example
+The following example demonstrates how the `SpotLight` can be created and looks visually.
+```java
+new SpotLight(AngleF.degrees(25.0F), AngleF.degrees(5.0F), new Color3F(200.0F), new Point3F(0.0F, 2.0F, -10.0F), Vector3F.z());
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SpotLight.png "SpotLight")
+
 #### Material Examples
 
 ###### Clear Coat Material Example

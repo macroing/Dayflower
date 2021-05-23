@@ -189,6 +189,13 @@ new SubstrateMaterial(new Color3F(1.0F, 0.2F, 0.2F));
 
 #### Texture Examples
 
+###### Blend Texture Example
+The following example demonstrates how the `BlendTexture` can be created and looks visually.
+```java
+new BlendTexture(new SimplexFractionalBrownianMotionTexture(), new BullseyeTexture(new Color3F(1.0F, 0.2F, 0.2F), new Color3F(0.2F, 1.0F, 0.2F), new Point3F(), 4.0F));
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/BlendTexture.png "BlendTexture")
+
 ###### Bullseye Texture Example
 The following example demonstrates how the `BullseyeTexture` can be created and looks visually.
 ```java
@@ -210,6 +217,13 @@ new ConstantTexture(new Color3F(1.0F, 0.2F, 0.2F));
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/ConstantTexture.png "ConstantTexture")
 
+###### Low-Dynamic-Range (LDR) Image Texture Example
+The following example demonstrates how the `LDRImageTexture` can be created and looks visually.
+```java
+LDRImageTexture.load(new File("./path/to/image.png"), AngleF.degrees(0.0F), new Vector2F(2.0F, 2.0F));
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/LDRImageTexture.png "LDRImageTexture")
+
 ###### Marble Texture Example
 The following example demonstrates how the `MarbleTexture` can be created and looks visually.
 ```java
@@ -223,3 +237,17 @@ The following example demonstrates how the `SimplexFractionalBrownianMotionTextu
 new SimplexFractionalBrownianMotionTexture();
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SimplexFractionalBrownianMotionTexture.png "SimplexFractionalBrownianMotionTexture")
+
+###### Surface Normal Texture Example
+The following example demonstrates how the `SurfaceNormalTexture` can be created and looks visually.
+```java
+new SurfaceNormalTexture();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SurfaceNormalTexture.png "SurfaceNormalTexture")
+
+###### UV Texture Example
+The following example demonstrates how the `UVTexture` can be created and looks visually.
+```java
+new UVTexture();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/UVTexture.png "UVTexture")

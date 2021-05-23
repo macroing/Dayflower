@@ -601,9 +601,9 @@ public final class PerezLight extends Light {
 	 * @return the length of the {@code float[]}
 	 */
 	public int getArrayLength() {
-		final int lengthSunColor = 3;
 		final int lengthObjectToWorld = 16;
 		final int lengthWorldToObject = 16;
+		final int lengthSunColor = 3;
 		final int lengthSunDirection = 3;
 		final int lengthSunDirectionWorldSpace = 3;
 		final int lengthPerezRelativeLuminance = 5;
@@ -613,7 +613,7 @@ public final class PerezLight extends Light {
 		final int lengthRadius = 1;
 		final int lengthTheta = 1;
 		final int lengthDistribution = this.distribution.toArray().length;
-		final int length = lengthSunColor + lengthObjectToWorld + lengthWorldToObject + lengthSunDirection + lengthSunDirectionWorldSpace + lengthPerezRelativeLuminance + lengthPerezX + lengthPerezY + lengthZenith + lengthRadius + lengthTheta + lengthDistribution;
+		final int length = lengthObjectToWorld + lengthWorldToObject + lengthSunColor + lengthSunDirection + lengthSunDirectionWorldSpace + lengthPerezRelativeLuminance + lengthPerezX + lengthPerezY + lengthZenith + lengthRadius + lengthTheta + lengthDistribution;
 		final int lengthWithPadding = length + padding(length);
 		
 		return lengthWithPadding;

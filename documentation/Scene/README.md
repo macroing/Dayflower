@@ -131,6 +131,13 @@ new DirectionalLight(new Transform(), Color3F.WHITE, Vector3F.normalize(new Vect
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/DirectionalLight.png "DirectionalLight")
 
+###### Low-Dynamic-Range (LDR) Image Light Example
+The following example demonstrates how the `LDRImageLight` can be created and looks visually.
+```java
+LDRImageLight.load(new File("./path/to/image.png"));
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/LDRImageLight.png "LDRImageLight")
+
 ###### Perez Light Example
 The following example demonstrates how the `PerezLight` can be created and looks visually.
 ```java

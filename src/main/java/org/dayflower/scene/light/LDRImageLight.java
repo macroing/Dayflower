@@ -81,27 +81,47 @@ public final class LDRImageLight extends Light {
 	/**
 	 * The offset for the angle in radians in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_ANGLE_RADIANS = 0;
+	public static final int ARRAY_OFFSET_ANGLE_RADIANS = 32;
+	
+	/**
+	 * The offset for the {@link Distribution2F} denoted by {@code Distribution} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_DISTRIBUTION = 40;
 	
 	/**
 	 * The offset for the image in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_IMAGE = 5;
+	public static final int ARRAY_OFFSET_IMAGE = 2352;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_OBJECT_TO_WORLD = 0;
+	
+	/**
+	 * The offset for the radius in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RADIUS = 35;
 	
 	/**
 	 * The offset for the resolution of the X-axis in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_RESOLUTION_X = 3;
+	public static final int ARRAY_OFFSET_RESOLUTION_X = 36;
 	
 	/**
 	 * The offset for the resolution of the Y-axis in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_RESOLUTION_Y = 4;
+	public static final int ARRAY_OFFSET_RESOLUTION_Y = 37;
 	
 	/**
 	 * The offset for the {@link Vector2F} instance representing the scale in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_SCALE = 1;
+	public static final int ARRAY_OFFSET_SCALE = 33;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_WORLD_TO_OBJECT = 16;
 	
 	/**
 	 * The ID of this {@code LDRImageLight} class.
@@ -307,16 +327,15 @@ public final class LDRImageLight extends Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());
-		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
+		final Sample2F sampleRemapped = this.distribution.continuousRemap(new Sample2F(sample.getU(), sample.getV()));
 		
-		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample1, true);
+		final float probabilityDensityFunctionValueRemapped = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true);
 		
-		if(isZero(probabilityDensityFunctionValue0)) {
+		if(isZero(probabilityDensityFunctionValueRemapped)) {
 			return Optional.empty();
 		}
 		
-		final Vector3F incomingObjectSpace = Vector3F.directionSpherical(sample1.getU(), sample1.getV());
+		final Vector3F incomingObjectSpace = Vector3F.directionSpherical(sampleRemapped.getU(), sampleRemapped.getV());
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incomingObjectSpace);
 		
 		final float sinTheta = incomingObjectSpace.sinTheta();
@@ -329,9 +348,9 @@ public final class LDRImageLight extends Light {
 		
 		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
 		
-		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * PI * PI * sinTheta);
 		
-		return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue1));
+		return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -480,18 +499,67 @@ public final class LDRImageLight extends Light {
 	public float[] toArray() {
 		final float[] array = new float[getArrayLength()];
 		
+		final float[] distribution = this.distribution.toArray();
+		
+		final Matrix44F objectToWorld = getTransform().getObjectToWorld();
+		final Matrix44F worldToObject = getTransform().getWorldToObject();
+		
+//		Block #1:
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();
+		
+//		Block #2:
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();
+		
+//		Block #3:
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();
+		
+//		Block #4:
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();
+		
+//		Block #5:
 		array[ARRAY_OFFSET_ANGLE_RADIANS] = this.angle.getRadians();
 		array[ARRAY_OFFSET_SCALE + 0] = this.scale.getU();
 		array[ARRAY_OFFSET_SCALE + 1] = this.scale.getV();
+		array[ARRAY_OFFSET_RADIUS] = this.radius;
 		array[ARRAY_OFFSET_RESOLUTION_X] = this.resolutionX;
 		array[ARRAY_OFFSET_RESOLUTION_Y] = this.resolutionY;
+		array[38] = 0.0F;
+		array[39] = 0.0F;
+		
+		for(int i = 0; i < distribution.length; i++) {
+			array[ARRAY_OFFSET_DISTRIBUTION + i] = distribution[i];
+		}
 		
 		for(int i = 0; i < this.image.length; i++) {
 			array[ARRAY_OFFSET_IMAGE + i] = this.image[i];
-		}
-		
-		for(int i = ARRAY_OFFSET_IMAGE + this.image.length; i < array.length; i++) {
-			array[i] = 0.0F;
 		}
 		
 		return array;
@@ -503,7 +571,19 @@ public final class LDRImageLight extends Light {
 	 * @return the length of the {@code float[]}
 	 */
 	public int getArrayLength() {
-		return 5 + this.image.length + padding(5 + this.image.length);
+		final int lengthObjectToWorld = 16;
+		final int lengthWorldToObject = 16;
+		final int lengthAngleRadians = 1;
+		final int lengthScale = 2;
+		final int lengthRadius = 1;
+		final int lengthResolutionX = 1;
+		final int lengthResolutionY = 1;
+		final int lengthDistribution = this.distribution.toArray().length;
+		final int lengthImage = this.image.length;
+		final int length = lengthObjectToWorld + lengthWorldToObject + lengthAngleRadians + lengthScale + lengthRadius + lengthResolutionX + lengthResolutionY + lengthDistribution + lengthImage;
+		final int lengthWithPadding = length + padding(length);
+		
+		return lengthWithPadding;
 	}
 	
 	/**

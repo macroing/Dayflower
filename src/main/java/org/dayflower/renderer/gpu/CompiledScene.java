@@ -215,12 +215,7 @@ final class CompiledScene {
 	}
 	
 	public int getLightCount() {
-		/*
-		 * LDRImageLight is currently not supported by the new lighting system.
-		 * This method is used in combination with 'lightIDAndOffsetArray'.
-		 */
-		
-		return getLightDirectionalLightCount() + /*getLightLDRImageLightCount() +*/ getLightPerezLightCount() + getLightPointLightCount() + getLightSpotLightCount();
+		return getLightDirectionalLightCount() + getLightLDRImageLightCount() + getLightPerezLightCount() + getLightPointLightCount() + getLightSpotLightCount();
 	}
 	
 	public int getLightDirectionalLightCount() {

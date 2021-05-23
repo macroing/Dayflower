@@ -532,7 +532,7 @@ final class SceneCompiler {
 		this.distinctPointLights.addAll(NodeFilter.filterAllDistinct(scene, PointLight.class));
 		this.distinctSpotLights.addAll(NodeFilter.filterAllDistinct(scene, SpotLight.class));
 		this.distinctLights.addAll(this.distinctDirectionalLights);
-//		this.distinctLights.addAll(this.distinctLDRImageLights);
+		this.distinctLights.addAll(this.distinctLDRImageLights);
 		this.distinctLights.addAll(this.distinctPerezLights);
 		this.distinctLights.addAll(this.distinctPointLights);
 		this.distinctLights.addAll(this.distinctSpotLights);

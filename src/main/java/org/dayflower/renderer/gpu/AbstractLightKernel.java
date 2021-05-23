@@ -31,6 +31,7 @@ import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
+import org.dayflower.scene.texture.LDRImageTexture;
 
 /**
  * An {@code AbstractLightKernel} is an abstract extension of the {@link AbstractMaterialKernel} class that adds additional features.
@@ -268,6 +269,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightIsUsingDeltaDistribution();
+		} else if(doLightLDRImageLightIsMatchingID(id)) {
+			return doLightLDRImageLightIsUsingDeltaDistribution();
 		} else if(doLightPerezLightIsMatchingID(id)) {
 			return doLightPerezLightIsUsingDeltaDistribution();
 		} else if(doLightPointLightIsMatchingID(id)) {
@@ -305,6 +308,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightSampleRadianceIncoming(u, v);
+		} else if(doLightLDRImageLightIsMatchingID(id)) {
+			return doLightLDRImageLightSampleRadianceIncoming(u, v);
 		} else if(doLightPerezLightIsMatchingID(id)) {
 			return doLightPerezLightSampleRadianceIncoming(u, v);
 		} else if(doLightPointLightIsMatchingID(id)) {
@@ -333,6 +338,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
+		} else if(doLightLDRImageLightIsMatchingID(id)) {
+			return doLightLDRImageLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
 		} else if(doLightPerezLightIsMatchingID(id)) {
 			return doLightPerezLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
 		} else if(doLightPointLightIsMatchingID(id)) {
@@ -380,6 +387,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			doLightDirectionalLightEvaluateRadianceEmitted();
+		} else if(doLightLDRImageLightIsMatchingID(id)) {
+			doLightLDRImageLightEvaluateRadianceEmitted();
 		} else if(doLightPerezLightIsMatchingID(id)) {
 			doLightPerezLightEvaluateRadianceEmitted();
 		} else if(doLightPointLightIsMatchingID(id)) {
@@ -393,11 +402,23 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	 * Evaluates the radiance emitted along the current ray using all {@link Light} instances for which this is supported.
 	 */
 	protected final void lightEvaluateRadianceEmittedAll() {
+		final int lightLDRImageLightCount = this.lightLDRImageLightCount;
 		final int lightPerezLightCount = this.lightPerezLightCount;
 		
 		float radianceR = 0.0F;
 		float radianceG = 0.0F;
 		float radianceB = 0.0F;
+		
+		for(int i = 0; i < lightLDRImageLightCount; i++) {
+			final int lightLDRImageLightArrayOffset = this.lightLDRImageLightOffsetArray[i];
+			
+			lightSet(LDRImageLight.ID, lightLDRImageLightArrayOffset);
+			lightEvaluateRadianceEmitted();
+			
+			radianceR += color3FLHSGetR();
+			radianceG += color3FLHSGetG();
+			radianceB += color3FLHSGetB();
+		}
 		
 		for(int i = 0; i < lightPerezLightCount; i++) {
 			final int lightPerezLightArrayOffset = this.lightPerezLightOffsetArray[i];
@@ -427,6 +448,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			doLightDirectionalLightPower();
+		} else if(doLightLDRImageLightIsMatchingID(id)) {
+			doLightLDRImageLightPower();
 		} else if(doLightPerezLightIsMatchingID(id)) {
 			doLightPerezLightPower();
 		} else if(doLightPointLightIsMatchingID(id)) {
@@ -684,6 +707,334 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float powerB = radianceB * scale;
 		
 		color3FLHSSet(powerR, powerG, powerB);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Light - LDRImageLight //////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightLDRImageLightIsMatchingID(final int id) {
+		return id == LDRImageLight.ID;
+	}
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightLDRImageLightIsUsingDeltaDistribution() {
+		return false;
+	}
+	
+	private boolean doLightLDRImageLightSampleRadianceIncoming(final float u, final float v) {
+		final int offset = lightGetOffset();
+		
+		final float radius = doLightLDRImageLightGetRadius(offset);
+		
+		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		
+		final int offsetDistribution = offset + LDRImageLight.ARRAY_OFFSET_DISTRIBUTION;
+		
+		doLightLDRImageLightDistribution2FContinuousRemap(offset + LDRImageLight.ARRAY_OFFSET_DISTRIBUTION, u, v);
+		
+		final float sampleRemappedU = point2FGetComponent1();
+		final float sampleRemappedV = point2FGetComponent2();
+		
+		final float probabilityDensityFunctionValueRemapped = doLightLDRImageLightDistribution2FContinuousProbabilityDensityFunctionRemapped(offsetDistribution, sampleRemappedU, sampleRemappedV);
+		
+		if(checkIsZero(probabilityDensityFunctionValueRemapped)) {
+			return false;
+		}
+		
+		vector3FSetDirectionSpherical2(sampleRemappedU, sampleRemappedV);
+		
+		final float incomingObjectSpaceX = vector3FGetComponent1();
+		final float incomingObjectSpaceY = vector3FGetComponent2();
+		final float incomingObjectSpaceZ = vector3FGetComponent3();
+		
+		doLightLDRImageLightTransformToWorldSpace(offset, incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		
+		final float incomingWorldSpaceX = vector3FGetComponent1();
+		final float incomingWorldSpaceY = vector3FGetComponent2();
+		final float incomingWorldSpaceZ = vector3FGetComponent3();
+		
+		final float sinTheta = vector3FSinTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		
+		if(checkIsZero(sinTheta)) {
+			return false;
+		}
+		
+		doLightLDRImageLightRadianceSky(offset, incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		
+		final float resultR = color3FLHSGetR();
+		final float resultG = color3FLHSGetG();
+		final float resultB = color3FLHSGetB();
+		
+		final float pointX = surfaceIntersectionPointX + incomingWorldSpaceX * 2.0F * radius;
+		final float pointY = surfaceIntersectionPointY + incomingWorldSpaceY * 2.0F * radius;
+		final float pointZ = surfaceIntersectionPointZ + incomingWorldSpaceZ * 2.0F * radius;
+		
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * PI * PI * sinTheta);
+		
+		lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
+		lightSampleSetPoint(pointX, pointY, pointZ);
+		lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+		lightSampleSetResult(resultR, resultG, resultB);
+		
+		return true;
+	}
+	
+	private float doLightLDRImageLightDistribution1FContinuousProbabilityDensityFunction(final int offset, final int index) {
+		final float functionIntegral = doLightLDRImageLightDistribution1FFunctionIntegral(offset);
+		final float function = doLightLDRImageLightDistribution1FFunction(offset, index);
+		
+		return functionIntegral > 0.0F ? function / functionIntegral : 0.0F;
+	}
+	
+	private float doLightLDRImageLightDistribution1FContinuousRemap(final int offset, final float value, final int index) {
+		final int count = doLightLDRImageLightDistribution1FCount(offset);
+		
+		final float cumulativeDistributionFunction0 = doLightLDRImageLightDistribution1FCumulativeDistributionFunction(offset, index + 0);
+		final float cumulativeDistributionFunction1 = doLightLDRImageLightDistribution1FCumulativeDistributionFunction(offset, index + 1);
+		
+		if(cumulativeDistributionFunction1 - cumulativeDistributionFunction0 > 0.0F) {
+			return (index + ((value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0))) / count;
+		}
+		
+		return (index + (value - cumulativeDistributionFunction0)) / count;
+	}
+	
+	private float doLightLDRImageLightDistribution1FCumulativeDistributionFunction(final int offset, final int index) {
+		return this.lightLDRImageLightArray[offset + 4 + index];
+	}
+	
+	private float doLightLDRImageLightDistribution1FFunction(final int offset, final int index) {
+		return this.lightLDRImageLightArray[offset + 4 + index + (int)(this.lightLDRImageLightArray[offset + 1])];
+	}
+	
+	private float doLightLDRImageLightDistribution1FFunctionIntegral(final int offset) {
+		return this.lightLDRImageLightArray[offset + 3];
+	}
+	
+	@SuppressWarnings("unused")
+	private float doLightLDRImageLightDistribution2FContinuousProbabilityDensityFunction(final int offset, final float u, final float v) {
+//		final boolean isUV = (int)(this.lightLDRImageLightArray[offset]) != 0;
+		final boolean isUV = true;
+		
+		final float m = isUV ? u : v;
+		final float c = isUV ? v : u;
+		
+		final int offsetM = offset + (int)(this.lightLDRImageLightArray[offset + 2]);
+		final int indexM = doLightLDRImageLightDistribution1FIndex(offsetM, m);
+		final int offsetC = offset + (int)(this.lightLDRImageLightArray[offset + 3 + indexM]);
+		final int indexC = doLightLDRImageLightDistribution1FIndex(offsetC, c);
+		
+		final float probabilityDensityFunctionValueM = doLightLDRImageLightDistribution1FContinuousProbabilityDensityFunction(offsetM, indexM);
+		final float probabilityDensityFunctionValueC = doLightLDRImageLightDistribution1FContinuousProbabilityDensityFunction(offsetC, indexC);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueM * probabilityDensityFunctionValueC;
+		
+		return probabilityDensityFunctionValue;
+	}
+	
+	private float doLightLDRImageLightDistribution2FContinuousProbabilityDensityFunctionRemapped(final int offset, final float u, final float v) {
+//		final boolean isUV = (int)(this.lightLDRImageLightArray[offset]) != 0;
+		final boolean isUV = true;
+		
+		final float m = isUV ? u : v;
+		final float c = isUV ? v : u;
+		
+		final int offsetM = offset + (int)(this.lightLDRImageLightArray[offset + 2]);
+		final int countM = doLightLDRImageLightDistribution1FCount(offsetM);
+		final int indexM = saturateI((int)(m * countM), 0, countM - 1);
+		final int offsetC = offset + (int)(this.lightLDRImageLightArray[offset + 3 + indexM]);
+		final int countC = doLightLDRImageLightDistribution1FCount(offsetC);
+		final int indexC = saturateI((int)(c * countC), 0, countC - 1);
+		
+		final float probabilityDensityFunctionValue = doLightLDRImageLightDistribution1FFunction(offsetC, indexC) / doLightLDRImageLightDistribution1FFunctionIntegral(offsetM);
+		
+		return probabilityDensityFunctionValue;
+	}
+	
+	private float doLightLDRImageLightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+		final int offset = lightGetOffset();
+		
+		doLightLDRImageLightTransformToObjectSpace(offset, incomingX, incomingY, incomingZ);
+		
+		final float incomingObjectSpaceX = vector3FGetComponent1();
+		final float incomingObjectSpaceY = vector3FGetComponent2();
+		final float incomingObjectSpaceZ = vector3FGetComponent3();
+		
+		final float sinTheta = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		
+		if(checkIsZero(sinTheta)) {
+			return 0.0F;
+		}
+		
+		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float v = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
+		
+		final float probabilityDensityFunctionValue = doLightLDRImageLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + LDRImageLight.ARRAY_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
+		
+		return probabilityDensityFunctionValue;
+	}
+	
+	private float doLightLDRImageLightGetAngleRadians(final int offset) {
+		return this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_ANGLE_RADIANS];
+	}
+	
+	private float doLightLDRImageLightGetRadius(final int offset) {
+		return this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RADIUS];
+	}
+	
+	private float doLightLDRImageLightGetScaleU(final int offset) {
+		return this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 0];
+	}
+	
+	private float doLightLDRImageLightGetScaleV(final int offset) {
+		return this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 1];
+	}
+	
+	private int doLightLDRImageLightDistribution1FCount(final int offset) {
+		return (int)(this.lightLDRImageLightArray[offset + 2]);
+	}
+	
+	private int doLightLDRImageLightDistribution1FIndex(final int offset, final float value) {
+		final int length = (int)(this.lightLDRImageLightArray[offset + 1]);
+		
+		int currentMinimum = 0;
+		int currentLength = length;
+		
+		while(currentLength > 0) {
+			int currentHalf = currentLength >> 1;
+			int currentMiddle = currentMinimum + currentHalf;
+			
+			if(doLightLDRImageLightDistribution1FCumulativeDistributionFunction(offset, currentMiddle) <= value) {
+				currentMinimum = currentMiddle + 1;
+				currentLength -= currentHalf + 1;
+			} else {
+				currentLength = currentHalf;
+			}
+		}
+		
+		return saturateI(currentMinimum - 1, 0, length - 2);
+	}
+	
+	private int doLightLDRImageLightGetResolutionX(final int offset) {
+		return (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_X]);
+	}
+	
+	private int doLightLDRImageLightGetResolutionY(final int offset) {
+		return (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_Y]);
+	}
+	
+	private void doLightLDRImageLightDistribution2FContinuousRemap(final int offset, final float u, final float v) {
+//		final boolean isUV = (int)(this.lightLDRImageLightArray[offset]) != 0;
+		final boolean isUV = true;
+		
+		final float m = isUV ? u : v;
+		final float c = isUV ? v : u;
+		
+		final int offsetM = offset + (int)(this.lightLDRImageLightArray[offset + 2]);
+		final int indexM = doLightLDRImageLightDistribution1FIndex(offsetM, m);
+		final int offsetC = offset + (int)(this.lightLDRImageLightArray[offset + 3 + indexM]);
+		final int indexC = doLightLDRImageLightDistribution1FIndex(offsetC, c);
+		
+		final float mRemapped = doLightLDRImageLightDistribution1FContinuousRemap(offsetM, m, indexM);
+		final float cRemapped = doLightLDRImageLightDistribution1FContinuousRemap(offsetC, c, indexC);
+		
+		point2FSet(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
+	}
+	
+	private void doLightLDRImageLightEvaluateRadianceEmitted() {
+		final int offset = lightGetOffset();
+		
+		doLightLDRImageLightTransformToObjectSpace(offset, ray3FGetDirectionComponent1(), ray3FGetDirectionComponent2(), ray3FGetDirectionComponent3());
+		doLightLDRImageLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+	}
+	
+	private void doLightLDRImageLightPower() {
+		color3FLHSSet(0.0F, 0.0F, 0.0F);
+	}
+	
+	private void doLightLDRImageLightRadianceSky(final int offset, final float directionX, final float directionY, final float directionZ) {
+		final float angleRadians = doLightLDRImageLightGetAngleRadians(offset);
+		final float angleRadiansCos = cos(angleRadians);
+		final float angleRadiansSin = sin(angleRadians);
+		
+		final float scaleU = doLightLDRImageLightGetScaleU(offset);
+		final float scaleV = doLightLDRImageLightGetScaleV(offset);
+		
+		final int resolutionX = doLightLDRImageLightGetResolutionX(offset);
+		final int resolutionY = doLightLDRImageLightGetResolutionY(offset);
+		
+		final float textureCoordinatesU = vector3FSphericalPhi(directionX, directionY, directionZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = vector3FSphericalTheta(directionX, directionY, directionZ) * PI_RECIPROCAL;
+		
+		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
+		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
+		
+		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU;
+		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV;
+		
+		final float x = positiveModuloF(textureCoordinatesScaledU * resolutionX - 0.5F, resolutionX);
+		final float y = positiveModuloF(textureCoordinatesScaledV * resolutionY - 0.5F, resolutionY);
+		
+		final int minimumX = (int)(floor(x));
+		final int maximumX = (int)(ceil(x));
+		
+		final int minimumY = (int)(floor(y));
+		final int maximumY = (int)(ceil(y));
+		
+		final int offsetImage = offset + LDRImageTexture.ARRAY_OFFSET_IMAGE;
+		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
+		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
+		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
+		final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
+		
+		final int color00RGB = (int)(this.lightLDRImageLightArray[offsetColor00RGB]);
+		final int color01RGB = (int)(this.lightLDRImageLightArray[offsetColor01RGB]);
+		final int color10RGB = (int)(this.lightLDRImageLightArray[offsetColor10RGB]);
+		final int color11RGB = (int)(this.lightLDRImageLightArray[offsetColor11RGB]);
+		
+		final float tX = x - minimumX;
+		final float tY = y - minimumY;
+		
+		final float r = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
+		final float g = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
+		final float b = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
+		
+		color3FLHSSet(r, g, b);
+	}
+	
+	private void doLightLDRImageLightTransformToObjectSpace(final int offset, final float directionX, final float directionY, final float directionZ) {
+		final int offsetWorldToObject = offset + LDRImageLight.ARRAY_OFFSET_WORLD_TO_OBJECT;
+		
+		final float element11 = this.lightLDRImageLightArray[offsetWorldToObject +  0];
+		final float element12 = this.lightLDRImageLightArray[offsetWorldToObject +  1];
+		final float element13 = this.lightLDRImageLightArray[offsetWorldToObject +  2];
+		final float element21 = this.lightLDRImageLightArray[offsetWorldToObject +  4];
+		final float element22 = this.lightLDRImageLightArray[offsetWorldToObject +  5];
+		final float element23 = this.lightLDRImageLightArray[offsetWorldToObject +  6];
+		final float element31 = this.lightLDRImageLightArray[offsetWorldToObject +  8];
+		final float element32 = this.lightLDRImageLightArray[offsetWorldToObject +  9];
+		final float element33 = this.lightLDRImageLightArray[offsetWorldToObject + 10];
+		
+		vector3FSetMatrix44FTransformNormalize(element11, element12, element13, element21, element22, element23, element31, element32, element33, directionX, directionY, directionZ);
+	}
+	
+	private void doLightLDRImageLightTransformToWorldSpace(final int offset, final float directionX, final float directionY, final float directionZ) {
+		final int offsetObjectToWorld = offset + LDRImageLight.ARRAY_OFFSET_OBJECT_TO_WORLD;
+		
+		final float element11 = this.lightLDRImageLightArray[offsetObjectToWorld +  0];
+		final float element12 = this.lightLDRImageLightArray[offsetObjectToWorld +  1];
+		final float element13 = this.lightLDRImageLightArray[offsetObjectToWorld +  2];
+		final float element21 = this.lightLDRImageLightArray[offsetObjectToWorld +  4];
+		final float element22 = this.lightLDRImageLightArray[offsetObjectToWorld +  5];
+		final float element23 = this.lightLDRImageLightArray[offsetObjectToWorld +  6];
+		final float element31 = this.lightLDRImageLightArray[offsetObjectToWorld +  8];
+		final float element32 = this.lightLDRImageLightArray[offsetObjectToWorld +  9];
+		final float element33 = this.lightLDRImageLightArray[offsetObjectToWorld + 10];
+		
+		vector3FSetMatrix44FTransformNormalize(element11, element12, element13, element21, element22, element23, element31, element32, element33, directionX, directionY, directionZ);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

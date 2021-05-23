@@ -1,3 +1,7 @@
+2021-05-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for LDRImageLight to the new lighting system in the GPU-renderer.
+
 2021-05-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix a bug in the AbstractMaterialKernel class. The negation flag for the incoming direction was only accounted for in one case.

@@ -187,6 +187,78 @@ new SubstrateMaterial(new Color3F(1.0F, 0.2F, 0.2F));
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SubstrateMaterial.png "SubstrateMaterial")
 
+#### Shape Examples
+
+###### Cone Example
+The following example demonstrates how the `Cone3F` can be created and looks visually.
+```java
+new Cone3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Cone3F.png "Cone3F")
+
+###### Cylinder Example
+The following example demonstrates how the `Cylinder3F` can be created and looks visually.
+```java
+new Cylinder3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Cylinder3F.png "Cylinder3F")
+
+###### Disk Example
+The following example demonstrates how the `Disk3F` can be created and looks visually.
+```java
+new Disk3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Disk3F.png "Disk3F")
+
+###### Paraboloid Example
+The following example demonstrates how the `Paraboloid3F` can be created and looks visually.
+```java
+new Paraboloid3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Paraboloid3F.png "Paraboloid3F")
+
+###### Plane Example
+The following example demonstrates how the `Plane3F` can be created and looks visually.
+```java
+new Plane3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Plane3F.png "Plane3F")
+
+###### Rectangular Cuboid Example
+The following example demonstrates how the `RectangularCuboid3F` can be created and looks visually.
+```java
+new RectangularCuboid3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/RectangularCuboid3F.png "RectangularCuboid3F")
+
+###### Sphere Example
+The following example demonstrates how the `Sphere3F` can be created and looks visually.
+```java
+new Sphere3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Sphere3F.png "Sphere3F")
+
+###### Torus Example
+The following example demonstrates how the `Torus3F` can be created and looks visually.
+```java
+new Torus3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Torus3F.png "Torus3F")
+
+###### Triangle Example
+The following example demonstrates how the `Triangle3F` can be created and looks visually.
+```java
+new Triangle3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Triangle3F.png "Triangle3F")
+
+###### Triangle Mesh Example
+The following example demonstrates how the `TriangleMesh3F` can be created and looks visually.
+```java
+TriangleMesh3F.readWavefrontObject(new File("./path/to/model.obj")).get(0);
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/TriangleMesh3F.png "TriangleMesh3F")
+
 #### Texture Examples
 
 ###### Blend Texture Example

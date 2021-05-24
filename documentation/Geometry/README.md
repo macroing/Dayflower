@@ -102,8 +102,8 @@ Below follows a few lists of features available in the Geometry API.
 * `Triangle2D` and `Triangle2DReader`
 * `Triangle2F` and `Triangle2FReader`
 * `Triangle2I` and `Triangle2IReader`
-* `Triangle3D`
-* `Triangle3F`
+* `Triangle3D` and `Triangle3DReader`
+* `Triangle3F` and `Triangle3FReader`
 * `TriangleMesh3D`
 * `TriangleMesh3F`
 

@@ -56,6 +56,7 @@ public final class DefaultShape3DReader implements Shape3DReader {
 		this.shape3DReaders.put(Integer.valueOf(RectangularCuboid3D.ID), new RectangularCuboid3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Sphere3D.ID), new Sphere3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Torus3D.ID), new Torus3DReader());
+		this.shape3DReaders.put(Integer.valueOf(Triangle3D.ID), new Triangle3DReader());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,6 +123,7 @@ public final class DefaultShape3DReader implements Shape3DReader {
 			case RectangularCuboid3D.ID:
 			case Sphere3D.ID:
 			case Torus3D.ID:
+			case Triangle3D.ID:
 				return this.shape3DReaders.get(Integer.valueOf(id)).read(dataInput, id);
 			default:
 				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));

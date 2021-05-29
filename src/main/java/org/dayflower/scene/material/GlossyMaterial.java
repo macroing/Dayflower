@@ -31,7 +31,9 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.AshikhminShirleyBRDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBRDF;
+import org.dayflower.scene.fresnel.ConductorFresnel;
+import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -341,7 +343,9 @@ public final class GlossyMaterial implements Material {
 		
 		final float floatRoughness = this.textureRoughness.getFloat(intersection);
 		
-		return Optional.of(new BSDF(intersection, new AshikhminShirleyBRDF(colorKR, floatRoughness), true));
+//		The old version used the AshikhminShirleyBRDF:
+//		return Optional.of(new BSDF(intersection, new AshikhminShirleyBRDF(colorKR, floatRoughness), true));
+		return Optional.of(new BSDF(intersection, new TorranceSparrowBRDF(colorKR, new ConductorFresnel(colorKR, Color3F.WHITE, Color3F.WHITE), new TrowbridgeReitzMicrofacetDistribution(true, false, floatRoughness, floatRoughness))));
 	}
 	
 	/**

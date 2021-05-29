@@ -67,9 +67,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		if(renderingAlgorithmIsAmbientOcclusion()) {
 			doRunAmbientOcclusion(getMaximumDistance(), getSamples());
 		} else if(renderingAlgorithmIsPathTracing()) {
-			doRunPathTracingPBRT(getMaximumBounce(), getMinimumBounceRussianRoulette());
-//			doRunPathTracingRayito(getMaximumBounce(), getMinimumBounceRussianRoulette());
-//			doRunPathTracingSmallPT(getMaximumBounce(), getMinimumBounceRussianRoulette());
+			doRunPathTracing(getMaximumBounce(), getMinimumBounceRussianRoulette());
 		} else if(renderingAlgorithmIsRayCasting()) {
 			doRunRayCasting();
 		} else if(renderingAlgorithmIsRayTracing()) {
@@ -111,7 +109,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		imageEnd();
 	}
 	
-	void doRunPathTracingPBRT(final int maximumBounce, final int minimumBounceRussianRoulette) {
+	void doRunPathTracing(final int maximumBounce, final int minimumBounceRussianRoulette) {
 		float radianceR = 0.0F;
 		float radianceG = 0.0F;
 		float radianceB = 0.0F;
@@ -209,160 +207,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 					
 					currentBounce = maximumBounce;
 				} else {
-					currentBounce = maximumBounce;
-				}
-			}
-		} else {
-			radianceR = 1.0F;
-			radianceG = 1.0F;
-			radianceB = 1.0F;
-		}
-		
-		filmAddColor(radianceR, radianceG, radianceB);
-		
-		imageBegin();
-		imageRedoGammaCorrectionPBRT();
-		imageEnd();
-	}
-	
-	void doRunPathTracingRayito(final int maximumBounce, final int minimumBounceRussianRoulette) {
-		float radianceR = 0.0F;
-		float radianceG = 0.0F;
-		float radianceB = 0.0F;
-		
-		float throughputR = 1.0F;
-		float throughputG = 1.0F;
-		float throughputB = 1.0F;
-		
-		final float pixel0X = 2.0F * random();
-		final float pixel1X = pixel0X < 1.0F ? sqrt(pixel0X) - 1.0F : 1.0F - sqrt(2.0F - pixel0X);
-		final float pixel0Y = 2.0F * random();
-		final float pixel1Y = pixel0Y < 1.0F ? sqrt(pixel0Y) - 1.0F : 1.0F - sqrt(2.0F - pixel0Y);
-		
-		if(ray3FCameraGenerate(pixel1X, pixel1Y)) {
-			int currentBounce = 0;
-			int currentBounceSpecular = 0;
-			
-			while(currentBounce < maximumBounce) {
-				if(primitiveIntersectionCompute()) {
-					if(currentBounce == 0 || currentBounce == currentBounceSpecular) {
-						materialEmittance(primitiveGetMaterialID(), primitiveGetMaterialOffset());
-						
-						radianceR += throughputR * color3FLHSGetComponent1();
-						radianceG += throughputG * color3FLHSGetComponent2();
-						radianceB += throughputB * color3FLHSGetComponent3();
-					}
-					
-					if(materialIsSpecular(primitiveGetMaterialID())) {
-						currentBounceSpecular++;
-					} else {
-//						TODO: Add direct light sampling!
-						radianceR += throughputR * 0.0F;
-						radianceG += throughputG * 0.0F;
-						radianceB += throughputB * 0.0F;
-					}
-					
-					if(materialSampleDistributionFunction(primitiveGetMaterialID(), primitiveGetMaterialOffset())) {
-						throughputR *= color3FLHSGetComponent1();
-						throughputG *= color3FLHSGetComponent2();
-						throughputB *= color3FLHSGetComponent3();
-						
-						ray3FSetFromSurfaceIntersectionPointAndVector3F();
-						
-						if(currentBounce >= minimumBounceRussianRoulette) {
-							final float probability = max(throughputR, throughputG, throughputB);
-							
-							if(random() > probability) {
-								currentBounce = maximumBounce;
-							} else {
-								throughputR /= probability;
-								throughputG /= probability;
-								throughputB /= probability;
-							}
-						}
-						
-						currentBounce++;
-					} else {
-						currentBounce = maximumBounce;
-					}
-				} else {
-					lightEvaluateRadianceEmittedAny();
-					
-					radianceR += throughputR * color3FLHSGetComponent1();
-					radianceG += throughputG * color3FLHSGetComponent2();
-					radianceB += throughputB * color3FLHSGetComponent3();
-					
-					currentBounce = maximumBounce;
-				}
-			}
-		} else {
-			radianceR = 1.0F;
-			radianceG = 1.0F;
-			radianceB = 1.0F;
-		}
-		
-		filmAddColor(radianceR, radianceG, radianceB);
-		
-		imageBegin();
-		imageRedoGammaCorrectionPBRT();
-		imageEnd();
-	}
-	
-	void doRunPathTracingSmallPT(final int maximumBounce, final int minimumBounceRussianRoulette) {
-		float radianceR = 0.0F;
-		float radianceG = 0.0F;
-		float radianceB = 0.0F;
-		
-		float throughputR = 1.0F;
-		float throughputG = 1.0F;
-		float throughputB = 1.0F;
-		
-		final float pixel0X = 2.0F * random();
-		final float pixel1X = pixel0X < 1.0F ? sqrt(pixel0X) - 1.0F : 1.0F - sqrt(2.0F - pixel0X);
-		final float pixel0Y = 2.0F * random();
-		final float pixel1Y = pixel0Y < 1.0F ? sqrt(pixel0Y) - 1.0F : 1.0F - sqrt(2.0F - pixel0Y);
-		
-		if(ray3FCameraGenerate(pixel1X, pixel1Y)) {
-			int currentBounce = 0;
-			
-			while(currentBounce < maximumBounce) {
-				if(primitiveIntersectionCompute()) {
-					materialEmittance(primitiveGetMaterialID(), primitiveGetMaterialOffset());
-					
-					radianceR += throughputR * color3FLHSGetComponent1();
-					radianceG += throughputG * color3FLHSGetComponent2();
-					radianceB += throughputB * color3FLHSGetComponent3();
-					
-					if(materialSampleDistributionFunction(primitiveGetMaterialID(), primitiveGetMaterialOffset())) {
-						throughputR *= color3FLHSGetComponent1();
-						throughputG *= color3FLHSGetComponent2();
-						throughputB *= color3FLHSGetComponent3();
-						
-						ray3FSetFromSurfaceIntersectionPointAndVector3F();
-						
-						if(currentBounce >= minimumBounceRussianRoulette) {
-							final float probability = max(throughputR, throughputG, throughputB);
-							
-							if(random() > probability) {
-								currentBounce = maximumBounce;
-							} else {
-								throughputR /= probability;
-								throughputG /= probability;
-								throughputB /= probability;
-							}
-						}
-						
-						currentBounce++;
-					} else {
-						currentBounce = maximumBounce;
-					}
-				} else {
-					lightEvaluateRadianceEmittedAny();
-					
-					radianceR += throughputR * color3FLHSGetComponent1();
-					radianceG += throughputG * color3FLHSGetComponent2();
-					radianceB += throughputB * color3FLHSGetComponent3();
-					
 					currentBounce = maximumBounce;
 				}
 			}

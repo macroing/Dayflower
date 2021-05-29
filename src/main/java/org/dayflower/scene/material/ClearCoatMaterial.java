@@ -333,11 +333,9 @@ public final class ClearCoatMaterial implements Material {
 			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
-//				return Optional.of(new BSDF(intersection, new ScaledBXDF(new SpecularBRDF(colorKS, new ConstantFresnel()), new Color3F(probabilityRussianRouletteReflection))));
 				return Optional.of(new BSDF(intersection, new SpecularBRDF(Color3F.multiply(colorKS, probabilityRussianRouletteReflection), new ConstantFresnel())));
 			}
 			
-//			return Optional.of(new BSDF(intersection, new ScaledBXDF(new LambertianBRDF(colorKD), new Color3F(probabilityRussianRouletteTransmission))));
 			return Optional.of(new BSDF(intersection, new LambertianBRDF(Color3F.multiply(colorKD, probabilityRussianRouletteTransmission))));
 		}
 		

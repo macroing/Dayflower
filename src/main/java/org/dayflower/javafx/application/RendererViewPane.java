@@ -87,7 +87,7 @@ final class RendererViewPane extends BorderPane {
 	private final AtomicBoolean isCameraUpdateRequired;
 	private final AtomicReference<File> file;
 	private final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer;
-	private final ConcurrentImageCanvas concurrentImageCanvas;
+	private final ConcurrentImageCanvas<ImageF> concurrentImageCanvas;
 	private final ExecutorService executorService;
 	private final HBox hBox;
 	private final Label labelRenderPass;
@@ -115,7 +115,7 @@ final class RendererViewPane extends BorderPane {
 		this.isCameraUpdateRequired = new AtomicBoolean();
 		this.file = new AtomicReference<>();
 		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
-		this.concurrentImageCanvas = new ConcurrentImageCanvas(executorService, combinedProgressiveImageOrderRenderer.getImage(), this::doRender, new ObserverImpl(combinedProgressiveImageOrderRenderer));
+		this.concurrentImageCanvas = new ConcurrentImageCanvas<>(executorService, combinedProgressiveImageOrderRenderer.getImage(), this::doRender, new ObserverImpl(combinedProgressiveImageOrderRenderer));
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
 		this.hBox = new HBox();
 		this.labelRenderPass = new Label();

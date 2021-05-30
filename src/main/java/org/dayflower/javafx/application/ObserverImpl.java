@@ -20,6 +20,7 @@ package org.dayflower.javafx.application;
 
 import java.util.Objects;
 
+import org.dayflower.image.Image;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas.Observer;
 import org.dayflower.renderer.Renderer;
@@ -36,7 +37,7 @@ final class ObserverImpl implements Observer {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
-	public void onMouseDragged(final ConcurrentImageCanvas concurrentImageCanvas, final float x, final float y) {
+	public void onMouseDragged(final ConcurrentImageCanvas<? extends Image> concurrentImageCanvas, final float x, final float y) {
 		final
 		Renderer renderer = this.renderer;
 		renderer.getScene().getCamera().rotate(x, y);

@@ -1,3 +1,10 @@
+2021-05-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a generic type for the Image to the ConcurrentImageCanvas class.
+	* ADD:		Add a class called ConcurrentImageCanvasPane.
+	* CHANGE:	Change the type ImageF in the constructors of the ConcurrentImageCanvas class to a generic type T that extends Image.
+	* CHANGE:	Change the method signature of the single method in the ConcurrentImageCanvas.Observer interface.
+
 2021-05-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Change the BXDF for GlossyMaterial from AshikhminShirleyBRDF to TorranceSparrowBRDF. The change was also done in the GPU-renderer.

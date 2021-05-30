@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.dayflower.image.Image;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
@@ -70,7 +71,7 @@ public final class CPUApplication extends Application {
 		
 		final ExecutorService executorService = this.executorService;
 		
-		final ConcurrentImageCanvas concurrentImageCanvas = new ConcurrentImageCanvas(this.executorService, pixelImage, this::doRender, new ObserverImpl(AbstractCPURenderer.class.cast(renderer), camera));
+		final ConcurrentImageCanvas<ImageF> concurrentImageCanvas = new ConcurrentImageCanvas<>(this.executorService, pixelImage, this::doRender, new ObserverImpl(AbstractCPURenderer.class.cast(renderer), camera));
 		
 		final
 		HBox hBox = new HBox();
@@ -191,7 +192,7 @@ public final class CPUApplication extends Application {
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		@Override
-		public void onMouseDragged(final ConcurrentImageCanvas concurrentImageCanvas, final float x, final float y) {
+		public void onMouseDragged(final ConcurrentImageCanvas<? extends Image> concurrentImageCanvas, final float x, final float y) {
 			this.camera.rotate(x, y);
 			this.abstractCPURenderer.clear();
 		}

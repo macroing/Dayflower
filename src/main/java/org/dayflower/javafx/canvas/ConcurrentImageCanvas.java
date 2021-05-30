@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 import org.dayflower.color.ArrayComponentOrder;
-import org.dayflower.image.ImageF;
+import org.dayflower.image.Image;
 import org.dayflower.javafx.concurrent.PredicateTask;
 
 import javafx.scene.canvas.Canvas;
@@ -42,12 +42,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 /**
- * A {@code ConcurrentImageCanvas} is a {@code Canvas} that performs rendering to an {@link ImageF} using an {@code ExecutorService} and updates the {@code Canvas} on the {@code FX Application Thread}.
+ * A {@code ConcurrentImageCanvas} is a {@code Canvas} that performs rendering to an {@link Image} using an {@code ExecutorService} and updates the {@code Canvas} on the {@code FX Application Thread}.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ConcurrentImageCanvas extends Canvas {
+public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 	private static final PixelFormat<ByteBuffer> PIXEL_FORMAT = PixelFormat.getByteBgraPreInstance();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,13 +64,13 @@ public final class ConcurrentImageCanvas extends Canvas {
 	private final AtomicInteger mouseMovedY;
 	private final AtomicLong mouseX;
 	private final AtomicLong mouseY;
+	private final AtomicReference<ByteBuffer> byteBuffer;
 	private final AtomicReference<PredicateTask> predicateTask;
-	private final ByteBuffer byteBuffer;
+	private final AtomicReference<T> image;
+	private final AtomicReference<WritableImage> writableImage;
 	private final ExecutorService executorService;
-	private final ImageF image;
 	private final Observer observer;
-	private final Predicate<ImageF> renderPredicate;
-	private final WritableImage writableImage;
+	private final Predicate<T> renderPredicate;
 	private final boolean[] isKeyPressed;
 	private final boolean[] isKeyPressedOnce;
 	private final boolean[] isMouseButtonPressed;
@@ -91,11 +91,11 @@ public final class ConcurrentImageCanvas extends Canvas {
 	 * </pre>
 	 * 
 	 * @param executorService the {@code ExecutorService} instance to use
-	 * @param image the {@link ImageF} instance to use
-	 * @param renderPredicate the {@code Predicate} of {@code ImageF} that performs the rendering itself
+	 * @param image the {@link Image} instance to use
+	 * @param renderPredicate the {@code Predicate} of {@code Image} that performs the rendering itself
 	 * @throws NullPointerException thrown if, and only if, either {@code executorService}, {@code image} or {@code renderPredicate} are {@code null}
 	 */
-	public ConcurrentImageCanvas(final ExecutorService executorService, final ImageF image, final Predicate<ImageF> renderPredicate) {
+	public ConcurrentImageCanvas(final ExecutorService executorService, final T image, final Predicate<T> renderPredicate) {
 		this(executorService, image, renderPredicate, (concurrentImageCanvas, x, y) -> {});
 	}
 	
@@ -105,12 +105,12 @@ public final class ConcurrentImageCanvas extends Canvas {
 	 * If either {@code executorService}, {@code image}, {@code renderPredicate} or {@code observer} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param executorService the {@code ExecutorService} instance to use
-	 * @param image the {@link ImageF} instance to use
-	 * @param renderPredicate the {@code Predicate} of {@code ImageF} that performs the rendering itself
+	 * @param image the {@link Image} instance to use
+	 * @param renderPredicate the {@code Predicate} of {@code Image} that performs the rendering itself
 	 * @param observer the {@link Observer} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code executorService}, {@code image}, {@code renderPredicate} or {@code observer} are {@code null}
 	 */
-	public ConcurrentImageCanvas(final ExecutorService executorService, final ImageF image, final Predicate<ImageF> renderPredicate, final Observer observer) {
+	public ConcurrentImageCanvas(final ExecutorService executorService, final T image, final Predicate<T> renderPredicate, final Observer observer) {
 		this.keysPressed = new AtomicInteger();
 		this.mouseButtonsPressed = new AtomicInteger();
 		this.mouseDraggedDeltaX = new AtomicInteger();
@@ -123,13 +123,13 @@ public final class ConcurrentImageCanvas extends Canvas {
 		this.mouseMovedY = new AtomicInteger();
 		this.mouseX = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
+		this.byteBuffer = new AtomicReference<>(ByteBuffer.allocate(image.getResolutionX() * image.getResolutionY() * 4));
 		this.predicateTask = new AtomicReference<>();
-		this.byteBuffer = ByteBuffer.allocate(image.getResolutionX() * image.getResolutionY() * 4);
+		this.image = new AtomicReference<>(image);
+		this.writableImage = new AtomicReference<>(new WritableImage(image.getResolutionX(), image.getResolutionY()));
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
-		this.image = image;
 		this.observer = Objects.requireNonNull(observer, "observer == null");
 		this.renderPredicate = Objects.requireNonNull(renderPredicate, "renderPredicate == null");
-		this.writableImage = new WritableImage(image.getResolutionX(), image.getResolutionY());
 		this.isKeyPressed = new boolean[KeyCode.values().length];
 		this.isKeyPressedOnce = new boolean[KeyCode.values().length];
 		this.isMouseButtonPressed = new boolean[MouseButton.values().length];
@@ -157,6 +157,15 @@ public final class ConcurrentImageCanvas extends Canvas {
 	 */
 	public ExecutorService getExecutorService() {
 		return this.executorService;
+	}
+	
+	/**
+	 * Returns the {@link Image} instance that is associated with this {@code ConcurrentImageCanvas} instance.
+	 * 
+	 * @return the {@code Image} instance that is associated with this {@code ConcurrentImageCanvas} instance
+	 */
+	public T getImage() {
+		return this.image.get();
 	}
 	
 	/**
@@ -302,16 +311,16 @@ public final class ConcurrentImageCanvas extends Canvas {
 			final PredicateTask oldPredicateTask = predicateTask.get();
 			
 			if(oldPredicateTask == null || oldPredicateTask.isCancelled() || oldPredicateTask.isDone()) {
-				final ByteBuffer byteBuffer = this.byteBuffer;
+				final ByteBuffer byteBuffer = this.byteBuffer.get();
 				
-				final ImageF image = this.image;
+				final T image = this.image.get();
 				
 				final double resolutionX = image.getResolutionX();
 				final double resolutionY = image.getResolutionY();
 				
-				final Predicate<ImageF> renderPredicate = this.renderPredicate;
+				final Predicate<T> renderPredicate = this.renderPredicate;
 				
-				final WritableImage writableImage = this.writableImage;
+				final WritableImage writableImage = this.writableImage.get();
 				
 				final PredicateTask newPredicateTask = new PredicateTask(() -> Boolean.valueOf(renderPredicate.test(image)), () -> {
 					image.copyTo(byteBuffer.array(), ArrayComponentOrder.BGRA);
@@ -337,6 +346,20 @@ public final class ConcurrentImageCanvas extends Canvas {
 		}
 	}
 	
+	/**
+	 * Sets the {@link Image} instance to {@code image}.
+	 * <p>
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image the new {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 */
+	public void setImage(final T image) {
+		this.byteBuffer.set(ByteBuffer.allocate(image.getResolutionX() * image.getResolutionY() * 4));
+		this.image.set(image);
+		this.writableImage.set(new WritableImage(image.getResolutionX(), image.getResolutionY()));
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -353,7 +376,7 @@ public final class ConcurrentImageCanvas extends Canvas {
 		 * @param x the dragged amount on the X-axis
 		 * @param y the dragged amount on the Y-axis
 		 */
-		void onMouseDragged(final ConcurrentImageCanvas concurrentImageCanvas, final float x, final float y);
+		void onMouseDragged(final ConcurrentImageCanvas<? extends Image> concurrentImageCanvas, final float x, final float y);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

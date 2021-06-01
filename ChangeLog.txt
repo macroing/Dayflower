@@ -1,3 +1,11 @@
+2021-06-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods addLater(Object) and addLater(Object, Consumer<Tab>) to the NodeSelectionTabPane class.
+	* ADD:		Add support for resizing the Dayflower application window, including the ConcurrentImageCanvas, the Camera and the CPU-renderer. This feature is in early development and may not work as expected yet.
+	* ADD:		Add the method setImageUpdater(ImageUpdater) to the ConcurrentImageCanvas class.
+	* ADD:		Add the class ConcurrentImageCanvas.ImageUpdater.
+	* REMOVE:	Remove the method setImage(Image) from the ConcurrentImageCanvas class.
+
 2021-05-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a generic type for the Image to the ConcurrentImageCanvas class.

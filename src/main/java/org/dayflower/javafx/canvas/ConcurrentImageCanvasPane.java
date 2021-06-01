@@ -19,11 +19,12 @@
 package org.dayflower.javafx.canvas;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.dayflower.image.Image;
+import org.dayflower.javafx.canvas.ConcurrentImageCanvas.ImageUpdater;
 import org.macroing.java.util.function.TriFunction;
 
-import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
 
 /**
@@ -33,11 +34,6 @@ import javafx.scene.layout.Pane;
  * @author J&#246;rgen Lundgren
  */
 public final class ConcurrentImageCanvasPane<T extends Image> extends Pane {
-	private final ConcurrentImageCanvas<T> concurrentImageCanvas;
-	private final TriFunction<T, Number, Number, T> imageConstructionFunction;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
 	 * Constructs a new {@code ConcurrentImageCanvasPane} instance.
 	 * <p>
@@ -48,44 +44,18 @@ public final class ConcurrentImageCanvasPane<T extends Image> extends Pane {
 	 * @throws NullPointerException thrown if, and only if, either {@code concurrentImageCanvas} or {@code imageConstructionFunction} are {@code null}
 	 */
 	public ConcurrentImageCanvasPane(final ConcurrentImageCanvas<T> concurrentImageCanvas, final TriFunction<T, Number, Number, T> imageConstructionFunction) {
-		this.concurrentImageCanvas = Objects.requireNonNull(concurrentImageCanvas, "concurrentImageCanvas == null");
-		this.imageConstructionFunction = Objects.requireNonNull(imageConstructionFunction, "imageConstructionFunction == null");
+		Objects.requireNonNull(concurrentImageCanvas, "concurrentImageCanvas == null");
+		Objects.requireNonNull(imageConstructionFunction, "imageConstructionFunction == null");
 		
 		getChildren().add(concurrentImageCanvas);
 		
 		setHeight(concurrentImageCanvas.getHeight());
 		setWidth(concurrentImageCanvas.getWidth());
 		
-		concurrentImageCanvas.heightProperty().bind(this.heightProperty());
-		concurrentImageCanvas.heightProperty().addListener(this::doHandleChangeHeightProperty);
+		final AtomicInteger imageResolutionX = new AtomicInteger(-1);
+		final AtomicInteger imageResolutionY = new AtomicInteger(-1);
 		
-		concurrentImageCanvas.widthProperty().bind(this.widthProperty());
-		concurrentImageCanvas.widthProperty().addListener(this::doHandleChangeWidthProperty);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("unused")
-	private void doHandleChangeHeightProperty(final ObservableValue<? extends Number> observable, final Number oldValue, final Number newValue) {
-		final T oldImage = this.concurrentImageCanvas.getImage();
-		
-		final Integer resolutionX = Integer.valueOf(oldImage.getResolutionX());
-		final Integer resolutionY = Integer.valueOf(newValue.intValue());
-		
-		final T newImage = this.imageConstructionFunction.apply(oldImage, resolutionX, resolutionY);
-		
-		this.concurrentImageCanvas.setImage(newImage);
-	}
-	
-	@SuppressWarnings("unused")
-	private void doHandleChangeWidthProperty(final ObservableValue<? extends Number> observable, final Number oldValue, final Number newValue) {
-		final T oldImage = this.concurrentImageCanvas.getImage();
-		
-		final Integer resolutionX = Integer.valueOf(newValue.intValue());
-		final Integer resolutionY = Integer.valueOf(oldImage.getResolutionY());
-		
-		final T newImage = this.imageConstructionFunction.apply(oldImage, resolutionX, resolutionY);
-		
-		this.concurrentImageCanvas.setImage(newImage);
+		heightProperty().addListener((observable, oldValue, newValue) -> concurrentImageCanvas.setImageUpdater(new ImageUpdater<>(imageConstructionFunction, imageResolutionX.get(), imageResolutionY.updateAndGet(currentValue -> newValue.intValue()))));
+		widthProperty().addListener((observable, oldValue, newValue) -> concurrentImageCanvas.setImageUpdater(new ImageUpdater<>(imageConstructionFunction, imageResolutionX.updateAndGet(currentValue -> newValue.intValue()), imageResolutionY.get())));
 	}
 }

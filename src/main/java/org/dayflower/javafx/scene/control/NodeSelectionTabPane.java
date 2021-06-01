@@ -21,8 +21,10 @@ package org.dayflower.javafx.scene.control;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -182,5 +184,48 @@ public final class NodeSelectionTabPane<T extends Node, U> extends TabPane {
 		getSelectionModel().select(tab);
 		
 		return tab;
+	}
+	
+	/**
+	 * Adds {@code object} of type {@code U} to this {@code NodeSelectionTabPane} instance.
+	 * <p>
+	 * If {@code object} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method will call {@link #add(Object)} on the {@code JavaFX Application Thread}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * <code>
+	 * nodeSelectionTabPane.addLater(object, tab -> {});
+	 * </code>
+	 * </pre>
+	 * 
+	 * @param object an {@code Object} instance of type {@code U}
+	 * @throws NullPointerException thrown if, and only if, {@code object} is {@code null}
+	 */
+	public void addLater(final U object) {
+		addLater(object, tab -> {});
+	}
+	
+	/**
+	 * Adds {@code object} of type {@code U} to this {@code NodeSelectionTabPane} instance.
+	 * <p>
+	 * If either {@code object} or {@code tabConsumer} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method will call {@link #add(Object)} and the {@code accept(Tab)} method of {@code tabConsumer} on the {@code JavaFX Application Thread}.
+	 * 
+	 * @param object an {@code Object} instance of type {@code U}
+	 * @param tabConsumer a {@code Consumer} that accepts a {@code Tab} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code object} or {@code tabConsumer} are {@code null}
+	 */
+	public void addLater(final U object, final Consumer<Tab> tabConsumer) {
+		Objects.requireNonNull(object, "object == null");
+		Objects.requireNonNull(tabConsumer, "tabConsumer == null");
+		
+		if(Platform.isFxApplicationThread()) {
+			tabConsumer.accept(add(object));
+		} else {
+			Platform.runLater(() -> tabConsumer.accept(add(object)));
+		}
 	}
 }

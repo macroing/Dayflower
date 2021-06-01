@@ -18,43 +18,26 @@
  */
 package org.dayflower.javafx.application;
 
-import java.io.File;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.dayflower.image.ByteImageF;
-import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
-import org.dayflower.renderer.cpu.CPURenderer;
-import org.dayflower.renderer.gpu.GPURenderer;
-import org.dayflower.renderer.observer.NoOpRendererObserver;
-import org.dayflower.scene.Camera;
-import org.dayflower.scene.Scene;
-import org.dayflower.scene.SceneLoader;
-import org.dayflower.scene.light.PerezLight;
-import org.dayflower.scene.loader.JavaSceneLoader;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -65,8 +48,6 @@ import javafx.stage.Stage;
  * @author J&#246;rgen Lundgren
  */
 public final class DayflowerApplication extends Application {
-	private static final File INITIAL_DIRECTORY_IMAGES = new File(".");
-	private static final File INITIAL_DIRECTORY_SCENES = new File("./resources/scenes");
 	private static final String PATH_ELEMENT_FILE = "File";
 	private static final String PATH_ELEMENT_RENDERER = "Renderer";
 	private static final String PATH_FILE = "File";
@@ -80,8 +61,6 @@ public final class DayflowerApplication extends Application {
 	private static final String TEXT_SAVE = "Save";
 	private static final String TEXT_SAVE_AS = "Save As...";
 	private static final String TITLE = "Dayflower";
-	private static final String TITLE_OPEN = "Open";
-	private static final String TITLE_SAVE_AS = "Save As...";
 	private static final double MINIMUM_RESOLUTION_X = 400.0D;
 	private static final double MINIMUM_RESOLUTION_Y = 400.0D;
 	
@@ -145,55 +124,12 @@ public final class DayflowerApplication extends Application {
 		return this.stage.get();
 	}
 	
-	private void doAddRenderer(final File file) {
-		this.executorService.execute(() -> {
-			final SceneLoader sceneLoader = new JavaSceneLoader();
-			
-			final Scene scene = sceneLoader.load(file);
-			
-			doAddRenderer(scene);
-		});
-	}
-	
-	private void doAddRenderer(final Scene scene) {
-		this.executorService.execute(() -> {
-			final Camera camera = scene.getCamera();
-			
-			final int resolutionX = (int)(camera.getResolutionX());
-			final int resolutionY = (int)(camera.getResolutionY());
-			
-			final boolean isUsingGPU = this.isUsingGPU.get();
-			
-			final
-			CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = isUsingGPU ? new GPURenderer(new NoOpRendererObserver()) : new CPURenderer(new NoOpRendererObserver());
-			combinedProgressiveImageOrderRenderer.setImage(isUsingGPU ? new ByteImageF(resolutionX, resolutionY) : new PixelImageF(resolutionX, resolutionY));
-			combinedProgressiveImageOrderRenderer.setRenderPasses(1);
-			combinedProgressiveImageOrderRenderer.setRenderPassesPerDisplayUpdate(1);
-			combinedProgressiveImageOrderRenderer.setSamples(1);
-			combinedProgressiveImageOrderRenderer.setScene(scene);
-			combinedProgressiveImageOrderRenderer.setup();
-			
-			Platform.runLater(() -> {
-				final
-				Tab tab = this.nodeSelectionTabPane.add(combinedProgressiveImageOrderRenderer);
-				tab.setOnClosed(event -> {
-					final Object source = event.getSource();
-					
-					if(source == tab) {
-						combinedProgressiveImageOrderRenderer.renderShutdown();
-						combinedProgressiveImageOrderRenderer.dispose();
-					}
-				});
-			});
-		});
-	}
-	
 	private void doConfigureAndShowStage() {
 		final
 		Stage stage = doGetStage();
 		stage.setMinHeight(MINIMUM_RESOLUTION_Y);
 		stage.setMinWidth(MINIMUM_RESOLUTION_X);
-		stage.setResizable(false);
+		stage.setResizable(true);
 		stage.setScene(new javafx.scene.Scene(this.borderPane));
 		stage.setTitle(TITLE);
 		stage.show();
@@ -211,132 +147,20 @@ public final class DayflowerApplication extends Application {
 	private void doConfigurePathMenuBar() {
 		this.pathMenuBar.setPathElementText(PATH_ELEMENT_FILE, TEXT_FILE);
 		this.pathMenuBar.setPathElementText(PATH_ELEMENT_RENDERER, TEXT_RENDERER);
-		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_NEW, this::doHandleEventFileNew, new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), true);
-		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_OPEN, this::doHandleEventFileOpen, new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), true);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_NEW, new FileNewEventHandler(this.isUsingGPU, this.executorService, this.nodeSelectionTabPane), new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), true);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_OPEN, new FileOpenEventHandler(this.isUsingGPU, this.executorService, this.nodeSelectionTabPane, doGetStage()), new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), true);
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
-		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE, this::doHandleEventFileSave, new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), false);
-		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_AS, this::doHandleEventFileSaveAs, null, false);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE, new FileSaveEventHandler(this.nodeSelectionTabPane, doGetStage()), new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), false);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_AS, new FileSaveAsEventHandler(this.nodeSelectionTabPane, doGetStage()), null, false);
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
-		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, this::doHandleEventFileExit, null, true);
-		this.pathMenuBar.addCheckMenuItem(PATH_RENDERER, TEXT_G_P_U, this::doHandleEventRendererGPU, true, false);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, new FileExitEventHandler(this.executorService, this.nodeSelectionTabPane), null, true);
+		this.pathMenuBar.addCheckMenuItem(PATH_RENDERER, TEXT_G_P_U, new RendererGPUEventHandler(this.isUsingGPU), true, false);
 	}
 	
 	private void doCreateAndStartAnimationTimer() {
 		final
 		AnimationTimer animationTimer = new AnimationTimerImpl(this.nodeSelectionTabPane);
 		animationTimer.start();
-	}
-	
-	@SuppressWarnings("unused")
-	private void doHandleEventFileExit(final ActionEvent actionEvent) {
-		for(final Tab tab : this.nodeSelectionTabPane.getTabs()) {
-			final Node content = tab.getContent();
-			
-			if(content instanceof RendererTabPane) {
-				final RendererTabPane rendererTabPane = RendererTabPane.class.cast(content);
-				
-				final
-				CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = rendererTabPane.getCombinedProgressiveImageOrderRenderer();
-				combinedProgressiveImageOrderRenderer.renderShutdown();
-				combinedProgressiveImageOrderRenderer.dispose();
-			}
-		}
-		
-		try {
-			this.executorService.shutdown();
-			this.executorService.awaitTermination(10000L, TimeUnit.MILLISECONDS);
-		} catch(final InterruptedException e) {
-			
-		}
-		
-		Platform.exit();
-	}
-	
-	@SuppressWarnings("unused")
-	private void doHandleEventFileOpen(final ActionEvent actionEvent) {
-		try {
-			final
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setInitialDirectory(doFindDirectory(INITIAL_DIRECTORY_SCENES));
-			fileChooser.setTitle(TITLE_OPEN);
-			
-			final File file = fileChooser.showOpenDialog(doGetStage());
-			
-			if(file != null) {
-				doAddRenderer(file);
-			}
-		} catch(final IllegalArgumentException e) {
-//			Do nothing for now.
-		}
-	}
-	
-	@SuppressWarnings("unused")
-	private void doHandleEventFileNew(final ActionEvent actionEvent) {
-		final
-		Scene scene = new Scene();
-		scene.addLight(new PerezLight());
-		
-		doAddRenderer(scene);
-	}
-	
-	@SuppressWarnings("unused")
-	private void doHandleEventFileSave(final ActionEvent actionEvent) {
-		final Optional<RendererTabPane> optionalRendererTabPane = this.nodeSelectionTabPane.getSelectedNode();
-		
-		if(optionalRendererTabPane.isPresent()) {
-			final RendererTabPane rendererTabPane = optionalRendererTabPane.get();
-			
-			final RendererViewPane rendererViewPane = rendererTabPane.getRendererViewPane();
-			
-			final Optional<File> optionalFile = rendererViewPane.getFile();
-			
-			if(optionalFile.isPresent()) {
-				rendererViewPane.save();
-			} else {
-				final
-				FileChooser fileChooser = new FileChooser();
-				fileChooser.setInitialDirectory(doFindDirectory(INITIAL_DIRECTORY_IMAGES));
-				fileChooser.setTitle(TITLE_SAVE_AS);
-				
-				final File file = fileChooser.showSaveDialog(doGetStage());
-				
-				if(file != null) {
-					rendererViewPane.setFile(file);
-					rendererViewPane.save();
-				}
-			}
-		}
-	}
-	
-	@SuppressWarnings("unused")
-	private void doHandleEventFileSaveAs(final ActionEvent actionEvent) {
-		final Optional<RendererTabPane> optionalRendererTabPane = this.nodeSelectionTabPane.getSelectedNode();
-		
-		if(optionalRendererTabPane.isPresent()) {
-			final RendererTabPane rendererTabPane = optionalRendererTabPane.get();
-			
-			final RendererViewPane rendererViewPane = rendererTabPane.getRendererViewPane();
-			
-			final
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setInitialDirectory(doFindDirectory(INITIAL_DIRECTORY_IMAGES));
-			fileChooser.setTitle(TITLE_SAVE_AS);
-			
-			final File file = fileChooser.showSaveDialog(doGetStage());
-			
-			if(file != null) {
-				rendererViewPane.setFile(file);
-				rendererViewPane.save();
-			}
-		}
-	}
-	
-	private void doHandleEventRendererGPU(final ActionEvent actionEvent) {
-		final Object source = actionEvent.getSource();
-		
-		if(source instanceof CheckMenuItem) {
-			this.isUsingGPU.set(CheckMenuItem.class.cast(source).isSelected());
-		}
 	}
 	
 	@SuppressWarnings("unused")
@@ -362,17 +186,5 @@ public final class DayflowerApplication extends Application {
 	
 	private void doSetStage(final Stage stage) {
 		this.stage.set(Objects.requireNonNull(stage, "stage == null"));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static File doFindDirectory(final File directory) {
-		File currentDirectory = directory;
-		
-		while(currentDirectory != null && !currentDirectory.isDirectory()) {
-			currentDirectory = currentDirectory.getParentFile();
-		}
-		
-		return currentDirectory != null && currentDirectory.isDirectory() ? currentDirectory : new File(".");
 	}
 }

@@ -30,6 +30,7 @@ import java.util.function.Predicate;
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.concurrent.PredicateTask;
+import org.macroing.java.util.function.TriFunction;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -65,6 +66,7 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 	private final AtomicLong mouseX;
 	private final AtomicLong mouseY;
 	private final AtomicReference<ByteBuffer> byteBuffer;
+	private final AtomicReference<ImageUpdater<T>> imageUpdater;
 	private final AtomicReference<PredicateTask> predicateTask;
 	private final AtomicReference<T> image;
 	private final AtomicReference<WritableImage> writableImage;
@@ -124,6 +126,7 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 		this.mouseX = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.byteBuffer = new AtomicReference<>(ByteBuffer.allocate(image.getResolutionX() * image.getResolutionY() * 4));
+		this.imageUpdater = new AtomicReference<>();
 		this.predicateTask = new AtomicReference<>();
 		this.image = new AtomicReference<>(image);
 		this.writableImage = new AtomicReference<>(new WritableImage(image.getResolutionX(), image.getResolutionY()));
@@ -311,6 +314,17 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 			final PredicateTask oldPredicateTask = predicateTask.get();
 			
 			if(oldPredicateTask == null || oldPredicateTask.isCancelled() || oldPredicateTask.isDone()) {
+				final ImageUpdater<T> imageUpdater = this.imageUpdater.getAndSet(null);
+				
+				if(imageUpdater != null) {
+					final T image = imageUpdater.update(this.image.get());
+					
+					doSetImage(image);
+					
+					setHeight(image.getResolutionY());
+					setWidth(image.getResolutionX());
+				}
+				
 				final ByteBuffer byteBuffer = this.byteBuffer.get();
 				
 				final T image = this.image.get();
@@ -347,17 +361,65 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 	}
 	
 	/**
-	 * Sets the {@link Image} instance to {@code image}.
+	 * Sets the {@link ImageUpdater} instance that will update the {@link Image} instance in the next {@link #render()} call.
 	 * <p>
-	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageUpdater} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image the new {@code Image} instance
-	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 * @param imageUpdater the {@code ImageUpdater} instance that will update the {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code imageUpdater} is {@code null}
 	 */
-	public void setImage(final T image) {
-		this.byteBuffer.set(ByteBuffer.allocate(image.getResolutionX() * image.getResolutionY() * 4));
-		this.image.set(image);
-		this.writableImage.set(new WritableImage(image.getResolutionX(), image.getResolutionY()));
+	public void setImageUpdater(final ImageUpdater<T> imageUpdater) {
+		this.imageUpdater.set(Objects.requireNonNull(imageUpdater, "imageUpdater == null"));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * An {@code ImageUpdater} is used to update the {@link Image} in a {@link ConcurrentImageCanvas} instance.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
+	public static final class ImageUpdater<T extends Image> {
+		private final TriFunction<T, Number, Number, T> imageConstructionFunction;
+		private final int imageResolutionX;
+		private final int imageResolutionY;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Constructs a new {@code ImageUpdater} instance.
+		 * <p>
+		 * If {@code imageConstructionFunction} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param imageConstructionFunction a {@code TriFunction} that constructs a new {@link Image} instance given the old {@code Image} instance and the new resolution of the X- and Y-axes
+		 * @param imageResolutionX the resolution of the X-axis or a negative value to use the current resolution
+		 * @param imageResolutionY the resolution of the Y-axis or a negative value to use the current resolution
+		 * @throws NullPointerException thrown if, and only if, {@code imageConstructionFunction} is {@code null}
+		 */
+		public ImageUpdater(final TriFunction<T, Number, Number, T> imageConstructionFunction, final int imageResolutionX, final int imageResolutionY) {
+			this.imageConstructionFunction = Objects.requireNonNull(imageConstructionFunction, "imageConstructionFunction == null");
+			this.imageResolutionX = imageResolutionX;
+			this.imageResolutionY = imageResolutionY;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Returns the updated {@link Image} instance.
+		 * <p>
+		 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param image the current {@code Image} instance
+		 * @return the updated {@code Image} instance
+		 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+		 */
+		public T update(final T image) {
+			final int imageResolutionX = this.imageResolutionX >= 0 ? this.imageResolutionX : image.getResolutionX();
+			final int imageResolutionY = this.imageResolutionY >= 0 ? this.imageResolutionY : image.getResolutionY();
+			
+			return this.imageConstructionFunction.apply(image, Integer.valueOf(imageResolutionX), Integer.valueOf(imageResolutionY));
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -437,5 +499,11 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 		
 		this.isMouseButtonPressed[mouseEvent.getButton().ordinal()] = false;
 		this.isMouseButtonPressedOnce[mouseEvent.getButton().ordinal()] = false;
+	}
+	
+	private void doSetImage(final T image) {
+		this.byteBuffer.set(ByteBuffer.allocate(image.getResolutionX() * image.getResolutionY() * 4));
+		this.image.set(image);
+		this.writableImage.set(new WritableImage(image.getResolutionX(), image.getResolutionY()));
 	}
 }

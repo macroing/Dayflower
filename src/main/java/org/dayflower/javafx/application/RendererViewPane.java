@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
@@ -41,6 +42,7 @@ import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
+import org.dayflower.javafx.canvas.ConcurrentImageCanvasPane;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.image.WritableImageCache;
 import org.dayflower.javafx.scene.layout.Regions;
@@ -57,6 +59,7 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.material.MatteMaterial;
+import org.macroing.java.util.function.TriFunction;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -85,10 +88,10 @@ final class RendererViewPane extends BorderPane {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final AtomicBoolean isCameraUpdateRequired;
+	private final AtomicLong lastResizeTimeMillis;
 	private final AtomicReference<File> file;
 	private final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer;
 	private final ConcurrentImageCanvas<ImageF> concurrentImageCanvas;
-	private final ExecutorService executorService;
 	private final HBox hBox;
 	private final Label labelRenderPass;
 	private final Label labelRenderTime;
@@ -102,21 +105,12 @@ final class RendererViewPane extends BorderPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Constructs a new {@code RendererViewPane} instance.
-	 * <p>
-	 * If either {@code combinedProgressiveImageOrderRenderer} or {@code executorService} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param combinedProgressiveImageOrderRenderer the {@link CombinedProgressiveImageOrderRenderer} instance associated with this {@code RendererViewPane} instance
-	 * @param executorService the {@code ExecutorService} associated with this {@code RendererViewPane} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code combinedProgressiveImageOrderRenderer} or {@code executorService} are {@code null}
-	 */
 	public RendererViewPane(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService) {
 		this.isCameraUpdateRequired = new AtomicBoolean();
+		this.lastResizeTimeMillis = new AtomicLong();
 		this.file = new AtomicReference<>();
 		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
 		this.concurrentImageCanvas = new ConcurrentImageCanvas<>(executorService, combinedProgressiveImageOrderRenderer.getImage(), this::doRender, new ObserverImpl(combinedProgressiveImageOrderRenderer));
-		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
 		this.hBox = new HBox();
 		this.labelRenderPass = new Label();
 		this.labelRenderTime = new Label();
@@ -133,52 +127,25 @@ final class RendererViewPane extends BorderPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Returns the {@link CombinedProgressiveImageOrderRenderer} instance associated with this {@code RendererViewPane} instance.
-	 * 
-	 * @return the {@code CombinedProgressiveImageOrderRenderer} instance associated with this {@code RendererViewPane} instance
-	 */
-	public CombinedProgressiveImageOrderRenderer getCombinedProgressiveImageOrderRenderer() {
-		return this.combinedProgressiveImageOrderRenderer;
-	}
-	
-	/**
-	 * Returns the {@code ExecutorService} instance associated with this {@code RendererViewPane} instance.
-	 * 
-	 * @return the {@code ExecutorService} instance associated with this {@code RendererViewPane} instance
-	 */
-	public ExecutorService getExecutorService() {
-		return this.executorService;
-	}
-	
-	/**
-	 * Returns the {@code ObjectTreeView} instance associated with this {@code RendererViewPane} instance.
-	 * 
-	 * @return the {@code ObjectTreeView} instance associated with this {@code RendererViewPane} instance
-	 */
 	public ObjectTreeView<String, Object> getObjectTreeView() {
 		return this.objectTreeView;
 	}
 	
-	/**
-	 * Returns the optional {@code File} for saving.
-	 * 
-	 * @return the optional {@code File} for saving
-	 */
 	public Optional<File> getFile() {
 		return Optional.ofNullable(this.file.get());
 	}
 	
-	/**
-	 * This method is called when it's time to render.
-	 */
 	public void render() {
+		if(System.currentTimeMillis() - this.lastResizeTimeMillis.get() < 100L) {
+			this.combinedProgressiveImageOrderRenderer.renderShutdown();
+			this.combinedProgressiveImageOrderRenderer.clear();
+			
+			return;
+		}
+		
 		this.concurrentImageCanvas.render();
 	}
 	
-	/**
-	 * This method is called when it's time to save the {@link ImageF}.
-	 */
 	public void save() {
 		final Optional<File> optionalFile = getFile();
 		
@@ -189,30 +156,14 @@ final class RendererViewPane extends BorderPane {
 		}
 	}
 	
-	/**
-	 * Sets the camera update required state to {@code isCameraUpdateRequired}.
-	 * 
-	 * @param isCameraUpdateRequired {@code true} if, and only if, camera update is required, {@code false} otherwise
-	 */
 	public void setCameraUpdateRequired(final boolean isCameraUpdateRequired) {
 		this.isCameraUpdateRequired.set(isCameraUpdateRequired);
 	}
 	
-	/**
-	 * Sets the {@code File} for saving to {@code file}.
-	 * <p>
-	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param file the {@code File} for saving
-	 * @throws NullPointerException} thrown if, and only if, {@code file} is {@code null}
-	 */
 	public void setFile(final File file) {
 		this.file.set(Objects.requireNonNull(file, "file == null"));
 	}
 	
-	/**
-	 * This method is called when it's time to update.
-	 */
 	public void update() {
 		final Camera camera = this.combinedProgressiveImageOrderRenderer.getScene().getCamera();
 		
@@ -320,9 +271,29 @@ final class RendererViewPane extends BorderPane {
 		
 		VBox.setVgrow(this.objectTreeView, Priority.ALWAYS);
 		
+		final TriFunction<ImageF, Number, Number, ImageF> imageConstructionFunction = (currentImage, resolutionX, resolutionY) -> {
+			final
+			Camera camera = this.combinedProgressiveImageOrderRenderer.getScene().getCamera();
+			camera.setResolution(resolutionX.intValue(), resolutionY.intValue());
+			camera.setFieldOfViewY();
+			
+			final ImageF image = currentImage.scale(resolutionX.intValue(), resolutionY.intValue()).clear();
+			
+			this.combinedProgressiveImageOrderRenderer.setImage(image);
+			this.combinedProgressiveImageOrderRenderer.renderShutdown();
+			this.combinedProgressiveImageOrderRenderer.clear();
+			
+			return image;
+		};
+		
+		final
+		ConcurrentImageCanvasPane<ImageF> concurrentImageCanvasPane = new ConcurrentImageCanvasPane<>(this.concurrentImageCanvas, imageConstructionFunction);
+		concurrentImageCanvasPane.heightProperty().addListener((observable, oldValue, newValue) -> this.lastResizeTimeMillis.set(System.currentTimeMillis()));
+		concurrentImageCanvasPane.widthProperty().addListener((observable, oldValue, newValue) -> this.lastResizeTimeMillis.set(System.currentTimeMillis()));
+		
 //		Configure the RendererViewPane:
 		setBottom(this.hBox);
-		setCenter(this.concurrentImageCanvas);
+		setCenter(concurrentImageCanvasPane);
 		setLeft(this.vBoxL);
 		setRight(this.vBoxR);
 	}

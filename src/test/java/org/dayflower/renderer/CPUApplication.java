@@ -27,6 +27,7 @@ import org.dayflower.image.Image;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
+import org.dayflower.javafx.canvas.ConcurrentImageCanvasPane;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas.Observer;
 import org.dayflower.renderer.cpu.AbstractCPURenderer;
 import org.dayflower.renderer.cpu.CPURenderer;
@@ -55,7 +56,7 @@ public final class CPUApplication extends Application {
 	public CPUApplication() {
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.label = new Label();
-		this.renderer = doCreateRenderer(RenderingAlgorithm.PATH_TRACING, "./resources/scenes/CPUTest.java");
+		this.renderer = doCreateRenderer(RenderingAlgorithm.PATH_TRACING, "./resources/scenes/MetalMaterial.java");
 		this.renderer.setRendererObserver(new RendererObserverImpl(this.label));
 	}
 	
@@ -81,12 +82,21 @@ public final class CPUApplication extends Application {
 		final
 		BorderPane borderPane = new BorderPane();
 		borderPane.setBottom(hBox);
-		borderPane.setCenter(concurrentImageCanvas);
+		borderPane.setCenter(new ConcurrentImageCanvasPane<>(concurrentImageCanvas, (currentImage, resolutionX, resolutionY) -> {
+			camera.setResolution(resolutionX.intValue(), resolutionY.intValue());
+			camera.setFieldOfViewY();
+			
+			final ImageF image = currentImage.scale(resolutionX.intValue(), resolutionY.intValue());
+			
+			renderer.setImage(image);
+			
+			return image;
+		}));
 		
 		final Scene scene = new Scene(borderPane);
 		
 		stage.centerOnScreen();
-		stage.setResizable(false);
+		stage.setResizable(true);
 		stage.setScene(scene);
 		stage.setTitle("CPU");
 		stage.sizeToScene();

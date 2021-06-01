@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
+import org.dayflower.utility.Files;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -64,7 +65,7 @@ final class FileSaveEventHandler implements EventHandler<ActionEvent> {
 			} else {
 				final
 				FileChooser fileChooser = new FileChooser();
-				fileChooser.setInitialDirectory(doFindDirectory(INITIAL_DIRECTORY_IMAGES));
+				fileChooser.setInitialDirectory(Files.findClosestExistingDirectoryTo(INITIAL_DIRECTORY_IMAGES));
 				fileChooser.setTitle(TITLE_SAVE_AS);
 				
 				final File file = fileChooser.showSaveDialog(this.stage);
@@ -75,17 +76,5 @@ final class FileSaveEventHandler implements EventHandler<ActionEvent> {
 				}
 			}
 		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static File doFindDirectory(final File directory) {
-		File currentDirectory = directory;
-		
-		while(currentDirectory != null && !currentDirectory.isDirectory()) {
-			currentDirectory = currentDirectory.getParentFile();
-		}
-		
-		return currentDirectory != null && currentDirectory.isDirectory() ? currentDirectory : new File(".");
 	}
 }

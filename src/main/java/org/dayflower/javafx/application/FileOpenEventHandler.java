@@ -34,6 +34,7 @@ import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
 import org.dayflower.scene.loader.JavaSceneLoader;
+import org.dayflower.utility.Files;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -67,7 +68,7 @@ final class FileOpenEventHandler implements EventHandler<ActionEvent> {
 		try {
 			final
 			FileChooser fileChooser = new FileChooser();
-			fileChooser.setInitialDirectory(doFindDirectory(INITIAL_DIRECTORY_SCENES));
+			fileChooser.setInitialDirectory(Files.findClosestExistingDirectoryTo(INITIAL_DIRECTORY_SCENES));
 			fileChooser.setTitle(TITLE_OPEN);
 			
 			final File file = fileChooser.showOpenDialog(this.stage);
@@ -108,17 +109,5 @@ final class FileOpenEventHandler implements EventHandler<ActionEvent> {
 		combinedProgressiveImageOrderRenderer.setup();
 		
 		return combinedProgressiveImageOrderRenderer;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static File doFindDirectory(final File directory) {
-		File currentDirectory = directory;
-		
-		while(currentDirectory != null && !currentDirectory.isDirectory()) {
-			currentDirectory = currentDirectory.getParentFile();
-		}
-		
-		return currentDirectory != null && currentDirectory.isDirectory() ? currentDirectory : new File(".");
 	}
 }

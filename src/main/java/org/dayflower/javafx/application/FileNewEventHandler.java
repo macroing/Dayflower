@@ -22,14 +22,8 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.dayflower.image.ByteImageF;
-import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
-import org.dayflower.renderer.cpu.CPURenderer;
-import org.dayflower.renderer.gpu.GPURenderer;
-import org.dayflower.renderer.observer.NoOpRendererObserver;
-import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.PerezLight;
 
@@ -53,36 +47,24 @@ final class FileNewEventHandler implements EventHandler<ActionEvent> {
 	
 	@Override
 	public void handle(final ActionEvent actionEvent) {
-		final
-		Scene scene = new Scene();
-		scene.addLight(new PerezLight());
-		
-		this.executorService.execute(() -> {
-			final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = doCreateCombinedProgressiveImageOrderRenderer(scene);
-			
-			this.nodeSelectionTabPane.addLater(combinedProgressiveImageOrderRenderer, tab -> tab.setOnClosed(new TabOnClosedEventHandler(combinedProgressiveImageOrderRenderer, tab)));
-		});
+		this.executorService.execute(this::doNew);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private CombinedProgressiveImageOrderRenderer doCreateCombinedProgressiveImageOrderRenderer(final Scene scene) {
-		final Camera camera = scene.getCamera();
+	private void doNew() {
+		final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = Renderers.createCombinedProgressiveImageOrderRenderer(doCreateScene(), this.isUsingGPU.get());
 		
-		final int resolutionX = (int)(camera.getResolutionX());
-		final int resolutionY = (int)(camera.getResolutionY());
-		
-		final boolean isUsingGPU = this.isUsingGPU.get();
-		
+		this.nodeSelectionTabPane.addLater(combinedProgressiveImageOrderRenderer, tab -> tab.setOnClosed(new TabOnClosedEventHandler(combinedProgressiveImageOrderRenderer, tab)));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Scene doCreateScene() {
 		final
-		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = isUsingGPU ? new GPURenderer(new NoOpRendererObserver()) : new CPURenderer(new NoOpRendererObserver());
-		combinedProgressiveImageOrderRenderer.setImage(isUsingGPU ? new ByteImageF(resolutionX, resolutionY) : new PixelImageF(resolutionX, resolutionY));
-		combinedProgressiveImageOrderRenderer.setRenderPasses(1);
-		combinedProgressiveImageOrderRenderer.setRenderPassesPerDisplayUpdate(1);
-		combinedProgressiveImageOrderRenderer.setSamples(1);
-		combinedProgressiveImageOrderRenderer.setScene(scene);
-		combinedProgressiveImageOrderRenderer.setup();
+		Scene scene = new Scene();
+		scene.addLight(new PerezLight());
 		
-		return combinedProgressiveImageOrderRenderer;
+		return scene;
 	}
 }

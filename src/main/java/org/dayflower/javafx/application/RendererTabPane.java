@@ -53,6 +53,11 @@ final class RendererTabPane extends TabPane {
 		return this.rendererViewPane;
 	}
 	
+	public void handleExitRequest() {
+		this.combinedProgressiveImageOrderRenderer.renderShutdown();
+		this.combinedProgressiveImageOrderRenderer.dispose();
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private void doConfigure() {

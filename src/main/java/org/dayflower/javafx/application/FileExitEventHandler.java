@@ -50,12 +50,9 @@ final class FileExitEventHandler implements EventHandler<ActionEvent> {
 			final Node content = tab.getContent();
 			
 			if(content instanceof RendererTabPane) {
-				final RendererTabPane rendererTabPane = RendererTabPane.class.cast(content);
-				
 				final
-				CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = rendererTabPane.getCombinedProgressiveImageOrderRenderer();
-				combinedProgressiveImageOrderRenderer.renderShutdown();
-				combinedProgressiveImageOrderRenderer.dispose();
+				RendererTabPane rendererTabPane = RendererTabPane.class.cast(content);
+				rendererTabPane.handleExitRequest();
 			}
 		}
 		

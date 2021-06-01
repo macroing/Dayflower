@@ -23,14 +23,8 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.dayflower.image.ByteImageF;
-import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
-import org.dayflower.renderer.cpu.CPURenderer;
-import org.dayflower.renderer.gpu.GPURenderer;
-import org.dayflower.renderer.observer.NoOpRendererObserver;
-import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
 import org.dayflower.scene.loader.JavaSceneLoader;
@@ -74,15 +68,7 @@ final class FileOpenEventHandler implements EventHandler<ActionEvent> {
 			final File file = fileChooser.showOpenDialog(this.stage);
 			
 			if(file != null) {
-				this.executorService.execute(() -> {
-					final SceneLoader sceneLoader = new JavaSceneLoader();
-					
-					final Scene scene = sceneLoader.load(file);
-					
-					final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = doCreateCombinedProgressiveImageOrderRenderer(scene);
-					
-					this.nodeSelectionTabPane.addLater(combinedProgressiveImageOrderRenderer, tab -> tab.setOnClosed(new TabOnClosedEventHandler(combinedProgressiveImageOrderRenderer, tab)));
-				});
+				this.executorService.execute(() -> doOpen(file));
 			}
 		} catch(final IllegalArgumentException e) {
 //			Do nothing for now.
@@ -91,23 +77,13 @@ final class FileOpenEventHandler implements EventHandler<ActionEvent> {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private CombinedProgressiveImageOrderRenderer doCreateCombinedProgressiveImageOrderRenderer(final Scene scene) {
-		final Camera camera = scene.getCamera();
+	private void doOpen(final File file) {
+		final SceneLoader sceneLoader = new JavaSceneLoader();
 		
-		final int resolutionX = (int)(camera.getResolutionX());
-		final int resolutionY = (int)(camera.getResolutionY());
+		final Scene scene = sceneLoader.load(file);
 		
-		final boolean isUsingGPU = this.isUsingGPU.get();
+		final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = Renderers.createCombinedProgressiveImageOrderRenderer(scene, this.isUsingGPU.get());
 		
-		final
-		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = isUsingGPU ? new GPURenderer(new NoOpRendererObserver()) : new CPURenderer(new NoOpRendererObserver());
-		combinedProgressiveImageOrderRenderer.setImage(isUsingGPU ? new ByteImageF(resolutionX, resolutionY) : new PixelImageF(resolutionX, resolutionY));
-		combinedProgressiveImageOrderRenderer.setRenderPasses(1);
-		combinedProgressiveImageOrderRenderer.setRenderPassesPerDisplayUpdate(1);
-		combinedProgressiveImageOrderRenderer.setSamples(1);
-		combinedProgressiveImageOrderRenderer.setScene(scene);
-		combinedProgressiveImageOrderRenderer.setup();
-		
-		return combinedProgressiveImageOrderRenderer;
+		this.nodeSelectionTabPane.addLater(combinedProgressiveImageOrderRenderer, tab -> tab.setOnClosed(new TabOnClosedEventHandler(combinedProgressiveImageOrderRenderer, tab)));
 	}
 }

@@ -1,5 +1,6 @@
 2021-06-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add a simple Change API to handle undo and redo operations.
 	* ADD:		Add the method putColorRGBA(Color4D, int) to the ImageD, ByteImageD, IntImageD and PixelImageD classes.
 	* ADD:		Add the method putColorRGBA(Color4F, int) to the ImageF, ByteImageF, IntImageF and PixelImageF classes.
 	* CHANGE:	Change the abstract modifier of the methods setColorRGBA(Color4D, int, PixelOperation) and setColorRGBA(Color4D, int, int, PixelOperation) in the ImageD class to final and add their implementations.

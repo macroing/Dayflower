@@ -515,7 +515,7 @@ public abstract class ImageD extends Image {
 		final int resolution = getResolution();
 		
 		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(colorRGBA, i);
+			doSetColorRGBA(colorRGBA, i);
 		}
 		
 		return this;
@@ -620,7 +620,7 @@ public abstract class ImageD extends Image {
 						final Color4D oldColorRGBA = getColorRGBA(circleX, circleY);
 						final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 						
-						setColorRGBA(newColorRGBA, circleX, circleY);
+						doSetColorRGBA(newColorRGBA, circleX, circleY);
 					}
 				}
 			}
@@ -708,7 +708,7 @@ public abstract class ImageD extends Image {
 				final Color4D oldColorRGBA = getColorRGBA(x, y);
 				final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 				
-				setColorRGBA(newColorRGBA, point.getX(), point.getY());
+				doSetColorRGBA(newColorRGBA, point.getX(), point.getY());
 			}
 		}
 		
@@ -795,7 +795,7 @@ public abstract class ImageD extends Image {
 					final Color4D oldColorRGBA = getColorRGBA(x, y);
 					final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 					
-					setColorRGBA(newColorRGBA, x, y);
+					doSetColorRGBA(newColorRGBA, x, y);
 				}
 			}
 		}
@@ -953,7 +953,7 @@ public abstract class ImageD extends Image {
 						final Color4D oldColorRGBA = getColorRGBA(circleX, circleY);
 						final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 						
-						setColorRGBA(newColorRGBA, circleX, circleY);
+						doSetColorRGBA(newColorRGBA, circleX, circleY);
 					}
 				}
 			}
@@ -1164,7 +1164,7 @@ public abstract class ImageD extends Image {
 					final Color4D targetColorRGBA = targetImage.getColorRGBA(targetX, targetY);
 					final Color4D colorRGBA = Objects.requireNonNull(triFunction.apply(sourceColorRGBA, targetColorRGBA, new Point2I(targetX, targetY)));
 					
-					targetImage.setColorRGBA(colorRGBA, targetX, targetY);
+					targetImage.doSetColorRGBA(colorRGBA, targetX, targetY);
 				}
 			}
 		}
@@ -1278,7 +1278,7 @@ public abstract class ImageD extends Image {
 					final Color4D oldColorRGBA = getColorRGBA(x, y);
 					final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 					
-					setColorRGBA(newColorRGBA, x, y);
+					doSetColorRGBA(newColorRGBA, x, y);
 				}
 			}
 		}
@@ -1438,7 +1438,7 @@ public abstract class ImageD extends Image {
 					final Color4D oldColorRGBA = getColorRGBA(x, y);
 					final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 					
-					setColorRGBA(newColorRGBA, point.getX(), point.getY());
+					doSetColorRGBA(newColorRGBA, point.getX(), point.getY());
 				}
 			}
 		}
@@ -1593,7 +1593,7 @@ public abstract class ImageD extends Image {
 				
 				colorRGBA = new Color4D(colorRGB.getR(), colorRGB.getG(), colorRGB.getB(), colorRGBA.getA());
 				
-				setColorRGBA(colorRGBA, x, y);
+				doSetColorRGBA(colorRGBA, x, y);
 			}
 		}
 		
@@ -1668,7 +1668,7 @@ public abstract class ImageD extends Image {
 				
 				colorRGBA = new Color4D(colorRGB.getR(), colorRGB.getG(), colorRGB.getB(), colorRGBA.getA());
 				
-				setColorRGBA(colorRGBA, x, y);
+				doSetColorRGBA(colorRGBA, x, y);
 			}
 		}
 		
@@ -1776,7 +1776,7 @@ public abstract class ImageD extends Image {
 				final Point2D d = Point2D.add(c, directionAToOldImage);
 				
 //				Set the Color4D instance in the new ImageD instance:
-				newImage.setColorRGBA(isWrappingAround ? oldImage.getColorRGBA(d, PixelOperation.WRAP_AROUND) : oldImage.getColorRGBA(d, point -> Color4D.TRANSPARENT), x, y);
+				newImage.doSetColorRGBA(isWrappingAround ? oldImage.getColorRGBA(d, PixelOperation.WRAP_AROUND) : oldImage.getColorRGBA(d, point -> Color4D.TRANSPARENT), x, y);
 			}
 		}
 		
@@ -1822,7 +1822,7 @@ public abstract class ImageD extends Image {
 		
 		for(int y = 0; y < resolutionY; y++) {
 			for(int x = 0; x < resolutionX; x++) {
-				newImage.setColorRGBA(oldImage.getColorRGBA(x * scaleX, y * scaleY), x, y);
+				newImage.doSetColorRGBA(oldImage.getColorRGBA(x * scaleX, y * scaleY), x, y);
 			}
 		}
 		
@@ -1965,18 +1965,7 @@ public abstract class ImageD extends Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
 	public final ImageD setColorRGBA(final Color4D colorRGBA, final int index, final PixelOperation pixelOperation) {
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
-		
-		final int resolution = getResolution();
-		
-		final int indexTransformed = pixelOperation.getIndex(index, resolution);
-		
-		if(indexTransformed >= 0 && indexTransformed < resolution) {
-			putColorRGBA(colorRGBA, indexTransformed);
-		}
-		
-		return this;
+		return doSetColorRGBA(colorRGBA, index, pixelOperation);
 	}
 	
 	/**
@@ -2020,22 +2009,7 @@ public abstract class ImageD extends Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
 	public final ImageD setColorRGBA(final Color4D colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		final int xTransformed = pixelOperation.getX(x, resolutionX);
-		final int yTransformed = pixelOperation.getY(y, resolutionY);
-		
-		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
-			final int index = yTransformed * resolutionX + xTransformed;
-			
-			putColorRGBA(colorRGBA, index);
-		}
-		
-		return this;
+		return doSetColorRGBA(colorRGBA, x, y, pixelOperation);
 	}
 	
 	/**
@@ -2120,7 +2094,7 @@ public abstract class ImageD extends Image {
 		
 		for(int y = minimumY; y < maximumY; y++) {
 			for(int x = minimumX; x < maximumX; x++) {
-				setColorRGBA(biFunction.apply(getColorRGBA(x, y), new Point2I(x, y)), x, y);
+				doSetColorRGBA(biFunction.apply(getColorRGBA(x, y), new Point2I(x, y)), x, y);
 			}
 		}
 		
@@ -2191,4 +2165,48 @@ public abstract class ImageD extends Image {
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
 	protected abstract void putColorRGBA(final Color4D colorRGBA, final int index);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private ImageD doSetColorRGBA(final Color4D colorRGBA, final int index) {
+		return doSetColorRGBA(colorRGBA, index, PixelOperation.NO_CHANGE);
+	}
+	
+	private ImageD doSetColorRGBA(final Color4D colorRGBA, final int index, final PixelOperation pixelOperation) {
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
+		
+		final int resolution = getResolution();
+		
+		final int indexTransformed = pixelOperation.getIndex(index, resolution);
+		
+		if(indexTransformed >= 0 && indexTransformed < resolution) {
+			putColorRGBA(colorRGBA, indexTransformed);
+		}
+		
+		return this;
+	}
+	
+	private ImageD doSetColorRGBA(final Color4D colorRGBA, final int x, final int y) {
+		return doSetColorRGBA(colorRGBA, x, y, PixelOperation.NO_CHANGE);
+	}
+	
+	private ImageD doSetColorRGBA(final Color4D colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
+		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		final int xTransformed = pixelOperation.getX(x, resolutionX);
+		final int yTransformed = pixelOperation.getY(y, resolutionY);
+		
+		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
+			final int index = yTransformed * resolutionX + xTransformed;
+			
+			putColorRGBA(colorRGBA, index);
+		}
+		
+		return this;
+	}
 }

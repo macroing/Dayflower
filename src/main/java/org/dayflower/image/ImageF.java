@@ -1955,7 +1955,20 @@ public abstract class ImageF extends Image {
 	 * @return this {@code ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
-	public abstract ImageF setColorRGBA(final Color4F colorRGBA, final int index, final PixelOperation pixelOperation);
+	public final ImageF setColorRGBA(final Color4F colorRGBA, final int index, final PixelOperation pixelOperation) {
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
+		
+		final int resolution = getResolution();
+		
+		final int indexTransformed = pixelOperation.getIndex(index, resolution);
+		
+		if(indexTransformed >= 0 && indexTransformed < resolution) {
+			putColorRGBA(colorRGBA, indexTransformed);
+		}
+		
+		return this;
+	}
 	
 	/**
 	 * Sets the {@link Color4F} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
@@ -1997,7 +2010,24 @@ public abstract class ImageF extends Image {
 	 * @return this {@code ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
-	public abstract ImageF setColorRGBA(final Color4F colorRGBA, final int x, final int y, final PixelOperation pixelOperation);
+	public final ImageF setColorRGBA(final Color4F colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
+		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		final int xTransformed = pixelOperation.getX(x, resolutionX);
+		final int yTransformed = pixelOperation.getY(y, resolutionY);
+		
+		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
+			final int index = yTransformed * resolutionX + xTransformed;
+			
+			putColorRGBA(colorRGBA, index);
+		}
+		
+		return this;
+	}
 	
 	/**
 	 * Sets the transparency for this {@code ImageF} instance to {@code transparency}.
@@ -2141,4 +2171,15 @@ public abstract class ImageF extends Image {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
 	protected abstract ImageF newImage(final int resolutionX, final int resolutionY);
+	
+	/**
+	 * Sets the {@link Color4F} of the pixel represented by {@code index} to {@code colorRGBA}.
+	 * <p>
+	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorRGBA the {@code Color4F} to set
+	 * @param index the index of the pixel
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
+	 */
+	protected abstract void putColorRGBA(final Color4F colorRGBA, final int index);
 }

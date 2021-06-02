@@ -1,3 +1,15 @@
+Image Undo & Redo Functionality:
+
+	Description:
+
+		Add support for Undo and Redo operations to the ImageD and ImageF classes.
+
+	Status:
+
+		The methods setColorRGBA(Color4*, int, PixelOperation) and setColorRGBA(Color4*, int, int, PixelOperation) of ImageD and ImageF are now implemented in ImageD and ImageF, rather than their respective subclasses.
+		The methods that performs the actual update are performed in putColorRGBA(Color4*, int) in their respective subclasses.
+		This change is necessary, because ImageD and ImageF needs to collect the data that changes in some stack data structure.
+
 Scene Loader Parameter Selection:
 
 	Description:

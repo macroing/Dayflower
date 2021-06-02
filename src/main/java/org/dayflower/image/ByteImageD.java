@@ -201,83 +201,6 @@ public final class ByteImageD extends ImageD {
 	}
 	
 	/**
-	 * Sets the {@link Color4D} of the pixel represented by {@code index} to {@code colorRGBA}.
-	 * <p>
-	 * Returns this {@code ByteImageD} instance.
-	 * <p>
-	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
-	 * 
-	 * @param colorRGBA the {@code Color4D} to set
-	 * @param index the index of the pixel
-	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return this {@code ByteImageD} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
-	 */
-	@Override
-	public ByteImageD setColorRGBA(final Color4D colorRGBA, final int index, final PixelOperation pixelOperation) {
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
-		
-		final int resolution = getResolution();
-		
-		final int indexTransformed = pixelOperation.getIndex(index, resolution);
-		
-		if(indexTransformed >= 0 && indexTransformed < resolution) {
-			synchronized(this.data) {
-				this.data[indexTransformed * 4 + 0] = colorRGBA.getAsByteR();
-				this.data[indexTransformed * 4 + 1] = colorRGBA.getAsByteG();
-				this.data[indexTransformed * 4 + 2] = colorRGBA.getAsByteB();
-				this.data[indexTransformed * 4 + 3] = colorRGBA.getAsByteA();
-			}
-		}
-		
-		return this;
-	}
-	
-	/**
-	 * Sets the {@link Color4D} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
-	 * <p>
-	 * Returns this {@code ByteImageD} instance.
-	 * <p>
-	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
-	 * 
-	 * @param colorRGBA the {@code Color4D} to set
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return this {@code ByteImageD} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
-	 */
-	@Override
-	public ByteImageD setColorRGBA(final Color4D colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		final int xTransformed = pixelOperation.getX(x, resolutionX);
-		final int yTransformed = pixelOperation.getY(y, resolutionY);
-		
-		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
-			final int index = yTransformed * resolutionX + xTransformed;
-			
-			synchronized(this.data) {
-				this.data[index * 4 + 0] = colorRGBA.getAsByteR();
-				this.data[index * 4 + 1] = colorRGBA.getAsByteG();
-				this.data[index * 4 + 2] = colorRGBA.getAsByteB();
-				this.data[index * 4 + 3] = colorRGBA.getAsByteA();
-			}
-		}
-		
-		return this;
-	}
-	
-	/**
 	 * Returns the {@link Color4D} of the pixel represented by {@code index}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -543,5 +466,28 @@ public final class ByteImageD extends ImageD {
 	@Override
 	protected ByteImageD newImage(final int resolutionX, final int resolutionY) {
 		return new ByteImageD(resolutionX, resolutionY);
+	}
+	
+	/**
+	 * Sets the {@link Color4D} of the pixel represented by {@code index} to {@code colorRGBA}.
+	 * <p>
+	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorRGBA the {@code Color4D} to set
+	 * @param index the index of the pixel
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
+	 */
+	@Override
+	protected void putColorRGBA(final Color4D colorRGBA, final int index) {
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+		
+		if(index >= 0 && index < getResolution()) {
+			synchronized(this.data) {
+				this.data[index * 4 + 0] = colorRGBA.getAsByteR();
+				this.data[index * 4 + 1] = colorRGBA.getAsByteG();
+				this.data[index * 4 + 2] = colorRGBA.getAsByteB();
+				this.data[index * 4 + 3] = colorRGBA.getAsByteA();
+			}
+		}
 	}
 }

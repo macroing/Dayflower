@@ -318,73 +318,6 @@ public final class IntImageF extends ImageF {
 	}
 	
 	/**
-	 * Sets the {@link Color4F} of the pixel represented by {@code index} to {@code colorRGBA}.
-	 * <p>
-	 * Returns this {@code IntImageF} instance.
-	 * <p>
-	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
-	 * 
-	 * @param colorRGBA the {@code Color4F} to set
-	 * @param index the index of the pixel
-	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return this {@code IntImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
-	 */
-	@Override
-	public IntImageF setColorRGBA(final Color4F colorRGBA, final int index, final PixelOperation pixelOperation) {
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
-		
-		final int resolution = getResolution();
-		
-		final int indexTransformed = pixelOperation.getIndex(index, resolution);
-		
-		if(indexTransformed >= 0 && indexTransformed < resolution) {
-			this.data[indexTransformed] = colorRGBA.pack();
-		}
-		
-		return this;
-	}
-	
-	/**
-	 * Sets the {@link Color4F} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
-	 * <p>
-	 * Returns this {@code IntImageF} instance.
-	 * <p>
-	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
-	 * 
-	 * @param colorRGBA the {@code Color4F} to set
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return this {@code IntImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
-	 */
-	@Override
-	public IntImageF setColorRGBA(final Color4F colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		final int xTransformed = pixelOperation.getX(x, resolutionX);
-		final int yTransformed = pixelOperation.getY(y, resolutionY);
-		
-		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
-			final int index = yTransformed * resolutionX + xTransformed;
-			
-			this.data[index] = colorRGBA.pack();
-		}
-		
-		return this;
-	}
-	
-	/**
 	 * Returns a {@code String} representation of this {@code IntImageF} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code IntImageF} instance
@@ -570,5 +503,23 @@ public final class IntImageF extends ImageF {
 	@Override
 	protected IntImageF newImage(final int resolutionX, final int resolutionY) {
 		return new IntImageF(resolutionX, resolutionY);
+	}
+	
+	/**
+	 * Sets the {@link Color4F} of the pixel represented by {@code index} to {@code colorRGBA}.
+	 * <p>
+	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorRGBA the {@code Color4F} to set
+	 * @param index the index of the pixel
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
+	 */
+	@Override
+	protected void putColorRGBA(final Color4F colorRGBA, final int index) {
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+		
+		if(index >= 0 && index < this.data.length) {
+			this.data[index] = colorRGBA.pack();
+		}
 	}
 }

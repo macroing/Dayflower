@@ -219,14 +219,12 @@ public final class ByteImageD extends ImageD {
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
 		
 		if(indexTransformed >= 0 && indexTransformed < resolution) {
-			synchronized(this.data) {
-				final int r = this.data[indexTransformed * 4 + 0] & 0xFF;
-				final int g = this.data[indexTransformed * 4 + 1] & 0xFF;
-				final int b = this.data[indexTransformed * 4 + 2] & 0xFF;
-				final int a = this.data[indexTransformed * 4 + 3] & 0xFF;
-				
-				return new Color4D(r, g, b, a);
-			}
+			final int r = this.data[indexTransformed * 4 + 0] & 0xFF;
+			final int g = this.data[indexTransformed * 4 + 1] & 0xFF;
+			final int b = this.data[indexTransformed * 4 + 2] & 0xFF;
+			final int a = this.data[indexTransformed * 4 + 3] & 0xFF;
+			
+			return new Color4D(r, g, b, a);
 		}
 		
 		return Color4D.BLACK;
@@ -253,14 +251,12 @@ public final class ByteImageD extends ImageD {
 		if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
 			final int index = y * resolutionX + x;
 			
-			synchronized(this.data) {
-				final int r = this.data[index * 4 + 0] & 0xFF;
-				final int g = this.data[index * 4 + 1] & 0xFF;
-				final int b = this.data[index * 4 + 2] & 0xFF;
-				final int a = this.data[index * 4 + 3] & 0xFF;
-				
-				return new Color4D(r, g, b, a);
-			}
+			final int r = this.data[index * 4 + 0] & 0xFF;
+			final int g = this.data[index * 4 + 1] & 0xFF;
+			final int b = this.data[index * 4 + 2] & 0xFF;
+			final int a = this.data[index * 4 + 3] & 0xFF;
+			
+			return new Color4D(r, g, b, a);
 		}
 		
 		return Objects.requireNonNull(function.apply(new Point2I(x, y)));
@@ -290,14 +286,12 @@ public final class ByteImageD extends ImageD {
 		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
 			final int index = yTransformed * resolutionX + xTransformed;
 			
-			synchronized(this.data) {
-				final int r = this.data[index * 4 + 0] & 0xFF;
-				final int g = this.data[index * 4 + 1] & 0xFF;
-				final int b = this.data[index * 4 + 2] & 0xFF;
-				final int a = this.data[index * 4 + 3] & 0xFF;
-				
-				return new Color4D(r, g, b, a);
-			}
+			final int r = this.data[index * 4 + 0] & 0xFF;
+			final int g = this.data[index * 4 + 1] & 0xFF;
+			final int b = this.data[index * 4 + 2] & 0xFF;
+			final int a = this.data[index * 4 + 3] & 0xFF;
+			
+			return new Color4D(r, g, b, a);
 		}
 		
 		return Color4D.BLACK;
@@ -365,9 +359,7 @@ public final class ByteImageD extends ImageD {
 	 * @return a copy of the associated {@code byte[]}, or the associated {@code byte[]} itself if {@code isWrapping} is {@code true}
 	 */
 	public byte[] getData(final boolean isWrapping) {
-		synchronized(this.data) {
-			return isWrapping ? this.data : this.data.clone();
-		}
+		return isWrapping ? this.data : this.data.clone();
 	}
 	
 	/**
@@ -381,9 +373,7 @@ public final class ByteImageD extends ImageD {
 	 */
 	@Override
 	public byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder) {
-		synchronized(this.data) {
-			return ArrayComponentOrder.convert(ArrayComponentOrder.RGBA, Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null"), this.data);
-		}
+		return ArrayComponentOrder.convert(ArrayComponentOrder.RGBA, Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null"), this.data);
 	}
 	
 	/**
@@ -393,9 +383,7 @@ public final class ByteImageD extends ImageD {
 	 */
 	@Override
 	public int hashCode() {
-		synchronized(this.data) {
-			return Objects.hash(Integer.valueOf(getResolution()), Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), Integer.valueOf(Arrays.hashCode(this.data)));
-		}
+		return Objects.hash(Integer.valueOf(getResolution()), Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), Integer.valueOf(Arrays.hashCode(this.data)));
 	}
 	
 	/**
@@ -409,9 +397,7 @@ public final class ByteImageD extends ImageD {
 	 */
 	@Override
 	public int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder) {
-		synchronized(this.data) {
-			return Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null").pack(ArrayComponentOrder.RGBA, this.data);
-		}
+		return Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null").pack(ArrayComponentOrder.RGBA, this.data);
 	}
 	
 	/**
@@ -428,27 +414,25 @@ public final class ByteImageD extends ImageD {
 		ParameterArguments.requireRange(indexA, 0, getResolution() - 1, "indexA");
 		ParameterArguments.requireRange(indexB, 0, getResolution() - 1, "indexB");
 		
-		synchronized(this.data) {
-			final byte rA = this.data[indexA * 4 + 0];
-			final byte gA = this.data[indexA * 4 + 1];
-			final byte bA = this.data[indexA * 4 + 2];
-			final byte aA = this.data[indexA * 4 + 3];
-			
-			final byte rB = this.data[indexB * 4 + 0];
-			final byte gB = this.data[indexB * 4 + 1];
-			final byte bB = this.data[indexB * 4 + 2];
-			final byte aB = this.data[indexB * 4 + 3];
-			
-			this.data[indexA + 0] = rB;
-			this.data[indexA + 1] = gB;
-			this.data[indexA + 2] = bB;
-			this.data[indexA + 3] = aB;
-			
-			this.data[indexB + 0] = rA;
-			this.data[indexB + 1] = gA;
-			this.data[indexB + 2] = bA;
-			this.data[indexB + 3] = aA;
-		}
+		final byte rA = this.data[indexA * 4 + 0];
+		final byte gA = this.data[indexA * 4 + 1];
+		final byte bA = this.data[indexA * 4 + 2];
+		final byte aA = this.data[indexA * 4 + 3];
+		
+		final byte rB = this.data[indexB * 4 + 0];
+		final byte gB = this.data[indexB * 4 + 1];
+		final byte bB = this.data[indexB * 4 + 2];
+		final byte aB = this.data[indexB * 4 + 3];
+		
+		this.data[indexA + 0] = rB;
+		this.data[indexA + 1] = gB;
+		this.data[indexA + 2] = bB;
+		this.data[indexA + 3] = aB;
+		
+		this.data[indexB + 0] = rA;
+		this.data[indexB + 1] = gA;
+		this.data[indexB + 2] = bA;
+		this.data[indexB + 3] = aA;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -482,12 +466,10 @@ public final class ByteImageD extends ImageD {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
 		if(index >= 0 && index < getResolution()) {
-			synchronized(this.data) {
-				this.data[index * 4 + 0] = colorRGBA.getAsByteR();
-				this.data[index * 4 + 1] = colorRGBA.getAsByteG();
-				this.data[index * 4 + 2] = colorRGBA.getAsByteB();
-				this.data[index * 4 + 3] = colorRGBA.getAsByteA();
-			}
+			this.data[index * 4 + 0] = colorRGBA.getAsByteR();
+			this.data[index * 4 + 1] = colorRGBA.getAsByteG();
+			this.data[index * 4 + 2] = colorRGBA.getAsByteB();
+			this.data[index * 4 + 3] = colorRGBA.getAsByteA();
 		}
 	}
 }

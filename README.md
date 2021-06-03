@@ -74,6 +74,7 @@ Supported Features
 ------------------
 This library consists of several APIs. They are presented below.
 
+ - [The Change API](https://github.com/macroing/Dayflower/tree/master/documentation/Change) provides functionality to perform undo and redo operations.
  - [The Color API](https://github.com/macroing/Dayflower/tree/master/documentation/Color) provides all color types and operations.
  - [The Filter API](https://github.com/macroing/Dayflower/tree/master/documentation/Filter) provides all filter types and operations.
  - [The Geometry API](https://github.com/macroing/Dayflower/tree/master/documentation/Geometry) provides all geometric types and operations.

@@ -127,10 +127,22 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 */
 	@Override
 	public void setup() {
+		setup(true);
+	}
+	
+	/**
+	 * Sets up all necessary resources for this {@code AbstractSceneKernel} instance.
+	 * 
+	 * @param isSettingUpScene {@code true} if, and only if, the scene should be setup, {@code false} otherwise
+	 */
+	public void setup(final boolean isSettingUpScene) {
 		super.setup();
 		
 		doSetupPixelArray();
-		doSetupScene();
+		
+		if(isSettingUpScene) {
+			doSetupScene();
+		}
 	}
 	
 	/**

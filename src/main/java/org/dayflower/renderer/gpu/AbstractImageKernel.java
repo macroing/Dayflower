@@ -365,6 +365,25 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	/**
 	 * Sets a color in {@link #color3FLHSArray_$private$3}.
 	 * <p>
+	 * This method works like {@link Color3F#maximumTo1(Color3F)}.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
+	protected final void color3FLHSSetMaximumTo1(final float component1, final float component2, final float component3) {
+		final float maximum = max(component1, component2, component3);
+		
+		if(maximum > 1.0F) {
+			color3FLHSSet(component1 / maximum, component2 / maximum, component3 / maximum);
+		} else {
+			color3FLHSSet(component1, component2, component3);
+		}
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FLHSArray_$private$3}.
+	 * <p>
 	 * This method works like {@link Color3F#minimumTo0(Color3F)}.
 	 * 
 	 * @param component1 the value of component 1
@@ -588,6 +607,25 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		final float component3 = component3LHS / component3RHS;
 		
 		color3FRHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FRHSArray_$private$3}.
+	 * <p>
+	 * This method works like {@link Color3F#maximumTo1(Color3F)}.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
+	protected final void color3FRHSSetMaximumTo1(final float component1, final float component2, final float component3) {
+		final float maximum = max(component1, component2, component3);
+		
+		if(maximum > 1.0F) {
+			color3FRHSSet(component1 / maximum, component2 / maximum, component3 / maximum);
+		} else {
+			color3FRHSSet(component1, component2, component3);
+		}
 	}
 	
 	/**

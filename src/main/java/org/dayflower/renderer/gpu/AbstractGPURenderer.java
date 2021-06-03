@@ -199,6 +199,10 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
 		
+		if(resolutionX != getResolutionX() || resolutionY != getResolutionY()) {
+			setup(false);
+		}
+		
 		final Range range = Range.create(resolutionX * resolutionY);
 		
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
@@ -536,6 +540,16 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	@Override
 	public void setup() {
+		setup(true);
+	}
+	
+	/**
+	 * Sets up all necessary resources for this {@code AbstractGPURenderer} instance.
+	 * 
+	 * @param isSettingUpScene {@code true} if, and only if, the scene should be setup, {@code false} otherwise
+	 */
+	@Override
+	public void setup(final boolean isSettingUpScene) {
 		final ImageF image = getImage();
 		
 		final Scene scene = getScene();
@@ -546,7 +560,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		setResolution(resolutionX, resolutionY);
 		setScene(scene);
 		
-		super.setup();
+		super.setup(isSettingUpScene);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

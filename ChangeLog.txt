@@ -1,3 +1,11 @@
+2021-06-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods color3FLHSSetMaximumTo1(float, float, float) and color3FRHSSetMaximumTo1(float, float, float) to the AbstractImageKernel class.
+	* ADD:		Add support for window resizing in the GPU-renderer.
+	* ADD:		Add support for undo and redo operations to the ImageD and ImageF classes.
+	* ADD:		Add the methods isChangeHistoryEnabled(), setChangeHistoryEnabled(boolean), getChangeHistory(), redo() and undo() to the Image class.
+	* ADD:		Add the class ChangeCombiner.
+
 2021-06-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a simple Change API to handle undo and redo operations.

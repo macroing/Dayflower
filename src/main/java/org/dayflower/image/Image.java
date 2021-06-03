@@ -24,9 +24,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.change.ChangeHistory;
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
@@ -44,6 +46,8 @@ import javafx.scene.image.WritableImage;
  * @author J&#246;rgen Lundgren
  */
 public abstract class Image {
+	private final AtomicBoolean isChangeHistoryEnabled;
+	private final ChangeHistory changeHistory;
 	private final int resolution;
 	private final int resolutionX;
 	private final int resolutionY;
@@ -63,6 +67,8 @@ public abstract class Image {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.isChangeHistoryEnabled = new AtomicBoolean();
+		this.changeHistory = new ChangeHistory();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +130,37 @@ public abstract class Image {
 		writableImage.getPixelWriter().setPixels(0, 0, this.resolutionX, this.resolutionY, PixelFormat.getIntArgbInstance(), toIntArrayPackedForm(), 0, this.resolutionX);
 		
 		return writableImage;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the change history is enabled, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the change history is enabled, {@code false} otherwise
+	 */
+	public final boolean isChangeHistoryEnabled() {
+		return this.isChangeHistoryEnabled.get();
+	}
+	
+	/**
+	 * Performs the current redo operation.
+	 * <p>
+	 * Returns {@code true} if, and only if, the redo operation was performed, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the redo operation was performed, {@code false} otherwise
+	 */
+	public final boolean redo() {
+		return this.changeHistory.redo();
+	}
+	
+	/**
+	 * Performs the current undo operation.
+	 * <p>
+	 * Returns {@code true} if, and only if, the undo operation was performed, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the undo operation was performed, {@code false} otherwise
+	 */
+	public final boolean undo() {
+		return this.changeHistory.undo();
 	}
 	
 	/**
@@ -424,6 +461,15 @@ public abstract class Image {
 	}
 	
 	/**
+	 * Sets the change history enabled state to {@code isChangeHistoryEnabled}.
+	 * 
+	 * @param isChangeHistoryEnabled the change history enabled state
+	 */
+	public final void setChangeHistoryEnabled(final boolean isChangeHistoryEnabled) {
+		this.isChangeHistoryEnabled.set(isChangeHistoryEnabled);
+	}
+	
+	/**
 	 * Swaps the pixels represented by {@code indexA} and {@code indexB}.
 	 * <p>
 	 * If either {@code indexA} or {@code indexB} are less than {@code 0} or greater than or equal to {@code getResolution()}, an {@code IllegalArgumentException} will be thrown.
@@ -433,4 +479,15 @@ public abstract class Image {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code indexA} or {@code indexB} are less than {@code 0} or greater than or equal to {@code getResolution()}
 	 */
 	public abstract void swap(final int indexA, final int indexB);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the {@link ChangeHistory} instance that is associated with this {@code Image} instance.
+	 * 
+	 * @return the {@code ChangeHistory} instance that is associated with this {@code Image} instance
+	 */
+	protected final ChangeHistory getChangeHistory() {
+		return this.changeHistory;
+	}
 }

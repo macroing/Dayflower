@@ -34,6 +34,9 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.dayflower.change.Change;
+import org.dayflower.change.ChangeCombiner;
+import org.dayflower.change.ChangeHistory;
 import org.dayflower.color.Color3D;
 import org.dayflower.color.Color4D;
 import org.dayflower.geometry.AngleD;
@@ -56,6 +59,10 @@ import org.macroing.java.util.function.TriFunction;
  * @author J&#246;rgen Lundgren
  */
 public abstract class ImageD extends Image {
+	private final ChangeCombiner changeCombiner;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code ImageD} instance.
 	 * <p>
@@ -67,6 +74,8 @@ public abstract class ImageD extends Image {
 	 */
 	protected ImageD(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
+		
+		this.changeCombiner = new ChangeCombiner();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -512,11 +521,15 @@ public abstract class ImageD extends Image {
 	public final ImageD clear(final Color4D colorRGBA) {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
+		doChangeBegin();
+		
 		final int resolution = getResolution();
 		
 		for(int i = 0; i < resolution; i++) {
 			doSetColorRGBA(colorRGBA, i);
 		}
+		
+		doChangeEnd();
 		
 		return this;
 	}
@@ -605,6 +618,8 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
+		doChangeBegin();
+		
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
 		
@@ -625,6 +640,8 @@ public abstract class ImageD extends Image {
 				}
 			}
 		}
+		
+		doChangeEnd();
 		
 		return this;
 	}
@@ -693,24 +710,9 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(line, "line == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
-		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(getResolutionX(), getResolutionY()));
-		
-		final Point2I[] scanline = Rasterizer2I.rasterize(line, rectangle);
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(final Point2I point : scanline) {
-			final int x = point.getX();
-			final int y = point.getY();
-			
-			if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
-				final Color4D oldColorRGBA = getColorRGBA(x, y);
-				final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-				
-				doSetColorRGBA(newColorRGBA, point.getX(), point.getY());
-			}
-		}
+		doChangeBegin();
+		doDrawLine(line, biFunction);
+		doChangeEnd();
 		
 		return this;
 	}
@@ -779,6 +781,8 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
+		doChangeBegin();
+		
 		final int minimumX = rectangle.getA().getX();
 		final int minimumY = rectangle.getA().getY();
 		final int maximumX = rectangle.getC().getX();
@@ -799,6 +803,8 @@ public abstract class ImageD extends Image {
 				}
 			}
 		}
+		
+		doChangeEnd();
 		
 		return this;
 	}
@@ -867,9 +873,11 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
-		drawLine(new Line2I(triangle.getA(), triangle.getB()), biFunction);
-		drawLine(new Line2I(triangle.getB(), triangle.getC()), biFunction);
-		drawLine(new Line2I(triangle.getC(), triangle.getA()), biFunction);
+		doChangeBegin();
+		doDrawLine(new Line2I(triangle.getA(), triangle.getB()), biFunction);
+		doDrawLine(new Line2I(triangle.getB(), triangle.getC()), biFunction);
+		doDrawLine(new Line2I(triangle.getC(), triangle.getA()), biFunction);
+		doChangeEnd();
 		
 		return this;
 	}
@@ -938,6 +946,8 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
+		doChangeBegin();
+		
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
 		
@@ -958,6 +968,8 @@ public abstract class ImageD extends Image {
 				}
 			}
 		}
+		
+		doChangeEnd();
 		
 		return this;
 	}
@@ -1143,6 +1155,8 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(targetBounds, "targetBounds == null");
 		Objects.requireNonNull(triFunction, "triFunction == null");
 		
+		doChangeBegin();
+		
 		final ImageD targetImage = this;
 		
 		final int sourceMinimumX = sourceBounds.getA().getX();
@@ -1168,6 +1182,8 @@ public abstract class ImageD extends Image {
 				}
 			}
 		}
+		
+		doChangeEnd();
 		
 		return this;
 	}
@@ -1262,6 +1278,8 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
+		doChangeBegin();
+		
 		final int minimumX = rectangle.getA().getX();
 		final int minimumY = rectangle.getA().getY();
 		final int maximumX = rectangle.getC().getX();
@@ -1282,6 +1300,8 @@ public abstract class ImageD extends Image {
 				}
 			}
 		}
+		
+		doChangeEnd();
 		
 		return this;
 	}
@@ -1422,6 +1442,8 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
+		doChangeBegin();
+		
 		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(getResolutionX(), getResolutionY()));
 		
 		final Point2I[][] scanlines = Rasterizer2I.rasterize(triangle, rectangle);
@@ -1442,6 +1464,8 @@ public abstract class ImageD extends Image {
 				}
 			}
 		}
+		
+		doChangeEnd();
 		
 		return this;
 	}
@@ -1560,6 +1584,8 @@ public abstract class ImageD extends Image {
 		final Color3D factor = new Color3D(convolutionKernel.getFactor());
 		final Color3D bias = new Color3D(convolutionKernel.getBias());
 		
+		doChangeBegin();
+		
 		final ImageD image = copy();
 		
 		final int resolutionX = getResolutionX();
@@ -1597,6 +1623,8 @@ public abstract class ImageD extends Image {
 			}
 		}
 		
+		doChangeEnd();
+		
 		return this;
 	}
 	
@@ -1614,6 +1642,8 @@ public abstract class ImageD extends Image {
 	public final ImageD multiply(final ConvolutionKernel55D convolutionKernel) {
 		final Color3D factor = new Color3D(convolutionKernel.getFactor());
 		final Color3D bias = new Color3D(convolutionKernel.getBias());
+		
+		doChangeBegin();
 		
 		final ImageD image = copy();
 		
@@ -1671,6 +1701,8 @@ public abstract class ImageD extends Image {
 				doSetColorRGBA(colorRGBA, x, y);
 			}
 		}
+		
+		doChangeEnd();
 		
 		return this;
 	}
@@ -1965,7 +1997,11 @@ public abstract class ImageD extends Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
 	public final ImageD setColorRGBA(final Color4D colorRGBA, final int index, final PixelOperation pixelOperation) {
-		return doSetColorRGBA(colorRGBA, index, pixelOperation);
+		doChangeBegin();
+		doSetColorRGBA(colorRGBA, index, pixelOperation);
+		doChangeEnd();
+		
+		return this;
 	}
 	
 	/**
@@ -2009,7 +2045,11 @@ public abstract class ImageD extends Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
 	public final ImageD setColorRGBA(final Color4D colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
-		return doSetColorRGBA(colorRGBA, x, y, pixelOperation);
+		doChangeBegin();
+		doSetColorRGBA(colorRGBA, x, y, pixelOperation);
+		doChangeEnd();
+		
+		return this;
 	}
 	
 	/**
@@ -2084,6 +2124,8 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		Objects.requireNonNull(bounds, "bounds == null");
 		
+		doChangeBegin();
+		
 		final Point2I minimum = bounds.getA();
 		final Point2I maximum = bounds.getC();
 		
@@ -2097,6 +2139,8 @@ public abstract class ImageD extends Image {
 				doSetColorRGBA(biFunction.apply(getColorRGBA(x, y), new Point2I(x, y)), x, y);
 			}
 		}
+		
+		doChangeEnd();
 		
 		return this;
 	}
@@ -2181,6 +2225,10 @@ public abstract class ImageD extends Image {
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
 		
 		if(indexTransformed >= 0 && indexTransformed < resolution) {
+			if(isChangeHistoryEnabled()) {
+				doChangeCreate(colorRGBA, getColorRGBA(indexTransformed), indexTransformed);
+			}
+			
 			putColorRGBA(colorRGBA, indexTransformed);
 		}
 		
@@ -2204,9 +2252,64 @@ public abstract class ImageD extends Image {
 		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
 			final int index = yTransformed * resolutionX + xTransformed;
 			
+			if(isChangeHistoryEnabled()) {
+				doChangeCreate(colorRGBA, getColorRGBA(index), index);
+			}
+			
 			putColorRGBA(colorRGBA, index);
 		}
 		
 		return this;
+	}
+	
+	private void doChangeBegin() {
+		if(isChangeHistoryEnabled()) {
+			final
+			ChangeCombiner changeCombiner = this.changeCombiner;
+			changeCombiner.clear();
+		}
+	}
+	
+	private void doChangeCreate(final Color4D newColorRGBA, final Color4D oldColorRGBA, final int index) {
+		if(isChangeHistoryEnabled()) {
+			final
+			ChangeCombiner changeCombiner = this.changeCombiner;
+			changeCombiner.add(new Change(() -> putColorRGBA(newColorRGBA, index), () -> putColorRGBA(oldColorRGBA, index)));
+		}
+	}
+	
+	private void doChangeEnd() {
+		if(isChangeHistoryEnabled()) {
+			final ChangeCombiner changeCombiner = this.changeCombiner;
+			
+			final Change change = changeCombiner.toChange();
+			
+			final
+			ChangeHistory changeHistory = getChangeHistory();
+			changeHistory.push(change);
+			
+			changeCombiner.clear();
+		}
+	}
+	
+	private void doDrawLine(final Line2I line, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
+		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(getResolutionX(), getResolutionY()));
+		
+		final Point2I[] scanline = Rasterizer2I.rasterize(line, rectangle);
+		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		for(final Point2I point : scanline) {
+			final int x = point.getX();
+			final int y = point.getY();
+			
+			if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
+				final Color4D oldColorRGBA = getColorRGBA(x, y);
+				final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+				
+				doSetColorRGBA(newColorRGBA, point.getX(), point.getY());
+			}
+		}
 	}
 }

@@ -23,7 +23,9 @@ import org.dayflower.color.Color4F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Vector2F;
+import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.image.ConvolutionKernel33F;
 import org.dayflower.image.ConvolutionKernel55F;
 import org.dayflower.image.ImageF;
@@ -67,6 +69,7 @@ public final class Test {
 		doTestImageFScaleDown();
 		doTestImageFScaleUp();
 		doTestImageFSepia();
+		doTestImageFUndoAndRedo();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,5 +292,24 @@ public final class Test {
 		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
 		imageF.sepia();
 		imageF.save("./generated/Test/Image-Sepia.png");
+	}
+	
+	private static void doTestImageFUndoAndRedo() {
+		final
+		ImageF imageF = new IntImageF(800, 800);
+		imageF.setChangeHistoryEnabled(true);
+		imageF.save("./generated/Test/Image-Undo-And-Redo-1.png");
+		imageF.fillTriangle(new Triangle2I(new Point2I(400, 300), new Point2I(300, 500), new Point2I(500, 500)), Color4F.RED);
+		imageF.save("./generated/Test/Image-Undo-And-Redo-2.png");
+		imageF.fillCircle(new Circle2I(new Point2I(100, 100), 50), Color4F.GREEN);
+		imageF.save("./generated/Test/Image-Undo-And-Redo-3.png");
+		imageF.undo();
+		imageF.save("./generated/Test/Image-Undo-And-Redo-4.png");
+		imageF.undo();
+		imageF.save("./generated/Test/Image-Undo-And-Redo-5.png");
+		imageF.redo();
+		imageF.save("./generated/Test/Image-Undo-And-Redo-6.png");
+		imageF.redo();
+		imageF.save("./generated/Test/Image-Undo-And-Redo-7.png");
 	}
 }

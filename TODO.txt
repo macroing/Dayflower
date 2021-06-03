@@ -1,14 +1,9 @@
-Image Undo & Redo Functionality:
+GPU Renderer Bug:
 
 	Description:
 
-		Add support for Undo and Redo operations to the ImageD and ImageF classes.
-
-	Status:
-
-		The methods setColorRGBA(Color4*, int, PixelOperation) and setColorRGBA(Color4*, int, int, PixelOperation) of ImageD and ImageF are now implemented in ImageD and ImageF, rather than their respective subclasses.
-		The methods that performs the actual update are performed in putColorRGBA(Color4*, int) in their respective subclasses.
-		This change is necessary, because ImageD and ImageF needs to collect the data that changes in some stack data structure.
+		The image sometimes resets when rendering with the Ambient Occlusion and Path Tracer algorithms. This does not seem to happen with the Ray Caster algorithm.
+		It happens more often when the image is smaller than if it is larger.
 
 Scene Loader Parameter Selection:
 

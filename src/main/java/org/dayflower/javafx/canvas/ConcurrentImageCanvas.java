@@ -30,6 +30,7 @@ import java.util.function.Predicate;
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.concurrent.PredicateTask;
+
 import org.macroing.java.util.function.TriFunction;
 
 import javafx.scene.canvas.Canvas;
@@ -313,7 +314,7 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 			
 			final PredicateTask oldPredicateTask = predicateTask.get();
 			
-			if(oldPredicateTask == null || oldPredicateTask.isCancelled() || oldPredicateTask.isDone()) {
+			if(oldPredicateTask == null || oldPredicateTask.isCancelled() || (oldPredicateTask.isDone() && oldPredicateTask.hasFinishedSucceeded())) {
 				final ImageUpdater<T> imageUpdater = this.imageUpdater.getAndSet(null);
 				
 				if(imageUpdater != null) {

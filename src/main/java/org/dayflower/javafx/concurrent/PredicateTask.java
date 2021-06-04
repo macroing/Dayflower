@@ -21,6 +21,7 @@ package org.dayflower.javafx.concurrent;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import javafx.concurrent.Task;
@@ -32,6 +33,7 @@ import javafx.concurrent.Task;
  * @author J&#246;rgen Lundgren
  */
 public final class PredicateTask extends Task<Boolean> {
+	private final AtomicBoolean hasFinishedSucceeded;
 	private final Callable<Boolean> callCallable;
 	private final Consumer<Exception> exceptionConsumer;
 	private final Runnable succeededRunnable;
@@ -91,6 +93,18 @@ public final class PredicateTask extends Task<Boolean> {
 		this.callCallable = Objects.requireNonNull(callCallable, "callCallable == null");
 		this.succeededRunnable = Objects.requireNonNull(succeededRunnable, "succeededRunnable == null");
 		this.exceptionConsumer = Objects.requireNonNull(exceptionConsumer, "exceptionConsumer == null");
+		this.hasFinishedSucceeded = new AtomicBoolean();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, the {@code Runnable} instance that is delegated to in the {@code succeeded()} method to perform GUI updates has finished, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the {@code Runnable} instance that is delegated to in the {@code succeeded()} method to perform GUI updates has finished, {@code false} otherwise
+	 */
+	public boolean hasFinishedSucceeded() {
+		return this.hasFinishedSucceeded.get();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,6 +147,8 @@ public final class PredicateTask extends Task<Boolean> {
 			}
 		} catch(final ExecutionException | InterruptedException | RuntimeException e) {
 			this.exceptionConsumer.accept(e);
+		} finally {
+			this.hasFinishedSucceeded.set(true);
 		}
 	}
 }

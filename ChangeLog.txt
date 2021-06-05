@@ -1,5 +1,8 @@
 2021-06-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the method createScreenCapture(Rectangle2I) to the IntImageD and IntImageF classes.
+	* ADD:		Add the methods blend(ImageD, ImageD), blend(ImageD, ImageD, double) and blend(ImageD, ImageD, double, double, double, double) to the ByteImageD and IntImageD classes.
+	* ADD:		Add the methods blend(ImageF, ImageF), blend(ImageF, ImageF, float) and blend(ImageF, ImageF, float, float, float, float) to the ByteImageF and IntImageF classes.
 	* ADD:		Add the classes HBoxes and VBoxes.
 
 2021-06-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>

@@ -18,6 +18,8 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.utility.Ints.max;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -433,6 +435,96 @@ public final class ByteImageD extends ImageD {
 		this.data[indexB + 1] = gA;
 		this.data[indexB + 2] = bA;
 		this.data[indexB + 3] = aA;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Blends {@code imageA} and {@code imageB} using the factor {@code 0.5D}.
+	 * <p>
+	 * Returns a new {@code ByteImageD} instance with the result of the blend operation.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * ByteImageD.blend(imageA, imageB, 0.5D);
+	 * }
+	 * </pre>
+	 * 
+	 * @param imageA one of the {@code ImageD} instances to blend
+	 * @param imageB one of the {@code ImageD} instances to blend
+	 * @return a new {@code ByteImageD} instance with the result of the blend operation
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static ByteImageD blend(final ImageD imageA, final ImageD imageB) {
+		return blend(imageA, imageB, 0.5D);
+	}
+	
+	/**
+	 * Blends {@code imageA} and {@code imageB} using the factor {@code t}.
+	 * <p>
+	 * Returns a new {@code ByteImageD} instance with the result of the blend operation.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * ByteImageD.blend(imageA, imageB, t, t, t, t);
+	 * }
+	 * </pre>
+	 * 
+	 * @param imageA one of the {@code ImageD} instances to blend
+	 * @param imageB one of the {@code ImageD} instances to blend
+	 * @param t the factor to use for all components in the blending process
+	 * @return a new {@code ByteImageD} instance with the result of the blend operation
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static ByteImageD blend(final ImageD imageA, final ImageD imageB, final double t) {
+		return blend(imageA, imageB, t, t, t, t);
+	}
+	
+	/**
+	 * Blends {@code imageA} and {@code imageB} using the factors {@code tComponent1}, {@code tComponent2}, {@code tComponent3} and {@code tComponent4}.
+	 * <p>
+	 * Returns a new {@code ByteImageD} instance with the result of the blend operation.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param imageA one of the {@code ImageD} instances to blend
+	 * @param imageB one of the {@code ImageD} instances to blend
+	 * @param tComponent1 the factor to use for component 1 in the blending process
+	 * @param tComponent2 the factor to use for component 2 in the blending process
+	 * @param tComponent3 the factor to use for component 3 in the blending process
+	 * @param tComponent4 the factor to use for component 4 in the blending process
+	 * @return a new {@code ByteImageD} instance with the result of the blend operation
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static ByteImageD blend(final ImageD imageA, final ImageD imageB, final double tComponent1, final double tComponent2, final double tComponent3, final double tComponent4) {
+		final int imageAResolutionX = imageA.getResolutionX();
+		final int imageAResolutionY = imageA.getResolutionY();
+		
+		final int imageBResolutionX = imageB.getResolutionX();
+		final int imageBResolutionY = imageB.getResolutionY();
+		
+		final int pixelImageCResolutionX = max(imageAResolutionX, imageBResolutionX);
+		final int pixelImageCResolutionY = max(imageAResolutionY, imageBResolutionY);
+		
+		final ByteImageD byteImageC = new ByteImageD(pixelImageCResolutionX, pixelImageCResolutionY);
+		
+		for(int y = 0; y < pixelImageCResolutionY; y++) {
+			for(int x = 0; x < pixelImageCResolutionX; x++) {
+				final Color4D colorA = imageA.getColorRGBA(x, y);
+				final Color4D colorB = imageB.getColorRGBA(x, y);
+				final Color4D colorC = Color4D.blend(colorA, colorB, tComponent1, tComponent2, tComponent3, tComponent4);
+				
+				byteImageC.setColorRGBA(colorC, x, y);
+			}
+		}
+		
+		return byteImageC;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

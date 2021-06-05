@@ -18,6 +18,8 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.utility.Ints.max;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
@@ -440,6 +442,115 @@ public final class IntImageF extends ImageF {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Blends {@code imageA} and {@code imageB} using the factor {@code 0.5F}.
+	 * <p>
+	 * Returns a new {@code IntImageF} instance with the result of the blend operation.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * IntImageF.blend(imageA, imageB, 0.5F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param imageA one of the {@code ImageF} instances to blend
+	 * @param imageB one of the {@code ImageF} instances to blend
+	 * @return a new {@code IntImageF} instance with the result of the blend operation
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static IntImageF blend(final ImageF imageA, final ImageF imageB) {
+		return blend(imageA, imageB, 0.5F);
+	}
+	
+	/**
+	 * Blends {@code imageA} and {@code imageB} using the factor {@code t}.
+	 * <p>
+	 * Returns a new {@code IntImageF} instance with the result of the blend operation.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * IntImageF.blend(imageA, imageB, t, t, t, t);
+	 * }
+	 * </pre>
+	 * 
+	 * @param imageA one of the {@code ImageF} instances to blend
+	 * @param imageB one of the {@code ImageF} instances to blend
+	 * @param t the factor to use for all components in the blending process
+	 * @return a new {@code IntImageF} instance with the result of the blend operation
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static IntImageF blend(final ImageF imageA, final ImageF imageB, final float t) {
+		return blend(imageA, imageB, t, t, t, t);
+	}
+	
+	/**
+	 * Blends {@code imageA} and {@code imageB} using the factors {@code tComponent1}, {@code tComponent2}, {@code tComponent3} and {@code tComponent4}.
+	 * <p>
+	 * Returns a new {@code IntImageF} instance with the result of the blend operation.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param imageA one of the {@code ImageF} instances to blend
+	 * @param imageB one of the {@code ImageF} instances to blend
+	 * @param tComponent1 the factor to use for component 1 in the blending process
+	 * @param tComponent2 the factor to use for component 2 in the blending process
+	 * @param tComponent3 the factor to use for component 3 in the blending process
+	 * @param tComponent4 the factor to use for component 4 in the blending process
+	 * @return a new {@code IntImageF} instance with the result of the blend operation
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static IntImageF blend(final ImageF imageA, final ImageF imageB, final float tComponent1, final float tComponent2, final float tComponent3, final float tComponent4) {
+		final int imageAResolutionX = imageA.getResolutionX();
+		final int imageAResolutionY = imageA.getResolutionY();
+		
+		final int imageBResolutionX = imageB.getResolutionX();
+		final int imageBResolutionY = imageB.getResolutionY();
+		
+		final int pixelImageCResolutionX = max(imageAResolutionX, imageBResolutionX);
+		final int pixelImageCResolutionY = max(imageAResolutionY, imageBResolutionY);
+		
+		final IntImageF intImageC = new IntImageF(pixelImageCResolutionX, pixelImageCResolutionY);
+		
+		for(int y = 0; y < pixelImageCResolutionY; y++) {
+			for(int x = 0; x < pixelImageCResolutionX; x++) {
+				final Color4F colorA = imageA.getColorRGBA(x, y);
+				final Color4F colorB = imageB.getColorRGBA(x, y);
+				final Color4F colorC = Color4F.blend(colorA, colorB, tComponent1, tComponent2, tComponent3, tComponent4);
+				
+				intImageC.setColorRGBA(colorC, x, y);
+			}
+		}
+		
+		return intImageC;
+	}
+	
+	/**
+	 * Creates an {@code IntImageF} by capturing the contents of the screen, without the mouse cursor.
+	 * <p>
+	 * Returns a new {@code IntImageF} instance.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If the permission {@code readDisplayPixels} is not granted, a {@code SecurityException} will be thrown.
+	 * 
+	 * @param rectangle a {@link Rectangle2I} that contains the bounds
+	 * @return a new {@code IntImageF} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
+	 */
+	public static IntImageF createScreenCapture(final Rectangle2I rectangle) {
+		return new IntImageF(BufferedImages.createScreenCapture(rectangle.getA().getX(), rectangle.getA().getY(), rectangle.getC().getX() - rectangle.getA().getX(), rectangle.getC().getY() - rectangle.getA().getY()));
+	}
 	
 	/**
 	 * Loads an {@code IntImageF} from the file represented by {@code file}.

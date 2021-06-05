@@ -26,7 +26,8 @@ import org.dayflower.color.Color4F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.ConvolutionKernel33F;
-import org.dayflower.image.PixelImageF;
+import org.dayflower.image.ImageF;
+import org.dayflower.image.IntImageF;
 import org.dayflower.utility.NoiseF;
 
 import javafx.animation.AnimationTimer;
@@ -66,7 +67,7 @@ public final class ScreenRendererApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final AtomicReference<Function<PixelImageF, PixelImageF>> function;
+	private final AtomicReference<Function<ImageF, ImageF>> function;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -74,7 +75,7 @@ public final class ScreenRendererApplication extends Application {
 	 * Constructs a new {@code ScreenRendererApplication} instance.
 	 */
 	public ScreenRendererApplication() {
-		this.function = new AtomicReference<>(pixelImage -> pixelImage);
+		this.function = new AtomicReference<>(image -> image);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +90,7 @@ public final class ScreenRendererApplication extends Application {
 	 */
 	@Override
 	public void start(final Stage stage) {
-		final AtomicReference<Function<PixelImageF, PixelImageF>> function = this.function;
+		final AtomicReference<Function<ImageF, ImageF>> function = this.function;
 		
 		final ComboBox<String> comboBox = doCreateComboBox();
 		
@@ -132,10 +133,12 @@ public final class ScreenRendererApplication extends Application {
 				final int y = (int)(boundsInScreen.getMinY());
 				final int width = (int)(boundsInScreen.getWidth());
 				final int height = (int)(boundsInScreen.getHeight());
-				
-				final PixelImageF pixelImage = function.get().apply(PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(x - width, y), new Point2I(x, y + height))));
-				
-				final WritableImage writableImage = pixelImage.toWritableImage();
+				long l0 = System.currentTimeMillis();
+				final ImageF image = function.get().apply(IntImageF.createScreenCapture(new Rectangle2I(new Point2I(x - width, y), new Point2I(x, y + height))));
+				long l1 = System.currentTimeMillis();
+				long l2 = l1 - l0;
+				System.out.println(l2 + " millis");
+				final WritableImage writableImage = image.toWritableImage();
 				
 				final
 				GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
@@ -185,7 +188,7 @@ public final class ScreenRendererApplication extends Application {
 		return comboBox;
 	}
 	
-	private static Runnable doCreateRunnable(final AtomicReference<Function<PixelImageF, PixelImageF>> function, final ComboBox<String> comboBox) {
+	private static Runnable doCreateRunnable(final AtomicReference<Function<ImageF, ImageF>> function, final ComboBox<String> comboBox) {
 		return () -> {
 			final String selectedItem = comboBox.getSelectionModel().getSelectedItem();
 			
@@ -277,7 +280,7 @@ public final class ScreenRendererApplication extends Application {
 		};
 	}
 	
-	private static void doSetOperationBlend(final AtomicReference<Function<PixelImageF, PixelImageF>> function, final Color4F colorNew) {
+	private static void doSetOperationBlend(final AtomicReference<Function<ImageF, ImageF>> function, final Color4F colorNew) {
 		function.set(pixelImage -> {
 			pixelImage.fillRectangle(pixelImage.getBounds(), (colorOld, point) -> Color4F.blend(colorOld, colorNew, 0.5F));
 			
@@ -285,7 +288,7 @@ public final class ScreenRendererApplication extends Application {
 		});
 	}
 	
-	private static void doSetOperationConvolutionKernel(final AtomicReference<Function<PixelImageF, PixelImageF>> function, final ConvolutionKernel33F convolutionKernel) {
+	private static void doSetOperationConvolutionKernel(final AtomicReference<Function<ImageF, ImageF>> function, final ConvolutionKernel33F convolutionKernel) {
 		function.set(pixelImage -> {
 			pixelImage.multiply(convolutionKernel);
 			

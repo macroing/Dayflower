@@ -318,7 +318,7 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 				final ImageUpdater<T> imageUpdater = this.imageUpdater.getAndSet(null);
 				
 				if(imageUpdater != null) {
-					final T image = imageUpdater.update(this.image.get());
+					final T image = imageUpdater.update(getImage());
 					
 					doSetImage(image);
 					
@@ -328,7 +328,7 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 				
 				final ByteBuffer byteBuffer = this.byteBuffer.get();
 				
-				final T image = this.image.get();
+				final T image = getImage();
 				
 				final double resolutionX = image.getResolutionX();
 				final double resolutionY = image.getResolutionY();

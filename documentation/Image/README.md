@@ -27,6 +27,7 @@ Packages
 
 Dependencies
 ------------
+* The Change API
 * The Color API
 * The Filter API
 * The Geometry API

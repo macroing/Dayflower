@@ -45,7 +45,9 @@ import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvasPane;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.image.WritableImageCache;
+import org.dayflower.javafx.scene.layout.HBoxes;
 import org.dayflower.javafx.scene.layout.Regions;
+import org.dayflower.javafx.scene.layout.VBoxes;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.cpu.CPURenderer;
@@ -61,7 +63,6 @@ import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.material.MatteMaterial;
 import org.macroing.java.util.function.TriFunction;
 
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -70,16 +71,10 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 final class RendererViewPane extends BorderPane {
 	private static final WritableImageCache<Material> WRITABLE_IMAGE_CACHE_MATERIAL = new WritableImageCache<>(RendererViewPane::doCreateWritableImageMaterial);
@@ -111,14 +106,14 @@ final class RendererViewPane extends BorderPane {
 		this.file = new AtomicReference<>();
 		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
 		this.concurrentImageCanvas = new ConcurrentImageCanvas<>(executorService, combinedProgressiveImageOrderRenderer.getImage(), this::doRender, new ObserverImpl(combinedProgressiveImageOrderRenderer));
-		this.hBox = new HBox();
+		this.hBox = HBoxes.createBorderedPaddedAndSpacedHBox(1.0D, 0.0D, 0.0D, 0.0D);
 		this.labelRenderPass = new Label();
 		this.labelRenderTime = new Label();
 		this.labelRenderTimePerPass = new Label();
 		this.objectTreeView = doCreateObjectTreeView(combinedProgressiveImageOrderRenderer.getScene());
 		this.progressBar = new ProgressBar();
-		this.vBoxL = new VBox();
-		this.vBoxR = new VBox();
+		this.vBoxL = VBoxes.createBorderedPaddedAndSpacedVBox(0.0D, 1.0D, 0.0D, 0.0D);
+		this.vBoxR = VBoxes.createBorderedPaddedAndSpacedVBox(0.0D, 0.0D, 0.0D, 1.0D);
 		this.vBoxRenderer = CenteredVBoxes.createCenteredVBoxForCombinedProgressiveImageOrderRenderer(combinedProgressiveImageOrderRenderer);
 		this.vBoxScene = CenteredVBoxes.createCenteredVBoxForScene(combinedProgressiveImageOrderRenderer);
 		
@@ -230,9 +225,6 @@ final class RendererViewPane extends BorderPane {
 		this.hBox.getChildren().add(this.labelRenderTimePerPass);
 		this.hBox.getChildren().add(Regions.createRegionHBoxHorizontalGrowAlways());
 		this.hBox.getChildren().add(this.progressBar);
-		this.hBox.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1.0D, 0.0D, 0.0D, 0.0D))));
-		this.hBox.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
-		this.hBox.setSpacing(20.0D);
 		
 //		Configure the Label for Render Pass:
 		this.labelRenderPass.setText("Render Pass: 0");
@@ -257,17 +249,9 @@ final class RendererViewPane extends BorderPane {
 //		Configure the VBox for L:
 		this.vBoxL.getChildren().add(this.vBoxRenderer);
 		this.vBoxL.getChildren().add(this.vBoxScene);
-		this.vBoxL.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 1.0D, 0.0D, 0.0D))));
-		this.vBoxL.setFillWidth(true);
-		this.vBoxL.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
-		this.vBoxL.setSpacing(20.0D);
 		
 //		Configure the VBox for R:
 		this.vBoxR.getChildren().add(this.objectTreeView);
-		this.vBoxR.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 0.0D, 0.0D, 1.0D))));
-		this.vBoxR.setFillWidth(true);
-		this.vBoxR.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
-		this.vBoxR.setSpacing(20.0D);
 		
 		VBox.setVgrow(this.objectTreeView, Priority.ALWAYS);
 		

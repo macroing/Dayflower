@@ -25,23 +25,13 @@ import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererObserver;
 
-import javafx.application.Platform;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-
 final class RendererObserverImpl implements RendererObserver {
-	private final Label labelRenderPass;
-	private final Label labelRenderTime;
-	private final Label labelRenderTimePerPass;
-	private final ProgressBar progressBar;
+	private final StatusBar statusBar;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public RendererObserverImpl(final Label labelRenderPass, final Label labelRenderTime, final Label labelRenderTimePerPass, final ProgressBar progressBar) {
-		this.labelRenderPass = Objects.requireNonNull(labelRenderPass, "labelRenderPass == null");
-		this.labelRenderTime = Objects.requireNonNull(labelRenderTime, "labelRenderTime == null");
-		this.labelRenderTimePerPass = Objects.requireNonNull(labelRenderTimePerPass, "labelRenderTimePerPass == null");
-		this.progressBar = Objects.requireNonNull(progressBar, "progressBar == null");
+	public RendererObserverImpl(final StatusBar statusBar) {
+		this.statusBar = Objects.requireNonNull(statusBar, "statusBar == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,13 +46,9 @@ final class RendererObserverImpl implements RendererObserver {
 		if(renderer instanceof ProgressiveImageOrderRenderer) {
 			final ProgressiveImageOrderRenderer progressiveImageOrderRenderer = ProgressiveImageOrderRenderer.class.cast(renderer);
 			
-			Platform.runLater(() -> {
-				this.labelRenderPass.setText("Render Pass: " + progressiveImageOrderRenderer.getRenderPass());
-				this.labelRenderTime.setText("Render Time: " + progressiveImageOrderRenderer.getTimer().getTime());
-				this.labelRenderTimePerPass.setText("Render Time Per Pass: " + elapsedTimeMillis);
-				
-				this.progressBar.setProgress(1.0D);
-			});
+			final
+			StatusBar statusBar = this.statusBar;
+			statusBar.setComplete(progressiveImageOrderRenderer.getRenderPass(), progressiveImageOrderRenderer.getTimer().getTime(), elapsedTimeMillis);
 		}
 	}
 	
@@ -71,12 +57,9 @@ final class RendererObserverImpl implements RendererObserver {
 		if(renderer instanceof ProgressiveImageOrderRenderer) {
 			final ProgressiveImageOrderRenderer progressiveImageOrderRenderer = ProgressiveImageOrderRenderer.class.cast(renderer);
 			
-			Platform.runLater(() -> {
-				this.labelRenderPass.setText("Render Pass: " + progressiveImageOrderRenderer.getRenderPass());
-				this.labelRenderTime.setText("Render Time: " + progressiveImageOrderRenderer.getTimer().getTime());
-				
-				this.progressBar.setProgress(percent);
-			});
+			final
+			StatusBar statusBar = this.statusBar;
+			statusBar.setProgress(progressiveImageOrderRenderer.getRenderPass(), progressiveImageOrderRenderer.getTimer().getTime(), percent);
 		}
 	}
 }

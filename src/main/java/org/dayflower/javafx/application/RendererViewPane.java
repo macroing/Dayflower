@@ -45,8 +45,6 @@ import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvasPane;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.image.WritableImageCache;
-import org.dayflower.javafx.scene.layout.HBoxes;
-import org.dayflower.javafx.scene.layout.Regions;
 import org.dayflower.javafx.scene.layout.VBoxes;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RenderingAlgorithm;
@@ -65,14 +63,11 @@ import org.macroing.java.util.function.TriFunction;
 
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -87,12 +82,8 @@ final class RendererViewPane extends BorderPane {
 	private final AtomicReference<File> file;
 	private final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer;
 	private final ConcurrentImageCanvas<ImageF> concurrentImageCanvas;
-	private final HBox hBox;
-	private final Label labelRenderPass;
-	private final Label labelRenderTime;
-	private final Label labelRenderTimePerPass;
 	private final ObjectTreeView<String, Object> objectTreeView;
-	private final ProgressBar progressBar;
+	private final StatusBar statusBar;
 	private final VBox vBoxL;
 	private final VBox vBoxR;
 	private final VBox vBoxRenderer;
@@ -106,12 +97,8 @@ final class RendererViewPane extends BorderPane {
 		this.file = new AtomicReference<>();
 		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
 		this.concurrentImageCanvas = new ConcurrentImageCanvas<>(executorService, combinedProgressiveImageOrderRenderer.getImage(), this::doRender, new ObserverImpl(combinedProgressiveImageOrderRenderer));
-		this.hBox = HBoxes.createBorderedPaddedAndSpacedHBox(1.0D, 0.0D, 0.0D, 0.0D);
-		this.labelRenderPass = new Label();
-		this.labelRenderTime = new Label();
-		this.labelRenderTimePerPass = new Label();
 		this.objectTreeView = doCreateObjectTreeView(combinedProgressiveImageOrderRenderer.getScene());
-		this.progressBar = new ProgressBar();
+		this.statusBar = new StatusBar();
 		this.vBoxL = VBoxes.createBorderedPaddedAndSpacedVBox(0.0D, 1.0D, 0.0D, 0.0D);
 		this.vBoxR = VBoxes.createBorderedPaddedAndSpacedVBox(0.0D, 0.0D, 0.0D, 1.0D);
 		this.vBoxRenderer = CenteredVBoxes.createCenteredVBoxForCombinedProgressiveImageOrderRenderer(combinedProgressiveImageOrderRenderer);
@@ -219,32 +206,13 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	private void doConfigure() {
-//		Configure the HBox:
-		this.hBox.getChildren().add(this.labelRenderPass);
-		this.hBox.getChildren().add(this.labelRenderTime);
-		this.hBox.getChildren().add(this.labelRenderTimePerPass);
-		this.hBox.getChildren().add(Regions.createRegionHBoxHorizontalGrowAlways());
-		this.hBox.getChildren().add(this.progressBar);
-		
-//		Configure the Label for Render Pass:
-		this.labelRenderPass.setText("Render Pass: 0");
-		
-//		Configure the Label for Render Time:
-		this.labelRenderTime.setText("Render Time: 00:00:00");
-		
-//		Configure the Label for Render Time Per Pass:
-		this.labelRenderTimePerPass.setText("Render Time Per Pass: 0");
-		
 //		Configure the ObjectTreeView:
 		for(final Primitive primitive : this.combinedProgressiveImageOrderRenderer.getScene().getPrimitives()) {
 			this.objectTreeView.add(primitive);
 		}
 		
-//		Configure the ProgressBar:
-		this.progressBar.setProgress(0.0D);
-		
 //		Configure the CombinedProgressiveImageOrderRenderer:
-		this.combinedProgressiveImageOrderRenderer.setRendererObserver(new RendererObserverImpl(this.labelRenderPass, this.labelRenderTime, this.labelRenderTimePerPass, this.progressBar));
+		this.combinedProgressiveImageOrderRenderer.setRendererObserver(new RendererObserverImpl(this.statusBar));
 		
 //		Configure the VBox for L:
 		this.vBoxL.getChildren().add(this.vBoxRenderer);
@@ -276,7 +244,7 @@ final class RendererViewPane extends BorderPane {
 		concurrentImageCanvasPane.widthProperty().addListener((observable, oldValue, newValue) -> this.lastResizeTimeMillis.set(System.currentTimeMillis()));
 		
 //		Configure the RendererViewPane:
-		setBottom(this.hBox);
+		setBottom(this.statusBar);
 		setCenter(concurrentImageCanvasPane);
 		setLeft(this.vBoxL);
 		setRight(this.vBoxR);

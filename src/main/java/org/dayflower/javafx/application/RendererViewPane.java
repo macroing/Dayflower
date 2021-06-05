@@ -19,75 +19,34 @@
 package org.dayflower.javafx.application;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
 
-import org.dayflower.color.Color3F;
-import org.dayflower.color.Color4F;
-import org.dayflower.filter.BoxFilter2F;
-import org.dayflower.geometry.Point2I;
-import org.dayflower.geometry.Point3F;
-import org.dayflower.geometry.Quaternion4F;
-import org.dayflower.geometry.Shape3F;
-import org.dayflower.geometry.Vector3F;
-import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.image.ImageF;
-import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvasPane;
-import org.dayflower.javafx.scene.control.ObjectTreeView;
-import org.dayflower.javafx.scene.image.WritableImageCache;
-import org.dayflower.javafx.scene.layout.VBoxes;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
-import org.dayflower.renderer.RenderingAlgorithm;
-import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
-import org.dayflower.renderer.observer.NoOpRendererObserver;
-import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Camera;
-import org.dayflower.scene.Material;
-import org.dayflower.scene.Primitive;
-import org.dayflower.scene.Scene;
-import org.dayflower.scene.Transform;
-import org.dayflower.scene.light.DiffuseAreaLight;
-import org.dayflower.scene.material.MatteMaterial;
 import org.macroing.java.util.function.TriFunction;
 
-import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 
 final class RendererViewPane extends BorderPane {
-	private static final WritableImageCache<Material> WRITABLE_IMAGE_CACHE_MATERIAL = new WritableImageCache<>(RendererViewPane::doCreateWritableImageMaterial);
-	private static final WritableImageCache<Shape3F> WRITABLE_IMAGE_CACHE_SHAPE = new WritableImageCache<>(RendererViewPane::doCreateWritableImageShape);
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private final AtomicBoolean isCameraUpdateRequired;
 	private final AtomicLong lastResizeTimeMillis;
 	private final AtomicReference<File> file;
 	private final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer;
 	private final ConcurrentImageCanvas<ImageF> concurrentImageCanvas;
-	private final ObjectTreeView<String, Object> objectTreeView;
-	private final StatusBar statusBar;
-	private final VBox vBoxL;
-	private final VBox vBoxR;
-	private final VBox vBoxRenderer;
-	private final VBox vBoxScene;
+	private final ConcurrentImageCanvasPane<ImageF> concurrentImageCanvasPane;
+	private final RendererConfigurationView rendererConfigurationView;
+	private final RendererStatusBar rendererStatusBar;
+	private final ScenePropertyView scenePropertyView;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -97,24 +56,30 @@ final class RendererViewPane extends BorderPane {
 		this.file = new AtomicReference<>();
 		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
 		this.concurrentImageCanvas = new ConcurrentImageCanvas<>(executorService, combinedProgressiveImageOrderRenderer.getImage(), this::doRender, new ObserverImpl(combinedProgressiveImageOrderRenderer));
-		this.objectTreeView = doCreateObjectTreeView(combinedProgressiveImageOrderRenderer.getScene());
-		this.statusBar = new StatusBar();
-		this.vBoxL = VBoxes.createBorderedPaddedAndSpacedVBox(0.0D, 1.0D, 0.0D, 0.0D);
-		this.vBoxR = VBoxes.createBorderedPaddedAndSpacedVBox(0.0D, 0.0D, 0.0D, 1.0D);
-		this.vBoxRenderer = CenteredVBoxes.createCenteredVBoxForCombinedProgressiveImageOrderRenderer(combinedProgressiveImageOrderRenderer);
-		this.vBoxScene = CenteredVBoxes.createCenteredVBoxForScene(combinedProgressiveImageOrderRenderer);
+		this.concurrentImageCanvasPane = doCreateConcurrentImageCanvasPane();
+		this.rendererConfigurationView = new RendererConfigurationView(combinedProgressiveImageOrderRenderer);
+		this.rendererStatusBar = new RendererStatusBar(combinedProgressiveImageOrderRenderer);
+		this.scenePropertyView = new ScenePropertyView(combinedProgressiveImageOrderRenderer.getScene());
 		
 		doConfigure();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public ObjectTreeView<String, Object> getObjectTreeView() {
-		return this.objectTreeView;
-	}
-	
 	public Optional<File> getFile() {
 		return Optional.ofNullable(this.file.get());
+	}
+	
+	public RendererConfigurationView getRendererConfigurationView() {
+		return this.rendererConfigurationView;
+	}
+	
+	public RendererStatusBar getRendererStatusBar() {
+		return this.rendererStatusBar;
+	}
+	
+	public ScenePropertyView getScenePropertyView() {
+		return this.scenePropertyView;
 	}
 	
 	public void render() {
@@ -177,53 +142,17 @@ final class RendererViewPane extends BorderPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Function<Object, ContextMenu> doCreateMapperUToContextMenu() {
-		return object -> {
-			if(object instanceof Primitive) {
-				final
-				MenuItem menuItem = new MenuItem();
-				menuItem.setOnAction(actionEvent -> doOnActionDelete(Primitive.class.cast(object)));
-				menuItem.setText("Delete");
-				
-				final
-				ContextMenu contextMenu = new ContextMenu();
-				contextMenu.getItems().add(menuItem);
-				
-				return contextMenu;
-			}
-			
-			return null;
-		};
+	private ConcurrentImageCanvasPane<ImageF> doCreateConcurrentImageCanvasPane() {
+		final
+		ConcurrentImageCanvasPane<ImageF> concurrentImageCanvasPane = new ConcurrentImageCanvasPane<>(this.concurrentImageCanvas, doCreateImageConstructionFunction());
+		concurrentImageCanvasPane.heightProperty().addListener((observable, oldValue, newValue) -> this.lastResizeTimeMillis.set(System.currentTimeMillis()));
+		concurrentImageCanvasPane.widthProperty().addListener((observable, oldValue, newValue) -> this.lastResizeTimeMillis.set(System.currentTimeMillis()));
+		
+		return concurrentImageCanvasPane;
 	}
 	
-	private ObjectTreeView<String, Object> doCreateObjectTreeView(final Scene scene) {
-		return new ObjectTreeView<>(doCreateMapperUToContextMenu(), doCreateMapperUToListU(), doCreateMapperUToGraphic(), doCreateMapperUToT(), scene);
-	}
-	
-	@SuppressWarnings("unused")
-	private boolean doRender(final ImageF image) {
-		return this.combinedProgressiveImageOrderRenderer.render();
-	}
-	
-	private void doConfigure() {
-//		Configure the ObjectTreeView:
-		for(final Primitive primitive : this.combinedProgressiveImageOrderRenderer.getScene().getPrimitives()) {
-			this.objectTreeView.add(primitive);
-		}
-		
-//		Configure the CombinedProgressiveImageOrderRenderer:
-		this.combinedProgressiveImageOrderRenderer.setRendererObserver(new RendererObserverImpl(this.statusBar));
-		
-//		Configure the VBox for L:
-		this.vBoxL.getChildren().add(this.vBoxRenderer);
-		this.vBoxL.getChildren().add(this.vBoxScene);
-		
-//		Configure the VBox for R:
-		this.vBoxR.getChildren().add(this.objectTreeView);
-		
-		VBox.setVgrow(this.objectTreeView, Priority.ALWAYS);
-		
-		final TriFunction<ImageF, Number, Number, ImageF> imageConstructionFunction = (currentImage, resolutionX, resolutionY) -> {
+	private TriFunction<ImageF, Number, Number, ImageF> doCreateImageConstructionFunction() {
+		return (currentImage, resolutionX, resolutionY) -> {
 			final
 			Camera camera = this.combinedProgressiveImageOrderRenderer.getScene().getCamera();
 			camera.setResolution(resolutionX.intValue(), resolutionY.intValue());
@@ -237,158 +166,17 @@ final class RendererViewPane extends BorderPane {
 			
 			return image;
 		};
-		
-		final
-		ConcurrentImageCanvasPane<ImageF> concurrentImageCanvasPane = new ConcurrentImageCanvasPane<>(this.concurrentImageCanvas, imageConstructionFunction);
-		concurrentImageCanvasPane.heightProperty().addListener((observable, oldValue, newValue) -> this.lastResizeTimeMillis.set(System.currentTimeMillis()));
-		concurrentImageCanvasPane.widthProperty().addListener((observable, oldValue, newValue) -> this.lastResizeTimeMillis.set(System.currentTimeMillis()));
-		
-//		Configure the RendererViewPane:
-		setBottom(this.statusBar);
-		setCenter(concurrentImageCanvasPane);
-		setLeft(this.vBoxL);
-		setRight(this.vBoxR);
-	}
-	
-	private void doOnActionDelete(final Primitive primitive) {
-		this.combinedProgressiveImageOrderRenderer.getScene().removePrimitive(primitive);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Function<Object, List<Object>> doCreateMapperUToListU() {
-		return object -> {
-			final List<Object> list = new ArrayList<>();
-			
-			if(object instanceof Primitive) {
-				final Primitive primitive = Primitive.class.cast(object);
-				
-				list.add(primitive.getMaterial());
-				list.add(primitive.getShape());
-//				list.add(primitive.getTransform());
-			} else if(object instanceof Transform) {
-				final Transform transform = Transform.class.cast(object);
-				
-				list.add(transform.getPosition());
-				list.add(transform.getRotation());
-				list.add(transform.getScale());
-			}
-			
-			return list;
-		};
-	}
-	
-	private static Function<Object, Node> doCreateMapperUToGraphic() {
-		return object -> {
-			if(object instanceof Material) {
-				return new ImageView(WRITABLE_IMAGE_CACHE_MATERIAL.get(Material.class.cast(object)));
-			} else if(object instanceof Point3F) {
-				return null;
-			} else if(object instanceof Primitive) {
-				return null;
-			} else if(object instanceof Quaternion4F) {
-				return null;
-			} else if(object instanceof Scene) {
-				return null;
-			} else if(object instanceof Shape3F) {
-				return new ImageView(WRITABLE_IMAGE_CACHE_SHAPE.get(Shape3F.class.cast(object)));
-			} else if(object instanceof Transform) {
-				return null;
-			} else if(object instanceof Vector3F) {
-				return null;
-			} else {
-				return null;
-			}
-		};
-	}
-	
-	private static Function<Object, String> doCreateMapperUToT() {
-		return object -> {
-			if(object instanceof Material) {
-				return Material.class.cast(object).getName();
-			} else if(object instanceof Point3F) {
-				final Point3F position = Point3F.class.cast(object);
-				
-				return String.format("[%+.10f, %+.10f, %+.10f]", Float.valueOf(position.getX()), Float.valueOf(position.getY()), Float.valueOf(position.getZ()));
-			} else if(object instanceof Primitive) {
-				return "Primitive";
-			} else if(object instanceof Quaternion4F) {
-				final Quaternion4F rotation = Quaternion4F.class.cast(object);
-				
-				return String.format("[%+.10f, %+.10f, %+.10f, %+.10f]", Float.valueOf(rotation.getX()), Float.valueOf(rotation.getY()), Float.valueOf(rotation.getZ()), Float.valueOf(rotation.getW()));
-			} else if(object instanceof Scene) {
-				return Scene.class.cast(object).getName();
-			} else if(object instanceof Shape3F) {
-				return Shape3F.class.cast(object).getName();
-			} else if(object instanceof Transform) {
-				return "Transform";
-			} else if(object instanceof Vector3F) {
-				final Vector3F scale = Vector3F.class.cast(object);
-				
-				return String.format("[%+.10f, %+.10f, %+.10f]", Float.valueOf(scale.getX()), Float.valueOf(scale.getY()), Float.valueOf(scale.getZ()));
-			} else {
-				return "";
-			}
-		};
-	}
-	
-	private static Scene doCreateMaterialPreviewScene(final Material material) {
-		Objects.requireNonNull(material, "material == null");
-		
-		final
-		Camera camera = new Camera();
-		camera.setResolution(32.0F, 32.0F);
-		camera.setFieldOfViewY();
-		camera.setOrthonormalBasis();
-		
-		final Material material0 = material;
-		final Material material1 = new MatteMaterial();
-		
-		final Shape3F shape0 = new Sphere3F();
-		final Shape3F shape1 = new Sphere3F(2.0F);
-		
-		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(4.0F));
-		final Transform transform1 = new Transform(camera.getPointBehindEye(4.0F));
-		
-		final AreaLight areaLight1 = new DiffuseAreaLight(transform1, 1, new Color3F(12.0F), shape1, true);
-		
-		final Primitive primitive0 = new Primitive(material0, shape0, transform0);
-		final Primitive primitive1 = new Primitive(material1, shape1, transform1, areaLight1);
-		
-		final
-		Scene scene = new Scene();
-		scene.addLight(areaLight1);
-		scene.addPrimitive(primitive0);
-		scene.addPrimitive(primitive1);
-		scene.setCamera(camera);
-		scene.setName("Preview");
-		
-		return scene;
-	}
-	
-	private static WritableImage doCreateWritableImageMaterial(final Material material) {
-		final
-		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
-		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(32, 32, Color4F.BLACK, new BoxFilter2F()));
-		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
-		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
-		combinedProgressiveImageOrderRenderer.setRenderPasses(10);
-		combinedProgressiveImageOrderRenderer.setScene(doCreateMaterialPreviewScene(material));
-		combinedProgressiveImageOrderRenderer.render();
-		
-		final
-		PixelImageF pixelImageF = PixelImageF.class.cast(combinedProgressiveImageOrderRenderer.getImage());
-		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
-		
-		return pixelImageF.toWritableImage();
 	}
 	
 	@SuppressWarnings("unused")
-	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
-		final
-		PixelImageF pixelImageF = new PixelImageF(32, 32, Color4F.WHITE);
-		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
-		
-		return pixelImageF.toWritableImage();
+	private boolean doRender(final ImageF image) {
+		return this.combinedProgressiveImageOrderRenderer.render();
+	}
+	
+	private void doConfigure() {
+		setBottom(this.rendererStatusBar);
+		setCenter(this.concurrentImageCanvasPane);
+		setLeft(this.rendererConfigurationView);
+		setRight(this.scenePropertyView);
 	}
 }

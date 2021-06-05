@@ -53,7 +53,7 @@ final class SceneObserverImpl implements SceneObserver {
 		Objects.requireNonNull(scene, "scene == null");
 		Objects.requireNonNull(newPrimitive, "newPrimitive == null");
 		
-		Platform.runLater(() -> this.rendererTabPane.getRendererViewPane().getObjectTreeView().add(newPrimitive));
+		Platform.runLater(() -> this.rendererTabPane.getRendererViewPane().getScenePropertyView().getObjectTreeView().add(newPrimitive));
 		
 		this.progressiveImageOrderRenderer.renderShutdown();
 		this.progressiveImageOrderRenderer.clear();
@@ -100,7 +100,7 @@ final class SceneObserverImpl implements SceneObserver {
 		Objects.requireNonNull(scene, "scene == null");
 		Objects.requireNonNull(oldPrimitive, "oldPrimitive == null");
 		
-		Platform.runLater(() -> this.rendererTabPane.getRendererViewPane().getObjectTreeView().remove(oldPrimitive));
+		Platform.runLater(() -> this.rendererTabPane.getRendererViewPane().getScenePropertyView().getObjectTreeView().remove(oldPrimitive));
 		
 		this.progressiveImageOrderRenderer.renderShutdown();
 		this.progressiveImageOrderRenderer.clear();

@@ -62,27 +62,31 @@ final class CenteredVBoxes {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static CenteredVBox createCenteredVBoxForCombinedProgressiveImageOrderRenderer(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer) {
+	public static CenteredVBox createCenteredVBoxForRenderer(final Renderer renderer) {
 		final
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Renderer Configuration", 16.0D);
 		
-		final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.RAY_CASTING, RenderingAlgorithm.RAY_TRACING), combinedProgressiveImageOrderRenderer.getRenderingAlgorithm());
-		
-		centeredVBox.addButton("Update Renderer", actionEvent -> {
-			final RenderingAlgorithm renderingAlgorithm = comboBox.getValue();
+		if(renderer instanceof CombinedProgressiveImageOrderRenderer) {
+			final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = CombinedProgressiveImageOrderRenderer.class.cast(renderer);
 			
-			if(renderingAlgorithm != null) {
-				combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);
-				combinedProgressiveImageOrderRenderer.renderShutdown();
-				combinedProgressiveImageOrderRenderer.clear();
-			}
-		});
+			final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.RAY_CASTING, RenderingAlgorithm.RAY_TRACING), combinedProgressiveImageOrderRenderer.getRenderingAlgorithm());
+			
+			centeredVBox.addButton("Update Renderer", actionEvent -> {
+				final RenderingAlgorithm renderingAlgorithm = comboBox.getValue();
+				
+				if(renderingAlgorithm != null) {
+					combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);
+					combinedProgressiveImageOrderRenderer.renderShutdown();
+					combinedProgressiveImageOrderRenderer.clear();
+				}
+			});
+		}
 		
 		return centeredVBox;
 	}
 	
-	public static CenteredVBox createCenteredVBoxForScene(final ProgressiveImageOrderRenderer progressiveImageOrderRenderer) {
+	public static CenteredVBox createCenteredVBoxForScene(final Renderer renderer) {
 		final
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Scene Configuration", 16.0D);
@@ -97,20 +101,26 @@ final class CenteredVBoxes {
 			
 			if(material != null && shape != null) {
 				final
-				Scene scene = progressiveImageOrderRenderer.getScene();
-				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(progressiveImageOrderRenderer, shape))));
+				Scene scene = renderer.getScene();
+				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(renderer, shape))));
 			}
 		});
 		centeredVBox.addSeparator();
 		centeredVBox.addButton("Build Acceleration Structure", actionEvent -> {
-			progressiveImageOrderRenderer.getScene().buildAccelerationStructure();
-			progressiveImageOrderRenderer.renderShutdown();
-			progressiveImageOrderRenderer.clear();
+			renderer.getScene().buildAccelerationStructure();
+			renderer.renderShutdown();
+			
+			if(renderer instanceof ProgressiveImageOrderRenderer) {
+				ProgressiveImageOrderRenderer.class.cast(renderer).clear();
+			}
 		});
 		centeredVBox.addButton("Clear Acceleration Structure", actionEvent -> {
-			progressiveImageOrderRenderer.getScene().clearAccelerationStructure();
-			progressiveImageOrderRenderer.renderShutdown();
-			progressiveImageOrderRenderer.clear();
+			renderer.getScene().clearAccelerationStructure();
+			renderer.renderShutdown();
+			
+			if(renderer instanceof ProgressiveImageOrderRenderer) {
+				ProgressiveImageOrderRenderer.class.cast(renderer).clear();
+			}
 		});
 		
 		return centeredVBox;

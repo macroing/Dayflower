@@ -18,7 +18,13 @@
  */
 package org.dayflower.javafx.application;
 
+import java.util.Objects;
+
+import org.dayflower.image.ImageF;
 import org.dayflower.javafx.scene.layout.Regions;
+import org.dayflower.renderer.ProgressiveImageOrderRenderer;
+import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.RendererObserver;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -32,7 +38,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
-final class StatusBar extends HBox {
+final class RendererStatusBar extends HBox {
 	private final Label labelRenderPass;
 	private final Label labelRenderTime;
 	private final Label labelRenderTimePerPass;
@@ -40,7 +46,9 @@ final class StatusBar extends HBox {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public StatusBar() {
+	public RendererStatusBar(final Renderer renderer) {
+		Objects.requireNonNull(renderer, "renderer == null");
+		
 		this.labelRenderPass = new Label("Render Pass: 0");
 		this.labelRenderTime = new Label("Render Time: 00:00:00");
 		this.labelRenderTimePerPass = new Label("Render Time Per Pass: 0");
@@ -55,6 +63,8 @@ final class StatusBar extends HBox {
 		setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1.0D, 0.0D, 0.0D, 0.0D))));
 		setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
 		setSpacing(20.0D);
+		
+		renderer.setRendererObserver(new RendererObserverImpl());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,6 +89,39 @@ final class StatusBar extends HBox {
 			this.progressBar.setProgress(percent);
 		} else {
 			Platform.runLater(() -> setProgress(renderPass, renderTime, percent));
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private final class RendererObserverImpl implements RendererObserver {
+		public RendererObserverImpl() {
+			
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void onRenderDisplay(final Renderer renderer, final ImageF image) {
+//			Do nothing.
+		}
+		
+		@Override
+		public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
+			if(renderer instanceof ProgressiveImageOrderRenderer) {
+				final ProgressiveImageOrderRenderer progressiveImageOrderRenderer = ProgressiveImageOrderRenderer.class.cast(renderer);
+				
+				setComplete(progressiveImageOrderRenderer.getRenderPass(), progressiveImageOrderRenderer.getTimer().getTime(), elapsedTimeMillis);
+			}
+		}
+		
+		@Override
+		public void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent) {
+			if(renderer instanceof ProgressiveImageOrderRenderer) {
+				final ProgressiveImageOrderRenderer progressiveImageOrderRenderer = ProgressiveImageOrderRenderer.class.cast(renderer);
+				
+				setProgress(progressiveImageOrderRenderer.getRenderPass(), progressiveImageOrderRenderer.getTimer().getTime(), percent);
+			}
 		}
 	}
 }

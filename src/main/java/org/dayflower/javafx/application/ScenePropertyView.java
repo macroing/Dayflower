@@ -23,38 +23,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.dayflower.color.Color3F;
-import org.dayflower.color.Color4F;
-import org.dayflower.filter.BoxFilter2F;
-import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.geometry.shape.Sphere3F;
-import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
-import org.dayflower.javafx.scene.image.WritableImageCache;
-import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
-import org.dayflower.renderer.RenderingAlgorithm;
-import org.dayflower.renderer.cpu.CPURenderer;
-import org.dayflower.renderer.observer.NoOpRendererObserver;
-import org.dayflower.scene.AreaLight;
-import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
-import org.dayflower.scene.light.DiffuseAreaLight;
-import org.dayflower.scene.material.MatteMaterial;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -65,11 +48,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 final class ScenePropertyView extends VBox {
-	private static final WritableImageCache<Material> WRITABLE_IMAGE_CACHE_MATERIAL = new WritableImageCache<>(ScenePropertyView::doCreateWritableImageMaterial);
-	private static final WritableImageCache<Shape3F> WRITABLE_IMAGE_CACHE_SHAPE = new WritableImageCache<>(ScenePropertyView::doCreateWritableImageShape);
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private final ObjectTreeView<String, Object> objectTreeView;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +123,7 @@ final class ScenePropertyView extends VBox {
 	private static Function<Object, Node> doCreateMapperUToGraphic() {
 		return object -> {
 			if(object instanceof Material) {
-				return new ImageView(WRITABLE_IMAGE_CACHE_MATERIAL.get(Material.class.cast(object)));
+				return new ImageView(WritableImageCaches.get(Material.class.cast(object)));
 			} else if(object instanceof Point3F) {
 				return null;
 			} else if(object instanceof Primitive) {
@@ -155,7 +133,7 @@ final class ScenePropertyView extends VBox {
 			} else if(object instanceof Scene) {
 				return null;
 			} else if(object instanceof Shape3F) {
-				return new ImageView(WRITABLE_IMAGE_CACHE_SHAPE.get(Shape3F.class.cast(object)));
+				return new ImageView(WritableImageCaches.get(Shape3F.class.cast(object)));
 			} else if(object instanceof Transform) {
 				return null;
 			} else if(object instanceof Vector3F) {
@@ -198,65 +176,5 @@ final class ScenePropertyView extends VBox {
 	
 	private static ObjectTreeView<String, Object> doCreateObjectTreeView(final Scene scene) {
 		return new ObjectTreeView<>(doCreateMapperUToContextMenu(scene), doCreateMapperUToListU(), doCreateMapperUToGraphic(), doCreateMapperUToT(), scene);
-	}
-	
-	private static Scene doCreateMaterialPreviewScene(final Material material) {
-		Objects.requireNonNull(material, "material == null");
-		
-		final
-		Camera camera = new Camera();
-		camera.setResolution(32.0F, 32.0F);
-		camera.setFieldOfViewY();
-		camera.setOrthonormalBasis();
-		
-		final Material material0 = material;
-		final Material material1 = new MatteMaterial();
-		
-		final Shape3F shape0 = new Sphere3F();
-		final Shape3F shape1 = new Sphere3F(2.0F);
-		
-		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(4.0F));
-		final Transform transform1 = new Transform(camera.getPointBehindEye(4.0F));
-		
-		final AreaLight areaLight1 = new DiffuseAreaLight(transform1, 1, new Color3F(12.0F), shape1, true);
-		
-		final Primitive primitive0 = new Primitive(material0, shape0, transform0);
-		final Primitive primitive1 = new Primitive(material1, shape1, transform1, areaLight1);
-		
-		final
-		Scene scene = new Scene();
-		scene.addLight(areaLight1);
-		scene.addPrimitive(primitive0);
-		scene.addPrimitive(primitive1);
-		scene.setCamera(camera);
-		scene.setName("Preview");
-		
-		return scene;
-	}
-	
-	private static WritableImage doCreateWritableImageMaterial(final Material material) {
-		final
-		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
-		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(32, 32, Color4F.BLACK, new BoxFilter2F()));
-		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
-		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
-		combinedProgressiveImageOrderRenderer.setRenderPasses(10);
-		combinedProgressiveImageOrderRenderer.setScene(doCreateMaterialPreviewScene(material));
-		combinedProgressiveImageOrderRenderer.render();
-		
-		final
-		PixelImageF pixelImageF = PixelImageF.class.cast(combinedProgressiveImageOrderRenderer.getImage());
-		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
-		
-		return pixelImageF.toWritableImage();
-	}
-	
-	@SuppressWarnings("unused")
-	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
-		final
-		PixelImageF pixelImageF = new PixelImageF(32, 32, Color4F.WHITE);
-		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
-		
-		return pixelImageF.toWritableImage();
 	}
 }

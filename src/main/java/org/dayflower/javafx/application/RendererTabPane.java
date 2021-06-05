@@ -25,6 +25,7 @@ import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.stage.Stage;
 
 final class RendererTabPane extends TabPane {
 	private static final String TEXT_VIEW = "View";
@@ -36,11 +37,15 @@ final class RendererTabPane extends TabPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public RendererTabPane(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService) {
+	public RendererTabPane(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService, final Stage stage) {
 		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
-		this.rendererViewPane = new RendererViewPane(combinedProgressiveImageOrderRenderer, Objects.requireNonNull(executorService, "executorService == null"));
+		this.combinedProgressiveImageOrderRenderer.getScene().addSceneObserver(new SceneObserverImpl(combinedProgressiveImageOrderRenderer, this));
+		this.rendererViewPane = new RendererViewPane(combinedProgressiveImageOrderRenderer, executorService, stage);
 		
-		doConfigure();
+		getTabs().add(new Tab(TEXT_VIEW, this.rendererViewPane));
+		getSelectionModel().select(0);
+		
+		setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,15 +63,11 @@ final class RendererTabPane extends TabPane {
 		this.combinedProgressiveImageOrderRenderer.dispose();
 	}
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void save() {
+		this.rendererViewPane.save();
+	}
 	
-	private void doConfigure() {
-//		Configure the Scene:
-		this.combinedProgressiveImageOrderRenderer.getScene().addSceneObserver(new SceneObserverImpl(this.combinedProgressiveImageOrderRenderer, this));
-		
-//		Configure the RendererTabPane:
-		getTabs().add(new Tab(TEXT_VIEW, this.rendererViewPane));
-		getSelectionModel().select(0);
-		setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+	public void saveAs() {
+		this.rendererViewPane.saveAs();
 	}
 }

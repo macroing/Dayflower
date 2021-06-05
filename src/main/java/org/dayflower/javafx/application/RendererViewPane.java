@@ -32,12 +32,20 @@ import org.dayflower.javafx.canvas.ConcurrentImageCanvasPane;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.scene.Camera;
+import org.dayflower.utility.Files;
 import org.macroing.java.util.function.TriFunction;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 final class RendererViewPane extends BorderPane {
+	private static final File INITIAL_DIRECTORY_IMAGES = new File(".");
+	private static final String TITLE_SAVE_AS = "Save As...";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AtomicBoolean isCameraUpdateRequired;
 	private final AtomicLong lastResizeTimeMillis;
 	private final AtomicReference<File> file;
@@ -47,10 +55,11 @@ final class RendererViewPane extends BorderPane {
 	private final RendererConfigurationView rendererConfigurationView;
 	private final RendererStatusBar rendererStatusBar;
 	private final ScenePropertyView scenePropertyView;
+	private final Stage stage;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public RendererViewPane(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService) {
+	public RendererViewPane(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService, final Stage stage) {
 		this.isCameraUpdateRequired = new AtomicBoolean();
 		this.lastResizeTimeMillis = new AtomicLong();
 		this.file = new AtomicReference<>();
@@ -60,8 +69,12 @@ final class RendererViewPane extends BorderPane {
 		this.rendererConfigurationView = new RendererConfigurationView(combinedProgressiveImageOrderRenderer);
 		this.rendererStatusBar = new RendererStatusBar(combinedProgressiveImageOrderRenderer);
 		this.scenePropertyView = new ScenePropertyView(combinedProgressiveImageOrderRenderer.getScene());
+		this.stage = Objects.requireNonNull(stage, "stage == null");
 		
-		doConfigure();
+		setBottom(this.rendererStatusBar);
+		setCenter(this.concurrentImageCanvasPane);
+		setLeft(this.rendererConfigurationView);
+		setRight(this.scenePropertyView);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,6 +113,23 @@ final class RendererViewPane extends BorderPane {
 			final
 			ImageF imageF = this.combinedProgressiveImageOrderRenderer.getImage();
 			imageF.save(optionalFile.get());
+		} else {
+			saveAs();
+		}
+	}
+	
+	public void saveAs() {
+		final
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setInitialDirectory(Files.findClosestExistingDirectoryTo(INITIAL_DIRECTORY_IMAGES));
+		fileChooser.setTitle(TITLE_SAVE_AS);
+		
+		final File file = fileChooser.showSaveDialog(this.stage);
+		
+		if(file != null) {
+			setFile(file);
+			
+			save();
 		}
 	}
 	
@@ -171,12 +201,5 @@ final class RendererViewPane extends BorderPane {
 	@SuppressWarnings("unused")
 	private boolean doRender(final ImageF image) {
 		return this.combinedProgressiveImageOrderRenderer.render();
-	}
-	
-	private void doConfigure() {
-		setBottom(this.rendererStatusBar);
-		setCenter(this.concurrentImageCanvasPane);
-		setLeft(this.rendererConfigurationView);
-		setRight(this.scenePropertyView);
 	}
 }

@@ -4,6 +4,7 @@
 	* ADD:		Add support for Rectangle3DReader in DefaultShape3DReader.
 	* ADD:		Add support for Rectangle3FReader in DefaultShape3FReader.
 	* ADD:		Add the classes Rectangle3D, Rectangle3DReader, Rectangle3F and Rectangle3FReader.
+	* CHANGE:	Fix a bug in the Specular BRDF that uses a constant Fresnel in the GPU-renderer. The red and blue components were swapped.
 	* CHANGE:	Change the IDs of RectangularCuboid3D, RectangularCuboid3F, Sphere3D, Sphere3F, Torus3D, Torus3F, Triangle3D, Triangle3F, TriangleMesh3D and TriangleMesh3F.
 
 2021-06-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>

@@ -1,5 +1,6 @@
 2021-06-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add support for Rectangle3F in the GPU-renderer.
 	* ADD:		Add support for Rectangle3DReader in DefaultShape3DReader.
 	* ADD:		Add support for Rectangle3FReader in DefaultShape3FReader.
 	* ADD:		Add the classes Rectangle3D, Rectangle3DReader, Rectangle3F and Rectangle3FReader.

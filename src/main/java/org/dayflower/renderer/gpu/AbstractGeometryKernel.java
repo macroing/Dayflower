@@ -33,6 +33,7 @@ import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.Rectangle3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
@@ -163,6 +164,11 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected float[] shape3FPlane3FArray;
 	
 	/**
+	 * A {@code float[]} that contains rectangles.
+	 */
+	protected float[] shape3FRectangle3FArray;
+	
+	/**
 	 * A {@code float[]} that contains rectangular cuboids.
 	 */
 	protected float[] shape3FRectangularCuboid3FArray;
@@ -215,6 +221,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.shape3FDisk3FArray = new float[1];
 		this.shape3FParaboloid3FArray = new float[1];
 		this.shape3FPlane3FArray = new float[1];
+		this.shape3FRectangle3FArray = new float[1];
 		this.shape3FRectangularCuboid3FArray = new float[1];
 		this.shape3FSphere3FArray = new float[1];
 		this.shape3FTorus3FArray = new float[1];
@@ -2119,6 +2126,216 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float bY = isXLarger ? planeCZ - aY : isYLarger ? planeCX - aY : planeCY - aY;
 		final float cX = isXLarger ? planeBY - aX : isYLarger ? planeBZ - aX : planeBX - aX;
 		final float cY = isXLarger ? planeBZ - aY : isYLarger ? planeBX - aY : planeBY - aY;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float determinant = bX * cY - bY * cX;
+		final float determinantReciprocal = 1.0F / determinant;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
+		final float v = isXLarger ? surfaceIntersectionPointZ : isYLarger ? surfaceIntersectionPointX : surfaceIntersectionPointY;
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = u * (-bY * determinantReciprocal) + v * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
+		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
+		
+//		Update the intersection array:
+		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetPrimitiveIndex(primitiveIndex);
+		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Shape3F - Rectangle3F ///////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given rectangle in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FRectangle3FArrayOffset the offset for the rectangle in {@link #shape3FRectangle3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given rectangle in object space, {@code false} otherwise
+	 */
+	protected final boolean shape3FRectangle3FIntersects(final int shape3FRectangle3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return shape3FRectangle3FIntersectionT(shape3FRectangle3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns the parametric T value for a given rectangle in object space, or {@code 0.0F} if no intersection was found.
+	 * 
+	 * @param shape3FRectangle3FArrayOffset the offset for the rectangle in {@link #shape3FRectangle3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given rectangle in object space, or {@code 0.0F} if no intersection was found
+	 */
+	protected final float shape3FRectangle3FIntersectionT(final int shape3FRectangle3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the rectangle variables that will be referred to by 'rectanglePosition', 'rectangleSideA', 'rectangleSideB' and 'rectangleSurfaceNormal' in the comments:
+		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 0];
+		final float rectanglePositionY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 1];
+		final float rectanglePositionZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 2];
+		final float rectangleSideAX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 0];
+		final float rectangleSideAY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 1];
+		final float rectangleSideAZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 2];
+		final float rectangleSideBX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 0];
+		final float rectangleSideBY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 1];
+		final float rectangleSideBZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 2];
+		final float rectangleSurfaceNormalX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 0];
+		final float rectangleSurfaceNormalY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 1];
+		final float rectangleSurfaceNormalZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 2];
+		
+//		Compute the determinant, which is the dot product between 'rectangleSurfaceNormal' and 'rayDirection':
+		final float determinant = rectangleSurfaceNormalX * rayDirectionX + rectangleSurfaceNormalY * rayDirectionY + rectangleSurfaceNormalZ * rayDirectionZ;
+		
+//		Check if the determinant is close to 0.0 and, if that is the case, return a miss:
+		if(determinant >= -0.0001F && determinant <= +0.0001F) {
+			return 0.0F;
+		}
+		
+//		Compute the direction from 'rayOrigin' to 'rectanglePosition', denoted by 'rayOriginToRectanglePosition' in the comments:
+		final float rayOriginToRectanglePositionX = rectanglePositionX - rayOriginX;
+		final float rayOriginToRectanglePositionY = rectanglePositionY - rayOriginY;
+		final float rayOriginToRectanglePositionZ = rectanglePositionZ - rayOriginZ;
+		
+//		Compute the intersection as the dot product between 'rayOriginToRectanglePosition' and 'rectangleSurfaceNormal' followed by a division with the determinant:
+		final float intersectionT = (rayOriginToRectanglePositionX * rectangleSurfaceNormalX + rayOriginToRectanglePositionY * rectangleSurfaceNormalY + rayOriginToRectanglePositionZ * rectangleSurfaceNormalZ) / determinant;
+		
+		if(intersectionT <= rayTMinimum || intersectionT >= rayTMaximum) {
+			return 0.0F;
+		}
+		
+//		Compute the side lengths and their reciprocal values:
+		final float rectangleSideALength = vector3FLength(rectangleSideAX, rectangleSideAY, rectangleSideAZ);
+		final float rectangleSideALengthReciprocal = 1.0F / rectangleSideALength;
+		final float rectangleSideBLength = vector3FLength(rectangleSideBX, rectangleSideBY, rectangleSideBZ);
+		final float rectangleSideBLengthReciprocal = 1.0F / rectangleSideBLength;
+		
+//		Compute the normalized version of 'rectangleSideA':
+		final float rectangleSideANormalizedX = rectangleSideAX * rectangleSideALengthReciprocal;
+		final float rectangleSideANormalizedY = rectangleSideAY * rectangleSideALengthReciprocal;
+		final float rectangleSideANormalizedZ = rectangleSideAZ * rectangleSideALengthReciprocal;
+		
+//		Compute the normalized version of 'rectangleSideB':
+		final float rectangleSideBNormalizedX = rectangleSideBX * rectangleSideBLengthReciprocal;
+		final float rectangleSideBNormalizedY = rectangleSideBY * rectangleSideBLengthReciprocal;
+		final float rectangleSideBNormalizedZ = rectangleSideBZ * rectangleSideBLengthReciprocal;
+		
+//		Compute the surface intersection point that will be referred to by 'surfaceIntersectionPoint' in the comments:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * intersectionT;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * intersectionT;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * intersectionT;
+		
+//		Compute the direction from 'rectanglePosition' to 'surfaceIntersectionPoint':
+		final float rectanglePositionToSurfaceIntersectionPointX = surfaceIntersectionPointX - rectanglePositionX;
+		final float rectanglePositionToSurfaceIntersectionPointY = surfaceIntersectionPointY - rectanglePositionY;
+		final float rectanglePositionToSurfaceIntersectionPointZ = surfaceIntersectionPointZ - rectanglePositionZ;
+		
+//		Compute the sides:
+		final float sideX = vector3FDotProduct(rectanglePositionToSurfaceIntersectionPointX, rectanglePositionToSurfaceIntersectionPointY, rectanglePositionToSurfaceIntersectionPointZ, rectangleSideANormalizedX, rectangleSideANormalizedY, rectangleSideANormalizedZ);
+		final float sideY = vector3FDotProduct(rectanglePositionToSurfaceIntersectionPointX, rectanglePositionToSurfaceIntersectionPointY, rectanglePositionToSurfaceIntersectionPointZ, rectangleSideBNormalizedX, rectangleSideBNormalizedY, rectangleSideBNormalizedZ);
+		
+		if(sideX < 0.0F || sideX > rectangleSideALength || sideY < 0.0F || sideY > rectangleSideBLength) {
+			return 0.0F;
+		}
+		
+		return intersectionT;
+	}
+	
+	/**
+	 * Computes the intersection properties for the rectangle at offset {@code shape3FRectangle3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the rectangle
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FRectangle3FArrayOffset the offset in {@link #shape3FRectangle3FArray}
+	 */
+	protected final void shape3FRectangle3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FRectangle3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the rectangle variables that will be referred to by 'rectanglePosition', 'rectangleSideA', 'rectangleSideB' and 'rectangleSurfaceNormal' in the comments:
+		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 0];
+		final float rectanglePositionY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 1];
+		final float rectanglePositionZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 2];
+		final float rectangleSideAX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 0];
+		final float rectangleSideAY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 1];
+		final float rectangleSideAZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 2];
+		final float rectangleSideBX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 0];
+		final float rectangleSideBY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 1];
+		final float rectangleSideBZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 2];
+		final float rectangleSurfaceNormalX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 0];
+		final float rectangleSurfaceNormalY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 1];
+		final float rectangleSurfaceNormalZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 2];
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Retrieve the W-direction (surface normal) of the geometric orthonormal basis:
+		final float orthonormalBasisGWNormalizedX = rectangleSurfaceNormalX;
+		final float orthonormalBasisGWNormalizedY = rectangleSurfaceNormalY;
+		final float orthonormalBasisGWNormalizedZ = rectangleSurfaceNormalZ;
+		
+//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis and other things:
+		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
+		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
+		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
+		
+//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
+		final boolean isXSmaller = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
+		final boolean isYSmaller = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGVX = isXSmaller ? +0.0F                          : isYSmaller ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGVY = isXSmaller ? +orthonormalBasisGWNormalizedZ : isYSmaller ? +0.0F                          : -orthonormalBasisGWNormalizedX;
+		final float orthonormalBasisGVZ = isXSmaller ? -orthonormalBasisGWNormalizedY : isYSmaller ? -orthonormalBasisGWNormalizedX : +0.0F;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+//		Compute the U-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final boolean isXLarger = orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedZAbs;
+		final boolean isYLarger = orthonormalBasisGWNormalizedYAbs > orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute three points:
+		final float rectangleAX = rectanglePositionX;
+		final float rectangleAY = rectanglePositionY;
+		final float rectangleAZ = rectanglePositionZ;
+		final float rectangleBX = rectangleAX + rectangleSideAX;
+		final float rectangleBY = rectangleAY + rectangleSideAY;
+		final float rectangleBZ = rectangleAZ + rectangleSideAZ;
+		final float rectangleCX = rectangleAX + rectangleSideBX;
+		final float rectangleCY = rectangleAY + rectangleSideBY;
+		final float rectangleCZ = rectangleAZ + rectangleSideBZ;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float aX = isXLarger ? rectangleAY      : isYLarger ? rectangleAZ      : rectangleAX;
+		final float aY = isXLarger ? rectangleAZ      : isYLarger ? rectangleAX      : rectangleAY;
+		final float bX = isXLarger ? rectangleCY - aX : isYLarger ? rectangleCZ - aX : rectangleCX - aX;
+		final float bY = isXLarger ? rectangleCZ - aY : isYLarger ? rectangleCX - aY : rectangleCY - aY;
+		final float cX = isXLarger ? rectangleBY - aX : isYLarger ? rectangleBZ - aX : rectangleBX - aX;
+		final float cY = isXLarger ? rectangleBZ - aY : isYLarger ? rectangleBX - aY : rectangleBY - aY;
 		
 //		Compute variables necessary for computing the texture coordinates:
 		final float determinant = bX * cY - bY * cX;

@@ -44,7 +44,7 @@ import org.dayflower.node.NodeTraversalException;
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3F} implementation is not supported on the GPU.
+ * This {@link Shape3F} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -56,6 +56,31 @@ public final class Rectangle3F implements Shape3F {
 	public static final String NAME = "Rectangle";
 	
 	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 16;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code Position} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_POSITION = 0;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance denoted by {@code Side A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SIDE_A = 3;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance denoted by {@code Side B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SIDE_B = 6;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance denoted by {@code Surface Normal} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SURFACE_NORMAL = 9;
+	
+	/**
 	 * The ID of this {@code Rectangle3F} class.
 	 */
 	public static final int ID = 11;
@@ -65,6 +90,7 @@ public final class Rectangle3F implements Shape3F {
 	private final Point3F position;
 	private final Vector3F sideA;
 	private final Vector3F sideB;
+	private final Vector3F surfaceNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -115,6 +141,7 @@ public final class Rectangle3F implements Shape3F {
 		this.position = Objects.requireNonNull(position, "position == null");
 		this.sideA = Objects.requireNonNull(sideA, "sideA == null");
 		this.sideB = Objects.requireNonNull(sideB, "sideB == null");
+		this.surfaceNormal = Vector3F.normalize(Vector3F.crossProduct(sideA, sideB));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,9 +172,7 @@ public final class Rectangle3F implements Shape3F {
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Vector3F direction = ray.getDirection();
-		final Vector3F sideA = this.sideA;
-		final Vector3F sideB = this.sideB;
-		final Vector3F surfaceNormal = Vector3F.normalize(Vector3F.crossProduct(sideA, sideB));
+		final Vector3F surfaceNormal = this.surfaceNormal;
 		
 		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
 		
@@ -165,6 +190,9 @@ public final class Rectangle3F implements Shape3F {
 		if(t <= tMinimum || t >= tMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
+		
+		final Vector3F sideA = this.sideA;
+		final Vector3F sideB = this.sideB;
 		
 		final float sideALength = sideA.length();
 		final float sideBLength = sideB.length();
@@ -268,6 +296,15 @@ public final class Rectangle3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns the surface normal of this {@code Rectangle3F} instance.
+	 * 
+	 * @return the surface normal of this {@code Rectangle3F} instance
+	 */
+	public Vector3F getSurfaceNormal() {
+		return this.surfaceNormal;
+	}
+	
+	/**
 	 * Accepts a {@link NodeHierarchicalVisitor}.
 	 * <p>
 	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.
@@ -305,6 +342,10 @@ public final class Rectangle3F implements Shape3F {
 				if(!this.sideB.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
+				
+				if(!this.surfaceNormal.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
 			}
 			
 			return nodeHierarchicalVisitor.visitLeave(this);
@@ -332,6 +373,8 @@ public final class Rectangle3F implements Shape3F {
 		} else if(!Objects.equals(this.sideA, Rectangle3F.class.cast(object).sideA)) {
 			return false;
 		} else if(!Objects.equals(this.sideB, Rectangle3F.class.cast(object).sideB)) {
+			return false;
+		} else if(!Objects.equals(this.surfaceNormal, Rectangle3F.class.cast(object).surfaceNormal)) {
 			return false;
 		} else {
 			return true;
@@ -364,9 +407,7 @@ public final class Rectangle3F implements Shape3F {
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Vector3F direction = ray.getDirection();
-		final Vector3F sideA = this.sideA;
-		final Vector3F sideB = this.sideB;
-		final Vector3F surfaceNormal = Vector3F.normalize(Vector3F.crossProduct(sideA, sideB));
+		final Vector3F surfaceNormal = this.surfaceNormal;
 		
 		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
 		
@@ -384,6 +425,9 @@ public final class Rectangle3F implements Shape3F {
 		if(t <= tMinimum || t >= tMaximum) {
 			return Float.NaN;
 		}
+		
+		final Vector3F sideA = this.sideA;
+		final Vector3F sideB = this.sideB;
 		
 		final float sideALength = sideA.length();
 		final float sideBLength = sideB.length();
@@ -406,6 +450,34 @@ public final class Rectangle3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns a {@code float[]} representation of this {@code Rectangle3F} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Rectangle3F} instance
+	 */
+	public float[] toArray() {
+		final float[] array = new float[ARRAY_LENGTH];
+		
+		array[ARRAY_OFFSET_POSITION + 0] = this.position.getX();			//Block #1
+		array[ARRAY_OFFSET_POSITION + 1] = this.position.getY();			//Block #1
+		array[ARRAY_OFFSET_POSITION + 2] = this.position.getZ();			//Block #1
+		array[ARRAY_OFFSET_SIDE_A + 0] = this.sideA.getX();					//Block #1
+		array[ARRAY_OFFSET_SIDE_A + 1] = this.sideA.getY();					//Block #1
+		array[ARRAY_OFFSET_SIDE_A + 2] = this.sideA.getZ();					//Block #1
+		array[ARRAY_OFFSET_SIDE_B + 0] = this.sideB.getX();					//Block #1
+		array[ARRAY_OFFSET_SIDE_B + 1] = this.sideB.getY();					//Block #1
+		array[ARRAY_OFFSET_SIDE_B + 2] = this.sideB.getZ();					//Block #2
+		array[ARRAY_OFFSET_SURFACE_NORMAL + 0] = this.surfaceNormal.getX();	//Block #2
+		array[ARRAY_OFFSET_SURFACE_NORMAL + 1] = this.surfaceNormal.getY();	//Block #2
+		array[ARRAY_OFFSET_SURFACE_NORMAL + 2] = this.surfaceNormal.getZ();	//Block #2
+		array[12] = 0.0F;													//Block #2
+		array[13] = 0.0F;													//Block #2
+		array[14] = 0.0F;													//Block #2
+		array[15] = 0.0F;													//Block #2
+		
+		return array;
+	}
+	
+	/**
 	 * Returns an {@code int} with the ID of this {@code Rectangle3F} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code Rectangle3F} instance
@@ -422,7 +494,7 @@ public final class Rectangle3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.position, this.sideA, this.sideB);
+		return Objects.hash(this.position, this.sideA, this.sideB, this.surfaceNormal);
 	}
 	
 	/**

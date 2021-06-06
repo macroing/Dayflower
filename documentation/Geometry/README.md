@@ -93,6 +93,8 @@ Below follows a few lists of features available in the Geometry API.
 * `Rectangle2D` and `Rectangle2DReader`
 * `Rectangle2F` and `Rectangle2FReader`
 * `Rectangle2I` and `Rectangle2IReader`
+* `Rectangle3D` and `Rectangle3DReader`
+* `Rectangle3F` and `Rectangle3FReader`
 * `RectangularCuboid3D` and `RectangularCuboid3DReader`
 * `RectangularCuboid3F` and `RectangularCuboid3FReader`
 * `Sphere3D` and `Sphere3DReader`

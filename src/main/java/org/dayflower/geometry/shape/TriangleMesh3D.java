@@ -124,7 +124,7 @@ public final class TriangleMesh3D implements Shape3D {
 	/**
 	 * The ID of this {@code TriangleMesh3D} class.
 	 */
-	public static final int ID = 15;
+	public static final int ID = 16;
 	
 	/**
 	 * The ID for all leaf nodes in the bounding volume hierarchy (BVH).

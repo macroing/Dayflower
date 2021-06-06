@@ -53,6 +53,7 @@ public final class DefaultShape3DReader implements Shape3DReader {
 		this.shape3DReaders.put(Integer.valueOf(Paraboloid3D.ID), new Paraboloid3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Plane3D.ID), new Plane3DReader());
 		this.shape3DReaders.put(Integer.valueOf(ProceduralTerrain3D.ID), new ProceduralTerrain3DReader());
+		this.shape3DReaders.put(Integer.valueOf(Rectangle3D.ID), new Rectangle3DReader());
 		this.shape3DReaders.put(Integer.valueOf(RectangularCuboid3D.ID), new RectangularCuboid3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Sphere3D.ID), new Sphere3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Torus3D.ID), new Torus3DReader());
@@ -120,6 +121,7 @@ public final class DefaultShape3DReader implements Shape3DReader {
 			case Paraboloid3D.ID:
 			case Plane3D.ID:
 			case ProceduralTerrain3D.ID:
+			case Rectangle3D.ID:
 			case RectangularCuboid3D.ID:
 			case Sphere3D.ID:
 			case Torus3D.ID:

@@ -75,7 +75,7 @@ public final class RectangularCuboid3F implements Shape3F {
 	/**
 	 * The ID of this {@code RectangularCuboid3F} class.
 	 */
-	public static final int ID = 11;
+	public static final int ID = 12;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

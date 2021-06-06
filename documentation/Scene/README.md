@@ -261,6 +261,13 @@ new Plane3F();
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Plane3F.png "Plane3F")
 
+###### Rectangle Example
+The following example demonstrates how the `Rectangle3F` can be created and looks visually.
+```java
+new Rectangle3F();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/Rectangle3F.png "Rectangle3F")
+
 ###### Rectangular Cuboid Example
 The following example demonstrates how the `RectangularCuboid3F` can be created and looks visually.
 ```java

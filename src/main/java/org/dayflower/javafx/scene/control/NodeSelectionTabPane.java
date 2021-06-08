@@ -196,7 +196,7 @@ public final class NodeSelectionTabPane<T extends Node, U> extends TabPane {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * <code>
-	 * nodeSelectionTabPane.addLater(object, tab -> {});
+	 * nodeSelectionTabPane.addLater(object, tab -&gt; {});
 	 * </code>
 	 * </pre>
 	 * 

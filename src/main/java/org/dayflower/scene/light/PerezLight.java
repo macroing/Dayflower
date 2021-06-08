@@ -32,6 +32,7 @@ import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.random;
 import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.padding;
 
 import java.util.Arrays;
@@ -706,15 +707,15 @@ public final class PerezLight extends Light {
 		
 		final double theta = acos(saturate(directionSaturated.getZ(), -1.0D, 1.0D));
 		final double gamma = acos(saturate(Vector3F.dotProduct(directionSaturated, this.sunDirection), -1.0D, 1.0D));
-		final double relativeLuminance = doCalculatePerezFunction(this.perezRelativeLuminance, theta, gamma, this.zenith[0]) * 1.0e-4D;
+		final double relativeLuminance = doCalculatePerezFunction(this.perezRelativeLuminance, theta, gamma, this.zenith[0]) * 0.0001D;
 		final double x = doCalculatePerezFunction(this.perezX, theta, gamma, this.zenith[1]);
 		final double y = doCalculatePerezFunction(this.perezY, theta, gamma, this.zenith[2]);
 		
 		final Color3F colorXYZ = ChromaticSpectralCurveF.getColorXYZ((float)(x), (float)(y));
 		
-		final float x0 = (float)(colorXYZ.getX() * relativeLuminance / colorXYZ.getY());
-		final float y0 = (float)(relativeLuminance);
-		final float z0 = (float)(colorXYZ.getZ() * relativeLuminance / colorXYZ.getY());
+		final float x0 = toFloat(colorXYZ.getX() * relativeLuminance / colorXYZ.getY());
+		final float y0 = toFloat(relativeLuminance);
+		final float z0 = toFloat(colorXYZ.getZ() * relativeLuminance / colorXYZ.getY());
 		
 		return Color3F.convertXYZToRGBUsingPBRT(new Color3F(x0, y0, z0));
 	}
@@ -793,7 +794,7 @@ public final class PerezLight extends Light {
 	private void doSetSunColorAndSunSpectralRadiance() {
 		if(this.sunDirection.getZ() > 0.0F) {
 			this.sunSpectralRadiance = doCalculateAttenuatedSunlight(this.theta, this.turbidity);
-			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingSRGB(Color3F.multiply(this.sunSpectralRadiance.toColorXYZ(), 0.01F)));//The original factor was 0.0001F.
+			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingSRGB(Color3F.multiply(this.sunSpectralRadiance.toColorXYZ(), 0.0001F)));
 		} else {
 			this.sunSpectralRadiance = new ConstantSpectralCurveF(0.0F);
 			this.sunColor = Color3F.BLACK;

@@ -26,7 +26,6 @@ import static org.dayflower.utility.Doubles.toDouble;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
-import static org.dayflower.utility.NoiseD.simplexFractionalBrownianMotionXY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2D;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
-
+import org.dayflower.noise.SimplexNoiseD;
 import org.macroing.java.util.function.TriFunction;
 
 /**
@@ -1372,7 +1371,7 @@ public abstract class ImageD extends Image {
 			final double x = (point.getX() - minimumX) / (maximumX - minimumX);
 			final double y = (point.getY() - minimumY) / (maximumY - minimumY);
 			
-			final double noise = simplexFractionalBrownianMotionXY(x, y, frequency, gain, 0.0D, 1.0D, octaves);
+			final double noise = SimplexNoiseD.fractionalBrownianMotionXY(x, y, frequency, gain, 0.0D, 1.0D, octaves);
 			
 			return new Color4D(Color3D.multiply(baseColor, noise));
 		});

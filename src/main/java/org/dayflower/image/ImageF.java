@@ -26,7 +26,6 @@ import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
-import static org.dayflower.utility.NoiseF.simplexFractionalBrownianMotionXY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
-
+import org.dayflower.noise.SimplexNoiseF;
 import org.macroing.java.util.function.TriFunction;
 
 /**
@@ -1372,7 +1371,7 @@ public abstract class ImageF extends Image {
 			final float x = (point.getX() - minimumX) / (maximumX - minimumX);
 			final float y = (point.getY() - minimumY) / (maximumY - minimumY);
 			
-			final float noise = simplexFractionalBrownianMotionXY(x, y, frequency, gain, 0.0F, 1.0F, octaves);
+			final float noise = SimplexNoiseF.fractionalBrownianMotionXY(x, y, frequency, gain, 0.0F, 1.0F, octaves);
 			
 			return new Color4F(Color3F.multiply(baseColor, noise));
 		});

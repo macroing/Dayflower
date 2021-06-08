@@ -22,16 +22,16 @@ import java.io.DataInput;
 import java.io.UncheckedIOException;
 
 /**
- * A {@code BoundingVolume3DReader} reads {@link BoundingVolume3D} instances from a {@code DataInput} instance.
+ * A {@code BoundingVolumeReader} reads {@link BoundingVolume} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface BoundingVolume3DReader extends BoundingVolumeReader {
+public interface BoundingVolumeReader {
 	/**
-	 * Reads a {@link BoundingVolume3D} instance from {@code dataInput}.
+	 * Reads a {@link BoundingVolume} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code BoundingVolume3D} instance that was read.
+	 * Returns the {@code BoundingVolume} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -40,18 +40,17 @@ public interface BoundingVolume3DReader extends BoundingVolumeReader {
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @return the {@code BoundingVolume3D} instance that was read
+	 * @return the {@code BoundingVolume} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	@Override
-	BoundingVolume3D read(final DataInput dataInput);
+	BoundingVolume read(final DataInput dataInput);
 	
 	/**
-	 * Reads a {@link BoundingVolume3D} instance from {@code dataInput}.
+	 * Reads a {@link BoundingVolume} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code BoundingVolume3D} instance that was read.
+	 * Returns the {@code BoundingVolume} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -59,15 +58,22 @@ public interface BoundingVolume3DReader extends BoundingVolumeReader {
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
-	 * The ID of the {@code BoundingVolume3D} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
+	 * The ID of the {@code BoundingVolume} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @param id the ID of the {@code BoundingVolume3D} type to read
-	 * @return the {@code BoundingVolume3D} instance that was read
+	 * @param id the ID of the {@code BoundingVolume} type to read
+	 * @return the {@code BoundingVolume} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, {@code id} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	@Override
-	BoundingVolume3D read(final DataInput dataInput, final int id);
+	BoundingVolume read(final DataInput dataInput, final int id);
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code BoundingVolumeReader} instance supports reading {@link BoundingVolume} instances with an ID of {@code id}, {@code false} otherwise.
+	 * 
+	 * @param id the ID of the {@code BoundingVolume} type to check
+	 * @return {@code true} if, and only if, this {@code BoundingVolumeReader} instance supports reading {@code BoundingVolume} instances with an ID of {@code id}, {@code false} otherwise
+	 */
+	boolean isSupported(final int id);
 }

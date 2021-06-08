@@ -22,12 +22,12 @@ import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.NoiseF.perlinTurbulenceXYZ;
 
 import java.util.Objects;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point3F;
+import org.dayflower.noise.PerlinNoiseF;
 import org.dayflower.scene.Intersection;
 
 /**
@@ -174,7 +174,7 @@ public final class MarbleTexture implements Texture {
 		final float x = surfaceIntersectionPoint.getX() * this.frequency;
 		final float y = surfaceIntersectionPoint.getY() * this.frequency;
 		final float z = surfaceIntersectionPoint.getZ() * this.frequency;
-		final float r = this.scale * perlinTurbulenceXYZ(x, y, z, this.octaves);
+		final float r = this.scale * PerlinNoiseF.turbulenceXYZ(x, y, z, this.octaves);
 		final float s = 2.0F * abs(sin(x + r));
 		final float t = s < 1.0F ? s : s - 1.0F;
 		

@@ -32,6 +32,7 @@ Dependencies
 * The Filter API
 * The Geometry API
 * The Node API
+* The Noise API
 * The Utility API
 
 Examples

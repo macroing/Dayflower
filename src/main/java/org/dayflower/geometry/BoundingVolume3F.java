@@ -20,8 +20,6 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Floats.isNaN;
 
-import org.dayflower.node.Node;
-
 /**
  * A {@code BoundingVolume3F} denotes a 3-dimensional bounding volume that uses the data type {@code float}.
  * <p>
@@ -30,7 +28,7 @@ import org.dayflower.node.Node;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface BoundingVolume3F extends Node {
+public interface BoundingVolume3F extends BoundingVolume {
 	/**
 	 * Performs a transformation.
 	 * <p>
@@ -108,13 +106,6 @@ public interface BoundingVolume3F extends Node {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	float intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
-	
-	/**
-	 * Returns an {@code int} with the ID of this {@code BoundingVolume3F} instance.
-	 * 
-	 * @return an {@code int} with the ID of this {@code BoundingVolume3F} instance
-	 */
-	int getID();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

@@ -16,18 +16,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.utility;
+package org.dayflower.noise;
 
 import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.floor;
+
+import org.dayflower.utility.Ints;
 
 /**
- * A class that consists exclusively of static methods that performs noise-based operations using the data type {@code double}.
+ * A class that consists exclusively of static methods that performs Simplex noise-based operations using the data type {@code double}.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class NoiseD {
+public final class SimplexNoiseD {
 	private static final double SIMPLEX_F2 = 0.3660254037844386D;
 	private static final double SIMPLEX_F3 = 1.0D / 3.0D;
 	private static final double SIMPLEX_F4 = 0.30901699437494745D;
@@ -41,212 +42,11 @@ public final class NoiseD {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private NoiseD() {
+	private SimplexNoiseD() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@code double} with noise computed by a Perlin-based fractal algorithm using the coordinates X, Y and Z.
-	 * 
-	 * @param x the X-coordinate
-	 * @param y the Y-coordinate
-	 * @param z the Z-coordinate
-	 * @param amplitude the amplitude to start at
-	 * @param frequency the frequency to start at
-	 * @param gain the amplitude multiplier
-	 * @param lacunarity the frequency multiplier
-	 * @param octaves the number of iterations to perform
-	 * @return a {@code double} with noise computed by a Perlin-based fractal algorithm using the coordinates X, Y and Z
-	 */
-	public static double perlinFractalXYZ(final double x, final double y, final double z, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
-		double result = 0.0D;
-		
-		double currentAmplitude = amplitude;
-		double currentFrequency = frequency;
-		
-		for(int i = 0; i < octaves; i++) {
-			result += currentAmplitude * perlinNoiseXYZ(x * currentFrequency, y * currentFrequency, z * currentFrequency);
-			
-			currentAmplitude *= gain;
-			currentFrequency *= lacunarity;
-		}
-		
-		return result;
-	}
-	
-	/**
-	 * Returns a {@code double} with noise computed by a Perlin-based fractional Brownian motion (fBm) algorithm using the coordinates X, Y and Z.
-	 * 
-	 * @param x the X-coordinate
-	 * @param y the Y-coordinate
-	 * @param z the Z-coordinate
-	 * @param frequency the frequency to start at
-	 * @param gain the amplitude multiplier
-	 * @param minimum the minimum value to return
-	 * @param maximum the maximum value to return
-	 * @param octaves the number of iterations to perform
-	 * @return a {@code double} with noise computed by a Perlin-based fractional Brownian motion (fBm) algorithm using the coordinates X, Y and Z
-	 */
-	public static double perlinFractionalBrownianMotionXYZ(final double x, final double y, final double z, final double frequency, final double gain, final double minimum, final double maximum, final int octaves) {
-		double currentAmplitude = 1.0D;
-		double maximumAmplitude = 0.0D;
-		
-		double currentFrequency = frequency;
-		
-		double noise = 0.0D;
-		
-		for(int i = 0; i < octaves; i++) {
-			noise += perlinNoiseXYZ(x * currentFrequency, y * currentFrequency, z * currentFrequency) * currentAmplitude;
-			
-			maximumAmplitude += currentAmplitude;
-			currentAmplitude *= gain;
-			
-			currentFrequency *= 2.0D;
-		}
-		
-		noise /= maximumAmplitude;
-		noise = noise * (maximum - minimum) / 2.0D + (maximum + minimum) / 2.0D;
-		
-		return noise;
-	}
-	
-	/**
-	 * Returns a {@code double} with noise computed by the Perlin algorithm using the coordinates X, Y and Z.
-	 * 
-	 * @param x the X-coordinate
-	 * @param y the Y-coordinate
-	 * @param z the Z-coordinate
-	 * @return a {@code double} with noise computed by the Perlin algorithm using the coordinates X, Y and Z
-	 */
-	public static double perlinNoiseXYZ(final double x, final double y, final double z) {
-		final double floorX = floor(x);
-		final double floorY = floor(y);
-		final double floorZ = floor(z);
-		
-		final int x0 = (int)(floorX) & 0xFF;
-		final int y0 = (int)(floorY) & 0xFF;
-		final int z0 = (int)(floorZ) & 0xFF;
-		
-		final double x1 = x - floorX;
-		final double y1 = y - floorY;
-		final double z1 = z - floorZ;
-		
-		final double u = x1 * x1 * x1 * (x1 * (x1 * 6.0D - 15.0D) + 10.0D);
-		final double v = y1 * y1 * y1 * (y1 * (y1 * 6.0D - 15.0D) + 10.0D);
-		final double w = z1 * z1 * z1 * (z1 * (z1 * 6.0D - 15.0D) + 10.0D);
-		
-		final int a0 = PERMUTATIONS_B[x0] + y0;
-		final int a1 = PERMUTATIONS_B[a0] + z0;
-		final int a2 = PERMUTATIONS_B[a0 + 1] + z0;
-		final int b0 = PERMUTATIONS_B[x0 + 1] + y0;
-		final int b1 = PERMUTATIONS_B[b0] + z0;
-		final int b2 = PERMUTATIONS_B[b0 + 1] + z0;
-		final int hash0 = PERMUTATIONS_B[a1] & 15;
-		final int hash1 = PERMUTATIONS_B[b1] & 15;
-		final int hash2 = PERMUTATIONS_B[a2] & 15;
-		final int hash3 = PERMUTATIONS_B[b2] & 15;
-		final int hash4 = PERMUTATIONS_B[a1 + 1] & 15;
-		final int hash5 = PERMUTATIONS_B[b1 + 1] & 15;
-		final int hash6 = PERMUTATIONS_B[a2 + 1] & 15;
-		final int hash7 = PERMUTATIONS_B[b2 + 1] & 15;
-		
-		final double gradient0U = hash0 < 8 || hash0 == 12 || hash0 == 13 ? x1 : y1;
-		final double gradient0V = hash0 < 4 || hash0 == 12 || hash0 == 13 ? y1 : z1;
-		final double gradient0 = ((hash0 & 1) == 0 ? gradient0U : -gradient0U) + ((hash0 & 2) == 0 ? gradient0V : -gradient0V);
-		final double gradient1U = hash1 < 8 || hash1 == 12 || hash1 == 13 ? x1 - 1.0D : y1;
-		final double gradient1V = hash1 < 4 || hash1 == 12 || hash1 == 13 ? y1 : z1;
-		final double gradient1 = ((hash1 & 1) == 0 ? gradient1U : -gradient1U) + ((hash1 & 2) == 0 ? gradient1V : -gradient1V);
-		final double gradient2U = hash2 < 8 || hash2 == 12 || hash2 == 13 ? x1 : y1 - 1.0D;
-		final double gradient2V = hash2 < 4 || hash2 == 12 || hash2 == 13 ? y1 - 1.0D : z1;
-		final double gradient2 = ((hash2 & 1) == 0 ? gradient2U : -gradient2U) + ((hash2 & 2) == 0 ? gradient2V : -gradient2V);
-		final double gradient3U = hash3 < 8 || hash3 == 12 || hash3 == 13 ? x1 - 1.0D : y1 - 1.0D;
-		final double gradient3V = hash3 < 4 || hash3 == 12 || hash3 == 13 ? y1 - 1.0D : z1;
-		final double gradient3 = ((hash3 & 1) == 0 ? gradient3U : -gradient3U) + ((hash3 & 2) == 0 ? gradient3V : -gradient3V);
-		final double gradient4U = hash4 < 8 || hash4 == 12 || hash4 == 13 ? x1 : y1;
-		final double gradient4V = hash4 < 4 || hash4 == 12 || hash4 == 13 ? y1 : z1 - 1.0D;
-		final double gradient4 = ((hash4 & 1) == 0 ? gradient4U : -gradient4U) + ((hash4 & 2) == 0 ? gradient4V : -gradient4V);
-		final double gradient5U = hash5 < 8 || hash5 == 12 || hash5 == 13 ? x1 - 1.0D : y1;
-		final double gradient5V = hash5 < 4 || hash5 == 12 || hash5 == 13 ? y1 : z1 - 1.0D;
-		final double gradient5 = ((hash5 & 1) == 0 ? gradient5U : -gradient5U) + ((hash5 & 2) == 0 ? gradient5V : -gradient5V);
-		final double gradient6U = hash6 < 8 || hash6 == 12 || hash6 == 13 ? x1 : y1 - 1.0D;
-		final double gradient6V = hash6 < 4 || hash6 == 12 || hash6 == 13 ? y1 - 1.0D : z1 - 1.0D;
-		final double gradient6 = ((hash6 & 1) == 0 ? gradient6U : -gradient6U) + ((hash6 & 2) == 0 ? gradient6V : -gradient6V);
-		final double gradient7U = hash7 < 8 || hash7 == 12 || hash7 == 13 ? x1 - 1.0D : y1 - 1.0D;
-		final double gradient7V = hash7 < 4 || hash7 == 12 || hash7 == 13 ? y1 - 1.0D : z1 - 1.0D;
-		final double gradient7 = ((hash7 & 1) == 0 ? gradient7U : -gradient7U) + ((hash7 & 2) == 0 ? gradient7V : -gradient7V);
-		
-		final double lerp0 = gradient0 + u * (gradient1 - gradient0);
-		final double lerp1 = gradient2 + u * (gradient3 - gradient2);
-		final double lerp2 = gradient4 + u * (gradient5 - gradient4);
-		final double lerp3 = gradient6 + u * (gradient7 - gradient6);
-		final double lerp4 = lerp0 + v * (lerp1 - lerp0);
-		final double lerp5 = lerp2 + v * (lerp3 - lerp2);
-		final double lerp6 = lerp4 + w * (lerp5 - lerp4);
-		
-		return lerp6;
-	}
-	
-	/**
-	 * Returns a {@code double} with noise computed by a Perlin-based turbulence algorithm using the coordinates X, Y and Z.
-	 * 
-	 * @param x the X-coordinate
-	 * @param y the Y-coordinate
-	 * @param z the Z-coordinate
-	 * @param amplitude the amplitude to start a
-	 * @param frequency the frequency to start at
-	 * @param gain the amplitude multiplier
-	 * @param lacunarity the frequency multiplier
-	 * @param octaves the number of iterations to perform
-	 * @return a {@code double} with noise computed by a Perlin-based turbulence algorithm using the coordinates X, Y and Z
-	 */
-	public static double perlinTurbulenceXYZ(final double x, final double y, final double z, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
-		double currentAmplitude = amplitude;
-		double currentFrequency = frequency;
-		
-		double noise = 0.0D;
-		
-		for(int i = 0; i < octaves; i++) {
-			noise += currentAmplitude * abs(perlinNoiseXYZ(x * currentFrequency, y * currentFrequency, z * currentFrequency));
-			
-			currentAmplitude *= gain;
-			currentFrequency *= lacunarity;
-		}
-		
-		return noise;
-	}
-	
-	/**
-	 * Returns a {@code double} with noise computed by a Perlin-based turbulence algorithm using the coordinates X, Y and Z.
-	 * 
-	 * @param x the X-coordinate
-	 * @param y the Y-coordinate
-	 * @param z the Z-coordinate
-	 * @param octaves the number of iterations to perform
-	 * @return a {@code double} with noise computed by a Perlin-based turbulence algorithm using the coordinates X, Y and Z
-	 */
-	public static double perlinTurbulenceXYZ(final double x, final double y, final double z, final int octaves) {
-		double currentX = x;
-		double currentY = y;
-		double currentZ = z;
-		
-		double noise = abs(perlinNoiseXYZ(x, y, z));
-		
-		double weight = 1.0D;
-		
-		for(int i = 1; i < octaves; i++) {
-			weight *= 2.0D;
-			
-			currentX = x * weight;
-			currentY = y * weight;
-			currentZ = z * weight;
-			
-			noise += abs(perlinNoiseXYZ(currentX, currentY, currentZ)) / weight;
-		}
-		
-		return noise;
-	}
 	
 	/**
 	 * Returns a {@code double} with noise computed by a Simplex-based fractal algorithm using the coordinate X.
@@ -259,14 +59,14 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based fractal algorithm using the coordinate X
 	 */
-	public static double simplexFractalX(final double x, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
+	public static double fractalX(final double x, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
 		double result = 0.0D;
 		
 		double currentAmplitude = amplitude;
 		double currentFrequency = frequency;
 		
 		for(int i = 0; i < octaves; i++) {
-			result += currentAmplitude * simplexNoiseX(x * currentFrequency);
+			result += currentAmplitude * noiseX(x * currentFrequency);
 			
 			currentAmplitude *= gain;
 			currentFrequency *= lacunarity;
@@ -287,14 +87,14 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based fractal algorithm using the coordinates X and Y
 	 */
-	public static double simplexFractalXY(final double x, final double y, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
+	public static double fractalXY(final double x, final double y, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
 		double result = 0.0D;
 		
 		double currentAmplitude = amplitude;
 		double currentFrequency = frequency;
 		
 		for(int i = 0; i < octaves; i++) {
-			result += currentAmplitude * simplexNoiseXY(x * currentFrequency, y * currentFrequency);
+			result += currentAmplitude * noiseXY(x * currentFrequency, y * currentFrequency);
 			
 			currentAmplitude *= gain;
 			currentFrequency *= lacunarity;
@@ -316,14 +116,14 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based fractal algorithm using the coordinates X, Y and Z
 	 */
-	public static double simplexFractalXYZ(final double x, final double y, final double z, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
+	public static double fractalXYZ(final double x, final double y, final double z, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
 		double result = 0.0D;
 		
 		double currentAmplitude = amplitude;
 		double currentFrequency = frequency;
 		
 		for(int i = 0; i < octaves; i++) {
-			result += currentAmplitude * simplexNoiseXYZ(x * currentFrequency, y * currentFrequency, z * currentFrequency);
+			result += currentAmplitude * noiseXYZ(x * currentFrequency, y * currentFrequency, z * currentFrequency);
 			
 			currentAmplitude *= gain;
 			currentFrequency *= lacunarity;
@@ -346,14 +146,14 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based fractal algorithm using the coordinates X, Y, Z and W
 	 */
-	public static double simplexFractalXYZW(final double x, final double y, final double z, final double w, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
+	public static double fractalXYZW(final double x, final double y, final double z, final double w, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
 		double result = 0.0D;
 		
 		double currentAmplitude = amplitude;
 		double currentFrequency = frequency;
 		
 		for(int i = 0; i < octaves; i++) {
-			result += currentAmplitude * simplexNoiseXYZW(x * currentFrequency, y * currentFrequency, z * currentFrequency, w * currentFrequency);
+			result += currentAmplitude * noiseXYZW(x * currentFrequency, y * currentFrequency, z * currentFrequency, w * currentFrequency);
 			
 			currentAmplitude *= gain;
 			currentFrequency *= lacunarity;
@@ -373,7 +173,7 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based fractional Brownian motion (fBm) algorithm using the coordinate X
 	 */
-	public static double simplexFractionalBrownianMotionX(final double x, final double frequency, final double gain, final double minimum, final double maximum, final int octaves) {
+	public static double fractionalBrownianMotionX(final double x, final double frequency, final double gain, final double minimum, final double maximum, final int octaves) {
 		double currentAmplitude = 1.0D;
 		double maximumAmplitude = 0.0D;
 		
@@ -382,7 +182,7 @@ public final class NoiseD {
 		double noise = 0.0D;
 		
 		for(int i = 0; i < octaves; i++) {
-			noise += simplexNoiseX(x * currentFrequency) * currentAmplitude;
+			noise += noiseX(x * currentFrequency) * currentAmplitude;
 			
 			maximumAmplitude += currentAmplitude;
 			currentAmplitude *= gain;
@@ -408,7 +208,7 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based fractional Brownian motion (fBm) algorithm using the coordinates X and Y
 	 */
-	public static double simplexFractionalBrownianMotionXY(final double x, final double y, final double frequency, final double gain, final double minimum, final double maximum, final int octaves) {
+	public static double fractionalBrownianMotionXY(final double x, final double y, final double frequency, final double gain, final double minimum, final double maximum, final int octaves) {
 		double currentAmplitude = 1.0D;
 		double maximumAmplitude = 0.0D;
 		
@@ -417,7 +217,7 @@ public final class NoiseD {
 		double noise = 0.0D;
 		
 		for(int i = 0; i < octaves; i++) {
-			noise += simplexNoiseXY(x * currentFrequency, y * currentFrequency) * currentAmplitude;
+			noise += noiseXY(x * currentFrequency, y * currentFrequency) * currentAmplitude;
 			
 			maximumAmplitude += currentAmplitude;
 			currentAmplitude *= gain;
@@ -444,7 +244,7 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based fractional Brownian motion (fBm) algorithm using the coordinates X, Y and Z
 	 */
-	public static double simplexFractionalBrownianMotionXYZ(final double x, final double y, final double z, final double frequency, final double gain, final double minimum, final double maximum, final int octaves) {
+	public static double fractionalBrownianMotionXYZ(final double x, final double y, final double z, final double frequency, final double gain, final double minimum, final double maximum, final int octaves) {
 		double currentAmplitude = 1.0D;
 		double maximumAmplitude = 0.0D;
 		
@@ -453,7 +253,7 @@ public final class NoiseD {
 		double noise = 0.0D;
 		
 		for(int i = 0; i < octaves; i++) {
-			noise += simplexNoiseXYZ(x * currentFrequency, y * currentFrequency, z * currentFrequency) * currentAmplitude;
+			noise += noiseXYZ(x * currentFrequency, y * currentFrequency, z * currentFrequency) * currentAmplitude;
 			
 			maximumAmplitude += currentAmplitude;
 			currentAmplitude *= gain;
@@ -481,7 +281,7 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based fractional Brownian motion (fBm) algorithm using the coordinates X, Y, Z and W
 	 */
-	public static double simplexFractionalBrownianMotionXYZW(final double x, final double y, final double z, final double w, final double frequency, final double gain, final double minimum, final double maximum, final int octaves) {
+	public static double fractionalBrownianMotionXYZW(final double x, final double y, final double z, final double w, final double frequency, final double gain, final double minimum, final double maximum, final int octaves) {
 		double currentAmplitude = 1.0D;
 		double maximumAmplitude = 0.0D;
 		
@@ -490,7 +290,7 @@ public final class NoiseD {
 		double noise = 0.0D;
 		
 		for(int i = 0; i < octaves; i++) {
-			noise += simplexNoiseXYZW(x * currentFrequency, y * currentFrequency, z * currentFrequency, w * currentFrequency) * currentAmplitude;
+			noise += noiseXYZW(x * currentFrequency, y * currentFrequency, z * currentFrequency, w * currentFrequency) * currentAmplitude;
 			
 			maximumAmplitude += currentAmplitude;
 			currentAmplitude *= gain;
@@ -510,7 +310,7 @@ public final class NoiseD {
 	 * @param x the X-coordinate
 	 * @return a {@code double} with noise computed by the Simplex algorithm using the coordinate X
 	 */
-	public static double simplexNoiseX(final double x) {
+	public static double noiseX(final double x) {
 		final int i0 = doFastFloorToInt(x);
 		final int i1 = i0 + 1;
 		
@@ -548,7 +348,7 @@ public final class NoiseD {
 	 * @param y the Y-coordinate
 	 * @return a {@code double} with noise computed by the Simplex algorithm using the coordinates X and Y
 	 */
-	public static double simplexNoiseXY(final double x, final double y) {
+	public static double noiseXY(final double x, final double y) {
 		final double s = (x + y) * SIMPLEX_F2;
 		
 		final int i = doFastFloorToInt(x + s);
@@ -594,7 +394,7 @@ public final class NoiseD {
 	 * @param z the Z-coordinate
 	 * @return a {@code double} with noise computed by the Simplex algorithm using the coordinates X, Y and Z
 	 */
-	public static double simplexNoiseXYZ(final double x, final double y, final double z) {
+	public static double noiseXYZ(final double x, final double y, final double z) {
 		final double s = (x + y + z) * SIMPLEX_F3;
 		
 		final int i = doFastFloorToInt(x + s);
@@ -705,7 +505,7 @@ public final class NoiseD {
 	 * @param w the W-coordinate
 	 * @return a {@code double} with noise computed by the Simplex algorithm using the coordinates X, Y, Z and W
 	 */
-	public static double simplexNoiseXYZW(final double x, final double y, final double z, final double w) {
+	public static double noiseXYZW(final double x, final double y, final double z, final double w) {
 		final double s = (x + y + z + w) * SIMPLEX_F4;
 		
 		final int i = doFastFloorToInt(x + s);
@@ -831,14 +631,14 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based turbulence algorithm using the coordinate X
 	 */
-	public static double simplexTurbulenceX(final double x, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
+	public static double turbulenceX(final double x, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
 		double currentAmplitude = amplitude;
 		double currentFrequency = frequency;
 		
 		double noise = 0.0D;
 		
 		for(int i = 0; i < octaves; i++) {
-			noise += currentAmplitude * abs(simplexNoiseX(x * currentFrequency));
+			noise += currentAmplitude * abs(noiseX(x * currentFrequency));
 			
 			currentAmplitude *= gain;
 			currentFrequency *= lacunarity;
@@ -859,14 +659,14 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based turbulence algorithm using the coordinates X and Y
 	 */
-	public static double simplexTurbulenceXY(final double x, final double y, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
+	public static double turbulenceXY(final double x, final double y, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
 		double currentAmplitude = amplitude;
 		double currentFrequency = frequency;
 		
 		double noise = 0.0D;
 		
 		for(int i = 0; i < octaves; i++) {
-			noise += currentAmplitude * abs(simplexNoiseXY(x * currentFrequency, y * currentFrequency));
+			noise += currentAmplitude * abs(noiseXY(x * currentFrequency, y * currentFrequency));
 			
 			currentAmplitude *= gain;
 			currentFrequency *= lacunarity;
@@ -888,14 +688,14 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based turbulence algorithm using the coordinates X, Y and Z
 	 */
-	public static double simplexTurbulenceXYZ(final double x, final double y, final double z, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
+	public static double turbulenceXYZ(final double x, final double y, final double z, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
 		double currentAmplitude = amplitude;
 		double currentFrequency = frequency;
 		
 		double noise = 0.0D;
 		
 		for(int i = 0; i < octaves; i++) {
-			noise += currentAmplitude * abs(simplexNoiseXYZ(x * currentFrequency, y * currentFrequency, z * currentFrequency));
+			noise += currentAmplitude * abs(noiseXYZ(x * currentFrequency, y * currentFrequency, z * currentFrequency));
 			
 			currentAmplitude *= gain;
 			currentFrequency *= lacunarity;
@@ -918,14 +718,14 @@ public final class NoiseD {
 	 * @param octaves the number of iterations to perform
 	 * @return a {@code double} with noise computed by a Simplex-based turbulence algorithm using the coordinates X, Y, Z and W
 	 */
-	public static double simplexTurbulenceXYZW(final double x, final double y, final double z, final double w, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
+	public static double turbulenceXYZW(final double x, final double y, final double z, final double w, final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
 		double currentAmplitude = amplitude;
 		double currentFrequency = frequency;
 		
 		double noise = 0.0D;
 		
 		for(int i = 0; i < octaves; i++) {
-			noise += currentAmplitude * abs(simplexNoiseXYZW(x * currentFrequency, y * currentFrequency, z * currentFrequency, w * currentFrequency));
+			noise += currentAmplitude * abs(noiseXYZW(x * currentFrequency, y * currentFrequency, z * currentFrequency, w * currentFrequency));
 			
 			currentAmplitude *= gain;
 			currentFrequency *= lacunarity;

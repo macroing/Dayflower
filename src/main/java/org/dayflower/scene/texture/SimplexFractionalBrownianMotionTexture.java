@@ -19,12 +19,12 @@
 package org.dayflower.scene.texture;
 
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.NoiseF.simplexFractionalBrownianMotionXYZ;
 
 import java.util.Objects;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point3F;
+import org.dayflower.noise.SimplexNoiseF;
 import org.dayflower.scene.Intersection;
 
 /**
@@ -147,7 +147,7 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 		final float y = surfaceIntersectionPoint.getY();
 		final float z = surfaceIntersectionPoint.getZ();
 		
-		final float noise = simplexFractionalBrownianMotionXYZ(x, y, z, this.frequency, this.gain, 0.0F, 1.0F, this.octaves);
+		final float noise = SimplexNoiseF.fractionalBrownianMotionXYZ(x, y, z, this.frequency, this.gain, 0.0F, 1.0F, this.octaves);
 		
 		return Color3F.multiply(this.color, noise);
 	}

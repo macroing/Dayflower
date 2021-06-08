@@ -1416,7 +1416,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float gamma = acos(saturateF(vector3FDotProduct(directionSaturatedX, directionSaturatedY, directionSaturatedZ, sunDirectionX, sunDirectionY, sunDirectionZ), -1.0F, 1.0F));
 		final float gammaCos = cos(gamma);
 		
-		final float relativeLuminance = (zenith0 * ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1 / thetaACos)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * gamma) + perezRelativeLuminance4 * gammaCos * gammaCos)) / ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * thetaB) + perezRelativeLuminance4 * thetaBCos * thetaBCos))) * 1.0e-4F;
+		final float relativeLuminance = (zenith0 * ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1 / thetaACos)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * gamma) + perezRelativeLuminance4 * gammaCos * gammaCos)) / ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * thetaB) + perezRelativeLuminance4 * thetaBCos * thetaBCos))) * 0.0001F;
 		final float x = zenith1 * ((1.0F + perezX0 * exp(perezX1 / thetaACos)) * (1.0F + perezX2 * exp(perezX3 * gamma) + perezX4 * gammaCos * gammaCos)) / ((1.0F + perezX0 * exp(perezX1)) * (1.0F + perezX2 * exp(perezX3 * thetaB) + perezX4 * thetaBCos * thetaBCos));
 		final float y = zenith2 * ((1.0F + perezY0 * exp(perezY1 / thetaACos)) * (1.0F + perezY2 * exp(perezY3 * gamma) + perezY4 * gammaCos * gammaCos)) / ((1.0F + perezY0 * exp(perezY1)) * (1.0F + perezY2 * exp(perezY3 * thetaB) + perezY4 * thetaBCos * thetaBCos));
 		

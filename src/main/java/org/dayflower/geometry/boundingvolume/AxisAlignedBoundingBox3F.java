@@ -21,6 +21,9 @@ package org.dayflower.geometry.boundingvolume;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
 
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
@@ -419,6 +422,29 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.maximum, this.minimum);
+	}
+	
+	/**
+	 * Writes this {@code AxisAlignedBoundingBox3F} instance to {@code dataOutput}.
+	 * <p>
+	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param dataOutput the {@code DataOutput} instance to write to
+	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public void write(final DataOutput dataOutput) {
+		try {
+			dataOutput.writeInt(ID);
+			
+			this.maximum.write(dataOutput);
+			this.minimum.write(dataOutput);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

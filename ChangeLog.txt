@@ -1,3 +1,17 @@
+2021-06-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the Noise API that includes the classes PerlinNoiseD, PerlinNoiseF, SimplexNoiseD and SimplexNoiseF.
+	* ADD:		Add the class FileParameter.
+	* ADD:		Add the classes AxisAlignedBoundingBox3DReader, AxisAlignedBoundingBox3FReader, BoundingSphere3DReader, BoundingSphere3FReader, InfiniteBoundingVolume3DReader, InfiniteBoundingVolume3FReader, DefaultBoundingVolume3DReader and DefaultBoundingVolume3FReader.
+	* ADD:		Add the method write(DataOutput) to the classes AxisAlignedBoundingBox3D, AxisAlignedBoundingBox3F, BoundingSphere3D, BoundingSphere3F, InfiniteBoundingVolume3D and InfiniteBoundingVolume3F.
+	* ADD:		Add an extends clause with BoundingVolumeReader to BoundingVolume3DReader and BoundingVolume3FReader.
+	* ADD:		Add the interfaces BoundingVolume and BoundingVolumeReader.
+	* CHANGE:	Change the factor of the sun color in the PerezLight from 0.001F to 0.0001F. The original value was 0.0001F. The value 0.001F produced more shadows, but also some artifacts.
+	* CHANGE:	Change the extended interface of BoundingVolume3D and BoundingVolume3F from Node to BoundingVolume.
+	* REMOVE:	Remove the classes NoiseD and NoiseF from the Utility API.
+	* REMOVE:	Remove the method getID() from BoundingVolume3D and BoundingVolume3F.
+	* REMOVE:	Remove the method isSupported(int) from BoundingVolume3DReader and BoundingVolume3FReader.
+
 2021-06-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for Rectangle3F in the GPU-renderer.

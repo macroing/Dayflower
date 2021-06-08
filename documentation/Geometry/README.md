@@ -9,6 +9,7 @@ Below follows a few lists of features available in the Geometry API.
 #### The Geometry API
 * `AngleD`
 * `AngleF`
+* `BoundingVolume` and `BoundingVolumeReader`
 * `BoundingVolume3D` and `BoundingVolume3DReader`
 * `BoundingVolume3F` and `BoundingVolume3FReader`
 * `Matrix33D`
@@ -53,12 +54,14 @@ Below follows a few lists of features available in the Geometry API.
 * `Vector4F`
 
 #### The Geometry Bounding Volume API
-* `AxisAlignedBoundingBox3D`
-* `AxisAlignedBoundingBox3F`
-* `BoundingSphere3D`
-* `BoundingSphere3F`
-* `InfiniteBoundingVolume3D`
-* `InfiniteBoundingVolume3F`
+* `AxisAlignedBoundingBox3D` and `AxisAlignedBoundingBox3DReader`
+* `AxisAlignedBoundingBox3F` and `AxisAlignedBoundingBox3FReader`
+* `BoundingSphere3D` and `BoundingSphere3DReader`
+* `BoundingSphere3F` and `BoundingSphere3FReader`
+* `DefaultBoundingVolume3DReader`
+* `DefaultBoundingVolume3FReader`
+* `InfiniteBoundingVolume3D` and `InfiniteBoundingVolume3DReader`
+* `InfiniteBoundingVolume3F` and `InfiniteBoundingVolume3FReader`
 
 #### The Geometry Rasterizer API
 * `Rasterizer2I`
@@ -77,6 +80,11 @@ Below follows a few lists of features available in the Geometry API.
 * `Curves3F` and `Curves3FReader`
 * `Cylinder3D` and `Cylinder3DReader`
 * `Cylinder3F` and `Cylinder3FReader`
+* `DefaultShape2DReader`
+* `DefaultShape2FReader`
+* `DefaultShape2IReader`
+* `DefaultShape3DReader`
+* `DefaultShape3FReader`
 * `Disk3D` and `Disk3DReader`
 * `Disk3F` and `Disk3FReader`
 * `Hyperboloid3D` and `Hyperboloid3DReader`
@@ -119,6 +127,7 @@ Packages
 Dependencies
 ------------
 * The Node API
+* The Noise API
 * The Utility API
 
 Examples

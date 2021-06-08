@@ -80,6 +80,7 @@ This library consists of several APIs. They are presented below.
  - [The Image API](https://github.com/macroing/Dayflower/tree/master/documentation/Image) provides image processing functionality.
  - [The JavaFX API](https://github.com/macroing/Dayflower/tree/master/documentation/JavaFX) provides the GUI components.
  - [The Node API](https://github.com/macroing/Dayflower/tree/master/documentation/Node) provides functionality for modeling data types that can be filtered and traversed.
+ - [The Noise API](https://github.com/macroing/Dayflower/tree/master/documentation/Noise) provides functionality for generating noise.
  - [The Parameter API](https://github.com/macroing/Dayflower/tree/master/documentation/Parameter) provides parameter management functionality.
  - [The Renderer API](https://github.com/macroing/Dayflower/tree/master/documentation/Renderer) provides the rendering algorithms.
  - [The Sampler API](https://github.com/macroing/Dayflower/tree/master/documentation/Sampler) provides sampling functionality.

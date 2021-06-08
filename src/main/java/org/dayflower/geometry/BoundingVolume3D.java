@@ -20,8 +20,6 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Doubles.isNaN;
 
-import org.dayflower.node.Node;
-
 /**
  * A {@code BoundingVolume3D} denotes a 3-dimensional bounding volume that uses the data type {@code double}.
  * <p>
@@ -30,7 +28,7 @@ import org.dayflower.node.Node;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface BoundingVolume3D extends Node {
+public interface BoundingVolume3D extends BoundingVolume {
 	/**
 	 * Performs a transformation.
 	 * <p>
@@ -108,13 +106,6 @@ public interface BoundingVolume3D extends Node {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	double intersection(final Ray3D ray, final double tMinimum, final double tMaximum);
-	
-	/**
-	 * Returns an {@code int} with the ID of this {@code BoundingVolume3D} instance.
-	 * 
-	 * @return an {@code int} with the ID of this {@code BoundingVolume3D} instance
-	 */
-	int getID();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

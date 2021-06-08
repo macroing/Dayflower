@@ -16,18 +16,40 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.geometry;
+package org.dayflower.geometry.boundingvolume;
 
 import java.io.DataInput;
+import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.BoundingVolume3FReader;
 
 /**
- * A {@code BoundingVolume3FReader} reads {@link BoundingVolume3F} instances from a {@code DataInput} instance.
+ * A {@code DefaultBoundingVolume3FReader} is a {@link BoundingVolume3FReader} implementation that reads all official {@link BoundingVolume3F} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface BoundingVolume3FReader extends BoundingVolumeReader {
+public final class DefaultBoundingVolume3FReader implements BoundingVolume3FReader {
+	private final Map<Integer, BoundingVolume3FReader> boundingVolume3FReaders;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code DefaultBoundingVolume3FReader} instance.
+	 */
+	public DefaultBoundingVolume3FReader() {
+		this.boundingVolume3FReaders = new LinkedHashMap<>();
+		this.boundingVolume3FReaders.put(Integer.valueOf(AxisAlignedBoundingBox3F.ID), new AxisAlignedBoundingBox3FReader());
+		this.boundingVolume3FReaders.put(Integer.valueOf(BoundingSphere3F.ID), new BoundingSphere3FReader());
+		this.boundingVolume3FReaders.put(Integer.valueOf(InfiniteBoundingVolume3F.ID), new InfiniteBoundingVolume3FReader());
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Reads a {@link BoundingVolume3F} instance from {@code dataInput}.
 	 * <p>
@@ -46,7 +68,13 @@ public interface BoundingVolume3FReader extends BoundingVolumeReader {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	BoundingVolume3F read(final DataInput dataInput);
+	public BoundingVolume3F read(final DataInput dataInput) {
+		try {
+			return read(dataInput, dataInput.readInt());
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
 	
 	/**
 	 * Reads a {@link BoundingVolume3F} instance from {@code dataInput}.
@@ -69,5 +97,25 @@ public interface BoundingVolume3FReader extends BoundingVolumeReader {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	BoundingVolume3F read(final DataInput dataInput, final int id);
+	public BoundingVolume3F read(final DataInput dataInput, final int id) {
+		switch(id) {
+			case AxisAlignedBoundingBox3F.ID:
+			case BoundingSphere3F.ID:
+			case InfiniteBoundingVolume3F.ID:
+				return this.boundingVolume3FReaders.get(Integer.valueOf(id)).read(dataInput, id);
+			default:
+				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));
+		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code DefaultBoundingVolume3FReader} instance supports reading {@link BoundingVolume3F} instances with an ID of {@code id}, {@code false} otherwise.
+	 * 
+	 * @param id the ID of the {@code BoundingVolume3F} type to check
+	 * @return {@code true} if, and only if, this {@code DefaultBoundingVolume3FReader} instance supports reading {@code BoundingVolume3F} instances with an ID of {@code id}, {@code false} otherwise
+	 */
+	@Override
+	public boolean isSupported(final int id) {
+		return this.boundingVolume3FReaders.containsKey(Integer.valueOf(id));
+	}
 }

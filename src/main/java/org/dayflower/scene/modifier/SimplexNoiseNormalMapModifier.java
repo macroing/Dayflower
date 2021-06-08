@@ -19,12 +19,12 @@
 package org.dayflower.scene.modifier;
 
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.NoiseF.simplexFractionalBrownianMotionXYZ;
 
 import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.noise.SimplexNoiseF;
 import org.dayflower.scene.Intersection;
 
 /**
@@ -154,9 +154,9 @@ public final class SimplexNoiseNormalMapModifier implements Modifier {
 		final float y0 = surfaceIntersectionPoint.getY() * frequencyReciprocal;
 		final float z0 = surfaceIntersectionPoint.getZ() * frequencyReciprocal;
 		
-		final float x1 = surfaceNormalS.getX() + simplexFractionalBrownianMotionXYZ(x0, y0, z0, frequency, 0.5F, -0.25F, 0.25F, 16) * scale;
-		final float y1 = surfaceNormalS.getY() + simplexFractionalBrownianMotionXYZ(y0, z0, x0, frequency, 0.5F, -0.25F, 0.25F, 16) * scale;
-		final float z1 = surfaceNormalS.getZ() + simplexFractionalBrownianMotionXYZ(z0, x0, y0, frequency, 0.5F, -0.25F, 0.25F, 16) * scale;
+		final float x1 = surfaceNormalS.getX() + SimplexNoiseF.fractionalBrownianMotionXYZ(x0, y0, z0, frequency, 0.5F, -0.25F, 0.25F, 16) * scale;
+		final float y1 = surfaceNormalS.getY() + SimplexNoiseF.fractionalBrownianMotionXYZ(y0, z0, x0, frequency, 0.5F, -0.25F, 0.25F, 16) * scale;
+		final float z1 = surfaceNormalS.getZ() + SimplexNoiseF.fractionalBrownianMotionXYZ(z0, x0, y0, frequency, 0.5F, -0.25F, 0.25F, 16) * scale;
 		
 		intersection.setSurfaceNormalS(Vector3F.normalize(new Vector3F(x1, y1, z1)));
 	}

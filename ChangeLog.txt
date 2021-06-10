@@ -1,3 +1,7 @@
+2021-06-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a new Scene Compiler API. It used to be a private API in the Renderer GPU API.
+
 2021-06-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Change the order of UndoActions in the ChangeCombiner to the reverse of the order they were added.

@@ -42,6 +42,8 @@ import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.compiler.CompiledScene;
+import org.dayflower.scene.compiler.SceneCompiler;
 import org.dayflower.utility.Floats;
 
 /**

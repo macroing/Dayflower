@@ -41,7 +41,7 @@ import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Color4F} encapsulates a color using the data type {@code float}.
+ * A {@code Color4F} represents a color with four {@code float}-based components.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 

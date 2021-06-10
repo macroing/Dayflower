@@ -41,7 +41,7 @@ import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Color4D} encapsulates a color using the data type {@code double}.
+ * A {@code Color4D} represents a color with four {@code double}-based components.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 

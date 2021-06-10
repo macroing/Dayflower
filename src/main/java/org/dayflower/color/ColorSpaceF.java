@@ -21,9 +21,9 @@ package org.dayflower.color;
 import static org.dayflower.utility.Floats.pow;
 
 /**
- * A {@code ColorSpaceF} represents a color space using the data type {@code float}.
+ * A {@code ColorSpaceF} represents a color space that performs conversions for the color types {@link Color3F} and {@link Color4F}.
  * <p>
- * An instance of this class can convert {@link Color3F} and {@link Color4F} instances from a specific RGB color space to a specific XYZ color space, as well as from a specific XYZ color space to a specific RGB color space. In addition to that, it can
+ * An instance of this class can convert {@code Color3F} and {@code Color4F} instances from a specific RGB color space to a specific XYZ color space, as well as from a specific XYZ color space to a specific RGB color space. In addition to that, it can
  * also redo or undo gamma correction.
  * 
  * @since 1.0.0

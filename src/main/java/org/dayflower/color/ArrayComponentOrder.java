@@ -21,9 +21,9 @@ package org.dayflower.color;
 import java.util.Objects;
 
 /**
- * An {@code ArrayComponentOrder} is used to tell us what order the R-, G-, B- and A-components are stored in arrays.
+ * An {@code ArrayComponentOrder} is used to determine the order in which the components are stored in an array.
  * <p>
- * This class has nothing to do with the way the R-, G-, B- and A-components are stored in an {@code int}, in packed form.
+ * This class has nothing to do with the way the components are stored in an {@code int}, in packed form.
  * <p>
  * The names of the constants in this class should not be confused with the names of similar things in other libraries. They only reflect the way the components are stored in an array. The order of the letters signify the order in which they
  * are stored in the array, starting from some offset. An example would be {@code ARGB}, where {@code A} denotes {@code offset + 0}, {@code R} denotes {@code offset + 1}, {@code G} denotes {@code offset + 2} and {@code B} denotes

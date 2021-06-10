@@ -74,6 +74,7 @@ Packages
 * `org.dayflower.scene` - The Scene API.
 * `org.dayflower.scene.bssrdf` - The Scene BSSRDF API.
 * `org.dayflower.scene.bxdf` - The Scene BXDF API.
+* `org.dayflower.scene.compiler` - The Scene Compiler API.
 * `org.dayflower.scene.demo` - The Scene Demo API.
 * `org.dayflower.scene.fresnel` - The Scene Fresnel API.
 * `org.dayflower.scene.light` - The Scene Light API.

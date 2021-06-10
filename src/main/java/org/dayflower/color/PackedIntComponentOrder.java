@@ -21,7 +21,7 @@ package org.dayflower.color;
 import java.util.Objects;
 
 /**
- * A {@code PackedIntComponentOrder} is used to tell us what order the R-, G-, B- and A-components are stored in an {@code int}, in a packed form.
+ * A {@code PackedIntComponentOrder} is used to determine the order in which the components are stored in an {@code int}, in packed form.
  * <p>
  * The names of the constants in this enum signifies the order of the components, from most significant byte to least significant byte.
  * 

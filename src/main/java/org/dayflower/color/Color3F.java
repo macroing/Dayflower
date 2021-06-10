@@ -44,7 +44,7 @@ import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Color3F} encapsulates a color using the data type {@code float}.
+ * A {@code Color3F} represents a color with three {@code float}-based components.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 

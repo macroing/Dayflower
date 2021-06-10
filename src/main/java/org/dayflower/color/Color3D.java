@@ -44,7 +44,7 @@ import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Color3D} encapsulates a color using the data type {@code double}.
+ * A {@code Color3D} represents a color with three {@code double}-based components.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 

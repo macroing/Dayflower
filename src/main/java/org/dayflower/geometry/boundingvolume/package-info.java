@@ -33,5 +33,13 @@
  * <li>{@link org.dayflower.geometry.boundingvolume.DefaultBoundingVolume3DReader DefaultBoundingVolume3DReader} is a {@code BoundingVolume3DReader} implementation that reads all official {@code BoundingVolume3D} instances from a {@code DataInput} instance.</li>
  * <li>{@link org.dayflower.geometry.boundingvolume.DefaultBoundingVolume3FReader DefaultBoundingVolume3FReader} is a {@code BoundingVolume3FReader} implementation that reads all official {@code BoundingVolume3F} instances from a {@code DataInput} instance.</li>
  * </ul>
+ * <h3>Dependencies</h3>
+ * <p>
+ * The following list shows all dependencies for this API.
+ * <ul>
+ * <li>The Node API</li>
+ * <li>The Geometry API</li>
+ * <li>The Utility API</li>
+ * </ul>
  */
 package org.dayflower.geometry.boundingvolume;

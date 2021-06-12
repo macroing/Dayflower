@@ -97,5 +97,12 @@
  * <li>{@link org.dayflower.geometry.SurfaceSample3D SurfaceSample3D} contains information about the surface of a {@code Shape3D} instance where it is being sampled.</li>
  * <li>{@link org.dayflower.geometry.SurfaceSample3F SurfaceSample3F} contains information about the surface of a {@code Shape3F} instance where it is being sampled.</li>
  * </ul>
+ * <h3>Dependencies</h3>
+ * <p>
+ * The following list shows all dependencies for this API.
+ * <ul>
+ * <li>The Node API</li>
+ * <li>The Utility API</li>
+ * </ul>
  */
 package org.dayflower.geometry;

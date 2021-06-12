@@ -25,7 +25,7 @@ import static org.dayflower.utility.Doubles.max;
 import java.util.Objects;
 
 /**
- * A {@code TriangleFilter2D} is an implementation of {@link Filter2D} that represents a Triangle filter.
+ * A {@code TriangleFilter2D} is an implementation of {@link Filter2D} that represents a triangle filter.
  * <p>
  * This class is immutable and therefore also suitable for concurrent use without external synchronization.
  * 

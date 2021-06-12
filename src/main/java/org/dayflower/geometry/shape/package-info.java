@@ -41,5 +41,15 @@
  * <li>{@link org.dayflower.geometry.shape.Curves3F Curves3F} is an implementation of {@code Shape3F} that contains a list of {@code Curve3F} instances.</li>
  * <li>{@link org.dayflower.geometry.shape.Curves3FReader Curves3FReader} is a {@code Shape3FReader} implementation that reads {@code Curves3F} instances from a {@code DataInput} instance.</li>
  * </ul>
+ * <h3>Dependencies</h3>
+ * <p>
+ * The following list shows all dependencies for this API.
+ * <ul>
+ * <li>The Geometry API</li>
+ * <li>The Geometry Bounding Volume API</li>
+ * <li>The Node API</li>
+ * <li>The Noise API</li>
+ * <li>The Utility API</li>
+ * </ul>
  */
 package org.dayflower.geometry.shape;

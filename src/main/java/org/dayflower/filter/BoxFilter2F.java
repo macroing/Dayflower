@@ -23,7 +23,7 @@ import static org.dayflower.utility.Floats.equal;
 import java.util.Objects;
 
 /**
- * A {@code BoxFilter2F} is an implementation of {@link Filter2F} that represents a Box filter.
+ * A {@code BoxFilter2F} is an implementation of {@link Filter2F} that represents a box filter.
  * <p>
  * This class is immutable and therefore also suitable for concurrent use without external synchronization.
  * 

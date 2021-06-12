@@ -37,5 +37,11 @@
  * <li>{@link org.dayflower.color.ArrayComponentOrder ArrayComponentOrder} is used to determine the order in which the components are stored in an array.</li>
  * <li>{@link org.dayflower.color.PackedIntComponentOrder PackedIntComponentOrder} is used to determine the order in which the components are stored in an {@code int}, in packed form.</li>
  * </ul>
+ * <h3>Dependencies</h3>
+ * <p>
+ * The following list shows all dependencies for this API.
+ * <ul>
+ * <li>The Utility API</li>
+ * </ul>
  */
 package org.dayflower.color;

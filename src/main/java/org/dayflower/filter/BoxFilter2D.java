@@ -23,7 +23,7 @@ import static org.dayflower.utility.Doubles.equal;
 import java.util.Objects;
 
 /**
- * A {@code BoxFilter2D} is an implementation of {@link Filter2D} that represents a Box filter.
+ * A {@code BoxFilter2D} is an implementation of {@link Filter2D} that represents a box filter.
  * <p>
  * This class is immutable and therefore also suitable for concurrent use without external synchronization.
  * 

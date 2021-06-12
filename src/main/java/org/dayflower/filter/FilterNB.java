@@ -19,7 +19,7 @@
 package org.dayflower.filter;
 
 /**
- * A {@code FilterNB} represents an N-dimensional filter of type {@code byte}.
+ * A {@code FilterNB} represents an N-dimensional filter that operates on and returns {@code byte[]} values.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

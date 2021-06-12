@@ -19,7 +19,7 @@
 package org.dayflower.filter;
 
 /**
- * A {@code Filter2F} represents a 2-dimensional filter of type {@code float}.
+ * A {@code Filter2F} represents a 2-dimensional filter that operates on and returns {@code float} values.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

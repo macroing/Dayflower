@@ -79,15 +79,15 @@ This library consists of several APIs. They are presented below.
  - The Geometry API provides data types for angles, bounding volumes, matrices, orthonormal bases, points, quaternions, rays, shapes and vectors.
  - The Image API provides image processing functionality.
  - [The JavaFX API](https://github.com/macroing/Dayflower/tree/master/documentation/JavaFX) provides the GUI components.
- - [The Node API](https://github.com/macroing/Dayflower/tree/master/documentation/Node) provides functionality for modeling data types that can be filtered and traversed.
- - [The Noise API](https://github.com/macroing/Dayflower/tree/master/documentation/Noise) provides functionality for generating noise.
+ - The Node API provides functionality for modeling data types that can be filtered and traversed.
+ - The Noise API provides functionality for generating noise.
  - [The Parameter API](https://github.com/macroing/Dayflower/tree/master/documentation/Parameter) provides parameter management functionality.
  - [The Renderer API](https://github.com/macroing/Dayflower/tree/master/documentation/Renderer) provides the rendering algorithms.
- - [The Sampler API](https://github.com/macroing/Dayflower/tree/master/documentation/Sampler) provides sampling functionality.
+ - The Sampler API provides sampling functionality.
  - [The Scene API](https://github.com/macroing/Dayflower/tree/master/documentation/Scene) provides the scene types and operations.
- - [The Sound API](https://github.com/macroing/Dayflower/tree/master/documentation/Sound) provides the sound player and sounds.
- - [The Utility API](https://github.com/macroing/Dayflower/tree/master/documentation/Utility) provides common but unrelated functionality.
- - [The Wavefront API](https://github.com/macroing/Dayflower/tree/master/documentation/Wavefront) provides functionality to read Wavefront files.
+ - The Sound API provides the sound player and sounds.
+ - The Utility API provides common but unrelated functionality.
+ - The Wavefront API provides functionality to read Wavefront files.
 
 Dependencies
 ------------

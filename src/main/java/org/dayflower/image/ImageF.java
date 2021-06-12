@@ -52,7 +52,7 @@ import org.dayflower.noise.SimplexNoiseF;
 import org.macroing.java.util.function.TriFunction;
 
 /**
- * An {@code ImageF} is an {@link Image} implementation that operates using the data type {@code float}.
+ * An {@code ImageF} is an extension of {@link Image} that adds additional methods that operates on {@code float}-based data types.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

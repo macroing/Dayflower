@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * A {@code ConvolutionKernel33D} is a convolution kernel with three rows and three columns.
+ * A {@code ConvolutionKernel33D} is a convolution kernel with 9 {@code double}-based elements in three rows and three columns.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 

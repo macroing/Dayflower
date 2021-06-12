@@ -52,7 +52,7 @@ import org.dayflower.noise.SimplexNoiseD;
 import org.macroing.java.util.function.TriFunction;
 
 /**
- * An {@code ImageD} is an {@link Image} implementation that operates using the data type {@code double}.
+ * An {@code ImageD} is an extension of {@link Image} that adds additional methods that operates on {@code double}-based data types.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

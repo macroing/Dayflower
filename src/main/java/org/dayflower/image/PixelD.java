@@ -29,7 +29,7 @@ import org.dayflower.utility.BufferedImages;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code PixelD} is a pixel of a {@link PixelImageD} instance.
+ * A {@code PixelD} represents a pixel in a {@link PixelImageD} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

@@ -77,7 +77,7 @@ This library consists of several APIs. They are presented below.
  - The Color API provides data types for colors, color spaces and spectral curves.
  - The Filter API provides data types that represents filters.
  - The Geometry API provides data types for angles, bounding volumes, matrices, orthonormal bases, points, quaternions, rays, shapes and vectors.
- - [The Image API](https://github.com/macroing/Dayflower/tree/master/documentation/Image) provides image processing functionality.
+ - The Image API provides image processing functionality.
  - [The JavaFX API](https://github.com/macroing/Dayflower/tree/master/documentation/JavaFX) provides the GUI components.
  - [The Node API](https://github.com/macroing/Dayflower/tree/master/documentation/Node) provides functionality for modeling data types that can be filtered and traversed.
  - [The Noise API](https://github.com/macroing/Dayflower/tree/master/documentation/Noise) provides functionality for generating noise.

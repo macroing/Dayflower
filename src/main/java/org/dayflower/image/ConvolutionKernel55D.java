@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * A {@code ConvolutionKernel55D} is a convolution kernel with five rows and five columns.
+ * A {@code ConvolutionKernel55D} is a convolution kernel with 25 {@code double}-based elements in five rows and five columns.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 

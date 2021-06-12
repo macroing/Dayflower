@@ -29,7 +29,7 @@ import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 
 /**
- * An {@code InfiniteBoundingVolume3D} denotes a 3-dimensional infinite bounding volume that uses the data type {@code double}.
+ * An {@code InfiniteBoundingVolume3D} is an implementation of {@link BoundingVolume3D} that represents an infinite bounding volume.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

@@ -39,7 +39,7 @@ import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
 
 /**
- * A {@code Point3D} denotes a 3-dimensional point with three coordinates, of type {@code double}.
+ * A {@code Point3D} represents a point with three {@code double}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

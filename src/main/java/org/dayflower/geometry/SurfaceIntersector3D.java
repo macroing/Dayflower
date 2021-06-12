@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A {@code SurfaceIntersector3D} is an utility useful for performing intersection tests.
+ * A {@code SurfaceIntersector3D} is an utility class that is useful for performing intersection tests on {@link Shape3D} instances.
  * <p>
  * This class is mutable and therefore not thread-safe.
  * 

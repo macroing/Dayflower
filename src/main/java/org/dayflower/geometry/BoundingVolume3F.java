@@ -21,7 +21,7 @@ package org.dayflower.geometry;
 import static org.dayflower.utility.Floats.isNaN;
 
 /**
- * A {@code BoundingVolume3F} denotes a 3-dimensional bounding volume that uses the data type {@code float}.
+ * A {@code BoundingVolume3F} is a 3-dimensional extension of {@link BoundingVolume} that adds additional methods that operates on {@code float}-based data types.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * 

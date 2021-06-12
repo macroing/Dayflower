@@ -22,7 +22,7 @@ import java.io.DataInput;
 import java.io.UncheckedIOException;
 
 /**
- * A {@code ShapeReader} reads {@link Shape} instances from a {@code DataInput} instance.
+ * A {@code ShapeReader} is used for reading {@link Shape} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

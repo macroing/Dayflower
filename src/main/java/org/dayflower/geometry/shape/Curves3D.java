@@ -41,11 +41,11 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Curves3D} is a container of {@link Curve3D} instances.
+ * A {@code Curves3D} is an implementation of {@link Shape3D} that contains a list of {@link Curve3D} instances.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3D} implementation is not supported on the GPU.
+ * This {@code Shape3D} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

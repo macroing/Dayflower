@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A {@code SurfaceIntersection3D} denotes a surface intersection between a {@link Ray3D} instance and a {@link Shape3D} instance.
+ * A {@code SurfaceIntersection3D} contains information about the surface of a {@link Shape3D} instance where a {@link Ray3D} instance intersects.
  * <p>
  * This class can be considered immutable and thread-safe if, and only if, its associated {@code Shape3D} instance is.
  * 

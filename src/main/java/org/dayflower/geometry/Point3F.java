@@ -39,7 +39,7 @@ import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
 
 /**
- * A {@code Point3F} denotes a 3-dimensional point with three coordinates, of type {@code float}.
+ * A {@code Point3F} represents a point with three {@code float}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

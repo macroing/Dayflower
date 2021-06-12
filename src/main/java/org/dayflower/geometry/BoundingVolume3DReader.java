@@ -22,7 +22,7 @@ import java.io.DataInput;
 import java.io.UncheckedIOException;
 
 /**
- * A {@code BoundingVolume3DReader} reads {@link BoundingVolume3D} instances from a {@code DataInput} instance.
+ * A {@code BoundingVolume3DReader} is an extension of {@link BoundingVolumeReader} and is used for reading {@link BoundingVolume3D} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

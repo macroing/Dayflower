@@ -31,7 +31,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Circle2F} denotes a 2-dimensional circle that uses the data type {@code float}.
+ * A {@code Circle2F} is an implementation of {@link Shape2F} that represents a circle.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

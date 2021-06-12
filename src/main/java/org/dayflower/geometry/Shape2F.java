@@ -19,7 +19,7 @@
 package org.dayflower.geometry;
 
 /**
- * A {@code Shape2F} denotes a 2-dimensional shape that uses the data type {@code float}.
+ * A {@code Shape2F} is a 2-dimensional extension of {@link Shape} that adds additional methods that operates on {@code float}-based data types.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * 

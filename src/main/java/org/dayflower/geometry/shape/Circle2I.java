@@ -29,7 +29,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Circle2I} denotes a 2-dimensional circle that uses the data type {@code int}.
+ * A {@code Circle2I} is an implementation of {@link Shape2I} that represents a circle.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

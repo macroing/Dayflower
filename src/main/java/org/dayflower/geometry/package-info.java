@@ -14,9 +14,9 @@
  * <ul>
  * <li>{@link org.dayflower.geometry.BoundingVolume BoundingVolume} represents a bounding volume.</li>
  * <li>{@link org.dayflower.geometry.BoundingVolumeReader BoundingVolumeReader} is used for reading {@code BoundingVolume} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.BoundingVolume3D BoundingVolume3D} is an extension of {@code BoundingVolume} that adds additional methods that operates on {@code double}-based data types.</li>
+ * <li>{@link org.dayflower.geometry.BoundingVolume3D BoundingVolume3D} is a 3-dimensional extension of {@code BoundingVolume} that adds additional methods that operates on {@code double}-based data types.</li>
  * <li>{@link org.dayflower.geometry.BoundingVolume3DReader BoundingVolume3DReader} is an extension of {@code BoundingVolumeReader} and is used for reading {@code BoundingVolume3D} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.BoundingVolume3F BoundingVolume3F} is an extension of {@code BoundingVolume} that adds additional methods that operates on {@code float}-based data types.</li>
+ * <li>{@link org.dayflower.geometry.BoundingVolume3F BoundingVolume3F} is a 3-dimensional extension of {@code BoundingVolume} that adds additional methods that operates on {@code float}-based data types.</li>
  * <li>{@link org.dayflower.geometry.BoundingVolume3FReader BoundingVolume3FReader} is an extension of {@code BoundingVolumeReader} and is used for reading {@code BoundingVolume3F} instances from a {@code DataInput} instance.</li>
  * </ul>
  * <p>
@@ -63,15 +63,15 @@
  * <ul>
  * <li>{@link org.dayflower.geometry.Shape Shape} represents a shape.</li>
  * <li>{@link org.dayflower.geometry.ShapeReader ShapeReader} is used for reading {@code Shape} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.Shape2D Shape2D} is an extension of {@code Shape} that adds additional methods that operates on {@code double}-based data types.</li>
+ * <li>{@link org.dayflower.geometry.Shape2D Shape2D} is a 2-dimensional extension of {@code Shape} that adds additional methods that operates on {@code double}-based data types.</li>
  * <li>{@link org.dayflower.geometry.Shape2DReader Shape2DReader} is an extension of {@code ShapeReader} and is used for reading {@code Shape2D} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.Shape2F Shape2F} is an extension of {@code Shape} that adds additional methods that operates on {@code float}-based data types.</li>
+ * <li>{@link org.dayflower.geometry.Shape2F Shape2F} is a 2-dimensional extension of {@code Shape} that adds additional methods that operates on {@code float}-based data types.</li>
  * <li>{@link org.dayflower.geometry.Shape2FReader Shape2FReader} is an extension of {@code ShapeReader} and is used for reading {@code Shape2F} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.Shape2I Shape2I} is an extension of {@code Shape} that adds additional methods that operates on {@code int}-based data types.</li>
+ * <li>{@link org.dayflower.geometry.Shape2I Shape2I} is a 2-dimensional extension of {@code Shape} that adds additional methods that operates on {@code int}-based data types.</li>
  * <li>{@link org.dayflower.geometry.Shape2IReader Shape2IReader} is an extension of {@code ShapeReader} and is used for reading {@code Shape2I} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.Shape3D Shape3D} is an extension of {@code Shape} that adds additional methods that operates on {@code double}-based data types.</li>
+ * <li>{@link org.dayflower.geometry.Shape3D Shape3D} is a 3-dimensional extension of {@code Shape} that adds additional methods that operates on {@code double}-based data types.</li>
  * <li>{@link org.dayflower.geometry.Shape3DReader Shape3DReader} is an extension of {@code ShapeReader} and is used for reading {@code Shape3D} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.Shape3F Shape3F} is an extension of {@code Shape} that adds additional methods that operates on {@code float}-based data types.</li>
+ * <li>{@link org.dayflower.geometry.Shape3F Shape3F} is a 3-dimensional extension of {@code Shape} that adds additional methods that operates on {@code float}-based data types.</li>
  * <li>{@link org.dayflower.geometry.Shape3FReader Shape3FReader} is an extension of {@code ShapeReader} and is used for reading {@code Shape3F} instances from a {@code DataInput} instance.</li>
  * </ul>
  * <p>

@@ -33,7 +33,7 @@ import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
 
 /**
- * A {@code Point4D} denotes a 4-dimensional point with four coordinates, of type {@code double}.
+ * A {@code Point4D} represents a point with four {@code double}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

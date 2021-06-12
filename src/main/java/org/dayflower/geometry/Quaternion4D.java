@@ -34,7 +34,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 
 /**
- * A {@code Quaternion4D} denotes a 4-dimensional quaternion with four components, of type {@code double}.
+ * A {@code Quaternion4D} represents a quaternion with four {@code double}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

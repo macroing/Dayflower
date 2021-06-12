@@ -58,11 +58,11 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Curve3F} denotes a 3-dimensional curve that uses the data type {@code float}.
+ * A {@code Curve3F} is an implementation of {@link Shape3F} that represents a curve.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3F} implementation is not supported on the GPU.
+ * This {@code Shape3F} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

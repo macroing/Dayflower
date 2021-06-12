@@ -41,7 +41,7 @@ import org.dayflower.utility.Doubles;
 import org.dayflower.utility.MortonCodes;
 
 /**
- * A {@code Point2D} denotes a 2-dimensional point with two coordinates, of type {@code double}.
+ * A {@code Point2D} represents a point with two {@code double}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

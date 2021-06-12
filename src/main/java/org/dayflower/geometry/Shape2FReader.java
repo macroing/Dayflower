@@ -22,7 +22,7 @@ import java.io.DataInput;
 import java.io.UncheckedIOException;
 
 /**
- * A {@code Shape2FReader} reads {@link Shape2F} instances from a {@code DataInput} instance.
+ * A {@code Shape2FReader} is an extension of {@link ShapeReader} and is used for reading {@link Shape2F} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

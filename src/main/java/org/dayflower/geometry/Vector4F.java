@@ -30,7 +30,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 
 /**
- * A {@code Vector4F} denotes a 4-dimensional vector with four components, of type {@code float}.
+ * A {@code Vector4F} represents a vector with four {@code float}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

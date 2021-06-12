@@ -41,7 +41,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code BoundingSphere3D} denotes a 3-dimensional bounding sphere that uses the data type {@code double}.
+ * A {@code BoundingSphere3D} is an implementation of {@link BoundingVolume3D} that represents a bounding sphere.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

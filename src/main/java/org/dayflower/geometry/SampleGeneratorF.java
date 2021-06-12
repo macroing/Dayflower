@@ -34,7 +34,7 @@ import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Floats.sqrt;
 
 /**
- * The class {@code SampleGeneratorF} contains methods for generating samples of type {@code float}.
+ * The class {@code SampleGeneratorF} contains methods to generate {@code float}-based samples.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

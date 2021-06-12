@@ -28,9 +28,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Ray3D} denotes a 3-dimensional ray with a point called its origin and a direction vector, both of which are using {@code double} as their type.
- * <p>
- * The 3-dimensional point used by this class is represented by {@link Point3D}. The 3-dimensional vector used by this class is represented by {@link Vector3D}.
+ * A {@code Ray3D} represents a 3-dimensional ray with a point of type {@link Point3D} and a vector of type {@link Vector3D}.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

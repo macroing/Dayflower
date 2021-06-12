@@ -32,7 +32,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 
 /**
- * A {@code Matrix44D} denotes a 4 x 4 matrix with 16 elements of type {@code double}.
+ * A {@code Matrix44D} represents a 4 x 4 matrix with 16 {@code double}-based elements.
  * <p>
  * The default order of this {@code Matrix44D} class is row-major.
  * <p>

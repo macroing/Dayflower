@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A {@code Shape3D} denotes a 3-dimensional shape that uses the data type {@code double}.
+ * A {@code Shape3D} is a 3-dimensional extension of {@link Shape} that adds additional methods that operates on {@code double}-based data types.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * 

@@ -46,7 +46,7 @@ import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
 
 /**
- * A {@code Vector3F} denotes a 3-dimensional vector with three components, of type {@code float}.
+ * A {@code Vector3F} represents a vector with three {@code float}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

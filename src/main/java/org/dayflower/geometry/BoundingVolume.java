@@ -29,7 +29,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 
 /**
- * A {@code BoundingVolume} denotes a bounding volume.
+ * A {@code BoundingVolume} represents a bounding volume.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * 

@@ -33,7 +33,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * An {@code OrthonormalBasis33F} denotes an orthonormal basis constructed by three 3-dimensional vectors of type {@code float}.
+ * An {@code OrthonormalBasis33F} represents an orthonormal basis constructed by three {@link Vector3F} instances.
  * <p>
  * The 3-dimensional vectors used by this class are represented by {@link Vector3F}.
  * <p>

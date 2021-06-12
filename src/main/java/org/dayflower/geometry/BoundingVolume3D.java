@@ -21,7 +21,7 @@ package org.dayflower.geometry;
 import static org.dayflower.utility.Doubles.isNaN;
 
 /**
- * A {@code BoundingVolume3D} denotes a 3-dimensional bounding volume that uses the data type {@code double}.
+ * A {@code BoundingVolume3D} is a 3-dimensional extension of {@link BoundingVolume} that adds additional methods that operates on {@code double}-based data types.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * 

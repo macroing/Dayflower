@@ -46,7 +46,7 @@ import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
 
 /**
- * A {@code Vector3D} denotes a 3-dimensional vector with three components, of type {@code double}.
+ * A {@code Vector3D} represents a vector with three {@code double}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

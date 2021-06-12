@@ -19,7 +19,7 @@
 package org.dayflower.geometry;
 
 /**
- * A {@code Shape2D} denotes a 2-dimensional shape that uses the data type {@code double}.
+ * A {@code Shape2D} is a 2-dimensional extension of {@link Shape} that adds additional methods that operates on {@code double}-based data types.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * 

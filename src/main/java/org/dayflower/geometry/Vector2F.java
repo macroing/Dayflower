@@ -30,7 +30,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 
 /**
- * A {@code Vector2F} denotes a 2-dimensional vector with two components, of type {@code float}.
+ * A {@code Vector2F} represents a vector with two {@code float}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

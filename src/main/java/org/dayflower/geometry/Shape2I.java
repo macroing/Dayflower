@@ -19,7 +19,7 @@
 package org.dayflower.geometry;
 
 /**
- * A {@code Shape2I} denotes a 2-dimensional shape that uses the data type {@code int}.
+ * A {@code Shape2I} is a 2-dimensional extension of {@link Shape} that adds additional methods that operates on {@code int}-based data types.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * 

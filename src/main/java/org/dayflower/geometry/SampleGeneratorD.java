@@ -34,7 +34,7 @@ import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.sqrt;
 
 /**
- * The class {@code SampleGeneratorD} contains methods for generating samples of type {@code double}.
+ * The class {@code SampleGeneratorD} contains methods to generate {@code double}-based samples.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

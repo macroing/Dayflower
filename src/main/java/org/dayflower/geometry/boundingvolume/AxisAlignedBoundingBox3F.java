@@ -35,7 +35,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * An {@code AxisAlignedBoundingBox3F} denotes a 3-dimensional axis-aligned bounding box (AABB) that uses the data type {@code float}.
+ * An {@code AxisAlignedBoundingBox3F} is an implementation of {@link BoundingVolume3F} that represents an axis-aligned bounding box (AABB).
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

@@ -29,7 +29,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 
 /**
- * A {@code Shape} denotes a shape.
+ * A {@code Shape} represents a shape.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * 

@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A {@code SurfaceSample3D} denotes a 3-dimensional surface sample that uses the data type {@code double}.
+ * A {@code SurfaceSample3D} contains information about the surface of a {@link Shape3D} instance where it is being sampled.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

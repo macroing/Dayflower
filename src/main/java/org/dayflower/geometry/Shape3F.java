@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A {@code Shape3F} denotes a 3-dimensional shape that uses the data type {@code float}.
+ * A {@code Shape3F} is a 3-dimensional extension of {@link Shape} that adds additional methods that operates on {@code float}-based data types.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * 

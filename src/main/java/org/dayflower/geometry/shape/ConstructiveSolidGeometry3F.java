@@ -37,11 +37,11 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code ConstructiveSolidGeometry3F} denotes a 3-dimensional Constructive Solid Geometry (CSG) shape that uses the data type {@code float}.
+ * A {@code ConstructiveSolidGeometry3F} is an implementation of {@link Shape3F} that can be used for constructive solid geometry (CSG).
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3F} implementation is not supported on the GPU.
+ * This {@code Shape3F} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

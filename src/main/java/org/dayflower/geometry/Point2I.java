@@ -30,7 +30,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 
 /**
- * A {@code Point2I} denotes a 2-dimensional point with two coordinates, of type {@code int}.
+ * A {@code Point2I} represents a point with two {@code int}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

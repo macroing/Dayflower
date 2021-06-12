@@ -32,7 +32,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 
 /**
- * A {@code Matrix33D} denotes a 3 x 3 matrix with 9 elements of type {@code double}.
+ * A {@code Matrix33D} represents a 3 x 3 matrix with 9 {@code double}-based elements.
  * <p>
  * The default order of this {@code Matrix33D} class is row-major.
  * <p>

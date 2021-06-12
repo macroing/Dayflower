@@ -41,7 +41,7 @@ import org.dayflower.utility.Floats;
 import org.dayflower.utility.MortonCodes;
 
 /**
- * A {@code Point2F} denotes a 2-dimensional point with two coordinates, of type {@code float}.
+ * A {@code Point2F} represents a point with two {@code float}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

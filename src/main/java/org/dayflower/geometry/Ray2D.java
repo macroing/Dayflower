@@ -28,9 +28,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Ray2D} denotes a 2-dimensional ray with a point called its origin and a direction vector, both of which are using {@code double} as their type.
- * <p>
- * The 2-dimensional point used by this class is represented by {@link Point2D}. The 2-dimensional vector used by this class is represented by {@link Vector2D}.
+ * A {@code Ray2D} represents a 2-dimensional ray with a point of type {@link Point2D} and a vector of type {@link Vector2D}.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

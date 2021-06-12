@@ -25,7 +25,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 /**
- * A {@code Vector2I} denotes a 2-dimensional vector with two components, of type {@code int}.
+ * A {@code Vector2I} represents a vector with two {@code int}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

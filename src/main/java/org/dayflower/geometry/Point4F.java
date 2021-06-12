@@ -33,7 +33,7 @@ import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
 
 /**
- * A {@code Point4F} denotes a 4-dimensional point with four coordinates, of type {@code float}.
+ * A {@code Point4F} represents a point with four {@code float}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

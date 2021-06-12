@@ -30,7 +30,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 
 /**
- * A {@code Vector2D} denotes a 2-dimensional vector with two components, of type {@code double}.
+ * A {@code Vector2D} represents a vector with two {@code double}-based components.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

@@ -37,7 +37,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 /**
- * An {@code AngleD} encapsulates angles in forms such as degrees and radians using the data type {@code double}.
+ * An {@code AngleD} represents an angle and contains {@code double}-based values for both degrees and radians.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

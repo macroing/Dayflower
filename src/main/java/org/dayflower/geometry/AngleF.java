@@ -37,7 +37,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 /**
- * An {@code AngleF} encapsulates angles in forms such as degrees and radians using the data type {@code float}.
+ * An {@code AngleF} represents an angle and contains {@code float}-based values for both degrees and radians.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

@@ -40,11 +40,11 @@ import org.dayflower.noise.SimplexNoiseD;
 import org.dayflower.utility.Doubles;
 
 /**
- * A {@code ProceduralTerrain3D} denotes a 3-dimensional procedural terrain that uses the data type {@code double}.
+ * A {@code ProceduralTerrain3D} is an implementation of {@link Shape3D} that represents a procedural terrain.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3D} implementation is not supported on the GPU.
+ * This {@code Shape3D} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

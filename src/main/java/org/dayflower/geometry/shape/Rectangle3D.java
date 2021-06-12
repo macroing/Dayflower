@@ -40,11 +40,11 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Rectangle3D} denotes a 3-dimensional rectangle that uses the data type {@code double}.
+ * A {@code Rectangle3D} is an implementation of {@link Shape3D} that represents a rectangle.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3D} implementation is not supported on the GPU.
+ * This {@code Shape3D} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

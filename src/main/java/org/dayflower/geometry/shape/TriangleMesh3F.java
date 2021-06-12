@@ -62,11 +62,11 @@ import org.dayflower.utility.ParameterArguments;
 import org.macroing.java.io.IntArrayOutputStream;
 
 /**
- * A {@code TriangleMesh3F} denotes a 3-dimensional triangle mesh that uses the data type {@code float}.
+ * A {@code TriangleMesh3F} is an implementation of {@link Shape3F} that represents a triangle mesh.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3F} implementation is supported on the GPU.
+ * This {@code Shape3F} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

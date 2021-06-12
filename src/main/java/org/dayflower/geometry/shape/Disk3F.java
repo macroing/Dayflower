@@ -43,11 +43,11 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 
 /**
- * A {@code Disk3F} denotes a 3-dimensional disk that uses the data type {@code float}.
+ * A {@code Disk3F} is an implementation of {@link Shape3F} that represents a disk.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3F} implementation is supported on the GPU.
+ * This {@code Shape3F} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

@@ -28,7 +28,7 @@ import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
 
 /**
- * A class that performs rasterization on {@link Line2I} and {@link Triangle2I} instances.
+ * {@code Rasterizer2I} performs rasterization on {@link Line2I} and {@link Triangle2I} instances.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

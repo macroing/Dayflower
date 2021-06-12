@@ -50,11 +50,11 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 
 /**
- * A {@code Hyperboloid3F} denotes a 3-dimensional hyperboloid that uses the data type {@code float}.
+ * A {@code Hyperboloid3F} is an implementation of {@link Shape3F} that represents a hyperboloid.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3F} implementation is not supported on the GPU.
+ * This {@code Shape3F} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

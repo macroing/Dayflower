@@ -29,7 +29,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Triangle2F} denotes a 2-dimensional triangle that uses the data type {@code double}.
+ * A {@code Triangle2D} is an implementation of {@link Shape2D} that represents a triangle.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

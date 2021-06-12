@@ -33,7 +33,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Rectangle2I} denotes a 2-dimensional rectangle, of type {@code int}.
+ * A {@code Rectangle2I} is an implementation of {@link Shape2I} that represents a rectangle.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

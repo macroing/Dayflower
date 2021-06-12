@@ -32,7 +32,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Line2D} denotes a 2-dimensional line that uses the data type {@code double}.
+ * A {@code Line2D} is an implementation of {@link Shape2D} that represents a line.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

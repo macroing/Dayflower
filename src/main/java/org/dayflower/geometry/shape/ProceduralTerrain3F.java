@@ -40,11 +40,11 @@ import org.dayflower.utility.Floats;
 import org.macroing.java.util.function.FloatBinaryOperator;
 
 /**
- * A {@code ProceduralTerrain3F} denotes a 3-dimensional procedural terrain that uses the data type {@code float}.
+ * A {@code ProceduralTerrain3F} is an implementation of {@link Shape3F} that represents a procedural terrain.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@link Shape3F} implementation is not supported on the GPU.
+ * This {@code Shape3F} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

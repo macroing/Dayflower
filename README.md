@@ -74,9 +74,9 @@ Supported Features
 This library consists of several APIs. They are presented below.
 
  - The Change API provides functionality to perform undo and redo operations.
- - The Color API provides all color types and operations.
- - The Filter API provides all filter types and operations.
- - [The Geometry API](https://github.com/macroing/Dayflower/tree/master/documentation/Geometry) provides all geometric types and operations.
+ - The Color API provides data types for colors, color spaces and spectral curves.
+ - The Filter API provides data types that represents filters.
+ - The Geometry API provides data types for angles, bounding volumes, matrices, orthonormal bases, points, quaternions, rays, shapes and vectors.
  - [The Image API](https://github.com/macroing/Dayflower/tree/master/documentation/Image) provides image processing functionality.
  - [The JavaFX API](https://github.com/macroing/Dayflower/tree/master/documentation/JavaFX) provides the GUI components.
  - [The Node API](https://github.com/macroing/Dayflower/tree/master/documentation/Node) provides functionality for modeling data types that can be filtered and traversed.

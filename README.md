@@ -1,6 +1,6 @@
 Dayflower
 =========
-Dayflower is an application, a framework and a library for rendering in Java.
+Dayflower is an application and a library for rendering in Java.
 
 Its primary focus is photorealistic 3D-rendering, preferably in realtime. However, it can also be used for 2D-rendering and image processing.
 
@@ -69,25 +69,11 @@ public class GPURendererExample {
 }
 ```
 
-Supported Features
-------------------
-This library consists of several APIs. They are presented below.
+Documentation
+-------------
+The documentation for this library can be found in the Javadocs that are generated when building it.
 
- - The Change API provides functionality to perform undo and redo operations.
- - The Color API provides data types for colors, color spaces and spectral curves.
- - The Filter API provides data types that represents filters.
- - The Geometry API provides data types for angles, bounding volumes, matrices, orthonormal bases, points, quaternions, rays, shapes and vectors.
- - The Image API provides image processing functionality.
- - [The JavaFX API](https://github.com/macroing/Dayflower/tree/master/documentation/JavaFX) provides the GUI components.
- - The Node API provides functionality for modeling data types that can be filtered and traversed.
- - The Noise API provides functionality for generating noise.
- - [The Parameter API](https://github.com/macroing/Dayflower/tree/master/documentation/Parameter) provides parameter management functionality.
- - [The Renderer API](https://github.com/macroing/Dayflower/tree/master/documentation/Renderer) provides the rendering algorithms.
- - The Sampler API provides sampling functionality.
- - [The Scene API](https://github.com/macroing/Dayflower/tree/master/documentation/Scene) provides the scene types and operations.
- - The Sound API provides the sound player and sounds.
- - The Utility API provides common but unrelated functionality.
- - The Wavefront API provides functionality to read Wavefront files.
+All documentation in the `documentation` folder of this repository will be removed in the future. Some of the documentation has already been removed. The documentation that was removed can be found in the Javadocs.
 
 Dependencies
 ------------

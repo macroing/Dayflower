@@ -1,3 +1,11 @@
+2021-06-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the class DoubleImageD.
+	* ADD:		Add the class FloatImageF.
+	* ADD:		Add the methods requireExactArrayLength(double[], int, String) and requireExactArrayLength(float[], int, String) to the ParameterArguments class.
+	* ADD:		Add the method array(int, double, double, double, double) to the Doubles class.
+	* ADD:		Add the method array(int, float, float, float, float) to the Floats class.
+
 2021-06-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a new Scene Compiler API. It used to be a private API in the Renderer GPU API.

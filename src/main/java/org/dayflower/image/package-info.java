@@ -16,6 +16,8 @@
  * <ul>
  * <li>{@link org.dayflower.image.ByteImageD ByteImageD} is an {@code ImageD} implementation that stores individual pixels as four {@code byte} values in a {@code byte[]}.</li>
  * <li>{@link org.dayflower.image.ByteImageF ByteImageF} is an {@code ImageF} implementation that stores individual pixels as four {@code byte} values in a {@code byte[]}.</li>
+ * <li>{@link org.dayflower.image.DoubleImageD DoubleImageD} is an {@code ImageD} implementation that stores individual pixels as four {@code double} values in a {@code double[]}.</li>
+ * <li>{@link org.dayflower.image.FloatImageF FloatImageF} is an {@code ImageF} implementation that stores individual pixels as four {@code float} values in a {@code float[]}.</li>
  * <li>{@link org.dayflower.image.IntImageD IntImageD} is an {@code ImageD} implementation that stores individual pixels as a packed {@code int} value in an {@code int[]}.</li>
  * <li>{@link org.dayflower.image.IntImageF IntImageF} is an {@code ImageF} implementation that stores individual pixels as a packed {@code int} value in an {@code int[]}.</li>
  * <li>{@link org.dayflower.image.PixelImageD PixelImageD} is an {@code ImageD} implementation that stores individual pixels as {@code PixelD} instances.</li>

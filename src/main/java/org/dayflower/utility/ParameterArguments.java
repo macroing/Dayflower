@@ -163,6 +163,27 @@ public final class ParameterArguments {
 	}
 	
 	/**
+	 * Checks that {@code array.length} is equal to {@code arrayLengthExpected}.
+	 * <p>
+	 * Returns {@code array}.
+	 * <p>
+	 * If {@code array.length} is not equal to {@code arrayLengthExpected}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array the array to check
+	 * @param arrayLengthExpected the expected length to compare against
+	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
+	 * @return {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length} is not equal to {@code arrayLengthExpected}
+	 */
+	public static double[] requireExactArrayLength(final double[] array, final int arrayLengthExpected, final String name) {
+		if(array.length != arrayLengthExpected) {
+			throw new IllegalArgumentException(String.format("%s.length != %d: %s.length == %d", name, Integer.valueOf(arrayLengthExpected), name, Integer.valueOf(array.length)));
+		}
+		
+		return array;
+	}
+	
+	/**
 	 * Checks that {@code value} is finite.
 	 * <p>
 	 * Returns {@code value}.
@@ -209,6 +230,27 @@ public final class ParameterArguments {
 		} else {
 			return value;
 		}
+	}
+	
+	/**
+	 * Checks that {@code array.length} is equal to {@code arrayLengthExpected}.
+	 * <p>
+	 * Returns {@code array}.
+	 * <p>
+	 * If {@code array.length} is not equal to {@code arrayLengthExpected}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array the array to check
+	 * @param arrayLengthExpected the expected length to compare against
+	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
+	 * @return {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length} is not equal to {@code arrayLengthExpected}
+	 */
+	public static float[] requireExactArrayLength(final float[] array, final int arrayLengthExpected, final String name) {
+		if(array.length != arrayLengthExpected) {
+			throw new IllegalArgumentException(String.format("%s.length != %d: %s.length == %d", name, Integer.valueOf(arrayLengthExpected), name, Integer.valueOf(array.length)));
+		}
+		
+		return array;
 	}
 	
 	/**

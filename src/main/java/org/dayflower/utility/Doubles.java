@@ -1249,6 +1249,36 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern.
+	 * <p>
+	 * If {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the {@code double[]}
+	 * @param value0 the {@code double} at the relative offset {@code 0}
+	 * @param value1 the {@code double} at the relative offset {@code 1}
+	 * @param value2 the {@code double} at the relative offset {@code 2}
+	 * @param value3 the {@code double} at the relative offset {@code 3}
+	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}
+	 */
+	public static double[] array(final int length, final double value0, final double value1, final double value2, final double value3) {
+		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		if(array.length % 4 != 0) {
+			throw new IllegalArgumentException(String.format("%d %% 4 != 0", Integer.valueOf(length)));
+		}
+		
+		for(int i = 0; i < length; i += 4) {
+			array[i + 0] = value0;
+			array[i + 1] = value1;
+			array[i + 2] = value2;
+			array[i + 3] = value3;
+		}
+		
+		return array;
+	}
+	
+	/**
 	 * Attempts to solve the quadratic system based on the values {@code a}, {@code b} and {@code c}.
 	 * <p>
 	 * Returns a {@code double[]}, with a length of {@code 2}, that contains the result.

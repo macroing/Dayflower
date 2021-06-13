@@ -229,6 +229,10 @@ public final class Color3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private static final float[] R_G_B_EXPONENTS = doCreateRGBExponents();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final float component1;
 	private final float component2;
 	private final float component3;
@@ -912,6 +916,50 @@ public final class Color3F {
 	}
 	
 	/**
+	 * Returns an {@code int} with the component values of this {@code Color3F} instance in RGBE-form.
+	 * 
+	 * @return an {@code int} with the component values of this {@code Color3F} instance in RGBE-form
+	 */
+	public int toRGBE() {
+		final float maximum = max(this.component1, this.component2, this.component3);
+		
+		if(maximum < 1.0e-32F) {
+			return 0;
+		}
+		
+		float mantissa = maximum;
+		
+		int exponent = 0;
+		
+		if(maximum > 1.0F) {
+			while(mantissa > 1.0F) {
+				mantissa *= 0.5F;
+				
+				exponent++;
+			}
+		} else if(maximum <= 0.5F) {
+			while(mantissa <= 0.5F) {
+				mantissa *= 2.0F;
+				
+				exponent--;
+			}
+		}
+		
+//		Find out if 255.0F should be 256.0F or maybe 255.5F? In Sunflow it is 255.0F and other places mention 256.0F in some cases.
+//		Performing multiple conversions seems to decrease the values over time.
+		final float multiplier = (mantissa * 255.0F) / maximum;
+		
+		final int r = toInt(this.component1 * multiplier) << 24;
+		final int g = toInt(this.component2 * multiplier) << 16;
+		final int b = toInt(this.component3 * multiplier) <<  8;
+		final int e = exponent + 128;
+		
+		final int colorRGBE = r | g | b | e;
+		
+		return colorRGBE;
+	}
+	
+	/**
 	 * Writes this {@code Color3F} instance to {@code dataOutput}.
 	 * <p>
 	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1305,6 +1353,22 @@ public final class Color3F {
 		final float component1 = finiteOrDefault(colorLHS.component1 / scalarRHS, 0.0F);
 		final float component2 = finiteOrDefault(colorLHS.component2 / scalarRHS, 0.0F);
 		final float component3 = finiteOrDefault(colorLHS.component3 / scalarRHS, 0.0F);
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Color3F} instance with the result of the conversion from RGBE to RGB.
+	 * 
+	 * @param colorRGBE an {@code int} with a color in the RGBE format
+	 * @return a new {@code Color3F} instance with the result of the conversion from RGBE to RGB
+	 */
+	public static Color3F fromRGBE(final int colorRGBE) {
+		final float exponent = R_G_B_EXPONENTS[colorRGBE & 0xFF];
+		
+		final float component1 = exponent * ((colorRGBE >>> 24)         + 0.5F);
+		final float component2 = exponent * (((colorRGBE >> 16) & 0xFF) + 0.5F);
+		final float component3 = exponent * (((colorRGBE >>  8) & 0xFF) + 0.5F);
 		
 		return new Color3F(component1, component2, component3);
 	}
@@ -2544,5 +2608,33 @@ public final class Color3F {
 		}
 		
 		return colors;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static float[] doCreateRGBExponents() {
+		final float[] exponents = new float[256];
+		
+		exponents[0] = 0.0F;
+		
+		for(int i = 1; i < exponents.length; i++) {
+			final int exponentInt = i - (128 + 8);
+			
+			float exponentFloat = 1.0F;
+			
+			if(exponentInt > 0) {
+				for(int j = 0; j < +exponentInt; j++) {
+					exponentFloat *= 2.0F;
+				}
+			} else {
+				for(int j = 0; j < -exponentInt; j++) {
+					exponentFloat *= 0.5F;
+				}
+			}
+			
+			exponents[i] = exponentFloat;
+		}
+		
+		return exponents;
 	}
 }

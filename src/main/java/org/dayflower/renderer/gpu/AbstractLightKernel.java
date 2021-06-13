@@ -1154,6 +1154,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		doLightPerezLightRadianceSky(offset, incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ, sunDirectionX, sunDirectionY, sunDirectionZ);
 		
+		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());
+		
 		final float resultR = color3FLHSGetR();
 		final float resultG = color3FLHSGetG();
 		final float resultB = color3FLHSGetB();
@@ -1369,6 +1371,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionX(offset), doLightPerezLightGetSunDirectionY(offset), doLightPerezLightGetSunDirectionZ(offset));
 		
+		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());
 		color3FLHSSet(color3FLHSGetR() * resultFactor, color3FLHSGetG() * resultFactor, color3FLHSGetB() * resultFactor);
 	}
 	

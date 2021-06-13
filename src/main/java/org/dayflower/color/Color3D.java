@@ -229,6 +229,10 @@ public final class Color3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private static final double[] R_G_B_EXPONENTS = doCreateRGBExponents();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final double component1;
 	private final double component2;
 	private final double component3;
@@ -912,6 +916,50 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Returns an {@code int} with the component values of this {@code Color3D} instance in RGBE-form.
+	 * 
+	 * @return an {@code int} with the component values of this {@code Color3D} instance in RGBE-form
+	 */
+	public int toRGBE() {
+		final double maximum = max(this.component1, this.component2, this.component3);
+		
+		if(maximum < 1.0e-32D) {
+			return 0;
+		}
+		
+		double mantissa = maximum;
+		
+		int exponent = 0;
+		
+		if(maximum > 1.0D) {
+			while(mantissa > 1.0D) {
+				mantissa *= 0.5D;
+				
+				exponent++;
+			}
+		} else if(maximum <= 0.5D) {
+			while(mantissa <= 0.5D) {
+				mantissa *= 2.0D;
+				
+				exponent--;
+			}
+		}
+		
+//		Find out if 255.0D should be 256.0D or maybe 255.5D? In Sunflow it is 255.0D and other places mention 256.0D in some cases.
+//		Performing multiple conversions seems to decrease the values over time.
+		final double multiplier = (mantissa * 255.0D) / maximum;
+		
+		final int r = toInt(this.component1 * multiplier) << 24;
+		final int g = toInt(this.component2 * multiplier) << 16;
+		final int b = toInt(this.component3 * multiplier) <<  8;
+		final int e = exponent + 128;
+		
+		final int colorRGBE = r | g | b | e;
+		
+		return colorRGBE;
+	}
+	
+	/**
 	 * Writes this {@code Color3D} instance to {@code dataOutput}.
 	 * <p>
 	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1305,6 +1353,22 @@ public final class Color3D {
 		final double component1 = finiteOrDefault(colorLHS.component1 / scalarRHS, 0.0D);
 		final double component2 = finiteOrDefault(colorLHS.component2 / scalarRHS, 0.0D);
 		final double component3 = finiteOrDefault(colorLHS.component3 / scalarRHS, 0.0D);
+		
+		return new Color3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Color3D} instance with the result of the conversion from RGBE to RGB.
+	 * 
+	 * @param colorRGBE an {@code int} with a color in the RGBE format
+	 * @return a new {@code Color3D} instance with the result of the conversion from RGBE to RGB
+	 */
+	public static Color3D fromRGBE(final int colorRGBE) {
+		final double exponent = R_G_B_EXPONENTS[colorRGBE & 0xFF];
+		
+		final double component1 = exponent * ((colorRGBE >>> 24)         + 0.5D);
+		final double component2 = exponent * (((colorRGBE >> 16) & 0xFF) + 0.5D);
+		final double component3 = exponent * (((colorRGBE >>  8) & 0xFF) + 0.5D);
 		
 		return new Color3D(component1, component2, component3);
 	}
@@ -2544,5 +2608,33 @@ public final class Color3D {
 		}
 		
 		return colors;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static double[] doCreateRGBExponents() {
+		final double[] exponents = new double[256];
+		
+		exponents[0] = 0.0D;
+		
+		for(int i = 1; i < exponents.length; i++) {
+			final int exponentInt = i - (128 + 8);
+			
+			double exponentDouble = 1.0D;
+			
+			if(exponentInt > 0) {
+				for(int j = 0; j < +exponentInt; j++) {
+					exponentDouble *= 2.0D;
+				}
+			} else {
+				for(int j = 0; j < -exponentInt; j++) {
+					exponentDouble *= 0.5D;
+				}
+			}
+			
+			exponents[i] = exponentDouble;
+		}
+		
+		return exponents;
 	}
 }

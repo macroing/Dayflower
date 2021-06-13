@@ -41,7 +41,6 @@ import java.util.Optional;
 
 import org.dayflower.color.ChromaticSpectralCurveF;
 import org.dayflower.color.Color3F;
-import org.dayflower.color.ConstantSpectralCurveF;
 import org.dayflower.color.IrregularSpectralCurveF;
 import org.dayflower.color.RegularSpectralCurveF;
 import org.dayflower.color.SpectralCurveF;
@@ -179,7 +178,6 @@ public final class PerezLight extends Light {
 	
 	private Color3F sunColor;
 	private Distribution2F distribution;
-	private SpectralCurveF sunSpectralRadiance;
 	private Vector3F sunDirection;
 	private Vector3F sunDirectionWorldSpace;
 	private double[] perezRelativeLuminance;
@@ -278,7 +276,7 @@ public final class PerezLight extends Light {
 	public Color3F power() {
 		final Vector3F incomingObjectSpace = Vector3F.directionSpherical(0.5F, 0.5F);
 		
-		final Color3F result = doRadianceSky(incomingObjectSpace);
+		final Color3F result = Color3F.minimumTo0(doRadianceSky(incomingObjectSpace));
 		
 		return Color3F.multiply(result, PI * this.radius * this.radius);
 	}
@@ -382,7 +380,7 @@ public final class PerezLight extends Light {
 			return Optional.empty();
 		}
 		
-		final Color3F result = doRadianceSky(incomingObjectSpace);
+		final Color3F result = Color3F.minimumTo0(doRadianceSky(incomingObjectSpace));
 		
 		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
 		
@@ -439,8 +437,6 @@ public final class PerezLight extends Light {
 		} else if(!Objects.equals(this.sunColor, PerezLight.class.cast(object).sunColor)) {
 			return false;
 		} else if(!Objects.equals(this.distribution, PerezLight.class.cast(object).distribution)) {
-			return false;
-		} else if(!Objects.equals(this.sunSpectralRadiance, PerezLight.class.cast(object).sunSpectralRadiance)) {
 			return false;
 		} else if(!Objects.equals(this.sunDirection, PerezLight.class.cast(object).sunDirection)) {
 			return false;
@@ -637,7 +633,7 @@ public final class PerezLight extends Light {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(getTransform(), this.sunColor, this.distribution, this.sunSpectralRadiance, this.sunDirection, this.sunDirectionWorldSpace, Integer.valueOf(Arrays.hashCode(this.perezRelativeLuminance)), Integer.valueOf(Arrays.hashCode(this.perezX)), Integer.valueOf(Arrays.hashCode(this.perezY)), Integer.valueOf(Arrays.hashCode(this.zenith)), Float.valueOf(this.radius), Float.valueOf(this.theta), Float.valueOf(this.turbidity));
+		return Objects.hash(getTransform(), this.sunColor, this.distribution, this.sunDirection, this.sunDirectionWorldSpace, Integer.valueOf(Arrays.hashCode(this.perezRelativeLuminance)), Integer.valueOf(Arrays.hashCode(this.perezX)), Integer.valueOf(Arrays.hashCode(this.perezY)), Integer.valueOf(Arrays.hashCode(this.zenith)), Float.valueOf(this.radius), Float.valueOf(this.theta), Float.valueOf(this.turbidity));
 	}
 	
 	/**
@@ -688,7 +684,7 @@ public final class PerezLight extends Light {
 		doSetSunDirectionWorldSpace(sunDirectionWorldSpace);
 		doSetSunDirection();
 		doSetTheta();
-		doSetSunColorAndSunSpectralRadiance();
+		doSetSunColor();
 		doSetZenith();
 		doInitializePerezRelativeLuminance();
 		doInitializePerezX();
@@ -711,7 +707,7 @@ public final class PerezLight extends Light {
 		final double x = doCalculatePerezFunction(this.perezX, theta, gamma, this.zenith[1]);
 		final double y = doCalculatePerezFunction(this.perezY, theta, gamma, this.zenith[2]);
 		
-		final Color3F colorXYZ = ChromaticSpectralCurveF.getColorXYZ((float)(x), (float)(y));
+		final Color3F colorXYZ = ChromaticSpectralCurveF.getColorXYZ(toFloat(x), toFloat(y));
 		
 		final float x0 = toFloat(colorXYZ.getX() * relativeLuminance / colorXYZ.getY());
 		final float y0 = toFloat(relativeLuminance);
@@ -791,12 +787,10 @@ public final class PerezLight extends Light {
 		this.radius = 10.0F;
 	}
 	
-	private void doSetSunColorAndSunSpectralRadiance() {
+	private void doSetSunColor() {
 		if(this.sunDirection.getZ() > 0.0F) {
-			this.sunSpectralRadiance = doCalculateAttenuatedSunlight(this.theta, this.turbidity);
-			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingSRGB(Color3F.multiply(this.sunSpectralRadiance.toColorXYZ(), 0.0001F)));
+			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingPBRT(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(), 0.0001F)));
 		} else {
-			this.sunSpectralRadiance = new ConstantSpectralCurveF(0.0F);
 			this.sunColor = Color3F.BLACK;
 		}
 	}
@@ -831,7 +825,7 @@ public final class PerezLight extends Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static SpectralCurveF doCalculateAttenuatedSunlight(final float theta, final float turbidity) {
-		final float[] spectrum = new float[91];
+		final float[] spectrum = new float[471];//Originally 91.
 		
 		final double alpha = 1.3D;
 		final double lozone = 0.35D;
@@ -839,7 +833,11 @@ public final class PerezLight extends Light {
 		final double beta = 0.04608365822050D * turbidity - 0.04586025928522D;
 		final double relativeOpticalMass = 1.0D / (cos(theta) + 0.000940D * pow(1.6386D - theta, -1.253D));
 		
-		for(int i = 0, lambda = 350; lambda <= 800; i++, lambda += 5) {
+		final int wavelengthMin = 360;//Originally 350.
+		final int wavelengthMax = 830;//Originally 800.
+		final int wavelengthStep = 1;//Originally 5.
+		
+		for(int i = 0, lambda = wavelengthMin; lambda <= wavelengthMax; i++, lambda += wavelengthStep) {
 			final double tauRayleighScattering = exp(-relativeOpticalMass * 0.008735D * pow(lambda / 1000.0D, -4.08D));
 			final double tauAerosolAttenuation = exp(-relativeOpticalMass * beta * pow(lambda / 1000.0D, -alpha));
 			final double tauOzoneAbsorptionAttenuation = exp(-relativeOpticalMass * K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * lozone);
@@ -847,9 +845,9 @@ public final class PerezLight extends Light {
 			final double tauWaterVaporAbsorptionAttenuation = exp(-0.2385D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass / pow(1.0D + 20.07D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass, 0.45D));
 			final double amplitude = SOL_SPECTRAL_CURVE.sample(lambda) * tauRayleighScattering * tauAerosolAttenuation * tauOzoneAbsorptionAttenuation * tauGasAbsorptionAttenuation * tauWaterVaporAbsorptionAttenuation;
 			
-			spectrum[i] = (float)(amplitude);
+			spectrum[i] = toFloat(amplitude);
 		}
 		
-		return new RegularSpectralCurveF(350.0F, 800.0F, spectrum);
+		return new RegularSpectralCurveF(wavelengthMin, wavelengthMax, spectrum);
 	}
 }

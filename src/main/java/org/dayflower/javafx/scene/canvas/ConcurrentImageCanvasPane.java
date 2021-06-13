@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.javafx.canvas;
+package org.dayflower.javafx.scene.canvas;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.dayflower.image.Image;
-import org.dayflower.javafx.canvas.ConcurrentImageCanvas.ImageUpdater;
+import org.dayflower.javafx.scene.canvas.ConcurrentImageCanvas.ImageUpdater;
 import org.macroing.java.util.function.TriFunction;
 
 import javafx.scene.layout.Pane;

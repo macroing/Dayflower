@@ -21,8 +21,8 @@ package org.dayflower.javafx.application;
 import java.util.Objects;
 
 import org.dayflower.image.Image;
-import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
-import org.dayflower.javafx.canvas.ConcurrentImageCanvas.Observer;
+import org.dayflower.javafx.scene.canvas.ConcurrentImageCanvas;
+import org.dayflower.javafx.scene.canvas.ConcurrentImageCanvas.Observer;
 import org.dayflower.renderer.Renderer;
 
 final class ObserverImpl implements Observer {

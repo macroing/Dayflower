@@ -45,7 +45,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
- * This {@code ScreenRendererApplication} class displays the contents of the screen to the left of the window in a {@code Canvas} instance.
+ * {@code ScreenRendererApplication} is an {@code Application} implementation that displays the contents of the screen to the left of its window in a {@code Canvas} instance.
  * <p>
  * The contents shown in the {@code Canvas} instance can be processed using various image processing algorithms.
  * 

@@ -53,7 +53,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
- * This {@code DayflowerApplication} class is the main entry point for the Dayflower GUI.
+ * {@code DayflowerApplication} is the main {@code Application} implementation for Dayflower.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

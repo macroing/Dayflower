@@ -69,6 +69,76 @@ public class GPURendererExample {
 }
 ```
 
+Supported Features
+------------------
+The lists below show the main features of the renderer.
+
+#### Supported Rendering Algorithms
+* Ambient Occlusion (CPU & GPU)
+* Path Tracing (CPU & GPU)
+* Ray Casting (CPU & GPU)
+* Ray Tracing (CPU)
+
+#### Supported Lights
+* Diffuse Area Light (CPU)
+* Directional Light (CPU & GPU)
+* Low-Dynamic-Range (LDR) Image Light (CPU & GPU)
+* Perez Light (CPU & GPU)
+* Point Light (CPU & GPU)
+* Primitive Area Light (CPU)
+* Spot Light (CPU & GPU)
+
+#### Supported Materials
+* Bullseye Material (CPU)
+* Checkerboard Material (CPU)
+* Clear Coat Material (CPU & GPU)
+* Disney Material (CPU & GPU)
+* Function Material (CPU)
+* Glass Material (CPU & GPU)
+* Glossy Material (CPU & GPU)
+* Hair Material (CPU)
+* Matte Material (CPU & GPU)
+* Metal Material (CPU & GPU)
+* Mirror Material (CPU & GPU)
+* Plastic Material (CPU & GPU)
+* Substrate Material (CPU & GPU)
+* Uber Material (CPU)
+
+#### Supported Modifiers
+* Low-Dynamic-Range (LDR) Image Normal Map Modifier (CPU)
+* No-Op Modifier (CPU)
+* Simplex Noise Normal Map Modifier (CPU)
+
+#### Supported Shapes
+* Cone (CPU & GPU)
+* Constructive Solid Geometry (CSG) (CPU)
+* Curve (CPU)
+* Cylinder (CPU & GPU)
+* Disk (CPU & GPU)
+* Hyperboloid (CPU)
+* Paraboloid (CPU & GPU)
+* Plane (CPU & GPU)
+* Procedural Terrain (CPU)
+* Rectangle (CPU & GPU)
+* Rectangular Cuboid (CPU & GPU)
+* Sphere (CPU & GPU)
+* Torus (CPU & GPU)
+* Triangle (CPU & GPU)
+* Triangle Mesh (CPU & GPU)
+
+#### Supported Textures
+* Blend Texture (CPU & GPU)
+* Bullseye Texture (CPU & GPU)
+* Checkerboard Texture (CPU & GPU)
+* Constant Texture (CPU & GPU)
+* Function Texture (CPU)
+* Low-Dynamic-Range (LDR) Image Texture (CPU & GPU)
+* Marble Texture (CPU & GPU)
+* Simplex Fractional Brownian Motion Texture (CPU & GPU)
+* Surface Normal Texture (CPU & GPU)
+* UV Texture (CPU & GPU)
+
+
 Documentation
 -------------
 The documentation for this library can be found in the Javadocs that are generated when building it.

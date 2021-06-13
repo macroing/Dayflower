@@ -73,8 +73,6 @@ Documentation
 -------------
 The documentation for this library can be found in the Javadocs that are generated when building it.
 
-All documentation in the `documentation` folder of this repository will be removed in the future. Some of the documentation has already been removed. The documentation that was removed can be found in the Javadocs.
-
 Dependencies
 ------------
  - [Java 8](http://www.java.com)

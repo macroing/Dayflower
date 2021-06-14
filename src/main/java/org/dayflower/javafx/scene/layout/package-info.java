@@ -12,5 +12,12 @@
  * <li>{@link org.dayflower.javafx.scene.layout.Regions Regions} consists exclusively of static methods that returns or performs various operations on {@code Region} instances.</li>
  * <li>{@link org.dayflower.javafx.scene.layout.VBoxes VBoxes} consists exclusively of static methods that returns or performs various operations on {@code VBox} instances.</li>
  * </ul>
+ * <h3>Dependencies</h3>
+ * <p>
+ * The following list shows all dependencies for this API.
+ * <ul>
+ * <li>The JavaFX Scene Control API</li>
+ * <li>The Utility API</li>
+ * </ul>
  */
 package org.dayflower.javafx.scene.layout;

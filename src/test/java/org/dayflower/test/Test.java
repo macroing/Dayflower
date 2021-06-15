@@ -21,6 +21,7 @@ package org.dayflower.test;
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
 import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.shape.Circle2I;
@@ -30,6 +31,8 @@ import org.dayflower.image.ConvolutionKernel33F;
 import org.dayflower.image.ConvolutionKernel55F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.IntImageF;
+import org.dayflower.utility.Floats;
+import org.dayflower.utility.Ints;
 
 public final class Test {
 	private Test() {
@@ -50,6 +53,7 @@ public final class Test {
 		doTestImageFConvolutionKernelSharpen();
 		doTestImageFConvolutionKernelUnsharpMasking();
 		doTestImageFCopy();
+		doTestImageFFillCircleComplement();
 		doTestImageFFillRectangle();
 		doTestImageFFillSimplexFractionalBrownianMotion();
 		doTestImageFFlipX();
@@ -73,6 +77,42 @@ public final class Test {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Circle2I doCreateCircle2I(final ImageF imageF) {
+		final Point2I center = new Point2I(imageF.getResolutionX() / 2, imageF.getResolutionY() / 2);
+		
+		final int border = 50;
+		final int radius = Ints.min(imageF.getResolutionX() / 2 - border, imageF.getResolutionY() / 2 - border);
+		
+		return new Circle2I(center, radius);
+	}
+	
+	private static Color4F doCreateColor4F(final Color4F oldColor, final Point2I point, final ImageF imageF) {
+		final float resolutionX = imageF.getResolutionX();
+		final float resolutionY = imageF.getResolutionY();
+		
+		final float radiusInner = Floats.min(resolutionX / 2.0F - 50.0F, resolutionY / 2.0F - 50.0F);
+//		final float radiusOuter = Point2F.distance(new Point2F(), new Point2F(resolutionX, resolutionY)) / 2.0F;
+		final float radiusOuter = radiusInner + 100.0F;
+		
+		final Point2F pointCenter = new Point2F(resolutionX / 2.0F, resolutionY / 2.0F);
+		final Point2F pointPixel = new Point2F(point.getX(), point.getY());
+		final Point2F pointInner = Point2F.add(pointCenter, Vector2F.multiply(Vector2F.normalize(Vector2F.direction(pointCenter, pointPixel)), radiusInner));
+		final Point2F pointOuter = Point2F.add(pointCenter, Vector2F.multiply(Vector2F.normalize(Vector2F.direction(pointCenter, pointPixel)), radiusOuter));
+		
+		final Vector2F directionPixel = Vector2F.direction(pointCenter, pointPixel);
+		final Vector2F directionInner = Vector2F.direction(pointCenter, pointInner);
+		final Vector2F directionOuter = Vector2F.direction(pointCenter, pointOuter);
+		
+		final float lengthPixel = Floats.abs(directionPixel.length());
+		final float lengthInner = Floats.abs(directionInner.length());
+		final float lengthOuter = Floats.abs(directionOuter.length());
+		
+		final float component = Floats.normalize(lengthPixel, lengthInner, lengthOuter);
+		
+//		return new Color4F(component);
+		return Color4F.blendOver(new Color4F(Color3F.BLACK, component), oldColor);
+	}
 	
 	private static ImageF doCreateImageFGradient(final int resolutionX, final int resolutionY) {
 		final
@@ -164,6 +204,13 @@ public final class Test {
 		final
 		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg").copy(new Rectangle2I(new Point2I(100, 100), new Point2I(1080 - 100, 1256 - 100)));
 		imageF.save("./generated/Test/Image-Copy.png");
+	}
+	
+	private static void doTestImageFFillCircleComplement() {
+		final
+		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
+		imageF.fillCircleComplement(doCreateCircle2I(imageF), (oldColor, point) -> doCreateColor4F(oldColor, point, imageF));
+		imageF.save("./generated/Test/Image-Fill-Circle-Complement.png");
 	}
 	
 	private static void doTestImageFFillRectangle() {

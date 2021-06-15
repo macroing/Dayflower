@@ -619,26 +619,7 @@ public abstract class ImageF extends Image {
 		
 		doChangeBegin();
 		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(int y = -circle.getRadius(); y <= circle.getRadius(); y++) {
-			for(int x = -circle.getRadius(); x <= circle.getRadius(); x++) {
-				if(x * x + y * y <= circle.getRadius() * circle.getRadius() && x * x + y * y > (circle.getRadius() - 1) * (circle.getRadius() - 1)) {
-					final int circleX = x + circle.getCenter().getX();
-					final int circleY = y + circle.getCenter().getY();
-					
-					if(circleX >= 0 && circleX < resolutionX && circleY >= 0 && circleY < resolutionY) {
-						final Point2I point = new Point2I(circleX, circleY);
-						
-						final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
-						final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-						
-						doSetColorRGBA(newColorRGBA, circleX, circleY);
-					}
-				}
-			}
-		}
+		circle.findPointsOfIntersection(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
 		
 		doChangeEnd();
 		
@@ -947,26 +928,32 @@ public abstract class ImageF extends Image {
 		
 		doChangeBegin();
 		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
+		circle.findPointsOfIntersection(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
 		
-		for(int y = -circle.getRadius(); y <= circle.getRadius(); y++) {
-			for(int x = -circle.getRadius(); x <= circle.getRadius(); x++) {
-				if(x * x + y * y <= circle.getRadius() * circle.getRadius()) {
-					final int circleX = x + circle.getCenter().getX();
-					final int circleY = y + circle.getCenter().getY();
-					
-					if(circleX >= 0 && circleX < resolutionX && circleY >= 0 && circleY < resolutionY) {
-						final Point2I point = new Point2I(circleX, circleY);
-						
-						final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
-						final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-						
-						doSetColorRGBA(newColorRGBA, circleX, circleY);
-					}
-				}
-			}
-		}
+		doChangeEnd();
+		
+		return this;
+	}
+	
+	/**
+	 * Fills everything except for {@code circle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param circle the {@link Circle2I} not to fill
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 */
+	public final ImageF fillCircleComplement(final Circle2I circle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+		Objects.requireNonNull(circle, "circle == null");
+		Objects.requireNonNull(biFunction, "biFunction == null");
+		
+		doChangeBegin();
+		
+		circle.findPointsOfComplement(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
 		
 		doChangeEnd();
 		

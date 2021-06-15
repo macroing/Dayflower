@@ -36,6 +36,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -500,6 +501,15 @@ public final class Curve3F implements Shape3F {
 	
 	/**
 	 * Returns a {@code List} of {@code Curve3F} instances.
+	 * 
+	 * @return a {@code List} of {@code Curve3F} instances
+	 */
+	public static List<Curve3F> createCurvesByBSpline() {
+		return createCurvesByBSpline(Arrays.asList(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)), new ArrayList<>(), Type.CYLINDER, 0.1F, 0.2F, 2, 2);
+	}
+	
+	/**
+	 * Returns a {@code List} of {@code Curve3F} instances.
 	 * <p>
 	 * If either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -612,6 +622,15 @@ public final class Curve3F implements Shape3F {
 		}
 		
 		return curves;
+	}
+	
+	/**
+	 * Returns a {@code List} of {@code Curve3F} instances.
+	 * 
+	 * @return a {@code List} of {@code Curve3F} instances
+	 */
+	public static List<Curve3F> createCurvesByBezier() {
+		return createCurvesByBezier(Arrays.asList(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)), new ArrayList<>(), Type.CYLINDER, 0.1F, 0.2F, 2, 2);
 	}
 	
 	/**

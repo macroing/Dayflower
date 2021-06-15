@@ -149,7 +149,7 @@ public abstract class Image {
 	 * @return {@code true} if, and only if, the redo operation was performed, {@code false} otherwise
 	 */
 	public final boolean redo() {
-		return this.changeHistory.redo();
+		return this.isChangeHistoryEnabled.get() && this.changeHistory.redo();
 	}
 	
 	/**
@@ -160,7 +160,7 @@ public abstract class Image {
 	 * @return {@code true} if, and only if, the undo operation was performed, {@code false} otherwise
 	 */
 	public final boolean undo() {
-		return this.changeHistory.undo();
+		return this.isChangeHistoryEnabled.get() && this.changeHistory.undo();
 	}
 	
 	/**

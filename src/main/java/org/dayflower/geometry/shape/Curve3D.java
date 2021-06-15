@@ -36,6 +36,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -500,6 +501,15 @@ public final class Curve3D implements Shape3D {
 	
 	/**
 	 * Returns a {@code List} of {@code Curve3D} instances.
+	 * 
+	 * @return a {@code List} of {@code Curve3D} instances
+	 */
+	public static List<Curve3D> createCurvesByBSpline() {
+		return createCurvesByBSpline(Arrays.asList(new Point3D(0.0D, 1.0D, 0.0D), new Point3D(1.0D, -1.0D, 0.0D), new Point3D(-1.0D, -1.0D, 0.0D)), new ArrayList<>(), Type.CYLINDER, 0.1D, 0.2D, 2, 2);
+	}
+	
+	/**
+	 * Returns a {@code List} of {@code Curve3D} instances.
 	 * <p>
 	 * If either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -612,6 +622,15 @@ public final class Curve3D implements Shape3D {
 		}
 		
 		return curves;
+	}
+	
+	/**
+	 * Returns a {@code List} of {@code Curve3D} instances.
+	 * 
+	 * @return a {@code List} of {@code Curve3D} instances
+	 */
+	public static List<Curve3D> createCurvesByBezier() {
+		return createCurvesByBezier(Arrays.asList(new Point3D(0.0D, 1.0D, 0.0D), new Point3D(1.0D, -1.0D, 0.0D), new Point3D(-1.0D, -1.0D, 0.0D)), new ArrayList<>(), Type.CYLINDER, 0.1D, 0.2D, 2, 2);
 	}
 	
 	/**

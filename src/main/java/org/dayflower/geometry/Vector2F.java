@@ -277,6 +277,20 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Vector2F} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized.
+	 * <p>
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye a {@link Point2F} instance denoting the eye to look from
+	 * @param lookAt a {@code Point2F} instance denoting the target to look at
+	 * @return a new {@code Vector2F} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
+	 */
+	public static Vector2F directionNormalized(final Point2F eye, final Point2F lookAt) {
+		return normalize(direction(eye, lookAt));
+	}
+	
+	/**
 	 * Divides the component values of {@code vectorLHS} with {@code scalarRHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the division.

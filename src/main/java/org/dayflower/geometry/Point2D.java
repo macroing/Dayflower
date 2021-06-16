@@ -251,6 +251,26 @@ public final class Point2D implements Node {
 	}
 	
 	/**
+	 * Adds the component values of {@code vectorRHS} multiplied by {@code scalar} to the component values of {@code pointLHS}.
+	 * <p>
+	 * Returns a new {@code Point2D} instance with the result of the addition.
+	 * <p>
+	 * If either {@code pointLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pointLHS the {@code Point2D} instance on the left-hand side
+	 * @param vectorRHS the {@link Vector2D} instance on the right-hand side
+	 * @param scalar the scalar to multiply the component values of {@code vectorRHS} with
+	 * @return a new {@code Point2D} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static Point2D add(final Point2D pointLHS, final Vector2D vectorRHS, final double scalar) {
+		final double component1 = pointLHS.component1 + vectorRHS.getComponent1() * scalar;
+		final double component2 = pointLHS.component2 + vectorRHS.getComponent2() * scalar;
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
 	 * Computes texture coordinates from three other texture coordinates via Barycentric interpolation.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the interpolated texture coordinates.

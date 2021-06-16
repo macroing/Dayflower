@@ -97,8 +97,8 @@ public final class Test {
 		
 		final Point2F pointCenter = new Point2F(resolutionX / 2.0F, resolutionY / 2.0F);
 		final Point2F pointPixel = new Point2F(point.getX(), point.getY());
-		final Point2F pointInner = Point2F.add(pointCenter, Vector2F.multiply(Vector2F.normalize(Vector2F.direction(pointCenter, pointPixel)), radiusInner));
-		final Point2F pointOuter = Point2F.add(pointCenter, Vector2F.multiply(Vector2F.normalize(Vector2F.direction(pointCenter, pointPixel)), radiusOuter));
+		final Point2F pointInner = Point2F.add(pointCenter, Vector2F.directionNormalized(pointCenter, pointPixel), radiusInner);
+		final Point2F pointOuter = Point2F.add(pointCenter, Vector2F.directionNormalized(pointCenter, pointPixel), radiusOuter);
 		
 		final Vector2F directionPixel = Vector2F.direction(pointCenter, pointPixel);
 		final Vector2F directionInner = Vector2F.direction(pointCenter, pointInner);

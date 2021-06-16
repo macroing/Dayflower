@@ -1,5 +1,9 @@
 2021-06-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the method add(Point2D, Vector2D, double) to the Point2D class.
+	* ADD:		Add the method add(Point2F, Vector2F, float) to the Point2F class.
+	* ADD:		Add the method directionNormalized(Point2D, Point2D) to the Vector2D class.
+	* ADD:		Add the method directionNormalized(Point2F, Point2F) to the Vector2F class.
 	* ADD:		Add the methods getColorRGBA(Point2I), getColorRGBA(Point2I, Function<Point2I, Color4D>) and getColorRGBA(Point2I, PixelOperation) to the ImageD class.
 	* ADD:		Add the methods getColorRGBA(Point2I), getColorRGBA(Point2I, Function<Point2I, Color4F>) and getColorRGBA(Point2I, PixelOperation) to the ImageF class.
 	* ADD:		Add the methods getColorRGB(Point2D), getColorRGB(Point2D, PixelOperation), getColorRGB(Point2I) and getColorRGB(Point2I, PixelOperation) to the ImageD class.

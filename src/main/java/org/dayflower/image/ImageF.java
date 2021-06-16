@@ -80,6 +80,96 @@ public abstract class ImageF extends Image {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code point}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(point, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2F} instance that contains the coordinates of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public final Color3F getColorRGB(final Point2F point) {
+		return getColorRGB(point, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code point}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * <p>
+	 * If either {@code point} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(point.getX(), point.getY(), pixelOperation);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2F} instance that contains the coordinates of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code pixelOperation} are {@code null}
+	 */
+	public final Color3F getColorRGB(final Point2F point, final PixelOperation pixelOperation) {
+		return getColorRGB(point.getX(), point.getY(), pixelOperation);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code point}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(point, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2I} instance that contains the coordinates of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public final Color3F getColorRGB(final Point2I point) {
+		return getColorRGB(point, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code point}.
+	 * <p>
+	 * If either {@code point} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(point.getX(), point.getY(), pixelOperation);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2I} instance that contains the coordinates of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code pixelOperation} are {@code null}
+	 */
+	public final Color3F getColorRGB(final Point2I point, final PixelOperation pixelOperation) {
+		return getColorRGB(point.getX(), point.getY(), pixelOperation);
+	}
+	
+	/**
 	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
 	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
@@ -273,6 +363,70 @@ public abstract class ImageF extends Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code pixelOperation} are {@code null}
 	 */
 	public final Color4F getColorRGBA(final Point2F point, final PixelOperation pixelOperation) {
+		return getColorRGBA(point.getX(), point.getY(), pixelOperation);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} of the pixel represented by {@code point}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGBA(point, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2I} instance with the coordinates of the pixel
+	 * @return the {@code Color4F} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public final Color4F getColorRGBA(final Point2I point) {
+		return getColorRGBA(point, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} of the pixel represented by {@code point}.
+	 * <p>
+	 * If either {@code point} or {@code function} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGBA(point.getX(), point.getY(), function);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2I} instance with the coordinates of the pixel
+	 * @param function a {@code Function} that returns a {@code Color4F} instance if any of the points are outside the bounds
+	 * @return the {@code Color4F} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code function} are {@code null}
+	 */
+	public final Color4F getColorRGBA(final Point2I point, final Function<Point2I, Color4F> function) {
+		return getColorRGBA(point.getX(), point.getY(), function);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} of the pixel represented by {@code point}.
+	 * <p>
+	 * If either {@code point} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGBA(point.getX(), point.getY(), pixelOperation);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2I} instance with the coordinates of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color4F} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code pixelOperation} are {@code null}
+	 */
+	public final Color4F getColorRGBA(final Point2I point, final PixelOperation pixelOperation) {
 		return getColorRGBA(point.getX(), point.getY(), pixelOperation);
 	}
 	
@@ -620,6 +774,31 @@ public abstract class ImageF extends Image {
 		doChangeBegin();
 		
 		circle.findPointsOfIntersection(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
+		
+		doChangeEnd();
+		
+		return this;
+	}
+	
+	/**
+	 * Draws everything except for {@code circle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param circle the {@link Circle2I} not to draw
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 */
+	public final ImageF drawCircleComplement(final Circle2I circle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+		Objects.requireNonNull(circle, "circle == null");
+		Objects.requireNonNull(biFunction, "biFunction == null");
+		
+		doChangeBegin();
+		
+		circle.findPointsOfComplement(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
 		
 		doChangeEnd();
 		

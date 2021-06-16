@@ -1,5 +1,14 @@
 2021-06-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods getColorRGBA(Point2I), getColorRGBA(Point2I, Function<Point2I, Color4D>) and getColorRGBA(Point2I, PixelOperation) to the ImageD class.
+	* ADD:		Add the methods getColorRGBA(Point2I), getColorRGBA(Point2I, Function<Point2I, Color4F>) and getColorRGBA(Point2I, PixelOperation) to the ImageF class.
+	* ADD:		Add the methods getColorRGB(Point2D), getColorRGB(Point2D, PixelOperation), getColorRGB(Point2I) and getColorRGB(Point2I, PixelOperation) to the ImageD class.
+	* ADD:		Add the methods getColorRGB(Point2F), getColorRGB(Point2F, PixelOperation), getColorRGB(Point2I) and getColorRGB(Point2I, PixelOperation) to the ImageF class.
+	* ADD:		Add the method drawCircleComplement(Circle2I, BiFunction<Color4D, Point2I, Color4D>) to the ImageD class.
+	* ADD:		Add the method drawCircleComplement(Circle2I, BiFunction<Color4F, Point2I, Color4F>) to the ImageF class.
+
+2021-06-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
 	* ADD:		Add the methods getBounds(), findPointsOfComplement(), findPointsOfComplement(Rectangle2I), findPointsOfComplement(Rectangle2I, boolean), findPointsOfIntersection(), findPointsOfIntersection(Rectangle2I) and findPointsOfIntersection(Rectangle2I, boolean) to the Circle2I class.
 	* ADD:		Add the method fillCircleComplement(Circle2I, BiFunction<Color4D, Point2I, Color4D>) to the ImageD class.
 	* ADD:		Add the method fillCircleComplement(Circle2I, BiFunction<Color4F, Point2I, Color4F>) to the ImageF class.

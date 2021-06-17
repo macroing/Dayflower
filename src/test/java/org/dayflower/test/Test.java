@@ -24,7 +24,9 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Vector2F;
+import org.dayflower.geometry.shape.Circle2F;
 import org.dayflower.geometry.shape.Circle2I;
+import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.image.ConvolutionKernel33F;
@@ -55,6 +57,7 @@ public final class Test {
 		doTestImageFCopy();
 		doTestImageFFillCircleComplement();
 		doTestImageFFillRectangle();
+		doTestImageFFillShapes();
 		doTestImageFFillSimplexFractionalBrownianMotion();
 		doTestImageFFlipX();
 		doTestImageFFlipY();
@@ -218,6 +221,21 @@ public final class Test {
 		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
 		imageF.fillRectangle(new Rectangle2I(new Point2I(100, 100), new Point2I(imageF.getResolutionX() - 1 - 100, imageF.getResolutionY() - 1 - 100)), (color, point) -> Color4F.blendOver(new Color4F(1.0F, 0.0F, 0.0F, 0.5F), color));
 		imageF.save("./generated/Test/Image-Fill-Rectangle.png");
+	}
+	
+	private static void doTestImageFFillShapes() {
+		final Circle2F circleA = new Circle2F(new Point2F(400.0F, 400.0F), 50.0F);
+		final Rectangle2F rectangleA = new Rectangle2F(circleA);
+		final Circle2F circleB = new Circle2F(rectangleA);
+		final Rectangle2F rectangleB = new Rectangle2F(circleB);
+		
+		final
+		ImageF imageF = new IntImageF(800, 800);
+		imageF.fillRectangle(new Rectangle2I(rectangleB), Color3F.RED);
+		imageF.fillCircle(new Circle2I(circleB), Color4F.GREEN);
+		imageF.fillRectangle(new Rectangle2I(rectangleA), Color3F.BLUE);
+		imageF.fillCircle(new Circle2I(circleA), Color4F.ORANGE);
+		imageF.save("./generated/Test/Image-Fill-Shapes.png");
 	}
 	
 	private static void doTestImageFFillSimplexFractionalBrownianMotion() {

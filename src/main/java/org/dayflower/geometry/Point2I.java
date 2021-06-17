@@ -20,6 +20,7 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -55,6 +56,44 @@ public final class Point2I implements Node {
 	 */
 	public Point2I() {
 		this(0, 0);
+	}
+	
+	/**
+	 * Constructs a new {@code Point2I} instance given the component values {@code Ints.toInt(point.getComponent1())} and {@code Ints.toInt(point.getComponent2())}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point2I(Ints.toInt(point.getComponent1()), Ints.toInt(point.getComponent2()));
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Point2I(final Point2D point) {
+		this(toInt(point.getComponent1()), toInt(point.getComponent2()));
+	}
+	
+	/**
+	 * Constructs a new {@code Point2I} instance given the component values {@code Ints.toInt(point.getComponent1())} and {@code Ints.toInt(point.getComponent2())}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point2I(Ints.toInt(point.getComponent1()), Ints.toInt(point.getComponent2()));
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Point2I(final Point2F point) {
+		this(toInt(point.getComponent1()), toInt(point.getComponent2()));
 	}
 	
 	/**

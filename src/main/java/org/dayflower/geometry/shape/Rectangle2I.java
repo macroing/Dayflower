@@ -61,6 +61,18 @@ public final class Rectangle2I implements Shape2I {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Constructs a new {@code Rectangle2I} instance that contains {@code circle}.
+	 * <p>
+	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param circle a {@link Circle2I} instance
+	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
+	 */
+	public Rectangle2I(final Circle2I circle) {
+		this(new Point2I(circle.getCenter().getX() - circle.getRadius(), circle.getCenter().getY() - circle.getRadius()), new Point2I(circle.getCenter().getX() + circle.getRadius(), circle.getCenter().getY() + circle.getRadius()));
+	}
+	
+	/**
 	 * Constructs a new {@code Rectangle2I} instance based on {@code x} and {@code y}.
 	 * <p>
 	 * If either {@code x} or {@code y} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -92,6 +104,36 @@ public final class Rectangle2I implements Shape2I {
 		this.b = Objects.requireNonNull(b, "b == null");
 		this.c = Objects.requireNonNull(c, "c == null");
 		this.d = Objects.requireNonNull(d, "d == null");
+	}
+	
+	/**
+	 * Constructs a new {@code Rectangle2I} instance from {@code rectangle}.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle a {@link Rectangle2D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 */
+	public Rectangle2I(final Rectangle2D rectangle) {
+		this.a = new Point2I(rectangle.getA());
+		this.b = new Point2I(rectangle.getB());
+		this.c = new Point2I(rectangle.getC());
+		this.d = new Point2I(rectangle.getD());
+	}
+	
+	/**
+	 * Constructs a new {@code Rectangle2I} instance from {@code rectangle}.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle a {@link Rectangle2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 */
+	public Rectangle2I(final Rectangle2F rectangle) {
+		this.a = new Point2I(rectangle.getA());
+		this.b = new Point2I(rectangle.getB());
+		this.c = new Point2I(rectangle.getC());
+		this.d = new Point2I(rectangle.getD());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

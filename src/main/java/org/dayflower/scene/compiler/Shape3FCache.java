@@ -244,63 +244,53 @@ final class Shape3FCache {
 	public void setup(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
+//		Add all distinct Shape3F instances:
+		this.distinctShape3Fs.clear();
+		this.distinctShape3Fs.addAll(NodeFilter.filterAllDistinct(scene, Shape3F.class).stream().filter(Shape3FCache::doFilterShape3F).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+		
 //		Add all distinct Cone3F instances:
 		this.distinctCone3Fs.clear();
-		this.distinctCone3Fs.addAll(NodeFilter.filterAllDistinct(scene, Cone3F.class));
+		this.distinctCone3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Cone3F).map(shape3F -> Cone3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct Cylinder3F instances:
 		this.distinctCylinder3Fs.clear();
-		this.distinctCylinder3Fs.addAll(NodeFilter.filterAllDistinct(scene, Cylinder3F.class));
+		this.distinctCylinder3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Cylinder3F).map(shape3F -> Cylinder3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct Disk3F instances:
 		this.distinctDisk3Fs.clear();
-		this.distinctDisk3Fs.addAll(NodeFilter.filterAllDistinct(scene, Disk3F.class));
+		this.distinctDisk3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Disk3F).map(shape3F -> Disk3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct Paraboloid3F instances:
 		this.distinctParaboloid3Fs.clear();
-		this.distinctParaboloid3Fs.addAll(NodeFilter.filterAllDistinct(scene, Paraboloid3F.class));
+		this.distinctParaboloid3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Paraboloid3F).map(shape3F -> Paraboloid3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct Plane3F instances:
 		this.distinctPlane3Fs.clear();
-		this.distinctPlane3Fs.addAll(NodeFilter.filterAllDistinct(scene, Plane3F.class));
+		this.distinctPlane3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Plane3F).map(shape3F -> Plane3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct Rectangle3F instances:
 		this.distinctRectangle3Fs.clear();
-		this.distinctRectangle3Fs.addAll(NodeFilter.filterAllDistinct(scene, Rectangle3F.class));
+		this.distinctRectangle3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Rectangle3F).map(shape3F -> Rectangle3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct RectangularCuboid3F instances:
 		this.distinctRectangularCuboid3Fs.clear();
-		this.distinctRectangularCuboid3Fs.addAll(NodeFilter.filterAllDistinct(scene, RectangularCuboid3F.class));
+		this.distinctRectangularCuboid3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof RectangularCuboid3F).map(shape3F -> RectangularCuboid3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct Sphere3F instances:
 		this.distinctSphere3Fs.clear();
-		this.distinctSphere3Fs.addAll(NodeFilter.filterAllDistinct(scene, Sphere3F.class));
+		this.distinctSphere3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Sphere3F).map(shape3F -> Sphere3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct Torus3F instances:
 		this.distinctTorus3Fs.clear();
-		this.distinctTorus3Fs.addAll(NodeFilter.filterAllDistinct(scene, Torus3F.class));
+		this.distinctTorus3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Torus3F).map(shape3F -> Torus3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct Triangle3F instances:
 		this.distinctTriangle3Fs.clear();
-		this.distinctTriangle3Fs.addAll(NodeFilter.filterAllDistinct(scene, Triangle3F.class));
+		this.distinctTriangle3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Triangle3F).map(shape3F -> Triangle3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct TriangleMesh3F instances:
 		this.distinctTriangleMesh3Fs.clear();
-		this.distinctTriangleMesh3Fs.addAll(NodeFilter.filterAllDistinct(scene, TriangleMesh3F.class));
-		
-//		Add all distinct Shape3F instances:
-		this.distinctShape3Fs.clear();
-		this.distinctShape3Fs.addAll(this.distinctCone3Fs);
-		this.distinctShape3Fs.addAll(this.distinctCylinder3Fs);
-		this.distinctShape3Fs.addAll(this.distinctDisk3Fs);
-		this.distinctShape3Fs.addAll(this.distinctParaboloid3Fs);
-		this.distinctShape3Fs.addAll(this.distinctPlane3Fs);
-		this.distinctShape3Fs.addAll(this.distinctRectangle3Fs);
-		this.distinctShape3Fs.addAll(this.distinctRectangularCuboid3Fs);
-		this.distinctShape3Fs.addAll(this.distinctSphere3Fs);
-		this.distinctShape3Fs.addAll(this.distinctTorus3Fs);
-		this.distinctShape3Fs.addAll(this.distinctTriangle3Fs);
-		this.distinctShape3Fs.addAll(this.distinctTriangleMesh3Fs);
+		this.distinctTriangleMesh3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof TriangleMesh3F).map(shape3F -> TriangleMesh3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Create offset mappings for all distinct Cone3F instances:
 		this.distinctToOffsetsCone3Fs.clear();
@@ -345,5 +335,35 @@ final class Shape3FCache {
 //		Create offset mappings for all distinct TriangleMesh3F instances:
 		this.distinctToOffsetsTriangleMesh3Fs.clear();
 		this.distinctToOffsetsTriangleMesh3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctTriangleMesh3Fs, triangleMesh3F -> triangleMesh3F.getArrayLength()));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static boolean doFilterShape3F(final Shape3F shape3F) {
+		if(shape3F instanceof Cone3F) {
+			return true;
+		} else if(shape3F instanceof Cylinder3F) {
+			return true;
+		} else if(shape3F instanceof Disk3F) {
+			return true;
+		} else if(shape3F instanceof Paraboloid3F) {
+			return true;
+		} else if(shape3F instanceof Plane3F) {
+			return true;
+		} else if(shape3F instanceof Rectangle3F) {
+			return true;
+		} else if(shape3F instanceof RectangularCuboid3F) {
+			return true;
+		} else if(shape3F instanceof Sphere3F) {
+			return true;
+		} else if(shape3F instanceof Torus3F) {
+			return true;
+		} else if(shape3F instanceof Triangle3F) {
+			return true;
+		} else if(shape3F instanceof TriangleMesh3F) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

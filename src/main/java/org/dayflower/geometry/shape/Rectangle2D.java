@@ -63,6 +63,18 @@ public final class Rectangle2D implements Shape2D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Constructs a new {@code Rectangle2D} instance that contains {@code circle}.
+	 * <p>
+	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param circle a {@link Circle2D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
+	 */
+	public Rectangle2D(final Circle2D circle) {
+		this(new Point2D(circle.getCenter().getX() - circle.getRadius(), circle.getCenter().getY() - circle.getRadius()), new Point2D(circle.getCenter().getX() + circle.getRadius(), circle.getCenter().getY() + circle.getRadius()));
+	}
+	
+	/**
 	 * Constructs a new {@code Rectangle2D} instance based on {@code x} and {@code y}.
 	 * <p>
 	 * If either {@code x} or {@code y} are {@code null}, a {@code NullPointerException} will be thrown.

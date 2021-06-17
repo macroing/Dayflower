@@ -63,6 +63,18 @@ public final class Rectangle2F implements Shape2F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Constructs a new {@code Rectangle2F} instance that contains {@code circle}.
+	 * <p>
+	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param circle a {@link Circle2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
+	 */
+	public Rectangle2F(final Circle2F circle) {
+		this(new Point2F(circle.getCenter().getX() - circle.getRadius(), circle.getCenter().getY() - circle.getRadius()), new Point2F(circle.getCenter().getX() + circle.getRadius(), circle.getCenter().getY() + circle.getRadius()));
+	}
+	
+	/**
 	 * Constructs a new {@code Rectangle2F} instance based on {@code x} and {@code y}.
 	 * <p>
 	 * If either {@code x} or {@code y} are {@code null}, a {@code NullPointerException} will be thrown.

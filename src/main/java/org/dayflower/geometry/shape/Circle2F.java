@@ -103,6 +103,19 @@ public final class Circle2F implements Shape2F {
 		this.radius = radius;
 	}
 	
+	/**
+	 * Constructs a new {@code Circle2F} instance that contains {@code rectangle}.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle a {@link Rectangle2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 */
+	public Circle2F(final Rectangle2F rectangle) {
+		this.center = Point2F.midpoint(rectangle.getA(), rectangle.getC());
+		this.radius = Point2F.distance(rectangle.getA(), rectangle.getC()) / 2.0F;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

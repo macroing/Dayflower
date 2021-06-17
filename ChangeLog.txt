@@ -1,4 +1,23 @@
-2021-06-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add Vertex3D-caching to the Triangle3D class.
+	* ADD:		Add Vertex3F-caching to the Triangle3F class.
+	* ADD:		Add the methods getCached(Vertex3D), getCacheSize() and clearCache() to the Vertex3D class.
+	* ADD:		Add the methods getCached(Vertex3F), getCacheSize() and clearCache() to the Vertex3F class.
+	* ADD:		Add the constructors Circle2I(Circle2D) and Circle2I(Circle2F) to the Circle2I class.
+	* ADD:		Add the constructors Rectangle2I(Rectangle2D) and Rectangle2I(Rectangle2F) to the Rectangle2I class.
+	* ADD:		Add the constructors Point2I(Point2D) and Point2I(Point2F) to the Point2I class.
+	* ADD:		Add the constructor Circle2D(Rectangle2D) to the Circle2D class.
+	* ADD:		Add the constructor Circle2F(Rectangle2F) to the Circle2F class.
+	* ADD:		Add the method midpoint(Point2D, Point2D) to the Point2D class.
+	* ADD:		Add the method midpoint(Point2F, Point2F) to the Point2F class.
+	* ADD:		Add the constructor Rectangle2D(Circle2D) to the Rectangle2D class.
+	* ADD:		Add the constructor Rectangle2F(Circle2F) to the Rectangle2F class.
+	* ADD:		Add the constructor Rectangle2I(Circle2I) to the Rectangle2I class.
+	* CHANGE:	Optimized the Scene Compiler API.
+	* REMOVE:	Remove the method getBounds() from the Circle2I class.
+
+2021-06-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method add(Point2D, Vector2D, double) to the Point2D class.
 	* ADD:		Add the method add(Point2F, Vector2F, float) to the Point2F class.

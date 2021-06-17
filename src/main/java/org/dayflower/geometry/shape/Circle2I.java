@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Ints.toInt;
+
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -71,6 +73,32 @@ public final class Circle2I implements Shape2I {
 	}
 	
 	/**
+	 * Constructs a new {@code Circle2I} instance from {@code circle}.
+	 * <p>
+	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param circle a {@link Circle2D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
+	 */
+	public Circle2I(final Circle2D circle) {
+		this.center = new Point2I(circle.getCenter());
+		this.radius = toInt(circle.getRadius());
+	}
+	
+	/**
+	 * Constructs a new {@code Circle2I} instance from {@code circle}.
+	 * <p>
+	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param circle a {@link Circle2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
+	 */
+	public Circle2I(final Circle2F circle) {
+		this.center = new Point2I(circle.getCenter());
+		this.radius = toInt(circle.getRadius());
+	}
+	
+	/**
 	 * Constructs a new {@code Circle2I} instance with a center of {@code center} and a radius of {@code 10}.
 	 * <p>
 	 * If {@code center} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -111,14 +139,14 @@ public final class Circle2I implements Shape2I {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * circle.findPointsOfComplement(circle.getBounds());
+	 * circle.findPointsOfComplement(new Rectangle2I(circle));
 	 * }
 	 * </pre>
 	 * 
 	 * @return a {@code List} with {@code Point2I} instances that represents the complement of this {@code Circle2I} instance within {@code circle.getBounds()}
 	 */
 	public List<Point2I> findPointsOfComplement() {
-		return findPointsOfComplement(getBounds());
+		return findPointsOfComplement(new Rectangle2I(this));
 	}
 	
 	/**
@@ -191,14 +219,14 @@ public final class Circle2I implements Shape2I {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * circle.findPointsOfIntersection(circle.getBounds());
+	 * circle.findPointsOfIntersection(new Rectangle2I(circle));
 	 * }
 	 * </pre>
 	 * 
 	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Circle2I} instance and {@code circle.getBounds()}
 	 */
 	public List<Point2I> findPointsOfIntersection() {
-		return findPointsOfIntersection(getBounds());
+		return findPointsOfIntersection(new Rectangle2I(this));
 	}
 	
 	/**
@@ -268,15 +296,6 @@ public final class Circle2I implements Shape2I {
 	 */
 	public Point2I getCenter() {
 		return this.center;
-	}
-	
-	/**
-	 * Returns a new {@link Rectangle2I} instance with the bounds for this {@code Circle2I} instance.
-	 * 
-	 * @return a new {@code Rectangle2I} instance with the bounds for this {@code Circle2I} instance
-	 */
-	public Rectangle2I getBounds() {
-		return new Rectangle2I(new Point2I(this.center.getX() - this.radius, this.center.getY() - this.radius), new Point2I(this.center.getX() + this.radius, this.center.getY() + this.radius));
 	}
 	
 	/**

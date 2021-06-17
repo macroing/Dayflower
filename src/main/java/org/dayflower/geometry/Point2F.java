@@ -404,6 +404,23 @@ public final class Point2F implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Point2F} instance that represents the midpoint of {@code a} and {@code b}.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2F} instance
+	 * @param b a {@code Point2F} instance
+	 * @return a new {@code Point2F} instance that represents the midpoint of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point2F midpoint(final Point2F a, final Point2F b) {
+		final float component1 = (a.component1 + b.component1) * 0.5F;
+		final float component2 = (a.component2 + b.component2) * 0.5F;
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
 	 * Returns a new {@code Point2F} instance with the smallest component values.
 	 * 
 	 * @return a new {@code Point2F} instance with the smallest component values

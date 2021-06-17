@@ -91,23 +91,21 @@ final class BoundingVolume3FCache {
 	public void setup(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
+//		Add all distinct BoundingVolume3F instances:
+		this.distinctBoundingVolume3Fs.clear();
+		this.distinctBoundingVolume3Fs.addAll(NodeFilter.filterAllDistinct(scene, BoundingVolume3F.class).stream().filter(BoundingVolume3FCache::doFilterBoundingVolume3F).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+		
 //		Add all distinct AxisAlignedBoundingBox3F instances:
 		this.distinctAxisAlignedBoundingBox3Fs.clear();
-		this.distinctAxisAlignedBoundingBox3Fs.addAll(NodeFilter.filterAllDistinct(scene, AxisAlignedBoundingBox3F.class));
+		this.distinctAxisAlignedBoundingBox3Fs.addAll(this.distinctBoundingVolume3Fs.stream().filter(boundingVolume3F -> boundingVolume3F instanceof AxisAlignedBoundingBox3F).map(boundingVolume3F -> AxisAlignedBoundingBox3F.class.cast(boundingVolume3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct BoundingSphere3F instances:
 		this.distinctBoundingSphere3Fs.clear();
-		this.distinctBoundingSphere3Fs.addAll(NodeFilter.filterAllDistinct(scene, BoundingSphere3F.class));
+		this.distinctBoundingSphere3Fs.addAll(this.distinctBoundingVolume3Fs.stream().filter(boundingVolume3F -> boundingVolume3F instanceof BoundingSphere3F).map(boundingVolume3F -> BoundingSphere3F.class.cast(boundingVolume3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct InfiniteBoundingVolume3F instances:
 		this.distinctInfiniteBoundingVolume3Fs.clear();
-		this.distinctInfiniteBoundingVolume3Fs.addAll(NodeFilter.filterAllDistinct(scene, InfiniteBoundingVolume3F.class));
-		
-//		Add all distinct BoundingVolume3F instances:
-		this.distinctBoundingVolume3Fs.clear();
-		this.distinctBoundingVolume3Fs.addAll(this.distinctAxisAlignedBoundingBox3Fs);
-		this.distinctBoundingVolume3Fs.addAll(this.distinctBoundingSphere3Fs);
-		this.distinctBoundingVolume3Fs.addAll(this.distinctInfiniteBoundingVolume3Fs);
+		this.distinctInfiniteBoundingVolume3Fs.addAll(this.distinctBoundingVolume3Fs.stream().filter(boundingVolume3F -> boundingVolume3F instanceof InfiniteBoundingVolume3F).map(boundingVolume3F -> InfiniteBoundingVolume3F.class.cast(boundingVolume3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Create offset mappings for all distinct AxisAlignedBoundingBox3F instances:
 		this.distinctToOffsetsAxisAlignedBoundingBox3Fs.clear();
@@ -116,5 +114,19 @@ final class BoundingVolume3FCache {
 //		Create offset mappings for all distinct BoundingSphere3F instances:
 		this.distinctToOffsetsBoundingSphere3Fs.clear();
 		this.distinctToOffsetsBoundingSphere3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBoundingSphere3Fs, BoundingSphere3F.ARRAY_LENGTH));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static boolean doFilterBoundingVolume3F(final BoundingVolume3F boundingVolume3F) {
+		if(boundingVolume3F instanceof AxisAlignedBoundingBox3F) {
+			return true;
+		} else if(boundingVolume3F instanceof BoundingSphere3F) {
+			return true;
+		} else if(boundingVolume3F instanceof InfiniteBoundingVolume3F) {
+			return true;
+		} else {
+			return true;
+		}
 	}
 }

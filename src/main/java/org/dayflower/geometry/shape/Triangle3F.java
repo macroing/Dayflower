@@ -26,6 +26,8 @@ import static org.dayflower.utility.Floats.max;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -131,9 +133,9 @@ public final class Triangle3F implements Shape3F {
 	 * Constructs a new {@code Triangle3F} instance.
 	 */
 	public Triangle3F() {
-		this.a = new Vertex3F(new Point2F(0.5F, 0.0F), new Point4F(+0.0F, +1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
-		this.b = new Vertex3F(new Point2F(1.0F, 1.0F), new Point4F(+1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
-		this.c = new Vertex3F(new Point2F(0.0F, 1.0F), new Point4F(-1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
+		this.a = Vertex3F.getCached(new Vertex3F(new Point2F(0.5F, 0.0F), new Point4F(+0.0F, +1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F))));
+		this.b = Vertex3F.getCached(new Vertex3F(new Point2F(1.0F, 1.0F), new Point4F(+1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F))));
+		this.c = Vertex3F.getCached(new Vertex3F(new Point2F(0.0F, 1.0F), new Point4F(-1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F))));
 		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(new Point3F(this.a.getPosition()), new Point3F(this.b.getPosition()), new Point3F(this.c.getPosition())));
 	}
 	
@@ -148,9 +150,9 @@ public final class Triangle3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public Triangle3F(final Vertex3F a, final Vertex3F b, final Vertex3F c) {
-		this.a = Objects.requireNonNull(a, "a == null");
-		this.b = Objects.requireNonNull(b, "b == null");
-		this.c = Objects.requireNonNull(c, "c == null");
+		this.a = Vertex3F.getCached(Objects.requireNonNull(a, "a == null"));
+		this.b = Vertex3F.getCached(Objects.requireNonNull(b, "b == null"));
+		this.c = Vertex3F.getCached(Objects.requireNonNull(c, "c == null"));
 		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(new Point3F(a.getPosition()), new Point3F(b.getPosition()), new Point3F(c.getPosition())));
 	}
 	
@@ -506,6 +508,10 @@ public final class Triangle3F implements Shape3F {
 	 * @author J&#246;rgen Lundgren
 	 */
 	public static final class Vertex3F implements Node {
+		private static final Map<Vertex3F, Vertex3F> CACHE = new HashMap<>();
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 		private final OrthonormalBasis33F orthonormalBasis;
 		private final Point2F textureCoordinates;
 		private final Point4F position;
@@ -701,6 +707,19 @@ public final class Triangle3F implements Shape3F {
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		/**
+		 * Returns a cached version of {@code vertex}.
+		 * <p>
+		 * If {@code vertex} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param vertex a {@code Vertex3F} instance
+		 * @return a cached version of {@code vertex}
+		 * @throws NullPointerException thrown if, and only if, {@code vertex} is {@code null}
+		 */
+		public static Vertex3F getCached(final Vertex3F vertex) {
+			return CACHE.computeIfAbsent(Objects.requireNonNull(vertex, "vertex == null"), key -> vertex);
+		}
+		
+		/**
 		 * Performs a linear interpolation operation on the supplied values.
 		 * <p>
 		 * Returns a {@code Vertex3F} instance with the result of the linear interpolation operation.
@@ -767,6 +786,22 @@ public final class Triangle3F implements Shape3F {
 			final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.transform(matrixInverse, vertex.orthonormalBasis);
 			
 			return new Vertex3F(textureCoordinates, position, orthonormalBasis);
+		}
+		
+		/**
+		 * Returns the size of the cache.
+		 * 
+		 * @return the size of the cache
+		 */
+		public static int getCacheSize() {
+			return CACHE.size();
+		}
+		
+		/**
+		 * Clears the cache.
+		 */
+		public static void clearCache() {
+			CACHE.clear();
 		}
 	}
 	

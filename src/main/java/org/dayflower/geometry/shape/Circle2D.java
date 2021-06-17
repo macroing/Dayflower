@@ -103,6 +103,19 @@ public final class Circle2D implements Shape2D {
 		this.radius = radius;
 	}
 	
+	/**
+	 * Constructs a new {@code Circle2D} instance that contains {@code rectangle}.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle a {@link Rectangle2D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 */
+	public Circle2D(final Rectangle2D rectangle) {
+		this.center = Point2D.midpoint(rectangle.getA(), rectangle.getC());
+		this.radius = Point2D.distance(rectangle.getA(), rectangle.getC()) / 2.0D;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

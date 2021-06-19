@@ -20,7 +20,6 @@ package org.dayflower.geometry.boundingvolume.hierarchy;
 
 import static org.dayflower.utility.Doubles.minOrNaN;
 
-import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -28,10 +27,16 @@ import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.SurfaceIntersector3D;
+import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code TreeBVHNode3D} is an implementation of {@link BVHNode3D} that represents a tree node.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class TreeBVHNode3D extends BVHNode3D {
 	/**
 	 * The offset for the left bounding volume hierarchy node in the {@code int[]}.
@@ -52,7 +57,21 @@ public final class TreeBVHNode3D extends BVHNode3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code TreeBVHNode3D} instance.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code bVHNodeL} or {@code bVHNodeR} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code depth} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param a a reference {@link Point3D} for the {@link AxisAlignedBoundingBox3D} instance that will be used
+	 * @param b a reference {@code Point3D} for the {@code AxisAlignedBoundingBox3D} instance that will be used
+	 * @param depth the depth
+	 * @param bVHNodeL the {@link BVHNode3D} instance on the left-hand side
+	 * @param bVHNodeR the {@code BVHNode3D} instance on the right-hand side
+	 * @throws IllegalArgumentException thrown if, and only if, {@code depth} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code bVHNodeL} or {@code bVHNodeR} are {@code null}
+	 */
 	public TreeBVHNode3D(final Point3D a, final Point3D b, final int depth, final BVHNode3D bVHNodeL, final BVHNode3D bVHNodeR) {
 		super(a, b, depth);
 		
@@ -62,7 +81,27 @@ public final class TreeBVHNode3D extends BVHNode3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Accepts a {@link NodeHierarchicalVisitor}.
+	 * <p>
+	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.
+	 * <p>
+	 * If {@code nodeHierarchicalVisitor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}, a {@code NodeTraversalException} will be thrown with the {@code RuntimeException} wrapped.
+	 * <p>
+	 * This implementation will:
+	 * <ul>
+	 * <li>throw a {@code NullPointerException} if {@code nodeHierarchicalVisitor} is {@code null}.</li>
+	 * <li>throw a {@code NodeTraversalException} if {@code nodeHierarchicalVisitor} throws a {@code RuntimeException}.</li>
+	 * <li>traverse its child {@code Node} instances.</li>
+	 * </ul>
+	 * 
+	 * @param nodeHierarchicalVisitor the {@code NodeHierarchicalVisitor} to accept
+	 * @return the result of {@code nodeHierarchicalVisitor.visitLeave(this)}
+	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
+	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
+	 */
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -88,7 +127,14 @@ public final class TreeBVHNode3D extends BVHNode3D {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code TreeBVHNode3D} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code TreeBVHNode3D}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code TreeBVHNode3D} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TreeBVHNode3D}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -108,7 +154,17 @@ public final class TreeBVHNode3D extends BVHNode3D {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code surfaceIntersector} and this {@code TreeBVHNode3D} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TreeBVHNode3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code surfaceIntersector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceIntersector a {@link SurfaceIntersector3D} instance
+	 * @return {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TreeBVHNode3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersector} is {@code null}
+	 */
 	@Override
 	public boolean intersection(final SurfaceIntersector3D surfaceIntersector) {
 		if(surfaceIntersector.isIntersecting(getBoundingVolume())) {
@@ -121,25 +177,47 @@ public final class TreeBVHNode3D extends BVHNode3D {
 		return false;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code TreeBVHNode3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code TreeBVHNode3D} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code TreeBVHNode3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	@Override
 	public boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		return (getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) && (this.bVHNodeL.intersects(ray, tMinimum, tMaximum) || this.bVHNodeR.intersects(ray, tMinimum, tMaximum));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the surface area of this {@code TreeBVHNode3D} instance.
+	 * 
+	 * @return the surface area of this {@code TreeBVHNode3D} instance
+	 */
 	@Override
 	public double getSurfaceArea() {
 		return this.bVHNodeL.getSurfaceArea() + this.bVHNodeR.getSurfaceArea();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the length of the array that contains a compiled version of this {@code TreeBVHNode3D} instance.
+	 * 
+	 * @return the length of the array that contains a compiled version of this {@code TreeBVHNode3D} instance
+	 */
 	@Override
 	public int getArrayLength() {
 		return 8;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code TreeBVHNode3D} instance.
+	 * 
+	 * @return a hash code for this {@code TreeBVHNode3D} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.bVHNodeL, this.bVHNodeR);
@@ -147,13 +225,35 @@ public final class TreeBVHNode3D extends BVHNode3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code TreeBVHNode3D} instance.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3D} instance that contains information about the intersection, if it was found.
+	 * <p>
+	 * If either {@code ray} or {@code tBounds} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code TreeBVHNode3D} instance
+	 * @param tBounds the minimum and maximum parametric distances
+	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
+	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code tBounds} are {@code null}
+	 */
 	@Override
 	protected Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double[] tBounds) {
 		return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3D.closest(this.bVHNodeL.intersection(ray, tBounds), this.bVHNodeR.intersection(ray, tBounds)) : Optional.empty();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code TreeBVHNode3D} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists.
+	 * <p>
+	 * If either {@code ray} or {@code tBounds} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code TreeBVHNode3D} instance
+	 * @param tBounds the minimum and maximum parametric distances
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code tBounds} are {@code null}
+	 */
 	@Override
 	protected double intersectionT(final Ray3D ray, final double[] tBounds) {
 		return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.bVHNodeL.intersectionT(ray, tBounds), this.bVHNodeR.intersectionT(ray, tBounds)) : Double.NaN;

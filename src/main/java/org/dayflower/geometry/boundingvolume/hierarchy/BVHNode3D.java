@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume.hierarchy;
 
-import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -31,7 +30,12 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code BVHNode3D} is a {@code double}-based node in a bounding volume hierarchy (BVH) structure.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public abstract class BVHNode3D implements Node {
 	/**
 	 * The offset for the offset of the {@link BoundingVolume3D} in the {@code int[]}.
@@ -99,15 +103,47 @@ public abstract class BVHNode3D implements Node {
 		return this.boundingVolume;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code BVHNode3D} instance.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3D} instance that contains information about the intersection, if it was found.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code BVHNode3D} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public final Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		return intersection(Objects.requireNonNull(ray, "ray == null"), new double[] {tMinimum, tMaximum});
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code surfaceIntersector} and this {@code BVHNode3D} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code BVHNode3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code surfaceIntersector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceIntersector a {@link SurfaceIntersector3D} instance
+	 * @return {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code BVHNode3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersector} is {@code null}
+	 */
 	public abstract boolean intersection(final SurfaceIntersector3D surfaceIntersector);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code BVHNode3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code BVHNode3D} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code BVHNode3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public abstract boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum);
 	
 	/**
@@ -117,7 +153,19 @@ public abstract class BVHNode3D implements Node {
 	 */
 	public abstract double getSurfaceArea();
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code BVHNode3D} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code BVHNode3D} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public final double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		return intersectionT(Objects.requireNonNull(ray, "ray == null"), new double[] {tMinimum, tMaximum});
 	}
@@ -140,9 +188,31 @@ public abstract class BVHNode3D implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code BVHNode3D} instance.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3D} instance that contains information about the intersection, if it was found.
+	 * <p>
+	 * If either {@code ray} or {@code tBounds} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code BVHNode3D} instance
+	 * @param tBounds the minimum and maximum parametric distances
+	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
+	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code tBounds} are {@code null}
+	 */
 	protected abstract Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double[] tBounds);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code BVHNode3D} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists.
+	 * <p>
+	 * If either {@code ray} or {@code tBounds} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code BVHNode3D} instance
+	 * @param tBounds the minimum and maximum parametric distances
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code tBounds} are {@code null}
+	 */
 	protected abstract double intersectionT(final Ray3D ray, final double[] tBounds);
 }

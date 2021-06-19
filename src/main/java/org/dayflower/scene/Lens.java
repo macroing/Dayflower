@@ -45,16 +45,33 @@ public enum Lens {
 	
 	/**
 	 * Returns a {@code String} representation of this {@code Lens} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * lens.toString(false);
+	 * }
+	 * </pre>
 	 * 
 	 * @return a {@code String} representation of this {@code Lens} instance
 	 */
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code Lens} instance.
+	 * 
+	 * @param isInternalFormat {@code true} if, and only if, the internal format should be used, {@code false} otherwise
+	 * @return a {@code String} representation of this {@code Lens} instance
+	 */
+	public String toString(final boolean isInternalFormat) {
 		switch(this) {
 			case FISHEYE:
-				return "Lens.FISHEYE";
+				return isInternalFormat ? "Lens.FISHEYE" : "Fisheye Lens";
 			case THIN:
-				return "Lens.THIN";
+				return isInternalFormat ? "Lens.THIN" : "Thin Lens";
 			default:
 				return "";
 		}

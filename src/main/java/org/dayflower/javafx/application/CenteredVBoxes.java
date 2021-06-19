@@ -41,6 +41,7 @@ import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.scene.AbstractCameraObserver;
 import org.dayflower.scene.Camera;
+import org.dayflower.scene.Lens;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
@@ -71,8 +72,11 @@ final class CenteredVBoxes {
 	public static CenteredVBox createCenteredVBoxForCamera(final Renderer renderer) {
 		final Camera camera = renderer.getScene().getCamera();
 		
-		final
-		CenteredVBox centeredVBox = new CenteredVBox();
+		final CenteredVBox centeredVBox = new CenteredVBox();
+		
+		final ComboBox<Lens> comboBoxLens = centeredVBox.addComboBox(Arrays.asList(Lens.FISHEYE, Lens.THIN), camera.getLens());
+		
+		centeredVBox.addButton("Update Lens", actionEvent -> camera.setLens(comboBoxLens.getValue()));
 		centeredVBox.addLabel("Pitch", 12.0D);
 		
 		final Slider sliderPitch = centeredVBox.addSlider(-90.0D, 90.0D, camera.getPitch().getDegrees(), 10.0D, 20.0D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraPitchChange(camera, newValue.floatValue()));

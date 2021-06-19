@@ -152,6 +152,14 @@ final class RendererViewPane extends BorderPane {
 			camera.moveRight(0.3F);
 		}
 		
+		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.E)) {
+			camera.moveDown(0.3F);
+		}
+		
+		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.Q)) {
+			camera.moveUp(0.3F);
+		}
+		
 		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.S)) {
 			camera.moveBackward(0.3F);
 		}

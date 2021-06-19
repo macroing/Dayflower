@@ -1,7 +1,10 @@
 2021-06-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the keys 'Q' and 'E' in the GUI to move the camera up and down, respectively.
+	* ADD:		Add the method toString(boolean) to the Lens enum. If the parameter argument true is passed, the old String representation (which is now called the internal format) will be returned, otherwise the new external format will be used.
 	* ADD:		Add camera configuration to the configuration view on the left-hand side in the GUI.
 	* ADD:		Add a new Geometry Bounding Volume Hierarchy API.
+	* CHANGE:	Change what's returned from the toString() method of the Lens enum.
 	* CHANGE:	Change the layout of the configuration view on the left-hand side in the GUI to an accordion.
 	* CHANGE:	Some minor changes to the PerezLight class and its equivalent GPU-renderer version in the AbstractLightKernel class.
 	* CHANGE:	Refactor the TriangleMesh3D, TriangleMesh3F, AbstractGeometryKernel and Shape3FCache classes to use the new Geometry Bounding Volume Hierarchy API.

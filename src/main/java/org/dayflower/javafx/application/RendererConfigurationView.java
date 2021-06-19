@@ -22,25 +22,23 @@ import java.util.Objects;
 
 import org.dayflower.renderer.Renderer;
 
-import javafx.geometry.Insets;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-final class RendererConfigurationView extends VBox {
+final class RendererConfigurationView extends Accordion {
 	public RendererConfigurationView(final Renderer renderer) {
 		Objects.requireNonNull(renderer, "renderer == null");
 		
-		setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 1.0D, 0.0D, 0.0D))));
-		setFillWidth(true);
-		setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
-		setSpacing(20.0D);
+		getPanes().add(new TitledPane("Camera", CenteredVBoxes.createCenteredVBoxForCamera(renderer)));
+		getPanes().add(new TitledPane("Renderer", CenteredVBoxes.createCenteredVBoxForRenderer(renderer)));
+		getPanes().add(new TitledPane("Scene", CenteredVBoxes.createCenteredVBoxForScene(renderer)));
 		
-		getChildren().add(CenteredVBoxes.createCenteredVBoxForRenderer(renderer));
-		getChildren().add(CenteredVBoxes.createCenteredVBoxForScene(renderer));
+		setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 1.0D, 0.0D, 0.0D))));
 	}
 }

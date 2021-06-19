@@ -24,17 +24,20 @@ import java.util.Collection;
 
 import org.dayflower.javafx.scene.control.Labels;
 
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 
 /**
- * A {@code CenteredVBox} is a {@code VBox} that centers, fills and provides spacing for its contents.
+ * A {@code CenteredVBox} is a {@code VBox} that centers the content horizontally, fills its width and provides padding and spacing.
  * <p>
  * In addition to the above, a few useful methods are provided to add different {@code Node} instances.
  * 
@@ -46,8 +49,9 @@ public final class CenteredVBox extends VBox {
 	 * Constructs a new {@code CenteredVBox} instance.
 	 */
 	public CenteredVBox() {
-		setAlignment(Pos.CENTER);
+		setAlignment(Pos.TOP_CENTER);
 		setFillWidth(true);
+		setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
 		setSpacing(10.0D);
 	}
 	
@@ -126,5 +130,42 @@ public final class CenteredVBox extends VBox {
 		getChildren().add(separator);
 		
 		return separator;
+	}
+	
+	/**
+	 * Adds a {@code Slider} instance.
+	 * <p>
+	 * Returns the {@code Slider} instance.
+	 * <p>
+	 * If {@code changeListener} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param min the value of the property {@code min}
+	 * @param max the value of the property {@code max}
+	 * @param value the value of the property {@code value}
+	 * @param blockIncrement the value of the property {@code blockIncrement}
+	 * @param majorTickUnit the value of the property {@code majorTickUnit}
+	 * @param showTickLabels the value of the property {@code showTickLabels}
+	 * @param showTickMarks the value of the property {@code showTickMarks}
+	 * @param snapToTicks the value of the property {@code snapToTicks}
+	 * @param changeListener a {@code ChangeListener}
+	 * @return the {@code Slider} instance
+	 * @throws NullPointerException thrown if, and only if, {@code changeListener} is {@code null}
+	 */
+	public Slider addSlider(final double min, final double max, final double value, final double blockIncrement, final double majorTickUnit, final boolean showTickLabels, final boolean showTickMarks, final boolean snapToTicks, final ChangeListener<? super Number> changeListener) {
+		final
+		Slider slider = new Slider();
+		slider.setBlockIncrement(blockIncrement);
+		slider.setMajorTickUnit(majorTickUnit);
+		slider.setMax(max);
+		slider.setMin(min);
+		slider.setShowTickLabels(showTickLabels);
+		slider.setShowTickMarks(showTickMarks);
+		slider.setSnapToTicks(snapToTicks);
+		slider.setValue(value);
+		slider.valueProperty().addListener(changeListener);
+		
+		getChildren().add(slider);
+		
+		return slider;
 	}
 }

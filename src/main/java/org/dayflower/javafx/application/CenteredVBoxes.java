@@ -19,7 +19,9 @@
 package org.dayflower.javafx.application;
 
 import java.util.Arrays;
+import java.util.Objects;
 
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Cone3F;
@@ -37,6 +39,8 @@ import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RenderingAlgorithm;
+import org.dayflower.scene.AbstractCameraObserver;
+import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
@@ -53,7 +57,9 @@ import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.material.UberMaterial;
 
+import javafx.application.Platform;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Slider;
 
 final class CenteredVBoxes {
 	private CenteredVBoxes() {
@@ -62,10 +68,26 @@ final class CenteredVBoxes {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static CenteredVBox createCenteredVBoxForRenderer(final Renderer renderer) {
+	public static CenteredVBox createCenteredVBoxForCamera(final Renderer renderer) {
+		final Camera camera = renderer.getScene().getCamera();
+		
 		final
 		CenteredVBox centeredVBox = new CenteredVBox();
-		centeredVBox.addLabel("Renderer Configuration", 16.0D);
+		centeredVBox.addLabel("Pitch", 12.0D);
+		
+		final Slider sliderPitch = centeredVBox.addSlider(-90.0D, 90.0D, camera.getPitch().getDegrees(), 10.0D, 20.0D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraPitchChange(camera, newValue.floatValue()));
+		
+		centeredVBox.addLabel("Yaw", 12.0D);
+		
+		final Slider sliderYaw = centeredVBox.addSlider(0.0D, 360.0D, camera.getPitch().getDegrees(), 20.0D, 40.0D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraYawChange(camera, newValue.floatValue()));
+		
+		camera.addCameraObserver(new CameraObserverImpl(sliderPitch, sliderYaw));
+		
+		return centeredVBox;
+	}
+	
+	public static CenteredVBox createCenteredVBoxForRenderer(final Renderer renderer) {
+		final CenteredVBox centeredVBox = new CenteredVBox();
 		
 		if(renderer instanceof CombinedProgressiveImageOrderRenderer) {
 			final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = CombinedProgressiveImageOrderRenderer.class.cast(renderer);
@@ -87,9 +109,7 @@ final class CenteredVBoxes {
 	}
 	
 	public static CenteredVBox createCenteredVBoxForScene(final Renderer renderer) {
-		final
-		CenteredVBox centeredVBox = new CenteredVBox();
-		centeredVBox.addLabel("Scene Configuration", 16.0D);
+		final CenteredVBox centeredVBox = new CenteredVBox();
 		
 		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(ClearCoatMaterial.NAME, DisneyMaterial.NAME, GlassMaterial.NAME, GlossyMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME), MatteMaterial.NAME);
 		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Cone3F.NAME, Cylinder3F.NAME, Disk3F.NAME, Hyperboloid3F.NAME, Paraboloid3F.NAME, Plane3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
@@ -220,5 +240,59 @@ final class CenteredVBoxes {
 		}
 		
 		return null;
+	}
+	
+	private static void doHandleCameraPitchChange(final Camera camera, final float value) {
+		camera.setPitch(AngleF.degrees(value, -90.0F, 90.0F));
+		camera.setOrthonormalBasis();
+	}
+	
+	private static void doHandleCameraYawChange(final Camera camera, final float value) {
+		camera.setYaw(AngleF.degrees(value));
+		camera.setOrthonormalBasis();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class CameraObserverImpl extends AbstractCameraObserver {
+		private final Slider sliderPitch;
+		private final Slider sliderYaw;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public CameraObserverImpl(final Slider sliderPitch, final Slider sliderYaw) {
+			this.sliderPitch = Objects.requireNonNull(sliderPitch, "sliderPitch == null");
+			this.sliderYaw = Objects.requireNonNull(sliderYaw, "sliderYaw == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void onChangePitch(final Camera camera, final AngleF oldPitch, final AngleF newPitch) {
+			Objects.requireNonNull(camera, "camera == null");
+			Objects.requireNonNull(oldPitch, "oldPitch == null");
+			Objects.requireNonNull(newPitch, "newPitch == null");
+			
+			doRunInFXApplicationThread(() -> this.sliderPitch.setValue(newPitch.getDegrees()));
+		}
+		
+		@Override
+		public void onChangeYaw(final Camera camera, final AngleF oldYaw, final AngleF newYaw) {
+			Objects.requireNonNull(camera, "camera == null");
+			Objects.requireNonNull(oldYaw, "oldYaw == null");
+			Objects.requireNonNull(newYaw, "newYaw == null");
+			
+			doRunInFXApplicationThread(() -> this.sliderYaw.setValue(newYaw.getDegrees()));
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private static void doRunInFXApplicationThread(final Runnable runnable) {
+			if(Platform.isFxApplicationThread()) {
+				runnable.run();
+			} else {
+				Platform.runLater(runnable);
+			}
+		}
 	}
 }

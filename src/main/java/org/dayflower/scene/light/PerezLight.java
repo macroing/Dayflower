@@ -343,24 +343,25 @@ public final class PerezLight extends Light {
 		final boolean isSamplingSun = Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalG()) > random && Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalS()) > random;
 		
 		if(isSamplingSun) {
-			final Vector3F incomingObjectSpace = this.sunDirection;
+//			final Vector3F incomingObjectSpace = this.sunDirection;
 			final Vector3F incomingWorldSpace = this.sunDirectionWorldSpace;
 			
-			final float sinTheta = incomingObjectSpace.sinTheta();
+//			final float sinTheta = incomingObjectSpace.sinTheta();
 			
-			if(!isZero(sinTheta)) {
+//			if(!isZero(sinTheta)) {
 				final Color3F result = this.sunColor;
 				
 				final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
 				
-				final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
+//				final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
 				
-				final Sample2F sampleRemapped = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
+//				final Sample2F sampleRemapped = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
 				
-				final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true) / (2.0F * PI * PI * sinTheta);
+//				final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true) / (2.0F * PI * PI * sinTheta);
+				final float probabilityDensityFunctionValue = 1.0F;
 				
 				return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue));
-			}
+//			}
 		}
 		
 		final Sample2F sampleRemapped = this.distribution.continuousRemap(new Sample2F(sample.getU(), sample.getV()));
@@ -747,7 +748,8 @@ public final class PerezLight extends Light {
 				final float sphericalV = (v + 0.5F) * resolutionVReciprocal;
 				final float sinTheta = sin(PI * sphericalV);
 				
-				final Color3F colorRGB = doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV));
+//				final Color3F colorRGB = doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV));
+				final Color3F colorRGB = Color3F.minimumTo0(doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV)));
 				
 				functions[u][v] = colorRGB.luminance() * sinTheta;
 			}
@@ -789,7 +791,7 @@ public final class PerezLight extends Light {
 	
 	private void doSetSunColor() {
 		if(this.sunDirection.getZ() > 0.0F) {
-			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingPBRT(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(), 0.0001F)));
+			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingPBRT(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(), 0.01F/*0.0001F*/)));
 		} else {
 			this.sunColor = Color3F.BLACK;
 		}

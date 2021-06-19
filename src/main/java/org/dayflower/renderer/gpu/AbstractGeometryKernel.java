@@ -28,6 +28,9 @@ import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
@@ -38,7 +41,6 @@ import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
-import org.dayflower.geometry.shape.TriangleMesh3F;
 
 /**
  * An {@code AbstractGeometryKernel} is an abstract extension of the {@code AbstractImageKernel} class that adds additional features.
@@ -3101,16 +3103,16 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		
 		while(relativeOffset != -1) {
 			final int offset = absoluteOffset + relativeOffset;
-			final int id = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_ID];
-			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
-			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_NEXT_OFFSET];
-			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT];
+			final int id = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_ID];
+			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
+			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_NEXT_OFFSET];
+			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT];
 			
 			final boolean isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 			
-			if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_LEAF_B_V_H_NODE) {
+			if(isIntersectingBoundingVolume && id == LeafBVHNode3F.ID) {
 				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
-					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT + 1 + i];
+					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT + 1 + i];
 					
 					final float tObjectSpace = this.shape3FTriangle3FIntersectionT(triangleOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 					
@@ -3120,7 +3122,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 				}
 				
 				relativeOffset = nextOffset;
-			} else if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_TREE_B_V_H_NODE) {
+			} else if(isIntersectingBoundingVolume && id == TreeBVHNode3F.ID) {
 				relativeOffset = leftOffsetOrTriangleCount;
 			} else {
 				relativeOffset = nextOffset;
@@ -3165,16 +3167,16 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		
 		while(relativeOffset != -1) {
 			final int offset = absoluteOffset + relativeOffset;
-			final int id = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_ID];
-			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
-			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_NEXT_OFFSET];
-			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT];
+			final int id = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_ID];
+			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
+			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_NEXT_OFFSET];
+			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT];
 			
 			final boolean isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 			
-			if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_LEAF_B_V_H_NODE) {
+			if(isIntersectingBoundingVolume && id == LeafBVHNode3F.ID) {
 				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
-					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT + 1 + i];
+					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT + 1 + i];
 					
 					final float tObjectSpace = this.shape3FTriangle3FIntersectionT(triangleOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 					
@@ -3188,7 +3190,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 				}
 				
 				relativeOffset = nextOffset;
-			} else if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_TREE_B_V_H_NODE) {
+			} else if(isIntersectingBoundingVolume && id == TreeBVHNode3F.ID) {
 				relativeOffset = leftOffsetOrTriangleCount;
 			} else {
 				relativeOffset = nextOffset;

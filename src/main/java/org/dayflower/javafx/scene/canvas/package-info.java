@@ -17,6 +17,8 @@
  * <li>The Color API</li>
  * <li>The Filter API</li>
  * <li>The Geometry API</li>
+ * <li>The Geometry Bounding Volume API</li>
+ * <li>The Geometry Bounding Volume Hierarchy API</li>
  * <li>The Geometry Rasterizer API</li>
  * <li>The Geometry Shape API</li>
  * <li>The JavaFX Concurrent API</li>

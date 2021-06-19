@@ -163,6 +163,7 @@
  * <ul>
  * <li>The Geometry API</li>
  * <li>The Geometry Bounding Volume API</li>
+ * <li>The Geometry Bounding Volume Hierarchy API</li>
  * <li>The Node API</li>
  * <li>The Noise API</li>
  * <li>The Utility API</li>

@@ -28,6 +28,9 @@ import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
@@ -188,14 +191,14 @@ final class Shape3FCache {
 			final int shape3FTriangleMesh3FArrayLength = shape3FTriangleMesh3FArrayOffset + triangleMesh.getArrayLength();
 			
 			for(int j = shape3FTriangleMesh3FArrayOffset; j < shape3FTriangleMesh3FArrayLength;) {
-				final int boundingVolumeOffset = j + TriangleMesh3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
-				final int idOffset = j + TriangleMesh3F.ARRAY_OFFSET_ID;
+				final int boundingVolumeOffset = j + BVHNode3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
+				final int idOffset = j + BVHNode3F.ARRAY_OFFSET_ID;
 				final int id = shape3FTriangleMesh3FArray[idOffset];
 				
 				shape3FTriangleMesh3FArray[boundingVolumeOffset] = boundingVolume3FCache.findOffsetFor(boundingVolumes.get(shape3FTriangleMesh3FArray[boundingVolumeOffset]));
 				
-				if(id == TriangleMesh3F.ID_LEAF_B_V_H_NODE) {
-					final int triangleCountOffset = j + TriangleMesh3F.ARRAY_OFFSET_TRIANGLE_COUNT;
+				if(id == LeafBVHNode3F.ID) {
+					final int triangleCountOffset = j + LeafBVHNode3F.ARRAY_OFFSET_SHAPE_COUNT;
 					final int triangleCount = shape3FTriangleMesh3FArray[triangleCountOffset];
 					final int triangleStartOffset = triangleCountOffset + 1;
 					
@@ -204,7 +207,7 @@ final class Shape3FCache {
 					}
 					
 					j += 4 + triangleCount + padding(4 + triangleCount);
-				} else if(id == TriangleMesh3F.ID_TREE_B_V_H_NODE) {
+				} else if(id == TreeBVHNode3F.ID) {
 					j += 8;
 				} else {
 					break;

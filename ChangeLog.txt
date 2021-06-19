@@ -1,3 +1,8 @@
+2021-06-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a new Geometry Bounding Volume Hierarchy API.
+	* CHANGE:	Refactor the TriangleMesh3D, TriangleMesh3F, AbstractGeometryKernel and Shape3FCache classes to use the new Geometry Bounding Volume Hierarchy API.
+
 2021-06-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Vertex3D-caching to the Triangle3D class.

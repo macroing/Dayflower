@@ -20,13 +20,11 @@ package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.MIN_VALUE;
-import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.minOrNaN;
-import static org.dayflower.utility.Ints.padding;
 
 import java.io.BufferedReader;
 import java.io.DataOutput;
@@ -53,13 +51,14 @@ import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.SurfaceIntersector3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
+import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3D;
+import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3Ds;
+import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3D;
 import org.dayflower.geometry.shape.Triangle3D.Vertex3D;
-import org.dayflower.node.Node;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
-import org.macroing.java.io.IntArrayOutputStream;
 
 /**
  * A {@code TriangleMesh3D} is an implementation of {@link Shape3D} that represents a triangle mesh.
@@ -78,67 +77,13 @@ public final class TriangleMesh3D implements Shape3D {
 	public static final String NAME = "Triangle Mesh";
 	
 	/**
-	 * The offset for the offset of the {@link BoundingVolume3D} in the {@code int[]}.
-	 * <p>
-	 * The {@code BoundingVolume3D} is always an {@link AxisAlignedBoundingBox3D}.
-	 * <p>
-	 * This offset is used for both leaf and tree nodes.
-	 */
-	public static final int ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET = 1;
-	
-	/**
-	 * The offset for the ID of the bounding volume hierarchy (BVH) node in the {@code int[]}.
-	 * <p>
-	 * This offset is used for both leaf and tree nodes.
-	 */
-	public static final int ARRAY_OFFSET_ID = 0;
-	
-	/**
-	 * The offset for the left bounding volume hierarchy node in the {@code int[]}.
-	 * <p>
-	 * This offset is used for tree nodes only.
-	 */
-	public static final int ARRAY_OFFSET_LEFT_OFFSET = 3;
-	
-	/**
-	 * The offset for the left bounding volume hierarchy node or the triangle count in the {@code int[]}.
-	 * <p>
-	 * This offset is used for both leaf and tree nodes.
-	 */
-	public static final int ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT = 3;
-	
-	/**
-	 * The offset for the next bounding volume hierarchy node in the {@code int[]}.
-	 * <p>
-	 * This offset is used for both leaf and tree nodes.
-	 */
-	public static final int ARRAY_OFFSET_NEXT_OFFSET = 2;
-	
-	/**
-	 * The offset for the {@link Triangle3D} count in the {@code int[]}.
-	 * <p>
-	 * This offset is used for leaf nodes only.
-	 */
-	public static final int ARRAY_OFFSET_TRIANGLE_COUNT = 3;
-	
-	/**
 	 * The ID of this {@code TriangleMesh3D} class.
 	 */
 	public static final int ID = 16;
 	
-	/**
-	 * The ID for all leaf nodes in the bounding volume hierarchy (BVH).
-	 */
-	public static final int ID_LEAF_B_V_H_NODE = 1;
-	
-	/**
-	 * The ID for all tree nodes in the bounding volume hierarchy (BVH).
-	 */
-	public static final int ID_TREE_B_V_H_NODE = 2;
-	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final BVHNode bVHNode;
+	private final BVHNode3D bVHNode;
 	private final BoundingVolume3D boundingVolume;
 	private final List<Triangle3D> triangles;
 	private final String groupName;
@@ -212,7 +157,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @return a {@code List} that contains all {@code BoundingVolume3D} instances used by the bounding volume hierarchy
 	 */
 	public List<BoundingVolume3D> getBoundingVolumes() {
-		return this.isUsingAccelerationStructure ? NodeFilter.filterAll(this.bVHNode, BVHNode.class).stream().map(bVHNode -> bVHNode.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll) : new ArrayList<>();
+		return this.isUsingAccelerationStructure ? NodeFilter.filterAll(this.bVHNode, BVHNode3D.class).stream().map(bVHNode -> bVHNode.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll) : new ArrayList<>();
 	}
 	
 	/**
@@ -240,7 +185,7 @@ public final class TriangleMesh3D implements Shape3D {
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		if(this.isUsingAccelerationStructure) {
-			return this.bVHNode.intersection(ray, new double[] {tMinimum, tMaximum});
+			return this.bVHNode.intersection(ray, tMinimum, tMaximum);
 		}
 		
 		final SurfaceIntersector3D surfaceIntersector = new SurfaceIntersector3D(ray, tMinimum, tMaximum);
@@ -440,7 +385,7 @@ public final class TriangleMesh3D implements Shape3D {
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		if(this.isUsingAccelerationStructure) {
-			return this.bVHNode.intersectionT(ray, new double[] {tMinimum, tMaximum});
+			return this.bVHNode.intersectionT(ray, tMinimum, tMaximum);
 		}
 		
 		double t = Double.NaN;
@@ -464,7 +409,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @return the length of the {@code int[]}
 	 */
 	public int getArrayLength() {
-		return this.isUsingAccelerationStructure ? NodeFilter.filterAll(this.bVHNode, BVHNode.class).stream().mapToInt(bVHNode -> bVHNode.getArrayLength()).sum() : 0;
+		return this.isUsingAccelerationStructure ? NodeFilter.filterAll(this.bVHNode, BVHNode3D.class).stream().mapToInt(bVHNode -> bVHNode.getArrayLength()).sum() : 0;
 	}
 	
 	/**
@@ -493,67 +438,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @return an {@code int[]} representation of this {@code TriangleMesh3D} instance
 	 */
 	public int[] toArray() {
-		if(this.isUsingAccelerationStructure) {
-			final List<BVHNode> bVHNodes = NodeFilter.filterAll(this.bVHNode, BVHNode.class);
-			final List<BoundingVolume3D> boundingVolumes = getBoundingVolumes();
-			final List<Triangle3D> triangles = getTriangles();
-			
-			final int[] offsets = new int[bVHNodes.size()];
-			
-			for(int i = 0, j = 0; i < offsets.length; j += bVHNodes.get(i).getArrayLength(), i++) {
-				offsets[i] = j;
-			}
-			
-			try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
-				for(int i = 0; i < bVHNodes.size(); i++) {
-					final BVHNode bVHNode = bVHNodes.get(i);
-					
-					if(bVHNode instanceof LeafBVHNode) {
-						final LeafBVHNode leafBVHNode = LeafBVHNode.class.cast(bVHNode);
-						
-						final int id = ID_LEAF_B_V_H_NODE;
-						final int boundingVolumeOffset = boundingVolumes.indexOf(leafBVHNode.getBoundingVolume());
-						final int nextOffset = doFindNextOffset(bVHNodes, leafBVHNode.getDepth(), i + 1, offsets);
-						final int triangleCount = leafBVHNode.getTriangleCount();
-						
-						intArrayOutputStream.writeInt(id);
-						intArrayOutputStream.writeInt(boundingVolumeOffset);
-						intArrayOutputStream.writeInt(nextOffset);
-						intArrayOutputStream.writeInt(triangleCount);
-						
-						for(final Triangle3D triangle : leafBVHNode.getTriangles()) {
-							intArrayOutputStream.writeInt(triangles.indexOf(triangle));
-						}
-						
-						final int padding = padding(4 + triangleCount);
-						
-						for(int j = 0; j < padding; j++) {
-							intArrayOutputStream.writeInt(0);
-						}
-					} else if(bVHNode instanceof TreeBVHNode) {
-						final TreeBVHNode treeBVHNode = TreeBVHNode.class.cast(bVHNode);
-						
-						final int id = ID_TREE_B_V_H_NODE;
-						final int boundingVolumeOffset = boundingVolumes.indexOf(treeBVHNode.getBoundingVolume());
-						final int nextOffset = doFindNextOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
-						final int leftOffset = doFindLeftOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
-						
-						intArrayOutputStream.writeInt(id);
-						intArrayOutputStream.writeInt(boundingVolumeOffset);
-						intArrayOutputStream.writeInt(nextOffset);
-						intArrayOutputStream.writeInt(leftOffset);
-						intArrayOutputStream.writeInt(0);
-						intArrayOutputStream.writeInt(0);
-						intArrayOutputStream.writeInt(0);
-						intArrayOutputStream.writeInt(0);
-					}
-				}
-				
-				return intArrayOutputStream.toIntArray();
-			}
-		}
-		
-		return new int[0];
+		return this.isUsingAccelerationStructure ? BVHNode3Ds.toArray(this.bVHNode, getTriangles()) : new int[0];
 	}
 	
 	/**
@@ -893,188 +778,8 @@ public final class TriangleMesh3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static BVHNode doCreateBVHNode(final List<LeafBVHNode> processableLeafBVHNodes, final Point3D maximum, final Point3D minimum, final int depth) {
-		final int size = processableLeafBVHNodes.size();
-		final int sizeHalf = size / 2;
-		
-		if(size < 4) {
-			final List<Triangle3D> triangles = new ArrayList<>();
-			
-			for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
-				for(final Triangle3D triangle : processableLeafBVHNode.getTriangles()) {
-					triangles.add(triangle);
-				}
-			}
-			
-			return new LeafBVHNode(maximum, minimum, depth, triangles);
-		}
-		
-		final double sideX = maximum.getX() - minimum.getX();
-		final double sideY = maximum.getY() - minimum.getY();
-		final double sideZ = maximum.getZ() - minimum.getZ();
-		
-		double minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
-		double bestSplit = MAX_VALUE;
-		
-		int bestAxis = -1;
-		
-		for(int axis = 0; axis < 3; axis++) {
-			final double start = minimum.getComponent(axis);
-			final double stop  = maximum.getComponent(axis);
-			
-			if(abs(stop - start) < 1.0e-4D) {
-				continue;
-			}
-			
-			final double step = (stop - start) / (1024.0D / (depth + 1.0D));
-			
-			for(double oldSplit = 0.0D, newSplit = start + step; newSplit < stop - step; oldSplit = newSplit, newSplit += step) {
-//				The following test prevents an infinite loop from occurring:
-				if(equal(oldSplit, newSplit)) {
-					break;
-				}
-				
-				double maximumLX = MIN_VALUE;
-				double maximumLY = MIN_VALUE;
-				double maximumLZ = MIN_VALUE;
-				double minimumLX = MAX_VALUE;
-				double minimumLY = MAX_VALUE;
-				double minimumLZ = MAX_VALUE;
-				double maximumRX = MIN_VALUE;
-				double maximumRY = MIN_VALUE;
-				double maximumRZ = MIN_VALUE;
-				double minimumRX = MAX_VALUE;
-				double minimumRY = MAX_VALUE;
-				double minimumRZ = MAX_VALUE;
-				
-				int countL = 0;
-				int countR = 0;
-				
-				for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
-					final BoundingVolume3D boundingVolume = processableLeafBVHNode.getBoundingVolume();
-					
-					final Point3D max = boundingVolume.getMaximum();
-					final Point3D mid = boundingVolume.getMidpoint();
-					final Point3D min = boundingVolume.getMinimum();
-					
-					final double value = mid.getComponent(axis);
-					
-					if(value < newSplit) {
-						maximumLX = max(maximumLX, max.getX());
-						maximumLY = max(maximumLY, max.getY());
-						maximumLZ = max(maximumLZ, max.getZ());
-						minimumLX = min(minimumLX, min.getX());
-						minimumLY = min(minimumLY, min.getY());
-						minimumLZ = min(minimumLZ, min.getZ());
-						
-						countL++;
-					} else {
-						maximumRX = max(maximumRX, max.getX());
-						maximumRY = max(maximumRY, max.getY());
-						maximumRZ = max(maximumRZ, max.getZ());
-						minimumRX = min(minimumRX, min.getX());
-						minimumRY = min(minimumRY, min.getY());
-						minimumRZ = min(minimumRZ, min.getZ());
-						
-						countR++;
-					}
-				}
-				
-				if(countL <= 1 || countR <= 1) {
-					continue;
-				}
-				
-				final double sideLX = maximumLX - minimumLX;
-				final double sideLY = maximumLY - minimumLY;
-				final double sideLZ = maximumLZ - minimumLZ;
-				final double sideRX = maximumRX - minimumRX;
-				final double sideRY = maximumRY - minimumRY;
-				final double sideRZ = maximumRZ - minimumRZ;
-				
-				final double surfaceL = sideLX * sideLY + sideLY * sideLZ + sideLZ * sideLX;
-				final double surfaceR = sideRX * sideRY + sideRY * sideRZ + sideRZ * sideRX;
-				
-				final double cost = surfaceL * countL + surfaceR * countR;
-				
-				if(cost < minimumCost) {
-					minimumCost = cost;
-					bestSplit = newSplit;
-					bestAxis = axis;
-				}
-			}
-		}
-		
-		if(bestAxis == -1) {
-			final List<Triangle3D> triangles = new ArrayList<>();
-			
-			for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
-				for(final Triangle3D triangle : processableLeafBVHNode.getTriangles()) {
-					triangles.add(triangle);
-				}
-			}
-			
-			return new LeafBVHNode(maximum, minimum, depth, triangles);
-		}
-		
-		final List<LeafBVHNode> leafBVHNodesL = new ArrayList<>(sizeHalf);
-		final List<LeafBVHNode> leafBVHNodesR = new ArrayList<>(sizeHalf);
-		
-		double maximumLX = MIN_VALUE;
-		double maximumLY = MIN_VALUE;
-		double maximumLZ = MIN_VALUE;
-		double minimumLX = MAX_VALUE;
-		double minimumLY = MAX_VALUE;
-		double minimumLZ = MAX_VALUE;
-		double maximumRX = MIN_VALUE;
-		double maximumRY = MIN_VALUE;
-		double maximumRZ = MIN_VALUE;
-		double minimumRX = MAX_VALUE;
-		double minimumRY = MAX_VALUE;
-		double minimumRZ = MAX_VALUE;
-		
-		for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
-			final BoundingVolume3D boundingVolume = processableLeafBVHNode.getBoundingVolume();
-			
-			final Point3D max = boundingVolume.getMaximum();
-			final Point3D mid = boundingVolume.getMidpoint();
-			final Point3D min = boundingVolume.getMinimum();
-			
-			final double value = mid.getComponent(bestAxis);
-			
-			if(value < bestSplit) {
-				leafBVHNodesL.add(processableLeafBVHNode);
-				
-				maximumLX = max(maximumLX, max.getX());
-				maximumLY = max(maximumLY, max.getY());
-				maximumLZ = max(maximumLZ, max.getZ());
-				minimumLX = min(minimumLX, min.getX());
-				minimumLY = min(minimumLY, min.getY());
-				minimumLZ = min(minimumLZ, min.getZ());
-			} else {
-				leafBVHNodesR.add(processableLeafBVHNode);
-				
-				maximumRX = max(maximumRX, max.getX());
-				maximumRY = max(maximumRY, max.getY());
-				maximumRZ = max(maximumRZ, max.getZ());
-				minimumRX = min(minimumRX, min.getX());
-				minimumRY = min(minimumRY, min.getY());
-				minimumRZ = min(minimumRZ, min.getZ());
-			}
-		}
-		
-		final Point3D maximumL = new Point3D(maximumLX, maximumLY, maximumLZ);
-		final Point3D minimumL = new Point3D(minimumLX, minimumLY, minimumLZ);
-		final Point3D maximumR = new Point3D(maximumRX, maximumRY, maximumRZ);
-		final Point3D minimumR = new Point3D(minimumRX, minimumRY, minimumRZ);
-		
-		final BVHNode bVHNodeL = doCreateBVHNode(leafBVHNodesL, maximumL, minimumL, depth + 1);
-		final BVHNode bVHNodeR = doCreateBVHNode(leafBVHNodesR, maximumR, minimumR, depth + 1);
-		
-		return new TreeBVHNode(maximum, minimum, depth, bVHNodeL, bVHNodeR);
-	}
-	
-	private static BVHNode doCreateBVHNode(final List<Triangle3D> triangles) {
-		final List<LeafBVHNode> processableLeafBVHNodes = new ArrayList<>(triangles.size());
+	private static BVHNode3D doCreateBVHNode(final List<Triangle3D> triangles) {
+		final List<LeafBVHNode3D<Triangle3D>> processableLeafBVHNodes = new ArrayList<>(triangles.size());
 		
 		double maximumX = MIN_VALUE;
 		double maximumY = MIN_VALUE;
@@ -1098,10 +803,10 @@ public final class TriangleMesh3D implements Shape3D {
 			minimumY = min(minimumY, minimum.getY());
 			minimumZ = min(minimumZ, minimum.getZ());
 			
-			processableLeafBVHNodes.add(new LeafBVHNode(maximum, minimum, 0, Arrays.asList(triangle)));
+			processableLeafBVHNodes.add(new LeafBVHNode3D<>(maximum, minimum, 0, Arrays.asList(triangle)));
 		}
 		
-		return doCreateBVHNode(processableLeafBVHNodes, new Point3D(maximumX, maximumY, maximumZ), new Point3D(minimumX, minimumY, minimumZ), 0);
+		return BVHNode3Ds.create(processableLeafBVHNodes, new Point3D(maximumX, maximumY, maximumZ), new Point3D(minimumX, minimumY, minimumZ), 0);
 	}
 	
 	private static BoundingVolume3D doCreateBoundingVolume(final List<Triangle3D> triangles) {
@@ -1128,62 +833,6 @@ public final class TriangleMesh3D implements Shape3D {
 		}
 		
 		return surfaceArea;
-	}
-	
-	private static int doFindLeftOffset(final List<BVHNode> bVHNodes, final int depth, final int index, final int[] offsets) {
-		for(int i = index; i < bVHNodes.size(); i++) {
-			if(bVHNodes.get(i).getDepth() == depth + 1) {
-				return offsets[i];
-			}
-		}
-		
-		return -1;
-	}
-	
-	private static int doFindNextOffset(final List<BVHNode> bVHNodes, final int depth, final int index, final int[] offsets) {
-		for(int i = index; i < bVHNodes.size(); i++) {
-			if(bVHNodes.get(i).getDepth() <= depth) {
-				return offsets[i];
-			}
-		}
-		
-		return -1;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static abstract class BVHNode implements Node {
-		private final BoundingVolume3D boundingVolume;
-		private final int depth;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		protected BVHNode(final Point3D maximum, final Point3D minimum, final int depth) {
-			this.boundingVolume = new AxisAlignedBoundingBox3D(maximum, minimum);
-			this.depth = depth;
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public final BoundingVolume3D getBoundingVolume() {
-			return this.boundingVolume;
-		}
-		
-		public abstract Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double[] tBounds);
-		
-		public abstract boolean intersection(final SurfaceIntersector3D surfaceIntersector);
-		
-		public abstract boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum);
-		
-		public abstract double getSurfaceArea();
-		
-		public abstract double intersectionT(final Ray3D ray, final double[] tBounds);
-		
-		public abstract int getArrayLength();
-		
-		public final int getDepth() {
-			return this.depth;
-		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1538,259 +1187,6 @@ public final class TriangleMesh3D implements Shape3D {
 			for(int i = 0; i < this.tangents.size(); i++) {
 				this.tangents.set(i, Vector3D.normalize(this.tangents.get(i)));
 			}
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class LeafBVHNode extends BVHNode {
-		private final List<Triangle3D> triangles;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public LeafBVHNode(final Point3D maximum, final Point3D minimum, final int depth, final List<Triangle3D> triangles) {
-			super(maximum, minimum, depth);
-			
-			this.triangles = Objects.requireNonNull(triangles, "triangles == null");
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public List<Triangle3D> getTriangles() {
-			return this.triangles;
-		}
-		
-		@Override
-		public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double[] tBounds) {
-			Optional<SurfaceIntersection3D> optionalSurfaceIntersection = SurfaceIntersection3D.EMPTY;
-			
-			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
-				for(final Triangle3D triangle : this.triangles) {
-					optionalSurfaceIntersection = SurfaceIntersection3D.closest(optionalSurfaceIntersection, triangle.intersection(ray, tBounds[0], tBounds[1]));
-					
-					if(optionalSurfaceIntersection.isPresent()) {
-						tBounds[1] = optionalSurfaceIntersection.get().getT();
-					}
-				}
-			}
-			
-			return optionalSurfaceIntersection;
-		}
-		
-		@Override
-		public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
-			Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
-			
-			try {
-				if(nodeHierarchicalVisitor.visitEnter(this)) {
-					if(!getBoundingVolume().accept(nodeHierarchicalVisitor)) {
-						return nodeHierarchicalVisitor.visitLeave(this);
-					}
-					
-					for(final Triangle3D triangle : this.triangles) {
-						if(!triangle.accept(nodeHierarchicalVisitor)) {
-							return nodeHierarchicalVisitor.visitLeave(this);
-						}
-					}
-				}
-				
-				return nodeHierarchicalVisitor.visitLeave(this);
-			} catch(final RuntimeException e) {
-				throw new NodeTraversalException(e);
-			}
-		}
-		
-		@Override
-		public boolean equals(final Object object) {
-			if(object == this) {
-				return true;
-			} else if(!(object instanceof LeafBVHNode)) {
-				return false;
-			} else if(!Objects.equals(getBoundingVolume(), LeafBVHNode.class.cast(object).getBoundingVolume())) {
-				return false;
-			} else if(getDepth() != LeafBVHNode.class.cast(object).getDepth()) {
-				return false;
-			} else if(!Objects.equals(this.triangles, LeafBVHNode.class.cast(object).triangles)) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		
-		@Override
-		public boolean intersection(final SurfaceIntersector3D surfaceIntersector) {
-			if(surfaceIntersector.isIntersecting(getBoundingVolume())) {
-				boolean isIntersecting = false;
-				
-				for(final Triangle3D triangle : this.triangles) {
-					if(surfaceIntersector.intersection(triangle)) {
-						isIntersecting = true;
-					}
-				}
-				
-				return isIntersecting;
-			}
-			
-			return false;
-		}
-		
-		@Override
-		public boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
-			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
-				for(final Triangle3D triangle : this.triangles) {
-					if(triangle.intersects(ray, tMinimum, tMaximum)) {
-						return true;
-					}
-				}
-			}
-			
-			return false;
-		}
-		
-		@Override
-		public double getSurfaceArea() {
-			double surfaceArea = 0.0D;
-			
-			for(final Triangle3D triangle : this.triangles) {
-				surfaceArea += triangle.getSurfaceArea();
-			}
-			
-			return surfaceArea;
-		}
-		
-		@Override
-		public double intersectionT(final Ray3D ray, final double[] tBounds) {
-			double t = Double.NaN;
-			
-			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
-				for(final Triangle3D triangle : this.triangles) {
-					t = minOrNaN(t, triangle.intersectionT(ray, tBounds[0], tBounds[1]));
-					
-					if(!isNaN(t)) {
-						tBounds[1] = t;
-					}
-				}
-			}
-			
-			return t;
-		}
-		
-		@Override
-		public int getArrayLength() {
-			return 4 + this.triangles.size() + padding(4 + this.triangles.size());
-		}
-		
-		public int getTriangleCount() {
-			return this.triangles.size();
-		}
-		
-		@Override
-		public int hashCode() {
-			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.triangles);
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class TreeBVHNode extends BVHNode {
-		private final BVHNode bVHNodeL;
-		private final BVHNode bVHNodeR;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public TreeBVHNode(final Point3D maximum, final Point3D minimum, final int depth, final BVHNode bVHNodeL, final BVHNode bVHNodeR) {
-			super(maximum, minimum, depth);
-			
-			this.bVHNodeL = Objects.requireNonNull(bVHNodeL, "bVHNodeL == null");
-			this.bVHNodeR = Objects.requireNonNull(bVHNodeR, "bVHNodeR == null");
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		@Override
-		public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double[] tBounds) {
-			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3D.closest(this.bVHNodeL.intersection(ray, tBounds), this.bVHNodeR.intersection(ray, tBounds)) : SurfaceIntersection3D.EMPTY;
-		}
-		
-		@Override
-		public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
-			Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
-			
-			try {
-				if(nodeHierarchicalVisitor.visitEnter(this)) {
-					if(!getBoundingVolume().accept(nodeHierarchicalVisitor)) {
-						return nodeHierarchicalVisitor.visitLeave(this);
-					}
-					
-					if(!this.bVHNodeL.accept(nodeHierarchicalVisitor)) {
-						return nodeHierarchicalVisitor.visitLeave(this);
-					}
-					
-					if(!this.bVHNodeR.accept(nodeHierarchicalVisitor)) {
-						return nodeHierarchicalVisitor.visitLeave(this);
-					}
-				}
-				
-				return nodeHierarchicalVisitor.visitLeave(this);
-			} catch(final RuntimeException e) {
-				throw new NodeTraversalException(e);
-			}
-		}
-		
-		@Override
-		public boolean equals(final Object object) {
-			if(object == this) {
-				return true;
-			} else if(!(object instanceof TreeBVHNode)) {
-				return false;
-			} else if(!Objects.equals(getBoundingVolume(), TreeBVHNode.class.cast(object).getBoundingVolume())) {
-				return false;
-			} else if(getDepth() != TreeBVHNode.class.cast(object).getDepth()) {
-				return false;
-			} else if(!Objects.equals(this.bVHNodeL, TreeBVHNode.class.cast(object).bVHNodeL)) {
-				return false;
-			} else if(!Objects.equals(this.bVHNodeR, TreeBVHNode.class.cast(object).bVHNodeR)) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		
-		@Override
-		public boolean intersection(final SurfaceIntersector3D surfaceIntersector) {
-			if(surfaceIntersector.isIntersecting(getBoundingVolume())) {
-				final boolean isIntersectingL = this.bVHNodeL.intersection(surfaceIntersector);
-				final boolean isIntersectingR = this.bVHNodeR.intersection(surfaceIntersector);
-				
-				return isIntersectingL || isIntersectingR;
-			}
-			
-			return false;
-		}
-		
-		@Override
-		public boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
-			return (getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) && (this.bVHNodeL.intersects(ray, tMinimum, tMaximum) || this.bVHNodeR.intersects(ray, tMinimum, tMaximum));
-		}
-		
-		@Override
-		public double getSurfaceArea() {
-			return this.bVHNodeL.getSurfaceArea() + this.bVHNodeR.getSurfaceArea();
-		}
-		
-		@Override
-		public double intersectionT(final Ray3D ray, final double[] tBounds) {
-			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.bVHNodeL.intersectionT(ray, tBounds), this.bVHNodeR.intersectionT(ray, tBounds)) : Double.NaN;
-		}
-		
-		@Override
-		public int getArrayLength() {
-			return 8;
-		}
-		
-		@Override
-		public int hashCode() {
-			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.bVHNodeL, this.bVHNodeR);
 		}
 	}
 	

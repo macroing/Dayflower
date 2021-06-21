@@ -77,6 +77,14 @@ final class CenteredVBoxes {
 		final ComboBox<Lens> comboBoxLens = centeredVBox.addComboBox(Arrays.asList(Lens.FISHEYE, Lens.THIN), camera.getLens());
 		
 		centeredVBox.addButton("Update Lens", actionEvent -> camera.setLens(comboBoxLens.getValue()));
+		centeredVBox.addLabel("Aperture Radius", 12.0D);
+		
+		final Slider sliderApertureRadius = centeredVBox.addSlider(0.0D, 25.0D, camera.getApertureRadius(), 1.0D, 5.0D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraApertureRadiusChange(camera, newValue.floatValue()));
+		
+		centeredVBox.addLabel("Focal Distance", 12.0D);
+		
+		final Slider sliderFocalDistance = centeredVBox.addSlider(0.0D, 100.0D, camera.getFocalDistance(), 1.0D, 20.0D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraFocalDistanceChange(camera, newValue.floatValue()));
+		
 		centeredVBox.addLabel("Pitch", 12.0D);
 		
 		final Slider sliderPitch = centeredVBox.addSlider(-90.0D, 90.0D, camera.getPitch().getDegrees(), 10.0D, 20.0D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraPitchChange(camera, newValue.floatValue()));
@@ -85,7 +93,7 @@ final class CenteredVBoxes {
 		
 		final Slider sliderYaw = centeredVBox.addSlider(0.0D, 360.0D, camera.getPitch().getDegrees(), 20.0D, 40.0D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraYawChange(camera, newValue.floatValue()));
 		
-		camera.addCameraObserver(new CameraObserverImpl(sliderPitch, sliderYaw));
+		camera.addCameraObserver(new CameraObserverImpl(sliderApertureRadius, sliderFocalDistance, sliderPitch, sliderYaw));
 		
 		return centeredVBox;
 	}
@@ -246,6 +254,14 @@ final class CenteredVBoxes {
 		return null;
 	}
 	
+	private static void doHandleCameraApertureRadiusChange(final Camera camera, final float value) {
+		camera.setApertureRadius(value);
+	}
+	
+	private static void doHandleCameraFocalDistanceChange(final Camera camera, final float value) {
+		camera.setFocalDistance(value);
+	}
+	
 	private static void doHandleCameraPitchChange(final Camera camera, final float value) {
 		camera.setPitch(AngleF.degrees(value, -90.0F, 90.0F));
 		camera.setOrthonormalBasis();
@@ -259,17 +275,35 @@ final class CenteredVBoxes {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class CameraObserverImpl extends AbstractCameraObserver {
+		private final Slider sliderApertureRadius;
+		private final Slider sliderFocalDistance;
 		private final Slider sliderPitch;
 		private final Slider sliderYaw;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public CameraObserverImpl(final Slider sliderPitch, final Slider sliderYaw) {
+		public CameraObserverImpl(final Slider sliderApertureRadius, final Slider sliderFocalDistance, final Slider sliderPitch, final Slider sliderYaw) {
+			this.sliderApertureRadius = Objects.requireNonNull(sliderApertureRadius, "sliderApertureRadius == null");
+			this.sliderFocalDistance = Objects.requireNonNull(sliderFocalDistance, "sliderFocalDistance == null");
 			this.sliderPitch = Objects.requireNonNull(sliderPitch, "sliderPitch == null");
 			this.sliderYaw = Objects.requireNonNull(sliderYaw, "sliderYaw == null");
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void onChangeApertureRadius(final Camera camera, final float oldApertureRadius, final float newApertureRadius) {
+			Objects.requireNonNull(camera, "camera == null");
+			
+			doRunInFXApplicationThread(() -> this.sliderApertureRadius.setValue(newApertureRadius));
+		}
+		
+		@Override
+		public void onChangeFocalDistance(final Camera camera, final float oldFocalDistance, final float newFocalDistance) {
+			Objects.requireNonNull(camera, "camera == null");
+			
+			doRunInFXApplicationThread(() -> this.sliderFocalDistance.setValue(newFocalDistance));
+		}
 		
 		@Override
 		public void onChangePitch(final Camera camera, final AngleF oldPitch, final AngleF newPitch) {

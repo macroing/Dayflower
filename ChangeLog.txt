@@ -1,3 +1,18 @@
+2021-06-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods getShape3FTriangle3FCount(), getShape3FTriangle3FOffsetAbsolute(float[]) and getShape3FTriangle3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the methods getShape3FTorus3FCount(), getShape3FTorus3FOffsetAbsolute(float[]) and getShape3FTorus3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the methods getShape3FSphere3FCount(), getShape3FSphere3FOffsetAbsolute(float[]) and getShape3FSphere3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the methods getShape3FRectangularCuboid3FCount(), getShape3FRectangularCuboid3FOffsetAbsolute(float[]) and getShape3FRectangularCuboid3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the methods getShape3FRectangle3FCount(), getShape3FRectangle3FOffsetAbsolute(float[]) and getShape3FRectangle3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the methods getShape3FPlane3FCount(), getShape3FPlane3FOffsetAbsolute(float[]) and getShape3FPlane3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the methods getShape3FParaboloid3FCount(), getShape3FParaboloid3FOffsetAbsolute(float[]) and getShape3FParaboloid3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the methods getShape3FDisk3FCount(), getShape3FDisk3FOffsetAbsolute(float[]) and getShape3FDisk3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the methods getShape3FCylinder3FCount(), getShape3FCylinder3FOffsetAbsolute(float[]) and getShape3FCylinder3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the methods getShape3FCone3FCount(), getShape3FCone3FOffsetAbsolute(float[]) and getShape3FCone3FOffsetRelative(float[]) to the CompiledScene class.
+	* ADD:		Add the method equal(double[], double[], int, int, int) to the Doubles class.
+	* ADD:		Add the method equal(float[], float[], int, int, int) to the Floats class.
+
 2021-06-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add sliders to change the aperture radius and focal distance of the camera in the GUI. They can be located in the camera configuration of the configuration view on the left-hand side.

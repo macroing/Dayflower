@@ -409,7 +409,7 @@ public final class CompiledScene {
 	 * @return the {@code DirectionalLight} count in this {@code CompiledScene} instance
 	 */
 	public int getLightDirectionalLightCount() {
-		return this.lightDirectionalLightArray.length % DirectionalLight.ARRAY_LENGTH == 0 ? this.lightDirectionalLightArray.length / DirectionalLight.ARRAY_LENGTH : 0;
+		return Structures.getStructureCount(this.lightDirectionalLightArray, DirectionalLight.ARRAY_LENGTH);
 	}
 	
 	/**
@@ -418,7 +418,7 @@ public final class CompiledScene {
 	 * @return the {@code LDRImageLight} count in this {@code CompiledScene} instance
 	 */
 	public int getLightLDRImageLightCount() {
-		return this.lightLDRImageLightArray.length % 8 == 0 ? this.lightLDRImageLightOffsetArray.length : 0;
+		return Structures.getStructureCount(this.lightLDRImageLightArray, 8, this.lightLDRImageLightOffsetArray.length);
 	}
 	
 	/**
@@ -427,7 +427,7 @@ public final class CompiledScene {
 	 * @return the {@code PerezLight} count in this {@code CompiledScene} instance
 	 */
 	public int getLightPerezLightCount() {
-		return this.lightPerezLightArray.length % 8 == 0 ? this.lightPerezLightOffsetArray.length : 0;
+		return Structures.getStructureCount(this.lightPerezLightArray, 8, this.lightPerezLightOffsetArray.length);
 	}
 	
 	/**
@@ -436,7 +436,7 @@ public final class CompiledScene {
 	 * @return the {@code PointLight} count in this {@code CompiledScene} instance
 	 */
 	public int getLightPointLightCount() {
-		return this.lightPointLightArray.length % PointLight.ARRAY_LENGTH == 0 ? this.lightPointLightArray.length / PointLight.ARRAY_LENGTH : 0;
+		return Structures.getStructureCount(this.lightPointLightArray, PointLight.ARRAY_LENGTH);
 	}
 	
 	/**
@@ -445,7 +445,7 @@ public final class CompiledScene {
 	 * @return the {@code SpotLight} count in this {@code CompiledScene} instance
 	 */
 	public int getLightSpotLightCount() {
-		return this.lightSpotLightArray.length % SpotLight.ARRAY_LENGTH == 0 ? this.lightSpotLightArray.length / SpotLight.ARRAY_LENGTH : 0;
+		return Structures.getStructureCount(this.lightSpotLightArray, SpotLight.ARRAY_LENGTH);
 	}
 	
 	/**
@@ -454,7 +454,357 @@ public final class CompiledScene {
 	 * @return the {@code Primitive} count in this {@code CompiledScene} instance
 	 */
 	public int getPrimitiveCount() {
-		return this.primitiveArray.length / Primitive.ARRAY_LENGTH;
+		return Structures.getStructureCount(this.primitiveArray, Primitive.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Cone3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code Cone3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FCone3FCount() {
+		return Structures.getStructureCount(this.shape3FCone3FArray, Cone3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FCone3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FCone3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FCone3F a {@link Cone3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FCone3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FCone3F} is {@code null}
+	 */
+	public int getShape3FCone3FOffsetAbsolute(final float[] shape3FCone3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FCone3FArray, Objects.requireNonNull(shape3FCone3F, "shape3FCone3F == null"), getShape3FCone3FCount(), Cone3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FCone3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FCone3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FCone3F a {@link Cone3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FCone3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FCone3F} is {@code null}
+	 */
+	public int getShape3FCone3FOffsetRelative(final float[] shape3FCone3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FCone3FArray, Objects.requireNonNull(shape3FCone3F, "shape3FCone3F == null"), getShape3FCone3FCount(), Cone3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Cylinder3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code Cylinder3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FCylinder3FCount() {
+		return Structures.getStructureCount(this.shape3FCylinder3FArray, Cylinder3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FCylinder3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FCylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FCylinder3F a {@link Cylinder3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FCylinder3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FCylinder3F} is {@code null}
+	 */
+	public int getShape3FCylinder3FOffsetAbsolute(final float[] shape3FCylinder3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FCylinder3FArray, Objects.requireNonNull(shape3FCylinder3F, "shape3FCylinder3F == null"), getShape3FCylinder3FCount(), Cylinder3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FCylinder3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FCylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FCylinder3F a {@link Cylinder3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FCylinder3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FCylinder3F} is {@code null}
+	 */
+	public int getShape3FCylinder3FOffsetRelative(final float[] shape3FCylinder3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FCylinder3FArray, Objects.requireNonNull(shape3FCylinder3F, "shape3FCylinder3F == null"), getShape3FCylinder3FCount(), Cylinder3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Disk3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code Disk3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FDisk3FCount() {
+		return Structures.getStructureCount(this.shape3FDisk3FArray, Disk3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FDisk3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FDisk3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FDisk3F a {@link Disk3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FDisk3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FDisk3F} is {@code null}
+	 */
+	public int getShape3FDisk3FOffsetAbsolute(final float[] shape3FDisk3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FDisk3FArray, Objects.requireNonNull(shape3FDisk3F, "shape3FDisk3F == null"), getShape3FDisk3FCount(), Disk3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FDisk3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FDisk3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FDisk3F a {@link Disk3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FDisk3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FDisk3F} is {@code null}
+	 */
+	public int getShape3FDisk3FOffsetRelative(final float[] shape3FDisk3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FDisk3FArray, Objects.requireNonNull(shape3FDisk3F, "shape3FDisk3F == null"), getShape3FDisk3FCount(), Disk3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Paraboloid3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code Paraboloid3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FParaboloid3FCount() {
+		return Structures.getStructureCount(this.shape3FParaboloid3FArray, Paraboloid3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FParaboloid3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FParaboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FParaboloid3F a {@link Paraboloid3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FParaboloid3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FParaboloid3F} is {@code null}
+	 */
+	public int getShape3FParaboloid3FOffsetAbsolute(final float[] shape3FParaboloid3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FParaboloid3FArray, Objects.requireNonNull(shape3FParaboloid3F, "shape3FParaboloid3F == null"), getShape3FParaboloid3FCount(), Paraboloid3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FParaboloid3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FParaboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FParaboloid3F a {@link Paraboloid3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FParaboloid3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FParaboloid3F} is {@code null}
+	 */
+	public int getShape3FParaboloid3FOffsetRelative(final float[] shape3FParaboloid3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FParaboloid3FArray, Objects.requireNonNull(shape3FParaboloid3F, "shape3FParaboloid3F == null"), getShape3FParaboloid3FCount(), Paraboloid3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Plane3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code Plane3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FPlane3FCount() {
+		return Structures.getStructureCount(this.shape3FPlane3FArray, Plane3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FPlane3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FPlane3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FPlane3F a {@link Plane3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FPlane3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FPlane3F} is {@code null}
+	 */
+	public int getShape3FPlane3FOffsetAbsolute(final float[] shape3FPlane3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FPlane3FArray, Objects.requireNonNull(shape3FPlane3F, "shape3FPlane3F == null"), getShape3FPlane3FCount(), Plane3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FPlane3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FPlane3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FPlane3F a {@link Plane3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FPlane3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FPlane3F} is {@code null}
+	 */
+	public int getShape3FPlane3FOffsetRelative(final float[] shape3FPlane3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FPlane3FArray, Objects.requireNonNull(shape3FPlane3F, "shape3FPlane3F == null"), getShape3FPlane3FCount(), Plane3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Rectangle3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code Rectangle3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FRectangle3FCount() {
+		return Structures.getStructureCount(this.shape3FRectangle3FArray, Rectangle3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FRectangle3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FRectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FRectangle3F a {@link Rectangle3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FRectangle3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangle3F} is {@code null}
+	 */
+	public int getShape3FRectangle3FOffsetAbsolute(final float[] shape3FRectangle3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FRectangle3FArray, Objects.requireNonNull(shape3FRectangle3F, "shape3FRectangle3F == null"), getShape3FRectangle3FCount(), Rectangle3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FRectangle3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FRectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FRectangle3F a {@link Rectangle3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FRectangle3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangle3F} is {@code null}
+	 */
+	public int getShape3FRectangle3FOffsetRelative(final float[] shape3FRectangle3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FRectangle3FArray, Objects.requireNonNull(shape3FRectangle3F, "shape3FRectangle3F == null"), getShape3FRectangle3FCount(), Rectangle3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link RectangularCuboid3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code RectangularCuboid3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FRectangularCuboid3FCount() {
+		return Structures.getStructureCount(this.shape3FRectangularCuboid3FArray, RectangularCuboid3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FRectangularCuboid3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FRectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FRectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FRectangularCuboid3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangularCuboid3F} is {@code null}
+	 */
+	public int getShape3FRectangularCuboid3FOffsetAbsolute(final float[] shape3FRectangularCuboid3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FRectangularCuboid3FArray, Objects.requireNonNull(shape3FRectangularCuboid3F, "shape3FRectangularCuboid3F == null"), getShape3FRectangularCuboid3FCount(), RectangularCuboid3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FRectangularCuboid3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FRectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FRectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FRectangularCuboid3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangularCuboid3F} is {@code null}
+	 */
+	public int getShape3FRectangularCuboid3FOffsetRelative(final float[] shape3FRectangularCuboid3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FRectangularCuboid3FArray, Objects.requireNonNull(shape3FRectangularCuboid3F, "shape3FRectangularCuboid3F == null"), getShape3FRectangularCuboid3FCount(), RectangularCuboid3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Sphere3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code Sphere3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FSphere3FCount() {
+		return Structures.getStructureCount(this.shape3FSphere3FArray, Sphere3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FSphere3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FSphere3F a {@link Sphere3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FSphere3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FSphere3F} is {@code null}
+	 */
+	public int getShape3FSphere3FOffsetAbsolute(final float[] shape3FSphere3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FSphere3FArray, Objects.requireNonNull(shape3FSphere3F, "shape3FSphere3F == null"), getShape3FSphere3FCount(), Sphere3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FSphere3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FSphere3F a {@link Sphere3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FSphere3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FSphere3F} is {@code null}
+	 */
+	public int getShape3FSphere3FOffsetRelative(final float[] shape3FSphere3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FSphere3FArray, Objects.requireNonNull(shape3FSphere3F, "shape3FSphere3F == null"), getShape3FSphere3FCount(), Sphere3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Torus3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code Torus3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FTorus3FCount() {
+		return Structures.getStructureCount(this.shape3FTorus3FArray, Torus3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FTorus3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FTorus3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FTorus3F a {@link Torus3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FTorus3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FTorus3F} is {@code null}
+	 */
+	public int getShape3FTorus3FOffsetAbsolute(final float[] shape3FTorus3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FTorus3FArray, Objects.requireNonNull(shape3FTorus3F, "shape3FTorus3F == null"), getShape3FTorus3FCount(), Torus3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FTorus3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FTorus3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FTorus3F a {@link Torus3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FTorus3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FTorus3F} is {@code null}
+	 */
+	public int getShape3FTorus3FOffsetRelative(final float[] shape3FTorus3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FTorus3FArray, Objects.requireNonNull(shape3FTorus3F, "shape3FTorus3F == null"), getShape3FTorus3FCount(), Torus3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Triangle3F} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code Triangle3F} count in this {@code CompiledScene} instance
+	 */
+	public int getShape3FTriangle3FCount() {
+		return Structures.getStructureCount(this.shape3FTriangle3FArray, Triangle3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FTriangle3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FTriangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FTriangle3F a {@link Triangle3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FTriangle3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FTriangle3F} is {@code null}
+	 */
+	public int getShape3FTriangle3FOffsetAbsolute(final float[] shape3FTriangle3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FTriangle3FArray, Objects.requireNonNull(shape3FTriangle3F, "shape3FTriangle3F == null"), getShape3FTriangle3FCount(), Triangle3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FTriangle3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FTriangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FTriangle3F a {@link Triangle3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FTriangle3F} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FTriangle3F} is {@code null}
+	 */
+	public int getShape3FTriangle3FOffsetRelative(final float[] shape3FTriangle3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FTriangle3FArray, Objects.requireNonNull(shape3FTriangle3F, "shape3FTriangle3F == null"), getShape3FTriangle3FCount(), Triangle3F.ARRAY_LENGTH);
 	}
 	
 	/**

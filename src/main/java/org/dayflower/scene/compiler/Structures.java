@@ -20,6 +20,10 @@ package org.dayflower.scene.compiler;
 
 import static org.dayflower.utility.Floats.equal;
 
+import java.util.Objects;
+
+import org.dayflower.utility.ParameterArguments;
+
 final class Structures {
 	private Structures() {
 		
@@ -27,19 +31,74 @@ final class Structures {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	public static boolean updateStructure(final float[] structureArray, final float[] structure, final int structureOffset) {
+//		Check that both 'structureArray' and 'structure' are not 'null':
+		Objects.requireNonNull(structureArray, "structureArray == null");
+		Objects.requireNonNull(structure, "structure == null");
+		
+//		Check that 'structureOffset' is greater than or equal to '0' and less than 'structureArray.length' and 'structureOffset + structure.length' is greater than or equal to '0' and less than or equal to 'structureArray.length':
+		ParameterArguments.requireRange(structureOffset, 0, structureArray.length - 1, "structureOffset");
+		ParameterArguments.requireRange(structureOffset + structure.length, 0, structureArray.length, "structureOffset + structure.length");
+		
+		boolean hasUpdated = false;
+		
+		for(int i = 0; i < structure.length; i++) {
+			if(!equal(structureArray[structureOffset + i], structure[i])) {
+				structureArray[structureOffset + i] = structure[i];
+				
+				hasUpdated = true;
+			}
+		}
+		
+		return hasUpdated;
+	}
+	
 	public static int getStructureCount(final float[] structureArray, final int structureLength) {
+//		Check that 'structureArray' is not 'null':
+		Objects.requireNonNull(structureArray, "structureArray == null");
+		
+//		Check that 'structureLength' is greater than or equal to '1':
+		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
+		
 		return structureArray.length % structureLength == 0 ? structureArray.length / structureLength : 0;
 	}
 	
 	public static int getStructureCount(final float[] structureArray, final int structureLength, final int structureLengthToReturn) {
+//		Check that 'structureArray' is not 'null':
+		Objects.requireNonNull(structureArray, "structureArray == null");
+		
+//		Check that both 'structureLength' and 'structureLengthToReturn' are greater than or equal to '1':
+		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
+		ParameterArguments.requireRange(structureLengthToReturn, 1, Integer.MAX_VALUE, "structureLengthToReturn");
+		
 		return structureArray.length % structureLength == 0 ? structureLengthToReturn : 0;
 	}
 	
 	public static int getStructureCount(final int[] structureArray, final int structureLength) {
+//		Check that 'structureArray' is not 'null':
+		Objects.requireNonNull(structureArray, "structureArray == null");
+		
+//		Check that 'structureLength' is greater than or equal to '1':
+		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
+		
 		return structureArray.length % structureLength == 0 ? structureArray.length / structureLength : 0;
 	}
 	
 	public static int getStructureOffsetAbsolute(final float[] structureArray, final float[] structure, final int structureCount, final int structureLength) {
+//		Check that both 'structureArray' and 'structure' are not 'null':
+		Objects.requireNonNull(structureArray, "structureArray == null");
+		Objects.requireNonNull(structure, "structure == null");
+		
+//		Check that 'structureCount' is greater than or equal to '0', 'structureLength' is greater than or equal to '1' and 'structure.length' is equal to 'structureLength':
+		ParameterArguments.requireRange(structureCount, 0, Integer.MAX_VALUE, "structureCount");
+		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
+		ParameterArguments.requireExactArrayLength(structure, structureLength, "structure");
+		
+		if(structureCount > 0) {
+//			Check that 'structureArray.length' is equal to 'structureCount * structureLength':
+			ParameterArguments.requireExactArrayLength(structureArray, structureCount * structureLength, "structureArray");
+		}
+		
 		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetAbsolute += structureLength, offsetRelative++) {
 			if(equal(structureArray, structure, offsetAbsolute, 0, structureLength)) {
 				return offsetAbsolute;
@@ -50,6 +109,20 @@ final class Structures {
 	}
 	
 	public static int getStructureOffsetRelative(final float[] structureArray, final float[] structure, final int structureCount, final int structureLength) {
+//		Check that both 'structureArray' and 'structure' are not 'null':
+		Objects.requireNonNull(structureArray, "structureArray == null");
+		Objects.requireNonNull(structure, "structure == null");
+		
+//		Check that 'structureCount' is greater than or equal to '0', 'structureLength' is greater than or equal to '1' and 'structure.length' is equal to 'structureLength':
+		ParameterArguments.requireRange(structureCount, 0, Integer.MAX_VALUE, "structureCount");
+		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
+		ParameterArguments.requireExactArrayLength(structure, structureLength, "structure");
+		
+		if(structureCount > 0) {
+//			Check that 'structureArray.length' is equal to 'structureCount * structureLength':
+			ParameterArguments.requireExactArrayLength(structureArray, structureCount * structureLength, "structureArray");
+		}
+		
 		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetAbsolute += structureLength, offsetRelative++) {
 			if(equal(structureArray, structure, offsetAbsolute, 0, structureLength)) {
 				return offsetRelative;

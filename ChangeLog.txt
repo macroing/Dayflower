@@ -1,3 +1,10 @@
+2021-06-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method getCompiledBoundingVolume3FCache() to the CompiledScene class.
+	* ADD:		Add the class CompiledBoundingVolume3FCache.
+	* ADD:		Add the methods getTextureBlendTextureCount(), getTextureBlendTextureOffsetAbsolute(float[]) and getTextureBlendTextureOffsetRelative(float[]) to the CompiledScene class.
+	* REMOVE:	Remove the methods getBoundingVolume3FAxisAlignedBoundingBox3FArray(), getBoundingVolume3FBoundingSphere3FArray(), setBoundingVolume3FAxisAlignedBoundingBox3FArray(float[]) and setBoundingVolume3FBoundingSphere3FArray(float[]) from the CompiledScene class.
+
 2021-06-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getShape3FTriangle3FCount(), getShape3FTriangle3FOffsetAbsolute(float[]) and getShape3FTriangle3FOffsetRelative(float[]) to the CompiledScene class.

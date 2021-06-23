@@ -1098,8 +1098,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		final CompiledScene compiledScene = sceneCompiler.compile(getScene());
 		
-		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
-		put(super.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
+		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getCompiledBoundingVolume3FCache().getBoundingVolume3FAxisAlignedBoundingBox3FArray());
+		put(super.boundingVolume3FBoundingSphere3FArray = compiledScene.getCompiledBoundingVolume3FCache().getBoundingVolume3FBoundingSphere3FArray());
 		
 		put(super.shape3FCone3FArray = compiledScene.getShape3FCone3FArray());
 		put(super.shape3FCylinder3FArray = compiledScene.getShape3FCylinder3FArray());

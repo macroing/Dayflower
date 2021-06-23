@@ -21,8 +21,6 @@ package org.dayflower.scene.compiler;
 import java.util.Objects;
 
 import org.dayflower.geometry.Matrix44F;
-import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
@@ -67,8 +65,7 @@ import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class CompiledScene {
-	private float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
-	private float[] boundingVolume3FBoundingSphere3FArray;
+	private final CompiledBoundingVolume3FCache compiledBoundingVolume3FCache;
 	private float[] cameraArray;
 	private float[] lightDirectionalLightArray;
 	private float[] lightLDRImageLightArray;
@@ -115,8 +112,8 @@ public final class CompiledScene {
 	 * Constructs a new {@code CompiledScene} instance.
 	 */
 	public CompiledScene() {
-		setBoundingVolume3FAxisAlignedBoundingBox3FArray(new float[1]);
-		setBoundingVolume3FBoundingSphere3FArray(new float[1]);
+		this.compiledBoundingVolume3FCache = new CompiledBoundingVolume3FCache();
+		
 		setCameraArray(new float[1]);
 		setLightDirectionalLightArray(new float[1]);
 		setLightIDAndOffsetArray(new int[1]);
@@ -161,21 +158,12 @@ public final class CompiledScene {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@code float[]} that contains all {@link AxisAlignedBoundingBox3F} instances in compiled form that are associated with this {@code CompiledScene} instance.
+	 * Returns the {@link CompiledBoundingVolume3FCache} instance associated with this {@code CompiledScene} instance.
 	 * 
-	 * @return a {@code float[]} that contains all {@code AxisAlignedBoundingBox3F} instances in compiled form that are associated with this {@code CompiledScene} instance
+	 * @return the {@code CompiledBoundingVolume3FCache} instance associated with this {@code CompiledScene} instance
 	 */
-	public float[] getBoundingVolume3FAxisAlignedBoundingBox3FArray() {
-		return this.boundingVolume3FAxisAlignedBoundingBox3FArray;
-	}
-	
-	/**
-	 * Returns a {@code float[]} that contains all {@link BoundingSphere3F} instances in compiled form that are associated with this {@code CompiledScene} instance.
-	 * 
-	 * @return a {@code float[]} that contains all {@code BoundingSphere3F} instances in compiled form that are associated with this {@code CompiledScene} instance
-	 */
-	public float[] getBoundingVolume3FBoundingSphere3FArray() {
-		return this.boundingVolume3FBoundingSphere3FArray;
+	public CompiledBoundingVolume3FCache getCompiledBoundingVolume3FCache() {
+		return this.compiledBoundingVolume3FCache;
 	}
 	
 	/**
@@ -808,6 +796,41 @@ public final class CompiledScene {
 	}
 	
 	/**
+	 * Returns the {@link BlendTexture} count in this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code BlendTexture} count in this {@code CompiledScene} instance
+	 */
+	public int getTextureBlendTextureCount() {
+		return Structures.getStructureCount(this.textureBlendTextureArray, BlendTexture.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code textureBlendTexture} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code textureBlendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureBlendTexture a {@link BlendTexture} instance in compiled form
+	 * @return the absolute offset of {@code textureBlendTexture} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code textureBlendTexture} is {@code null}
+	 */
+	public int getTextureBlendTextureOffsetAbsolute(final float[] textureBlendTexture) {
+		return Structures.getStructureOffsetAbsolute(this.textureBlendTextureArray, Objects.requireNonNull(textureBlendTexture, "textureBlendTexture == null"), getTextureBlendTextureCount(), BlendTexture.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code textureBlendTexture} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code textureBlendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureBlendTexture a {@link BlendTexture} instance in compiled form
+	 * @return the relative offset of {@code textureBlendTexture} in this {@code CompiledScene} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code textureBlendTexture} is {@code null}
+	 */
+	public int getTextureBlendTextureOffsetRelative(final float[] textureBlendTexture) {
+		return Structures.getStructureOffsetRelative(this.textureBlendTextureArray, Objects.requireNonNull(textureBlendTexture, "textureBlendTexture == null"), getTextureBlendTextureCount(), BlendTexture.ARRAY_LENGTH);
+	}
+	
+	/**
 	 * Returns an {@code int[]} that contains the ID and offset for all {@link Light} instances in this {@code CompiledScene} instance.
 	 * 
 	 * @return an {@code int[]} that contains the ID and offset for all {@code Light} instances in this {@code CompiledScene} instance
@@ -940,30 +963,6 @@ public final class CompiledScene {
 	 */
 	public int[] getTextureLDRImageTextureOffsetArray() {
 		return this.textureLDRImageTextureOffsetArray;
-	}
-	
-	/**
-	 * Sets all {@link AxisAlignedBoundingBox3F} instances in compiled form to {@code boundingVolume3FAxisAlignedBoundingBox3FArray}.
-	 * <p>
-	 * If {@code boundingVolume3FAxisAlignedBoundingBox3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param boundingVolume3FAxisAlignedBoundingBox3FArray the {@code AxisAlignedBoundingBox3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume3FAxisAlignedBoundingBox3FArray} is {@code null}
-	 */
-	public void setBoundingVolume3FAxisAlignedBoundingBox3FArray(final float[] boundingVolume3FAxisAlignedBoundingBox3FArray) {
-		this.boundingVolume3FAxisAlignedBoundingBox3FArray = Objects.requireNonNull(boundingVolume3FAxisAlignedBoundingBox3FArray, "boundingVolume3FAxisAlignedBoundingBox3FArray == null");
-	}
-	
-	/**
-	 * Sets all {@link BoundingSphere3F} instances in compiled form to {@code boundingVolume3FBoundingSphere3FArray}.
-	 * <p>
-	 * If {@code boundingVolume3FBoundingSphere3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param boundingVolume3FBoundingSphere3FArray the {@code BoundingSphere3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume3FBoundingSphere3FArray} is {@code null}
-	 */
-	public void setBoundingVolume3FBoundingSphere3FArray(final float[] boundingVolume3FBoundingSphere3FArray) {
-		this.boundingVolume3FBoundingSphere3FArray = Objects.requireNonNull(boundingVolume3FBoundingSphere3FArray, "boundingVolume3FBoundingSphere3FArray == null");
 	}
 	
 	/**

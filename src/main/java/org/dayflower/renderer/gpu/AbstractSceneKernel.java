@@ -67,7 +67,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	/**
 	 * A {@code float[]} that contains {@link Matrix44F} instances used by the {@link Primitive} instances.
 	 */
-	protected float[] matrix44FArray;
+	protected float[] primitiveMatrix44FArray;
 	
 	/**
 	 * A {@code float[]} that contains X- and Y-components for the pixels.
@@ -95,7 +95,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 */
 	protected AbstractSceneKernel() {
 		this.cameraArray = new float[1];
-		this.matrix44FArray = new float[1];
+		this.primitiveMatrix44FArray = new float[1];
 		this.pixelArray = new float[1];
 		this.primitiveCount = 0;
 		this.primitiveArray = new int[1];
@@ -629,35 +629,35 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private void doIntersectionTransform(final int matrix44FArrayOffsetMatrix, final int matrix44FArrayOffsetMatrixInverse) {
+	private void doIntersectionTransform(final int primitiveMatrix44FArrayOffsetMatrix, final int primitiveMatrix44FArrayOffsetMatrixInverse) {
 //		Retrieve the matrix elements:
-		final float matrixElement11 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
-		final float matrixElement12 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
-		final float matrixElement13 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_3];
-		final float matrixElement14 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_4];
-		final float matrixElement21 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_1];
-		final float matrixElement22 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_2];
-		final float matrixElement23 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_3];
-		final float matrixElement24 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_4];
-		final float matrixElement31 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_1];
-		final float matrixElement32 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_2];
-		final float matrixElement33 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
-		final float matrixElement34 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_4];
-		final float matrixElement41 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_1];
-		final float matrixElement42 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_2];
-		final float matrixElement43 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_3];
-		final float matrixElement44 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_4];
+		final float matrixElement11 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
+		final float matrixElement12 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
+		final float matrixElement13 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_3];
+		final float matrixElement14 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_4];
+		final float matrixElement21 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_1];
+		final float matrixElement22 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_2];
+		final float matrixElement23 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_3];
+		final float matrixElement24 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_4];
+		final float matrixElement31 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_1];
+		final float matrixElement32 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_2];
+		final float matrixElement33 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
+		final float matrixElement34 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_4];
+		final float matrixElement41 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_1];
+		final float matrixElement42 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_2];
+		final float matrixElement43 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_3];
+		final float matrixElement44 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_4];
 		
 //		Retrieve the matrix inverse elements:
-		final float matrixInverseElement11 = this.matrix44FArray[matrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
-		final float matrixInverseElement12 = this.matrix44FArray[matrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
-		final float matrixInverseElement13 = this.matrix44FArray[matrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_1_3];
-		final float matrixInverseElement21 = this.matrix44FArray[matrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_2_1];
-		final float matrixInverseElement22 = this.matrix44FArray[matrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_2_2];
-		final float matrixInverseElement23 = this.matrix44FArray[matrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_2_3];
-		final float matrixInverseElement31 = this.matrix44FArray[matrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_1];
-		final float matrixInverseElement32 = this.matrix44FArray[matrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_2];
-		final float matrixInverseElement33 = this.matrix44FArray[matrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
+		final float matrixInverseElement11 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
+		final float matrixInverseElement12 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
+		final float matrixInverseElement13 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_1_3];
+		final float matrixInverseElement21 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_2_1];
+		final float matrixInverseElement22 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_2_2];
+		final float matrixInverseElement23 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_2_3];
+		final float matrixInverseElement31 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_1];
+		final float matrixInverseElement32 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_2];
+		final float matrixInverseElement33 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
 		
 //		Retrieve the old variables from the intersection array:
 		final float oldOrthonormalBasisGUX = intersectionGetOrthonormalBasisGUComponent1();
@@ -985,24 +985,24 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		color3FLHSSet(lightDirectR, lightDirectG, lightDirectB);
 	}
 	
-	private void doRay3FSetMatrix44FTransform(final int matrix44FArrayOffset) {
+	private void doRay3FSetMatrix44FTransform(final int primitiveMatrix44FArrayOffset) {
 //		Retrieve the matrix elements:
-		final float element11 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
-		final float element12 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
-		final float element13 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_3];
-		final float element14 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_4];
-		final float element21 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_1];
-		final float element22 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_2];
-		final float element23 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_3];
-		final float element24 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_4];
-		final float element31 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_1];
-		final float element32 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_2];
-		final float element33 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
-		final float element34 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_4];
-		final float element41 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_1];
-		final float element42 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_2];
-		final float element43 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_3];
-		final float element44 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_4];
+		final float element11 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
+		final float element12 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
+		final float element13 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_3];
+		final float element14 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_4];
+		final float element21 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_1];
+		final float element22 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_2];
+		final float element23 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_3];
+		final float element24 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_4];
+		final float element31 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_1];
+		final float element32 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_2];
+		final float element33 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
+		final float element34 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_4];
+		final float element41 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_1];
+		final float element42 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_2];
+		final float element43 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_3];
+		final float element44 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_4];
 		
 //		Retrieve the ray origin components from the old space:
 		final float oldOriginX = ray3FGetOriginComponent1();
@@ -1101,59 +1101,58 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getCompiledBoundingVolume3FCache().getBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		put(super.boundingVolume3FBoundingSphere3FArray = compiledScene.getCompiledBoundingVolume3FCache().getBoundingVolume3FBoundingSphere3FArray());
 		
-		put(super.shape3FCone3FArray = compiledScene.getShape3FCone3FArray());
-		put(super.shape3FCylinder3FArray = compiledScene.getShape3FCylinder3FArray());
-		put(super.shape3FDisk3FArray = compiledScene.getShape3FDisk3FArray());
-		put(super.shape3FParaboloid3FArray = compiledScene.getShape3FParaboloid3FArray());
-		put(super.shape3FPlane3FArray = compiledScene.getShape3FPlane3FArray());
-		put(super.shape3FRectangle3FArray = compiledScene.getShape3FRectangle3FArray());
-		put(super.shape3FRectangularCuboid3FArray = compiledScene.getShape3FRectangularCuboid3FArray());
-		put(super.shape3FSphere3FArray = compiledScene.getShape3FSphere3FArray());
-		put(super.shape3FTorus3FArray = compiledScene.getShape3FTorus3FArray());
-		put(super.shape3FTriangle3FArray = compiledScene.getShape3FTriangle3FArray());
-		put(super.shape3FTriangleMesh3FArray = compiledScene.getShape3FTriangleMesh3FArray());
+		put(super.shape3FCone3FArray = compiledScene.getCompiledShape3FCache().getShape3FCone3FArray());
+		put(super.shape3FCylinder3FArray = compiledScene.getCompiledShape3FCache().getShape3FCylinder3FArray());
+		put(super.shape3FDisk3FArray = compiledScene.getCompiledShape3FCache().getShape3FDisk3FArray());
+		put(super.shape3FParaboloid3FArray = compiledScene.getCompiledShape3FCache().getShape3FParaboloid3FArray());
+		put(super.shape3FPlane3FArray = compiledScene.getCompiledShape3FCache().getShape3FPlane3FArray());
+		put(super.shape3FRectangle3FArray = compiledScene.getCompiledShape3FCache().getShape3FRectangle3FArray());
+		put(super.shape3FRectangularCuboid3FArray = compiledScene.getCompiledShape3FCache().getShape3FRectangularCuboid3FArray());
+		put(super.shape3FSphere3FArray = compiledScene.getCompiledShape3FCache().getShape3FSphere3FArray());
+		put(super.shape3FTorus3FArray = compiledScene.getCompiledShape3FCache().getShape3FTorus3FArray());
+		put(super.shape3FTriangle3FArray = compiledScene.getCompiledShape3FCache().getShape3FTriangle3FArray());
+		put(super.shape3FTriangleMesh3FArray = compiledScene.getCompiledShape3FCache().getShape3FTriangleMesh3FArray());
 		
-		put(super.textureBlendTextureArray = compiledScene.getTextureBlendTextureArray());
-		put(super.textureBullseyeTextureArray = compiledScene.getTextureBullseyeTextureArray());
-		put(super.textureCheckerboardTextureArray = compiledScene.getTextureCheckerboardTextureArray());
-		put(super.textureConstantTextureArray = compiledScene.getTextureConstantTextureArray());
-		put(super.textureLDRImageTextureArray = compiledScene.getTextureLDRImageTextureArray());
-		put(super.textureLDRImageTextureOffsetArray = compiledScene.getTextureLDRImageTextureOffsetArray());
-		put(super.textureMarbleTextureArray = compiledScene.getTextureMarbleTextureArray());
-		put(super.textureSimplexFractionalBrownianMotionTextureArray = compiledScene.getTextureSimplexFractionalBrownianMotionTextureArray());
+		put(super.textureBlendTextureArray = compiledScene.getCompiledTextureCache().getTextureBlendTextureArray());
+		put(super.textureBullseyeTextureArray = compiledScene.getCompiledTextureCache().getTextureBullseyeTextureArray());
+		put(super.textureCheckerboardTextureArray = compiledScene.getCompiledTextureCache().getTextureCheckerboardTextureArray());
+		put(super.textureConstantTextureArray = compiledScene.getCompiledTextureCache().getTextureConstantTextureArray());
+		put(super.textureLDRImageTextureArray = compiledScene.getCompiledTextureCache().getTextureLDRImageTextureArray());
+		put(super.textureLDRImageTextureOffsetArray = compiledScene.getCompiledTextureCache().getTextureLDRImageTextureOffsetArray());
+		put(super.textureMarbleTextureArray = compiledScene.getCompiledTextureCache().getTextureMarbleTextureArray());
+		put(super.textureSimplexFractionalBrownianMotionTextureArray = compiledScene.getCompiledTextureCache().getTextureSimplexFractionalBrownianMotionTextureArray());
 		
-		put(super.materialClearCoatMaterialArray = compiledScene.getMaterialClearCoatMaterialArray());
-		put(super.materialDisneyMaterialArray = compiledScene.getMaterialDisneyMaterialArray());
-		put(super.materialGlassMaterialArray = compiledScene.getMaterialGlassMaterialArray());
-		put(super.materialGlossyMaterialArray = compiledScene.getMaterialGlossyMaterialArray());
-		put(super.materialMatteMaterialArray = compiledScene.getMaterialMatteMaterialArray());
-		put(super.materialMetalMaterialArray = compiledScene.getMaterialMetalMaterialArray());
-		put(super.materialMirrorMaterialArray = compiledScene.getMaterialMirrorMaterialArray());
-		put(super.materialPlasticMaterialArray = compiledScene.getMaterialPlasticMaterialArray());
-		put(super.materialSubstrateMaterialArray = compiledScene.getMaterialSubstrateMaterialArray());
+		put(super.materialClearCoatMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialClearCoatMaterialArray());
+		put(super.materialDisneyMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialDisneyMaterialArray());
+		put(super.materialGlassMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialGlassMaterialArray());
+		put(super.materialGlossyMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialGlossyMaterialArray());
+		put(super.materialMatteMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialMatteMaterialArray());
+		put(super.materialMetalMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialMetalMaterialArray());
+		put(super.materialMirrorMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialMirrorMaterialArray());
+		put(super.materialPlasticMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialPlasticMaterialArray());
+		put(super.materialSubstrateMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialSubstrateMaterialArray());
 		
-		put(super.lightIDAndOffsetArray = compiledScene.getLightIDAndOffsetArray());
-		put(super.lightDirectionalLightArray = compiledScene.getLightDirectionalLightArray());
-		put(super.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
-		put(super.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());
-		put(super.lightPerezLightArray = compiledScene.getLightPerezLightArray());
-		put(super.lightPerezLightOffsetArray = compiledScene.getLightPerezLightOffsetArray());
-		put(super.lightPointLightArray = compiledScene.getLightPointLightArray());
-		put(super.lightSpotLightArray = compiledScene.getLightSpotLightArray());
+		put(super.lightIDAndOffsetArray = compiledScene.getCompiledLightCache().getLightIDAndOffsetArray());
+		put(super.lightDirectionalLightArray = compiledScene.getCompiledLightCache().getLightDirectionalLightArray());
+		put(super.lightLDRImageLightArray = compiledScene.getCompiledLightCache().getLightLDRImageLightArray());
+		put(super.lightLDRImageLightOffsetArray = compiledScene.getCompiledLightCache().getLightLDRImageLightOffsetArray());
+		put(super.lightPerezLightArray = compiledScene.getCompiledLightCache().getLightPerezLightArray());
+		put(super.lightPerezLightOffsetArray = compiledScene.getCompiledLightCache().getLightPerezLightOffsetArray());
+		put(super.lightPointLightArray = compiledScene.getCompiledLightCache().getLightPointLightArray());
+		put(super.lightSpotLightArray = compiledScene.getCompiledLightCache().getLightSpotLightArray());
 		
-		put(this.cameraArray = compiledScene.getCameraArray());
+		put(this.cameraArray = compiledScene.getCompiledCameraCache().getCameraArray());
 		
-		put(this.matrix44FArray = compiledScene.getMatrix44FArray());
+		put(this.primitiveArray = compiledScene.getCompiledPrimitiveCache().getPrimitiveArray());
+		put(this.primitiveMatrix44FArray = compiledScene.getCompiledPrimitiveCache().getPrimitiveMatrix44FArray());
 		
-		put(this.primitiveArray = compiledScene.getPrimitiveArray());
+		super.lightCount = compiledScene.getCompiledLightCache().getLightCount();
+		super.lightDirectionalLightCount = compiledScene.getCompiledLightCache().getLightDirectionalLightCount();
+		super.lightLDRImageLightCount = compiledScene.getCompiledLightCache().getLightLDRImageLightCount();
+		super.lightPerezLightCount = compiledScene.getCompiledLightCache().getLightPerezLightCount();
+		super.lightPointLightCount = compiledScene.getCompiledLightCache().getLightPointLightCount();
+		super.lightSpotLightCount = compiledScene.getCompiledLightCache().getLightSpotLightCount();
 		
-		super.lightCount = compiledScene.getLightCount();
-		super.lightDirectionalLightCount = compiledScene.getLightDirectionalLightCount();
-		super.lightLDRImageLightCount = compiledScene.getLightLDRImageLightCount();
-		super.lightPerezLightCount = compiledScene.getLightPerezLightCount();
-		super.lightPointLightCount = compiledScene.getLightPointLightCount();
-		super.lightSpotLightCount = compiledScene.getLightSpotLightCount();
-		
-		this.primitiveCount = compiledScene.getPrimitiveCount();
+		this.primitiveCount = compiledScene.getCompiledPrimitiveCache().getPrimitiveCount();
 	}
 }

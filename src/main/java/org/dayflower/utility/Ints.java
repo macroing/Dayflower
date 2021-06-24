@@ -55,6 +55,44 @@ public final class Ints {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns {@code true} if, and only if, the elements of {@code arrayA} starting at {@code offsetArrayA} are equal to the elements of {@code arrayB} starting at {@code offsetArrayB}, {@code false} otherwise.
+	 * <p>
+	 * If either {@code arrayA} or {@code arrayB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to {@code arrayB.length}, {@code length} is less than {@code 0},
+	 * {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0} or greater than {@code arrayB.length}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param arrayA an {@code int[]}
+	 * @param arrayB an {@code int[]}
+	 * @param offsetArrayA the offset to start at in {@code arrayA}
+	 * @param offsetArrayB the offset to start at in {@code arrayB}
+	 * @param length the length of the sub-arrays to test for equality
+	 * @return {@code true} if, and only if, the elements of {@code arrayA} starting at {@code offsetArrayA} are equal to the elements of {@code arrayB} starting at {@code offsetArrayB}, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to
+	 *                                  {@code arrayB.length}, {@code length} is less than {@code 0}, {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0}
+	 *                                  or greater than {@code arrayB.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayA} or {@code arrayB} are {@code null}
+	 */
+	public static boolean equal(final int[] arrayA, final int[] arrayB, final int offsetArrayA, final int offsetArrayB, final int length) {
+		Objects.requireNonNull(arrayA, "arrayA == null");
+		Objects.requireNonNull(arrayB, "arrayB == null");
+		
+		ParameterArguments.requireRange(offsetArrayA, 0, arrayA.length - 1, "offsetArrayA");
+		ParameterArguments.requireRange(offsetArrayB, 0, arrayB.length - 1, "offsetArrayB");
+		ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length");
+		ParameterArguments.requireRange(offsetArrayA + length, 0, arrayA.length, "offsetArrayA + length");
+		ParameterArguments.requireRange(offsetArrayB + length, 0, arrayB.length, "offsetArrayB + length");
+		
+		for(int i = 0; i < length; i++) {
+			if(arrayA[offsetArrayA + i] != arrayB[offsetArrayB + i]) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
 	 * Returns the absolute version of {@code value}.
 	 * <p>
 	 * If the argument is not negative, the argument is returned. If the argument is negative, the negation of the argument is returned.

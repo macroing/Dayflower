@@ -110,7 +110,7 @@ public final class SceneCompiler {
 	
 	private void doBuildCompiledScene(final Scene scene) {
 //		Retrieve the float[] for the Matrix44F instances:
-		final float[] matrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> primitive.getTransform().toArray(), 1);
+		final float[] primitiveMatrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> primitive.getTransform().toArray(), 1);
 		
 //		Retrieve the int[] for all primitives:
 		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> primitive.toArray(), 1);
@@ -124,45 +124,45 @@ public final class SceneCompiler {
 		CompiledScene compiledScene = new CompiledScene();
 		compiledScene.getCompiledBoundingVolume3FCache().setBoundingVolume3FAxisAlignedBoundingBox3FArray(this.boundingVolume3FCache.toBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		compiledScene.getCompiledBoundingVolume3FCache().setBoundingVolume3FBoundingSphere3FArray(this.boundingVolume3FCache.toBoundingVolume3FBoundingSphere3FArray());
-		compiledScene.setCameraArray(scene.getCamera().toArray());
-		compiledScene.setLightDirectionalLightArray(this.lightCache.toLightDirectionalLightArray());
-		compiledScene.setLightIDAndOffsetArray(this.lightCache.toLightIDAndOffsetArray());
-		compiledScene.setLightLDRImageLightArray(this.lightCache.toLightLDRImageLightArray());
-		compiledScene.setLightLDRImageLightOffsetArray(this.lightCache.toLightLDRImageLightOffsetArray());
-		compiledScene.setLightPerezLightArray(this.lightCache.toLightPerezLightArray());
-		compiledScene.setLightPerezLightOffsetArray(this.lightCache.toLightPerezLightOffsetArray());
-		compiledScene.setLightPointLightArray(this.lightCache.toLightPointLightArray());
-		compiledScene.setLightSpotLightArray(this.lightCache.toLightSpotLightArray());
-		compiledScene.setMaterialClearCoatMaterialArray(this.materialCache.toMaterialClearCoatMaterialArray(this.textureCache));
-		compiledScene.setMaterialDisneyMaterialArray(this.materialCache.toMaterialDisneyMaterialArray(this.textureCache));
-		compiledScene.setMaterialGlassMaterialArray(this.materialCache.toMaterialGlassMaterialArray(this.textureCache));
-		compiledScene.setMaterialGlossyMaterialArray(this.materialCache.toMaterialGlossyMaterialArray(this.textureCache));
-		compiledScene.setMaterialMatteMaterialArray(this.materialCache.toMaterialMatteMaterialArray(this.textureCache));
-		compiledScene.setMaterialMetalMaterialArray(this.materialCache.toMaterialMetalMaterialArray(this.textureCache));
-		compiledScene.setMaterialMirrorMaterialArray(this.materialCache.toMaterialMirrorMaterialArray(this.textureCache));
-		compiledScene.setMaterialPlasticMaterialArray(this.materialCache.toMaterialPlasticMaterialArray(this.textureCache));
-		compiledScene.setMaterialSubstrateMaterialArray(this.materialCache.toMaterialSubstrateMaterialArray(this.textureCache));
-		compiledScene.setMatrix44FArray(matrix44FArray);
-		compiledScene.setPrimitiveArray(primitiveArray);
-		compiledScene.setShape3FCone3FArray(this.shape3FCache.toShape3FCone3FArray());
-		compiledScene.setShape3FCylinder3FArray(this.shape3FCache.toShape3FCylinder3FArray());
-		compiledScene.setShape3FDisk3FArray(this.shape3FCache.toShape3FDisk3FArray());
-		compiledScene.setShape3FParaboloid3FArray(this.shape3FCache.toShape3FParaboloid3FArray());
-		compiledScene.setShape3FPlane3FArray(this.shape3FCache.toShape3FPlane3FArray());
-		compiledScene.setShape3FRectangle3FArray(this.shape3FCache.toShape3FRectangle3FArray());
-		compiledScene.setShape3FRectangularCuboid3FArray(this.shape3FCache.toShape3FRectangularCuboid3FArray());
-		compiledScene.setShape3FSphere3FArray(this.shape3FCache.toShape3FSphere3FArray());
-		compiledScene.setShape3FTorus3FArray(this.shape3FCache.toShape3FTorus3FArray());
-		compiledScene.setShape3FTriangle3FArray(this.shape3FCache.toShape3FTriangle3FArray());
-		compiledScene.setShape3FTriangleMesh3FArray(this.shape3FCache.toShape3FTriangleMesh3FArray(this.boundingVolume3FCache));
-		compiledScene.setTextureBlendTextureArray(this.textureCache.toTextureBlendTextureArray());
-		compiledScene.setTextureBullseyeTextureArray(this.textureCache.toTextureBullseyeTextureArray());
-		compiledScene.setTextureCheckerboardTextureArray(this.textureCache.toTextureCheckerboardTextureArray());
-		compiledScene.setTextureConstantTextureArray(this.textureCache.toTextureConstantTextureArray());
-		compiledScene.setTextureLDRImageTextureArray(this.textureCache.toTextureLDRImageTextureArray());
-		compiledScene.setTextureLDRImageTextureOffsetArray(this.textureCache.toTextureLDRImageTextureOffsetArray());
-		compiledScene.setTextureMarbleTextureArray(this.textureCache.toTextureMarbleTextureArray());
-		compiledScene.setTextureSimplexFractionalBrownianMotionTextureArray(this.textureCache.toTextureSimplexFractionalBrownianMotionTextureArray());
+		compiledScene.getCompiledCameraCache().setCameraArray(scene.getCamera().toArray());
+		compiledScene.getCompiledLightCache().setLightDirectionalLightArray(this.lightCache.toLightDirectionalLightArray());
+		compiledScene.getCompiledLightCache().setLightIDAndOffsetArray(this.lightCache.toLightIDAndOffsetArray());
+		compiledScene.getCompiledLightCache().setLightLDRImageLightArray(this.lightCache.toLightLDRImageLightArray());
+		compiledScene.getCompiledLightCache().setLightLDRImageLightOffsetArray(this.lightCache.toLightLDRImageLightOffsetArray());
+		compiledScene.getCompiledLightCache().setLightPerezLightArray(this.lightCache.toLightPerezLightArray());
+		compiledScene.getCompiledLightCache().setLightPerezLightOffsetArray(this.lightCache.toLightPerezLightOffsetArray());
+		compiledScene.getCompiledLightCache().setLightPointLightArray(this.lightCache.toLightPointLightArray());
+		compiledScene.getCompiledLightCache().setLightSpotLightArray(this.lightCache.toLightSpotLightArray());
+		compiledScene.getCompiledMaterialCache().setMaterialClearCoatMaterialArray(this.materialCache.toMaterialClearCoatMaterialArray(this.textureCache));
+		compiledScene.getCompiledMaterialCache().setMaterialDisneyMaterialArray(this.materialCache.toMaterialDisneyMaterialArray(this.textureCache));
+		compiledScene.getCompiledMaterialCache().setMaterialGlassMaterialArray(this.materialCache.toMaterialGlassMaterialArray(this.textureCache));
+		compiledScene.getCompiledMaterialCache().setMaterialGlossyMaterialArray(this.materialCache.toMaterialGlossyMaterialArray(this.textureCache));
+		compiledScene.getCompiledMaterialCache().setMaterialMatteMaterialArray(this.materialCache.toMaterialMatteMaterialArray(this.textureCache));
+		compiledScene.getCompiledMaterialCache().setMaterialMetalMaterialArray(this.materialCache.toMaterialMetalMaterialArray(this.textureCache));
+		compiledScene.getCompiledMaterialCache().setMaterialMirrorMaterialArray(this.materialCache.toMaterialMirrorMaterialArray(this.textureCache));
+		compiledScene.getCompiledMaterialCache().setMaterialPlasticMaterialArray(this.materialCache.toMaterialPlasticMaterialArray(this.textureCache));
+		compiledScene.getCompiledMaterialCache().setMaterialSubstrateMaterialArray(this.materialCache.toMaterialSubstrateMaterialArray(this.textureCache));
+		compiledScene.getCompiledPrimitiveCache().setPrimitiveArray(primitiveArray);
+		compiledScene.getCompiledPrimitiveCache().setPrimitiveMatrix44FArray(primitiveMatrix44FArray);
+		compiledScene.getCompiledShape3FCache().setShape3FCone3FArray(this.shape3FCache.toShape3FCone3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FCylinder3FArray(this.shape3FCache.toShape3FCylinder3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FDisk3FArray(this.shape3FCache.toShape3FDisk3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FParaboloid3FArray(this.shape3FCache.toShape3FParaboloid3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FPlane3FArray(this.shape3FCache.toShape3FPlane3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FRectangle3FArray(this.shape3FCache.toShape3FRectangle3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FRectangularCuboid3FArray(this.shape3FCache.toShape3FRectangularCuboid3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FSphere3FArray(this.shape3FCache.toShape3FSphere3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FTorus3FArray(this.shape3FCache.toShape3FTorus3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FTriangle3FArray(this.shape3FCache.toShape3FTriangle3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FTriangleMesh3FArray(this.shape3FCache.toShape3FTriangleMesh3FArray(this.boundingVolume3FCache));
+		compiledScene.getCompiledTextureCache().setTextureBlendTextureArray(this.textureCache.toTextureBlendTextureArray());
+		compiledScene.getCompiledTextureCache().setTextureBullseyeTextureArray(this.textureCache.toTextureBullseyeTextureArray());
+		compiledScene.getCompiledTextureCache().setTextureCheckerboardTextureArray(this.textureCache.toTextureCheckerboardTextureArray());
+		compiledScene.getCompiledTextureCache().setTextureConstantTextureArray(this.textureCache.toTextureConstantTextureArray());
+		compiledScene.getCompiledTextureCache().setTextureLDRImageTextureArray(this.textureCache.toTextureLDRImageTextureArray());
+		compiledScene.getCompiledTextureCache().setTextureLDRImageTextureOffsetArray(this.textureCache.toTextureLDRImageTextureOffsetArray());
+		compiledScene.getCompiledTextureCache().setTextureMarbleTextureArray(this.textureCache.toTextureMarbleTextureArray());
+		compiledScene.getCompiledTextureCache().setTextureSimplexFractionalBrownianMotionTextureArray(this.textureCache.toTextureSimplexFractionalBrownianMotionTextureArray());
 		
 		this.compiledScene.set(compiledScene);
 	}

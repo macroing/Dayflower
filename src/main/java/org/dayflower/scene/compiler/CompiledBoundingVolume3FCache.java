@@ -20,6 +20,7 @@ package org.dayflower.scene.compiler;
 
 import java.util.Objects;
 
+import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 

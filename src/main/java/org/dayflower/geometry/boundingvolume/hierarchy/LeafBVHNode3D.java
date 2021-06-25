@@ -261,6 +261,22 @@ public final class LeafBVHNode3D<T extends Shape3D> extends BVHNode3D {
 		return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.shapes);
 	}
 	
+	/**
+	 * Adds all {@link Shape3D} instances associated with this {@code LeafBVHNode3D} to {@code shapes}.
+	 * <p>
+	 * If {@code shapes} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shapes the {@code List} to add all {@code Shape3D} instances to
+	 * @throws NullPointerException thrown if, and only if, {@code shapes} is {@code null}
+	 */
+	public void addShapesTo(final List<T> shapes) {
+		Objects.requireNonNull(shapes, "shapes == null");
+		
+		for(final T shape : this.shapes) {
+			shapes.add(shape);
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

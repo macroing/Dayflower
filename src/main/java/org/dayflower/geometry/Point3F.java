@@ -565,6 +565,26 @@ public final class Point3F implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Point3F} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @param c a {@code Point3F} instance
+	 * @param d a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public static Point3F maximum(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
+		final float component1 = max(a.component1, b.component1, c.component1, d.component1);
+		final float component2 = max(a.component2, b.component2, c.component2, d.component2);
+		final float component3 = max(a.component3, b.component3, c.component3, d.component3);
+		
+		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Returns a new {@code Point3F} instance that represents the midpoint of {@code a} and {@code b}.
 	 * <p>
 	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -628,6 +648,26 @@ public final class Point3F implements Node {
 		final float component1 = min(a.component1, b.component1, c.component1);
 		final float component2 = min(a.component2, b.component2, c.component2);
 		final float component3 = min(a.component3, b.component3, c.component3);
+		
+		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Point3F} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @param c a {@code Point3F} instance
+	 * @param d a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public static Point3F minimum(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
+		final float component1 = min(a.component1, b.component1, c.component1, d.component1);
+		final float component2 = min(a.component2, b.component2, c.component2, d.component2);
+		final float component3 = min(a.component3, b.component3, c.component3, d.component3);
 		
 		return new Point3F(component1, component2, component3);
 	}

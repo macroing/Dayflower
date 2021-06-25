@@ -1,3 +1,16 @@
+2021-06-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method addShapesTo(List<T>) to the LeafBVHNode3D class.
+	* ADD:		Add the method addShapesTo(List<T>) to the LeafBVHNode3F class.
+	* ADD:		Add the constants MAXIMUM and MINIMUM to the Point2D class.
+	* ADD:		Add the constants MAXIMUM and MINIMUM to the Point2F class.
+	* ADD:		Add the methods maximum(Point3D, Point3D, Point3D, Point3D) and minimum(Point3D, Point3D, Point3D, Point3D) to the Point3D class.
+	* ADD:		Add the methods maximum(Point3F, Point3F, Point3F, Point3F) and minimum(Point3F, Point3F, Point3F, Point3F) to the Point3F class.
+	* ADD:		Add the methods add(Point2D, double), centroid(Point2D, Point2D), centroid(Point2D, Point2D, Point2D), centroid(Point2D, Point2D, Point2D, Point2D), centroid(Point2D, Point2D, Point2D, Point2D, Point2D, Point2D, Point2D, Point2D), clearCache(), getCacheSize(), getCached(Point2D), getComponent(int), subtract(Point2D, Vector2D) and subtract(Point2D, double) to the Point2D class.
+	* ADD:		Add the methods add(Point2F, float), centroid(Point2F, Point2F), centroid(Point2F, Point2F, Point2F), centroid(Point2F, Point2F, Point2F, Point2F), centroid(Point2F, Point2F, Point2F, Point2F, Point2F, Point2F, Point2F, Point2F), clearCache(), getCacheSize(), getCached(Point2F), getComponent(int), subtract(Point2F, Vector2F) and subtract(Point2F, float) to the Point2F class.
+	* ADD:		Add the constructor Point2D(double) to the Point2D class.
+	* ADD:		Add the constructor Point2F(float) to the Point2F class.
+
 2021-06-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method equal(int[], int[], int, int, int) to the Ints class.

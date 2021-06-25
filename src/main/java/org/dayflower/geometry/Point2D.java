@@ -34,6 +34,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -49,6 +51,22 @@ import org.dayflower.utility.MortonCodes;
  * @author J&#246;rgen Lundgren
  */
 public final class Point2D implements Node {
+	/**
+	 * A {@code Point2D} instance with the largest component values.
+	 */
+	public static final Point2D MAXIMUM = maximum();
+	
+	/**
+	 * A {@code Point2D} instance with the smallest component values.
+	 */
+	public static final Point2D MINIMUM = minimum();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final Map<Point2D, Point2D> CACHE = new HashMap<>();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final double component1;
 	private final double component2;
 	
@@ -85,6 +103,22 @@ public final class Point2D implements Node {
 	 */
 	public Point2D(final Vector2D vector) {
 		this(vector.getComponent1(), vector.getComponent2());
+	}
+	
+	/**
+	 * Constructs a new {@code Point2D} instance given the component values {@code component} and {@code component}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point2D(component, component);
+	 * }
+	 * </pre>
+	 * 
+	 * @param component the value for both components
+	 */
+	public Point2D(final double component) {
+		this(component, component);
 	}
 	
 	/**
@@ -130,6 +164,26 @@ public final class Point2D implements Node {
 			return false;
 		} else {
 			return true;
+		}
+	}
+	
+	/**
+	 * Returns the value of the component at index {@code index}.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than {@code 1}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index of the component whose value to return
+	 * @return the value of the component at index {@code index}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code 1}
+	 */
+	public double getComponent(final int index) {
+		switch(index) {
+			case 0:
+				return this.component1;
+			case 1:
+				return this.component2;
+			default:
+				throw new IllegalArgumentException(String.format("Illegal index: index=%s", Integer.toString(index)));
 		}
 	}
 	
@@ -271,6 +325,104 @@ public final class Point2D implements Node {
 	}
 	
 	/**
+	 * Adds {@code scalarRHS} to the component values of {@code pointLHS}.
+	 * <p>
+	 * Returns a new {@code Point2D} instance with the result of the addition.
+	 * <p>
+	 * If {@code pointLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pointLHS the {@code Point2D} instance on the left-hand side
+	 * @param scalarRHS the scalar value on the right-hand side
+	 * @return a new {@code Point2D} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
+	 */
+	public static Point2D add(final Point2D pointLHS, final double scalarRHS) {
+		final double component1 = pointLHS.component1 + scalarRHS;
+		final double component2 = pointLHS.component2 + scalarRHS;
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2D} instance that represents the centroid of {@code a} and {@code b}.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Note: This method is equivalent to {@link #midpoint(Point2D, Point2D)}.
+	 * 
+	 * @param a a {@code Point2D} instance
+	 * @param b a {@code Point2D} instance
+	 * @return a new {@code Point2D} instance that represents the centroid of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point2D centroid(final Point2D a, final Point2D b) {
+		final double component1 = (a.component1 + b.component1) / 2.0D;
+		final double component2 = (a.component2 + b.component2) / 2.0D;
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2D} instance that represents the centroid of {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2D} instance
+	 * @param b a {@code Point2D} instance
+	 * @param c a {@code Point2D} instance
+	 * @return a new {@code Point2D} instance that represents the centroid of {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
+	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c) {
+		final double component1 = (a.component1 + b.component1 + c.component1) / 3.0D;
+		final double component2 = (a.component2 + b.component2 + c.component2) / 3.0D;
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2D} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2D} instance
+	 * @param b a {@code Point2D} instance
+	 * @param c a {@code Point2D} instance
+	 * @param d a {@code Point2D} instance
+	 * @return a new {@code Point2D} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
+		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0D;
+		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0D;
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2D} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2D} instance
+	 * @param b a {@code Point2D} instance
+	 * @param c a {@code Point2D} instance
+	 * @param d a {@code Point2D} instance
+	 * @param e a {@code Point2D} instance
+	 * @param f a {@code Point2D} instance
+	 * @param g a {@code Point2D} instance
+	 * @param h a {@code Point2D} instance
+	 * @return a new {@code Point2D} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
+	 */
+	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c, final Point2D d, final Point2D e, final Point2D f, final Point2D g, final Point2D h) {
+		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0D;
+		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0D;
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
 	 * Computes texture coordinates from three other texture coordinates via Barycentric interpolation.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the interpolated texture coordinates.
@@ -315,6 +467,19 @@ public final class Point2D implements Node {
 		final double y = mortonCodeY / (double)(1 << 16);
 		
 		return new Point2D(x, y);
+	}
+	
+	/**
+	 * Returns a cached version of {@code point}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point2D} instance
+	 * @return a cached version of {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Point2D getCached(final Point2D point) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
 	}
 	
 	/**
@@ -565,6 +730,44 @@ public final class Point2D implements Node {
 	}
 	
 	/**
+	 * Subtracts the component values of {@code vectorRHS} from the component values of {@code pointLHS}.
+	 * <p>
+	 * Returns a new {@code Point2D} instance with the result of the subtraction.
+	 * <p>
+	 * If either {@code pointLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pointLHS the {@code Point2D} instance on the left-hand side
+	 * @param vectorRHS the {@link Vector2D} instance on the right-hand side
+	 * @return a new {@code Point2D} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static Point2D subtract(final Point2D pointLHS, final Vector2D vectorRHS) {
+		final double component1 = pointLHS.component1 - vectorRHS.getComponent1();
+		final double component2 = pointLHS.component2 - vectorRHS.getComponent2();
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Subtracts {@code scalarRHS} from the component values of {@code pointLHS}.
+	 * <p>
+	 * Returns a new {@code Point2D} instance with the result of the subtraction.
+	 * <p>
+	 * If {@code pointLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pointLHS the {@code Point2D} instance on the left-hand side
+	 * @param scalarRHS the scalar value on the right-hand side
+	 * @return a new {@code Point2D} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
+	 */
+	public static Point2D subtract(final Point2D pointLHS, final double scalarRHS) {
+		final double component1 = pointLHS.component1 - scalarRHS;
+		final double component2 = pointLHS.component2 - scalarRHS;
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
 	 * Returns a new {@code Point2D} instance with {@code point} inside the image represented by {@code resolutionX} and {@code resolutionY}.
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -647,5 +850,21 @@ public final class Point2D implements Node {
 	 */
 	public static double distanceSquared(final Point2D eye, final Point2D lookAt) {
 		return Vector2D.direction(eye, lookAt).lengthSquared();
+	}
+	
+	/**
+	 * Returns the size of the cache.
+	 * 
+	 * @return the size of the cache
+	 */
+	public static int getCacheSize() {
+		return CACHE.size();
+	}
+	
+	/**
+	 * Clears the cache.
+	 */
+	public static void clearCache() {
+		CACHE.clear();
 	}
 }

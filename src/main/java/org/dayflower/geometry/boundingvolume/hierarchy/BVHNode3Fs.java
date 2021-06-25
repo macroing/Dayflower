@@ -75,9 +75,7 @@ public final class BVHNode3Fs {
 			final List<T> shapes = new ArrayList<>();
 			
 			for(final LeafBVHNode3F<T> processableLeafBVHNode : processableLeafBVHNodes) {
-				for(final T shape : processableLeafBVHNode.getShapes()) {
-					shapes.add(shape);
-				}
+				processableLeafBVHNode.addShapesTo(shapes);
 			}
 			
 			return new LeafBVHNode3F<>(maximum, minimum, depth, shapes);
@@ -182,9 +180,7 @@ public final class BVHNode3Fs {
 			final List<T> shapes = new ArrayList<>();
 			
 			for(final LeafBVHNode3F<T> processableLeafBVHNode : processableLeafBVHNodes) {
-				for(final T shape : processableLeafBVHNode.getShapes()) {
-					shapes.add(shape);
-				}
+				processableLeafBVHNode.addShapesTo(shapes);
 			}
 			
 			return new LeafBVHNode3F<>(maximum, minimum, depth, shapes);

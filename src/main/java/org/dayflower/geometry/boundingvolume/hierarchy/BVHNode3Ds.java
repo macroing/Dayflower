@@ -55,27 +55,27 @@ public final class BVHNode3Ds {
 	 * 
 	 * Returns a {@link BVHNode3D} instance that represents the root of the bounding volume hierarchy (BVH) structure.
 	 * <p>
-	 * If either {@code processableLeafBVHNodes}, at least one of its elements, {@code maximum} or {@code minimum} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code processableBVHItems}, at least one of its elements, {@code maximum} or {@code minimum} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code depth} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param processableLeafBVHNodes a {@code List} of {@link LeafBVHNode3D} instances to process
+	 * @param processableBVHItems a {@code List} of {@link BVHItem3D} instances to process
 	 * @param maximum a {@link Point3D} instance with the maximum coordinates of the {@link BoundingVolume3D} instance that contains the returned {@code BVHNode3D} instance
 	 * @param minimum a {@code Point3D} instance with the minimum coordinates of the {@code BoundingVolume3D} instance that contains the returned {@code BVHNode3D} instance
 	 * @param depth the depth of the returned {@code BVHNode3D} instance
 	 * @return a {@code BVHNode3D} instance that represents the root of the bounding volume hierarchy (BVH) structure
 	 * @throws IllegalArgumentException thrown if, and only if, {@code depth} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code processableLeafBVHNodes}, at least one of its elements, {@code maximum} or {@code minimum} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code processableBVHItems}, at least one of its elements, {@code maximum} or {@code minimum} are {@code null}
 	 */
-	public static <T extends Shape3D> BVHNode3D create(final List<LeafBVHNode3D<T>> processableLeafBVHNodes, final Point3D maximum, final Point3D minimum, final int depth) {
-		final int size = processableLeafBVHNodes.size();
+	public static <T extends Shape3D> BVHNode3D create(final List<BVHItem3D<T>> processableBVHItems, final Point3D maximum, final Point3D minimum, final int depth) {
+		final int size = processableBVHItems.size();
 		final int sizeHalf = size / 2;
 		
 		if(size < 4) {
 			final List<T> shapes = new ArrayList<>();
 			
-			for(final LeafBVHNode3D<T> processableLeafBVHNode : processableLeafBVHNodes) {
-				processableLeafBVHNode.addShapesTo(shapes);
+			for(final BVHItem3D<T> processableBVHItem : processableBVHItems) {
+				shapes.add(processableBVHItem.getShape());
 			}
 			
 			return new LeafBVHNode3D<>(maximum, minimum, depth, shapes);
@@ -122,8 +122,8 @@ public final class BVHNode3Ds {
 				int countL = 0;
 				int countR = 0;
 				
-				for(final LeafBVHNode3D<T> processableLeafBVHNode : processableLeafBVHNodes) {
-					final BoundingVolume3D boundingVolume = processableLeafBVHNode.getBoundingVolume();
+				for(final BVHItem3D<T> processableBVHItem : processableBVHItems) {
+					final BoundingVolume3D boundingVolume = processableBVHItem.getBoundingVolume();
 					
 					final Point3D max = boundingVolume.getMaximum();
 					final Point3D mid = boundingVolume.getMidpoint();
@@ -179,15 +179,15 @@ public final class BVHNode3Ds {
 		if(bestAxis == -1) {
 			final List<T> shapes = new ArrayList<>();
 			
-			for(final LeafBVHNode3D<T> processableLeafBVHNode : processableLeafBVHNodes) {
-				processableLeafBVHNode.addShapesTo(shapes);
+			for(final BVHItem3D<T> processableBVHItem : processableBVHItems) {
+				shapes.add(processableBVHItem.getShape());
 			}
 			
 			return new LeafBVHNode3D<>(maximum, minimum, depth, shapes);
 		}
 		
-		final List<LeafBVHNode3D<T>> leafBVHNodesL = new ArrayList<>(sizeHalf);
-		final List<LeafBVHNode3D<T>> leafBVHNodesR = new ArrayList<>(sizeHalf);
+		final List<BVHItem3D<T>> processableBVHItemsL = new ArrayList<>(sizeHalf);
+		final List<BVHItem3D<T>> processableBVHItemsR = new ArrayList<>(sizeHalf);
 		
 		double maximumLX = MIN_VALUE;
 		double maximumLY = MIN_VALUE;
@@ -202,8 +202,8 @@ public final class BVHNode3Ds {
 		double minimumRY = MAX_VALUE;
 		double minimumRZ = MAX_VALUE;
 		
-		for(final LeafBVHNode3D<T> processableLeafBVHNode : processableLeafBVHNodes) {
-			final BoundingVolume3D boundingVolume = processableLeafBVHNode.getBoundingVolume();
+		for(final BVHItem3D<T> processableBVHItem : processableBVHItems) {
+			final BoundingVolume3D boundingVolume = processableBVHItem.getBoundingVolume();
 			
 			final Point3D max = boundingVolume.getMaximum();
 			final Point3D mid = boundingVolume.getMidpoint();
@@ -212,7 +212,7 @@ public final class BVHNode3Ds {
 			final double value = mid.getComponent(bestAxis);
 			
 			if(value < bestSplit) {
-				leafBVHNodesL.add(processableLeafBVHNode);
+				processableBVHItemsL.add(processableBVHItem);
 				
 				maximumLX = max(maximumLX, max.getX());
 				maximumLY = max(maximumLY, max.getY());
@@ -221,7 +221,7 @@ public final class BVHNode3Ds {
 				minimumLY = min(minimumLY, min.getY());
 				minimumLZ = min(minimumLZ, min.getZ());
 			} else {
-				leafBVHNodesR.add(processableLeafBVHNode);
+				processableBVHItemsR.add(processableBVHItem);
 				
 				maximumRX = max(maximumRX, max.getX());
 				maximumRY = max(maximumRY, max.getY());
@@ -237,8 +237,8 @@ public final class BVHNode3Ds {
 		final Point3D maximumR = new Point3D(maximumRX, maximumRY, maximumRZ);
 		final Point3D minimumR = new Point3D(minimumRX, minimumRY, minimumRZ);
 		
-		final BVHNode3D bVHNodeL = create(leafBVHNodesL, maximumL, minimumL, depth + 1);
-		final BVHNode3D bVHNodeR = create(leafBVHNodesR, maximumR, minimumR, depth + 1);
+		final BVHNode3D bVHNodeL = create(processableBVHItemsL, maximumL, minimumL, depth + 1);
+		final BVHNode3D bVHNodeR = create(processableBVHItemsR, maximumR, minimumR, depth + 1);
 		
 		return new TreeBVHNode3D(maximum, minimum, depth, bVHNodeL, bVHNodeR);
 	}

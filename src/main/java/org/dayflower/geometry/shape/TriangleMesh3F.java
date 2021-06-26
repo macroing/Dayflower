@@ -33,7 +33,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +50,9 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceIntersector3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.BVHItem3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3Fs;
-import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -779,7 +778,7 @@ public final class TriangleMesh3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static BVHNode3F doCreateBVHNode(final List<Triangle3F> triangles) {
-		final List<LeafBVHNode3F<Triangle3F>> processableLeafBVHNodes = new ArrayList<>(triangles.size());
+		final List<BVHItem3F<Triangle3F>> processableBVHItems = new ArrayList<>(triangles.size());
 		
 		float maximumX = MIN_VALUE;
 		float maximumY = MIN_VALUE;
@@ -803,10 +802,10 @@ public final class TriangleMesh3F implements Shape3F {
 			minimumY = min(minimumY, minimum.getY());
 			minimumZ = min(minimumZ, minimum.getZ());
 			
-			processableLeafBVHNodes.add(new LeafBVHNode3F<>(maximum, minimum, 0, Arrays.asList(triangle)));
+			processableBVHItems.add(new BVHItem3F<>(new AxisAlignedBoundingBox3F(maximum, minimum), triangle));
 		}
 		
-		return BVHNode3Fs.create(processableLeafBVHNodes, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
+		return BVHNode3Fs.create(processableBVHItems, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
 	}
 	
 	private static BoundingVolume3F doCreateBoundingVolume(final List<Triangle3F> triangles) {

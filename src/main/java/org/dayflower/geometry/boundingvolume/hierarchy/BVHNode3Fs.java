@@ -55,27 +55,27 @@ public final class BVHNode3Fs {
 	 * 
 	 * Returns a {@link BVHNode3F} instance that represents the root of the bounding volume hierarchy (BVH) structure.
 	 * <p>
-	 * If either {@code processableLeafBVHNodes}, at least one of its elements, {@code maximum} or {@code minimum} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code processableBVHItems}, at least one of its elements, {@code maximum} or {@code minimum} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code depth} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param processableLeafBVHNodes a {@code List} of {@link LeafBVHNode3F} instances to process
+	 * @param processableBVHItems a {@code List} of {@link BVHItem3F} instances to process
 	 * @param maximum a {@link Point3F} instance with the maximum coordinates of the {@link BoundingVolume3F} instance that contains the returned {@code BVHNode3F} instance
 	 * @param minimum a {@code Point3F} instance with the minimum coordinates of the {@code BoundingVolume3F} instance that contains the returned {@code BVHNode3F} instance
 	 * @param depth the depth of the returned {@code BVHNode3F} instance
 	 * @return a {@code BVHNode3F} instance that represents the root of the bounding volume hierarchy (BVH) structure
 	 * @throws IllegalArgumentException thrown if, and only if, {@code depth} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code processableLeafBVHNodes}, at least one of its elements, {@code maximum} or {@code minimum} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code processableBVHItems}, at least one of its elements, {@code maximum} or {@code minimum} are {@code null}
 	 */
-	public static <T extends Shape3F> BVHNode3F create(final List<LeafBVHNode3F<T>> processableLeafBVHNodes, final Point3F maximum, final Point3F minimum, final int depth) {
-		final int size = processableLeafBVHNodes.size();
+	public static <T extends Shape3F> BVHNode3F create(final List<BVHItem3F<T>> processableBVHItems, final Point3F maximum, final Point3F minimum, final int depth) {
+		final int size = processableBVHItems.size();
 		final int sizeHalf = size / 2;
 		
 		if(size < 4) {
-			final List<T> shapes = new ArrayList<>();
+			final List<T> shapes = new ArrayList<>(processableBVHItems.size());
 			
-			for(final LeafBVHNode3F<T> processableLeafBVHNode : processableLeafBVHNodes) {
-				processableLeafBVHNode.addShapesTo(shapes);
+			for(final BVHItem3F<T> processableBVHItem : processableBVHItems) {
+				shapes.add(processableBVHItem.getShape());
 			}
 			
 			return new LeafBVHNode3F<>(maximum, minimum, depth, shapes);
@@ -122,8 +122,8 @@ public final class BVHNode3Fs {
 				int countL = 0;
 				int countR = 0;
 				
-				for(final LeafBVHNode3F<T> processableLeafBVHNode : processableLeafBVHNodes) {
-					final BoundingVolume3F boundingVolume = processableLeafBVHNode.getBoundingVolume();
+				for(final BVHItem3F<T> processableBVHItem : processableBVHItems) {
+					final BoundingVolume3F boundingVolume = processableBVHItem.getBoundingVolume();
 					
 					final Point3F max = boundingVolume.getMaximum();
 					final Point3F mid = boundingVolume.getMidpoint();
@@ -177,17 +177,17 @@ public final class BVHNode3Fs {
 		}
 		
 		if(bestAxis == -1) {
-			final List<T> shapes = new ArrayList<>();
+			final List<T> shapes = new ArrayList<>(processableBVHItems.size());
 			
-			for(final LeafBVHNode3F<T> processableLeafBVHNode : processableLeafBVHNodes) {
-				processableLeafBVHNode.addShapesTo(shapes);
+			for(final BVHItem3F<T> processableBVHItem : processableBVHItems) {
+				shapes.add(processableBVHItem.getShape());
 			}
 			
 			return new LeafBVHNode3F<>(maximum, minimum, depth, shapes);
 		}
 		
-		final List<LeafBVHNode3F<T>> leafBVHNodesL = new ArrayList<>(sizeHalf);
-		final List<LeafBVHNode3F<T>> leafBVHNodesR = new ArrayList<>(sizeHalf);
+		final List<BVHItem3F<T>> processableBVHItemsL = new ArrayList<>(sizeHalf);
+		final List<BVHItem3F<T>> processableBVHItemsR = new ArrayList<>(sizeHalf);
 		
 		float maximumLX = MIN_VALUE;
 		float maximumLY = MIN_VALUE;
@@ -202,8 +202,8 @@ public final class BVHNode3Fs {
 		float minimumRY = MAX_VALUE;
 		float minimumRZ = MAX_VALUE;
 		
-		for(final LeafBVHNode3F<T> processableLeafBVHNode : processableLeafBVHNodes) {
-			final BoundingVolume3F boundingVolume = processableLeafBVHNode.getBoundingVolume();
+		for(final BVHItem3F<T> processableBVHItem : processableBVHItems) {
+			final BoundingVolume3F boundingVolume = processableBVHItem.getBoundingVolume();
 			
 			final Point3F max = boundingVolume.getMaximum();
 			final Point3F mid = boundingVolume.getMidpoint();
@@ -212,7 +212,7 @@ public final class BVHNode3Fs {
 			final float value = mid.getComponent(bestAxis);
 			
 			if(value < bestSplit) {
-				leafBVHNodesL.add(processableLeafBVHNode);
+				processableBVHItemsL.add(processableBVHItem);
 				
 				maximumLX = max(maximumLX, max.getX());
 				maximumLY = max(maximumLY, max.getY());
@@ -221,7 +221,7 @@ public final class BVHNode3Fs {
 				minimumLY = min(minimumLY, min.getY());
 				minimumLZ = min(minimumLZ, min.getZ());
 			} else {
-				leafBVHNodesR.add(processableLeafBVHNode);
+				processableBVHItemsR.add(processableBVHItem);
 				
 				maximumRX = max(maximumRX, max.getX());
 				maximumRY = max(maximumRY, max.getY());
@@ -237,8 +237,8 @@ public final class BVHNode3Fs {
 		final Point3F maximumR = new Point3F(maximumRX, maximumRY, maximumRZ);
 		final Point3F minimumR = new Point3F(minimumRX, minimumRY, minimumRZ);
 		
-		final BVHNode3F bVHNodeL = create(leafBVHNodesL, maximumL, minimumL, depth + 1);
-		final BVHNode3F bVHNodeR = create(leafBVHNodesR, maximumR, minimumR, depth + 1);
+		final BVHNode3F bVHNodeL = create(processableBVHItemsL, maximumL, minimumL, depth + 1);
+		final BVHNode3F bVHNodeR = create(processableBVHItemsR, maximumR, minimumR, depth + 1);
 		
 		return new TreeBVHNode3F(maximum, minimum, depth, bVHNodeL, bVHNodeR);
 	}

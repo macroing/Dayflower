@@ -1,8 +1,8 @@
 2021-06-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the classes BVHItem3D and BVHItem3F.
-	* CHANGE:	Change the signature of the method create(List<LeafBVHNode3D>, Point3D, Point3D, int) in the class BVHNode3Ds to create(List<BVHItem3D<T>>, Point3D, Point3D, int).
-	* CHANGE:	Change the signature of the method create(List<LeafBVHNode3F>, Point3F, Point3F, int) in the class BVHNode3Fs to create(List<BVHItem3F<T>>, Point3F, Point3F, int).
+	* CHANGE:	Change the signature of the method create(List<LeafBVHNode3D>, Point3D, Point3D, int) in the class BVHNode3Ds to create(List<BVHItem3D<T>>, Point3D, Point3D, int). This is an optimization.
+	* CHANGE:	Change the signature of the method create(List<LeafBVHNode3F>, Point3F, Point3F, int) in the class BVHNode3Fs to create(List<BVHItem3F<T>>, Point3F, Point3F, int). This is an optimization.
 
 2021-06-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

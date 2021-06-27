@@ -72,7 +72,7 @@ public final class BVHNode3Fs {
 		final int sizeHalf = size / 2;
 		
 		if(size < 4) {
-			final List<T> shapes = new ArrayList<>(processableBVHItems.size());
+			final List<T> shapes = new ArrayList<>(size);
 			
 			for(final BVHItem3F<T> processableBVHItem : processableBVHItems) {
 				shapes.add(processableBVHItem.getShape());
@@ -177,7 +177,7 @@ public final class BVHNode3Fs {
 		}
 		
 		if(bestAxis == -1) {
-			final List<T> shapes = new ArrayList<>(processableBVHItems.size());
+			final List<T> shapes = new ArrayList<>(size);
 			
 			for(final BVHItem3F<T> processableBVHItem : processableBVHItems) {
 				shapes.add(processableBVHItem.getShape());

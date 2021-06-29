@@ -67,6 +67,16 @@ public final class Ray3D implements Node {
 	}
 	
 	/**
+	 * Returns a {@link Point3D} instance given the parametric distance {@code t}.
+	 * 
+	 * @param t the parametric distance
+	 * @return a {@code Point3D} instance given the parametric distance {@code t}
+	 */
+	public Point3D getPointAt(final double t) {
+		return Point3D.add(this.origin, this.direction, t);
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code Ray3D} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code Ray3D} instance

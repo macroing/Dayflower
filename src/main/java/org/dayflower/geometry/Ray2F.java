@@ -67,6 +67,16 @@ public final class Ray2F implements Node {
 	}
 	
 	/**
+	 * Returns a {@link Point2F} instance given the parametric distance {@code t}.
+	 * 
+	 * @param t the parametric distance
+	 * @return a {@code Point2F} instance given the parametric distance {@code t}
+	 */
+	public Point2F getPointAt(final float t) {
+		return Point2F.add(this.origin, this.direction, t);
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code Ray2F} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code Ray2F} instance

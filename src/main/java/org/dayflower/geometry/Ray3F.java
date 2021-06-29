@@ -67,6 +67,16 @@ public final class Ray3F implements Node {
 	}
 	
 	/**
+	 * Returns a {@link Point3F} instance given the parametric distance {@code t}.
+	 * 
+	 * @param t the parametric distance
+	 * @return a {@code Point3F} instance given the parametric distance {@code t}
+	 */
+	public Point3F getPointAt(final float t) {
+		return Point3F.add(this.origin, this.direction, t);
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code Ray3F} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code Ray3F} instance

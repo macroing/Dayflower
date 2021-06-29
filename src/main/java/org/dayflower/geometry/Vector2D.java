@@ -18,16 +18,21 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.finiteOrDefault;
 import static org.dayflower.utility.Doubles.sqrt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.utility.Doubles;
 
 /**
  * A {@code Vector2D} represents a vector with two {@code double}-based components.
@@ -38,6 +43,22 @@ import org.dayflower.node.Node;
  * @author J&#246;rgen Lundgren
  */
 public final class Vector2D implements Node {
+	/**
+	 * A {@code Vector2D} instance given the component values {@code Double.NaN} and {@code Double.NaN}.
+	 */
+	public static final Vector2D NaN = new Vector2D(Double.NaN, Double.NaN);
+	
+	/**
+	 * A {@code Vector2D} instance given the component values {@code 0.0D} and {@code 0.0D}.
+	 */
+	public static final Vector2D ZERO = new Vector2D(0.0D, 0.0D);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final Map<Vector2D, Vector2D> CACHE = new HashMap<>();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final double component1;
 	private final double component2;
 	
@@ -74,6 +95,22 @@ public final class Vector2D implements Node {
 	 */
 	public Vector2D(final Point2D point) {
 		this(point.getComponent1(), point.getComponent2());
+	}
+	
+	/**
+	 * Constructs a new {@code Vector2D} instance given the component values {@code component} and {@code component}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Vector2D(component, component);
+	 * }
+	 * </pre>
+	 * 
+	 * @param component the value of both components
+	 */
+	public Vector2D(final double component) {
+		this(component, component);
 	}
 	
 	/**
@@ -120,6 +157,20 @@ public final class Vector2D implements Node {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Vector2D} instance is a unit vector, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Vector2D} instance is a unit vector, {@code false} otherwise
+	 */
+	public boolean isUnitVector() {
+		final double length = length();
+		
+		final boolean isLengthGTEThreshold = length >= 1.0D - 0.000001D;
+		final boolean isLengthLTEThreshold = length <= 1.0D + 0.000001D;
+		
+		return isLengthGTEThreshold && isLengthLTEThreshold;
 	}
 	
 	/**
@@ -239,6 +290,22 @@ public final class Vector2D implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a new {@code Vector2D} instance with the absolute component values of {@code vector}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector2D} instance
+	 * @return a new {@code Vector2D} instance with the absolute component values of {@code vector}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector2D absolute(final Vector2D vector) {
+		final double component1 = abs(vector.component1);
+		final double component2 = abs(vector.component2);
+		
+		return new Vector2D(component1, component2);
+	}
+	
+	/**
 	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
 	 * <p>
 	 * Returns a new {@code Vector2D} instance with the result of the addition.
@@ -255,6 +322,28 @@ public final class Vector2D implements Node {
 	public static Vector2D add(final Vector2D vectorLHS, final Vector2D vectorRHS) {
 		final double component1 = vectorLHS.component1 + vectorRHS.component1;
 		final double component2 = vectorLHS.component2 + vectorRHS.component2;
+		
+		return new Vector2D(component1, component2);
+	}
+	
+	/**
+	 * Adds the component values of {@code vectorA}, {@code vectorB} and {@code vectorC}.
+	 * <p>
+	 * Returns a new {@code Vector2D} instance with the result of the addition.
+	 * <p>
+	 * If either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector addition is performed componentwise.
+	 * 
+	 * @param vectorA a {@code Vector2D} instance
+	 * @param vectorB a {@code Vector2D} instance
+	 * @param vectorC a {@code Vector2D} instance
+	 * @return a new {@code Vector2D} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}
+	 */
+	public static Vector2D add(final Vector2D vectorA, final Vector2D vectorB, final Vector2D vectorC) {
+		final double component1 = vectorA.component1 + vectorB.component1 + vectorC.component1;
+		final double component2 = vectorA.component2 + vectorB.component2 + vectorC.component2;
 		
 		return new Vector2D(component1, component2);
 	}
@@ -305,8 +394,41 @@ public final class Vector2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
 	public static Vector2D divide(final Vector2D vectorLHS, final double scalarRHS) {
-		final double component1 = vectorLHS.component1 / scalarRHS;
-		final double component2 = vectorLHS.component2 / scalarRHS;
+		final double component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0D);
+		final double component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0D);
+		
+		return new Vector2D(component1, component2);
+	}
+	
+	/**
+	 * Returns a cached version of {@code vector}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector2D} instance
+	 * @return a cached version of {@code vector}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector2D getCached(final Vector2D vector) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(vector, "vector == null"), key -> vector);
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns a {@code Vector2D} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Vector2D} instance
+	 * @param b a {@code Vector2D} instance
+	 * @param t the factor
+	 * @return a {@code Vector2D} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Vector2D lerp(final Vector2D a, final Vector2D b, final double t) {
+		final double component1 = Doubles.lerp(a.component1, b.component1, t);
+		final double component2 = Doubles.lerp(a.component2, b.component2, t);
 		
 		return new Vector2D(component1, component2);
 	}
@@ -351,6 +473,42 @@ public final class Vector2D implements Node {
 	}
 	
 	/**
+	 * Negates the component 1 value of {@code vector}.
+	 * <p>
+	 * Returns a new {@code Vector2D} instance with the result of the negation.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector2D} instance
+	 * @return a new {@code Vector2D} instance with the result of the negation
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector2D negateComponent1(final Vector2D vector) {
+		final double component1 = -vector.component1;
+		final double component2 = +vector.component2;
+		
+		return new Vector2D(component1, component2);
+	}
+	
+	/**
+	 * Negates the component 2 value of {@code vector}.
+	 * <p>
+	 * Returns a new {@code Vector2D} instance with the result of the negation.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector2D} instance
+	 * @return a new {@code Vector2D} instance with the result of the negation
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector2D negateComponent2(final Vector2D vector) {
+		final double component1 = +vector.component1;
+		final double component2 = -vector.component2;
+		
+		return new Vector2D(component1, component2);
+	}
+	
+	/**
 	 * Normalizes the component values of {@code vector}.
 	 * <p>
 	 * Returns a new {@code Vector2D} instance with the result of the normalization.
@@ -363,6 +521,43 @@ public final class Vector2D implements Node {
 	 */
 	public static Vector2D normalize(final Vector2D vector) {
 		return divide(vector, vector.length());
+	}
+	
+	/**
+	 * Returns a random {@code Vector2D} instance.
+	 * 
+	 * @return a random {@code Vector2D} instance
+	 */
+	public static Vector2D random() {
+		final double component1 = Doubles.random();
+		final double component2 = Doubles.random();
+		
+		return new Vector2D(component1, component2);
+	}
+	
+	/**
+	 * Returns a random and normalized {@code Vector2D} instance.
+	 * 
+	 * @return a random and normalized {@code Vector2D} instance
+	 */
+	public static Vector2D randomNormalized() {
+		return normalize(random());
+	}
+	
+	/**
+	 * Returns a new {@code Vector2D} instance with the reciprocal (or inverse) component values of {@code vector}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector2D} instance
+	 * @return a new {@code Vector2D} instance with the reciprocal (or inverse) component values of {@code vector}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector2D reciprocal(final Vector2D vector) {
+		final double component1 = finiteOrDefault(1.0D / vector.component1, 0.0D);
+		final double component2 = finiteOrDefault(1.0D / vector.component2, 0.0D);
+		
+		return new Vector2D(component1, component2);
 	}
 	
 	/**
@@ -448,6 +643,101 @@ public final class Vector2D implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Vector2D} instance equivalent to {@code new Vector2D(1.0D, 0.0D)}.
+	 * 
+	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(1.0D, 0.0D)}
+	 */
+	public static Vector2D u() {
+		return u(1.0D);
+	}
+	
+	/**
+	 * Returns a new {@code Vector2D} instance equivalent to {@code new Vector2D(u, 0.0D)}.
+	 * 
+	 * @param u the value of the U-component
+	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(u, 0.0D)}
+	 */
+	public static Vector2D u(final double u) {
+		return new Vector2D(u, 0.0D);
+	}
+	
+	/**
+	 * Returns a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, 1.0D)}.
+	 * 
+	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, 1.0D)}
+	 */
+	public static Vector2D v() {
+		return v(1.0D);
+	}
+	
+	/**
+	 * Returns a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, v)}.
+	 * 
+	 * @param v the value of the V-component
+	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, v)}
+	 */
+	public static Vector2D v(final double v) {
+		return new Vector2D(0.0D, v);
+	}
+	
+	/**
+	 * Returns a new {@code Vector2D} instance equivalent to {@code new Vector2D(1.0D, 0.0D)}.
+	 * 
+	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(1.0D, 0.0D)}
+	 */
+	public static Vector2D x() {
+		return x(1.0D);
+	}
+	
+	/**
+	 * Returns a new {@code Vector2D} instance equivalent to {@code new Vector2D(x, 0.0D)}.
+	 * 
+	 * @param x the value of the X-component
+	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(x, 0.0D)}
+	 */
+	public static Vector2D x(final double x) {
+		return new Vector2D(x, 0.0D);
+	}
+	
+	/**
+	 * Returns a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, 1.0D)}.
+	 * 
+	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, 1.0D)}
+	 */
+	public static Vector2D y() {
+		return y(1.0D);
+	}
+	
+	/**
+	 * Returns a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, y)}.
+	 * 
+	 * @param y the value of the Y-component
+	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, y)}
+	 */
+	public static Vector2D y(final double y) {
+		return new Vector2D(0.0D, y);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code vLHS} and {@code vRHS} are orthogonal, {@code false} otherwise.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vLHS the {@code Vector2D} instance on the left-hand side
+	 * @param vRHS the {@code Vector2D} instance on the right-hand side
+	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are orthogonal, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
+	public static boolean orthogonal(final Vector2D vLHS, final Vector2D vRHS) {
+		final double dotProduct = dotProduct(vLHS, vRHS);
+		
+		final boolean isDotProductGTEThreshold = dotProduct >= 0.0D - 0.000001D;
+		final boolean isDotProductLTEThreshold = dotProduct <= 0.0D + 0.000001D;
+		
+		return isDotProductGTEThreshold && isDotProductLTEThreshold;
+	}
+	
+	/**
 	 * Returns the dot product of {@code vectorLHS} and {@code vectorRHS}.
 	 * <p>
 	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -459,5 +749,21 @@ public final class Vector2D implements Node {
 	 */
 	public static double dotProduct(final Vector2D vectorLHS, final Vector2D vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2;
+	}
+	
+	/**
+	 * Returns the size of the cache.
+	 * 
+	 * @return the size of the cache
+	 */
+	public static int getCacheSize() {
+		return CACHE.size();
+	}
+	
+	/**
+	 * Clears the cache.
+	 */
+	public static void clearCache() {
+		CACHE.clear();
 	}
 }

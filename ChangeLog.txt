@@ -1,3 +1,16 @@
+2021-06-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method getPointAt(double) to the Ray2D class.
+	* ADD:		Add the method getPointAt(float) to the Ray2F class.
+	* ADD:		Add the method getPointAt(double) to the Ray3D class.
+	* ADD:		Add the method getPointAt(float) to the Ray3F class.
+	* ADD:		Add the methods absolute(Vector2D), add(Vector2D, Vector2D, Vector2D), clearCache(), getCacheSize(), getCached(Vector2D), isUnitVector(), lerp(Vector2D, Vector2D, double), negateComponent1(Vector2D), negateComponent2(Vector2D), orthogonal(Vector2D, Vector2D), random(), randomNormalized(), reciprocal(Vector2D), u(), u(double), v(), v(double), x(), x(double), y() and y(double) to the Vector2D class.
+	* ADD:		Add the methods absolute(Vector2F), add(Vector2F, Vector2F, Vector2F), clearCache(), getCacheSize(), getCached(Vector2F), isUnitVector(), lerp(Vector2F, Vector2F, float), negateComponent1(Vector2F), negateComponent2(Vector2F), orthogonal(Vector2F, Vector2F), random(), randomNormalized(), reciprocal(Vector2F), u(), u(float), v(), v(float), x(), x(float), y() and y(float) to the Vector2F class.
+	* ADD:		Add the constants NaN and ZERO to the Vector2D class.
+	* ADD:		Add the constants NaN and ZERO to the Vector2F class.
+	* ADD:		Add the constructor Vector2D(double) to the Vector2D class.
+	* ADD:		Add the constructor Vector2F(float) to the Vector2F class.
+
 2021-06-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the classes BVHItem3D and BVHItem3F.

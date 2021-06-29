@@ -1,19 +1,51 @@
-GPU Renderer Bug:
+Geometry Shape API:
 
-	Description:
+	* FIX:		Fix the Hyperboloid3D class.
+	* FIX:		Fix the Hyperboloid3F class.
 
-		The image sometimes resets when rendering with the Ambient Occlusion and Path Tracer algorithms. This does not seem to happen with the Ray Caster algorithm.
-		It happens more often when the image is smaller than if it is larger.
+Renderer GPU API:
 
-Scene Loader Parameter Selection:
+	* ADD:		Add support for DiffuseAreaLight.
+	* ADD:		Add support for PrimitiveAreaLight.
+	* ADD:		Add support for BullseyeMaterial.
+	* ADD:		Add support for CheckerboardMaterial.
+	* ADD:		Add support for UberMaterial.
+	* ADD:		Add support for LDRImageNormalMapModifier.
+	* ADD:		Add support for SimplexNoiseNormalMapModifier.
+	* ADD:		Add support for ConstructiveSolidGeometry3F.
+	* ADD:		Add support for Hyperboloid3F.
+	* ADD:		Add support for the Ray Tracer algorithm.
+	* ADD:		Add support for the Scene-based BVH structure.
+	* FIX:		Fix the bug that resets the image occasionally using the Ambient Occlusion and Path Tracer algorithms.
+	* FIX:		Fix rendering of transmissive materials. Mainly in the Path Tracer.
 
-	Description:
+Scene BSSRDF API:
 
-		Create a general purpose API for parameter selection. One implementation of the API could be a GUI dialog box.
-		It should support parameters of type boolean, float, int and String, as well as default values for these types.
-		It should also support options, where a list of options are supplied and only one can be selected.
-		An API like this would be useful in combination with a SceneLoader, such that parameters could be retrieved when generating a Scene.
+	* ADD:		Add implementations.
 
-	Status:
+Scene Compiler API:
 
-		An early version of the API now exists.
+	* ADD:		Add support for updating a CompiledScene instance on-the-fly.
+
+Scene Loader API:
+
+	* ADD:		Add support for the Parameter API.
+
+Scene Light API:
+
+	* ADD:		Add an HDRImageLight class.
+
+Scene Material API:
+
+	* ADD:		Add a Builder to the HairMaterial class.
+	* ADD:		Add a Builder to the MatteMaterial class.
+	* ADD:		Add a Builder to the MetalMaterial class.
+	* ADD:		Add a Builder to the MirrorMaterial class.
+	* ADD:		Add a Builder to the PlasticMaterial class.
+	* ADD:		Add a Builder to the SubstrateMaterial class.
+	* ADD:		Add a Builder to the UberMaterial class.
+	* FIX:		Fix the HairMaterial class.
+
+Scene Texture API:
+
+	* ADD:		Add an HDRImageTexture class.

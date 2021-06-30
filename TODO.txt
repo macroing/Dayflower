@@ -3,6 +3,10 @@ Geometry Shape API:
 	* FIX:		Fix the Hyperboloid3D class.
 	* FIX:		Fix the Hyperboloid3F class.
 
+JavaFX Application API:
+
+	* ADD:		Add support for the Parameter API.
+
 Renderer GPU API:
 
 	* ADD:		Add support for DiffuseAreaLight.

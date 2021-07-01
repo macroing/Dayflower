@@ -32,6 +32,8 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Sphere3F;
+import org.dayflower.node.NodeHierarchicalVisitor;
+import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.LightSample;
@@ -52,6 +54,41 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * The name of this {@code DiffuseAreaLight} class.
 	 */
 	public static final String NAME = "Diffuse Area Light";
+	
+	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 40;
+	
+	/**
+	 * The offset for the flag denoted by {@code Is Two-Sided} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_IS_TWO_SIDED = 37;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_OBJECT_TO_WORLD = 0;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code Radiance Emitted} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RADIANCE_EMITTED = 32;
+	
+	/**
+	 * The offset for the ID of the {@link Shape3F} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SHAPE_ID = 35;
+	
+	/**
+	 * The offset for the offset of the {@link Shape3F} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SHAPE_OFFSET = 36;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_WORLD_TO_OBJECT = 16;
 	
 	/**
 	 * The ID of this {@code DiffuseAreaLight} class.
@@ -215,6 +252,15 @@ public final class DiffuseAreaLight extends AreaLight {
 	}
 	
 	/**
+	 * Returns a {@link Color3F} instance with the radiance emitted.
+	 * 
+	 * @return a {@code Color3F} instance with the radiance emitted
+	 */
+	public Color3F getRadianceEmitted() {
+		return this.radianceEmitted;
+	}
+	
+	/**
 	 * Returns a {@link Color3F} instance with the power of this {@code DiffuseAreaLight} instance.
 	 * 
 	 * @return a {@code Color3F} instance with the power of this {@code DiffuseAreaLight} instance
@@ -270,6 +316,15 @@ public final class DiffuseAreaLight extends AreaLight {
 	}
 	
 	/**
+	 * Returns the {@link Shape3F} instance associated with this {@code DiffuseAreaLight} instance.
+	 * 
+	 * @return the {@code Shape3F} instance associated with this {@code DiffuseAreaLight} instance
+	 */
+	public Shape3F getShape() {
+		return this.shape;
+	}
+	
+	/**
 	 * Returns a {@code String} with the name of this {@code DiffuseAreaLight} instance.
 	 * 
 	 * @return a {@code String} with the name of this {@code DiffuseAreaLight} instance
@@ -287,6 +342,48 @@ public final class DiffuseAreaLight extends AreaLight {
 	@Override
 	public String toString() {
 		return String.format("new DiffuseAreaLight(%s, %d, %s, %s, %s)", getTransform(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.toString(this.isTwoSided));
+	}
+	
+	/**
+	 * Accepts a {@link NodeHierarchicalVisitor}.
+	 * <p>
+	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.
+	 * <p>
+	 * If {@code nodeHierarchicalVisitor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}, a {@code NodeTraversalException} will be thrown with the {@code RuntimeException} wrapped.
+	 * <p>
+	 * This implementation will:
+	 * <ul>
+	 * <li>throw a {@code NullPointerException} if {@code nodeHierarchicalVisitor} is {@code null}.</li>
+	 * <li>throw a {@code NodeTraversalException} if {@code nodeHierarchicalVisitor} throws a {@code RuntimeException}.</li>
+	 * <li>traverse its child {@code Node} instances.</li>
+	 * </ul>
+	 * 
+	 * @param nodeHierarchicalVisitor the {@code NodeHierarchicalVisitor} to accept
+	 * @return the result of {@code nodeHierarchicalVisitor.visitLeave(this)}
+	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
+	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
+	 */
+	@Override
+	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+		
+		try {
+			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!getTransform().accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.shape.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+			}
+			
+			return nodeHierarchicalVisitor.visitLeave(this);
+		} catch(final RuntimeException e) {
+			throw new NodeTraversalException(e);
+		}
 	}
 	
 	/**
@@ -319,6 +416,15 @@ public final class DiffuseAreaLight extends AreaLight {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, this {@code DiffuseAreaLight} instance is two-sided, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code DiffuseAreaLight} instance is two-sided, {@code false} otherwise
+	 */
+	public boolean isTwoSided() {
+		return this.isTwoSided;
+	}
+	
+	/**
 	 * Evaluates the probability density function (PDF) for the incoming radiance.
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
@@ -346,6 +452,62 @@ public final class DiffuseAreaLight extends AreaLight {
 		final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
 		
 		return this.shape.evaluateProbabilityDensityFunction(surfaceIntersectionObjectSpace, incomingObjectSpace);
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code DiffuseAreaLight} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code DiffuseAreaLight} instance
+	 */
+	public float[] toArray() {
+		final float[] array = new float[ARRAY_LENGTH];
+		
+		final Matrix44F objectToWorld = getTransform().getObjectToWorld();
+		final Matrix44F worldToObject = getTransform().getWorldToObject();
+		
+//		Because the DiffuseAreaLight occupy 40/40 positions in three blocks, it should be aligned.
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();							//Block #1
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();							//Block #1
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();							//Block #1
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();							//Block #1
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();							//Block #1
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();							//Block #1
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();							//Block #1
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();							//Block #1
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();							//Block #2
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();							//Block #2
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();							//Block #2
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();							//Block #2
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();							//Block #2
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();							//Block #2
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();							//Block #2
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();							//Block #2
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();							//Block #3
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();							//Block #3
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();							//Block #3
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();							//Block #3
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();							//Block #3
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();							//Block #3
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();							//Block #3
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();							//Block #3
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();							//Block #4
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();							//Block #4
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();							//Block #4
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();							//Block #4
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();							//Block #4
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();							//Block #4
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();							//Block #4
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();							//Block #4
+		array[ARRAY_OFFSET_RADIANCE_EMITTED + 0] = this.radianceEmitted.getR();								//Block #5
+		array[ARRAY_OFFSET_RADIANCE_EMITTED + 1] = this.radianceEmitted.getG();								//Block #5
+		array[ARRAY_OFFSET_RADIANCE_EMITTED + 2] = this.radianceEmitted.getB();								//Block #5
+		array[ARRAY_OFFSET_SHAPE_ID] = this.shape.getID();													//Block #5
+		array[ARRAY_OFFSET_SHAPE_OFFSET] = 0.0F;															//Block #5
+		array[ARRAY_OFFSET_IS_TWO_SIDED] = this.isTwoSided ? 1.0F : 0.0F;									//Block #5
+		array[38] = 0.0F;																					//Block #5
+		array[39] = 0.0F;																					//Block #5
+		
+		return array;
 	}
 	
 	/**

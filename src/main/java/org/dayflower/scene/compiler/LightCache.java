@@ -27,9 +27,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.shape.Sphere3F;
+import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.light.PerezLight;
@@ -38,12 +42,14 @@ import org.dayflower.scene.light.SpotLight;
 import org.dayflower.utility.Floats;
 
 final class LightCache {
+	private final List<DiffuseAreaLight> distinctDiffuseAreaLights;
 	private final List<DirectionalLight> distinctDirectionalLights;
 	private final List<LDRImageLight> distinctLDRImageLights;
 	private final List<Light> distinctLights;
 	private final List<PerezLight> distinctPerezLights;
 	private final List<PointLight> distinctPointLights;
 	private final List<SpotLight> distinctSpotLights;
+	private final Map<DiffuseAreaLight, Integer> distinctToOffsetsDiffuseAreaLights;
 	private final Map<DirectionalLight, Integer> distinctToOffsetsDirectionalLights;
 	private final Map<LDRImageLight, Integer> distinctToOffsetsLDRImageLights;
 	private final Map<PerezLight, Integer> distinctToOffsetsPerezLights;
@@ -53,12 +59,14 @@ final class LightCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public LightCache() {
+		this.distinctDiffuseAreaLights = new ArrayList<>();
 		this.distinctDirectionalLights = new ArrayList<>();
 		this.distinctLDRImageLights = new ArrayList<>();
 		this.distinctLights = new ArrayList<>();
 		this.distinctPerezLights = new ArrayList<>();
 		this.distinctPointLights = new ArrayList<>();
 		this.distinctSpotLights = new ArrayList<>();
+		this.distinctToOffsetsDiffuseAreaLights = new LinkedHashMap<>();
 		this.distinctToOffsetsDirectionalLights = new LinkedHashMap<>();
 		this.distinctToOffsetsLDRImageLights = new LinkedHashMap<>();
 		this.distinctToOffsetsPerezLights = new LinkedHashMap<>();
@@ -67,6 +75,10 @@ final class LightCache {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public float[] toLightDiffuseAreaLightArray() {
+		return Floats.toArray(this.distinctDiffuseAreaLights, diffuseAreaLight -> diffuseAreaLight.toArray(), 1);
+	}
 	
 	public float[] toLightDirectionalLightArray() {
 		return Floats.toArray(this.distinctDirectionalLights, directionalLight -> directionalLight.toArray(), 1);
@@ -91,7 +103,9 @@ final class LightCache {
 	public int findOffsetFor(final Light light) {
 		Objects.requireNonNull(light, "light == null");
 		
-		if(light instanceof DirectionalLight) {
+		if(light instanceof DiffuseAreaLight) {
+			return this.distinctToOffsetsDiffuseAreaLights.get(light).intValue();
+		} else if(light instanceof DirectionalLight) {
 			return this.distinctToOffsetsDirectionalLights.get(light).intValue();
 		} else if(light instanceof LDRImageLight) {
 			return this.distinctToOffsetsLDRImageLights.get(light).intValue();
@@ -139,12 +153,14 @@ final class LightCache {
 	}
 	
 	public void clear() {
+		this.distinctDiffuseAreaLights.clear();
 		this.distinctDirectionalLights.clear();
 		this.distinctLDRImageLights.clear();
 		this.distinctLights.clear();
 		this.distinctPerezLights.clear();
 		this.distinctPointLights.clear();
 		this.distinctSpotLights.clear();
+		this.distinctToOffsetsDiffuseAreaLights.clear();
 		this.distinctToOffsetsDirectionalLights.clear();
 		this.distinctToOffsetsLDRImageLights.clear();
 		this.distinctToOffsetsPerezLights.clear();
@@ -155,37 +171,41 @@ final class LightCache {
 	public void setup(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
+//		Add all distinct Light instances:
+		this.distinctLights.clear();
+		this.distinctLights.addAll(NodeFilter.filterAllDistinct(scene, Light.class).stream().filter(LightCache::doFilterLight).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+		
+//		Add all distinct DiffuseAreaLight instances:
+		this.distinctDiffuseAreaLights.clear();
+		this.distinctDiffuseAreaLights.addAll(this.distinctLights.stream().filter(light -> light instanceof DiffuseAreaLight).map(light -> DiffuseAreaLight.class.cast(light)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+		
 //		Add all distinct DirectionalLight instances:
 		this.distinctDirectionalLights.clear();
-		this.distinctDirectionalLights.addAll(NodeFilter.filterAllDistinct(scene, DirectionalLight.class));
+		this.distinctDirectionalLights.addAll(this.distinctLights.stream().filter(light -> light instanceof DirectionalLight).map(light -> DirectionalLight.class.cast(light)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct LDRImageLight instances:
 		this.distinctLDRImageLights.clear();
-		this.distinctLDRImageLights.addAll(NodeFilter.filterAllDistinct(scene, LDRImageLight.class));
+		this.distinctLDRImageLights.addAll(this.distinctLights.stream().filter(light -> light instanceof LDRImageLight).map(light -> LDRImageLight.class.cast(light)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct PerezLight instances:
 		this.distinctPerezLights.clear();
-		this.distinctPerezLights.addAll(NodeFilter.filterAllDistinct(scene, PerezLight.class));
+		this.distinctPerezLights.addAll(this.distinctLights.stream().filter(light -> light instanceof PerezLight).map(light -> PerezLight.class.cast(light)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct PointLight instances:
 		this.distinctPointLights.clear();
-		this.distinctPointLights.addAll(NodeFilter.filterAllDistinct(scene, PointLight.class));
+		this.distinctPointLights.addAll(this.distinctLights.stream().filter(light -> light instanceof PointLight).map(light -> PointLight.class.cast(light)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct SpotLight instances:
 		this.distinctSpotLights.clear();
-		this.distinctSpotLights.addAll(NodeFilter.filterAllDistinct(scene, SpotLight.class));
-		
-//		Add all distinct Light instances:
-		this.distinctLights.clear();
-		this.distinctLights.addAll(this.distinctDirectionalLights);
-		this.distinctLights.addAll(this.distinctLDRImageLights);
-		this.distinctLights.addAll(this.distinctPerezLights);
-		this.distinctLights.addAll(this.distinctPointLights);
-		this.distinctLights.addAll(this.distinctSpotLights);
+		this.distinctSpotLights.addAll(this.distinctLights.stream().filter(light -> light instanceof SpotLight).map(light -> SpotLight.class.cast(light)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 		/*
 		 * The below offset mappings will only work as long as all affected Light instances are not modified during compilation.
 		 */
+		
+//		Create offset mappings for all distinct DiffuseAreaLight instances:
+		this.distinctToOffsetsDiffuseAreaLights.clear();
+		this.distinctToOffsetsDiffuseAreaLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDiffuseAreaLights, DiffuseAreaLight.ARRAY_LENGTH));
 		
 //		Create offset mappings for all distinct DirectionalLight instances:
 		this.distinctToOffsetsDirectionalLights.clear();
@@ -206,5 +226,39 @@ final class LightCache {
 //		Create offset mappings for all distinct SpotLight instances:
 		this.distinctToOffsetsSpotLights.clear();
 		this.distinctToOffsetsSpotLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSpotLights, SpotLight.ARRAY_LENGTH));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static boolean doFilterDiffuseAreaLight(final DiffuseAreaLight diffuseAreaLight) {
+		return doFilterDiffuseAreaLightByShape(diffuseAreaLight.getShape());
+	}
+	
+	private static boolean doFilterDiffuseAreaLightByShape(final Shape3F shape) {
+		if(shape instanceof Sphere3F) {
+			return true;
+		} else if(shape instanceof Triangle3F) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private static boolean doFilterLight(final Light light) {
+		if(light instanceof DiffuseAreaLight) {
+			return doFilterDiffuseAreaLight(DiffuseAreaLight.class.cast(light));
+		} else if(light instanceof DirectionalLight) {
+			return true;
+		} else if(light instanceof LDRImageLight) {
+			return true;
+		} else if(light instanceof PerezLight) {
+			return true;
+		} else if(light instanceof PointLight) {
+			return true;
+		} else if(light instanceof SpotLight) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

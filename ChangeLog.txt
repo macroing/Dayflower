@@ -1,3 +1,10 @@
+2021-07-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods accept(NodeHierarchicalVisitor), getRadianceEmitted(), getShape(), isTwoSided() and toArray() to the DiffuseAreaLight class.
+	* ADD:		Add the constants ARRAY_LENGTH, ARRAY_OFFSET_IS_TWO_SIDED, ARRAY_OFFSET_OBJECT_TO_WORLD, ARRAY_OFFSET_RADIANCE_EMITTED, ARRAY_OFFSET_SHAPE_ID, ARRAY_OFFSET_SHAPE_OFFSET and ARRAY_OFFSET_WORLD_TO_OBJECT to the DiffuseAreaLight class.
+	* CHANGE:	Change the value of the constant ARRAY_OFFSET_INTENSITY in the SpotLight class from 0 to 16 for better alignment.
+	* CHANGE:	Change the value of the constant ARRAY_OFFSET_WORLD_TO_OBJECT in the SpotLight class from 3 to 0 for better alignment.
+
 2021-06-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method getPointAt(double) to the Ray2D class.

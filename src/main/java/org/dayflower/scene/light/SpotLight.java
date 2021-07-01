@@ -70,7 +70,7 @@ public final class SpotLight extends Light {
 	/**
 	 * The offset for the {@link Color3F} denoted by {@code Intensity} in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_INTENSITY = 0;
+	public static final int ARRAY_OFFSET_INTENSITY = 16;
 	
 	/**
 	 * The offset for the {@link Point3F} denoted by {@code Position} in the {@code float[]}.
@@ -80,7 +80,7 @@ public final class SpotLight extends Light {
 	/**
 	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_WORLD_TO_OBJECT = 3;
+	public static final int ARRAY_OFFSET_WORLD_TO_OBJECT = 0;
 	
 	/**
 	 * The ID of this {@code SpotLight} class.
@@ -344,25 +344,25 @@ public final class SpotLight extends Light {
 		final Point3F position = Point3F.transformAndDivide(objectToWorld, new Point3F());
 		
 //		Because the SpotLight occupy 24/24 positions in three blocks, it should be aligned.
-		array[ARRAY_OFFSET_INTENSITY + 0] = this.intensity.getR();											//Block #1
-		array[ARRAY_OFFSET_INTENSITY + 1] = this.intensity.getG();											//Block #1
-		array[ARRAY_OFFSET_INTENSITY + 2] = this.intensity.getB();											//Block #1
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();							//Block #1
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();							//Block #1
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();							//Block #1
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();							//Block #1
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();							//Block #1
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();							//Block #2
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();							//Block #1
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();							//Block #1
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();							//Block #1
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();							//Block #2
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();							//Block #2
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();							//Block #2
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();							//Block #2
 		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();							//Block #3
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();							//Block #2
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();							//Block #2
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();							//Block #2
+		array[ARRAY_OFFSET_INTENSITY + 0] = this.intensity.getR();											//Block #3
+		array[ARRAY_OFFSET_INTENSITY + 1] = this.intensity.getG();											//Block #3
+		array[ARRAY_OFFSET_INTENSITY + 2] = this.intensity.getB();											//Block #3
 		array[ARRAY_OFFSET_POSITION + 0] = position.getX();													//Block #3
 		array[ARRAY_OFFSET_POSITION + 1] = position.getY();													//Block #3
 		array[ARRAY_OFFSET_POSITION + 2] = position.getZ();													//Block #3

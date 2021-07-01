@@ -33,9 +33,9 @@ import java.util.Objects;
 import org.dayflower.geometry.BoundingVolume3D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Shape3D;
+import org.dayflower.java.io.IntArrayOutputStream;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.utility.ParameterArguments;
-import org.macroing.java.io.IntArrayOutputStream;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@link BVHNode3D} instances.
@@ -59,6 +59,7 @@ public final class BVHNode3Ds {
 	 * <p>
 	 * If {@code depth} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
+	 * @param <T> the generic {@link Shape3D} type to use
 	 * @param processableBVHItems a {@code List} of {@link BVHItem3D} instances to process
 	 * @param maximum a {@link Point3D} instance with the maximum coordinates of the {@link BoundingVolume3D} instance that contains the returned {@code BVHNode3D} instance
 	 * @param minimum a {@code Point3D} instance with the minimum coordinates of the {@code BoundingVolume3D} instance that contains the returned {@code BVHNode3D} instance
@@ -248,8 +249,9 @@ public final class BVHNode3Ds {
 	 * <p>
 	 * If either {@code rootBVHNode}, {@code shapes} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param <T> the generic {@link Shape3D} type to use
 	 * @param rootBVHNode a {@link BVHNode3D} instance that represents the root of the bounding volume hierarchy (BVH) structure to compile
-	 * @param shapes a {@code List} of {@link Shape3D} instances
+	 * @param shapes a {@code List} of {@code Shape3D} instances
 	 * @return an {@code int[]} with a compiled version of {@code rootBVHNode}
 	 * @throws NullPointerException thrown if, and only if, either {@code rootBVHNode}, {@code shapes} or at least one of its elements are {@code null}
 	 */

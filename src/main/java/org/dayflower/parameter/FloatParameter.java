@@ -22,7 +22,7 @@ import static org.dayflower.utility.Floats.equal;
 
 import java.util.Objects;
 
-import org.macroing.java.util.concurrent.atomic.AtomicFloat;
+import org.dayflower.java.util.concurrent.atomic.AtomicFloat;
 
 /**
  * A {@code FloatParameter} is a {@link Parameter} implementation for a {@code float} value.

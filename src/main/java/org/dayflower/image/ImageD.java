@@ -48,8 +48,8 @@ import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2D;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
+import org.dayflower.java.util.function.TriFunction;
 import org.dayflower.noise.SimplexNoiseD;
-import org.macroing.java.util.function.TriFunction;
 
 /**
  * An {@code ImageD} is an extension of {@link Image} that adds additional methods that operates on {@code double}-based data types.

@@ -27,13 +27,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.image.ImageF;
+import org.dayflower.java.util.function.TriFunction;
 import org.dayflower.javafx.scene.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.scene.canvas.ConcurrentImageCanvasPane;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.scene.Camera;
 import org.dayflower.utility.Files;
-import org.macroing.java.util.function.TriFunction;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;

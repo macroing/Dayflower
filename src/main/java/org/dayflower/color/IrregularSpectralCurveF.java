@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
+import org.dayflower.java.io.FloatArrayOutputStream;
 import org.dayflower.utility.Strings;
-import org.macroing.java.io.FloatArrayOutputStream;
 
 /**
  * An {@code IrregularSpectralCurveF} is an implementation of {@link SpectralCurveF} that contains irregular spectral data.

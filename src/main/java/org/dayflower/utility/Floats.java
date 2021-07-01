@@ -24,8 +24,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.function.Function;
 
-import org.macroing.java.io.FloatArrayOutputStream;
-import org.macroing.java.util.function.FloatSupplier;
+import org.dayflower.java.io.FloatArrayOutputStream;
+import org.dayflower.java.util.function.FloatSupplier;
 
 /**
  * The class {@code Floats} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.

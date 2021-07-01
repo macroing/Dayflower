@@ -147,7 +147,6 @@ Dependencies
 ------------
  - [Java 8](http://www.java.com)
  - [Macroing / Aparapi](https://github.com/macroing/aparapi)
- - [Macroing / Java](https://github.com/macroing/Java)
 
 References
 ----------

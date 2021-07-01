@@ -23,8 +23,8 @@ import static org.dayflower.utility.Ints.toInt;
 
 import java.util.Objects;
 
+import org.dayflower.java.io.FloatArrayOutputStream;
 import org.dayflower.utility.ParameterArguments;
-import org.macroing.java.io.FloatArrayOutputStream;
 
 /**
  * A {@code Distribution2F} represents a 2-dimensional distribution and contains methods to sample it in a continuous or discrete way.

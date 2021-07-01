@@ -22,8 +22,8 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.dayflower.image.Image;
+import org.dayflower.java.util.function.TriFunction;
 import org.dayflower.javafx.scene.canvas.ConcurrentImageCanvas.ImageUpdater;
-import org.macroing.java.util.function.TriFunction;
 
 import javafx.scene.layout.Pane;
 

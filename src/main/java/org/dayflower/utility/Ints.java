@@ -25,7 +25,7 @@ import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.function.IntSupplier;
 
-import org.macroing.java.io.IntArrayOutputStream;
+import org.dayflower.java.io.IntArrayOutputStream;
 
 /**
  * The class {@code Ints} contains methods for performing basic numeric operations.

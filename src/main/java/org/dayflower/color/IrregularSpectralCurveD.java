@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
+import org.dayflower.java.io.DoubleArrayOutputStream;
 import org.dayflower.utility.Strings;
-import org.macroing.java.io.DoubleArrayOutputStream;
 
 /**
  * An {@code IrregularSpectralCurveD} is an implementation of {@link SpectralCurveD} that contains irregular spectral data.

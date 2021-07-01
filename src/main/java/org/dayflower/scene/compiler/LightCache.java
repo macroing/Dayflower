@@ -76,8 +76,26 @@ final class LightCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public float[] toLightDiffuseAreaLightArray() {
-		return Floats.toArray(this.distinctDiffuseAreaLights, diffuseAreaLight -> diffuseAreaLight.toArray(), 1);
+	public boolean contains(final Light light) {
+		return this.distinctLights.contains(Objects.requireNonNull(light, "light == null"));
+	}
+	
+	public float[] toLightDiffuseAreaLightArray(final Shape3FCache shape3FCache) {
+		Objects.requireNonNull(shape3FCache, "shape3FCache == null");
+		
+		final float[] lightDiffuseAreaLightArray = Floats.toArray(this.distinctDiffuseAreaLights, diffuseAreaLight -> diffuseAreaLight.toArray(), 1);
+		
+		for(int i = 0; i < this.distinctDiffuseAreaLights.size(); i++) {
+			final DiffuseAreaLight diffuseAreaLight = this.distinctDiffuseAreaLights.get(i);
+			
+			final Shape3F shape = diffuseAreaLight.getShape();
+			
+			final int lightDiffuseAreaLightArrayShapeOffset = i * DiffuseAreaLight.ARRAY_LENGTH + DiffuseAreaLight.ARRAY_OFFSET_SHAPE_OFFSET;
+			
+			lightDiffuseAreaLightArray[lightDiffuseAreaLightArrayShapeOffset] = shape3FCache.findOffsetFor(shape);
+		}
+		
+		return lightDiffuseAreaLightArray;
 	}
 	
 	public float[] toLightDirectionalLightArray() {

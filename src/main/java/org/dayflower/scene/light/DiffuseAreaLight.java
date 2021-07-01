@@ -63,7 +63,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	/**
 	 * The offset for the flag denoted by {@code Is Two-Sided} in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_IS_TWO_SIDED = 37;
+	public static final int ARRAY_OFFSET_IS_TWO_SIDED = 38;
 	
 	/**
 	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in the {@code float[]}.
@@ -84,6 +84,11 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * The offset for the offset of the {@link Shape3F} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_SHAPE_OFFSET = 36;
+	
+	/**
+	 * The offset for the surface area of the {@link Shape3F} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SHAPE_SURFACE_AREA = 37;
 	
 	/**
 	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in the {@code float[]}.
@@ -503,8 +508,8 @@ public final class DiffuseAreaLight extends AreaLight {
 		array[ARRAY_OFFSET_RADIANCE_EMITTED + 2] = this.radianceEmitted.getB();								//Block #5
 		array[ARRAY_OFFSET_SHAPE_ID] = this.shape.getID();													//Block #5
 		array[ARRAY_OFFSET_SHAPE_OFFSET] = 0.0F;															//Block #5
+		array[ARRAY_OFFSET_SHAPE_SURFACE_AREA] = this.shape.getSurfaceArea();								//Block #5
 		array[ARRAY_OFFSET_IS_TWO_SIDED] = this.isTwoSided ? 1.0F : 0.0F;									//Block #5
-		array[38] = 0.0F;																					//Block #5
 		array[39] = 0.0F;																					//Block #5
 		
 		return array;

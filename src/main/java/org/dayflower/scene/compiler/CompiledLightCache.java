@@ -21,6 +21,7 @@ package org.dayflower.scene.compiler;
 import java.util.Objects;
 
 import org.dayflower.scene.Light;
+import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.light.PerezLight;
@@ -34,6 +35,7 @@ import org.dayflower.scene.light.SpotLight;
  * @author J&#246;rgen Lundgren
  */
 public final class CompiledLightCache {
+	private float[] lightDiffuseAreaLightArray;
 	private float[] lightDirectionalLightArray;
 	private float[] lightLDRImageLightArray;
 	private float[] lightPerezLightArray;
@@ -49,6 +51,7 @@ public final class CompiledLightCache {
 	 * Constructs a new {@code CompiledLightCache} instance.
 	 */
 	public CompiledLightCache() {
+		setLightDiffuseAreaLightArray(new float[1]);
 		setLightDirectionalLightArray(new float[1]);
 		setLightIDAndOffsetArray(new int[1]);
 		setLightLDRImageLightArray(new float[1]);
@@ -60,6 +63,15 @@ public final class CompiledLightCache {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code float[]} that contains all {@link DiffuseAreaLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance.
+	 * 
+	 * @return a {@code float[]} that contains all {@code DiffuseAreaLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance
+	 */
+	public float[] getLightDiffuseAreaLightArray() {
+		return this.lightDiffuseAreaLightArray;
+	}
 	
 	/**
 	 * Returns a {@code float[]} that contains all {@link DirectionalLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance.
@@ -112,7 +124,16 @@ public final class CompiledLightCache {
 	 * @return the {@code Light} count in this {@code CompiledLightCache} instance
 	 */
 	public int getLightCount() {
-		return getLightDirectionalLightCount() + getLightLDRImageLightCount() + getLightPerezLightCount() + getLightPointLightCount() + getLightSpotLightCount();
+		return getLightDiffuseAreaLightCount() + getLightDirectionalLightCount() + getLightLDRImageLightCount() + getLightPerezLightCount() + getLightPointLightCount() + getLightSpotLightCount();
+	}
+	
+	/**
+	 * Returns the {@link DiffuseAreaLight} count in this {@code CompiledLightCache} instance.
+	 * 
+	 * @return the {@code DiffuseAreaLight} count in this {@code CompiledLightCache} instance
+	 */
+	public int getLightDiffuseAreaLightCount() {
+		return Structures.getStructureCount(this.lightDiffuseAreaLightArray, DiffuseAreaLight.ARRAY_LENGTH);
 	}
 	
 	/**
@@ -185,6 +206,18 @@ public final class CompiledLightCache {
 	 */
 	public int[] getLightPerezLightOffsetArray() {
 		return this.lightPerezLightOffsetArray;
+	}
+	
+	/**
+	 * Sets all {@link DiffuseAreaLight} instances in compiled form to {@code lightDiffuseAreaLightArray}.
+	 * <p>
+	 * If {@code lightDiffuseAreaLightArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lightDiffuseAreaLightArray the {@code DiffuseAreaLight} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code lightDiffuseAreaLightArray} is {@code null}
+	 */
+	public void setLightDiffuseAreaLightArray(final float[] lightDiffuseAreaLightArray) {
+		this.lightDiffuseAreaLightArray = Objects.requireNonNull(lightDiffuseAreaLightArray, "lightDiffuseAreaLightArray == null");
 	}
 	
 	/**

@@ -26,19 +26,23 @@ import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
+import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
-import org.dayflower.scene.texture.LDRImageTexture;
 
 /**
  * An {@code AbstractLightKernel} is an abstract extension of the {@link AbstractMaterialKernel} class that adds additional features.
  * <p>
  * The features added are the following:
  * <ul>
+ * <li>{@link DirectionalLight}</li>
  * <li>{@link LDRImageLight}</li>
+ * <li>{@link PerezLight}</li>
+ * <li>{@link PointLight}</li>
+ * <li>{@link SpotLight}</li>
  * </ul>
  * 
  * @since 1.0.0
@@ -56,6 +60,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	private static final int LIGHT_SAMPLE_ARRAY_OFFSET_RESULT = 0;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * A {@code float[]} that contains {@link DiffuseAreaLight} instances.
+	 */
+	protected float[] lightDiffuseAreaLightArray;
 	
 	/**
 	 * A {@code float[]} that contains {@link DirectionalLight} instances.
@@ -91,6 +100,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	 * The {@link Light} count.
 	 */
 	protected int lightCount;
+	
+	/**
+	 * The {@link DiffuseAreaLight} count.
+	 */
+	protected int lightDiffuseAreaLightCount;
 	
 	/**
 	 * The {@link DirectionalLight} count.
@@ -146,6 +160,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		this.lightArray_$private$2 = new int[LIGHT_ARRAY_LENGTH];
 		this.lightCount = 0;
 		this.lightIDAndOffsetArray = new int[1];
+		this.lightDiffuseAreaLightArray = new float[1];
+		this.lightDiffuseAreaLightCount = 0;
 		this.lightDirectionalLightArray = new float[1];
 		this.lightDirectionalLightCount = 0;
 		this.lightLDRImageLightArray = new float[1];
@@ -162,98 +178,6 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Evaluates the radiance emitted for a random {@link LDRImageLight} instance.
-	 * <p>
-	 * This method is used by the old lighting system and may be removed in the future.
-	 */
-	protected final void lightEvaluateRadianceEmittedAny() {
-		doLightEvaluateRadianceEmittedClear();
-		doLightEvaluateRadianceEmittedAnyLDRImageLight();
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private void doLightEvaluateRadianceEmittedAnyLDRImageLight() {
-		final int lightLDRImageLightCount = this.lightLDRImageLightCount;
-		
-		if(lightLDRImageLightCount > 0) {
-			final int offset = min((int)(random() * lightLDRImageLightCount), lightLDRImageLightCount - 1);
-			
-			final float probabilityDensityFunctionValue = 1.0F / lightLDRImageLightCount;
-			
-			doLightEvaluateRadianceEmittedOneLDRImageLight(offset, probabilityDensityFunctionValue);
-		}
-	}
-	
-	private void doLightEvaluateRadianceEmittedClear() {
-		color3FLHSSet(0.0F, 0.0F, 0.0F);
-	}
-	
-	private void doLightEvaluateRadianceEmittedOneLDRImageLight(final int offset, final float probabilityDensityFunctionValue) {
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
-		
-		final float textureCoordinatesU = 0.5F + atan2(rayDirectionZ, rayDirectionX) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = 0.5F - asinpi(rayDirectionY);
-//		final float textureCoordinatesU = vector3FSphericalPhi(rayDirectionX, rayDirectionY, rayDirectionZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-//		final float textureCoordinatesV = vector3FSphericalTheta(rayDirectionX, rayDirectionY, rayDirectionZ) * PI_RECIPROCAL;
-		
-		final float angleRadians = this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_ANGLE_RADIANS];
-		final float angleRadiansCos = cos(angleRadians);
-		final float angleRadiansSin = sin(angleRadians);
-		
-		final float scaleU = this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 0];
-		final float scaleV = this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 1];
-		
-		final int resolutionX = (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_X]);
-		final int resolutionY = (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_Y]);
-		
-		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
-		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
-		
-		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
-		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
-		
-		final float x = positiveModuloF(textureCoordinatesScaledU, resolutionX);
-		final float y = positiveModuloF(textureCoordinatesScaledV, resolutionY);
-		
-		final int minimumX = (int)(floor(x));
-		final int maximumX = (int)(ceil(x));
-		
-		final int minimumY = (int)(floor(y));
-		final int maximumY = (int)(ceil(y));
-		
-		final int offsetImage = offset + LDRImageLight.ARRAY_OFFSET_IMAGE;
-		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-		
-		final int color00RGB = (int)(this.lightLDRImageLightArray[offsetColor00RGB]);
-		final int color01RGB = (int)(this.lightLDRImageLightArray[offsetColor01RGB]);
-		final int color10RGB = (int)(this.lightLDRImageLightArray[offsetColor10RGB]);
-		final int color11RGB = (int)(this.lightLDRImageLightArray[offsetColor11RGB]);
-		
-		final float tX = x - minimumX;
-		final float tY = y - minimumY;
-		
-		final float component1 = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
-		final float component2 = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
-		final float component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
-		
-		color3FLHSSet(component1 / probabilityDensityFunctionValue, component2 / probabilityDensityFunctionValue, component3 / probabilityDensityFunctionValue);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/*
-	 * The following is a test implementation of the Light API in the CPU-renderer.
-	 */
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Light ///////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -267,7 +191,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected final boolean lightIsUsingDeltaDistribution() {
 		final int id = lightGetID();
 		
-		if(doLightDirectionalLightIsMatchingID(id)) {
+		if(doLightDiffuseAreaLightIsMatchingID(id)) {
+			return doLightDiffuseAreaLightIsUsingDeltaDistribution();
+		} else if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightIsUsingDeltaDistribution();
 		} else if(doLightLDRImageLightIsMatchingID(id)) {
 			return doLightLDRImageLightIsUsingDeltaDistribution();
@@ -306,7 +232,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected final boolean lightSampleRadianceIncoming(final float u, final float v) {
 		final int id = lightGetID();
 		
-		if(doLightDirectionalLightIsMatchingID(id)) {
+		if(doLightDiffuseAreaLightIsMatchingID(id)) {
+			return doLightDiffuseAreaLightSampleRadianceIncoming(u, v);
+		} else if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightSampleRadianceIncoming(u, v);
 		} else if(doLightLDRImageLightIsMatchingID(id)) {
 			return doLightLDRImageLightSampleRadianceIncoming(u, v);
@@ -336,7 +264,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected final float lightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
 		final int id = lightGetID();
 		
-		if(doLightDirectionalLightIsMatchingID(id)) {
+		if(doLightDiffuseAreaLightIsMatchingID(id)) {
+			return doLightDiffuseAreaLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
+		} else if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
 		} else if(doLightLDRImageLightIsMatchingID(id)) {
 			return doLightLDRImageLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
@@ -385,7 +315,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected final void lightEvaluateRadianceEmitted() {
 		final int id = lightGetID();
 		
-		if(doLightDirectionalLightIsMatchingID(id)) {
+		if(doLightDiffuseAreaLightIsMatchingID(id)) {
+			doLightDiffuseAreaLightEvaluateRadianceEmitted();
+		} else if(doLightDirectionalLightIsMatchingID(id)) {
 			doLightDirectionalLightEvaluateRadianceEmitted();
 		} else if(doLightLDRImageLightIsMatchingID(id)) {
 			doLightLDRImageLightEvaluateRadianceEmitted();
@@ -435,6 +367,24 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	/**
+	 * Evaluates the radiance emitted from some surface intersection in a given direction.
+	 * 
+	 * @param surfaceNormalX the X-component of the surface normal of the surface intersection
+	 * @param surfaceNormalY the Y-component of the surface normal of the surface intersection
+	 * @param surfaceNormalZ the Z-component of the surface normal of the surface intersection
+	 * @param directionX the X-component of the direction the radiance is emitted
+	 * @param directionY the Y-component of the direction the radiance is emitted
+	 * @param directionZ the Z-component of the direction the radiance is emitted
+	 */
+	protected final void lightEvaluateRadianceEmittedAreaLight(final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float directionX, final float directionY, final float directionZ) {
+		final int id = lightGetID();
+		
+		if(doLightDiffuseAreaLightIsMatchingID(id)) {
+			doLightDiffuseAreaLightEvaluateRadianceEmittedAreaLight(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
+		}
+	}
+	
+	/**
 	 * Computes the power of the current {@link Light} instance.
 	 * <p>
 	 * This method assumes the method {@link #lightSet(int, int)} has been called.
@@ -446,7 +396,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected final void lightPower() {
 		final int id = lightGetID();
 		
-		if(doLightDirectionalLightIsMatchingID(id)) {
+		if(doLightDiffuseAreaLightIsMatchingID(id)) {
+			doLightDiffuseAreaLightPower();
+		} else if(doLightDirectionalLightIsMatchingID(id)) {
 			doLightDirectionalLightPower();
 		} else if(doLightLDRImageLightIsMatchingID(id)) {
 			doLightLDRImageLightPower();
@@ -610,6 +562,142 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 0] = resultR;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 1] = resultG;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 2] = resultB;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Light - DiffuseAreaLight ////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightDiffuseAreaLightIsMatchingID(final int id) {
+		return id == DiffuseAreaLight.ID;
+	}
+	
+	private boolean doLightDiffuseAreaLightIsTwoSided() {
+		return !checkIsZero(this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_IS_TWO_SIDED]);
+	}
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightDiffuseAreaLightIsUsingDeltaDistribution() {
+		return false;
+	}
+	
+	@SuppressWarnings({"static-method", "unused"})
+	private boolean doLightDiffuseAreaLightSampleRadianceIncoming(final float u, final float v) {
+		/*
+		 * 	final Transform transform = getTransform();
+		 * 	
+		 * 	final Matrix44F objectToWorld = transform.getObjectToWorld();
+		 * 	final Matrix44F worldToObject = transform.getWorldToObject();
+		 * 	
+		 * 	final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
+		 * 	final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
+		 * 	
+		 * 	final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = this.shape.sample(sample, surfaceIntersectionObjectSpace);
+		 * 	
+		 * 	if(optionalSurfaceSampleObjectSpace.isPresent()) {
+		 * 		final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSampleObjectSpace.get();
+		 * 		final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleObjectSpace, objectToWorld, worldToObject);
+		 * 		
+		 * 		final float probabilityDensityFunctionValue = surfaceSampleWorldSpace.getProbabilityDensityFunctionValue();
+		 * 		
+		 * 		final Point3F pointWorldSpace = surfaceSampleWorldSpace.getPoint();
+		 * 		
+		 * 		final Vector3F incomingWorldSpace = Vector3F.directionNormalized(surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint(), pointWorldSpace);
+		 * 		
+		 * 		if(probabilityDensityFunctionValue > 0.0F && (this.isTwoSided || Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.negate(incomingWorldSpace)) > 0.0F)) {
+		 * 			return Optional.of(new LightSample(this.radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
+		 * 		}
+		 * 	}
+		 * 	
+		 * 	return Optional.empty();
+		 */
+		
+//		TODO: Implement!
+		return false;
+	}
+	
+	@SuppressWarnings({"static-method", "unused"})
+	private float doLightDiffuseAreaLightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+		/*
+		 * 	final Transform transform = getTransform();
+		 * 	
+		 * 	final Matrix44F objectToWorld = transform.getObjectToWorld();
+		 * 	final Matrix44F worldToObject = transform.getWorldToObject();
+		 * 	
+		 * 	final Vector3F incomingObjectSpace = Vector3F.transform(worldToObject, incoming);
+		 * 	
+		 * 	final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
+		 * 	final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
+		 * 	
+		 * 	return this.shape.evaluateProbabilityDensityFunction(surfaceIntersectionObjectSpace, incomingObjectSpace);
+		 */
+		
+//		TODO: Implement!
+		return 0.0F;
+	}
+	
+	private float doLightDiffuseAreaLightGetRadianceEmittedB() {
+		return this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_RADIANCE_EMITTED + 2];
+	}
+	
+	private float doLightDiffuseAreaLightGetRadianceEmittedG() {
+		return this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_RADIANCE_EMITTED + 1];
+	}
+	
+	private float doLightDiffuseAreaLightGetRadianceEmittedR() {
+		return this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_RADIANCE_EMITTED + 0];
+	}
+	
+	private float doLightDiffuseAreaLightGetShapeSurfaceArea() {
+		return this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_SHAPE_SURFACE_AREA];
+	}
+	
+	@SuppressWarnings("unused")
+	private int doLightDiffuseAreaLightGetShapeID() {
+		return (int)(this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_SHAPE_ID]);
+	}
+	
+	@SuppressWarnings("unused")
+	private int doLightDiffuseAreaLightGetShapeOffset() {
+		return (int)(this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_SHAPE_OFFSET]);
+	}
+	
+	private void doLightDiffuseAreaLightEvaluateRadianceEmitted() {
+		color3FLHSSet(0.0F, 0.0F, 0.0F);
+	}
+	
+	private void doLightDiffuseAreaLightEvaluateRadianceEmittedAreaLight(final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float directionX, final float directionY, final float directionZ) {
+		final float radianceEmittedR = doLightDiffuseAreaLightGetRadianceEmittedR();
+		final float radianceEmittedG = doLightDiffuseAreaLightGetRadianceEmittedG();
+		final float radianceEmittedB = doLightDiffuseAreaLightGetRadianceEmittedB();
+		
+		final boolean isTwoSided = doLightDiffuseAreaLightIsTwoSided();
+		final boolean isVisible = isTwoSided || vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ) > 0.0F;
+		
+		if(isVisible) {
+			color3FLHSSet(radianceEmittedR, radianceEmittedG, radianceEmittedB);
+		} else {
+			color3FLHSSet(0.0F, 0.0F, 0.0F);
+		}
+	}
+	
+	private void doLightDiffuseAreaLightPower() {
+		final float radianceEmittedR = doLightDiffuseAreaLightGetRadianceEmittedR();
+		final float radianceEmittedG = doLightDiffuseAreaLightGetRadianceEmittedG();
+		final float radianceEmittedB = doLightDiffuseAreaLightGetRadianceEmittedB();
+		
+		final float shapeSurfaceArea = doLightDiffuseAreaLightGetShapeSurfaceArea();
+		
+		final boolean isTwoSided = doLightDiffuseAreaLightIsTwoSided();
+		
+		final float scale = (isTwoSided ? 2.0F : 1.0F) * shapeSurfaceArea * PI;
+		
+		final float powerR = radianceEmittedR * scale;
+		final float powerG = radianceEmittedG * scale;
+		final float powerB = radianceEmittedB * scale;
+		
+		color3FLHSSet(powerR, powerG, powerB);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -984,7 +1072,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int minimumY = (int)(floor(y));
 		final int maximumY = (int)(ceil(y));
 		
-		final int offsetImage = offset + LDRImageTexture.ARRAY_OFFSET_IMAGE;
+		final int offsetImage = offset + LDRImageLight.ARRAY_OFFSET_IMAGE;
 		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
 		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
 		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));

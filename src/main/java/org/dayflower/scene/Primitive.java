@@ -549,7 +549,7 @@ public final class Primitive implements Node {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-		array[ARRAY_OFFSET_AREA_LIGHT_ID] = 0;
+		array[ARRAY_OFFSET_AREA_LIGHT_ID] = this.areaLight != null ? this.areaLight.getID() : 0;
 		array[ARRAY_OFFSET_AREA_LIGHT_OFFSET] = 0;
 		array[ARRAY_OFFSET_BOUNDING_VOLUME_ID] = this.boundingVolume.getID();
 		array[ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET] = 0;

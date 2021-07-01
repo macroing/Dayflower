@@ -1133,6 +1133,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.materialSubstrateMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialSubstrateMaterialArray());
 		
 		put(super.lightIDAndOffsetArray = compiledScene.getCompiledLightCache().getLightIDAndOffsetArray());
+		put(super.lightDiffuseAreaLightArray = compiledScene.getCompiledLightCache().getLightDiffuseAreaLightArray());
 		put(super.lightDirectionalLightArray = compiledScene.getCompiledLightCache().getLightDirectionalLightArray());
 		put(super.lightLDRImageLightArray = compiledScene.getCompiledLightCache().getLightLDRImageLightArray());
 		put(super.lightLDRImageLightOffsetArray = compiledScene.getCompiledLightCache().getLightLDRImageLightOffsetArray());
@@ -1147,6 +1148,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(this.primitiveMatrix44FArray = compiledScene.getCompiledPrimitiveCache().getPrimitiveMatrix44FArray());
 		
 		super.lightCount = compiledScene.getCompiledLightCache().getLightCount();
+		super.lightDiffuseAreaLightCount = compiledScene.getCompiledLightCache().getLightDiffuseAreaLightCount();
 		super.lightDirectionalLightCount = compiledScene.getCompiledLightCache().getLightDirectionalLightCount();
 		super.lightLDRImageLightCount = compiledScene.getCompiledLightCache().getLightLDRImageLightCount();
 		super.lightPerezLightCount = compiledScene.getCompiledLightCache().getLightPerezLightCount();

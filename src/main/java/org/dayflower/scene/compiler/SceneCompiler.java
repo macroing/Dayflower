@@ -21,9 +21,11 @@ package org.dayflower.scene.compiler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.utility.Floats;
@@ -93,6 +95,12 @@ public final class SceneCompiler {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private boolean doFilterPrimitive(final Primitive primitive) {
+		final Optional<AreaLight> optionalAreaLight = primitive.getAreaLight();
+		
+		if(optionalAreaLight.isPresent() && !this.lightCache.contains(optionalAreaLight.get())) {
+			return false;
+		}
+		
 		if(!this.boundingVolume3FCache.contains(primitive.getBoundingVolume())) {
 			return false;
 		}
@@ -116,6 +124,7 @@ public final class SceneCompiler {
 		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> primitive.toArray(), 1);
 		
 //		Populate the float[] or int[] with data:
+		doPopulatePrimitiveArrayWithAreaLights(primitiveArray);
 		doPopulatePrimitiveArrayWithBoundingVolumes(primitiveArray);
 		doPopulatePrimitiveArrayWithMaterials(primitiveArray);
 		doPopulatePrimitiveArrayWithShapes(primitiveArray);
@@ -125,6 +134,7 @@ public final class SceneCompiler {
 		compiledScene.getCompiledBoundingVolume3FCache().setBoundingVolume3FAxisAlignedBoundingBox3FArray(this.boundingVolume3FCache.toBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		compiledScene.getCompiledBoundingVolume3FCache().setBoundingVolume3FBoundingSphere3FArray(this.boundingVolume3FCache.toBoundingVolume3FBoundingSphere3FArray());
 		compiledScene.getCompiledCameraCache().setCameraArray(scene.getCamera().toArray());
+		compiledScene.getCompiledLightCache().setLightDiffuseAreaLightArray(this.lightCache.toLightDiffuseAreaLightArray(this.shape3FCache));
 		compiledScene.getCompiledLightCache().setLightDirectionalLightArray(this.lightCache.toLightDirectionalLightArray());
 		compiledScene.getCompiledLightCache().setLightIDAndOffsetArray(this.lightCache.toLightIDAndOffsetArray());
 		compiledScene.getCompiledLightCache().setLightLDRImageLightArray(this.lightCache.toLightLDRImageLightArray());
@@ -179,6 +189,17 @@ public final class SceneCompiler {
 	private void doFilterPrimitives(final Scene scene) {
 		this.filteredPrimitives.clear();
 		this.filteredPrimitives.addAll(scene.getPrimitives().stream().filter(this::doFilterPrimitive).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+	}
+	
+	private void doPopulatePrimitiveArrayWithAreaLights(final int[] primitiveArray) {
+		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
+			final int primitiveArrayOffset = i * Primitive.ARRAY_LENGTH;
+			
+			this.filteredPrimitives.get(i).getAreaLight().ifPresent(areaLight -> {
+				primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_AREA_LIGHT_ID] = areaLight.getID();
+				primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_AREA_LIGHT_OFFSET] = this.lightCache.findOffsetFor(areaLight);
+			});
+		}
 	}
 	
 	private void doPopulatePrimitiveArrayWithBoundingVolumes(final int[] primitiveArray) {

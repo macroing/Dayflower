@@ -49,7 +49,7 @@ import org.dayflower.filter.Filter2D;
 import org.dayflower.filter.MitchellFilter2D;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.BufferedImages;
+import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.ParameterArguments;
 
 /**

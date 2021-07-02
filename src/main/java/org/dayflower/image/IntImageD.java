@@ -37,7 +37,7 @@ import org.dayflower.color.Color4D;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.BufferedImages;
+import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 

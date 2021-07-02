@@ -1,3 +1,11 @@
+2021-07-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the Java AWT Image API.
+	* ADD:		Add the Java Util API.
+	* CHANGE:	Move the BufferedImages class from the Utility API to the Java AWT Image API.
+	* CHANGE:	Move the MersenneTwisterRandom class from the Utility API to the Java Util API.
+	* CHANGE:	Move the XORShiftRandom class from the Utility API to the Java Util API.
+
 2021-07-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Java I/O API from the dependency org.macroing.java.

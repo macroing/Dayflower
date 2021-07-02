@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import org.dayflower.color.Color3D;
 import org.dayflower.color.Color4D;
-import org.dayflower.utility.BufferedImages;
+import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.ParameterArguments;
 
 /**

@@ -37,10 +37,10 @@
  * <p>
  * The following list shows all dependencies for this API.
  * <ul>
+ * <li>The Geometry API</li>
  * <li>The Java I/O API</li>
  * <li>The Java Util Function API</li>
  * <li>The Node API</li>
- * <li>The Geometry API</li>
  * <li>The Utility API</li>
  * </ul>
  */

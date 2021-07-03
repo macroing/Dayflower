@@ -19,7 +19,6 @@
 package org.dayflower.utility;
 
 import java.text.DecimalFormat;
-import java.util.Objects;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code String} instances.
@@ -39,58 +38,6 @@ public final class Strings {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@code String} with a constant Java field representation of {@code array} and a name of {@code name}.
-	 * <p>
-	 * If either {@code name} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param name the name of the constant field
-	 * @param array the array
-	 * @return a {@code String} with a constant Java field representation of {@code array} and a name of {@code name}
-	 * @throws NullPointerException thrown if, and only if, either {@code name} or {@code array} are {@code null}
-	 */
-	public static String toConstantJavaField(final String name, final double[] array) {
-		Objects.requireNonNull(name, "name == null");
-		Objects.requireNonNull(array, "array == null");
-		
-		final StringBuilder stringBuilder = new StringBuilder(String.format("public static final double[] %s = {", name));
-		
-		for(int i = 0; i < array.length; i++) {
-			stringBuilder.append(i > 0 ? ", " : "");
-			stringBuilder.append(String.format("%.6fD", Double.valueOf(array[i])).replace(',', '.').replace(" ", ""));
-		}
-		
-		stringBuilder.append("};");
-		
-		return stringBuilder.toString();
-	}
-	
-	/**
-	 * Returns a {@code String} with a constant Java field representation of {@code array} and a name of {@code name}.
-	 * <p>
-	 * If either {@code name} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param name the name of the constant field
-	 * @param array the array
-	 * @return a {@code String} with a constant Java field representation of {@code array} and a name of {@code name}
-	 * @throws NullPointerException thrown if, and only if, either {@code name} or {@code array} are {@code null}
-	 */
-	public static String toConstantJavaField(final String name, final float[] array) {
-		Objects.requireNonNull(name, "name == null");
-		Objects.requireNonNull(array, "array == null");
-		
-		final StringBuilder stringBuilder = new StringBuilder(String.format("public static final float[] %s = {", name));
-		
-		for(int i = 0; i < array.length; i++) {
-			stringBuilder.append(i > 0 ? ", " : "");
-			stringBuilder.append(String.format("%.6fF", Float.valueOf(array[i])).replace(',', '.').replace(" ", ""));
-		}
-		
-		stringBuilder.append("};");
-		
-		return stringBuilder.toString();
-	}
-	
-	/**
 	 * Returns a {@code String} representation of {@code value} without scientific notation.
 	 * 
 	 * @param value a {@code float} value
@@ -98,42 +45,6 @@ public final class Strings {
 	 */
 	public static String toNonScientificNotation(final float value) {
 		return DECIMAL_FORMAT.format(value).replace(',', '.');
-	}
-	
-	/**
-	 * Splits {@code string} on {@code regex} and discards empty substrings.
-	 * <p>
-	 * Returns a {@code String} array with the result.
-	 * <p>
-	 * If either {@code string} or {@code regex} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param string a {@code String}
-	 * @param regex the {@code String} to split with
-	 * @return a {@code String} array with the result
-	 * @throws NullPointerException thrown if, and only if, either {@code string} or {@code regex} are {@code null}
-	 */
-	public static String[] splitAndDiscardEmptySubstrings(final String string, final String regex) {
-		final String[] oldStrings = string.split(Objects.requireNonNull(regex, "regex == null"));
-		
-		int length = 0;
-		
-		for(int i = 0; i < oldStrings.length; i++) {
-			if(oldStrings[i].isEmpty()) {
-				oldStrings[i] = null;
-			} else {
-				length++;
-			}
-		}
-		
-		final String[] newStrings = new String[length];
-		
-		for(int i = 0, j = 0; i < oldStrings.length; i++) {
-			if(oldStrings[i] != null) {
-				newStrings[j++] = oldStrings[i];
-			}
-		}
-		
-		return newStrings;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

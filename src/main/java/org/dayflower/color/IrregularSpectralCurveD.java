@@ -26,7 +26,6 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.java.io.DoubleArrayOutputStream;
-import org.dayflower.utility.Strings;
 
 /**
  * An {@code IrregularSpectralCurveD} is an implementation of {@link SpectralCurveD} that contains irregular spectral data.
@@ -237,8 +236,26 @@ public final class IrregularSpectralCurveD extends SpectralCurveD {
 		final IrregularSpectralCurveD irregularSpectralCurveEta = parseSPD(fileEta);
 		final IrregularSpectralCurveD irregularSpectralCurveK = parseSPD(fileK);
 		
-		System.out.println(Strings.toConstantJavaField("ETA", irregularSpectralCurveEta.getAmplitudes()));
-		System.out.println(Strings.toConstantJavaField("K", irregularSpectralCurveK.getAmplitudes()));
-		System.out.println(Strings.toConstantJavaField("WAVELENGTH", irregularSpectralCurveEta.getWavelengths()));
+		System.out.println(doToConstantJavaField("ETA", irregularSpectralCurveEta.getAmplitudes()));
+		System.out.println(doToConstantJavaField("K", irregularSpectralCurveK.getAmplitudes()));
+		System.out.println(doToConstantJavaField("WAVELENGTH", irregularSpectralCurveEta.getWavelengths()));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static String doToConstantJavaField(final String name, final double[] array) {
+		Objects.requireNonNull(name, "name == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		final StringBuilder stringBuilder = new StringBuilder(String.format("public static final double[] %s = {", name));
+		
+		for(int i = 0; i < array.length; i++) {
+			stringBuilder.append(i > 0 ? ", " : "");
+			stringBuilder.append(String.format("%.6fD", Double.valueOf(array[i])).replace(',', '.').replace(" ", ""));
+		}
+		
+		stringBuilder.append("};");
+		
+		return stringBuilder.toString();
 	}
 }

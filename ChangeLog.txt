@@ -1,3 +1,10 @@
+2021-07-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods findFilesFromDirectory(), findFilesFromDirectory(File), findFilesFromDirectory(File, Predicate<File>), findFilesFromDirectory(File, Predicate<File>, Predicate<File>) and readAllBytesToString(File) to the Files class.
+	* CHANGE:	Move the Files class from the Utility API to the Java I/O API.
+	* CHANGE:	Move the MortonCodes class from the Utility API to the Geometry API.
+	* REMOVE:	Remove the methods splitAndDiscardEmptySubstrings(String, String), toConstantJavaField(String, double[]) and toConstantJavaField(String, float[]) from the Strings class.
+
 2021-07-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Java AWT Image API.

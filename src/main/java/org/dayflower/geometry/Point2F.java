@@ -40,7 +40,6 @@ import java.util.Objects;
 
 import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
-import org.dayflower.utility.MortonCodes;
 
 /**
  * A {@code Point2F} represents a point with two {@code float}-based components.

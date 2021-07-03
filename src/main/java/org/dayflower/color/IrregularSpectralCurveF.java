@@ -26,7 +26,6 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.java.io.FloatArrayOutputStream;
-import org.dayflower.utility.Strings;
 
 /**
  * An {@code IrregularSpectralCurveF} is an implementation of {@link SpectralCurveF} that contains irregular spectral data.
@@ -237,8 +236,26 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 		final IrregularSpectralCurveF irregularSpectralCurveEta = parseSPD(fileEta);
 		final IrregularSpectralCurveF irregularSpectralCurveK = parseSPD(fileK);
 		
-		System.out.println(Strings.toConstantJavaField("ETA", irregularSpectralCurveEta.getAmplitudes()));
-		System.out.println(Strings.toConstantJavaField("K", irregularSpectralCurveK.getAmplitudes()));
-		System.out.println(Strings.toConstantJavaField("WAVELENGTH", irregularSpectralCurveEta.getWavelengths()));
+		System.out.println(doToConstantJavaField("ETA", irregularSpectralCurveEta.getAmplitudes()));
+		System.out.println(doToConstantJavaField("K", irregularSpectralCurveK.getAmplitudes()));
+		System.out.println(doToConstantJavaField("WAVELENGTH", irregularSpectralCurveEta.getWavelengths()));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static String doToConstantJavaField(final String name, final float[] array) {
+		Objects.requireNonNull(name, "name == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		final StringBuilder stringBuilder = new StringBuilder(String.format("public static final float[] %s = {", name));
+		
+		for(int i = 0; i < array.length; i++) {
+			stringBuilder.append(i > 0 ? ", " : "");
+			stringBuilder.append(String.format("%.6fF", Float.valueOf(array[i])).replace(',', '.').replace(" ", ""));
+		}
+		
+		stringBuilder.append("};");
+		
+		return stringBuilder.toString();
 	}
 }

@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.utility;
+package org.dayflower.geometry;
+
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A class that consists exclusively of static methods that performs operations on Morton codes.

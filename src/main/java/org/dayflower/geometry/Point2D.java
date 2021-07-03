@@ -40,7 +40,6 @@ import java.util.Objects;
 
 import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
-import org.dayflower.utility.MortonCodes;
 
 /**
  * A {@code Point2D} represents a point with two {@code double}-based components.

@@ -21,6 +21,7 @@ package org.dayflower.utility;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A {@code TextLine} takes a {@code String} and tokenizes it into individual tokens (or substrings if you will). These individual tokens can then be retrieved by various methods.
@@ -62,7 +63,7 @@ public final class TextLine {
 	 * @throws NullPointerException thrown if, and only if, either {@code string} or {@code regex} are {@code null}
 	 */
 	public TextLine(final String string, final String regex) {
-		this.tokens = Strings.splitAndDiscardEmptySubstrings(string, regex);
+		this.tokens = doSplitAndDiscardEmptySubstrings(string, regex);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,5 +226,31 @@ public final class TextLine {
 	 */
 	public int length() {
 		return this.tokens.length;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static String[] doSplitAndDiscardEmptySubstrings(final String string, final String regex) {
+		final String[] oldStrings = string.split(Objects.requireNonNull(regex, "regex == null"));
+		
+		int length = 0;
+		
+		for(int i = 0; i < oldStrings.length; i++) {
+			if(oldStrings[i].isEmpty()) {
+				oldStrings[i] = null;
+			} else {
+				length++;
+			}
+		}
+		
+		final String[] newStrings = new String[length];
+		
+		for(int i = 0, j = 0; i < oldStrings.length; i++) {
+			if(oldStrings[i] != null) {
+				newStrings[j++] = oldStrings[i];
+			}
+		}
+		
+		return newStrings;
 	}
 }

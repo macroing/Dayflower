@@ -4,6 +4,7 @@
 	* CHANGE:	Move the Files class from the Utility API to the Java I/O API.
 	* CHANGE:	Move the MortonCodes class from the Utility API to the Geometry API.
 	* REMOVE:	Remove the methods splitAndDiscardEmptySubstrings(String, String), toConstantJavaField(String, double[]) and toConstantJavaField(String, float[]) from the Strings class.
+	* REMOVE:	Remove all example classes. Most of them can be found in the Javadocs.
 
 2021-07-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

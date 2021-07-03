@@ -125,7 +125,7 @@
  *         
  *         ImageF imageF = new PixelImageF(150, 150);
  *         imageF.fillCircle(new Circle2I(new Point2I(75, 75), 50), Color4F.RED);
- *         imageF.fillPixelImage(imageFRandom, imageFRandom.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
+ *         imageF.fillImage(imageFRandom, imageFRandom.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
  *         imageF.save("Image-Result.png");
  *     }
  * }

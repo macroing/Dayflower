@@ -7,6 +7,10 @@ JavaFX Application API:
 
 	* ADD:		Add support for the Parameter API.
 
+Parameter API:
+
+	* ADD:		Add support for different Parameter implementations that contains lists of options.
+
 Renderer GPU API:
 
 	* ADD:		Add support for DiffuseAreaLight.

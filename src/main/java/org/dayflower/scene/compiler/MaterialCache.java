@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Scene;
@@ -61,10 +63,12 @@ final class MaterialCache {
 	private final Map<MirrorMaterial, Integer> distinctToOffsetsMirrorMaterials;
 	private final Map<PlasticMaterial, Integer> distinctToOffsetsPlasticMaterials;
 	private final Map<SubstrateMaterial, Integer> distinctToOffsetsSubstrateMaterials;
+	private final NodeCache nodeCache;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public MaterialCache() {
+	public MaterialCache(final NodeCache nodeCache) {
+		this.nodeCache = nodeCache;
 		this.distinctClearCoatMaterials = new ArrayList<>();
 		this.distinctDisneyMaterials = new ArrayList<>();
 		this.distinctGlassMaterials = new ArrayList<>();
@@ -378,6 +382,110 @@ final class MaterialCache {
 	}
 	
 	public void setup(final Scene scene) {
+		if(this.nodeCache != null) {
+			doSetupNew(scene);
+		} else {
+			doSetupOld(scene);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static boolean filter(final Node node) {
+		return node instanceof Material;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doSetupNew(final Scene scene) {
+		Objects.requireNonNull(scene, "scene == null");
+		
+//		Add all distinct ClearCoatMaterial instances:
+		this.distinctClearCoatMaterials.clear();
+		this.distinctClearCoatMaterials.addAll(this.nodeCache.getAllDistinct(ClearCoatMaterial.class));
+		
+//		Add all distinct DisneyMaterial instances:
+		this.distinctDisneyMaterials.clear();
+		this.distinctDisneyMaterials.addAll(this.nodeCache.getAllDistinct(DisneyMaterial.class));
+		
+//		Add all distinct GlassMaterial instances:
+		this.distinctGlassMaterials.clear();
+		this.distinctGlassMaterials.addAll(this.nodeCache.getAllDistinct(GlassMaterial.class));
+		
+//		Add all distinct GlossyMaterial instances:
+		this.distinctGlossyMaterials.clear();
+		this.distinctGlossyMaterials.addAll(this.nodeCache.getAllDistinct(GlossyMaterial.class));
+		
+//		Add all distinct MatteMaterial instances:
+		this.distinctMatteMaterials.clear();
+		this.distinctMatteMaterials.addAll(this.nodeCache.getAllDistinct(MatteMaterial.class));
+		
+//		Add all distinct MetalMaterial instances:
+		this.distinctMetalMaterials.clear();
+		this.distinctMetalMaterials.addAll(this.nodeCache.getAllDistinct(MetalMaterial.class));
+		
+//		Add all distinct MirrorMaterial instances:
+		this.distinctMirrorMaterials.clear();
+		this.distinctMirrorMaterials.addAll(this.nodeCache.getAllDistinct(MirrorMaterial.class));
+		
+//		Add all distinct PlasticMaterial instances:
+		this.distinctPlasticMaterials.clear();
+		this.distinctPlasticMaterials.addAll(this.nodeCache.getAllDistinct(PlasticMaterial.class));
+		
+//		Add all distinct SubstrateMaterial instances:
+		this.distinctSubstrateMaterials.clear();
+		this.distinctSubstrateMaterials.addAll(this.nodeCache.getAllDistinct(SubstrateMaterial.class));
+		
+//		Add all distinct Material instances:
+		this.distinctMaterials.clear();
+		this.distinctMaterials.addAll(this.distinctClearCoatMaterials);
+		this.distinctMaterials.addAll(this.distinctDisneyMaterials);
+		this.distinctMaterials.addAll(this.distinctGlassMaterials);
+		this.distinctMaterials.addAll(this.distinctGlossyMaterials);
+		this.distinctMaterials.addAll(this.distinctMatteMaterials);
+		this.distinctMaterials.addAll(this.distinctMetalMaterials);
+		this.distinctMaterials.addAll(this.distinctMirrorMaterials);
+		this.distinctMaterials.addAll(this.distinctPlasticMaterials);
+		this.distinctMaterials.addAll(this.distinctSubstrateMaterials);
+		
+//		Create offset mappings for all distinct ClearCoatMaterial instances:
+		this.distinctToOffsetsClearCoatMaterials.clear();
+		this.distinctToOffsetsClearCoatMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctClearCoatMaterials, ClearCoatMaterial.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct DisneyMaterial instances:
+		this.distinctToOffsetsDisneyMaterials.clear();
+		this.distinctToOffsetsDisneyMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisneyMaterials, DisneyMaterial.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct GlassMaterial instances:
+		this.distinctToOffsetsGlassMaterials.clear();
+		this.distinctToOffsetsGlassMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlassMaterials, GlassMaterial.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct GlossyMaterial instances:
+		this.distinctToOffsetsGlossyMaterials.clear();
+		this.distinctToOffsetsGlossyMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlossyMaterials, GlossyMaterial.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct MatteMaterial instances:
+		this.distinctToOffsetsMatteMaterials.clear();
+		this.distinctToOffsetsMatteMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMatteMaterials, MatteMaterial.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct MetalMaterial instances:
+		this.distinctToOffsetsMetalMaterials.clear();
+		this.distinctToOffsetsMetalMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMetalMaterials, MetalMaterial.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct MirrorMaterial instances:
+		this.distinctToOffsetsMirrorMaterials.clear();
+		this.distinctToOffsetsMirrorMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMirrorMaterials, MirrorMaterial.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct PlasticMaterial instances:
+		this.distinctToOffsetsPlasticMaterials.clear();
+		this.distinctToOffsetsPlasticMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlasticMaterials, PlasticMaterial.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct SubstrateMaterial instances:
+		this.distinctToOffsetsSubstrateMaterials.clear();
+		this.distinctToOffsetsSubstrateMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSubstrateMaterials, SubstrateMaterial.ARRAY_LENGTH));
+	}
+	
+	private void doSetupOld(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
 //		Add all distinct Material instances:

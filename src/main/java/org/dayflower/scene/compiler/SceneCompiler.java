@@ -25,6 +25,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.node.Node;
+import org.dayflower.node.NodeCache;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
@@ -44,6 +46,7 @@ public final class SceneCompiler {
 	private final LightCache lightCache;
 	private final List<Primitive> filteredPrimitives;
 	private final MaterialCache materialCache;
+	private final NodeCache nodeCache;
 	private final Shape3FCache shape3FCache;
 	private final TextureCache textureCache;
 	
@@ -55,12 +58,13 @@ public final class SceneCompiler {
 	public SceneCompiler() {
 		this.timeMillis = new AtomicLong();
 		this.compiledScene = new AtomicReference<>();
-		this.boundingVolume3FCache = new BoundingVolume3FCache();
-		this.lightCache = new LightCache();
+		this.nodeCache = new NodeCache();
+		this.boundingVolume3FCache = new BoundingVolume3FCache(this.nodeCache);
+		this.lightCache = new LightCache(this.nodeCache);
 		this.filteredPrimitives = new ArrayList<>();
-		this.materialCache = new MaterialCache();
-		this.shape3FCache = new Shape3FCache();
-		this.textureCache = new TextureCache();
+		this.materialCache = new MaterialCache(this.nodeCache);
+		this.shape3FCache = new Shape3FCache(this.nodeCache);
+		this.textureCache = new TextureCache(this.nodeCache);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,6 +183,10 @@ public final class SceneCompiler {
 	}
 	
 	private void doClear() {
+		if(this.nodeCache != null) {
+			this.nodeCache.clear();
+		}
+		
 		this.boundingVolume3FCache.clear();
 		this.lightCache.clear();
 		this.filteredPrimitives.clear();
@@ -239,10 +247,20 @@ public final class SceneCompiler {
 	}
 	
 	private void doSetup(final Scene scene) {
+		if(this.nodeCache != null) {
+			this.nodeCache.add(scene, SceneCompiler::doFilter);
+		}
+		
 		this.boundingVolume3FCache.setup(scene);
 		this.lightCache.setup(scene);
 		this.materialCache.setup(scene);
 		this.shape3FCache.setup(scene);
 		this.textureCache.setup(scene);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static boolean doFilter(final Node node) {
+		return BoundingVolume3FCache.filter(node) || LightCache.filter(node) || MaterialCache.filter(node) || Shape3FCache.filter(node) || TextureCache.filter(node);
 	}
 }

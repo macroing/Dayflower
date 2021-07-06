@@ -28,6 +28,8 @@ import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
+import org.dayflower.node.Node;
+import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Scene;
 import org.dayflower.utility.Floats;
@@ -39,10 +41,12 @@ final class BoundingVolume3FCache {
 	private final List<InfiniteBoundingVolume3F> distinctInfiniteBoundingVolume3Fs;
 	private final Map<AxisAlignedBoundingBox3F, Integer> distinctToOffsetsAxisAlignedBoundingBox3Fs;
 	private final Map<BoundingSphere3F, Integer> distinctToOffsetsBoundingSphere3Fs;
+	private final NodeCache nodeCache;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public BoundingVolume3FCache() {
+	public BoundingVolume3FCache(final NodeCache nodeCache) {
+		this.nodeCache = nodeCache;
 		this.distinctAxisAlignedBoundingBox3Fs = new ArrayList<>();
 		this.distinctBoundingSphere3Fs = new ArrayList<>();
 		this.distinctBoundingVolume3Fs = new ArrayList<>();
@@ -89,6 +93,52 @@ final class BoundingVolume3FCache {
 	}
 	
 	public void setup(final Scene scene) {
+		if(this.nodeCache != null) {
+			doSetupNew(scene);
+		} else {
+			doSetupOld(scene);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static boolean filter(final Node node) {
+		return node instanceof BoundingVolume3F;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doSetupNew(final Scene scene) {
+		Objects.requireNonNull(scene, "scene == null");
+		
+//		Add all distinct AxisAlignedBoundingBox3F instances:
+		this.distinctAxisAlignedBoundingBox3Fs.clear();
+		this.distinctAxisAlignedBoundingBox3Fs.addAll(this.nodeCache.getAllDistinct(AxisAlignedBoundingBox3F.class));
+		
+//		Add all distinct BoundingSphere3F instances:
+		this.distinctBoundingSphere3Fs.clear();
+		this.distinctBoundingSphere3Fs.addAll(this.nodeCache.getAllDistinct(BoundingSphere3F.class));
+		
+//		Add all distinct InfiniteBoundingVolume3F instances:
+		this.distinctInfiniteBoundingVolume3Fs.clear();
+		this.distinctInfiniteBoundingVolume3Fs.addAll(this.nodeCache.getAllDistinct(InfiniteBoundingVolume3F.class));
+		
+//		Add all distinct BoundingVolume3F instances:
+		this.distinctBoundingVolume3Fs.clear();
+		this.distinctBoundingVolume3Fs.addAll(this.distinctAxisAlignedBoundingBox3Fs);
+		this.distinctBoundingVolume3Fs.addAll(this.distinctBoundingSphere3Fs);
+		this.distinctBoundingVolume3Fs.addAll(this.distinctInfiniteBoundingVolume3Fs);
+		
+//		Create offset mappings for all distinct AxisAlignedBoundingBox3F instances:
+		this.distinctToOffsetsAxisAlignedBoundingBox3Fs.clear();
+		this.distinctToOffsetsAxisAlignedBoundingBox3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctAxisAlignedBoundingBox3Fs, AxisAlignedBoundingBox3F.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct BoundingSphere3F instances:
+		this.distinctToOffsetsBoundingSphere3Fs.clear();
+		this.distinctToOffsetsBoundingSphere3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBoundingSphere3Fs, BoundingSphere3F.ARRAY_LENGTH));
+	}
+	
+	private void doSetupOld(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
 //		Add all distinct BoundingVolume3F instances:

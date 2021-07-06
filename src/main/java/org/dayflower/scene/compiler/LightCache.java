@@ -30,6 +30,8 @@ import java.util.Objects;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Triangle3F;
+import org.dayflower.node.Node;
+import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Scene;
@@ -55,10 +57,12 @@ final class LightCache {
 	private final Map<PerezLight, Integer> distinctToOffsetsPerezLights;
 	private final Map<PointLight, Integer> distinctToOffsetsPointLights;
 	private final Map<SpotLight, Integer> distinctToOffsetsSpotLights;
+	private final NodeCache nodeCache;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public LightCache() {
+	public LightCache(final NodeCache nodeCache) {
+		this.nodeCache = nodeCache;
 		this.distinctDiffuseAreaLights = new ArrayList<>();
 		this.distinctDirectionalLights = new ArrayList<>();
 		this.distinctLDRImageLights = new ArrayList<>();
@@ -187,6 +191,87 @@ final class LightCache {
 	}
 	
 	public void setup(final Scene scene) {
+		if(this.nodeCache != null) {
+			doSetupNew(scene);
+		} else {
+			doSetupOld(scene);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static boolean filter(final Node node) {
+		return node instanceof DiffuseAreaLight ? doFilterDiffuseAreaLight(DiffuseAreaLight.class.cast(node)) : node instanceof Light;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doSetupNew(final Scene scene) {
+		Objects.requireNonNull(scene, "scene == null");
+		
+//		Add all distinct DiffuseAreaLight instances:
+		this.distinctDiffuseAreaLights.clear();
+		this.distinctDiffuseAreaLights.addAll(this.nodeCache.getAllDistinct(DiffuseAreaLight.class));
+		
+//		Add all distinct DirectionalLight instances:
+		this.distinctDirectionalLights.clear();
+		this.distinctDirectionalLights.addAll(this.nodeCache.getAllDistinct(DirectionalLight.class));
+		
+//		Add all distinct LDRImageLight instances:
+		this.distinctLDRImageLights.clear();
+		this.distinctLDRImageLights.addAll(this.nodeCache.getAllDistinct(LDRImageLight.class));
+		
+//		Add all distinct PerezLight instances:
+		this.distinctPerezLights.clear();
+		this.distinctPerezLights.addAll(this.nodeCache.getAllDistinct(PerezLight.class));
+		
+//		Add all distinct PointLight instances:
+		this.distinctPointLights.clear();
+		this.distinctPointLights.addAll(this.nodeCache.getAllDistinct(PointLight.class));
+		
+//		Add all distinct SpotLight instances:
+		this.distinctSpotLights.clear();
+		this.distinctSpotLights.addAll(this.nodeCache.getAllDistinct(SpotLight.class));
+		
+//		Add all distinct Light instances:
+		this.distinctLights.clear();
+		this.distinctLights.addAll(this.distinctDiffuseAreaLights);
+		this.distinctLights.addAll(this.distinctDirectionalLights);
+		this.distinctLights.addAll(this.distinctLDRImageLights);
+		this.distinctLights.addAll(this.distinctPerezLights);
+		this.distinctLights.addAll(this.distinctPointLights);
+		this.distinctLights.addAll(this.distinctSpotLights);
+		
+		/*
+		 * The below offset mappings will only work as long as all affected Light instances are not modified during compilation.
+		 */
+		
+//		Create offset mappings for all distinct DiffuseAreaLight instances:
+		this.distinctToOffsetsDiffuseAreaLights.clear();
+		this.distinctToOffsetsDiffuseAreaLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDiffuseAreaLights, DiffuseAreaLight.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct DirectionalLight instances:
+		this.distinctToOffsetsDirectionalLights.clear();
+		this.distinctToOffsetsDirectionalLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDirectionalLights, DirectionalLight.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct LDRImageLight instances:
+		this.distinctToOffsetsLDRImageLights.clear();
+		this.distinctToOffsetsLDRImageLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageLights, lDRImageLight -> lDRImageLight.getArrayLength()));
+		
+//		Create offset mappings for all distinct PerezLight instances:
+		this.distinctToOffsetsPerezLights.clear();
+		this.distinctToOffsetsPerezLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPerezLights, perezLight -> perezLight.getArrayLength()));
+		
+//		Create offset mappings for all distinct PointLight instances:
+		this.distinctToOffsetsPointLights.clear();
+		this.distinctToOffsetsPointLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPointLights, PointLight.ARRAY_LENGTH));
+		
+//		Create offset mappings for all distinct SpotLight instances:
+		this.distinctToOffsetsSpotLights.clear();
+		this.distinctToOffsetsSpotLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSpotLights, SpotLight.ARRAY_LENGTH));
+	}
+	
+	private void doSetupOld(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
 //		Add all distinct Light instances:

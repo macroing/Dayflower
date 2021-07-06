@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.texture.BlendTexture;
@@ -59,10 +61,12 @@ final class TextureCache {
 	private final Map<LDRImageTexture, Integer> distinctToOffsetsLDRImageTextures;
 	private final Map<MarbleTexture, Integer> distinctToOffsetsMarbleTextures;
 	private final Map<SimplexFractionalBrownianMotionTexture, Integer> distinctToOffsetsSimplexFractionalBrownianMotionTextures;
+	private final NodeCache nodeCache;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public TextureCache() {
+	public TextureCache(final NodeCache nodeCache) {
+		this.nodeCache = nodeCache;
 		this.distinctBlendTextures = new ArrayList<>();
 		this.distinctBullseyeTextures = new ArrayList<>();
 		this.distinctCheckerboardTextures = new ArrayList<>();
@@ -218,6 +222,102 @@ final class TextureCache {
 	}
 	
 	public void setup(final Scene scene) {
+		if(this.nodeCache != null) {
+			doSetupNew(scene);
+		} else {
+			doSetupOld(scene);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static boolean filter(final Node node) {
+		return node instanceof Texture;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doSetupNew(final Scene scene) {
+		Objects.requireNonNull(scene, "scene == null");
+		
+//		Add all distinct BlendTexture instances:
+		this.distinctBlendTextures.clear();
+		this.distinctBlendTextures.addAll(this.nodeCache.getAllDistinct(BlendTexture.class));
+		
+//		Add all distinct BullseyeTexture instances:
+		this.distinctBullseyeTextures.clear();
+		this.distinctBullseyeTextures.addAll(this.nodeCache.getAllDistinct(BullseyeTexture.class));
+		
+//		Add all distinct CheckerboardTexture instances:
+		this.distinctCheckerboardTextures.clear();
+		this.distinctCheckerboardTextures.addAll(this.nodeCache.getAllDistinct(CheckerboardTexture.class));
+		
+//		Add all distinct ConstantTexture instances:
+		this.distinctConstantTextures.clear();
+		this.distinctConstantTextures.addAll(this.nodeCache.getAllDistinct(ConstantTexture.class));
+		
+//		Add all distinct LDRImageTexture instances:
+		this.distinctLDRImageTextures.clear();
+		this.distinctLDRImageTextures.addAll(this.nodeCache.getAllDistinct(LDRImageTexture.class));
+		
+//		Add all distinct MarbleTexture instances:
+		this.distinctMarbleTextures.clear();
+		this.distinctMarbleTextures.addAll(this.nodeCache.getAllDistinct(MarbleTexture.class));
+		
+//		Add all distinct SimplexFractionalBrownianMotionTexture instances:
+		this.distinctSimplexFractionalBrownianMotionTextures.clear();
+		this.distinctSimplexFractionalBrownianMotionTextures.addAll(this.nodeCache.getAllDistinct(SimplexFractionalBrownianMotionTexture.class));
+		
+//		Add all distinct SurfaceNormalTexture instances:
+		this.distinctSurfaceNormalTextures.clear();
+		this.distinctSurfaceNormalTextures.addAll(this.nodeCache.getAllDistinct(SurfaceNormalTexture.class));
+		
+//		Add all distinct UVTexture instances:
+		this.distinctUVTextures.clear();
+		this.distinctUVTextures.addAll(this.nodeCache.getAllDistinct(UVTexture.class));
+		
+//		Add all distinct Texture instances:
+		this.distinctTextures.clear();
+		this.distinctTextures.addAll(this.distinctBlendTextures);
+		this.distinctTextures.addAll(this.distinctBullseyeTextures);
+		this.distinctTextures.addAll(this.distinctCheckerboardTextures);
+		this.distinctTextures.addAll(this.distinctConstantTextures);
+		this.distinctTextures.addAll(this.distinctLDRImageTextures);
+		this.distinctTextures.addAll(this.distinctMarbleTextures);
+		this.distinctTextures.addAll(this.distinctSimplexFractionalBrownianMotionTextures);
+		this.distinctTextures.addAll(this.distinctSurfaceNormalTextures);
+		this.distinctTextures.addAll(this.distinctUVTextures);
+		
+//		Create offset mappings for all distinct BlendTexture instances:
+		this.distinctToOffsetsBlendTextures.clear();
+		this.distinctToOffsetsBlendTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBlendTextures, 1));
+		
+//		Create offset mappings for all distinct BullseyeTexture instances:
+		this.distinctToOffsetsBullseyeTextures.clear();
+		this.distinctToOffsetsBullseyeTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBullseyeTextures, 1));
+		
+//		Create offset mappings for all distinct CheckerboardTexture instances:
+		this.distinctToOffsetsCheckerboardTextures.clear();
+		this.distinctToOffsetsCheckerboardTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCheckerboardTextures, 1));
+		
+//		Create offset mappings for all distinct ConstantTexture instances:
+		this.distinctToOffsetsConstantTextures.clear();
+		this.distinctToOffsetsConstantTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctConstantTextures, 1));
+		
+//		Create offset mappings for all distinct LDRImageTexture instances:
+		this.distinctToOffsetsLDRImageTextures.clear();
+		this.distinctToOffsetsLDRImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageTextures, 1));
+		
+//		Create offset mappings for all distinct MarbleTexture instances:
+		this.distinctToOffsetsMarbleTextures.clear();
+		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures, 1));
+		
+//		Create offset mappings for all distinct SimplexFractionalBrownianMotionTexture instances:
+		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
+		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSimplexFractionalBrownianMotionTextures, 1));
+	}
+	
+	private void doSetupOld(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
 //		Add all distinct Texture instances:

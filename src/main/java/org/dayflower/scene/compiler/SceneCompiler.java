@@ -157,6 +157,7 @@ public final class SceneCompiler {
 		compiledScene.getCompiledShape3FCache().setShape3FCone3FArray(this.shape3FCache.toShape3FCone3FArray());
 		compiledScene.getCompiledShape3FCache().setShape3FCylinder3FArray(this.shape3FCache.toShape3FCylinder3FArray());
 		compiledScene.getCompiledShape3FCache().setShape3FDisk3FArray(this.shape3FCache.toShape3FDisk3FArray());
+		compiledScene.getCompiledShape3FCache().setShape3FHyperboloid3FArray(this.shape3FCache.toShape3FHyperboloid3FArray());
 		compiledScene.getCompiledShape3FCache().setShape3FParaboloid3FArray(this.shape3FCache.toShape3FParaboloid3FArray());
 		compiledScene.getCompiledShape3FCache().setShape3FPlane3FArray(this.shape3FCache.toShape3FPlane3FArray());
 		compiledScene.getCompiledShape3FCache().setShape3FRectangle3FArray(this.shape3FCache.toShape3FRectangle3FArray());

@@ -34,6 +34,7 @@ import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
+import org.dayflower.geometry.shape.Hyperboloid3F;
 import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.Rectangle3F;
@@ -51,6 +52,7 @@ final class Shape3FCache {
 	private final List<Cone3F> distinctCone3Fs;
 	private final List<Cylinder3F> distinctCylinder3Fs;
 	private final List<Disk3F> distinctDisk3Fs;
+	private final List<Hyperboloid3F> distinctHyperboloid3Fs;
 	private final List<Paraboloid3F> distinctParaboloid3Fs;
 	private final List<Plane3F> distinctPlane3Fs;
 	private final List<Rectangle3F> distinctRectangle3Fs;
@@ -63,6 +65,7 @@ final class Shape3FCache {
 	private final Map<Cone3F, Integer> distinctToOffsetsCone3Fs;
 	private final Map<Cylinder3F, Integer> distinctToOffsetsCylinder3Fs;
 	private final Map<Disk3F, Integer> distinctToOffsetsDisk3Fs;
+	private final Map<Hyperboloid3F, Integer> distinctToOffsetsHyperboloid3Fs;
 	private final Map<Paraboloid3F, Integer> distinctToOffsetsParaboloid3Fs;
 	private final Map<Plane3F, Integer> distinctToOffsetsPlane3Fs;
 	private final Map<Rectangle3F, Integer> distinctToOffsetsRectangle3Fs;
@@ -78,6 +81,7 @@ final class Shape3FCache {
 		this.distinctCone3Fs = new ArrayList<>();
 		this.distinctCylinder3Fs = new ArrayList<>();
 		this.distinctDisk3Fs = new ArrayList<>();
+		this.distinctHyperboloid3Fs = new ArrayList<>();
 		this.distinctParaboloid3Fs = new ArrayList<>();
 		this.distinctPlane3Fs = new ArrayList<>();
 		this.distinctRectangle3Fs = new ArrayList<>();
@@ -90,6 +94,7 @@ final class Shape3FCache {
 		this.distinctToOffsetsCone3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsCylinder3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsDisk3Fs = new LinkedHashMap<>();
+		this.distinctToOffsetsHyperboloid3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsParaboloid3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsPlane3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsRectangle3Fs = new LinkedHashMap<>();
@@ -116,6 +121,10 @@ final class Shape3FCache {
 	
 	public float[] toShape3FDisk3FArray() {
 		return Floats.toArray(this.distinctDisk3Fs, disk3F -> disk3F.toArray(), 1);
+	}
+	
+	public float[] toShape3FHyperboloid3FArray() {
+		return Floats.toArray(this.distinctHyperboloid3Fs, hyperboloid3F -> hyperboloid3F.toArray(), 1);
 	}
 	
 	public float[] toShape3FParaboloid3FArray() {
@@ -155,6 +164,8 @@ final class Shape3FCache {
 			return this.distinctToOffsetsCylinder3Fs.get(shape3F).intValue();
 		} else if(shape3F instanceof Disk3F) {
 			return this.distinctToOffsetsDisk3Fs.get(shape3F).intValue();
+		} else if(shape3F instanceof Hyperboloid3F) {
+			return this.distinctToOffsetsHyperboloid3Fs.get(shape3F).intValue();
 		} else if(shape3F instanceof Paraboloid3F) {
 			return this.distinctToOffsetsParaboloid3Fs.get(shape3F).intValue();
 		} else if(shape3F instanceof Plane3F) {
@@ -222,6 +233,7 @@ final class Shape3FCache {
 		this.distinctCone3Fs.clear();
 		this.distinctCylinder3Fs.clear();
 		this.distinctDisk3Fs.clear();
+		this.distinctHyperboloid3Fs.clear();
 		this.distinctParaboloid3Fs.clear();
 		this.distinctPlane3Fs.clear();
 		this.distinctRectangle3Fs.clear();
@@ -234,6 +246,7 @@ final class Shape3FCache {
 		this.distinctToOffsetsCone3Fs.clear();
 		this.distinctToOffsetsCylinder3Fs.clear();
 		this.distinctToOffsetsDisk3Fs.clear();
+		this.distinctToOffsetsHyperboloid3Fs.clear();
 		this.distinctToOffsetsParaboloid3Fs.clear();
 		this.distinctToOffsetsPlane3Fs.clear();
 		this.distinctToOffsetsRectangle3Fs.clear();
@@ -262,6 +275,10 @@ final class Shape3FCache {
 //		Add all distinct Disk3F instances:
 		this.distinctDisk3Fs.clear();
 		this.distinctDisk3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Disk3F).map(shape3F -> Disk3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+		
+//		Add all distinct Hyperboloid3F instances:
+		this.distinctHyperboloid3Fs.clear();
+		this.distinctHyperboloid3Fs.addAll(this.distinctShape3Fs.stream().filter(shape3F -> shape3F instanceof Hyperboloid3F).map(shape3F -> Hyperboloid3F.class.cast(shape3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
 		
 //		Add all distinct Paraboloid3F instances:
 		this.distinctParaboloid3Fs.clear();
@@ -307,6 +324,10 @@ final class Shape3FCache {
 		this.distinctToOffsetsDisk3Fs.clear();
 		this.distinctToOffsetsDisk3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisk3Fs, Disk3F.ARRAY_LENGTH));
 		
+//		Create offset mappings for all distinct Hyperboloid3F instances:
+		this.distinctToOffsetsHyperboloid3Fs.clear();
+		this.distinctToOffsetsHyperboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctHyperboloid3Fs, Hyperboloid3F.ARRAY_LENGTH));
+		
 //		Create offset mappings for all distinct Paraboloid3F instances:
 		this.distinctToOffsetsParaboloid3Fs.clear();
 		this.distinctToOffsetsParaboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctParaboloid3Fs, Paraboloid3F.ARRAY_LENGTH));
@@ -348,6 +369,8 @@ final class Shape3FCache {
 		} else if(shape3F instanceof Cylinder3F) {
 			return true;
 		} else if(shape3F instanceof Disk3F) {
+			return true;
+		} else if(shape3F instanceof Hyperboloid3F) {
 			return true;
 		} else if(shape3F instanceof Paraboloid3F) {
 			return true;

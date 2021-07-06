@@ -24,6 +24,7 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
+import org.dayflower.geometry.shape.Hyperboloid3F;
 import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.Rectangle3F;
@@ -43,6 +44,7 @@ public final class CompiledShape3FCache {
 	private float[] shape3FCone3FArray;
 	private float[] shape3FCylinder3FArray;
 	private float[] shape3FDisk3FArray;
+	private float[] shape3FHyperboloid3FArray;
 	private float[] shape3FParaboloid3FArray;
 	private float[] shape3FPlane3FArray;
 	private float[] shape3FRectangle3FArray;
@@ -61,6 +63,7 @@ public final class CompiledShape3FCache {
 		setShape3FCone3FArray(new float[1]);
 		setShape3FCylinder3FArray(new float[1]);
 		setShape3FDisk3FArray(new float[1]);
+		setShape3FHyperboloid3FArray(new float[1]);
 		setShape3FParaboloid3FArray(new float[1]);
 		setShape3FPlane3FArray(new float[1]);
 		setShape3FRectangle3FArray(new float[1]);
@@ -98,6 +101,15 @@ public final class CompiledShape3FCache {
 	 */
 	public float[] getShape3FDisk3FArray() {
 		return this.shape3FDisk3FArray;
+	}
+	
+	/**
+	 * Returns a {@code float[]} that contains all {@link Hyperboloid3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
+	 * 
+	 * @return a {@code float[]} that contains all {@code Hyperboloid3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
+	 */
+	public float[] getShape3FHyperboloid3FArray() {
+		return this.shape3FHyperboloid3FArray;
 	}
 	
 	/**
@@ -266,6 +278,41 @@ public final class CompiledShape3FCache {
 	 */
 	public int getShape3FDisk3FOffsetRelative(final float[] shape3FDisk3F) {
 		return Structures.getStructureOffsetRelative(this.shape3FDisk3FArray, Objects.requireNonNull(shape3FDisk3F, "shape3FDisk3F == null"), getShape3FDisk3FCount(), Disk3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link Hyperboloid3F} count in this {@code CompiledShape3FCache} instance.
+	 * 
+	 * @return the {@code Hyperboloid3F} count in this {@code CompiledShape3FCache} instance
+	 */
+	public int getShape3FHyperboloid3FCount() {
+		return Structures.getStructureCount(this.shape3FHyperboloid3FArray, Hyperboloid3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code shape3FHyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FHyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FHyperboloid3F a {@link Hyperboloid3F} instance in compiled form
+	 * @return the absolute offset of {@code shape3FHyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FHyperboloid3F} is {@code null}
+	 */
+	public int getShape3FHyperboloid3FOffsetAbsolute(final float[] shape3FHyperboloid3F) {
+		return Structures.getStructureOffsetAbsolute(this.shape3FHyperboloid3FArray, Objects.requireNonNull(shape3FHyperboloid3F, "shape3FHyperboloid3F == null"), getShape3FHyperboloid3FCount(), Hyperboloid3F.ARRAY_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code shape3FHyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code shape3FHyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FHyperboloid3F a {@link Hyperboloid3F} instance in compiled form
+	 * @return the relative offset of {@code shape3FHyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FHyperboloid3F} is {@code null}
+	 */
+	public int getShape3FHyperboloid3FOffsetRelative(final float[] shape3FHyperboloid3F) {
+		return Structures.getStructureOffsetRelative(this.shape3FHyperboloid3FArray, Objects.requireNonNull(shape3FHyperboloid3F, "shape3FHyperboloid3F == null"), getShape3FHyperboloid3FCount(), Hyperboloid3F.ARRAY_LENGTH);
 	}
 	
 	/**
@@ -556,6 +603,18 @@ public final class CompiledShape3FCache {
 	 */
 	public void setShape3FDisk3FArray(final float[] shape3FDisk3FArray) {
 		this.shape3FDisk3FArray = Objects.requireNonNull(shape3FDisk3FArray, "shape3FDisk3FArray == null");
+	}
+	
+	/**
+	 * Sets all {@link Hyperboloid3F} instances in compiled form to {@code shape3FHyperboloid3FArray}.
+	 * <p>
+	 * If {@code shape3FHyperboloid3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3FHyperboloid3FArray the {@code Hyperboloid3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code shape3FHyperboloid3FArray} is {@code null}
+	 */
+	public void setShape3FHyperboloid3FArray(final float[] shape3FHyperboloid3FArray) {
+		this.shape3FHyperboloid3FArray = Objects.requireNonNull(shape3FHyperboloid3FArray, "shape3FHyperboloid3FArray == null");
 	}
 	
 	/**

@@ -54,7 +54,7 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@code Shape3F} implementation is not supported on the GPU.
+ * This {@code Shape3F} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -64,6 +64,51 @@ public final class Hyperboloid3F implements Shape3F {
 	 * The name of this {@code Hyperboloid3F} class.
 	 */
 	public static final String NAME = "Hyperboloid";
+	
+	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 16;
+	
+	/**
+	 * The offset for the variable denoted by {@code AH} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_A_H = 7;
+	
+	/**
+	 * The offset for the variable denoted by {@code CH} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_C_H = 8;
+	
+	/**
+	 * The offset for the {@link AngleF} instance representing the maximum phi in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_PHI_MAX = 0;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_POINT_A = 1;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_POINT_B = 4;
+	
+	/**
+	 * The offset for the maximum radius in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_R_MAX = 9;
+	
+	/**
+	 * The offset for the maximum Z in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_Z_MAX = 10;
+	
+	/**
+	 * The offset for the minimum Z in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_Z_MIN = 11;
 	
 	/**
 	 * The ID of this {@code Hyperboloid3F} class.
@@ -524,6 +569,30 @@ public final class Hyperboloid3F implements Shape3F {
 		}
 		
 		return tClosest;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code Hyperboloid3F} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Hyperboloid3F} instance
+	 */
+	public float[] toArray() {
+		final float[] array = new float[ARRAY_LENGTH];
+		
+		array[ARRAY_OFFSET_PHI_MAX] = this.phiMax.getRadians();
+		array[ARRAY_OFFSET_POINT_A + 0] = this.a.getX();
+		array[ARRAY_OFFSET_POINT_A + 1] = this.a.getY();
+		array[ARRAY_OFFSET_POINT_A + 2] = this.a.getZ();
+		array[ARRAY_OFFSET_POINT_B + 0] = this.b.getX();
+		array[ARRAY_OFFSET_POINT_B + 1] = this.b.getY();
+		array[ARRAY_OFFSET_POINT_B + 2] = this.b.getZ();
+		array[ARRAY_OFFSET_A_H] = this.aH;
+		array[ARRAY_OFFSET_C_H] = this.cH;
+		array[ARRAY_OFFSET_R_MAX] = this.rMax;
+		array[ARRAY_OFFSET_Z_MAX] = this.zMax;
+		array[ARRAY_OFFSET_Z_MIN] = this.zMin;
+		
+		return array;
 	}
 	
 	/**

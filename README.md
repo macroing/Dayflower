@@ -115,7 +115,7 @@ The lists below show the main features of the renderer.
 * Curve (CPU)
 * Cylinder (CPU & GPU)
 * Disk (CPU & GPU)
-* Hyperboloid (CPU)
+* Hyperboloid (CPU & GPU)
 * Paraboloid (CPU & GPU)
 * Plane (CPU & GPU)
 * Procedural Terrain (CPU)

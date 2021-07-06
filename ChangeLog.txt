@@ -1,3 +1,13 @@
+2021-07-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods shape3FHyperboloid3FIntersects(int, float, float), shape3FHyperboloid3FIntersectionT(int, float, float) and shape3FHyperboloid3FIntersectionCompute(float, int, int) to the AbstractGeometryKernel class.
+	* ADD:		Add the field shape3FHyperboloid3FArray to the AbstractGeometryKernel class.
+	* ADD:		Add the methods getShape3FHyperboloid3FArray(), getShape3FHyperboloid3FCount(), getShape3FHyperboloid3FOffsetAbsolute(float[]), getShape3FHyperboloid3FOffsetRelative(float[]) and setShape3FHyperboloid3FArray(float[]) to the CompiledShape3FCache class.
+	* ADD:		Add the method toArray() to the Hyperboloid3D class.
+	* ADD:		Add the method toArray() to the Hyperboloid3F class.
+	* ADD:		Add the constants ARRAY_LENGTH, ARRAY_OFFSET_A_H, ARRAY_OFFSET_C_H, ARRAY_OFFSET_PHI_MAX, ARRAY_OFFSET_POINT_A, ARRAY_OFFSET_POINT_B, ARRAY_OFFSET_R_MAX, ARRAY_OFFSET_Z_MAX and ARRAY_OFFSET_Z_MIN to the Hyperboloid3D class.
+	* ADD:		Add the constants ARRAY_LENGTH, ARRAY_OFFSET_A_H, ARRAY_OFFSET_C_H, ARRAY_OFFSET_PHI_MAX, ARRAY_OFFSET_POINT_A, ARRAY_OFFSET_POINT_B, ARRAY_OFFSET_R_MAX, ARRAY_OFFSET_Z_MAX and ARRAY_OFFSET_Z_MIN to the Hyperboloid3F class.
+
 2021-07-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods findFilesFromDirectory(), findFilesFromDirectory(File), findFilesFromDirectory(File, Predicate<File>), findFilesFromDirectory(File, Predicate<File>, Predicate<File>) and readAllBytesToString(File) to the Files class.

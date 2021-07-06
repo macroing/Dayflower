@@ -261,7 +261,6 @@ public final class BVHNode3Fs {
 		ParameterArguments.requireNonNullList(shapes, "shapes");
 		
 		final List<BVHNode3F> bVHNodes = NodeFilter.filterAll(rootBVHNode, BVHNode3F.class);
-		final List<BoundingVolume3F> boundingVolumes = NodeFilter.filterAll(rootBVHNode, BVHNode3F.class).stream().map(bVHNode -> bVHNode.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 		
 		final int[] offsets = new int[bVHNodes.size()];
 		
@@ -277,7 +276,7 @@ public final class BVHNode3Fs {
 					final LeafBVHNode3F<?> leafBVHNode = LeafBVHNode3F.class.cast(bVHNode);
 					
 					final int id = LeafBVHNode3F.ID;
-					final int boundingVolumeOffset = boundingVolumes.indexOf(leafBVHNode.getBoundingVolume());
+					final int boundingVolumeOffset = i;
 					final int nextOffset = doFindNextOffset(bVHNodes, leafBVHNode.getDepth(), i + 1, offsets);
 					final int shapeCount = leafBVHNode.getShapeCount();
 					
@@ -299,7 +298,7 @@ public final class BVHNode3Fs {
 					final TreeBVHNode3F treeBVHNode = TreeBVHNode3F.class.cast(bVHNode);
 					
 					final int id = TreeBVHNode3F.ID;
-					final int boundingVolumeOffset = boundingVolumes.indexOf(treeBVHNode.getBoundingVolume());
+					final int boundingVolumeOffset = i;
 					final int nextOffset = doFindNextOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
 					final int leftOffset = doFindLeftOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
 					

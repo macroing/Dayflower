@@ -27,7 +27,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
@@ -116,31 +118,31 @@ final class Shape3FCache {
 	}
 	
 	public float[] toShape3FCone3FArray() {
-		return Floats.toArray(this.distinctCone3Fs, cone3F -> cone3F.toArray(), 1);
+		return Floats.toArray(this.distinctCone3Fs, cone3F -> doToArray(cone3F), 1);
 	}
 	
 	public float[] toShape3FCylinder3FArray() {
-		return Floats.toArray(this.distinctCylinder3Fs, cylinder3F -> cylinder3F.toArray(), 1);
+		return Floats.toArray(this.distinctCylinder3Fs, cylinder3F -> doToArray(cylinder3F), 1);
 	}
 	
 	public float[] toShape3FDisk3FArray() {
-		return Floats.toArray(this.distinctDisk3Fs, disk3F -> disk3F.toArray(), 1);
+		return Floats.toArray(this.distinctDisk3Fs, disk3F -> doToArray(disk3F), 1);
 	}
 	
 	public float[] toShape3FHyperboloid3FArray() {
-		return Floats.toArray(this.distinctHyperboloid3Fs, hyperboloid3F -> hyperboloid3F.toArray(), 1);
+		return Floats.toArray(this.distinctHyperboloid3Fs, hyperboloid3F -> doToArray(hyperboloid3F), 1);
 	}
 	
 	public float[] toShape3FParaboloid3FArray() {
-		return Floats.toArray(this.distinctParaboloid3Fs, paraboloid3F -> paraboloid3F.toArray(), 1);
+		return Floats.toArray(this.distinctParaboloid3Fs, paraboloid3F -> doToArray(paraboloid3F), 1);
 	}
 	
 	public float[] toShape3FPlane3FArray() {
-		return Floats.toArray(this.distinctPlane3Fs, plane3F -> plane3F.toArray(), 1);
+		return Floats.toArray(this.distinctPlane3Fs, plane3F -> doToArray(plane3F), 1);
 	}
 	
 	public float[] toShape3FRectangle3FArray() {
-		return Floats.toArray(this.distinctRectangle3Fs, rectangle3F -> rectangle3F.toArray(), 1);
+		return Floats.toArray(this.distinctRectangle3Fs, rectangle3F -> doToArray(rectangle3F), 1);
 	}
 	
 	public float[] toShape3FRectangularCuboid3FArray() {
@@ -345,31 +347,31 @@ final class Shape3FCache {
 		
 //		Create offset mappings for all distinct Cone3F instances:
 		this.distinctToOffsetsCone3Fs.clear();
-		this.distinctToOffsetsCone3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCone3Fs, Cone3F.ARRAY_LENGTH));
+		this.distinctToOffsetsCone3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCone3Fs, CompiledShape3FCache.CONE_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Cylinder3F instances:
 		this.distinctToOffsetsCylinder3Fs.clear();
-		this.distinctToOffsetsCylinder3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCylinder3Fs, Cylinder3F.ARRAY_LENGTH));
+		this.distinctToOffsetsCylinder3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCylinder3Fs, CompiledShape3FCache.CYLINDER_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Disk3F instances:
 		this.distinctToOffsetsDisk3Fs.clear();
-		this.distinctToOffsetsDisk3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisk3Fs, Disk3F.ARRAY_LENGTH));
+		this.distinctToOffsetsDisk3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisk3Fs, CompiledShape3FCache.DISK_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Hyperboloid3F instances:
 		this.distinctToOffsetsHyperboloid3Fs.clear();
-		this.distinctToOffsetsHyperboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctHyperboloid3Fs, Hyperboloid3F.ARRAY_LENGTH));
+		this.distinctToOffsetsHyperboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctHyperboloid3Fs, CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Paraboloid3F instances:
 		this.distinctToOffsetsParaboloid3Fs.clear();
-		this.distinctToOffsetsParaboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctParaboloid3Fs, Paraboloid3F.ARRAY_LENGTH));
+		this.distinctToOffsetsParaboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctParaboloid3Fs, CompiledShape3FCache.PARABOLOID_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Plane3F instances:
 		this.distinctToOffsetsPlane3Fs.clear();
-		this.distinctToOffsetsPlane3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlane3Fs, Plane3F.ARRAY_LENGTH));
+		this.distinctToOffsetsPlane3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlane3Fs, CompiledShape3FCache.PLANE_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Rectangle3F instances:
 		this.distinctToOffsetsRectangle3Fs.clear();
-		this.distinctToOffsetsRectangle3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctRectangle3Fs, Rectangle3F.ARRAY_LENGTH));
+		this.distinctToOffsetsRectangle3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctRectangle3Fs, CompiledShape3FCache.RECTANGLE_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct RectangularCuboid3F instances:
 		this.distinctToOffsetsRectangularCuboid3Fs.clear();
@@ -449,31 +451,31 @@ final class Shape3FCache {
 		
 //		Create offset mappings for all distinct Cone3F instances:
 		this.distinctToOffsetsCone3Fs.clear();
-		this.distinctToOffsetsCone3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCone3Fs, Cone3F.ARRAY_LENGTH));
+		this.distinctToOffsetsCone3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCone3Fs, CompiledShape3FCache.CONE_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Cylinder3F instances:
 		this.distinctToOffsetsCylinder3Fs.clear();
-		this.distinctToOffsetsCylinder3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCylinder3Fs, Cylinder3F.ARRAY_LENGTH));
+		this.distinctToOffsetsCylinder3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCylinder3Fs, CompiledShape3FCache.CYLINDER_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Disk3F instances:
 		this.distinctToOffsetsDisk3Fs.clear();
-		this.distinctToOffsetsDisk3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisk3Fs, Disk3F.ARRAY_LENGTH));
+		this.distinctToOffsetsDisk3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisk3Fs, CompiledShape3FCache.DISK_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Hyperboloid3F instances:
 		this.distinctToOffsetsHyperboloid3Fs.clear();
-		this.distinctToOffsetsHyperboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctHyperboloid3Fs, Hyperboloid3F.ARRAY_LENGTH));
+		this.distinctToOffsetsHyperboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctHyperboloid3Fs, CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Paraboloid3F instances:
 		this.distinctToOffsetsParaboloid3Fs.clear();
-		this.distinctToOffsetsParaboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctParaboloid3Fs, Paraboloid3F.ARRAY_LENGTH));
+		this.distinctToOffsetsParaboloid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctParaboloid3Fs, CompiledShape3FCache.PARABOLOID_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Plane3F instances:
 		this.distinctToOffsetsPlane3Fs.clear();
-		this.distinctToOffsetsPlane3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlane3Fs, Plane3F.ARRAY_LENGTH));
+		this.distinctToOffsetsPlane3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlane3Fs, CompiledShape3FCache.PLANE_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Rectangle3F instances:
 		this.distinctToOffsetsRectangle3Fs.clear();
-		this.distinctToOffsetsRectangle3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctRectangle3Fs, Rectangle3F.ARRAY_LENGTH));
+		this.distinctToOffsetsRectangle3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctRectangle3Fs, CompiledShape3FCache.RECTANGLE_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct RectangularCuboid3F instances:
 		this.distinctToOffsetsRectangularCuboid3Fs.clear();
@@ -526,5 +528,155 @@ final class Shape3FCache {
 		} else {
 			return false;
 		}
+	}
+	
+	private static float[] doToArray(final Cone3F cone3F) {
+		final float phiMax = cone3F.getPhiMax().getRadians();
+		final float radius = cone3F.getRadius();
+		final float zMax = cone3F.getZMax();
+		
+		final float[] array = new float[CompiledShape3FCache.CONE_3_F_LENGTH];
+		
+		array[CompiledShape3FCache.CONE_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[CompiledShape3FCache.CONE_3_F_OFFSET_RADIUS] = radius;
+		array[CompiledShape3FCache.CONE_3_F_OFFSET_Z_MAX] = zMax;
+		array[3] = 0.0F;
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final Cylinder3F cylinder3F) {
+		final float phiMax = cylinder3F.getPhiMax().getRadians();
+		final float radius = cylinder3F.getRadius();
+		final float zMax = cylinder3F.getZMax();
+		final float zMin = cylinder3F.getZMin();
+		
+		final float[] array = new float[CompiledShape3FCache.CYLINDER_3_F_LENGTH];
+		
+		array[CompiledShape3FCache.CYLINDER_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[CompiledShape3FCache.CYLINDER_3_F_OFFSET_RADIUS] = radius;
+		array[CompiledShape3FCache.CYLINDER_3_F_OFFSET_Z_MAX] = zMax;
+		array[CompiledShape3FCache.CYLINDER_3_F_OFFSET_Z_MIN] = zMin;
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final Disk3F disk3F) {
+		final float phiMax = disk3F.getPhiMax().getRadians();
+		final float radiusInner = disk3F.getRadiusInner();
+		final float radiusOuter = disk3F.getRadiusOuter();
+		final float zMax = disk3F.getZMax();
+		
+		final float[] array = new float[CompiledShape3FCache.DISK_3_F_LENGTH];
+		
+		array[CompiledShape3FCache.DISK_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[CompiledShape3FCache.DISK_3_F_OFFSET_RADIUS_INNER] = radiusInner;
+		array[CompiledShape3FCache.DISK_3_F_OFFSET_RADIUS_OUTER] = radiusOuter;
+		array[CompiledShape3FCache.DISK_3_F_OFFSET_Z_MAX] = zMax;
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final Hyperboloid3F hyperboloid3F) {
+		final Point3F a = hyperboloid3F.getA();
+		final Point3F b = hyperboloid3F.getB();
+		
+		final float phiMax = hyperboloid3F.getPhiMax().getRadians();
+		final float aH = hyperboloid3F.getAH();
+		final float cH = hyperboloid3F.getCH();
+		final float rMax = hyperboloid3F.getRMax();
+		final float zMax = hyperboloid3F.getZMax();
+		final float zMin = hyperboloid3F.getZMin();
+		
+		final float[] array = new float[CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH];
+		
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 0] = a.getX();
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 1] = a.getY();
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 2] = a.getZ();
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 0] = b.getX();
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 1] = b.getY();
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 2] = b.getZ();
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_A_H] = aH;
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_C_H] = cH;
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_R_MAX] = rMax;
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_Z_MAX] = zMax;
+		array[CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_Z_MIN] = zMin;
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final Paraboloid3F paraboloid3F) {
+		final float phiMax = paraboloid3F.getPhiMax().getRadians();
+		final float radius = paraboloid3F.getRadius();
+		final float zMax = paraboloid3F.getZMax();
+		final float zMin = paraboloid3F.getZMin();
+		
+		final float[] array = new float[CompiledShape3FCache.PARABOLOID_3_F_LENGTH];
+		
+		array[CompiledShape3FCache.PARABOLOID_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[CompiledShape3FCache.PARABOLOID_3_F_OFFSET_RADIUS] = radius;
+		array[CompiledShape3FCache.PARABOLOID_3_F_OFFSET_Z_MAX] = zMax;
+		array[CompiledShape3FCache.PARABOLOID_3_F_OFFSET_Z_MIN] = zMin;
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final Plane3F plane3F) {
+		final Point3F a = plane3F.getA();
+		final Point3F b = plane3F.getB();
+		final Point3F c = plane3F.getC();
+		
+		final Vector3F surfaceNormal = plane3F.getSurfaceNormal();
+		
+		final float[] array = new float[CompiledShape3FCache.PLANE_3_F_LENGTH];
+		
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_A + 0] = a.getX();							//Block #1
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_A + 1] = a.getY();							//Block #1
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_A + 2] = a.getZ();							//Block #1
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_B + 0] = b.getX();							//Block #1
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_B + 1] = b.getY();							//Block #1
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_B + 2] = b.getZ();							//Block #1
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_C + 0] = c.getX();							//Block #1
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_C + 1] = c.getY();							//Block #1
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_C + 2] = c.getZ();							//Block #2
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();	//Block #2
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();	//Block #2
+		array[CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();	//Block #2
+		array[12] = 0.0F;																		//Block #2
+		array[13] = 0.0F;																		//Block #2
+		array[14] = 0.0F;																		//Block #2
+		array[15] = 0.0F;																		//Block #2
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final Rectangle3F rectangle3F) {
+		final Point3F position = rectangle3F.getPosition();
+		
+		final Vector3F sideA = rectangle3F.getSideA();
+		final Vector3F sideB = rectangle3F.getSideB();
+		final Vector3F surfaceNormal = rectangle3F.getSurfaceNormal();
+		
+		final float[] array = new float[CompiledShape3FCache.RECTANGLE_3_F_LENGTH];
+		
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 0] = position.getX();			//Block #1
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 1] = position.getY();			//Block #1
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 2] = position.getZ();			//Block #1
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 0] = sideA.getX();					//Block #1
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 1] = sideA.getY();					//Block #1
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 2] = sideA.getZ();					//Block #1
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 0] = sideB.getX();					//Block #1
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 1] = sideB.getY();					//Block #1
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 2] = sideB.getZ();					//Block #2
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();	//Block #2
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();	//Block #2
+		array[CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();	//Block #2
+		array[12] = 0.0F;																			//Block #2
+		array[13] = 0.0F;																			//Block #2
+		array[14] = 0.0F;																			//Block #2
+		array[15] = 0.0F;																			//Block #2
+		
+		return array;
 	}
 }

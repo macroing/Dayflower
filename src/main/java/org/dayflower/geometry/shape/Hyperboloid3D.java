@@ -401,6 +401,33 @@ public final class Hyperboloid3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns the value of the variable {@code AH}.
+	 * 
+	 * @return the value of the variable {@code AH}
+	 */
+	public double getAH() {
+		return this.aH;
+	}
+	
+	/**
+	 * Returns the value of the variable {@code CH}.
+	 * 
+	 * @return the value of the variable {@code CH}
+	 */
+	public double getCH() {
+		return this.cH;
+	}
+	
+	/**
+	 * Returns the maximum radius.
+	 * 
+	 * @return the maximum radius
+	 */
+	public double getRMax() {
+		return this.rMax;
+	}
+	
+	/**
 	 * Returns the surface area of this {@code Hyperboloid3D} instance.
 	 * 
 	 * @return the surface area of this {@code Hyperboloid3D} instance
@@ -426,6 +453,24 @@ public final class Hyperboloid3D implements Shape3D {
 		final double h = 2.0D * aXQuad - 2.0D * aX * aX * aX * bX + 2.0D * bXQuad + 2.0D * c * d + bX * bX * e + aX * aX * f - 2.0D * aX * bX * g;
 		
 		return this.phiMax.getRadians() / 6.0D * h;
+	}
+	
+	/**
+	 * Returns the maximum Z value.
+	 * 
+	 * @return the maximum Z value
+	 */
+	public double getZMax() {
+		return this.zMax;
+	}
+	
+	/**
+	 * Returns the minimum Z value.
+	 * 
+	 * @return the minimum Z value
+	 */
+	public double getZMin() {
+		return this.zMin;
 	}
 	
 	/**

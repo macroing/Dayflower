@@ -21,6 +21,7 @@ package org.dayflower.scene.compiler;
 import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 
@@ -31,6 +32,38 @@ import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
  * @author J&#246;rgen Lundgren
  */
 public final class CompiledBoundingVolume3FCache {
+	/**
+	 * The length of a compiled {@link AxisAlignedBoundingBox3F} instance.
+	 */
+	public static final int AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH = 6;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the maximum point in a compiled {@link AxisAlignedBoundingBox3F} instance.
+	 */
+	public static final int AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM = 0;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the minimum point in a compiled {@link AxisAlignedBoundingBox3F} instance.
+	 */
+	public static final int AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM = 3;
+	
+	/**
+	 * The length of a compiled {@link BoundingSphere3F} instance.
+	 */
+	public static final int BOUNDING_SPHERE_3_F_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the center in a compiled {@link BoundingSphere3F} instance.
+	 */
+	public static final int BOUNDING_SPHERE_3_F_OFFSET_CENTER = 0;
+	
+	/**
+	 * The offset for the radius in a compiled {@link BoundingSphere3F} instance.
+	 */
+	public static final int BOUNDING_SPHERE_3_F_OFFSET_RADIUS = 3;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
 	private float[] boundingVolume3FBoundingSphere3FArray;
 	

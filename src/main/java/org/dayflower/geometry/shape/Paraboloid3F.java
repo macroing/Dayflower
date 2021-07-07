@@ -60,31 +60,6 @@ public final class Paraboloid3F implements Shape3F {
 	public static final String NAME = "Paraboloid";
 	
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the {@link AngleF} instance representing the maximum phi in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_PHI_MAX = 0;
-	
-	/**
-	 * The offset for the radius in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS = 1;
-	
-	/**
-	 * The offset for the maximum Z in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_Z_MAX = 2;
-	
-	/**
-	 * The offset for the minimum Z in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_Z_MIN = 3;
-	
-	/**
 	 * The ID of this {@code Paraboloid3F} class.
 	 */
 	public static final int ID = 8;
@@ -474,22 +449,6 @@ public final class Paraboloid3F implements Shape3F {
 		}
 		
 		return tClosest;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code Paraboloid3F} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code Paraboloid3F} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_PHI_MAX] = this.phiMax.getRadians();
-		array[ARRAY_OFFSET_RADIUS] = this.radius;
-		array[ARRAY_OFFSET_Z_MAX] = this.zMax;
-		array[ARRAY_OFFSET_Z_MIN] = this.zMin;
-		
-		return array;
 	}
 	
 	/**

@@ -56,31 +56,6 @@ public final class Rectangle3F implements Shape3F {
 	public static final String NAME = "Rectangle";
 	
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 16;
-	
-	/**
-	 * The offset for the {@link Point3F} instance denoted by {@code Position} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_POSITION = 0;
-	
-	/**
-	 * The offset for the {@link Vector3F} instance denoted by {@code Side A} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SIDE_A = 3;
-	
-	/**
-	 * The offset for the {@link Vector3F} instance denoted by {@code Side B} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SIDE_B = 6;
-	
-	/**
-	 * The offset for the {@link Vector3F} instance denoted by {@code Surface Normal} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SURFACE_NORMAL = 9;
-	
-	/**
 	 * The ID of this {@code Rectangle3F} class.
 	 */
 	public static final int ID = 11;
@@ -447,34 +422,6 @@ public final class Rectangle3F implements Shape3F {
 		}
 		
 		return t;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code Rectangle3F} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code Rectangle3F} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_POSITION + 0] = this.position.getX();			//Block #1
-		array[ARRAY_OFFSET_POSITION + 1] = this.position.getY();			//Block #1
-		array[ARRAY_OFFSET_POSITION + 2] = this.position.getZ();			//Block #1
-		array[ARRAY_OFFSET_SIDE_A + 0] = this.sideA.getX();					//Block #1
-		array[ARRAY_OFFSET_SIDE_A + 1] = this.sideA.getY();					//Block #1
-		array[ARRAY_OFFSET_SIDE_A + 2] = this.sideA.getZ();					//Block #1
-		array[ARRAY_OFFSET_SIDE_B + 0] = this.sideB.getX();					//Block #1
-		array[ARRAY_OFFSET_SIDE_B + 1] = this.sideB.getY();					//Block #1
-		array[ARRAY_OFFSET_SIDE_B + 2] = this.sideB.getZ();					//Block #2
-		array[ARRAY_OFFSET_SURFACE_NORMAL + 0] = this.surfaceNormal.getX();	//Block #2
-		array[ARRAY_OFFSET_SURFACE_NORMAL + 1] = this.surfaceNormal.getY();	//Block #2
-		array[ARRAY_OFFSET_SURFACE_NORMAL + 2] = this.surfaceNormal.getZ();	//Block #2
-		array[12] = 0.0F;													//Block #2
-		array[13] = 0.0F;													//Block #2
-		array[14] = 0.0F;													//Block #2
-		array[15] = 0.0F;													//Block #2
-		
-		return array;
 	}
 	
 	/**

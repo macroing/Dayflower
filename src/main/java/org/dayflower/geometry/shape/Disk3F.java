@@ -59,31 +59,6 @@ public final class Disk3F implements Shape3F {
 	public static final String NAME = "Disk";
 	
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the {@link AngleF} instance representing the maximum phi in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_PHI_MAX = 0;
-	
-	/**
-	 * The offset for the inner radius in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS_INNER = 1;
-	
-	/**
-	 * The offset for the outer radius in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS_OUTER = 2;
-	
-	/**
-	 * The offset for the maximum Z in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_Z_MAX = 3;
-	
-	/**
 	 * The ID of this {@code Disk3F} class.
 	 */
 	public static final int ID = 6;
@@ -417,22 +392,6 @@ public final class Disk3F implements Shape3F {
 		}
 		
 		return t;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code Disk3F} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code Disk3F} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_PHI_MAX] = this.phiMax.getRadians();
-		array[ARRAY_OFFSET_RADIUS_INNER] = this.radiusInner;
-		array[ARRAY_OFFSET_RADIUS_OUTER] = this.radiusOuter;
-		array[ARRAY_OFFSET_Z_MAX] = this.zMax;
-		
-		return array;
 	}
 	
 	/**

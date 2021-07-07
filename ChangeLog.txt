@@ -1,11 +1,14 @@
 2021-07-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods getAH(), getCH(), getRMax(), getZMax() and getZMin() to the Hyperboloid3D and Hyperboloid3F classes.
+	* ADD:		Add constants to the CompiledBoundingVolume3FCache class.
+	* ADD:		Add constants to the CompiledShape3FCache class.
 	* CHANGE:	Optimized the Scene Compiler API.
-	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the AxisAlignedBoundingBox3D and BoundingSphere3D classes.
+	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the AxisAlignedBoundingBox3D, AxisAlignedBoundingBox3F, BoundingSphere3D and BoundingSphere3F classes.
 	* REMOVE:	Remove the constants ARRAY_OFFSET_* from the BVHNode3D, LeafBVHNode3D and TreeBVHNode3D classes.
-	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the Cone3D, Cylinder3D, Disk3D, Hyperboloid3D, Paraboloid3D, Plane3D, Rectangle3D, RectangularCuboid3D, Sphere3D, Torus3D and Triangle3D classes.
-	* REMOVE:	Remove the method toArray() from the AxisAlignedBoundingBox3D and BoundingSphere3D classes.
-	* REMOVE:	Remove the method toArray() from the Cone3D, Cylinder3D, Disk3D, Hyperboloid3D, Paraboloid3D, Plane3D, Rectangle3D, RectangularCuboid3D, Sphere3D, Torus3D, Triangle3D and TriangleMesh3D classes.
+	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the Cone3D, Cone3F, Cylinder3D, Cylinder3F, Disk3D, Disk3F, Hyperboloid3D, Hyperboloid3F, Paraboloid3D, Paraboloid3F, Plane3D, Plane3F, Rectangle3D, Rectangle3F, RectangularCuboid3D, Sphere3D, Torus3D and Triangle3D classes.
+	* REMOVE:	Remove the method toArray() from the AxisAlignedBoundingBox3D, AxisAlignedBoundingBox3F, BoundingSphere3D and BoundingSphere3F classes.
+	* REMOVE:	Remove the method toArray() from the Cone3D, Cone3F, Cylinder3D, Cylinder3F, Disk3D, Disk3F, Hyperboloid3D, Hyperboloid3F, Paraboloid3D, Paraboloid3F, Plane3D, Plane3F, Rectangle3D, Rectangle3F, RectangularCuboid3D, Sphere3D, Torus3D, Triangle3D and TriangleMesh3D classes.
 	* REMOVE:	Remove the method getArrayLength() from the BVHNode3D, LeafBVHNode3D, TreeBVHNode3D and TriangleMesh3D classes.
 	* REMOVE:	Remove the method toArray(BVHNode3D, List<T>) from the BVHNode3Ds class.
 

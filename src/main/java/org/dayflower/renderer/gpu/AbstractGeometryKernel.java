@@ -26,22 +26,15 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
-import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
-import org.dayflower.geometry.shape.Cone3F;
-import org.dayflower.geometry.shape.Cylinder3F;
-import org.dayflower.geometry.shape.Disk3F;
-import org.dayflower.geometry.shape.Hyperboloid3F;
-import org.dayflower.geometry.shape.Paraboloid3F;
-import org.dayflower.geometry.shape.Plane3F;
-import org.dayflower.geometry.shape.Rectangle3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
+import org.dayflower.scene.compiler.CompiledBoundingVolume3FCache;
+import org.dayflower.scene.compiler.CompiledShape3FCache;
 
 /**
  * An {@code AbstractGeometryKernel} is an abstract extension of the {@code AbstractImageKernel} class that adds additional features.
@@ -254,12 +247,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return {@code true} if, and only if, a point is contained by a given axis aligned bounding box, {@code false} otherwise
 	 */
 	protected final boolean boundingVolume3FAxisAlignedBoundingBox3FContains(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float pointX, final float pointY, final float pointZ) {
-		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
-		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
-		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 2];
-		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 0];
-		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 1];
-		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 2];
+		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 0];
+		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 1];
+		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 2];
+		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 0];
+		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 1];
+		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 2];
 		
 		final boolean containsX = pointX >= axisAlignedBoundingBoxMinimumX && pointX <= axisAlignedBoundingBoxMaximumX;
 		final boolean containsY = pointY >= axisAlignedBoundingBoxMinimumY && pointY <= axisAlignedBoundingBoxMaximumY;
@@ -286,12 +279,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
 		
 //		Retrieve the axis aligned bounding box variables:
-		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
-		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
-		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 2];
-		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 0];
-		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 1];
-		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 2];
+		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 0];
+		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 1];
+		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 2];
+		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 0];
+		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 1];
+		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 2];
 		
 		final boolean containsX = rayOriginX >= axisAlignedBoundingBoxMinimumX && rayOriginX <= axisAlignedBoundingBoxMaximumX;
 		final boolean containsY = rayOriginY >= axisAlignedBoundingBoxMinimumY && rayOriginY <= axisAlignedBoundingBoxMaximumY;
@@ -352,12 +345,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
 		
 //		Retrieve the axis aligned bounding box variables:
-		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
-		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
-		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 2];
-		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 0];
-		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 1];
-		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 2];
+		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 0];
+		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 1];
+		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 2];
+		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 0];
+		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 1];
+		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 2];
 		
 //		Compute the intersection:
 		final float intersectionTMinimumX = (axisAlignedBoundingBoxMinimumX - rayOriginX) * rayDirectionReciprocalX;
@@ -398,10 +391,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return {@code true} if, and only if, a point is contained by a given bounding sphere, {@code false} otherwise
 	 */
 	protected final boolean boundingVolume3FBoundingSphere3FContains(final int boundingVolume3FBoundingSphere3FArrayOffset, final float pointX, final float pointY, final float pointZ) {
-		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
-		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
-		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
-		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
+		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 0];
+		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 1];
+		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 2];
+		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_RADIUS];
 		
 		final float distanceSquared = point3FDistanceSquared(boundingSphereCenterX, boundingSphereCenterY, boundingSphereCenterZ, pointX, pointY, pointZ);
 		
@@ -426,10 +419,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the bounding sphere variables:
-		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
-		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
-		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
-		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
+		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 0];
+		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 1];
+		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 2];
+		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_RADIUS];
 		final float boundingSphereRadiusSquared = boundingSphereRadius * boundingSphereRadius;
 		
 		final float distanceSquared = point3FDistanceSquared(boundingSphereCenterX, boundingSphereCenterY, boundingSphereCenterZ, rayOriginX, rayOriginY, rayOriginZ);
@@ -484,10 +477,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the bounding sphere variables:
-		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
-		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
-		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
-		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
+		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 0];
+		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 1];
+		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 2];
+		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_RADIUS];
 		final float boundingSphereRadiusSquared = boundingSphereRadius * boundingSphereRadius;
 		
 //		Compute the direction from the bounding sphere center to the ray origin:
@@ -1472,9 +1465,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the disk variables that will be referred to by 'conePhiMax', 'coneRadius' and 'coneZMax' in the comments:
-		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_PHI_MAX];
-		final float coneRadius = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_RADIUS];
-		final float coneZMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_Z_MAX];
+		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_PHI_MAX];
+		final float coneRadius = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_RADIUS];
+		final float coneZMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_Z_MAX];
 		
 		final float k = (coneRadius / coneZMax) * (coneRadius / coneZMax);
 		
@@ -1535,8 +1528,8 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the disk variables that will be referred to by 'conePhiMax' and 'coneZMax' in the comments:
-		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_PHI_MAX];
-		final float coneZMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_Z_MAX];
+		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_PHI_MAX];
+		final float coneZMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_Z_MAX];
 		
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
@@ -1609,10 +1602,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the cylinder variables that will be referred to by 'cylinderPhiMax', 'cylinderRadius', 'cylinderZMax' and 'cylinderZMin' in the comments:
-		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_PHI_MAX];
-		final float cylinderRadius = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_RADIUS];
-		final float cylinderZMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_Z_MAX];
-		final float cylinderZMin = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_Z_MIN];
+		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_PHI_MAX];
+		final float cylinderRadius = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_RADIUS];
+		final float cylinderZMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_Z_MAX];
+		final float cylinderZMin = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_Z_MIN];
 		
 		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY;
 		final float b = 2.0F * (rayDirectionX * rayOriginX + rayDirectionY * rayOriginY);
@@ -1683,10 +1676,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the cylinder variables that will be referred to by 'cylinderPhiMax', 'cylinderRadius', 'cylinderZMax' and 'cylinderZMin' in the comments:
-		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_PHI_MAX];
-		final float cylinderRadius = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_RADIUS];
-		final float cylinderZMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_Z_MAX];
-		final float cylinderZMin = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_Z_MIN];
+		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_PHI_MAX];
+		final float cylinderRadius = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_RADIUS];
+		final float cylinderZMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_Z_MAX];
+		final float cylinderZMin = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_Z_MIN];
 		
 		final float x = rayOriginX + rayDirectionX * t;
 		final float y = rayOriginY + rayDirectionY * t;
@@ -1769,10 +1762,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		}
 		
 //		Retrieve the disk variables that will be referred to by 'diskPhiMax', 'diskRadiusInner', 'diskRadiusOuter' and 'diskZMax' in the comments:
-		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_PHI_MAX];
-		final float diskRadiusInner = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_RADIUS_INNER];
-		final float diskRadiusOuter = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_RADIUS_OUTER];
-		final float diskZMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_Z_MAX];
+		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_PHI_MAX];
+		final float diskRadiusInner = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_RADIUS_INNER];
+		final float diskRadiusOuter = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_RADIUS_OUTER];
+		final float diskZMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_Z_MAX];
 		
 		final float t = (diskZMax - rayOriginZ) / rayDirectionZ;
 		
@@ -1813,10 +1806,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionY = ray3FGetDirectionComponent2();
 		
 //		Retrieve the disk variables that will be referred to by 'diskPhiMax', 'diskRadiusInner', 'diskRadiusOuter' and 'diskZMax' in the comments:
-		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_PHI_MAX];
-		final float diskRadiusInner = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_RADIUS_INNER];
-		final float diskRadiusOuter = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_RADIUS_OUTER];
-		final float diskZMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_Z_MAX];
+		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_PHI_MAX];
+		final float diskRadiusInner = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_RADIUS_INNER];
+		final float diskRadiusOuter = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_RADIUS_OUTER];
+		final float diskZMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_Z_MAX];
 		
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
@@ -1892,17 +1885,17 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the hyperboloid variables that will be referred to by 'hyperboloidPhiMax', 'hyperboloidA', 'hyperboloidB', 'hyperboloidAH', 'hyperboloidCH', 'hyperboloidZMax' and 'hyperboloidZMin' in the comments:
-		final float hyperboloidPhiMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_PHI_MAX];
-		final float hyperboloidAX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_A + 0];
-		final float hyperboloidAY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_A + 1];
-		final float hyperboloidAZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_A + 2];
-		final float hyperboloidBX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_B + 0];
-		final float hyperboloidBY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_B + 1];
-		final float hyperboloidBZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_B + 2];
-		final float hyperboloidAH = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_A_H];
-		final float hyperboloidCH = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_C_H];
-		final float hyperboloidZMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_Z_MAX];
-		final float hyperboloidZMin = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_Z_MIN];
+		final float hyperboloidPhiMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_PHI_MAX];
+		final float hyperboloidAX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 0];
+		final float hyperboloidAY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 1];
+		final float hyperboloidAZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 2];
+		final float hyperboloidBX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 0];
+		final float hyperboloidBY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 1];
+		final float hyperboloidBZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 2];
+		final float hyperboloidAH = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_A_H];
+		final float hyperboloidCH = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_C_H];
+		final float hyperboloidZMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_Z_MAX];
+		final float hyperboloidZMin = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_Z_MIN];
 		
 		final float a = hyperboloidAH * rayDirectionX * rayDirectionX + hyperboloidAH * rayDirectionY * rayDirectionY - hyperboloidCH * rayDirectionZ * rayDirectionZ;
 		final float b = 2.0F * (hyperboloidAH * rayDirectionX * rayOriginX + hyperboloidAH * rayDirectionY * rayOriginY - hyperboloidCH * rayDirectionZ * rayOriginZ);
@@ -1967,13 +1960,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the hyperboloid variables that will be referred to by 'hyperboloidPhiMax', 'hyperboloidA' and 'hyperboloidB' in the comments:
-		final float hyperboloidPhiMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_PHI_MAX];
-		final float hyperboloidAX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_A + 0];
-		final float hyperboloidAY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_A + 1];
-		final float hyperboloidAZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_A + 2];
-		final float hyperboloidBX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_B + 0];
-		final float hyperboloidBY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_B + 1];
-		final float hyperboloidBZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + Hyperboloid3F.ARRAY_OFFSET_POINT_B + 2];
+		final float hyperboloidPhiMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_PHI_MAX];
+		final float hyperboloidAX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 0];
+		final float hyperboloidAY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 1];
+		final float hyperboloidAZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 2];
+		final float hyperboloidBX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 0];
+		final float hyperboloidBY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 1];
+		final float hyperboloidBZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 2];
 		
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
@@ -2049,10 +2042,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the paraboloid variables that will be referred to by 'paraboloidPhiMax', 'paraboloidRadius', 'paraboloidZMax' and 'paraboloidZMin' in the comments:
-		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_PHI_MAX];
-		final float paraboloidRadius = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_RADIUS];
-		final float paraboloidZMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_Z_MAX];
-		final float paraboloidZMin = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_Z_MIN];
+		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_PHI_MAX];
+		final float paraboloidRadius = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_RADIUS];
+		final float paraboloidZMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_Z_MAX];
+		final float paraboloidZMin = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_Z_MIN];
 		
 		final float k = paraboloidZMax / (paraboloidRadius * paraboloidRadius);
 		
@@ -2113,9 +2106,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the paraboloid variables that will be referred to by 'paraboloidPhiMax', 'paraboloidZMax' and 'paraboloidZMin' in the comments:
-		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_PHI_MAX];
-		final float paraboloidZMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_Z_MAX];
-		final float paraboloidZMin = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_Z_MIN];
+		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_PHI_MAX];
+		final float paraboloidZMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_Z_MAX];
+		final float paraboloidZMin = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_Z_MIN];
 		
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
@@ -2188,12 +2181,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the plane variables that will be referred to by 'planeA' and 'planeSurfaceNormal' in the comments:
-		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_A + 0];
-		final float planeAY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_A + 1];
-		final float planeAZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_A + 2];
-		final float planeSurfaceNormalX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_SURFACE_NORMAL + 0];
-		final float planeSurfaceNormalY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_SURFACE_NORMAL + 1];
-		final float planeSurfaceNormalZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_SURFACE_NORMAL + 2];
+		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 0];
+		final float planeAY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 1];
+		final float planeAZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 2];
+		final float planeSurfaceNormalX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 0];
+		final float planeSurfaceNormalY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 1];
+		final float planeSurfaceNormalZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 2];
 		
 //		Compute the determinant, which is the dot product between 'planeSurfaceNormal' and 'rayDirection':
 		final float determinant = planeSurfaceNormalX * rayDirectionX + planeSurfaceNormalY * rayDirectionY + planeSurfaceNormalZ * rayDirectionZ;
@@ -2235,18 +2228,18 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the plane variables:
-		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_A + 0];
-		final float planeAY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_A + 1];
-		final float planeAZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_A + 2];
-		final float planeBX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_B + 0];
-		final float planeBY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_B + 1];
-		final float planeBZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_B + 2];
-		final float planeCX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_C + 0];
-		final float planeCY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_C + 1];
-		final float planeCZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_C + 2];
-		final float planeSurfaceNormalX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_SURFACE_NORMAL + 0];
-		final float planeSurfaceNormalY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_SURFACE_NORMAL + 1];
-		final float planeSurfaceNormalZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_SURFACE_NORMAL + 2];
+		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 0];
+		final float planeAY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 1];
+		final float planeAZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 2];
+		final float planeBX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 0];
+		final float planeBY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 1];
+		final float planeBZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 2];
+		final float planeCX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 0];
+		final float planeCY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 1];
+		final float planeCZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 2];
+		final float planeSurfaceNormalX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 0];
+		final float planeSurfaceNormalY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 1];
+		final float planeSurfaceNormalZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 2];
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -2347,18 +2340,18 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the rectangle variables that will be referred to by 'rectanglePosition', 'rectangleSideA', 'rectangleSideB' and 'rectangleSurfaceNormal' in the comments:
-		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 0];
-		final float rectanglePositionY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 1];
-		final float rectanglePositionZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 2];
-		final float rectangleSideAX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 0];
-		final float rectangleSideAY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 1];
-		final float rectangleSideAZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 2];
-		final float rectangleSideBX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 0];
-		final float rectangleSideBY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 1];
-		final float rectangleSideBZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 2];
-		final float rectangleSurfaceNormalX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 0];
-		final float rectangleSurfaceNormalY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 1];
-		final float rectangleSurfaceNormalZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 2];
+		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 0];
+		final float rectanglePositionY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 1];
+		final float rectanglePositionZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 2];
+		final float rectangleSideAX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 0];
+		final float rectangleSideAY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 1];
+		final float rectangleSideAZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 2];
+		final float rectangleSideBX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 0];
+		final float rectangleSideBY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 1];
+		final float rectangleSideBZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 2];
+		final float rectangleSurfaceNormalX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 0];
+		final float rectangleSurfaceNormalY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 1];
+		final float rectangleSurfaceNormalZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 2];
 		
 //		Compute the determinant, which is the dot product between 'rectangleSurfaceNormal' and 'rayDirection':
 		final float determinant = rectangleSurfaceNormalX * rayDirectionX + rectangleSurfaceNormalY * rayDirectionY + rectangleSurfaceNormalZ * rayDirectionZ;
@@ -2434,18 +2427,18 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the rectangle variables that will be referred to by 'rectanglePosition', 'rectangleSideA', 'rectangleSideB' and 'rectangleSurfaceNormal' in the comments:
-		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 0];
-		final float rectanglePositionY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 1];
-		final float rectanglePositionZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_POSITION + 2];
-		final float rectangleSideAX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 0];
-		final float rectangleSideAY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 1];
-		final float rectangleSideAZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_A + 2];
-		final float rectangleSideBX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 0];
-		final float rectangleSideBY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 1];
-		final float rectangleSideBZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SIDE_B + 2];
-		final float rectangleSurfaceNormalX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 0];
-		final float rectangleSurfaceNormalY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 1];
-		final float rectangleSurfaceNormalZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + Rectangle3F.ARRAY_OFFSET_SURFACE_NORMAL + 2];
+		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 0];
+		final float rectanglePositionY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 1];
+		final float rectanglePositionZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 2];
+		final float rectangleSideAX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 0];
+		final float rectangleSideAY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 1];
+		final float rectangleSideAZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 2];
+		final float rectangleSideBX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 0];
+		final float rectangleSideBY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 1];
+		final float rectangleSideBZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 2];
+		final float rectangleSurfaceNormalX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 0];
+		final float rectangleSurfaceNormalY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 1];
+		final float rectangleSurfaceNormalZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 2];
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;

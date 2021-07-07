@@ -20,7 +20,10 @@ package org.dayflower.scene.compiler;
 
 import java.util.Objects;
 
+import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
@@ -41,6 +44,198 @@ import org.dayflower.geometry.shape.TriangleMesh3F;
  * @author J&#246;rgen Lundgren
  */
 public final class CompiledShape3FCache {
+	/**
+	 * The length of a compiled {@link Cone3F} instance.
+	 */
+	public static final int CONE_3_F_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link AngleF} instance that represents the maximum phi in a compiled {@link Cone3F} instance.
+	 */
+	public static final int CONE_3_F_OFFSET_PHI_MAX = 0;
+	
+	/**
+	 * The offset for the radius in a compiled {@link Cone3F} instance.
+	 */
+	public static final int CONE_3_F_OFFSET_RADIUS = 1;
+	
+	/**
+	 * The offset for the maximum Z in a compiled {@link Cone3F} instance.
+	 */
+	public static final int CONE_3_F_OFFSET_Z_MAX = 2;
+	
+	/**
+	 * The length of a compiled {@link Cylinder3F} instance.
+	 */
+	public static final int CYLINDER_3_F_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link AngleF} instance that represents the maximum phi in a compiled {@link Cylinder3F} instance.
+	 */
+	public static final int CYLINDER_3_F_OFFSET_PHI_MAX = 0;
+	
+	/**
+	 * The offset for the radius in a compiled {@link Cylinder3F} instance.
+	 */
+	public static final int CYLINDER_3_F_OFFSET_RADIUS = 1;
+	
+	/**
+	 * The offset for the maximum Z in a compiled {@link Cylinder3F} instance.
+	 */
+	public static final int CYLINDER_3_F_OFFSET_Z_MAX = 2;
+	
+	/**
+	 * The offset for the minimum Z in a compiled {@link Cylinder3F} instance.
+	 */
+	public static final int CYLINDER_3_F_OFFSET_Z_MIN = 3;
+	
+	/**
+	 * The length of a compiled {@link Disk3F} instance.
+	 */
+	public static final int DISK_3_F_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link AngleF} instance that represents the maximum phi in a compiled {@link Disk3F} instance.
+	 */
+	public static final int DISK_3_F_OFFSET_PHI_MAX = 0;
+	
+	/**
+	 * The offset for the inner radius in a compiled {@link Disk3F} instance.
+	 */
+	public static final int DISK_3_F_OFFSET_RADIUS_INNER = 1;
+	
+	/**
+	 * The offset for the outer radius in a compiled {@link Disk3F} instance.
+	 */
+	public static final int DISK_3_F_OFFSET_RADIUS_OUTER = 2;
+	
+	/**
+	 * The offset for the maximum Z in a compiled {@link Disk3F} instance.
+	 */
+	public static final int DISK_3_F_OFFSET_Z_MAX = 3;
+	
+	/**
+	 * The length of a compiled {@link Hyperboloid3F} instance.
+	 */
+	public static final int HYPERBOLOID_3_F_LENGTH = 16;
+	
+	/**
+	 * The offset for the variable denoted by {@code AH} in a compiled {@link Hyperboloid3F} instance.
+	 */
+	public static final int HYPERBOLOID_3_F_OFFSET_A_H = 7;
+	
+	/**
+	 * The offset for the variable denoted by {@code CH} in a compiled {@link Hyperboloid3F} instance.
+	 */
+	public static final int HYPERBOLOID_3_F_OFFSET_C_H = 8;
+	
+	/**
+	 * The offset for the {@link AngleF} instance that represents the maximum phi in a compiled {@link Hyperboloid3F} instance.
+	 */
+	public static final int HYPERBOLOID_3_F_OFFSET_PHI_MAX = 0;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code A} in a compiled {@link Hyperboloid3F} instance.
+	 */
+	public static final int HYPERBOLOID_3_F_OFFSET_POINT_A = 1;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code B} in a compiled {@link Hyperboloid3F} instance.
+	 */
+	public static final int HYPERBOLOID_3_F_OFFSET_POINT_B = 4;
+	
+	/**
+	 * The offset for the maximum radius in a compiled {@link Hyperboloid3F} instance.
+	 */
+	public static final int HYPERBOLOID_3_F_OFFSET_R_MAX = 9;
+	
+	/**
+	 * The offset for the maximum Z in a compiled {@link Hyperboloid3F} instance.
+	 */
+	public static final int HYPERBOLOID_3_F_OFFSET_Z_MAX = 10;
+	
+	/**
+	 * The offset for the minimum Z in a compiled {@link Hyperboloid3F} instance.
+	 */
+	public static final int HYPERBOLOID_3_F_OFFSET_Z_MIN = 11;
+	
+	/**
+	 * The length of a compiled {@link Paraboloid3F} instance.
+	 */
+	public static final int PARABOLOID_3_F_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link AngleF} instance that represents the maximum phi in a compiled {@link Paraboloid3F} instance.
+	 */
+	public static final int PARABOLOID_3_F_OFFSET_PHI_MAX = 0;
+	
+	/**
+	 * The offset for the radius in a compiled {@link Paraboloid3F} instance.
+	 */
+	public static final int PARABOLOID_3_F_OFFSET_RADIUS = 1;
+	
+	/**
+	 * The offset for the maximum Z in a compiled {@link Paraboloid3F} instance.
+	 */
+	public static final int PARABOLOID_3_F_OFFSET_Z_MAX = 2;
+	
+	/**
+	 * The offset for the minimum Z in a compiled {@link Paraboloid3F} instance.
+	 */
+	public static final int PARABOLOID_3_F_OFFSET_Z_MIN = 3;
+	
+	/**
+	 * The length of a compiled {@link Plane3F} instance.
+	 */
+	public static final int PLANE_3_F_LENGTH = 16;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code A} in a compiled {@link Plane3F} instance.
+	 */
+	public static final int PLANE_3_F_OFFSET_A = 0;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code B} in a compiled {@link Plane3F} instance.
+	 */
+	public static final int PLANE_3_F_OFFSET_B = 3;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code C} in a compiled {@link Plane3F} instance.
+	 */
+	public static final int PLANE_3_F_OFFSET_C = 6;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance that represents the surface normal in a compiled {@link Plane3F} instance.
+	 */
+	public static final int PLANE_3_F_OFFSET_SURFACE_NORMAL = 9;
+	
+	/**
+	 * The length of a compiled {@link Rectangle3F} instance.
+	 */
+	public static final int RECTANGLE_3_F_LENGTH = 16;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code Position} in a compiled {@link Rectangle3F} instance.
+	 */
+	public static final int RECTANGLE_3_F_OFFSET_POSITION = 0;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance denoted by {@code Side A} in a compiled {@link Rectangle3F} instance.
+	 */
+	public static final int RECTANGLE_3_F_OFFSET_SIDE_A = 3;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance denoted by {@code Side B} in a compiled {@link Rectangle3F} instance.
+	 */
+	public static final int RECTANGLE_3_F_OFFSET_SIDE_B = 6;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance denoted by {@code Surface Normal} in a compiled {@link Rectangle3F} instance.
+	 */
+	public static final int RECTANGLE_3_F_OFFSET_SURFACE_NORMAL = 9;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private float[] shape3FCone3FArray;
 	private float[] shape3FCylinder3FArray;
 	private float[] shape3FDisk3FArray;
@@ -181,7 +376,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Cone3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FCone3FCount() {
-		return Structures.getStructureCount(this.shape3FCone3FArray, Cone3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FCone3FArray, CONE_3_F_LENGTH);
 	}
 	
 	/**
@@ -194,7 +389,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FCone3F} is {@code null}
 	 */
 	public int getShape3FCone3FOffsetAbsolute(final float[] shape3FCone3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FCone3FArray, Objects.requireNonNull(shape3FCone3F, "shape3FCone3F == null"), getShape3FCone3FCount(), Cone3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FCone3FArray, Objects.requireNonNull(shape3FCone3F, "shape3FCone3F == null"), getShape3FCone3FCount(), CONE_3_F_LENGTH);
 	}
 	
 	/**
@@ -207,7 +402,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FCone3F} is {@code null}
 	 */
 	public int getShape3FCone3FOffsetRelative(final float[] shape3FCone3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FCone3FArray, Objects.requireNonNull(shape3FCone3F, "shape3FCone3F == null"), getShape3FCone3FCount(), Cone3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FCone3FArray, Objects.requireNonNull(shape3FCone3F, "shape3FCone3F == null"), getShape3FCone3FCount(), CONE_3_F_LENGTH);
 	}
 	
 	/**
@@ -216,7 +411,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Cylinder3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FCylinder3FCount() {
-		return Structures.getStructureCount(this.shape3FCylinder3FArray, Cylinder3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FCylinder3FArray, CYLINDER_3_F_LENGTH);
 	}
 	
 	/**
@@ -229,7 +424,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FCylinder3F} is {@code null}
 	 */
 	public int getShape3FCylinder3FOffsetAbsolute(final float[] shape3FCylinder3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FCylinder3FArray, Objects.requireNonNull(shape3FCylinder3F, "shape3FCylinder3F == null"), getShape3FCylinder3FCount(), Cylinder3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FCylinder3FArray, Objects.requireNonNull(shape3FCylinder3F, "shape3FCylinder3F == null"), getShape3FCylinder3FCount(), CYLINDER_3_F_LENGTH);
 	}
 	
 	/**
@@ -242,7 +437,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FCylinder3F} is {@code null}
 	 */
 	public int getShape3FCylinder3FOffsetRelative(final float[] shape3FCylinder3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FCylinder3FArray, Objects.requireNonNull(shape3FCylinder3F, "shape3FCylinder3F == null"), getShape3FCylinder3FCount(), Cylinder3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FCylinder3FArray, Objects.requireNonNull(shape3FCylinder3F, "shape3FCylinder3F == null"), getShape3FCylinder3FCount(), CYLINDER_3_F_LENGTH);
 	}
 	
 	/**
@@ -251,7 +446,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Disk3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FDisk3FCount() {
-		return Structures.getStructureCount(this.shape3FDisk3FArray, Disk3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FDisk3FArray, DISK_3_F_LENGTH);
 	}
 	
 	/**
@@ -264,7 +459,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FDisk3F} is {@code null}
 	 */
 	public int getShape3FDisk3FOffsetAbsolute(final float[] shape3FDisk3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FDisk3FArray, Objects.requireNonNull(shape3FDisk3F, "shape3FDisk3F == null"), getShape3FDisk3FCount(), Disk3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FDisk3FArray, Objects.requireNonNull(shape3FDisk3F, "shape3FDisk3F == null"), getShape3FDisk3FCount(), DISK_3_F_LENGTH);
 	}
 	
 	/**
@@ -277,7 +472,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FDisk3F} is {@code null}
 	 */
 	public int getShape3FDisk3FOffsetRelative(final float[] shape3FDisk3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FDisk3FArray, Objects.requireNonNull(shape3FDisk3F, "shape3FDisk3F == null"), getShape3FDisk3FCount(), Disk3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FDisk3FArray, Objects.requireNonNull(shape3FDisk3F, "shape3FDisk3F == null"), getShape3FDisk3FCount(), DISK_3_F_LENGTH);
 	}
 	
 	/**
@@ -286,7 +481,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Hyperboloid3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FHyperboloid3FCount() {
-		return Structures.getStructureCount(this.shape3FHyperboloid3FArray, Hyperboloid3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FHyperboloid3FArray, HYPERBOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -299,7 +494,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FHyperboloid3F} is {@code null}
 	 */
 	public int getShape3FHyperboloid3FOffsetAbsolute(final float[] shape3FHyperboloid3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FHyperboloid3FArray, Objects.requireNonNull(shape3FHyperboloid3F, "shape3FHyperboloid3F == null"), getShape3FHyperboloid3FCount(), Hyperboloid3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FHyperboloid3FArray, Objects.requireNonNull(shape3FHyperboloid3F, "shape3FHyperboloid3F == null"), getShape3FHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -312,7 +507,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FHyperboloid3F} is {@code null}
 	 */
 	public int getShape3FHyperboloid3FOffsetRelative(final float[] shape3FHyperboloid3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FHyperboloid3FArray, Objects.requireNonNull(shape3FHyperboloid3F, "shape3FHyperboloid3F == null"), getShape3FHyperboloid3FCount(), Hyperboloid3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FHyperboloid3FArray, Objects.requireNonNull(shape3FHyperboloid3F, "shape3FHyperboloid3F == null"), getShape3FHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -321,7 +516,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Paraboloid3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FParaboloid3FCount() {
-		return Structures.getStructureCount(this.shape3FParaboloid3FArray, Paraboloid3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FParaboloid3FArray, PARABOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -334,7 +529,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FParaboloid3F} is {@code null}
 	 */
 	public int getShape3FParaboloid3FOffsetAbsolute(final float[] shape3FParaboloid3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FParaboloid3FArray, Objects.requireNonNull(shape3FParaboloid3F, "shape3FParaboloid3F == null"), getShape3FParaboloid3FCount(), Paraboloid3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FParaboloid3FArray, Objects.requireNonNull(shape3FParaboloid3F, "shape3FParaboloid3F == null"), getShape3FParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -347,7 +542,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FParaboloid3F} is {@code null}
 	 */
 	public int getShape3FParaboloid3FOffsetRelative(final float[] shape3FParaboloid3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FParaboloid3FArray, Objects.requireNonNull(shape3FParaboloid3F, "shape3FParaboloid3F == null"), getShape3FParaboloid3FCount(), Paraboloid3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FParaboloid3FArray, Objects.requireNonNull(shape3FParaboloid3F, "shape3FParaboloid3F == null"), getShape3FParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -356,7 +551,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Plane3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FPlane3FCount() {
-		return Structures.getStructureCount(this.shape3FPlane3FArray, Plane3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FPlane3FArray, PLANE_3_F_LENGTH);
 	}
 	
 	/**
@@ -369,7 +564,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FPlane3F} is {@code null}
 	 */
 	public int getShape3FPlane3FOffsetAbsolute(final float[] shape3FPlane3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FPlane3FArray, Objects.requireNonNull(shape3FPlane3F, "shape3FPlane3F == null"), getShape3FPlane3FCount(), Plane3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FPlane3FArray, Objects.requireNonNull(shape3FPlane3F, "shape3FPlane3F == null"), getShape3FPlane3FCount(), PLANE_3_F_LENGTH);
 	}
 	
 	/**
@@ -382,7 +577,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FPlane3F} is {@code null}
 	 */
 	public int getShape3FPlane3FOffsetRelative(final float[] shape3FPlane3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FPlane3FArray, Objects.requireNonNull(shape3FPlane3F, "shape3FPlane3F == null"), getShape3FPlane3FCount(), Plane3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FPlane3FArray, Objects.requireNonNull(shape3FPlane3F, "shape3FPlane3F == null"), getShape3FPlane3FCount(), PLANE_3_F_LENGTH);
 	}
 	
 	/**
@@ -391,7 +586,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Rectangle3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FRectangle3FCount() {
-		return Structures.getStructureCount(this.shape3FRectangle3FArray, Rectangle3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FRectangle3FArray, RECTANGLE_3_F_LENGTH);
 	}
 	
 	/**
@@ -404,7 +599,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangle3F} is {@code null}
 	 */
 	public int getShape3FRectangle3FOffsetAbsolute(final float[] shape3FRectangle3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FRectangle3FArray, Objects.requireNonNull(shape3FRectangle3F, "shape3FRectangle3F == null"), getShape3FRectangle3FCount(), Rectangle3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FRectangle3FArray, Objects.requireNonNull(shape3FRectangle3F, "shape3FRectangle3F == null"), getShape3FRectangle3FCount(), RECTANGLE_3_F_LENGTH);
 	}
 	
 	/**
@@ -417,7 +612,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangle3F} is {@code null}
 	 */
 	public int getShape3FRectangle3FOffsetRelative(final float[] shape3FRectangle3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FRectangle3FArray, Objects.requireNonNull(shape3FRectangle3F, "shape3FRectangle3F == null"), getShape3FRectangle3FCount(), Rectangle3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FRectangle3FArray, Objects.requireNonNull(shape3FRectangle3F, "shape3FRectangle3F == null"), getShape3FRectangle3FCount(), RECTANGLE_3_F_LENGTH);
 	}
 	
 	/**

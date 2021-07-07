@@ -169,6 +169,15 @@ public final class TriangleMesh3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns the optional {@link BVHNode3D} instance that is used by this {@code TriangleMesh3D} instance.
+	 * 
+	 * @return the optional {@code BVHNode3D} instance that is used by this {@code TriangleMesh3D} instance
+	 */
+	public Optional<BVHNode3D> getRootBVHNode() {
+		return this.isUsingAccelerationStructure ? Optional.of(this.bVHNode) : Optional.empty();
+	}
+	
+	/**
 	 * Performs an intersection test between {@code ray} and this {@code TriangleMesh3D} instance.
 	 * <p>
 	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3D} instance that contains information about the intersection, if it was found.

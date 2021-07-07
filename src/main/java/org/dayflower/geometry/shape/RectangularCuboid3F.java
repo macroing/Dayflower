@@ -58,21 +58,6 @@ public final class RectangularCuboid3F implements Shape3F {
 	public static final String NAME = "Rectangular Cuboid";
 	
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 8;
-	
-	/**
-	 * The offset for the {@link Point3F} instance representing the maximum point in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_MAXIMUM = 0;
-	
-	/**
-	 * The offset for the {@link Point3F} instance representing the minimum point in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_MINIMUM = 3;
-	
-	/**
 	 * The ID of this {@code RectangularCuboid3F} class.
 	 */
 	public static final int ID = 12;
@@ -343,26 +328,6 @@ public final class RectangularCuboid3F implements Shape3F {
 		final float t = t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
 		
 		return t;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code RectangularCuboid3F} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code RectangularCuboid3F} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_MAXIMUM + 0] = this.maximum.getX();	//Block #1
-		array[ARRAY_OFFSET_MAXIMUM + 1] = this.maximum.getY();	//Block #1
-		array[ARRAY_OFFSET_MAXIMUM + 2] = this.maximum.getZ();	//Block #1
-		array[ARRAY_OFFSET_MINIMUM + 0] = this.minimum.getX();	//Block #1
-		array[ARRAY_OFFSET_MINIMUM + 1] = this.minimum.getY();	//Block #1
-		array[ARRAY_OFFSET_MINIMUM + 2] = this.minimum.getZ();	//Block #1
-		array[6] = 0.0F;										//Block #1
-		array[7] = 0.0F;										//Block #1
-		
-		return array;
 	}
 	
 	/**

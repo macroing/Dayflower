@@ -21,6 +21,8 @@ package org.dayflower.scene.compiler;
 import java.util.Objects;
 
 import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Vector3F;
@@ -36,6 +38,7 @@ import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
+import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 
 /**
  * A {@code CompiledShape3FCache} contains {@link Shape3F} instances in compiled form.
@@ -233,6 +236,101 @@ public final class CompiledShape3FCache {
 	 * The offset for the {@link Vector3F} instance denoted by {@code Surface Normal} in a compiled {@link Rectangle3F} instance.
 	 */
 	public static final int RECTANGLE_3_F_OFFSET_SURFACE_NORMAL = 9;
+	
+	/**
+	 * The length of a compiled {@link RectangularCuboid3F} instance.
+	 */
+	public static final int RECTANGULAR_CUBOID_3_F_LENGTH = 8;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the maximum point in a compiled {@link RectangularCuboid3F} instance.
+	 */
+	public static final int RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM = 0;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the minimum point in a compiled {@link RectangularCuboid3F} instance.
+	 */
+	public static final int RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM = 3;
+	
+	/**
+	 * The length of a compiled {@link Sphere3F} instance.
+	 */
+	public static final int SPHERE_3_F_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the center in the a compiled {@link Sphere3F} instance.
+	 */
+	public static final int SPHERE_3_F_OFFSET_CENTER = 0;
+	
+	/**
+	 * The offset for the radius in a compiled {@link Sphere3F} instance.
+	 */
+	public static final int SPHERE_3_F_OFFSET_RADIUS = 3;
+	
+	/**
+	 * The length of a compiled {@link Torus3F} instance.
+	 */
+	public static final int TORUS_3_F_LENGTH = 2;
+	
+	/**
+	 * The offset for the inner radius in a compiled {@link Torus3F} instance.
+	 */
+	public static final int TORUS_3_F_OFFSET_RADIUS_INNER = 0;
+	
+	/**
+	 * The offset for the outer radius in a compiled {@link Torus3F} instance.
+	 */
+	public static final int TORUS_3_F_OFFSET_RADIUS_OUTER = 1;
+	
+	/**
+	 * The length of a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_LENGTH = 24;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance that represents the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex3F} {@code A} in a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W = 15;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the position of {@link Vertex3F} {@code A} in a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_OFFSET_A_POSITION = 0;
+	
+	/**
+	 * The offset for the {@link Point2F} instance that represents the texture coordinates of {@link Vertex3F} {@code A} in a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES = 9;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance that represents the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex3F} {@code B} in a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W = 18;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the position of {@link Vertex3F} {@code B} in a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_OFFSET_B_POSITION = 3;
+	
+	/**
+	 * The offset for the {@link Point2F} instance that represents the texture coordinates of {@link Vertex3F} {@code B} in a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES = 11;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance that represents the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex3F} {@code C} in a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W = 21;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the position of {@link Vertex3F} {@code C} in a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_OFFSET_C_POSITION = 6;
+	
+	/**
+	 * The offset for the {@link Point2F} instance that represents the texture coordinates of {@link Vertex3F} {@code C} in a compiled {@link Triangle3F} instance.
+	 */
+	public static final int TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES = 13;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -621,7 +719,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code RectangularCuboid3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FRectangularCuboid3FCount() {
-		return Structures.getStructureCount(this.shape3FRectangularCuboid3FArray, RectangularCuboid3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FRectangularCuboid3FArray, RECTANGULAR_CUBOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -634,7 +732,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangularCuboid3F} is {@code null}
 	 */
 	public int getShape3FRectangularCuboid3FOffsetAbsolute(final float[] shape3FRectangularCuboid3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FRectangularCuboid3FArray, Objects.requireNonNull(shape3FRectangularCuboid3F, "shape3FRectangularCuboid3F == null"), getShape3FRectangularCuboid3FCount(), RectangularCuboid3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FRectangularCuboid3FArray, Objects.requireNonNull(shape3FRectangularCuboid3F, "shape3FRectangularCuboid3F == null"), getShape3FRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -647,7 +745,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangularCuboid3F} is {@code null}
 	 */
 	public int getShape3FRectangularCuboid3FOffsetRelative(final float[] shape3FRectangularCuboid3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FRectangularCuboid3FArray, Objects.requireNonNull(shape3FRectangularCuboid3F, "shape3FRectangularCuboid3F == null"), getShape3FRectangularCuboid3FCount(), RectangularCuboid3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FRectangularCuboid3FArray, Objects.requireNonNull(shape3FRectangularCuboid3F, "shape3FRectangularCuboid3F == null"), getShape3FRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -656,7 +754,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Sphere3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FSphere3FCount() {
-		return Structures.getStructureCount(this.shape3FSphere3FArray, Sphere3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FSphere3FArray, SPHERE_3_F_LENGTH);
 	}
 	
 	/**
@@ -669,7 +767,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FSphere3F} is {@code null}
 	 */
 	public int getShape3FSphere3FOffsetAbsolute(final float[] shape3FSphere3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FSphere3FArray, Objects.requireNonNull(shape3FSphere3F, "shape3FSphere3F == null"), getShape3FSphere3FCount(), Sphere3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FSphere3FArray, Objects.requireNonNull(shape3FSphere3F, "shape3FSphere3F == null"), getShape3FSphere3FCount(), SPHERE_3_F_LENGTH);
 	}
 	
 	/**
@@ -682,7 +780,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FSphere3F} is {@code null}
 	 */
 	public int getShape3FSphere3FOffsetRelative(final float[] shape3FSphere3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FSphere3FArray, Objects.requireNonNull(shape3FSphere3F, "shape3FSphere3F == null"), getShape3FSphere3FCount(), Sphere3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FSphere3FArray, Objects.requireNonNull(shape3FSphere3F, "shape3FSphere3F == null"), getShape3FSphere3FCount(), SPHERE_3_F_LENGTH);
 	}
 	
 	/**
@@ -691,7 +789,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Torus3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FTorus3FCount() {
-		return Structures.getStructureCount(this.shape3FTorus3FArray, Torus3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FTorus3FArray, TORUS_3_F_LENGTH);
 	}
 	
 	/**
@@ -704,7 +802,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FTorus3F} is {@code null}
 	 */
 	public int getShape3FTorus3FOffsetAbsolute(final float[] shape3FTorus3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FTorus3FArray, Objects.requireNonNull(shape3FTorus3F, "shape3FTorus3F == null"), getShape3FTorus3FCount(), Torus3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FTorus3FArray, Objects.requireNonNull(shape3FTorus3F, "shape3FTorus3F == null"), getShape3FTorus3FCount(), TORUS_3_F_LENGTH);
 	}
 	
 	/**
@@ -717,7 +815,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FTorus3F} is {@code null}
 	 */
 	public int getShape3FTorus3FOffsetRelative(final float[] shape3FTorus3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FTorus3FArray, Objects.requireNonNull(shape3FTorus3F, "shape3FTorus3F == null"), getShape3FTorus3FCount(), Torus3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FTorus3FArray, Objects.requireNonNull(shape3FTorus3F, "shape3FTorus3F == null"), getShape3FTorus3FCount(), TORUS_3_F_LENGTH);
 	}
 	
 	/**
@@ -726,7 +824,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code Triangle3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getShape3FTriangle3FCount() {
-		return Structures.getStructureCount(this.shape3FTriangle3FArray, Triangle3F.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.shape3FTriangle3FArray, TRIANGLE_3_F_LENGTH);
 	}
 	
 	/**
@@ -739,7 +837,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FTriangle3F} is {@code null}
 	 */
 	public int getShape3FTriangle3FOffsetAbsolute(final float[] shape3FTriangle3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FTriangle3FArray, Objects.requireNonNull(shape3FTriangle3F, "shape3FTriangle3F == null"), getShape3FTriangle3FCount(), Triangle3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.shape3FTriangle3FArray, Objects.requireNonNull(shape3FTriangle3F, "shape3FTriangle3F == null"), getShape3FTriangle3FCount(), TRIANGLE_3_F_LENGTH);
 	}
 	
 	/**
@@ -752,7 +850,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code shape3FTriangle3F} is {@code null}
 	 */
 	public int getShape3FTriangle3FOffsetRelative(final float[] shape3FTriangle3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FTriangle3FArray, Objects.requireNonNull(shape3FTriangle3F, "shape3FTriangle3F == null"), getShape3FTriangle3FCount(), Triangle3F.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.shape3FTriangle3FArray, Objects.requireNonNull(shape3FTriangle3F, "shape3FTriangle3F == null"), getShape3FTriangle3FCount(), TRIANGLE_3_F_LENGTH);
 	}
 	
 	/**

@@ -29,10 +29,6 @@ import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
-import org.dayflower.geometry.shape.RectangularCuboid3F;
-import org.dayflower.geometry.shape.Sphere3F;
-import org.dayflower.geometry.shape.Torus3F;
-import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.scene.compiler.CompiledBoundingVolume3FCache;
 import org.dayflower.scene.compiler.CompiledShape3FCache;
 
@@ -2550,12 +2546,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
 		
 //		Retrieve the rectangular cuboid variables:
-		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MAXIMUM + 0];
-		final float rectangularCuboidMaximumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MAXIMUM + 1];
-		final float rectangularCuboidMaximumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MAXIMUM + 2];
-		final float rectangularCuboidMinimumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MINIMUM + 0];
-		final float rectangularCuboidMinimumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MINIMUM + 1];
-		final float rectangularCuboidMinimumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MINIMUM + 2];
+		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 0];
+		final float rectangularCuboidMaximumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 1];
+		final float rectangularCuboidMaximumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 2];
+		final float rectangularCuboidMinimumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 0];
+		final float rectangularCuboidMinimumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 1];
+		final float rectangularCuboidMinimumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 2];
 		
 //		Compute the intersection:
 		final float intersectionTMinimumX = (rectangularCuboidMinimumX - rayOriginX) * rayDirectionReciprocalX;
@@ -2599,12 +2595,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the rectangular cuboid variables:
-		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MAXIMUM + 0];
-		final float rectangularCuboidMaximumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MAXIMUM + 1];
-		final float rectangularCuboidMaximumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MAXIMUM + 2];
-		final float rectangularCuboidMinimumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MINIMUM + 0];
-		final float rectangularCuboidMinimumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MINIMUM + 1];
-		final float rectangularCuboidMinimumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MINIMUM + 2];
+		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 0];
+		final float rectangularCuboidMaximumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 1];
+		final float rectangularCuboidMaximumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 2];
+		final float rectangularCuboidMinimumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 0];
+		final float rectangularCuboidMinimumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 1];
+		final float rectangularCuboidMinimumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 2];
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -2706,10 +2702,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the sphere variables:
-		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 0];
-		final float sphereCenterY = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 1];
-		final float sphereCenterZ = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 2];
-		final float sphereRadius = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_RADIUS];
+		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 0];
+		final float sphereCenterY = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 1];
+		final float sphereCenterZ = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 2];
+		final float sphereRadius = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_RADIUS];
 		final float sphereRadiusSquared = sphereRadius * sphereRadius;
 		
 //		Compute the direction from the sphere center to the ray origin:
@@ -2745,9 +2741,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the sphere variables:
-		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 0];
-		final float sphereCenterY = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 1];
-		final float sphereCenterZ = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 2];
+		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 0];
+		final float sphereCenterY = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 1];
+		final float sphereCenterZ = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 2];
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -2824,9 +2820,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the torus variables:
-		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_INNER];
+		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + CompiledShape3FCache.TORUS_3_F_OFFSET_RADIUS_INNER];
 		final float torusRadiusInnerSquared = torusRadiusInner * torusRadiusInner;
-		final float torusRadiusOuter = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_OUTER];
+		final float torusRadiusOuter = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + CompiledShape3FCache.TORUS_3_F_OFFSET_RADIUS_OUTER];
 		final float torusRadiusOuterSquared = torusRadiusOuter * torusRadiusOuter;
 		
 		/*
@@ -2894,9 +2890,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the torus variables:
-		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_INNER];
+		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + CompiledShape3FCache.TORUS_3_F_OFFSET_RADIUS_INNER];
 		final float torusRadiusInnerSquared = torusRadiusInner * torusRadiusInner;
-		final float torusRadiusOuter = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_OUTER];
+		final float torusRadiusOuter = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + CompiledShape3FCache.TORUS_3_F_OFFSET_RADIUS_OUTER];
 		final float torusRadiusOuterSquared = torusRadiusOuter * torusRadiusOuter;
 		
 //		Compute the surface intersection point:
@@ -2985,15 +2981,15 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
-		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 0];
-		final float triangleAPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 1];
-		final float triangleAPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 2];
-		final float triangleBPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 0];
-		final float triangleBPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 1];
-		final float triangleBPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 2];
-		final float triangleCPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 0];
-		final float triangleCPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 1];
-		final float triangleCPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 2];
+		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 0];
+		final float triangleAPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 1];
+		final float triangleAPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 2];
+		final float triangleBPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_POSITION + 0];
+		final float triangleBPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_POSITION + 1];
+		final float triangleBPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_POSITION + 2];
+		final float triangleCPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 0];
+		final float triangleCPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 1];
+		final float triangleCPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 2];
 		
 //		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'edgeAB' in the comments:
 		final float edgeABX = triangleBPositionX - triangleAPositionX;
@@ -3067,34 +3063,34 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
-		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 0];
-		final float triangleAPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 1];
-		final float triangleAPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 2];
-		final float triangleBPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 0];
-		final float triangleBPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 1];
-		final float triangleBPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 2];
-		final float triangleCPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 0];
-		final float triangleCPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 1];
-		final float triangleCPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 2];
+		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 0];
+		final float triangleAPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 1];
+		final float triangleAPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 2];
+		final float triangleBPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_POSITION + 0];
+		final float triangleBPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_POSITION + 1];
+		final float triangleBPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_POSITION + 2];
+		final float triangleCPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 0];
+		final float triangleCPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 1];
+		final float triangleCPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 2];
 		
 //		Retrieve the triangle variables that will be used for texturing:
-		final float triangleATextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_TEXTURE_COORDINATES + 0];
-		final float triangleATextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_TEXTURE_COORDINATES + 1];
-		final float triangleBTextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_TEXTURE_COORDINATES + 0];
-		final float triangleBTextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_TEXTURE_COORDINATES + 1];
-		final float triangleCTextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_TEXTURE_COORDINATES + 0];
-		final float triangleCTextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_TEXTURE_COORDINATES + 1];
+		final float triangleATextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 0];
+		final float triangleATextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 1];
+		final float triangleBTextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 0];
+		final float triangleBTextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 1];
+		final float triangleCTextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 0];
+		final float triangleCTextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 1];
 		
 //		Retrieve the triangle variables that will be used when constructing the geometric and shading orthonormal bases:
-		final float triangleAOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 0];
-		final float triangleAOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 1];
-		final float triangleAOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 2];
-		final float triangleBOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 0];
-		final float triangleBOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 1];
-		final float triangleBOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 2];
-		final float triangleCOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 0];
-		final float triangleCOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 1];
-		final float triangleCOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 2];
+		final float triangleAOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 0];
+		final float triangleAOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 1];
+		final float triangleAOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 2];
+		final float triangleBOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 0];
+		final float triangleBOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 1];
+		final float triangleBOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 2];
+		final float triangleCOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 0];
+		final float triangleCOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 1];
+		final float triangleCOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 2];
 		
 //		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'edgeAB' in the comments:
 		final float edgeABX = triangleBPositionX - triangleAPositionX;

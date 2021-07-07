@@ -66,21 +66,6 @@ public final class Torus3F implements Shape3F {
 	public static final String NAME = "Torus";
 	
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 2;
-	
-	/**
-	 * The offset for the inner radius in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS_INNER = 0;
-	
-	/**
-	 * The offset for the outer radius in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS_OUTER = 1;
-	
-	/**
 	 * The ID of this {@code Torus3F} class.
 	 */
 	public static final int ID = 14;
@@ -392,20 +377,6 @@ public final class Torus3F implements Shape3F {
 		}
 		
 		return Float.NaN;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code Torus3F} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code Torus3F} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_RADIUS_INNER] = this.radiusInner;
-		array[ARRAY_OFFSET_RADIUS_OUTER] = this.radiusOuter;
-		
-		return array;
 	}
 	
 	/**

@@ -69,21 +69,6 @@ public final class Sphere3F implements Shape3F {
 	public static final String NAME = "Sphere";
 	
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the {@link Point3F} instance representing the center in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_CENTER = 0;
-	
-	/**
-	 * The offset for the radius in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS = 3;
-	
-	/**
 	 * The ID of this {@code Sphere3F} class.
 	 */
 	public static final int ID = 13;
@@ -548,22 +533,6 @@ public final class Sphere3F implements Shape3F {
 		final float t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
 		
 		return t;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code Sphere3F} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code Sphere3F} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_CENTER + 0] = this.center.getX();
-		array[ARRAY_OFFSET_CENTER + 1] = this.center.getY();
-		array[ARRAY_OFFSET_CENTER + 2] = this.center.getZ();
-		array[ARRAY_OFFSET_RADIUS] = this.radius;
-		
-		return array;
 	}
 	
 	/**

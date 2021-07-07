@@ -169,6 +169,15 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns the optional {@link BVHNode3F} instance that is used by this {@code TriangleMesh3F} instance.
+	 * 
+	 * @return the optional {@code BVHNode3F} instance that is used by this {@code TriangleMesh3F} instance
+	 */
+	public Optional<BVHNode3F> getRootBVHNode() {
+		return this.isUsingAccelerationStructure ? Optional.of(this.bVHNode) : Optional.empty();
+	}
+	
+	/**
 	 * Performs an intersection test between {@code ray} and this {@code TriangleMesh3F} instance.
 	 * <p>
 	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3F} instance that contains information about the intersection, if it was found.
@@ -403,15 +412,6 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the length of the {@code int[]}.
-	 * 
-	 * @return the length of the {@code int[]}
-	 */
-	public int getArrayLength() {
-		return this.isUsingAccelerationStructure ? NodeFilter.filterAll(this.bVHNode, BVHNode3F.class).stream().mapToInt(bVHNode -> bVHNode.getArrayLength()).sum() : 0;
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code TriangleMesh3F} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code TriangleMesh3F} instance
@@ -429,15 +429,6 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.bVHNode, this.boundingVolume, this.triangles, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure), Float.valueOf(this.surfaceArea));
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code TriangleMesh3F} instance.
-	 * 
-	 * @return an {@code int[]} representation of this {@code TriangleMesh3F} instance
-	 */
-	public int[] toArray() {
-		return this.isUsingAccelerationStructure ? BVHNode3Fs.toArray(this.bVHNode, getTriangles()) : new int[0];
 	}
 	
 	/**

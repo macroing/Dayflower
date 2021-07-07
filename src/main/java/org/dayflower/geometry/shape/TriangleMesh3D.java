@@ -403,15 +403,6 @@ public final class TriangleMesh3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns the length of the {@code int[]}.
-	 * 
-	 * @return the length of the {@code int[]}
-	 */
-	public int getArrayLength() {
-		return this.isUsingAccelerationStructure ? NodeFilter.filterAll(this.bVHNode, BVHNode3D.class).stream().mapToInt(bVHNode -> bVHNode.getArrayLength()).sum() : 0;
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code TriangleMesh3D} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code TriangleMesh3D} instance
@@ -429,15 +420,6 @@ public final class TriangleMesh3D implements Shape3D {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.bVHNode, this.boundingVolume, this.triangles, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure), Double.valueOf(this.surfaceArea));
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code TriangleMesh3D} instance.
-	 * 
-	 * @return an {@code int[]} representation of this {@code TriangleMesh3D} instance
-	 */
-	public int[] toArray() {
-		return this.isUsingAccelerationStructure ? BVHNode3Ds.toArray(this.bVHNode, getTriangles()) : new int[0];
 	}
 	
 	/**

@@ -65,21 +65,6 @@ public final class Torus3D implements Shape3D {
 	public static final String NAME = "Torus";
 	
 	/**
-	 * The length of the {@code double[]}.
-	 */
-	public static final int ARRAY_LENGTH = 2;
-	
-	/**
-	 * The offset for the inner radius in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS_INNER = 0;
-	
-	/**
-	 * The offset for the outer radius in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS_OUTER = 1;
-	
-	/**
 	 * The ID of this {@code Torus3D} class.
 	 */
 	public static final int ID = 14;
@@ -391,20 +376,6 @@ public final class Torus3D implements Shape3D {
 		}
 		
 		return Double.NaN;
-	}
-	
-	/**
-	 * Returns a {@code double[]} representation of this {@code Torus3D} instance.
-	 * 
-	 * @return a {@code double[]} representation of this {@code Torus3D} instance
-	 */
-	public double[] toArray() {
-		final double[] array = new double[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_RADIUS_INNER] = this.radiusInner;
-		array[ARRAY_OFFSET_RADIUS_OUTER] = this.radiusOuter;
-		
-		return array;
 	}
 	
 	/**

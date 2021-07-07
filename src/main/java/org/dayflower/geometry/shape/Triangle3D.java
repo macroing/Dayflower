@@ -66,56 +66,6 @@ public final class Triangle3D implements Shape3D {
 	public static final String NAME = "Triangle";
 	
 	/**
-	 * The length of the {@code double[]}.
-	 */
-	public static final int ARRAY_LENGTH = 24;
-	
-	/**
-	 * The offset for the {@link Vector3D} instance representing the W-direction of the {@link OrthonormalBasis33D} of {@link Vertex3D} {@code A} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W = 15;
-	
-	/**
-	 * The offset for the {@link Point3D} instance representing the position of {@link Vertex3D} {@code A} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_A_POSITION = 0;
-	
-	/**
-	 * The offset for the {@link Point2D} instance representing the texture coordinates of {@link Vertex3D} {@code A} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_A_TEXTURE_COORDINATES = 9;
-	
-	/**
-	 * The offset for the {@link Vector3D} instance representing the W-direction of the {@link OrthonormalBasis33D} of {@link Vertex3D} {@code B} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W = 18;
-	
-	/**
-	 * The offset for the {@link Point3D} instance representing the position of {@link Vertex3D} {@code B} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_B_POSITION = 3;
-	
-	/**
-	 * The offset for the {@link Point2D} instance representing the texture coordinates of {@link Vertex3D} {@code B} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_B_TEXTURE_COORDINATES = 11;
-	
-	/**
-	 * The offset for the {@link Vector3D} instance representing the W-direction of the {@link OrthonormalBasis33D} of {@link Vertex3D} {@code C} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W = 21;
-	
-	/**
-	 * The offset for the {@link Point3D} instance representing the position of {@link Vertex3D} {@code C} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_C_POSITION = 6;
-	
-	/**
-	 * The offset for the {@link Point2D} instance representing the texture coordinates of {@link Vertex3D} {@code C} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_C_TEXTURE_COORDINATES = 13;
-	
-	/**
 	 * The ID of this {@code Triangle3D} class.
 	 */
 	public static final int ID = 15;
@@ -413,44 +363,6 @@ public final class Triangle3D implements Shape3D {
 //		return doIntersectionTOld(ray, tMinimum, tMaximum);
 //		return doIntersectionTPBRT(ray, tMinimum, tMaximum);
 		return doIntersectionTSunflow(ray, tMinimum, tMaximum);
-	}
-	
-	/**
-	 * Returns a {@code double[]} representation of this {@code Triangle3D} instance.
-	 * 
-	 * @return a {@code double[]} representation of this {@code Triangle3D} instance
-	 */
-	public double[] toArray() {
-		final double[] array = new double[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_A_POSITION + 0] = this.a.getPosition().getX();								//Block #1
-		array[ARRAY_OFFSET_A_POSITION + 1] = this.a.getPosition().getY();								//Block #1
-		array[ARRAY_OFFSET_A_POSITION + 2] = this.a.getPosition().getZ();								//Block #1
-		array[ARRAY_OFFSET_B_POSITION + 0] = this.b.getPosition().getX();								//Block #1
-		array[ARRAY_OFFSET_B_POSITION + 1] = this.b.getPosition().getY();								//Block #1
-		array[ARRAY_OFFSET_B_POSITION + 2] = this.b.getPosition().getZ();								//Block #1
-		array[ARRAY_OFFSET_C_POSITION + 0] = this.c.getPosition().getX();								//Block #1
-		array[ARRAY_OFFSET_C_POSITION + 1] = this.c.getPosition().getY();								//Block #1
-		array[ARRAY_OFFSET_C_POSITION + 2] = this.c.getPosition().getZ();								//Block #2
-		
-		array[ARRAY_OFFSET_A_TEXTURE_COORDINATES + 0] = this.a.getTextureCoordinates().getU();			//Block #2
-		array[ARRAY_OFFSET_A_TEXTURE_COORDINATES + 1] = this.a.getTextureCoordinates().getV();			//Block #2
-		array[ARRAY_OFFSET_B_TEXTURE_COORDINATES + 0] = this.b.getTextureCoordinates().getU();			//Block #2
-		array[ARRAY_OFFSET_B_TEXTURE_COORDINATES + 1] = this.b.getTextureCoordinates().getV();			//Block #2
-		array[ARRAY_OFFSET_C_TEXTURE_COORDINATES + 0] = this.c.getTextureCoordinates().getU();			//Block #2
-		array[ARRAY_OFFSET_C_TEXTURE_COORDINATES + 1] = this.c.getTextureCoordinates().getV();			//Block #2
-		
-		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 0] = this.a.getOrthonormalBasis().getW().getX();		//Block #2
-		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 1] = this.a.getOrthonormalBasis().getW().getY();		//Block #3
-		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 2] = this.a.getOrthonormalBasis().getW().getZ();		//Block #3
-		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 0] = this.b.getOrthonormalBasis().getW().getX();		//Block #3
-		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 1] = this.b.getOrthonormalBasis().getW().getY();		//Block #3
-		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 2] = this.b.getOrthonormalBasis().getW().getZ();		//Block #3
-		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 0] = this.c.getOrthonormalBasis().getW().getX();		//Block #3
-		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 1] = this.c.getOrthonormalBasis().getW().getY();		//Block #3
-		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 2] = this.c.getOrthonormalBasis().getW().getZ();		//Block #3
-		
-		return array;
 	}
 	
 	/**

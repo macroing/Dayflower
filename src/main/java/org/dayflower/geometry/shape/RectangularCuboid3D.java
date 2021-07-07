@@ -58,21 +58,6 @@ public final class RectangularCuboid3D implements Shape3D {
 	public static final String NAME = "Rectangular Cuboid";
 	
 	/**
-	 * The length of the {@code double[]}.
-	 */
-	public static final int ARRAY_LENGTH = 8;
-	
-	/**
-	 * The offset for the {@link Point3D} instance representing the maximum point in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_MAXIMUM = 0;
-	
-	/**
-	 * The offset for the {@link Point3D} instance representing the minimum point in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_MINIMUM = 3;
-	
-	/**
 	 * The ID of this {@code RectangularCuboid3D} class.
 	 */
 	public static final int ID = 12;
@@ -343,26 +328,6 @@ public final class RectangularCuboid3D implements Shape3D {
 		final double t = t0 > t1 ? Double.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
 		
 		return t;
-	}
-	
-	/**
-	 * Returns a {@code double[]} representation of this {@code RectangularCuboid3D} instance.
-	 * 
-	 * @return a {@code double[]} representation of this {@code RectangularCuboid3D} instance
-	 */
-	public double[] toArray() {
-		final double[] array = new double[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_MAXIMUM + 0] = this.maximum.getX();	//Block #1
-		array[ARRAY_OFFSET_MAXIMUM + 1] = this.maximum.getY();	//Block #1
-		array[ARRAY_OFFSET_MAXIMUM + 2] = this.maximum.getZ();	//Block #1
-		array[ARRAY_OFFSET_MINIMUM + 0] = this.minimum.getX();	//Block #1
-		array[ARRAY_OFFSET_MINIMUM + 1] = this.minimum.getY();	//Block #1
-		array[ARRAY_OFFSET_MINIMUM + 2] = this.minimum.getZ();	//Block #1
-		array[6] = 0.0D;										//Block #1
-		array[7] = 0.0D;										//Block #1
-		
-		return array;
 	}
 	
 	/**

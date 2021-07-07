@@ -69,21 +69,6 @@ public final class Sphere3D implements Shape3D {
 	public static final String NAME = "Sphere";
 	
 	/**
-	 * The length of the {@code double[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the {@link Point3D} instance representing the center in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_CENTER = 0;
-	
-	/**
-	 * The offset for the radius in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS = 3;
-	
-	/**
 	 * The ID of this {@code Sphere3D} class.
 	 */
 	public static final int ID = 13;
@@ -548,22 +533,6 @@ public final class Sphere3D implements Shape3D {
 		final double t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
 		
 		return t;
-	}
-	
-	/**
-	 * Returns a {@code double[]} representation of this {@code Sphere3D} instance.
-	 * 
-	 * @return a {@code double[]} representation of this {@code Sphere3D} instance
-	 */
-	public double[] toArray() {
-		final double[] array = new double[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_CENTER + 0] = this.center.getX();
-		array[ARRAY_OFFSET_CENTER + 1] = this.center.getY();
-		array[ARRAY_OFFSET_CENTER + 2] = this.center.getZ();
-		array[ARRAY_OFFSET_RADIUS] = this.radius;
-		
-		return array;
 	}
 	
 	/**

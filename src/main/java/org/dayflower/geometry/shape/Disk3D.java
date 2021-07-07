@@ -59,31 +59,6 @@ public final class Disk3D implements Shape3D {
 	public static final String NAME = "Disk";
 	
 	/**
-	 * The length of the {@code double[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the {@link AngleD} instance representing the maximum phi in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_PHI_MAX = 0;
-	
-	/**
-	 * The offset for the inner radius in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS_INNER = 1;
-	
-	/**
-	 * The offset for the outer radius in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS_OUTER = 2;
-	
-	/**
-	 * The offset for the maximum Z in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_Z_MAX = 3;
-	
-	/**
 	 * The ID of this {@code Disk3D} class.
 	 */
 	public static final int ID = 6;
@@ -417,22 +392,6 @@ public final class Disk3D implements Shape3D {
 		}
 		
 		return t;
-	}
-	
-	/**
-	 * Returns a {@code double[]} representation of this {@code Disk3D} instance.
-	 * 
-	 * @return a {@code double[]} representation of this {@code Disk3D} instance
-	 */
-	public double[] toArray() {
-		final double[] array = new double[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_PHI_MAX] = this.phiMax.getRadians();
-		array[ARRAY_OFFSET_RADIUS_INNER] = this.radiusInner;
-		array[ARRAY_OFFSET_RADIUS_OUTER] = this.radiusOuter;
-		array[ARRAY_OFFSET_Z_MAX] = this.zMax;
-		
-		return array;
 	}
 	
 	/**

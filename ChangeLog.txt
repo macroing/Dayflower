@@ -1,6 +1,13 @@
 2021-07-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Optimized the Scene Compiler API.
+	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the AxisAlignedBoundingBox3D and BoundingSphere3D classes.
+	* REMOVE:	Remove the constants ARRAY_OFFSET_* from the BVHNode3D, LeafBVHNode3D and TreeBVHNode3D classes.
+	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the Cone3D, Cylinder3D, Disk3D, Hyperboloid3D, Paraboloid3D, Plane3D, Rectangle3D, RectangularCuboid3D, Sphere3D, Torus3D and Triangle3D classes.
+	* REMOVE:	Remove the method toArray() from the AxisAlignedBoundingBox3D and BoundingSphere3D classes.
+	* REMOVE:	Remove the method toArray() from the Cone3D, Cylinder3D, Disk3D, Hyperboloid3D, Paraboloid3D, Plane3D, Rectangle3D, RectangularCuboid3D, Sphere3D, Torus3D, Triangle3D and TriangleMesh3D classes.
+	* REMOVE:	Remove the method getArrayLength() from the BVHNode3D, LeafBVHNode3D, TreeBVHNode3D and TriangleMesh3D classes.
+	* REMOVE:	Remove the method toArray(BVHNode3D, List<T>) from the BVHNode3Ds class.
 
 2021-07-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

@@ -56,31 +56,6 @@ public final class Plane3D implements Shape3D {
 	public static final String NAME = "Plane";
 	
 	/**
-	 * The length of the {@code double[]}.
-	 */
-	public static final int ARRAY_LENGTH = 16;
-	
-	/**
-	 * The offset for the {@link Point3D} instance denoted by {@code A} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_A = 0;
-	
-	/**
-	 * The offset for the {@link Point3D} instance denoted by {@code B} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_B = 3;
-	
-	/**
-	 * The offset for the {@link Point3D} instance denoted by {@code C} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_C = 6;
-	
-	/**
-	 * The offset for the {@link Vector3D} instance representing the surface normal in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_SURFACE_NORMAL = 9;
-	
-	/**
 	 * The ID of this {@code Plane3D} class.
 	 */
 	public static final int ID = 9;
@@ -390,34 +365,6 @@ public final class Plane3D implements Shape3D {
 		}
 		
 		return t;
-	}
-	
-	/**
-	 * Returns a {@code double[]} representation of this {@code Plane3D} instance.
-	 * 
-	 * @return a {@code double[]} representation of this {@code Plane3D} instance
-	 */
-	public double[] toArray() {
-		final double[] array = new double[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_A + 0] = this.a.getX();							//Block #1
-		array[ARRAY_OFFSET_A + 1] = this.a.getY();							//Block #1
-		array[ARRAY_OFFSET_A + 2] = this.a.getZ();							//Block #1
-		array[ARRAY_OFFSET_B + 0] = this.b.getX();							//Block #1
-		array[ARRAY_OFFSET_B + 1] = this.b.getY();							//Block #1
-		array[ARRAY_OFFSET_B + 2] = this.b.getZ();							//Block #1
-		array[ARRAY_OFFSET_C + 0] = this.c.getX();							//Block #1
-		array[ARRAY_OFFSET_C + 1] = this.c.getY();							//Block #1
-		array[ARRAY_OFFSET_C + 2] = this.c.getZ();							//Block #2
-		array[ARRAY_OFFSET_SURFACE_NORMAL + 0] = this.surfaceNormal.getX();	//Block #2
-		array[ARRAY_OFFSET_SURFACE_NORMAL + 1] = this.surfaceNormal.getY();	//Block #2
-		array[ARRAY_OFFSET_SURFACE_NORMAL + 2] = this.surfaceNormal.getZ();	//Block #2
-		array[12] = 0.0D;													//Block #2
-		array[13] = 0.0D;													//Block #2
-		array[14] = 0.0D;													//Block #2
-		array[15] = 0.0D;													//Block #2
-		
-		return array;
 	}
 	
 	/**

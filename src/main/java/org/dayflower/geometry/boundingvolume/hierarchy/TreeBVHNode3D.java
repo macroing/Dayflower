@@ -39,13 +39,6 @@ import org.dayflower.node.NodeTraversalException;
  */
 public final class TreeBVHNode3D extends BVHNode3D {
 	/**
-	 * The offset for the left bounding volume hierarchy node in the {@code int[]}.
-	 * <p>
-	 * This offset is used for tree nodes only.
-	 */
-	public static final int ARRAY_OFFSET_LEFT_OFFSET = 3;
-	
-	/**
 	 * The ID for all tree nodes in the bounding volume hierarchy (BVH).
 	 */
 	public static final int ID = 2;
@@ -201,16 +194,6 @@ public final class TreeBVHNode3D extends BVHNode3D {
 	@Override
 	public double getSurfaceArea() {
 		return this.bVHNodeL.getSurfaceArea() + this.bVHNodeR.getSurfaceArea();
-	}
-	
-	/**
-	 * Returns the length of the array that contains a compiled version of this {@code TreeBVHNode3D} instance.
-	 * 
-	 * @return the length of the array that contains a compiled version of this {@code TreeBVHNode3D} instance
-	 */
-	@Override
-	public int getArrayLength() {
-		return 8;
 	}
 	
 	/**

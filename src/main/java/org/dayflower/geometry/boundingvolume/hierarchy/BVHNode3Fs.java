@@ -24,18 +24,13 @@ import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Ints.padding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
-import org.dayflower.java.io.IntArrayOutputStream;
-import org.dayflower.node.NodeFilter;
-import org.dayflower.utility.ParameterArguments;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@link BVHNode3F} instances.
@@ -242,100 +237,5 @@ public final class BVHNode3Fs {
 		final BVHNode3F bVHNodeR = create(processableBVHItemsR, maximumR, minimumR, depth + 1);
 		
 		return new TreeBVHNode3F(maximum, minimum, depth, bVHNodeL, bVHNodeR);
-	}
-	
-	/**
-	 * Returns an {@code int[]} with a compiled version of {@code rootBVHNode}.
-	 * <p>
-	 * If either {@code rootBVHNode}, {@code shapes} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param <T> the generic {@link Shape3F} type to use
-	 * @param rootBVHNode a {@link BVHNode3F} instance that represents the root of the bounding volume hierarchy (BVH) structure to compile
-	 * @param shapes a {@code List} of {@code Shape3F} instances
-	 * @return an {@code int[]} with a compiled version of {@code rootBVHNode}
-	 * @throws NullPointerException thrown if, and only if, either {@code rootBVHNode}, {@code shapes} or at least one of its elements are {@code null}
-	 */
-	public static <T extends Shape3F> int[] toArray(final BVHNode3F rootBVHNode, final List<T> shapes) {
-		Objects.requireNonNull(rootBVHNode, "rootBVHNode == null");
-		
-		ParameterArguments.requireNonNullList(shapes, "shapes");
-		
-		final List<BVHNode3F> bVHNodes = NodeFilter.filterAll(rootBVHNode, BVHNode3F.class);
-		
-		final int[] offsets = new int[bVHNodes.size()];
-		
-		for(int i = 0, j = 0; i < offsets.length; j += bVHNodes.get(i).getArrayLength(), i++) {
-			offsets[i] = j;
-		}
-		
-		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
-			for(int i = 0; i < bVHNodes.size(); i++) {
-				final BVHNode3F bVHNode = bVHNodes.get(i);
-				
-				if(bVHNode instanceof LeafBVHNode3F) {
-					final LeafBVHNode3F<?> leafBVHNode = LeafBVHNode3F.class.cast(bVHNode);
-					
-					final int id = LeafBVHNode3F.ID;
-					final int boundingVolumeOffset = i;
-					final int nextOffset = doFindNextOffset(bVHNodes, leafBVHNode.getDepth(), i + 1, offsets);
-					final int shapeCount = leafBVHNode.getShapeCount();
-					
-					intArrayOutputStream.writeInt(id);
-					intArrayOutputStream.writeInt(boundingVolumeOffset);
-					intArrayOutputStream.writeInt(nextOffset);
-					intArrayOutputStream.writeInt(shapeCount);
-					
-					for(final Shape3F shape : leafBVHNode.getShapes()) {
-						intArrayOutputStream.writeInt(shapes.indexOf(shape));
-					}
-					
-					final int padding = padding(4 + shapeCount);
-					
-					for(int j = 0; j < padding; j++) {
-						intArrayOutputStream.writeInt(0);
-					}
-				} else if(bVHNode instanceof TreeBVHNode3F) {
-					final TreeBVHNode3F treeBVHNode = TreeBVHNode3F.class.cast(bVHNode);
-					
-					final int id = TreeBVHNode3F.ID;
-					final int boundingVolumeOffset = i;
-					final int nextOffset = doFindNextOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
-					final int leftOffset = doFindLeftOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
-					
-					intArrayOutputStream.writeInt(id);
-					intArrayOutputStream.writeInt(boundingVolumeOffset);
-					intArrayOutputStream.writeInt(nextOffset);
-					intArrayOutputStream.writeInt(leftOffset);
-					intArrayOutputStream.writeInt(0);
-					intArrayOutputStream.writeInt(0);
-					intArrayOutputStream.writeInt(0);
-					intArrayOutputStream.writeInt(0);
-				}
-			}
-			
-			return intArrayOutputStream.toIntArray();
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static int doFindLeftOffset(final List<BVHNode3F> bVHNodes, final int depth, final int index, final int[] offsets) {
-		for(int i = index; i < bVHNodes.size(); i++) {
-			if(bVHNodes.get(i).getDepth() == depth + 1) {
-				return offsets[i];
-			}
-		}
-		
-		return -1;
-	}
-	
-	private static int doFindNextOffset(final List<BVHNode3F> bVHNodes, final int depth, final int index, final int[] offsets) {
-		for(int i = index; i < bVHNodes.size(); i++) {
-			if(bVHNodes.get(i).getDepth() <= depth) {
-				return offsets[i];
-			}
-		}
-		
-		return -1;
 	}
 }

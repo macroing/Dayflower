@@ -20,7 +20,6 @@ package org.dayflower.geometry.boundingvolume.hierarchy;
 
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.minOrNaN;
-import static org.dayflower.utility.Ints.padding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +43,6 @@ import org.dayflower.utility.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class LeafBVHNode3F<T extends Shape3F> extends BVHNode3F {
-	/**
-	 * The offset for the shape count in the {@code int[]}.
-	 * <p>
-	 * This offset is used for leaf nodes only.
-	 */
-	public static final int ARRAY_OFFSET_SHAPE_COUNT = 3;
-	
 	/**
 	 * The ID for all leaf nodes in the bounding volume hierarchy (BVH).
 	 */
@@ -230,16 +222,6 @@ public final class LeafBVHNode3F<T extends Shape3F> extends BVHNode3F {
 		}
 		
 		return surfaceArea;
-	}
-	
-	/**
-	 * Returns the length of the array that contains a compiled version of this {@code LeafBVHNode3F} instance.
-	 * 
-	 * @return the length of the array that contains a compiled version of this {@code LeafBVHNode3F} instance
-	 */
-	@Override
-	public int getArrayLength() {
-		return 4 + this.shapes.size() + padding(4 + this.shapes.size());
 	}
 	
 	/**

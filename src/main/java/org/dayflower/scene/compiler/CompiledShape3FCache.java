@@ -21,11 +21,16 @@ package org.dayflower.scene.compiler;
 import java.util.Objects;
 
 import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
+import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
@@ -331,6 +336,50 @@ public final class CompiledShape3FCache {
 	 * The offset for the {@link Point2F} instance that represents the texture coordinates of {@link Vertex3F} {@code C} in a compiled {@link Triangle3F} instance.
 	 */
 	public static final int TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES = 13;
+	
+	/**
+	 * The offset for the offset of the {@link BoundingVolume3F} in a given {@link BVHNode3F} in a compiled {@link TriangleMesh3F} instance.
+	 * <p>
+	 * The {@code BoundingVolume3F} is always an {@link AxisAlignedBoundingBox3F}.
+	 * <p>
+	 * This offset is used for both {@link LeafBVHNode3F} and {@link TreeBVHNode3F}.
+	 */
+	public static final int TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_BOUNDING_VOLUME_OFFSET = 1;
+	
+	/**
+	 * The offset for the ID of a given {@link BVHNode3F} in a compiled {@link TriangleMesh3F} instance.
+	 * <p>
+	 * This offset is used for both {@link LeafBVHNode3F} and {@link TreeBVHNode3F}.
+	 */
+	public static final int TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_ID = 0;
+	
+	/**
+	 * The offset for the left {@link BVHNode3F} in a {@link TreeBVHNode3F} or the {@link Shape3F} count in a {@link LeafBVHNode3F} in a compiled {@link TriangleMesh3F} instance.
+	 * <p>
+	 * This offset is used for both {@code LeafBVHNode3F} and {@code TreeBVHNode3F}.
+	 */
+	public static final int TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT = 3;
+	
+	/**
+	 * The offset for the next {@link BVHNode3F} of a given {@code BVHNode3F} in a compiled {@link TriangleMesh3F} instance.
+	 * <p>
+	 * This offset is used for both {@link LeafBVHNode3F} and {@link TreeBVHNode3F}.
+	 */
+	public static final int TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_NEXT_OFFSET = 2;
+	
+	/**
+	 * The offset for the {@link Shape3F} count in a {@link LeafBVHNode3F} in a compiled {@link TriangleMesh3F} instance.
+	 * <p>
+	 * This offset is used for {@code LeafBVHNode3F} only.
+	 */
+	public static final int TRIANGLE_MESH_3_F_LEAF_B_V_H_NODE_3_F_OFFSET_SHAPE_COUNT = 3;
+	
+	/**
+	 * The offset for the left {@link BVHNode3F} in a {@link TreeBVHNode3F} in a compiled {@link TriangleMesh3F} instance.
+	 * <p>
+	 * This offset is used for {@code TreeBVHNode3F} only.
+	 */
+	public static final int TRIANGLE_MESH_3_F_TREE_B_V_H_NODE_3_F_OFFSET_LEFT_OFFSET = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

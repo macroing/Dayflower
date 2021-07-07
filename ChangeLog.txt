@@ -6,12 +6,13 @@
 	* ADD:		Add constants to the CompiledShape3FCache class.
 	* CHANGE:	Optimized the Scene Compiler API.
 	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the AxisAlignedBoundingBox3D, AxisAlignedBoundingBox3F, BoundingSphere3D and BoundingSphere3F classes.
-	* REMOVE:	Remove the constants ARRAY_OFFSET_* from the BVHNode3D, LeafBVHNode3D and TreeBVHNode3D classes.
+	* REMOVE:	Remove the constants ARRAY_OFFSET_* from the BVHNode3D, BVHNode3F, LeafBVHNode3D, LeafBVHNode3F, TreeBVHNode3D and TreeBVHNode3F classes.
 	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the Cone3D, Cone3F, Cylinder3D, Cylinder3F, Disk3D, Disk3F, Hyperboloid3D, Hyperboloid3F, Paraboloid3D, Paraboloid3F, Plane3D, Plane3F, Rectangle3D, Rectangle3F, RectangularCuboid3D, RectangularCuboid3F, Sphere3D, Sphere3F, Torus3D, Torus3F, Triangle3D and Triangle3F classes.
 	* REMOVE:	Remove the method toArray() from the AxisAlignedBoundingBox3D, AxisAlignedBoundingBox3F, BoundingSphere3D and BoundingSphere3F classes.
 	* REMOVE:	Remove the method toArray() from the Cone3D, Cone3F, Cylinder3D, Cylinder3F, Disk3D, Disk3F, Hyperboloid3D, Hyperboloid3F, Paraboloid3D, Paraboloid3F, Plane3D, Plane3F, Rectangle3D, Rectangle3F, RectangularCuboid3D, RectangularCuboid3F, Sphere3D, Sphere3F, Torus3D, Torus3F, Triangle3D, Triangle3F, TriangleMesh3D and TriangleMesh3F classes.
-	* REMOVE:	Remove the method getArrayLength() from the BVHNode3D, LeafBVHNode3D, TreeBVHNode3D, TriangleMesh3D and TriangleMesh3F classes.
+	* REMOVE:	Remove the method getArrayLength() from the BVHNode3D, BVHNode3F, LeafBVHNode3D, LeafBVHNode3F, TreeBVHNode3D, TreeBVHNode3F, TriangleMesh3D and TriangleMesh3F classes.
 	* REMOVE:	Remove the method toArray(BVHNode3D, List<T>) from the BVHNode3Ds class.
+	* REMOVE:	Remove the method toArray(BVHNode3F, List<T>) from the BVHNode3Fs class.
 
 2021-07-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

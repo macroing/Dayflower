@@ -26,7 +26,6 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
-import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
 import org.dayflower.scene.compiler.CompiledBoundingVolume3FCache;
@@ -3256,16 +3255,16 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		
 		while(relativeOffset != -1) {
 			final int offset = absoluteOffset + relativeOffset;
-			final int id = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_ID];
-			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
-			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_NEXT_OFFSET];
-			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT];
+			final int id = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_ID];
+			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_BOUNDING_VOLUME_OFFSET];
+			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_NEXT_OFFSET];
+			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT];
 			
 			final boolean isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 			
 			if(isIntersectingBoundingVolume && id == LeafBVHNode3F.ID) {
 				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
-					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT + 1 + i];
+					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT + 1 + i];
 					
 					final float tObjectSpace = this.shape3FTriangle3FIntersectionT(triangleOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 					
@@ -3320,16 +3319,16 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		
 		while(relativeOffset != -1) {
 			final int offset = absoluteOffset + relativeOffset;
-			final int id = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_ID];
-			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
-			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_NEXT_OFFSET];
-			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT];
+			final int id = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_ID];
+			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_BOUNDING_VOLUME_OFFSET];
+			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_NEXT_OFFSET];
+			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT];
 			
 			final boolean isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 			
 			if(isIntersectingBoundingVolume && id == LeafBVHNode3F.ID) {
 				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
-					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + BVHNode3F.ARRAY_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT + 1 + i];
+					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT + 1 + i];
 					
 					final float tObjectSpace = this.shape3FTriangle3FIntersectionT(triangleOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 					

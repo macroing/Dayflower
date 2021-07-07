@@ -37,38 +37,6 @@ import org.dayflower.utility.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public abstract class BVHNode3F implements Node {
-	/**
-	 * The offset for the offset of the {@link BoundingVolume3F} in the {@code int[]}.
-	 * <p>
-	 * The {@code BoundingVolume3F} is always an {@link AxisAlignedBoundingBox3F}.
-	 * <p>
-	 * This offset is used for both leaf and tree nodes.
-	 */
-	public static final int ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET = 1;
-	
-	/**
-	 * The offset for the ID of the bounding volume hierarchy (BVH) node in the {@code int[]}.
-	 * <p>
-	 * This offset is used for both leaf and tree nodes.
-	 */
-	public static final int ARRAY_OFFSET_ID = 0;
-	
-	/**
-	 * The offset for the left bounding volume hierarchy node or the shape count in the {@code int[]}.
-	 * <p>
-	 * This offset is used for both leaf and tree nodes.
-	 */
-	public static final int ARRAY_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT = 3;
-	
-	/**
-	 * The offset for the next bounding volume hierarchy node in the {@code int[]}.
-	 * <p>
-	 * This offset is used for both leaf and tree nodes.
-	 */
-	public static final int ARRAY_OFFSET_NEXT_OFFSET = 2;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private final BoundingVolume3F boundingVolume;
 	private final int depth;
 	
@@ -169,13 +137,6 @@ public abstract class BVHNode3F implements Node {
 	public final float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		return intersectionT(Objects.requireNonNull(ray, "ray == null"), new float[] {tMinimum, tMaximum});
 	}
-	
-	/**
-	 * Returns the length of the array that contains a compiled version of this {@code BVHNode3F} instance.
-	 * 
-	 * @return the length of the array that contains a compiled version of this {@code BVHNode3F} instance
-	 */
-	public abstract int getArrayLength();
 	
 	/**
 	 * Returns the depth associated with this {@code BVHNode3F} instance.

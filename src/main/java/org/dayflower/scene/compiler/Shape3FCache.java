@@ -32,7 +32,6 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3F;
-import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3Fs;
 import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
 import org.dayflower.geometry.shape.Cone3F;
@@ -47,6 +46,7 @@ import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
+import org.dayflower.java.io.IntArrayOutputStream;
 import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
@@ -54,6 +54,7 @@ import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Scene;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
+import org.dayflower.utility.ParameterArguments;
 
 final class Shape3FCache {
 	private final List<Cone3F> distinctCone3Fs;
@@ -211,14 +212,14 @@ final class Shape3FCache {
 			final int shape3FTriangleMesh3FArrayLength = shape3FTriangleMesh3FArrayOffset + doGetArrayLength(triangleMesh);
 			
 			for(int j = shape3FTriangleMesh3FArrayOffset; j < shape3FTriangleMesh3FArrayLength;) {
-				final int boundingVolumeOffset = j + BVHNode3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
-				final int idOffset = j + BVHNode3F.ARRAY_OFFSET_ID;
+				final int boundingVolumeOffset = j + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_BOUNDING_VOLUME_OFFSET;
+				final int idOffset = j + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_ID;
 				final int id = shape3FTriangleMesh3FArray[idOffset];
 				
 				shape3FTriangleMesh3FArray[boundingVolumeOffset] = boundingVolume3FCache.findOffsetFor(boundingVolumes.get(shape3FTriangleMesh3FArray[boundingVolumeOffset]));
 				
 				if(id == LeafBVHNode3F.ID) {
-					final int triangleCountOffset = j + LeafBVHNode3F.ARRAY_OFFSET_SHAPE_COUNT;
+					final int triangleCountOffset = j + CompiledShape3FCache.TRIANGLE_MESH_3_F_LEAF_B_V_H_NODE_3_F_OFFSET_SHAPE_COUNT;
 					final int triangleCount = shape3FTriangleMesh3FArray[triangleCountOffset];
 					final int triangleStartOffset = triangleCountOffset + 1;
 					
@@ -765,25 +766,119 @@ final class Shape3FCache {
 		return array;
 	}
 	
+	private static int doFindLeftOffset(final List<BVHNode3F> bVHNodes, final int depth, final int index, final int[] offsets) {
+		for(int i = index; i < bVHNodes.size(); i++) {
+			if(bVHNodes.get(i).getDepth() == depth + 1) {
+				return offsets[i];
+			}
+		}
+		
+		return -1;
+	}
+	
+	private static int doFindNextOffset(final List<BVHNode3F> bVHNodes, final int depth, final int index, final int[] offsets) {
+		for(int i = index; i < bVHNodes.size(); i++) {
+			if(bVHNodes.get(i).getDepth() <= depth) {
+				return offsets[i];
+			}
+		}
+		
+		return -1;
+	}
+	
+	private static int doGetArrayLength(final BVHNode3F bVHNode3F) {
+		if(bVHNode3F instanceof LeafBVHNode3F) {
+			final int a = 4;
+			final int b = LeafBVHNode3F.class.cast(bVHNode3F).getShapeCount();
+			final int c = padding(a + b);
+			
+			return a + b + c;
+		} else if(bVHNode3F instanceof TreeBVHNode3F) {
+			return 8;
+		} else {
+			return 0;
+		}
+	}
+	
 	private static int doGetArrayLength(final TriangleMesh3F triangleMesh3F) {
 		final Optional<BVHNode3F> optionalRootBVHNode = triangleMesh3F.getRootBVHNode();
 		
 		if(optionalRootBVHNode.isPresent()) {
 			final BVHNode3F rootBVHNode = optionalRootBVHNode.get();
 			
-			return NodeFilter.filterAll(rootBVHNode, BVHNode3F.class).stream().mapToInt(bVHNode -> bVHNode.getArrayLength()).sum();
+			return NodeFilter.filterAll(rootBVHNode, BVHNode3F.class).stream().mapToInt(bVHNode -> doGetArrayLength(bVHNode)).sum();
 		}
 		
 		return 0;
+	}
+	
+	private static int[] doToArray(final BVHNode3F rootBVHNode, final List<Triangle3F> shapes) {
+		Objects.requireNonNull(rootBVHNode, "rootBVHNode == null");
+		
+		ParameterArguments.requireNonNullList(shapes, "shapes");
+		
+		final List<BVHNode3F> bVHNodes = NodeFilter.filterAll(rootBVHNode, BVHNode3F.class);
+		
+		final int[] offsets = new int[bVHNodes.size()];
+		
+		for(int i = 0, j = 0; i < offsets.length; j += doGetArrayLength(bVHNodes.get(i)), i++) {
+			offsets[i] = j;
+		}
+		
+		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
+			for(int i = 0; i < bVHNodes.size(); i++) {
+				final BVHNode3F bVHNode = bVHNodes.get(i);
+				
+				if(bVHNode instanceof LeafBVHNode3F) {
+					final LeafBVHNode3F<?> leafBVHNode = LeafBVHNode3F.class.cast(bVHNode);
+					
+					final int id = LeafBVHNode3F.ID;
+					final int boundingVolumeOffset = i;
+					final int nextOffset = doFindNextOffset(bVHNodes, leafBVHNode.getDepth(), i + 1, offsets);
+					final int shapeCount = leafBVHNode.getShapeCount();
+					
+					intArrayOutputStream.writeInt(id);
+					intArrayOutputStream.writeInt(boundingVolumeOffset);
+					intArrayOutputStream.writeInt(nextOffset);
+					intArrayOutputStream.writeInt(shapeCount);
+					
+					for(final Shape3F shape : leafBVHNode.getShapes()) {
+						intArrayOutputStream.writeInt(shapes.indexOf(shape));
+					}
+					
+					final int padding = padding(4 + shapeCount);
+					
+					for(int j = 0; j < padding; j++) {
+						intArrayOutputStream.writeInt(0);
+					}
+				} else if(bVHNode instanceof TreeBVHNode3F) {
+					final TreeBVHNode3F treeBVHNode = TreeBVHNode3F.class.cast(bVHNode);
+					
+					final int id = TreeBVHNode3F.ID;
+					final int boundingVolumeOffset = i;
+					final int nextOffset = doFindNextOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
+					final int leftOffset = doFindLeftOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
+					
+					intArrayOutputStream.writeInt(id);
+					intArrayOutputStream.writeInt(boundingVolumeOffset);
+					intArrayOutputStream.writeInt(nextOffset);
+					intArrayOutputStream.writeInt(leftOffset);
+					intArrayOutputStream.writeInt(0);
+					intArrayOutputStream.writeInt(0);
+					intArrayOutputStream.writeInt(0);
+					intArrayOutputStream.writeInt(0);
+				}
+			}
+			
+			return intArrayOutputStream.toIntArray();
+		}
 	}
 	
 	private static int[] doToArray(final TriangleMesh3F triangleMesh3F) {
 		final Optional<BVHNode3F> optionalRootBVHNode = triangleMesh3F.getRootBVHNode();
 		
 		if(optionalRootBVHNode.isPresent()) {
-			final BVHNode3F rootBVHNode = optionalRootBVHNode.get();
-			
-			return BVHNode3Fs.toArray(rootBVHNode, triangleMesh3F.getTriangles());
+			return doToArray(optionalRootBVHNode.get(), triangleMesh3F.getTriangles());
 		}
 		
 		return new int[0];

@@ -18,6 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
+import org.dayflower.scene.compiler.CompiledTextureCache;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -134,18 +135,18 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 	 */
 	protected final void textureEvaluate(final int textureID, final int textureOffset) {
 		if(textureID == BlendTexture.ID) {
-			final int textureOffsetAbsolute = textureOffset * BlendTexture.ARRAY_LENGTH;
+			final int textureOffsetAbsolute = textureOffset * CompiledTextureCache.BLEND_TEXTURE_LENGTH;
 			
-			final int textureA = (int)(this.textureBlendTextureArray[textureOffsetAbsolute + BlendTexture.ARRAY_OFFSET_TEXTURE_A]);
+			final int textureA = (int)(this.textureBlendTextureArray[textureOffsetAbsolute + CompiledTextureCache.BLEND_TEXTURE_OFFSET_TEXTURE_A]);
 			final int textureAID = (textureA >>> 16) & 0xFFFF;
 			final int textureAOffset = textureA & 0xFFFF;
-			final int textureB = (int)(this.textureBlendTextureArray[textureOffsetAbsolute + BlendTexture.ARRAY_OFFSET_TEXTURE_B]);
+			final int textureB = (int)(this.textureBlendTextureArray[textureOffsetAbsolute + CompiledTextureCache.BLEND_TEXTURE_OFFSET_TEXTURE_B]);
 			final int textureBID = (textureB >>> 16) & 0xFFFF;
 			final int textureBOffset = textureB & 0xFFFF;
 			
-			final float tComponent1 = this.textureBlendTextureArray[textureOffsetAbsolute + BlendTexture.ARRAY_OFFSET_T_COMPONENT_1];
-			final float tComponent2 = this.textureBlendTextureArray[textureOffsetAbsolute + BlendTexture.ARRAY_OFFSET_T_COMPONENT_2];
-			final float tComponent3 = this.textureBlendTextureArray[textureOffsetAbsolute + BlendTexture.ARRAY_OFFSET_T_COMPONENT_3];
+			final float tComponent1 = this.textureBlendTextureArray[textureOffsetAbsolute + CompiledTextureCache.BLEND_TEXTURE_OFFSET_T_COMPONENT_1];
+			final float tComponent2 = this.textureBlendTextureArray[textureOffsetAbsolute + CompiledTextureCache.BLEND_TEXTURE_OFFSET_T_COMPONENT_2];
+			final float tComponent3 = this.textureBlendTextureArray[textureOffsetAbsolute + CompiledTextureCache.BLEND_TEXTURE_OFFSET_T_COMPONENT_3];
 			
 			textureEvaluateExcludingBlendTexture(textureAID, textureAOffset);
 			
@@ -196,20 +197,20 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 		
 		while(currentTextureID != -1 && currentTextureOffset != -1) {
 			if(currentTextureID == BullseyeTexture.ID) {
-				final int currentTextureOffsetAbsolute = currentTextureOffset * BullseyeTexture.ARRAY_LENGTH;
+				final int currentTextureOffsetAbsolute = currentTextureOffset * CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH;
 				
-				final float originX = this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + BullseyeTexture.ARRAY_OFFSET_ORIGIN + 0];
-				final float originY = this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + BullseyeTexture.ARRAY_OFFSET_ORIGIN + 1];
-				final float originZ = this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + BullseyeTexture.ARRAY_OFFSET_ORIGIN + 2];
+				final float originX = this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_ORIGIN + 0];
+				final float originY = this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_ORIGIN + 1];
+				final float originZ = this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_ORIGIN + 2];
 				
-				final int textureA = (int)(this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + BullseyeTexture.ARRAY_OFFSET_TEXTURE_A]);
+				final int textureA = (int)(this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_TEXTURE_A]);
 				final int textureAID = (textureA >>> 16) & 0xFFFF;
 				final int textureAOffset = textureA & 0xFFFF;
-				final int textureB = (int)(this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + BullseyeTexture.ARRAY_OFFSET_TEXTURE_B]);
+				final int textureB = (int)(this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_TEXTURE_B]);
 				final int textureBID = (textureB >>> 16) & 0xFFFF;
 				final int textureBOffset = textureB & 0xFFFF;
 				
-				final float scale = this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + BullseyeTexture.ARRAY_OFFSET_SCALE];
+				final float scale = this.textureBullseyeTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_SCALE];
 				
 				final float distance = point3FDistance(originX, originY, originZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 				final float distanceScaled = distance * scale;
@@ -220,21 +221,21 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 				currentTextureID = isTextureA ? textureAID : textureBID;
 				currentTextureOffset = isTextureA ? textureAOffset : textureBOffset;
 			} else if(currentTextureID == CheckerboardTexture.ID) {
-				final int currentTextureOffsetAbsolute = currentTextureOffset * CheckerboardTexture.ARRAY_LENGTH;
+				final int currentTextureOffsetAbsolute = currentTextureOffset * CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH;
 				
-				final float angleRadians = this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CheckerboardTexture.ARRAY_OFFSET_ANGLE_RADIANS];
+				final float angleRadians = this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_ANGLE_RADIANS];
 				final float angleRadiansCos = cos(angleRadians);
 				final float angleRadiansSin = sin(angleRadians);
 				
-				final int textureA = (int)(this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CheckerboardTexture.ARRAY_OFFSET_TEXTURE_A]);
+				final int textureA = (int)(this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_A]);
 				final int textureAID = (textureA >>> 16) & 0xFFFF;
 				final int textureAOffset = textureA & 0xFFFF;
-				final int textureB = (int)(this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CheckerboardTexture.ARRAY_OFFSET_TEXTURE_B]);
+				final int textureB = (int)(this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_B]);
 				final int textureBID = (textureB >>> 16) & 0xFFFF;
 				final int textureBOffset = textureB & 0xFFFF;
 				
-				final float scaleU = this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CheckerboardTexture.ARRAY_OFFSET_SCALE + 0];
-				final float scaleV = this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CheckerboardTexture.ARRAY_OFFSET_SCALE + 1];
+				final float scaleU = this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_SCALE + 0];
+				final float scaleV = this.textureCheckerboardTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_SCALE + 1];
 				
 				final boolean isU = fractionalPart((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * scaleU, false) > 0.5F;
 				final boolean isV = fractionalPart((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * scaleV, false) > 0.5F;
@@ -244,26 +245,26 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 				currentTextureID = isTextureA ? textureAID : textureBID;
 				currentTextureOffset = isTextureA ? textureAOffset : textureBOffset;
 			} else if(currentTextureID == ConstantTexture.ID) {
-				final int currentTextureOffsetAbsolute = currentTextureOffset * ConstantTexture.ARRAY_LENGTH;
+				final int currentTextureOffsetAbsolute = currentTextureOffset * CompiledTextureCache.CONSTANT_TEXTURE_LENGTH;
 				
-				component1 = this.textureConstantTextureArray[currentTextureOffsetAbsolute + ConstantTexture.ARRAY_OFFSET_COLOR + 0];
-				component2 = this.textureConstantTextureArray[currentTextureOffsetAbsolute + ConstantTexture.ARRAY_OFFSET_COLOR + 1];
-				component3 = this.textureConstantTextureArray[currentTextureOffsetAbsolute + ConstantTexture.ARRAY_OFFSET_COLOR + 2];
+				component1 = this.textureConstantTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CONSTANT_TEXTURE_OFFSET_COLOR + 0];
+				component2 = this.textureConstantTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CONSTANT_TEXTURE_OFFSET_COLOR + 1];
+				component3 = this.textureConstantTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CONSTANT_TEXTURE_OFFSET_COLOR + 2];
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else if(currentTextureID == LDRImageTexture.ID) {
 				final int currentTextureOffsetAbsolute = this.textureLDRImageTextureOffsetArray[currentTextureOffset];
 				
-				final float angleRadians = this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + LDRImageTexture.ARRAY_OFFSET_ANGLE_RADIANS];
+				final float angleRadians = this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_ANGLE_RADIANS];
 				final float angleRadiansCos = cos(angleRadians);
 				final float angleRadiansSin = sin(angleRadians);
 				
-				final float scaleU = this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + LDRImageTexture.ARRAY_OFFSET_SCALE + 0];
-				final float scaleV = this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + LDRImageTexture.ARRAY_OFFSET_SCALE + 1];
+				final float scaleU = this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 0];
+				final float scaleV = this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 1];
 				
-				final int resolutionX = (int)(this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + LDRImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
-				final int resolutionY = (int)(this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + LDRImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
+				final int resolutionX = (int)(this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_X]);
+				final int resolutionY = (int)(this.textureLDRImageTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_Y]);
 				
 				final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
 				final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
@@ -280,7 +281,7 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 				final int minimumY = (int)(floor(y));
 				final int maximumY = (int)(ceil(y));
 				
-				final int offsetImage = currentTextureOffsetAbsolute + LDRImageTexture.ARRAY_OFFSET_IMAGE;
+				final int offsetImage = currentTextureOffsetAbsolute + CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_IMAGE;
 				final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
 				final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
 				final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
@@ -301,16 +302,16 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else if(currentTextureID == MarbleTexture.ID) {
-				final int currentTextureOffsetAbsolute = currentTextureOffset * MarbleTexture.ARRAY_LENGTH;
+				final int currentTextureOffsetAbsolute = currentTextureOffset * CompiledTextureCache.MARBLE_TEXTURE_LENGTH;
 				
-				final int colorARGB = (int)(this.textureMarbleTextureArray[currentTextureOffsetAbsolute + MarbleTexture.ARRAY_OFFSET_COLOR_A]);
-				final int colorBRGB = (int)(this.textureMarbleTextureArray[currentTextureOffsetAbsolute + MarbleTexture.ARRAY_OFFSET_COLOR_B]);
-				final int colorCRGB = (int)(this.textureMarbleTextureArray[currentTextureOffsetAbsolute + MarbleTexture.ARRAY_OFFSET_COLOR_C]);
+				final int colorARGB = (int)(this.textureMarbleTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.MARBLE_TEXTURE_OFFSET_COLOR_A]);
+				final int colorBRGB = (int)(this.textureMarbleTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.MARBLE_TEXTURE_OFFSET_COLOR_B]);
+				final int colorCRGB = (int)(this.textureMarbleTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.MARBLE_TEXTURE_OFFSET_COLOR_C]);
 				
-				final float frequency = this.textureMarbleTextureArray[currentTextureOffsetAbsolute + MarbleTexture.ARRAY_OFFSET_FREQUENCY];
-				final float scale = this.textureMarbleTextureArray[currentTextureOffsetAbsolute + MarbleTexture.ARRAY_OFFSET_SCALE];
+				final float frequency = this.textureMarbleTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.MARBLE_TEXTURE_OFFSET_FREQUENCY];
+				final float scale = this.textureMarbleTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.MARBLE_TEXTURE_OFFSET_SCALE];
 				
-				final int octaves = (int)(this.textureMarbleTextureArray[currentTextureOffsetAbsolute + MarbleTexture.ARRAY_OFFSET_OCTAVES]);
+				final int octaves = (int)(this.textureMarbleTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.MARBLE_TEXTURE_OFFSET_OCTAVES]);
 				
 				final float x = surfaceIntersectionPointX * frequency;
 				final float y = surfaceIntersectionPointY * frequency;
@@ -326,14 +327,14 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else if(currentTextureID == SimplexFractionalBrownianMotionTexture.ID) {
-				final int currentTextureOffsetAbsolute = currentTextureOffset * SimplexFractionalBrownianMotionTexture.ARRAY_LENGTH;
+				final int currentTextureOffsetAbsolute = currentTextureOffset * CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH;
 				
-				final int colorRGB = (int)(this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffsetAbsolute + SimplexFractionalBrownianMotionTexture.ARRAY_OFFSET_COLOR]);
+				final int colorRGB = (int)(this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_COLOR]);
 				
-				final float frequency = this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffsetAbsolute + SimplexFractionalBrownianMotionTexture.ARRAY_OFFSET_FREQUENCY];
-				final float gain = this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffsetAbsolute + SimplexFractionalBrownianMotionTexture.ARRAY_OFFSET_GAIN];
+				final float frequency = this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_FREQUENCY];
+				final float gain = this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_GAIN];
 				
-				final int octaves = (int)(this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffsetAbsolute + SimplexFractionalBrownianMotionTexture.ARRAY_OFFSET_OCTAVES]);
+				final int octaves = (int)(this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_OCTAVES]);
 				
 				final float colorR = colorRGBIntToRFloat(colorRGB);
 				final float colorG = colorRGBIntToGFloat(colorRGB);

@@ -39,31 +39,6 @@ import org.dayflower.scene.Intersection;
  */
 public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the {@link Color3F} instance representing the color in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_COLOR = 0;
-	
-	/**
-	 * The offset for the frequency in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_FREQUENCY = 1;
-	
-	/**
-	 * The offset for the gain in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_GAIN = 2;
-	
-	/**
-	 * The offset for the octaves in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_OCTAVES = 3;
-	
-	/**
 	 * The ID of this {@code SimplexFractionalBrownianMotionTexture} class.
 	 */
 	public static final int ID = 8;
@@ -129,6 +104,15 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the {@link Color3F} instance associated with this {@code SimplexFractionalBrownianMotionTexture} instance.
+	 * 
+	 * @return the {@code Color3F} instance associated with this {@code SimplexFractionalBrownianMotionTexture} instance
+	 */
+	public Color3F getColor() {
+		return this.color;
+	}
 	
 	/**
 	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
@@ -204,20 +188,21 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code SimplexFractionalBrownianMotionTexture} instance.
+	 * Returns the frequency associated with this {@code SimplexFractionalBrownianMotionTexture} instance.
 	 * 
-	 * @return a {@code float[]} representation of this {@code SimplexFractionalBrownianMotionTexture} instance
+	 * @return the frequency associated with this {@code SimplexFractionalBrownianMotionTexture} instance
 	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-//		Because the SimplexFractionalBrownianMotionTexture occupy 4/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_COLOR] = this.color.pack();	//Block #1
-		array[ARRAY_OFFSET_FREQUENCY] = this.frequency;	//Block #1
-		array[ARRAY_OFFSET_GAIN] = this.gain;			//Block #1
-		array[ARRAY_OFFSET_OCTAVES] = this.octaves;		//Block #1
-		
-		return array;
+	public float getFrequency() {
+		return this.frequency;
+	}
+	
+	/**
+	 * Returns the gain associated with this {@code SimplexFractionalBrownianMotionTexture} instance.
+	 * 
+	 * @return the gain associated with this {@code SimplexFractionalBrownianMotionTexture} instance
+	 */
+	public float getGain() {
+		return this.gain;
 	}
 	
 	/**
@@ -228,6 +213,15 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	@Override
 	public int getID() {
 		return ID;
+	}
+	
+	/**
+	 * Returns the octaves associated with this {@code SimplexFractionalBrownianMotionTexture} instance.
+	 * 
+	 * @return the octaves associated with this {@code SimplexFractionalBrownianMotionTexture} instance
+	 */
+	public int getOctaves() {
+		return this.octaves;
 	}
 	
 	/**

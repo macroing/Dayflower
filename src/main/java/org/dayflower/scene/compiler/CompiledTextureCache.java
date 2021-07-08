@@ -20,6 +20,9 @@ package org.dayflower.scene.compiler;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Vector2F;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -36,6 +39,193 @@ import org.dayflower.scene.texture.Texture;
  * @author J&#246;rgen Lundgren
  */
 public final class CompiledTextureCache {
+	/**
+	 * The length of a compiled {@link BlendTexture} instance.
+	 */
+	public static final int BLEND_TEXTURE_LENGTH = 8;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code A} in a compiled {@link BlendTexture} instance.
+	 */
+	public static final int BLEND_TEXTURE_OFFSET_TEXTURE_A = 0;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code B} in a compiled {@link BlendTexture} instance.
+	 */
+	public static final int BLEND_TEXTURE_OFFSET_TEXTURE_B = 1;
+	
+	/**
+	 * The offset for the factor to use for component 1 in a compiled {@link BlendTexture} instance.
+	 */
+	public static final int BLEND_TEXTURE_OFFSET_T_COMPONENT_1 = 2;
+	
+	/**
+	 * The offset for the factor to use for component 2 in a compiled {@link BlendTexture} instance.
+	 */
+	public static final int BLEND_TEXTURE_OFFSET_T_COMPONENT_2 = 3;
+	
+	/**
+	 * The offset for the factor to use for component 3 in a compiled {@link BlendTexture} instance.
+	 */
+	public static final int BLEND_TEXTURE_OFFSET_T_COMPONENT_3 = 4;
+	
+	/**
+	 * The length of a compiled {@link BullseyeTexture} instance.
+	 */
+	public static final int BULLSEYE_TEXTURE_LENGTH = 8;
+	
+	/**
+	 * The offset for the {@link Point3F} instance that represents the origin in a compiled {@link BullseyeTexture} instance.
+	 */
+	public static final int BULLSEYE_TEXTURE_OFFSET_ORIGIN = 0;
+	
+	/**
+	 * The offset for the scale in a compiled {@link BullseyeTexture} instance.
+	 */
+	public static final int BULLSEYE_TEXTURE_OFFSET_SCALE = 5;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code A} in a compiled {@link BullseyeTexture} instance.
+	 */
+	public static final int BULLSEYE_TEXTURE_OFFSET_TEXTURE_A = 3;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code B} in a compiled {@link BullseyeTexture} instance.
+	 */
+	public static final int BULLSEYE_TEXTURE_OFFSET_TEXTURE_B = 4;
+	
+	/**
+	 * The length of a compiled {@link CheckerboardTexture} instance.
+	 */
+	public static final int CHECKERBOARD_TEXTURE_LENGTH = 8;
+	
+	/**
+	 * The offset for the angle in degrees in a compiled {@link CheckerboardTexture} instance.
+	 */
+	public static final int CHECKERBOARD_TEXTURE_OFFSET_ANGLE_DEGREES = 0;
+	
+	/**
+	 * The offset for the angle in radians in a compiled {@link CheckerboardTexture} instance.
+	 */
+	public static final int CHECKERBOARD_TEXTURE_OFFSET_ANGLE_RADIANS = 1;
+	
+	/**
+	 * The offset for the {@link Vector2F} instance that represents the scale in a compiled {@link CheckerboardTexture} instance.
+	 */
+	public static final int CHECKERBOARD_TEXTURE_OFFSET_SCALE = 4;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code A} in a compiled {@link CheckerboardTexture} instance.
+	 */
+	public static final int CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_A = 2;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code B} in a compiled {@link CheckerboardTexture} instance.
+	 */
+	public static final int CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_B = 3;
+	
+	/**
+	 * The length of a compiled {@link ConstantTexture} instance.
+	 */
+	public static final int CONSTANT_TEXTURE_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link Color3F} instance that represents the color in a compiled {@link ConstantTexture} instance.
+	 */
+	public static final int CONSTANT_TEXTURE_OFFSET_COLOR = 0;
+	
+	/**
+	 * The offset for the angle in radians in a compiled {@link LDRImageTexture} instance.
+	 */
+	public static final int L_D_R_IMAGE_TEXTURE_OFFSET_ANGLE_RADIANS = 0;
+	
+	/**
+	 * The offset for the image in a compiled {@link LDRImageTexture} instance.
+	 */
+	public static final int L_D_R_IMAGE_TEXTURE_OFFSET_IMAGE = 5;
+	
+	/**
+	 * The offset for the resolution of the X-axis in a compiled {@link LDRImageTexture} instance.
+	 */
+	public static final int L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_X = 3;
+	
+	/**
+	 * The offset for the resolution of the Y-axis in a compiled {@link LDRImageTexture} instance.
+	 */
+	public static final int L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_Y = 4;
+	
+	/**
+	 * The offset for the {@link Vector2F} instance that represents the scale in a compiled {@link LDRImageTexture} instance.
+	 */
+	public static final int L_D_R_IMAGE_TEXTURE_OFFSET_SCALE = 1;
+	
+	/**
+	 * The length of a compiled {@link MarbleTexture} instance.
+	 */
+	public static final int MARBLE_TEXTURE_LENGTH = 8;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code A} in a compiled {@link MarbleTexture} instance.
+	 */
+	public static final int MARBLE_TEXTURE_OFFSET_COLOR_A = 0;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code B} in a compiled {@link MarbleTexture} instance.
+	 */
+	public static final int MARBLE_TEXTURE_OFFSET_COLOR_B = 1;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code B} in a compiled {@link MarbleTexture} instance.
+	 */
+	public static final int MARBLE_TEXTURE_OFFSET_COLOR_C = 2;
+	
+	/**
+	 * The offset for the frequency in a compiled {@link MarbleTexture} instance.
+	 */
+	public static final int MARBLE_TEXTURE_OFFSET_FREQUENCY = 3;
+	
+	/**
+	 * The offset for the octaves in a compiled {@link MarbleTexture} instance.
+	 */
+	public static final int MARBLE_TEXTURE_OFFSET_OCTAVES = 6;
+	
+	/**
+	 * The offset for the scale in a compiled {@link MarbleTexture} instance.
+	 */
+	public static final int MARBLE_TEXTURE_OFFSET_SCALE = 4;
+	
+	/**
+	 * The offset for the stripes in a compiled {@link MarbleTexture} instance.
+	 */
+	public static final int MARBLE_TEXTURE_OFFSET_STRIPES = 5;
+	
+	/**
+	 * The length of a compiled {@link SimplexFractionalBrownianMotionTexture} instance.
+	 */
+	public static final int SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link Color3F} instance that represents the color in a compiled {@link SimplexFractionalBrownianMotionTexture} instance.
+	 */
+	public static final int SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_COLOR = 0;
+	
+	/**
+	 * The offset for the frequency in a compiled {@link SimplexFractionalBrownianMotionTexture} instance.
+	 */
+	public static final int SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_FREQUENCY = 1;
+	
+	/**
+	 * The offset for the gain in a compiled {@link SimplexFractionalBrownianMotionTexture} instance.
+	 */
+	public static final int SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_GAIN = 2;
+	
+	/**
+	 * The offset for the octaves in a compiled {@link SimplexFractionalBrownianMotionTexture} instance.
+	 */
+	public static final int SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_OCTAVES = 3;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private float[] textureBlendTextureArray;
 	private float[] textureBullseyeTextureArray;
 	private float[] textureCheckerboardTextureArray;
@@ -132,7 +322,7 @@ public final class CompiledTextureCache {
 	 * @return the {@code BlendTexture} count in this {@code CompiledTextureCache} instance
 	 */
 	public int getTextureBlendTextureCount() {
-		return Structures.getStructureCount(this.textureBlendTextureArray, BlendTexture.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.textureBlendTextureArray, BLEND_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -145,7 +335,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureBlendTexture} is {@code null}
 	 */
 	public int getTextureBlendTextureOffsetAbsolute(final float[] textureBlendTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureBlendTextureArray, Objects.requireNonNull(textureBlendTexture, "textureBlendTexture == null"), getTextureBlendTextureCount(), BlendTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.textureBlendTextureArray, Objects.requireNonNull(textureBlendTexture, "textureBlendTexture == null"), getTextureBlendTextureCount(), BLEND_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -158,7 +348,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureBlendTexture} is {@code null}
 	 */
 	public int getTextureBlendTextureOffsetRelative(final float[] textureBlendTexture) {
-		return Structures.getStructureOffsetRelative(this.textureBlendTextureArray, Objects.requireNonNull(textureBlendTexture, "textureBlendTexture == null"), getTextureBlendTextureCount(), BlendTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.textureBlendTextureArray, Objects.requireNonNull(textureBlendTexture, "textureBlendTexture == null"), getTextureBlendTextureCount(), BLEND_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -167,7 +357,7 @@ public final class CompiledTextureCache {
 	 * @return the {@code BullseyeTexture} count in this {@code CompiledTextureCache} instance
 	 */
 	public int getTextureBullseyeTextureCount() {
-		return Structures.getStructureCount(this.textureBullseyeTextureArray, BullseyeTexture.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.textureBullseyeTextureArray, BULLSEYE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -180,7 +370,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureBullseyeTexture} is {@code null}
 	 */
 	public int getTextureBullseyeTextureOffsetAbsolute(final float[] textureBullseyeTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureBullseyeTextureArray, Objects.requireNonNull(textureBullseyeTexture, "textureBullseyeTexture == null"), getTextureBullseyeTextureCount(), BullseyeTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.textureBullseyeTextureArray, Objects.requireNonNull(textureBullseyeTexture, "textureBullseyeTexture == null"), getTextureBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -193,7 +383,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureBullseyeTexture} is {@code null}
 	 */
 	public int getTextureBullseyeTextureOffsetRelative(final float[] textureBullseyeTexture) {
-		return Structures.getStructureOffsetRelative(this.textureBullseyeTextureArray, Objects.requireNonNull(textureBullseyeTexture, "textureBullseyeTexture == null"), getTextureBullseyeTextureCount(), BullseyeTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.textureBullseyeTextureArray, Objects.requireNonNull(textureBullseyeTexture, "textureBullseyeTexture == null"), getTextureBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -202,7 +392,7 @@ public final class CompiledTextureCache {
 	 * @return the {@code CheckerboardTexture} count in this {@code CompiledTextureCache} instance
 	 */
 	public int getTextureCheckerboardTextureCount() {
-		return Structures.getStructureCount(this.textureCheckerboardTextureArray, CheckerboardTexture.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.textureCheckerboardTextureArray, CHECKERBOARD_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -215,7 +405,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureCheckerboardTexture} is {@code null}
 	 */
 	public int getTextureCheckerboardTextureOffsetAbsolute(final float[] textureCheckerboardTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureCheckerboardTextureArray, Objects.requireNonNull(textureCheckerboardTexture, "textureCheckerboardTexture == null"), getTextureCheckerboardTextureCount(), CheckerboardTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.textureCheckerboardTextureArray, Objects.requireNonNull(textureCheckerboardTexture, "textureCheckerboardTexture == null"), getTextureCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -228,7 +418,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureCheckerboardTexture} is {@code null}
 	 */
 	public int getTextureCheckerboardTextureOffsetRelative(final float[] textureCheckerboardTexture) {
-		return Structures.getStructureOffsetRelative(this.textureCheckerboardTextureArray, Objects.requireNonNull(textureCheckerboardTexture, "textureCheckerboardTexture == null"), getTextureCheckerboardTextureCount(), CheckerboardTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.textureCheckerboardTextureArray, Objects.requireNonNull(textureCheckerboardTexture, "textureCheckerboardTexture == null"), getTextureCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -237,7 +427,7 @@ public final class CompiledTextureCache {
 	 * @return the {@code ConstantTexture} count in this {@code CompiledTextureCache} instance
 	 */
 	public int getTextureConstantTextureCount() {
-		return Structures.getStructureCount(this.textureConstantTextureArray, ConstantTexture.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.textureConstantTextureArray, CONSTANT_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -250,7 +440,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureConstantTexture} is {@code null}
 	 */
 	public int getTextureConstantTextureOffsetAbsolute(final float[] textureConstantTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureConstantTextureArray, Objects.requireNonNull(textureConstantTexture, "textureConstantTexture == null"), getTextureConstantTextureCount(), ConstantTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.textureConstantTextureArray, Objects.requireNonNull(textureConstantTexture, "textureConstantTexture == null"), getTextureConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -263,7 +453,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureConstantTexture} is {@code null}
 	 */
 	public int getTextureConstantTextureOffsetRelative(final float[] textureConstantTexture) {
-		return Structures.getStructureOffsetRelative(this.textureConstantTextureArray, Objects.requireNonNull(textureConstantTexture, "textureConstantTexture == null"), getTextureConstantTextureCount(), ConstantTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.textureConstantTextureArray, Objects.requireNonNull(textureConstantTexture, "textureConstantTexture == null"), getTextureConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -272,7 +462,7 @@ public final class CompiledTextureCache {
 	 * @return the {@code MarbleTexture} count in this {@code CompiledTextureCache} instance
 	 */
 	public int getTextureMarbleTextureCount() {
-		return Structures.getStructureCount(this.textureMarbleTextureArray, MarbleTexture.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.textureMarbleTextureArray, MARBLE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -285,7 +475,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureMarbleTexture} is {@code null}
 	 */
 	public int getTextureMarbleTextureOffsetAbsolute(final float[] textureMarbleTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureMarbleTextureArray, Objects.requireNonNull(textureMarbleTexture, "textureMarbleTexture == null"), getTextureMarbleTextureCount(), MarbleTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.textureMarbleTextureArray, Objects.requireNonNull(textureMarbleTexture, "textureMarbleTexture == null"), getTextureMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -298,7 +488,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureMarbleTexture} is {@code null}
 	 */
 	public int getTextureMarbleTextureOffsetRelative(final float[] textureMarbleTexture) {
-		return Structures.getStructureOffsetRelative(this.textureMarbleTextureArray, Objects.requireNonNull(textureMarbleTexture, "textureMarbleTexture == null"), getTextureMarbleTextureCount(), MarbleTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.textureMarbleTextureArray, Objects.requireNonNull(textureMarbleTexture, "textureMarbleTexture == null"), getTextureMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -307,7 +497,7 @@ public final class CompiledTextureCache {
 	 * @return the {@code SimplexFractionalBrownianMotionTexture} count in this {@code CompiledTextureCache} instance
 	 */
 	public int getTextureSimplexFractionalBrownianMotionTextureCount() {
-		return Structures.getStructureCount(this.textureSimplexFractionalBrownianMotionTextureArray, SimplexFractionalBrownianMotionTexture.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.textureSimplexFractionalBrownianMotionTextureArray, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -320,7 +510,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureSimplexFractionalBrownianMotionTexture} is {@code null}
 	 */
 	public int getTextureSimplexFractionalBrownianMotionTextureOffsetAbsolute(final float[] textureSimplexFractionalBrownianMotionTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureSimplexFractionalBrownianMotionTextureArray, Objects.requireNonNull(textureSimplexFractionalBrownianMotionTexture, "textureSimplexFractionalBrownianMotionTexture == null"), getTextureSimplexFractionalBrownianMotionTextureCount(), SimplexFractionalBrownianMotionTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.textureSimplexFractionalBrownianMotionTextureArray, Objects.requireNonNull(textureSimplexFractionalBrownianMotionTexture, "textureSimplexFractionalBrownianMotionTexture == null"), getTextureSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -333,7 +523,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code textureSimplexFractionalBrownianMotionTexture} is {@code null}
 	 */
 	public int getTextureSimplexFractionalBrownianMotionTextureOffsetRelative(final float[] textureSimplexFractionalBrownianMotionTexture) {
-		return Structures.getStructureOffsetRelative(this.textureSimplexFractionalBrownianMotionTextureArray, Objects.requireNonNull(textureSimplexFractionalBrownianMotionTexture, "textureSimplexFractionalBrownianMotionTexture == null"), getTextureSimplexFractionalBrownianMotionTextureCount(), SimplexFractionalBrownianMotionTexture.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.textureSimplexFractionalBrownianMotionTextureArray, Objects.requireNonNull(textureSimplexFractionalBrownianMotionTexture, "textureSimplexFractionalBrownianMotionTexture == null"), getTextureSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
 	}
 	
 	/**

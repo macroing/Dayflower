@@ -42,31 +42,6 @@ import org.dayflower.scene.Intersection;
  */
 public final class BullseyeTexture implements Texture {
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 8;
-	
-	/**
-	 * The offset for the {@link Point3F} instance representing the origin in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_ORIGIN = 0;
-	
-	/**
-	 * The offset for the scale in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SCALE = 5;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code A} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_A = 3;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code B} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_B = 4;
-	
-	/**
 	 * The ID of this {@code BullseyeTexture} class.
 	 */
 	public static final int ID = 2;
@@ -369,27 +344,6 @@ public final class BullseyeTexture implements Texture {
 	 */
 	public float getScale() {
 		return this.scale;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code BullseyeTexture} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code BullseyeTexture} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-//		Because the BullseyeTexture occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_ORIGIN + 0] = this.origin.getX();	//Block #1
-		array[ARRAY_OFFSET_ORIGIN + 1] = this.origin.getY();	//Block #1
-		array[ARRAY_OFFSET_ORIGIN + 2] = this.origin.getZ();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_A] = this.textureA.getID();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_B] = this.textureB.getID();	//Block #1
-		array[ARRAY_OFFSET_SCALE] = this.scale;					//Block #1
-		array[6] = 0.0F;										//Block #1
-		array[7] = 0.0F;										//Block #1
-		
-		return array;
 	}
 	
 	/**

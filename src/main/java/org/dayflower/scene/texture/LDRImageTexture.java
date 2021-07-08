@@ -21,7 +21,6 @@ package org.dayflower.scene.texture;
 import static org.dayflower.utility.Floats.ceil;
 import static org.dayflower.utility.Floats.floor;
 import static org.dayflower.utility.Floats.positiveModulo;
-import static org.dayflower.utility.Ints.padding;
 import static org.dayflower.utility.Ints.positiveModulo;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -60,31 +59,6 @@ import org.dayflower.utility.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class LDRImageTexture implements Texture {
-	/**
-	 * The offset for the angle in radians in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_ANGLE_RADIANS = 0;
-	
-	/**
-	 * The offset for the image in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_IMAGE = 5;
-	
-	/**
-	 * The offset for the resolution of the X-axis in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RESOLUTION_X = 3;
-	
-	/**
-	 * The offset for the resolution of the Y-axis in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RESOLUTION_Y = 4;
-	
-	/**
-	 * The offset for the {@link Vector2F} instance representing the scale in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SCALE = 1;
-	
 	/**
 	 * The ID of this {@code LDRImageTexture} class.
 	 */
@@ -364,40 +338,6 @@ public final class LDRImageTexture implements Texture {
 	@Override
 	public float getFloat(final Intersection intersection) {
 		return getColor(intersection).average();
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code LDRImageTexture} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code LDRImageTexture} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[getArrayLength()];
-		
-		array[ARRAY_OFFSET_ANGLE_RADIANS] = this.angle.getRadians();
-		array[ARRAY_OFFSET_SCALE + 0] = this.scale.getU();
-		array[ARRAY_OFFSET_SCALE + 1] = this.scale.getV();
-		array[ARRAY_OFFSET_RESOLUTION_X] = this.resolutionX;
-		array[ARRAY_OFFSET_RESOLUTION_Y] = this.resolutionY;
-		
-		for(int i = 0; i < this.image.length; i++) {
-			array[ARRAY_OFFSET_IMAGE + i] = this.image[i];
-		}
-		
-		for(int i = ARRAY_OFFSET_IMAGE + this.image.length; i < array.length; i++) {
-			array[i] = 0.0F;
-		}
-		
-		return array;
-	}
-	
-	/**
-	 * Returns the length of the {@code float[]}.
-	 * 
-	 * @return the length of the {@code float[]}
-	 */
-	public int getArrayLength() {
-		return 5 + this.image.length + padding(5 + this.image.length);
 	}
 	
 	/**

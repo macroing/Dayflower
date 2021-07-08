@@ -43,36 +43,6 @@ import org.dayflower.scene.Intersection;
  */
 public final class CheckerboardTexture implements Texture {
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 8;
-	
-	/**
-	 * The offset for the angle in degrees in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_ANGLE_DEGREES = 0;
-	
-	/**
-	 * The offset for the angle in radians in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_ANGLE_RADIANS = 1;
-	
-	/**
-	 * The offset for the {@link Vector2F} instance representing the scale in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SCALE = 4;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code A} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_A = 2;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code B} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_B = 3;
-	
-	/**
 	 * The ID of this {@code CheckerboardTexture} class.
 	 */
 	public static final int ID = 3;
@@ -378,27 +348,6 @@ public final class CheckerboardTexture implements Texture {
 	@Override
 	public float getFloat(final Intersection intersection) {
 		return getColor(intersection).average();
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code CheckerboardTexture} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code CheckerboardTexture} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-//		Because the CheckerboardTexture occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_ANGLE_DEGREES] = this.angle.getDegrees();//Block #1
-		array[ARRAY_OFFSET_ANGLE_RADIANS] = this.angle.getRadians();//Block #1
-		array[ARRAY_OFFSET_TEXTURE_A] = this.textureA.getID();		//Block #1
-		array[ARRAY_OFFSET_TEXTURE_B] = this.textureB.getID();		//Block #1
-		array[ARRAY_OFFSET_SCALE + 0] = this.scale.getX();			//Block #1
-		array[ARRAY_OFFSET_SCALE + 1] = this.scale.getY();			//Block #1
-		array[6] = 0.0F;											//Block #1
-		array[7] = 0.0F;											//Block #1
-		
-		return array;
 	}
 	
 	/**

@@ -42,46 +42,6 @@ import org.dayflower.scene.Intersection;
  */
 public final class MarbleTexture implements Texture {
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 8;
-	
-	/**
-	 * The offset for the {@link Color3F} denoted by {@code A} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_COLOR_A = 0;
-	
-	/**
-	 * The offset for the {@link Color3F} denoted by {@code B} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_COLOR_B = 1;
-	
-	/**
-	 * The offset for the {@link Color3F} denoted by {@code B} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_COLOR_C = 2;
-	
-	/**
-	 * The offset for the frequency in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_FREQUENCY = 3;
-	
-	/**
-	 * The offset for the octaves in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_OCTAVES = 6;
-	
-	/**
-	 * The offset for the scale in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SCALE = 4;
-	
-	/**
-	 * The offset for the stripes in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_STRIPES = 5;
-	
-	/**
 	 * The ID of this {@code MarbleTexture} class.
 	 */
 	public static final int ID = 7;
@@ -267,6 +227,15 @@ public final class MarbleTexture implements Texture {
 	}
 	
 	/**
+	 * Returns the frequency associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return the frequency associated with this {@code MarbleTexture} instance
+	 */
+	public float getFrequency() {
+		return this.frequency;
+	}
+	
+	/**
 	 * Returns the scale associated with this {@code MarbleTexture} instance.
 	 * 
 	 * @return the scale associated with this {@code MarbleTexture} instance
@@ -282,27 +251,6 @@ public final class MarbleTexture implements Texture {
 	 */
 	public float getStripes() {
 		return this.stripes;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code MarbleTexture} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code MarbleTexture} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-//		Because the MarbleTexture occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_COLOR_A] = this.colorA.pack();	//Block #1
-		array[ARRAY_OFFSET_COLOR_B] = this.colorB.pack();	//Block #1
-		array[ARRAY_OFFSET_COLOR_C] = this.colorC.pack();	//Block #1
-		array[ARRAY_OFFSET_FREQUENCY] = this.frequency;		//Block #1
-		array[ARRAY_OFFSET_SCALE] = this.scale;				//Block #1
-		array[ARRAY_OFFSET_STRIPES] = this.stripes;			//Block #1
-		array[ARRAY_OFFSET_OCTAVES] = this.octaves;			//Block #1
-		array[7] = 0.0F;									//Block #1
-		
-		return array;
 	}
 	
 	/**

@@ -120,16 +120,6 @@ public final class ConstantTexture implements Texture {
 	public static final ConstantTexture WHITE = new ConstantTexture(Color3F.WHITE);
 	
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the {@link Color3F} instance representing the color in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_COLOR = 0;
-	
-	/**
 	 * The ID of this {@code ConstantTexture} class.
 	 */
 	public static final int ID = 4;
@@ -245,23 +235,6 @@ public final class ConstantTexture implements Texture {
 	@Override
 	public float getFloat(final Intersection intersection) {
 		return getColor(intersection).average();
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code ConstantTexture} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code ConstantTexture} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-//		Because the ConstantTexture occupy 4/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_COLOR + 0] = this.color.getR();
-		array[ARRAY_OFFSET_COLOR + 1] = this.color.getG();
-		array[ARRAY_OFFSET_COLOR + 2] = this.color.getB();
-		array[3] = 0.0F;
-		
-		return array;
 	}
 	
 	/**

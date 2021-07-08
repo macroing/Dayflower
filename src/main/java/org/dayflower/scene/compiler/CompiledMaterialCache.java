@@ -30,6 +30,7 @@ import org.dayflower.scene.material.MetalMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.texture.Texture;
 
 /**
  * A {@code CompiledMaterialCache} contains {@link Material} instances in compiled form.
@@ -38,6 +39,183 @@ import org.dayflower.scene.material.SubstrateMaterial;
  * @author J&#246;rgen Lundgren
  */
 public final class CompiledMaterialCache {
+	/**
+	 * The length of a compiled {@link ClearCoatMaterial} instance.
+	 */
+	public static final int CLEAR_COAT_MATERIAL_LENGTH = 2;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KD} and {@code KS} in a compiled {@link ClearCoatMaterial} instance.
+	 */
+	public static final int CLEAR_COAT_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S = 1;
+	
+	/**
+	 * The length of a compiled {@link DisneyMaterial} instance.
+	 */
+	public static final int DISNEY_MATERIAL_LENGTH = 8;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Clear Coat} and {@code Clear Coat Gloss} in a compiled {@link DisneyMaterial} instance.
+	 */
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS = 1;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Color} and {@code Diffuse Transmission} in a compiled {@link DisneyMaterial} instance.
+	 */
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION = 2;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code Anisotropic} in a compiled {@link DisneyMaterial} instance.
+	 */
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC = 0;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Eta} and {@code Flatness} in a compiled {@link DisneyMaterial} instance.
+	 */
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS = 3;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Metallic} and {@code Roughness} in a compiled {@link DisneyMaterial} instance.
+	 */
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS = 4;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Scatter Distance} and {@code Sheen} in a compiled {@link DisneyMaterial} instance.
+	 */
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN = 5;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Sheen Tint} and {@code Specular Tint} in a compiled {@link DisneyMaterial} instance.
+	 */
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT = 6;
+	
+	/**
+	 * The ID and offset for the {@link Texture} instance denoted by {@code Specular Transmission} and the thin flag in a compiled {@link DisneyMaterial} instance.
+	 */
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN = 7;
+	
+	/**
+	 * The length of a compiled {@link GlassMaterial} instance.
+	 */
+	public static final int GLASS_MATERIAL_LENGTH = 4;
+	
+	/**
+	 * The offset for the roughness remapping flag in a compiled {@link GlassMaterial} instance.
+	 */
+	public static final int GLASS_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code Eta} in a compiled {@link GlassMaterial} instance.
+	 */
+	public static final int GLASS_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA = 0;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KR} and {@code KT} in a compiled {@link GlassMaterial} instance.
+	 */
+	public static final int GLASS_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T = 1;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Roughness U} and {@code Roughness V} in a compiled {@link GlassMaterial} instance.
+	 */
+	public static final int GLASS_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
+	
+	/**
+	 * The length of a compiled {@link GlossyMaterial} instance.
+	 */
+	public static final int GLOSSY_MATERIAL_LENGTH = 2;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KR} and {@code Roughness} in a compiled {@link GlossyMaterial} instance.
+	 */
+	public static final int GLOSSY_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_ROUGHNESS = 1;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Emission} in a compiled {@link Material} instance.
+	 */
+	public static final int MATERIAL_OFFSET_TEXTURE_EMISSION = 0;
+	
+	/**
+	 * The length of a compiled {@link MatteMaterial} instance.
+	 */
+	public static final int MATTE_MATERIAL_LENGTH = 2;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Angle} and {@code KD} in a compiled {@link MatteMaterial} instance.
+	 */
+	public static final int MATTE_MATERIAL_OFFSET_TEXTURE_ANGLE_AND_TEXTURE_K_D = 1;
+	
+	/**
+	 * The length of a compiled {@link MetalMaterial} instance.
+	 */
+	public static final int METAL_MATERIAL_LENGTH = 4;
+	
+	/**
+	 * The offset for the roughness remapping flag in a compiled {@link MetalMaterial} instance.
+	 */
+	public static final int METAL_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Eta} and {@code K} in a compiled {@link MetalMaterial} instance.
+	 */
+	public static final int METAL_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_K = 1;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Roughness U} and {@code Roughness V} in a compiled {@link MetalMaterial} instance.
+	 */
+	public static final int METAL_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
+	
+	/**
+	 * The length of a compiled {@link MirrorMaterial} instance.
+	 */
+	public static final int MIRROR_MATERIAL_LENGTH = 1;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code KR} in a compiled {@link MirrorMaterial} instance.
+	 */
+	public static final int MIRROR_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_K_R = 0;
+	
+	/**
+	 * The length of a compiled {@link PlasticMaterial} instance.
+	 */
+	public static final int PLASTIC_MATERIAL_LENGTH = 4;
+	
+	/**
+	 * The offset for the roughness remapping flag in a compiled {@link PlasticMaterial} instance.
+	 */
+	public static final int PLASTIC_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KD} and {@code KS} in a compiled {@link PlasticMaterial} instance.
+	 */
+	public static final int PLASTIC_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S = 1;
+	
+	/**
+	 * The ID and offset for the {@link Texture} instance denoted by {@code Roughness} in a compiled {@link PlasticMaterial} instance.
+	 */
+	public static final int PLASTIC_MATERIAL_OFFSET_TEXTURE_ROUGHNESS = 2;
+	
+	/**
+	 * The length of a compiled {@link SubstrateMaterial} instance.
+	 */
+	public static final int SUBSTRATE_MATERIAL_LENGTH = 4;
+	
+	/**
+	 * The offset for the roughness remapping flag in a compiled {@link SubstrateMaterial} instance.
+	 */
+	public static final int SUBSTRATE_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KD} and {@code KS} in a compiled {@link SubstrateMaterial} instance.
+	 */
+	public static final int SUBSTRATE_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S = 1;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Roughness U} and {@code Roughness V} in a compiled {@link SubstrateMaterial} instance.
+	 */
+	public static final int SUBSTRATE_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private int[] materialClearCoatMaterialArray;
 	private int[] materialDisneyMaterialArray;
 	private int[] materialGlassMaterialArray;
@@ -73,7 +251,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code ClearCoatMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMaterialClearCoatMaterialCount() {
-		return Structures.getStructureCount(this.materialClearCoatMaterialArray, ClearCoatMaterial.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.materialClearCoatMaterialArray, CLEAR_COAT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -86,7 +264,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialClearCoatMaterial} is {@code null}
 	 */
 	public int getMaterialClearCoatMaterialOffsetAbsolute(final int[] materialClearCoatMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.materialClearCoatMaterialArray, Objects.requireNonNull(materialClearCoatMaterial, "materialClearCoatMaterial == null"), getMaterialClearCoatMaterialCount(), ClearCoatMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.materialClearCoatMaterialArray, Objects.requireNonNull(materialClearCoatMaterial, "materialClearCoatMaterial == null"), getMaterialClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -99,7 +277,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialClearCoatMaterial} is {@code null}
 	 */
 	public int getMaterialClearCoatMaterialOffsetRelative(final int[] materialClearCoatMaterial) {
-		return Structures.getStructureOffsetRelative(this.materialClearCoatMaterialArray, Objects.requireNonNull(materialClearCoatMaterial, "materialClearCoatMaterial == null"), getMaterialClearCoatMaterialCount(), ClearCoatMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.materialClearCoatMaterialArray, Objects.requireNonNull(materialClearCoatMaterial, "materialClearCoatMaterial == null"), getMaterialClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -108,7 +286,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code DisneyMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMaterialDisneyMaterialCount() {
-		return Structures.getStructureCount(this.materialDisneyMaterialArray, DisneyMaterial.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.materialDisneyMaterialArray, DISNEY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -121,7 +299,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialDisneyMaterial} is {@code null}
 	 */
 	public int getMaterialDisneyMaterialOffsetAbsolute(final int[] materialDisneyMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.materialDisneyMaterialArray, Objects.requireNonNull(materialDisneyMaterial, "materialDisneyMaterial == null"), getMaterialDisneyMaterialCount(), DisneyMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.materialDisneyMaterialArray, Objects.requireNonNull(materialDisneyMaterial, "materialDisneyMaterial == null"), getMaterialDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -134,7 +312,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialDisneyMaterial} is {@code null}
 	 */
 	public int getMaterialDisneyMaterialOffsetRelative(final int[] materialDisneyMaterial) {
-		return Structures.getStructureOffsetRelative(this.materialDisneyMaterialArray, Objects.requireNonNull(materialDisneyMaterial, "materialDisneyMaterial == null"), getMaterialDisneyMaterialCount(), DisneyMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.materialDisneyMaterialArray, Objects.requireNonNull(materialDisneyMaterial, "materialDisneyMaterial == null"), getMaterialDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -143,7 +321,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code GlassMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMaterialGlassMaterialCount() {
-		return Structures.getStructureCount(this.materialGlassMaterialArray, GlassMaterial.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.materialGlassMaterialArray, GLASS_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -156,7 +334,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialGlassMaterial} is {@code null}
 	 */
 	public int getMaterialGlassMaterialOffsetAbsolute(final int[] materialGlassMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.materialGlassMaterialArray, Objects.requireNonNull(materialGlassMaterial, "materialGlassMaterial == null"), getMaterialGlassMaterialCount(), GlassMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.materialGlassMaterialArray, Objects.requireNonNull(materialGlassMaterial, "materialGlassMaterial == null"), getMaterialGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -169,7 +347,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialGlassMaterial} is {@code null}
 	 */
 	public int getMaterialGlassMaterialOffsetRelative(final int[] materialGlassMaterial) {
-		return Structures.getStructureOffsetRelative(this.materialGlassMaterialArray, Objects.requireNonNull(materialGlassMaterial, "materialGlassMaterial == null"), getMaterialGlassMaterialCount(), GlassMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.materialGlassMaterialArray, Objects.requireNonNull(materialGlassMaterial, "materialGlassMaterial == null"), getMaterialGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -178,7 +356,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code GlossyMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMaterialGlossyMaterialCount() {
-		return Structures.getStructureCount(this.materialGlossyMaterialArray, GlossyMaterial.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.materialGlossyMaterialArray, GLOSSY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -191,7 +369,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialGlossyMaterial} is {@code null}
 	 */
 	public int getMaterialGlossyMaterialOffsetAbsolute(final int[] materialGlossyMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.materialGlossyMaterialArray, Objects.requireNonNull(materialGlossyMaterial, "materialGlossyMaterial == null"), getMaterialGlossyMaterialCount(), GlossyMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.materialGlossyMaterialArray, Objects.requireNonNull(materialGlossyMaterial, "materialGlossyMaterial == null"), getMaterialGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -204,7 +382,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialGlossyMaterial} is {@code null}
 	 */
 	public int getMaterialGlossyMaterialOffsetRelative(final int[] materialGlossyMaterial) {
-		return Structures.getStructureOffsetRelative(this.materialGlossyMaterialArray, Objects.requireNonNull(materialGlossyMaterial, "materialGlossyMaterial == null"), getMaterialGlossyMaterialCount(), GlossyMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.materialGlossyMaterialArray, Objects.requireNonNull(materialGlossyMaterial, "materialGlossyMaterial == null"), getMaterialGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -213,7 +391,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code MatteMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMaterialMatteMaterialCount() {
-		return Structures.getStructureCount(this.materialMatteMaterialArray, MatteMaterial.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.materialMatteMaterialArray, MATTE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -226,7 +404,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialMatteMaterial} is {@code null}
 	 */
 	public int getMaterialMatteMaterialOffsetAbsolute(final int[] materialMatteMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.materialMatteMaterialArray, Objects.requireNonNull(materialMatteMaterial, "materialMatteMaterial == null"), getMaterialMatteMaterialCount(), MatteMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.materialMatteMaterialArray, Objects.requireNonNull(materialMatteMaterial, "materialMatteMaterial == null"), getMaterialMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -239,7 +417,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialMatteMaterial} is {@code null}
 	 */
 	public int getMaterialMatteMaterialOffsetRelative(final int[] materialMatteMaterial) {
-		return Structures.getStructureOffsetRelative(this.materialMatteMaterialArray, Objects.requireNonNull(materialMatteMaterial, "materialMatteMaterial == null"), getMaterialMatteMaterialCount(), MatteMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.materialMatteMaterialArray, Objects.requireNonNull(materialMatteMaterial, "materialMatteMaterial == null"), getMaterialMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -248,7 +426,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code MetalMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMaterialMetalMaterialCount() {
-		return Structures.getStructureCount(this.materialMetalMaterialArray, MetalMaterial.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.materialMetalMaterialArray, METAL_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -261,7 +439,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialMetalMaterial} is {@code null}
 	 */
 	public int getMaterialMetalMaterialOffsetAbsolute(final int[] materialMetalMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.materialMetalMaterialArray, Objects.requireNonNull(materialMetalMaterial, "materialMetalMaterial == null"), getMaterialMetalMaterialCount(), MetalMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.materialMetalMaterialArray, Objects.requireNonNull(materialMetalMaterial, "materialMetalMaterial == null"), getMaterialMetalMaterialCount(), METAL_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -274,7 +452,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialMetalMaterial} is {@code null}
 	 */
 	public int getMaterialMetalMaterialOffsetRelative(final int[] materialMetalMaterial) {
-		return Structures.getStructureOffsetRelative(this.materialMetalMaterialArray, Objects.requireNonNull(materialMetalMaterial, "materialMetalMaterial == null"), getMaterialMetalMaterialCount(), MetalMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.materialMetalMaterialArray, Objects.requireNonNull(materialMetalMaterial, "materialMetalMaterial == null"), getMaterialMetalMaterialCount(), METAL_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -283,7 +461,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code MirrorMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMaterialMirrorMaterialCount() {
-		return Structures.getStructureCount(this.materialMirrorMaterialArray, MirrorMaterial.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.materialMirrorMaterialArray, MIRROR_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -296,7 +474,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialMirrorMaterial} is {@code null}
 	 */
 	public int getMaterialMirrorMaterialOffsetAbsolute(final int[] materialMirrorMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.materialMirrorMaterialArray, Objects.requireNonNull(materialMirrorMaterial, "materialMirrorMaterial == null"), getMaterialMirrorMaterialCount(), MirrorMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.materialMirrorMaterialArray, Objects.requireNonNull(materialMirrorMaterial, "materialMirrorMaterial == null"), getMaterialMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -309,7 +487,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialMirrorMaterial} is {@code null}
 	 */
 	public int getMaterialMirrorMaterialOffsetRelative(final int[] materialMirrorMaterial) {
-		return Structures.getStructureOffsetRelative(this.materialMirrorMaterialArray, Objects.requireNonNull(materialMirrorMaterial, "materialMirrorMaterial == null"), getMaterialMirrorMaterialCount(), MirrorMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.materialMirrorMaterialArray, Objects.requireNonNull(materialMirrorMaterial, "materialMirrorMaterial == null"), getMaterialMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -318,7 +496,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code PlasticMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMaterialPlasticMaterialCount() {
-		return Structures.getStructureCount(this.materialPlasticMaterialArray, PlasticMaterial.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.materialPlasticMaterialArray, PLASTIC_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -331,7 +509,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialPlasticMaterial} is {@code null}
 	 */
 	public int getMaterialPlasticMaterialOffsetAbsolute(final int[] materialPlasticMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.materialPlasticMaterialArray, Objects.requireNonNull(materialPlasticMaterial, "materialPlasticMaterial == null"), getMaterialPlasticMaterialCount(), PlasticMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.materialPlasticMaterialArray, Objects.requireNonNull(materialPlasticMaterial, "materialPlasticMaterial == null"), getMaterialPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -344,7 +522,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialPlasticMaterial} is {@code null}
 	 */
 	public int getMaterialPlasticMaterialOffsetRelative(final int[] materialPlasticMaterial) {
-		return Structures.getStructureOffsetRelative(this.materialPlasticMaterialArray, Objects.requireNonNull(materialPlasticMaterial, "materialPlasticMaterial == null"), getMaterialPlasticMaterialCount(), PlasticMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.materialPlasticMaterialArray, Objects.requireNonNull(materialPlasticMaterial, "materialPlasticMaterial == null"), getMaterialPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -353,7 +531,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code SubstrateMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMaterialSubstrateMaterialCount() {
-		return Structures.getStructureCount(this.materialSubstrateMaterialArray, SubstrateMaterial.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.materialSubstrateMaterialArray, SUBSTRATE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -366,7 +544,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialSubstrateMaterial} is {@code null}
 	 */
 	public int getMaterialSubstrateMaterialOffsetAbsolute(final int[] materialSubstrateMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.materialSubstrateMaterialArray, Objects.requireNonNull(materialSubstrateMaterial, "materialSubstrateMaterial == null"), getMaterialSubstrateMaterialCount(), SubstrateMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.materialSubstrateMaterialArray, Objects.requireNonNull(materialSubstrateMaterial, "materialSubstrateMaterial == null"), getMaterialSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -379,7 +557,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code materialSubstrateMaterial} is {@code null}
 	 */
 	public int getMaterialSubstrateMaterialOffsetRelative(final int[] materialSubstrateMaterial) {
-		return Structures.getStructureOffsetRelative(this.materialSubstrateMaterialArray, Objects.requireNonNull(materialSubstrateMaterial, "materialSubstrateMaterial == null"), getMaterialSubstrateMaterialCount(), SubstrateMaterial.ARRAY_LENGTH);
+		return Structures.getStructureOffsetRelative(this.materialSubstrateMaterialArray, Objects.requireNonNull(materialSubstrateMaterial, "materialSubstrateMaterial == null"), getMaterialSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
 	}
 	
 	/**

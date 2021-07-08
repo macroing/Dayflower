@@ -19,7 +19,6 @@
 package org.dayflower.scene.material;
 
 import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Ints.pack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,26 +60,6 @@ public final class PlasticMaterial implements Material {
 	 * The name of this {@code PlasticMaterial} class.
 	 */
 	public static final String NAME = "Plastic";
-	
-	/**
-	 * The length of the {@code int[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the roughness remapping flag in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KD} and {@code KS} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S = 1;
-	
-	/**
-	 * The ID and offset for the {@link Texture} instance denoted by {@code Roughness} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS = 2;
 	
 	/**
 	 * The ID of this {@code PlasticMaterial} class.
@@ -628,22 +607,5 @@ public final class PlasticMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureEmission, this.textureKD, this.textureKS, this.textureRoughness, Boolean.valueOf(this.isRemappingRoughness));
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code PlasticMaterial} instance.
-	 * 
-	 * @return an {@code int[]} representation of this {@code PlasticMaterial} instance
-	 */
-	public int[] toArray() {
-		final int[] array = new int[ARRAY_LENGTH];
-		
-//		Because the PlasticMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = pack(this.textureEmission.getID(), 0, 0, 0);								//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(this.textureKD.getID(), 0, this.textureKS.getID(), 0);	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS] = pack(this.textureRoughness.getID(), 0, 0, 0);							//Block #1
-		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;									//Block #1
-		
-		return array;
 	}
 }

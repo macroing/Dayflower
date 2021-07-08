@@ -18,8 +18,6 @@
  */
 package org.dayflower.scene.material;
 
-import static org.dayflower.utility.Ints.pack;
-
 import java.util.Objects;
 import java.util.Optional;
 
@@ -54,16 +52,6 @@ public final class GlossyMaterial implements Material {
 	 * The name of this {@code GlossyMaterial} class.
 	 */
 	public static final String NAME = "Glossy";
-	
-	/**
-	 * The length of the {@code int[]}.
-	 */
-	public static final int ARRAY_LENGTH = 2;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KR} and {@code Roughness} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_R_AND_TEXTURE_ROUGHNESS = 1;
 	
 	/**
 	 * The ID of this {@code GlossyMaterial} class.
@@ -505,21 +493,6 @@ public final class GlossyMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.textureEmission, this.textureKR, this.textureRoughness);
-	}
-	
-	/**
-	 * Returns a {@code int[]} representation of this {@code GlossyMaterial} instance.
-	 * 
-	 * @return a {@code int[]} representation of this {@code GlossyMaterial} instance
-	 */
-	public int[] toArray() {
-		final int[] array = new int[ARRAY_LENGTH];
-		
-//		Because the GlossyMaterial occupy 2/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = pack(this.textureEmission.getID(), 0, 0, 0);											//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_R_AND_TEXTURE_ROUGHNESS] = pack(this.textureKR.getID(), 0, this.textureRoughness.getID(), 0);	//Block #1
-		
-		return array;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

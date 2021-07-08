@@ -20,7 +20,6 @@ package org.dayflower.scene.material;
 
 import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Ints.pack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,31 +64,6 @@ public final class GlassMaterial implements Material {
 	 * The name of this {@code GlassMaterial} class.
 	 */
 	public static final String NAME = "Glass";
-	
-	/**
-	 * The length of the {@code int[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the roughness remapping flag in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code Eta} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA = 0;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KR} and {@code KT} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T = 1;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Roughness U} and {@code Roughness V} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
 	
 	/**
 	 * The ID of this {@code GlassMaterial} class.
@@ -802,23 +776,6 @@ public final class GlassMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureEmission, this.textureEta, this.textureKR, this.textureKT, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code GlassMaterial} instance.
-	 * 
-	 * @return an {@code int[]} representation of this {@code GlassMaterial} instance
-	 */
-	public int[] toArray() {
-		final int[] array = new int[ARRAY_LENGTH];
-		
-//		Because the GlassMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA] = pack(this.textureEmission.getID(), 0, this.textureEta.getID(), 0);						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T] = pack(this.textureKR.getID(), 0, this.textureKT.getID(), 0);									//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(this.textureRoughnessU.getID(), 0, this.textureRoughnessV.getID(), 0);	//Block #1
-		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;																	//Block #1
-		
-		return array;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

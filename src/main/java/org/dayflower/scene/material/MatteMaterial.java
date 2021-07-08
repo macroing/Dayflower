@@ -21,7 +21,6 @@ package org.dayflower.scene.material;
 import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.saturate;
-import static org.dayflower.utility.Ints.pack;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -57,16 +56,6 @@ public final class MatteMaterial implements Material {
 	 * The name of this {@code MatteMaterial} class.
 	 */
 	public static final String NAME = "Matte";
-	
-	/**
-	 * The length of the {@code int[]}.
-	 */
-	public static final int ARRAY_LENGTH = 2;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Angle} and {@code KD} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ANGLE_AND_TEXTURE_K_D = 1;
 	
 	/**
 	 * The ID of this {@code MatteMaterial} class.
@@ -479,20 +468,5 @@ public final class MatteMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureAngle, this.textureEmission, this.textureKD);
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code MatteMaterial} instance.
-	 * 
-	 * @return an {@code int[]} representation of this {@code MatteMaterial} instance
-	 */
-	public int[] toArray() {
-		final int[] array = new int[ARRAY_LENGTH];
-		
-//		Because the MatteMaterial occupy 2/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = pack(this.textureEmission.getID(), 0, 0, 0);									//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ANGLE_AND_TEXTURE_K_D] = pack(this.textureAngle.getID(), 0, this.textureKD.getID(), 0);	//Block #1
-		
-		return array;
 	}
 }

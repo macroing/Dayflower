@@ -22,7 +22,6 @@ import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.lerp;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.sqrt;
-import static org.dayflower.utility.Ints.pack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,51 +70,6 @@ public final class DisneyMaterial implements Material {
 	 * The name of this {@code DisneyMaterial} class.
 	 */
 	public static final String NAME = "Disney";
-	
-	/**
-	 * The length of the {@code int[]}.
-	 */
-	public static final int ARRAY_LENGTH = 8;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Clear Coat} and {@code Clear Coat Gloss} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS = 1;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Color} and {@code Diffuse Transmission} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION = 2;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code Anisotropic} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC = 0;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Eta} and {@code Flatness} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS = 3;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Metallic} and {@code Roughness} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS = 4;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Scatter Distance} and {@code Sheen} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN = 5;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Sheen Tint} and {@code Specular Tint} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT = 6;
-	
-	/**
-	 * The ID and offset for the {@link Texture} instance denoted by {@code Specular Transmission} and the thin flag in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN = 7;
 	
 	/**
 	 * The ID of this {@code DisneyMaterial} class.
@@ -1628,27 +1582,6 @@ public final class DisneyMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureAnisotropic, this.textureClearCoat, this.textureClearCoatGloss, this.textureColor, this.textureDiffuseTransmission, this.textureEmission, this.textureEta, this.textureFlatness, this.textureMetallic, this.textureRoughness, this.textureScatterDistance, this.textureSheen, this.textureSheenTint, this.textureSpecularTint, this.textureSpecularTransmission, Boolean.valueOf(this.isThin));
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code DisneyMaterial} instance.
-	 * 
-	 * @return an {@code int[]} representation of this {@code DisneyMaterial} instance
-	 */
-	public int[] toArray() {
-		final int[] array = new int[ARRAY_LENGTH];
-		
-//		Because the DisneyMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC] = pack(this.textureEmission.getID(), 0, this.textureAnisotropic.getID(), 0);			//Block #1.
-		array[ARRAY_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS] = pack(this.textureClearCoat.getID(), 0, this.textureClearCoatGloss.getID(), 0);//Block #1.
-		array[ARRAY_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION] = pack(this.textureColor.getID(), 0, this.textureDiffuseTransmission.getID(), 0);//Block #1.
-		array[ARRAY_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS] = pack(this.textureEta.getID(), 0, this.textureFlatness.getID(), 0);							//Block #1.
-		array[ARRAY_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS] = pack(this.textureMetallic.getID(), 0, this.textureRoughness.getID(), 0);				//Block #1.
-		array[ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN] = pack(this.textureScatterDistance.getID(), 0, this.textureSheen.getID(), 0);		//Block #1.
-		array[ARRAY_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT] = pack(this.textureSheenTint.getID(), 0, this.textureSpecularTint.getID(), 0);		//Block #1.
-		array[ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN] = pack(this.textureSpecularTransmission.getID(), 0, this.isThin ? 1 : 0, 0);			//Block #1.
-		
-		return array;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -19,7 +19,6 @@
 package org.dayflower.scene.material;
 
 import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Ints.pack;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -55,26 +54,6 @@ public final class SubstrateMaterial implements Material {
 	 * The name of this {@code SubstrateMaterial} class.
 	 */
 	public static final String NAME = "Substrate";
-	
-	/**
-	 * The length of the {@code int[]}.
-	 */
-	public static final int ARRAY_LENGTH = 4;
-	
-	/**
-	 * The offset for the roughness remapping flag in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KD} and {@code KS} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S = 1;
-	
-	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Roughness U} and {@code Roughness V} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
 	
 	/**
 	 * The ID of this {@code SubstrateMaterial} class.
@@ -679,22 +658,5 @@ public final class SubstrateMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureEmission, this.textureKD, this.textureKS, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code SubstrateMaterial} instance.
-	 * 
-	 * @return an {@code int[]} representation of this {@code SubstrateMaterial} instance
-	 */
-	public int[] toArray() {
-		final int[] array = new int[ARRAY_LENGTH];
-		
-//		Because the SubstrateMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = pack(this.textureEmission.getID(), 0, 0, 0);																//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(this.textureKD.getID(), 0, this.textureKS.getID(), 0);									//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(this.textureRoughnessU.getID(), 0, this.textureRoughnessV.getID(), 0);	//Block #1
-		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;																	//Block #1
-		
-		return array;
 	}
 }

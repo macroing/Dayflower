@@ -50,26 +50,6 @@ public final class DirectionalLight extends Light {
 	public static final String NAME = "Directional Light";
 	
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 8;
-	
-	/**
-	 * The offset for the {@link Vector3F} denoted by {@code Direction} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_DIRECTION = 3;
-	
-	/**
-	 * The offset for the {@link Color3F} denoted by {@code Radiance} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIANCE = 0;
-	
-	/**
-	 * The offset for the radius in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS = 6;
-	
-	/**
 	 * The ID of this {@code DirectionalLight} class.
 	 */
 	public static final int ID = 2;
@@ -178,6 +158,15 @@ public final class DirectionalLight extends Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns the {@link Color3F} instance that represents the radiance associated with this {@code DirectionalLight} instance.
+	 * 
+	 * @return the {@code Color3F} instance that represents the radiance associated with this {@code DirectionalLight} instance
+	 */
+	public Color3F getRadiance() {
+		return this.radiance;
+	}
+	
+	/**
 	 * Returns a {@link Color3F} instance with the power of this {@code DirectionalLight} instance.
 	 * 
 	 * @return a {@code Color3F} instance with the power of this {@code DirectionalLight} instance
@@ -275,26 +264,12 @@ public final class DirectionalLight extends Light {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code DirectionalLight} instance.
+	 * Returns the radius of the scene.
 	 * 
-	 * @return a {@code float[]} representation of this {@code DirectionalLight} instance
+	 * @return the radius of the scene
 	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-		final Vector3F direction = Vector3F.transform(getTransform().getObjectToWorld(), this.direction);
-		
-//		Because the DirectionalLight occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_RADIANCE + 0] = this.radiance.getR();//Block #1
-		array[ARRAY_OFFSET_RADIANCE + 1] = this.radiance.getG();//Block #1
-		array[ARRAY_OFFSET_RADIANCE + 2] = this.radiance.getB();//Block #1
-		array[ARRAY_OFFSET_DIRECTION + 0] = direction.getX();	//Block #1
-		array[ARRAY_OFFSET_DIRECTION + 1] = direction.getY();	//Block #1
-		array[ARRAY_OFFSET_DIRECTION + 2] = direction.getZ();	//Block #1
-		array[ARRAY_OFFSET_RADIUS] = this.radius;				//Block #1
-		array[7] = 0.0F;										//Block #1
-		
-		return array;
+	public float getRadius() {
+		return this.radius;
 	}
 	
 	/**

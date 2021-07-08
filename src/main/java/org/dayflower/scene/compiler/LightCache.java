@@ -27,7 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.node.Node;
@@ -87,14 +90,14 @@ final class LightCache {
 	public float[] toLightDiffuseAreaLightArray(final Shape3FCache shape3FCache) {
 		Objects.requireNonNull(shape3FCache, "shape3FCache == null");
 		
-		final float[] lightDiffuseAreaLightArray = Floats.toArray(this.distinctDiffuseAreaLights, diffuseAreaLight -> diffuseAreaLight.toArray(), 1);
+		final float[] lightDiffuseAreaLightArray = Floats.toArray(this.distinctDiffuseAreaLights, diffuseAreaLight -> doToArray(diffuseAreaLight), 1);
 		
 		for(int i = 0; i < this.distinctDiffuseAreaLights.size(); i++) {
 			final DiffuseAreaLight diffuseAreaLight = this.distinctDiffuseAreaLights.get(i);
 			
 			final Shape3F shape = diffuseAreaLight.getShape();
 			
-			final int lightDiffuseAreaLightArrayShapeOffset = i * DiffuseAreaLight.ARRAY_LENGTH + DiffuseAreaLight.ARRAY_OFFSET_SHAPE_OFFSET;
+			final int lightDiffuseAreaLightArrayShapeOffset = i * CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_OFFSET;
 			
 			lightDiffuseAreaLightArray[lightDiffuseAreaLightArrayShapeOffset] = shape3FCache.findOffsetFor(shape);
 		}
@@ -103,7 +106,7 @@ final class LightCache {
 	}
 	
 	public float[] toLightDirectionalLightArray() {
-		return Floats.toArray(this.distinctDirectionalLights, directionalLight -> directionalLight.toArray(), 1);
+		return Floats.toArray(this.distinctDirectionalLights, directionalLight -> doToArray(directionalLight), 1);
 	}
 	
 	public float[] toLightLDRImageLightArray() {
@@ -248,11 +251,11 @@ final class LightCache {
 		
 //		Create offset mappings for all distinct DiffuseAreaLight instances:
 		this.distinctToOffsetsDiffuseAreaLights.clear();
-		this.distinctToOffsetsDiffuseAreaLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDiffuseAreaLights, DiffuseAreaLight.ARRAY_LENGTH));
+		this.distinctToOffsetsDiffuseAreaLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDiffuseAreaLights, CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH));
 		
 //		Create offset mappings for all distinct DirectionalLight instances:
 		this.distinctToOffsetsDirectionalLights.clear();
-		this.distinctToOffsetsDirectionalLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDirectionalLights, DirectionalLight.ARRAY_LENGTH));
+		this.distinctToOffsetsDirectionalLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDirectionalLights, CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH));
 		
 //		Create offset mappings for all distinct LDRImageLight instances:
 		this.distinctToOffsetsLDRImageLights.clear();
@@ -308,11 +311,11 @@ final class LightCache {
 		
 //		Create offset mappings for all distinct DiffuseAreaLight instances:
 		this.distinctToOffsetsDiffuseAreaLights.clear();
-		this.distinctToOffsetsDiffuseAreaLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDiffuseAreaLights, DiffuseAreaLight.ARRAY_LENGTH));
+		this.distinctToOffsetsDiffuseAreaLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDiffuseAreaLights, CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH));
 		
 //		Create offset mappings for all distinct DirectionalLight instances:
 		this.distinctToOffsetsDirectionalLights.clear();
-		this.distinctToOffsetsDirectionalLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDirectionalLights, DirectionalLight.ARRAY_LENGTH));
+		this.distinctToOffsetsDirectionalLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDirectionalLights, CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH));
 		
 //		Create offset mappings for all distinct LDRImageLight instances:
 		this.distinctToOffsetsLDRImageLights.clear();
@@ -363,5 +366,84 @@ final class LightCache {
 		} else {
 			return false;
 		}
+	}
+	
+	private static float[] doToArray(final DiffuseAreaLight diffuseAreaLight) {
+		final Color3F radianceEmitted = diffuseAreaLight.getRadianceEmitted();
+		
+		final Matrix44F objectToWorld = diffuseAreaLight.getTransform().getObjectToWorld();
+		final Matrix44F worldToObject = diffuseAreaLight.getTransform().getWorldToObject();
+		
+		final Shape3F shape = diffuseAreaLight.getShape();
+		
+		final boolean isTwoSided = diffuseAreaLight.isTwoSided();
+		
+		final float[] array = new float[CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH];
+		
+//		Because the DiffuseAreaLight occupy 40/40 positions in five blocks, it should be aligned.
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();//Block #1
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();//Block #1
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();//Block #1
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();//Block #1
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();//Block #1
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();//Block #1
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();//Block #1
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();//Block #1
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();//Block #2
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();//Block #2
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();//Block #2
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();//Block #2
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();//Block #2
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();//Block #2
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();//Block #2
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();//Block #2
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();//Block #3
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();//Block #3
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();//Block #3
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();//Block #3
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();//Block #3
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();//Block #3
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();//Block #3
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();//Block #3
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();//Block #4
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();//Block #4
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();//Block #4
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();//Block #4
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();//Block #4
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();//Block #4
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();//Block #4
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();//Block #4
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 0] = radianceEmitted.getR();		//Block #5
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 1] = radianceEmitted.getG();		//Block #5
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 2] = radianceEmitted.getB();		//Block #5
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_ID] = shape.getID();							//Block #5
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_OFFSET] = 0.0F;								//Block #5
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_SURFACE_AREA] = shape.getSurfaceArea();		//Block #5
+		array[CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_IS_TWO_SIDED] = isTwoSided ? 1.0F : 0.0F;			//Block #5
+		array[39] = 0.0F;																						//Block #5
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final DirectionalLight directionalLight) {
+		final Color3F radiance = directionalLight.getRadiance();
+		
+		final Vector3F direction = Vector3F.transform(directionalLight.getTransform().getObjectToWorld(), directionalLight.getDirection());
+		
+		final float radius = directionalLight.getRadius();
+		
+		final float[] array = new float[CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH];
+		
+//		Because the DirectionalLight occupy 8/8 positions in a block, it should be aligned.
+		array[CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 0] = radiance.getR();	//Block #1
+		array[CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 1] = radiance.getG();	//Block #1
+		array[CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 2] = radiance.getB();	//Block #1
+		array[CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 0] = direction.getX();//Block #1
+		array[CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 1] = direction.getY();//Block #1
+		array[CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 2] = direction.getZ();//Block #1
+		array[CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_RADIUS] = radius;					//Block #1
+		array[7] = 0.0F;																	//Block #1
+		
+		return array;
 	}
 }

@@ -29,7 +29,6 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -330,22 +329,6 @@ public final class Transform implements Node {
 	 */
 	public boolean removeTransformObserver(final TransformObserver transformObserver) {
 		return this.transformObservers.remove(Objects.requireNonNull(transformObserver, "transformObserver == null"));
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code Transform} instance.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Floats.array(transform.getObjectToWorld().toArray(), transform.getWorldToObject().toArray());
-	 * }
-	 * </pre>
-	 * 
-	 * @return a {@code float[]} representation of this {@code Transform} instance
-	 */
-	public float[] toArray() {
-		return Floats.array(getObjectToWorld().toArray(), getWorldToObject().toArray());
 	}
 	
 	/**

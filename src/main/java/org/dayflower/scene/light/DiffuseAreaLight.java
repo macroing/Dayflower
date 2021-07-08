@@ -56,46 +56,6 @@ public final class DiffuseAreaLight extends AreaLight {
 	public static final String NAME = "Diffuse Area Light";
 	
 	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 40;
-	
-	/**
-	 * The offset for the flag denoted by {@code Is Two-Sided} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_IS_TWO_SIDED = 38;
-	
-	/**
-	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_OBJECT_TO_WORLD = 0;
-	
-	/**
-	 * The offset for the {@link Color3F} denoted by {@code Radiance Emitted} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIANCE_EMITTED = 32;
-	
-	/**
-	 * The offset for the ID of the {@link Shape3F} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SHAPE_ID = 35;
-	
-	/**
-	 * The offset for the offset of the {@link Shape3F} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SHAPE_OFFSET = 36;
-	
-	/**
-	 * The offset for the surface area of the {@link Shape3F} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SHAPE_SURFACE_AREA = 37;
-	
-	/**
-	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_WORLD_TO_OBJECT = 16;
-	
-	/**
 	 * The ID of this {@code DiffuseAreaLight} class.
 	 */
 	public static final int ID = 1;
@@ -457,62 +417,6 @@ public final class DiffuseAreaLight extends AreaLight {
 		final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
 		
 		return this.shape.evaluateProbabilityDensityFunction(surfaceIntersectionObjectSpace, incomingObjectSpace);
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code DiffuseAreaLight} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code DiffuseAreaLight} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-		final Matrix44F objectToWorld = getTransform().getObjectToWorld();
-		final Matrix44F worldToObject = getTransform().getWorldToObject();
-		
-//		Because the DiffuseAreaLight occupy 40/40 positions in three blocks, it should be aligned.
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();							//Block #1
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();							//Block #1
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();							//Block #1
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();							//Block #1
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();							//Block #1
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();							//Block #1
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();							//Block #1
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();							//Block #1
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();							//Block #2
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();							//Block #2
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();							//Block #2
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();							//Block #2
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();							//Block #2
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();							//Block #2
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();							//Block #2
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();							//Block #3
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();							//Block #4
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();							//Block #4
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();							//Block #4
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();							//Block #4
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();							//Block #4
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();							//Block #4
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();							//Block #4
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();							//Block #4
-		array[ARRAY_OFFSET_RADIANCE_EMITTED + 0] = this.radianceEmitted.getR();								//Block #5
-		array[ARRAY_OFFSET_RADIANCE_EMITTED + 1] = this.radianceEmitted.getG();								//Block #5
-		array[ARRAY_OFFSET_RADIANCE_EMITTED + 2] = this.radianceEmitted.getB();								//Block #5
-		array[ARRAY_OFFSET_SHAPE_ID] = this.shape.getID();													//Block #5
-		array[ARRAY_OFFSET_SHAPE_OFFSET] = 0.0F;															//Block #5
-		array[ARRAY_OFFSET_SHAPE_SURFACE_AREA] = this.shape.getSurfaceArea();								//Block #5
-		array[ARRAY_OFFSET_IS_TWO_SIDED] = this.isTwoSided ? 1.0F : 0.0F;									//Block #5
-		array[39] = 0.0F;																					//Block #5
-		
-		return array;
 	}
 	
 	/**

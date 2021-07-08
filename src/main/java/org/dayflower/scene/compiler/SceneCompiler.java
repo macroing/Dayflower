@@ -30,6 +30,7 @@ import org.dayflower.node.NodeCache;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.Transform;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
 
@@ -122,7 +123,7 @@ public final class SceneCompiler {
 	
 	private void doBuildCompiledScene(final Scene scene) {
 //		Retrieve the float[] for the Matrix44F instances:
-		final float[] primitiveMatrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> primitive.getTransform().toArray(), 1);
+		final float[] primitiveMatrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> doToArray(primitive.getTransform()), 1);
 		
 //		Retrieve the int[] for all primitives:
 		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> primitive.toArray(), 1);
@@ -262,5 +263,9 @@ public final class SceneCompiler {
 	
 	private static boolean doFilter(final Node node) {
 		return BoundingVolume3FCache.filter(node) || LightCache.filter(node) || MaterialCache.filter(node) || Shape3FCache.filter(node) || TextureCache.filter(node);
+	}
+	
+	private static float[] doToArray(final Transform transform) {
+		return Floats.array(transform.getObjectToWorld().toArray(), transform.getWorldToObject().toArray());
 	}
 }

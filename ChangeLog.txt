@@ -1,12 +1,17 @@
 2021-07-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods getRadiance() and getRadius() to the DirectionalLight class.
 	* ADD:		Add the methods getColor(), getFrequency(), getGain() and getOctaves() to the SimplexFractionalBrownianMotionTexture class.
 	* ADD:		Add the method getFrequency() to the MarbleTexture class.
+	* ADD:		Add constants to the CompiledLightCache class.
 	* ADD:		Add constants to the CompiledMaterialCache class.
 	* ADD:		Add constants to the CompiledTextureCache class.
+	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the DiffuseAreaLight and DirectionalLight classes.
 	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the ClearCoatMaterial, DisneyMaterial, GlassMaterial, GlossyMaterial, MatteMaterial, MetalMaterial, MirrorMaterial, PlasticMaterial and SubstrateMaterial classes.
 	* REMOVE:	Remove the constants ARRAY_OFFSET_TEXTURE_EMISSION, ARRAY_OFFSET_TEXTURE_EMISSION_ID and ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET from the Material interface.
 	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the BlendTexture, BullseyeTexture, CheckerboardTexture, ConstantTexture, LDRImageTexture, MarbleTexture and SimplexFractionalBrownianMotionTexture classes.
+	* REMOVE:	Remove the method toArray() from the Transform class.
+	* REMOVE:	Remove the method toArray() from the DiffuseAreaLight and DirectionalLight classes.
 	* REMOVE:	Remove the method toArray() from the ClearCoatMaterial, DisneyMaterial, GlassMaterial, GlossyMaterial, MatteMaterial, MetalMaterial, MirrorMaterial, PlasticMaterial and SubstrateMaterial classes.
 	* REMOVE:	Remove the method toArray() from the BlendTexture, BullseyeTexture, CheckerboardTexture, ConstantTexture, LDRImageTexture, MarbleTexture and SimplexFractionalBrownianMotionTexture classes.
 

@@ -20,6 +20,10 @@ package org.dayflower.scene.compiler;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
@@ -35,6 +39,68 @@ import org.dayflower.scene.light.SpotLight;
  * @author J&#246;rgen Lundgren
  */
 public final class CompiledLightCache {
+	/**
+	 * The length of a compiled {@link DiffuseAreaLight} instance.
+	 */
+	public static final int DIFFUSE_AREA_LIGHT_LENGTH = 40;
+	
+	/**
+	 * The offset for the flag denoted by {@code Is Two-Sided} in a compiled {@link DiffuseAreaLight} instance.
+	 */
+	public static final int DIFFUSE_AREA_LIGHT_OFFSET_IS_TWO_SIDED = 38;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in a compiled {@link DiffuseAreaLight} instance.
+	 */
+	public static final int DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD = 0;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code Radiance Emitted} in a compiled {@link DiffuseAreaLight} instance.
+	 */
+	public static final int DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED = 32;
+	
+	/**
+	 * The offset for the ID of the {@link Shape3F} in a compiled {@link DiffuseAreaLight} instance.
+	 */
+	public static final int DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_ID = 35;
+	
+	/**
+	 * The offset for the offset of the {@link Shape3F} in a compiled {@link DiffuseAreaLight} instance.
+	 */
+	public static final int DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_OFFSET = 36;
+	
+	/**
+	 * The offset for the surface area of the {@link Shape3F} in a compiled {@link DiffuseAreaLight} instance.
+	 */
+	public static final int DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_SURFACE_AREA = 37;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in a compiled {@link DiffuseAreaLight} instance.
+	 */
+	public static final int DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT = 16;
+	
+	/**
+	 * The length of a compiled {@link DirectionalLight} instance.
+	 */
+	public static final int DIRECTIONAL_LIGHT_LENGTH = 8;
+	
+	/**
+	 * The offset for the {@link Vector3F} denoted by {@code Direction} in a compiled {@link DirectionalLight} instance.
+	 */
+	public static final int DIRECTIONAL_LIGHT_OFFSET_DIRECTION = 3;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code Radiance} in a compiled {@link DirectionalLight} instance.
+	 */
+	public static final int DIRECTIONAL_LIGHT_OFFSET_RADIANCE = 0;
+	
+	/**
+	 * The offset for the radius in a compiled {@link DirectionalLight} instance.
+	 */
+	public static final int DIRECTIONAL_LIGHT_OFFSET_RADIUS = 6;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private float[] lightDiffuseAreaLightArray;
 	private float[] lightDirectionalLightArray;
 	private float[] lightLDRImageLightArray;
@@ -133,7 +199,7 @@ public final class CompiledLightCache {
 	 * @return the {@code DiffuseAreaLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getLightDiffuseAreaLightCount() {
-		return Structures.getStructureCount(this.lightDiffuseAreaLightArray, DiffuseAreaLight.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.lightDiffuseAreaLightArray, DIFFUSE_AREA_LIGHT_LENGTH);
 	}
 	
 	/**
@@ -142,7 +208,7 @@ public final class CompiledLightCache {
 	 * @return the {@code DirectionalLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getLightDirectionalLightCount() {
-		return Structures.getStructureCount(this.lightDirectionalLightArray, DirectionalLight.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.lightDirectionalLightArray, DIRECTIONAL_LIGHT_LENGTH);
 	}
 	
 	/**

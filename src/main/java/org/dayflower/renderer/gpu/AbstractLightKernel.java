@@ -26,6 +26,7 @@ import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
+import org.dayflower.scene.compiler.CompiledLightCache;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.LDRImageLight;
@@ -574,7 +575,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private boolean doLightDiffuseAreaLightIsTwoSided() {
-		return !checkIsZero(this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_IS_TWO_SIDED]);
+		return !checkIsZero(this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_IS_TWO_SIDED]);
 	}
 	
 	@SuppressWarnings("static-method")
@@ -638,29 +639,29 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private float doLightDiffuseAreaLightGetRadianceEmittedB() {
-		return this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_RADIANCE_EMITTED + 2];
+		return this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 2];
 	}
 	
 	private float doLightDiffuseAreaLightGetRadianceEmittedG() {
-		return this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_RADIANCE_EMITTED + 1];
+		return this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 1];
 	}
 	
 	private float doLightDiffuseAreaLightGetRadianceEmittedR() {
-		return this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_RADIANCE_EMITTED + 0];
+		return this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 0];
 	}
 	
 	private float doLightDiffuseAreaLightGetShapeSurfaceArea() {
-		return this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_SHAPE_SURFACE_AREA];
+		return this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_SURFACE_AREA];
 	}
 	
 	@SuppressWarnings("unused")
 	private int doLightDiffuseAreaLightGetShapeID() {
-		return (int)(this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_SHAPE_ID]);
+		return (int)(this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_ID]);
 	}
 	
 	@SuppressWarnings("unused")
 	private int doLightDiffuseAreaLightGetShapeOffset() {
-		return (int)(this.lightDiffuseAreaLightArray[lightGetOffset() + DiffuseAreaLight.ARRAY_OFFSET_SHAPE_OFFSET]);
+		return (int)(this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_OFFSET]);
 	}
 	
 	private void doLightDiffuseAreaLightEvaluateRadianceEmitted() {
@@ -750,31 +751,31 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private float doLightDirectionalLightGetDirectionX() {
-		return this.lightDirectionalLightArray[lightGetOffset() + DirectionalLight.ARRAY_OFFSET_DIRECTION + 0];
+		return this.lightDirectionalLightArray[lightGetOffset() + CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 0];
 	}
 	
 	private float doLightDirectionalLightGetDirectionY() {
-		return this.lightDirectionalLightArray[lightGetOffset() + DirectionalLight.ARRAY_OFFSET_DIRECTION + 1];
+		return this.lightDirectionalLightArray[lightGetOffset() + CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 1];
 	}
 	
 	private float doLightDirectionalLightGetDirectionZ() {
-		return this.lightDirectionalLightArray[lightGetOffset() + DirectionalLight.ARRAY_OFFSET_DIRECTION + 2];
+		return this.lightDirectionalLightArray[lightGetOffset() + CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 2];
 	}
 	
 	private float doLightDirectionalLightGetRadianceB() {
-		return this.lightDirectionalLightArray[lightGetOffset() + DirectionalLight.ARRAY_OFFSET_RADIANCE + 2];
+		return this.lightDirectionalLightArray[lightGetOffset() + CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 2];
 	}
 	
 	private float doLightDirectionalLightGetRadianceG() {
-		return this.lightDirectionalLightArray[lightGetOffset() + DirectionalLight.ARRAY_OFFSET_RADIANCE + 1];
+		return this.lightDirectionalLightArray[lightGetOffset() + CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 1];
 	}
 	
 	private float doLightDirectionalLightGetRadianceR() {
-		return this.lightDirectionalLightArray[lightGetOffset() + DirectionalLight.ARRAY_OFFSET_RADIANCE + 0];
+		return this.lightDirectionalLightArray[lightGetOffset() + CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 0];
 	}
 	
 	private float doLightDirectionalLightGetRadius() {
-		return this.lightDirectionalLightArray[lightGetOffset() + DirectionalLight.ARRAY_OFFSET_RADIUS];
+		return this.lightDirectionalLightArray[lightGetOffset() + CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_RADIUS];
 	}
 	
 	private void doLightDirectionalLightEvaluateRadianceEmitted() {

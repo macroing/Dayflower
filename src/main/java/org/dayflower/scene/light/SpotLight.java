@@ -27,7 +27,6 @@ import java.util.Optional;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
-import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
@@ -51,36 +50,6 @@ public final class SpotLight extends Light {
 	 * The name of this {@code SpotLight} class.
 	 */
 	public static final String NAME = "Spotlight";
-	
-	/**
-	 * The length of the {@code float[]}.
-	 */
-	public static final int ARRAY_LENGTH = 24;
-	
-	/**
-	 * The offset for the cosine of the cone angle in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_COS_CONE_ANGLE = 22;
-	
-	/**
-	 * The offset for the cosine of the cone angle minus the cone angle delta in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_COS_CONE_ANGLE_MINUS_CONE_ANGLE_DELTA = 23;
-	
-	/**
-	 * The offset for the {@link Color3F} denoted by {@code Intensity} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_INTENSITY = 16;
-	
-	/**
-	 * The offset for the {@link Point3F} denoted by {@code Position} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_POSITION = 19;
-	
-	/**
-	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_WORLD_TO_OBJECT = 0;
 	
 	/**
 	 * The ID of this {@code SpotLight} class.
@@ -240,6 +209,33 @@ public final class SpotLight extends Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns an {@link AngleF} instance with the cone angle associated with this {@code SpotLight} instance.
+	 * 
+	 * @return an {@code AngleF} instance with the cone angle associated with this {@code SpotLight} instance
+	 */
+	public AngleF getConeAngle() {
+		return this.coneAngle;
+	}
+	
+	/**
+	 * Returns an {@link AngleF} instance with the cone angle delta associated with this {@code SpotLight} instance.
+	 * 
+	 * @return an {@code AngleF} instance with the cone angle delta associated with this {@code SpotLight} instance
+	 */
+	public AngleF getConeAngleDelta() {
+		return this.coneAngleDelta;
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the intensity associated with this {@code SpotLight} instance.
+	 * 
+	 * @return a {@code Color3F} instance with the intensity associated with this {@code SpotLight} instance
+	 */
+	public Color3F getIntensity() {
+		return this.intensity;
+	}
+	
+	/**
 	 * Returns a {@link Color3F} instance with the power of this {@code SpotLight} instance.
 	 * 
 	 * @return a {@code Color3F} instance with the power of this {@code SpotLight} instance
@@ -331,45 +327,21 @@ public final class SpotLight extends Light {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code SpotLight} instance.
+	 * Returns the cosine of the cone angle.
 	 * 
-	 * @return a {@code float[]} representation of this {@code SpotLight} instance
+	 * @return the cosine of the cone angle
 	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-		final Matrix44F objectToWorld = getTransform().getObjectToWorld();
-		final Matrix44F worldToObject = getTransform().getWorldToObject();
-		
-		final Point3F position = Point3F.transformAndDivide(objectToWorld, new Point3F());
-		
-//		Because the SpotLight occupy 24/24 positions in three blocks, it should be aligned.
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();							//Block #1
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();							//Block #1
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();							//Block #1
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();							//Block #1
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();							//Block #1
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();							//Block #1
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();							//Block #1
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();							//Block #1
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();							//Block #2
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();							//Block #2
-		array[ARRAY_OFFSET_INTENSITY + 0] = this.intensity.getR();											//Block #3
-		array[ARRAY_OFFSET_INTENSITY + 1] = this.intensity.getG();											//Block #3
-		array[ARRAY_OFFSET_INTENSITY + 2] = this.intensity.getB();											//Block #3
-		array[ARRAY_OFFSET_POSITION + 0] = position.getX();													//Block #3
-		array[ARRAY_OFFSET_POSITION + 1] = position.getY();													//Block #3
-		array[ARRAY_OFFSET_POSITION + 2] = position.getZ();													//Block #3
-		array[ARRAY_OFFSET_COS_CONE_ANGLE] = this.cosConeAngle;												//Block #3
-		array[ARRAY_OFFSET_COS_CONE_ANGLE_MINUS_CONE_ANGLE_DELTA] = this.cosConeAngleMinusConeAngleDelta;	//Block #3
-		
-		return array;
+	public float getCosConeAngle() {
+		return this.cosConeAngle;
+	}
+	
+	/**
+	 * Returns the cosine of the value computed by the cone angle minus the cone angle delta.
+	 * 
+	 * @return the cosine of the value computed by the cone angle minus the cone angle delta
+	 */
+	public float getCosConeAngleMinusConeAngleDelta() {
+		return this.cosConeAngleMinusConeAngleDelta;
 	}
 	
 	/**

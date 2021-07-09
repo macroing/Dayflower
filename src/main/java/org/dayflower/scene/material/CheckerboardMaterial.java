@@ -55,7 +55,7 @@ public final class CheckerboardMaterial implements Material {
 	/**
 	 * The ID of this {@code CheckerboardMaterial} class.
 	 */
-	public static final int ID = 101;
+	public static final int ID = 2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

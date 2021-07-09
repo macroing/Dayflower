@@ -33,7 +33,6 @@ import static org.dayflower.utility.Floats.random;
 import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Floats.toFloat;
-import static org.dayflower.utility.Ints.padding;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -77,66 +76,6 @@ public final class PerezLight extends Light {
 	public static final String NAME = "Perez Light";
 	
 	/**
-	 * The offset for the {@link Distribution2F} denoted by {@code Distribution} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_DISTRIBUTION = 61;
-	
-	/**
-	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_OBJECT_TO_WORLD = 0;
-	
-	/**
-	 * The offset for the Perez relative luminance in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE = 41;
-	
-	/**
-	 * The offset for the Perez X in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_PEREZ_X = 46;
-	
-	/**
-	 * The offset for the Perez Y in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_PEREZ_Y = 51;
-	
-	/**
-	 * The offset for the radius in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RADIUS = 59;
-	
-	/**
-	 * The offset for the {@link Color3F} denoted by {@code Sun Color} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SUN_COLOR = 32;
-	
-	/**
-	 * The offset for the {@link Vector3F} denoted by {@code Sun Direction} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SUN_DIRECTION = 35;
-	
-	/**
-	 * The offset for the {@link Vector3F} denoted by {@code Sun Direction World Space} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE = 38;
-	
-	/**
-	 * The offset for the theta in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_THETA = 60;
-	
-	/**
-	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_WORLD_TO_OBJECT = 16;
-	
-	/**
-	 * The offset for the zenith in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_ZENITH = 56;
-	
-	/**
 	 * The ID of this {@code PerezLight} class.
 	 */
 	public static final int ID = 4;
@@ -178,7 +117,7 @@ public final class PerezLight extends Light {
 	
 	private Color3F sunColor;
 	private Distribution2F distribution;
-	private Vector3F sunDirection;
+	private Vector3F sunDirectionObjectSpace;
 	private Vector3F sunDirectionWorldSpace;
 	private double[] perezRelativeLuminance;
 	private double[] perezX;
@@ -411,6 +350,15 @@ public final class PerezLight extends Light {
 	}
 	
 	/**
+	 * Returns the sun direction in object space associated with this {@code PerezLight} instance.
+	 * 
+	 * @return the sun direction in object space associated with this {@code PerezLight} instance
+	 */
+	public Vector3F getSunDirectionObjectSpace() {
+		return this.sunDirectionObjectSpace;
+	}
+	
+	/**
 	 * Returns the sun direction in world space associated with this {@code PerezLight} instance.
 	 * 
 	 * @return the sun direction in world space associated with this {@code PerezLight} instance
@@ -439,7 +387,7 @@ public final class PerezLight extends Light {
 			return false;
 		} else if(!Objects.equals(this.distribution, PerezLight.class.cast(object).distribution)) {
 			return false;
-		} else if(!Objects.equals(this.sunDirection, PerezLight.class.cast(object).sunDirection)) {
+		} else if(!Objects.equals(this.sunDirectionObjectSpace, PerezLight.class.cast(object).sunDirectionObjectSpace)) {
 			return false;
 		} else if(!Objects.equals(this.sunDirectionWorldSpace, PerezLight.class.cast(object).sunDirectionWorldSpace)) {
 			return false;
@@ -460,6 +408,50 @@ public final class PerezLight extends Light {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code double[]} with the Perez relative luminance.
+	 * <p>
+	 * Modifications to the returned {@code double[]} will not affect this {@code PerezLight} instance.
+	 * 
+	 * @return a {@code double[]} with the Perez relative luminance
+	 */
+	public double[] getPerezRelativeLuminance() {
+		return this.perezRelativeLuminance.clone();
+	}
+	
+	/**
+	 * Returns a {@code double[]} with the Perez X.
+	 * <p>
+	 * Modifications to the returned {@code double[]} will not affect this {@code PerezLight} instance.
+	 * 
+	 * @return a {@code double[]} with the Perez X
+	 */
+	public double[] getPerezX() {
+		return this.perezX.clone();
+	}
+	
+	/**
+	 * Returns a {@code double[]} with the Perez Y.
+	 * <p>
+	 * Modifications to the returned {@code double[]} will not affect this {@code PerezLight} instance.
+	 * 
+	 * @return a {@code double[]} with the Perez Y
+	 */
+	public double[] getPerezY() {
+		return this.perezY.clone();
+	}
+	
+	/**
+	 * Returns a {@code double[]} with the zenith.
+	 * <p>
+	 * Modifications to the returned {@code double[]} will not affect this {@code PerezLight} instance.
+	 * 
+	 * @return a {@code double[]} with the zenith
+	 */
+	public double[] getZenith() {
+		return this.zenith.clone();
 	}
 	
 	/**
@@ -497,124 +489,21 @@ public final class PerezLight extends Light {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code PerezLight} instance.
+	 * Returns the radius associated with this {@code PerezLight} instance.
 	 * 
-	 * @return a {@code float[]} representation of this {@code PerezLight} instance
+	 * @return the radius associated with this {@code PerezLight} instance
 	 */
-	public float[] toArray() {
-		final float[] array = new float[getArrayLength()];
-		
-		final float[] distribution = this.distribution.toArray();
-		
-		final Matrix44F objectToWorld = getTransform().getObjectToWorld();
-		final Matrix44F worldToObject = getTransform().getWorldToObject();
-		
-//		Block #1:
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();
-		
-//		Block #2:
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();
-		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();
-		
-//		Block #3:
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();
-		
-//		Block #4:
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();
-		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();
-		
-//		Block #5:
-		array[ARRAY_OFFSET_SUN_COLOR + 0] = this.sunColor.getR();
-		array[ARRAY_OFFSET_SUN_COLOR + 1] = this.sunColor.getG();
-		array[ARRAY_OFFSET_SUN_COLOR + 2] = this.sunColor.getB();
-		array[ARRAY_OFFSET_SUN_DIRECTION + 0] = this.sunDirection.getX();
-		array[ARRAY_OFFSET_SUN_DIRECTION + 1] = this.sunDirection.getY();
-		array[ARRAY_OFFSET_SUN_DIRECTION + 2] = this.sunDirection.getZ();
-		array[ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 0] = this.sunDirectionWorldSpace.getX();
-		array[ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 1] = this.sunDirectionWorldSpace.getY();
-		
-//		Block #6:
-		array[ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2] = this.sunDirectionWorldSpace.getZ();
-		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 0] = (float)(this.perezRelativeLuminance[0]);
-		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 1] = (float)(this.perezRelativeLuminance[1]);
-		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 2] = (float)(this.perezRelativeLuminance[2]);
-		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 3] = (float)(this.perezRelativeLuminance[3]);
-		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 4] = (float)(this.perezRelativeLuminance[4]);
-		array[ARRAY_OFFSET_PEREZ_X + 0] = (float)(this.perezX[0]);
-		array[ARRAY_OFFSET_PEREZ_X + 1] = (float)(this.perezX[1]);
-		
-//		Block #7:
-		array[ARRAY_OFFSET_PEREZ_X + 2] = (float)(this.perezX[2]);
-		array[ARRAY_OFFSET_PEREZ_X + 3] = (float)(this.perezX[3]);
-		array[ARRAY_OFFSET_PEREZ_X + 4] = (float)(this.perezX[4]);
-		array[ARRAY_OFFSET_PEREZ_Y + 0] = (float)(this.perezY[0]);
-		array[ARRAY_OFFSET_PEREZ_Y + 1] = (float)(this.perezY[1]);
-		array[ARRAY_OFFSET_PEREZ_Y + 2] = (float)(this.perezY[2]);
-		array[ARRAY_OFFSET_PEREZ_Y + 3] = (float)(this.perezY[3]);
-		array[ARRAY_OFFSET_PEREZ_Y + 4] = (float)(this.perezY[4]);
-		
-//		Block #8:
-		array[ARRAY_OFFSET_ZENITH + 0] = (float)(this.zenith[0]);
-		array[ARRAY_OFFSET_ZENITH + 1] = (float)(this.zenith[1]);
-		array[ARRAY_OFFSET_ZENITH + 2] = (float)(this.zenith[2]);
-		array[ARRAY_OFFSET_RADIUS] = this.radius;
-		array[ARRAY_OFFSET_THETA] = this.theta;
-		
-		for(int i = 0; i < distribution.length; i++) {
-			array[ARRAY_OFFSET_DISTRIBUTION + i] = distribution[i];
-		}
-		
-		return array;
+	public float getRadius() {
+		return this.radius;
 	}
 	
 	/**
-	 * Returns the length of the {@code float[]}.
+	 * Returns the angle theta associated with this {@code PerezLight} instance.
 	 * 
-	 * @return the length of the {@code float[]}
+	 * @return the angle theta associated with this {@code PerezLight} instance
 	 */
-	public int getArrayLength() {
-		final int lengthObjectToWorld = 16;
-		final int lengthWorldToObject = 16;
-		final int lengthSunColor = 3;
-		final int lengthSunDirection = 3;
-		final int lengthSunDirectionWorldSpace = 3;
-		final int lengthPerezRelativeLuminance = 5;
-		final int lengthPerezX = 5;
-		final int lengthPerezY = 5;
-		final int lengthZenith = 3;
-		final int lengthRadius = 1;
-		final int lengthTheta = 1;
-		final int lengthDistribution = this.distribution.toArray().length;
-		final int length = lengthObjectToWorld + lengthWorldToObject + lengthSunColor + lengthSunDirection + lengthSunDirectionWorldSpace + lengthPerezRelativeLuminance + lengthPerezX + lengthPerezY + lengthZenith + lengthRadius + lengthTheta + lengthDistribution;
-		final int lengthWithPadding = length + padding(length);
-		
-		return lengthWithPadding;
+	public float getTheta() {
+		return this.theta;
 	}
 	
 	/**
@@ -634,7 +523,7 @@ public final class PerezLight extends Light {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(getTransform(), this.sunColor, this.distribution, this.sunDirection, this.sunDirectionWorldSpace, Integer.valueOf(Arrays.hashCode(this.perezRelativeLuminance)), Integer.valueOf(Arrays.hashCode(this.perezX)), Integer.valueOf(Arrays.hashCode(this.perezY)), Integer.valueOf(Arrays.hashCode(this.zenith)), Float.valueOf(this.radius), Float.valueOf(this.theta), Float.valueOf(this.turbidity));
+		return Objects.hash(getTransform(), this.sunColor, this.distribution, this.sunDirectionObjectSpace, this.sunDirectionWorldSpace, Integer.valueOf(Arrays.hashCode(this.perezRelativeLuminance)), Integer.valueOf(Arrays.hashCode(this.perezX)), Integer.valueOf(Arrays.hashCode(this.perezY)), Integer.valueOf(Arrays.hashCode(this.zenith)), Float.valueOf(this.radius), Float.valueOf(this.theta), Float.valueOf(this.turbidity));
 	}
 	
 	/**
@@ -683,7 +572,7 @@ public final class PerezLight extends Light {
 		doSetRadius();
 		doSetTurbidity(turbidity);
 		doSetSunDirectionWorldSpace(sunDirectionWorldSpace);
-		doSetSunDirection();
+		doSetSunDirectionObjectSpace();
 		doSetTheta();
 		doSetSunColor();
 		doSetZenith();
@@ -703,7 +592,7 @@ public final class PerezLight extends Light {
 		final Vector3F directionSaturated = Vector3F.normalize(new Vector3F(direction.getX(), direction.getY(), max(direction.getZ(), 0.001F)));
 		
 		final double theta = acos(saturate(directionSaturated.getZ(), -1.0D, 1.0D));
-		final double gamma = acos(saturate(Vector3F.dotProduct(directionSaturated, this.sunDirection), -1.0D, 1.0D));
+		final double gamma = acos(saturate(Vector3F.dotProduct(directionSaturated, this.sunDirectionObjectSpace), -1.0D, 1.0D));
 		final double relativeLuminance = doCalculatePerezFunction(this.perezRelativeLuminance, theta, gamma, this.zenith[0]) * 0.0001D;
 		final double x = doCalculatePerezFunction(this.perezX, theta, gamma, this.zenith[1]);
 		final double y = doCalculatePerezFunction(this.perezY, theta, gamma, this.zenith[2]);
@@ -790,15 +679,15 @@ public final class PerezLight extends Light {
 	}
 	
 	private void doSetSunColor() {
-		if(this.sunDirection.getZ() > 0.0F) {
+		if(this.sunDirectionObjectSpace.getZ() > 0.0F) {
 			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingPBRT(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(), 0.01F/*0.0001F*/)));
 		} else {
 			this.sunColor = Color3F.BLACK;
 		}
 	}
 	
-	private void doSetSunDirection() {
-		this.sunDirection = doTransformToObjectSpace(this.sunDirectionWorldSpace);
+	private void doSetSunDirectionObjectSpace() {
+		this.sunDirectionObjectSpace = doTransformToObjectSpace(this.sunDirectionWorldSpace);
 	}
 	
 	private void doSetSunDirectionWorldSpace(final Vector3F sunDirectionWorldSpace) {
@@ -806,7 +695,7 @@ public final class PerezLight extends Light {
 	}
 	
 	private void doSetTheta() {
-		this.theta = acos(saturate(this.sunDirection.getZ(), -1.0F, 1.0F));
+		this.theta = acos(saturate(this.sunDirectionObjectSpace.getZ(), -1.0F, 1.0F));
 	}
 	
 	private void doSetTransform() {

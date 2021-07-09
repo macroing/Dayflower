@@ -54,7 +54,7 @@ public final class BullseyeMaterial implements Material {
 	/**
 	 * The ID of this {@code BullseyeMaterial} class.
 	 */
-	public static final int ID = 100;
+	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

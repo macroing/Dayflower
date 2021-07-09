@@ -22,8 +22,11 @@ import java.util.Objects;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.sampler.Distribution2F;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
@@ -98,6 +101,156 @@ public final class CompiledLightCache {
 	 * The offset for the radius in a compiled {@link DirectionalLight} instance.
 	 */
 	public static final int DIRECTIONAL_LIGHT_OFFSET_RADIUS = 6;
+	
+	/**
+	 * The offset for the angle in radians in a compiled {@link LDRImageLight} instance.
+	 */
+	public static final int L_D_R_IMAGE_LIGHT_OFFSET_ANGLE_RADIANS = 32;
+	
+	/**
+	 * The offset for the {@link Distribution2F} denoted by {@code Distribution} in a compiled {@link LDRImageLight} instance.
+	 */
+	public static final int L_D_R_IMAGE_LIGHT_OFFSET_DISTRIBUTION = 40;
+	
+	/**
+	 * The offset for the image in a compiled {@link LDRImageLight} instance.
+	 */
+	public static final int L_D_R_IMAGE_LIGHT_OFFSET_IMAGE = 2352;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in a compiled {@link LDRImageLight} instance.
+	 */
+	public static final int L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD = 0;
+	
+	/**
+	 * The offset for the radius in a compiled {@link LDRImageLight} instance.
+	 */
+	public static final int L_D_R_IMAGE_LIGHT_OFFSET_RADIUS = 35;
+	
+	/**
+	 * The offset for the resolution of the X-axis in a compiled {@link LDRImageLight} instance.
+	 */
+	public static final int L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_X = 36;
+	
+	/**
+	 * The offset for the resolution of the Y-axis in a compiled {@link LDRImageLight} instance.
+	 */
+	public static final int L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_Y = 37;
+	
+	/**
+	 * The offset for the {@link Vector2F} instance that represents the scale in a compiled {@link LDRImageLight} instance.
+	 */
+	public static final int L_D_R_IMAGE_LIGHT_OFFSET_SCALE = 33;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in a compiled {@link LDRImageLight} instance.
+	 */
+	public static final int L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT = 16;
+	
+	/**
+	 * The offset for the {@link Distribution2F} denoted by {@code Distribution} in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_DISTRIBUTION = 61;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD = 0;
+	
+	/**
+	 * The offset for the Perez relative luminance in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE = 41;
+	
+	/**
+	 * The offset for the Perez X in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_PEREZ_X = 46;
+	
+	/**
+	 * The offset for the Perez Y in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_PEREZ_Y = 51;
+	
+	/**
+	 * The offset for the radius in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_RADIUS = 59;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code Sun Color} in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_SUN_COLOR = 32;
+	
+	/**
+	 * The offset for the {@link Vector3F} denoted by {@code Sun Direction Object Space} in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE = 35;
+	
+	/**
+	 * The offset for the {@link Vector3F} denoted by {@code Sun Direction World Space} in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE = 38;
+	
+	/**
+	 * The offset for the theta in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_THETA = 60;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT = 16;
+	
+	/**
+	 * The offset for the zenith in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_ZENITH = 56;
+	
+	/**
+	 * The length of a compiled {@link PointLight} instance.
+	 */
+	public static final int POINT_LIGHT_LENGTH = 8;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code Intensity} in a compiled {@link PointLight} instance.
+	 */
+	public static final int POINT_LIGHT_OFFSET_INTENSITY = 0;
+	
+	/**
+	 * The offset for the {@link Point3F} denoted by {@code Position} in a compiled {@link PointLight} instance.
+	 */
+	public static final int POINT_LIGHT_OFFSET_POSITION = 3;
+	
+	/**
+	 * The length of a compiled {@link SpotLight} instance.
+	 */
+	public static final int SPOT_LIGHT_LENGTH = 24;
+	
+	/**
+	 * The offset for the cosine of the cone angle in a compiled {@link SpotLight} instance.
+	 */
+	public static final int SPOT_LIGHT_OFFSET_COS_CONE_ANGLE = 22;
+	
+	/**
+	 * The offset for the cosine of the cone angle minus the cone angle delta in a compiled {@link SpotLight} instance.
+	 */
+	public static final int SPOT_LIGHT_OFFSET_COS_CONE_ANGLE_MINUS_CONE_ANGLE_DELTA = 23;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code Intensity} in a compiled {@link SpotLight} instance.
+	 */
+	public static final int SPOT_LIGHT_OFFSET_INTENSITY = 16;
+	
+	/**
+	 * The offset for the {@link Point3F} denoted by {@code Position} in a compiled {@link SpotLight} instance.
+	 */
+	public static final int SPOT_LIGHT_OFFSET_POSITION = 19;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in a compiled {@link SpotLight} instance.
+	 */
+	public static final int SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT = 0;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -235,7 +388,7 @@ public final class CompiledLightCache {
 	 * @return the {@code PointLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getLightPointLightCount() {
-		return Structures.getStructureCount(this.lightPointLightArray, PointLight.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.lightPointLightArray, POINT_LIGHT_LENGTH);
 	}
 	
 	/**
@@ -244,7 +397,7 @@ public final class CompiledLightCache {
 	 * @return the {@code SpotLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getLightSpotLightCount() {
-		return Structures.getStructureCount(this.lightSpotLightArray, SpotLight.ARRAY_LENGTH);
+		return Structures.getStructureCount(this.lightSpotLightArray, SPOT_LIGHT_LENGTH);
 	}
 	
 	/**

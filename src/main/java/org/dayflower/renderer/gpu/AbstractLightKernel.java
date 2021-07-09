@@ -821,9 +821,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
 		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
 		
-		final int offsetDistribution = offset + LDRImageLight.ARRAY_OFFSET_DISTRIBUTION;
+		final int offsetDistribution = offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_DISTRIBUTION;
 		
-		doLightLDRImageLightDistribution2FContinuousRemap(offset + LDRImageLight.ARRAY_OFFSET_DISTRIBUTION, u, v);
+		doLightLDRImageLightDistribution2FContinuousRemap(offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_DISTRIBUTION, u, v);
 		
 		final float sampleRemappedU = point2FGetComponent1();
 		final float sampleRemappedV = point2FGetComponent2();
@@ -961,25 +961,25 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float v = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
 		
-		final float probabilityDensityFunctionValue = doLightLDRImageLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + LDRImageLight.ARRAY_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = doLightLDRImageLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
 		
 		return probabilityDensityFunctionValue;
 	}
 	
 	private float doLightLDRImageLightGetAngleRadians(final int offset) {
-		return this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_ANGLE_RADIANS];
+		return this.lightLDRImageLightArray[offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_ANGLE_RADIANS];
 	}
 	
 	private float doLightLDRImageLightGetRadius(final int offset) {
-		return this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RADIUS];
+		return this.lightLDRImageLightArray[offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_RADIUS];
 	}
 	
 	private float doLightLDRImageLightGetScaleU(final int offset) {
-		return this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 0];
+		return this.lightLDRImageLightArray[offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_SCALE + 0];
 	}
 	
 	private float doLightLDRImageLightGetScaleV(final int offset) {
-		return this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 1];
+		return this.lightLDRImageLightArray[offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_SCALE + 1];
 	}
 	
 	private int doLightLDRImageLightDistribution1FCount(final int offset) {
@@ -1008,11 +1008,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private int doLightLDRImageLightGetResolutionX(final int offset) {
-		return (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_X]);
+		return (int)(this.lightLDRImageLightArray[offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_X]);
 	}
 	
 	private int doLightLDRImageLightGetResolutionY(final int offset) {
-		return (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_Y]);
+		return (int)(this.lightLDRImageLightArray[offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_Y]);
 	}
 	
 	private void doLightLDRImageLightDistribution2FContinuousRemap(final int offset, final float u, final float v) {
@@ -1073,7 +1073,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int minimumY = (int)(floor(y));
 		final int maximumY = (int)(ceil(y));
 		
-		final int offsetImage = offset + LDRImageLight.ARRAY_OFFSET_IMAGE;
+		final int offsetImage = offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_IMAGE;
 		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
 		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
 		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
@@ -1095,7 +1095,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private void doLightLDRImageLightTransformToObjectSpace(final int offset, final float directionX, final float directionY, final float directionZ) {
-		final int offsetWorldToObject = offset + LDRImageLight.ARRAY_OFFSET_WORLD_TO_OBJECT;
+		final int offsetWorldToObject = offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT;
 		
 		final float element11 = this.lightLDRImageLightArray[offsetWorldToObject +  0];
 		final float element12 = this.lightLDRImageLightArray[offsetWorldToObject +  1];
@@ -1111,7 +1111,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private void doLightLDRImageLightTransformToWorldSpace(final int offset, final float directionX, final float directionY, final float directionZ) {
-		final int offsetObjectToWorld = offset + LDRImageLight.ARRAY_OFFSET_OBJECT_TO_WORLD;
+		final int offsetObjectToWorld = offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD;
 		
 		final float element11 = this.lightLDRImageLightArray[offsetObjectToWorld +  0];
 		final float element12 = this.lightLDRImageLightArray[offsetObjectToWorld +  1];
@@ -1143,9 +1143,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	private boolean doLightPerezLightSampleRadianceIncoming(final float u, final float v) {
 		final int offset = lightGetOffset();
 		
-		final float sunDirectionX = doLightPerezLightGetSunDirectionX(offset);
-		final float sunDirectionY = doLightPerezLightGetSunDirectionY(offset);
-		final float sunDirectionZ = doLightPerezLightGetSunDirectionZ(offset);
+		final float sunDirectionObjectSpaceX = doLightPerezLightGetSunDirectionObjectSpaceX(offset);
+		final float sunDirectionObjectSpaceY = doLightPerezLightGetSunDirectionObjectSpaceY(offset);
+		final float sunDirectionObjectSpaceZ = doLightPerezLightGetSunDirectionObjectSpaceZ(offset);
 		
 		final float sunDirectionWorldSpaceX = doLightPerezLightGetSunDirectionWorldSpaceX(offset);
 		final float sunDirectionWorldSpaceY = doLightPerezLightGetSunDirectionWorldSpaceY(offset);
@@ -1172,12 +1172,12 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final boolean isSamplingSun = sunDirectionWorldSpaceDotSurfaceNormalG > random && sunDirectionWorldSpaceDotSurfaceNormalS > random;
 		
-		final int offsetDistribution = offset + PerezLight.ARRAY_OFFSET_DISTRIBUTION;
+		final int offsetDistribution = offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_DISTRIBUTION;
 		
 		if(isSamplingSun) {
-//			final float incomingObjectSpaceX = sunDirectionX;
-//			final float incomingObjectSpaceY = sunDirectionY;
-//			final float incomingObjectSpaceZ = sunDirectionZ;
+//			final float incomingObjectSpaceX = sunDirectionObjectSpaceX;
+//			final float incomingObjectSpaceY = sunDirectionObjectSpaceY;
+//			final float incomingObjectSpaceZ = sunDirectionObjectSpaceZ;
 			
 			final float incomingWorldSpaceX = sunDirectionWorldSpaceX;
 			final float incomingWorldSpaceY = sunDirectionWorldSpaceY;
@@ -1221,7 +1221,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 //			}
 		}
 		
-		doLightPerezLightDistribution2FContinuousRemap(offset + PerezLight.ARRAY_OFFSET_DISTRIBUTION, u, v);
+		doLightPerezLightDistribution2FContinuousRemap(offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_DISTRIBUTION, u, v);
 		
 		final float sampleRemappedU = point2FGetComponent1();
 		final float sampleRemappedV = point2FGetComponent2();
@@ -1250,7 +1250,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 			return false;
 		}
 		
-		doLightPerezLightRadianceSky(offset, incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ, sunDirectionX, sunDirectionY, sunDirectionZ);
+		doLightPerezLightRadianceSky(offset, incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ, sunDirectionObjectSpaceX, sunDirectionObjectSpaceY, sunDirectionObjectSpaceZ);
 		
 		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());
 		
@@ -1361,49 +1361,49 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float v = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
 		
-		final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + PerezLight.ARRAY_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + CompiledLightCache.PEREZ_LIGHT_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
 		
 		return probabilityDensityFunctionValue;
 	}
 	
 	private float doLightPerezLightGetRadius(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_RADIUS];
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_RADIUS];
 	}
 	
 	private float doLightPerezLightGetSunColorB(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_COLOR + 2];
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_SUN_COLOR + 2];
 	}
 	
 	private float doLightPerezLightGetSunColorG(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_COLOR + 1];
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_SUN_COLOR + 1];
 	}
 	
 	private float doLightPerezLightGetSunColorR(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_COLOR + 0];
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_SUN_COLOR + 0];
+	}
+	
+	private float doLightPerezLightGetSunDirectionObjectSpaceX(final int offset) {
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 0];
+	}
+	
+	private float doLightPerezLightGetSunDirectionObjectSpaceY(final int offset) {
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 1];
+	}
+	
+	private float doLightPerezLightGetSunDirectionObjectSpaceZ(final int offset) {
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 2];
 	}
 	
 	private float doLightPerezLightGetSunDirectionWorldSpaceX(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 0];
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 0];
 	}
 	
 	private float doLightPerezLightGetSunDirectionWorldSpaceY(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 1];
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 1];
 	}
 	
 	private float doLightPerezLightGetSunDirectionWorldSpaceZ(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2];
-	}
-	
-	private float doLightPerezLightGetSunDirectionX(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_DIRECTION + 0];
-	}
-	
-	private float doLightPerezLightGetSunDirectionY(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_DIRECTION + 1];
-	}
-	
-	private float doLightPerezLightGetSunDirectionZ(final int offset) {
-		return this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_DIRECTION + 2];
+		return this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2];
 	}
 	
 	private int doLightPerezLightDistribution1FCount(final int offset) {
@@ -1453,7 +1453,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int offset = lightGetOffset();
 		
 		doLightPerezLightTransformToObjectSpace(offset, ray3FGetDirectionComponent1(), ray3FGetDirectionComponent2(), ray3FGetDirectionComponent3());
-		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionX(offset), doLightPerezLightGetSunDirectionY(offset), doLightPerezLightGetSunDirectionZ(offset));
+		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionObjectSpaceX(offset), doLightPerezLightGetSunDirectionObjectSpaceY(offset), doLightPerezLightGetSunDirectionObjectSpaceZ(offset));
 		
 		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());
 	}
@@ -1467,13 +1467,13 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		vector3FSetDirectionSpherical2(0.5F, 0.5F);
 		
-		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionX(offset), doLightPerezLightGetSunDirectionY(offset), doLightPerezLightGetSunDirectionZ(offset));
+		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionObjectSpaceX(offset), doLightPerezLightGetSunDirectionObjectSpaceY(offset), doLightPerezLightGetSunDirectionObjectSpaceZ(offset));
 		
 		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());
 		color3FLHSSet(color3FLHSGetR() * resultFactor, color3FLHSGetG() * resultFactor, color3FLHSGetB() * resultFactor);
 	}
 	
-	private void doLightPerezLightRadianceSky(final int offset, final float directionX, final float directionY, final float directionZ, final float sunDirectionX, final float sunDirectionY, final float sunDirectionZ) {
+	private void doLightPerezLightRadianceSky(final int offset, final float directionX, final float directionY, final float directionZ, final float sunDirectionObjectSpaceX, final float sunDirectionObjectSpaceY, final float sunDirectionObjectSpaceZ) {
 		if(directionZ < 0.0F) {
 			color3FLHSSet(0.0F, 0.0F, 0.0F);
 			
@@ -1489,32 +1489,32 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float thetaA = acos(saturateF(directionSaturatedZ, -1.0F, 1.0F));
 		final float thetaACos = cos(thetaA);
 		
-		final float perezRelativeLuminance0 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 0];
-		final float perezRelativeLuminance1 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 1];
-		final float perezRelativeLuminance2 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 2];
-		final float perezRelativeLuminance3 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 3];
-		final float perezRelativeLuminance4 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 4];
+		final float perezRelativeLuminance0 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 0];
+		final float perezRelativeLuminance1 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 1];
+		final float perezRelativeLuminance2 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 2];
+		final float perezRelativeLuminance3 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 3];
+		final float perezRelativeLuminance4 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 4];
 		
-		final float perezX0 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 0];
-		final float perezX1 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 1];
-		final float perezX2 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 2];
-		final float perezX3 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 3];
-		final float perezX4 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 4];
+		final float perezX0 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 0];
+		final float perezX1 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 1];
+		final float perezX2 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 2];
+		final float perezX3 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 3];
+		final float perezX4 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 4];
 		
-		final float perezY0 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 0];
-		final float perezY1 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 1];
-		final float perezY2 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 2];
-		final float perezY3 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 3];
-		final float perezY4 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 4];
+		final float perezY0 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 0];
+		final float perezY1 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 1];
+		final float perezY2 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 2];
+		final float perezY3 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 3];
+		final float perezY4 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 4];
 		
-		final float zenith0 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_ZENITH + 0];
-		final float zenith1 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_ZENITH + 1];
-		final float zenith2 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_ZENITH + 2];
+		final float zenith0 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_ZENITH + 0];
+		final float zenith1 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_ZENITH + 1];
+		final float zenith2 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_ZENITH + 2];
 		
-		final float thetaB = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_THETA];
+		final float thetaB = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_THETA];
 		final float thetaBCos = cos(thetaB);
 		
-		final float gamma = acos(saturateF(vector3FDotProduct(directionSaturatedX, directionSaturatedY, directionSaturatedZ, sunDirectionX, sunDirectionY, sunDirectionZ), -1.0F, 1.0F));
+		final float gamma = acos(saturateF(vector3FDotProduct(directionSaturatedX, directionSaturatedY, directionSaturatedZ, sunDirectionObjectSpaceX, sunDirectionObjectSpaceY, sunDirectionObjectSpaceZ), -1.0F, 1.0F));
 		final float gammaCos = cos(gamma);
 		
 		final float relativeLuminance = (zenith0 * ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1 / thetaACos)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * gamma) + perezRelativeLuminance4 * gammaCos * gammaCos)) / ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * thetaB) + perezRelativeLuminance4 * thetaBCos * thetaBCos))) * 0.0001F;
@@ -1543,7 +1543,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private void doLightPerezLightTransformToObjectSpace(final int offset, final float directionX, final float directionY, final float directionZ) {
-		final int offsetWorldToObject = offset + PerezLight.ARRAY_OFFSET_WORLD_TO_OBJECT;
+		final int offsetWorldToObject = offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT;
 		
 		final float element11 = this.lightPerezLightArray[offsetWorldToObject +  0];
 		final float element12 = this.lightPerezLightArray[offsetWorldToObject +  1];
@@ -1559,7 +1559,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private void doLightPerezLightTransformToWorldSpace(final int offset, final float directionX, final float directionY, final float directionZ) {
-		final int offsetObjectToWorld = offset + PerezLight.ARRAY_OFFSET_OBJECT_TO_WORLD;
+		final int offsetObjectToWorld = offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD;
 		
 		final float element11 = this.lightPerezLightArray[offsetObjectToWorld +  0];
 		final float element12 = this.lightPerezLightArray[offsetObjectToWorld +  1];
@@ -1632,27 +1632,27 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private float doLightPointLightGetIntensityB() {
-		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_INTENSITY + 2];
+		return this.lightPointLightArray[lightGetOffset() + CompiledLightCache.POINT_LIGHT_OFFSET_INTENSITY + 2];
 	}
 	
 	private float doLightPointLightGetIntensityG() {
-		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_INTENSITY + 1];
+		return this.lightPointLightArray[lightGetOffset() + CompiledLightCache.POINT_LIGHT_OFFSET_INTENSITY + 1];
 	}
 	
 	private float doLightPointLightGetIntensityR() {
-		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_INTENSITY + 0];
+		return this.lightPointLightArray[lightGetOffset() + CompiledLightCache.POINT_LIGHT_OFFSET_INTENSITY + 0];
 	}
 	
 	private float doLightPointLightGetPositionX() {
-		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_POSITION + 0];
+		return this.lightPointLightArray[lightGetOffset() + CompiledLightCache.POINT_LIGHT_OFFSET_POSITION + 0];
 	}
 	
 	private float doLightPointLightGetPositionY() {
-		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_POSITION + 1];
+		return this.lightPointLightArray[lightGetOffset() + CompiledLightCache.POINT_LIGHT_OFFSET_POSITION + 1];
 	}
 	
 	private float doLightPointLightGetPositionZ() {
-		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_POSITION + 2];
+		return this.lightPointLightArray[lightGetOffset() + CompiledLightCache.POINT_LIGHT_OFFSET_POSITION + 2];
 	}
 	
 	private void doLightPointLightEvaluateRadianceEmitted() {
@@ -1726,7 +1726,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private float doLightSpotLightComputeFalloff(final float directionX, final float directionY, final float directionZ) {
-		final int offset = lightGetOffset() + SpotLight.ARRAY_OFFSET_WORLD_TO_OBJECT;
+		final int offset = lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT;
 		
 		final float element11 = this.lightSpotLightArray[offset +  0];
 		final float element12 = this.lightSpotLightArray[offset +  1];
@@ -1770,35 +1770,35 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private float doLightSpotLightGetCosConeAngle() {
-		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_COS_CONE_ANGLE];
+		return this.lightSpotLightArray[lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_COS_CONE_ANGLE];
 	}
 	
 	private float doLightSpotLightGetCosConeAngleMinusConeAngleDelta() {
-		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_COS_CONE_ANGLE_MINUS_CONE_ANGLE_DELTA];
+		return this.lightSpotLightArray[lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_COS_CONE_ANGLE_MINUS_CONE_ANGLE_DELTA];
 	}
 	
 	private float doLightSpotLightGetIntensityB() {
-		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_INTENSITY + 2];
+		return this.lightSpotLightArray[lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_INTENSITY + 2];
 	}
 	
 	private float doLightSpotLightGetIntensityG() {
-		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_INTENSITY + 1];
+		return this.lightSpotLightArray[lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_INTENSITY + 1];
 	}
 	
 	private float doLightSpotLightGetIntensityR() {
-		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_INTENSITY + 0];
+		return this.lightSpotLightArray[lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_INTENSITY + 0];
 	}
 	
 	private float doLightSpotLightGetPositionX() {
-		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_POSITION + 0];
+		return this.lightSpotLightArray[lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_POSITION + 0];
 	}
 	
 	private float doLightSpotLightGetPositionY() {
-		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_POSITION + 1];
+		return this.lightSpotLightArray[lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_POSITION + 1];
 	}
 	
 	private float doLightSpotLightGetPositionZ() {
-		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_POSITION + 2];
+		return this.lightSpotLightArray[lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_POSITION + 2];
 	}
 	
 	private void doLightSpotLightEvaluateRadianceEmitted() {

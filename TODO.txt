@@ -46,8 +46,10 @@ Scene Material API:
 	* ADD:		Add a Builder to the PlasticMaterial class.
 	* ADD:		Add a Builder to the SubstrateMaterial class.
 	* ADD:		Add a Builder to the UberMaterial class.
+	* ADD:		Add a PolkaDotMaterial class.
 	* FIX:		Fix the HairMaterial class.
 
 Scene Texture API:
 
 	* ADD:		Add an HDRImageTexture class.
+	* ADD:		Add a PolkaDotTexture class.

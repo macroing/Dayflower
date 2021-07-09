@@ -58,7 +58,7 @@ public final class SubstrateMaterial implements Material {
 	/**
 	 * The ID of this {@code SubstrateMaterial} class.
 	 */
-	public static final int ID = 112;
+	public static final int ID = 13;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

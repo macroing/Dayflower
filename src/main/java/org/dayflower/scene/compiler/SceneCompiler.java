@@ -141,7 +141,7 @@ public final class SceneCompiler {
 		CompiledScene compiledScene = new CompiledScene();
 		compiledScene.getCompiledBoundingVolume3FCache().setBoundingVolume3FAxisAlignedBoundingBox3FArray(this.boundingVolume3FCache.toBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		compiledScene.getCompiledBoundingVolume3FCache().setBoundingVolume3FBoundingSphere3FArray(this.boundingVolume3FCache.toBoundingVolume3FBoundingSphere3FArray());
-		compiledScene.getCompiledCameraCache().setCameraArray(scene.getCamera().toArray());
+		compiledScene.getCompiledCameraCache().setCameraArray(CompiledCameraCache.toArray(scene.getCamera()));
 		compiledScene.getCompiledLightCache().setLightDiffuseAreaLightArray(this.lightCache.toLightDiffuseAreaLightArray(this.shape3FCache));
 		compiledScene.getCompiledLightCache().setLightDirectionalLightArray(this.lightCache.toLightDirectionalLightArray());
 		compiledScene.getCompiledLightCache().setLightIDAndOffsetArray(this.lightCache.toLightIDAndOffsetArray());

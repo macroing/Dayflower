@@ -1,14 +1,18 @@
 2021-07-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add constants to the CompiledCameraCache class.
+	* ADD:		Add the method toArray(Camera) to the CompiledCameraCache class.
 	* ADD:		Add constants to the CompiledPrimitiveCache class.
 	* ADD:		Add the methods getConeAngle(), getConeAngleDelta(), getCosConeAngle(), getCosConeAngleMinusConeAngleDelta() and getIntensity() to the SpotLight class.
 	* ADD:		Add the methods getPerezRelativeLuminance(), getPerezX(), getPerezY(), getRadius(), getSunDirectionObjectSpace() and getZenith() to the PerezLight class.
 	* ADD:		Add the constants L_D_R_IMAGE_LIGHT_* to the CompiledLightCache class.
 	* ADD:		Add the methods getDistribution() and getRadius() to the LDRImageLight class.
 	* CHANGE:	Change the ID values of all Material implementations.
+	* REMOVE:	Remove the constants ARRAY_OFFSET_* and ARRAY_SIZE from the Camera class.
 	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the Primitive class.
 	* REMOVE:	Remove the constant ARRAY_LENGTH from the PointLight and SpotLight classes.
 	* REMOVE:	Remove the constants ARRAY_OFFSET_* from the LDRImageLight, PerezLight, PointLight and SpotLight classes.
+	* REMOVE:	Remove the method toArray() from the Camera class.
 	* REMOVE:	Remove the method toArray() from the Primitive class.
 	* REMOVE:	Remove the method toArray() from the LDRImageLight, PerezLight, PointLight and SpotLight classes.
 	* REMOVE:	Remove the method getArrayLength() from the LDRImageLight and PerezLight classes.

@@ -43,6 +43,7 @@ import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.compiler.CompiledCameraCache;
 import org.dayflower.scene.compiler.CompiledPrimitiveCache;
 import org.dayflower.scene.compiler.CompiledScene;
 import org.dayflower.scene.compiler.SceneCompiler;
@@ -154,7 +155,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * Updates the {@link Camera} instance.
 	 */
 	public final void updateCamera() {
-		put(this.cameraArray = getScene().getCamera().toArray());
+		put(this.cameraArray = CompiledCameraCache.toArray(getScene().getCamera()));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -387,25 +388,25 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float imageY = getGlobalId() / this.resolutionX;
 		
 //		Retrieve all values from the 'cameraArray' in the correct order:
-		final float fieldOfViewX = tan(+this.cameraArray[Camera.ARRAY_OFFSET_FIELD_OF_VIEW_X] * 0.5F);
-		final float fieldOfViewY = tan(-this.cameraArray[Camera.ARRAY_OFFSET_FIELD_OF_VIEW_Y] * 0.5F);
-		final float lens = this.cameraArray[Camera.ARRAY_OFFSET_LENS];
-		final float uX = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_U + 0];
-		final float uY = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_U + 1];
-		final float uZ = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_U + 2];
-		final float vX = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_V + 0];
-		final float vY = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_V + 1];
-		final float vZ = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_V + 2];
-		final float wX = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_W + 0];
-		final float wY = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_W + 1];
-		final float wZ = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_W + 2];
-		final float eyeX = this.cameraArray[Camera.ARRAY_OFFSET_EYE + 0];
-		final float eyeY = this.cameraArray[Camera.ARRAY_OFFSET_EYE + 1];
-		final float eyeZ = this.cameraArray[Camera.ARRAY_OFFSET_EYE + 2];
-		final float apertureRadius = this.cameraArray[Camera.ARRAY_OFFSET_APERTURE_RADIUS];
-		final float focalDistance = this.cameraArray[Camera.ARRAY_OFFSET_FOCAL_DISTANCE];
-		final float resolutionX = this.cameraArray[Camera.ARRAY_OFFSET_RESOLUTION_X];
-		final float resolutionY = this.cameraArray[Camera.ARRAY_OFFSET_RESOLUTION_Y];
+		final float fieldOfViewX = tan(+this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_FIELD_OF_VIEW_X] * 0.5F);
+		final float fieldOfViewY = tan(-this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_FIELD_OF_VIEW_Y] * 0.5F);
+		final float lens = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_LENS];
+		final float uX = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_U + 0];
+		final float uY = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_U + 1];
+		final float uZ = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_U + 2];
+		final float vX = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_V + 0];
+		final float vY = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_V + 1];
+		final float vZ = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_V + 2];
+		final float wX = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_W + 0];
+		final float wY = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_W + 1];
+		final float wZ = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_W + 2];
+		final float eyeX = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_EYE + 0];
+		final float eyeY = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_EYE + 1];
+		final float eyeZ = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_EYE + 2];
+		final float apertureRadius = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_APERTURE_RADIUS];
+		final float focalDistance = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_FOCAL_DISTANCE];
+		final float resolutionX = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_RESOLUTION_X];
+		final float resolutionY = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_RESOLUTION_Y];
 		
 //		Compute the camera coordinates:
 		final float cameraX = 2.0F * ((imageX + pixelX) / (resolutionX - 1.0F)) - 1.0F;

@@ -52,53 +52,6 @@ import org.dayflower.utility.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class Primitive implements Node {
-	/**
-	 * The length of the {@code int[]}.
-	 */
-	public static final int ARRAY_LENGTH = 8;
-	
-	/**
-	 * The offset for the {@link AreaLight} ID in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_AREA_LIGHT_ID = 0;
-	
-	/**
-	 * The offset for the {@link AreaLight} offset in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_AREA_LIGHT_OFFSET = 1;
-	
-	/**
-	 * The offset for the {@link BoundingVolume3F} ID in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_BOUNDING_VOLUME_ID = 2;
-	
-	/**
-	 * The offset for the {@link BoundingVolume3F} offset in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET = 3;
-	
-	/**
-	 * The offset for the {@link Material} ID in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_MATERIAL_ID = 4;
-	
-	/**
-	 * The offset for the {@link Material} offset in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_MATERIAL_OFFSET = 5;
-	
-	/**
-	 * The offset for the {@link Shape3F} ID in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_SHAPE_ID = 6;
-	
-	/**
-	 * The offset for the {@link Shape3F} offset in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_SHAPE_OFFSET = 7;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private AreaLight areaLight;
 	private BoundingVolume3F boundingVolume;
 	private final List<PrimitiveObserver> primitiveObservers;
@@ -539,26 +492,6 @@ public final class Primitive implements Node {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.areaLight, this.boundingVolume, this.primitiveObservers, this.material, this.shape, this.transform);
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code Primitive} instance.
-	 * 
-	 * @return an {@code int[]} representation of this {@code Primitive} instance
-	 */
-	public int[] toArray() {
-		final int[] array = new int[ARRAY_LENGTH];
-		
-		array[ARRAY_OFFSET_AREA_LIGHT_ID] = this.areaLight != null ? this.areaLight.getID() : 0;
-		array[ARRAY_OFFSET_AREA_LIGHT_OFFSET] = 0;
-		array[ARRAY_OFFSET_BOUNDING_VOLUME_ID] = this.boundingVolume.getID();
-		array[ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET] = 0;
-		array[ARRAY_OFFSET_MATERIAL_ID] = this.material.getID();
-		array[ARRAY_OFFSET_MATERIAL_OFFSET] = 0;
-		array[ARRAY_OFFSET_SHAPE_ID] = this.shape.getID();
-		array[ARRAY_OFFSET_SHAPE_OFFSET] = 0;
-		
-		return array;
 	}
 	
 	/**

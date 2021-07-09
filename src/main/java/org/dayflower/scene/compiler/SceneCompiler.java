@@ -25,9 +25,12 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.Shape3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.scene.AreaLight;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
@@ -126,7 +129,7 @@ public final class SceneCompiler {
 		final float[] primitiveMatrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> doToArray(primitive.getTransform()), 1);
 		
 //		Retrieve the int[] for all primitives:
-		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> primitive.toArray(), 1);
+		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> doToArray(primitive), 1);
 		
 //		Populate the float[] or int[] with data:
 		doPopulatePrimitiveArrayWithAreaLights(primitiveArray);
@@ -203,30 +206,30 @@ public final class SceneCompiler {
 	
 	private void doPopulatePrimitiveArrayWithAreaLights(final int[] primitiveArray) {
 		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
-			final int primitiveArrayOffset = i * Primitive.ARRAY_LENGTH;
+			final int primitiveArrayOffset = i * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
 			
 			this.filteredPrimitives.get(i).getAreaLight().ifPresent(areaLight -> {
-				primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_AREA_LIGHT_ID] = areaLight.getID();
-				primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_AREA_LIGHT_OFFSET] = this.lightCache.findOffsetFor(areaLight);
+				primitiveArray[primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID] = areaLight.getID();
+				primitiveArray[primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_OFFSET] = this.lightCache.findOffsetFor(areaLight);
 			});
 		}
 	}
 	
 	private void doPopulatePrimitiveArrayWithBoundingVolumes(final int[] primitiveArray) {
 		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
-			primitiveArray[i * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET] = this.boundingVolume3FCache.findOffsetFor(this.filteredPrimitives.get(i).getBoundingVolume());
+			primitiveArray[i * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET] = this.boundingVolume3FCache.findOffsetFor(this.filteredPrimitives.get(i).getBoundingVolume());
 		}
 	}
 	
 	private void doPopulatePrimitiveArrayWithMaterials(final int[] primitiveArray) {
 		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
-			primitiveArray[i * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET] = this.materialCache.findOffsetFor(this.filteredPrimitives.get(i).getMaterial());
+			primitiveArray[i * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_OFFSET] = this.materialCache.findOffsetFor(this.filteredPrimitives.get(i).getMaterial());
 		}
 	}
 	
 	private void doPopulatePrimitiveArrayWithShapes(final int[] primitiveArray) {
 		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
-			primitiveArray[i * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_SHAPE_OFFSET] = this.shape3FCache.findOffsetFor(this.filteredPrimitives.get(i).getShape());
+			primitiveArray[i * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET] = this.shape3FCache.findOffsetFor(this.filteredPrimitives.get(i).getShape());
 		}
 	}
 	
@@ -267,5 +270,28 @@ public final class SceneCompiler {
 	
 	private static float[] doToArray(final Transform transform) {
 		return Floats.array(transform.getObjectToWorld().toArray(), transform.getWorldToObject().toArray());
+	}
+	
+	private static int[] doToArray(final Primitive primitive) {
+		final BoundingVolume3F boundingVolume = primitive.getBoundingVolume();
+		
+		final Material material = primitive.getMaterial();
+		
+		final Optional<AreaLight> optionalAreaLight = primitive.getAreaLight();
+		
+		final Shape3F shape = primitive.getShape();
+		
+		final int[] array = new int[CompiledPrimitiveCache.PRIMITIVE_LENGTH];
+		
+		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID] = optionalAreaLight.isPresent() ? optionalAreaLight.get().getID() : 0;
+		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_OFFSET] = 0;
+		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID] = boundingVolume.getID();
+		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET] = 0;
+		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_ID] = material.getID();
+		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_OFFSET] = 0;
+		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID] = shape.getID();
+		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET] = 0;
+		
+		return array;
 	}
 }

@@ -43,6 +43,7 @@ import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.compiler.CompiledPrimitiveCache;
 import org.dayflower.scene.compiler.CompiledScene;
 import org.dayflower.scene.compiler.SceneCompiler;
 import org.dayflower.utility.Floats;
@@ -173,11 +174,11 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0] = -1;
 		
 		for(int index = 0; index < this.primitiveCount; index++) {
-			final int primitiveArrayOffset = index * Primitive.ARRAY_LENGTH;
-			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_ID;
-			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
-			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
-			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+			final int primitiveArrayOffset = index * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
+			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID;
+			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET;
 			
 			final int boundingVolumeID = this.primitiveArray[primitiveArrayOffsetBoundingVolumeID];
 			final int boundingVolumeOffset = this.primitiveArray[primitiveArrayOffsetBoundingVolumeOffset];
@@ -243,9 +244,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		}
 		
 		if(primitiveIndex != -1) {
-			final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
-			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+			final int primitiveArrayOffset = primitiveIndex * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET;
 			
 			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
 			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
@@ -297,11 +298,11 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 */
 	protected final boolean primitiveIntersects() {
 		for(int index = 0; index < this.primitiveCount; index++) {
-			final int primitiveArrayOffset = index * Primitive.ARRAY_LENGTH;
-			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_ID;
-			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
-			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
-			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+			final int primitiveArrayOffset = index * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
+			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID;
+			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET;
 			
 			final int boundingVolumeID = this.primitiveArray[primitiveArrayOffsetBoundingVolumeID];
 			final int boundingVolumeOffset = this.primitiveArray[primitiveArrayOffsetBoundingVolumeOffset];
@@ -480,11 +481,11 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		boolean hasFoundIntersection = false;
 		
 		for(int index = 0; index < this.primitiveCount; index++) {
-			final int primitiveArrayOffset = index * Primitive.ARRAY_LENGTH;
-			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_ID;
-			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
-			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
-			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+			final int primitiveArrayOffset = index * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
+			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID;
+			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET;
 			
 			final int boundingVolumeID = this.primitiveArray[primitiveArrayOffsetBoundingVolumeID];
 			final int boundingVolumeOffset = this.primitiveArray[primitiveArrayOffsetBoundingVolumeOffset];
@@ -567,7 +568,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * @return the ID of the {@code Material} instance that is used by the intersected {@code Primitive} instance
 	 */
 	protected final int primitiveGetMaterialID() {
-		return this.primitiveArray[intersectionGetPrimitiveIndex() * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_MATERIAL_ID];
+		return this.primitiveArray[intersectionGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_ID];
 	}
 	
 	/**
@@ -576,7 +577,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * @return the offset for the {@code Material} instance that is used by the intersected {@code Primitive} instance
 	 */
 	protected final int primitiveGetMaterialOffset() {
-		return this.primitiveArray[intersectionGetPrimitiveIndex() * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+		return this.primitiveArray[intersectionGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_OFFSET];
 	}
 	
 	/**

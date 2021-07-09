@@ -31,6 +31,16 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
 
+/**
+ * A {@code PolkaDotTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between two other {@code Texture} instances in a polka dot pattern.
+ * <p>
+ * This class is immutable and therefore thread-safe if, and only if, both {@code Texture} instances are.
+ * <p>
+ * This {@code Texture} implementation is not supported on the GPU.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class PolkaDotTexture implements Texture {
 	/**
 	 * The ID of this {@code PolkaDotTexture} class.

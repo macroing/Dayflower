@@ -229,7 +229,7 @@ public final class BullseyeTexture implements Texture {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new BullseyeTexture(%s, %s, %s, %+.10f)", this.origin, this.textureA, this.textureB, Float.valueOf(this.scale));
+		return String.format("new BullseyeTexture(%s, %s, %s, %+.10f)", this.textureA, this.textureB, this.origin, Float.valueOf(this.scale));
 	}
 	
 	/**

@@ -19,6 +19,7 @@
 package org.dayflower.scene.texture;
 
 import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.fractionalPart;
 import static org.dayflower.utility.Floats.sin;
 
@@ -26,59 +27,49 @@ import java.util.Objects;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
-import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
 
-/**
- * A {@code CheckerboardTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between two other {@code Texture} instances in a checkerboard pattern.
- * <p>
- * This class is immutable and therefore thread-safe if, and only if, both {@code Texture} instances are.
- * <p>
- * This {@code Texture} implementation is supported on the GPU.
- * 
- * @since 1.0.0
- * @author J&#246;rgen Lundgren
- */
-public final class CheckerboardTexture implements Texture {
+public final class PolkaDotTexture implements Texture {
 	/**
-	 * The ID of this {@code CheckerboardTexture} class.
+	 * The ID of this {@code PolkaDotTexture} class.
 	 */
-	public static final int ID = 3;
+	public static final int ID = 8;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final AngleF angle;
 	private final Texture textureA;
 	private final Texture textureB;
-	private final Vector2F scale;
+	private final float cellResolution;
+	private final float polkaDotRadius;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * Constructs a new {@code PolkaDotTexture} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardTexture(Color3F.GRAY_0_50, Color3F.WHITE);
+	 * new PolkaDotTexture(Color3F.GRAY_0_50, Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
-	public CheckerboardTexture() {
+	public PolkaDotTexture() {
 		this(Color3F.GRAY_0_50, Color3F.WHITE);
 	}
 	
 	/**
-	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * Constructs a new {@code PolkaDotTexture} instance.
 	 * <p>
 	 * If either {@code colorA} or {@code colorB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardTexture(colorA, colorB, AngleF.degrees(0.0F));
+	 * new PolkaDotTexture(colorA, colorB, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -86,19 +77,19 @@ public final class CheckerboardTexture implements Texture {
 	 * @param colorB one of the two {@code Color3F} instances to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
-	public CheckerboardTexture(final Color3F colorA, final Color3F colorB) {
-		this(new ConstantTexture(colorA), new ConstantTexture(colorB), AngleF.degrees(0.0F));
+	public PolkaDotTexture(final Color3F colorA, final Color3F colorB) {
+		this(colorA, colorB, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * Constructs a new {@code PolkaDotTexture} instance.
 	 * <p>
 	 * If either {@code colorA}, {@code colorB} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardTexture(colorA, colorB, angle, new Vector2F(1.0F, 1.0F));
+	 * new PolkaDotTexture(colorA, colorB, angle, 10.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -107,41 +98,64 @@ public final class CheckerboardTexture implements Texture {
 	 * @param angle the {@link AngleF} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code angle} are {@code null}
 	 */
-	public CheckerboardTexture(final Color3F colorA, final Color3F colorB, final AngleF angle) {
-		this(new ConstantTexture(colorA), new ConstantTexture(colorB), angle, new Vector2F(1.0F, 1.0F));
+	public PolkaDotTexture(final Color3F colorA, final Color3F colorB, final AngleF angle) {
+		this(colorA, colorB, angle, 10.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * Constructs a new {@code PolkaDotTexture} instance.
 	 * <p>
-	 * If either {@code colorA}, {@code colorB}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorA}, {@code colorB} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardTexture(new ConstantTexture(colorA), new ConstantTexture(colorB), angle, scale);
+	 * new PolkaDotTexture(colorA, colorB, angle, cellResolution, 0.25F);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorA one of the two {@link Color3F} instances to use
 	 * @param colorB one of the two {@code Color3F} instances to use
 	 * @param angle the {@link AngleF} instance to use
-	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB}, {@code angle} or {@code scale} are {@code null}
+	 * @param cellResolution the cell resolution to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code angle} are {@code null}
 	 */
-	public CheckerboardTexture(final Color3F colorA, final Color3F colorB, final AngleF angle, Vector2F scale) {
-		this(new ConstantTexture(colorA), new ConstantTexture(colorB), angle, scale);
+	public PolkaDotTexture(final Color3F colorA, final Color3F colorB, final AngleF angle, final float cellResolution) {
+		this(colorA, colorB, angle, cellResolution, 0.25F);
 	}
 	
 	/**
-	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * Constructs a new {@code PolkaDotTexture} instance.
+	 * <p>
+	 * If either {@code colorA}, {@code colorB} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PolkaDotTexture(new ConstantTexture(colorA), new ConstantTexture(colorB), angle, cellResolution, polkaDotRadius);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorA one of the two {@link Color3F} instances to use
+	 * @param colorB one of the two {@code Color3F} instances to use
+	 * @param angle the {@link AngleF} instance to use
+	 * @param cellResolution the cell resolution to use
+	 * @param polkaDotRadius the polka dot radius to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code angle} are {@code null}
+	 */
+	public PolkaDotTexture(final Color3F colorA, final Color3F colorB, final AngleF angle, final float cellResolution, final float polkaDotRadius) {
+		this(new ConstantTexture(colorA), new ConstantTexture(colorB), angle, cellResolution, polkaDotRadius);
+	}
+	
+	/**
+	 * Constructs a new {@code PolkaDotTexture} instance.
 	 * <p>
 	 * If either {@code textureA} or {@code textureB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardTexture(textureA, textureB, AngleF.degrees(0.0F));
+	 * new PolkaDotTexture(textureA, textureB, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -149,19 +163,19 @@ public final class CheckerboardTexture implements Texture {
 	 * @param textureB one of the two {@code Texture} instances to use
 	 * @throws NullPointerException thrown if, and only if, either {@code textureA} or {@code textureB} are {@code null}
 	 */
-	public CheckerboardTexture(final Texture textureA, final Texture textureB) {
+	public PolkaDotTexture(final Texture textureA, final Texture textureB) {
 		this(textureA, textureB, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * Constructs a new {@code PolkaDotTexture} instance.
 	 * <p>
 	 * If either {@code textureA}, {@code textureB} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardTexture(textureA, textureB, angle, new Vector2F(1.0F, 1.0F));
+	 * new PolkaDotTexture(textureA, textureB, angle, 10.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -170,26 +184,50 @@ public final class CheckerboardTexture implements Texture {
 	 * @param angle the {@link AngleF} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code textureA}, {@code textureB} or {@code angle} are {@code null}
 	 */
-	public CheckerboardTexture(final Texture textureA, final Texture textureB, final AngleF angle) {
-		this(textureA, textureB, angle, new Vector2F(1.0F, 1.0F));
+	public PolkaDotTexture(final Texture textureA, final Texture textureB, final AngleF angle) {
+		this(textureA, textureB, angle, 10.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * Constructs a new {@code PolkaDotTexture} instance.
 	 * <p>
-	 * If either {@code textureA}, {@code textureB}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureA}, {@code textureB} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PolkaDotTexture(textureA, textureB, angle, cellResolution, 0.25F);
+	 * }
+	 * </pre>
 	 * 
 	 * @param textureA one of the two {@link Texture} instances to use
 	 * @param textureB one of the two {@code Texture} instances to use
 	 * @param angle the {@link AngleF} instance to use
-	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @throws NullPointerException thrown if, and only if, either {@code textureA}, {@code textureB}, {@code angle} or {@code scale} are {@code null}
+	 * @param cellResolution the cell resolution to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureA}, {@code textureB} or {@code angle} are {@code null}
 	 */
-	public CheckerboardTexture(final Texture textureA, final Texture textureB, final AngleF angle, final Vector2F scale) {
+	public PolkaDotTexture(final Texture textureA, final Texture textureB, final AngleF angle, final float cellResolution) {
+		this(textureA, textureB, angle, cellResolution, 0.25F);
+	}
+	
+	/**
+	 * Constructs a new {@code PolkaDotTexture} instance.
+	 * <p>
+	 * If either {@code textureA}, {@code textureB} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureA one of the two {@link Texture} instances to use
+	 * @param textureB one of the two {@code Texture} instances to use
+	 * @param angle the {@link AngleF} instance to use
+	 * @param cellResolution the cell resolution to use
+	 * @param polkaDotRadius the polka dot radius to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureA}, {@code textureB} or {@code angle} are {@code null}
+	 */
+	public PolkaDotTexture(final Texture textureA, final Texture textureB, final AngleF angle, final float cellResolution, final float polkaDotRadius) {
 		this.textureA = Objects.requireNonNull(textureA, "textureA == null");
 		this.textureB = Objects.requireNonNull(textureB, "textureB == null");
 		this.angle = Objects.requireNonNull(angle, "angle == null");
-		this.scale = Objects.requireNonNull(scale, "scale == null");
+		this.cellResolution = cellResolution;
+		this.polkaDotRadius = polkaDotRadius;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,20 +258,26 @@ public final class CheckerboardTexture implements Texture {
 		final float u = intersection.getTextureCoordinates().getU();
 		final float v = intersection.getTextureCoordinates().getV();
 		
-		final boolean isU = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.scale.getU()) > 0.5F;
-		final boolean isV = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.scale.getV()) > 0.5F;
+		final float x = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.cellResolution);
+		final float y = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.cellResolution);
 		
-		return isU ^ isV ? this.textureA.getColor(intersection) : this.textureB.getColor(intersection);
+		final float distanceSquared = (x - 0.5F) * (x - 0.5F) + (y - 0.5F) * (y - 0.5F);
+		
+		if(distanceSquared < this.polkaDotRadius * this.polkaDotRadius) {
+			return this.textureA.getColor(intersection);
+		}
+		
+		return this.textureB.getColor(intersection);
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code CheckerboardTexture} instance.
+	 * Returns a {@code String} representation of this {@code PolkaDotTexture} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code CheckerboardTexture} instance
+	 * @return a {@code String} representation of this {@code PolkaDotTexture} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new CheckerboardTexture(%s, %s, %s, %s)", this.textureA, this.textureB, this.angle, this.scale);
+		return String.format("new PolkaDotTexture(%s, %s, %s, %+.10f, %+.10f)", this.textureA, this.textureB, this.angle, Float.valueOf(this.cellResolution), Float.valueOf(this.polkaDotRadius));
 	}
 	
 	/**
@@ -252,15 +296,6 @@ public final class CheckerboardTexture implements Texture {
 	 */
 	public Texture getTextureB() {
 		return this.textureB;
-	}
-	
-	/**
-	 * Returns the {@link Vector2F} instance to use as the scale factor.
-	 * 
-	 * @return the {@code Vector2F} instance to use as the scale factor
-	 */
-	public Vector2F getScale() {
-		return this.scale;
 	}
 	
 	/**
@@ -297,10 +332,6 @@ public final class CheckerboardTexture implements Texture {
 				if(!this.textureB.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
-				
-				if(!this.scale.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
 			}
 			
 			return nodeHierarchicalVisitor.visitLeave(this);
@@ -310,30 +341,41 @@ public final class CheckerboardTexture implements Texture {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code CheckerboardTexture} instance for equality.
+	 * Compares {@code object} to this {@code PolkaDotTexture} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code CheckerboardTexture}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PolkaDotTexture}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code CheckerboardTexture} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CheckerboardTexture}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code PolkaDotTexture} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PolkaDotTexture}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof CheckerboardTexture)) {
+		} else if(!(object instanceof PolkaDotTexture)) {
 			return false;
-		} else if(!Objects.equals(this.angle, CheckerboardTexture.class.cast(object).angle)) {
+		} else if(!Objects.equals(this.angle, PolkaDotTexture.class.cast(object).angle)) {
 			return false;
-		} else if(!Objects.equals(this.textureA, CheckerboardTexture.class.cast(object).textureA)) {
+		} else if(!Objects.equals(this.textureA, PolkaDotTexture.class.cast(object).textureA)) {
 			return false;
-		} else if(!Objects.equals(this.textureB, CheckerboardTexture.class.cast(object).textureB)) {
+		} else if(!Objects.equals(this.textureB, PolkaDotTexture.class.cast(object).textureB)) {
 			return false;
-		} else if(!Objects.equals(this.scale, CheckerboardTexture.class.cast(object).scale)) {
+		} else if(!equal(this.cellResolution, PolkaDotTexture.class.cast(object).cellResolution)) {
+			return false;
+		} else if(!equal(this.polkaDotRadius, PolkaDotTexture.class.cast(object).polkaDotRadius)) {
 			return false;
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns the cell resolution to use.
+	 * 
+	 * @return the cell resolution to use
+	 */
+	public float getCellResolution() {
+		return this.cellResolution;
 	}
 	
 	/**
@@ -351,9 +393,18 @@ public final class CheckerboardTexture implements Texture {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code CheckerboardTexture} instance.
+	 * Returns the polka dot radius to use.
 	 * 
-	 * @return an {@code int} with the ID of this {@code CheckerboardTexture} instance
+	 * @return the polka dot radius to use
+	 */
+	public float getPolkaDotRadius() {
+		return this.polkaDotRadius;
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code PolkaDotTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code PolkaDotTexture} instance
 	 */
 	@Override
 	public int getID() {
@@ -361,12 +412,12 @@ public final class CheckerboardTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code CheckerboardTexture} instance.
+	 * Returns a hash code for this {@code PolkaDotTexture} instance.
 	 * 
-	 * @return a hash code for this {@code CheckerboardTexture} instance
+	 * @return a hash code for this {@code PolkaDotTexture} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.angle, this.textureA, this.textureB, this.scale);
+		return Objects.hash(this.angle, this.textureA, this.textureB, Float.valueOf(this.cellResolution), Float.valueOf(this.polkaDotRadius));
 	}
 }

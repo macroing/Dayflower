@@ -134,6 +134,7 @@ The lists below show the main features of the renderer.
 * Function Texture (CPU)
 * Low-Dynamic-Range (LDR) Image Texture (CPU & GPU)
 * Marble Texture (CPU & GPU)
+* Polka Dot Texture (CPU)
 * Simplex Fractional Brownian Motion Texture (CPU & GPU)
 * Surface Normal Texture (CPU & GPU)
 * UV Texture (CPU & GPU)

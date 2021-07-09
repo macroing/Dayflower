@@ -52,4 +52,3 @@ Scene Material API:
 Scene Texture API:
 
 	* ADD:		Add an HDRImageTexture class.
-	* ADD:		Add a PolkaDotTexture class.

@@ -1,5 +1,6 @@
 2021-07-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the PolkaDotTexture class.
 	* ADD:		Add constants to the CompiledCameraCache class.
 	* ADD:		Add the method toArray(Camera) to the CompiledCameraCache class.
 	* ADD:		Add constants to the CompiledPrimitiveCache class.
@@ -7,6 +8,8 @@
 	* ADD:		Add the methods getPerezRelativeLuminance(), getPerezX(), getPerezY(), getRadius(), getSunDirectionObjectSpace() and getZenith() to the PerezLight class.
 	* ADD:		Add the constants L_D_R_IMAGE_LIGHT_* to the CompiledLightCache class.
 	* ADD:		Add the methods getDistribution() and getRadius() to the LDRImageLight class.
+	* CHANGE:	Change the String representations created by the toString() method of the BullseyeTexture and CheckerboardTexture classes. They were wrong.
+	* CHANGE:	Change the ID values of the SimplexFractionalBrownianMotionTexture, SurfaceNormalTexture and UVTexture classes.
 	* CHANGE:	Change the ID values of all Material implementations.
 	* REMOVE:	Remove the constants ARRAY_OFFSET_* and ARRAY_SIZE from the Camera class.
 	* REMOVE:	Remove the constants ARRAY_LENGTH and ARRAY_OFFSET_* from the Primitive class.

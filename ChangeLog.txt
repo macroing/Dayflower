@@ -1,3 +1,8 @@
+2021-07-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the PolkaDotMaterial class.
+	* CHANGE:	Change the ID values of the SubstrateMaterial and UberMaterial classes.
+
 2021-07-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the PolkaDotTexture class.

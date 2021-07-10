@@ -101,6 +101,7 @@ The lists below show the main features of the renderer.
 * Metal Material (CPU & GPU)
 * Mirror Material (CPU & GPU)
 * Plastic Material (CPU & GPU)
+* Polka Dot Material (CPU)
 * Substrate Material (CPU & GPU)
 * Uber Material (CPU)
 

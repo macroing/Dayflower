@@ -12,10 +12,12 @@ Renderer GPU API:
 	* ADD:		Add support for PrimitiveAreaLight.
 	* ADD:		Add support for BullseyeMaterial.
 	* ADD:		Add support for CheckerboardMaterial.
+	* ADD:		Add support for PolkaDotMaterial.
 	* ADD:		Add support for UberMaterial.
 	* ADD:		Add support for LDRImageNormalMapModifier.
 	* ADD:		Add support for SimplexNoiseNormalMapModifier.
 	* ADD:		Add support for ConstructiveSolidGeometry3F.
+	* ADD:		Add support for PolkaDotTexture.
 	* ADD:		Add support for the Ray Tracer algorithm.
 	* ADD:		Add support for the Scene-based BVH structure.
 	* FIX:		Fix the bug that resets the image occasionally using the Ambient Occlusion and Path Tracer algorithms.
@@ -46,7 +48,6 @@ Scene Material API:
 	* ADD:		Add a Builder to the PlasticMaterial class.
 	* ADD:		Add a Builder to the SubstrateMaterial class.
 	* ADD:		Add a Builder to the UberMaterial class.
-	* ADD:		Add a PolkaDotMaterial class.
 	* FIX:		Fix the HairMaterial class.
 
 Scene Texture API:

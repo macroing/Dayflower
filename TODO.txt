@@ -17,7 +17,6 @@ Renderer GPU API:
 	* ADD:		Add support for LDRImageNormalMapModifier.
 	* ADD:		Add support for SimplexNoiseNormalMapModifier.
 	* ADD:		Add support for ConstructiveSolidGeometry3F.
-	* ADD:		Add support for PolkaDotTexture.
 	* ADD:		Add support for the Ray Tracer algorithm.
 	* ADD:		Add support for the Scene-based BVH structure.
 	* FIX:		Fix the bug that resets the image occasionally using the Ambient Occlusion and Path Tracer algorithms.

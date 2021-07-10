@@ -29,6 +29,7 @@ import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
+import org.dayflower.scene.texture.PolkaDotTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.Texture;
 
@@ -200,6 +201,41 @@ public final class CompiledTextureCache {
 	public static final int MARBLE_TEXTURE_OFFSET_STRIPES = 5;
 	
 	/**
+	 * The length of a compiled {@link PolkaDotTexture} instance.
+	 */
+	public static final int POLKA_DOT_TEXTURE_LENGTH = 8;
+	
+	/**
+	 * The offset for the angle in degrees in a compiled {@link PolkaDotTexture} instance.
+	 */
+	public static final int POLKA_DOT_TEXTURE_OFFSET_ANGLE_DEGREES = 0;
+	
+	/**
+	 * The offset for the angle in radians in a compiled {@link PolkaDotTexture} instance.
+	 */
+	public static final int POLKA_DOT_TEXTURE_OFFSET_ANGLE_RADIANS = 1;
+	
+	/**
+	 * The offset for the cell resolution in a compiled {@link PolkaDotTexture} instance.
+	 */
+	public static final int POLKA_DOT_TEXTURE_OFFSET_CELL_RESOLUTION = 4;
+	
+	/**
+	 * The offset for the polka dot radius in a compiled {@link PolkaDotTexture} instance.
+	 */
+	public static final int POLKA_DOT_TEXTURE_OFFSET_POLKA_DOT_RADIUS = 5;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code A} in a compiled {@link PolkaDotTexture} instance.
+	 */
+	public static final int POLKA_DOT_TEXTURE_OFFSET_TEXTURE_A = 2;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code B} in a compiled {@link PolkaDotTexture} instance.
+	 */
+	public static final int POLKA_DOT_TEXTURE_OFFSET_TEXTURE_B = 3;
+	
+	/**
 	 * The length of a compiled {@link SimplexFractionalBrownianMotionTexture} instance.
 	 */
 	public static final int SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH = 4;
@@ -232,6 +268,7 @@ public final class CompiledTextureCache {
 	private float[] textureConstantTextureArray;
 	private float[] textureLDRImageTextureArray;
 	private float[] textureMarbleTextureArray;
+	private float[] texturePolkaDotTextureArray;
 	private float[] textureSimplexFractionalBrownianMotionTextureArray;
 	private int[] textureLDRImageTextureOffsetArray;
 	
@@ -248,6 +285,7 @@ public final class CompiledTextureCache {
 		setTextureLDRImageTextureArray(new float[1]);
 		setTextureLDRImageTextureOffsetArray(new int[1]);
 		setTextureMarbleTextureArray(new float[1]);
+		setTexturePolkaDotTextureArray(new float[1]);
 		setTextureSimplexFractionalBrownianMotionTextureArray(new float[1]);
 	}
 	
@@ -305,6 +343,15 @@ public final class CompiledTextureCache {
 	 */
 	public float[] getTextureMarbleTextureArray() {
 		return this.textureMarbleTextureArray;
+	}
+	
+	/**
+	 * Returns a {@code float[]} that contains all {@link PolkaDotTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance.
+	 * 
+	 * @return a {@code float[]} that contains all {@code PolkaDotTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
+	 */
+	public float[] getTexturePolkaDotTextureArray() {
+		return this.texturePolkaDotTextureArray;
 	}
 	
 	/**
@@ -492,6 +539,41 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
+	 * Returns the {@link PolkaDotTexture} count in this {@code CompiledTextureCache} instance.
+	 * 
+	 * @return the {@code PolkaDotTexture} count in this {@code CompiledTextureCache} instance
+	 */
+	public int getTexturePolkaDotTextureCount() {
+		return Structures.getStructureCount(this.texturePolkaDotTextureArray, POLKA_DOT_TEXTURE_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code texturePolkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code texturePolkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param texturePolkaDotTexture a {@link PolkaDotTexture} instance in compiled form
+	 * @return the absolute offset of {@code texturePolkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code texturePolkaDotTexture} is {@code null}
+	 */
+	public int getTexturePolkaDotTextureOffsetAbsolute(final float[] texturePolkaDotTexture) {
+		return Structures.getStructureOffsetAbsolute(this.texturePolkaDotTextureArray, Objects.requireNonNull(texturePolkaDotTexture, "texturePolkaDotTexture == null"), getTexturePolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code texturePolkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code texturePolkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param texturePolkaDotTexture a {@link PolkaDotTexture} instance in compiled form
+	 * @return the relative offset of {@code texturePolkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code texturePolkaDotTexture} is {@code null}
+	 */
+	public int getTexturePolkaDotTextureOffsetRelative(final float[] texturePolkaDotTexture) {
+		return Structures.getStructureOffsetRelative(this.texturePolkaDotTextureArray, Objects.requireNonNull(texturePolkaDotTexture, "texturePolkaDotTexture == null"), getTexturePolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
+	}
+	
+	/**
 	 * Returns the {@link SimplexFractionalBrownianMotionTexture} count in this {@code CompiledTextureCache} instance.
 	 * 
 	 * @return the {@code SimplexFractionalBrownianMotionTexture} count in this {@code CompiledTextureCache} instance
@@ -617,6 +699,18 @@ public final class CompiledTextureCache {
 	 */
 	public void setTextureMarbleTextureArray(final float[] textureMarbleTextureArray) {
 		this.textureMarbleTextureArray = Objects.requireNonNull(textureMarbleTextureArray, "textureMarbleTextureArray == null");
+	}
+	
+	/**
+	 * Sets all {@link PolkaDotTexture} instances in compiled form to {@code texturePolkaDotTextureArray}.
+	 * <p>
+	 * If {@code texturePolkaDotTextureArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param texturePolkaDotTextureArray the {@code PolkaDotTexture} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code texturePolkaDotTextureArray} is {@code null}
+	 */
+	public void setTexturePolkaDotTextureArray(final float[] texturePolkaDotTextureArray) {
+		this.texturePolkaDotTextureArray = Objects.requireNonNull(texturePolkaDotTextureArray, "texturePolkaDotTextureArray == null");
 	}
 	
 	/**

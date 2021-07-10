@@ -42,6 +42,7 @@ import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
+import org.dayflower.scene.texture.PolkaDotTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
@@ -55,6 +56,7 @@ final class TextureCache {
 	private final List<ConstantTexture> distinctConstantTextures;
 	private final List<LDRImageTexture> distinctLDRImageTextures;
 	private final List<MarbleTexture> distinctMarbleTextures;
+	private final List<PolkaDotTexture> distinctPolkaDotTextures;
 	private final List<SimplexFractionalBrownianMotionTexture> distinctSimplexFractionalBrownianMotionTextures;
 	private final List<SurfaceNormalTexture> distinctSurfaceNormalTextures;
 	private final List<Texture> distinctTextures;
@@ -65,19 +67,21 @@ final class TextureCache {
 	private final Map<ConstantTexture, Integer> distinctToOffsetsConstantTextures;
 	private final Map<LDRImageTexture, Integer> distinctToOffsetsLDRImageTextures;
 	private final Map<MarbleTexture, Integer> distinctToOffsetsMarbleTextures;
+	private final Map<PolkaDotTexture, Integer> distinctToOffsetsPolkaDotTextures;
 	private final Map<SimplexFractionalBrownianMotionTexture, Integer> distinctToOffsetsSimplexFractionalBrownianMotionTextures;
 	private final NodeCache nodeCache;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public TextureCache(final NodeCache nodeCache) {
-		this.nodeCache = nodeCache;
+		this.nodeCache = Objects.requireNonNull(nodeCache, "nodeCache == null");
 		this.distinctBlendTextures = new ArrayList<>();
 		this.distinctBullseyeTextures = new ArrayList<>();
 		this.distinctCheckerboardTextures = new ArrayList<>();
 		this.distinctConstantTextures = new ArrayList<>();
 		this.distinctLDRImageTextures = new ArrayList<>();
 		this.distinctMarbleTextures = new ArrayList<>();
+		this.distinctPolkaDotTextures = new ArrayList<>();
 		this.distinctSimplexFractionalBrownianMotionTextures = new ArrayList<>();
 		this.distinctSurfaceNormalTextures = new ArrayList<>();
 		this.distinctTextures = new ArrayList<>();
@@ -88,6 +92,7 @@ final class TextureCache {
 		this.distinctToOffsetsConstantTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsLDRImageTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsMarbleTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsPolkaDotTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures = new LinkedHashMap<>();
 	}
 	
@@ -108,6 +113,8 @@ final class TextureCache {
 			return this.distinctToOffsetsLDRImageTextures.get(texture).intValue();
 		} else if(texture instanceof MarbleTexture) {
 			return this.distinctToOffsetsMarbleTextures.get(texture).intValue();
+		} else if(texture instanceof PolkaDotTexture) {
+			return this.distinctToOffsetsPolkaDotTextures.get(texture).intValue();
 		} else if(texture instanceof SimplexFractionalBrownianMotionTexture) {
 			return this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.get(texture).intValue();
 		} else if(texture instanceof SurfaceNormalTexture) {
@@ -188,6 +195,25 @@ final class TextureCache {
 		return Floats.toArray(this.distinctMarbleTextures, marbleTexture -> doToArray(marbleTexture), 1);
 	}
 	
+	public float[] toTexturePolkaDotTextureArray() {
+		final float[] texturePolkaDotTextureArray = Floats.toArray(this.distinctPolkaDotTextures, polkaDotTexture -> doToArray(polkaDotTexture), 1);
+		
+		for(int i = 0; i < this.distinctPolkaDotTextures.size(); i++) {
+			final PolkaDotTexture polkaDotTexture = this.distinctPolkaDotTextures.get(i);
+			
+			final Texture textureA = polkaDotTexture.getTextureA();
+			final Texture textureB = polkaDotTexture.getTextureB();
+			
+			final int texturePolkaDotTextureArrayTextureAOffset = i * CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_A;
+			final int texturePolkaDotTextureArrayTextureBOffset = i * CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_B;
+			
+			texturePolkaDotTextureArray[texturePolkaDotTextureArrayTextureAOffset] = pack(textureA.getID(), findOffsetFor(textureA));
+			texturePolkaDotTextureArray[texturePolkaDotTextureArrayTextureBOffset] = pack(textureB.getID(), findOffsetFor(textureB));
+		}
+		
+		return texturePolkaDotTextureArray;
+	}
+	
 	public float[] toTextureSimplexFractionalBrownianMotionTextureArray() {
 		return Floats.toArray(this.distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> doToArray(simplexFractionalBrownianMotionTexture), 1);
 	}
@@ -213,6 +239,7 @@ final class TextureCache {
 		this.distinctConstantTextures.clear();
 		this.distinctLDRImageTextures.clear();
 		this.distinctMarbleTextures.clear();
+		this.distinctPolkaDotTextures.clear();
 		this.distinctSimplexFractionalBrownianMotionTextures.clear();
 		this.distinctSurfaceNormalTextures.clear();
 		this.distinctTextures.clear();
@@ -223,26 +250,11 @@ final class TextureCache {
 		this.distinctToOffsetsConstantTextures.clear();
 		this.distinctToOffsetsLDRImageTextures.clear();
 		this.distinctToOffsetsMarbleTextures.clear();
+		this.distinctToOffsetsPolkaDotTextures.clear();
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
 	}
 	
 	public void setup(final Scene scene) {
-		if(this.nodeCache != null) {
-			doSetupNew(scene);
-		} else {
-			doSetupOld(scene);
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public static boolean filter(final Node node) {
-		return node instanceof Texture;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private void doSetupNew(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
 //		Add all distinct BlendTexture instances:
@@ -269,6 +281,10 @@ final class TextureCache {
 		this.distinctMarbleTextures.clear();
 		this.distinctMarbleTextures.addAll(this.nodeCache.getAllDistinct(MarbleTexture.class));
 		
+//		Add all distinct PolkaDotTexture instances:
+		this.distinctPolkaDotTextures.clear();
+		this.distinctPolkaDotTextures.addAll(this.nodeCache.getAllDistinct(PolkaDotTexture.class));
+		
 //		Add all distinct SimplexFractionalBrownianMotionTexture instances:
 		this.distinctSimplexFractionalBrownianMotionTextures.clear();
 		this.distinctSimplexFractionalBrownianMotionTextures.addAll(this.nodeCache.getAllDistinct(SimplexFractionalBrownianMotionTexture.class));
@@ -289,6 +305,7 @@ final class TextureCache {
 		this.distinctTextures.addAll(this.distinctConstantTextures);
 		this.distinctTextures.addAll(this.distinctLDRImageTextures);
 		this.distinctTextures.addAll(this.distinctMarbleTextures);
+		this.distinctTextures.addAll(this.distinctPolkaDotTextures);
 		this.distinctTextures.addAll(this.distinctSimplexFractionalBrownianMotionTextures);
 		this.distinctTextures.addAll(this.distinctSurfaceNormalTextures);
 		this.distinctTextures.addAll(this.distinctUVTextures);
@@ -317,77 +334,9 @@ final class TextureCache {
 		this.distinctToOffsetsMarbleTextures.clear();
 		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures, 1));
 		
-//		Create offset mappings for all distinct SimplexFractionalBrownianMotionTexture instances:
-		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
-		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSimplexFractionalBrownianMotionTextures, 1));
-	}
-	
-	private void doSetupOld(final Scene scene) {
-		Objects.requireNonNull(scene, "scene == null");
-		
-//		Add all distinct Texture instances:
-		this.distinctTextures.clear();
-		this.distinctTextures.addAll(NodeFilter.filterAllDistinct(scene, Texture.class).stream().filter(TextureCache::doFilterTexture).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct BlendTexture instances:
-		this.distinctBlendTextures.clear();
-		this.distinctBlendTextures.addAll(this.distinctTextures.stream().filter(texture -> texture instanceof BlendTexture).map(texture -> BlendTexture.class.cast(texture)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct BullseyeTexture instances:
-		this.distinctBullseyeTextures.clear();
-		this.distinctBullseyeTextures.addAll(this.distinctTextures.stream().filter(texture -> texture instanceof BullseyeTexture).map(texture -> BullseyeTexture.class.cast(texture)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct CheckerboardTexture instances:
-		this.distinctCheckerboardTextures.clear();
-		this.distinctCheckerboardTextures.addAll(this.distinctTextures.stream().filter(texture -> texture instanceof CheckerboardTexture).map(texture -> CheckerboardTexture.class.cast(texture)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct ConstantTexture instances:
-		this.distinctConstantTextures.clear();
-		this.distinctConstantTextures.addAll(this.distinctTextures.stream().filter(texture -> texture instanceof ConstantTexture).map(texture -> ConstantTexture.class.cast(texture)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct LDRImageTexture instances:
-		this.distinctLDRImageTextures.clear();
-		this.distinctLDRImageTextures.addAll(this.distinctTextures.stream().filter(texture -> texture instanceof LDRImageTexture).map(texture -> LDRImageTexture.class.cast(texture)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct MarbleTexture instances:
-		this.distinctMarbleTextures.clear();
-		this.distinctMarbleTextures.addAll(this.distinctTextures.stream().filter(texture -> texture instanceof MarbleTexture).map(texture -> MarbleTexture.class.cast(texture)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct SimplexFractionalBrownianMotionTexture instances:
-		this.distinctSimplexFractionalBrownianMotionTextures.clear();
-		this.distinctSimplexFractionalBrownianMotionTextures.addAll(this.distinctTextures.stream().filter(texture -> texture instanceof SimplexFractionalBrownianMotionTexture).map(texture -> SimplexFractionalBrownianMotionTexture.class.cast(texture)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct SurfaceNormalTexture instances:
-		this.distinctSurfaceNormalTextures.clear();
-		this.distinctSurfaceNormalTextures.addAll(this.distinctTextures.stream().filter(texture -> texture instanceof SurfaceNormalTexture).map(texture -> SurfaceNormalTexture.class.cast(texture)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct UVTexture instances:
-		this.distinctUVTextures.clear();
-		this.distinctUVTextures.addAll(this.distinctTextures.stream().filter(texture -> texture instanceof UVTexture).map(texture -> UVTexture.class.cast(texture)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Create offset mappings for all distinct BlendTexture instances:
-		this.distinctToOffsetsBlendTextures.clear();
-		this.distinctToOffsetsBlendTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBlendTextures, 1));
-		
-//		Create offset mappings for all distinct BullseyeTexture instances:
-		this.distinctToOffsetsBullseyeTextures.clear();
-		this.distinctToOffsetsBullseyeTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBullseyeTextures, 1));
-		
-//		Create offset mappings for all distinct CheckerboardTexture instances:
-		this.distinctToOffsetsCheckerboardTextures.clear();
-		this.distinctToOffsetsCheckerboardTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCheckerboardTextures, 1));
-		
-//		Create offset mappings for all distinct ConstantTexture instances:
-		this.distinctToOffsetsConstantTextures.clear();
-		this.distinctToOffsetsConstantTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctConstantTextures, 1));
-		
-//		Create offset mappings for all distinct LDRImageTexture instances:
-		this.distinctToOffsetsLDRImageTextures.clear();
-		this.distinctToOffsetsLDRImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageTextures, 1));
-		
-//		Create offset mappings for all distinct MarbleTexture instances:
-		this.distinctToOffsetsMarbleTextures.clear();
-		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures, 1));
+//		Create offset mappings for all distinct PolkaDotTexture instances:
+		this.distinctToOffsetsPolkaDotTextures.clear();
+		this.distinctToOffsetsPolkaDotTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPolkaDotTextures, 1));
 		
 //		Create offset mappings for all distinct SimplexFractionalBrownianMotionTexture instances:
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
@@ -396,29 +345,11 @@ final class TextureCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static boolean doFilterTexture(final Texture texture) {
-		if(texture instanceof BlendTexture) {
-			return true;
-		} else if(texture instanceof BullseyeTexture) {
-			return true;
-		} else if(texture instanceof CheckerboardTexture) {
-			return true;
-		} else if(texture instanceof ConstantTexture) {
-			return true;
-		} else if(texture instanceof LDRImageTexture) {
-			return true;
-		} else if(texture instanceof MarbleTexture) {
-			return true;
-		} else if(texture instanceof SimplexFractionalBrownianMotionTexture) {
-			return true;
-		} else if(texture instanceof SurfaceNormalTexture) {
-			return true;
-		} else if(texture instanceof UVTexture) {
-			return true;
-		} else {
-			return false;
-		}
+	public static boolean filter(final Node node) {
+		return node instanceof Texture;
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float[] doToArray(final BlendTexture blendTexture) {
 		final Texture textureA = blendTexture.getTextureA();
@@ -554,6 +485,30 @@ final class TextureCache {
 		array[CompiledTextureCache.MARBLE_TEXTURE_OFFSET_STRIPES] = stripes;		//Block #1
 		array[CompiledTextureCache.MARBLE_TEXTURE_OFFSET_OCTAVES] = octaves;		//Block #1
 		array[7] = 0.0F;															//Block #1
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final PolkaDotTexture polkaDotTexture) {
+		final AngleF angle = polkaDotTexture.getAngle();
+		
+		final Texture textureA = polkaDotTexture.getTextureA();
+		final Texture textureB = polkaDotTexture.getTextureB();
+		
+		final float cellResolution = polkaDotTexture.getCellResolution();
+		final float polkaDotRadius = polkaDotTexture.getPolkaDotRadius();
+		
+		final float[] array = new float[CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH];
+		
+//		Because the PolkaDotTexture occupy 8/8 positions in a block, it should be aligned.
+		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_ANGLE_DEGREES] = angle.getDegrees();//Block #1
+		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();//Block #1
+		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();		//Block #1
+		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();		//Block #1
+		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_CELL_RESOLUTION] = cellResolution;	//Block #1
+		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_POLKA_DOT_RADIUS] = polkaDotRadius;	//Block #1
+		array[6] = 0.0F;																		//Block #1
+		array[7] = 0.0F;																		//Block #1
 		
 		return array;
 	}

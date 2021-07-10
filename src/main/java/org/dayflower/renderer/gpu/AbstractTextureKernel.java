@@ -25,6 +25,7 @@ import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
+import org.dayflower.scene.texture.PolkaDotTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
@@ -81,6 +82,11 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 	protected float[] textureMarbleTextureArray;
 	
 	/**
+	 * A {@code float[]} that contains {@link PolkaDotTexture} instances.
+	 */
+	protected float[] texturePolkaDotTextureArray;
+	
+	/**
 	 * A {@code float[]} that contains {@link SimplexFractionalBrownianMotionTexture} instances.
 	 */
 	protected float[] textureSimplexFractionalBrownianMotionTextureArray;
@@ -103,6 +109,7 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 		this.textureLDRImageTextureArray = new float[1];
 		this.textureLDRImageTextureOffsetArray = new int[1];
 		this.textureMarbleTextureArray = new float[1];
+		this.texturePolkaDotTextureArray = new float[1];
 		this.textureSimplexFractionalBrownianMotionTextureArray = new float[1];
 	}
 	
@@ -326,6 +333,32 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;
+			} else if(currentTextureID == PolkaDotTexture.ID) {
+				final int currentTextureOffsetAbsolute = currentTextureOffset * CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH;
+				
+				final float angleRadians = this.texturePolkaDotTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_ANGLE_RADIANS];
+				final float angleRadiansCos = cos(angleRadians);
+				final float angleRadiansSin = sin(angleRadians);
+				
+				final int textureA = (int)(this.texturePolkaDotTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_A]);
+				final int textureAID = (textureA >>> 16) & 0xFFFF;
+				final int textureAOffset = textureA & 0xFFFF;
+				final int textureB = (int)(this.texturePolkaDotTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_B]);
+				final int textureBID = (textureB >>> 16) & 0xFFFF;
+				final int textureBOffset = textureB & 0xFFFF;
+				
+				final float cellResolution = this.texturePolkaDotTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_CELL_RESOLUTION];
+				final float polkaDotRadius = this.texturePolkaDotTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_POLKA_DOT_RADIUS];
+				
+				final float x = fractionalPart((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * cellResolution, false);
+				final float y = fractionalPart((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * cellResolution, false);
+				
+				final float distanceSquared = (x - 0.5F) * (x - 0.5F) + (y - 0.5F) * (y - 0.5F);
+				
+				final boolean isTextureA = distanceSquared < polkaDotRadius * polkaDotRadius;
+				
+				currentTextureID = isTextureA ? textureAID : textureBID;
+				currentTextureOffset = isTextureA ? textureAOffset : textureBOffset;
 			} else if(currentTextureID == SimplexFractionalBrownianMotionTexture.ID) {
 				final int currentTextureOffsetAbsolute = currentTextureOffset * CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH;
 				

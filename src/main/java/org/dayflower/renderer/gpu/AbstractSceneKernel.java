@@ -1132,6 +1132,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.textureLDRImageTextureArray = compiledScene.getCompiledTextureCache().getTextureLDRImageTextureArray());
 		put(super.textureLDRImageTextureOffsetArray = compiledScene.getCompiledTextureCache().getTextureLDRImageTextureOffsetArray());
 		put(super.textureMarbleTextureArray = compiledScene.getCompiledTextureCache().getTextureMarbleTextureArray());
+		put(super.texturePolkaDotTextureArray = compiledScene.getCompiledTextureCache().getTexturePolkaDotTextureArray());
 		put(super.textureSimplexFractionalBrownianMotionTextureArray = compiledScene.getCompiledTextureCache().getTextureSimplexFractionalBrownianMotionTextureArray());
 		
 		put(super.materialClearCoatMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialClearCoatMaterialArray());

@@ -181,16 +181,14 @@ public final class SceneCompiler {
 		compiledScene.getCompiledTextureCache().setTextureLDRImageTextureArray(this.textureCache.toTextureLDRImageTextureArray());
 		compiledScene.getCompiledTextureCache().setTextureLDRImageTextureOffsetArray(this.textureCache.toTextureLDRImageTextureOffsetArray());
 		compiledScene.getCompiledTextureCache().setTextureMarbleTextureArray(this.textureCache.toTextureMarbleTextureArray());
+		compiledScene.getCompiledTextureCache().setTexturePolkaDotTextureArray(this.textureCache.toTexturePolkaDotTextureArray());
 		compiledScene.getCompiledTextureCache().setTextureSimplexFractionalBrownianMotionTextureArray(this.textureCache.toTextureSimplexFractionalBrownianMotionTextureArray());
 		
 		this.compiledScene.set(compiledScene);
 	}
 	
 	private void doClear() {
-		if(this.nodeCache != null) {
-			this.nodeCache.clear();
-		}
-		
+		this.nodeCache.clear();
 		this.boundingVolume3FCache.clear();
 		this.lightCache.clear();
 		this.filteredPrimitives.clear();
@@ -251,10 +249,7 @@ public final class SceneCompiler {
 	}
 	
 	private void doSetup(final Scene scene) {
-		if(this.nodeCache != null) {
-			this.nodeCache.add(scene, SceneCompiler::doFilter);
-		}
-		
+		this.nodeCache.add(scene, SceneCompiler::doFilter);
 		this.boundingVolume3FCache.setup(scene);
 		this.lightCache.setup(scene);
 		this.materialCache.setup(scene);

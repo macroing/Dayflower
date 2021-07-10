@@ -47,7 +47,7 @@ final class BoundingVolume3FCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public BoundingVolume3FCache(final NodeCache nodeCache) {
-		this.nodeCache = nodeCache;
+		this.nodeCache = Objects.requireNonNull(nodeCache, "nodeCache == null");
 		this.distinctAxisAlignedBoundingBox3Fs = new ArrayList<>();
 		this.distinctBoundingSphere3Fs = new ArrayList<>();
 		this.distinctBoundingVolume3Fs = new ArrayList<>();
@@ -94,22 +94,6 @@ final class BoundingVolume3FCache {
 	}
 	
 	public void setup(final Scene scene) {
-		if(this.nodeCache != null) {
-			doSetupNew(scene);
-		} else {
-			doSetupOld(scene);
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public static boolean filter(final Node node) {
-		return node instanceof BoundingVolume3F;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private void doSetupNew(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
 //		Add all distinct AxisAlignedBoundingBox3F instances:
@@ -139,47 +123,13 @@ final class BoundingVolume3FCache {
 		this.distinctToOffsetsBoundingSphere3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBoundingSphere3Fs, CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH));
 	}
 	
-	private void doSetupOld(final Scene scene) {
-		Objects.requireNonNull(scene, "scene == null");
-		
-//		Add all distinct BoundingVolume3F instances:
-		this.distinctBoundingVolume3Fs.clear();
-		this.distinctBoundingVolume3Fs.addAll(NodeFilter.filterAllDistinct(scene, BoundingVolume3F.class).stream().filter(BoundingVolume3FCache::doFilterBoundingVolume3F).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct AxisAlignedBoundingBox3F instances:
-		this.distinctAxisAlignedBoundingBox3Fs.clear();
-		this.distinctAxisAlignedBoundingBox3Fs.addAll(this.distinctBoundingVolume3Fs.stream().filter(boundingVolume3F -> boundingVolume3F instanceof AxisAlignedBoundingBox3F).map(boundingVolume3F -> AxisAlignedBoundingBox3F.class.cast(boundingVolume3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct BoundingSphere3F instances:
-		this.distinctBoundingSphere3Fs.clear();
-		this.distinctBoundingSphere3Fs.addAll(this.distinctBoundingVolume3Fs.stream().filter(boundingVolume3F -> boundingVolume3F instanceof BoundingSphere3F).map(boundingVolume3F -> BoundingSphere3F.class.cast(boundingVolume3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct InfiniteBoundingVolume3F instances:
-		this.distinctInfiniteBoundingVolume3Fs.clear();
-		this.distinctInfiniteBoundingVolume3Fs.addAll(this.distinctBoundingVolume3Fs.stream().filter(boundingVolume3F -> boundingVolume3F instanceof InfiniteBoundingVolume3F).map(boundingVolume3F -> InfiniteBoundingVolume3F.class.cast(boundingVolume3F)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Create offset mappings for all distinct AxisAlignedBoundingBox3F instances:
-		this.distinctToOffsetsAxisAlignedBoundingBox3Fs.clear();
-		this.distinctToOffsetsAxisAlignedBoundingBox3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctAxisAlignedBoundingBox3Fs, CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH));
-		
-//		Create offset mappings for all distinct BoundingSphere3F instances:
-		this.distinctToOffsetsBoundingSphere3Fs.clear();
-		this.distinctToOffsetsBoundingSphere3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBoundingSphere3Fs, CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH));
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static boolean filter(final Node node) {
+		return node instanceof BoundingVolume3F;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static boolean doFilterBoundingVolume3F(final BoundingVolume3F boundingVolume3F) {
-		if(boundingVolume3F instanceof AxisAlignedBoundingBox3F) {
-			return true;
-		} else if(boundingVolume3F instanceof BoundingSphere3F) {
-			return true;
-		} else if(boundingVolume3F instanceof InfiniteBoundingVolume3F) {
-			return true;
-		} else {
-			return true;
-		}
-	}
 	
 	private static float[] doToArray(final AxisAlignedBoundingBox3F axisAlignedBoundingBox3F) {
 		final Point3F maximum = axisAlignedBoundingBox3F.getMaximum();

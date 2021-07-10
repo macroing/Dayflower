@@ -68,7 +68,7 @@ final class MaterialCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public MaterialCache(final NodeCache nodeCache) {
-		this.nodeCache = nodeCache;
+		this.nodeCache = Objects.requireNonNull(nodeCache, "nodeCache == null");
 		this.distinctClearCoatMaterials = new ArrayList<>();
 		this.distinctDisneyMaterials = new ArrayList<>();
 		this.distinctGlassMaterials = new ArrayList<>();
@@ -382,22 +382,6 @@ final class MaterialCache {
 	}
 	
 	public void setup(final Scene scene) {
-		if(this.nodeCache != null) {
-			doSetupNew(scene);
-		} else {
-			doSetupOld(scene);
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public static boolean filter(final Node node) {
-		return node instanceof Material;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private void doSetupNew(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
 		
 //		Add all distinct ClearCoatMaterial instances:
@@ -485,111 +469,13 @@ final class MaterialCache {
 		this.distinctToOffsetsSubstrateMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSubstrateMaterials, CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH));
 	}
 	
-	private void doSetupOld(final Scene scene) {
-		Objects.requireNonNull(scene, "scene == null");
-		
-//		Add all distinct Material instances:
-		this.distinctMaterials.clear();
-		this.distinctMaterials.addAll(NodeFilter.filterAllDistinct(scene, Material.class).stream().filter(MaterialCache::doFilterMaterial).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct ClearCoatMaterial instances:
-		this.distinctClearCoatMaterials.clear();
-		this.distinctClearCoatMaterials.addAll(this.distinctMaterials.stream().filter(material -> material instanceof ClearCoatMaterial).map(material -> ClearCoatMaterial.class.cast(material)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct DisneyMaterial instances:
-		this.distinctDisneyMaterials.clear();
-		this.distinctDisneyMaterials.addAll(this.distinctMaterials.stream().filter(material -> material instanceof DisneyMaterial).map(material -> DisneyMaterial.class.cast(material)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct GlassMaterial instances:
-		this.distinctGlassMaterials.clear();
-		this.distinctGlassMaterials.addAll(this.distinctMaterials.stream().filter(material -> material instanceof GlassMaterial).map(material -> GlassMaterial.class.cast(material)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct GlossyMaterial instances:
-		this.distinctGlossyMaterials.clear();
-		this.distinctGlossyMaterials.addAll(this.distinctMaterials.stream().filter(material -> material instanceof GlossyMaterial).map(material -> GlossyMaterial.class.cast(material)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct MatteMaterial instances:
-		this.distinctMatteMaterials.clear();
-		this.distinctMatteMaterials.addAll(this.distinctMaterials.stream().filter(material -> material instanceof MatteMaterial).map(material -> MatteMaterial.class.cast(material)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct MetalMaterial instances:
-		this.distinctMetalMaterials.clear();
-		this.distinctMetalMaterials.addAll(this.distinctMaterials.stream().filter(material -> material instanceof MetalMaterial).map(material -> MetalMaterial.class.cast(material)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct MirrorMaterial instances:
-		this.distinctMirrorMaterials.clear();
-		this.distinctMirrorMaterials.addAll(this.distinctMaterials.stream().filter(material -> material instanceof MirrorMaterial).map(material -> MirrorMaterial.class.cast(material)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct PlasticMaterial instances:
-		this.distinctPlasticMaterials.clear();
-		this.distinctPlasticMaterials.addAll(this.distinctMaterials.stream().filter(material -> material instanceof PlasticMaterial).map(material -> PlasticMaterial.class.cast(material)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Add all distinct SubstrateMaterial instances:
-		this.distinctSubstrateMaterials.clear();
-		this.distinctSubstrateMaterials.addAll(this.distinctMaterials.stream().filter(material -> material instanceof SubstrateMaterial).map(material -> SubstrateMaterial.class.cast(material)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-		
-//		Create offset mappings for all distinct ClearCoatMaterial instances:
-		this.distinctToOffsetsClearCoatMaterials.clear();
-		this.distinctToOffsetsClearCoatMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctClearCoatMaterials, CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH));
-		
-//		Create offset mappings for all distinct DisneyMaterial instances:
-		this.distinctToOffsetsDisneyMaterials.clear();
-		this.distinctToOffsetsDisneyMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisneyMaterials, CompiledMaterialCache.DISNEY_MATERIAL_LENGTH));
-		
-//		Create offset mappings for all distinct GlassMaterial instances:
-		this.distinctToOffsetsGlassMaterials.clear();
-		this.distinctToOffsetsGlassMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlassMaterials, CompiledMaterialCache.GLASS_MATERIAL_LENGTH));
-		
-//		Create offset mappings for all distinct GlossyMaterial instances:
-		this.distinctToOffsetsGlossyMaterials.clear();
-		this.distinctToOffsetsGlossyMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlossyMaterials, CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH));
-		
-//		Create offset mappings for all distinct MatteMaterial instances:
-		this.distinctToOffsetsMatteMaterials.clear();
-		this.distinctToOffsetsMatteMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMatteMaterials, CompiledMaterialCache.MATTE_MATERIAL_LENGTH));
-		
-//		Create offset mappings for all distinct MetalMaterial instances:
-		this.distinctToOffsetsMetalMaterials.clear();
-		this.distinctToOffsetsMetalMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMetalMaterials, CompiledMaterialCache.METAL_MATERIAL_LENGTH));
-		
-//		Create offset mappings for all distinct MirrorMaterial instances:
-		this.distinctToOffsetsMirrorMaterials.clear();
-		this.distinctToOffsetsMirrorMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMirrorMaterials, CompiledMaterialCache.MIRROR_MATERIAL_LENGTH));
-		
-//		Create offset mappings for all distinct PlasticMaterial instances:
-		this.distinctToOffsetsPlasticMaterials.clear();
-		this.distinctToOffsetsPlasticMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlasticMaterials, CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH));
-		
-//		Create offset mappings for all distinct SubstrateMaterial instances:
-		this.distinctToOffsetsSubstrateMaterials.clear();
-		this.distinctToOffsetsSubstrateMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSubstrateMaterials, CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH));
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static boolean filter(final Node node) {
+		return node instanceof Material;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static boolean doFilterMaterial(final Material material) {
-		if(material instanceof ClearCoatMaterial) {
-			return true;
-		} else if(material instanceof DisneyMaterial) {
-			return true;
-		} else if(material instanceof GlassMaterial) {
-			return true;
-		} else if(material instanceof GlossyMaterial) {
-			return true;
-		} else if(material instanceof MatteMaterial) {
-			return true;
-		} else if(material instanceof MetalMaterial) {
-			return true;
-		} else if(material instanceof MirrorMaterial) {
-			return true;
-		} else if(material instanceof PlasticMaterial) {
-			return true;
-		} else if(material instanceof SubstrateMaterial) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 	
 	private static int[] doToArray(final ClearCoatMaterial clearCoatMaterial) {
 		final Texture textureEmission = clearCoatMaterial.getTextureEmission();

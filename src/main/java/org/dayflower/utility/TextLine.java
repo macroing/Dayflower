@@ -26,8 +26,6 @@ import java.util.Objects;
 /**
  * A {@code TextLine} takes a {@code String} and tokenizes it into individual tokens (or substrings if you will). These individual tokens can then be retrieved by various methods.
  * <p>
- * The tokenization process is performed by a single call to {@link Strings#splitAndDiscardEmptySubstrings(String, String)}.
- * <p>
  * The length of a {@code TextLine} does not refer to the length of the initial {@code String} before tokenization. It does not either refer to the combined length of each individual token. What it does refer to is the length of the underlying array
  * that stores each individual token.
  * 

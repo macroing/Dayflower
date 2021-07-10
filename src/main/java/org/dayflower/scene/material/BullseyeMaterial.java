@@ -87,7 +87,7 @@ public final class BullseyeMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BullseyeMaterial(materialA, materialB, new Point3F());
+	 * new BullseyeMaterial(materialA, materialB, new Point3F(0.0F, 10.0F, 0.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -96,7 +96,7 @@ public final class BullseyeMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code materialA} or {@code materialB} are {@code null}
 	 */
 	public BullseyeMaterial(final Material materialA, final Material materialB) {
-		this(materialA, materialB, new Point3F());
+		this(materialA, materialB, new Point3F(0.0F, 10.0F, 0.0F));
 	}
 	
 	/**

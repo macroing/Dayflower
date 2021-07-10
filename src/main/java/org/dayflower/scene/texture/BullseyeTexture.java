@@ -77,7 +77,7 @@ public final class BullseyeTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BullseyeTexture(colorA, colorB, new Point3F());
+	 * new BullseyeTexture(colorA, colorB, new Point3F(0.0F, 10.0F, 0.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -86,7 +86,7 @@ public final class BullseyeTexture implements Texture {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
 	public BullseyeTexture(final Color3F colorA, final Color3F colorB) {
-		this(colorA, colorB, new Point3F());
+		this(colorA, colorB, new Point3F(0.0F, 10.0F, 0.0F));
 	}
 	
 	/**
@@ -140,7 +140,7 @@ public final class BullseyeTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BullseyeTexture(textureA, textureB, new Point3F());
+	 * new BullseyeTexture(textureA, textureB, new Point3F(0.0F, 10.0F, 0.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -149,7 +149,7 @@ public final class BullseyeTexture implements Texture {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureA} or {@code textureB} are {@code null}
 	 */
 	public BullseyeTexture(final Texture textureA, final Texture textureB) {
-		this(textureA, textureB, new Point3F());
+		this(textureA, textureB, new Point3F(0.0F, 10.0F, 0.0F));
 	}
 	
 	/**

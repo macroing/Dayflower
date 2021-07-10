@@ -30,6 +30,7 @@ import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Hyperboloid3F;
 import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.Rectangle3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
@@ -46,6 +47,8 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
+import org.dayflower.scene.material.BullseyeMaterial;
+import org.dayflower.scene.material.CheckerboardMaterial;
 import org.dayflower.scene.material.ClearCoatMaterial;
 import org.dayflower.scene.material.DisneyMaterial;
 import org.dayflower.scene.material.GlassMaterial;
@@ -55,6 +58,7 @@ import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.MetalMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
+import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.material.UberMaterial;
 
@@ -123,8 +127,8 @@ final class CenteredVBoxes {
 	public static CenteredVBox createCenteredVBoxForScene(final Renderer renderer) {
 		final CenteredVBox centeredVBox = new CenteredVBox();
 		
-		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(ClearCoatMaterial.NAME, DisneyMaterial.NAME, GlassMaterial.NAME, GlossyMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME), MatteMaterial.NAME);
-		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Cone3F.NAME, Cylinder3F.NAME, Disk3F.NAME, Hyperboloid3F.NAME, Paraboloid3F.NAME, Plane3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
+		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(BullseyeMaterial.NAME, CheckerboardMaterial.NAME, ClearCoatMaterial.NAME, DisneyMaterial.NAME, GlassMaterial.NAME, GlossyMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, PolkaDotMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME), MatteMaterial.NAME);
+		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Cone3F.NAME, Cylinder3F.NAME, Disk3F.NAME, Hyperboloid3F.NAME, Paraboloid3F.NAME, Plane3F.NAME, Rectangle3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
 		
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
 			final Material material = doCreateMaterial(comboBoxMaterial);
@@ -165,6 +169,10 @@ final class CenteredVBoxes {
 		
 		if(selectedItem != null) {
 			switch(selectedItem) {
+				case BullseyeMaterial.NAME:
+					return new BullseyeMaterial();
+				case CheckerboardMaterial.NAME:
+					return new CheckerboardMaterial();
 				case ClearCoatMaterial.NAME:
 					return new ClearCoatMaterial();
 				case DisneyMaterial.NAME:
@@ -183,6 +191,8 @@ final class CenteredVBoxes {
 					return new MirrorMaterial();
 				case PlasticMaterial.NAME:
 					return new PlasticMaterial();
+				case PolkaDotMaterial.NAME:
+					return new PolkaDotMaterial();
 				case SubstrateMaterial.NAME:
 					return new SubstrateMaterial();
 				case UberMaterial.NAME:
@@ -208,6 +218,8 @@ final class CenteredVBoxes {
 			return renderer.getScene().getCamera().getPointInfrontOfEye(7.5F);
 		} else if(shape instanceof Plane3F) {
 			return renderer.getScene().getCamera().getPointBelowEye(1.0F);
+		} else if(shape instanceof Rectangle3F) {
+			return renderer.getScene().getCamera().getPointInfrontOfEye(7.5F);
 		} else if(shape instanceof RectangularCuboid3F) {
 			return renderer.getScene().getCamera().getPointInfrontOfEye(7.5F);
 		} else if(shape instanceof Sphere3F) {
@@ -238,6 +250,8 @@ final class CenteredVBoxes {
 					return new Paraboloid3F();
 				case Plane3F.NAME:
 					return new Plane3F();
+				case Rectangle3F.NAME:
+					return new Rectangle3F();
 				case RectangularCuboid3F.NAME:
 					return new RectangularCuboid3F();
 				case Sphere3F.NAME:

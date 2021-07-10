@@ -47,6 +47,8 @@ import org.dayflower.scene.fresnel.ConductorFresnel;
 import org.dayflower.scene.fresnel.ConstantFresnel;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.fresnel.DisneyFresnel;
+import org.dayflower.scene.material.BullseyeMaterial;
+import org.dayflower.scene.material.CheckerboardMaterial;
 import org.dayflower.scene.material.ClearCoatMaterial;
 import org.dayflower.scene.material.DisneyMaterial;
 import org.dayflower.scene.material.GlassMaterial;
@@ -55,6 +57,7 @@ import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.MetalMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
+import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.Texture;
@@ -64,6 +67,8 @@ import org.dayflower.scene.texture.Texture;
  * <p>
  * The features added are the following:
  * <ul>
+ * <li>{@link BullseyeMaterial}</li>
+ * <li>{@link CheckerboardMaterial}</li>
  * <li>{@link ClearCoatMaterial}</li>
  * <li>{@link DisneyMaterial}</li>
  * <li>{@link GlassMaterial}</li>
@@ -72,6 +77,7 @@ import org.dayflower.scene.texture.Texture;
  * <li>{@link MetalMaterial}</li>
  * <li>{@link MirrorMaterial}</li>
  * <li>{@link PlasticMaterial}</li>
+ * <li>{@link PolkaDotMaterial}</li>
  * <li>{@link SubstrateMaterial}</li>
  * </ul>
  * 
@@ -387,6 +393,21 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected float[] materialBXDFResultArray_$private$16;
 	
 	/**
+	 * A {@code float[]} that contains {@link BullseyeMaterial} instances.
+	 */
+	protected float[] materialBullseyeMaterialArray;
+	
+	/**
+	 * A {@code float[]} that contains {@link CheckerboardMaterial} instances.
+	 */
+	protected float[] materialCheckerboardMaterialArray;
+	
+	/**
+	 * A {@code float[]} that contains {@link PolkaDotMaterial} instances.
+	 */
+	protected float[] materialPolkaDotMaterialArray;
+	
+	/**
 	 * A {@code float[]} that contains a {@link TrowbridgeReitzMicrofacetDistribution} instance.
 	 */
 	protected float[] microfacetDistributionTrowbridgeReitzArray_$private$4;
@@ -462,6 +483,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$12 = new float[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_LENGTH];
 		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9 = new float[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH];
 		this.microfacetDistributionTrowbridgeReitzArray_$private$4 = new float[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_LENGTH];
+		this.materialBullseyeMaterialArray = new float[1];
+		this.materialCheckerboardMaterialArray = new float[1];
 		this.materialClearCoatMaterialArray = new int[1];
 		this.materialDisneyMaterialArray = new int[1];
 		this.materialGlassMaterialArray = new int[1];
@@ -470,6 +493,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.materialMetalMaterialArray = new int[1];
 		this.materialMirrorMaterialArray = new int[1];
 		this.materialPlasticMaterialArray = new int[1];
+		this.materialPolkaDotMaterialArray = new float[1];
 		this.materialSubstrateMaterialArray = new int[1];
 	}
 	
@@ -487,24 +511,112 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * @return {@code true} if, and only if, the {@code BSDF} was computed, {@code false} otherwise
 	 */
 	protected final boolean materialBSDFCompute(final int materialID, final int materialOffset) {
-		if(materialID == ClearCoatMaterial.ID) {
-			return doMaterialClearCoatMaterialComputeBSDF(materialOffset);
-		} else if(materialID == DisneyMaterial.ID) {
-			return doMaterialDisneyMaterialComputeBSDF(materialOffset);
-		} else if(materialID == GlassMaterial.ID) {
-			return doMaterialGlassMaterialComputeBSDF(materialOffset);
-		} else if(materialID == GlossyMaterial.ID) {
-			return doMaterialGlossyMaterialComputeBSDF(materialOffset);
-		} else if(materialID == MatteMaterial.ID) {
-			return doMaterialMatteMaterialComputeBSDF(materialOffset);
-		} else if(materialID == MetalMaterial.ID) {
-			return doMaterialMetalMaterialComputeBSDF(materialOffset);
-		} else if(materialID == MirrorMaterial.ID) {
-			return doMaterialMirrorMaterialComputeBSDF(materialOffset);
-		} else if(materialID == PlasticMaterial.ID) {
-			return doMaterialPlasticMaterialComputeBSDF(materialOffset);
-		} else if(materialID == SubstrateMaterial.ID) {
-			return doMaterialSubstrateMaterialComputeBSDF(materialOffset);
+		int currentMaterialID = materialID;
+		int currentMaterialOffset = materialOffset;
+		
+		boolean isFindingMaterial = currentMaterialID == BullseyeMaterial.ID || currentMaterialID == CheckerboardMaterial.ID || currentMaterialID == PolkaDotMaterial.ID;
+		
+		if(isFindingMaterial) {
+			final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+			final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+			final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+			
+			final float textureCoordinatesU = intersectionGetTextureCoordinatesComponent1();
+			final float textureCoordinatesV = intersectionGetTextureCoordinatesComponent2();
+			
+			while(isFindingMaterial) {
+				if(currentMaterialID == BullseyeMaterial.ID) {
+					final float originX = this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 0];
+					final float originY = this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 1];
+					final float originZ = this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 2];
+					
+					final int materialA = (int)(this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_A]);
+					final int materialAID = (materialA >>> 16) & 0xFFFF;
+					final int materialAOffset = materialA & 0xFFFF;
+					final int materialB = (int)(this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_B]);
+					final int materialBID = (materialB >>> 16) & 0xFFFF;
+					final int materialBOffset = materialB & 0xFFFF;
+					
+					final float scale = this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_SCALE];
+					
+					final float distance = point3FDistance(originX, originY, originZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+					final float distanceScaled = distance * scale;
+					final float distanceScaledRemainder = remainder(distanceScaled, 1.0F);
+					
+					final boolean isMaterialA = distanceScaledRemainder > 0.5F;
+					
+					currentMaterialID = isMaterialA ? materialAID : materialBID;
+					currentMaterialOffset = isMaterialA ? materialAOffset : materialBOffset;
+				} else if(currentMaterialID == CheckerboardMaterial.ID) {
+					final float angleRadians = this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_ANGLE_RADIANS];
+					final float angleRadiansCos = cos(angleRadians);
+					final float angleRadiansSin = sin(angleRadians);
+					
+					final int materialA = (int)(this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A]);
+					final int materialAID = (materialA >>> 16) & 0xFFFF;
+					final int materialAOffset = materialA & 0xFFFF;
+					final int materialB = (int)(this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B]);
+					final int materialBID = (materialB >>> 16) & 0xFFFF;
+					final int materialBOffset = materialB & 0xFFFF;
+					
+					final float scaleU = this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_SCALE + 0];
+					final float scaleV = this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_SCALE + 1];
+					
+					final boolean isU = fractionalPart((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * scaleU, false) > 0.5F;
+					final boolean isV = fractionalPart((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * scaleV, false) > 0.5F;
+					
+					final boolean isMaterialA = isU ^ isV;
+					
+					currentMaterialID = isMaterialA ? materialAID : materialBID;
+					currentMaterialOffset = isMaterialA ? materialAOffset : materialBOffset;
+				} else if(currentMaterialID == PolkaDotMaterial.ID) {
+					final float angleRadians = this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_ANGLE_RADIANS];
+					final float angleRadiansCos = cos(angleRadians);
+					final float angleRadiansSin = sin(angleRadians);
+					
+					final int materialA = (int)(this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_A]);
+					final int materialAID = (materialA >>> 16) & 0xFFFF;
+					final int materialAOffset = materialA & 0xFFFF;
+					final int materialB = (int)(this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_B]);
+					final int materialBID = (materialB >>> 16) & 0xFFFF;
+					final int materialBOffset = materialB & 0xFFFF;
+					
+					final float cellResolution = this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_CELL_RESOLUTION];
+					final float polkaDotRadius = this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_POLKA_DOT_RADIUS];
+					
+					final float x = fractionalPart((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * cellResolution, false);
+					final float y = fractionalPart((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * cellResolution, false);
+					
+					final float distanceSquared = (x - 0.5F) * (x - 0.5F) + (y - 0.5F) * (y - 0.5F);
+					
+					final boolean isMaterialA = distanceSquared < polkaDotRadius * polkaDotRadius;
+					
+					currentMaterialID = isMaterialA ? materialAID : materialBID;
+					currentMaterialOffset = isMaterialA ? materialAOffset : materialBOffset;
+				}
+				
+				isFindingMaterial = currentMaterialID == BullseyeMaterial.ID || currentMaterialID == CheckerboardMaterial.ID || currentMaterialID == PolkaDotMaterial.ID;
+			}
+		}
+		
+		if(currentMaterialID == ClearCoatMaterial.ID) {
+			return doMaterialClearCoatMaterialComputeBSDF(currentMaterialOffset);
+		} else if(currentMaterialID == DisneyMaterial.ID) {
+			return doMaterialDisneyMaterialComputeBSDF(currentMaterialOffset);
+		} else if(currentMaterialID == GlassMaterial.ID) {
+			return doMaterialGlassMaterialComputeBSDF(currentMaterialOffset);
+		} else if(currentMaterialID == GlossyMaterial.ID) {
+			return doMaterialGlossyMaterialComputeBSDF(currentMaterialOffset);
+		} else if(currentMaterialID == MatteMaterial.ID) {
+			return doMaterialMatteMaterialComputeBSDF(currentMaterialOffset);
+		} else if(currentMaterialID == MetalMaterial.ID) {
+			return doMaterialMetalMaterialComputeBSDF(currentMaterialOffset);
+		} else if(currentMaterialID == MirrorMaterial.ID) {
+			return doMaterialMirrorMaterialComputeBSDF(currentMaterialOffset);
+		} else if(currentMaterialID == PlasticMaterial.ID) {
+			return doMaterialPlasticMaterialComputeBSDF(currentMaterialOffset);
+		} else if(currentMaterialID == SubstrateMaterial.ID) {
+			return doMaterialSubstrateMaterialComputeBSDF(currentMaterialOffset);
 		} else {
 			return false;
 		}
@@ -852,27 +964,115 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * @param materialOffset the offset for the current {@code Material}
 	 */
 	protected final void materialEmittance(final int materialID, final int materialOffset) {
-		final int materialOffsetTextureEmission = materialOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION;
+		int currentMaterialID = materialID;
+		int currentMaterialOffset = materialOffset;
+		
+		boolean isFindingMaterial = currentMaterialID == BullseyeMaterial.ID || currentMaterialID == CheckerboardMaterial.ID || currentMaterialID == PolkaDotMaterial.ID;
+		
+		if(isFindingMaterial) {
+			final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+			final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+			final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+			
+			final float textureCoordinatesU = intersectionGetTextureCoordinatesComponent1();
+			final float textureCoordinatesV = intersectionGetTextureCoordinatesComponent2();
+			
+			while(isFindingMaterial) {
+				if(currentMaterialID == BullseyeMaterial.ID) {
+					final float originX = this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 0];
+					final float originY = this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 1];
+					final float originZ = this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 2];
+					
+					final int materialA = (int)(this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_A]);
+					final int materialAID = (materialA >>> 16) & 0xFFFF;
+					final int materialAOffset = materialA & 0xFFFF;
+					final int materialB = (int)(this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_B]);
+					final int materialBID = (materialB >>> 16) & 0xFFFF;
+					final int materialBOffset = materialB & 0xFFFF;
+					
+					final float scale = this.materialBullseyeMaterialArray[currentMaterialOffset + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_SCALE];
+					
+					final float distance = point3FDistance(originX, originY, originZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+					final float distanceScaled = distance * scale;
+					final float distanceScaledRemainder = remainder(distanceScaled, 1.0F);
+					
+					final boolean isMaterialA = distanceScaledRemainder > 0.5F;
+					
+					currentMaterialID = isMaterialA ? materialAID : materialBID;
+					currentMaterialOffset = isMaterialA ? materialAOffset : materialBOffset;
+				} else if(currentMaterialID == CheckerboardMaterial.ID) {
+					final float angleRadians = this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_ANGLE_RADIANS];
+					final float angleRadiansCos = cos(angleRadians);
+					final float angleRadiansSin = sin(angleRadians);
+					
+					final int materialA = (int)(this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A]);
+					final int materialAID = (materialA >>> 16) & 0xFFFF;
+					final int materialAOffset = materialA & 0xFFFF;
+					final int materialB = (int)(this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B]);
+					final int materialBID = (materialB >>> 16) & 0xFFFF;
+					final int materialBOffset = materialB & 0xFFFF;
+					
+					final float scaleU = this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_SCALE + 0];
+					final float scaleV = this.materialCheckerboardMaterialArray[currentMaterialOffset + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_SCALE + 1];
+					
+					final boolean isU = fractionalPart((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * scaleU, false) > 0.5F;
+					final boolean isV = fractionalPart((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * scaleV, false) > 0.5F;
+					
+					final boolean isMaterialA = isU ^ isV;
+					
+					currentMaterialID = isMaterialA ? materialAID : materialBID;
+					currentMaterialOffset = isMaterialA ? materialAOffset : materialBOffset;
+				} else if(currentMaterialID == PolkaDotMaterial.ID) {
+					final float angleRadians = this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_ANGLE_RADIANS];
+					final float angleRadiansCos = cos(angleRadians);
+					final float angleRadiansSin = sin(angleRadians);
+					
+					final int materialA = (int)(this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_A]);
+					final int materialAID = (materialA >>> 16) & 0xFFFF;
+					final int materialAOffset = materialA & 0xFFFF;
+					final int materialB = (int)(this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_B]);
+					final int materialBID = (materialB >>> 16) & 0xFFFF;
+					final int materialBOffset = materialB & 0xFFFF;
+					
+					final float cellResolution = this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_CELL_RESOLUTION];
+					final float polkaDotRadius = this.materialPolkaDotMaterialArray[currentMaterialOffset + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_POLKA_DOT_RADIUS];
+					
+					final float x = fractionalPart((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * cellResolution, false);
+					final float y = fractionalPart((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * cellResolution, false);
+					
+					final float distanceSquared = (x - 0.5F) * (x - 0.5F) + (y - 0.5F) * (y - 0.5F);
+					
+					final boolean isMaterialA = distanceSquared < polkaDotRadius * polkaDotRadius;
+					
+					currentMaterialID = isMaterialA ? materialAID : materialBID;
+					currentMaterialOffset = isMaterialA ? materialAOffset : materialBOffset;
+				}
+				
+				isFindingMaterial = currentMaterialID == BullseyeMaterial.ID || currentMaterialID == CheckerboardMaterial.ID || currentMaterialID == PolkaDotMaterial.ID;
+			}
+		}
+		
+		final int materialOffsetTextureEmission = currentMaterialOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION;
 		
 		int textureEmission = 0;
 		
-		if(materialID == ClearCoatMaterial.ID) {
+		if(currentMaterialID == ClearCoatMaterial.ID) {
 			textureEmission = this.materialClearCoatMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == DisneyMaterial.ID) {
+		} else if(currentMaterialID == DisneyMaterial.ID) {
 			textureEmission = this.materialDisneyMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == GlassMaterial.ID) {
+		} else if(currentMaterialID == GlassMaterial.ID) {
 			textureEmission = this.materialGlassMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == GlossyMaterial.ID) {
+		} else if(currentMaterialID == GlossyMaterial.ID) {
 			textureEmission = this.materialGlossyMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == MatteMaterial.ID) {
+		} else if(currentMaterialID == MatteMaterial.ID) {
 			textureEmission = this.materialMatteMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == MetalMaterial.ID) {
+		} else if(currentMaterialID == MetalMaterial.ID) {
 			textureEmission = this.materialMetalMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == MirrorMaterial.ID) {
+		} else if(currentMaterialID == MirrorMaterial.ID) {
 			textureEmission = this.materialMirrorMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == PlasticMaterial.ID) {
+		} else if(currentMaterialID == PlasticMaterial.ID) {
 			textureEmission = this.materialPlasticMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == SubstrateMaterial.ID) {
+		} else if(currentMaterialID == SubstrateMaterial.ID) {
 			textureEmission = this.materialSubstrateMaterialArray[materialOffsetTextureEmission];
 		}
 		

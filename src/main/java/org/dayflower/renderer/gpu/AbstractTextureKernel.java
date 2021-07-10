@@ -42,6 +42,7 @@ import org.dayflower.scene.texture.UVTexture;
  * <li>{@link ConstantTexture}</li>
  * <li>{@link LDRImageTexture}</li>
  * <li>{@link MarbleTexture}</li>
+ * <li>{@link PolkaDotTexture}</li>
  * <li>{@link SimplexFractionalBrownianMotionTexture}</li>
  * <li>{@link SurfaceNormalTexture}</li>
  * <li>{@link UVTexture}</li>

@@ -89,8 +89,8 @@ The lists below show the main features of the renderer.
 * Spot Light (CPU & GPU)
 
 #### Supported Materials
-* Bullseye Material (CPU)
-* Checkerboard Material (CPU)
+* Bullseye Material (CPU & GPU)
+* Checkerboard Material (CPU & GPU)
 * Clear Coat Material (CPU & GPU)
 * Disney Material (CPU & GPU)
 * Function Material (CPU)
@@ -101,7 +101,7 @@ The lists below show the main features of the renderer.
 * Metal Material (CPU & GPU)
 * Mirror Material (CPU & GPU)
 * Plastic Material (CPU & GPU)
-* Polka Dot Material (CPU)
+* Polka Dot Material (CPU & GPU)
 * Substrate Material (CPU & GPU)
 * Uber Material (CPU)
 

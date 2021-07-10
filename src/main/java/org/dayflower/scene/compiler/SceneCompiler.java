@@ -151,6 +151,8 @@ public final class SceneCompiler {
 		compiledScene.getCompiledLightCache().setLightPerezLightOffsetArray(this.lightCache.toLightPerezLightOffsetArray());
 		compiledScene.getCompiledLightCache().setLightPointLightArray(this.lightCache.toLightPointLightArray());
 		compiledScene.getCompiledLightCache().setLightSpotLightArray(this.lightCache.toLightSpotLightArray());
+		compiledScene.getCompiledMaterialCache().setMaterialBullseyeMaterialArray(this.materialCache.toMaterialBullseyeMaterialArray());
+		compiledScene.getCompiledMaterialCache().setMaterialCheckerboardMaterialArray(this.materialCache.toMaterialCheckerboardMaterialArray());
 		compiledScene.getCompiledMaterialCache().setMaterialClearCoatMaterialArray(this.materialCache.toMaterialClearCoatMaterialArray(this.textureCache));
 		compiledScene.getCompiledMaterialCache().setMaterialDisneyMaterialArray(this.materialCache.toMaterialDisneyMaterialArray(this.textureCache));
 		compiledScene.getCompiledMaterialCache().setMaterialGlassMaterialArray(this.materialCache.toMaterialGlassMaterialArray(this.textureCache));
@@ -159,6 +161,7 @@ public final class SceneCompiler {
 		compiledScene.getCompiledMaterialCache().setMaterialMetalMaterialArray(this.materialCache.toMaterialMetalMaterialArray(this.textureCache));
 		compiledScene.getCompiledMaterialCache().setMaterialMirrorMaterialArray(this.materialCache.toMaterialMirrorMaterialArray(this.textureCache));
 		compiledScene.getCompiledMaterialCache().setMaterialPlasticMaterialArray(this.materialCache.toMaterialPlasticMaterialArray(this.textureCache));
+		compiledScene.getCompiledMaterialCache().setMaterialPolkaDotMaterialArray(this.materialCache.toMaterialPolkaDotMaterialArray());
 		compiledScene.getCompiledMaterialCache().setMaterialSubstrateMaterialArray(this.materialCache.toMaterialSubstrateMaterialArray(this.textureCache));
 		compiledScene.getCompiledPrimitiveCache().setPrimitiveArray(primitiveArray);
 		compiledScene.getCompiledPrimitiveCache().setPrimitiveMatrix44FArray(primitiveMatrix44FArray);

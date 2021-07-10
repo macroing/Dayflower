@@ -1,5 +1,11 @@
 2021-07-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add support for BullseyeMaterial, CheckerboardMaterial and PolkaDotMaterial to the GPU-renderer.
+	* ADD:		Add the fields materialBullseyeMaterialArray, materialCheckerboardMaterialArray and materialPolkaDotMaterialArray to the AbstractMaterialKernel class.
+	* ADD:		Add the methods getMaterialBullseyeMaterialArray(), getMaterialBullseyeMaterialCount(), getMaterialBullseyeMaterialOffsetAbsolute(float[]), getMaterialBullseyeMaterialOffsetRelative(float[]) and setMaterialBullseyeMaterialArray(float[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods getMaterialCheckerboardMaterialArray(), getMaterialCheckerboardMaterialCount(), getMaterialCheckerboardMaterialOffsetAbsolute(float[]), getMaterialCheckerboardMaterialOffsetRelative(float[]) and setMaterialCheckerboardMaterialArray(float[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods getMaterialPolkaDotMaterialArray(), getMaterialPolkaDotMaterialCount(), getMaterialPolkaDotMaterialOffsetAbsolute(float[]), getMaterialPolkaDotMaterialOffsetRelative(float[]) and setMaterialPolkaDotMaterialArray(float[]) to the CompiledMaterialCache class.
+	* ADD:		Add the constants BULLSEYE_MATERIAL_*, CHECKERBOARD_MATERIAL_* and POLKA_DOT_MATERIAL_* to the CompiledMaterialCache class.
 	* ADD:		Add support for PolkaDotTexture to the GPU-renderer.
 	* ADD:		Add the field texturePolkaDotTextureArray to the AbstractTextureKernel class.
 	* ADD:		Add the methods getTexturePolkaDotTextureArray(), getTexturePolkaDotTextureCount(), getTexturePolkaDotTextureOffsetAbsolute(float[]), getTexturePolkaDotTextureOffsetRelative(float[]) and setTexturePolkaDotTextureArray(float[]) to the CompiledTextureCache class.

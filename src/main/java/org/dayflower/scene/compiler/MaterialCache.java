@@ -26,11 +26,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.material.BullseyeMaterial;
+import org.dayflower.scene.material.CheckerboardMaterial;
 import org.dayflower.scene.material.ClearCoatMaterial;
 import org.dayflower.scene.material.DisneyMaterial;
 import org.dayflower.scene.material.GlassMaterial;
@@ -39,11 +44,15 @@ import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.MetalMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
+import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.texture.Texture;
+import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
 
 final class MaterialCache {
+	private final List<BullseyeMaterial> distinctBullseyeMaterials;
+	private final List<CheckerboardMaterial> distinctCheckerboardMaterials;
 	private final List<ClearCoatMaterial> distinctClearCoatMaterials;
 	private final List<DisneyMaterial> distinctDisneyMaterials;
 	private final List<GlassMaterial> distinctGlassMaterials;
@@ -53,7 +62,10 @@ final class MaterialCache {
 	private final List<MetalMaterial> distinctMetalMaterials;
 	private final List<MirrorMaterial> distinctMirrorMaterials;
 	private final List<PlasticMaterial> distinctPlasticMaterials;
+	private final List<PolkaDotMaterial> distinctPolkaDotMaterials;
 	private final List<SubstrateMaterial> distinctSubstrateMaterials;
+	private final Map<BullseyeMaterial, Integer> distinctToOffsetsBullseyeMaterials;
+	private final Map<CheckerboardMaterial, Integer> distinctToOffsetsCheckerboardMaterials;
 	private final Map<ClearCoatMaterial, Integer> distinctToOffsetsClearCoatMaterials;
 	private final Map<DisneyMaterial, Integer> distinctToOffsetsDisneyMaterials;
 	private final Map<GlassMaterial, Integer> distinctToOffsetsGlassMaterials;
@@ -62,6 +74,7 @@ final class MaterialCache {
 	private final Map<MetalMaterial, Integer> distinctToOffsetsMetalMaterials;
 	private final Map<MirrorMaterial, Integer> distinctToOffsetsMirrorMaterials;
 	private final Map<PlasticMaterial, Integer> distinctToOffsetsPlasticMaterials;
+	private final Map<PolkaDotMaterial, Integer> distinctToOffsetsPolkaDotMaterials;
 	private final Map<SubstrateMaterial, Integer> distinctToOffsetsSubstrateMaterials;
 	private final NodeCache nodeCache;
 	
@@ -69,6 +82,8 @@ final class MaterialCache {
 	
 	public MaterialCache(final NodeCache nodeCache) {
 		this.nodeCache = Objects.requireNonNull(nodeCache, "nodeCache == null");
+		this.distinctBullseyeMaterials = new ArrayList<>();
+		this.distinctCheckerboardMaterials = new ArrayList<>();
 		this.distinctClearCoatMaterials = new ArrayList<>();
 		this.distinctDisneyMaterials = new ArrayList<>();
 		this.distinctGlassMaterials = new ArrayList<>();
@@ -78,7 +93,10 @@ final class MaterialCache {
 		this.distinctMetalMaterials = new ArrayList<>();
 		this.distinctMirrorMaterials = new ArrayList<>();
 		this.distinctPlasticMaterials = new ArrayList<>();
+		this.distinctPolkaDotMaterials = new ArrayList<>();
 		this.distinctSubstrateMaterials = new ArrayList<>();
+		this.distinctToOffsetsBullseyeMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsCheckerboardMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsClearCoatMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsDisneyMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsGlassMaterials = new LinkedHashMap<>();
@@ -87,6 +105,7 @@ final class MaterialCache {
 		this.distinctToOffsetsMetalMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsMirrorMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsPlasticMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsPolkaDotMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsSubstrateMaterials = new LinkedHashMap<>();
 	}
 	
@@ -96,10 +115,71 @@ final class MaterialCache {
 		return this.distinctMaterials.contains(Objects.requireNonNull(material, "material == null"));
 	}
 	
+	public float[] toMaterialBullseyeMaterialArray() {
+		final float[] materialBullseyeMaterialArray = Floats.toArray(this.distinctBullseyeMaterials, bullseyeMaterial -> doToArray(bullseyeMaterial), 1);
+		
+		for(int i = 0; i < this.distinctBullseyeMaterials.size(); i++) {
+			final BullseyeMaterial bullseyeMaterial = this.distinctBullseyeMaterials.get(i);
+			
+			final Material materialA = bullseyeMaterial.getMaterialA();
+			final Material materialB = bullseyeMaterial.getMaterialB();
+			
+			final int materialBullseyeMaterialArrayMaterialA = i * CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_A;
+			final int materialBullseyeMaterialArrayMaterialB = i * CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_B;
+			
+			materialBullseyeMaterialArray[materialBullseyeMaterialArrayMaterialA] = pack(materialA.getID(), findOffsetFor(materialA));
+			materialBullseyeMaterialArray[materialBullseyeMaterialArrayMaterialB] = pack(materialB.getID(), findOffsetFor(materialB));
+		}
+		
+		return materialBullseyeMaterialArray;
+	}
+	
+	public float[] toMaterialCheckerboardMaterialArray() {
+		final float[] materialCheckerboardMaterialArray = Floats.toArray(this.distinctCheckerboardMaterials, checkerboardMaterial -> doToArray(checkerboardMaterial), 1);
+		
+		for(int i = 0; i < this.distinctCheckerboardMaterials.size(); i++) {
+			final CheckerboardMaterial checkerboardMaterial = this.distinctCheckerboardMaterials.get(i);
+			
+			final Material materialA = checkerboardMaterial.getMaterialA();
+			final Material materialB = checkerboardMaterial.getMaterialB();
+			
+			final int materialCheckerboardMaterialArrayMaterialA = i * CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A;
+			final int materialCheckerboardMaterialArrayMaterialB = i * CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B;
+			
+			materialCheckerboardMaterialArray[materialCheckerboardMaterialArrayMaterialA] = pack(materialA.getID(), findOffsetFor(materialA));
+			materialCheckerboardMaterialArray[materialCheckerboardMaterialArrayMaterialB] = pack(materialB.getID(), findOffsetFor(materialB));
+		}
+		
+		return materialCheckerboardMaterialArray;
+	}
+	
+	public float[] toMaterialPolkaDotMaterialArray() {
+		final float[] materialPolkaDotMaterialArray = Floats.toArray(this.distinctPolkaDotMaterials, polkaDotMaterial -> doToArray(polkaDotMaterial), 1);
+		
+		for(int i = 0; i < this.distinctPolkaDotMaterials.size(); i++) {
+			final PolkaDotMaterial polkaDotMaterial = this.distinctPolkaDotMaterials.get(i);
+			
+			final Material materialA = polkaDotMaterial.getMaterialA();
+			final Material materialB = polkaDotMaterial.getMaterialB();
+			
+			final int materialPolkaDotMaterialArrayMaterialA = i * CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_A;
+			final int materialPolkaDotMaterialArrayMaterialB = i * CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_B;
+			
+			materialPolkaDotMaterialArray[materialPolkaDotMaterialArrayMaterialA] = pack(materialA.getID(), findOffsetFor(materialA));
+			materialPolkaDotMaterialArray[materialPolkaDotMaterialArrayMaterialB] = pack(materialB.getID(), findOffsetFor(materialB));
+		}
+		
+		return materialPolkaDotMaterialArray;
+	}
+	
 	public int findOffsetFor(final Material material) {
 		Objects.requireNonNull(material, "material == null");
 		
-		if(material instanceof ClearCoatMaterial) {
+		if(material instanceof BullseyeMaterial) {
+			return this.distinctToOffsetsBullseyeMaterials.get(material).intValue();
+		} else if(material instanceof CheckerboardMaterial) {
+			return this.distinctToOffsetsCheckerboardMaterials.get(material).intValue();
+		} else if(material instanceof ClearCoatMaterial) {
 			return this.distinctToOffsetsClearCoatMaterials.get(material).intValue();
 		} else if(material instanceof DisneyMaterial) {
 			return this.distinctToOffsetsDisneyMaterials.get(material).intValue();
@@ -115,6 +195,8 @@ final class MaterialCache {
 			return this.distinctToOffsetsMirrorMaterials.get(material).intValue();
 		} else if(material instanceof PlasticMaterial) {
 			return this.distinctToOffsetsPlasticMaterials.get(material).intValue();
+		} else if(material instanceof PolkaDotMaterial) {
+			return this.distinctToOffsetsPolkaDotMaterials.get(material).intValue();
 		} else if(material instanceof SubstrateMaterial) {
 			return this.distinctToOffsetsSubstrateMaterials.get(material).intValue();
 		} else {
@@ -360,6 +442,8 @@ final class MaterialCache {
 	}
 	
 	public void clear() {
+		this.distinctBullseyeMaterials.clear();
+		this.distinctCheckerboardMaterials.clear();
 		this.distinctClearCoatMaterials.clear();
 		this.distinctDisneyMaterials.clear();
 		this.distinctGlassMaterials.clear();
@@ -369,7 +453,10 @@ final class MaterialCache {
 		this.distinctMetalMaterials.clear();
 		this.distinctMirrorMaterials.clear();
 		this.distinctPlasticMaterials.clear();
+		this.distinctPolkaDotMaterials.clear();
 		this.distinctSubstrateMaterials.clear();
+		this.distinctToOffsetsBullseyeMaterials.clear();
+		this.distinctToOffsetsCheckerboardMaterials.clear();
 		this.distinctToOffsetsClearCoatMaterials.clear();
 		this.distinctToOffsetsDisneyMaterials.clear();
 		this.distinctToOffsetsGlassMaterials.clear();
@@ -378,11 +465,20 @@ final class MaterialCache {
 		this.distinctToOffsetsMetalMaterials.clear();
 		this.distinctToOffsetsMirrorMaterials.clear();
 		this.distinctToOffsetsPlasticMaterials.clear();
+		this.distinctToOffsetsPolkaDotMaterials.clear();
 		this.distinctToOffsetsSubstrateMaterials.clear();
 	}
 	
 	public void setup(final Scene scene) {
 		Objects.requireNonNull(scene, "scene == null");
+		
+//		Add all distinct BullseyeMaterial instances:
+		this.distinctBullseyeMaterials.clear();
+		this.distinctBullseyeMaterials.addAll(this.nodeCache.getAllDistinct(BullseyeMaterial.class));
+		
+//		Add all distinct CheckerboardMaterial instances:
+		this.distinctCheckerboardMaterials.clear();
+		this.distinctCheckerboardMaterials.addAll(this.nodeCache.getAllDistinct(CheckerboardMaterial.class));
 		
 //		Add all distinct ClearCoatMaterial instances:
 		this.distinctClearCoatMaterials.clear();
@@ -416,12 +512,18 @@ final class MaterialCache {
 		this.distinctPlasticMaterials.clear();
 		this.distinctPlasticMaterials.addAll(this.nodeCache.getAllDistinct(PlasticMaterial.class));
 		
+//		Add all distinct PolkaDotMaterial instances:
+		this.distinctPolkaDotMaterials.clear();
+		this.distinctPolkaDotMaterials.addAll(this.nodeCache.getAllDistinct(PolkaDotMaterial.class));
+		
 //		Add all distinct SubstrateMaterial instances:
 		this.distinctSubstrateMaterials.clear();
 		this.distinctSubstrateMaterials.addAll(this.nodeCache.getAllDistinct(SubstrateMaterial.class));
 		
 //		Add all distinct Material instances:
 		this.distinctMaterials.clear();
+		this.distinctMaterials.addAll(this.distinctBullseyeMaterials);
+		this.distinctMaterials.addAll(this.distinctCheckerboardMaterials);
 		this.distinctMaterials.addAll(this.distinctClearCoatMaterials);
 		this.distinctMaterials.addAll(this.distinctDisneyMaterials);
 		this.distinctMaterials.addAll(this.distinctGlassMaterials);
@@ -430,7 +532,16 @@ final class MaterialCache {
 		this.distinctMaterials.addAll(this.distinctMetalMaterials);
 		this.distinctMaterials.addAll(this.distinctMirrorMaterials);
 		this.distinctMaterials.addAll(this.distinctPlasticMaterials);
+		this.distinctMaterials.addAll(this.distinctPolkaDotMaterials);
 		this.distinctMaterials.addAll(this.distinctSubstrateMaterials);
+		
+//		Create offset mappings for all distinct BullseyeMaterial instances:
+		this.distinctToOffsetsBullseyeMaterials.clear();
+		this.distinctToOffsetsBullseyeMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBullseyeMaterials, CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH));
+		
+//		Create offset mappings for all distinct CheckerboardMaterial instances:
+		this.distinctToOffsetsCheckerboardMaterials.clear();
+		this.distinctToOffsetsCheckerboardMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCheckerboardMaterials, CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH));
 		
 //		Create offset mappings for all distinct ClearCoatMaterial instances:
 		this.distinctToOffsetsClearCoatMaterials.clear();
@@ -464,6 +575,10 @@ final class MaterialCache {
 		this.distinctToOffsetsPlasticMaterials.clear();
 		this.distinctToOffsetsPlasticMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlasticMaterials, CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH));
 		
+//		Create offset mappings for all distinct PolkaDotMaterial instances:
+		this.distinctToOffsetsPolkaDotMaterials.clear();
+		this.distinctToOffsetsPolkaDotMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPolkaDotMaterials, CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH));
+		
 //		Create offset mappings for all distinct SubstrateMaterial instances:
 		this.distinctToOffsetsSubstrateMaterials.clear();
 		this.distinctToOffsetsSubstrateMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSubstrateMaterials, CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH));
@@ -476,6 +591,76 @@ final class MaterialCache {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static float[] doToArray(final BullseyeMaterial bullseyeMaterial) {
+		final Material materialA = bullseyeMaterial.getMaterialA();
+		final Material materialB = bullseyeMaterial.getMaterialB();
+		
+		final Point3F origin = bullseyeMaterial.getOrigin();
+		
+		final float scale = bullseyeMaterial.getScale();
+		
+		final float[] array = new float[CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH];
+		
+//		Because the BullseyeMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 0] = origin.getX();		//Block #1
+		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 1] = origin.getY();		//Block #1
+		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 2] = origin.getZ();		//Block #1
+		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();	//Block #1
+		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();	//Block #1
+		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_SCALE] = scale;					//Block #1
+		array[6] = 0.0F;																		//Block #1
+		array[7] = 0.0F;																		//Block #1
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final CheckerboardMaterial checkerboardMaterial) {
+		final AngleF angle = checkerboardMaterial.getAngle();
+		
+		final Material materialA = checkerboardMaterial.getMaterialA();
+		final Material materialB = checkerboardMaterial.getMaterialB();
+		
+		final Vector2F scale = checkerboardMaterial.getScale();
+		
+		final float[] array = new float[CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH];
+		
+//		Because the CheckerboardMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
+		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
+		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();		//Block #1
+		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();		//Block #1
+		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_SCALE + 0] = scale.getX();				//Block #1
+		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_SCALE + 1] = scale.getY();				//Block #1
+		array[6] = 0.0F;																				//Block #1
+		array[7] = 0.0F;																				//Block #1
+		
+		return array;
+	}
+	
+	private static float[] doToArray(final PolkaDotMaterial polkaDotMaterial) {
+		final AngleF angle = polkaDotMaterial.getAngle();
+		
+		final Material materialA = polkaDotMaterial.getMaterialA();
+		final Material materialB = polkaDotMaterial.getMaterialB();
+		
+		final float cellResolution = polkaDotMaterial.getCellResolution();
+		final float polkaDotRadius = polkaDotMaterial.getPolkaDotRadius();
+		
+		final float[] array = new float[CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH];
+		
+//		Because the PolkaDotMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
+		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
+		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();		//Block #1
+		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();		//Block #1
+		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_CELL_RESOLUTION] = cellResolution;	//Block #1
+		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_POLKA_DOT_RADIUS] = polkaDotRadius;	//Block #1
+		array[6] = 0.0F;																			//Block #1
+		array[7] = 0.0F;																			//Block #1
+		
+		return array;
+	}
 	
 	private static int[] doToArray(final ClearCoatMaterial clearCoatMaterial) {
 		final Texture textureEmission = clearCoatMaterial.getTextureEmission();
@@ -513,14 +698,14 @@ final class MaterialCache {
 		final int[] array = new int[CompiledMaterialCache.DISNEY_MATERIAL_LENGTH];
 		
 //		Because the DisneyMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC] = pack(textureEmission.getID(), 0, textureAnisotropic.getID(), 0);				//Block #1.
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS] = pack(textureClearCoat.getID(), 0, textureClearCoatGloss.getID(), 0);	//Block #1.
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION] = pack(textureColor.getID(), 0, textureDiffuseTransmission.getID(), 0);	//Block #1.
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS] = pack(textureEta.getID(), 0, textureFlatness.getID(), 0);								//Block #1.
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS] = pack(textureMetallic.getID(), 0, textureRoughness.getID(), 0);					//Block #1.
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN] = pack(textureScatterDistance.getID(), 0, textureSheen.getID(), 0);			//Block #1.
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT] = pack(textureSheenTint.getID(), 0, textureSpecularTint.getID(), 0);		//Block #1.
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN] = pack(textureSpecularTransmission.getID(), 0, isThin ? 1 : 0, 0);			//Block #1.
+		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC] = pack(textureEmission.getID(), 0, textureAnisotropic.getID(), 0);				//Block #1
+		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS] = pack(textureClearCoat.getID(), 0, textureClearCoatGloss.getID(), 0);	//Block #1
+		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION] = pack(textureColor.getID(), 0, textureDiffuseTransmission.getID(), 0);	//Block #1
+		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS] = pack(textureEta.getID(), 0, textureFlatness.getID(), 0);								//Block #1
+		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS] = pack(textureMetallic.getID(), 0, textureRoughness.getID(), 0);					//Block #1
+		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN] = pack(textureScatterDistance.getID(), 0, textureSheen.getID(), 0);			//Block #1
+		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT] = pack(textureSheenTint.getID(), 0, textureSpecularTint.getID(), 0);		//Block #1
+		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN] = pack(textureSpecularTransmission.getID(), 0, isThin ? 1 : 0, 0);			//Block #1
 		
 		return array;
 	}

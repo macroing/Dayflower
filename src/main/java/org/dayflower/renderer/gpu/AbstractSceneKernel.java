@@ -1135,6 +1135,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.texturePolkaDotTextureArray = compiledScene.getCompiledTextureCache().getTexturePolkaDotTextureArray());
 		put(super.textureSimplexFractionalBrownianMotionTextureArray = compiledScene.getCompiledTextureCache().getTextureSimplexFractionalBrownianMotionTextureArray());
 		
+		put(super.materialBullseyeMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialBullseyeMaterialArray());
+		put(super.materialCheckerboardMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialCheckerboardMaterialArray());
 		put(super.materialClearCoatMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialClearCoatMaterialArray());
 		put(super.materialDisneyMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialDisneyMaterialArray());
 		put(super.materialGlassMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialGlassMaterialArray());
@@ -1143,6 +1145,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.materialMetalMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialMetalMaterialArray());
 		put(super.materialMirrorMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialMirrorMaterialArray());
 		put(super.materialPlasticMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialPlasticMaterialArray());
+		put(super.materialPolkaDotMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialPolkaDotMaterialArray());
 		put(super.materialSubstrateMaterialArray = compiledScene.getCompiledMaterialCache().getMaterialSubstrateMaterialArray());
 		
 		put(super.lightIDAndOffsetArray = compiledScene.getCompiledLightCache().getLightIDAndOffsetArray());

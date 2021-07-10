@@ -10,9 +10,6 @@ Renderer GPU API:
 
 	* ADD:		Add support for DiffuseAreaLight.
 	* ADD:		Add support for PrimitiveAreaLight.
-	* ADD:		Add support for BullseyeMaterial.
-	* ADD:		Add support for CheckerboardMaterial.
-	* ADD:		Add support for PolkaDotMaterial.
 	* ADD:		Add support for UberMaterial.
 	* ADD:		Add support for LDRImageNormalMapModifier.
 	* ADD:		Add support for SimplexNoiseNormalMapModifier.

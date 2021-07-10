@@ -41,7 +41,7 @@ import org.dayflower.scene.TransportMode;
  * <p>
  * This class is immutable and thread-safe as long as its two associated {@link Material} instances are.
  * <p>
- * This {@code Material} implementation is not supported on the GPU.
+ * This {@code Material} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

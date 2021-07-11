@@ -133,12 +133,12 @@ public final class CompiledCameraCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a compiled {@code float[]} representation of {@code camera}.
+	 * Returns a {@code float[]} with {@code camera} in compiled form.
 	 * <p>
 	 * If {@code camera} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param camera a {@link Camera} instance
-	 * @return a compiled {@code float[]} representation of {@code camera}
+	 * @return a {@code float[]} with {@code camera} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
 	 */
 	public static float[] toArray(final Camera camera) {

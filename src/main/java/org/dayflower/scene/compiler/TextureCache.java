@@ -20,7 +20,6 @@ package org.dayflower.scene.compiler;
 
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.pack;
-import static org.dayflower.utility.Ints.padding;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -28,10 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.color.Color3F;
-import org.dayflower.geometry.AngleF;
-import org.dayflower.geometry.Point3F;
-import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
@@ -127,7 +122,7 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureBlendTextureArray() {
-		final float[] textureBlendTextureArray = Floats.toArray(this.distinctBlendTextures, blendTexture -> doToArray(blendTexture), 1);
+		final float[] textureBlendTextureArray = Floats.toArray(this.distinctBlendTextures, blendTexture -> CompiledTextureCache.toArray(blendTexture), 1);
 		
 		for(int i = 0; i < this.distinctBlendTextures.size(); i++) {
 			final BlendTexture blendTexture = this.distinctBlendTextures.get(i);
@@ -146,7 +141,7 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureBullseyeTextureArray() {
-		final float[] textureBullseyeTextureArray = Floats.toArray(this.distinctBullseyeTextures, bullseyeTexture -> doToArray(bullseyeTexture), 1);
+		final float[] textureBullseyeTextureArray = Floats.toArray(this.distinctBullseyeTextures, bullseyeTexture -> CompiledTextureCache.toArray(bullseyeTexture), 1);
 		
 		for(int i = 0; i < this.distinctBullseyeTextures.size(); i++) {
 			final BullseyeTexture bullseyeTexture = this.distinctBullseyeTextures.get(i);
@@ -165,7 +160,7 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureCheckerboardTextureArray() {
-		final float[] textureCheckerboardTextureArray = Floats.toArray(this.distinctCheckerboardTextures, checkerboardTexture -> doToArray(checkerboardTexture), 1);
+		final float[] textureCheckerboardTextureArray = Floats.toArray(this.distinctCheckerboardTextures, checkerboardTexture -> CompiledTextureCache.toArray(checkerboardTexture), 1);
 		
 		for(int i = 0; i < this.distinctCheckerboardTextures.size(); i++) {
 			final CheckerboardTexture checkerboardTexture = this.distinctCheckerboardTextures.get(i);
@@ -184,19 +179,19 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureConstantTextureArray() {
-		return Floats.toArray(this.distinctConstantTextures, constantTexture -> doToArray(constantTexture), 1);
+		return Floats.toArray(this.distinctConstantTextures, constantTexture -> CompiledTextureCache.toArray(constantTexture), 1);
 	}
 	
 	public float[] toTextureLDRImageTextureArray() {
-		return Floats.toArray(this.distinctLDRImageTextures, lDRImageTexture -> doToArray(lDRImageTexture), 1);
+		return Floats.toArray(this.distinctLDRImageTextures, lDRImageTexture -> CompiledTextureCache.toArray(lDRImageTexture), 1);
 	}
 	
 	public float[] toTextureMarbleTextureArray() {
-		return Floats.toArray(this.distinctMarbleTextures, marbleTexture -> doToArray(marbleTexture), 1);
+		return Floats.toArray(this.distinctMarbleTextures, marbleTexture -> CompiledTextureCache.toArray(marbleTexture), 1);
 	}
 	
 	public float[] toTexturePolkaDotTextureArray() {
-		final float[] texturePolkaDotTextureArray = Floats.toArray(this.distinctPolkaDotTextures, polkaDotTexture -> doToArray(polkaDotTexture), 1);
+		final float[] texturePolkaDotTextureArray = Floats.toArray(this.distinctPolkaDotTextures, polkaDotTexture -> CompiledTextureCache.toArray(polkaDotTexture), 1);
 		
 		for(int i = 0; i < this.distinctPolkaDotTextures.size(); i++) {
 			final PolkaDotTexture polkaDotTexture = this.distinctPolkaDotTextures.get(i);
@@ -215,7 +210,7 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureSimplexFractionalBrownianMotionTextureArray() {
-		return Floats.toArray(this.distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> doToArray(simplexFractionalBrownianMotionTexture), 1);
+		return Floats.toArray(this.distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> CompiledTextureCache.toArray(simplexFractionalBrownianMotionTexture), 1);
 	}
 	
 	public int[] toTextureLDRImageTextureOffsetArray() {
@@ -226,7 +221,7 @@ final class TextureCache {
 			
 			textureLDRImageTextureOffsetArray[i] = j;
 			
-			j += doGetArrayLength(lDRImageTexture);
+			j += CompiledTextureCache.getLength(lDRImageTexture);
 		}
 		
 		return textureLDRImageTextureOffsetArray;
@@ -347,196 +342,5 @@ final class TextureCache {
 	
 	public static boolean filter(final Node node) {
 		return node instanceof Texture;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static float[] doToArray(final BlendTexture blendTexture) {
-		final Texture textureA = blendTexture.getTextureA();
-		final Texture textureB = blendTexture.getTextureB();
-		
-		final float tComponent1 = blendTexture.getTComponent1();
-		final float tComponent2 = blendTexture.getTComponent2();
-		final float tComponent3 = blendTexture.getTComponent3();
-		
-		final float[] array = new float[CompiledTextureCache.BLEND_TEXTURE_LENGTH];
-		
-//		Because the BlendTexture occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledTextureCache.BLEND_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();	//Block #1
-		array[CompiledTextureCache.BLEND_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();	//Block #1
-		array[CompiledTextureCache.BLEND_TEXTURE_OFFSET_T_COMPONENT_1] = tComponent1;	//Block #1
-		array[CompiledTextureCache.BLEND_TEXTURE_OFFSET_T_COMPONENT_2] = tComponent2;	//Block #1
-		array[CompiledTextureCache.BLEND_TEXTURE_OFFSET_T_COMPONENT_3] = tComponent3;	//Block #1
-		array[5] = 0.0F;																//Block #1
-		array[6] = 0.0F;																//Block #1
-		array[7] = 0.0F;																//Block #1
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final BullseyeTexture bullseyeTexture) {
-		final Point3F origin = bullseyeTexture.getOrigin();
-		
-		final Texture textureA = bullseyeTexture.getTextureA();
-		final Texture textureB = bullseyeTexture.getTextureB();
-		
-		final float scale = bullseyeTexture.getScale();
-		
-		final float[] array = new float[CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH];
-		
-//		Because the BullseyeTexture occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_ORIGIN + 0] = origin.getX();		//Block #1
-		array[CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_ORIGIN + 1] = origin.getY();		//Block #1
-		array[CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_ORIGIN + 2] = origin.getZ();		//Block #1
-		array[CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();	//Block #1
-		array[CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();	//Block #1
-		array[CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_SCALE] = scale;					//Block #1
-		array[6] = 0.0F;																	//Block #1
-		array[7] = 0.0F;																	//Block #1
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final CheckerboardTexture checkerboardTexture) {
-		final AngleF angle = checkerboardTexture.getAngle();
-		
-		final Texture textureA = checkerboardTexture.getTextureA();
-		final Texture textureB = checkerboardTexture.getTextureB();
-		
-		final Vector2F scale = checkerboardTexture.getScale();
-		
-		final float[] array = new float[CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH];
-		
-//		Because the CheckerboardTexture occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
-		array[CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
-		array[CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();		//Block #1
-		array[CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();		//Block #1
-		array[CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_SCALE + 0] = scale.getX();			//Block #1
-		array[CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_SCALE + 1] = scale.getY();			//Block #1
-		array[6] = 0.0F;																			//Block #1
-		array[7] = 0.0F;																			//Block #1
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final ConstantTexture constantTexture) {
-		final Color3F color = constantTexture.getColor();
-		
-		final float[] array = new float[CompiledTextureCache.CONSTANT_TEXTURE_LENGTH];
-		
-//		Because the ConstantTexture occupy 4/8 positions in a block, it should be aligned.
-		array[CompiledTextureCache.CONSTANT_TEXTURE_OFFSET_COLOR + 0] = color.getR();
-		array[CompiledTextureCache.CONSTANT_TEXTURE_OFFSET_COLOR + 1] = color.getG();
-		array[CompiledTextureCache.CONSTANT_TEXTURE_OFFSET_COLOR + 2] = color.getB();
-		array[3] = 0.0F;
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final LDRImageTexture lDRImageTexture) {
-		final AngleF angle = lDRImageTexture.getAngle();
-		
-		final Vector2F scale = lDRImageTexture.getScale();
-		
-		final int resolutionX = lDRImageTexture.getResolutionX();
-		final int resolutionY = lDRImageTexture.getResolutionY();
-		
-		final int[] image = lDRImageTexture.getImage();
-		
-		final float[] array = new float[doGetArrayLength(lDRImageTexture)];
-		
-		array[CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();
-		array[CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 0] = scale.getU();
-		array[CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 1] = scale.getV();
-		array[CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_X] = resolutionX;
-		array[CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_Y] = resolutionY;
-		
-		for(int i = 0; i < image.length; i++) {
-			array[CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_IMAGE + i] = image[i];
-		}
-		
-		for(int i = CompiledTextureCache.L_D_R_IMAGE_TEXTURE_OFFSET_IMAGE + image.length; i < array.length; i++) {
-			array[i] = 0.0F;
-		}
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final MarbleTexture marbleTexture) {
-		final Color3F colorA = marbleTexture.getColorA();
-		final Color3F colorB = marbleTexture.getColorB();
-		final Color3F colorC = marbleTexture.getColorC();
-		
-		final float frequency = marbleTexture.getFrequency();
-		final float scale = marbleTexture.getScale();
-		final float stripes = marbleTexture.getStripes();
-		
-		final int octaves = marbleTexture.getOctaves();
-		
-		final float[] array = new float[CompiledTextureCache.MARBLE_TEXTURE_LENGTH];
-		
-//		Because the MarbleTexture occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledTextureCache.MARBLE_TEXTURE_OFFSET_COLOR_A] = colorA.pack();	//Block #1
-		array[CompiledTextureCache.MARBLE_TEXTURE_OFFSET_COLOR_B] = colorB.pack();	//Block #1
-		array[CompiledTextureCache.MARBLE_TEXTURE_OFFSET_COLOR_C] = colorC.pack();	//Block #1
-		array[CompiledTextureCache.MARBLE_TEXTURE_OFFSET_FREQUENCY] = frequency;	//Block #1
-		array[CompiledTextureCache.MARBLE_TEXTURE_OFFSET_SCALE] = scale;			//Block #1
-		array[CompiledTextureCache.MARBLE_TEXTURE_OFFSET_STRIPES] = stripes;		//Block #1
-		array[CompiledTextureCache.MARBLE_TEXTURE_OFFSET_OCTAVES] = octaves;		//Block #1
-		array[7] = 0.0F;															//Block #1
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final PolkaDotTexture polkaDotTexture) {
-		final AngleF angle = polkaDotTexture.getAngle();
-		
-		final Texture textureA = polkaDotTexture.getTextureA();
-		final Texture textureB = polkaDotTexture.getTextureB();
-		
-		final float cellResolution = polkaDotTexture.getCellResolution();
-		final float polkaDotRadius = polkaDotTexture.getPolkaDotRadius();
-		
-		final float[] array = new float[CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH];
-		
-//		Because the PolkaDotTexture occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_ANGLE_DEGREES] = angle.getDegrees();//Block #1
-		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();//Block #1
-		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();		//Block #1
-		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();		//Block #1
-		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_CELL_RESOLUTION] = cellResolution;	//Block #1
-		array[CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_POLKA_DOT_RADIUS] = polkaDotRadius;	//Block #1
-		array[6] = 0.0F;																		//Block #1
-		array[7] = 0.0F;																		//Block #1
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final SimplexFractionalBrownianMotionTexture simplexFractionalBrownianMotionTexture) {
-		final Color3F color = simplexFractionalBrownianMotionTexture.getColor();
-		
-		final float frequency = simplexFractionalBrownianMotionTexture.getFrequency();
-		final float gain = simplexFractionalBrownianMotionTexture.getGain();
-		
-		final int octaves = simplexFractionalBrownianMotionTexture.getOctaves();
-		
-		final float[] array = new float[CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH];
-		
-//		Because the SimplexFractionalBrownianMotionTexture occupy 4/8 positions in a block, it should be aligned.
-		array[CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_COLOR] = color.pack();	//Block #1
-		array[CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_FREQUENCY] = frequency;//Block #1
-		array[CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_GAIN] = gain;			//Block #1
-		array[CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_OCTAVES] = octaves;	//Block #1
-		
-		return array;
-	}
-	
-	private static int doGetArrayLength(final LDRImageTexture lDRImageTexture) {
-		final int a = 5;
-		final int b = lDRImageTexture.getResolution();
-		final int c = padding(a + b);
-		
-		return a + b + c;
 	}
 }

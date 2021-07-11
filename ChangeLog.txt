@@ -1,5 +1,8 @@
 2021-07-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods toArray(BlendTexture), toArray(BullseyeTexture), toArray(CheckerboardTexture), toArray(ConstantTexture), toArray(LDRImageTexture), toArray(MarbleTexture), toArray(PolkaDotTexture), toArray(SimplexFractionalBrownianMotionTexture) and getLength(LDRImageTexture) to the CompiledTextureCache class.
+	* ADD:		Add the methods toArray(DiffuseAreaLight), toArray(DirectionalLight), toArray(LDRImageLight), toArray(PerezLight), toArray(PointLight), toArray(SpotLight), getLength(LDRImageLight) and getLength(PerezLight) to the CompiledLightCache class.
+	* ADD:		Add the methods toArray(AxisAlignedBoundingBox3F) and toArray(BoundingSphere3F) to the CompiledBoundingVolume3FCache class.
 	* ADD:		Add support for the Parameter API in the GUI.
 	* ADD:		Add the methods load(File, Scene, ParameterList) and load(String, Scene, ParameterList) to the SceneLoader interface and the JavaSceneLoader class.
 	* ADD:		Add an inner class called Builder to the MatteMaterial class.

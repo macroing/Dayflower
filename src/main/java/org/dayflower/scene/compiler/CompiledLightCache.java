@@ -18,9 +18,13 @@
  */
 package org.dayflower.scene.compiler;
 
+import static org.dayflower.utility.Floats.toFloat;
+import static org.dayflower.utility.Ints.padding;
+
 import java.util.Objects;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
@@ -533,5 +537,420 @@ public final class CompiledLightCache {
 	 */
 	public void setLightSpotLightArray(final float[] lightSpotLightArray) {
 		this.lightSpotLightArray = Objects.requireNonNull(lightSpotLightArray, "lightSpotLightArray == null");
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code float[]} with {@code diffuseAreaLight} in compiled form.
+	 * <p>
+	 * If {@code diffuseAreaLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param diffuseAreaLight a {@link DiffuseAreaLight} instance
+	 * @return a {@code float[]} with {@code diffuseAreaLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code diffuseAreaLight} is {@code null}
+	 */
+	public static float[] toArray(final DiffuseAreaLight diffuseAreaLight) {
+		final Color3F radianceEmitted = diffuseAreaLight.getRadianceEmitted();
+		
+		final Matrix44F objectToWorld = diffuseAreaLight.getTransform().getObjectToWorld();
+		final Matrix44F worldToObject = diffuseAreaLight.getTransform().getWorldToObject();
+		
+		final Shape3F shape = diffuseAreaLight.getShape();
+		
+		final boolean isTwoSided = diffuseAreaLight.isTwoSided();
+		
+		final float[] array = new float[DIFFUSE_AREA_LIGHT_LENGTH];
+		
+//		Because the DiffuseAreaLight occupy 40/40 positions in five blocks, it should be aligned.
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();	//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();	//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();	//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();	//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();	//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();	//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();	//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();	//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();	//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();	//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();	//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();	//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();	//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();	//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();	//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();	//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();	//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();	//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();	//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();	//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();	//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();	//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();	//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();	//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();	//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();	//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();	//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();	//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();	//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();	//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();	//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();	//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 0] = radianceEmitted.getR();			//Block #5
+		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 1] = radianceEmitted.getG();			//Block #5
+		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 2] = radianceEmitted.getB();			//Block #5
+		array[DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_ID] = shape.getID();								//Block #5
+		array[DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_OFFSET] = 0.0F;									//Block #5
+		array[DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_SURFACE_AREA] = shape.getSurfaceArea();			//Block #5
+		array[DIFFUSE_AREA_LIGHT_OFFSET_IS_TWO_SIDED] = isTwoSided ? 1.0F : 0.0F;				//Block #5
+		array[39] = 0.0F;																		//Block #5
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code directionalLight} in compiled form.
+	 * <p>
+	 * If {@code directionalLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param directionalLight a {@link DirectionalLight} instance
+	 * @return a {@code float[]} with {@code directionalLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code directionalLight} is {@code null}
+	 */
+	public static float[] toArray(final DirectionalLight directionalLight) {
+		final Color3F radiance = directionalLight.getRadiance();
+		
+		final Vector3F direction = Vector3F.transform(directionalLight.getTransform().getObjectToWorld(), directionalLight.getDirection());
+		
+		final float radius = directionalLight.getRadius();
+		
+		final float[] array = new float[DIRECTIONAL_LIGHT_LENGTH];
+		
+//		Because the DirectionalLight occupy 8/8 positions in a block, it should be aligned.
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 0] = radiance.getR();		//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 1] = radiance.getG();		//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 2] = radiance.getB();		//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 0] = direction.getX();	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 1] = direction.getY();	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 2] = direction.getZ();	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIUS] = radius;					//Block #1
+		array[7] = 0.0F;													//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code lDRImageLight} in compiled form.
+	 * <p>
+	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lDRImageLight an {@link LDRImageLight} instance
+	 * @return a {@code float[]} with {@code lDRImageLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 */
+	public static float[] toArray(final LDRImageLight lDRImageLight) {
+		final AngleF angle = lDRImageLight.getAngle();
+		
+		final Matrix44F objectToWorld = lDRImageLight.getTransform().getObjectToWorld();
+		final Matrix44F worldToObject = lDRImageLight.getTransform().getWorldToObject();
+		
+		final Vector2F scale = lDRImageLight.getScale();
+		
+		final float radius = lDRImageLight.getRadius();
+		
+		final float[] distribution = lDRImageLight.getDistribution().toArray();
+		
+		final int resolutionX = lDRImageLight.getResolutionX();
+		final int resolutionY = lDRImageLight.getResolutionY();
+		
+		final int[] image = lDRImageLight.getImage();
+		
+		final float[] array = new float[getLength(lDRImageLight)];
+		
+//		Block #1:
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();
+		
+//		Block #2:
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();
+		
+//		Block #3:
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();
+		
+//		Block #4:
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();
+		
+//		Block #5:
+		array[L_D_R_IMAGE_LIGHT_OFFSET_ANGLE_RADIANS] = angle.getRadians();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_SCALE + 0] = scale.getU();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_SCALE + 1] = scale.getV();
+		array[L_D_R_IMAGE_LIGHT_OFFSET_RADIUS] = radius;
+		array[L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_X] = resolutionX;
+		array[L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_Y] = resolutionY;
+		array[38] = 0.0F;
+		array[39] = 0.0F;
+		
+		for(int i = 0; i < distribution.length; i++) {
+			array[L_D_R_IMAGE_LIGHT_OFFSET_DISTRIBUTION + i] = distribution[i];
+		}
+		
+		for(int i = 0; i < image.length; i++) {
+			array[L_D_R_IMAGE_LIGHT_OFFSET_IMAGE + i] = image[i];
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code perezLight} in compiled form.
+	 * <p>
+	 * If {@code perezLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param perezLight a {@link PerezLight} instance
+	 * @return a {@code float[]} with {@code perezLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code perezLight} is {@code null}
+	 */
+	public static float[] toArray(final PerezLight perezLight) {
+		final Color3F sunColor = perezLight.getSunColor();
+		
+		final Matrix44F objectToWorld = perezLight.getTransform().getObjectToWorld();
+		final Matrix44F worldToObject = perezLight.getTransform().getWorldToObject();
+		
+		final Vector3F sunDirectionObjectSpace = perezLight.getSunDirectionObjectSpace();
+		final Vector3F sunDirectionWorldSpace = perezLight.getSunDirectionWorldSpace();
+		
+		final double[] perezRelativeLuminance = perezLight.getPerezRelativeLuminance();
+		final double[] perezX = perezLight.getPerezX();
+		final double[] perezY = perezLight.getPerezY();
+		final double[] zenith = perezLight.getZenith();
+		
+		final float radius = perezLight.getRadius();
+		final float theta = perezLight.getTheta();
+		
+		final float[] distribution = perezLight.getDistribution().toArray();
+		
+		final float[] array = new float[getLength(perezLight)];
+		
+//		Block #1:
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();
+		
+//		Block #2:
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();
+		
+//		Block #3:
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();
+		
+//		Block #4:
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();
+		
+//		Block #5:
+		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 0] = sunColor.getR();
+		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 1] = sunColor.getG();
+		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 2] = sunColor.getB();
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 0] = sunDirectionObjectSpace.getX();
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 1] = sunDirectionObjectSpace.getY();
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 2] = sunDirectionObjectSpace.getZ();
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 0] = sunDirectionWorldSpace.getX();
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 1] = sunDirectionWorldSpace.getY();
+		
+//		Block #6:
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2] = sunDirectionWorldSpace.getZ();
+		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 0] = toFloat(perezRelativeLuminance[0]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 1] = toFloat(perezRelativeLuminance[1]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 2] = toFloat(perezRelativeLuminance[2]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 3] = toFloat(perezRelativeLuminance[3]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 4] = toFloat(perezRelativeLuminance[4]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 0] = toFloat(perezX[0]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 1] = toFloat(perezX[1]);
+		
+//		Block #7:
+		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 2] = toFloat(perezX[2]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 3] = toFloat(perezX[3]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 4] = toFloat(perezX[4]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 0] = toFloat(perezY[0]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 1] = toFloat(perezY[1]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 2] = toFloat(perezY[2]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 3] = toFloat(perezY[3]);
+		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 4] = toFloat(perezY[4]);
+		
+//		Block #8:
+		array[PEREZ_LIGHT_OFFSET_ZENITH + 0] = toFloat(zenith[0]);
+		array[PEREZ_LIGHT_OFFSET_ZENITH + 1] = toFloat(zenith[1]);
+		array[PEREZ_LIGHT_OFFSET_ZENITH + 2] = toFloat(zenith[2]);
+		array[PEREZ_LIGHT_OFFSET_RADIUS] = radius;
+		array[PEREZ_LIGHT_OFFSET_THETA] = theta;
+		
+		for(int i = 0; i < distribution.length; i++) {
+			array[PEREZ_LIGHT_OFFSET_DISTRIBUTION + i] = distribution[i];
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code pointLight} in compiled form.
+	 * <p>
+	 * If {@code pointLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pointLight a {@link PointLight} instance
+	 * @return a {@code float[]} with {@code pointLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code pointLight} is {@code null}
+	 */
+	public static float[] toArray(final PointLight pointLight) {
+		final Color3F intensity = pointLight.getIntensity();
+		
+		final Point3F position = pointLight.getTransform().getPosition();
+		
+		final float[] array = new float[POINT_LIGHT_LENGTH];
+		
+//		Because the PointLight occupy 8/8 positions in a block, it should be aligned.
+		array[POINT_LIGHT_OFFSET_INTENSITY + 0] = intensity.getR();	//Block #1
+		array[POINT_LIGHT_OFFSET_INTENSITY + 1] = intensity.getG();	//Block #1
+		array[POINT_LIGHT_OFFSET_INTENSITY + 2] = intensity.getB();	//Block #1
+		array[POINT_LIGHT_OFFSET_POSITION + 0] = position.getX();	//Block #1
+		array[POINT_LIGHT_OFFSET_POSITION + 1] = position.getY();	//Block #1
+		array[POINT_LIGHT_OFFSET_POSITION + 2] = position.getZ();	//Block #1
+		array[6] = 0.0F;											//Block #1
+		array[7] = 0.0F;											//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code spotLight} in compiled form.
+	 * <p>
+	 * If {@code spotLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param spotLight a {@link SpotLight} instance
+	 * @return a {@code float[]} with {@code spotLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code spotLight} is {@code null}
+	 */
+	public static float[] toArray(final SpotLight spotLight) {
+		final Color3F intensity = spotLight.getIntensity();
+		
+		final Matrix44F objectToWorld = spotLight.getTransform().getObjectToWorld();
+		final Matrix44F worldToObject = spotLight.getTransform().getWorldToObject();
+		
+		final Point3F position = Point3F.transformAndDivide(objectToWorld, new Point3F());
+		
+		final float cosConeAngle = spotLight.getCosConeAngle();
+		final float cosConeAngleMinusConeAngleDelta = spotLight.getCosConeAngleMinusConeAngleDelta();
+		
+		final float[] array = new float[SPOT_LIGHT_LENGTH];
+		
+//		Because the SpotLight occupy 24/24 positions in three blocks, it should be aligned.
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();						//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();						//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();						//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();						//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();						//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();						//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();						//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();						//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();						//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();						//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();						//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();						//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();						//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();						//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();						//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();						//Block #2
+		array[SPOT_LIGHT_OFFSET_INTENSITY + 0] = intensity.getR();											//Block #3
+		array[SPOT_LIGHT_OFFSET_INTENSITY + 1] = intensity.getG();											//Block #3
+		array[SPOT_LIGHT_OFFSET_INTENSITY + 2] = intensity.getB();											//Block #3
+		array[SPOT_LIGHT_OFFSET_POSITION + 0] = position.getX();											//Block #3
+		array[SPOT_LIGHT_OFFSET_POSITION + 1] = position.getY();											//Block #3
+		array[SPOT_LIGHT_OFFSET_POSITION + 2] = position.getZ();											//Block #3
+		array[SPOT_LIGHT_OFFSET_COS_CONE_ANGLE] = cosConeAngle;												//Block #3
+		array[SPOT_LIGHT_OFFSET_COS_CONE_ANGLE_MINUS_CONE_ANGLE_DELTA] = cosConeAngleMinusConeAngleDelta;	//Block #3
+		
+		return array;
+	}
+	
+	/**
+	 * Returns the length of {@code lDRImageLight} in compiled form.
+	 * <p>
+	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lDRImageLight an {@link LDRImageLight} instance
+	 * @return the length of {@code lDRImageLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 */
+	public static int getLength(final LDRImageLight lDRImageLight) {
+		final int a = 16 + 16 + 1 + 2 + 1 + 1 + 1;
+		final int b = lDRImageLight.getDistribution().toArray().length;
+		final int c = lDRImageLight.getResolution();
+		
+		return a + b + c + padding(a + b + c);
+	}
+	
+	/**
+	 * Returns the length of {@code perezLight} in compiled form.
+	 * <p>
+	 * If {@code perezLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param perezLight a {@link PerezLight} instance
+	 * @return the length of {@code perezLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code perezLight} is {@code null}
+	 */
+	public static int getLength(final PerezLight perezLight) {
+		final int a = 16 + 16 + 3 + 3 + 3 + 5 + 5 + 5 + 3 + 1 + 1;
+		final int b = perezLight.getDistribution().toArray().length;
+		
+		return a + b + padding(a + b);
 	}
 }

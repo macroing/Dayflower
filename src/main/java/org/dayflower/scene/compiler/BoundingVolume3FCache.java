@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
@@ -63,11 +62,11 @@ final class BoundingVolume3FCache {
 	}
 	
 	public float[] toBoundingVolume3FAxisAlignedBoundingBox3FArray() {
-		return Floats.toArray(this.distinctAxisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> doToArray(axisAlignedBoundingBox3F), 1);
+		return Floats.toArray(this.distinctAxisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> CompiledBoundingVolume3FCache.toArray(axisAlignedBoundingBox3F), 1);
 	}
 	
 	public float[] toBoundingVolume3FBoundingSphere3FArray() {
-		return Floats.toArray(this.distinctBoundingSphere3Fs, boundingSphere3F -> doToArray(boundingSphere3F), 1);
+		return Floats.toArray(this.distinctBoundingSphere3Fs, boundingSphere3F -> CompiledBoundingVolume3FCache.toArray(boundingSphere3F), 1);
 	}
 	
 	public int findOffsetFor(final BoundingVolume3F boundingVolume3F) {
@@ -127,38 +126,5 @@ final class BoundingVolume3FCache {
 	
 	public static boolean filter(final Node node) {
 		return node instanceof BoundingVolume3F;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static float[] doToArray(final AxisAlignedBoundingBox3F axisAlignedBoundingBox3F) {
-		final Point3F maximum = axisAlignedBoundingBox3F.getMaximum();
-		final Point3F minimum = axisAlignedBoundingBox3F.getMinimum();
-		
-		final float[] array = new float[CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH];
-		
-		array[CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 0] = maximum.getX();
-		array[CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 1] = maximum.getY();
-		array[CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 2] = maximum.getZ();
-		array[CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 0] = minimum.getX();
-		array[CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 1] = minimum.getY();
-		array[CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 2] = minimum.getZ();
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final BoundingSphere3F boundingSphere3F) {
-		final Point3F center = boundingSphere3F.getCenter();
-		
-		final float radius = boundingSphere3F.getRadius();
-		
-		final float[] array = new float[CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH];
-		
-		array[CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 0] = center.getX();
-		array[CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 1] = center.getY();
-		array[CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 2] = center.getZ();
-		array[CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_RADIUS] = radius;
-		
-		return array;
 	}
 }

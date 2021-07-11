@@ -35,7 +35,7 @@ public final class CompiledBoundingVolume3FCache {
 	/**
 	 * The length of a compiled {@link AxisAlignedBoundingBox3F} instance.
 	 */
-	public static final int AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH = 6;
+	public static final int AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH = 8;
 	
 	/**
 	 * The offset for the {@link Point3F} instance that represents the maximum point in a compiled {@link AxisAlignedBoundingBox3F} instance.
@@ -119,5 +119,58 @@ public final class CompiledBoundingVolume3FCache {
 	 */
 	public void setBoundingVolume3FBoundingSphere3FArray(final float[] boundingVolume3FBoundingSphere3FArray) {
 		this.boundingVolume3FBoundingSphere3FArray = Objects.requireNonNull(boundingVolume3FBoundingSphere3FArray, "boundingVolume3FBoundingSphere3FArray == null");
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code float[]} with {@code axisAlignedBoundingBox3F} in compiled form.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBox3F an {@link AxisAlignedBoundingBox3F} instance
+	 * @return a {@code float[]} with {@code axisAlignedBoundingBox3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3F} is {@code null}
+	 */
+	public static float[] toArray(final AxisAlignedBoundingBox3F axisAlignedBoundingBox3F) {
+		final Point3F maximum = axisAlignedBoundingBox3F.getMaximum();
+		final Point3F minimum = axisAlignedBoundingBox3F.getMinimum();
+		
+		final float[] array = new float[AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH];
+		
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 0] = maximum.getX();
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 1] = maximum.getY();
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 2] = maximum.getZ();
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 0] = minimum.getX();
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 1] = minimum.getY();
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 2] = minimum.getZ();
+		array[6] = 0.0F;
+		array[7] = 0.0F;
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code boundingSphere3F} in compiled form.
+	 * <p>
+	 * If {@code boundingSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param boundingSphere3F a {@link BoundingSphere3F} instance
+	 * @return a {@code float[]} with {@code boundingSphere3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3F} is {@code null}
+	 */
+	public static float[] toArray(final BoundingSphere3F boundingSphere3F) {
+		final Point3F center = boundingSphere3F.getCenter();
+		
+		final float radius = boundingSphere3F.getRadius();
+		
+		final float[] array = new float[BOUNDING_SPHERE_3_F_LENGTH];
+		
+		array[BOUNDING_SPHERE_3_F_OFFSET_CENTER + 0] = center.getX();
+		array[BOUNDING_SPHERE_3_F_OFFSET_CENTER + 1] = center.getY();
+		array[BOUNDING_SPHERE_3_F_OFFSET_CENTER + 2] = center.getZ();
+		array[BOUNDING_SPHERE_3_F_OFFSET_RADIUS] = radius;
+		
+		return array;
 	}
 }

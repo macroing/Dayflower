@@ -18,9 +18,12 @@
  */
 package org.dayflower.scene.compiler;
 
+import static org.dayflower.utility.Ints.padding;
+
 import java.util.Objects;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.scene.texture.BlendTexture;
@@ -723,5 +726,277 @@ public final class CompiledTextureCache {
 	 */
 	public void setTextureSimplexFractionalBrownianMotionTextureArray(final float[] textureSimplexFractionalBrownianMotionTextureArray) {
 		this.textureSimplexFractionalBrownianMotionTextureArray = Objects.requireNonNull(textureSimplexFractionalBrownianMotionTextureArray, "textureSimplexFractionalBrownianMotionTextureArray == null");
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code float[]} with {@code blendTexture} in compiled form.
+	 * <p>
+	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param blendTexture a {@link BlendTexture} instance
+	 * @return a {@code float[]} with {@code blendTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code blendTexture} is {@code null}
+	 */
+	public static float[] toArray(final BlendTexture blendTexture) {
+		final Texture textureA = blendTexture.getTextureA();
+		final Texture textureB = blendTexture.getTextureB();
+		
+		final float tComponent1 = blendTexture.getTComponent1();
+		final float tComponent2 = blendTexture.getTComponent2();
+		final float tComponent3 = blendTexture.getTComponent3();
+		
+		final float[] array = new float[BLEND_TEXTURE_LENGTH];
+		
+//		Because the BlendTexture occupy 8/8 positions in a block, it should be aligned.
+		array[BLEND_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();	//Block #1
+		array[BLEND_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();	//Block #1
+		array[BLEND_TEXTURE_OFFSET_T_COMPONENT_1] = tComponent1;	//Block #1
+		array[BLEND_TEXTURE_OFFSET_T_COMPONENT_2] = tComponent2;	//Block #1
+		array[BLEND_TEXTURE_OFFSET_T_COMPONENT_3] = tComponent3;	//Block #1
+		array[5] = 0.0F;											//Block #1
+		array[6] = 0.0F;											//Block #1
+		array[7] = 0.0F;											//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code bullseyeTexture} in compiled form.
+	 * <p>
+	 * If {@code bullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bullseyeTexture a {@link BullseyeTexture} instance
+	 * @return a {@code float[]} with {@code bullseyeTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTexture} is {@code null}
+	 */
+	public static float[] toArray(final BullseyeTexture bullseyeTexture) {
+		final Point3F origin = bullseyeTexture.getOrigin();
+		
+		final Texture textureA = bullseyeTexture.getTextureA();
+		final Texture textureB = bullseyeTexture.getTextureB();
+		
+		final float scale = bullseyeTexture.getScale();
+		
+		final float[] array = new float[BULLSEYE_TEXTURE_LENGTH];
+		
+//		Because the BullseyeTexture occupy 8/8 positions in a block, it should be aligned.
+		array[BULLSEYE_TEXTURE_OFFSET_ORIGIN + 0] = origin.getX();		//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_ORIGIN + 1] = origin.getY();		//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_ORIGIN + 2] = origin.getZ();		//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();	//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();	//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_SCALE] = scale;					//Block #1
+		array[6] = 0.0F;												//Block #1
+		array[7] = 0.0F;												//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code checkerboardTexture} in compiled form.
+	 * <p>
+	 * If {@code checkerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param checkerboardTexture a {@link CheckerboardTexture} instance
+	 * @return a {@code float[]} with {@code checkerboardTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTexture} is {@code null}
+	 */
+	public static float[] toArray(final CheckerboardTexture checkerboardTexture) {
+		final AngleF angle = checkerboardTexture.getAngle();
+		
+		final Texture textureA = checkerboardTexture.getTextureA();
+		final Texture textureB = checkerboardTexture.getTextureB();
+		
+		final Vector2F scale = checkerboardTexture.getScale();
+		
+		final float[] array = new float[CHECKERBOARD_TEXTURE_LENGTH];
+		
+//		Because the CheckerboardTexture occupy 8/8 positions in a block, it should be aligned.
+		array[CHECKERBOARD_TEXTURE_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
+		array[CHECKERBOARD_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
+		array[CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();		//Block #1
+		array[CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();		//Block #1
+		array[CHECKERBOARD_TEXTURE_OFFSET_SCALE + 0] = scale.getX();			//Block #1
+		array[CHECKERBOARD_TEXTURE_OFFSET_SCALE + 1] = scale.getY();			//Block #1
+		array[6] = 0.0F;														//Block #1
+		array[7] = 0.0F;														//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code constantTexture} in compiled form.
+	 * <p>
+	 * If {@code constantTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param constantTexture a {@link ConstantTexture} instance
+	 * @return a {@code float[]} with {@code constantTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code constantTexture} is {@code null}
+	 */
+	public static float[] toArray(final ConstantTexture constantTexture) {
+		final Color3F color = constantTexture.getColor();
+		
+		final float[] array = new float[CONSTANT_TEXTURE_LENGTH];
+		
+//		Because the ConstantTexture occupy 4/8 positions in a block, it should be aligned.
+		array[CONSTANT_TEXTURE_OFFSET_COLOR + 0] = color.getR();
+		array[CONSTANT_TEXTURE_OFFSET_COLOR + 1] = color.getG();
+		array[CONSTANT_TEXTURE_OFFSET_COLOR + 2] = color.getB();
+		array[3] = 0.0F;
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code lDRImageTexture} in compiled form.
+	 * <p>
+	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lDRImageTexture an {@link LDRImageTexture} instance
+	 * @return a {@code float[]} with {@code lDRImageTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
+	 */
+	public static float[] toArray(final LDRImageTexture lDRImageTexture) {
+		final AngleF angle = lDRImageTexture.getAngle();
+		
+		final Vector2F scale = lDRImageTexture.getScale();
+		
+		final int resolutionX = lDRImageTexture.getResolutionX();
+		final int resolutionY = lDRImageTexture.getResolutionY();
+		
+		final int[] image = lDRImageTexture.getImage();
+		
+		final float[] array = new float[getLength(lDRImageTexture)];
+		
+		array[L_D_R_IMAGE_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();
+		array[L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 0] = scale.getU();
+		array[L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 1] = scale.getV();
+		array[L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_X] = resolutionX;
+		array[L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_Y] = resolutionY;
+		
+		for(int i = 0; i < image.length; i++) {
+			array[L_D_R_IMAGE_TEXTURE_OFFSET_IMAGE + i] = image[i];
+		}
+		
+		for(int i = L_D_R_IMAGE_TEXTURE_OFFSET_IMAGE + image.length; i < array.length; i++) {
+			array[i] = 0.0F;
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code marbleTexture} in compiled form.
+	 * <p>
+	 * If {@code marbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param marbleTexture a {@link MarbleTexture} instance
+	 * @return a {@code float[]} with {@code marbleTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code marbleTexture} is {@code null}
+	 */
+	public static float[] toArray(final MarbleTexture marbleTexture) {
+		final Color3F colorA = marbleTexture.getColorA();
+		final Color3F colorB = marbleTexture.getColorB();
+		final Color3F colorC = marbleTexture.getColorC();
+		
+		final float frequency = marbleTexture.getFrequency();
+		final float scale = marbleTexture.getScale();
+		final float stripes = marbleTexture.getStripes();
+		
+		final int octaves = marbleTexture.getOctaves();
+		
+		final float[] array = new float[MARBLE_TEXTURE_LENGTH];
+		
+//		Because the MarbleTexture occupy 8/8 positions in a block, it should be aligned.
+		array[MARBLE_TEXTURE_OFFSET_COLOR_A] = colorA.pack();	//Block #1
+		array[MARBLE_TEXTURE_OFFSET_COLOR_B] = colorB.pack();	//Block #1
+		array[MARBLE_TEXTURE_OFFSET_COLOR_C] = colorC.pack();	//Block #1
+		array[MARBLE_TEXTURE_OFFSET_FREQUENCY] = frequency;		//Block #1
+		array[MARBLE_TEXTURE_OFFSET_SCALE] = scale;				//Block #1
+		array[MARBLE_TEXTURE_OFFSET_STRIPES] = stripes;			//Block #1
+		array[MARBLE_TEXTURE_OFFSET_OCTAVES] = octaves;			//Block #1
+		array[7] = 0.0F;										//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code polkaDotTexture} in compiled form.
+	 * <p>
+	 * If {@code polkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polkaDotTexture a {@link PolkaDotTexture} instance
+	 * @return a {@code float[]} with {@code polkaDotTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTexture} is {@code null}
+	 */
+	public static float[] toArray(final PolkaDotTexture polkaDotTexture) {
+		final AngleF angle = polkaDotTexture.getAngle();
+		
+		final Texture textureA = polkaDotTexture.getTextureA();
+		final Texture textureB = polkaDotTexture.getTextureB();
+		
+		final float cellResolution = polkaDotTexture.getCellResolution();
+		final float polkaDotRadius = polkaDotTexture.getPolkaDotRadius();
+		
+		final float[] array = new float[POLKA_DOT_TEXTURE_LENGTH];
+		
+//		Because the PolkaDotTexture occupy 8/8 positions in a block, it should be aligned.
+		array[POLKA_DOT_TEXTURE_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
+		array[POLKA_DOT_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
+		array[POLKA_DOT_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();		//Block #1
+		array[POLKA_DOT_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();		//Block #1
+		array[POLKA_DOT_TEXTURE_OFFSET_CELL_RESOLUTION] = cellResolution;	//Block #1
+		array[POLKA_DOT_TEXTURE_OFFSET_POLKA_DOT_RADIUS] = polkaDotRadius;	//Block #1
+		array[6] = 0.0F;													//Block #1
+		array[7] = 0.0F;													//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code simplexFractionalBrownianMotionTexture} in compiled form.
+	 * <p>
+	 * If {@code simplexFractionalBrownianMotionTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param simplexFractionalBrownianMotionTexture a {@link SimplexFractionalBrownianMotionTexture} instance
+	 * @return a {@code float[]} with {@code simplexFractionalBrownianMotionTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture} is {@code null}
+	 */
+	public static float[] toArray(final SimplexFractionalBrownianMotionTexture simplexFractionalBrownianMotionTexture) {
+		final Color3F color = simplexFractionalBrownianMotionTexture.getColor();
+		
+		final float frequency = simplexFractionalBrownianMotionTexture.getFrequency();
+		final float gain = simplexFractionalBrownianMotionTexture.getGain();
+		
+		final int octaves = simplexFractionalBrownianMotionTexture.getOctaves();
+		
+		final float[] array = new float[SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH];
+		
+//		Because the SimplexFractionalBrownianMotionTexture occupy 4/8 positions in a block, it should be aligned.
+		array[SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_COLOR] = color.pack();	//Block #1
+		array[SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_FREQUENCY] = frequency;	//Block #1
+		array[SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_GAIN] = gain;			//Block #1
+		array[SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_OFFSET_OCTAVES] = octaves;		//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns the length of {@code lDRImageTexture} in compiled form.
+	 * <p>
+	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lDRImageTexture an {@link LDRImageTexture} instance
+	 * @return the length of {@code lDRImageTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
+	 */
+	public static int getLength(final LDRImageTexture lDRImageTexture) {
+		final int a = 5;
+		final int b = lDRImageTexture.getResolution();
+		final int c = padding(a + b);
+		
+		return a + b + c;
 	}
 }

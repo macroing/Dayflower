@@ -1,7 +1,13 @@
 2021-07-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add support for the Parameter API in the GUI.
+	* ADD:		Add the methods load(File, Scene, ParameterList) and load(String, Scene, ParameterList) to the SceneLoader interface and the JavaSceneLoader class.
+	* ADD:		Add an inner class called Builder to the MatteMaterial class.
+	* ADD:		Add an inner class called Builder to the MirrorMaterial class.
+	* ADD:		Add an inner class called Builder to the PlasticMaterial class.
 	* ADD:		Add support for BullseyeMaterial, CheckerboardMaterial and PolkaDotMaterial in the GUI Scene configuration control.
 	* ADD:		Add support for Rectangle3F in the GUI Scene configuration control.
+	* CHANGE:	Fix a bug in the GlassMaterial.Builder class.
 	* CHANGE:	Change the default origin parameter of the BullseyeMaterial to 0.0, 10.0 and 0.0.
 	* CHANGE:	Change the default origin parameter of the BullseyeTexture to 0.0, 10.0 and 0.0.
 

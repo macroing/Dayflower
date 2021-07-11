@@ -21,6 +21,8 @@ package org.dayflower.scene;
 import java.io.File;
 import java.io.UncheckedIOException;
 
+import org.dayflower.parameter.ParameterList;
+
 /**
  * A {@code SceneLoader} is used to load {@link Scene} instances.
  * 
@@ -59,6 +61,13 @@ public interface SceneLoader {
 	 * If either {@code file} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * sceneLoader.load(file, scene, new ParameterList());
+	 * }
+	 * </pre>
 	 * 
 	 * @param file a {@code File} instance that represents a file
 	 * @param scene the {@code Scene} instance to load into
@@ -67,6 +76,24 @@ public interface SceneLoader {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	Scene load(final File file, final Scene scene);
+	
+	/**
+	 * Loads a {@link Scene} instance from the file represented by {@code file} into {@code scene}.
+	 * <p>
+	 * Returns the loaded {@code Scene} instance, {@code scene}.
+	 * <p>
+	 * If either {@code file}, {@code scene} or {@code parameterList} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} instance that represents a file
+	 * @param scene the {@code Scene} instance to load into
+	 * @param parameterList the {@link ParameterList} that contains parameters
+	 * @return the loaded {@code Scene} instance, {@code scene}
+	 * @throws NullPointerException thrown if, and only if, either {@code file}, {@code scene} or {@code parameterList} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	Scene load(final File file, final Scene scene, final ParameterList parameterList);
 	
 	/**
 	 * Loads a {@link Scene} instance from the file represented by {@code pathname}.
@@ -99,6 +126,13 @@ public interface SceneLoader {
 	 * If either {@code pathname} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * sceneLoader.load(pathname, scene, new ParameterList());
+	 * }
+	 * </pre>
 	 * 
 	 * @param pathname a {@code String} instance that represents a pathname to a file
 	 * @param scene the {@code Scene} instance to load into
@@ -107,4 +141,22 @@ public interface SceneLoader {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	Scene load(final String pathname, final Scene scene);
+	
+	/**
+	 * Loads a {@link Scene} instance from the file represented by {@code pathname} into {@code scene}.
+	 * <p>
+	 * Returns the loaded {@code Scene} instance, {@code scene}.
+	 * <p>
+	 * If either {@code pathname}, {@code scene} or {@code parameterList} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param pathname a {@code String} instance that represents a pathname to a file
+	 * @param scene the {@code Scene} instance to load into
+	 * @param parameterList the {@link ParameterList} that contains parameters
+	 * @return the loaded {@code Scene} instance, {@code scene}
+	 * @throws NullPointerException thrown if, and only if, either {@code pathname}, {@code scene} or {@code parameterList} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	Scene load(final String pathname, final Scene scene, final ParameterList parameterList);
 }

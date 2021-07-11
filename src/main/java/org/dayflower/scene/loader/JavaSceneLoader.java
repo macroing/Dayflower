@@ -44,6 +44,7 @@ import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 
+import org.dayflower.parameter.ParameterList;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
 
@@ -107,6 +108,13 @@ public final class JavaSceneLoader implements SceneLoader {
 	 * If either {@code file} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * javaSceneLoader.load(file, scene, new ParameterList());
+	 * }
+	 * </pre>
 	 * 
 	 * @param file a {@code File} instance that represents a file
 	 * @param scene the {@code Scene} instance to load into
@@ -116,12 +124,34 @@ public final class JavaSceneLoader implements SceneLoader {
 	 */
 	@Override
 	public Scene load(final File file, final Scene scene) {
+		return load(file, scene, new ParameterList());
+	}
+	
+	/**
+	 * Loads a {@link Scene} instance from the file represented by {@code file} into {@code scene}.
+	 * <p>
+	 * Returns the loaded {@code Scene} instance, {@code scene}.
+	 * <p>
+	 * If either {@code file}, {@code scene} or {@code parameterList} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} instance that represents a file
+	 * @param scene the {@code Scene} instance to load into
+	 * @param parameterList the {@link ParameterList} that contains parameters
+	 * @return the loaded {@code Scene} instance, {@code scene}
+	 * @throws NullPointerException thrown if, and only if, either {@code file}, {@code scene} or {@code parameterList} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public Scene load(final File file, final Scene scene, final ParameterList parameterList) {
 		Objects.requireNonNull(file, "file == null");
 		Objects.requireNonNull(scene, "scene == null");
+		Objects.requireNonNull(parameterList, "parameterList == null");
 		
 		final File directory = file.getParentFile() != null ? file.getParentFile() : new File(".");
 		
-		doLoad(doLoadObject(file), directory, scene);
+		doLoad(doLoadObject(file), directory, scene, parameterList);
 		
 		return scene;
 	}
@@ -160,6 +190,13 @@ public final class JavaSceneLoader implements SceneLoader {
 	 * If either {@code pathname} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * javaSceneLoader.load(pathname, scene, new ParameterList());
+	 * }
+	 * </pre>
 	 * 
 	 * @param pathname a {@code String} instance that represents a pathname to a file
 	 * @param scene the {@code Scene} instance to load into
@@ -169,7 +206,28 @@ public final class JavaSceneLoader implements SceneLoader {
 	 */
 	@Override
 	public Scene load(final String pathname, final Scene scene) {
-		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), scene);
+		return load(pathname, scene, new ParameterList());
+	}
+	
+	/**
+	 * Loads a {@link Scene} instance from the file represented by {@code pathname} into {@code scene}.
+	 * <p>
+	 * Returns the loaded {@code Scene} instance, {@code scene}.
+	 * <p>
+	 * If either {@code pathname}, {@code scene} or {@code parameterList} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param pathname a {@code String} instance that represents a pathname to a file
+	 * @param scene the {@code Scene} instance to load into
+	 * @param parameterList the {@link ParameterList} that contains parameters
+	 * @return the loaded {@code Scene} instance, {@code scene}
+	 * @throws NullPointerException thrown if, and only if, either {@code pathname}, {@code scene} or {@code parameterList} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	@Override
+	public Scene load(final String pathname, final Scene scene, final ParameterList parameterList) {
+		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), scene, parameterList);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -311,6 +369,7 @@ public final class JavaSceneLoader implements SceneLoader {
 		doAppendLinef(stringBuilder, "import org.dayflower.geometry.shape.Curve3F.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.geometry.shape.Triangle3F.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.image.*;");
+		doAppendLinef(stringBuilder, "import org.dayflower.parameter.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.scene.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.scene.bssrdf.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.scene.bxdf.*;");
@@ -326,7 +385,7 @@ public final class JavaSceneLoader implements SceneLoader {
 		doAppendLinef(stringBuilder, "		");
 		doAppendLinef(stringBuilder, "	}");
 		doAppendLinef(stringBuilder, "	");
-		doAppendLinef(stringBuilder, "	public Scene load(final File directory, final Scene scene) {");
+		doAppendLinef(stringBuilder, "	public Scene load(final File directory, final Scene scene, final ParameterList parameterList) {");
 		doAppendLinef(stringBuilder, "		try {");
 		doAppendLinef(stringBuilder, "			%s", doFormatSourceCode(sourceCode));
 		doAppendLinef(stringBuilder, "		} catch(final Exception e) {");
@@ -381,14 +440,14 @@ public final class JavaSceneLoader implements SceneLoader {
 		}
 	}
 	
-	private static void doLoad(final Object object, final File directory, final Scene scene) {
+	private static void doLoad(final Object object, final File directory, final Scene scene, final ParameterList parameterList) {
 		if(object != null) {
 			try {
 				final Class<?> clazz = object.getClass();
 				
 				final
-				Method method = clazz.getMethod("load", File.class, Scene.class);
-				method.invoke(object, directory, scene);
+				Method method = clazz.getMethod("load", File.class, Scene.class, ParameterList.class);
+				method.invoke(object, directory, scene, parameterList);
 			} catch(final IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 //				Do nothing for now!
 			}

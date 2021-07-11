@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.dayflower.java.io.Files;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
+import org.dayflower.parameter.ParameterList;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
@@ -258,7 +259,7 @@ public final class DayflowerApplication extends Application {
 	private void doOpen(final File file) {
 		final SceneLoader sceneLoader = new JavaSceneLoader();
 		
-		final Scene scene = sceneLoader.load(file);
+		final Scene scene = sceneLoader.load(file, new Scene(), new ParameterList(new ParameterLoaderImpl(doGetStage())));
 		
 		final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = Renderers.createCombinedProgressiveImageOrderRenderer(scene, this.isUsingGPU.get());
 		

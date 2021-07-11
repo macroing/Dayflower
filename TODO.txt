@@ -1,7 +1,3 @@
-JavaFX Application API:
-
-	* ADD:		Add support for the Parameter API.
-
 Parameter API:
 
 	* ADD:		Add support for different Parameter implementations that contains lists of options.
@@ -27,10 +23,6 @@ Scene Compiler API:
 
 	* ADD:		Add support for updating a CompiledScene instance on-the-fly.
 
-Scene Loader API:
-
-	* ADD:		Add support for the Parameter API.
-
 Scene Light API:
 
 	* ADD:		Add an HDRImageLight class.
@@ -38,10 +30,7 @@ Scene Light API:
 Scene Material API:
 
 	* ADD:		Add a Builder to the HairMaterial class.
-	* ADD:		Add a Builder to the MatteMaterial class.
 	* ADD:		Add a Builder to the MetalMaterial class.
-	* ADD:		Add a Builder to the MirrorMaterial class.
-	* ADD:		Add a Builder to the PlasticMaterial class.
 	* ADD:		Add a Builder to the SubstrateMaterial class.
 	* ADD:		Add a Builder to the UberMaterial class.
 	* FIX:		Fix the HairMaterial class.

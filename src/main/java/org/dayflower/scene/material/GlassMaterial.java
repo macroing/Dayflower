@@ -1011,7 +1011,7 @@ public final class GlassMaterial implements Material {
 		 * @return this {@code Builder} instance
 		 */
 		public Builder setTextureRoughness(final float floatRoughness) {
-			return setTextureRoughnessU(new ConstantTexture(floatRoughness));
+			return setTextureRoughness(new ConstantTexture(floatRoughness));
 		}
 		
 		/**

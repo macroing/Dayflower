@@ -396,4 +396,135 @@ public final class MirrorMaterial implements Material {
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureEmission, this.textureKR);
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * A {@code Builder} is used to build {@link MirrorMaterial} instances.
+	 * <p>
+	 * This class is mutable and not thread-safe.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
+	public static final class Builder {
+		private Modifier modifier;
+		private Texture textureEmission;
+		private Texture textureKR;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Constructs a new {@code Builder} instance.
+		 */
+		public Builder() {
+			this(new MirrorMaterial());
+		}
+		
+		/**
+		 * Constructs a new {@code Builder} instance given {@code mirrorMaterial}.
+		 * <p>
+		 * If {@code mirrorMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param mirrorMaterial a {@link MirrorMaterial} instance
+		 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterial} is {@code null}
+		 */
+		public Builder(final MirrorMaterial mirrorMaterial) {
+			this.modifier = mirrorMaterial.getModifier();
+			this.textureEmission = mirrorMaterial.getTextureEmission();
+			this.textureKR = mirrorMaterial.getTextureKR();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Sets the {@link Modifier} instance.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code modifier} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param modifier the {@code Modifier} instance
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code modifier} is {@code null}
+		 */
+		public Builder setModifier(final Modifier modifier) {
+			this.modifier = Objects.requireNonNull(modifier, "modifier == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorEmission a {@link Color3F} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Color3F colorEmission) {
+			return setTextureEmission(new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureEmission the {@code Texture} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Texture textureEmission) {
+			this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the reflection coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
+		 */
+		public Builder setTextureKR(final Color3F colorKR) {
+			return setTextureKR(new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the reflection coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureKR the {@code Texture} instance for the reflection coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
+		 */
+		public Builder setTextureKR(final Texture textureKR) {
+			this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Returns a new {@link MirrorMaterial} instance.
+		 * 
+		 * @return a new {@code MirrorMaterial} instance
+		 */
+		public MirrorMaterial build() {
+			return new MirrorMaterial(this.textureKR, this.textureEmission, this.modifier);
+		}
+	}
 }

@@ -469,4 +469,166 @@ public final class MatteMaterial implements Material {
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureAngle, this.textureEmission, this.textureKD);
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * A {@code Builder} is used to build {@link MatteMaterial} instances.
+	 * <p>
+	 * This class is mutable and not thread-safe.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
+	public static final class Builder {
+		private Modifier modifier;
+		private Texture textureAngle;
+		private Texture textureEmission;
+		private Texture textureKD;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Constructs a new {@code Builder} instance.
+		 */
+		public Builder() {
+			this(new MatteMaterial());
+		}
+		
+		/**
+		 * Constructs a new {@code Builder} instance given {@code matteMaterial}.
+		 * <p>
+		 * If {@code matteMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param matteMaterial a {@link MatteMaterial} instance
+		 * @throws NullPointerException thrown if, and only if, {@code matteMaterial} is {@code null}
+		 */
+		public Builder(final MatteMaterial matteMaterial) {
+			this.modifier = matteMaterial.getModifier();
+			this.textureAngle = matteMaterial.getTextureAngle();
+			this.textureEmission = matteMaterial.getTextureEmission();
+			this.textureKD = matteMaterial.getTextureKD();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Sets the {@link Modifier} instance.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code modifier} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param modifier the {@code Modifier} instance
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code modifier} is {@code null}
+		 */
+		public Builder setModifier(final Modifier modifier) {
+			this.modifier = Objects.requireNonNull(modifier, "modifier == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the angle.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureAngle} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureAngle the {@code Texture} instance for the angle
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureAngle} is {@code null}
+		 */
+		public Builder setTextureAngle(final Texture textureAngle) {
+			this.textureAngle = Objects.requireNonNull(textureAngle, "textureAngle == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the angle.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatAngle a {@code float} for the angle
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureAngle(final float floatAngle) {
+			return setTextureAngle(new ConstantTexture(floatAngle));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorEmission a {@link Color3F} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Color3F colorEmission) {
+			return setTextureEmission(new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureEmission the {@code Texture} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Texture textureEmission) {
+			this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the diffuse coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
+		 */
+		public Builder setTextureKD(final Color3F colorKD) {
+			return setTextureKD(new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the diffuse coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureKD the {@code Texture} instance for the diffuse coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
+		 */
+		public Builder setTextureKD(final Texture textureKD) {
+			this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Returns a new {@link MatteMaterial} instance.
+		 * 
+		 * @return a new {@code MatteMaterial} instance
+		 */
+		public MatteMaterial build() {
+			return new MatteMaterial(this.textureKD, this.textureEmission, this.textureAngle, this.modifier);
+		}
+	}
 }

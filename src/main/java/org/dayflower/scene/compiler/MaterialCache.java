@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.geometry.AngleF;
-import org.dayflower.geometry.Point3F;
-import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
@@ -116,7 +113,7 @@ final class MaterialCache {
 	}
 	
 	public float[] toMaterialBullseyeMaterialArray() {
-		final float[] materialBullseyeMaterialArray = Floats.toArray(this.distinctBullseyeMaterials, bullseyeMaterial -> doToArray(bullseyeMaterial), 1);
+		final float[] materialBullseyeMaterialArray = Floats.toArray(this.distinctBullseyeMaterials, bullseyeMaterial -> CompiledMaterialCache.toArray(bullseyeMaterial), 1);
 		
 		for(int i = 0; i < this.distinctBullseyeMaterials.size(); i++) {
 			final BullseyeMaterial bullseyeMaterial = this.distinctBullseyeMaterials.get(i);
@@ -135,7 +132,7 @@ final class MaterialCache {
 	}
 	
 	public float[] toMaterialCheckerboardMaterialArray() {
-		final float[] materialCheckerboardMaterialArray = Floats.toArray(this.distinctCheckerboardMaterials, checkerboardMaterial -> doToArray(checkerboardMaterial), 1);
+		final float[] materialCheckerboardMaterialArray = Floats.toArray(this.distinctCheckerboardMaterials, checkerboardMaterial -> CompiledMaterialCache.toArray(checkerboardMaterial), 1);
 		
 		for(int i = 0; i < this.distinctCheckerboardMaterials.size(); i++) {
 			final CheckerboardMaterial checkerboardMaterial = this.distinctCheckerboardMaterials.get(i);
@@ -154,7 +151,7 @@ final class MaterialCache {
 	}
 	
 	public float[] toMaterialPolkaDotMaterialArray() {
-		final float[] materialPolkaDotMaterialArray = Floats.toArray(this.distinctPolkaDotMaterials, polkaDotMaterial -> doToArray(polkaDotMaterial), 1);
+		final float[] materialPolkaDotMaterialArray = Floats.toArray(this.distinctPolkaDotMaterials, polkaDotMaterial -> CompiledMaterialCache.toArray(polkaDotMaterial), 1);
 		
 		for(int i = 0; i < this.distinctPolkaDotMaterials.size(); i++) {
 			final PolkaDotMaterial polkaDotMaterial = this.distinctPolkaDotMaterials.get(i);
@@ -207,7 +204,7 @@ final class MaterialCache {
 	public int[] toMaterialClearCoatMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialClearCoatMaterialArray = Ints.toArray(this.distinctClearCoatMaterials, clearCoatMaterial -> doToArray(clearCoatMaterial), 1);
+		final int[] materialClearCoatMaterialArray = Ints.toArray(this.distinctClearCoatMaterials, clearCoatMaterial -> CompiledMaterialCache.toArray(clearCoatMaterial), 1);
 		
 		for(int i = 0; i < this.distinctClearCoatMaterials.size(); i++) {
 			final ClearCoatMaterial clearCoatMaterial = this.distinctClearCoatMaterials.get(i);
@@ -229,7 +226,7 @@ final class MaterialCache {
 	public int[] toMaterialDisneyMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialDisneyMaterialArray = Ints.toArray(this.distinctDisneyMaterials, disneyMaterial -> doToArray(disneyMaterial), 1);
+		final int[] materialDisneyMaterialArray = Ints.toArray(this.distinctDisneyMaterials, disneyMaterial -> CompiledMaterialCache.toArray(disneyMaterial), 1);
 		
 		for(int i = 0; i < this.distinctDisneyMaterials.size(); i++) {
 			final DisneyMaterial disneyMaterial = this.distinctDisneyMaterials.get(i);
@@ -277,7 +274,7 @@ final class MaterialCache {
 	public int[] toMaterialGlassMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialGlassMaterialArray = Ints.toArray(this.distinctGlassMaterials, glassMaterial -> doToArray(glassMaterial), 1);
+		final int[] materialGlassMaterialArray = Ints.toArray(this.distinctGlassMaterials, glassMaterial -> CompiledMaterialCache.toArray(glassMaterial), 1);
 		
 		for(int i = 0; i < this.distinctGlassMaterials.size(); i++) {
 			final GlassMaterial glassMaterial = this.distinctGlassMaterials.get(i);
@@ -304,7 +301,7 @@ final class MaterialCache {
 	public int[] toMaterialGlossyMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialGlossyMaterialArray = Ints.toArray(this.distinctGlossyMaterials, glossyMaterial -> doToArray(glossyMaterial), 1);
+		final int[] materialGlossyMaterialArray = Ints.toArray(this.distinctGlossyMaterials, glossyMaterial -> CompiledMaterialCache.toArray(glossyMaterial), 1);
 		
 		for(int i = 0; i < this.distinctGlossyMaterials.size(); i++) {
 			final GlossyMaterial glossyMaterial = this.distinctGlossyMaterials.get(i);
@@ -326,7 +323,7 @@ final class MaterialCache {
 	public int[] toMaterialMatteMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialMatteMaterialArray = Ints.toArray(this.distinctMatteMaterials, matteMaterial -> doToArray(matteMaterial), 1);
+		final int[] materialMatteMaterialArray = Ints.toArray(this.distinctMatteMaterials, matteMaterial -> CompiledMaterialCache.toArray(matteMaterial), 1);
 		
 		for(int i = 0; i < this.distinctMatteMaterials.size(); i++) {
 			final MatteMaterial matteMaterial = this.distinctMatteMaterials.get(i);
@@ -348,7 +345,7 @@ final class MaterialCache {
 	public int[] toMaterialMetalMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialMetalMaterialArray = Ints.toArray(this.distinctMetalMaterials, metalMaterial -> doToArray(metalMaterial), 1);
+		final int[] materialMetalMaterialArray = Ints.toArray(this.distinctMetalMaterials, metalMaterial -> CompiledMaterialCache.toArray(metalMaterial), 1);
 		
 		for(int i = 0; i < this.distinctMetalMaterials.size(); i++) {
 			final MetalMaterial metalMaterial = this.distinctMetalMaterials.get(i);
@@ -374,7 +371,7 @@ final class MaterialCache {
 	public int[] toMaterialMirrorMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialMirrorMaterialArray = Ints.toArray(this.distinctMirrorMaterials, mirrorMaterial -> doToArray(mirrorMaterial), 1);
+		final int[] materialMirrorMaterialArray = Ints.toArray(this.distinctMirrorMaterials, mirrorMaterial -> CompiledMaterialCache.toArray(mirrorMaterial), 1);
 		
 		for(int i = 0; i < this.distinctMirrorMaterials.size(); i++) {
 			final MirrorMaterial mirrorMaterial = this.distinctMirrorMaterials.get(i);
@@ -393,7 +390,7 @@ final class MaterialCache {
 	public int[] toMaterialPlasticMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialPlasticMaterialArray = Ints.toArray(this.distinctPlasticMaterials, plasticMaterial -> doToArray(plasticMaterial), 1);
+		final int[] materialPlasticMaterialArray = Ints.toArray(this.distinctPlasticMaterials, plasticMaterial -> CompiledMaterialCache.toArray(plasticMaterial), 1);
 		
 		for(int i = 0; i < this.distinctPlasticMaterials.size(); i++) {
 			final PlasticMaterial plasticMaterial = this.distinctPlasticMaterials.get(i);
@@ -418,7 +415,7 @@ final class MaterialCache {
 	public int[] toMaterialSubstrateMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialSubstrateMaterialArray = Ints.toArray(this.distinctSubstrateMaterials, substrateMaterial -> doToArray(substrateMaterial), 1);
+		final int[] materialSubstrateMaterialArray = Ints.toArray(this.distinctSubstrateMaterials, substrateMaterial -> CompiledMaterialCache.toArray(substrateMaterial), 1);
 		
 		for(int i = 0; i < this.distinctSubstrateMaterials.size(); i++) {
 			final SubstrateMaterial substrateMaterial = this.distinctSubstrateMaterials.get(i);
@@ -588,245 +585,5 @@ final class MaterialCache {
 	
 	public static boolean filter(final Node node) {
 		return node instanceof Material;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static float[] doToArray(final BullseyeMaterial bullseyeMaterial) {
-		final Material materialA = bullseyeMaterial.getMaterialA();
-		final Material materialB = bullseyeMaterial.getMaterialB();
-		
-		final Point3F origin = bullseyeMaterial.getOrigin();
-		
-		final float scale = bullseyeMaterial.getScale();
-		
-		final float[] array = new float[CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH];
-		
-//		Because the BullseyeMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 0] = origin.getX();		//Block #1
-		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 1] = origin.getY();		//Block #1
-		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_ORIGIN + 2] = origin.getZ();		//Block #1
-		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();	//Block #1
-		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();	//Block #1
-		array[CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_SCALE] = scale;					//Block #1
-		array[6] = 0.0F;																		//Block #1
-		array[7] = 0.0F;																		//Block #1
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final CheckerboardMaterial checkerboardMaterial) {
-		final AngleF angle = checkerboardMaterial.getAngle();
-		
-		final Material materialA = checkerboardMaterial.getMaterialA();
-		final Material materialB = checkerboardMaterial.getMaterialB();
-		
-		final Vector2F scale = checkerboardMaterial.getScale();
-		
-		final float[] array = new float[CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH];
-		
-//		Because the CheckerboardMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
-		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
-		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();		//Block #1
-		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();		//Block #1
-		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_SCALE + 0] = scale.getX();				//Block #1
-		array[CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_SCALE + 1] = scale.getY();				//Block #1
-		array[6] = 0.0F;																				//Block #1
-		array[7] = 0.0F;																				//Block #1
-		
-		return array;
-	}
-	
-	private static float[] doToArray(final PolkaDotMaterial polkaDotMaterial) {
-		final AngleF angle = polkaDotMaterial.getAngle();
-		
-		final Material materialA = polkaDotMaterial.getMaterialA();
-		final Material materialB = polkaDotMaterial.getMaterialB();
-		
-		final float cellResolution = polkaDotMaterial.getCellResolution();
-		final float polkaDotRadius = polkaDotMaterial.getPolkaDotRadius();
-		
-		final float[] array = new float[CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH];
-		
-//		Because the PolkaDotMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
-		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
-		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();		//Block #1
-		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();		//Block #1
-		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_CELL_RESOLUTION] = cellResolution;	//Block #1
-		array[CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_POLKA_DOT_RADIUS] = polkaDotRadius;	//Block #1
-		array[6] = 0.0F;																			//Block #1
-		array[7] = 0.0F;																			//Block #1
-		
-		return array;
-	}
-	
-	private static int[] doToArray(final ClearCoatMaterial clearCoatMaterial) {
-		final Texture textureEmission = clearCoatMaterial.getTextureEmission();
-		final Texture textureKD = clearCoatMaterial.getTextureKD();
-		final Texture textureKS = clearCoatMaterial.getTextureKS();
-		
-		final int[] array = new int[CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH];
-		
-//		Because the ClearCoatMaterial occupy 2/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);									//Block #1
-		array[CompiledMaterialCache.CLEAR_COAT_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(textureKD.getID(), 0, textureKS.getID(), 0);	//Block #1
-		
-		return array;
-	}
-	
-	private static int[] doToArray(final DisneyMaterial disneyMaterial) {
-		final Texture textureEmission = disneyMaterial.getTextureEmission();
-		final Texture textureAnisotropic = disneyMaterial.getTextureAnisotropic();
-		final Texture textureClearCoat = disneyMaterial.getTextureClearCoat();
-		final Texture textureClearCoatGloss = disneyMaterial.getTextureClearCoatGloss();
-		final Texture textureColor = disneyMaterial.getTextureColor();
-		final Texture textureDiffuseTransmission = disneyMaterial.getTextureDiffuseTransmission();
-		final Texture textureEta = disneyMaterial.getTextureEta();
-		final Texture textureFlatness = disneyMaterial.getTextureFlatness();
-		final Texture textureMetallic = disneyMaterial.getTextureMetallic();
-		final Texture textureRoughness = disneyMaterial.getTextureRoughness();
-		final Texture textureScatterDistance = disneyMaterial.getTextureScatterDistance();
-		final Texture textureSheen = disneyMaterial.getTextureSheen();
-		final Texture textureSheenTint = disneyMaterial.getTextureSheenTint();
-		final Texture textureSpecularTint = disneyMaterial.getTextureSpecularTint();
-		final Texture textureSpecularTransmission = disneyMaterial.getTextureSpecularTransmission();
-		
-		final boolean isThin = disneyMaterial.isThin();
-		
-		final int[] array = new int[CompiledMaterialCache.DISNEY_MATERIAL_LENGTH];
-		
-//		Because the DisneyMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC] = pack(textureEmission.getID(), 0, textureAnisotropic.getID(), 0);				//Block #1
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS] = pack(textureClearCoat.getID(), 0, textureClearCoatGloss.getID(), 0);	//Block #1
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION] = pack(textureColor.getID(), 0, textureDiffuseTransmission.getID(), 0);	//Block #1
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS] = pack(textureEta.getID(), 0, textureFlatness.getID(), 0);								//Block #1
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS] = pack(textureMetallic.getID(), 0, textureRoughness.getID(), 0);					//Block #1
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN] = pack(textureScatterDistance.getID(), 0, textureSheen.getID(), 0);			//Block #1
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT] = pack(textureSheenTint.getID(), 0, textureSpecularTint.getID(), 0);		//Block #1
-		array[CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN] = pack(textureSpecularTransmission.getID(), 0, isThin ? 1 : 0, 0);			//Block #1
-		
-		return array;
-	}
-	
-	private static int[] doToArray(final GlassMaterial glassMaterial) {
-		final Texture textureEmission = glassMaterial.getTextureEmission();
-		final Texture textureEta = glassMaterial.getTextureEta();
-		final Texture textureKR = glassMaterial.getTextureKR();
-		final Texture textureKT = glassMaterial.getTextureKT();
-		final Texture textureRoughnessU = glassMaterial.getTextureRoughnessU();
-		final Texture textureRoughnessV = glassMaterial.getTextureRoughnessV();
-		
-		final boolean isRemappingRoughness = glassMaterial.isRemappingRoughness();
-		
-		final int[] array = new int[CompiledMaterialCache.GLASS_MATERIAL_LENGTH];
-		
-//		Because the GlassMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.GLASS_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA] = pack(textureEmission.getID(), 0, textureEta.getID(), 0);						//Block #1
-		array[CompiledMaterialCache.GLASS_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T] = pack(textureKR.getID(), 0, textureKT.getID(), 0);									//Block #1
-		array[CompiledMaterialCache.GLASS_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(textureRoughnessU.getID(), 0, textureRoughnessV.getID(), 0);	//Block #1
-		array[CompiledMaterialCache.GLASS_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;															//Block #1
-		
-		return array;
-	}
-	
-	private static int[] doToArray(final GlossyMaterial glossyMaterial) {
-		final Texture textureEmission = glossyMaterial.getTextureEmission();
-		final Texture textureKR = glossyMaterial.getTextureKR();
-		final Texture textureRoughness = glossyMaterial.getTextureRoughness();
-		
-		final int[] array = new int[CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH];
-		
-//		Because the GlossyMaterial occupy 2/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);											//Block #1
-		array[CompiledMaterialCache.GLOSSY_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_ROUGHNESS] = pack(textureKR.getID(), 0, textureRoughness.getID(), 0);//Block #1
-		
-		return array;
-	}
-	
-	private static int[] doToArray(final MatteMaterial matteMaterial) {
-		final Texture textureEmission = matteMaterial.getTextureEmission();
-		final Texture textureAngle = matteMaterial.getTextureAngle();
-		final Texture textureKD = matteMaterial.getTextureKD();
-		
-		final int[] array = new int[CompiledMaterialCache.MATTE_MATERIAL_LENGTH];
-		
-//		Because the MatteMaterial occupy 2/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);									//Block #1
-		array[CompiledMaterialCache.MATTE_MATERIAL_OFFSET_TEXTURE_ANGLE_AND_TEXTURE_K_D] = pack(textureAngle.getID(), 0, textureKD.getID(), 0);	//Block #1
-		
-		return array;
-	}
-	
-	private static int[] doToArray(final MetalMaterial metalMaterial) {
-		final Texture textureEmission = metalMaterial.getTextureEmission();
-		final Texture textureEta = metalMaterial.getTextureEta();
-		final Texture textureK = metalMaterial.getTextureK();
-		final Texture textureRoughnessU = metalMaterial.getTextureRoughnessU();
-		final Texture textureRoughnessV = metalMaterial.getTextureRoughnessV();
-		
-		final boolean isRemappingRoughness = metalMaterial.isRemappingRoughness();
-		
-		final int[] array = new int[CompiledMaterialCache.METAL_MATERIAL_LENGTH];
-		
-//		Because the MetalMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);																//Block #1
-		array[CompiledMaterialCache.METAL_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_K] = pack(textureEta.getID(), 0, textureK.getID(), 0);									//Block #1
-		array[CompiledMaterialCache.METAL_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(textureRoughnessU.getID(), 0, textureRoughnessV.getID(), 0);	//Block #1
-		array[CompiledMaterialCache.METAL_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;															//Block #1
-		
-		return array;
-	}
-	
-	private static int[] doToArray(final MirrorMaterial mirrorMaterial) {
-		final Texture textureEmission = mirrorMaterial.getTextureEmission();
-		final Texture textureKR = mirrorMaterial.getTextureKR();
-		
-		final int[] array = new int[CompiledMaterialCache.MIRROR_MATERIAL_LENGTH];
-		
-//		Because the MirrorMaterial occupy 1/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.MIRROR_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_K_R] = pack(textureEmission.getID(), 0, textureKR.getID(), 0);//Block #1
-		
-		return array;
-	}
-	
-	private static int[] doToArray(final PlasticMaterial plasticMaterial) {
-		final Texture textureEmission = plasticMaterial.getTextureEmission();
-		final Texture textureKD = plasticMaterial.getTextureKD();
-		final Texture textureKS = plasticMaterial.getTextureKS();
-		final Texture textureRoughness = plasticMaterial.getTextureRoughness();
-		
-		final boolean isRemappingRoughness = plasticMaterial.isRemappingRoughness();
-		
-		final int[] array = new int[CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH];
-		
-//		Because the PlasticMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);								//Block #1
-		array[CompiledMaterialCache.PLASTIC_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(textureKD.getID(), 0, textureKS.getID(), 0);//Block #1
-		array[CompiledMaterialCache.PLASTIC_MATERIAL_OFFSET_TEXTURE_ROUGHNESS] = pack(textureRoughness.getID(), 0, 0, 0);					//Block #1
-		array[CompiledMaterialCache.PLASTIC_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;							//Block #1
-		
-		return array;
-	}
-	
-	private static int[] doToArray(final SubstrateMaterial substrateMaterial) {
-		final Texture textureEmission = substrateMaterial.getTextureEmission();
-		final Texture textureKD = substrateMaterial.getTextureKD();
-		final Texture textureKS = substrateMaterial.getTextureKS();
-		final Texture textureRoughnessU = substrateMaterial.getTextureRoughnessU();
-		final Texture textureRoughnessV = substrateMaterial.getTextureRoughnessV();
-		
-		final boolean isRemappingRoughness = substrateMaterial.isRemappingRoughness();
-		
-		final int[] array = new int[CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH];
-		
-//		Because the SubstrateMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);																	//Block #1
-		array[CompiledMaterialCache.SUBSTRATE_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(textureKD.getID(), 0, textureKS.getID(), 0);									//Block #1
-		array[CompiledMaterialCache.SUBSTRATE_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(textureRoughnessU.getID(), 0, textureRoughnessV.getID(), 0);	//Block #1
-		array[CompiledMaterialCache.SUBSTRATE_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;															//Block #1
-		
-		return array;
 	}
 }

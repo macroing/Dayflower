@@ -18,8 +18,11 @@
  */
 package org.dayflower.scene.compiler;
 
+import static org.dayflower.utility.Ints.pack;
+
 import java.util.Objects;
 
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.scene.Material;
@@ -1016,5 +1019,353 @@ public final class CompiledMaterialCache {
 	 */
 	public void setMaterialSubstrateMaterialArray(final int[] materialSubstrateMaterialArray) {
 		this.materialSubstrateMaterialArray = Objects.requireNonNull(materialSubstrateMaterialArray, "materialSubstrateMaterialArray == null");
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code float[]} with {@code bullseyeMaterial} in compiled form.
+	 * <p>
+	 * If {@code bullseyeMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bullseyeMaterial a {@link BullseyeMaterial} instance
+	 * @return a {@code float[]} with {@code bullseyeMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
+	 */
+	public static float[] toArray(final BullseyeMaterial bullseyeMaterial) {
+		final Material materialA = bullseyeMaterial.getMaterialA();
+		final Material materialB = bullseyeMaterial.getMaterialB();
+		
+		final Point3F origin = bullseyeMaterial.getOrigin();
+		
+		final float scale = bullseyeMaterial.getScale();
+		
+		final float[] array = new float[BULLSEYE_MATERIAL_LENGTH];
+		
+//		Because the BullseyeMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 0] = origin.getX();		//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 1] = origin.getY();		//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 2] = origin.getZ();		//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();	//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();	//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_SCALE] = scale;					//Block #1
+		array[6] = 0.0F;												//Block #1
+		array[7] = 0.0F;												//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code checkerboardMaterial} in compiled form.
+	 * <p>
+	 * If {@code checkerboardMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param checkerboardMaterial a {@link CheckerboardMaterial} instance
+	 * @return a {@code float[]} with {@code checkerboardMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
+	 */
+	public static float[] toArray(final CheckerboardMaterial checkerboardMaterial) {
+		final AngleF angle = checkerboardMaterial.getAngle();
+		
+		final Material materialA = checkerboardMaterial.getMaterialA();
+		final Material materialB = checkerboardMaterial.getMaterialB();
+		
+		final Vector2F scale = checkerboardMaterial.getScale();
+		
+		final float[] array = new float[CHECKERBOARD_MATERIAL_LENGTH];
+		
+//		Because the CheckerboardMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[CHECKERBOARD_MATERIAL_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
+		array[CHECKERBOARD_MATERIAL_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
+		array[CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();		//Block #1
+		array[CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();		//Block #1
+		array[CHECKERBOARD_MATERIAL_OFFSET_SCALE + 0] = scale.getX();			//Block #1
+		array[CHECKERBOARD_MATERIAL_OFFSET_SCALE + 1] = scale.getY();			//Block #1
+		array[6] = 0.0F;														//Block #1
+		array[7] = 0.0F;														//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code polkaDotMaterial} in compiled form.
+	 * <p>
+	 * If {@code polkaDotMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polkaDotMaterial a {@link PolkaDotMaterial} instance
+	 * @return a {@code float[]} with {@code polkaDotMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterial} is {@code null}
+	 */
+	public static float[] toArray(final PolkaDotMaterial polkaDotMaterial) {
+		final AngleF angle = polkaDotMaterial.getAngle();
+		
+		final Material materialA = polkaDotMaterial.getMaterialA();
+		final Material materialB = polkaDotMaterial.getMaterialB();
+		
+		final float cellResolution = polkaDotMaterial.getCellResolution();
+		final float polkaDotRadius = polkaDotMaterial.getPolkaDotRadius();
+		
+		final float[] array = new float[POLKA_DOT_MATERIAL_LENGTH];
+		
+//		Because the PolkaDotMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[POLKA_DOT_MATERIAL_OFFSET_ANGLE_DEGREES] = angle.getDegrees();//Block #1
+		array[POLKA_DOT_MATERIAL_OFFSET_ANGLE_RADIANS] = angle.getRadians();//Block #1
+		array[POLKA_DOT_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();	//Block #1
+		array[POLKA_DOT_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();	//Block #1
+		array[POLKA_DOT_MATERIAL_OFFSET_CELL_RESOLUTION] = cellResolution;	//Block #1
+		array[POLKA_DOT_MATERIAL_OFFSET_POLKA_DOT_RADIUS] = polkaDotRadius;	//Block #1
+		array[6] = 0.0F;													//Block #1
+		array[7] = 0.0F;													//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code clearCoatMaterial} in compiled form.
+	 * <p>
+	 * If {@code clearCoatMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param clearCoatMaterial a {@link ClearCoatMaterial} instance
+	 * @return an {@code int[]} with {@code clearCoatMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterial} is {@code null}
+	 */
+	public static int[] toArray(final ClearCoatMaterial clearCoatMaterial) {
+		final Texture textureEmission = clearCoatMaterial.getTextureEmission();
+		final Texture textureKD = clearCoatMaterial.getTextureKD();
+		final Texture textureKS = clearCoatMaterial.getTextureKS();
+		
+		final int[] array = new int[CLEAR_COAT_MATERIAL_LENGTH];
+		
+//		Because the ClearCoatMaterial occupy 2/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);									//Block #1
+		array[CLEAR_COAT_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(textureKD.getID(), 0, textureKS.getID(), 0);	//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code disneyMaterial} in compiled form.
+	 * <p>
+	 * If {@code disneyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param disneyMaterial a {@link DisneyMaterial} instance
+	 * @return an {@code int[]} with {@code disneyMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterial} is {@code null}
+	 */
+	public static int[] toArray(final DisneyMaterial disneyMaterial) {
+		final Texture textureEmission = disneyMaterial.getTextureEmission();
+		final Texture textureAnisotropic = disneyMaterial.getTextureAnisotropic();
+		final Texture textureClearCoat = disneyMaterial.getTextureClearCoat();
+		final Texture textureClearCoatGloss = disneyMaterial.getTextureClearCoatGloss();
+		final Texture textureColor = disneyMaterial.getTextureColor();
+		final Texture textureDiffuseTransmission = disneyMaterial.getTextureDiffuseTransmission();
+		final Texture textureEta = disneyMaterial.getTextureEta();
+		final Texture textureFlatness = disneyMaterial.getTextureFlatness();
+		final Texture textureMetallic = disneyMaterial.getTextureMetallic();
+		final Texture textureRoughness = disneyMaterial.getTextureRoughness();
+		final Texture textureScatterDistance = disneyMaterial.getTextureScatterDistance();
+		final Texture textureSheen = disneyMaterial.getTextureSheen();
+		final Texture textureSheenTint = disneyMaterial.getTextureSheenTint();
+		final Texture textureSpecularTint = disneyMaterial.getTextureSpecularTint();
+		final Texture textureSpecularTransmission = disneyMaterial.getTextureSpecularTransmission();
+		
+		final boolean isThin = disneyMaterial.isThin();
+		
+		final int[] array = new int[DISNEY_MATERIAL_LENGTH];
+		
+//		Because the DisneyMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[DISNEY_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC] = pack(textureEmission.getID(), 0, textureAnisotropic.getID(), 0);			//Block #1
+		array[DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS] = pack(textureClearCoat.getID(), 0, textureClearCoatGloss.getID(), 0);//Block #1
+		array[DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION] = pack(textureColor.getID(), 0, textureDiffuseTransmission.getID(), 0);//Block #1
+		array[DISNEY_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS] = pack(textureEta.getID(), 0, textureFlatness.getID(), 0);							//Block #1
+		array[DISNEY_MATERIAL_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS] = pack(textureMetallic.getID(), 0, textureRoughness.getID(), 0);				//Block #1
+		array[DISNEY_MATERIAL_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN] = pack(textureScatterDistance.getID(), 0, textureSheen.getID(), 0);		//Block #1
+		array[DISNEY_MATERIAL_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT] = pack(textureSheenTint.getID(), 0, textureSpecularTint.getID(), 0);		//Block #1
+		array[DISNEY_MATERIAL_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN] = pack(textureSpecularTransmission.getID(), 0, isThin ? 1 : 0, 0);			//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code glassMaterial} in compiled form.
+	 * <p>
+	 * If {@code glassMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param glassMaterial a {@link GlassMaterial} instance
+	 * @return an {@code int[]} with {@code glassMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code glassMaterial} is {@code null}
+	 */
+	public static int[] toArray(final GlassMaterial glassMaterial) {
+		final Texture textureEmission = glassMaterial.getTextureEmission();
+		final Texture textureEta = glassMaterial.getTextureEta();
+		final Texture textureKR = glassMaterial.getTextureKR();
+		final Texture textureKT = glassMaterial.getTextureKT();
+		final Texture textureRoughnessU = glassMaterial.getTextureRoughnessU();
+		final Texture textureRoughnessV = glassMaterial.getTextureRoughnessV();
+		
+		final boolean isRemappingRoughness = glassMaterial.isRemappingRoughness();
+		
+		final int[] array = new int[GLASS_MATERIAL_LENGTH];
+		
+//		Because the GlassMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[GLASS_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA] = pack(textureEmission.getID(), 0, textureEta.getID(), 0);					//Block #1
+		array[GLASS_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T] = pack(textureKR.getID(), 0, textureKT.getID(), 0);								//Block #1
+		array[GLASS_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(textureRoughnessU.getID(), 0, textureRoughnessV.getID(), 0);//Block #1
+		array[GLASS_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;															//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code glossyMaterial} in compiled form.
+	 * <p>
+	 * If {@code glossyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param glossyMaterial a {@link GlossyMaterial} instance
+	 * @return an {@code int[]} with {@code glossyMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterial} is {@code null}
+	 */
+	public static int[] toArray(final GlossyMaterial glossyMaterial) {
+		final Texture textureEmission = glossyMaterial.getTextureEmission();
+		final Texture textureKR = glossyMaterial.getTextureKR();
+		final Texture textureRoughness = glossyMaterial.getTextureRoughness();
+		
+		final int[] array = new int[GLOSSY_MATERIAL_LENGTH];
+		
+//		Because the GlossyMaterial occupy 2/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);											//Block #1
+		array[GLOSSY_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_ROUGHNESS] = pack(textureKR.getID(), 0, textureRoughness.getID(), 0);	//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code matteMaterial} in compiled form.
+	 * <p>
+	 * If {@code matteMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param matteMaterial a {@link MatteMaterial} instance
+	 * @return an {@code int[]} with {@code matteMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code matteMaterial} is {@code null}
+	 */
+	public static int[] toArray(final MatteMaterial matteMaterial) {
+		final Texture textureEmission = matteMaterial.getTextureEmission();
+		final Texture textureAngle = matteMaterial.getTextureAngle();
+		final Texture textureKD = matteMaterial.getTextureKD();
+		
+		final int[] array = new int[MATTE_MATERIAL_LENGTH];
+		
+//		Because the MatteMaterial occupy 2/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);									//Block #1
+		array[MATTE_MATERIAL_OFFSET_TEXTURE_ANGLE_AND_TEXTURE_K_D] = pack(textureAngle.getID(), 0, textureKD.getID(), 0);	//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code metalMaterial} in compiled form.
+	 * <p>
+	 * If {@code metalMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param metalMaterial a {@link MetalMaterial} instance
+	 * @return an {@code int[]} with {@code metalMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code metalMaterial} is {@code null}
+	 */
+	public static int[] toArray(final MetalMaterial metalMaterial) {
+		final Texture textureEmission = metalMaterial.getTextureEmission();
+		final Texture textureEta = metalMaterial.getTextureEta();
+		final Texture textureK = metalMaterial.getTextureK();
+		final Texture textureRoughnessU = metalMaterial.getTextureRoughnessU();
+		final Texture textureRoughnessV = metalMaterial.getTextureRoughnessV();
+		
+		final boolean isRemappingRoughness = metalMaterial.isRemappingRoughness();
+		
+		final int[] array = new int[METAL_MATERIAL_LENGTH];
+		
+//		Because the MetalMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);															//Block #1
+		array[METAL_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_K] = pack(textureEta.getID(), 0, textureK.getID(), 0);									//Block #1
+		array[METAL_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(textureRoughnessU.getID(), 0, textureRoughnessV.getID(), 0);//Block #1
+		array[METAL_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;															//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code mirrorMaterial} in compiled form.
+	 * <p>
+	 * If {@code mirrorMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mirrorMaterial a {@link MirrorMaterial} instance
+	 * @return an {@code int[]} with {@code mirrorMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterial} is {@code null}
+	 */
+	public static int[] toArray(final MirrorMaterial mirrorMaterial) {
+		final Texture textureEmission = mirrorMaterial.getTextureEmission();
+		final Texture textureKR = mirrorMaterial.getTextureKR();
+		
+		final int[] array = new int[MIRROR_MATERIAL_LENGTH];
+		
+//		Because the MirrorMaterial occupy 1/8 positions in a block, it should be aligned.
+		array[MIRROR_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_K_R] = pack(textureEmission.getID(), 0, textureKR.getID(), 0);//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code plasticMaterial} in compiled form.
+	 * <p>
+	 * If {@code plasticMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param plasticMaterial a {@link PlasticMaterial} instance
+	 * @return an {@code int[]} with {@code plasticMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterial} is {@code null}
+	 */
+	public static int[] toArray(final PlasticMaterial plasticMaterial) {
+		final Texture textureEmission = plasticMaterial.getTextureEmission();
+		final Texture textureKD = plasticMaterial.getTextureKD();
+		final Texture textureKS = plasticMaterial.getTextureKS();
+		final Texture textureRoughness = plasticMaterial.getTextureRoughness();
+		
+		final boolean isRemappingRoughness = plasticMaterial.isRemappingRoughness();
+		
+		final int[] array = new int[PLASTIC_MATERIAL_LENGTH];
+		
+//		Because the PlasticMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);								//Block #1
+		array[PLASTIC_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(textureKD.getID(), 0, textureKS.getID(), 0);	//Block #1
+		array[PLASTIC_MATERIAL_OFFSET_TEXTURE_ROUGHNESS] = pack(textureRoughness.getID(), 0, 0, 0);						//Block #1
+		array[PLASTIC_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;							//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code substrateMaterial} in compiled form.
+	 * <p>
+	 * If {@code substrateMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param substrateMaterial a {@link SubstrateMaterial} instance
+	 * @return an {@code int[]} with {@code substrateMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterial} is {@code null}
+	 */
+	public static int[] toArray(final SubstrateMaterial substrateMaterial) {
+		final Texture textureEmission = substrateMaterial.getTextureEmission();
+		final Texture textureKD = substrateMaterial.getTextureKD();
+		final Texture textureKS = substrateMaterial.getTextureKS();
+		final Texture textureRoughnessU = substrateMaterial.getTextureRoughnessU();
+		final Texture textureRoughnessV = substrateMaterial.getTextureRoughnessV();
+		
+		final boolean isRemappingRoughness = substrateMaterial.isRemappingRoughness();
+		
+		final int[] array = new int[SUBSTRATE_MATERIAL_LENGTH];
+		
+//		Because the SubstrateMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = pack(textureEmission.getID(), 0, 0, 0);																//Block #1
+		array[SUBSTRATE_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(textureKD.getID(), 0, textureKS.getID(), 0);								//Block #1
+		array[SUBSTRATE_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(textureRoughnessU.getID(), 0, textureRoughnessV.getID(), 0);//Block #1
+		array[SUBSTRATE_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;															//Block #1
+		
+		return array;
 	}
 }

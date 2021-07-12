@@ -32,7 +32,6 @@ import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Scene;
-import org.dayflower.utility.Floats;
 
 final class BoundingVolume3FCache {
 	private final List<AxisAlignedBoundingBox3F> distinctAxisAlignedBoundingBox3Fs;
@@ -62,11 +61,11 @@ final class BoundingVolume3FCache {
 	}
 	
 	public float[] toBoundingVolume3FAxisAlignedBoundingBox3FArray() {
-		return Floats.toArray(this.distinctAxisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> CompiledBoundingVolume3FCache.toArray(axisAlignedBoundingBox3F));
+		return CompiledBoundingVolume3FCache.toBoundingVolume3FAxisAlignedBoundingBox3FArray(this.distinctAxisAlignedBoundingBox3Fs);
 	}
 	
 	public float[] toBoundingVolume3FBoundingSphere3FArray() {
-		return Floats.toArray(this.distinctBoundingSphere3Fs, boundingSphere3F -> CompiledBoundingVolume3FCache.toArray(boundingSphere3F));
+		return CompiledBoundingVolume3FCache.toBoundingVolume3FBoundingSphere3FArray(this.distinctBoundingSphere3Fs);
 	}
 	
 	public int findOffsetFor(final BoundingVolume3F boundingVolume3F) {

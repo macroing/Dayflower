@@ -18,12 +18,14 @@
  */
 package org.dayflower.scene.compiler;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
+import org.dayflower.utility.Floats;
 
 /**
  * A {@code CompiledBoundingVolume3FCache} contains {@link BoundingVolume3F} instances in compiled form.
@@ -172,5 +174,31 @@ public final class CompiledBoundingVolume3FCache {
 		array[BOUNDING_SPHERE_3_F_OFFSET_RADIUS] = radius;
 		
 		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link AxisAlignedBoundingBox3F} instances in {@code axisAlignedBoundingBox3Fs} in compiled form.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBox3Fs a {@code List} of {@code AxisAlignedBoundingBox3F} instances
+	 * @return a {@code float[]} with all {@code AxisAlignedBoundingBox3F} instances in {@code axisAlignedBoundingBox3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toBoundingVolume3FAxisAlignedBoundingBox3FArray(final List<AxisAlignedBoundingBox3F> axisAlignedBoundingBox3Fs) {
+		return Floats.toArray(axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> toArray(axisAlignedBoundingBox3F));
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link BoundingSphere3F} instances in {@code boundingSphere3Fs} in compiled form.
+	 * <p>
+	 * If {@code boundingSphere3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param boundingSphere3Fs a {@code List} of {@code BoundingSphere3F} instances
+	 * @return a {@code float[]} with all {@code BoundingSphere3F} instances in {@code boundingSphere3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toBoundingVolume3FBoundingSphere3FArray(final List<BoundingSphere3F> boundingSphere3Fs) {
+		return Floats.toArray(boundingSphere3Fs, boundingSphere3F -> toArray(boundingSphere3F));
 	}
 }

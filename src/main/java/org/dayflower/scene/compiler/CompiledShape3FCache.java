@@ -18,7 +18,11 @@
  */
 package org.dayflower.scene.compiler;
 
+import static org.dayflower.utility.Ints.padding;
+
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.BoundingVolume3F;
@@ -44,6 +48,9 @@ import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
+import org.dayflower.java.io.IntArrayOutputStream;
+import org.dayflower.node.NodeFilter;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledShape3FCache} contains {@link Shape3F} instances in compiled form.
@@ -1053,5 +1060,476 @@ public final class CompiledShape3FCache {
 	 */
 	public void setShape3FTriangleMesh3FArray(final int[] shape3FTriangleMesh3FArray) {
 		this.shape3FTriangleMesh3FArray = Objects.requireNonNull(shape3FTriangleMesh3FArray, "shape3FTriangleMesh3FArray == null");
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code float[]} with {@code cone3F} in compiled form.
+	 * <p>
+	 * If {@code cone3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cone3F a {@link Cone3F} instance
+	 * @return a {@code float[]} with {@code cone3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code cone3F} is {@code null}
+	 */
+	public static float[] toArray(final Cone3F cone3F) {
+		final float phiMax = cone3F.getPhiMax().getRadians();
+		final float radius = cone3F.getRadius();
+		final float zMax = cone3F.getZMax();
+		
+		final float[] array = new float[CONE_3_F_LENGTH];
+		
+		array[CONE_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[CONE_3_F_OFFSET_RADIUS] = radius;
+		array[CONE_3_F_OFFSET_Z_MAX] = zMax;
+		array[3] = 0.0F;
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code cylinder3F} in compiled form.
+	 * <p>
+	 * If {@code cylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cylinder3F a {@link Cylinder3F} instance
+	 * @return a {@code float[]} with {@code cylinder3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3F} is {@code null}
+	 */
+	public static float[] toArray(final Cylinder3F cylinder3F) {
+		final float phiMax = cylinder3F.getPhiMax().getRadians();
+		final float radius = cylinder3F.getRadius();
+		final float zMax = cylinder3F.getZMax();
+		final float zMin = cylinder3F.getZMin();
+		
+		final float[] array = new float[CYLINDER_3_F_LENGTH];
+		
+		array[CYLINDER_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[CYLINDER_3_F_OFFSET_RADIUS] = radius;
+		array[CYLINDER_3_F_OFFSET_Z_MAX] = zMax;
+		array[CYLINDER_3_F_OFFSET_Z_MIN] = zMin;
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code disk3F} in compiled form.
+	 * <p>
+	 * If {@code disk3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param disk3F a {@link Disk3F} instance
+	 * @return a {@code float[]} with {@code disk3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code disk3F} is {@code null}
+	 */
+	public static float[] toArray(final Disk3F disk3F) {
+		final float phiMax = disk3F.getPhiMax().getRadians();
+		final float radiusInner = disk3F.getRadiusInner();
+		final float radiusOuter = disk3F.getRadiusOuter();
+		final float zMax = disk3F.getZMax();
+		
+		final float[] array = new float[DISK_3_F_LENGTH];
+		
+		array[DISK_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[DISK_3_F_OFFSET_RADIUS_INNER] = radiusInner;
+		array[DISK_3_F_OFFSET_RADIUS_OUTER] = radiusOuter;
+		array[DISK_3_F_OFFSET_Z_MAX] = zMax;
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code hyperboloid3F} in compiled form.
+	 * <p>
+	 * If {@code hyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param hyperboloid3F a {@link Hyperboloid3F} instance
+	 * @return a {@code float[]} with {@code hyperboloid3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3F} is {@code null}
+	 */
+	public static float[] toArray(final Hyperboloid3F hyperboloid3F) {
+		final Point3F a = hyperboloid3F.getA();
+		final Point3F b = hyperboloid3F.getB();
+		
+		final float phiMax = hyperboloid3F.getPhiMax().getRadians();
+		final float aH = hyperboloid3F.getAH();
+		final float cH = hyperboloid3F.getCH();
+		final float rMax = hyperboloid3F.getRMax();
+		final float zMax = hyperboloid3F.getZMax();
+		final float zMin = hyperboloid3F.getZMin();
+		
+		final float[] array = new float[HYPERBOLOID_3_F_LENGTH];
+		
+		array[HYPERBOLOID_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[HYPERBOLOID_3_F_OFFSET_POINT_A + 0] = a.getX();
+		array[HYPERBOLOID_3_F_OFFSET_POINT_A + 1] = a.getY();
+		array[HYPERBOLOID_3_F_OFFSET_POINT_A + 2] = a.getZ();
+		array[HYPERBOLOID_3_F_OFFSET_POINT_B + 0] = b.getX();
+		array[HYPERBOLOID_3_F_OFFSET_POINT_B + 1] = b.getY();
+		array[HYPERBOLOID_3_F_OFFSET_POINT_B + 2] = b.getZ();
+		array[HYPERBOLOID_3_F_OFFSET_A_H] = aH;
+		array[HYPERBOLOID_3_F_OFFSET_C_H] = cH;
+		array[HYPERBOLOID_3_F_OFFSET_R_MAX] = rMax;
+		array[HYPERBOLOID_3_F_OFFSET_Z_MAX] = zMax;
+		array[HYPERBOLOID_3_F_OFFSET_Z_MIN] = zMin;
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code paraboloid3F} in compiled form.
+	 * <p>
+	 * If {@code paraboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param paraboloid3F a {@link Paraboloid3F} instance
+	 * @return a {@code float[]} with {@code paraboloid3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3F} is {@code null}
+	 */
+	public static float[] toArray(final Paraboloid3F paraboloid3F) {
+		final float phiMax = paraboloid3F.getPhiMax().getRadians();
+		final float radius = paraboloid3F.getRadius();
+		final float zMax = paraboloid3F.getZMax();
+		final float zMin = paraboloid3F.getZMin();
+		
+		final float[] array = new float[PARABOLOID_3_F_LENGTH];
+		
+		array[PARABOLOID_3_F_OFFSET_PHI_MAX] = phiMax;
+		array[PARABOLOID_3_F_OFFSET_RADIUS] = radius;
+		array[PARABOLOID_3_F_OFFSET_Z_MAX] = zMax;
+		array[PARABOLOID_3_F_OFFSET_Z_MIN] = zMin;
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code plane3F} in compiled form.
+	 * <p>
+	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param plane3F a {@link Plane3F} instance
+	 * @return a {@code float[]} with {@code plane3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
+	 */
+	public static float[] toArray(final Plane3F plane3F) {
+		final Point3F a = plane3F.getA();
+		final Point3F b = plane3F.getB();
+		final Point3F c = plane3F.getC();
+		
+		final Vector3F surfaceNormal = plane3F.getSurfaceNormal();
+		
+		final float[] array = new float[PLANE_3_F_LENGTH];
+		
+		array[PLANE_3_F_OFFSET_A + 0] = a.getX();							//Block #1
+		array[PLANE_3_F_OFFSET_A + 1] = a.getY();							//Block #1
+		array[PLANE_3_F_OFFSET_A + 2] = a.getZ();							//Block #1
+		array[PLANE_3_F_OFFSET_B + 0] = b.getX();							//Block #1
+		array[PLANE_3_F_OFFSET_B + 1] = b.getY();							//Block #1
+		array[PLANE_3_F_OFFSET_B + 2] = b.getZ();							//Block #1
+		array[PLANE_3_F_OFFSET_C + 0] = c.getX();							//Block #1
+		array[PLANE_3_F_OFFSET_C + 1] = c.getY();							//Block #1
+		array[PLANE_3_F_OFFSET_C + 2] = c.getZ();							//Block #2
+		array[PLANE_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();	//Block #2
+		array[PLANE_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();	//Block #2
+		array[PLANE_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();	//Block #2
+		array[12] = 0.0F;													//Block #2
+		array[13] = 0.0F;													//Block #2
+		array[14] = 0.0F;													//Block #2
+		array[15] = 0.0F;													//Block #2
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code rectangle3F} in compiled form.
+	 * <p>
+	 * If {@code rectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle3F a {@link Rectangle3F} instance
+	 * @return a {@code float[]} with {@code rectangle3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle3F} is {@code null}
+	 */
+	public static float[] toArray(final Rectangle3F rectangle3F) {
+		final Point3F position = rectangle3F.getPosition();
+		
+		final Vector3F sideA = rectangle3F.getSideA();
+		final Vector3F sideB = rectangle3F.getSideB();
+		final Vector3F surfaceNormal = rectangle3F.getSurfaceNormal();
+		
+		final float[] array = new float[RECTANGLE_3_F_LENGTH];
+		
+		array[RECTANGLE_3_F_OFFSET_POSITION + 0] = position.getX();				//Block #1
+		array[RECTANGLE_3_F_OFFSET_POSITION + 1] = position.getY();				//Block #1
+		array[RECTANGLE_3_F_OFFSET_POSITION + 2] = position.getZ();				//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_A + 0] = sideA.getX();					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_A + 1] = sideA.getY();					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_A + 2] = sideA.getZ();					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_B + 0] = sideB.getX();					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_B + 1] = sideB.getY();					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_B + 2] = sideB.getZ();					//Block #2
+		array[RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();	//Block #2
+		array[RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();	//Block #2
+		array[RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();	//Block #2
+		array[12] = 0.0F;														//Block #2
+		array[13] = 0.0F;														//Block #2
+		array[14] = 0.0F;														//Block #2
+		array[15] = 0.0F;														//Block #2
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code rectangularCuboid3F} in compiled form.
+	 * <p>
+	 * If {@code rectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangularCuboid3F a {@link RectangularCuboid3F} instance
+	 * @return a {@code float[]} with {@code rectangularCuboid3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3F} is {@code null}
+	 */
+	public static float[] toArray(final RectangularCuboid3F rectangularCuboid3F) {
+		final Point3F maximum = rectangularCuboid3F.getMaximum();
+		final Point3F minimum = rectangularCuboid3F.getMinimum();
+		
+		final float[] array = new float[RECTANGULAR_CUBOID_3_F_LENGTH];
+		
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 0] = maximum.getX();	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 1] = maximum.getY();	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 2] = maximum.getZ();	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 0] = minimum.getX();	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 1] = minimum.getY();	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 2] = minimum.getZ();	//Block #1
+		array[6] = 0.0F;													//Block #1
+		array[7] = 0.0F;													//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code sphere3F} in compiled form.
+	 * <p>
+	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sphere3F a {@link Sphere3F} instance
+	 * @return a {@code float[]} with {@code sphere3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
+	 */
+	public static float[] toArray(final Sphere3F sphere3F) {
+		final Point3F center = sphere3F.getCenter();
+		
+		final float radius = sphere3F.getRadius();
+		
+		final float[] array = new float[SPHERE_3_F_LENGTH];
+		
+		array[SPHERE_3_F_OFFSET_CENTER + 0] = center.getX();
+		array[SPHERE_3_F_OFFSET_CENTER + 1] = center.getY();
+		array[SPHERE_3_F_OFFSET_CENTER + 2] = center.getZ();
+		array[SPHERE_3_F_OFFSET_RADIUS] = radius;
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code torus3F} in compiled form.
+	 * <p>
+	 * If {@code torus3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param torus3F a {@link Torus3F} instance
+	 * @return a {@code float[]} with {@code torus3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code torus3F} is {@code null}
+	 */
+	public static float[] toArray(final Torus3F torus3F) {
+		final float radiusInner = torus3F.getRadiusInner();
+		final float radiusOuter = torus3F.getRadiusOuter();
+		
+		final float[] array = new float[TORUS_3_F_LENGTH];
+		
+		array[TORUS_3_F_OFFSET_RADIUS_INNER] = radiusInner;
+		array[TORUS_3_F_OFFSET_RADIUS_OUTER] = radiusOuter;
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code triangle3F} in compiled form.
+	 * <p>
+	 * If {@code triangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangle3F a {@link Triangle3F} instance
+	 * @return a {@code float[]} with {@code triangle3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code triangle3F} is {@code null}
+	 */
+	public static float[] toArray(final Triangle3F triangle3F) {
+		final Vertex3F a = triangle3F.getA();
+		final Vertex3F b = triangle3F.getB();
+		final Vertex3F c = triangle3F.getC();
+		
+		final float[] array = new float[TRIANGLE_3_F_LENGTH];
+		
+		array[TRIANGLE_3_F_OFFSET_A_POSITION + 0] = a.getPosition().getX();								//Block #1
+		array[TRIANGLE_3_F_OFFSET_A_POSITION + 1] = a.getPosition().getY();								//Block #1
+		array[TRIANGLE_3_F_OFFSET_A_POSITION + 2] = a.getPosition().getZ();								//Block #1
+		array[TRIANGLE_3_F_OFFSET_B_POSITION + 0] = b.getPosition().getX();								//Block #1
+		array[TRIANGLE_3_F_OFFSET_B_POSITION + 1] = b.getPosition().getY();								//Block #1
+		array[TRIANGLE_3_F_OFFSET_B_POSITION + 2] = b.getPosition().getZ();								//Block #1
+		array[TRIANGLE_3_F_OFFSET_C_POSITION + 0] = c.getPosition().getX();								//Block #1
+		array[TRIANGLE_3_F_OFFSET_C_POSITION + 1] = c.getPosition().getY();								//Block #1
+		array[TRIANGLE_3_F_OFFSET_C_POSITION + 2] = c.getPosition().getZ();								//Block #2
+		
+		array[TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 0] = a.getTextureCoordinates().getU();		//Block #2
+		array[TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 1] = a.getTextureCoordinates().getV();		//Block #2
+		array[TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 0] = b.getTextureCoordinates().getU();		//Block #2
+		array[TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 1] = b.getTextureCoordinates().getV();		//Block #2
+		array[TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 0] = c.getTextureCoordinates().getU();		//Block #2
+		array[TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 1] = c.getTextureCoordinates().getV();		//Block #2
+		
+		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 0] = a.getOrthonormalBasis().getW().getX();	//Block #2
+		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 1] = a.getOrthonormalBasis().getW().getY();	//Block #3
+		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 2] = a.getOrthonormalBasis().getW().getZ();	//Block #3
+		array[TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 0] = b.getOrthonormalBasis().getW().getX();	//Block #3
+		array[TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 1] = b.getOrthonormalBasis().getW().getY();	//Block #3
+		array[TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 2] = b.getOrthonormalBasis().getW().getZ();	//Block #3
+		array[TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 0] = c.getOrthonormalBasis().getW().getX();	//Block #3
+		array[TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 1] = c.getOrthonormalBasis().getW().getY();	//Block #3
+		array[TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 2] = c.getOrthonormalBasis().getW().getZ();	//Block #3
+		
+		return array;
+	}
+	
+	/**
+	 * Returns the length of {@code triangleMesh3F} in compiled form.
+	 * <p>
+	 * If {@code triangleMesh3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangleMesh3F a {@link TriangleMesh3F} instance
+	 * @return the length of {@code triangleMesh3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3F} is {@code null}
+	 */
+	public static int getLength(final TriangleMesh3F triangleMesh3F) {
+		final Optional<BVHNode3F> optionalRootBVHNode = triangleMesh3F.getRootBVHNode();
+		
+		if(optionalRootBVHNode.isPresent()) {
+			final BVHNode3F rootBVHNode = optionalRootBVHNode.get();
+			
+			return NodeFilter.filterAll(rootBVHNode, BVHNode3F.class).stream().mapToInt(bVHNode -> doGetLength(bVHNode)).sum();
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code triangleMesh3F} in compiled form.
+	 * <p>
+	 * If {@code triangleMesh3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangleMesh3F a {@link TriangleMesh3F} instance
+	 * @return an {@code int[]} with {@code triangleMesh3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3F} is {@code null}
+	 */
+	public static int[] toArray(final TriangleMesh3F triangleMesh3F) {
+		final Optional<BVHNode3F> optionalRootBVHNode = triangleMesh3F.getRootBVHNode();
+		
+		if(optionalRootBVHNode.isPresent()) {
+			return doToArray(optionalRootBVHNode.get(), triangleMesh3F.getTriangles());
+		}
+		
+		return new int[0];
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static int doFindLeftOffset(final List<BVHNode3F> bVHNodes, final int depth, final int index, final int[] offsets) {
+		for(int i = index; i < bVHNodes.size(); i++) {
+			if(bVHNodes.get(i).getDepth() == depth + 1) {
+				return offsets[i];
+			}
+		}
+		
+		return -1;
+	}
+	
+	private static int doFindNextOffset(final List<BVHNode3F> bVHNodes, final int depth, final int index, final int[] offsets) {
+		for(int i = index; i < bVHNodes.size(); i++) {
+			if(bVHNodes.get(i).getDepth() <= depth) {
+				return offsets[i];
+			}
+		}
+		
+		return -1;
+	}
+	
+	private static int doGetLength(final BVHNode3F bVHNode3F) {
+		if(bVHNode3F instanceof LeafBVHNode3F) {
+			final int a = 4;
+			final int b = LeafBVHNode3F.class.cast(bVHNode3F).getShapeCount();
+			final int c = padding(a + b);
+			
+			return a + b + c;
+		} else if(bVHNode3F instanceof TreeBVHNode3F) {
+			return 8;
+		} else {
+			return 0;
+		}
+	}
+	
+	private static int[] doToArray(final BVHNode3F rootBVHNode, final List<Triangle3F> shapes) {
+		Objects.requireNonNull(rootBVHNode, "rootBVHNode == null");
+		
+		ParameterArguments.requireNonNullList(shapes, "shapes");
+		
+		final List<BVHNode3F> bVHNodes = NodeFilter.filterAll(rootBVHNode, BVHNode3F.class);
+		
+		final int[] offsets = new int[bVHNodes.size()];
+		
+		for(int i = 0, j = 0; i < offsets.length; j += doGetLength(bVHNodes.get(i)), i++) {
+			offsets[i] = j;
+		}
+		
+		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
+			for(int i = 0; i < bVHNodes.size(); i++) {
+				final BVHNode3F bVHNode = bVHNodes.get(i);
+				
+				if(bVHNode instanceof LeafBVHNode3F) {
+					final LeafBVHNode3F<?> leafBVHNode = LeafBVHNode3F.class.cast(bVHNode);
+					
+					final int id = LeafBVHNode3F.ID;
+					final int boundingVolumeOffset = i;
+					final int nextOffset = doFindNextOffset(bVHNodes, leafBVHNode.getDepth(), i + 1, offsets);
+					final int shapeCount = leafBVHNode.getShapeCount();
+					
+					intArrayOutputStream.writeInt(id);
+					intArrayOutputStream.writeInt(boundingVolumeOffset);
+					intArrayOutputStream.writeInt(nextOffset);
+					intArrayOutputStream.writeInt(shapeCount);
+					
+					for(final Shape3F shape : leafBVHNode.getShapes()) {
+						intArrayOutputStream.writeInt(shapes.indexOf(shape));
+					}
+					
+					final int padding = padding(4 + shapeCount);
+					
+					for(int j = 0; j < padding; j++) {
+						intArrayOutputStream.writeInt(0);
+					}
+				} else if(bVHNode instanceof TreeBVHNode3F) {
+					final TreeBVHNode3F treeBVHNode = TreeBVHNode3F.class.cast(bVHNode);
+					
+					final int id = TreeBVHNode3F.ID;
+					final int boundingVolumeOffset = i;
+					final int nextOffset = doFindNextOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
+					final int leftOffset = doFindLeftOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
+					
+					intArrayOutputStream.writeInt(id);
+					intArrayOutputStream.writeInt(boundingVolumeOffset);
+					intArrayOutputStream.writeInt(nextOffset);
+					intArrayOutputStream.writeInt(leftOffset);
+					intArrayOutputStream.writeInt(0);
+					intArrayOutputStream.writeInt(0);
+					intArrayOutputStream.writeInt(0);
+					intArrayOutputStream.writeInt(0);
+				}
+			}
+			
+			return intArrayOutputStream.toIntArray();
+		}
 	}
 }

@@ -126,10 +126,10 @@ public final class SceneCompiler {
 	
 	private void doBuildCompiledScene(final Scene scene) {
 //		Retrieve the float[] for the Matrix44F instances:
-		final float[] primitiveMatrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> doToArray(primitive.getTransform()), 1);
+		final float[] primitiveMatrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> doToArray(primitive.getTransform()));
 		
 //		Retrieve the int[] for all primitives:
-		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> doToArray(primitive), 1);
+		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> doToArray(primitive));
 		
 //		Populate the float[] or int[] with data:
 		doPopulatePrimitiveArrayWithAreaLights(primitiveArray);

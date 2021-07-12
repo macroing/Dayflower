@@ -115,47 +115,47 @@ final class Shape3FCache {
 	}
 	
 	public float[] toShape3FCone3FArray() {
-		return Floats.toArray(this.distinctCone3Fs, cone3F -> CompiledShape3FCache.toArray(cone3F), 1);
+		return Floats.toArray(this.distinctCone3Fs, cone3F -> CompiledShape3FCache.toArray(cone3F));
 	}
 	
 	public float[] toShape3FCylinder3FArray() {
-		return Floats.toArray(this.distinctCylinder3Fs, cylinder3F -> CompiledShape3FCache.toArray(cylinder3F), 1);
+		return Floats.toArray(this.distinctCylinder3Fs, cylinder3F -> CompiledShape3FCache.toArray(cylinder3F));
 	}
 	
 	public float[] toShape3FDisk3FArray() {
-		return Floats.toArray(this.distinctDisk3Fs, disk3F -> CompiledShape3FCache.toArray(disk3F), 1);
+		return Floats.toArray(this.distinctDisk3Fs, disk3F -> CompiledShape3FCache.toArray(disk3F));
 	}
 	
 	public float[] toShape3FHyperboloid3FArray() {
-		return Floats.toArray(this.distinctHyperboloid3Fs, hyperboloid3F -> CompiledShape3FCache.toArray(hyperboloid3F), 1);
+		return Floats.toArray(this.distinctHyperboloid3Fs, hyperboloid3F -> CompiledShape3FCache.toArray(hyperboloid3F));
 	}
 	
 	public float[] toShape3FParaboloid3FArray() {
-		return Floats.toArray(this.distinctParaboloid3Fs, paraboloid3F -> CompiledShape3FCache.toArray(paraboloid3F), 1);
+		return Floats.toArray(this.distinctParaboloid3Fs, paraboloid3F -> CompiledShape3FCache.toArray(paraboloid3F));
 	}
 	
 	public float[] toShape3FPlane3FArray() {
-		return Floats.toArray(this.distinctPlane3Fs, plane3F -> CompiledShape3FCache.toArray(plane3F), 1);
+		return Floats.toArray(this.distinctPlane3Fs, plane3F -> CompiledShape3FCache.toArray(plane3F));
 	}
 	
 	public float[] toShape3FRectangle3FArray() {
-		return Floats.toArray(this.distinctRectangle3Fs, rectangle3F -> CompiledShape3FCache.toArray(rectangle3F), 1);
+		return Floats.toArray(this.distinctRectangle3Fs, rectangle3F -> CompiledShape3FCache.toArray(rectangle3F));
 	}
 	
 	public float[] toShape3FRectangularCuboid3FArray() {
-		return Floats.toArray(this.distinctRectangularCuboid3Fs, rectangularCuboid3F -> CompiledShape3FCache.toArray(rectangularCuboid3F), 1);
+		return Floats.toArray(this.distinctRectangularCuboid3Fs, rectangularCuboid3F -> CompiledShape3FCache.toArray(rectangularCuboid3F));
 	}
 	
 	public float[] toShape3FSphere3FArray() {
-		return Floats.toArray(this.distinctSphere3Fs, sphere3F -> CompiledShape3FCache.toArray(sphere3F), 1);
+		return Floats.toArray(this.distinctSphere3Fs, sphere3F -> CompiledShape3FCache.toArray(sphere3F));
 	}
 	
 	public float[] toShape3FTorus3FArray() {
-		return Floats.toArray(this.distinctTorus3Fs, torus3F -> CompiledShape3FCache.toArray(torus3F), 1);
+		return Floats.toArray(this.distinctTorus3Fs, torus3F -> CompiledShape3FCache.toArray(torus3F));
 	}
 	
 	public float[] toShape3FTriangle3FArray() {
-		return Floats.toArray(this.distinctTriangle3Fs, triangle3F -> CompiledShape3FCache.toArray(triangle3F), 1);
+		return Floats.toArray(this.distinctTriangle3Fs, triangle3F -> CompiledShape3FCache.toArray(triangle3F));
 	}
 	
 	public int findOffsetFor(final Shape3F shape3F) {

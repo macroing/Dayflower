@@ -333,18 +333,18 @@ public final class CompiledMaterialCache {
 	 * Constructs a new {@code CompiledMaterialCache} instance.
 	 */
 	public CompiledMaterialCache() {
-		setMaterialBullseyeMaterialArray(new float[1]);
-		setMaterialCheckerboardMaterialArray(new float[1]);
-		setMaterialClearCoatMaterialArray(new int[1]);
-		setMaterialDisneyMaterialArray(new int[1]);
-		setMaterialGlassMaterialArray(new int[1]);
-		setMaterialGlossyMaterialArray(new int[1]);
-		setMaterialMatteMaterialArray(new int[1]);
-		setMaterialMetalMaterialArray(new int[1]);
-		setMaterialMirrorMaterialArray(new int[1]);
-		setMaterialPlasticMaterialArray(new int[1]);
-		setMaterialPolkaDotMaterialArray(new float[1]);
-		setMaterialSubstrateMaterialArray(new int[1]);
+		setMaterialBullseyeMaterialArray(new float[0]);
+		setMaterialCheckerboardMaterialArray(new float[0]);
+		setMaterialClearCoatMaterialArray(new int[0]);
+		setMaterialDisneyMaterialArray(new int[0]);
+		setMaterialGlassMaterialArray(new int[0]);
+		setMaterialGlossyMaterialArray(new int[0]);
+		setMaterialMatteMaterialArray(new int[0]);
+		setMaterialMetalMaterialArray(new int[0]);
+		setMaterialMirrorMaterialArray(new int[0]);
+		setMaterialPlasticMaterialArray(new int[0]);
+		setMaterialPolkaDotMaterialArray(new float[0]);
+		setMaterialSubstrateMaterialArray(new int[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

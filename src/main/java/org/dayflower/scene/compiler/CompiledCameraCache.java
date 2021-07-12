@@ -104,7 +104,7 @@ public final class CompiledCameraCache {
 	 * Constructs a new {@code CompiledCameraCache} instance.
 	 */
 	public CompiledCameraCache() {
-		setCameraArray(new float[1]);
+		setCameraArray(new float[CAMERA_LENGTH]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

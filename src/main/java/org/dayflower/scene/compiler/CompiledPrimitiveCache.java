@@ -90,8 +90,8 @@ public final class CompiledPrimitiveCache {
 	 * Constructs a new {@code CompiledPrimitiveCache} instance.
 	 */
 	public CompiledPrimitiveCache() {
-		setPrimitiveArray(new int[1]);
-		setPrimitiveMatrix44FArray(new float[1]);
+		setPrimitiveArray(new int[0]);
+		setPrimitiveMatrix44FArray(new float[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

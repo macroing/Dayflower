@@ -281,15 +281,15 @@ public final class CompiledTextureCache {
 	 * Constructs a new {@code CompiledTextureCache} instance.
 	 */
 	public CompiledTextureCache() {
-		setTextureBlendTextureArray(new float[1]);
-		setTextureBullseyeTextureArray(new float[1]);
-		setTextureCheckerboardTextureArray(new float[1]);
-		setTextureConstantTextureArray(new float[1]);
-		setTextureLDRImageTextureArray(new float[1]);
-		setTextureLDRImageTextureOffsetArray(new int[1]);
-		setTextureMarbleTextureArray(new float[1]);
-		setTexturePolkaDotTextureArray(new float[1]);
-		setTextureSimplexFractionalBrownianMotionTextureArray(new float[1]);
+		setTextureBlendTextureArray(new float[0]);
+		setTextureBullseyeTextureArray(new float[0]);
+		setTextureCheckerboardTextureArray(new float[0]);
+		setTextureConstantTextureArray(new float[0]);
+		setTextureLDRImageTextureArray(new float[0]);
+		setTextureLDRImageTextureOffsetArray(new int[0]);
+		setTextureMarbleTextureArray(new float[0]);
+		setTexturePolkaDotTextureArray(new float[0]);
+		setTextureSimplexFractionalBrownianMotionTextureArray(new float[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

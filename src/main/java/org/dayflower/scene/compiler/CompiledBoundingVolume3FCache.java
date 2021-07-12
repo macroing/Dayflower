@@ -73,8 +73,8 @@ public final class CompiledBoundingVolume3FCache {
 	 * Constructs a new {@code CompiledBoundingVolume3FCache} instance.
 	 */
 	public CompiledBoundingVolume3FCache() {
-		setBoundingVolume3FAxisAlignedBoundingBox3FArray(new float[1]);
-		setBoundingVolume3FBoundingSphere3FArray(new float[1]);
+		setBoundingVolume3FAxisAlignedBoundingBox3FArray(new float[0]);
+		setBoundingVolume3FBoundingSphere3FArray(new float[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

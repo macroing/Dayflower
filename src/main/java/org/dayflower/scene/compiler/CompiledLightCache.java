@@ -274,15 +274,15 @@ public final class CompiledLightCache {
 	 * Constructs a new {@code CompiledLightCache} instance.
 	 */
 	public CompiledLightCache() {
-		setLightDiffuseAreaLightArray(new float[1]);
-		setLightDirectionalLightArray(new float[1]);
-		setLightIDAndOffsetArray(new int[1]);
-		setLightLDRImageLightArray(new float[1]);
-		setLightLDRImageLightOffsetArray(new int[1]);
-		setLightPerezLightArray(new float[1]);
-		setLightPerezLightOffsetArray(new int[1]);
-		setLightPointLightArray(new float[1]);
-		setLightSpotLightArray(new float[1]);
+		setLightDiffuseAreaLightArray(new float[0]);
+		setLightDirectionalLightArray(new float[0]);
+		setLightIDAndOffsetArray(new int[0]);
+		setLightLDRImageLightArray(new float[0]);
+		setLightLDRImageLightOffsetArray(new int[0]);
+		setLightPerezLightArray(new float[0]);
+		setLightPerezLightOffsetArray(new int[0]);
+		setLightPointLightArray(new float[0]);
+		setLightSpotLightArray(new float[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

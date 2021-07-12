@@ -62,11 +62,11 @@ final class BoundingVolume3FCache {
 	}
 	
 	public float[] toBoundingVolume3FAxisAlignedBoundingBox3FArray() {
-		return Floats.toArray(this.distinctAxisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> CompiledBoundingVolume3FCache.toArray(axisAlignedBoundingBox3F), 1);
+		return Floats.toArray(this.distinctAxisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> CompiledBoundingVolume3FCache.toArray(axisAlignedBoundingBox3F));
 	}
 	
 	public float[] toBoundingVolume3FBoundingSphere3FArray() {
-		return Floats.toArray(this.distinctBoundingSphere3Fs, boundingSphere3F -> CompiledBoundingVolume3FCache.toArray(boundingSphere3F), 1);
+		return Floats.toArray(this.distinctBoundingSphere3Fs, boundingSphere3F -> CompiledBoundingVolume3FCache.toArray(boundingSphere3F));
 	}
 	
 	public int findOffsetFor(final BoundingVolume3F boundingVolume3F) {

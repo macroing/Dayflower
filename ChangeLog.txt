@@ -2,6 +2,7 @@
 
 	* ADD:		Add the methods toArray(Cone3F), toArray(Cylinder3F), toArray(Disk3F), toArray(Hyperboloid3F), toArray(Paraboloid3F), toArray(Plane3F), toArray(Rectangle3F), toArray(RectangularCuboid3F), toArray(Sphere3F), toArray(Torus3F), toArray(Triangle3F), toArray(TriangleMesh3F) and getLength(TriangleMesh3F) to the CompiledShape3FCache class.
 	* ADD:		Add the methods toArray(BullseyeMaterial), toArray(CheckerboardMaterial), toArray(ClearCoatMaterial), toArray(DisneyMaterial), toArray(GlassMaterial), toArray(GlossyMaterial), toArray(MatteMaterial), toArray(MetalMaterial), toArray(MirrorMaterial), toArray(PlasticMaterial), toArray(PolkaDotMaterial) and toArray(SubstrateMaterial) to the CompiledMaterialCache class.
+	* CHANGE:	The responsibility to create arrays with a length of at least 1 has been moved to the Renderer GPU API, rather than the Scene Compiler API. This "requirement" is Aparapi-specific and would cause a crash if left out. The Scene Compiler API can be used for other purposes than in combination with Aparapi.
 
 2021-07-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

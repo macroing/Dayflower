@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.compiler;
 
-import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.pack;
 
 import java.util.ArrayList;
@@ -87,7 +86,7 @@ final class LightCache {
 	public float[] toLightDiffuseAreaLightArray(final Shape3FCache shape3FCache) {
 		Objects.requireNonNull(shape3FCache, "shape3FCache == null");
 		
-		final float[] lightDiffuseAreaLightArray = Floats.toArray(this.distinctDiffuseAreaLights, diffuseAreaLight -> CompiledLightCache.toArray(diffuseAreaLight), 1);
+		final float[] lightDiffuseAreaLightArray = Floats.toArray(this.distinctDiffuseAreaLights, diffuseAreaLight -> CompiledLightCache.toArray(diffuseAreaLight));
 		
 		for(int i = 0; i < this.distinctDiffuseAreaLights.size(); i++) {
 			final DiffuseAreaLight diffuseAreaLight = this.distinctDiffuseAreaLights.get(i);
@@ -103,23 +102,23 @@ final class LightCache {
 	}
 	
 	public float[] toLightDirectionalLightArray() {
-		return Floats.toArray(this.distinctDirectionalLights, directionalLight -> CompiledLightCache.toArray(directionalLight), 1);
+		return Floats.toArray(this.distinctDirectionalLights, directionalLight -> CompiledLightCache.toArray(directionalLight));
 	}
 	
 	public float[] toLightLDRImageLightArray() {
-		return Floats.toArray(this.distinctLDRImageLights, lDRImageLight -> CompiledLightCache.toArray(lDRImageLight), 1);
+		return Floats.toArray(this.distinctLDRImageLights, lDRImageLight -> CompiledLightCache.toArray(lDRImageLight));
 	}
 	
 	public float[] toLightPerezLightArray() {
-		return Floats.toArray(this.distinctPerezLights, perezLight -> CompiledLightCache.toArray(perezLight), 1);
+		return Floats.toArray(this.distinctPerezLights, perezLight -> CompiledLightCache.toArray(perezLight));
 	}
 	
 	public float[] toLightPointLightArray() {
-		return Floats.toArray(this.distinctPointLights, pointLight -> CompiledLightCache.toArray(pointLight), 1);
+		return Floats.toArray(this.distinctPointLights, pointLight -> CompiledLightCache.toArray(pointLight));
 	}
 	
 	public float[] toLightSpotLightArray() {
-		return Floats.toArray(this.distinctSpotLights, spotLight -> CompiledLightCache.toArray(spotLight), 1);
+		return Floats.toArray(this.distinctSpotLights, spotLight -> CompiledLightCache.toArray(spotLight));
 	}
 	
 	public int findOffsetFor(final Light light) {
@@ -143,7 +142,7 @@ final class LightCache {
 	}
 	
 	public int[] toLightIDAndOffsetArray() {
-		final int[] lightIDAndOffsetArray = new int[max(this.distinctLights.size(), 1)];
+		final int[] lightIDAndOffsetArray = new int[this.distinctLights.size()];
 		
 		for(int i = 0; i < this.distinctLights.size(); i++) {
 			final Light light = this.distinctLights.get(i);
@@ -155,7 +154,7 @@ final class LightCache {
 	}
 	
 	public int[] toLightLDRImageLightOffsetArray() {
-		final int[] lightLDRImageLightOffsetArray = new int[max(this.distinctLDRImageLights.size(), 1)];
+		final int[] lightLDRImageLightOffsetArray = new int[this.distinctLDRImageLights.size()];
 		
 		for(int i = 0; i < this.distinctLDRImageLights.size(); i++) {
 			lightLDRImageLightOffsetArray[i] = this.distinctToOffsetsLDRImageLights.get(this.distinctLDRImageLights.get(i)).intValue();
@@ -165,7 +164,7 @@ final class LightCache {
 	}
 	
 	public int[] toLightPerezLightOffsetArray() {
-		final int[] lightPerezLightOffsetArray = new int[max(this.distinctPerezLights.size(), 1)];
+		final int[] lightPerezLightOffsetArray = new int[this.distinctPerezLights.size()];
 		
 		for(int i = 0; i < this.distinctPerezLights.size(); i++) {
 			lightPerezLightOffsetArray[i] = this.distinctToOffsetsPerezLights.get(this.distinctPerezLights.get(i)).intValue();

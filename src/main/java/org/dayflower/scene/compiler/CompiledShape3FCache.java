@@ -409,18 +409,18 @@ public final class CompiledShape3FCache {
 	 * Constructs a new {@code CompiledShape3FCache} instance.
 	 */
 	public CompiledShape3FCache() {
-		setShape3FCone3FArray(new float[1]);
-		setShape3FCylinder3FArray(new float[1]);
-		setShape3FDisk3FArray(new float[1]);
-		setShape3FHyperboloid3FArray(new float[1]);
-		setShape3FParaboloid3FArray(new float[1]);
-		setShape3FPlane3FArray(new float[1]);
-		setShape3FRectangle3FArray(new float[1]);
-		setShape3FRectangularCuboid3FArray(new float[1]);
-		setShape3FSphere3FArray(new float[1]);
-		setShape3FTorus3FArray(new float[1]);
-		setShape3FTriangle3FArray(new float[1]);
-		setShape3FTriangleMesh3FArray(new int[1]);
+		setShape3FCone3FArray(new float[0]);
+		setShape3FCylinder3FArray(new float[0]);
+		setShape3FDisk3FArray(new float[0]);
+		setShape3FHyperboloid3FArray(new float[0]);
+		setShape3FParaboloid3FArray(new float[0]);
+		setShape3FPlane3FArray(new float[0]);
+		setShape3FRectangle3FArray(new float[0]);
+		setShape3FRectangularCuboid3FArray(new float[0]);
+		setShape3FSphere3FArray(new float[0]);
+		setShape3FTorus3FArray(new float[0]);
+		setShape3FTriangle3FArray(new float[0]);
+		setShape3FTriangleMesh3FArray(new int[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

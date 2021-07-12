@@ -113,7 +113,7 @@ final class MaterialCache {
 	}
 	
 	public float[] toMaterialBullseyeMaterialArray() {
-		final float[] materialBullseyeMaterialArray = Floats.toArray(this.distinctBullseyeMaterials, bullseyeMaterial -> CompiledMaterialCache.toArray(bullseyeMaterial), 1);
+		final float[] materialBullseyeMaterialArray = Floats.toArray(this.distinctBullseyeMaterials, bullseyeMaterial -> CompiledMaterialCache.toArray(bullseyeMaterial));
 		
 		for(int i = 0; i < this.distinctBullseyeMaterials.size(); i++) {
 			final BullseyeMaterial bullseyeMaterial = this.distinctBullseyeMaterials.get(i);
@@ -132,7 +132,7 @@ final class MaterialCache {
 	}
 	
 	public float[] toMaterialCheckerboardMaterialArray() {
-		final float[] materialCheckerboardMaterialArray = Floats.toArray(this.distinctCheckerboardMaterials, checkerboardMaterial -> CompiledMaterialCache.toArray(checkerboardMaterial), 1);
+		final float[] materialCheckerboardMaterialArray = Floats.toArray(this.distinctCheckerboardMaterials, checkerboardMaterial -> CompiledMaterialCache.toArray(checkerboardMaterial));
 		
 		for(int i = 0; i < this.distinctCheckerboardMaterials.size(); i++) {
 			final CheckerboardMaterial checkerboardMaterial = this.distinctCheckerboardMaterials.get(i);
@@ -151,7 +151,7 @@ final class MaterialCache {
 	}
 	
 	public float[] toMaterialPolkaDotMaterialArray() {
-		final float[] materialPolkaDotMaterialArray = Floats.toArray(this.distinctPolkaDotMaterials, polkaDotMaterial -> CompiledMaterialCache.toArray(polkaDotMaterial), 1);
+		final float[] materialPolkaDotMaterialArray = Floats.toArray(this.distinctPolkaDotMaterials, polkaDotMaterial -> CompiledMaterialCache.toArray(polkaDotMaterial));
 		
 		for(int i = 0; i < this.distinctPolkaDotMaterials.size(); i++) {
 			final PolkaDotMaterial polkaDotMaterial = this.distinctPolkaDotMaterials.get(i);
@@ -204,7 +204,7 @@ final class MaterialCache {
 	public int[] toMaterialClearCoatMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialClearCoatMaterialArray = Ints.toArray(this.distinctClearCoatMaterials, clearCoatMaterial -> CompiledMaterialCache.toArray(clearCoatMaterial), 1);
+		final int[] materialClearCoatMaterialArray = Ints.toArray(this.distinctClearCoatMaterials, clearCoatMaterial -> CompiledMaterialCache.toArray(clearCoatMaterial));
 		
 		for(int i = 0; i < this.distinctClearCoatMaterials.size(); i++) {
 			final ClearCoatMaterial clearCoatMaterial = this.distinctClearCoatMaterials.get(i);
@@ -226,7 +226,7 @@ final class MaterialCache {
 	public int[] toMaterialDisneyMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialDisneyMaterialArray = Ints.toArray(this.distinctDisneyMaterials, disneyMaterial -> CompiledMaterialCache.toArray(disneyMaterial), 1);
+		final int[] materialDisneyMaterialArray = Ints.toArray(this.distinctDisneyMaterials, disneyMaterial -> CompiledMaterialCache.toArray(disneyMaterial));
 		
 		for(int i = 0; i < this.distinctDisneyMaterials.size(); i++) {
 			final DisneyMaterial disneyMaterial = this.distinctDisneyMaterials.get(i);
@@ -274,7 +274,7 @@ final class MaterialCache {
 	public int[] toMaterialGlassMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialGlassMaterialArray = Ints.toArray(this.distinctGlassMaterials, glassMaterial -> CompiledMaterialCache.toArray(glassMaterial), 1);
+		final int[] materialGlassMaterialArray = Ints.toArray(this.distinctGlassMaterials, glassMaterial -> CompiledMaterialCache.toArray(glassMaterial));
 		
 		for(int i = 0; i < this.distinctGlassMaterials.size(); i++) {
 			final GlassMaterial glassMaterial = this.distinctGlassMaterials.get(i);
@@ -301,7 +301,7 @@ final class MaterialCache {
 	public int[] toMaterialGlossyMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialGlossyMaterialArray = Ints.toArray(this.distinctGlossyMaterials, glossyMaterial -> CompiledMaterialCache.toArray(glossyMaterial), 1);
+		final int[] materialGlossyMaterialArray = Ints.toArray(this.distinctGlossyMaterials, glossyMaterial -> CompiledMaterialCache.toArray(glossyMaterial));
 		
 		for(int i = 0; i < this.distinctGlossyMaterials.size(); i++) {
 			final GlossyMaterial glossyMaterial = this.distinctGlossyMaterials.get(i);
@@ -323,7 +323,7 @@ final class MaterialCache {
 	public int[] toMaterialMatteMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialMatteMaterialArray = Ints.toArray(this.distinctMatteMaterials, matteMaterial -> CompiledMaterialCache.toArray(matteMaterial), 1);
+		final int[] materialMatteMaterialArray = Ints.toArray(this.distinctMatteMaterials, matteMaterial -> CompiledMaterialCache.toArray(matteMaterial));
 		
 		for(int i = 0; i < this.distinctMatteMaterials.size(); i++) {
 			final MatteMaterial matteMaterial = this.distinctMatteMaterials.get(i);
@@ -345,7 +345,7 @@ final class MaterialCache {
 	public int[] toMaterialMetalMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialMetalMaterialArray = Ints.toArray(this.distinctMetalMaterials, metalMaterial -> CompiledMaterialCache.toArray(metalMaterial), 1);
+		final int[] materialMetalMaterialArray = Ints.toArray(this.distinctMetalMaterials, metalMaterial -> CompiledMaterialCache.toArray(metalMaterial));
 		
 		for(int i = 0; i < this.distinctMetalMaterials.size(); i++) {
 			final MetalMaterial metalMaterial = this.distinctMetalMaterials.get(i);
@@ -371,7 +371,7 @@ final class MaterialCache {
 	public int[] toMaterialMirrorMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialMirrorMaterialArray = Ints.toArray(this.distinctMirrorMaterials, mirrorMaterial -> CompiledMaterialCache.toArray(mirrorMaterial), 1);
+		final int[] materialMirrorMaterialArray = Ints.toArray(this.distinctMirrorMaterials, mirrorMaterial -> CompiledMaterialCache.toArray(mirrorMaterial));
 		
 		for(int i = 0; i < this.distinctMirrorMaterials.size(); i++) {
 			final MirrorMaterial mirrorMaterial = this.distinctMirrorMaterials.get(i);
@@ -390,7 +390,7 @@ final class MaterialCache {
 	public int[] toMaterialPlasticMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialPlasticMaterialArray = Ints.toArray(this.distinctPlasticMaterials, plasticMaterial -> CompiledMaterialCache.toArray(plasticMaterial), 1);
+		final int[] materialPlasticMaterialArray = Ints.toArray(this.distinctPlasticMaterials, plasticMaterial -> CompiledMaterialCache.toArray(plasticMaterial));
 		
 		for(int i = 0; i < this.distinctPlasticMaterials.size(); i++) {
 			final PlasticMaterial plasticMaterial = this.distinctPlasticMaterials.get(i);
@@ -415,7 +415,7 @@ final class MaterialCache {
 	public int[] toMaterialSubstrateMaterialArray(final TextureCache textureCache) {
 		Objects.requireNonNull(textureCache, "textureCache == null");
 		
-		final int[] materialSubstrateMaterialArray = Ints.toArray(this.distinctSubstrateMaterials, substrateMaterial -> CompiledMaterialCache.toArray(substrateMaterial), 1);
+		final int[] materialSubstrateMaterialArray = Ints.toArray(this.distinctSubstrateMaterials, substrateMaterial -> CompiledMaterialCache.toArray(substrateMaterial));
 		
 		for(int i = 0; i < this.distinctSubstrateMaterials.size(); i++) {
 			final SubstrateMaterial substrateMaterial = this.distinctSubstrateMaterials.get(i);

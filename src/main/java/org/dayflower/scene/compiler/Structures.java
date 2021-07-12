@@ -68,9 +68,9 @@ final class Structures {
 //		Check that 'structureArray' is not 'null':
 		Objects.requireNonNull(structureArray, "structureArray == null");
 		
-//		Check that both 'structureLength' and 'structureLengthToReturn' are greater than or equal to '1':
+//		Check that 'structureLength' is greater than or equal to '1' and 'structureLengthToReturn' is greater than or equal to '0':
 		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
-		ParameterArguments.requireRange(structureLengthToReturn, 1, Integer.MAX_VALUE, "structureLengthToReturn");
+		ParameterArguments.requireRange(structureLengthToReturn, 0, Integer.MAX_VALUE, "structureLengthToReturn");
 		
 		return structureArray.length % structureLength == 0 ? structureLengthToReturn : 0;
 	}

@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.compiler;
 
-import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.pack;
 
 import java.util.ArrayList;
@@ -122,7 +121,7 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureBlendTextureArray() {
-		final float[] textureBlendTextureArray = Floats.toArray(this.distinctBlendTextures, blendTexture -> CompiledTextureCache.toArray(blendTexture), 1);
+		final float[] textureBlendTextureArray = Floats.toArray(this.distinctBlendTextures, blendTexture -> CompiledTextureCache.toArray(blendTexture));
 		
 		for(int i = 0; i < this.distinctBlendTextures.size(); i++) {
 			final BlendTexture blendTexture = this.distinctBlendTextures.get(i);
@@ -141,7 +140,7 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureBullseyeTextureArray() {
-		final float[] textureBullseyeTextureArray = Floats.toArray(this.distinctBullseyeTextures, bullseyeTexture -> CompiledTextureCache.toArray(bullseyeTexture), 1);
+		final float[] textureBullseyeTextureArray = Floats.toArray(this.distinctBullseyeTextures, bullseyeTexture -> CompiledTextureCache.toArray(bullseyeTexture));
 		
 		for(int i = 0; i < this.distinctBullseyeTextures.size(); i++) {
 			final BullseyeTexture bullseyeTexture = this.distinctBullseyeTextures.get(i);
@@ -160,7 +159,7 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureCheckerboardTextureArray() {
-		final float[] textureCheckerboardTextureArray = Floats.toArray(this.distinctCheckerboardTextures, checkerboardTexture -> CompiledTextureCache.toArray(checkerboardTexture), 1);
+		final float[] textureCheckerboardTextureArray = Floats.toArray(this.distinctCheckerboardTextures, checkerboardTexture -> CompiledTextureCache.toArray(checkerboardTexture));
 		
 		for(int i = 0; i < this.distinctCheckerboardTextures.size(); i++) {
 			final CheckerboardTexture checkerboardTexture = this.distinctCheckerboardTextures.get(i);
@@ -179,19 +178,19 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureConstantTextureArray() {
-		return Floats.toArray(this.distinctConstantTextures, constantTexture -> CompiledTextureCache.toArray(constantTexture), 1);
+		return Floats.toArray(this.distinctConstantTextures, constantTexture -> CompiledTextureCache.toArray(constantTexture));
 	}
 	
 	public float[] toTextureLDRImageTextureArray() {
-		return Floats.toArray(this.distinctLDRImageTextures, lDRImageTexture -> CompiledTextureCache.toArray(lDRImageTexture), 1);
+		return Floats.toArray(this.distinctLDRImageTextures, lDRImageTexture -> CompiledTextureCache.toArray(lDRImageTexture));
 	}
 	
 	public float[] toTextureMarbleTextureArray() {
-		return Floats.toArray(this.distinctMarbleTextures, marbleTexture -> CompiledTextureCache.toArray(marbleTexture), 1);
+		return Floats.toArray(this.distinctMarbleTextures, marbleTexture -> CompiledTextureCache.toArray(marbleTexture));
 	}
 	
 	public float[] toTexturePolkaDotTextureArray() {
-		final float[] texturePolkaDotTextureArray = Floats.toArray(this.distinctPolkaDotTextures, polkaDotTexture -> CompiledTextureCache.toArray(polkaDotTexture), 1);
+		final float[] texturePolkaDotTextureArray = Floats.toArray(this.distinctPolkaDotTextures, polkaDotTexture -> CompiledTextureCache.toArray(polkaDotTexture));
 		
 		for(int i = 0; i < this.distinctPolkaDotTextures.size(); i++) {
 			final PolkaDotTexture polkaDotTexture = this.distinctPolkaDotTextures.get(i);
@@ -210,11 +209,11 @@ final class TextureCache {
 	}
 	
 	public float[] toTextureSimplexFractionalBrownianMotionTextureArray() {
-		return Floats.toArray(this.distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> CompiledTextureCache.toArray(simplexFractionalBrownianMotionTexture), 1);
+		return Floats.toArray(this.distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> CompiledTextureCache.toArray(simplexFractionalBrownianMotionTexture));
 	}
 	
 	public int[] toTextureLDRImageTextureOffsetArray() {
-		final int[] textureLDRImageTextureOffsetArray = new int[max(this.distinctLDRImageTextures.size(), 1)];
+		final int[] textureLDRImageTextureOffsetArray = new int[this.distinctLDRImageTextures.size()];
 		
 		for(int i = 0, j = 0; i < this.distinctLDRImageTextures.size(); i++) {
 			final LDRImageTexture lDRImageTexture = this.distinctLDRImageTextures.get(i);

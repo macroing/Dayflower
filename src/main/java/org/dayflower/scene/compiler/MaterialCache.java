@@ -44,7 +44,6 @@ import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.texture.Texture;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
 
 final class MaterialCache {
@@ -113,60 +112,15 @@ final class MaterialCache {
 	}
 	
 	public float[] toMaterialBullseyeMaterialArray() {
-		final float[] materialBullseyeMaterialArray = Floats.toArray(this.distinctBullseyeMaterials, bullseyeMaterial -> CompiledMaterialCache.toArray(bullseyeMaterial));
-		
-		for(int i = 0; i < this.distinctBullseyeMaterials.size(); i++) {
-			final BullseyeMaterial bullseyeMaterial = this.distinctBullseyeMaterials.get(i);
-			
-			final Material materialA = bullseyeMaterial.getMaterialA();
-			final Material materialB = bullseyeMaterial.getMaterialB();
-			
-			final int materialBullseyeMaterialArrayMaterialA = i * CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_A;
-			final int materialBullseyeMaterialArrayMaterialB = i * CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH + CompiledMaterialCache.BULLSEYE_MATERIAL_OFFSET_MATERIAL_B;
-			
-			materialBullseyeMaterialArray[materialBullseyeMaterialArrayMaterialA] = pack(materialA.getID(), findOffsetFor(materialA));
-			materialBullseyeMaterialArray[materialBullseyeMaterialArrayMaterialB] = pack(materialB.getID(), findOffsetFor(materialB));
-		}
-		
-		return materialBullseyeMaterialArray;
+		return CompiledMaterialCache.toMaterialBullseyeMaterialArray(this.distinctBullseyeMaterials, this::findOffsetFor);
 	}
 	
 	public float[] toMaterialCheckerboardMaterialArray() {
-		final float[] materialCheckerboardMaterialArray = Floats.toArray(this.distinctCheckerboardMaterials, checkerboardMaterial -> CompiledMaterialCache.toArray(checkerboardMaterial));
-		
-		for(int i = 0; i < this.distinctCheckerboardMaterials.size(); i++) {
-			final CheckerboardMaterial checkerboardMaterial = this.distinctCheckerboardMaterials.get(i);
-			
-			final Material materialA = checkerboardMaterial.getMaterialA();
-			final Material materialB = checkerboardMaterial.getMaterialB();
-			
-			final int materialCheckerboardMaterialArrayMaterialA = i * CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A;
-			final int materialCheckerboardMaterialArrayMaterialB = i * CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH + CompiledMaterialCache.CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B;
-			
-			materialCheckerboardMaterialArray[materialCheckerboardMaterialArrayMaterialA] = pack(materialA.getID(), findOffsetFor(materialA));
-			materialCheckerboardMaterialArray[materialCheckerboardMaterialArrayMaterialB] = pack(materialB.getID(), findOffsetFor(materialB));
-		}
-		
-		return materialCheckerboardMaterialArray;
+		return CompiledMaterialCache.toMaterialCheckerboardMaterialArray(this.distinctCheckerboardMaterials, this::findOffsetFor);
 	}
 	
 	public float[] toMaterialPolkaDotMaterialArray() {
-		final float[] materialPolkaDotMaterialArray = Floats.toArray(this.distinctPolkaDotMaterials, polkaDotMaterial -> CompiledMaterialCache.toArray(polkaDotMaterial));
-		
-		for(int i = 0; i < this.distinctPolkaDotMaterials.size(); i++) {
-			final PolkaDotMaterial polkaDotMaterial = this.distinctPolkaDotMaterials.get(i);
-			
-			final Material materialA = polkaDotMaterial.getMaterialA();
-			final Material materialB = polkaDotMaterial.getMaterialB();
-			
-			final int materialPolkaDotMaterialArrayMaterialA = i * CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_A;
-			final int materialPolkaDotMaterialArrayMaterialB = i * CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH + CompiledMaterialCache.POLKA_DOT_MATERIAL_OFFSET_MATERIAL_B;
-			
-			materialPolkaDotMaterialArray[materialPolkaDotMaterialArrayMaterialA] = pack(materialA.getID(), findOffsetFor(materialA));
-			materialPolkaDotMaterialArray[materialPolkaDotMaterialArrayMaterialB] = pack(materialB.getID(), findOffsetFor(materialB));
-		}
-		
-		return materialPolkaDotMaterialArray;
+		return CompiledMaterialCache.toMaterialPolkaDotMaterialArray(this.distinctPolkaDotMaterials, this::findOffsetFor);
 	}
 	
 	public int findOffsetFor(final Material material) {

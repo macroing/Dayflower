@@ -20,7 +20,9 @@ package org.dayflower.scene.compiler;
 
 import static org.dayflower.utility.Ints.pack;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.function.ToIntFunction;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point3F;
@@ -39,6 +41,7 @@ import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.texture.Texture;
+import org.dayflower.utility.Floats;
 
 /**
  * A {@code CompiledMaterialCache} contains {@link Material} instances in compiled form.
@@ -1027,12 +1030,33 @@ public final class CompiledMaterialCache {
 	 * Returns a {@code float[]} with {@code bullseyeMaterial} in compiled form.
 	 * <p>
 	 * If {@code bullseyeMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toArray(bullseyeMaterial, material -> 0);
+	 * }
+	 * </pre>
 	 * 
 	 * @param bullseyeMaterial a {@link BullseyeMaterial} instance
 	 * @return a {@code float[]} with {@code bullseyeMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
 	 */
 	public static float[] toArray(final BullseyeMaterial bullseyeMaterial) {
+		return toArray(bullseyeMaterial, material -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code bullseyeMaterial} in compiled form.
+	 * <p>
+	 * If either {@code bullseyeMaterial} or {@code materialOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bullseyeMaterial a {@link BullseyeMaterial} instance
+	 * @param materialOffsetFunction a {@code ToIntFunction} that returns {@link Material} offsets
+	 * @return a {@code float[]} with {@code bullseyeMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeMaterial} or {@code materialOffsetFunction} are {@code null}
+	 */
+	public static float[] toArray(final BullseyeMaterial bullseyeMaterial, final ToIntFunction<Material> materialOffsetFunction) {
 		final Material materialA = bullseyeMaterial.getMaterialA();
 		final Material materialB = bullseyeMaterial.getMaterialB();
 		
@@ -1040,14 +1064,17 @@ public final class CompiledMaterialCache {
 		
 		final float scale = bullseyeMaterial.getScale();
 		
+		final int materialAValue = pack(materialA.getID(), materialOffsetFunction.applyAsInt(materialA));
+		final int materialBValue = pack(materialB.getID(), materialOffsetFunction.applyAsInt(materialB));
+		
 		final float[] array = new float[BULLSEYE_MATERIAL_LENGTH];
 		
 //		Because the BullseyeMaterial occupy 8/8 positions in a block, it should be aligned.
 		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 0] = origin.getX();		//Block #1
 		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 1] = origin.getY();		//Block #1
 		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 2] = origin.getZ();		//Block #1
-		array[BULLSEYE_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();	//Block #1
-		array[BULLSEYE_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();	//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_MATERIAL_A] = materialAValue;	//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_MATERIAL_B] = materialBValue;	//Block #1
 		array[BULLSEYE_MATERIAL_OFFSET_SCALE] = scale;					//Block #1
 		array[6] = 0.0F;												//Block #1
 		array[7] = 0.0F;												//Block #1
@@ -1059,12 +1086,33 @@ public final class CompiledMaterialCache {
 	 * Returns a {@code float[]} with {@code checkerboardMaterial} in compiled form.
 	 * <p>
 	 * If {@code checkerboardMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toArray(checkerboardMaterial, material -> 0);
+	 * }
+	 * </pre>
 	 * 
 	 * @param checkerboardMaterial a {@link CheckerboardMaterial} instance
 	 * @return a {@code float[]} with {@code checkerboardMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
 	 */
 	public static float[] toArray(final CheckerboardMaterial checkerboardMaterial) {
+		return toArray(checkerboardMaterial, material -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code checkerboardMaterial} in compiled form.
+	 * <p>
+	 * If either {@code checkerboardMaterial} or {@code materialOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param checkerboardMaterial a {@link CheckerboardMaterial} instance
+	 * @param materialOffsetFunction a {@code ToIntFunction} that returns {@link Material} offsets
+	 * @return a {@code float[]} with {@code checkerboardMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardMaterial} or {@code materialOffsetFunction} are {@code null}
+	 */
+	public static float[] toArray(final CheckerboardMaterial checkerboardMaterial, final ToIntFunction<Material> materialOffsetFunction) {
 		final AngleF angle = checkerboardMaterial.getAngle();
 		
 		final Material materialA = checkerboardMaterial.getMaterialA();
@@ -1072,13 +1120,16 @@ public final class CompiledMaterialCache {
 		
 		final Vector2F scale = checkerboardMaterial.getScale();
 		
+		final int materialAValue = pack(materialA.getID(), materialOffsetFunction.applyAsInt(materialA));
+		final int materialBValue = pack(materialB.getID(), materialOffsetFunction.applyAsInt(materialB));
+		
 		final float[] array = new float[CHECKERBOARD_MATERIAL_LENGTH];
 		
 //		Because the CheckerboardMaterial occupy 8/8 positions in a block, it should be aligned.
 		array[CHECKERBOARD_MATERIAL_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
 		array[CHECKERBOARD_MATERIAL_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
-		array[CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();		//Block #1
-		array[CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();		//Block #1
+		array[CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A] = materialAValue;		//Block #1
+		array[CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B] = materialBValue;		//Block #1
 		array[CHECKERBOARD_MATERIAL_OFFSET_SCALE + 0] = scale.getX();			//Block #1
 		array[CHECKERBOARD_MATERIAL_OFFSET_SCALE + 1] = scale.getY();			//Block #1
 		array[6] = 0.0F;														//Block #1
@@ -1091,12 +1142,33 @@ public final class CompiledMaterialCache {
 	 * Returns a {@code float[]} with {@code polkaDotMaterial} in compiled form.
 	 * <p>
 	 * If {@code polkaDotMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toArray(polkaDotMaterial, material -> 0);
+	 * }
+	 * </pre>
 	 * 
 	 * @param polkaDotMaterial a {@link PolkaDotMaterial} instance
 	 * @return a {@code float[]} with {@code polkaDotMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterial} is {@code null}
 	 */
 	public static float[] toArray(final PolkaDotMaterial polkaDotMaterial) {
+		return toArray(polkaDotMaterial, material -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code polkaDotMaterial} in compiled form.
+	 * <p>
+	 * If either {@code polkaDotMaterial} or {@code materialOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polkaDotMaterial a {@link PolkaDotMaterial} instance
+	 * @param materialOffsetFunction a {@code ToIntFunction} that returns {@link Material} offsets
+	 * @return a {@code float[]} with {@code polkaDotMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotMaterial} or {@code materialOffsetFunction} are {@code null}
+	 */
+	public static float[] toArray(final PolkaDotMaterial polkaDotMaterial, final ToIntFunction<Material> materialOffsetFunction) {
 		final AngleF angle = polkaDotMaterial.getAngle();
 		
 		final Material materialA = polkaDotMaterial.getMaterialA();
@@ -1105,19 +1177,124 @@ public final class CompiledMaterialCache {
 		final float cellResolution = polkaDotMaterial.getCellResolution();
 		final float polkaDotRadius = polkaDotMaterial.getPolkaDotRadius();
 		
+		final int materialAValue = pack(materialA.getID(), materialOffsetFunction.applyAsInt(materialA));
+		final int materialBValue = pack(materialB.getID(), materialOffsetFunction.applyAsInt(materialB));
+		
 		final float[] array = new float[POLKA_DOT_MATERIAL_LENGTH];
 		
 //		Because the PolkaDotMaterial occupy 8/8 positions in a block, it should be aligned.
 		array[POLKA_DOT_MATERIAL_OFFSET_ANGLE_DEGREES] = angle.getDegrees();//Block #1
 		array[POLKA_DOT_MATERIAL_OFFSET_ANGLE_RADIANS] = angle.getRadians();//Block #1
-		array[POLKA_DOT_MATERIAL_OFFSET_MATERIAL_A] = materialA.getID();	//Block #1
-		array[POLKA_DOT_MATERIAL_OFFSET_MATERIAL_B] = materialB.getID();	//Block #1
+		array[POLKA_DOT_MATERIAL_OFFSET_MATERIAL_A] = materialAValue;		//Block #1
+		array[POLKA_DOT_MATERIAL_OFFSET_MATERIAL_B] = materialBValue;		//Block #1
 		array[POLKA_DOT_MATERIAL_OFFSET_CELL_RESOLUTION] = cellResolution;	//Block #1
 		array[POLKA_DOT_MATERIAL_OFFSET_POLKA_DOT_RADIUS] = polkaDotRadius;	//Block #1
 		array[6] = 0.0F;													//Block #1
 		array[7] = 0.0F;													//Block #1
 		
 		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link BullseyeMaterial} instances in {@code bullseyeMaterials} in compiled form.
+	 * <p>
+	 * If {@code bullseyeMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toMaterialBullseyeMaterialArray(bullseyeMaterials, material -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param bullseyeMaterials a {@code List} of {@code BullseyeMaterial} instances
+	 * @return a {@code float[]} with all {@code BullseyeMaterial} instances in {@code bullseyeMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterials} or at least one of its elements are {@code null}
+	 */
+	public static float[] toMaterialBullseyeMaterialArray(final List<BullseyeMaterial> bullseyeMaterials) {
+		return toMaterialBullseyeMaterialArray(bullseyeMaterials, material -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link BullseyeMaterial} instances in {@code bullseyeMaterials} in compiled form.
+	 * <p>
+	 * If either {@code bullseyeMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bullseyeMaterials a {@code List} of {@code BullseyeMaterial} instances
+	 * @param materialOffsetFunction a {@code ToIntFunction} that returns {@link Material} offsets
+	 * @return a {@code float[]} with all {@code BullseyeMaterial} instances in {@code bullseyeMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
+	 */
+	public static float[] toMaterialBullseyeMaterialArray(final List<BullseyeMaterial> bullseyeMaterials, final ToIntFunction<Material> materialOffsetFunction) {
+		return Floats.toArray(bullseyeMaterials, bullseyeMaterial -> toArray(bullseyeMaterial, materialOffsetFunction));
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link CheckerboardMaterial} instances in {@code checkerboardMaterials} in compiled form.
+	 * <p>
+	 * If {@code checkerboardMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toMaterialCheckerboardMaterialArray(checkerboardMaterials, material -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param checkerboardMaterials a {@code List} of {@code CheckerboardMaterial} instances
+	 * @return a {@code float[]} with all {@code CheckerboardMaterial} instances in {@code checkerboardMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterials} or at least one of its elements are {@code null}
+	 */
+	public static float[] toMaterialCheckerboardMaterialArray(final List<CheckerboardMaterial> checkerboardMaterials) {
+		return toMaterialCheckerboardMaterialArray(checkerboardMaterials, material -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link CheckerboardMaterial} instances in {@code checkerboardMaterials} in compiled form.
+	 * <p>
+	 * If either {@code checkerboardMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param checkerboardMaterials a {@code List} of {@code CheckerboardMaterial} instances
+	 * @param materialOffsetFunction a {@code ToIntFunction} that returns {@link Material} offsets
+	 * @return a {@code float[]} with all {@code CheckerboardMaterial} instances in {@code checkerboardMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
+	 */
+	public static float[] toMaterialCheckerboardMaterialArray(final List<CheckerboardMaterial> checkerboardMaterials, final ToIntFunction<Material> materialOffsetFunction) {
+		return Floats.toArray(checkerboardMaterials, checkerboardMaterial -> toArray(checkerboardMaterial, materialOffsetFunction));
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form.
+	 * <p>
+	 * If {@code polkaDotMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toMaterialPolkaDotMaterialArray(polkaDotMaterials, material -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param polkaDotMaterials a {@code List} of {@code PolkaDotMaterial} instances
+	 * @return a {@code float[]} with all {@code PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterials} or at least one of its elements are {@code null}
+	 */
+	public static float[] toMaterialPolkaDotMaterialArray(final List<PolkaDotMaterial> polkaDotMaterials) {
+		return toMaterialPolkaDotMaterialArray(polkaDotMaterials, material -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form.
+	 * <p>
+	 * If either {@code polkaDotMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polkaDotMaterials a {@code List} of {@code PolkaDotMaterial} instances
+	 * @param materialOffsetFunction a {@code ToIntFunction} that returns {@link Material} offsets
+	 * @return a {@code float[]} with all {@code PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
+	 */
+	public static float[] toMaterialPolkaDotMaterialArray(final List<PolkaDotMaterial> polkaDotMaterials, final ToIntFunction<Material> materialOffsetFunction) {
+		return Floats.toArray(polkaDotMaterials, polkaDotMaterial -> toArray(polkaDotMaterial, materialOffsetFunction));
 	}
 	
 	/**

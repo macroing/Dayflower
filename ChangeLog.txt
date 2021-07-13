@@ -1,3 +1,7 @@
+2021-07-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods toArray(DiffuseAreaLight, ToIntFunction<Shape3F>), toLightDiffuseAreaLightArray(List<DiffuseAreaLight>), toLightDiffuseAreaLightArray(List<DiffuseAreaLight>, ToIntFunction<Shape3F>), toLightDirectionalLightArray(List<DirectionalLight>), toLightIDAndOffsetArray(List<Light>, ToIntFunction<Light>), toLightLDRImageLightArray(List<LDRImageLight>), toLightLDRImageLightOffsetArray(List<LDRImageLight>, ToIntFunction<LDRImageLight>), toLightPerezLightArray(List<PerezLight>), toLightPerezLightOffsetArray(List<PerezLight>, ToIntFunction<PerezLight>), toLightPointLightArray(List<PointLight>) and toLightSpotLightArray(List<SpotLight>) to the CompiledLightCache class.
+
 2021-07-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods toBoundingVolume3FAxisAlignedBoundingBox3FArray(List<AxisAlignedBoundingBox3F>) and toBoundingVolume3FBoundingSphere3FArray(List<BoundingSphere3F>) to the CompiledBoundingVolume3FCache class.

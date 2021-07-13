@@ -4,6 +4,8 @@
 	* ADD:		Add the methods toArray(CheckerboardMaterial, ToIntFunction<Material>), toMaterialCheckerboardMaterialArray(List<CheckerboardMaterial>) and toMaterialCheckerboardMaterialArray(List<CheckerboardMaterial>, ToIntFunction<Material>) to the CompiledMaterialCache class.
 	* ADD:		Add the methods toArray(BullseyeMaterial, ToIntFunction<Material>), toMaterialBullseyeMaterialArray(List<BullseyeMaterial>) and toMaterialBullseyeMaterialArray(List<BullseyeMaterial>, ToIntFunction<Material>) to the CompiledMaterialCache class.
 	* ADD:		Add the methods toArray(DiffuseAreaLight, ToIntFunction<Shape3F>), toLightDiffuseAreaLightArray(List<DiffuseAreaLight>), toLightDiffuseAreaLightArray(List<DiffuseAreaLight>, ToIntFunction<Shape3F>), toLightDirectionalLightArray(List<DirectionalLight>), toLightIDAndOffsetArray(List<Light>, ToIntFunction<Light>), toLightLDRImageLightArray(List<LDRImageLight>), toLightLDRImageLightOffsetArray(List<LDRImageLight>, ToIntFunction<LDRImageLight>), toLightPerezLightArray(List<PerezLight>), toLightPerezLightOffsetArray(List<PerezLight>, ToIntFunction<PerezLight>), toLightPointLightArray(List<PointLight>) and toLightSpotLightArray(List<SpotLight>) to the CompiledLightCache class.
+	* CHANGE:	Change the naming convention used by the CompiledBoundingVolume3FCache class.
+	* CHANGE:	Change the naming convention used by the CompiledCameraCache class.
 
 2021-07-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

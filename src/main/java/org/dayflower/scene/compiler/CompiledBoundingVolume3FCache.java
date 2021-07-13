@@ -66,8 +66,8 @@ public final class CompiledBoundingVolume3FCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
-	private float[] boundingVolume3FBoundingSphere3FArray;
+	private float[] axisAlignedBoundingBox3FArray;
+	private float[] boundingSphere3FArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -75,8 +75,8 @@ public final class CompiledBoundingVolume3FCache {
 	 * Constructs a new {@code CompiledBoundingVolume3FCache} instance.
 	 */
 	public CompiledBoundingVolume3FCache() {
-		setBoundingVolume3FAxisAlignedBoundingBox3FArray(new float[0]);
-		setBoundingVolume3FBoundingSphere3FArray(new float[0]);
+		setAxisAlignedBoundingBox3FArray(new float[0]);
+		setBoundingSphere3FArray(new float[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,8 +86,8 @@ public final class CompiledBoundingVolume3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code AxisAlignedBoundingBox3F} instances in compiled form that are associated with this {@code CompiledBoundingVolume3FCache} instance
 	 */
-	public float[] getBoundingVolume3FAxisAlignedBoundingBox3FArray() {
-		return this.boundingVolume3FAxisAlignedBoundingBox3FArray;
+	public float[] getAxisAlignedBoundingBox3FArray() {
+		return this.axisAlignedBoundingBox3FArray;
 	}
 	
 	/**
@@ -95,32 +95,32 @@ public final class CompiledBoundingVolume3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code BoundingSphere3F} instances in compiled form that are associated with this {@code CompiledBoundingVolume3FCache} instance
 	 */
-	public float[] getBoundingVolume3FBoundingSphere3FArray() {
-		return this.boundingVolume3FBoundingSphere3FArray;
+	public float[] getBoundingSphere3FArray() {
+		return this.boundingSphere3FArray;
 	}
 	
 	/**
-	 * Sets all {@link AxisAlignedBoundingBox3F} instances in compiled form to {@code boundingVolume3FAxisAlignedBoundingBox3FArray}.
+	 * Sets all {@link AxisAlignedBoundingBox3F} instances in compiled form to {@code axisAlignedBoundingBox3FArray}.
 	 * <p>
-	 * If {@code boundingVolume3FAxisAlignedBoundingBox3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code axisAlignedBoundingBox3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param boundingVolume3FAxisAlignedBoundingBox3FArray the {@code AxisAlignedBoundingBox3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume3FAxisAlignedBoundingBox3FArray} is {@code null}
+	 * @param axisAlignedBoundingBox3FArray the {@code AxisAlignedBoundingBox3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3FArray} is {@code null}
 	 */
-	public void setBoundingVolume3FAxisAlignedBoundingBox3FArray(final float[] boundingVolume3FAxisAlignedBoundingBox3FArray) {
-		this.boundingVolume3FAxisAlignedBoundingBox3FArray = Objects.requireNonNull(boundingVolume3FAxisAlignedBoundingBox3FArray, "boundingVolume3FAxisAlignedBoundingBox3FArray == null");
+	public void setAxisAlignedBoundingBox3FArray(final float[] axisAlignedBoundingBox3FArray) {
+		this.axisAlignedBoundingBox3FArray = Objects.requireNonNull(axisAlignedBoundingBox3FArray, "axisAlignedBoundingBox3FArray == null");
 	}
 	
 	/**
-	 * Sets all {@link BoundingSphere3F} instances in compiled form to {@code boundingVolume3FBoundingSphere3FArray}.
+	 * Sets all {@link BoundingSphere3F} instances in compiled form to {@code boundingSphere3FArray}.
 	 * <p>
-	 * If {@code boundingVolume3FBoundingSphere3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code boundingSphere3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param boundingVolume3FBoundingSphere3FArray the {@code BoundingSphere3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume3FBoundingSphere3FArray} is {@code null}
+	 * @param boundingSphere3FArray the {@code BoundingSphere3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3FArray} is {@code null}
 	 */
-	public void setBoundingVolume3FBoundingSphere3FArray(final float[] boundingVolume3FBoundingSphere3FArray) {
-		this.boundingVolume3FBoundingSphere3FArray = Objects.requireNonNull(boundingVolume3FBoundingSphere3FArray, "boundingVolume3FBoundingSphere3FArray == null");
+	public void setBoundingSphere3FArray(final float[] boundingSphere3FArray) {
+		this.boundingSphere3FArray = Objects.requireNonNull(boundingSphere3FArray, "boundingSphere3FArray == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ public final class CompiledBoundingVolume3FCache {
 	 * @return a {@code float[]} with {@code axisAlignedBoundingBox3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3F} is {@code null}
 	 */
-	public static float[] toArray(final AxisAlignedBoundingBox3F axisAlignedBoundingBox3F) {
+	public static float[] toAxisAlignedBoundingBox3FArray(final AxisAlignedBoundingBox3F axisAlignedBoundingBox3F) {
 		final Point3F maximum = axisAlignedBoundingBox3F.getMaximum();
 		final Point3F minimum = axisAlignedBoundingBox3F.getMinimum();
 		
@@ -153,6 +153,19 @@ public final class CompiledBoundingVolume3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link AxisAlignedBoundingBox3F} instances in {@code axisAlignedBoundingBox3Fs} in compiled form.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBox3Fs a {@code List} of {@code AxisAlignedBoundingBox3F} instances
+	 * @return a {@code float[]} with all {@code AxisAlignedBoundingBox3F} instances in {@code axisAlignedBoundingBox3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toAxisAlignedBoundingBox3FArray(final List<AxisAlignedBoundingBox3F> axisAlignedBoundingBox3Fs) {
+		return Floats.toArray(axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> toAxisAlignedBoundingBox3FArray(axisAlignedBoundingBox3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code boundingSphere3F} in compiled form.
 	 * <p>
 	 * If {@code boundingSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -161,7 +174,7 @@ public final class CompiledBoundingVolume3FCache {
 	 * @return a {@code float[]} with {@code boundingSphere3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3F} is {@code null}
 	 */
-	public static float[] toArray(final BoundingSphere3F boundingSphere3F) {
+	public static float[] toBoundingSphere3FArray(final BoundingSphere3F boundingSphere3F) {
 		final Point3F center = boundingSphere3F.getCenter();
 		
 		final float radius = boundingSphere3F.getRadius();
@@ -177,19 +190,6 @@ public final class CompiledBoundingVolume3FCache {
 	}
 	
 	/**
-	 * Returns a {@code float[]} with all {@link AxisAlignedBoundingBox3F} instances in {@code axisAlignedBoundingBox3Fs} in compiled form.
-	 * <p>
-	 * If {@code axisAlignedBoundingBox3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param axisAlignedBoundingBox3Fs a {@code List} of {@code AxisAlignedBoundingBox3F} instances
-	 * @return a {@code float[]} with all {@code AxisAlignedBoundingBox3F} instances in {@code axisAlignedBoundingBox3Fs} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3Fs} or at least one of its elements are {@code null}
-	 */
-	public static float[] toBoundingVolume3FAxisAlignedBoundingBox3FArray(final List<AxisAlignedBoundingBox3F> axisAlignedBoundingBox3Fs) {
-		return Floats.toArray(axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> toArray(axisAlignedBoundingBox3F));
-	}
-	
-	/**
 	 * Returns a {@code float[]} with all {@link BoundingSphere3F} instances in {@code boundingSphere3Fs} in compiled form.
 	 * <p>
 	 * If {@code boundingSphere3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
@@ -198,7 +198,7 @@ public final class CompiledBoundingVolume3FCache {
 	 * @return a {@code float[]} with all {@code BoundingSphere3F} instances in {@code boundingSphere3Fs} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3Fs} or at least one of its elements are {@code null}
 	 */
-	public static float[] toBoundingVolume3FBoundingSphere3FArray(final List<BoundingSphere3F> boundingSphere3Fs) {
-		return Floats.toArray(boundingSphere3Fs, boundingSphere3F -> toArray(boundingSphere3F));
+	public static float[] toBoundingSphere3FArray(final List<BoundingSphere3F> boundingSphere3Fs) {
+		return Floats.toArray(boundingSphere3Fs, boundingSphere3F -> toBoundingSphere3FArray(boundingSphere3F));
 	}
 }

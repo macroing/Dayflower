@@ -155,7 +155,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * Updates the {@link Camera} instance.
 	 */
 	public final void updateCamera() {
-		put(this.cameraArray = CompiledCameraCache.toArray(getScene().getCamera()));
+		put(this.cameraArray = CompiledCameraCache.toCameraArray(getScene().getCamera()));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1109,8 +1109,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		final CompiledScene compiledScene = sceneCompiler.compile(getScene());
 		
-		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getBoundingVolume3FAxisAlignedBoundingBox3FArray()));
-		put(super.boundingVolume3FBoundingSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getBoundingVolume3FBoundingSphere3FArray()));
+		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getAxisAlignedBoundingBox3FArray()));
+		put(super.boundingVolume3FBoundingSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getBoundingSphere3FArray()));
 		
 		put(super.shape3FCone3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FCone3FArray()));
 		put(super.shape3FCylinder3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FCylinder3FArray()));

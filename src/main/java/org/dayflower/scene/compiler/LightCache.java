@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.compiler;
 
+import java.lang.reflect.Field;//TODO: Refactor!
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

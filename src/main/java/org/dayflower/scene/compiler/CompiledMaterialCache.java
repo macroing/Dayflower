@@ -20,6 +20,7 @@ package org.dayflower.scene.compiler;
 
 import static org.dayflower.utility.Ints.pack;
 
+import java.lang.reflect.Field;//TODO: Refactor!
 import java.util.List;
 import java.util.Objects;
 import java.util.function.ToIntFunction;

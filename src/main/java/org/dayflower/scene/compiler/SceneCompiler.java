@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.compiler;
 
+import java.lang.reflect.Field;//TODO: Refactor!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -139,9 +140,9 @@ public final class SceneCompiler {
 		
 		final
 		CompiledScene compiledScene = new CompiledScene();
-		compiledScene.getCompiledBoundingVolume3FCache().setBoundingVolume3FAxisAlignedBoundingBox3FArray(this.boundingVolume3FCache.toBoundingVolume3FAxisAlignedBoundingBox3FArray());
-		compiledScene.getCompiledBoundingVolume3FCache().setBoundingVolume3FBoundingSphere3FArray(this.boundingVolume3FCache.toBoundingVolume3FBoundingSphere3FArray());
-		compiledScene.getCompiledCameraCache().setCameraArray(CompiledCameraCache.toArray(scene.getCamera()));
+		compiledScene.getCompiledBoundingVolume3FCache().setAxisAlignedBoundingBox3FArray(this.boundingVolume3FCache.toAxisAlignedBoundingBox3FArray());
+		compiledScene.getCompiledBoundingVolume3FCache().setBoundingSphere3FArray(this.boundingVolume3FCache.toBoundingSphere3FArray());
+		compiledScene.getCompiledCameraCache().setCameraArray(CompiledCameraCache.toCameraArray(scene.getCamera()));
 		compiledScene.getCompiledLightCache().setLightDiffuseAreaLightArray(this.lightCache.toLightDiffuseAreaLightArray(this.shape3FCache));
 		compiledScene.getCompiledLightCache().setLightDirectionalLightArray(this.lightCache.toLightDirectionalLightArray());
 		compiledScene.getCompiledLightCache().setLightIDAndOffsetArray(this.lightCache.toLightIDAndOffsetArray());

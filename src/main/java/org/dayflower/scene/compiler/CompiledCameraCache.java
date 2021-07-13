@@ -141,7 +141,7 @@ public final class CompiledCameraCache {
 	 * @return a {@code float[]} with {@code camera} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
 	 */
-	public static float[] toArray(final Camera camera) {
+	public static float[] toCameraArray(final Camera camera) {
 		final AngleF fieldOfViewX = camera.getFieldOfViewX();
 		final AngleF fieldOfViewY = camera.getFieldOfViewY();
 		

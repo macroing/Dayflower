@@ -1149,14 +1149,14 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.materialSubstrateMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMaterialSubstrateMaterialArray()));
 		
 		put(super.lightIDAndOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightIDAndOffsetArray()));
-		put(super.lightDiffuseAreaLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightDiffuseAreaLightArray()));
-		put(super.lightDirectionalLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightDirectionalLightArray()));
-		put(super.lightLDRImageLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightLDRImageLightArray()));
-		put(super.lightLDRImageLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightLDRImageLightOffsetArray()));
-		put(super.lightPerezLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightPerezLightArray()));
-		put(super.lightPerezLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightPerezLightOffsetArray()));
-		put(super.lightPointLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightPointLightArray()));
-		put(super.lightSpotLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightSpotLightArray()));
+		put(super.lightDiffuseAreaLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDiffuseAreaLightArray()));
+		put(super.lightDirectionalLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDirectionalLightArray()));
+		put(super.lightLDRImageLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLDRImageLightArray()));
+		put(super.lightLDRImageLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLDRImageLightOffsetArray()));
+		put(super.lightPerezLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLightArray()));
+		put(super.lightPerezLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLightOffsetArray()));
+		put(super.lightPointLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPointLightArray()));
+		put(super.lightSpotLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getSpotLightArray()));
 		
 		put(this.cameraArray = doGetCompatibleArray(compiledScene.getCompiledCameraCache().getCameraArray()));
 		
@@ -1164,12 +1164,12 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(this.primitiveMatrix44FArray = doGetCompatibleArray(compiledScene.getCompiledPrimitiveCache().getPrimitiveMatrix44FArray()));
 		
 		super.lightCount = compiledScene.getCompiledLightCache().getLightCount();
-		super.lightDiffuseAreaLightCount = compiledScene.getCompiledLightCache().getLightDiffuseAreaLightCount();
-		super.lightDirectionalLightCount = compiledScene.getCompiledLightCache().getLightDirectionalLightCount();
-		super.lightLDRImageLightCount = compiledScene.getCompiledLightCache().getLightLDRImageLightCount();
-		super.lightPerezLightCount = compiledScene.getCompiledLightCache().getLightPerezLightCount();
-		super.lightPointLightCount = compiledScene.getCompiledLightCache().getLightPointLightCount();
-		super.lightSpotLightCount = compiledScene.getCompiledLightCache().getLightSpotLightCount();
+		super.lightDiffuseAreaLightCount = compiledScene.getCompiledLightCache().getDiffuseAreaLightCount();
+		super.lightDirectionalLightCount = compiledScene.getCompiledLightCache().getDirectionalLightCount();
+		super.lightLDRImageLightCount = compiledScene.getCompiledLightCache().getLDRImageLightCount();
+		super.lightPerezLightCount = compiledScene.getCompiledLightCache().getPerezLightCount();
+		super.lightPointLightCount = compiledScene.getCompiledLightCache().getPointLightCount();
+		super.lightSpotLightCount = compiledScene.getCompiledLightCache().getSpotLightCount();
 		
 		this.primitiveCount = compiledScene.getCompiledPrimitiveCache().getPrimitiveCount();
 	}

@@ -1,3 +1,7 @@
+2021-07-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Change the naming convention used by the CompiledLightCache class.
+
 2021-07-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods toArray(PolkaDotMaterial, ToIntFunction<Material>), toMaterialPolkaDotMaterialArray(List<PolkaDotMaterial>) and toMaterialPolkaDotMaterialArray(List<PolkaDotMaterial>, ToIntFunction<Material>) to the CompiledMaterialCache class.

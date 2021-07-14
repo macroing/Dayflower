@@ -1112,18 +1112,18 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getAxisAlignedBoundingBox3Fs()));
 		put(super.boundingVolume3FBoundingSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getBoundingSphere3Fs()));
 		
-		put(super.shape3FCone3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FCone3FArray()));
-		put(super.shape3FCylinder3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FCylinder3FArray()));
-		put(super.shape3FDisk3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FDisk3FArray()));
-		put(super.shape3FHyperboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FHyperboloid3FArray()));
-		put(super.shape3FParaboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FParaboloid3FArray()));
-		put(super.shape3FPlane3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FPlane3FArray()));
-		put(super.shape3FRectangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FRectangle3FArray()));
-		put(super.shape3FRectangularCuboid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FRectangularCuboid3FArray()));
-		put(super.shape3FSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FSphere3FArray()));
-		put(super.shape3FTorus3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FTorus3FArray()));
-		put(super.shape3FTriangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FTriangle3FArray()));
-		put(super.shape3FTriangleMesh3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FTriangleMesh3FArray()));
+		put(super.shape3FCone3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getCone3Fs()));
+		put(super.shape3FCylinder3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getCylinder3Fs()));
+		put(super.shape3FDisk3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getDisk3Fs()));
+		put(super.shape3FHyperboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getHyperboloid3Fs()));
+		put(super.shape3FParaboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getParaboloid3Fs()));
+		put(super.shape3FPlane3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getPlane3Fs()));
+		put(super.shape3FRectangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangle3Fs()));
+		put(super.shape3FRectangularCuboid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangularCuboid3Fs()));
+		put(super.shape3FSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getSphere3Fs()));
+		put(super.shape3FTorus3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getTorus3Fs()));
+		put(super.shape3FTriangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getTriangle3Fs()));
+		put(super.shape3FTriangleMesh3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getTriangleMesh3Fs()));
 		
 		put(super.textureBlendTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getBlendTextures()));
 		put(super.textureBullseyeTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getBullseyeTextures()));

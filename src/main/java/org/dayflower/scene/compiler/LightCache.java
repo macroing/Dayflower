@@ -104,6 +104,12 @@ final class LightCache {
 		return CompiledLightCache.toSpotLights(this.distinctSpotLights);
 	}
 	
+	public int findOffsetFor(final LDRImageLight lDRImageLight) {
+		Objects.requireNonNull(lDRImageLight, "lDRImageLight == null");
+		
+		return this.distinctToOffsetsLDRImageLights.get(lDRImageLight).intValue();
+	}
+	
 	public int findOffsetFor(final Light light) {
 		Objects.requireNonNull(light, "light == null");
 		
@@ -122,6 +128,12 @@ final class LightCache {
 		} else {
 			return 0;
 		}
+	}
+	
+	public int findOffsetFor(final PerezLight perezLight) {
+		Objects.requireNonNull(perezLight, "perezLight == null");
+		
+		return this.distinctToOffsetsPerezLights.get(perezLight).intValue();
 	}
 	
 	public int[] toLDRImageLightOffsets() {

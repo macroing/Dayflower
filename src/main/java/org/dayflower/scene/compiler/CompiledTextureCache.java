@@ -1292,22 +1292,19 @@ public final class CompiledTextureCache {
 	/**
 	 * Returns an {@code int[]} with the offsets for all {@link LDRImageTexture} instances in {@code lDRImageTextures} in compiled form.
 	 * <p>
-	 * If either {@code lDRImageTextures}, at least one of its elements or {@code lDRImageTextureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageTextures} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param lDRImageTextures a {@code List} of {@code LDRImageTexture} instances
-	 * @param lDRImageTextureOffsetFunction a {@code ToIntFunction} that returns the {@code LDRImageTexture} offset
 	 * @return an {@code int[]} with the offsets for all {@code LDRImageTexture} instances in {@code lDRImageTextures} in compiled form
-	 * @throws NullPointerException thrown if, and only if, either {@code lDRImageTextures}, at least one of its elements or {@code lDRImageTextureOffsetFunction} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTextures} or at least one of its elements are {@code null}
 	 */
-	public static int[] toLDRImageTextureOffsets(final List<LDRImageTexture> lDRImageTextures, final ToIntFunction<LDRImageTexture> lDRImageTextureOffsetFunction) {
+	public static int[] toLDRImageTextureOffsets(final List<LDRImageTexture> lDRImageTextures) {
 		ParameterArguments.requireNonNullList(lDRImageTextures, "lDRImageTextures");
-		
-		Objects.requireNonNull(lDRImageTextureOffsetFunction, "lDRImageTextureOffsetFunction == null");
 		
 		final int[] lDRImageTextureOffsets = new int[lDRImageTextures.size()];
 		
-		for(int i = 0; i < lDRImageTextures.size(); i++) {
-			lDRImageTextureOffsets[i] = lDRImageTextureOffsetFunction.applyAsInt(lDRImageTextures.get(i));
+		for(int i = 0, j = 0; i < lDRImageTextures.size(); j += getLDRImageTextureLength(lDRImageTextures.get(i)), i++) {
+			lDRImageTextureOffsets[i] = j;
 		}
 		
 		return lDRImageTextureOffsets;

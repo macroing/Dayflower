@@ -18,19 +18,13 @@
  */
 package org.dayflower.scene.compiler;
 
-import static org.dayflower.utility.Ints.padding;
-
-import java.lang.reflect.Field;//TODO: Refactor!
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Shape3F;
-import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
-import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
@@ -47,8 +41,6 @@ import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Scene;
-import org.dayflower.utility.Floats;
-import org.dayflower.utility.Ints;
 
 final class Shape3FCache {
 	private final List<Cone3F> distinctCone3Fs;
@@ -115,48 +107,48 @@ final class Shape3FCache {
 		return this.distinctShape3Fs.contains(Objects.requireNonNull(shape3F, "shape3F == null"));
 	}
 	
-	public float[] toShape3FCone3FArray() {
-		return Floats.toArray(this.distinctCone3Fs, cone3F -> CompiledShape3FCache.toArray(cone3F));
+	public float[] toCone3Fs() {
+		return CompiledShape3FCache.toCone3Fs(this.distinctCone3Fs);
 	}
 	
-	public float[] toShape3FCylinder3FArray() {
-		return Floats.toArray(this.distinctCylinder3Fs, cylinder3F -> CompiledShape3FCache.toArray(cylinder3F));
+	public float[] toCylinder3Fs() {
+		return CompiledShape3FCache.toCylinder3Fs(this.distinctCylinder3Fs);
 	}
 	
-	public float[] toShape3FDisk3FArray() {
-		return Floats.toArray(this.distinctDisk3Fs, disk3F -> CompiledShape3FCache.toArray(disk3F));
+	public float[] toDisk3Fs() {
+		return CompiledShape3FCache.toDisk3Fs(this.distinctDisk3Fs);
 	}
 	
-	public float[] toShape3FHyperboloid3FArray() {
-		return Floats.toArray(this.distinctHyperboloid3Fs, hyperboloid3F -> CompiledShape3FCache.toArray(hyperboloid3F));
+	public float[] toHyperboloid3Fs() {
+		return CompiledShape3FCache.toHyperboloid3Fs(this.distinctHyperboloid3Fs);
 	}
 	
-	public float[] toShape3FParaboloid3FArray() {
-		return Floats.toArray(this.distinctParaboloid3Fs, paraboloid3F -> CompiledShape3FCache.toArray(paraboloid3F));
+	public float[] toParaboloid3Fs() {
+		return CompiledShape3FCache.toParaboloid3Fs(this.distinctParaboloid3Fs);
 	}
 	
-	public float[] toShape3FPlane3FArray() {
-		return Floats.toArray(this.distinctPlane3Fs, plane3F -> CompiledShape3FCache.toArray(plane3F));
+	public float[] toPlane3Fs() {
+		return CompiledShape3FCache.toPlane3Fs(this.distinctPlane3Fs);
 	}
 	
-	public float[] toShape3FRectangle3FArray() {
-		return Floats.toArray(this.distinctRectangle3Fs, rectangle3F -> CompiledShape3FCache.toArray(rectangle3F));
+	public float[] toRectangle3Fs() {
+		return CompiledShape3FCache.toRectangle3Fs(this.distinctRectangle3Fs);
 	}
 	
-	public float[] toShape3FRectangularCuboid3FArray() {
-		return Floats.toArray(this.distinctRectangularCuboid3Fs, rectangularCuboid3F -> CompiledShape3FCache.toArray(rectangularCuboid3F));
+	public float[] toRectangularCuboid3Fs() {
+		return CompiledShape3FCache.toRectangularCuboid3Fs(this.distinctRectangularCuboid3Fs);
 	}
 	
-	public float[] toShape3FSphere3FArray() {
-		return Floats.toArray(this.distinctSphere3Fs, sphere3F -> CompiledShape3FCache.toArray(sphere3F));
+	public float[] toSphere3Fs() {
+		return CompiledShape3FCache.toSphere3Fs(this.distinctSphere3Fs);
 	}
 	
-	public float[] toShape3FTorus3FArray() {
-		return Floats.toArray(this.distinctTorus3Fs, torus3F -> CompiledShape3FCache.toArray(torus3F));
+	public float[] toTorus3Fs() {
+		return CompiledShape3FCache.toTorus3Fs(this.distinctTorus3Fs);
 	}
 	
-	public float[] toShape3FTriangle3FArray() {
-		return Floats.toArray(this.distinctTriangle3Fs, triangle3F -> CompiledShape3FCache.toArray(triangle3F));
+	public float[] toTriangle3Fs() {
+		return CompiledShape3FCache.toTriangle3Fs(this.distinctTriangle3Fs);
 	}
 	
 	public int findOffsetFor(final Shape3F shape3F) {
@@ -191,46 +183,16 @@ final class Shape3FCache {
 		}
 	}
 	
-	public int[] toShape3FTriangleMesh3FArray(final BoundingVolume3FCache boundingVolume3FCache) {
+	public int findOffsetFor(final Triangle3F triangle3F) {
+		Objects.requireNonNull(triangle3F, "triangle3F == null");
+		
+		return this.distinctToOffsetsTriangle3Fs.get(triangle3F).intValue();
+	}
+	
+	public int[] toTriangleMesh3Fs(final BoundingVolume3FCache boundingVolume3FCache) {
 		Objects.requireNonNull(boundingVolume3FCache, "boundingVolume3FCache == null");
 		
-		final int[] shape3FTriangleMesh3FArray = Ints.toArray(this.distinctTriangleMesh3Fs, triangleMesh3F -> CompiledShape3FCache.toArray(triangleMesh3F), 1);
-		
-		for(int i = 0; i < this.distinctTriangleMesh3Fs.size(); i++) {
-			final TriangleMesh3F triangleMesh = this.distinctTriangleMesh3Fs.get(i);
-			
-			final List<BoundingVolume3F> boundingVolumes = triangleMesh.getBoundingVolumes();
-			final List<Triangle3F> triangles = triangleMesh.getTriangles();
-			
-			final int shape3FTriangleMesh3FArrayOffset = this.distinctToOffsetsTriangleMesh3Fs.get(triangleMesh).intValue();
-			final int shape3FTriangleMesh3FArrayLength = shape3FTriangleMesh3FArrayOffset + CompiledShape3FCache.getLength(triangleMesh);
-			
-			for(int j = shape3FTriangleMesh3FArrayOffset; j < shape3FTriangleMesh3FArrayLength;) {
-				final int boundingVolumeOffset = j + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_BOUNDING_VOLUME_OFFSET;
-				final int idOffset = j + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_ID;
-				final int id = shape3FTriangleMesh3FArray[idOffset];
-				
-				shape3FTriangleMesh3FArray[boundingVolumeOffset] = boundingVolume3FCache.findOffsetFor(boundingVolumes.get(shape3FTriangleMesh3FArray[boundingVolumeOffset]));
-				
-				if(id == LeafBVHNode3F.ID) {
-					final int triangleCountOffset = j + CompiledShape3FCache.TRIANGLE_MESH_3_F_LEAF_B_V_H_NODE_3_F_OFFSET_SHAPE_COUNT;
-					final int triangleCount = shape3FTriangleMesh3FArray[triangleCountOffset];
-					final int triangleStartOffset = triangleCountOffset + 1;
-					
-					for(int k = triangleStartOffset; k < triangleStartOffset + triangleCount; k++) {
-						shape3FTriangleMesh3FArray[k] = this.distinctToOffsetsTriangle3Fs.get(triangles.get(shape3FTriangleMesh3FArray[k])).intValue();
-					}
-					
-					j += 4 + triangleCount + padding(4 + triangleCount);
-				} else if(id == TreeBVHNode3F.ID) {
-					j += 8;
-				} else {
-					break;
-				}
-			}
-		}
-		
-		return shape3FTriangleMesh3FArray;
+		return CompiledShape3FCache.toTriangleMesh3Fs(this.distinctTriangleMesh3Fs, boundingVolume3FCache::findOffsetFor, this::findOffsetFor);
 	}
 	
 	public void clear() {
@@ -373,7 +335,7 @@ final class Shape3FCache {
 		
 //		Create offset mappings for all distinct TriangleMesh3F instances:
 		this.distinctToOffsetsTriangleMesh3Fs.clear();
-		this.distinctToOffsetsTriangleMesh3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctTriangleMesh3Fs, triangleMesh3F -> CompiledShape3FCache.getLength(triangleMesh3F)));
+		this.distinctToOffsetsTriangleMesh3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctTriangleMesh3Fs, triangleMesh3F -> CompiledShape3FCache.getTriangleMesh3FLength(triangleMesh3F)));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

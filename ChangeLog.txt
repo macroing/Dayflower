@@ -1,3 +1,9 @@
+2021-07-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Optimized the Scene Compiler API.
+	* CHANGE:	Refactor the CompiledShape3FCache class.
+	* CHANGE:	Refactor the CompiledTextureCache class.
+
 2021-07-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Refactor the CompiledBoundingVolume3FCache class.

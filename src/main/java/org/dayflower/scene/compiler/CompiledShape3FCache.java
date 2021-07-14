@@ -20,10 +20,10 @@ package org.dayflower.scene.compiler;
 
 import static org.dayflower.utility.Ints.padding;
 
-import java.lang.reflect.Field;//TODO: Refactor!
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.ToIntFunction;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.BoundingVolume3F;
@@ -51,7 +51,8 @@ import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.java.io.IntArrayOutputStream;
 import org.dayflower.node.NodeFilter;
-import org.dayflower.utility.ParameterArguments;
+import org.dayflower.utility.Floats;
+import org.dayflower.utility.Ints;
 
 /**
  * A {@code CompiledShape3FCache} contains {@link Shape3F} instances in compiled form.
@@ -391,18 +392,18 @@ public final class CompiledShape3FCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private float[] shape3FCone3FArray;
-	private float[] shape3FCylinder3FArray;
-	private float[] shape3FDisk3FArray;
-	private float[] shape3FHyperboloid3FArray;
-	private float[] shape3FParaboloid3FArray;
-	private float[] shape3FPlane3FArray;
-	private float[] shape3FRectangle3FArray;
-	private float[] shape3FRectangularCuboid3FArray;
-	private float[] shape3FSphere3FArray;
-	private float[] shape3FTorus3FArray;
-	private float[] shape3FTriangle3FArray;
-	private int[] shape3FTriangleMesh3FArray;
+	private float[] cone3Fs;
+	private float[] cylinder3Fs;
+	private float[] disk3Fs;
+	private float[] hyperboloid3Fs;
+	private float[] paraboloid3Fs;
+	private float[] plane3Fs;
+	private float[] rectangle3Fs;
+	private float[] rectangularCuboid3Fs;
+	private float[] sphere3Fs;
+	private float[] torus3Fs;
+	private float[] triangle3Fs;
+	private int[] triangleMesh3Fs;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -410,18 +411,18 @@ public final class CompiledShape3FCache {
 	 * Constructs a new {@code CompiledShape3FCache} instance.
 	 */
 	public CompiledShape3FCache() {
-		setShape3FCone3FArray(new float[0]);
-		setShape3FCylinder3FArray(new float[0]);
-		setShape3FDisk3FArray(new float[0]);
-		setShape3FHyperboloid3FArray(new float[0]);
-		setShape3FParaboloid3FArray(new float[0]);
-		setShape3FPlane3FArray(new float[0]);
-		setShape3FRectangle3FArray(new float[0]);
-		setShape3FRectangularCuboid3FArray(new float[0]);
-		setShape3FSphere3FArray(new float[0]);
-		setShape3FTorus3FArray(new float[0]);
-		setShape3FTriangle3FArray(new float[0]);
-		setShape3FTriangleMesh3FArray(new int[0]);
+		setCone3Fs(new float[0]);
+		setCylinder3Fs(new float[0]);
+		setDisk3Fs(new float[0]);
+		setHyperboloid3Fs(new float[0]);
+		setParaboloid3Fs(new float[0]);
+		setPlane3Fs(new float[0]);
+		setRectangle3Fs(new float[0]);
+		setRectangularCuboid3Fs(new float[0]);
+		setSphere3Fs(new float[0]);
+		setTorus3Fs(new float[0]);
+		setTriangle3Fs(new float[0]);
+		setTriangleMesh3Fs(new int[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -431,8 +432,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Cone3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FCone3FArray() {
-		return this.shape3FCone3FArray;
+	public float[] getCone3Fs() {
+		return this.cone3Fs;
 	}
 	
 	/**
@@ -440,8 +441,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Cylinder3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FCylinder3FArray() {
-		return this.shape3FCylinder3FArray;
+	public float[] getCylinder3Fs() {
+		return this.cylinder3Fs;
 	}
 	
 	/**
@@ -449,8 +450,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Disk3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FDisk3FArray() {
-		return this.shape3FDisk3FArray;
+	public float[] getDisk3Fs() {
+		return this.disk3Fs;
 	}
 	
 	/**
@@ -458,8 +459,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Hyperboloid3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FHyperboloid3FArray() {
-		return this.shape3FHyperboloid3FArray;
+	public float[] getHyperboloid3Fs() {
+		return this.hyperboloid3Fs;
 	}
 	
 	/**
@@ -467,8 +468,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Paraboloid3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FParaboloid3FArray() {
-		return this.shape3FParaboloid3FArray;
+	public float[] getParaboloid3Fs() {
+		return this.paraboloid3Fs;
 	}
 	
 	/**
@@ -476,8 +477,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Plane3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FPlane3FArray() {
-		return this.shape3FPlane3FArray;
+	public float[] getPlane3Fs() {
+		return this.plane3Fs;
 	}
 	
 	/**
@@ -485,8 +486,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Rectangle3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FRectangle3FArray() {
-		return this.shape3FRectangle3FArray;
+	public float[] getRectangle3Fs() {
+		return this.rectangle3Fs;
 	}
 	
 	/**
@@ -494,8 +495,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code RectangularCuboid3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FRectangularCuboid3FArray() {
-		return this.shape3FRectangularCuboid3FArray;
+	public float[] getRectangularCuboid3Fs() {
+		return this.rectangularCuboid3Fs;
 	}
 	
 	/**
@@ -503,8 +504,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Sphere3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FSphere3FArray() {
-		return this.shape3FSphere3FArray;
+	public float[] getSphere3Fs() {
+		return this.sphere3Fs;
 	}
 	
 	/**
@@ -512,8 +513,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Torus3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FTorus3FArray() {
-		return this.shape3FTorus3FArray;
+	public float[] getTorus3Fs() {
+		return this.torus3Fs;
 	}
 	
 	/**
@@ -521,8 +522,8 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code Triangle3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public float[] getShape3FTriangle3FArray() {
-		return this.shape3FTriangle3FArray;
+	public float[] getTriangle3Fs() {
+		return this.triangle3Fs;
 	}
 	
 	/**
@@ -530,34 +531,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Cone3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FCone3FCount() {
-		return Structures.getStructureCount(this.shape3FCone3FArray, CONE_3_F_LENGTH);
+	public int getCone3FCount() {
+		return Structures.getStructureCount(this.cone3Fs, CONE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FCone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code cone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FCone3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code cone3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FCone3F a {@link Cone3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FCone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FCone3F} is {@code null}
+	 * @param cone3F a {@link Cone3F} instance in compiled form
+	 * @return the absolute offset of {@code cone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code cone3F} is {@code null}
 	 */
-	public int getShape3FCone3FOffsetAbsolute(final float[] shape3FCone3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FCone3FArray, Objects.requireNonNull(shape3FCone3F, "shape3FCone3F == null"), getShape3FCone3FCount(), CONE_3_F_LENGTH);
+	public int getCone3FOffsetAbsolute(final float[] cone3F) {
+		return Structures.getStructureOffsetAbsolute(this.cone3Fs, Objects.requireNonNull(cone3F, "cone3F == null"), getCone3FCount(), CONE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FCone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code cone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FCone3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code cone3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FCone3F a {@link Cone3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FCone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FCone3F} is {@code null}
+	 * @param cone3F a {@link Cone3F} instance in compiled form
+	 * @return the relative offset of {@code cone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code cone3F} is {@code null}
 	 */
-	public int getShape3FCone3FOffsetRelative(final float[] shape3FCone3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FCone3FArray, Objects.requireNonNull(shape3FCone3F, "shape3FCone3F == null"), getShape3FCone3FCount(), CONE_3_F_LENGTH);
+	public int getCone3FOffsetRelative(final float[] cone3F) {
+		return Structures.getStructureOffsetRelative(this.cone3Fs, Objects.requireNonNull(cone3F, "cone3F == null"), getCone3FCount(), CONE_3_F_LENGTH);
 	}
 	
 	/**
@@ -565,34 +566,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Cylinder3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FCylinder3FCount() {
-		return Structures.getStructureCount(this.shape3FCylinder3FArray, CYLINDER_3_F_LENGTH);
+	public int getCylinder3FCount() {
+		return Structures.getStructureCount(this.cylinder3Fs, CYLINDER_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FCylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code cylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FCylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code cylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FCylinder3F a {@link Cylinder3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FCylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FCylinder3F} is {@code null}
+	 * @param cylinder3F a {@link Cylinder3F} instance in compiled form
+	 * @return the absolute offset of {@code cylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3F} is {@code null}
 	 */
-	public int getShape3FCylinder3FOffsetAbsolute(final float[] shape3FCylinder3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FCylinder3FArray, Objects.requireNonNull(shape3FCylinder3F, "shape3FCylinder3F == null"), getShape3FCylinder3FCount(), CYLINDER_3_F_LENGTH);
+	public int getCylinder3FOffsetAbsolute(final float[] cylinder3F) {
+		return Structures.getStructureOffsetAbsolute(this.cylinder3Fs, Objects.requireNonNull(cylinder3F, "cylinder3F == null"), getCylinder3FCount(), CYLINDER_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FCylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code cylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FCylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code cylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FCylinder3F a {@link Cylinder3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FCylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FCylinder3F} is {@code null}
+	 * @param cylinder3F a {@link Cylinder3F} instance in compiled form
+	 * @return the relative offset of {@code cylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3F} is {@code null}
 	 */
-	public int getShape3FCylinder3FOffsetRelative(final float[] shape3FCylinder3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FCylinder3FArray, Objects.requireNonNull(shape3FCylinder3F, "shape3FCylinder3F == null"), getShape3FCylinder3FCount(), CYLINDER_3_F_LENGTH);
+	public int getCylinder3FOffsetRelative(final float[] cylinder3F) {
+		return Structures.getStructureOffsetRelative(this.cylinder3Fs, Objects.requireNonNull(cylinder3F, "cylinder3F == null"), getCylinder3FCount(), CYLINDER_3_F_LENGTH);
 	}
 	
 	/**
@@ -600,34 +601,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Disk3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FDisk3FCount() {
-		return Structures.getStructureCount(this.shape3FDisk3FArray, DISK_3_F_LENGTH);
+	public int getDisk3FCount() {
+		return Structures.getStructureCount(this.disk3Fs, DISK_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FDisk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code disk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FDisk3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code disk3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FDisk3F a {@link Disk3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FDisk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FDisk3F} is {@code null}
+	 * @param disk3F a {@link Disk3F} instance in compiled form
+	 * @return the absolute offset of {@code disk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code disk3F} is {@code null}
 	 */
-	public int getShape3FDisk3FOffsetAbsolute(final float[] shape3FDisk3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FDisk3FArray, Objects.requireNonNull(shape3FDisk3F, "shape3FDisk3F == null"), getShape3FDisk3FCount(), DISK_3_F_LENGTH);
+	public int getDisk3FOffsetAbsolute(final float[] disk3F) {
+		return Structures.getStructureOffsetAbsolute(this.disk3Fs, Objects.requireNonNull(disk3F, "disk3F == null"), getDisk3FCount(), DISK_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FDisk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code disk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FDisk3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code disk3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FDisk3F a {@link Disk3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FDisk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FDisk3F} is {@code null}
+	 * @param disk3F a {@link Disk3F} instance in compiled form
+	 * @return the relative offset of {@code disk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code disk3F} is {@code null}
 	 */
-	public int getShape3FDisk3FOffsetRelative(final float[] shape3FDisk3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FDisk3FArray, Objects.requireNonNull(shape3FDisk3F, "shape3FDisk3F == null"), getShape3FDisk3FCount(), DISK_3_F_LENGTH);
+	public int getDisk3FOffsetRelative(final float[] disk3F) {
+		return Structures.getStructureOffsetRelative(this.disk3Fs, Objects.requireNonNull(disk3F, "disk3F == null"), getDisk3FCount(), DISK_3_F_LENGTH);
 	}
 	
 	/**
@@ -635,34 +636,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Hyperboloid3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FHyperboloid3FCount() {
-		return Structures.getStructureCount(this.shape3FHyperboloid3FArray, HYPERBOLOID_3_F_LENGTH);
+	public int getHyperboloid3FCount() {
+		return Structures.getStructureCount(this.hyperboloid3Fs, HYPERBOLOID_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FHyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code hyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FHyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code hyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FHyperboloid3F a {@link Hyperboloid3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FHyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FHyperboloid3F} is {@code null}
+	 * @param hyperboloid3F a {@link Hyperboloid3F} instance in compiled form
+	 * @return the absolute offset of {@code hyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3F} is {@code null}
 	 */
-	public int getShape3FHyperboloid3FOffsetAbsolute(final float[] shape3FHyperboloid3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FHyperboloid3FArray, Objects.requireNonNull(shape3FHyperboloid3F, "shape3FHyperboloid3F == null"), getShape3FHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
+	public int getHyperboloid3FOffsetAbsolute(final float[] hyperboloid3F) {
+		return Structures.getStructureOffsetAbsolute(this.hyperboloid3Fs, Objects.requireNonNull(hyperboloid3F, "hyperboloid3F == null"), getHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FHyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code hyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FHyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code hyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FHyperboloid3F a {@link Hyperboloid3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FHyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FHyperboloid3F} is {@code null}
+	 * @param hyperboloid3F a {@link Hyperboloid3F} instance in compiled form
+	 * @return the relative offset of {@code hyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3F} is {@code null}
 	 */
-	public int getShape3FHyperboloid3FOffsetRelative(final float[] shape3FHyperboloid3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FHyperboloid3FArray, Objects.requireNonNull(shape3FHyperboloid3F, "shape3FHyperboloid3F == null"), getShape3FHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
+	public int getHyperboloid3FOffsetRelative(final float[] hyperboloid3F) {
+		return Structures.getStructureOffsetRelative(this.hyperboloid3Fs, Objects.requireNonNull(hyperboloid3F, "hyperboloid3F == null"), getHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -670,34 +671,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Paraboloid3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FParaboloid3FCount() {
-		return Structures.getStructureCount(this.shape3FParaboloid3FArray, PARABOLOID_3_F_LENGTH);
+	public int getParaboloid3FCount() {
+		return Structures.getStructureCount(this.paraboloid3Fs, PARABOLOID_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FParaboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code paraboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FParaboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code paraboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FParaboloid3F a {@link Paraboloid3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FParaboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FParaboloid3F} is {@code null}
+	 * @param paraboloid3F a {@link Paraboloid3F} instance in compiled form
+	 * @return the absolute offset of {@code paraboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3F} is {@code null}
 	 */
-	public int getShape3FParaboloid3FOffsetAbsolute(final float[] shape3FParaboloid3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FParaboloid3FArray, Objects.requireNonNull(shape3FParaboloid3F, "shape3FParaboloid3F == null"), getShape3FParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
+	public int getParaboloid3FOffsetAbsolute(final float[] paraboloid3F) {
+		return Structures.getStructureOffsetAbsolute(this.paraboloid3Fs, Objects.requireNonNull(paraboloid3F, "paraboloid3F == null"), getParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FParaboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code paraboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FParaboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code paraboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FParaboloid3F a {@link Paraboloid3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FParaboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FParaboloid3F} is {@code null}
+	 * @param paraboloid3F a {@link Paraboloid3F} instance in compiled form
+	 * @return the relative offset of {@code paraboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3F} is {@code null}
 	 */
-	public int getShape3FParaboloid3FOffsetRelative(final float[] shape3FParaboloid3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FParaboloid3FArray, Objects.requireNonNull(shape3FParaboloid3F, "shape3FParaboloid3F == null"), getShape3FParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
+	public int getParaboloid3FOffsetRelative(final float[] paraboloid3F) {
+		return Structures.getStructureOffsetRelative(this.paraboloid3Fs, Objects.requireNonNull(paraboloid3F, "paraboloid3F == null"), getParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -705,34 +706,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Plane3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FPlane3FCount() {
-		return Structures.getStructureCount(this.shape3FPlane3FArray, PLANE_3_F_LENGTH);
+	public int getPlane3FCount() {
+		return Structures.getStructureCount(this.plane3Fs, PLANE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FPlane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FPlane3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FPlane3F a {@link Plane3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FPlane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FPlane3F} is {@code null}
+	 * @param plane3F a {@link Plane3F} instance in compiled form
+	 * @return the absolute offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
 	 */
-	public int getShape3FPlane3FOffsetAbsolute(final float[] shape3FPlane3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FPlane3FArray, Objects.requireNonNull(shape3FPlane3F, "shape3FPlane3F == null"), getShape3FPlane3FCount(), PLANE_3_F_LENGTH);
+	public int getPlane3FOffsetAbsolute(final float[] plane3F) {
+		return Structures.getStructureOffsetAbsolute(this.plane3Fs, Objects.requireNonNull(plane3F, "plane3F == null"), getPlane3FCount(), PLANE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FPlane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FPlane3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FPlane3F a {@link Plane3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FPlane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FPlane3F} is {@code null}
+	 * @param plane3F a {@link Plane3F} instance in compiled form
+	 * @return the relative offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
 	 */
-	public int getShape3FPlane3FOffsetRelative(final float[] shape3FPlane3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FPlane3FArray, Objects.requireNonNull(shape3FPlane3F, "shape3FPlane3F == null"), getShape3FPlane3FCount(), PLANE_3_F_LENGTH);
+	public int getPlane3FOffsetRelative(final float[] plane3F) {
+		return Structures.getStructureOffsetRelative(this.plane3Fs, Objects.requireNonNull(plane3F, "plane3F == null"), getPlane3FCount(), PLANE_3_F_LENGTH);
 	}
 	
 	/**
@@ -740,34 +741,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Rectangle3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FRectangle3FCount() {
-		return Structures.getStructureCount(this.shape3FRectangle3FArray, RECTANGLE_3_F_LENGTH);
+	public int getRectangle3FCount() {
+		return Structures.getStructureCount(this.rectangle3Fs, RECTANGLE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FRectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code rectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FRectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FRectangle3F a {@link Rectangle3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FRectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangle3F} is {@code null}
+	 * @param rectangle3F a {@link Rectangle3F} instance in compiled form
+	 * @return the absolute offset of {@code rectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle3F} is {@code null}
 	 */
-	public int getShape3FRectangle3FOffsetAbsolute(final float[] shape3FRectangle3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FRectangle3FArray, Objects.requireNonNull(shape3FRectangle3F, "shape3FRectangle3F == null"), getShape3FRectangle3FCount(), RECTANGLE_3_F_LENGTH);
+	public int getRectangle3FOffsetAbsolute(final float[] rectangle3F) {
+		return Structures.getStructureOffsetAbsolute(this.rectangle3Fs, Objects.requireNonNull(rectangle3F, "rectangle3F == null"), getRectangle3FCount(), RECTANGLE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FRectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code rectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FRectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FRectangle3F a {@link Rectangle3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FRectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangle3F} is {@code null}
+	 * @param rectangle3F a {@link Rectangle3F} instance in compiled form
+	 * @return the relative offset of {@code rectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle3F} is {@code null}
 	 */
-	public int getShape3FRectangle3FOffsetRelative(final float[] shape3FRectangle3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FRectangle3FArray, Objects.requireNonNull(shape3FRectangle3F, "shape3FRectangle3F == null"), getShape3FRectangle3FCount(), RECTANGLE_3_F_LENGTH);
+	public int getRectangle3FOffsetRelative(final float[] rectangle3F) {
+		return Structures.getStructureOffsetRelative(this.rectangle3Fs, Objects.requireNonNull(rectangle3F, "rectangle3F == null"), getRectangle3FCount(), RECTANGLE_3_F_LENGTH);
 	}
 	
 	/**
@@ -775,34 +776,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code RectangularCuboid3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FRectangularCuboid3FCount() {
-		return Structures.getStructureCount(this.shape3FRectangularCuboid3FArray, RECTANGULAR_CUBOID_3_F_LENGTH);
+	public int getRectangularCuboid3FCount() {
+		return Structures.getStructureCount(this.rectangularCuboid3Fs, RECTANGULAR_CUBOID_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FRectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code rectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FRectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FRectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FRectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangularCuboid3F} is {@code null}
+	 * @param rectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
+	 * @return the absolute offset of {@code rectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3F} is {@code null}
 	 */
-	public int getShape3FRectangularCuboid3FOffsetAbsolute(final float[] shape3FRectangularCuboid3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FRectangularCuboid3FArray, Objects.requireNonNull(shape3FRectangularCuboid3F, "shape3FRectangularCuboid3F == null"), getShape3FRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
+	public int getRectangularCuboid3FOffsetAbsolute(final float[] rectangularCuboid3F) {
+		return Structures.getStructureOffsetAbsolute(this.rectangularCuboid3Fs, Objects.requireNonNull(rectangularCuboid3F, "rectangularCuboid3F == null"), getRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FRectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code rectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FRectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FRectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FRectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangularCuboid3F} is {@code null}
+	 * @param rectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
+	 * @return the relative offset of {@code rectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3F} is {@code null}
 	 */
-	public int getShape3FRectangularCuboid3FOffsetRelative(final float[] shape3FRectangularCuboid3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FRectangularCuboid3FArray, Objects.requireNonNull(shape3FRectangularCuboid3F, "shape3FRectangularCuboid3F == null"), getShape3FRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
+	public int getRectangularCuboid3FOffsetRelative(final float[] rectangularCuboid3F) {
+		return Structures.getStructureOffsetRelative(this.rectangularCuboid3Fs, Objects.requireNonNull(rectangularCuboid3F, "rectangularCuboid3F == null"), getRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -810,34 +811,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Sphere3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FSphere3FCount() {
-		return Structures.getStructureCount(this.shape3FSphere3FArray, SPHERE_3_F_LENGTH);
+	public int getSphere3FCount() {
+		return Structures.getStructureCount(this.sphere3Fs, SPHERE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FSphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FSphere3F a {@link Sphere3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FSphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FSphere3F} is {@code null}
+	 * @param sphere3F a {@link Sphere3F} instance in compiled form
+	 * @return the absolute offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
 	 */
-	public int getShape3FSphere3FOffsetAbsolute(final float[] shape3FSphere3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FSphere3FArray, Objects.requireNonNull(shape3FSphere3F, "shape3FSphere3F == null"), getShape3FSphere3FCount(), SPHERE_3_F_LENGTH);
+	public int getSphere3FOffsetAbsolute(final float[] sphere3F) {
+		return Structures.getStructureOffsetAbsolute(this.sphere3Fs, Objects.requireNonNull(sphere3F, "sphere3F == null"), getSphere3FCount(), SPHERE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FSphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FSphere3F a {@link Sphere3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FSphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FSphere3F} is {@code null}
+	 * @param sphere3F a {@link Sphere3F} instance in compiled form
+	 * @return the relative offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
 	 */
-	public int getShape3FSphere3FOffsetRelative(final float[] shape3FSphere3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FSphere3FArray, Objects.requireNonNull(shape3FSphere3F, "shape3FSphere3F == null"), getShape3FSphere3FCount(), SPHERE_3_F_LENGTH);
+	public int getSphere3FOffsetRelative(final float[] sphere3F) {
+		return Structures.getStructureOffsetRelative(this.sphere3Fs, Objects.requireNonNull(sphere3F, "sphere3F == null"), getSphere3FCount(), SPHERE_3_F_LENGTH);
 	}
 	
 	/**
@@ -845,34 +846,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Torus3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FTorus3FCount() {
-		return Structures.getStructureCount(this.shape3FTorus3FArray, TORUS_3_F_LENGTH);
+	public int getTorus3FCount() {
+		return Structures.getStructureCount(this.torus3Fs, TORUS_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FTorus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code torus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FTorus3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code torus3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FTorus3F a {@link Torus3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FTorus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FTorus3F} is {@code null}
+	 * @param torus3F a {@link Torus3F} instance in compiled form
+	 * @return the absolute offset of {@code torus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code torus3F} is {@code null}
 	 */
-	public int getShape3FTorus3FOffsetAbsolute(final float[] shape3FTorus3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FTorus3FArray, Objects.requireNonNull(shape3FTorus3F, "shape3FTorus3F == null"), getShape3FTorus3FCount(), TORUS_3_F_LENGTH);
+	public int getTorus3FOffsetAbsolute(final float[] torus3F) {
+		return Structures.getStructureOffsetAbsolute(this.torus3Fs, Objects.requireNonNull(torus3F, "torus3F == null"), getTorus3FCount(), TORUS_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FTorus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code torus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FTorus3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code torus3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FTorus3F a {@link Torus3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FTorus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FTorus3F} is {@code null}
+	 * @param torus3F a {@link Torus3F} instance in compiled form
+	 * @return the relative offset of {@code torus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code torus3F} is {@code null}
 	 */
-	public int getShape3FTorus3FOffsetRelative(final float[] shape3FTorus3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FTorus3FArray, Objects.requireNonNull(shape3FTorus3F, "shape3FTorus3F == null"), getShape3FTorus3FCount(), TORUS_3_F_LENGTH);
+	public int getTorus3FOffsetRelative(final float[] torus3F) {
+		return Structures.getStructureOffsetRelative(this.torus3Fs, Objects.requireNonNull(torus3F, "torus3F == null"), getTorus3FCount(), TORUS_3_F_LENGTH);
 	}
 	
 	/**
@@ -880,34 +881,34 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return the {@code Triangle3F} count in this {@code CompiledShape3FCache} instance
 	 */
-	public int getShape3FTriangle3FCount() {
-		return Structures.getStructureCount(this.shape3FTriangle3FArray, TRIANGLE_3_F_LENGTH);
+	public int getTriangle3FCount() {
+		return Structures.getStructureCount(this.triangle3Fs, TRIANGLE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code shape3FTriangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code triangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FTriangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code triangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FTriangle3F a {@link Triangle3F} instance in compiled form
-	 * @return the absolute offset of {@code shape3FTriangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FTriangle3F} is {@code null}
+	 * @param triangle3F a {@link Triangle3F} instance in compiled form
+	 * @return the absolute offset of {@code triangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code triangle3F} is {@code null}
 	 */
-	public int getShape3FTriangle3FOffsetAbsolute(final float[] shape3FTriangle3F) {
-		return Structures.getStructureOffsetAbsolute(this.shape3FTriangle3FArray, Objects.requireNonNull(shape3FTriangle3F, "shape3FTriangle3F == null"), getShape3FTriangle3FCount(), TRIANGLE_3_F_LENGTH);
+	public int getTriangle3FOffsetAbsolute(final float[] triangle3F) {
+		return Structures.getStructureOffsetAbsolute(this.triangle3Fs, Objects.requireNonNull(triangle3F, "triangle3F == null"), getTriangle3FCount(), TRIANGLE_3_F_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code shape3FTriangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code triangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code shape3FTriangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code triangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FTriangle3F a {@link Triangle3F} instance in compiled form
-	 * @return the relative offset of {@code shape3FTriangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FTriangle3F} is {@code null}
+	 * @param triangle3F a {@link Triangle3F} instance in compiled form
+	 * @return the relative offset of {@code triangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code triangle3F} is {@code null}
 	 */
-	public int getShape3FTriangle3FOffsetRelative(final float[] shape3FTriangle3F) {
-		return Structures.getStructureOffsetRelative(this.shape3FTriangle3FArray, Objects.requireNonNull(shape3FTriangle3F, "shape3FTriangle3F == null"), getShape3FTriangle3FCount(), TRIANGLE_3_F_LENGTH);
+	public int getTriangle3FOffsetRelative(final float[] triangle3F) {
+		return Structures.getStructureOffsetRelative(this.triangle3Fs, Objects.requireNonNull(triangle3F, "triangle3F == null"), getTriangle3FCount(), TRIANGLE_3_F_LENGTH);
 	}
 	
 	/**
@@ -915,152 +916,152 @@ public final class CompiledShape3FCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code TriangleMesh3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
 	 */
-	public int[] getShape3FTriangleMesh3FArray() {
-		return this.shape3FTriangleMesh3FArray;
+	public int[] getTriangleMesh3Fs() {
+		return this.triangleMesh3Fs;
 	}
 	
 	/**
-	 * Sets all {@link Cone3F} instances in compiled form to {@code shape3FCone3FArray}.
+	 * Sets all {@link Cone3F} instances in compiled form to {@code cone3Fs}.
 	 * <p>
-	 * If {@code shape3FCone3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code cone3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FCone3FArray the {@code Cone3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FCone3FArray} is {@code null}
+	 * @param cone3Fs the {@code Cone3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code cone3Fs} is {@code null}
 	 */
-	public void setShape3FCone3FArray(final float[] shape3FCone3FArray) {
-		this.shape3FCone3FArray = Objects.requireNonNull(shape3FCone3FArray, "shape3FCone3FArray == null");
+	public void setCone3Fs(final float[] cone3Fs) {
+		this.cone3Fs = Objects.requireNonNull(cone3Fs, "cone3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link Cylinder3F} instances in compiled form to {@code shape3FCylinder3FArray}.
+	 * Sets all {@link Cylinder3F} instances in compiled form to {@code cylinder3Fs}.
 	 * <p>
-	 * If {@code shape3FCylinder3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code cylinder3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FCylinder3FArray the {@code Cylinder3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FCylinder3FArray} is {@code null}
+	 * @param cylinder3Fs the {@code Cylinder3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3Fs} is {@code null}
 	 */
-	public void setShape3FCylinder3FArray(final float[] shape3FCylinder3FArray) {
-		this.shape3FCylinder3FArray = Objects.requireNonNull(shape3FCylinder3FArray, "shape3FCylinder3FArray == null");
+	public void setCylinder3Fs(final float[] cylinder3Fs) {
+		this.cylinder3Fs = Objects.requireNonNull(cylinder3Fs, "cylinder3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link Disk3F} instances in compiled form to {@code shape3FDisk3FArray}.
+	 * Sets all {@link Disk3F} instances in compiled form to {@code disk3Fs}.
 	 * <p>
-	 * If {@code shape3FDisk3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code disk3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FDisk3FArray the {@code Disk3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FDisk3FArray} is {@code null}
+	 * @param disk3Fs the {@code Disk3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code disk3Fs} is {@code null}
 	 */
-	public void setShape3FDisk3FArray(final float[] shape3FDisk3FArray) {
-		this.shape3FDisk3FArray = Objects.requireNonNull(shape3FDisk3FArray, "shape3FDisk3FArray == null");
+	public void setDisk3Fs(final float[] disk3Fs) {
+		this.disk3Fs = Objects.requireNonNull(disk3Fs, "disk3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link Hyperboloid3F} instances in compiled form to {@code shape3FHyperboloid3FArray}.
+	 * Sets all {@link Hyperboloid3F} instances in compiled form to {@code hyperboloid3Fs}.
 	 * <p>
-	 * If {@code shape3FHyperboloid3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code hyperboloid3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FHyperboloid3FArray the {@code Hyperboloid3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FHyperboloid3FArray} is {@code null}
+	 * @param hyperboloid3Fs the {@code Hyperboloid3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3Fs} is {@code null}
 	 */
-	public void setShape3FHyperboloid3FArray(final float[] shape3FHyperboloid3FArray) {
-		this.shape3FHyperboloid3FArray = Objects.requireNonNull(shape3FHyperboloid3FArray, "shape3FHyperboloid3FArray == null");
+	public void setHyperboloid3Fs(final float[] hyperboloid3Fs) {
+		this.hyperboloid3Fs = Objects.requireNonNull(hyperboloid3Fs, "hyperboloid3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link Paraboloid3F} instances in compiled form to {@code shape3FParaboloid3FArray}.
+	 * Sets all {@link Paraboloid3F} instances in compiled form to {@code paraboloid3Fs}.
 	 * <p>
-	 * If {@code shape3FParaboloid3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code paraboloid3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FParaboloid3FArray the {@code Paraboloid3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FParaboloid3FArray} is {@code null}
+	 * @param paraboloid3Fs the {@code Paraboloid3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3Fs} is {@code null}
 	 */
-	public void setShape3FParaboloid3FArray(final float[] shape3FParaboloid3FArray) {
-		this.shape3FParaboloid3FArray = Objects.requireNonNull(shape3FParaboloid3FArray, "shape3FParaboloid3FArray == null");
+	public void setParaboloid3Fs(final float[] paraboloid3Fs) {
+		this.paraboloid3Fs = Objects.requireNonNull(paraboloid3Fs, "paraboloid3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link Plane3F} instances in compiled form to {@code shape3FPlane3FArray}.
+	 * Sets all {@link Plane3F} instances in compiled form to {@code plane3Fs}.
 	 * <p>
-	 * If {@code shape3FPlane3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code plane3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FPlane3FArray the {@code Plane3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FPlane3FArray} is {@code null}
+	 * @param plane3Fs the {@code Plane3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code plane3Fs} is {@code null}
 	 */
-	public void setShape3FPlane3FArray(final float[] shape3FPlane3FArray) {
-		this.shape3FPlane3FArray = Objects.requireNonNull(shape3FPlane3FArray, "shape3FPlane3FArray == null");
+	public void setPlane3Fs(final float[] plane3Fs) {
+		this.plane3Fs = Objects.requireNonNull(plane3Fs, "plane3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link Rectangle3F} instances in compiled form to {@code shape3FRectangle3FArray}.
+	 * Sets all {@link Rectangle3F} instances in compiled form to {@code rectangle3Fs}.
 	 * <p>
-	 * If {@code shape3FRectangle3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rectangle3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FRectangle3FArray the {@code Rectangle3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangle3FArray} is {@code null}
+	 * @param rectangle3Fs the {@code Rectangle3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle3Fs} is {@code null}
 	 */
-	public void setShape3FRectangle3FArray(final float[] shape3FRectangle3FArray) {
-		this.shape3FRectangle3FArray = Objects.requireNonNull(shape3FRectangle3FArray, "shape3FRectangle3FArray == null");
+	public void setRectangle3Fs(final float[] rectangle3Fs) {
+		this.rectangle3Fs = Objects.requireNonNull(rectangle3Fs, "rectangle3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link RectangularCuboid3F} instances in compiled form to {@code shape3FRectangularCuboid3FArray}.
+	 * Sets all {@link RectangularCuboid3F} instances in compiled form to {@code rectangularCuboid3Fs}.
 	 * <p>
-	 * If {@code shape3FRectangularCuboid3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rectangularCuboid3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FRectangularCuboid3FArray the {@code RectangularCuboid3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FRectangularCuboid3FArray} is {@code null}
+	 * @param rectangularCuboid3Fs the {@code RectangularCuboid3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3Fs} is {@code null}
 	 */
-	public void setShape3FRectangularCuboid3FArray(final float[] shape3FRectangularCuboid3FArray) {
-		this.shape3FRectangularCuboid3FArray = Objects.requireNonNull(shape3FRectangularCuboid3FArray, "shape3FRectangularCuboid3FArray == null");
+	public void setRectangularCuboid3Fs(final float[] rectangularCuboid3Fs) {
+		this.rectangularCuboid3Fs = Objects.requireNonNull(rectangularCuboid3Fs, "rectangularCuboid3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link Sphere3F} instances in compiled form to {@code shape3FSphere3FArray}.
+	 * Sets all {@link Sphere3F} instances in compiled form to {@code sphere3Fs}.
 	 * <p>
-	 * If {@code shape3FSphere3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code sphere3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FSphere3FArray the {@code Sphere3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FSphere3FArray} is {@code null}
+	 * @param sphere3Fs the {@code Sphere3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code sphere3Fs} is {@code null}
 	 */
-	public void setShape3FSphere3FArray(final float[] shape3FSphere3FArray) {
-		this.shape3FSphere3FArray = Objects.requireNonNull(shape3FSphere3FArray, "shape3FSphere3FArray == null");
+	public void setSphere3Fs(final float[] sphere3Fs) {
+		this.sphere3Fs = Objects.requireNonNull(sphere3Fs, "sphere3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link Torus3F} instances in compiled form to {@code shape3FTorus3FArray}.
+	 * Sets all {@link Torus3F} instances in compiled form to {@code torus3Fs}.
 	 * <p>
-	 * If {@code shape3FTorus3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code torus3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FTorus3FArray the {@code Torus3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FTorus3FArray} is {@code null}
+	 * @param torus3Fs the {@code Torus3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code torus3Fs} is {@code null}
 	 */
-	public void setShape3FTorus3FArray(final float[] shape3FTorus3FArray) {
-		this.shape3FTorus3FArray = Objects.requireNonNull(shape3FTorus3FArray, "shape3FTorus3FArray == null");
+	public void setTorus3Fs(final float[] torus3Fs) {
+		this.torus3Fs = Objects.requireNonNull(torus3Fs, "torus3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link Triangle3F} instances in compiled form to {@code shape3FTriangle3FArray}.
+	 * Sets all {@link Triangle3F} instances in compiled form to {@code triangle3Fs}.
 	 * <p>
-	 * If {@code shape3FTriangle3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code triangle3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FTriangle3FArray the {@code Triangle3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FTriangle3FArray} is {@code null}
+	 * @param triangle3Fs the {@code Triangle3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code triangle3Fs} is {@code null}
 	 */
-	public void setShape3FTriangle3FArray(final float[] shape3FTriangle3FArray) {
-		this.shape3FTriangle3FArray = Objects.requireNonNull(shape3FTriangle3FArray, "shape3FTriangle3FArray == null");
+	public void setTriangle3Fs(final float[] triangle3Fs) {
+		this.triangle3Fs = Objects.requireNonNull(triangle3Fs, "triangle3Fs == null");
 	}
 	
 	/**
-	 * Sets all {@link TriangleMesh3F} instances in compiled form to {@code shape3FTriangleMesh3FArray}.
+	 * Sets all {@link TriangleMesh3F} instances in compiled form to {@code triangleMesh3Fs}.
 	 * <p>
-	 * If {@code shape3FTriangleMesh3FArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code triangleMesh3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param shape3FTriangleMesh3FArray the {@code TriangleMesh3F} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code shape3FTriangleMesh3FArray} is {@code null}
+	 * @param triangleMesh3Fs the {@code TriangleMesh3F} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3Fs} is {@code null}
 	 */
-	public void setShape3FTriangleMesh3FArray(final int[] shape3FTriangleMesh3FArray) {
-		this.shape3FTriangleMesh3FArray = Objects.requireNonNull(shape3FTriangleMesh3FArray, "shape3FTriangleMesh3FArray == null");
+	public void setTriangleMesh3Fs(final int[] triangleMesh3Fs) {
+		this.triangleMesh3Fs = Objects.requireNonNull(triangleMesh3Fs, "triangleMesh3Fs == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1074,7 +1075,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code cone3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code cone3F} is {@code null}
 	 */
-	public static float[] toArray(final Cone3F cone3F) {
+	public static float[] toCone3F(final Cone3F cone3F) {
 		final float phiMax = cone3F.getPhiMax().getRadians();
 		final float radius = cone3F.getRadius();
 		final float zMax = cone3F.getZMax();
@@ -1090,6 +1091,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Cone3F} instances in {@code cone3Fs} in compiled form.
+	 * <p>
+	 * If {@code cone3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cone3Fs a {@code List} of {@code Cone3F} instances
+	 * @return a {@code float[]} with all {@code Cone3F} instances in {@code cone3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code cone3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toCone3Fs(final List<Cone3F> cone3Fs) {
+		return Floats.toArray(cone3Fs, cone3F -> toCone3F(cone3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code cylinder3F} in compiled form.
 	 * <p>
 	 * If {@code cylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1098,7 +1112,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code cylinder3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3F} is {@code null}
 	 */
-	public static float[] toArray(final Cylinder3F cylinder3F) {
+	public static float[] toCylinder3F(final Cylinder3F cylinder3F) {
 		final float phiMax = cylinder3F.getPhiMax().getRadians();
 		final float radius = cylinder3F.getRadius();
 		final float zMax = cylinder3F.getZMax();
@@ -1115,6 +1129,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Cylinder3F} instances in {@code cylinder3Fs} in compiled form.
+	 * <p>
+	 * If {@code cylinder3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cylinder3Fs a {@code List} of {@code Cylinder3F} instances
+	 * @return a {@code float[]} with all {@code Cylinder3F} instances in {@code cylinder3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toCylinder3Fs(final List<Cylinder3F> cylinder3Fs) {
+		return Floats.toArray(cylinder3Fs, cylinder3F -> toCylinder3F(cylinder3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code disk3F} in compiled form.
 	 * <p>
 	 * If {@code disk3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1123,7 +1150,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code disk3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code disk3F} is {@code null}
 	 */
-	public static float[] toArray(final Disk3F disk3F) {
+	public static float[] toDisk3F(final Disk3F disk3F) {
 		final float phiMax = disk3F.getPhiMax().getRadians();
 		final float radiusInner = disk3F.getRadiusInner();
 		final float radiusOuter = disk3F.getRadiusOuter();
@@ -1140,6 +1167,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Disk3F} instances in {@code disk3Fs} in compiled form.
+	 * <p>
+	 * If {@code disk3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param disk3Fs a {@code List} of {@code Disk3F} instances
+	 * @return a {@code float[]} with all {@code Disk3F} instances in {@code disk3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code disk3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toDisk3Fs(final List<Disk3F> disk3Fs) {
+		return Floats.toArray(disk3Fs, disk3F -> toDisk3F(disk3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code hyperboloid3F} in compiled form.
 	 * <p>
 	 * If {@code hyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1148,7 +1188,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code hyperboloid3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3F} is {@code null}
 	 */
-	public static float[] toArray(final Hyperboloid3F hyperboloid3F) {
+	public static float[] toHyperboloid3F(final Hyperboloid3F hyperboloid3F) {
 		final Point3F a = hyperboloid3F.getA();
 		final Point3F b = hyperboloid3F.getB();
 		
@@ -1178,6 +1218,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Hyperboloid3F} instances in {@code hyperboloid3Fs} in compiled form.
+	 * <p>
+	 * If {@code hyperboloid3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param hyperboloid3Fs a {@code List} of {@code Hyperboloid3F} instances
+	 * @return a {@code float[]} with all {@code Hyperboloid3F} instances in {@code hyperboloid3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toHyperboloid3Fs(final List<Hyperboloid3F> hyperboloid3Fs) {
+		return Floats.toArray(hyperboloid3Fs, hyperboloid3F -> toHyperboloid3F(hyperboloid3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code paraboloid3F} in compiled form.
 	 * <p>
 	 * If {@code paraboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1186,7 +1239,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code paraboloid3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3F} is {@code null}
 	 */
-	public static float[] toArray(final Paraboloid3F paraboloid3F) {
+	public static float[] toParaboloid3F(final Paraboloid3F paraboloid3F) {
 		final float phiMax = paraboloid3F.getPhiMax().getRadians();
 		final float radius = paraboloid3F.getRadius();
 		final float zMax = paraboloid3F.getZMax();
@@ -1203,6 +1256,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Paraboloid3F} instances in {@code paraboloid3Fs} in compiled form.
+	 * <p>
+	 * If {@code paraboloid3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param paraboloid3Fs a {@code List} of {@code Paraboloid3F} instances
+	 * @return a {@code float[]} with all {@code Paraboloid3F} instances in {@code paraboloid3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toParaboloid3Fs(final List<Paraboloid3F> paraboloid3Fs) {
+		return Floats.toArray(paraboloid3Fs, paraboloid3F -> toParaboloid3F(paraboloid3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code plane3F} in compiled form.
 	 * <p>
 	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1211,7 +1277,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code plane3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
 	 */
-	public static float[] toArray(final Plane3F plane3F) {
+	public static float[] toPlane3F(final Plane3F plane3F) {
 		final Point3F a = plane3F.getA();
 		final Point3F b = plane3F.getB();
 		final Point3F c = plane3F.getC();
@@ -1241,6 +1307,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Plane3F} instances in {@code plane3Fs} in compiled form.
+	 * <p>
+	 * If {@code plane3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param plane3Fs a {@code List} of {@code Plane3F} instances
+	 * @return a {@code float[]} with all {@code Plane3F} instances in {@code plane3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code plane3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toPlane3Fs(final List<Plane3F> plane3Fs) {
+		return Floats.toArray(plane3Fs, plane3F -> toPlane3F(plane3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code rectangle3F} in compiled form.
 	 * <p>
 	 * If {@code rectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1249,7 +1328,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code rectangle3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle3F} is {@code null}
 	 */
-	public static float[] toArray(final Rectangle3F rectangle3F) {
+	public static float[] toRectangle3F(final Rectangle3F rectangle3F) {
 		final Point3F position = rectangle3F.getPosition();
 		
 		final Vector3F sideA = rectangle3F.getSideA();
@@ -1279,6 +1358,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Rectangle3F} instances in {@code rectangle3Fs} in compiled form.
+	 * <p>
+	 * If {@code rectangle3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle3Fs a {@code List} of {@code Rectangle3F} instances
+	 * @return a {@code float[]} with all {@code Rectangle3F} instances in {@code rectangle3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toRectangle3Fs(final List<Rectangle3F> rectangle3Fs) {
+		return Floats.toArray(rectangle3Fs, rectangle3F -> toRectangle3F(rectangle3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code rectangularCuboid3F} in compiled form.
 	 * <p>
 	 * If {@code rectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1287,7 +1379,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code rectangularCuboid3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3F} is {@code null}
 	 */
-	public static float[] toArray(final RectangularCuboid3F rectangularCuboid3F) {
+	public static float[] toRectangularCuboid3F(final RectangularCuboid3F rectangularCuboid3F) {
 		final Point3F maximum = rectangularCuboid3F.getMaximum();
 		final Point3F minimum = rectangularCuboid3F.getMinimum();
 		
@@ -1306,6 +1398,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link RectangularCuboid3F} instances in {@code rectangularCuboid3Fs} in compiled form.
+	 * <p>
+	 * If {@code rectangularCuboid3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangularCuboid3Fs a {@code List} of {@code RectangularCuboid3F} instances
+	 * @return a {@code float[]} with all {@code RectangularCuboid3F} instances in {@code rectangularCuboid3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toRectangularCuboid3Fs(final List<RectangularCuboid3F> rectangularCuboid3Fs) {
+		return Floats.toArray(rectangularCuboid3Fs, rectangularCuboid3F -> toRectangularCuboid3F(rectangularCuboid3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code sphere3F} in compiled form.
 	 * <p>
 	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1314,7 +1419,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code sphere3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
 	 */
-	public static float[] toArray(final Sphere3F sphere3F) {
+	public static float[] toSphere3F(final Sphere3F sphere3F) {
 		final Point3F center = sphere3F.getCenter();
 		
 		final float radius = sphere3F.getRadius();
@@ -1330,6 +1435,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Sphere3F} instances in {@code sphere3Fs} in compiled form.
+	 * <p>
+	 * If {@code sphere3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sphere3Fs a {@code List} of {@code Sphere3F} instances
+	 * @return a {@code float[]} with all {@code Sphere3F} instances in {@code sphere3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code sphere3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toSphere3Fs(final List<Sphere3F> sphere3Fs) {
+		return Floats.toArray(sphere3Fs, sphere3F -> toSphere3F(sphere3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code torus3F} in compiled form.
 	 * <p>
 	 * If {@code torus3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1338,7 +1456,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code torus3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code torus3F} is {@code null}
 	 */
-	public static float[] toArray(final Torus3F torus3F) {
+	public static float[] toTorus3F(final Torus3F torus3F) {
 		final float radiusInner = torus3F.getRadiusInner();
 		final float radiusOuter = torus3F.getRadiusOuter();
 		
@@ -1351,6 +1469,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Torus3F} instances in {@code torus3Fs} in compiled form.
+	 * <p>
+	 * If {@code torus3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param torus3Fs a {@code List} of {@code Torus3F} instances
+	 * @return a {@code float[]} with all {@code Torus3F} instances in {@code torus3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code torus3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toTorus3Fs(final List<Torus3F> torus3Fs) {
+		return Floats.toArray(torus3Fs, torus3F -> toTorus3F(torus3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code triangle3F} in compiled form.
 	 * <p>
 	 * If {@code triangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1359,7 +1490,7 @@ public final class CompiledShape3FCache {
 	 * @return a {@code float[]} with {@code triangle3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code triangle3F} is {@code null}
 	 */
-	public static float[] toArray(final Triangle3F triangle3F) {
+	public static float[] toTriangle3F(final Triangle3F triangle3F) {
 		final Vertex3F a = triangle3F.getA();
 		final Vertex3F b = triangle3F.getB();
 		final Vertex3F c = triangle3F.getC();
@@ -1397,6 +1528,19 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link Triangle3F} instances in {@code triangle3Fs} in compiled form.
+	 * <p>
+	 * If {@code triangle3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangle3Fs a {@code List} of {@code Triangle3F} instances
+	 * @return a {@code float[]} with all {@code Triangle3F} instances in {@code triangle3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code triangle3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toTriangle3Fs(final List<Triangle3F> triangle3Fs) {
+		return Floats.toArray(triangle3Fs, triangle3F -> toTriangle3F(triangle3F));
+	}
+	
+	/**
 	 * Returns the length of {@code triangleMesh3F} in compiled form.
 	 * <p>
 	 * If {@code triangleMesh3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1405,13 +1549,11 @@ public final class CompiledShape3FCache {
 	 * @return the length of {@code triangleMesh3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3F} is {@code null}
 	 */
-	public static int getLength(final TriangleMesh3F triangleMesh3F) {
+	public static int getTriangleMesh3FLength(final TriangleMesh3F triangleMesh3F) {
 		final Optional<BVHNode3F> optionalRootBVHNode = triangleMesh3F.getRootBVHNode();
 		
 		if(optionalRootBVHNode.isPresent()) {
-			final BVHNode3F rootBVHNode = optionalRootBVHNode.get();
-			
-			return NodeFilter.filterAll(rootBVHNode, BVHNode3F.class).stream().mapToInt(bVHNode -> doGetLength(bVHNode)).sum();
+			return NodeFilter.filterAll(optionalRootBVHNode.get(), BVHNode3F.class).stream().mapToInt(bVHNode -> doGetBVHNode3FLength(bVHNode)).sum();
 		}
 		
 		return 0;
@@ -1421,19 +1563,76 @@ public final class CompiledShape3FCache {
 	 * Returns an {@code int[]} with {@code triangleMesh3F} in compiled form.
 	 * <p>
 	 * If {@code triangleMesh3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledShape3FCache.toTriangleMesh3F(triangleMesh3F, boundingVolume3F -> 0, triangle3F -> 0);
+	 * }
+	 * </pre>
 	 * 
 	 * @param triangleMesh3F a {@link TriangleMesh3F} instance
 	 * @return an {@code int[]} with {@code triangleMesh3F} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3F} is {@code null}
 	 */
-	public static int[] toArray(final TriangleMesh3F triangleMesh3F) {
+	public static int[] toTriangleMesh3F(final TriangleMesh3F triangleMesh3F) {
+		return toTriangleMesh3F(triangleMesh3F, boundingVolume3F -> 0, triangle3F -> 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code triangleMesh3F} in compiled form.
+	 * <p>
+	 * If either {@code triangleMesh3F}, {@code boundingVolume3FOffsetFunction} or {@code triangle3FOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangleMesh3F a {@link TriangleMesh3F} instance
+	 * @param boundingVolume3FOffsetFunction a {@code ToIntFunction} that returns {@link BoundingVolume3F} offsets
+	 * @param triangle3FOffsetFunction a {@code ToIntFunction} that returns {@link Triangle3F} offsets
+	 * @return an {@code int[]} with {@code triangleMesh3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code triangleMesh3F}, {@code boundingVolume3FOffsetFunction} or {@code triangle3FOffsetFunction} are {@code null}
+	 */
+	public static int[] toTriangleMesh3F(final TriangleMesh3F triangleMesh3F, final ToIntFunction<BoundingVolume3F> boundingVolume3FOffsetFunction, final ToIntFunction<Triangle3F> triangle3FOffsetFunction) {
 		final Optional<BVHNode3F> optionalRootBVHNode = triangleMesh3F.getRootBVHNode();
 		
 		if(optionalRootBVHNode.isPresent()) {
-			return doToArray(optionalRootBVHNode.get(), triangleMesh3F.getTriangles());
+			return doToBVHNode3F(optionalRootBVHNode.get(), boundingVolume3FOffsetFunction, triangle3FOffsetFunction);
 		}
 		
 		return new int[0];
+	}
+	
+	/**
+	 * Returns an {@code int[]} with all {@link TriangleMesh3F} instances in {@code triangleMesh3Fs} in compiled form.
+	 * <p>
+	 * If either {@code triangleMesh3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledShape3FCache.toTriangleMesh3Fs(triangleMesh3Fs, boundingVolume3F -> 0, triangle3F -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param triangleMesh3Fs a {@code List} of {@code TriangleMesh3F} instances
+	 * @return an {@code int[]} with all {@code TriangleMesh3F} instances in {@code triangleMesh3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code triangleMesh3Fs} or at least one of its elements are {@code null}
+	 */
+	public static int[] toTriangleMesh3Fs(final List<TriangleMesh3F> triangleMesh3Fs) {
+		return toTriangleMesh3Fs(triangleMesh3Fs, boundingVolume3F -> 0, triangle3F -> 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with all {@link TriangleMesh3F} instances in {@code triangleMesh3Fs} in compiled form.
+	 * <p>
+	 * If either {@code triangleMesh3Fs}, at least one of its elements, {@code boundingVolume3FOffsetFunction} or {@code triangle3FOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangleMesh3Fs a {@code List} of {@code TriangleMesh3F} instances
+	 * @param boundingVolume3FOffsetFunction a {@code ToIntFunction} that returns {@link BoundingVolume3F} offsets
+	 * @param triangle3FOffsetFunction a {@code ToIntFunction} that returns {@link Triangle3F} offsets
+	 * @return an {@code int[]} with all {@code TriangleMesh3F} instances in {@code triangleMesh3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code triangleMesh3Fs}, at least one of its elements, {@code boundingVolume3FOffsetFunction} or {@code triangle3FOffsetFunction} are {@code null}
+	 */
+	public static int[] toTriangleMesh3Fs(final List<TriangleMesh3F> triangleMesh3Fs, final ToIntFunction<BoundingVolume3F> boundingVolume3FOffsetFunction, final ToIntFunction<Triangle3F> triangle3FOffsetFunction) {
+		return Ints.toArray(triangleMesh3Fs, triangleMesh3F -> toTriangleMesh3F(triangleMesh3F, boundingVolume3FOffsetFunction, triangle3FOffsetFunction));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1458,7 +1657,7 @@ public final class CompiledShape3FCache {
 		return -1;
 	}
 	
-	private static int doGetLength(final BVHNode3F bVHNode3F) {
+	private static int doGetBVHNode3FLength(final BVHNode3F bVHNode3F) {
 		if(bVHNode3F instanceof LeafBVHNode3F) {
 			final int a = 4;
 			final int b = LeafBVHNode3F.class.cast(bVHNode3F).getShapeCount();
@@ -1472,38 +1671,36 @@ public final class CompiledShape3FCache {
 		}
 	}
 	
-	private static int[] doToArray(final BVHNode3F rootBVHNode, final List<Triangle3F> shapes) {
-		Objects.requireNonNull(rootBVHNode, "rootBVHNode == null");
+	private static int[] doToBVHNode3F(final BVHNode3F rootBVHNode3F, final ToIntFunction<BoundingVolume3F> boundingVolume3FOffsetFunction, final ToIntFunction<Triangle3F> triangle3FOffsetFunction) {
+		Objects.requireNonNull(rootBVHNode3F, "rootBVHNode3F == null");
 		
-		ParameterArguments.requireNonNullList(shapes, "shapes");
+		final List<BVHNode3F> bVHNode3Fs = NodeFilter.filterAll(rootBVHNode3F, BVHNode3F.class);
 		
-		final List<BVHNode3F> bVHNodes = NodeFilter.filterAll(rootBVHNode, BVHNode3F.class);
+		final int[] offsets = new int[bVHNode3Fs.size()];
 		
-		final int[] offsets = new int[bVHNodes.size()];
-		
-		for(int i = 0, j = 0; i < offsets.length; j += doGetLength(bVHNodes.get(i)), i++) {
+		for(int i = 0, j = 0; i < offsets.length; j += doGetBVHNode3FLength(bVHNode3Fs.get(i)), i++) {
 			offsets[i] = j;
 		}
 		
 		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
-			for(int i = 0; i < bVHNodes.size(); i++) {
-				final BVHNode3F bVHNode = bVHNodes.get(i);
+			for(int i = 0; i < bVHNode3Fs.size(); i++) {
+				final BVHNode3F bVHNode3F = bVHNode3Fs.get(i);
 				
-				if(bVHNode instanceof LeafBVHNode3F) {
-					final LeafBVHNode3F<?> leafBVHNode = LeafBVHNode3F.class.cast(bVHNode);
+				if(bVHNode3F instanceof LeafBVHNode3F) {
+					final LeafBVHNode3F<?> leafBVHNode3F = LeafBVHNode3F.class.cast(bVHNode3F);
 					
 					final int id = LeafBVHNode3F.ID;
-					final int boundingVolumeOffset = i;
-					final int nextOffset = doFindNextOffset(bVHNodes, leafBVHNode.getDepth(), i + 1, offsets);
-					final int shapeCount = leafBVHNode.getShapeCount();
+					final int boundingVolumeOffset = boundingVolume3FOffsetFunction.applyAsInt(leafBVHNode3F.getBoundingVolume());
+					final int nextOffset = doFindNextOffset(bVHNode3Fs, leafBVHNode3F.getDepth(), i + 1, offsets);
+					final int shapeCount = leafBVHNode3F.getShapeCount();
 					
 					intArrayOutputStream.writeInt(id);
 					intArrayOutputStream.writeInt(boundingVolumeOffset);
 					intArrayOutputStream.writeInt(nextOffset);
 					intArrayOutputStream.writeInt(shapeCount);
 					
-					for(final Shape3F shape : leafBVHNode.getShapes()) {
-						intArrayOutputStream.writeInt(shapes.indexOf(shape));
+					for(final Shape3F shape3F : leafBVHNode3F.getShapes()) {
+						intArrayOutputStream.writeInt(triangle3FOffsetFunction.applyAsInt(Triangle3F.class.cast(shape3F)));
 					}
 					
 					final int padding = padding(4 + shapeCount);
@@ -1511,13 +1708,13 @@ public final class CompiledShape3FCache {
 					for(int j = 0; j < padding; j++) {
 						intArrayOutputStream.writeInt(0);
 					}
-				} else if(bVHNode instanceof TreeBVHNode3F) {
-					final TreeBVHNode3F treeBVHNode = TreeBVHNode3F.class.cast(bVHNode);
+				} else if(bVHNode3F instanceof TreeBVHNode3F) {
+					final TreeBVHNode3F treeBVHNode3F = TreeBVHNode3F.class.cast(bVHNode3F);
 					
 					final int id = TreeBVHNode3F.ID;
-					final int boundingVolumeOffset = i;
-					final int nextOffset = doFindNextOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
-					final int leftOffset = doFindLeftOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
+					final int boundingVolumeOffset = boundingVolume3FOffsetFunction.applyAsInt(treeBVHNode3F.getBoundingVolume());
+					final int nextOffset = doFindNextOffset(bVHNode3Fs, treeBVHNode3F.getDepth(), i + 1, offsets);
+					final int leftOffset = doFindLeftOffset(bVHNode3Fs, treeBVHNode3F.getDepth(), i + 1, offsets);
 					
 					intArrayOutputStream.writeInt(id);
 					intArrayOutputStream.writeInt(boundingVolumeOffset);

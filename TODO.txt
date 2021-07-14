@@ -22,9 +22,6 @@ Scene BSSRDF API:
 Scene Compiler API:
 
 	* ADD:		Add support for updating a CompiledScene instance on-the-fly.
-	* CHANGE:	Move the implementations of the methods toShape3F*Array() from the Shape3FCache class to the CompiledShape3FCache class. The methods should be toShape3F*Array(List<*>) and toShape3F*Array(List<*>, ToIntFunction<BoundingVolume3F>).
-	* CHANGE:	Change the naming convention of the CompiledShape3FCache class. The methods should be similar to getSphere3FArray() instead of getShape3FSphere3FArray() etc. Similar with fields.
-	* CHANGE:	Change the method names from something like toArray(Sphere3F) to toSphere3FArray(Sphere3F). Similar to the methods that take a List<Sphere3F> etc.
 
 Scene Light API:
 

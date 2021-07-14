@@ -150,7 +150,7 @@ final class TextureCache {
 	}
 	
 	public int[] toLDRImageTextureOffsets() {
-		return CompiledTextureCache.toLDRImageTextureOffsets(this.distinctLDRImageTextures, this::findOffsetFor);
+		return CompiledTextureCache.toLDRImageTextureOffsets(this.distinctLDRImageTextures);
 	}
 	
 	public void clear() {

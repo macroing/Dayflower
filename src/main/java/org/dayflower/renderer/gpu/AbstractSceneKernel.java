@@ -1125,15 +1125,15 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.shape3FTriangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FTriangle3FArray()));
 		put(super.shape3FTriangleMesh3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FTriangleMesh3FArray()));
 		
-		put(super.textureBlendTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTextureBlendTextureArray()));
-		put(super.textureBullseyeTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTextureBullseyeTextureArray()));
-		put(super.textureCheckerboardTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTextureCheckerboardTextureArray()));
-		put(super.textureConstantTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTextureConstantTextureArray()));
-		put(super.textureLDRImageTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTextureLDRImageTextureArray()));
-		put(super.textureLDRImageTextureOffsetArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTextureLDRImageTextureOffsetArray()));
-		put(super.textureMarbleTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTextureMarbleTextureArray()));
-		put(super.texturePolkaDotTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTexturePolkaDotTextureArray()));
-		put(super.textureSimplexFractionalBrownianMotionTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTextureSimplexFractionalBrownianMotionTextureArray()));
+		put(super.textureBlendTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getBlendTextures()));
+		put(super.textureBullseyeTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getBullseyeTextures()));
+		put(super.textureCheckerboardTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getCheckerboardTextures()));
+		put(super.textureConstantTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getConstantTextures()));
+		put(super.textureLDRImageTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getLDRImageTextures()));
+		put(super.textureLDRImageTextureOffsetArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getLDRImageTextureOffsets()));
+		put(super.textureMarbleTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getMarbleTextures()));
+		put(super.texturePolkaDotTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getPolkaDotTextures()));
+		put(super.textureSimplexFractionalBrownianMotionTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getSimplexFractionalBrownianMotionTextures()));
 		
 		put(super.materialBullseyeMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getBullseyeMaterials()));
 		put(super.materialCheckerboardMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getCheckerboardMaterials()));

@@ -4,6 +4,7 @@
 	* CHANGE:	Refactor the CompiledCameraCache class.
 	* CHANGE:	Refactor the CompiledLightCache class.
 	* CHANGE:	Refactor the CompiledMaterialCache class.
+	* CHANGE:	Refactor the CompiledTextureCache class.
 
 2021-07-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

@@ -178,15 +178,15 @@ public final class SceneCompiler {
 		compiledScene.getCompiledShape3FCache().setShape3FTorus3FArray(this.shape3FCache.toShape3FTorus3FArray());
 		compiledScene.getCompiledShape3FCache().setShape3FTriangle3FArray(this.shape3FCache.toShape3FTriangle3FArray());
 		compiledScene.getCompiledShape3FCache().setShape3FTriangleMesh3FArray(this.shape3FCache.toShape3FTriangleMesh3FArray(this.boundingVolume3FCache));
-		compiledScene.getCompiledTextureCache().setTextureBlendTextureArray(this.textureCache.toTextureBlendTextureArray());
-		compiledScene.getCompiledTextureCache().setTextureBullseyeTextureArray(this.textureCache.toTextureBullseyeTextureArray());
-		compiledScene.getCompiledTextureCache().setTextureCheckerboardTextureArray(this.textureCache.toTextureCheckerboardTextureArray());
-		compiledScene.getCompiledTextureCache().setTextureConstantTextureArray(this.textureCache.toTextureConstantTextureArray());
-		compiledScene.getCompiledTextureCache().setTextureLDRImageTextureArray(this.textureCache.toTextureLDRImageTextureArray());
-		compiledScene.getCompiledTextureCache().setTextureLDRImageTextureOffsetArray(this.textureCache.toTextureLDRImageTextureOffsetArray());
-		compiledScene.getCompiledTextureCache().setTextureMarbleTextureArray(this.textureCache.toTextureMarbleTextureArray());
-		compiledScene.getCompiledTextureCache().setTexturePolkaDotTextureArray(this.textureCache.toTexturePolkaDotTextureArray());
-		compiledScene.getCompiledTextureCache().setTextureSimplexFractionalBrownianMotionTextureArray(this.textureCache.toTextureSimplexFractionalBrownianMotionTextureArray());
+		compiledScene.getCompiledTextureCache().setBlendTextures(this.textureCache.toBlendTextures());
+		compiledScene.getCompiledTextureCache().setBullseyeTextures(this.textureCache.toBullseyeTextures());
+		compiledScene.getCompiledTextureCache().setCheckerboardTextures(this.textureCache.toCheckerboardTextures());
+		compiledScene.getCompiledTextureCache().setConstantTextures(this.textureCache.toConstantTextures());
+		compiledScene.getCompiledTextureCache().setLDRImageTextureOffsets(this.textureCache.toLDRImageTextureOffsets());
+		compiledScene.getCompiledTextureCache().setLDRImageTextures(this.textureCache.toLDRImageTextures());
+		compiledScene.getCompiledTextureCache().setMarbleTextures(this.textureCache.toMarbleTextures());
+		compiledScene.getCompiledTextureCache().setPolkaDotTextures(this.textureCache.toPolkaDotTextures());
+		compiledScene.getCompiledTextureCache().setSimplexFractionalBrownianMotionTextures(this.textureCache.toSimplexFractionalBrownianMotionTextures());
 		
 		this.compiledScene.set(compiledScene);
 	}

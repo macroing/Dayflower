@@ -18,10 +18,12 @@
  */
 package org.dayflower.scene.compiler;
 
+import static org.dayflower.utility.Ints.pack;
 import static org.dayflower.utility.Ints.padding;
 
-import java.lang.reflect.Field;//TODO: Refactor!
+import java.util.List;
 import java.util.Objects;
+import java.util.function.ToIntFunction;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
@@ -36,6 +38,8 @@ import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.PolkaDotTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.Texture;
+import org.dayflower.utility.Floats;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledTextureCache} contains {@link Texture} instances in compiled form.
@@ -266,15 +270,15 @@ public final class CompiledTextureCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private float[] textureBlendTextureArray;
-	private float[] textureBullseyeTextureArray;
-	private float[] textureCheckerboardTextureArray;
-	private float[] textureConstantTextureArray;
-	private float[] textureLDRImageTextureArray;
-	private float[] textureMarbleTextureArray;
-	private float[] texturePolkaDotTextureArray;
-	private float[] textureSimplexFractionalBrownianMotionTextureArray;
-	private int[] textureLDRImageTextureOffsetArray;
+	private float[] blendTextures;
+	private float[] bullseyeTextures;
+	private float[] checkerboardTextures;
+	private float[] constantTextures;
+	private float[] lDRImageTextures;
+	private float[] marbleTextures;
+	private float[] polkaDotTextures;
+	private float[] simplexFractionalBrownianMotionTextures;
+	private int[] lDRImageTextureOffsets;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -282,15 +286,15 @@ public final class CompiledTextureCache {
 	 * Constructs a new {@code CompiledTextureCache} instance.
 	 */
 	public CompiledTextureCache() {
-		setTextureBlendTextureArray(new float[0]);
-		setTextureBullseyeTextureArray(new float[0]);
-		setTextureCheckerboardTextureArray(new float[0]);
-		setTextureConstantTextureArray(new float[0]);
-		setTextureLDRImageTextureArray(new float[0]);
-		setTextureLDRImageTextureOffsetArray(new int[0]);
-		setTextureMarbleTextureArray(new float[0]);
-		setTexturePolkaDotTextureArray(new float[0]);
-		setTextureSimplexFractionalBrownianMotionTextureArray(new float[0]);
+		setBlendTextures(new float[0]);
+		setBullseyeTextures(new float[0]);
+		setCheckerboardTextures(new float[0]);
+		setConstantTextures(new float[0]);
+		setLDRImageTextureOffsets(new int[0]);
+		setLDRImageTextures(new float[0]);
+		setMarbleTextures(new float[0]);
+		setPolkaDotTextures(new float[0]);
+		setSimplexFractionalBrownianMotionTextures(new float[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -300,8 +304,8 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code BlendTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
 	 */
-	public float[] getTextureBlendTextureArray() {
-		return this.textureBlendTextureArray;
+	public float[] getBlendTextures() {
+		return this.blendTextures;
 	}
 	
 	/**
@@ -309,8 +313,8 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code BullseyeTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
 	 */
-	public float[] getTextureBullseyeTextureArray() {
-		return this.textureBullseyeTextureArray;
+	public float[] getBullseyeTextures() {
+		return this.bullseyeTextures;
 	}
 	
 	/**
@@ -318,8 +322,8 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code CheckerboardTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
 	 */
-	public float[] getTextureCheckerboardTextureArray() {
-		return this.textureCheckerboardTextureArray;
+	public float[] getCheckerboardTextures() {
+		return this.checkerboardTextures;
 	}
 	
 	/**
@@ -327,8 +331,8 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code ConstantTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
 	 */
-	public float[] getTextureConstantTextureArray() {
-		return this.textureConstantTextureArray;
+	public float[] getConstantTextures() {
+		return this.constantTextures;
 	}
 	
 	/**
@@ -336,8 +340,8 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code LDRImageTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
 	 */
-	public float[] getTextureLDRImageTextureArray() {
-		return this.textureLDRImageTextureArray;
+	public float[] getLDRImageTextures() {
+		return this.lDRImageTextures;
 	}
 	
 	/**
@@ -345,8 +349,8 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code MarbleTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
 	 */
-	public float[] getTextureMarbleTextureArray() {
-		return this.textureMarbleTextureArray;
+	public float[] getMarbleTextures() {
+		return this.marbleTextures;
 	}
 	
 	/**
@@ -354,8 +358,8 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code PolkaDotTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
 	 */
-	public float[] getTexturePolkaDotTextureArray() {
-		return this.texturePolkaDotTextureArray;
+	public float[] getPolkaDotTextures() {
+		return this.polkaDotTextures;
 	}
 	
 	/**
@@ -363,8 +367,8 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code SimplexFractionalBrownianMotionTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
 	 */
-	public float[] getTextureSimplexFractionalBrownianMotionTextureArray() {
-		return this.textureSimplexFractionalBrownianMotionTextureArray;
+	public float[] getSimplexFractionalBrownianMotionTextures() {
+		return this.simplexFractionalBrownianMotionTextures;
 	}
 	
 	/**
@@ -372,34 +376,34 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return the {@code BlendTexture} count in this {@code CompiledTextureCache} instance
 	 */
-	public int getTextureBlendTextureCount() {
-		return Structures.getStructureCount(this.textureBlendTextureArray, BLEND_TEXTURE_LENGTH);
+	public int getBlendTextureCount() {
+		return Structures.getStructureCount(this.blendTextures, BLEND_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code textureBlendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code blendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureBlendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureBlendTexture a {@link BlendTexture} instance in compiled form
-	 * @return the absolute offset of {@code textureBlendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureBlendTexture} is {@code null}
+	 * @param blendTexture a {@link BlendTexture} instance in compiled form
+	 * @return the absolute offset of {@code blendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code blendTexture} is {@code null}
 	 */
-	public int getTextureBlendTextureOffsetAbsolute(final float[] textureBlendTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureBlendTextureArray, Objects.requireNonNull(textureBlendTexture, "textureBlendTexture == null"), getTextureBlendTextureCount(), BLEND_TEXTURE_LENGTH);
+	public int getBlendTextureOffsetAbsolute(final float[] blendTexture) {
+		return Structures.getStructureOffsetAbsolute(this.blendTextures, Objects.requireNonNull(blendTexture, "blendTexture == null"), getBlendTextureCount(), BLEND_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code textureBlendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code blendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureBlendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureBlendTexture a {@link BlendTexture} instance in compiled form
-	 * @return the relative offset of {@code textureBlendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureBlendTexture} is {@code null}
+	 * @param blendTexture a {@link BlendTexture} instance in compiled form
+	 * @return the relative offset of {@code blendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code blendTexture} is {@code null}
 	 */
-	public int getTextureBlendTextureOffsetRelative(final float[] textureBlendTexture) {
-		return Structures.getStructureOffsetRelative(this.textureBlendTextureArray, Objects.requireNonNull(textureBlendTexture, "textureBlendTexture == null"), getTextureBlendTextureCount(), BLEND_TEXTURE_LENGTH);
+	public int getBlendTextureOffsetRelative(final float[] blendTexture) {
+		return Structures.getStructureOffsetRelative(this.blendTextures, Objects.requireNonNull(blendTexture, "blendTexture == null"), getBlendTextureCount(), BLEND_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -407,34 +411,34 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return the {@code BullseyeTexture} count in this {@code CompiledTextureCache} instance
 	 */
-	public int getTextureBullseyeTextureCount() {
-		return Structures.getStructureCount(this.textureBullseyeTextureArray, BULLSEYE_TEXTURE_LENGTH);
+	public int getBullseyeTextureCount() {
+		return Structures.getStructureCount(this.bullseyeTextures, BULLSEYE_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code textureBullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code bullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureBullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code bullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureBullseyeTexture a {@link BullseyeTexture} instance in compiled form
-	 * @return the absolute offset of {@code textureBullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureBullseyeTexture} is {@code null}
+	 * @param bullseyeTexture a {@link BullseyeTexture} instance in compiled form
+	 * @return the absolute offset of {@code bullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTexture} is {@code null}
 	 */
-	public int getTextureBullseyeTextureOffsetAbsolute(final float[] textureBullseyeTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureBullseyeTextureArray, Objects.requireNonNull(textureBullseyeTexture, "textureBullseyeTexture == null"), getTextureBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
+	public int getBullseyeTextureOffsetAbsolute(final float[] bullseyeTexture) {
+		return Structures.getStructureOffsetAbsolute(this.bullseyeTextures, Objects.requireNonNull(bullseyeTexture, "bullseyeTexture == null"), getBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code textureBullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code bullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureBullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code bullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureBullseyeTexture a {@link BullseyeTexture} instance in compiled form
-	 * @return the relative offset of {@code textureBullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureBullseyeTexture} is {@code null}
+	 * @param bullseyeTexture a {@link BullseyeTexture} instance in compiled form
+	 * @return the relative offset of {@code bullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTexture} is {@code null}
 	 */
-	public int getTextureBullseyeTextureOffsetRelative(final float[] textureBullseyeTexture) {
-		return Structures.getStructureOffsetRelative(this.textureBullseyeTextureArray, Objects.requireNonNull(textureBullseyeTexture, "textureBullseyeTexture == null"), getTextureBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
+	public int getBullseyeTextureOffsetRelative(final float[] bullseyeTexture) {
+		return Structures.getStructureOffsetRelative(this.bullseyeTextures, Objects.requireNonNull(bullseyeTexture, "bullseyeTexture == null"), getBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -442,34 +446,34 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return the {@code CheckerboardTexture} count in this {@code CompiledTextureCache} instance
 	 */
-	public int getTextureCheckerboardTextureCount() {
-		return Structures.getStructureCount(this.textureCheckerboardTextureArray, CHECKERBOARD_TEXTURE_LENGTH);
+	public int getCheckerboardTextureCount() {
+		return Structures.getStructureCount(this.checkerboardTextures, CHECKERBOARD_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code textureCheckerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code checkerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureCheckerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code checkerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureCheckerboardTexture a {@link CheckerboardTexture} instance in compiled form
-	 * @return the absolute offset of {@code textureCheckerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureCheckerboardTexture} is {@code null}
+	 * @param checkerboardTexture a {@link CheckerboardTexture} instance in compiled form
+	 * @return the absolute offset of {@code checkerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTexture} is {@code null}
 	 */
-	public int getTextureCheckerboardTextureOffsetAbsolute(final float[] textureCheckerboardTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureCheckerboardTextureArray, Objects.requireNonNull(textureCheckerboardTexture, "textureCheckerboardTexture == null"), getTextureCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
+	public int getCheckerboardTextureOffsetAbsolute(final float[] checkerboardTexture) {
+		return Structures.getStructureOffsetAbsolute(this.checkerboardTextures, Objects.requireNonNull(checkerboardTexture, "checkerboardTexture == null"), getCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code textureCheckerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code checkerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureCheckerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code checkerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureCheckerboardTexture a {@link CheckerboardTexture} instance in compiled form
-	 * @return the relative offset of {@code textureCheckerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureCheckerboardTexture} is {@code null}
+	 * @param checkerboardTexture a {@link CheckerboardTexture} instance in compiled form
+	 * @return the relative offset of {@code checkerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTexture} is {@code null}
 	 */
-	public int getTextureCheckerboardTextureOffsetRelative(final float[] textureCheckerboardTexture) {
-		return Structures.getStructureOffsetRelative(this.textureCheckerboardTextureArray, Objects.requireNonNull(textureCheckerboardTexture, "textureCheckerboardTexture == null"), getTextureCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
+	public int getCheckerboardTextureOffsetRelative(final float[] checkerboardTexture) {
+		return Structures.getStructureOffsetRelative(this.checkerboardTextures, Objects.requireNonNull(checkerboardTexture, "checkerboardTexture == null"), getCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -477,34 +481,34 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return the {@code ConstantTexture} count in this {@code CompiledTextureCache} instance
 	 */
-	public int getTextureConstantTextureCount() {
-		return Structures.getStructureCount(this.textureConstantTextureArray, CONSTANT_TEXTURE_LENGTH);
+	public int getConstantTextureCount() {
+		return Structures.getStructureCount(this.constantTextures, CONSTANT_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code textureConstantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code constantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureConstantTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code constantTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureConstantTexture a {@link ConstantTexture} instance in compiled form
-	 * @return the absolute offset of {@code textureConstantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureConstantTexture} is {@code null}
+	 * @param constantTexture a {@link ConstantTexture} instance in compiled form
+	 * @return the absolute offset of {@code constantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code constantTexture} is {@code null}
 	 */
-	public int getTextureConstantTextureOffsetAbsolute(final float[] textureConstantTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureConstantTextureArray, Objects.requireNonNull(textureConstantTexture, "textureConstantTexture == null"), getTextureConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
+	public int getConstantTextureOffsetAbsolute(final float[] constantTexture) {
+		return Structures.getStructureOffsetAbsolute(this.constantTextures, Objects.requireNonNull(constantTexture, "constantTexture == null"), getConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code textureConstantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code constantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureConstantTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code constantTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureConstantTexture a {@link ConstantTexture} instance in compiled form
-	 * @return the relative offset of {@code textureConstantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureConstantTexture} is {@code null}
+	 * @param constantTexture a {@link ConstantTexture} instance in compiled form
+	 * @return the relative offset of {@code constantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code constantTexture} is {@code null}
 	 */
-	public int getTextureConstantTextureOffsetRelative(final float[] textureConstantTexture) {
-		return Structures.getStructureOffsetRelative(this.textureConstantTextureArray, Objects.requireNonNull(textureConstantTexture, "textureConstantTexture == null"), getTextureConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
+	public int getConstantTextureOffsetRelative(final float[] constantTexture) {
+		return Structures.getStructureOffsetRelative(this.constantTextures, Objects.requireNonNull(constantTexture, "constantTexture == null"), getConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -512,34 +516,34 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return the {@code MarbleTexture} count in this {@code CompiledTextureCache} instance
 	 */
-	public int getTextureMarbleTextureCount() {
-		return Structures.getStructureCount(this.textureMarbleTextureArray, MARBLE_TEXTURE_LENGTH);
+	public int getMarbleTextureCount() {
+		return Structures.getStructureCount(this.marbleTextures, MARBLE_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code textureMarbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code marbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureMarbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code marbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureMarbleTexture a {@link MarbleTexture} instance in compiled form
-	 * @return the absolute offset of {@code textureMarbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureMarbleTexture} is {@code null}
+	 * @param marbleTexture a {@link MarbleTexture} instance in compiled form
+	 * @return the absolute offset of {@code marbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code marbleTexture} is {@code null}
 	 */
-	public int getTextureMarbleTextureOffsetAbsolute(final float[] textureMarbleTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureMarbleTextureArray, Objects.requireNonNull(textureMarbleTexture, "textureMarbleTexture == null"), getTextureMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
+	public int getMarbleTextureOffsetAbsolute(final float[] marbleTexture) {
+		return Structures.getStructureOffsetAbsolute(this.marbleTextures, Objects.requireNonNull(marbleTexture, "marbleTexture == null"), getMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code textureMarbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code marbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureMarbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code marbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureMarbleTexture a {@link MarbleTexture} instance in compiled form
-	 * @return the relative offset of {@code textureMarbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureMarbleTexture} is {@code null}
+	 * @param marbleTexture a {@link MarbleTexture} instance in compiled form
+	 * @return the relative offset of {@code marbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code marbleTexture} is {@code null}
 	 */
-	public int getTextureMarbleTextureOffsetRelative(final float[] textureMarbleTexture) {
-		return Structures.getStructureOffsetRelative(this.textureMarbleTextureArray, Objects.requireNonNull(textureMarbleTexture, "textureMarbleTexture == null"), getTextureMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
+	public int getMarbleTextureOffsetRelative(final float[] marbleTexture) {
+		return Structures.getStructureOffsetRelative(this.marbleTextures, Objects.requireNonNull(marbleTexture, "marbleTexture == null"), getMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -547,34 +551,34 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return the {@code PolkaDotTexture} count in this {@code CompiledTextureCache} instance
 	 */
-	public int getTexturePolkaDotTextureCount() {
-		return Structures.getStructureCount(this.texturePolkaDotTextureArray, POLKA_DOT_TEXTURE_LENGTH);
+	public int getPolkaDotTextureCount() {
+		return Structures.getStructureCount(this.polkaDotTextures, POLKA_DOT_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code texturePolkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code polkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code texturePolkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code polkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param texturePolkaDotTexture a {@link PolkaDotTexture} instance in compiled form
-	 * @return the absolute offset of {@code texturePolkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code texturePolkaDotTexture} is {@code null}
+	 * @param polkaDotTexture a {@link PolkaDotTexture} instance in compiled form
+	 * @return the absolute offset of {@code polkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTexture} is {@code null}
 	 */
-	public int getTexturePolkaDotTextureOffsetAbsolute(final float[] texturePolkaDotTexture) {
-		return Structures.getStructureOffsetAbsolute(this.texturePolkaDotTextureArray, Objects.requireNonNull(texturePolkaDotTexture, "texturePolkaDotTexture == null"), getTexturePolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
+	public int getPolkaDotTextureOffsetAbsolute(final float[] polkaDotTexture) {
+		return Structures.getStructureOffsetAbsolute(this.polkaDotTextures, Objects.requireNonNull(polkaDotTexture, "polkaDotTexture == null"), getPolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code texturePolkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code polkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code texturePolkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code polkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param texturePolkaDotTexture a {@link PolkaDotTexture} instance in compiled form
-	 * @return the relative offset of {@code texturePolkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code texturePolkaDotTexture} is {@code null}
+	 * @param polkaDotTexture a {@link PolkaDotTexture} instance in compiled form
+	 * @return the relative offset of {@code polkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTexture} is {@code null}
 	 */
-	public int getTexturePolkaDotTextureOffsetRelative(final float[] texturePolkaDotTexture) {
-		return Structures.getStructureOffsetRelative(this.texturePolkaDotTextureArray, Objects.requireNonNull(texturePolkaDotTexture, "texturePolkaDotTexture == null"), getTexturePolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
+	public int getPolkaDotTextureOffsetRelative(final float[] polkaDotTexture) {
+		return Structures.getStructureOffsetRelative(this.polkaDotTextures, Objects.requireNonNull(polkaDotTexture, "polkaDotTexture == null"), getPolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -582,34 +586,34 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return the {@code SimplexFractionalBrownianMotionTexture} count in this {@code CompiledTextureCache} instance
 	 */
-	public int getTextureSimplexFractionalBrownianMotionTextureCount() {
-		return Structures.getStructureCount(this.textureSimplexFractionalBrownianMotionTextureArray, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
+	public int getSimplexFractionalBrownianMotionTextureCount() {
+		return Structures.getStructureCount(this.simplexFractionalBrownianMotionTextures, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code textureSimplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code simplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureSimplexFractionalBrownianMotionTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code simplexFractionalBrownianMotionTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureSimplexFractionalBrownianMotionTexture a {@link SimplexFractionalBrownianMotionTexture} instance in compiled form
-	 * @return the absolute offset of {@code textureSimplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureSimplexFractionalBrownianMotionTexture} is {@code null}
+	 * @param simplexFractionalBrownianMotionTexture a {@link SimplexFractionalBrownianMotionTexture} instance in compiled form
+	 * @return the absolute offset of {@code simplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture} is {@code null}
 	 */
-	public int getTextureSimplexFractionalBrownianMotionTextureOffsetAbsolute(final float[] textureSimplexFractionalBrownianMotionTexture) {
-		return Structures.getStructureOffsetAbsolute(this.textureSimplexFractionalBrownianMotionTextureArray, Objects.requireNonNull(textureSimplexFractionalBrownianMotionTexture, "textureSimplexFractionalBrownianMotionTexture == null"), getTextureSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
+	public int getSimplexFractionalBrownianMotionTextureOffsetAbsolute(final float[] simplexFractionalBrownianMotionTexture) {
+		return Structures.getStructureOffsetAbsolute(this.simplexFractionalBrownianMotionTextures, Objects.requireNonNull(simplexFractionalBrownianMotionTexture, "simplexFractionalBrownianMotionTexture == null"), getSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code textureSimplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code simplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code textureSimplexFractionalBrownianMotionTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code simplexFractionalBrownianMotionTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureSimplexFractionalBrownianMotionTexture a {@link SimplexFractionalBrownianMotionTexture} instance in compiled form
-	 * @return the relative offset of {@code textureSimplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code textureSimplexFractionalBrownianMotionTexture} is {@code null}
+	 * @param simplexFractionalBrownianMotionTexture a {@link SimplexFractionalBrownianMotionTexture} instance in compiled form
+	 * @return the relative offset of {@code simplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture} is {@code null}
 	 */
-	public int getTextureSimplexFractionalBrownianMotionTextureOffsetRelative(final float[] textureSimplexFractionalBrownianMotionTexture) {
-		return Structures.getStructureOffsetRelative(this.textureSimplexFractionalBrownianMotionTextureArray, Objects.requireNonNull(textureSimplexFractionalBrownianMotionTexture, "textureSimplexFractionalBrownianMotionTexture == null"), getTextureSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
+	public int getSimplexFractionalBrownianMotionTextureOffsetRelative(final float[] simplexFractionalBrownianMotionTexture) {
+		return Structures.getStructureOffsetRelative(this.simplexFractionalBrownianMotionTextures, Objects.requireNonNull(simplexFractionalBrownianMotionTexture, "simplexFractionalBrownianMotionTexture == null"), getSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -617,116 +621,116 @@ public final class CompiledTextureCache {
 	 * 
 	 * @return an {@code int[]} that contains the offsets for all {@code LDRImageTexture} instances in this {@code CompiledTextureCache} instance
 	 */
-	public int[] getTextureLDRImageTextureOffsetArray() {
-		return this.textureLDRImageTextureOffsetArray;
+	public int[] getLDRImageTextureOffsets() {
+		return this.lDRImageTextureOffsets;
 	}
 	
 	/**
-	 * Sets all {@link BlendTexture} instances in compiled form to {@code textureBlendTextureArray}.
+	 * Sets all {@link BlendTexture} instances in compiled form to {@code blendTextures}.
 	 * <p>
-	 * If {@code textureBlendTextureArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code blendTextures} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureBlendTextureArray the {@code BlendTexture} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code textureBlendTextureArray} is {@code null}
+	 * @param blendTextures the {@code BlendTexture} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code blendTextures} is {@code null}
 	 */
-	public void setTextureBlendTextureArray(final float[] textureBlendTextureArray) {
-		this.textureBlendTextureArray = Objects.requireNonNull(textureBlendTextureArray, "textureBlendTextureArray == null");
+	public void setBlendTextures(final float[] blendTextures) {
+		this.blendTextures = Objects.requireNonNull(blendTextures, "blendTextures == null");
 	}
 	
 	/**
-	 * Sets all {@link BullseyeTexture} instances in compiled form to {@code textureBullseyeTextureArray}.
+	 * Sets all {@link BullseyeTexture} instances in compiled form to {@code bullseyeTextures}.
 	 * <p>
-	 * If {@code textureBullseyeTextureArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code bullseyeTextures} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureBullseyeTextureArray the {@code BullseyeTexture} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code textureBullseyeTextureArray} is {@code null}
+	 * @param bullseyeTextures the {@code BullseyeTexture} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTextures} is {@code null}
 	 */
-	public void setTextureBullseyeTextureArray(final float[] textureBullseyeTextureArray) {
-		this.textureBullseyeTextureArray = Objects.requireNonNull(textureBullseyeTextureArray, "textureBullseyeTextureArray == null");
+	public void setBullseyeTextures(final float[] bullseyeTextures) {
+		this.bullseyeTextures = Objects.requireNonNull(bullseyeTextures, "bullseyeTextures == null");
 	}
 	
 	/**
-	 * Sets all {@link CheckerboardTexture} instances in compiled form to {@code textureCheckerboardTextureArray}.
+	 * Sets all {@link CheckerboardTexture} instances in compiled form to {@code checkerboardTextures}.
 	 * <p>
-	 * If {@code textureCheckerboardTextureArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code checkerboardTextures} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureCheckerboardTextureArray the {@code CheckerboardTexture} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code textureCheckerboardTextureArray} is {@code null}
+	 * @param checkerboardTextures the {@code CheckerboardTexture} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTextures} is {@code null}
 	 */
-	public void setTextureCheckerboardTextureArray(final float[] textureCheckerboardTextureArray) {
-		this.textureCheckerboardTextureArray = Objects.requireNonNull(textureCheckerboardTextureArray, "textureCheckerboardTextureArray == null");
+	public void setCheckerboardTextures(final float[] checkerboardTextures) {
+		this.checkerboardTextures = Objects.requireNonNull(checkerboardTextures, "checkerboardTextures == null");
 	}
 	
 	/**
-	 * Sets all {@link ConstantTexture} instances in compiled form to {@code textureConstantTextureArray}.
+	 * Sets all {@link ConstantTexture} instances in compiled form to {@code constantTextures}.
 	 * <p>
-	 * If {@code textureConstantTextureArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code constantTextures} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureConstantTextureArray the {@code ConstantTexture} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code textureConstantTextureArray} is {@code null}
+	 * @param constantTextures the {@code ConstantTexture} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code constantTextures} is {@code null}
 	 */
-	public void setTextureConstantTextureArray(final float[] textureConstantTextureArray) {
-		this.textureConstantTextureArray = Objects.requireNonNull(textureConstantTextureArray, "textureConstantTextureArray == null");
+	public void setConstantTextures(final float[] constantTextures) {
+		this.constantTextures = Objects.requireNonNull(constantTextures, "constantTextures == null");
 	}
 	
 	/**
-	 * Sets all {@link LDRImageTexture} instances in compiled form to {@code textureLDRImageTextureArray}.
+	 * Sets the {@code int[]} that contains the offsets for all {@link LDRImageTexture} instances to {@code lDRImageTextureOffsets}.
 	 * <p>
-	 * If {@code textureLDRImageTextureArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageTextureOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureLDRImageTextureArray the {@code LDRImageTexture} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code textureLDRImageTextureArray} is {@code null}
+	 * @param lDRImageTextureOffsets the {@code int[]} that contains the offsets for all {@code LDRImageTexture} instances
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTextureOffsets} is {@code null}
 	 */
-	public void setTextureLDRImageTextureArray(final float[] textureLDRImageTextureArray) {
-		this.textureLDRImageTextureArray = Objects.requireNonNull(textureLDRImageTextureArray, "textureLDRImageTextureArray == null");
+	public void setLDRImageTextureOffsets(final int[] lDRImageTextureOffsets) {
+		this.lDRImageTextureOffsets = Objects.requireNonNull(lDRImageTextureOffsets, "lDRImageTextureOffsets == null");
 	}
 	
 	/**
-	 * Sets the {@code int[]} that contains the offsets for all {@link LDRImageTexture} instances to {@code textureLDRImageTextureOffsetArray}.
+	 * Sets all {@link LDRImageTexture} instances in compiled form to {@code lDRImageTextures}.
 	 * <p>
-	 * If {@code textureLDRImageTextureOffsetArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageTextures} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureLDRImageTextureOffsetArray the {@code int[]} that contains the offsets for all {@code LDRImageTexture} instances
-	 * @throws NullPointerException thrown if, and only if, {@code textureLDRImageTextureOffsetArray} is {@code null}
+	 * @param lDRImageTextures the {@code LDRImageTexture} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTextures} is {@code null}
 	 */
-	public void setTextureLDRImageTextureOffsetArray(final int[] textureLDRImageTextureOffsetArray) {
-		this.textureLDRImageTextureOffsetArray = Objects.requireNonNull(textureLDRImageTextureOffsetArray, "textureLDRImageTextureOffsetArray == null");
+	public void setLDRImageTextures(final float[] lDRImageTextures) {
+		this.lDRImageTextures = Objects.requireNonNull(lDRImageTextures, "lDRImageTextures == null");
 	}
 	
 	/**
-	 * Sets all {@link MarbleTexture} instances in compiled form to {@code textureMarbleTextureArray}.
+	 * Sets all {@link MarbleTexture} instances in compiled form to {@code marbleTextures}.
 	 * <p>
-	 * If {@code textureMarbleTextureArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code marbleTextures} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureMarbleTextureArray the {@code MarbleTexture} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code textureMarbleTextureArray} is {@code null}
+	 * @param marbleTextures the {@code MarbleTexture} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code marbleTextures} is {@code null}
 	 */
-	public void setTextureMarbleTextureArray(final float[] textureMarbleTextureArray) {
-		this.textureMarbleTextureArray = Objects.requireNonNull(textureMarbleTextureArray, "textureMarbleTextureArray == null");
+	public void setMarbleTextures(final float[] marbleTextures) {
+		this.marbleTextures = Objects.requireNonNull(marbleTextures, "marbleTextures == null");
 	}
 	
 	/**
-	 * Sets all {@link PolkaDotTexture} instances in compiled form to {@code texturePolkaDotTextureArray}.
+	 * Sets all {@link PolkaDotTexture} instances in compiled form to {@code polkaDotTextures}.
 	 * <p>
-	 * If {@code texturePolkaDotTextureArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code polkaDotTextures} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param texturePolkaDotTextureArray the {@code PolkaDotTexture} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code texturePolkaDotTextureArray} is {@code null}
+	 * @param polkaDotTextures the {@code PolkaDotTexture} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTextures} is {@code null}
 	 */
-	public void setTexturePolkaDotTextureArray(final float[] texturePolkaDotTextureArray) {
-		this.texturePolkaDotTextureArray = Objects.requireNonNull(texturePolkaDotTextureArray, "texturePolkaDotTextureArray == null");
+	public void setPolkaDotTextures(final float[] polkaDotTextures) {
+		this.polkaDotTextures = Objects.requireNonNull(polkaDotTextures, "polkaDotTextures == null");
 	}
 	
 	/**
-	 * Sets all {@link SimplexFractionalBrownianMotionTexture} instances in compiled form to {@code textureSimplexFractionalBrownianMotionTextureArray}.
+	 * Sets all {@link SimplexFractionalBrownianMotionTexture} instances in compiled form to {@code simplexFractionalBrownianMotionTextures}.
 	 * <p>
-	 * If {@code textureSimplexFractionalBrownianMotionTextureArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code simplexFractionalBrownianMotionTextures} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureSimplexFractionalBrownianMotionTextureArray the {@code SimplexFractionalBrownianMotionTexture} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code textureSimplexFractionalBrownianMotionTextureArray} is {@code null}
+	 * @param simplexFractionalBrownianMotionTextures the {@code SimplexFractionalBrownianMotionTexture} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTextures} is {@code null}
 	 */
-	public void setTextureSimplexFractionalBrownianMotionTextureArray(final float[] textureSimplexFractionalBrownianMotionTextureArray) {
-		this.textureSimplexFractionalBrownianMotionTextureArray = Objects.requireNonNull(textureSimplexFractionalBrownianMotionTextureArray, "textureSimplexFractionalBrownianMotionTextureArray == null");
+	public void setSimplexFractionalBrownianMotionTextures(final float[] simplexFractionalBrownianMotionTextures) {
+		this.simplexFractionalBrownianMotionTextures = Objects.requireNonNull(simplexFractionalBrownianMotionTextures, "simplexFractionalBrownianMotionTextures == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -735,12 +739,33 @@ public final class CompiledTextureCache {
 	 * Returns a {@code float[]} with {@code blendTexture} in compiled form.
 	 * <p>
 	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledTextureCache.toBlendTexture(blendTexture, texture -> 0);
+	 * }
+	 * </pre>
 	 * 
 	 * @param blendTexture a {@link BlendTexture} instance
 	 * @return a {@code float[]} with {@code blendTexture} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code blendTexture} is {@code null}
 	 */
-	public static float[] toArray(final BlendTexture blendTexture) {
+	public static float[] toBlendTexture(final BlendTexture blendTexture) {
+		return toBlendTexture(blendTexture, texture -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code blendTexture} in compiled form.
+	 * <p>
+	 * If either {@code blendTexture} or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param blendTexture a {@link BlendTexture} instance
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return a {@code float[]} with {@code blendTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code blendTexture} or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static float[] toBlendTexture(final BlendTexture blendTexture, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureA = blendTexture.getTextureA();
 		final Texture textureB = blendTexture.getTextureB();
 		
@@ -748,31 +773,89 @@ public final class CompiledTextureCache {
 		final float tComponent2 = blendTexture.getTComponent2();
 		final float tComponent3 = blendTexture.getTComponent3();
 		
+		final int textureAValue = pack(textureA.getID(), textureOffsetFunction.applyAsInt(textureA));
+		final int textureBValue = pack(textureB.getID(), textureOffsetFunction.applyAsInt(textureB));
+		
 		final float[] array = new float[BLEND_TEXTURE_LENGTH];
 		
 //		Because the BlendTexture occupy 8/8 positions in a block, it should be aligned.
-		array[BLEND_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();	//Block #1
-		array[BLEND_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();	//Block #1
-		array[BLEND_TEXTURE_OFFSET_T_COMPONENT_1] = tComponent1;	//Block #1
-		array[BLEND_TEXTURE_OFFSET_T_COMPONENT_2] = tComponent2;	//Block #1
-		array[BLEND_TEXTURE_OFFSET_T_COMPONENT_3] = tComponent3;	//Block #1
-		array[5] = 0.0F;											//Block #1
-		array[6] = 0.0F;											//Block #1
-		array[7] = 0.0F;											//Block #1
+		array[BLEND_TEXTURE_OFFSET_TEXTURE_A] = textureAValue;	//Block #1
+		array[BLEND_TEXTURE_OFFSET_TEXTURE_B] = textureBValue;	//Block #1
+		array[BLEND_TEXTURE_OFFSET_T_COMPONENT_1] = tComponent1;//Block #1
+		array[BLEND_TEXTURE_OFFSET_T_COMPONENT_2] = tComponent2;//Block #1
+		array[BLEND_TEXTURE_OFFSET_T_COMPONENT_3] = tComponent3;//Block #1
+		array[5] = 0.0F;										//Block #1
+		array[6] = 0.0F;										//Block #1
+		array[7] = 0.0F;										//Block #1
 		
 		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link BlendTexture} instances in {@code blendTextures} in compiled form.
+	 * <p>
+	 * If {@code blendTextures} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledTextureCache.toBlendTextures(blendTextures, texture -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param blendTextures a {@code List} of {@code BlendTexture} instances
+	 * @return a {@code float[]} with all {@code BlendTexture} instances in {@code blendTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code blendTextures} or at least one of its elements are {@code null}
+	 */
+	public static float[] toBlendTextures(final List<BlendTexture> blendTextures) {
+		return toBlendTextures(blendTextures, texture -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link BlendTexture} instances in {@code blendTextures} in compiled form.
+	 * <p>
+	 * If either {@code blendTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param blendTextures a {@code List} of {@code BlendTexture} instances
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return a {@code float[]} with all {@code BlendTexture} instances in {@code blendTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code blendTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static float[] toBlendTextures(final List<BlendTexture> blendTextures, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Floats.toArray(blendTextures, blendTexture -> toBlendTexture(blendTexture, textureOffsetFunction));
 	}
 	
 	/**
 	 * Returns a {@code float[]} with {@code bullseyeTexture} in compiled form.
 	 * <p>
 	 * If {@code bullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledTextureCache.toBullseyeTexture(bullseyeTexture, texture -> 0);
+	 * }
+	 * </pre>
 	 * 
 	 * @param bullseyeTexture a {@link BullseyeTexture} instance
 	 * @return a {@code float[]} with {@code bullseyeTexture} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTexture} is {@code null}
 	 */
-	public static float[] toArray(final BullseyeTexture bullseyeTexture) {
+	public static float[] toBullseyeTexture(final BullseyeTexture bullseyeTexture) {
+		return toBullseyeTexture(bullseyeTexture, texture -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code bullseyeTexture} in compiled form.
+	 * <p>
+	 * If either {@code bullseyeTexture} or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bullseyeTexture a {@link BullseyeTexture} instance
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return a {@code float[]} with {@code bullseyeTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeTexture} or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static float[] toBullseyeTexture(final BullseyeTexture bullseyeTexture, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Point3F origin = bullseyeTexture.getOrigin();
 		
 		final Texture textureA = bullseyeTexture.getTextureA();
@@ -780,31 +863,89 @@ public final class CompiledTextureCache {
 		
 		final float scale = bullseyeTexture.getScale();
 		
+		final int textureAValue = pack(textureA.getID(), textureOffsetFunction.applyAsInt(textureA));
+		final int textureBValue = pack(textureB.getID(), textureOffsetFunction.applyAsInt(textureB));
+		
 		final float[] array = new float[BULLSEYE_TEXTURE_LENGTH];
 		
 //		Because the BullseyeTexture occupy 8/8 positions in a block, it should be aligned.
-		array[BULLSEYE_TEXTURE_OFFSET_ORIGIN + 0] = origin.getX();		//Block #1
-		array[BULLSEYE_TEXTURE_OFFSET_ORIGIN + 1] = origin.getY();		//Block #1
-		array[BULLSEYE_TEXTURE_OFFSET_ORIGIN + 2] = origin.getZ();		//Block #1
-		array[BULLSEYE_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();	//Block #1
-		array[BULLSEYE_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();	//Block #1
-		array[BULLSEYE_TEXTURE_OFFSET_SCALE] = scale;					//Block #1
-		array[6] = 0.0F;												//Block #1
-		array[7] = 0.0F;												//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_ORIGIN + 0] = origin.getX();	//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_ORIGIN + 1] = origin.getY();	//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_ORIGIN + 2] = origin.getZ();	//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_TEXTURE_A] = textureAValue;	//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_TEXTURE_B] = textureBValue;	//Block #1
+		array[BULLSEYE_TEXTURE_OFFSET_SCALE] = scale;				//Block #1
+		array[6] = 0.0F;											//Block #1
+		array[7] = 0.0F;											//Block #1
 		
 		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link BullseyeTexture} instances in {@code bullseyeTextures} in compiled form.
+	 * <p>
+	 * If {@code bullseyeTextures} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledTextureCache.toBullseyeTextures(bullseyeTextures, texture -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param bullseyeTextures a {@code List} of {@code BullseyeTexture} instances
+	 * @return a {@code float[]} with all {@code BullseyeTexture} instances in {@code bullseyeTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTextures} or at least one of its elements are {@code null}
+	 */
+	public static float[] toBullseyeTextures(final List<BullseyeTexture> bullseyeTextures) {
+		return toBullseyeTextures(bullseyeTextures, texture -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link BullseyeTexture} instances in {@code bullseyeTextures} in compiled form.
+	 * <p>
+	 * If either {@code bullseyeTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bullseyeTextures a {@code List} of {@code BullseyeTexture} instances
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return a {@code float[]} with all {@code BullseyeTexture} instances in {@code bullseyeTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static float[] toBullseyeTextures(final List<BullseyeTexture> bullseyeTextures, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Floats.toArray(bullseyeTextures, bullseyeTexture -> toBullseyeTexture(bullseyeTexture, textureOffsetFunction));
 	}
 	
 	/**
 	 * Returns a {@code float[]} with {@code checkerboardTexture} in compiled form.
 	 * <p>
 	 * If {@code checkerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledTextureCache.toCheckerboardTexture(checkerboardTexture, texture -> 0);
+	 * }
+	 * </pre>
 	 * 
 	 * @param checkerboardTexture a {@link CheckerboardTexture} instance
 	 * @return a {@code float[]} with {@code checkerboardTexture} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTexture} is {@code null}
 	 */
-	public static float[] toArray(final CheckerboardTexture checkerboardTexture) {
+	public static float[] toCheckerboardTexture(final CheckerboardTexture checkerboardTexture) {
+		return toCheckerboardTexture(checkerboardTexture, texture -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code checkerboardTexture} in compiled form.
+	 * <p>
+	 * If either {@code checkerboardTexture} or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param checkerboardTexture a {@link CheckerboardTexture} instance
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return a {@code float[]} with {@code checkerboardTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardTexture} or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static float[] toCheckerboardTexture(final CheckerboardTexture checkerboardTexture, final ToIntFunction<Texture> textureOffsetFunction) {
 		final AngleF angle = checkerboardTexture.getAngle();
 		
 		final Texture textureA = checkerboardTexture.getTextureA();
@@ -812,19 +953,56 @@ public final class CompiledTextureCache {
 		
 		final Vector2F scale = checkerboardTexture.getScale();
 		
+		final int textureAValue = pack(textureA.getID(), textureOffsetFunction.applyAsInt(textureA));
+		final int textureBValue = pack(textureB.getID(), textureOffsetFunction.applyAsInt(textureB));
+		
 		final float[] array = new float[CHECKERBOARD_TEXTURE_LENGTH];
 		
 //		Because the CheckerboardTexture occupy 8/8 positions in a block, it should be aligned.
 		array[CHECKERBOARD_TEXTURE_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
 		array[CHECKERBOARD_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
-		array[CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();		//Block #1
-		array[CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();		//Block #1
+		array[CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_A] = textureAValue;			//Block #1
+		array[CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_B] = textureBValue;			//Block #1
 		array[CHECKERBOARD_TEXTURE_OFFSET_SCALE + 0] = scale.getX();			//Block #1
 		array[CHECKERBOARD_TEXTURE_OFFSET_SCALE + 1] = scale.getY();			//Block #1
 		array[6] = 0.0F;														//Block #1
 		array[7] = 0.0F;														//Block #1
 		
 		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link CheckerboardTexture} instances in {@code checkerboardTextures} in compiled form.
+	 * <p>
+	 * If {@code checkerboardTextures} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledTextureCache.toCheckerboardTextures(checkerboardTextures, texture -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param checkerboardTextures a {@code List} of {@code CheckerboardTexture} instances
+	 * @return a {@code float[]} with all {@code CheckerboardTexture} instances in {@code checkerboardTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTextures} or at least one of its elements are {@code null}
+	 */
+	public static float[] toCheckerboardTextures(final List<CheckerboardTexture> checkerboardTextures) {
+		return toCheckerboardTextures(checkerboardTextures, texture -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link CheckerboardTexture} instances in {@code checkerboardTextures} in compiled form.
+	 * <p>
+	 * If either {@code checkerboardTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param checkerboardTextures a {@code List} of {@code CheckerboardTexture} instances
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return a {@code float[]} with all {@code CheckerboardTexture} instances in {@code checkerboardTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static float[] toCheckerboardTextures(final List<CheckerboardTexture> checkerboardTextures, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Floats.toArray(checkerboardTextures, checkerboardTexture -> toCheckerboardTexture(checkerboardTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -836,7 +1014,7 @@ public final class CompiledTextureCache {
 	 * @return a {@code float[]} with {@code constantTexture} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code constantTexture} is {@code null}
 	 */
-	public static float[] toArray(final ConstantTexture constantTexture) {
+	public static float[] toConstantTexture(final ConstantTexture constantTexture) {
 		final Color3F color = constantTexture.getColor();
 		
 		final float[] array = new float[CONSTANT_TEXTURE_LENGTH];
@@ -851,6 +1029,19 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link ConstantTexture} instances in {@code constantTextures} in compiled form.
+	 * <p>
+	 * If {@code constantTextures} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param constantTextures a {@code List} of {@code ConstantTexture} instances
+	 * @return a {@code float[]} with all {@code ConstantTexture} instances in {@code constantTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code constantTextures} or at least one of its elements are {@code null}
+	 */
+	public static float[] toConstantTextures(final List<ConstantTexture> constantTextures) {
+		return Floats.toArray(constantTextures, constantTexture -> toConstantTexture(constantTexture));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code lDRImageTexture} in compiled form.
 	 * <p>
 	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -859,7 +1050,7 @@ public final class CompiledTextureCache {
 	 * @return a {@code float[]} with {@code lDRImageTexture} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
 	 */
-	public static float[] toArray(final LDRImageTexture lDRImageTexture) {
+	public static float[] toLDRImageTexture(final LDRImageTexture lDRImageTexture) {
 		final AngleF angle = lDRImageTexture.getAngle();
 		
 		final Vector2F scale = lDRImageTexture.getScale();
@@ -869,7 +1060,7 @@ public final class CompiledTextureCache {
 		
 		final int[] image = lDRImageTexture.getImage();
 		
-		final float[] array = new float[getLength(lDRImageTexture)];
+		final float[] array = new float[getLDRImageTextureLength(lDRImageTexture)];
 		
 		array[L_D_R_IMAGE_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();
 		array[L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 0] = scale.getU();
@@ -889,6 +1080,19 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link LDRImageTexture} instances in {@code lDRImageTextures} in compiled form.
+	 * <p>
+	 * If {@code lDRImageTextures} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lDRImageTextures a {@code List} of {@code LDRImageTexture} instances
+	 * @return a {@code float[]} with all {@code LDRImageTexture} instances in {@code lDRImageTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTextures} or at least one of its elements are {@code null}
+	 */
+	public static float[] toLDRImageTextures(final List<LDRImageTexture> lDRImageTextures) {
+		return Floats.toArray(lDRImageTextures, lDRImageTexture -> toLDRImageTexture(lDRImageTexture));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code marbleTexture} in compiled form.
 	 * <p>
 	 * If {@code marbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -897,7 +1101,7 @@ public final class CompiledTextureCache {
 	 * @return a {@code float[]} with {@code marbleTexture} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code marbleTexture} is {@code null}
 	 */
-	public static float[] toArray(final MarbleTexture marbleTexture) {
+	public static float[] toMarbleTexture(final MarbleTexture marbleTexture) {
 		final Color3F colorA = marbleTexture.getColorA();
 		final Color3F colorB = marbleTexture.getColorB();
 		final Color3F colorC = marbleTexture.getColorC();
@@ -924,15 +1128,49 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link MarbleTexture} instances in {@code marbleTextures} in compiled form.
+	 * <p>
+	 * If {@code marbleTextures} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param marbleTextures a {@code List} of {@code MarbleTexture} instances
+	 * @return a {@code float[]} with all {@code MarbleTexture} instances in {@code marbleTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code marbleTextures} or at least one of its elements are {@code null}
+	 */
+	public static float[] toMarbleTextures(final List<MarbleTexture> marbleTextures) {
+		return Floats.toArray(marbleTextures, marbleTexture -> toMarbleTexture(marbleTexture));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code polkaDotTexture} in compiled form.
 	 * <p>
 	 * If {@code polkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledTextureCache.toPolkaDotTexture(polkaDotTexture, texture -> 0);
+	 * }
+	 * </pre>
 	 * 
 	 * @param polkaDotTexture a {@link PolkaDotTexture} instance
 	 * @return a {@code float[]} with {@code polkaDotTexture} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTexture} is {@code null}
 	 */
-	public static float[] toArray(final PolkaDotTexture polkaDotTexture) {
+	public static float[] toPolkaDotTexture(final PolkaDotTexture polkaDotTexture) {
+		return toPolkaDotTexture(polkaDotTexture, texture -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with {@code polkaDotTexture} in compiled form.
+	 * <p>
+	 * If either {@code polkaDotTexture} or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polkaDotTexture a {@link PolkaDotTexture} instance
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return a {@code float[]} with {@code polkaDotTexture} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotTexture} or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static float[] toPolkaDotTexture(final PolkaDotTexture polkaDotTexture, final ToIntFunction<Texture> textureOffsetFunction) {
 		final AngleF angle = polkaDotTexture.getAngle();
 		
 		final Texture textureA = polkaDotTexture.getTextureA();
@@ -941,19 +1179,56 @@ public final class CompiledTextureCache {
 		final float cellResolution = polkaDotTexture.getCellResolution();
 		final float polkaDotRadius = polkaDotTexture.getPolkaDotRadius();
 		
+		final int textureAValue = pack(textureA.getID(), textureOffsetFunction.applyAsInt(textureA));
+		final int textureBValue = pack(textureB.getID(), textureOffsetFunction.applyAsInt(textureB));
+		
 		final float[] array = new float[POLKA_DOT_TEXTURE_LENGTH];
 		
 //		Because the PolkaDotTexture occupy 8/8 positions in a block, it should be aligned.
 		array[POLKA_DOT_TEXTURE_OFFSET_ANGLE_DEGREES] = angle.getDegrees();	//Block #1
 		array[POLKA_DOT_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
-		array[POLKA_DOT_TEXTURE_OFFSET_TEXTURE_A] = textureA.getID();		//Block #1
-		array[POLKA_DOT_TEXTURE_OFFSET_TEXTURE_B] = textureB.getID();		//Block #1
+		array[POLKA_DOT_TEXTURE_OFFSET_TEXTURE_A] = textureAValue;			//Block #1
+		array[POLKA_DOT_TEXTURE_OFFSET_TEXTURE_B] = textureBValue;			//Block #1
 		array[POLKA_DOT_TEXTURE_OFFSET_CELL_RESOLUTION] = cellResolution;	//Block #1
 		array[POLKA_DOT_TEXTURE_OFFSET_POLKA_DOT_RADIUS] = polkaDotRadius;	//Block #1
 		array[6] = 0.0F;													//Block #1
 		array[7] = 0.0F;													//Block #1
 		
 		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link PolkaDotTexture} instances in {@code polkaDotTextures} in compiled form.
+	 * <p>
+	 * If {@code polkaDotTextures} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledTextureCache.toPolkaDotTextures(polkaDotTextures, texture -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param polkaDotTextures a {@code List} of {@code PolkaDotTexture} instances
+	 * @return a {@code float[]} with all {@code PolkaDotTexture} instances in {@code polkaDotTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTextures} or at least one of its elements are {@code null}
+	 */
+	public static float[] toPolkaDotTextures(final List<PolkaDotTexture> polkaDotTextures) {
+		return toPolkaDotTextures(polkaDotTextures, texture -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link PolkaDotTexture} instances in {@code polkaDotTextures} in compiled form.
+	 * <p>
+	 * If either {@code polkaDotTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polkaDotTextures a {@code List} of {@code PolkaDotTexture} instances
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return a {@code float[]} with all {@code PolkaDotTexture} instances in {@code polkaDotTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static float[] toPolkaDotTextures(final List<PolkaDotTexture> polkaDotTextures, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Floats.toArray(polkaDotTextures, polkaDotTexture -> toPolkaDotTexture(polkaDotTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -965,7 +1240,7 @@ public final class CompiledTextureCache {
 	 * @return a {@code float[]} with {@code simplexFractionalBrownianMotionTexture} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture} is {@code null}
 	 */
-	public static float[] toArray(final SimplexFractionalBrownianMotionTexture simplexFractionalBrownianMotionTexture) {
+	public static float[] toSimplexFractionalBrownianMotionTexture(final SimplexFractionalBrownianMotionTexture simplexFractionalBrownianMotionTexture) {
 		final Color3F color = simplexFractionalBrownianMotionTexture.getColor();
 		
 		final float frequency = simplexFractionalBrownianMotionTexture.getFrequency();
@@ -985,6 +1260,19 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link SimplexFractionalBrownianMotionTexture} instances in {@code simplexFractionalBrownianMotionTextures} in compiled form.
+	 * <p>
+	 * If {@code simplexFractionalBrownianMotionTextures} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param simplexFractionalBrownianMotionTextures a {@code List} of {@code SimplexFractionalBrownianMotionTexture} instances
+	 * @return a {@code float[]} with all {@code SimplexFractionalBrownianMotionTexture} instances in {@code simplexFractionalBrownianMotionTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTextures} or at least one of its elements are {@code null}
+	 */
+	public static float[] toSimplexFractionalBrownianMotionTextures(final List<SimplexFractionalBrownianMotionTexture> simplexFractionalBrownianMotionTextures) {
+		return Floats.toArray(simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> toSimplexFractionalBrownianMotionTexture(simplexFractionalBrownianMotionTexture));
+	}
+	
+	/**
 	 * Returns the length of {@code lDRImageTexture} in compiled form.
 	 * <p>
 	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -993,11 +1281,35 @@ public final class CompiledTextureCache {
 	 * @return the length of {@code lDRImageTexture} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
 	 */
-	public static int getLength(final LDRImageTexture lDRImageTexture) {
+	public static int getLDRImageTextureLength(final LDRImageTexture lDRImageTexture) {
 		final int a = 5;
 		final int b = lDRImageTexture.getResolution();
 		final int c = padding(a + b);
 		
 		return a + b + c;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with the offsets for all {@link LDRImageTexture} instances in {@code lDRImageTextures} in compiled form.
+	 * <p>
+	 * If either {@code lDRImageTextures}, at least one of its elements or {@code lDRImageTextureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lDRImageTextures a {@code List} of {@code LDRImageTexture} instances
+	 * @param lDRImageTextureOffsetFunction a {@code ToIntFunction} that returns the {@code LDRImageTexture} offset
+	 * @return an {@code int[]} with the offsets for all {@code LDRImageTexture} instances in {@code lDRImageTextures} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code lDRImageTextures}, at least one of its elements or {@code lDRImageTextureOffsetFunction} are {@code null}
+	 */
+	public static int[] toLDRImageTextureOffsets(final List<LDRImageTexture> lDRImageTextures, final ToIntFunction<LDRImageTexture> lDRImageTextureOffsetFunction) {
+		ParameterArguments.requireNonNullList(lDRImageTextures, "lDRImageTextures");
+		
+		Objects.requireNonNull(lDRImageTextureOffsetFunction, "lDRImageTextureOffsetFunction == null");
+		
+		final int[] lDRImageTextureOffsets = new int[lDRImageTextures.size()];
+		
+		for(int i = 0; i < lDRImageTextures.size(); i++) {
+			lDRImageTextureOffsets[i] = lDRImageTextureOffsetFunction.applyAsInt(lDRImageTextures.get(i));
+		}
+		
+		return lDRImageTextureOffsets;
 	}
 }

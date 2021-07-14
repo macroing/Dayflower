@@ -18,9 +18,6 @@
  */
 package org.dayflower.scene.compiler;
 
-import static org.dayflower.utility.Ints.pack;
-
-import java.lang.reflect.Field;//TODO: Refactor!
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,7 +39,6 @@ import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
-import org.dayflower.utility.Floats;
 
 final class TextureCache {
 	private final List<BlendTexture> distinctBlendTextures;
@@ -121,110 +117,40 @@ final class TextureCache {
 		}
 	}
 	
-	public float[] toTextureBlendTextureArray() {
-		final float[] textureBlendTextureArray = Floats.toArray(this.distinctBlendTextures, blendTexture -> CompiledTextureCache.toArray(blendTexture));
-		
-		for(int i = 0; i < this.distinctBlendTextures.size(); i++) {
-			final BlendTexture blendTexture = this.distinctBlendTextures.get(i);
-			
-			final Texture textureA = blendTexture.getTextureA();
-			final Texture textureB = blendTexture.getTextureB();
-			
-			final int textureBlendTextureArrayTextureAOffset = i * CompiledTextureCache.BLEND_TEXTURE_LENGTH + CompiledTextureCache.BLEND_TEXTURE_OFFSET_TEXTURE_A;
-			final int textureBlendTextureArrayTextureBOffset = i * CompiledTextureCache.BLEND_TEXTURE_LENGTH + CompiledTextureCache.BLEND_TEXTURE_OFFSET_TEXTURE_B;
-			
-			textureBlendTextureArray[textureBlendTextureArrayTextureAOffset] = pack(textureA.getID(), findOffsetFor(textureA));
-			textureBlendTextureArray[textureBlendTextureArrayTextureBOffset] = pack(textureB.getID(), findOffsetFor(textureB));
-		}
-		
-		return textureBlendTextureArray;
+	public float[] toBlendTextures() {
+		return CompiledTextureCache.toBlendTextures(this.distinctBlendTextures, this::findOffsetFor);
 	}
 	
-	public float[] toTextureBullseyeTextureArray() {
-		final float[] textureBullseyeTextureArray = Floats.toArray(this.distinctBullseyeTextures, bullseyeTexture -> CompiledTextureCache.toArray(bullseyeTexture));
-		
-		for(int i = 0; i < this.distinctBullseyeTextures.size(); i++) {
-			final BullseyeTexture bullseyeTexture = this.distinctBullseyeTextures.get(i);
-			
-			final Texture textureA = bullseyeTexture.getTextureA();
-			final Texture textureB = bullseyeTexture.getTextureB();
-			
-			final int textureBullseyeTextureArrayTextureAOffset = i * CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH + CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_TEXTURE_A;
-			final int textureBullseyeTextureArrayTextureBOffset = i * CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH + CompiledTextureCache.BULLSEYE_TEXTURE_OFFSET_TEXTURE_B;
-			
-			textureBullseyeTextureArray[textureBullseyeTextureArrayTextureAOffset] = pack(textureA.getID(), findOffsetFor(textureA));
-			textureBullseyeTextureArray[textureBullseyeTextureArrayTextureBOffset] = pack(textureB.getID(), findOffsetFor(textureB));
-		}
-		
-		return textureBullseyeTextureArray;
+	public float[] toBullseyeTextures() {
+		return CompiledTextureCache.toBullseyeTextures(this.distinctBullseyeTextures, this::findOffsetFor);
 	}
 	
-	public float[] toTextureCheckerboardTextureArray() {
-		final float[] textureCheckerboardTextureArray = Floats.toArray(this.distinctCheckerboardTextures, checkerboardTexture -> CompiledTextureCache.toArray(checkerboardTexture));
-		
-		for(int i = 0; i < this.distinctCheckerboardTextures.size(); i++) {
-			final CheckerboardTexture checkerboardTexture = this.distinctCheckerboardTextures.get(i);
-			
-			final Texture textureA = checkerboardTexture.getTextureA();
-			final Texture textureB = checkerboardTexture.getTextureB();
-			
-			final int textureCheckerboardTextureArrayTextureAOffset = i * CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH + CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_A;
-			final int textureCheckerboardTextureArrayTextureBOffset = i * CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH + CompiledTextureCache.CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_B;
-			
-			textureCheckerboardTextureArray[textureCheckerboardTextureArrayTextureAOffset] = pack(textureA.getID(), findOffsetFor(textureA));
-			textureCheckerboardTextureArray[textureCheckerboardTextureArrayTextureBOffset] = pack(textureB.getID(), findOffsetFor(textureB));
-		}
-		
-		return textureCheckerboardTextureArray;
+	public float[] toCheckerboardTextures() {
+		return CompiledTextureCache.toCheckerboardTextures(this.distinctCheckerboardTextures, this::findOffsetFor);
 	}
 	
-	public float[] toTextureConstantTextureArray() {
-		return Floats.toArray(this.distinctConstantTextures, constantTexture -> CompiledTextureCache.toArray(constantTexture));
+	public float[] toConstantTextures() {
+		return CompiledTextureCache.toConstantTextures(this.distinctConstantTextures);
 	}
 	
-	public float[] toTextureLDRImageTextureArray() {
-		return Floats.toArray(this.distinctLDRImageTextures, lDRImageTexture -> CompiledTextureCache.toArray(lDRImageTexture));
+	public float[] toLDRImageTextures() {
+		return CompiledTextureCache.toLDRImageTextures(this.distinctLDRImageTextures);
 	}
 	
-	public float[] toTextureMarbleTextureArray() {
-		return Floats.toArray(this.distinctMarbleTextures, marbleTexture -> CompiledTextureCache.toArray(marbleTexture));
+	public float[] toMarbleTextures() {
+		return CompiledTextureCache.toMarbleTextures(this.distinctMarbleTextures);
 	}
 	
-	public float[] toTexturePolkaDotTextureArray() {
-		final float[] texturePolkaDotTextureArray = Floats.toArray(this.distinctPolkaDotTextures, polkaDotTexture -> CompiledTextureCache.toArray(polkaDotTexture));
-		
-		for(int i = 0; i < this.distinctPolkaDotTextures.size(); i++) {
-			final PolkaDotTexture polkaDotTexture = this.distinctPolkaDotTextures.get(i);
-			
-			final Texture textureA = polkaDotTexture.getTextureA();
-			final Texture textureB = polkaDotTexture.getTextureB();
-			
-			final int texturePolkaDotTextureArrayTextureAOffset = i * CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_A;
-			final int texturePolkaDotTextureArrayTextureBOffset = i * CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_TEXTURE_B;
-			
-			texturePolkaDotTextureArray[texturePolkaDotTextureArrayTextureAOffset] = pack(textureA.getID(), findOffsetFor(textureA));
-			texturePolkaDotTextureArray[texturePolkaDotTextureArrayTextureBOffset] = pack(textureB.getID(), findOffsetFor(textureB));
-		}
-		
-		return texturePolkaDotTextureArray;
+	public float[] toPolkaDotTextures() {
+		return CompiledTextureCache.toPolkaDotTextures(this.distinctPolkaDotTextures, this::findOffsetFor);
 	}
 	
-	public float[] toTextureSimplexFractionalBrownianMotionTextureArray() {
-		return Floats.toArray(this.distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> CompiledTextureCache.toArray(simplexFractionalBrownianMotionTexture));
+	public float[] toSimplexFractionalBrownianMotionTextures() {
+		return CompiledTextureCache.toSimplexFractionalBrownianMotionTextures(this.distinctSimplexFractionalBrownianMotionTextures);
 	}
 	
-	public int[] toTextureLDRImageTextureOffsetArray() {
-		final int[] textureLDRImageTextureOffsetArray = new int[this.distinctLDRImageTextures.size()];
-		
-		for(int i = 0, j = 0; i < this.distinctLDRImageTextures.size(); i++) {
-			final LDRImageTexture lDRImageTexture = this.distinctLDRImageTextures.get(i);
-			
-			textureLDRImageTextureOffsetArray[i] = j;
-			
-			j += CompiledTextureCache.getLength(lDRImageTexture);
-		}
-		
-		return textureLDRImageTextureOffsetArray;
+	public int[] toLDRImageTextureOffsets() {
+		return CompiledTextureCache.toLDRImageTextureOffsets(this.distinctLDRImageTextures, this::findOffsetFor);
 	}
 	
 	public void clear() {

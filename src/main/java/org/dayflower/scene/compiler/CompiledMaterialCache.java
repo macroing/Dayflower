@@ -318,18 +318,18 @@ public final class CompiledMaterialCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private float[] bullseyeMaterialArray;
-	private float[] checkerboardMaterialArray;
-	private float[] polkaDotMaterialArray;
-	private int[] clearCoatMaterialArray;
-	private int[] disneyMaterialArray;
-	private int[] glassMaterialArray;
-	private int[] glossyMaterialArray;
-	private int[] matteMaterialArray;
-	private int[] metalMaterialArray;
-	private int[] mirrorMaterialArray;
-	private int[] plasticMaterialArray;
-	private int[] substrateMaterialArray;
+	private float[] bullseyeMaterials;
+	private float[] checkerboardMaterials;
+	private float[] polkaDotMaterials;
+	private int[] clearCoatMaterials;
+	private int[] disneyMaterials;
+	private int[] glassMaterials;
+	private int[] glossyMaterials;
+	private int[] matteMaterials;
+	private int[] metalMaterials;
+	private int[] mirrorMaterials;
+	private int[] plasticMaterials;
+	private int[] substrateMaterials;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -337,18 +337,18 @@ public final class CompiledMaterialCache {
 	 * Constructs a new {@code CompiledMaterialCache} instance.
 	 */
 	public CompiledMaterialCache() {
-		setBullseyeMaterialArray(new float[0]);
-		setCheckerboardMaterialArray(new float[0]);
-		setClearCoatMaterialArray(new int[0]);
-		setDisneyMaterialArray(new int[0]);
-		setGlassMaterialArray(new int[0]);
-		setGlossyMaterialArray(new int[0]);
-		setMatteMaterialArray(new int[0]);
-		setMetalMaterialArray(new int[0]);
-		setMirrorMaterialArray(new int[0]);
-		setPlasticMaterialArray(new int[0]);
-		setPolkaDotMaterialArray(new float[0]);
-		setSubstrateMaterialArray(new int[0]);
+		setBullseyeMaterials(new float[0]);
+		setCheckerboardMaterials(new float[0]);
+		setClearCoatMaterials(new int[0]);
+		setDisneyMaterials(new int[0]);
+		setGlassMaterials(new int[0]);
+		setGlossyMaterials(new int[0]);
+		setMatteMaterials(new int[0]);
+		setMetalMaterials(new int[0]);
+		setMirrorMaterials(new int[0]);
+		setPlasticMaterials(new int[0]);
+		setPolkaDotMaterials(new float[0]);
+		setSubstrateMaterials(new int[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -358,8 +358,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code BullseyeMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public float[] getBullseyeMaterialArray() {
-		return this.bullseyeMaterialArray;
+	public float[] getBullseyeMaterials() {
+		return this.bullseyeMaterials;
 	}
 	
 	/**
@@ -367,8 +367,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code CheckerboardMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public float[] getCheckerboardMaterialArray() {
-		return this.checkerboardMaterialArray;
+	public float[] getCheckerboardMaterials() {
+		return this.checkerboardMaterials;
 	}
 	
 	/**
@@ -376,8 +376,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code PolkaDotMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public float[] getPolkaDotMaterialArray() {
-		return this.polkaDotMaterialArray;
+	public float[] getPolkaDotMaterials() {
+		return this.polkaDotMaterials;
 	}
 	
 	/**
@@ -386,7 +386,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code BullseyeMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getBullseyeMaterialCount() {
-		return Structures.getStructureCount(this.bullseyeMaterialArray, BULLSEYE_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.bullseyeMaterials, BULLSEYE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -399,7 +399,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
 	 */
 	public int getBullseyeMaterialOffsetAbsolute(final float[] bullseyeMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.bullseyeMaterialArray, Objects.requireNonNull(bullseyeMaterial, "bullseyeMaterial == null"), getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.bullseyeMaterials, Objects.requireNonNull(bullseyeMaterial, "bullseyeMaterial == null"), getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -412,7 +412,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
 	 */
 	public int getMaterialBullseyeMaterialOffsetRelative(final float[] bullseyeMaterial) {
-		return Structures.getStructureOffsetRelative(this.bullseyeMaterialArray, Objects.requireNonNull(bullseyeMaterial, "bullseyeMaterial == null"), getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.bullseyeMaterials, Objects.requireNonNull(bullseyeMaterial, "bullseyeMaterial == null"), getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -421,7 +421,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code CheckerboardMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getCheckerboardMaterialCount() {
-		return Structures.getStructureCount(this.checkerboardMaterialArray, CHECKERBOARD_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.checkerboardMaterials, CHECKERBOARD_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -434,7 +434,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
 	 */
 	public int getCheckerboardMaterialOffsetAbsolute(final float[] checkerboardMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.checkerboardMaterialArray, Objects.requireNonNull(checkerboardMaterial, "checkerboardMaterial == null"), getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.checkerboardMaterials, Objects.requireNonNull(checkerboardMaterial, "checkerboardMaterial == null"), getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -447,7 +447,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
 	 */
 	public int getCheckerboardMaterialOffsetRelative(final float[] checkerboardMaterial) {
-		return Structures.getStructureOffsetRelative(this.checkerboardMaterialArray, Objects.requireNonNull(checkerboardMaterial, "checkerboardMaterial == null"), getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.checkerboardMaterials, Objects.requireNonNull(checkerboardMaterial, "checkerboardMaterial == null"), getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -456,7 +456,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code ClearCoatMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getClearCoatMaterialCount() {
-		return Structures.getStructureCount(this.clearCoatMaterialArray, CLEAR_COAT_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.clearCoatMaterials, CLEAR_COAT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -469,7 +469,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterial} is {@code null}
 	 */
 	public int getClearCoatMaterialOffsetAbsolute(final int[] clearCoatMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.clearCoatMaterialArray, Objects.requireNonNull(clearCoatMaterial, "clearCoatMaterial == null"), getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.clearCoatMaterials, Objects.requireNonNull(clearCoatMaterial, "clearCoatMaterial == null"), getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -482,7 +482,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterial} is {@code null}
 	 */
 	public int getClearCoatMaterialOffsetRelative(final int[] clearCoatMaterial) {
-		return Structures.getStructureOffsetRelative(this.clearCoatMaterialArray, Objects.requireNonNull(clearCoatMaterial, "clearCoatMaterial == null"), getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.clearCoatMaterials, Objects.requireNonNull(clearCoatMaterial, "clearCoatMaterial == null"), getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -491,7 +491,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code DisneyMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getDisneyMaterialCount() {
-		return Structures.getStructureCount(this.disneyMaterialArray, DISNEY_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.disneyMaterials, DISNEY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -504,7 +504,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterial} is {@code null}
 	 */
 	public int getDisneyMaterialOffsetAbsolute(final int[] disneyMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.disneyMaterialArray, Objects.requireNonNull(disneyMaterial, "disneyMaterial == null"), getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.disneyMaterials, Objects.requireNonNull(disneyMaterial, "disneyMaterial == null"), getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -517,7 +517,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterial} is {@code null}
 	 */
 	public int getDisneyMaterialOffsetRelative(final int[] disneyMaterial) {
-		return Structures.getStructureOffsetRelative(this.disneyMaterialArray, Objects.requireNonNull(disneyMaterial, "disneyMaterial == null"), getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.disneyMaterials, Objects.requireNonNull(disneyMaterial, "disneyMaterial == null"), getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -526,7 +526,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code GlassMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getGlassMaterialCount() {
-		return Structures.getStructureCount(this.glassMaterialArray, GLASS_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.glassMaterials, GLASS_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -539,7 +539,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code glassMaterial} is {@code null}
 	 */
 	public int getGlassMaterialOffsetAbsolute(final int[] glassMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.glassMaterialArray, Objects.requireNonNull(glassMaterial, "glassMaterial == null"), getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.glassMaterials, Objects.requireNonNull(glassMaterial, "glassMaterial == null"), getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -552,7 +552,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code glassMaterial} is {@code null}
 	 */
 	public int getGlassMaterialOffsetRelative(final int[] glassMaterial) {
-		return Structures.getStructureOffsetRelative(this.glassMaterialArray, Objects.requireNonNull(glassMaterial, "glassMaterial == null"), getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.glassMaterials, Objects.requireNonNull(glassMaterial, "glassMaterial == null"), getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -561,7 +561,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code GlossyMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getGlossyMaterialCount() {
-		return Structures.getStructureCount(this.glossyMaterialArray, GLOSSY_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.glossyMaterials, GLOSSY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -574,7 +574,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterial} is {@code null}
 	 */
 	public int getGlossyMaterialOffsetAbsolute(final int[] glossyMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.glossyMaterialArray, Objects.requireNonNull(glossyMaterial, "glossyMaterial == null"), getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.glossyMaterials, Objects.requireNonNull(glossyMaterial, "glossyMaterial == null"), getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -587,7 +587,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterial} is {@code null}
 	 */
 	public int getGlossyMaterialOffsetRelative(final int[] glossyMaterial) {
-		return Structures.getStructureOffsetRelative(this.glossyMaterialArray, Objects.requireNonNull(glossyMaterial, "glossyMaterial == null"), getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.glossyMaterials, Objects.requireNonNull(glossyMaterial, "glossyMaterial == null"), getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -596,7 +596,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code MatteMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMatteMaterialCount() {
-		return Structures.getStructureCount(this.matteMaterialArray, MATTE_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.matteMaterials, MATTE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -609,7 +609,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code matteMaterial} is {@code null}
 	 */
 	public int getMatteMaterialOffsetAbsolute(final int[] matteMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.matteMaterialArray, Objects.requireNonNull(matteMaterial, "matteMaterial == null"), getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.matteMaterials, Objects.requireNonNull(matteMaterial, "matteMaterial == null"), getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -622,7 +622,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code matteMaterial} is {@code null}
 	 */
 	public int getMatteMaterialOffsetRelative(final int[] matteMaterial) {
-		return Structures.getStructureOffsetRelative(this.matteMaterialArray, Objects.requireNonNull(matteMaterial, "matteMaterial == null"), getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.matteMaterials, Objects.requireNonNull(matteMaterial, "matteMaterial == null"), getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -631,7 +631,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code MetalMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMetalMaterialCount() {
-		return Structures.getStructureCount(this.metalMaterialArray, METAL_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.metalMaterials, METAL_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -644,7 +644,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code metalMaterial} is {@code null}
 	 */
 	public int getMetalMaterialOffsetAbsolute(final int[] metalMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.metalMaterialArray, Objects.requireNonNull(metalMaterial, "metalMaterial == null"), getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.metalMaterials, Objects.requireNonNull(metalMaterial, "metalMaterial == null"), getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -657,7 +657,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code metalMaterial} is {@code null}
 	 */
 	public int getMetalMaterialOffsetRelative(final int[] metalMaterial) {
-		return Structures.getStructureOffsetRelative(this.metalMaterialArray, Objects.requireNonNull(metalMaterial, "metalMaterial == null"), getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.metalMaterials, Objects.requireNonNull(metalMaterial, "metalMaterial == null"), getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -666,7 +666,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code MirrorMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getMirrorMaterialCount() {
-		return Structures.getStructureCount(this.mirrorMaterialArray, MIRROR_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.mirrorMaterials, MIRROR_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -679,7 +679,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterial} is {@code null}
 	 */
 	public int getMirrorMaterialOffsetAbsolute(final int[] mirrorMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.mirrorMaterialArray, Objects.requireNonNull(mirrorMaterial, "mirrorMaterial == null"), getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.mirrorMaterials, Objects.requireNonNull(mirrorMaterial, "mirrorMaterial == null"), getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -692,7 +692,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterial} is {@code null}
 	 */
 	public int getMirrorMaterialOffsetRelative(final int[] mirrorMaterial) {
-		return Structures.getStructureOffsetRelative(this.mirrorMaterialArray, Objects.requireNonNull(mirrorMaterial, "mirrorMaterial == null"), getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.mirrorMaterials, Objects.requireNonNull(mirrorMaterial, "mirrorMaterial == null"), getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -701,7 +701,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code PlasticMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getPlasticMaterialCount() {
-		return Structures.getStructureCount(this.plasticMaterialArray, PLASTIC_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.plasticMaterials, PLASTIC_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -714,7 +714,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterial} is {@code null}
 	 */
 	public int getPlasticMaterialOffsetAbsolute(final int[] plasticMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.plasticMaterialArray, Objects.requireNonNull(plasticMaterial, "plasticMaterial == null"), getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.plasticMaterials, Objects.requireNonNull(plasticMaterial, "plasticMaterial == null"), getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -727,7 +727,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterial} is {@code null}
 	 */
 	public int getPlasticMaterialOffsetRelative(final int[] plasticMaterial) {
-		return Structures.getStructureOffsetRelative(this.plasticMaterialArray, Objects.requireNonNull(plasticMaterial, "plasticMaterial == null"), getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.plasticMaterials, Objects.requireNonNull(plasticMaterial, "plasticMaterial == null"), getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -736,7 +736,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code PolkaDotMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getPolkaDotMaterialCount() {
-		return Structures.getStructureCount(this.polkaDotMaterialArray, POLKA_DOT_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.polkaDotMaterials, POLKA_DOT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -749,7 +749,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterial} is {@code null}
 	 */
 	public int getPolkaDotMaterialOffsetAbsolute(final float[] polkaDotMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.polkaDotMaterialArray, Objects.requireNonNull(polkaDotMaterial, "polkaDotMaterial == null"), getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.polkaDotMaterials, Objects.requireNonNull(polkaDotMaterial, "polkaDotMaterial == null"), getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -762,7 +762,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterial} is {@code null}
 	 */
 	public int getPolkaDotMaterialOffsetRelative(final float[] polkaDotMaterial) {
-		return Structures.getStructureOffsetRelative(this.polkaDotMaterialArray, Objects.requireNonNull(polkaDotMaterial, "polkaDotMaterial == null"), getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.polkaDotMaterials, Objects.requireNonNull(polkaDotMaterial, "polkaDotMaterial == null"), getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -771,7 +771,7 @@ public final class CompiledMaterialCache {
 	 * @return the {@code SubstrateMaterial} count in this {@code CompiledMaterialCache} instance
 	 */
 	public int getSubstrateMaterialCount() {
-		return Structures.getStructureCount(this.substrateMaterialArray, SUBSTRATE_MATERIAL_LENGTH);
+		return Structures.getStructureCount(this.substrateMaterials, SUBSTRATE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -784,7 +784,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterial} is {@code null}
 	 */
 	public int getSubstrateMaterialOffsetAbsolute(final int[] substrateMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.substrateMaterialArray, Objects.requireNonNull(substrateMaterial, "substrateMaterial == null"), getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.substrateMaterials, Objects.requireNonNull(substrateMaterial, "substrateMaterial == null"), getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -797,7 +797,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterial} is {@code null}
 	 */
 	public int getSubstrateMaterialOffsetRelative(final int[] substrateMaterial) {
-		return Structures.getStructureOffsetRelative(this.substrateMaterialArray, Objects.requireNonNull(substrateMaterial, "substrateMaterial == null"), getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.substrateMaterials, Objects.requireNonNull(substrateMaterial, "substrateMaterial == null"), getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -805,8 +805,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code ClearCoatMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public int[] getClearCoatMaterialArray() {
-		return this.clearCoatMaterialArray;
+	public int[] getClearCoatMaterials() {
+		return this.clearCoatMaterials;
 	}
 	
 	/**
@@ -814,8 +814,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code DisneyMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public int[] getDisneyMaterialArray() {
-		return this.disneyMaterialArray;
+	public int[] getDisneyMaterials() {
+		return this.disneyMaterials;
 	}
 	
 	/**
@@ -823,8 +823,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code GlassMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public int[] getGlassMaterialArray() {
-		return this.glassMaterialArray;
+	public int[] getGlassMaterials() {
+		return this.glassMaterials;
 	}
 	
 	/**
@@ -832,8 +832,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code GlossyMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public int[] getGlossyMaterialArray() {
-		return this.glossyMaterialArray;
+	public int[] getGlossyMaterials() {
+		return this.glossyMaterials;
 	}
 	
 	/**
@@ -841,8 +841,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code MatteMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public int[] getMatteMaterialArray() {
-		return this.matteMaterialArray;
+	public int[] getMatteMaterials() {
+		return this.matteMaterials;
 	}
 	
 	/**
@@ -850,8 +850,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code MetalMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public int[] getMetalMaterialArray() {
-		return this.metalMaterialArray;
+	public int[] getMetalMaterials() {
+		return this.metalMaterials;
 	}
 	
 	/**
@@ -859,8 +859,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code MirrorMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public int[] getMirrorMaterialArray() {
-		return this.mirrorMaterialArray;
+	public int[] getMirrorMaterials() {
+		return this.mirrorMaterials;
 	}
 	
 	/**
@@ -868,8 +868,8 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code PlasticMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public int[] getPlasticMaterialArray() {
-		return this.plasticMaterialArray;
+	public int[] getPlasticMaterials() {
+		return this.plasticMaterials;
 	}
 	
 	/**
@@ -877,152 +877,152 @@ public final class CompiledMaterialCache {
 	 * 
 	 * @return an {@code int[]} that contains all {@code SubstrateMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
 	 */
-	public int[] getSubstrateMaterialArray() {
-		return this.substrateMaterialArray;
+	public int[] getSubstrateMaterials() {
+		return this.substrateMaterials;
 	}
 	
 	/**
-	 * Sets all {@link BullseyeMaterial} instances in compiled form to {@code bullseyeMaterialArray}.
+	 * Sets all {@link BullseyeMaterial} instances in compiled form to {@code bullseyeMaterials}.
 	 * <p>
-	 * If {@code bullseyeMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code bullseyeMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param bullseyeMaterialArray the {@code BullseyeMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterialArray} is {@code null}
+	 * @param bullseyeMaterials the {@code BullseyeMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterials} is {@code null}
 	 */
-	public void setBullseyeMaterialArray(final float[] bullseyeMaterialArray) {
-		this.bullseyeMaterialArray = Objects.requireNonNull(bullseyeMaterialArray, "bullseyeMaterialArray == null");
+	public void setBullseyeMaterials(final float[] bullseyeMaterials) {
+		this.bullseyeMaterials = Objects.requireNonNull(bullseyeMaterials, "bullseyeMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link CheckerboardMaterial} instances in compiled form to {@code checkerboardMaterialArray}.
+	 * Sets all {@link CheckerboardMaterial} instances in compiled form to {@code checkerboardMaterials}.
 	 * <p>
-	 * If {@code checkerboardMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code checkerboardMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param checkerboardMaterialArray the {@code CheckerboardMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterialArray} is {@code null}
+	 * @param checkerboardMaterials the {@code CheckerboardMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterials} is {@code null}
 	 */
-	public void setCheckerboardMaterialArray(final float[] checkerboardMaterialArray) {
-		this.checkerboardMaterialArray = Objects.requireNonNull(checkerboardMaterialArray, "checkerboardMaterialArray == null");
+	public void setCheckerboardMaterials(final float[] checkerboardMaterials) {
+		this.checkerboardMaterials = Objects.requireNonNull(checkerboardMaterials, "checkerboardMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link ClearCoatMaterial} instances in compiled form to {@code clearCoatMaterialArray}.
+	 * Sets all {@link ClearCoatMaterial} instances in compiled form to {@code clearCoatMaterials}.
 	 * <p>
-	 * If {@code clearCoatMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code clearCoatMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param clearCoatMaterialArray the {@code ClearCoatMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterialArray} is {@code null}
+	 * @param clearCoatMaterials the {@code ClearCoatMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterials} is {@code null}
 	 */
-	public void setClearCoatMaterialArray(final int[] clearCoatMaterialArray) {
-		this.clearCoatMaterialArray = Objects.requireNonNull(clearCoatMaterialArray, "clearCoatMaterialArray == null");
+	public void setClearCoatMaterials(final int[] clearCoatMaterials) {
+		this.clearCoatMaterials = Objects.requireNonNull(clearCoatMaterials, "clearCoatMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link DisneyMaterial} instances in compiled form to {@code disneyMaterialArray}.
+	 * Sets all {@link DisneyMaterial} instances in compiled form to {@code disneyMaterials}.
 	 * <p>
-	 * If {@code disneyMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code disneyMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param disneyMaterialArray the {@code DisneyMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterialArray} is {@code null}
+	 * @param disneyMaterials the {@code DisneyMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterials} is {@code null}
 	 */
-	public void setDisneyMaterialArray(final int[] disneyMaterialArray) {
-		this.disneyMaterialArray = Objects.requireNonNull(disneyMaterialArray, "disneyMaterialArray == null");
+	public void setDisneyMaterials(final int[] disneyMaterials) {
+		this.disneyMaterials = Objects.requireNonNull(disneyMaterials, "disneyMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link GlassMaterial} instances in compiled form to {@code glassMaterialArray}.
+	 * Sets all {@link GlassMaterial} instances in compiled form to {@code glassMaterials}.
 	 * <p>
-	 * If {@code glassMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code glassMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param glassMaterialArray the {@code GlassMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code glassMaterialArray} is {@code null}
+	 * @param glassMaterials the {@code GlassMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code glassMaterials} is {@code null}
 	 */
-	public void setGlassMaterialArray(final int[] glassMaterialArray) {
-		this.glassMaterialArray = Objects.requireNonNull(glassMaterialArray, "glassMaterialArray == null");
+	public void setGlassMaterials(final int[] glassMaterials) {
+		this.glassMaterials = Objects.requireNonNull(glassMaterials, "glassMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link GlossyMaterial} instances in compiled form to {@code glossyMaterialArray}.
+	 * Sets all {@link GlossyMaterial} instances in compiled form to {@code glossyMaterials}.
 	 * <p>
-	 * If {@code glossyMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code glossyMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param glossyMaterialArray the {@code GlossyMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterialArray} is {@code null}
+	 * @param glossyMaterials the {@code GlossyMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterials} is {@code null}
 	 */
-	public void setGlossyMaterialArray(final int[] glossyMaterialArray) {
-		this.glossyMaterialArray = Objects.requireNonNull(glossyMaterialArray, "glossyMaterialArray == null");
+	public void setGlossyMaterials(final int[] glossyMaterials) {
+		this.glossyMaterials = Objects.requireNonNull(glossyMaterials, "glossyMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link MatteMaterial} instances in compiled form to {@code matteMaterialArray}.
+	 * Sets all {@link MatteMaterial} instances in compiled form to {@code matteMaterials}.
 	 * <p>
-	 * If {@code matteMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code matteMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matteMaterialArray the {@code MatteMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code matteMaterialArray} is {@code null}
+	 * @param matteMaterials the {@code MatteMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code matteMaterials} is {@code null}
 	 */
-	public void setMatteMaterialArray(final int[] matteMaterialArray) {
-		this.matteMaterialArray = Objects.requireNonNull(matteMaterialArray, "matteMaterialArray == null");
+	public void setMatteMaterials(final int[] matteMaterials) {
+		this.matteMaterials = Objects.requireNonNull(matteMaterials, "matteMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link MetalMaterial} instances in compiled form to {@code metalMaterialArray}.
+	 * Sets all {@link MetalMaterial} instances in compiled form to {@code metalMaterials}.
 	 * <p>
-	 * If {@code metalMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code metalMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param metalMaterialArray the {@code MetalMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code metalMaterialArray} is {@code null}
+	 * @param metalMaterials the {@code MetalMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code metalMaterials} is {@code null}
 	 */
-	public void setMetalMaterialArray(final int[] metalMaterialArray) {
-		this.metalMaterialArray = Objects.requireNonNull(metalMaterialArray, "metalMaterialArray == null");
+	public void setMetalMaterials(final int[] metalMaterials) {
+		this.metalMaterials = Objects.requireNonNull(metalMaterials, "metalMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link MirrorMaterial} instances in compiled form to {@code mirrorMaterialArray}.
+	 * Sets all {@link MirrorMaterial} instances in compiled form to {@code mirrorMaterials}.
 	 * <p>
-	 * If {@code mirrorMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code mirrorMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param mirrorMaterialArray the {@code MirrorMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterialArray} is {@code null}
+	 * @param mirrorMaterials the {@code MirrorMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterials} is {@code null}
 	 */
-	public void setMirrorMaterialArray(final int[] mirrorMaterialArray) {
-		this.mirrorMaterialArray = Objects.requireNonNull(mirrorMaterialArray, "mirrorMaterialArray == null");
+	public void setMirrorMaterials(final int[] mirrorMaterials) {
+		this.mirrorMaterials = Objects.requireNonNull(mirrorMaterials, "mirrorMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link PlasticMaterial} instances in compiled form to {@code plasticMaterialArray}.
+	 * Sets all {@link PlasticMaterial} instances in compiled form to {@code plasticMaterials}.
 	 * <p>
-	 * If {@code plasticMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code plasticMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param plasticMaterialArray the {@code PlasticMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterialArray} is {@code null}
+	 * @param plasticMaterials the {@code PlasticMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterials} is {@code null}
 	 */
-	public void setPlasticMaterialArray(final int[] plasticMaterialArray) {
-		this.plasticMaterialArray = Objects.requireNonNull(plasticMaterialArray, "plasticMaterialArray == null");
+	public void setPlasticMaterials(final int[] plasticMaterials) {
+		this.plasticMaterials = Objects.requireNonNull(plasticMaterials, "plasticMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link PolkaDotMaterial} instances in compiled form to {@code polkaDotMaterialArray}.
+	 * Sets all {@link PolkaDotMaterial} instances in compiled form to {@code polkaDotMaterials}.
 	 * <p>
-	 * If {@code polkaDotMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code polkaDotMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param polkaDotMaterialArray the {@code PolkaDotMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterialArray} is {@code null}
+	 * @param polkaDotMaterials the {@code PolkaDotMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterials} is {@code null}
 	 */
-	public void setPolkaDotMaterialArray(final float[] polkaDotMaterialArray) {
-		this.polkaDotMaterialArray = Objects.requireNonNull(polkaDotMaterialArray, "polkaDotMaterialArray == null");
+	public void setPolkaDotMaterials(final float[] polkaDotMaterials) {
+		this.polkaDotMaterials = Objects.requireNonNull(polkaDotMaterials, "polkaDotMaterials == null");
 	}
 	
 	/**
-	 * Sets all {@link SubstrateMaterial} instances in compiled form to {@code substrateMaterialArray}.
+	 * Sets all {@link SubstrateMaterial} instances in compiled form to {@code substrateMaterials}.
 	 * <p>
-	 * If {@code substrateMaterialArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code substrateMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param substrateMaterialArray the {@code SubstrateMaterial} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterialArray} is {@code null}
+	 * @param substrateMaterials the {@code SubstrateMaterial} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterials} is {@code null}
 	 */
-	public void setSubstrateMaterialArray(final int[] substrateMaterialArray) {
-		this.substrateMaterialArray = Objects.requireNonNull(substrateMaterialArray, "substrateMaterialArray == null");
+	public void setSubstrateMaterials(final int[] substrateMaterials) {
+		this.substrateMaterials = Objects.requireNonNull(substrateMaterials, "substrateMaterials == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1035,7 +1035,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toBullseyeMaterialArray(bullseyeMaterial, material -> 0);
+	 * compiledMaterialCache.toBullseyeMaterial(bullseyeMaterial, material -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1043,8 +1043,8 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with {@code bullseyeMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
 	 */
-	public static float[] toBullseyeMaterialArray(final BullseyeMaterial bullseyeMaterial) {
-		return toBullseyeMaterialArray(bullseyeMaterial, material -> 0);
+	public static float[] toBullseyeMaterial(final BullseyeMaterial bullseyeMaterial) {
+		return toBullseyeMaterial(bullseyeMaterial, material -> 0);
 	}
 	
 	/**
@@ -1057,7 +1057,7 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with {@code bullseyeMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeMaterial} or {@code materialOffsetFunction} are {@code null}
 	 */
-	public static float[] toBullseyeMaterialArray(final BullseyeMaterial bullseyeMaterial, final ToIntFunction<Material> materialOffsetFunction) {
+	public static float[] toBullseyeMaterial(final BullseyeMaterial bullseyeMaterial, final ToIntFunction<Material> materialOffsetFunction) {
 		final Material materialA = bullseyeMaterial.getMaterialA();
 		final Material materialB = bullseyeMaterial.getMaterialB();
 		
@@ -1091,7 +1091,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toBullseyeMaterialArray(bullseyeMaterials, material -> 0);
+	 * compiledMaterialCache.toBullseyeMaterials(bullseyeMaterials, material -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1099,8 +1099,8 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with all {@code BullseyeMaterial} instances in {@code bullseyeMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterials} or at least one of its elements are {@code null}
 	 */
-	public static float[] toBullseyeMaterialArray(final List<BullseyeMaterial> bullseyeMaterials) {
-		return toBullseyeMaterialArray(bullseyeMaterials, material -> 0);
+	public static float[] toBullseyeMaterials(final List<BullseyeMaterial> bullseyeMaterials) {
+		return toBullseyeMaterials(bullseyeMaterials, material -> 0);
 	}
 	
 	/**
@@ -1113,8 +1113,8 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with all {@code BullseyeMaterial} instances in {@code bullseyeMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
 	 */
-	public static float[] toBullseyeMaterialArray(final List<BullseyeMaterial> bullseyeMaterials, final ToIntFunction<Material> materialOffsetFunction) {
-		return Floats.toArray(bullseyeMaterials, bullseyeMaterial -> toBullseyeMaterialArray(bullseyeMaterial, materialOffsetFunction));
+	public static float[] toBullseyeMaterials(final List<BullseyeMaterial> bullseyeMaterials, final ToIntFunction<Material> materialOffsetFunction) {
+		return Floats.toArray(bullseyeMaterials, bullseyeMaterial -> toBullseyeMaterial(bullseyeMaterial, materialOffsetFunction));
 	}
 	
 	/**
@@ -1125,7 +1125,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toCheckerboardMaterialArray(checkerboardMaterial, material -> 0);
+	 * compiledMaterialCache.toCheckerboardMaterial(checkerboardMaterial, material -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1133,8 +1133,8 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with {@code checkerboardMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
 	 */
-	public static float[] toCheckerboardMaterialArray(final CheckerboardMaterial checkerboardMaterial) {
-		return toCheckerboardMaterialArray(checkerboardMaterial, material -> 0);
+	public static float[] toCheckerboardMaterial(final CheckerboardMaterial checkerboardMaterial) {
+		return toCheckerboardMaterial(checkerboardMaterial, material -> 0);
 	}
 	
 	/**
@@ -1147,7 +1147,7 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with {@code checkerboardMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardMaterial} or {@code materialOffsetFunction} are {@code null}
 	 */
-	public static float[] toCheckerboardMaterialArray(final CheckerboardMaterial checkerboardMaterial, final ToIntFunction<Material> materialOffsetFunction) {
+	public static float[] toCheckerboardMaterial(final CheckerboardMaterial checkerboardMaterial, final ToIntFunction<Material> materialOffsetFunction) {
 		final AngleF angle = checkerboardMaterial.getAngle();
 		
 		final Material materialA = checkerboardMaterial.getMaterialA();
@@ -1181,7 +1181,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toCheckerboardMaterialArray(checkerboardMaterials, material -> 0);
+	 * compiledMaterialCache.toCheckerboardMaterials(checkerboardMaterials, material -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1189,8 +1189,8 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with all {@code CheckerboardMaterial} instances in {@code checkerboardMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterials} or at least one of its elements are {@code null}
 	 */
-	public static float[] toCheckerboardMaterialArray(final List<CheckerboardMaterial> checkerboardMaterials) {
-		return toCheckerboardMaterialArray(checkerboardMaterials, material -> 0);
+	public static float[] toCheckerboardMaterials(final List<CheckerboardMaterial> checkerboardMaterials) {
+		return toCheckerboardMaterials(checkerboardMaterials, material -> 0);
 	}
 	
 	/**
@@ -1203,42 +1203,8 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with all {@code CheckerboardMaterial} instances in {@code checkerboardMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
 	 */
-	public static float[] toCheckerboardMaterialArray(final List<CheckerboardMaterial> checkerboardMaterials, final ToIntFunction<Material> materialOffsetFunction) {
-		return Floats.toArray(checkerboardMaterials, checkerboardMaterial -> toCheckerboardMaterialArray(checkerboardMaterial, materialOffsetFunction));
-	}
-	
-	/**
-	 * Returns a {@code float[]} with all {@link PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form.
-	 * <p>
-	 * If {@code polkaDotMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * compiledMaterialCache.toPolkaDotMaterialArray(polkaDotMaterials, material -> 0);
-	 * }
-	 * </pre>
-	 * 
-	 * @param polkaDotMaterials a {@code List} of {@code PolkaDotMaterial} instances
-	 * @return a {@code float[]} with all {@code PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterials} or at least one of its elements are {@code null}
-	 */
-	public static float[] toPolkaDotMaterialArray(final List<PolkaDotMaterial> polkaDotMaterials) {
-		return toPolkaDotMaterialArray(polkaDotMaterials, material -> 0);
-	}
-	
-	/**
-	 * Returns a {@code float[]} with all {@link PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form.
-	 * <p>
-	 * If either {@code polkaDotMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param polkaDotMaterials a {@code List} of {@code PolkaDotMaterial} instances
-	 * @param materialOffsetFunction a {@code ToIntFunction} that returns {@link Material} offsets
-	 * @return a {@code float[]} with all {@code PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
-	 */
-	public static float[] toPolkaDotMaterialArray(final List<PolkaDotMaterial> polkaDotMaterials, final ToIntFunction<Material> materialOffsetFunction) {
-		return Floats.toArray(polkaDotMaterials, polkaDotMaterial -> toPolkaDotMaterialArray(polkaDotMaterial, materialOffsetFunction));
+	public static float[] toCheckerboardMaterials(final List<CheckerboardMaterial> checkerboardMaterials, final ToIntFunction<Material> materialOffsetFunction) {
+		return Floats.toArray(checkerboardMaterials, checkerboardMaterial -> toCheckerboardMaterial(checkerboardMaterial, materialOffsetFunction));
 	}
 	
 	/**
@@ -1249,7 +1215,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toPolkaDotMaterialArray(polkaDotMaterial, material -> 0);
+	 * compiledMaterialCache.toPolkaDotMaterial(polkaDotMaterial, material -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1257,8 +1223,8 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with {@code polkaDotMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterial} is {@code null}
 	 */
-	public static float[] toPolkaDotMaterialArray(final PolkaDotMaterial polkaDotMaterial) {
-		return toPolkaDotMaterialArray(polkaDotMaterial, material -> 0);
+	public static float[] toPolkaDotMaterial(final PolkaDotMaterial polkaDotMaterial) {
+		return toPolkaDotMaterial(polkaDotMaterial, material -> 0);
 	}
 	
 	/**
@@ -1271,7 +1237,7 @@ public final class CompiledMaterialCache {
 	 * @return a {@code float[]} with {@code polkaDotMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotMaterial} or {@code materialOffsetFunction} are {@code null}
 	 */
-	public static float[] toPolkaDotMaterialArray(final PolkaDotMaterial polkaDotMaterial, final ToIntFunction<Material> materialOffsetFunction) {
+	public static float[] toPolkaDotMaterial(final PolkaDotMaterial polkaDotMaterial, final ToIntFunction<Material> materialOffsetFunction) {
 		final AngleF angle = polkaDotMaterial.getAngle();
 		
 		final Material materialA = polkaDotMaterial.getMaterialA();
@@ -1299,6 +1265,40 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with all {@link PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form.
+	 * <p>
+	 * If {@code polkaDotMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toPolkaDotMaterials(polkaDotMaterials, material -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param polkaDotMaterials a {@code List} of {@code PolkaDotMaterial} instances
+	 * @return a {@code float[]} with all {@code PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterials} or at least one of its elements are {@code null}
+	 */
+	public static float[] toPolkaDotMaterials(final List<PolkaDotMaterial> polkaDotMaterials) {
+		return toPolkaDotMaterials(polkaDotMaterials, material -> 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form.
+	 * <p>
+	 * If either {@code polkaDotMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polkaDotMaterials a {@code List} of {@code PolkaDotMaterial} instances
+	 * @param materialOffsetFunction a {@code ToIntFunction} that returns {@link Material} offsets
+	 * @return a {@code float[]} with all {@code PolkaDotMaterial} instances in {@code polkaDotMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
+	 */
+	public static float[] toPolkaDotMaterials(final List<PolkaDotMaterial> polkaDotMaterials, final ToIntFunction<Material> materialOffsetFunction) {
+		return Floats.toArray(polkaDotMaterials, polkaDotMaterial -> toPolkaDotMaterial(polkaDotMaterial, materialOffsetFunction));
+	}
+	
+	/**
 	 * Returns an {@code int[]} with {@code clearCoatMaterial} in compiled form.
 	 * <p>
 	 * If {@code clearCoatMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1306,7 +1306,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toClearCoatMaterialArray(clearCoatMaterial, texture -> 0);
+	 * compiledMaterialCache.toClearCoatMaterial(clearCoatMaterial, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1314,8 +1314,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code clearCoatMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterial} is {@code null}
 	 */
-	public static int[] toClearCoatMaterialArray(final ClearCoatMaterial clearCoatMaterial) {
-		return toClearCoatMaterialArray(clearCoatMaterial, texture -> 0);
+	public static int[] toClearCoatMaterial(final ClearCoatMaterial clearCoatMaterial) {
+		return toClearCoatMaterial(clearCoatMaterial, texture -> 0);
 	}
 	
 	/**
@@ -1328,7 +1328,7 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code clearCoatMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code clearCoatMaterial} or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toClearCoatMaterialArray(final ClearCoatMaterial clearCoatMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
+	public static int[] toClearCoatMaterial(final ClearCoatMaterial clearCoatMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureEmission = clearCoatMaterial.getTextureEmission();
 		final Texture textureKD = clearCoatMaterial.getTextureKD();
 		final Texture textureKS = clearCoatMaterial.getTextureKS();
@@ -1353,7 +1353,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toClearCoatMaterialArray(clearCoatMaterials, texture -> 0);
+	 * compiledMaterialCache.toClearCoatMaterials(clearCoatMaterials, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1361,8 +1361,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with all {@code ClearCoatMaterial} instances in {@code clearCoatMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterials} or at least one of its elements are {@code null}
 	 */
-	public static int[] toClearCoatMaterialArray(final List<ClearCoatMaterial> clearCoatMaterials) {
-		return toClearCoatMaterialArray(clearCoatMaterials, texture -> 0);
+	public static int[] toClearCoatMaterials(final List<ClearCoatMaterial> clearCoatMaterials) {
+		return toClearCoatMaterials(clearCoatMaterials, texture -> 0);
 	}
 	
 	/**
@@ -1375,8 +1375,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with all {@code ClearCoatMaterial} instances in {@code clearCoatMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code clearCoatMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toClearCoatMaterialArray(final List<ClearCoatMaterial> clearCoatMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Ints.toArray(clearCoatMaterials, clearCoatMaterial -> toClearCoatMaterialArray(clearCoatMaterial, textureOffsetFunction));
+	public static int[] toClearCoatMaterials(final List<ClearCoatMaterial> clearCoatMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Ints.toArray(clearCoatMaterials, clearCoatMaterial -> toClearCoatMaterial(clearCoatMaterial, textureOffsetFunction));
 	}
 	
 	/**
@@ -1387,7 +1387,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toDisneyMaterialArray(disneyMaterial, texture -> 0);
+	 * compiledMaterialCache.toDisneyMaterial(disneyMaterial, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1395,8 +1395,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code disneyMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterial} is {@code null}
 	 */
-	public static int[] toDisneyMaterialArray(final DisneyMaterial disneyMaterial) {
-		return toDisneyMaterialArray(disneyMaterial, texture -> 0);
+	public static int[] toDisneyMaterial(final DisneyMaterial disneyMaterial) {
+		return toDisneyMaterial(disneyMaterial, texture -> 0);
 	}
 	
 	/**
@@ -1409,7 +1409,7 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code disneyMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code disneyMaterial} or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toDisneyMaterialArray(final DisneyMaterial disneyMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
+	public static int[] toDisneyMaterial(final DisneyMaterial disneyMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureEmission = disneyMaterial.getTextureEmission();
 		final Texture textureAnisotropic = disneyMaterial.getTextureAnisotropic();
 		final Texture textureClearCoat = disneyMaterial.getTextureClearCoat();
@@ -1460,7 +1460,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toDisneyMaterialArray(disneyMaterials, texture -> 0);
+	 * compiledMaterialCache.toDisneyMaterials(disneyMaterials, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1468,8 +1468,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with all {@code DisneyMaterial} instances in {@code disneyMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterials} or at least one of its elements are {@code null}
 	 */
-	public static int[] toDisneyMaterialArray(final List<DisneyMaterial> disneyMaterials) {
-		return toDisneyMaterialArray(disneyMaterials, texture -> 0);
+	public static int[] toDisneyMaterials(final List<DisneyMaterial> disneyMaterials) {
+		return toDisneyMaterials(disneyMaterials, texture -> 0);
 	}
 	
 	/**
@@ -1482,8 +1482,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with all {@code DisneyMaterial} instances in {@code disneyMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code disneyMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toDisneyMaterialArray(final List<DisneyMaterial> disneyMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Ints.toArray(disneyMaterials, disneyMaterial -> toDisneyMaterialArray(disneyMaterial, textureOffsetFunction));
+	public static int[] toDisneyMaterials(final List<DisneyMaterial> disneyMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Ints.toArray(disneyMaterials, disneyMaterial -> toDisneyMaterial(disneyMaterial, textureOffsetFunction));
 	}
 	
 	/**
@@ -1494,7 +1494,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toGlassMaterialArray(glassMaterial, texture -> 0);
+	 * compiledMaterialCache.toGlassMaterial(glassMaterial, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1502,8 +1502,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code glassMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code glassMaterial} is {@code null}
 	 */
-	public static int[] toGlassMaterialArray(final GlassMaterial glassMaterial) {
-		return toGlassMaterialArray(glassMaterial, texture -> 0);
+	public static int[] toGlassMaterial(final GlassMaterial glassMaterial) {
+		return toGlassMaterial(glassMaterial, texture -> 0);
 	}
 	
 	/**
@@ -1516,7 +1516,7 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code glassMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code glassMaterial} or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toGlassMaterialArray(final GlassMaterial glassMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
+	public static int[] toGlassMaterial(final GlassMaterial glassMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureEmission = glassMaterial.getTextureEmission();
 		final Texture textureEta = glassMaterial.getTextureEta();
 		final Texture textureKR = glassMaterial.getTextureKR();
@@ -1549,7 +1549,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toGlassMaterialArray(glassMaterials, texture -> 0);
+	 * compiledMaterialCache.toGlassMaterials(glassMaterials, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1557,8 +1557,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with all {@code GlassMaterial} instances in {@code glassMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code glassMaterials} or at least one of its elements are {@code null}
 	 */
-	public static int[] toGlassMaterialArray(final List<GlassMaterial> glassMaterials) {
-		return toGlassMaterialArray(glassMaterials, texture -> 0);
+	public static int[] toGlassMaterials(final List<GlassMaterial> glassMaterials) {
+		return toGlassMaterials(glassMaterials, texture -> 0);
 	}
 	
 	/**
@@ -1571,8 +1571,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with all {@code GlassMaterial} instances in {@code glassMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code glassMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toGlassMaterialArray(final List<GlassMaterial> glassMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Ints.toArray(glassMaterials, glassMaterial -> toGlassMaterialArray(glassMaterial, textureOffsetFunction));
+	public static int[] toGlassMaterials(final List<GlassMaterial> glassMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Ints.toArray(glassMaterials, glassMaterial -> toGlassMaterial(glassMaterial, textureOffsetFunction));
 	}
 	
 	/**
@@ -1583,7 +1583,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toGlossyMaterialArray(glossyMaterial, texture -> 0);
+	 * compiledMaterialCache.toGlossyMaterial(glossyMaterial, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1591,8 +1591,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code glossyMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterial} is {@code null}
 	 */
-	public static int[] toGlossyMaterialArray(final GlossyMaterial glossyMaterial) {
-		return toGlossyMaterialArray(glossyMaterial, texture -> 0);
+	public static int[] toGlossyMaterial(final GlossyMaterial glossyMaterial) {
+		return toGlossyMaterial(glossyMaterial, texture -> 0);
 	}
 	
 	/**
@@ -1605,7 +1605,7 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code glossyMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code glossyMaterial} or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toGlossyMaterialArray(final GlossyMaterial glossyMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
+	public static int[] toGlossyMaterial(final GlossyMaterial glossyMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureEmission = glossyMaterial.getTextureEmission();
 		final Texture textureKR = glossyMaterial.getTextureKR();
 		final Texture textureRoughness = glossyMaterial.getTextureRoughness();
@@ -1630,7 +1630,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toGlossyMaterialArray(glossyMaterials, texture -> 0);
+	 * compiledMaterialCache.toGlossyMaterials(glossyMaterials, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1638,8 +1638,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with all {@code GlossyMaterial} instances in {@code glossyMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterials} or at least one of its elements are {@code null}
 	 */
-	public static int[] toGlossyMaterialArray(final List<GlossyMaterial> glossyMaterials) {
-		return toGlossyMaterialArray(glossyMaterials, texture -> 0);
+	public static int[] toGlossyMaterials(final List<GlossyMaterial> glossyMaterials) {
+		return toGlossyMaterials(glossyMaterials, texture -> 0);
 	}
 	
 	/**
@@ -1652,42 +1652,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with all {@code GlossyMaterial} instances in {@code glossyMaterials} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code glossyMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toGlossyMaterialArray(final List<GlossyMaterial> glossyMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Ints.toArray(glossyMaterials, glossyMaterial -> toGlossyMaterialArray(glossyMaterial, textureOffsetFunction));
-	}
-	
-	/**
-	 * Returns an {@code int[]} with all {@link MatteMaterial} instances in {@code matteMaterials} in compiled form.
-	 * <p>
-	 * If {@code matteMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * compiledMaterialCache.toMatteMaterialArray(matteMaterials, texture -> 0);
-	 * }
-	 * </pre>
-	 * 
-	 * @param matteMaterials a {@code List} of {@code MatteMaterial} instances
-	 * @return an {@code int[]} with all {@code MatteMaterial} instances in {@code matteMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code matteMaterials} or at least one of its elements are {@code null}
-	 */
-	public static int[] toMatteMaterialArray(final List<MatteMaterial> matteMaterials) {
-		return toMatteMaterialArray(matteMaterials, texture -> 0);
-	}
-	
-	/**
-	 * Returns an {@code int[]} with all {@link MatteMaterial} instances in {@code matteMaterials} in compiled form.
-	 * <p>
-	 * If either {@code matteMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param matteMaterials a {@code List} of {@code MatteMaterial} instances
-	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
-	 * @return an {@code int[]} with all {@code MatteMaterial} instances in {@code matteMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, either {@code matteMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
-	 */
-	public static int[] toMatteMaterialArray(final List<MatteMaterial> matteMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Ints.toArray(matteMaterials, matteMaterial -> toMatteMaterialArray(matteMaterial, textureOffsetFunction));
+	public static int[] toGlossyMaterials(final List<GlossyMaterial> glossyMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Ints.toArray(glossyMaterials, glossyMaterial -> toGlossyMaterial(glossyMaterial, textureOffsetFunction));
 	}
 	
 	/**
@@ -1698,7 +1664,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toMatteMaterialArray(matteMaterial, texture -> 0);
+	 * compiledMaterialCache.toMatteMaterial(matteMaterial, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1706,8 +1672,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code matteMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code matteMaterial} is {@code null}
 	 */
-	public static int[] toMatteMaterialArray(final MatteMaterial matteMaterial) {
-		return toMatteMaterialArray(matteMaterial, texture -> 0);
+	public static int[] toMatteMaterial(final MatteMaterial matteMaterial) {
+		return toMatteMaterial(matteMaterial, texture -> 0);
 	}
 	
 	/**
@@ -1720,7 +1686,7 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code matteMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code matteMaterial} or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toMatteMaterialArray(final MatteMaterial matteMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
+	public static int[] toMatteMaterial(final MatteMaterial matteMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureEmission = matteMaterial.getTextureEmission();
 		final Texture textureAngle = matteMaterial.getTextureAngle();
 		final Texture textureKD = matteMaterial.getTextureKD();
@@ -1738,37 +1704,37 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
-	 * Returns an {@code int[]} with all {@link MetalMaterial} instances in {@code metalMaterials} in compiled form.
+	 * Returns an {@code int[]} with all {@link MatteMaterial} instances in {@code matteMaterials} in compiled form.
 	 * <p>
-	 * If {@code metalMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code matteMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toMetalMaterialArray(metalMaterials, texture -> 0);
+	 * compiledMaterialCache.toMatteMaterials(matteMaterials, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
-	 * @param metalMaterials a {@code List} of {@code MetalMaterial} instances
-	 * @return an {@code int[]} with all {@code MetalMaterial} instances in {@code metalMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code metalMaterials} or at least one of its elements are {@code null}
+	 * @param matteMaterials a {@code List} of {@code MatteMaterial} instances
+	 * @return an {@code int[]} with all {@code MatteMaterial} instances in {@code matteMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code matteMaterials} or at least one of its elements are {@code null}
 	 */
-	public static int[] toMetalMaterialArray(final List<MetalMaterial> metalMaterials) {
-		return toMetalMaterialArray(metalMaterials, texture -> 0);
+	public static int[] toMatteMaterials(final List<MatteMaterial> matteMaterials) {
+		return toMatteMaterials(matteMaterials, texture -> 0);
 	}
 	
 	/**
-	 * Returns an {@code int[]} with all {@link MetalMaterial} instances in {@code metalMaterials} in compiled form.
+	 * Returns an {@code int[]} with all {@link MatteMaterial} instances in {@code matteMaterials} in compiled form.
 	 * <p>
-	 * If either {@code metalMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code matteMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param metalMaterials a {@code List} of {@code MetalMaterial} instances
+	 * @param matteMaterials a {@code List} of {@code MatteMaterial} instances
 	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
-	 * @return an {@code int[]} with all {@code MetalMaterial} instances in {@code metalMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, either {@code metalMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
+	 * @return an {@code int[]} with all {@code MatteMaterial} instances in {@code matteMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code matteMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toMetalMaterialArray(final List<MetalMaterial> metalMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Ints.toArray(metalMaterials, metalMaterial -> toMetalMaterialArray(metalMaterial, textureOffsetFunction));
+	public static int[] toMatteMaterials(final List<MatteMaterial> matteMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Ints.toArray(matteMaterials, matteMaterial -> toMatteMaterial(matteMaterial, textureOffsetFunction));
 	}
 	
 	/**
@@ -1779,7 +1745,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toMetalMaterialArray(metalMaterial, texture -> 0);
+	 * compiledMaterialCache.toMetalMaterial(metalMaterial, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1787,8 +1753,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code metalMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code metalMaterial} is {@code null}
 	 */
-	public static int[] toMetalMaterialArray(final MetalMaterial metalMaterial) {
-		return toMetalMaterialArray(metalMaterial, texture -> 0);
+	public static int[] toMetalMaterial(final MetalMaterial metalMaterial) {
+		return toMetalMaterial(metalMaterial, texture -> 0);
 	}
 	
 	/**
@@ -1801,7 +1767,7 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code metalMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code metalMaterial} or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toMetalMaterialArray(final MetalMaterial metalMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
+	public static int[] toMetalMaterial(final MetalMaterial metalMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureEmission = metalMaterial.getTextureEmission();
 		final Texture textureEta = metalMaterial.getTextureEta();
 		final Texture textureK = metalMaterial.getTextureK();
@@ -1826,37 +1792,37 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
-	 * Returns an {@code int[]} with all {@link MirrorMaterial} instances in {@code mirrorMaterials} in compiled form.
+	 * Returns an {@code int[]} with all {@link MetalMaterial} instances in {@code metalMaterials} in compiled form.
 	 * <p>
-	 * If {@code mirrorMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code metalMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toMirrorMaterialArray(mirrorMaterials, texture -> 0);
+	 * compiledMaterialCache.toMetalMaterials(metalMaterials, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
-	 * @param mirrorMaterials a {@code List} of {@code MirrorMaterial} instances
-	 * @return an {@code int[]} with all {@code MirrorMaterial} instances in {@code mirrorMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterials} or at least one of its elements are {@code null}
+	 * @param metalMaterials a {@code List} of {@code MetalMaterial} instances
+	 * @return an {@code int[]} with all {@code MetalMaterial} instances in {@code metalMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code metalMaterials} or at least one of its elements are {@code null}
 	 */
-	public static int[] toMirrorMaterialArray(final List<MirrorMaterial> mirrorMaterials) {
-		return toMirrorMaterialArray(mirrorMaterials, texture -> 0);
+	public static int[] toMetalMaterials(final List<MetalMaterial> metalMaterials) {
+		return toMetalMaterials(metalMaterials, texture -> 0);
 	}
 	
 	/**
-	 * Returns an {@code int[]} with all {@link MirrorMaterial} instances in {@code mirrorMaterials} in compiled form.
+	 * Returns an {@code int[]} with all {@link MetalMaterial} instances in {@code metalMaterials} in compiled form.
 	 * <p>
-	 * If either {@code mirrorMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code metalMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param mirrorMaterials a {@code List} of {@code MirrorMaterial} instances
+	 * @param metalMaterials a {@code List} of {@code MetalMaterial} instances
 	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
-	 * @return an {@code int[]} with all {@code MirrorMaterial} instances in {@code mirrorMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, either {@code mirrorMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
+	 * @return an {@code int[]} with all {@code MetalMaterial} instances in {@code metalMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code metalMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toMirrorMaterialArray(final List<MirrorMaterial> mirrorMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Ints.toArray(mirrorMaterials, mirrorMaterial -> toMirrorMaterialArray(mirrorMaterial, textureOffsetFunction));
+	public static int[] toMetalMaterials(final List<MetalMaterial> metalMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Ints.toArray(metalMaterials, metalMaterial -> toMetalMaterial(metalMaterial, textureOffsetFunction));
 	}
 	
 	/**
@@ -1867,7 +1833,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toMirrorMaterialArray(mirrorMaterial, texture -> 0);
+	 * compiledMaterialCache.toMirrorMaterial(mirrorMaterial, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1875,8 +1841,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code mirrorMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterial} is {@code null}
 	 */
-	public static int[] toMirrorMaterialArray(final MirrorMaterial mirrorMaterial) {
-		return toMirrorMaterialArray(mirrorMaterial, texture -> 0);
+	public static int[] toMirrorMaterial(final MirrorMaterial mirrorMaterial) {
+		return toMirrorMaterial(mirrorMaterial, texture -> 0);
 	}
 	
 	/**
@@ -1889,7 +1855,7 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code mirrorMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code mirrorMaterial} or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toMirrorMaterialArray(final MirrorMaterial mirrorMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
+	public static int[] toMirrorMaterial(final MirrorMaterial mirrorMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureEmission = mirrorMaterial.getTextureEmission();
 		final Texture textureKR = mirrorMaterial.getTextureKR();
 		
@@ -1904,37 +1870,37 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
-	 * Returns an {@code int[]} with all {@link PlasticMaterial} instances in {@code plasticMaterials} in compiled form.
+	 * Returns an {@code int[]} with all {@link MirrorMaterial} instances in {@code mirrorMaterials} in compiled form.
 	 * <p>
-	 * If {@code plasticMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code mirrorMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toPlasticMaterialArray(plasticMaterials, texture -> 0);
+	 * compiledMaterialCache.toMirrorMaterials(mirrorMaterials, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
-	 * @param plasticMaterials a {@code List} of {@code PlasticMaterial} instances
-	 * @return an {@code int[]} with all {@code PlasticMaterial} instances in {@code plasticMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterials} or at least one of its elements are {@code null}
+	 * @param mirrorMaterials a {@code List} of {@code MirrorMaterial} instances
+	 * @return an {@code int[]} with all {@code MirrorMaterial} instances in {@code mirrorMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterials} or at least one of its elements are {@code null}
 	 */
-	public static int[] toPlasticMaterialArray(final List<PlasticMaterial> plasticMaterials) {
-		return toPlasticMaterialArray(plasticMaterials, texture -> 0);
+	public static int[] toMirrorMaterials(final List<MirrorMaterial> mirrorMaterials) {
+		return toMirrorMaterials(mirrorMaterials, texture -> 0);
 	}
 	
 	/**
-	 * Returns an {@code int[]} with all {@link PlasticMaterial} instances in {@code plasticMaterials} in compiled form.
+	 * Returns an {@code int[]} with all {@link MirrorMaterial} instances in {@code mirrorMaterials} in compiled form.
 	 * <p>
-	 * If either {@code plasticMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mirrorMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param plasticMaterials a {@code List} of {@code PlasticMaterial} instances
+	 * @param mirrorMaterials a {@code List} of {@code MirrorMaterial} instances
 	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
-	 * @return an {@code int[]} with all {@code PlasticMaterial} instances in {@code plasticMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, either {@code plasticMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
+	 * @return an {@code int[]} with all {@code MirrorMaterial} instances in {@code mirrorMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code mirrorMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toPlasticMaterialArray(final List<PlasticMaterial> plasticMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Ints.toArray(plasticMaterials, plasticMaterial -> toPlasticMaterialArray(plasticMaterial, textureOffsetFunction));
+	public static int[] toMirrorMaterials(final List<MirrorMaterial> mirrorMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Ints.toArray(mirrorMaterials, mirrorMaterial -> toMirrorMaterial(mirrorMaterial, textureOffsetFunction));
 	}
 	
 	/**
@@ -1945,7 +1911,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toPlasticMaterialArray(plasticMaterial, texture -> 0);
+	 * compiledMaterialCache.toPlasticMaterial(plasticMaterial, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -1953,8 +1919,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code plasticMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterial} is {@code null}
 	 */
-	public static int[] toPlasticMaterialArray(final PlasticMaterial plasticMaterial) {
-		return toPlasticMaterialArray(plasticMaterial, texture -> 0);
+	public static int[] toPlasticMaterial(final PlasticMaterial plasticMaterial) {
+		return toPlasticMaterial(plasticMaterial, texture -> 0);
 	}
 	
 	/**
@@ -1967,7 +1933,7 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code plasticMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code plasticMaterial} or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toPlasticMaterialArray(final PlasticMaterial plasticMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
+	public static int[] toPlasticMaterial(final PlasticMaterial plasticMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureEmission = plasticMaterial.getTextureEmission();
 		final Texture textureKD = plasticMaterial.getTextureKD();
 		final Texture textureKS = plasticMaterial.getTextureKS();
@@ -1991,37 +1957,37 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
-	 * Returns an {@code int[]} with all {@link SubstrateMaterial} instances in {@code substrateMaterials} in compiled form.
+	 * Returns an {@code int[]} with all {@link PlasticMaterial} instances in {@code plasticMaterials} in compiled form.
 	 * <p>
-	 * If {@code substrateMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code plasticMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toSubstrateMaterialArray(substrateMaterials, texture -> 0);
+	 * compiledMaterialCache.toPlasticMaterials(plasticMaterials, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
-	 * @param substrateMaterials a {@code List} of {@code SubstrateMaterial} instances
-	 * @return an {@code int[]} with all {@code SubstrateMaterial} instances in {@code substrateMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterials} or at least one of its elements are {@code null}
+	 * @param plasticMaterials a {@code List} of {@code PlasticMaterial} instances
+	 * @return an {@code int[]} with all {@code PlasticMaterial} instances in {@code plasticMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterials} or at least one of its elements are {@code null}
 	 */
-	public static int[] toSubstrateMaterialArray(final List<SubstrateMaterial> substrateMaterials) {
-		return toSubstrateMaterialArray(substrateMaterials, texture -> 0);
+	public static int[] toPlasticMaterials(final List<PlasticMaterial> plasticMaterials) {
+		return toPlasticMaterials(plasticMaterials, texture -> 0);
 	}
 	
 	/**
-	 * Returns an {@code int[]} with all {@link SubstrateMaterial} instances in {@code substrateMaterials} in compiled form.
+	 * Returns an {@code int[]} with all {@link PlasticMaterial} instances in {@code plasticMaterials} in compiled form.
 	 * <p>
-	 * If either {@code substrateMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code plasticMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param substrateMaterials a {@code List} of {@code SubstrateMaterial} instances
+	 * @param plasticMaterials a {@code List} of {@code PlasticMaterial} instances
 	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
-	 * @return an {@code int[]} with all {@code SubstrateMaterial} instances in {@code substrateMaterials} in compiled form
-	 * @throws NullPointerException thrown if, and only if, either {@code substrateMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
+	 * @return an {@code int[]} with all {@code PlasticMaterial} instances in {@code plasticMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code plasticMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toSubstrateMaterialArray(final List<SubstrateMaterial> substrateMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Ints.toArray(substrateMaterials, substrateMaterial -> toSubstrateMaterialArray(substrateMaterial, textureOffsetFunction));
+	public static int[] toPlasticMaterials(final List<PlasticMaterial> plasticMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Ints.toArray(plasticMaterials, plasticMaterial -> toPlasticMaterial(plasticMaterial, textureOffsetFunction));
 	}
 	
 	/**
@@ -2032,7 +1998,7 @@ public final class CompiledMaterialCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledMaterialCache.toSubstrateMaterialArray(substrateMaterial, texture -> 0);
+	 * compiledMaterialCache.toSubstrateMaterial(substrateMaterial, texture -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -2040,8 +2006,8 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code substrateMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterial} is {@code null}
 	 */
-	public static int[] toSubstrateMaterialArray(final SubstrateMaterial substrateMaterial) {
-		return toSubstrateMaterialArray(substrateMaterial, texture -> 0);
+	public static int[] toSubstrateMaterial(final SubstrateMaterial substrateMaterial) {
+		return toSubstrateMaterial(substrateMaterial, texture -> 0);
 	}
 	
 	/**
@@ -2054,7 +2020,7 @@ public final class CompiledMaterialCache {
 	 * @return an {@code int[]} with {@code substrateMaterial} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code substrateMaterial} or {@code textureOffsetFunction} are {@code null}
 	 */
-	public static int[] toSubstrateMaterialArray(final SubstrateMaterial substrateMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
+	public static int[] toSubstrateMaterial(final SubstrateMaterial substrateMaterial, final ToIntFunction<Texture> textureOffsetFunction) {
 		final Texture textureEmission = substrateMaterial.getTextureEmission();
 		final Texture textureKD = substrateMaterial.getTextureKD();
 		final Texture textureKS = substrateMaterial.getTextureKS();
@@ -2076,5 +2042,39 @@ public final class CompiledMaterialCache {
 		array[SUBSTRATE_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;										//Block #1
 		
 		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with all {@link SubstrateMaterial} instances in {@code substrateMaterials} in compiled form.
+	 * <p>
+	 * If {@code substrateMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toSubstrateMaterials(substrateMaterials, texture -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param substrateMaterials a {@code List} of {@code SubstrateMaterial} instances
+	 * @return an {@code int[]} with all {@code SubstrateMaterial} instances in {@code substrateMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterials} or at least one of its elements are {@code null}
+	 */
+	public static int[] toSubstrateMaterials(final List<SubstrateMaterial> substrateMaterials) {
+		return toSubstrateMaterials(substrateMaterials, texture -> 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with all {@link SubstrateMaterial} instances in {@code substrateMaterials} in compiled form.
+	 * <p>
+	 * If either {@code substrateMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param substrateMaterials a {@code List} of {@code SubstrateMaterial} instances
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return an {@code int[]} with all {@code SubstrateMaterial} instances in {@code substrateMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code substrateMaterials}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static int[] toSubstrateMaterials(final List<SubstrateMaterial> substrateMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Ints.toArray(substrateMaterials, substrateMaterial -> toSubstrateMaterial(substrateMaterial, textureOffsetFunction));
 	}
 }

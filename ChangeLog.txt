@@ -1,7 +1,9 @@
 2021-07-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* CHANGE:	Refactor the CompiledBoundingVolume3FCache class.
+	* CHANGE:	Refactor the CompiledCameraCache class.
+	* CHANGE:	Refactor the CompiledLightCache class.
 	* CHANGE:	Refactor the CompiledMaterialCache class.
-	* CHANGE:	Change the naming convention used by the CompiledLightCache class.
 
 2021-07-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

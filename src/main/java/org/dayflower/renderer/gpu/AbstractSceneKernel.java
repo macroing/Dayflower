@@ -155,7 +155,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * Updates the {@link Camera} instance.
 	 */
 	public final void updateCamera() {
-		put(this.cameraArray = CompiledCameraCache.toCameraArray(getScene().getCamera()));
+		put(this.cameraArray = CompiledCameraCache.toCamera(getScene().getCamera()));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1109,8 +1109,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		final CompiledScene compiledScene = sceneCompiler.compile(getScene());
 		
-		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getAxisAlignedBoundingBox3FArray()));
-		put(super.boundingVolume3FBoundingSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getBoundingSphere3FArray()));
+		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getAxisAlignedBoundingBox3Fs()));
+		put(super.boundingVolume3FBoundingSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getBoundingSphere3Fs()));
 		
 		put(super.shape3FCone3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FCone3FArray()));
 		put(super.shape3FCylinder3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getShape3FCylinder3FArray()));
@@ -1135,30 +1135,30 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.texturePolkaDotTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTexturePolkaDotTextureArray()));
 		put(super.textureSimplexFractionalBrownianMotionTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getTextureSimplexFractionalBrownianMotionTextureArray()));
 		
-		put(super.materialBullseyeMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getBullseyeMaterialArray()));
-		put(super.materialCheckerboardMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getCheckerboardMaterialArray()));
-		put(super.materialClearCoatMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getClearCoatMaterialArray()));
-		put(super.materialDisneyMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getDisneyMaterialArray()));
-		put(super.materialGlassMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getGlassMaterialArray()));
-		put(super.materialGlossyMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getGlossyMaterialArray()));
-		put(super.materialMatteMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMatteMaterialArray()));
-		put(super.materialMetalMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMetalMaterialArray()));
-		put(super.materialMirrorMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMirrorMaterialArray()));
-		put(super.materialPlasticMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPlasticMaterialArray()));
-		put(super.materialPolkaDotMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPolkaDotMaterialArray()));
-		put(super.materialSubstrateMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getSubstrateMaterialArray()));
+		put(super.materialBullseyeMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getBullseyeMaterials()));
+		put(super.materialCheckerboardMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getCheckerboardMaterials()));
+		put(super.materialClearCoatMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getClearCoatMaterials()));
+		put(super.materialDisneyMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getDisneyMaterials()));
+		put(super.materialGlassMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getGlassMaterials()));
+		put(super.materialGlossyMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getGlossyMaterials()));
+		put(super.materialMatteMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMatteMaterials()));
+		put(super.materialMetalMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMetalMaterials()));
+		put(super.materialMirrorMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMirrorMaterials()));
+		put(super.materialPlasticMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPlasticMaterials()));
+		put(super.materialPolkaDotMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPolkaDotMaterials()));
+		put(super.materialSubstrateMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getSubstrateMaterials()));
 		
-		put(super.lightIDAndOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightIDAndOffsetArray()));
-		put(super.lightDiffuseAreaLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDiffuseAreaLightArray()));
-		put(super.lightDirectionalLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDirectionalLightArray()));
-		put(super.lightLDRImageLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLDRImageLightArray()));
-		put(super.lightLDRImageLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLDRImageLightOffsetArray()));
-		put(super.lightPerezLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLightArray()));
-		put(super.lightPerezLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLightOffsetArray()));
-		put(super.lightPointLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPointLightArray()));
-		put(super.lightSpotLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getSpotLightArray()));
+		put(super.lightIDAndOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightIDsAndOffsets()));
+		put(super.lightDiffuseAreaLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDiffuseAreaLights()));
+		put(super.lightDirectionalLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDirectionalLights()));
+		put(super.lightLDRImageLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLDRImageLights()));
+		put(super.lightLDRImageLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLDRImageLightOffsets()));
+		put(super.lightPerezLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLights()));
+		put(super.lightPerezLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLightOffsets()));
+		put(super.lightPointLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPointLights()));
+		put(super.lightSpotLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getSpotLights()));
 		
-		put(this.cameraArray = doGetCompatibleArray(compiledScene.getCompiledCameraCache().getCameraArray()));
+		put(this.cameraArray = doGetCompatibleArray(compiledScene.getCompiledCameraCache().getCamera()));
 		
 		put(this.primitiveArray = doGetCompatibleArray(compiledScene.getCompiledPrimitiveCache().getPrimitiveArray()));
 		put(this.primitiveMatrix44FArray = doGetCompatibleArray(compiledScene.getCompiledPrimitiveCache().getPrimitiveMatrix44FArray()));

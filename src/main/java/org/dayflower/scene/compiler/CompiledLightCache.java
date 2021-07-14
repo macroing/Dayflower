@@ -263,15 +263,15 @@ public final class CompiledLightCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private float[] diffuseAreaLightArray;
-	private float[] directionalLightArray;
-	private float[] lDRImageLightArray;
-	private float[] perezLightArray;
-	private float[] pointLightArray;
-	private float[] spotLightArray;
-	private int[] lDRImageLightOffsetArray;
-	private int[] lightIDAndOffsetArray;
-	private int[] perezLightOffsetArray;
+	private float[] diffuseAreaLights;
+	private float[] directionalLights;
+	private float[] lDRImageLights;
+	private float[] perezLights;
+	private float[] pointLights;
+	private float[] spotLights;
+	private int[] lDRImageLightOffsets;
+	private int[] lightIDsAndOffsets;
+	private int[] perezLightOffsets;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -279,15 +279,15 @@ public final class CompiledLightCache {
 	 * Constructs a new {@code CompiledLightCache} instance.
 	 */
 	public CompiledLightCache() {
-		setDiffuseAreaLightArray(new float[0]);
-		setDirectionalLightArray(new float[0]);
-		setLDRImageLightArray(new float[0]);
-		setLDRImageLightOffsetArray(new int[0]);
-		setLightIDAndOffsetArray(new int[0]);
-		setPerezLightArray(new float[0]);
-		setPerezLightOffsetArray(new int[0]);
-		setPointLightArray(new float[0]);
-		setSpotLightArray(new float[0]);
+		setDiffuseAreaLights(new float[0]);
+		setDirectionalLights(new float[0]);
+		setLDRImageLightOffsets(new int[0]);
+		setLDRImageLights(new float[0]);
+		setLightIDsAndOffsets(new int[0]);
+		setPerezLightOffsets(new int[0]);
+		setPerezLights(new float[0]);
+		setPointLights(new float[0]);
+		setSpotLights(new float[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -297,8 +297,8 @@ public final class CompiledLightCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code DiffuseAreaLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance
 	 */
-	public float[] getDiffuseAreaLightArray() {
-		return this.diffuseAreaLightArray;
+	public float[] getDiffuseAreaLights() {
+		return this.diffuseAreaLights;
 	}
 	
 	/**
@@ -306,8 +306,8 @@ public final class CompiledLightCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code DirectionalLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance
 	 */
-	public float[] getDirectionalLightArray() {
-		return this.directionalLightArray;
+	public float[] getDirectionalLights() {
+		return this.directionalLights;
 	}
 	
 	/**
@@ -315,8 +315,8 @@ public final class CompiledLightCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code LDRImageLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance
 	 */
-	public float[] getLDRImageLightArray() {
-		return this.lDRImageLightArray;
+	public float[] getLDRImageLights() {
+		return this.lDRImageLights;
 	}
 	
 	/**
@@ -324,8 +324,8 @@ public final class CompiledLightCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code PerezLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance
 	 */
-	public float[] getPerezLightArray() {
-		return this.perezLightArray;
+	public float[] getPerezLights() {
+		return this.perezLights;
 	}
 	
 	/**
@@ -333,8 +333,8 @@ public final class CompiledLightCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code PointLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance
 	 */
-	public float[] getPointLightArray() {
-		return this.pointLightArray;
+	public float[] getPointLights() {
+		return this.pointLights;
 	}
 	
 	/**
@@ -342,8 +342,8 @@ public final class CompiledLightCache {
 	 * 
 	 * @return a {@code float[]} that contains all {@code SpotLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance
 	 */
-	public float[] getSpotLightArray() {
-		return this.spotLightArray;
+	public float[] getSpotLights() {
+		return this.spotLights;
 	}
 	
 	/**
@@ -352,7 +352,7 @@ public final class CompiledLightCache {
 	 * @return the {@code DiffuseAreaLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getDiffuseAreaLightCount() {
-		return Structures.getStructureCount(this.diffuseAreaLightArray, DIFFUSE_AREA_LIGHT_LENGTH);
+		return Structures.getStructureCount(this.diffuseAreaLights, DIFFUSE_AREA_LIGHT_LENGTH);
 	}
 	
 	/**
@@ -361,7 +361,7 @@ public final class CompiledLightCache {
 	 * @return the {@code DirectionalLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getDirectionalLightCount() {
-		return Structures.getStructureCount(this.directionalLightArray, DIRECTIONAL_LIGHT_LENGTH);
+		return Structures.getStructureCount(this.directionalLights, DIRECTIONAL_LIGHT_LENGTH);
 	}
 	
 	/**
@@ -370,7 +370,7 @@ public final class CompiledLightCache {
 	 * @return the {@code LDRImageLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getLDRImageLightCount() {
-		return Structures.getStructureCount(this.lDRImageLightArray, 8, this.lDRImageLightOffsetArray.length);
+		return Structures.getStructureCount(this.lDRImageLights, 8, this.lDRImageLightOffsets.length);
 	}
 	
 	/**
@@ -388,7 +388,7 @@ public final class CompiledLightCache {
 	 * @return the {@code PerezLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getPerezLightCount() {
-		return Structures.getStructureCount(this.perezLightArray, 8, this.perezLightOffsetArray.length);
+		return Structures.getStructureCount(this.perezLights, 8, this.perezLightOffsets.length);
 	}
 	
 	/**
@@ -397,7 +397,7 @@ public final class CompiledLightCache {
 	 * @return the {@code PointLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getPointLightCount() {
-		return Structures.getStructureCount(this.pointLightArray, POINT_LIGHT_LENGTH);
+		return Structures.getStructureCount(this.pointLights, POINT_LIGHT_LENGTH);
 	}
 	
 	/**
@@ -406,7 +406,7 @@ public final class CompiledLightCache {
 	 * @return the {@code SpotLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getSpotLightCount() {
-		return Structures.getStructureCount(this.spotLightArray, SPOT_LIGHT_LENGTH);
+		return Structures.getStructureCount(this.spotLights, SPOT_LIGHT_LENGTH);
 	}
 	
 	/**
@@ -414,8 +414,8 @@ public final class CompiledLightCache {
 	 * 
 	 * @return an {@code int[]} that contains the offsets for all {@code LDRImageLight} instances in this {@code CompiledLightCache} instance
 	 */
-	public int[] getLDRImageLightOffsetArray() {
-		return this.lDRImageLightOffsetArray;
+	public int[] getLDRImageLightOffsets() {
+		return this.lDRImageLightOffsets;
 	}
 	
 	/**
@@ -423,8 +423,8 @@ public final class CompiledLightCache {
 	 * 
 	 * @return an {@code int[]} that contains the ID and offset for all {@code Light} instances in this {@code CompiledLightCache} instance
 	 */
-	public int[] getLightIDAndOffsetArray() {
-		return this.lightIDAndOffsetArray;
+	public int[] getLightIDsAndOffsets() {
+		return this.lightIDsAndOffsets;
 	}
 	
 	/**
@@ -432,116 +432,116 @@ public final class CompiledLightCache {
 	 * 
 	 * @return an {@code int[]} that contains the offsets for all {@code PerezLight} instances in this {@code CompiledLightCache} instance
 	 */
-	public int[] getPerezLightOffsetArray() {
-		return this.perezLightOffsetArray;
+	public int[] getPerezLightOffsets() {
+		return this.perezLightOffsets;
 	}
 	
 	/**
-	 * Sets all {@link DiffuseAreaLight} instances in compiled form to {@code diffuseAreaLightArray}.
+	 * Sets all {@link DiffuseAreaLight} instances in compiled form to {@code diffuseAreaLights}.
 	 * <p>
-	 * If {@code diffuseAreaLightArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code diffuseAreaLights} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param diffuseAreaLightArray the {@code DiffuseAreaLight} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code diffuseAreaLightArray} is {@code null}
+	 * @param diffuseAreaLights the {@code DiffuseAreaLight} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code diffuseAreaLights} is {@code null}
 	 */
-	public void setDiffuseAreaLightArray(final float[] diffuseAreaLightArray) {
-		this.diffuseAreaLightArray = Objects.requireNonNull(diffuseAreaLightArray, "diffuseAreaLightArray == null");
+	public void setDiffuseAreaLights(final float[] diffuseAreaLights) {
+		this.diffuseAreaLights = Objects.requireNonNull(diffuseAreaLights, "diffuseAreaLights == null");
 	}
 	
 	/**
-	 * Sets all {@link DirectionalLight} instances in compiled form to {@code directionalLightArray}.
+	 * Sets all {@link DirectionalLight} instances in compiled form to {@code directionalLights}.
 	 * <p>
-	 * If {@code directionalLightArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code directionalLights} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param directionalLightArray the {@code DirectionalLight} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code directionalLightArray} is {@code null}
+	 * @param directionalLights the {@code DirectionalLight} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code directionalLights} is {@code null}
 	 */
-	public void setDirectionalLightArray(final float[] directionalLightArray) {
-		this.directionalLightArray = Objects.requireNonNull(directionalLightArray, "directionalLightArray == null");
+	public void setDirectionalLights(final float[] directionalLights) {
+		this.directionalLights = Objects.requireNonNull(directionalLights, "directionalLights == null");
 	}
 	
 	/**
-	 * Sets all {@link LDRImageLight} instances in compiled form to {@code lDRImageLightArray}.
+	 * Sets the {@code int[]} that contains the offsets for all {@link LDRImageLight} instances to {@code lDRImageLightOffsets}.
 	 * <p>
-	 * If {@code lDRImageLightArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageLightOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageLightArray the {@code LDRImageLight} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLightArray} is {@code null}
+	 * @param lDRImageLightOffsets the {@code int[]} that contains the offsets for all {@code LDRImageLight} instances
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLightOffsets} is {@code null}
 	 */
-	public void setLDRImageLightArray(final float[] lDRImageLightArray) {
-		this.lDRImageLightArray = Objects.requireNonNull(lDRImageLightArray, "lDRImageLightArray == null");
+	public void setLDRImageLightOffsets(final int[] lDRImageLightOffsets) {
+		this.lDRImageLightOffsets = Objects.requireNonNull(lDRImageLightOffsets, "lDRImageLightOffsets == null");
 	}
 	
 	/**
-	 * Sets the {@code int[]} that contains the offsets for all {@link LDRImageLight} instances to {@code lDRImageLightOffsetArray}.
+	 * Sets all {@link LDRImageLight} instances in compiled form to {@code lDRImageLights}.
 	 * <p>
-	 * If {@code lDRImageLightOffsetArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageLights} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageLightOffsetArray the {@code int[]} that contains the offsets for all {@code LDRImageLight} instances
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLightOffsetArray} is {@code null}
+	 * @param lDRImageLights the {@code LDRImageLight} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLights} is {@code null}
 	 */
-	public void setLDRImageLightOffsetArray(final int[] lDRImageLightOffsetArray) {
-		this.lDRImageLightOffsetArray = Objects.requireNonNull(lDRImageLightOffsetArray, "lDRImageLightOffsetArray == null");
+	public void setLDRImageLights(final float[] lDRImageLights) {
+		this.lDRImageLights = Objects.requireNonNull(lDRImageLights, "lDRImageLights == null");
 	}
 	
 	/**
-	 * Sets the {@code int[]} that contains the ID and offset for all {@link Light} instances to {@code lightIDAndOffsetArray}.
+	 * Sets the {@code int[]} that contains the ID and offset for all {@link Light} instances to {@code lightIDsAndOffsets}.
 	 * <p>
-	 * If {@code lightIDAndOffsetArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lightIDsAndOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lightIDAndOffsetArray the {@code int[]} that contains the ID and offset for all {@code Light} instances
-	 * @throws NullPointerException thrown if, and only if, {@code lightIDAndOffsetArray} is {@code null}
+	 * @param lightIDsAndOffsets the {@code int[]} that contains the ID and offset for all {@code Light} instances
+	 * @throws NullPointerException thrown if, and only if, {@code lightIDsAndOffsets} is {@code null}
 	 */
-	public void setLightIDAndOffsetArray(final int[] lightIDAndOffsetArray) {
-		this.lightIDAndOffsetArray = Objects.requireNonNull(lightIDAndOffsetArray, "lightIDAndOffsetArray == null");
+	public void setLightIDsAndOffsets(final int[] lightIDsAndOffsets) {
+		this.lightIDsAndOffsets = Objects.requireNonNull(lightIDsAndOffsets, "lightIDsAndOffsets == null");
 	}
 	
 	/**
-	 * Sets all {@link PerezLight} instances in compiled form to {@code perezLightArray}.
+	 * Sets the {@code int[]} that contains the offsets for all {@link PerezLight} instances to {@code perezLightOffsets}.
 	 * <p>
-	 * If {@code perezLightArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code perezLightOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param perezLightArray the {@code PerezLight} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code perezLightArray} is {@code null}
+	 * @param perezLightOffsets the {@code int[]} that contains the offsets for all {@code PerezLight} instances
+	 * @throws NullPointerException thrown if, and only if, {@code perezLightOffsets} is {@code null}
 	 */
-	public void setPerezLightArray(final float[] perezLightArray) {
-		this.perezLightArray = Objects.requireNonNull(perezLightArray, "perezLightArray == null");
+	public void setPerezLightOffsets(final int[] perezLightOffsets) {
+		this.perezLightOffsets = Objects.requireNonNull(perezLightOffsets, "perezLightOffsets == null");
 	}
 	
 	/**
-	 * Sets the {@code int[]} that contains the offsets for all {@link PerezLight} instances to {@code perezLightOffsetArray}.
+	 * Sets all {@link PerezLight} instances in compiled form to {@code perezLights}.
 	 * <p>
-	 * If {@code perezLightOffsetArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code perezLights} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param perezLightOffsetArray the {@code int[]} that contains the offsets for all {@code PerezLight} instances
-	 * @throws NullPointerException thrown if, and only if, {@code perezLightOffsetArray} is {@code null}
+	 * @param perezLights the {@code PerezLight} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code perezLights} is {@code null}
 	 */
-	public void setPerezLightOffsetArray(final int[] perezLightOffsetArray) {
-		this.perezLightOffsetArray = Objects.requireNonNull(perezLightOffsetArray, "perezLightOffsetArray == null");
+	public void setPerezLights(final float[] perezLights) {
+		this.perezLights = Objects.requireNonNull(perezLights, "perezLights == null");
 	}
 	
 	/**
-	 * Sets all {@link PointLight} instances in compiled form to {@code pointLightArray}.
+	 * Sets all {@link PointLight} instances in compiled form to {@code pointLights}.
 	 * <p>
-	 * If {@code pointLightArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code pointLights} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLightArray the {@code PointLight} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code pointLightArray} is {@code null}
+	 * @param pointLights the {@code PointLight} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code pointLights} is {@code null}
 	 */
-	public void setPointLightArray(final float[] pointLightArray) {
-		this.pointLightArray = Objects.requireNonNull(pointLightArray, "pointLightArray == null");
+	public void setPointLights(final float[] pointLights) {
+		this.pointLights = Objects.requireNonNull(pointLights, "pointLights == null");
 	}
 	
 	/**
-	 * Sets all {@link SpotLight} instances in compiled form to {@code spotLightArray}.
+	 * Sets all {@link SpotLight} instances in compiled form to {@code spotLights}.
 	 * <p>
-	 * If {@code spotLightArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code spotLights} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param spotLightArray the {@code SpotLight} instances in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code spotLightArray} is {@code null}
+	 * @param spotLights the {@code SpotLight} instances in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code spotLights} is {@code null}
 	 */
-	public void setSpotLightArray(final float[] spotLightArray) {
-		this.spotLightArray = Objects.requireNonNull(spotLightArray, "spotLightArray == null");
+	public void setSpotLights(final float[] spotLights) {
+		this.spotLights = Objects.requireNonNull(spotLights, "spotLights == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -554,7 +554,7 @@ public final class CompiledLightCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledLightCache.toDiffuseAreaLightArray(diffuseAreaLight, shape3F -> 0);
+	 * compiledLightCache.toDiffuseAreaLight(diffuseAreaLight, shape3F -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -562,8 +562,8 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with {@code diffuseAreaLight} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code diffuseAreaLight} is {@code null}
 	 */
-	public static float[] toDiffuseAreaLightArray(final DiffuseAreaLight diffuseAreaLight) {
-		return toDiffuseAreaLightArray(diffuseAreaLight, shape3F -> 0);
+	public static float[] toDiffuseAreaLight(final DiffuseAreaLight diffuseAreaLight) {
+		return toDiffuseAreaLight(diffuseAreaLight, shape3F -> 0);
 	}
 	
 	/**
@@ -576,7 +576,7 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with {@code diffuseAreaLight} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code diffuseAreaLight} or {@code shapeOffsetFunction} are {@code null}
 	 */
-	public static float[] toDiffuseAreaLightArray(final DiffuseAreaLight diffuseAreaLight, final ToIntFunction<Shape3F> shapeOffsetFunction) {
+	public static float[] toDiffuseAreaLight(final DiffuseAreaLight diffuseAreaLight, final ToIntFunction<Shape3F> shapeOffsetFunction) {
 		final Color3F radianceEmitted = diffuseAreaLight.getRadianceEmitted();
 		
 		final Matrix44F objectToWorld = diffuseAreaLight.getTransform().getObjectToWorld();
@@ -641,7 +641,7 @@ public final class CompiledLightCache {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * compiledLightCache.toDiffuseAreaLightArray(diffuseAreaLights, shape3F -> 0);
+	 * compiledLightCache.toDiffuseAreaLights(diffuseAreaLights, shape3F -> 0);
 	 * }
 	 * </pre>
 	 * 
@@ -649,8 +649,8 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with all {@code DiffuseAreaLight} instances in {@code diffuseAreaLights} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code diffuseAreaLights} or at least one of its elements are {@code null}
 	 */
-	public static float[] toDiffuseAreaLightArray(final List<DiffuseAreaLight> diffuseAreaLights) {
-		return toDiffuseAreaLightArray(diffuseAreaLights, shape3F -> 0);
+	public static float[] toDiffuseAreaLights(final List<DiffuseAreaLight> diffuseAreaLights) {
+		return toDiffuseAreaLights(diffuseAreaLights, shape3F -> 0);
 	}
 	
 	/**
@@ -663,8 +663,8 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with all {@code DiffuseAreaLight} instances in {@code diffuseAreaLights} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code diffuseAreaLights}, at least one of its elements or {@code shapeOffsetFunction} are {@code null}
 	 */
-	public static float[] toDiffuseAreaLightArray(final List<DiffuseAreaLight> diffuseAreaLights, final ToIntFunction<Shape3F> shapeOffsetFunction) {
-		return Floats.toArray(diffuseAreaLights, diffuseAreaLight -> toDiffuseAreaLightArray(diffuseAreaLight, shapeOffsetFunction));
+	public static float[] toDiffuseAreaLights(final List<DiffuseAreaLight> diffuseAreaLights, final ToIntFunction<Shape3F> shapeOffsetFunction) {
+		return Floats.toArray(diffuseAreaLights, diffuseAreaLight -> toDiffuseAreaLight(diffuseAreaLight, shapeOffsetFunction));
 	}
 	
 	/**
@@ -676,7 +676,7 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with {@code directionalLight} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code directionalLight} is {@code null}
 	 */
-	public static float[] toDirectionalLightArray(final DirectionalLight directionalLight) {
+	public static float[] toDirectionalLight(final DirectionalLight directionalLight) {
 		final Color3F radiance = directionalLight.getRadiance();
 		
 		final Vector3F direction = Vector3F.transform(directionalLight.getTransform().getObjectToWorld(), directionalLight.getDirection());
@@ -707,8 +707,8 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with all {@code DirectionalLight} instances in {@code directionalLights} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code directionalLights} or at least one of its elements are {@code null}
 	 */
-	public static float[] toDirectionalLightArray(final List<DirectionalLight> directionalLights) {
-		return Floats.toArray(directionalLights, directionalLight -> toDirectionalLightArray(directionalLight));
+	public static float[] toDirectionalLights(final List<DirectionalLight> directionalLights) {
+		return Floats.toArray(directionalLights, directionalLight -> toDirectionalLight(directionalLight));
 	}
 	
 	/**
@@ -720,7 +720,7 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with {@code lDRImageLight} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
 	 */
-	public static float[] toLDRImageLightArray(final LDRImageLight lDRImageLight) {
+	public static float[] toLDRImageLight(final LDRImageLight lDRImageLight) {
 		final AngleF angle = lDRImageLight.getAngle();
 		
 		final Matrix44F objectToWorld = lDRImageLight.getTransform().getObjectToWorld();
@@ -809,21 +809,8 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with all {@code LDRImageLight} instances in {@code lDRImageLights} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLights} or at least one of its elements are {@code null}
 	 */
-	public static float[] toLDRImageLightArray(final List<LDRImageLight> lDRImageLights) {
-		return Floats.toArray(lDRImageLights, lDRImageLight -> toLDRImageLightArray(lDRImageLight));
-	}
-	
-	/**
-	 * Returns a {@code float[]} with all {@link PerezLight} instances in {@code perezLights} in compiled form.
-	 * <p>
-	 * If {@code perezLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param perezLights a {@code List} of {@code PerezLight} instances
-	 * @return a {@code float[]} with all {@code PerezLight} instances in {@code perezLights} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code perezLights} or at least one of its elements are {@code null}
-	 */
-	public static float[] toPerezLightArray(final List<PerezLight> perezLights) {
-		return Floats.toArray(perezLights, perezLight -> toPerezLightArray(perezLight));
+	public static float[] toLDRImageLights(final List<LDRImageLight> lDRImageLights) {
+		return Floats.toArray(lDRImageLights, lDRImageLight -> toLDRImageLight(lDRImageLight));
 	}
 	
 	/**
@@ -835,7 +822,7 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with {@code perezLight} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code perezLight} is {@code null}
 	 */
-	public static float[] toPerezLightArray(final PerezLight perezLight) {
+	public static float[] toPerezLight(final PerezLight perezLight) {
 		final Color3F sunColor = perezLight.getSunColor();
 		
 		final Matrix44F objectToWorld = perezLight.getTransform().getObjectToWorld();
@@ -941,16 +928,16 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Returns a {@code float[]} with all {@link PointLight} instances in {@code pointLights} in compiled form.
+	 * Returns a {@code float[]} with all {@link PerezLight} instances in {@code perezLights} in compiled form.
 	 * <p>
-	 * If {@code pointLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code perezLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLights a {@code List} of {@code PointLight} instances
-	 * @return a {@code float[]} with all {@code PointLight} instances in {@code pointLights} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code pointLights} or at least one of its elements are {@code null}
+	 * @param perezLights a {@code List} of {@code PerezLight} instances
+	 * @return a {@code float[]} with all {@code PerezLight} instances in {@code perezLights} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code perezLights} or at least one of its elements are {@code null}
 	 */
-	public static float[] toPointLightArray(final List<PointLight> pointLights) {
-		return Floats.toArray(pointLights, pointLight -> toPointLightArray(pointLight));
+	public static float[] toPerezLights(final List<PerezLight> perezLights) {
+		return Floats.toArray(perezLights, perezLight -> toPerezLight(perezLight));
 	}
 	
 	/**
@@ -962,7 +949,7 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with {@code pointLight} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code pointLight} is {@code null}
 	 */
-	public static float[] toPointLightArray(final PointLight pointLight) {
+	public static float[] toPointLight(final PointLight pointLight) {
 		final Color3F intensity = pointLight.getIntensity();
 		
 		final Point3F position = pointLight.getTransform().getPosition();
@@ -983,16 +970,16 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Returns a {@code float[]} with all {@link SpotLight} instances in {@code spotLights} in compiled form.
+	 * Returns a {@code float[]} with all {@link PointLight} instances in {@code pointLights} in compiled form.
 	 * <p>
-	 * If {@code spotLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code pointLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param spotLights a {@code List} of {@code SpotLight} instances
-	 * @return a {@code float[]} with all {@code SpotLight} instances in {@code spotLights} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code spotLights} or at least one of its elements are {@code null}
+	 * @param pointLights a {@code List} of {@code PointLight} instances
+	 * @return a {@code float[]} with all {@code PointLight} instances in {@code pointLights} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code pointLights} or at least one of its elements are {@code null}
 	 */
-	public static float[] toSpotLightArray(final List<SpotLight> spotLights) {
-		return Floats.toArray(spotLights, spotLight -> toSpotLightArray(spotLight));
+	public static float[] toPointLights(final List<PointLight> pointLights) {
+		return Floats.toArray(pointLights, pointLight -> toPointLight(pointLight));
 	}
 	
 	/**
@@ -1004,7 +991,7 @@ public final class CompiledLightCache {
 	 * @return a {@code float[]} with {@code spotLight} in compiled form
 	 * @throws NullPointerException thrown if, and only if, {@code spotLight} is {@code null}
 	 */
-	public static float[] toSpotLightArray(final SpotLight spotLight) {
+	public static float[] toSpotLight(final SpotLight spotLight) {
 		final Color3F intensity = spotLight.getIntensity();
 		
 		final Matrix44F objectToWorld = spotLight.getTransform().getObjectToWorld();
@@ -1044,6 +1031,19 @@ public final class CompiledLightCache {
 		array[SPOT_LIGHT_OFFSET_COS_CONE_ANGLE_MINUS_CONE_ANGLE_DELTA] = cosConeAngleMinusConeAngleDelta;	//Block #3
 		
 		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link SpotLight} instances in {@code spotLights} in compiled form.
+	 * <p>
+	 * If {@code spotLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param spotLights a {@code List} of {@code SpotLight} instances
+	 * @return a {@code float[]} with all {@code SpotLight} instances in {@code spotLights} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code spotLights} or at least one of its elements are {@code null}
+	 */
+	public static float[] toSpotLights(final List<SpotLight> spotLights) {
+		return Floats.toArray(spotLights, spotLight -> toSpotLight(spotLight));
 	}
 	
 	/**
@@ -1089,18 +1089,18 @@ public final class CompiledLightCache {
 	 * @return an {@code int[]} with the offsets for all {@code LDRImageLight} instances in {@code lDRImageLights} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code lDRImageLights}, at least one of its elements or {@code lDRImageLightOffsetFunction} are {@code null}
 	 */
-	public static int[] toLDRImageLightOffsetArray(final List<LDRImageLight> lDRImageLights, final ToIntFunction<LDRImageLight> lDRImageLightOffsetFunction) {
+	public static int[] toLDRImageLightOffsets(final List<LDRImageLight> lDRImageLights, final ToIntFunction<LDRImageLight> lDRImageLightOffsetFunction) {
 		ParameterArguments.requireNonNullList(lDRImageLights, "lDRImageLights");
 		
 		Objects.requireNonNull(lDRImageLightOffsetFunction, "lDRImageLightOffsetFunction == null");
 		
-		final int[] lightLDRImageLightOffsetArray = new int[lDRImageLights.size()];
+		final int[] lDRImageLightOffsets = new int[lDRImageLights.size()];
 		
 		for(int i = 0; i < lDRImageLights.size(); i++) {
-			lightLDRImageLightOffsetArray[i] = lDRImageLightOffsetFunction.applyAsInt(lDRImageLights.get(i));
+			lDRImageLightOffsets[i] = lDRImageLightOffsetFunction.applyAsInt(lDRImageLights.get(i));
 		}
 		
-		return lightLDRImageLightOffsetArray;
+		return lDRImageLightOffsets;
 	}
 	
 	/**
@@ -1113,20 +1113,20 @@ public final class CompiledLightCache {
 	 * @return an {@code int[]} with the IDs and offsets for all {@code Light} instances in {@code lights} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code lights}, at least one of its elements or {@code lightOffsetFunction} are {@code null}
 	 */
-	public static int[] toLightIDAndOffsetArray(final List<Light> lights, final ToIntFunction<Light> lightOffsetFunction) {
+	public static int[] toLightIDsAndOffsets(final List<Light> lights, final ToIntFunction<Light> lightOffsetFunction) {
 		ParameterArguments.requireNonNullList(lights, "lights");
 		
 		Objects.requireNonNull(lightOffsetFunction, "lightOffsetFunction == null");
 		
-		final int[] lightIDAndOffsetArray = new int[lights.size()];
+		final int[] lightIDsAndOffsets = new int[lights.size()];
 		
 		for(int i = 0; i < lights.size(); i++) {
 			final Light light = lights.get(i);
 			
-			lightIDAndOffsetArray[i] = pack(light.getID(), lightOffsetFunction.applyAsInt(light));
+			lightIDsAndOffsets[i] = pack(light.getID(), lightOffsetFunction.applyAsInt(light));
 		}
 		
-		return lightIDAndOffsetArray;
+		return lightIDsAndOffsets;
 	}
 	
 	/**
@@ -1139,17 +1139,17 @@ public final class CompiledLightCache {
 	 * @return an {@code int[]} with the offsets for all {@code PerezLight} instances in {@code perezLights} in compiled form
 	 * @throws NullPointerException thrown if, and only if, either {@code perezLights}, at least one of its elements or {@code perezLightOffsetFunction} are {@code null}
 	 */
-	public static int[] toPerezLightOffsetArray(final List<PerezLight> perezLights, final ToIntFunction<PerezLight> perezLightOffsetFunction) {
+	public static int[] toPerezLightOffsets(final List<PerezLight> perezLights, final ToIntFunction<PerezLight> perezLightOffsetFunction) {
 		ParameterArguments.requireNonNullList(perezLights, "perezLights");
 		
 		Objects.requireNonNull(perezLightOffsetFunction, "perezLightOffsetFunction == null");
 		
-		final int[] lightPerezLightOffsetArray = new int[perezLights.size()];
+		final int[] perezLightOffsets = new int[perezLights.size()];
 		
 		for(int i = 0; i < perezLights.size(); i++) {
-			lightPerezLightOffsetArray[i] = perezLightOffsetFunction.applyAsInt(perezLights.get(i));
+			perezLightOffsets[i] = perezLightOffsetFunction.applyAsInt(perezLights.get(i));
 		}
 		
-		return lightPerezLightOffsetArray;
+		return perezLightOffsets;
 	}
 }

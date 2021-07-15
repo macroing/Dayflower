@@ -31,7 +31,6 @@ import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Light;
-import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.LDRImageLight;
@@ -54,11 +53,13 @@ final class LightCache {
 	private final Map<PointLight, Integer> distinctToOffsetsPointLights;
 	private final Map<SpotLight, Integer> distinctToOffsetsSpotLights;
 	private final NodeCache nodeCache;
+	private final Shape3FCache shape3FCache;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public LightCache(final NodeCache nodeCache) {
+	public LightCache(final NodeCache nodeCache, final Shape3FCache shape3FCache) {
 		this.nodeCache = Objects.requireNonNull(nodeCache, "nodeCache == null");
+		this.shape3FCache = Objects.requireNonNull(shape3FCache, "shape3FCache == null");
 		this.distinctDiffuseAreaLights = new ArrayList<>();
 		this.distinctDirectionalLights = new ArrayList<>();
 		this.distinctLDRImageLights = new ArrayList<>();
@@ -80,8 +81,8 @@ final class LightCache {
 		return this.distinctLights.contains(Objects.requireNonNull(light, "light == null"));
 	}
 	
-	public float[] toDiffuseAreaLights(final Shape3FCache shape3FCache) {
-		return CompiledLightCache.toDiffuseAreaLights(this.distinctDiffuseAreaLights, shape3FCache::findOffsetFor);
+	public float[] toDiffuseAreaLights() {
+		return CompiledLightCache.toDiffuseAreaLights(this.distinctDiffuseAreaLights, this.shape3FCache::findOffsetFor);
 	}
 	
 	public float[] toDirectionalLights() {
@@ -148,6 +149,22 @@ final class LightCache {
 		return CompiledLightCache.toPerezLightOffsets(this.distinctPerezLights, this::findOffsetFor);
 	}
 	
+	public void build(final CompiledLightCache compiledLightCache) {
+		compiledLightCache.setDiffuseAreaLights(toDiffuseAreaLights());
+		compiledLightCache.setDirectionalLights(toDirectionalLights());
+		compiledLightCache.setLDRImageLightOffsets(toLDRImageLightOffsets());
+		compiledLightCache.setLDRImageLights(toLDRImageLights());
+		compiledLightCache.setLightIDsAndOffsets(toLightIDsAndOffsets());
+		compiledLightCache.setPerezLightOffsets(toPerezLightOffsets());
+		compiledLightCache.setPerezLights(toPerezLights());
+		compiledLightCache.setPointLights(toPointLights());
+		compiledLightCache.setSpotLights(toSpotLights());
+	}
+	
+	public void build(final CompiledScene compiledScene) {
+		build(compiledScene.getCompiledLightCache());
+	}
+	
 	public void clear() {
 		this.distinctDiffuseAreaLights.clear();
 		this.distinctDirectionalLights.clear();
@@ -164,9 +181,7 @@ final class LightCache {
 		this.distinctToOffsetsSpotLights.clear();
 	}
 	
-	public void setup(final Scene scene) {
-		Objects.requireNonNull(scene, "scene == null");
-		
+	public void setup() {
 //		Add all distinct DiffuseAreaLight instances:
 		this.distinctDiffuseAreaLights.clear();
 		this.distinctDiffuseAreaLights.addAll(this.nodeCache.getAllDistinct(DiffuseAreaLight.class));

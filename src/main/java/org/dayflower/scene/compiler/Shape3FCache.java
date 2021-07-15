@@ -40,9 +40,9 @@ import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
-import org.dayflower.scene.Scene;
 
 final class Shape3FCache {
+	private final BoundingVolume3FCache boundingVolume3FCache;
 	private final List<Cone3F> distinctCone3Fs;
 	private final List<Cylinder3F> distinctCylinder3Fs;
 	private final List<Disk3F> distinctDisk3Fs;
@@ -72,8 +72,9 @@ final class Shape3FCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public Shape3FCache(final NodeCache nodeCache) {
+	public Shape3FCache(final NodeCache nodeCache, final BoundingVolume3FCache boundingVolume3FCache) {
 		this.nodeCache = Objects.requireNonNull(nodeCache, "nodeCache == null");
+		this.boundingVolume3FCache = Objects.requireNonNull(boundingVolume3FCache, "boundingVolume3FCache == null");
 		this.distinctCone3Fs = new ArrayList<>();
 		this.distinctCylinder3Fs = new ArrayList<>();
 		this.distinctDisk3Fs = new ArrayList<>();
@@ -189,10 +190,27 @@ final class Shape3FCache {
 		return this.distinctToOffsetsTriangle3Fs.get(triangle3F).intValue();
 	}
 	
-	public int[] toTriangleMesh3Fs(final BoundingVolume3FCache boundingVolume3FCache) {
-		Objects.requireNonNull(boundingVolume3FCache, "boundingVolume3FCache == null");
-		
-		return CompiledShape3FCache.toTriangleMesh3Fs(this.distinctTriangleMesh3Fs, boundingVolume3FCache::findOffsetFor, this::findOffsetFor);
+	public int[] toTriangleMesh3Fs() {
+		return CompiledShape3FCache.toTriangleMesh3Fs(this.distinctTriangleMesh3Fs, this.boundingVolume3FCache::findOffsetFor, this::findOffsetFor);
+	}
+	
+	public void build(final CompiledScene compiledScene) {
+		build(compiledScene.getCompiledShape3FCache());
+	}
+	
+	public void build(final CompiledShape3FCache compiledShape3FCache) {
+		compiledShape3FCache.setCone3Fs(toCone3Fs());
+		compiledShape3FCache.setCylinder3Fs(toCylinder3Fs());
+		compiledShape3FCache.setDisk3Fs(toDisk3Fs());
+		compiledShape3FCache.setHyperboloid3Fs(toHyperboloid3Fs());
+		compiledShape3FCache.setParaboloid3Fs(toParaboloid3Fs());
+		compiledShape3FCache.setPlane3Fs(toPlane3Fs());
+		compiledShape3FCache.setRectangle3Fs(toRectangle3Fs());
+		compiledShape3FCache.setRectangularCuboid3Fs(toRectangularCuboid3Fs());
+		compiledShape3FCache.setSphere3Fs(toSphere3Fs());
+		compiledShape3FCache.setTorus3Fs(toTorus3Fs());
+		compiledShape3FCache.setTriangle3Fs(toTriangle3Fs());
+		compiledShape3FCache.setTriangleMesh3Fs(toTriangleMesh3Fs());
 	}
 	
 	public void clear() {
@@ -223,9 +241,7 @@ final class Shape3FCache {
 		this.distinctToOffsetsTriangleMesh3Fs.clear();
 	}
 	
-	public void setup(final Scene scene) {
-		Objects.requireNonNull(scene, "scene == null");
-		
+	public void setup() {
 //		Add all distinct Cone3F instances:
 		this.distinctCone3Fs.clear();
 		this.distinctCone3Fs.addAll(this.nodeCache.getAllDistinct(Cone3F.class));

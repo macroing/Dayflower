@@ -31,7 +31,6 @@ import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
-import org.dayflower.scene.Scene;
 
 final class BoundingVolume3FCache {
 	private final List<AxisAlignedBoundingBox3F> distinctAxisAlignedBoundingBox3Fs;
@@ -82,6 +81,15 @@ final class BoundingVolume3FCache {
 		}
 	}
 	
+	public void build(final CompiledBoundingVolume3FCache compiledBoundingVolume3FCache) {
+		compiledBoundingVolume3FCache.setAxisAlignedBoundingBox3Fs(toAxisAlignedBoundingBox3Fs());
+		compiledBoundingVolume3FCache.setBoundingSphere3Fs(toBoundingSphere3Fs());
+	}
+	
+	public void build(final CompiledScene compiledScene) {
+		build(compiledScene.getCompiledBoundingVolume3FCache());
+	}
+	
 	public void clear() {
 		this.distinctAxisAlignedBoundingBox3Fs.clear();
 		this.distinctBoundingSphere3Fs.clear();
@@ -91,9 +99,7 @@ final class BoundingVolume3FCache {
 		this.distinctToOffsetsBoundingSphere3Fs.clear();
 	}
 	
-	public void setup(final Scene scene) {
-		Objects.requireNonNull(scene, "scene == null");
-		
+	public void setup() {
 //		Add all distinct AxisAlignedBoundingBox3F instances:
 		this.distinctAxisAlignedBoundingBox3Fs.clear();
 		this.distinctAxisAlignedBoundingBox3Fs.addAll(this.nodeCache.getAllDistinct(AxisAlignedBoundingBox3F.class));

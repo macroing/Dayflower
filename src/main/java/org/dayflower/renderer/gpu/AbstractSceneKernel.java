@@ -1160,8 +1160,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		put(this.cameraArray = doGetCompatibleArray(compiledScene.getCompiledCameraCache().getCamera()));
 		
-		put(this.primitiveArray = doGetCompatibleArray(compiledScene.getCompiledPrimitiveCache().getPrimitiveArray()));
-		put(this.primitiveMatrix44FArray = doGetCompatibleArray(compiledScene.getCompiledPrimitiveCache().getPrimitiveMatrix44FArray()));
+		put(this.primitiveArray = doGetCompatibleArray(compiledScene.getCompiledPrimitiveCache().getPrimitives()));
+		put(this.primitiveMatrix44FArray = doGetCompatibleArray(compiledScene.getCompiledPrimitiveCache().getMatrix44Fs()));
 		
 		super.lightCount = compiledScene.getCompiledLightCache().getLightCount();
 		super.lightDiffuseAreaLightCount = compiledScene.getCompiledLightCache().getDiffuseAreaLightCount();

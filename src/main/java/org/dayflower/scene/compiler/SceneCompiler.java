@@ -18,25 +18,13 @@
  */
 package org.dayflower.scene.compiler;
 
-import java.lang.reflect.Field;//TODO: Refactor!
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.Shape3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
-import org.dayflower.scene.AreaLight;
-import org.dayflower.scene.Material;
-import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
-import org.dayflower.scene.Transform;
-import org.dayflower.utility.Floats;
-import org.dayflower.utility.Ints;
 
 /**
  * A {@code SceneCompiler} compiles a {@link Scene} instance into a {@link CompiledScene} instance.
@@ -48,10 +36,11 @@ public final class SceneCompiler {
 	private final AtomicLong timeMillis;
 	private final AtomicReference<CompiledScene> compiledScene;
 	private final BoundingVolume3FCache boundingVolume3FCache;
+	private final CameraCache cameraCache;
 	private final LightCache lightCache;
-	private final List<Primitive> filteredPrimitives;
 	private final MaterialCache materialCache;
 	private final NodeCache nodeCache;
+	private final PrimitiveCache primitiveCache;
 	private final Shape3FCache shape3FCache;
 	private final TextureCache textureCache;
 	
@@ -65,11 +54,12 @@ public final class SceneCompiler {
 		this.compiledScene = new AtomicReference<>();
 		this.nodeCache = new NodeCache();
 		this.boundingVolume3FCache = new BoundingVolume3FCache(this.nodeCache);
-		this.lightCache = new LightCache(this.nodeCache);
-		this.filteredPrimitives = new ArrayList<>();
-		this.materialCache = new MaterialCache(this.nodeCache);
-		this.shape3FCache = new Shape3FCache(this.nodeCache);
+		this.cameraCache = new CameraCache();
+		this.shape3FCache = new Shape3FCache(this.nodeCache, this.boundingVolume3FCache);
+		this.lightCache = new LightCache(this.nodeCache, this.shape3FCache);
 		this.textureCache = new TextureCache(this.nodeCache);
+		this.materialCache = new MaterialCache(this.nodeCache, this.textureCache);
+		this.primitiveCache = new PrimitiveCache(this.boundingVolume3FCache, this.lightCache, this.materialCache, this.shape3FCache);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,8 +82,7 @@ public final class SceneCompiler {
 		doSetCurrentTimeMillis();
 		doClear();
 		doSetup(scene);
-		doFilterPrimitives(scene);
-		doBuildCompiledScene(scene);
+		doBuildCompiledScene();
 		doClear();
 		doSetElapsedTimeMillis();
 		doReportDone();
@@ -103,136 +92,28 @@ public final class SceneCompiler {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private boolean doFilterPrimitive(final Primitive primitive) {
-		final Optional<AreaLight> optionalAreaLight = primitive.getAreaLight();
+	private void doBuildCompiledScene() {
+		final CompiledScene compiledScene = new CompiledScene();
 		
-		if(optionalAreaLight.isPresent() && !this.lightCache.contains(optionalAreaLight.get())) {
-			return false;
-		}
-		
-		if(!this.boundingVolume3FCache.contains(primitive.getBoundingVolume())) {
-			return false;
-		}
-		
-		if(!this.materialCache.contains(primitive.getMaterial())) {
-			return false;
-		}
-		
-		if(!this.shape3FCache.contains(primitive.getShape())) {
-			return false;
-		}
-		
-		return true;
-	}
-	
-	private void doBuildCompiledScene(final Scene scene) {
-//		Retrieve the float[] for the Matrix44F instances:
-		final float[] primitiveMatrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> doToArray(primitive.getTransform()));
-		
-//		Retrieve the int[] for all primitives:
-		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> doToArray(primitive));
-		
-//		Populate the float[] or int[] with data:
-		doPopulatePrimitiveArrayWithAreaLights(primitiveArray);
-		doPopulatePrimitiveArrayWithBoundingVolumes(primitiveArray);
-		doPopulatePrimitiveArrayWithMaterials(primitiveArray);
-		doPopulatePrimitiveArrayWithShapes(primitiveArray);
-		
-		final
-		CompiledScene compiledScene = new CompiledScene();
-		compiledScene.getCompiledBoundingVolume3FCache().setAxisAlignedBoundingBox3Fs(this.boundingVolume3FCache.toAxisAlignedBoundingBox3Fs());
-		compiledScene.getCompiledBoundingVolume3FCache().setBoundingSphere3Fs(this.boundingVolume3FCache.toBoundingSphere3Fs());
-		compiledScene.getCompiledCameraCache().setCamera(CompiledCameraCache.toCamera(scene.getCamera()));
-		compiledScene.getCompiledLightCache().setDiffuseAreaLights(this.lightCache.toDiffuseAreaLights(this.shape3FCache));
-		compiledScene.getCompiledLightCache().setDirectionalLights(this.lightCache.toDirectionalLights());
-		compiledScene.getCompiledLightCache().setLDRImageLightOffsets(this.lightCache.toLDRImageLightOffsets());
-		compiledScene.getCompiledLightCache().setLDRImageLights(this.lightCache.toLDRImageLights());
-		compiledScene.getCompiledLightCache().setLightIDsAndOffsets(this.lightCache.toLightIDsAndOffsets());
-		compiledScene.getCompiledLightCache().setPerezLightOffsets(this.lightCache.toPerezLightOffsets());
-		compiledScene.getCompiledLightCache().setPerezLights(this.lightCache.toPerezLights());
-		compiledScene.getCompiledLightCache().setPointLights(this.lightCache.toPointLights());
-		compiledScene.getCompiledLightCache().setSpotLights(this.lightCache.toSpotLights());
-		compiledScene.getCompiledMaterialCache().setBullseyeMaterials(this.materialCache.toBullseyeMaterials());
-		compiledScene.getCompiledMaterialCache().setCheckerboardMaterials(this.materialCache.toCheckerboardMaterials());
-		compiledScene.getCompiledMaterialCache().setClearCoatMaterials(this.materialCache.toClearCoatMaterials(this.textureCache));
-		compiledScene.getCompiledMaterialCache().setDisneyMaterials(this.materialCache.toDisneyMaterials(this.textureCache));
-		compiledScene.getCompiledMaterialCache().setGlassMaterials(this.materialCache.toGlassMaterials(this.textureCache));
-		compiledScene.getCompiledMaterialCache().setGlossyMaterials(this.materialCache.toGlossyMaterials(this.textureCache));
-		compiledScene.getCompiledMaterialCache().setMatteMaterials(this.materialCache.toMatteMaterials(this.textureCache));
-		compiledScene.getCompiledMaterialCache().setMetalMaterials(this.materialCache.toMetalMaterials(this.textureCache));
-		compiledScene.getCompiledMaterialCache().setMirrorMaterials(this.materialCache.toMirrorMaterials(this.textureCache));
-		compiledScene.getCompiledMaterialCache().setPlasticMaterials(this.materialCache.toPlasticMaterials(this.textureCache));
-		compiledScene.getCompiledMaterialCache().setPolkaDotMaterials(this.materialCache.toPolkaDotMaterials());
-		compiledScene.getCompiledMaterialCache().setSubstrateMaterials(this.materialCache.toSubstrateMaterials(this.textureCache));
-		compiledScene.getCompiledPrimitiveCache().setPrimitiveArray(primitiveArray);
-		compiledScene.getCompiledPrimitiveCache().setPrimitiveMatrix44FArray(primitiveMatrix44FArray);
-		compiledScene.getCompiledShape3FCache().setCone3Fs(this.shape3FCache.toCone3Fs());
-		compiledScene.getCompiledShape3FCache().setCylinder3Fs(this.shape3FCache.toCylinder3Fs());
-		compiledScene.getCompiledShape3FCache().setDisk3Fs(this.shape3FCache.toDisk3Fs());
-		compiledScene.getCompiledShape3FCache().setHyperboloid3Fs(this.shape3FCache.toHyperboloid3Fs());
-		compiledScene.getCompiledShape3FCache().setParaboloid3Fs(this.shape3FCache.toParaboloid3Fs());
-		compiledScene.getCompiledShape3FCache().setPlane3Fs(this.shape3FCache.toPlane3Fs());
-		compiledScene.getCompiledShape3FCache().setRectangle3Fs(this.shape3FCache.toRectangle3Fs());
-		compiledScene.getCompiledShape3FCache().setRectangularCuboid3Fs(this.shape3FCache.toRectangularCuboid3Fs());
-		compiledScene.getCompiledShape3FCache().setSphere3Fs(this.shape3FCache.toSphere3Fs());
-		compiledScene.getCompiledShape3FCache().setTorus3Fs(this.shape3FCache.toTorus3Fs());
-		compiledScene.getCompiledShape3FCache().setTriangle3Fs(this.shape3FCache.toTriangle3Fs());
-		compiledScene.getCompiledShape3FCache().setTriangleMesh3Fs(this.shape3FCache.toTriangleMesh3Fs(this.boundingVolume3FCache));
-		compiledScene.getCompiledTextureCache().setBlendTextures(this.textureCache.toBlendTextures());
-		compiledScene.getCompiledTextureCache().setBullseyeTextures(this.textureCache.toBullseyeTextures());
-		compiledScene.getCompiledTextureCache().setCheckerboardTextures(this.textureCache.toCheckerboardTextures());
-		compiledScene.getCompiledTextureCache().setConstantTextures(this.textureCache.toConstantTextures());
-		compiledScene.getCompiledTextureCache().setLDRImageTextureOffsets(this.textureCache.toLDRImageTextureOffsets());
-		compiledScene.getCompiledTextureCache().setLDRImageTextures(this.textureCache.toLDRImageTextures());
-		compiledScene.getCompiledTextureCache().setMarbleTextures(this.textureCache.toMarbleTextures());
-		compiledScene.getCompiledTextureCache().setPolkaDotTextures(this.textureCache.toPolkaDotTextures());
-		compiledScene.getCompiledTextureCache().setSimplexFractionalBrownianMotionTextures(this.textureCache.toSimplexFractionalBrownianMotionTextures());
-		
+		this.boundingVolume3FCache.build(compiledScene);
+		this.cameraCache.build(compiledScene);
+		this.lightCache.build(compiledScene);
+		this.materialCache.build(compiledScene);
+		this.primitiveCache.build(compiledScene);
+		this.shape3FCache.build(compiledScene);
+		this.textureCache.build(compiledScene);
 		this.compiledScene.set(compiledScene);
 	}
 	
 	private void doClear() {
 		this.nodeCache.clear();
 		this.boundingVolume3FCache.clear();
+		this.cameraCache.clear();
 		this.lightCache.clear();
-		this.filteredPrimitives.clear();
 		this.materialCache.clear();
+		this.primitiveCache.clear();
 		this.shape3FCache.clear();
 		this.textureCache.clear();
-	}
-	
-	private void doFilterPrimitives(final Scene scene) {
-		this.filteredPrimitives.clear();
-		this.filteredPrimitives.addAll(scene.getPrimitives().stream().filter(this::doFilterPrimitive).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
-	}
-	
-	private void doPopulatePrimitiveArrayWithAreaLights(final int[] primitiveArray) {
-		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
-			final int primitiveArrayOffset = i * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
-			
-			this.filteredPrimitives.get(i).getAreaLight().ifPresent(areaLight -> {
-				primitiveArray[primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID] = areaLight.getID();
-				primitiveArray[primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_OFFSET] = this.lightCache.findOffsetFor(areaLight);
-			});
-		}
-	}
-	
-	private void doPopulatePrimitiveArrayWithBoundingVolumes(final int[] primitiveArray) {
-		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
-			primitiveArray[i * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET] = this.boundingVolume3FCache.findOffsetFor(this.filteredPrimitives.get(i).getBoundingVolume());
-		}
-	}
-	
-	private void doPopulatePrimitiveArrayWithMaterials(final int[] primitiveArray) {
-		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
-			primitiveArray[i * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_OFFSET] = this.materialCache.findOffsetFor(this.filteredPrimitives.get(i).getMaterial());
-		}
-	}
-	
-	private void doPopulatePrimitiveArrayWithShapes(final int[] primitiveArray) {
-		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
-			primitiveArray[i * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET] = this.shape3FCache.findOffsetFor(this.filteredPrimitives.get(i).getShape());
-		}
 	}
 	
 	private void doReportDone() {
@@ -253,44 +134,26 @@ public final class SceneCompiler {
 	}
 	
 	private void doSetup(final Scene scene) {
+//		Prepare the NodeCache that will be used by BoundingVolume3FCache, LightCache, MaterialCache, Shape3FCache and TextureCache:
 		this.nodeCache.add(scene, SceneCompiler::doFilter);
-		this.boundingVolume3FCache.setup(scene);
-		this.lightCache.setup(scene);
-		this.materialCache.setup(scene);
-		this.shape3FCache.setup(scene);
-		this.textureCache.setup(scene);
+		
+//		Setup the CameraCache:
+		this.cameraCache.setup(scene);
+		
+//		Setup the BoundingVolume3FCache, LightCache, MaterialCache, Shape3FCache and TextureCache:
+		this.boundingVolume3FCache.setup();
+		this.lightCache.setup();
+		this.materialCache.setup();
+		this.shape3FCache.setup();
+		this.textureCache.setup();
+		
+//		Setup the PrimitiveCache that will use the BoundingVolume3FCache, LightCache, MaterialCache and Shape3FCache:
+		this.primitiveCache.setup(scene);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static boolean doFilter(final Node node) {
 		return BoundingVolume3FCache.filter(node) || LightCache.filter(node) || MaterialCache.filter(node) || Shape3FCache.filter(node) || TextureCache.filter(node);
-	}
-	
-	private static float[] doToArray(final Transform transform) {
-		return Floats.array(transform.getObjectToWorld().toArray(), transform.getWorldToObject().toArray());
-	}
-	
-	private static int[] doToArray(final Primitive primitive) {
-		final BoundingVolume3F boundingVolume = primitive.getBoundingVolume();
-		
-		final Material material = primitive.getMaterial();
-		
-		final Optional<AreaLight> optionalAreaLight = primitive.getAreaLight();
-		
-		final Shape3F shape = primitive.getShape();
-		
-		final int[] array = new int[CompiledPrimitiveCache.PRIMITIVE_LENGTH];
-		
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID] = optionalAreaLight.isPresent() ? optionalAreaLight.get().getID() : 0;
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_OFFSET] = 0;
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID] = boundingVolume.getID();
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET] = 0;
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_ID] = material.getID();
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_OFFSET] = 0;
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID] = shape.getID();
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET] = 0;
-		
-		return array;
 	}
 }

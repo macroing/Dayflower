@@ -27,7 +27,6 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
-import org.dayflower.scene.Scene;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -153,6 +152,22 @@ final class TextureCache {
 		return CompiledTextureCache.toLDRImageTextureOffsets(this.distinctLDRImageTextures);
 	}
 	
+	public void build(final CompiledScene compiledScene) {
+		build(compiledScene.getCompiledTextureCache());
+	}
+	
+	public void build(final CompiledTextureCache compiledTextureCache) {
+		compiledTextureCache.setBlendTextures(toBlendTextures());
+		compiledTextureCache.setBullseyeTextures(toBullseyeTextures());
+		compiledTextureCache.setCheckerboardTextures(toCheckerboardTextures());
+		compiledTextureCache.setConstantTextures(toConstantTextures());
+		compiledTextureCache.setLDRImageTextureOffsets(toLDRImageTextureOffsets());
+		compiledTextureCache.setLDRImageTextures(toLDRImageTextures());
+		compiledTextureCache.setMarbleTextures(toMarbleTextures());
+		compiledTextureCache.setPolkaDotTextures(toPolkaDotTextures());
+		compiledTextureCache.setSimplexFractionalBrownianMotionTextures(toSimplexFractionalBrownianMotionTextures());
+	}
+	
 	public void clear() {
 		this.distinctBlendTextures.clear();
 		this.distinctBullseyeTextures.clear();
@@ -175,9 +190,7 @@ final class TextureCache {
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
 	}
 	
-	public void setup(final Scene scene) {
-		Objects.requireNonNull(scene, "scene == null");
-		
+	public void setup() {
 //		Add all distinct BlendTexture instances:
 		this.distinctBlendTextures.clear();
 		this.distinctBlendTextures.addAll(this.nodeCache.getAllDistinct(BlendTexture.class));

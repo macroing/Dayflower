@@ -1,3 +1,11 @@
+2021-07-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add additional parameter validation to the methods getAxisAlignedBoundingBox3FOffsetAbsolute(float[]), getAxisAlignedBoundingBox3FOffsetRelative(float[]), getBoundingSphere3FOffsetAbsolute(float[]), getBoundingSphere3FOffsetRelative(float[]), setAxisAlignedBoundingBox3Fs(float[]) and setBoundingSphere3Fs(float[]) in the CompiledBoundingVolume3FCache class.
+	* ADD:		Add the methods addAxisAlignedBoundingBox3F(float[]), addBoundingSphere3F(float[]), removeAxisAlignedBoundingBox3F(float[]) and removeBoundingSphere3F(float[]) to the CompiledBoundingVolume3FCache class.
+	* ADD:		Add the methods getAxisAlignedBoundingBox3FCount(), getAxisAlignedBoundingBox3FOffsetAbsolute(float[]) and getAxisAlignedBoundingBox3FOffsetRelative(float[]) to the CompiledBoundingVolume3FCache class.
+	* ADD:		Add the methods getBoundingSphere3FCount(), getBoundingSphere3FOffsetAbsolute(float[]) and getBoundingSphere3FOffsetRelative(float[]) to the CompiledBoundingVolume3FCache class.
+	* CHANGE:	Refactor the method getMaterialBullseyeMaterialOffsetRelative(float[]) in the CompiledMaterialCache class to getBullseyeMaterialOffsetRelative(float[]).
+
 2021-07-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Optimized the Scene Compiler API.

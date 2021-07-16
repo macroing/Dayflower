@@ -26,6 +26,7 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.utility.Floats;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledBoundingVolume3FCache} contains {@link BoundingVolume3F} instances in compiled form.
@@ -82,6 +83,58 @@ public final class CompiledBoundingVolume3FCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Removes {@code axisAlignedBoundingBox3F} from this {@code CompiledBoundingVolume3FCache}, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code axisAlignedBoundingBox3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBox3F an {@link AxisAlignedBoundingBox3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code axisAlignedBoundingBox3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3F} is {@code null}
+	 */
+	public boolean removeAxisAlignedBoundingBox3F(final float[] axisAlignedBoundingBox3F) {
+		final int absoluteOffset = getAxisAlignedBoundingBox3FOffsetAbsolute(axisAlignedBoundingBox3F);
+		
+		if(absoluteOffset != -1) {
+			setAxisAlignedBoundingBox3Fs(Structures.removeStructure(getAxisAlignedBoundingBox3Fs(), absoluteOffset, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code boundingSphere3F} from this {@code CompiledBoundingVolume3FCache}, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code boundingSphere3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code boundingSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param boundingSphere3F a {@link BoundingSphere3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code boundingSphere3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3F} is {@code null}
+	 */
+	public boolean removeBoundingSphere3F(final float[] boundingSphere3F) {
+		final int absoluteOffset = getBoundingSphere3FOffsetAbsolute(boundingSphere3F);
+		
+		if(absoluteOffset != -1) {
+			setBoundingSphere3Fs(Structures.removeStructure(getBoundingSphere3Fs(), absoluteOffset, BOUNDING_SPHERE_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link AxisAlignedBoundingBox3F} instances in compiled form that are associated with this {@code CompiledBoundingVolume3FCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code AxisAlignedBoundingBox3F} instances in compiled form that are associated with this {@code CompiledBoundingVolume3FCache} instance
@@ -100,27 +153,193 @@ public final class CompiledBoundingVolume3FCache {
 	}
 	
 	/**
+	 * Adds {@code axisAlignedBoundingBox3F} to this {@code CompiledBoundingVolume3FCache} instance, if absent.
+	 * <p>
+	 * Returns the absolute offset to {@code axisAlignedBoundingBox3F}.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBox3F an {@link AxisAlignedBoundingBox3F} instance in compiled form
+	 * @return the absolute offset to {@code axisAlignedBoundingBox3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3F} is {@code null}
+	 */
+	public int addAxisAlignedBoundingBox3F(final float[] axisAlignedBoundingBox3F) {
+		final int absoluteOffsetOld = getAxisAlignedBoundingBox3FOffsetAbsolute(axisAlignedBoundingBox3F);
+		final int absoluteOffsetNew = this.axisAlignedBoundingBox3Fs.length;
+		
+		if(absoluteOffsetOld != -1) {
+			return absoluteOffsetOld;
+		}
+		
+		setAxisAlignedBoundingBox3Fs(Structures.addStructure(getAxisAlignedBoundingBox3Fs(), axisAlignedBoundingBox3F));
+		
+		return absoluteOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code boundingSphere3F} to this {@code CompiledBoundingVolume3FCache} instance, if absent.
+	 * <p>
+	 * Returns the absolute offset to {@code boundingSphere3F}.
+	 * <p>
+	 * If {@code boundingSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param boundingSphere3F a {@link BoundingSphere3F} instance in compiled form
+	 * @return the absolute offset to {@code boundingSphere3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3F} is {@code null}
+	 */
+	public int addBoundingSphere3F(final float[] boundingSphere3F) {
+		final int absoluteOffsetOld = getBoundingSphere3FOffsetAbsolute(boundingSphere3F);
+		final int absoluteOffsetNew = this.boundingSphere3Fs.length;
+		
+		if(absoluteOffsetOld != -1) {
+			return absoluteOffsetOld;
+		}
+		
+		setBoundingSphere3Fs(Structures.addStructure(getBoundingSphere3Fs(), boundingSphere3F));
+		
+		return absoluteOffsetNew;
+	}
+	
+	/**
+	 * Returns the {@link AxisAlignedBoundingBox3F} count in this {@code CompiledBoundingVolume3FCache} instance.
+	 * 
+	 * @return the {@code AxisAlignedBoundingBox3F} count in this {@code CompiledBoundingVolume3FCache} instance
+	 */
+	public int getAxisAlignedBoundingBox3FCount() {
+		return Structures.getStructureCount(this.axisAlignedBoundingBox3Fs, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code axisAlignedBoundingBox3F} in this {@code CompiledBoundingVolume3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBox3F an {@link AxisAlignedBoundingBox3F} instance in compiled form
+	 * @return the absolute offset of {@code axisAlignedBoundingBox3F} in this {@code CompiledBoundingVolume3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3F} is {@code null}
+	 */
+	public int getAxisAlignedBoundingBox3FOffsetAbsolute(final float[] axisAlignedBoundingBox3F) {
+		Objects.requireNonNull(axisAlignedBoundingBox3F, "axisAlignedBoundingBox3F == null");
+		
+		ParameterArguments.requireExactArrayLength(axisAlignedBoundingBox3F, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH, "axisAlignedBoundingBox3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F, getAxisAlignedBoundingBox3FCount(), AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code axisAlignedBoundingBox3F} in this {@code CompiledBoundingVolume3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBox3F an {@link AxisAlignedBoundingBox3F} instance in compiled form
+	 * @return the relative offset of {@code axisAlignedBoundingBox3F} in this {@code CompiledBoundingVolume3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3F} is {@code null}
+	 */
+	public int getAxisAlignedBoundingBox3FOffsetRelative(final float[] axisAlignedBoundingBox3F) {
+		Objects.requireNonNull(axisAlignedBoundingBox3F, "axisAlignedBoundingBox3F == null");
+		
+		ParameterArguments.requireExactArrayLength(axisAlignedBoundingBox3F, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH, "axisAlignedBoundingBox3F");
+		
+		return Structures.getStructureOffsetRelative(this.axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F, getAxisAlignedBoundingBox3FCount(), AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH);
+	}
+	
+	/**
+	 * Returns the {@link BoundingSphere3F} count in this {@code CompiledBoundingVolume3FCache} instance.
+	 * 
+	 * @return the {@code BoundingSphere3F} count in this {@code CompiledBoundingVolume3FCache} instance
+	 */
+	public int getBoundingSphere3FCount() {
+		return Structures.getStructureCount(this.boundingSphere3Fs, BOUNDING_SPHERE_3_F_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code boundingSphere3F} in this {@code CompiledBoundingVolume3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code boundingSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param boundingSphere3F a {@link BoundingSphere3F} instance in compiled form
+	 * @return the absolute offset of {@code boundingSphere3F} in this {@code CompiledBoundingVolume3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3F} is {@code null}
+	 */
+	public int getBoundingSphere3FOffsetAbsolute(final float[] boundingSphere3F) {
+		Objects.requireNonNull(boundingSphere3F, "boundingSphere3F == null");
+		
+		ParameterArguments.requireExactArrayLength(boundingSphere3F, BOUNDING_SPHERE_3_F_LENGTH, "boundingSphere3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.boundingSphere3Fs, boundingSphere3F, getBoundingSphere3FCount(), BOUNDING_SPHERE_3_F_LENGTH);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code boundingSphere3F} in this {@code CompiledBoundingVolume3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code boundingSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param boundingSphere3F a {@link BoundingSphere3F} instance in compiled form
+	 * @return the relative offset of {@code boundingSphere3F} in this {@code CompiledBoundingVolume3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3F} is {@code null}
+	 */
+	public int getBoundingSphere3FOffsetRelative(final float[] boundingSphere3F) {
+		Objects.requireNonNull(boundingSphere3F, "boundingSphere3F == null");
+		
+		ParameterArguments.requireExactArrayLength(boundingSphere3F, BOUNDING_SPHERE_3_F_LENGTH, "boundingSphere3F");
+		
+		return Structures.getStructureOffsetRelative(this.boundingSphere3Fs, boundingSphere3F, getBoundingSphere3FCount(), BOUNDING_SPHERE_3_F_LENGTH);
+	}
+	
+	/**
 	 * Sets all {@link AxisAlignedBoundingBox3F} instances in compiled form to {@code axisAlignedBoundingBox3Fs}.
 	 * <p>
 	 * If {@code axisAlignedBoundingBox3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox3Fs.length % CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param axisAlignedBoundingBox3Fs the {@code AxisAlignedBoundingBox3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code axisAlignedBoundingBox3Fs.length % CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3Fs} is {@code null}
 	 */
 	public void setAxisAlignedBoundingBox3Fs(final float[] axisAlignedBoundingBox3Fs) {
-		this.axisAlignedBoundingBox3Fs = Objects.requireNonNull(axisAlignedBoundingBox3Fs, "axisAlignedBoundingBox3Fs == null");
+		Objects.requireNonNull(axisAlignedBoundingBox3Fs, "axisAlignedBoundingBox3Fs == null");
+		
+		ParameterArguments.requireExact(axisAlignedBoundingBox3Fs.length % AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH, 0, "axisAlignedBoundingBox3Fs.length % CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH");
+		
+		this.axisAlignedBoundingBox3Fs = axisAlignedBoundingBox3Fs;
 	}
 	
 	/**
 	 * Sets all {@link BoundingSphere3F} instances in compiled form to {@code boundingSphere3Fs}.
 	 * <p>
 	 * If {@code boundingSphere3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code boundingSphere3Fs.length % CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param boundingSphere3Fs the {@code BoundingSphere3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code boundingSphere3Fs.length % CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3Fs} is {@code null}
 	 */
 	public void setBoundingSphere3Fs(final float[] boundingSphere3Fs) {
-		this.boundingSphere3Fs = Objects.requireNonNull(boundingSphere3Fs, "boundingSphere3Fs == null");
+		Objects.requireNonNull(boundingSphere3Fs, "boundingSphere3Fs == null");
+		
+		ParameterArguments.requireExact(boundingSphere3Fs.length % BOUNDING_SPHERE_3_F_LENGTH, 0, "boundingSphere3Fs.length % CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH");
+		
+		this.boundingSphere3Fs = boundingSphere3Fs;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

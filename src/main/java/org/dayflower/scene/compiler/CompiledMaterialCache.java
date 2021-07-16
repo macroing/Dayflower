@@ -411,7 +411,7 @@ public final class CompiledMaterialCache {
 	 * @return the relative offset of {@code bullseyeMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
 	 */
-	public int getMaterialBullseyeMaterialOffsetRelative(final float[] bullseyeMaterial) {
+	public int getBullseyeMaterialOffsetRelative(final float[] bullseyeMaterial) {
 		return Structures.getStructureOffsetRelative(this.bullseyeMaterials, Objects.requireNonNull(bullseyeMaterial, "bullseyeMaterial == null"), getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
 	}
 	

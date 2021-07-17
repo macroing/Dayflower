@@ -1,3 +1,18 @@
+2021-07-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method indexOf(int, int[]) to the Ints class.
+	* ADD:		Add the methods equals(Object) and hashCode() to the Distribution2F class.
+	* ADD:		Add the methods equals(Object) and hashCode() to the Distribution1F class.
+	* ADD:		Add the method requireRange(int[], int, int, String) to the ParameterArguments class.
+	* ADD:		Add the methods getDiffuseAreaLightOffsetAbsolute(float[]) and getDiffuseAreaLightOffsetRelative(float[]) to the CompiledLightCache class.
+	* ADD:		Add the methods getDirectionalLightOffsetAbsolute(float[]) and getDirectionalLightOffsetRelative(float[]) to the CompiledLightCache class.
+	* ADD:		Add the methods getLDRImageLightOffsetAbsolute(float[]) and getLDRImageLightOffsetRelative(float[]) to the CompiledLightCache class.
+	* ADD:		Add the methods addPerezLight(float[]), getPerezLightOffsetAbsolute(float[]), getPerezLightOffsetRelative(float[]) and removePerezLight(float[]) to the CompiledLightCache class.
+	* ADD:		Add the methods getPointLightOffsetAbsolute(float[]) and getPointLightOffsetRelative(float[]) to the CompiledLightCache class.
+	* ADD:		Add the methods getSpotLightOffsetAbsolute(float[]) and getSpotLightOffsetRelative(float[]) to the CompiledLightCache class.
+	* CHANGE:	Add additional parameter validation to the methods setDiffuseAreaLights(float[]), setDirectionalLights(float[]), setLDRImageLightOffsets(int[]), setLDRImageLights(float[]), setPerezLightOffsets(int[]), setPerezLights(float[]), setPointLights(float[]) and setSpotLights(float[]) in the CompiledLightCache class.
+	* CHANGE:	Add additional parameter validation to the methods requireExactArrayLength(byte[], int, String), requireFiniteValue(double, String), requireRange(double, double, double, String), requireExactArrayLength(double[], int, String), requireFiniteValue(float, String), requireRange(float, float, float, String), requireExactArrayLength(float[], int, String), requireExact(int, int, String), requireRange(int, int, int, String), requireRangef(int, int, int, String, Object[]) and requireExactArrayLength(int[], int, String) in the ParameterArguments class.
+
 2021-07-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add additional parameter validation to the methods getAxisAlignedBoundingBox3FOffsetAbsolute(float[]), getAxisAlignedBoundingBox3FOffsetRelative(float[]), getBoundingSphere3FOffsetAbsolute(float[]), getBoundingSphere3FOffsetRelative(float[]), setAxisAlignedBoundingBox3Fs(float[]) and setBoundingSphere3Fs(float[]) in the CompiledBoundingVolume3FCache class.

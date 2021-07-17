@@ -97,6 +97,8 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code array}.
 	 * <p>
+	 * If either {@code array} or {@code name} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code array.length} is not equal to {@code arrayLengthExpected}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param array the array to check
@@ -104,8 +106,12 @@ public final class ParameterArguments {
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code array}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length} is not equal to {@code arrayLengthExpected}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code name} are {@code null}
 	 */
 	public static byte[] requireExactArrayLength(final byte[] array, final int arrayLengthExpected, final String name) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(name, "name == null");
+		
 		if(array.length != arrayLengthExpected) {
 			throw new IllegalArgumentException(String.format("%s.length != %d: %s.length == %d", name, Integer.valueOf(arrayLengthExpected), name, Integer.valueOf(array.length)));
 		}
@@ -118,14 +124,19 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code value}.
 	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If either {@code Double.isInfinite(value)} or {@code Double.isNaN(value)} returns {@code true}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param value the value to check
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code value}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code Double.isInfinite(value)} or {@code Double.isNaN(value)} returns {@code true}
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
 	 */
 	public static double requireFiniteValue(final double value, final String name) {
+		Objects.requireNonNull(name, "name == null");
+		
 		if(Double.isInfinite(value)) {
 			throw new IllegalArgumentException(String.format("Double.isInfinite(%s) == true", name));
 		} else if(Double.isNaN(value)) {
@@ -140,6 +151,8 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code value}.
 	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code value} is less than {@code Doubles.min(edgeA, edgeB)} or greater than {@code Doubles.max(edgeA, edgeB)}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param value the value to check
@@ -148,8 +161,11 @@ public final class ParameterArguments {
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code value}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is less than {@code Doubles.min(edgeA, edgeB)} or greater than {@code Doubles.max(edgeA, edgeB)}
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
 	 */
 	public static double requireRange(final double value, final double edgeA, final double edgeB, final String name) {
+		Objects.requireNonNull(name, "name == null");
+		
 		final double minimum = min(edgeA, edgeB);
 		final double maximum = max(edgeA, edgeB);
 		
@@ -167,6 +183,8 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code array}.
 	 * <p>
+	 * If either {@code array} or {@code name} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code array.length} is not equal to {@code arrayLengthExpected}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param array the array to check
@@ -174,8 +192,12 @@ public final class ParameterArguments {
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code array}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length} is not equal to {@code arrayLengthExpected}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code name} are {@code null}
 	 */
 	public static double[] requireExactArrayLength(final double[] array, final int arrayLengthExpected, final String name) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(name, "name == null");
+		
 		if(array.length != arrayLengthExpected) {
 			throw new IllegalArgumentException(String.format("%s.length != %d: %s.length == %d", name, Integer.valueOf(arrayLengthExpected), name, Integer.valueOf(array.length)));
 		}
@@ -188,14 +210,19 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code value}.
 	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If either {@code Float.isInfinite(value)} or {@code Float.isNaN(value)} returns {@code true}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param value the value to check
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code value}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code Float.isInfinite(value)} or {@code Float.isNaN(value)} returns {@code true}
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
 	 */
 	public static float requireFiniteValue(final float value, final String name) {
+		Objects.requireNonNull(name, "name == null");
+		
 		if(Float.isInfinite(value)) {
 			throw new IllegalArgumentException(String.format("Float.isInfinite(%s) == true", name));
 		} else if(Float.isNaN(value)) {
@@ -210,6 +237,8 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code value}.
 	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code value} is less than {@code Floats.min(edgeA, edgeB)} or greater than {@code Floats.max(edgeA, edgeB)}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param value the value to check
@@ -218,8 +247,11 @@ public final class ParameterArguments {
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code value}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is less than {@code Floats.min(edgeA, edgeB)} or greater than {@code Floats.max(edgeA, edgeB)}
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
 	 */
 	public static float requireRange(final float value, final float edgeA, final float edgeB, final String name) {
+		Objects.requireNonNull(name, "name == null");
+		
 		final float minimum = min(edgeA, edgeB);
 		final float maximum = max(edgeA, edgeB);
 		
@@ -237,6 +269,8 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code array}.
 	 * <p>
+	 * If either {@code array} or {@code name} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code array.length} is not equal to {@code arrayLengthExpected}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param array the array to check
@@ -244,8 +278,12 @@ public final class ParameterArguments {
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code array}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length} is not equal to {@code arrayLengthExpected}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code name} are {@code null}
 	 */
 	public static float[] requireExactArrayLength(final float[] array, final int arrayLengthExpected, final String name) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(name, "name == null");
+		
 		if(array.length != arrayLengthExpected) {
 			throw new IllegalArgumentException(String.format("%s.length != %d: %s.length == %d", name, Integer.valueOf(arrayLengthExpected), name, Integer.valueOf(array.length)));
 		}
@@ -258,6 +296,8 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code value}.
 	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code value} is not equal to {@code valueExpected}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param value the value to check
@@ -265,8 +305,11 @@ public final class ParameterArguments {
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code value}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is not equal to {@code valueExpected}
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
 	 */
 	public static int requireExact(final int value, final int valueExpected, final String name) {
+		Objects.requireNonNull(name, "name == null");
+		
 		if(value != valueExpected) {
 			throw new IllegalArgumentException(String.format("%s != %d: %s == %d", name, Integer.valueOf(valueExpected), name, Integer.valueOf(value)));
 		}
@@ -279,6 +322,8 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code value}.
 	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code value} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param value the value to check
@@ -287,8 +332,11 @@ public final class ParameterArguments {
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code value}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
 	 */
 	public static int requireRange(final int value, final int edgeA, final int edgeB, final String name) {
+		Objects.requireNonNull(name, "name == null");
+		
 		final int minimum = min(edgeA, edgeB);
 		final int maximum = max(edgeA, edgeB);
 		
@@ -306,6 +354,8 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code value}.
 	 * <p>
+	 * If either {@code nameFormat} or {@code nameFormatArguments} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code value} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * If either {@code nameFormat} or {@code nameFormatArguments} are invalid, an {@code IllegalFormatException} will be thrown.
@@ -318,8 +368,12 @@ public final class ParameterArguments {
 	 * @return {@code value}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}
 	 * @throws IllegalFormatException thrown if, and only if, either {@code nameFormat} or {@code nameFormatArguments} are invalid
+	 * @throws NullPointerException thrown if, and only if, either {@code nameFormat} or {@code nameFormatArguments} are {@code null}
 	 */
 	public static int requireRangef(final int value, final int edgeA, final int edgeB, final String nameFormat, final Object... nameFormatArguments) {
+		Objects.requireNonNull(nameFormat, "nameFormat == null");
+		Objects.requireNonNull(nameFormatArguments, "nameFormatArguments == null");
+		
 		final int minimum = min(edgeA, edgeB);
 		final int maximum = max(edgeA, edgeB);
 		
@@ -341,6 +395,8 @@ public final class ParameterArguments {
 	 * <p>
 	 * Returns {@code array}.
 	 * <p>
+	 * If either {@code array} or {@code name} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * If {@code array.length} is not equal to {@code arrayLengthExpected}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param array the array to check
@@ -348,10 +404,51 @@ public final class ParameterArguments {
 	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
 	 * @return {@code array}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length} is not equal to {@code arrayLengthExpected}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code name} are {@code null}
 	 */
 	public static int[] requireExactArrayLength(final int[] array, final int arrayLengthExpected, final String name) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(name, "name == null");
+		
 		if(array.length != arrayLengthExpected) {
 			throw new IllegalArgumentException(String.format("%s.length != %d: %s.length == %d", name, Integer.valueOf(arrayLengthExpected), name, Integer.valueOf(array.length)));
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Checks that {@code array} contains values in the range {@code [Ints.min(edgeA, edgeB), Ints.max(edgeA, edgeB)]}.
+	 * <p>
+	 * Returns {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code name} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If at least one value in {@code array} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array the array to check
+	 * @param edgeA the minimum or maximum value allowed
+	 * @param edgeB the maximum or minimum value allowed
+	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
+	 * @return {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, at least one value in {@code array} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code name} are {@code null}
+	 */
+	public static int[] requireRange(final int[] array, final int edgeA, final int edgeB, final String name) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(name, "name == null");
+		
+		final int minimum = min(edgeA, edgeB);
+		final int maximum = max(edgeA, edgeB);
+		
+		for(int i = 0; i < array.length; i++) {
+			final int value = array[i];
+			
+			if(value < minimum) {
+				throw new IllegalArgumentException(String.format("%s[%d] < %d: %s[%d] == %d", name, Integer.valueOf(i), Integer.valueOf(minimum), name, Integer.valueOf(i), Integer.valueOf(value)));
+			} else if(value > maximum) {
+				throw new IllegalArgumentException(String.format("%s[%d] > %d: %s[%d] == %d", name, Integer.valueOf(i), Integer.valueOf(maximum), name, Integer.valueOf(i), Integer.valueOf(value)));
+			}
 		}
 		
 		return array;

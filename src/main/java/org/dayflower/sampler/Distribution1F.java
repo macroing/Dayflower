@@ -18,12 +18,14 @@
  */
 package org.dayflower.sampler;
 
+import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.findInterval;
 import static org.dayflower.utility.Ints.saturate;
 import static org.dayflower.utility.Ints.toInt;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.dayflower.utility.ParameterArguments;
@@ -92,6 +94,31 @@ public final class Distribution1F {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Compares {@code object} to this {@code Distribution1F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Distribution1F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Distribution1F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Distribution1F}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof Distribution1F)) {
+			return false;
+		} else if(!Arrays.equals(this.cumulativeDistributionFunction, Distribution1F.class.cast(object).cumulativeDistributionFunction)) {
+			return false;
+		} else if(!Arrays.equals(this.function, Distribution1F.class.cast(object).function)) {
+			return false;
+		} else if(!equal(this.functionIntegral, Distribution1F.class.cast(object).functionIntegral)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
 	/**
 	 * Returns the continuous probability density function (PDF) value at index {@code index}.
@@ -248,6 +275,16 @@ public final class Distribution1F {
 	 */
 	public int count() {
 		return this.function.length;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code Distribution1F} instance.
+	 * 
+	 * @return a hash code for this {@code Distribution1F} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.cumulativeDistributionFunction)), Integer.valueOf(Arrays.hashCode(this.function)), Float.valueOf(this.functionIntegral));
 	}
 	
 	/**

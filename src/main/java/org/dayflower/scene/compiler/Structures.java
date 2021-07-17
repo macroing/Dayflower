@@ -23,6 +23,7 @@ import static org.dayflower.utility.Ints.equal;
 
 import java.util.Objects;
 
+import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 final class Structures {
@@ -136,6 +137,25 @@ final class Structures {
 		return -1;
 	}
 	
+	public static int getStructureOffsetAbsolute(final float[] structures, final float[] structure, final int[] structureOffsets) {
+//		Check that 'structures', 'structure' and 'structureOffsets' are not 'null':
+		Objects.requireNonNull(structures, "structures == null");
+		Objects.requireNonNull(structure, "structure == null");
+		Objects.requireNonNull(structureOffsets, "structureOffsets == null");
+		
+		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureOffsets.length; offsetRelative++) {
+			final int structureLength = offsetRelative + 1 < structureOffsets.length ? structureOffsets[offsetRelative + 1] - structureOffsets[offsetRelative] : structures.length - structureOffsets[offsetRelative];
+			
+			if(structure.length == structureLength && equal(structures, structure, offsetAbsolute, 0, structureLength)) {
+				return offsetAbsolute;
+			}
+			
+			offsetAbsolute += structureLength;
+		}
+		
+		return -1;
+	}
+	
 	public static int getStructureOffsetAbsolute(final int[] structures, final int[] structure, final int structureCount, final int structureLength) {
 //		Check that both 'structures' and 'structure' are not 'null':
 		Objects.requireNonNull(structures, "structures == null");
@@ -184,6 +204,25 @@ final class Structures {
 		return -1;
 	}
 	
+	public static int getStructureOffsetRelative(final float[] structures, final float[] structure, final int[] structureOffsets) {
+//		Check that 'structures', 'structure' and 'structureOffsets' are not 'null':
+		Objects.requireNonNull(structures, "structures == null");
+		Objects.requireNonNull(structure, "structure == null");
+		Objects.requireNonNull(structureOffsets, "structureOffsets == null");
+		
+		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureOffsets.length; offsetRelative++) {
+			final int structureLength = offsetRelative + 1 < structureOffsets.length ? structureOffsets[offsetRelative + 1] - structureOffsets[offsetRelative] : structures.length - structureOffsets[offsetRelative];
+			
+			if(structure.length == structureLength && equal(structures, structure, offsetAbsolute, 0, structureLength)) {
+				return offsetRelative;
+			}
+			
+			offsetAbsolute += structureLength;
+		}
+		
+		return -1;
+	}
+	
 	public static int getStructureOffsetRelative(final int[] structures, final int[] structure, final int structureCount, final int structureLength) {
 //		Check that both 'structures' and 'structure' are not 'null':
 		Objects.requireNonNull(structures, "structures == null");
@@ -206,5 +245,42 @@ final class Structures {
 		}
 		
 		return -1;
+	}
+	
+	public static int[] addStructureOffset(final int[] structureOffsets, final int structureOffsetAbsolute) {
+		Objects.requireNonNull(structureOffsets, "structureOffsets == null");
+		
+		ParameterArguments.requireRange(structureOffsetAbsolute, 0, Integer.MAX_VALUE, "structureOffsetAbsolute");
+		
+		final int[] newStructureOffsets = new int[structureOffsets.length + 1];
+		
+		System.arraycopy(structureOffsets, 0, newStructureOffsets, 0, structureOffsets.length);
+		
+		newStructureOffsets[newStructureOffsets.length - 1] = structureOffsetAbsolute;
+		
+		return newStructureOffsets;
+	}
+	
+	public static int[] removeStructureOffset(final int[] structureOffsets, final int structureOffsetAbsolute, final int structureLength) {
+		Objects.requireNonNull(structureOffsets, "structureOffsets == null");
+		
+		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
+		ParameterArguments.requireRange(structureOffsetAbsolute, 0, Integer.MAX_VALUE, "structureOffsetAbsolute");
+		
+		final int structureOffsetRelative = Ints.indexOf(structureOffsetAbsolute, structureOffsets);
+		
+		if(structureOffsetRelative == -1) {
+			return structureOffsets;
+		}
+		
+		final int[] newStructureOffsets = new int[structureOffsets.length - 1];
+		
+		System.arraycopy(structureOffsets, 0, newStructureOffsets, 0, structureOffsetRelative);
+		
+		for(int i = structureOffsetRelative + 1; i < structureOffsets.length; i++) {
+			newStructureOffsets[i - 1] = structureOffsets[i] - structureLength;
+		}
+		
+		return newStructureOffsets;
 	}
 }

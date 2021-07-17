@@ -166,6 +166,28 @@ public final class Ints {
 	}
 	
 	/**
+	 * Returns the index of {@code value} in {@code array}, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param value the {@code int} value to find the index for
+	 * @param array the {@code int[]} to search for {@code value} in
+	 * @return the index of {@code value} in {@code array}, or {@code -1} if it cannot be found
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public static int indexOf(final int value, final int[] array) {
+		Objects.requireNonNull(array, "array == null");
+		
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] == value) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	
+	/**
 	 * Returns the greater value of {@code a} and {@code b}.
 	 * <p>
 	 * The result is the argument closer to the value of {@code Integer.MAX_VALUE}.

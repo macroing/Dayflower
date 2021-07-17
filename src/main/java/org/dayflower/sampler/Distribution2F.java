@@ -21,6 +21,7 @@ package org.dayflower.sampler;
 import static org.dayflower.utility.Ints.saturate;
 import static org.dayflower.utility.Ints.toInt;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.dayflower.java.io.FloatArrayOutputStream;
@@ -177,6 +178,31 @@ public final class Distribution2F {
 	}
 	
 	/**
+	 * Compares {@code object} to this {@code Distribution2F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Distribution2F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Distribution2F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Distribution2F}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof Distribution2F)) {
+			return false;
+		} else if(!Objects.equals(this.marginal, Distribution2F.class.cast(object).marginal)) {
+			return false;
+		} else if(!Arrays.equals(this.conditional, Distribution2F.class.cast(object).conditional)) {
+			return false;
+		} else if(this.isUV != Distribution2F.class.cast(object).isUV) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Returns the continuous probability density function (PDF) value for {@code sample}.
 	 * <p>
 	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -304,6 +330,16 @@ public final class Distribution2F {
 	 */
 	public int count() {
 		return this.conditional.length;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code Distribution2F} instance.
+	 * 
+	 * @return a hash code for this {@code Distribution2F} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.marginal, Integer.valueOf(Arrays.hashCode(this.conditional)), Boolean.valueOf(this.isUV));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

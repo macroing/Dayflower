@@ -6,7 +6,7 @@
 	* ADD:		Add the method requireRange(int[], int, int, String) to the ParameterArguments class.
 	* ADD:		Add the methods getDiffuseAreaLightOffsetAbsolute(float[]) and getDiffuseAreaLightOffsetRelative(float[]) to the CompiledLightCache class.
 	* ADD:		Add the methods getDirectionalLightOffsetAbsolute(float[]) and getDirectionalLightOffsetRelative(float[]) to the CompiledLightCache class.
-	* ADD:		Add the methods getLDRImageLightOffsetAbsolute(float[]) and getLDRImageLightOffsetRelative(float[]) to the CompiledLightCache class.
+	* ADD:		Add the methods addLDRImageLight(float[]), getLDRImageLightOffsetAbsolute(float[]), getLDRImageLightOffsetRelative(float[]) and removeLDRImageLight(float[]) to the CompiledLightCache class.
 	* ADD:		Add the methods addPerezLight(float[]), getPerezLightOffsetAbsolute(float[]), getPerezLightOffsetRelative(float[]) and removePerezLight(float[]) to the CompiledLightCache class.
 	* ADD:		Add the methods getPointLightOffsetAbsolute(float[]) and getPointLightOffsetRelative(float[]) to the CompiledLightCache class.
 	* ADD:		Add the methods getSpotLightOffsetAbsolute(float[]) and getSpotLightOffsetRelative(float[]) to the CompiledLightCache class.

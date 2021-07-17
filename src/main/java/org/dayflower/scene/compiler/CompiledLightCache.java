@@ -293,6 +293,34 @@ public final class CompiledLightCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Removes {@code lDRImageLight} from this {@code CompiledLightCache}, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code lDRImageLight} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code lDRImageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param lDRImageLight an {@link LDRImageLight} instance in compiled form
+	 * @return {@code true} if, and only if, {@code lDRImageLight} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageLight.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 */
+	public boolean removeLDRImageLight(final float[] lDRImageLight) {
+		final int absoluteOffset = getLDRImageLightOffsetAbsolute(lDRImageLight);
+		
+		if(absoluteOffset != -1) {
+			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, absoluteOffset, lDRImageLight.length));
+			setLDRImageLightOffsets(Structures.removeStructureOffset(getLDRImageLightOffsets(), absoluteOffset, lDRImageLight.length));
+			setLDRImageLights(Structures.removeStructure(getLDRImageLights(), absoluteOffset, lDRImageLight.length));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Removes {@code perezLight} from this {@code CompiledLightCache}, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code perezLight} was removed, {@code false} otherwise.
@@ -310,6 +338,7 @@ public final class CompiledLightCache {
 		final int absoluteOffset = getPerezLightOffsetAbsolute(perezLight);
 		
 		if(absoluteOffset != -1) {
+			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), PerezLight.ID, absoluteOffset, perezLight.length));
 			setPerezLightOffsets(Structures.removeStructureOffset(getPerezLightOffsets(), absoluteOffset, perezLight.length));
 			setPerezLights(Structures.removeStructure(getPerezLights(), absoluteOffset, perezLight.length));
 			
@@ -374,6 +403,35 @@ public final class CompiledLightCache {
 	}
 	
 	/**
+	 * Adds {@code lDRImageLight} to this {@code CompiledLightCache} instance, if absent.
+	 * <p>
+	 * Returns the absolute offset to {@code lDRImageLight}.
+	 * <p>
+	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code lDRImageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param lDRImageLight an {@link LDRImageLight} instance in compiled form
+	 * @return the absolute offset to {@code lDRImageLight}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageLight.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 */
+	public int addLDRImageLight(final float[] lDRImageLight) {
+		final int absoluteOffsetOld = getLDRImageLightOffsetAbsolute(lDRImageLight);
+		final int absoluteOffsetNew = this.lDRImageLights.length;
+		
+		if(absoluteOffsetOld != -1) {
+			return absoluteOffsetOld;
+		}
+		
+		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, absoluteOffsetNew));
+		setLDRImageLightOffsets(Structures.addStructureOffset(getLDRImageLightOffsets(), absoluteOffsetNew));
+		setLDRImageLights(Structures.addStructure(getLDRImageLights(), lDRImageLight));
+		
+		return absoluteOffsetNew;
+	}
+	
+	/**
 	 * Adds {@code perezLight} to this {@code CompiledLightCache} instance, if absent.
 	 * <p>
 	 * Returns the absolute offset to {@code perezLight}.
@@ -395,6 +453,7 @@ public final class CompiledLightCache {
 			return absoluteOffsetOld;
 		}
 		
+		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PerezLight.ID, absoluteOffsetNew));
 		setPerezLightOffsets(Structures.addStructureOffset(getPerezLightOffsets(), absoluteOffsetNew));
 		setPerezLights(Structures.addStructure(getPerezLights(), perezLight));
 		

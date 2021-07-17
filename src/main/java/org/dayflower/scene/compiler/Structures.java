@@ -20,6 +20,8 @@ package org.dayflower.scene.compiler;
 
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Ints.equal;
+import static org.dayflower.utility.Ints.pack;
+import static org.dayflower.utility.Ints.unpack;
 
 import java.util.Objects;
 
@@ -247,37 +249,86 @@ final class Structures {
 		return -1;
 	}
 	
-	public static int[] addStructureOffset(final int[] structureOffsets, final int structureOffsetAbsolute) {
+	public static int[] addStructureIDAndOffset(final int[] structureIDsAndOffsets, final int structureID, final int structureOffset) {
+		Objects.requireNonNull(structureIDsAndOffsets, "structureIDsAndOffsets == null");
+		
+		ParameterArguments.requireRange(structureID, 0, Integer.MAX_VALUE, "structureID");
+		ParameterArguments.requireRange(structureOffset, 0, Integer.MAX_VALUE, "structureOffset");
+		
+		final int[] newStructureIDsAndOffsets = new int[structureIDsAndOffsets.length + 1];
+		
+		System.arraycopy(structureIDsAndOffsets, 0, newStructureIDsAndOffsets, 0, structureIDsAndOffsets.length);
+		
+		newStructureIDsAndOffsets[newStructureIDsAndOffsets.length - 1] = pack(structureID, structureOffset);
+		
+		return newStructureIDsAndOffsets;
+	}
+	
+	public static int[] addStructureOffset(final int[] structureOffsets, final int structureOffset) {
 		Objects.requireNonNull(structureOffsets, "structureOffsets == null");
 		
-		ParameterArguments.requireRange(structureOffsetAbsolute, 0, Integer.MAX_VALUE, "structureOffsetAbsolute");
+		ParameterArguments.requireRange(structureOffset, 0, Integer.MAX_VALUE, "structureOffset");
 		
 		final int[] newStructureOffsets = new int[structureOffsets.length + 1];
 		
 		System.arraycopy(structureOffsets, 0, newStructureOffsets, 0, structureOffsets.length);
 		
-		newStructureOffsets[newStructureOffsets.length - 1] = structureOffsetAbsolute;
+		newStructureOffsets[newStructureOffsets.length - 1] = structureOffset;
 		
 		return newStructureOffsets;
 	}
 	
-	public static int[] removeStructureOffset(final int[] structureOffsets, final int structureOffsetAbsolute, final int structureLength) {
+	public static int[] removeStructureIDAndOffset(final int[] structureIDsAndOffsets, final int structureID, final int structureOffset, final int structureLength) {
+		Objects.requireNonNull(structureIDsAndOffsets, "structureIDsAndOffsets == null");
+		
+		ParameterArguments.requireRange(structureID, 0, Integer.MAX_VALUE, "structureID");
+		ParameterArguments.requireRange(structureOffset, 0, Integer.MAX_VALUE, "structureOffset");
+		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
+		
+		final int structureIDAndOffset = pack(structureID, structureOffset);
+		final int index = Ints.indexOf(structureIDAndOffset, structureIDsAndOffsets);
+		
+		if(index == -1) {
+			return structureIDsAndOffsets;
+		}
+		
+		final int[] newStructureIDsAndOffsets = new int[structureIDsAndOffsets.length - 1];
+		
+		System.arraycopy(structureIDsAndOffsets, 0, newStructureIDsAndOffsets, 0, index);
+		
+		for(int i = index + 1; i < structureIDsAndOffsets.length; i++) {
+			final int[] currentStructureIDAndOffset = unpack(structureIDsAndOffsets[i]);
+			
+			final int currentStructureID = currentStructureIDAndOffset[0];
+			final int currentStructureOffset = currentStructureIDAndOffset[1];
+			
+			if(currentStructureID == structureID) {
+				newStructureIDsAndOffsets[i - 1] = pack(currentStructureID, currentStructureOffset - structureLength);
+			} else {
+				newStructureIDsAndOffsets[i - 1] = pack(currentStructureID, currentStructureOffset);
+			}
+		}
+		
+		return newStructureIDsAndOffsets;
+	}
+	
+	public static int[] removeStructureOffset(final int[] structureOffsets, final int structureOffset, final int structureLength) {
 		Objects.requireNonNull(structureOffsets, "structureOffsets == null");
 		
+		ParameterArguments.requireRange(structureOffset, 0, Integer.MAX_VALUE, "structureOffset");
 		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
-		ParameterArguments.requireRange(structureOffsetAbsolute, 0, Integer.MAX_VALUE, "structureOffsetAbsolute");
 		
-		final int structureOffsetRelative = Ints.indexOf(structureOffsetAbsolute, structureOffsets);
+		final int index = Ints.indexOf(structureOffset, structureOffsets);
 		
-		if(structureOffsetRelative == -1) {
+		if(index == -1) {
 			return structureOffsets;
 		}
 		
 		final int[] newStructureOffsets = new int[structureOffsets.length - 1];
 		
-		System.arraycopy(structureOffsets, 0, newStructureOffsets, 0, structureOffsetRelative);
+		System.arraycopy(structureOffsets, 0, newStructureOffsets, 0, index);
 		
-		for(int i = structureOffsetRelative + 1; i < structureOffsets.length; i++) {
+		for(int i = index + 1; i < structureOffsets.length; i++) {
 			newStructureOffsets[i - 1] = structureOffsets[i] - structureLength;
 		}
 		

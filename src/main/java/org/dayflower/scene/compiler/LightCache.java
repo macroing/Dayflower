@@ -105,12 +105,6 @@ final class LightCache {
 		return CompiledLightCache.toSpotLights(this.distinctSpotLights);
 	}
 	
-	public int findOffsetFor(final LDRImageLight lDRImageLight) {
-		Objects.requireNonNull(lDRImageLight, "lDRImageLight == null");
-		
-		return this.distinctToOffsetsLDRImageLights.get(lDRImageLight).intValue();
-	}
-	
 	public int findOffsetFor(final Light light) {
 		Objects.requireNonNull(light, "light == null");
 		
@@ -131,14 +125,8 @@ final class LightCache {
 		}
 	}
 	
-	public int findOffsetFor(final PerezLight perezLight) {
-		Objects.requireNonNull(perezLight, "perezLight == null");
-		
-		return this.distinctToOffsetsPerezLights.get(perezLight).intValue();
-	}
-	
 	public int[] toLDRImageLightOffsets() {
-		return CompiledLightCache.toLDRImageLightOffsets(this.distinctLDRImageLights, this::findOffsetFor);
+		return CompiledLightCache.toLDRImageLightOffsets(this.distinctLDRImageLights);
 	}
 	
 	public int[] toLightIDsAndOffsets() {
@@ -146,7 +134,7 @@ final class LightCache {
 	}
 	
 	public int[] toPerezLightOffsets() {
-		return CompiledLightCache.toPerezLightOffsets(this.distinctPerezLights, this::findOffsetFor);
+		return CompiledLightCache.toPerezLightOffsets(this.distinctPerezLights);
 	}
 	
 	public void build(final CompiledLightCache compiledLightCache) {
@@ -221,27 +209,27 @@ final class LightCache {
 		
 //		Create offset mappings for all distinct DiffuseAreaLight instances:
 		this.distinctToOffsetsDiffuseAreaLights.clear();
-		this.distinctToOffsetsDiffuseAreaLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDiffuseAreaLights, CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH));
+		this.distinctToOffsetsDiffuseAreaLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDiffuseAreaLights));
 		
 //		Create offset mappings for all distinct DirectionalLight instances:
 		this.distinctToOffsetsDirectionalLights.clear();
-		this.distinctToOffsetsDirectionalLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDirectionalLights, CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH));
+		this.distinctToOffsetsDirectionalLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDirectionalLights));
 		
 //		Create offset mappings for all distinct LDRImageLight instances:
 		this.distinctToOffsetsLDRImageLights.clear();
-		this.distinctToOffsetsLDRImageLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageLights, lDRImageLight -> CompiledLightCache.getLDRImageLightLength(lDRImageLight)));
+		this.distinctToOffsetsLDRImageLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageLights));
 		
 //		Create offset mappings for all distinct PerezLight instances:
 		this.distinctToOffsetsPerezLights.clear();
-		this.distinctToOffsetsPerezLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPerezLights, perezLight -> CompiledLightCache.getPerezLightLength(perezLight)));
+		this.distinctToOffsetsPerezLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPerezLights));
 		
 //		Create offset mappings for all distinct PointLight instances:
 		this.distinctToOffsetsPointLights.clear();
-		this.distinctToOffsetsPointLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPointLights, CompiledLightCache.POINT_LIGHT_LENGTH));
+		this.distinctToOffsetsPointLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPointLights));
 		
 //		Create offset mappings for all distinct SpotLight instances:
 		this.distinctToOffsetsSpotLights.clear();
-		this.distinctToOffsetsSpotLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSpotLights, CompiledLightCache.SPOT_LIGHT_LENGTH));
+		this.distinctToOffsetsSpotLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSpotLights));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

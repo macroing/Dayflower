@@ -1,3 +1,13 @@
+2021-07-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods addDiffuseAreaLight(float[]) and removeDiffuseAreaLight(float[]) to the CompiledLightCache class.
+	* ADD:		Add the methods addDirectionalLight(float[]) and removeDirectionalLight(float[]) to the CompiledLightCache class.
+	* ADD:		Add the methods addPointLight(float[]) and removePointLight(float[]) to the CompiledLightCache class.
+	* ADD:		Add the methods addSpotLight(float[]) and removeSpotLight(float[]) to the CompiledLightCache class.
+	* CHANGE:	Change the stored Light offsets from absolute to relative in the Scene Compiler API and the Renderer GPU API.
+	* CHANGE:	Refactor the method toLDRImageLightOffsets(List<LDRImageLight>, ToIntFunction<LDRImageLight>) to toLDRImageLightOffsets(List<LDRImageLight>).
+	* CHANGE:	Refactor the method toPerezLightOffsets(List<PerezLight>, ToIntFunction<PerezLight>) to toPerezLightOffsets(List<PerezLight>).
+
 2021-07-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method indexOf(int, int[]) to the Ints class.

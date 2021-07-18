@@ -305,6 +305,31 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	/**
+	 * Returns the absolute offset given the ID {@code id} and the relative offset {@code offset}.
+	 * 
+	 * @param id the ID
+	 * @param offset the relative offset
+	 * @return the absolute offset given the ID {@code id} and the relative offset {@code offset}
+	 */
+	protected final int lightToOffset(final int id, final int offset) {
+		if(doLightDiffuseAreaLightIsMatchingID(id)) {
+			return doLightDiffuseAreaLightToOffset(offset);
+		} else if(doLightDirectionalLightIsMatchingID(id)) {
+			return doLightDirectionalLightToOffset(offset);
+		} else if(doLightLDRImageLightIsMatchingID(id)) {
+			return doLightLDRImageLightToOffset(offset);
+		} else if(doLightPerezLightIsMatchingID(id)) {
+			return doLightPerezLightToOffset(offset);
+		} else if(doLightPointLightIsMatchingID(id)) {
+			return doLightPointLightToOffset(offset);
+		} else if(doLightSpotLightIsMatchingID(id)) {
+			return doLightSpotLightToOffset(offset);
+		} else {
+			return 0;
+		}
+	}
+	
+	/**
 	 * Evaluates the radiance emitted along the current ray using the current {@link Light} instance.
 	 * <p>
 	 * This method assumes the method {@link #lightSet(int, int)} has been called and that the array {@link AbstractGeometryKernel#ray3FArray_$private$8 ray3FArray_$private$8} contains a ray.
@@ -664,6 +689,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		return (int)(this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_OFFSET]);
 	}
 	
+	@SuppressWarnings("static-method")
+	private int doLightDiffuseAreaLightToOffset(final int offset) {
+		return offset * CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH;
+	}
+	
 	private void doLightDiffuseAreaLightEvaluateRadianceEmitted() {
 		color3FLHSSet(0.0F, 0.0F, 0.0F);
 	}
@@ -776,6 +806,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	
 	private float doLightDirectionalLightGetRadius() {
 		return this.lightDirectionalLightArray[lightGetOffset() + CompiledLightCache.DIRECTIONAL_LIGHT_OFFSET_RADIUS];
+	}
+	
+	@SuppressWarnings("static-method")
+	private int doLightDirectionalLightToOffset(final int offset) {
+		return offset * CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH;
 	}
 	
 	private void doLightDirectionalLightEvaluateRadianceEmitted() {
@@ -1013,6 +1048,10 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	
 	private int doLightLDRImageLightGetResolutionY(final int offset) {
 		return (int)(this.lightLDRImageLightArray[offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_Y]);
+	}
+	
+	private int doLightLDRImageLightToOffset(final int offset) {
+		return this.lightLDRImageLightOffsetArray[offset];
 	}
 	
 	private void doLightLDRImageLightDistribution2FContinuousRemap(final int offset, final float u, final float v) {
@@ -1431,6 +1470,10 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		return saturateI(currentMinimum - 1, 0, length - 2);
 	}
 	
+	private int doLightPerezLightToOffset(final int offset) {
+		return this.lightPerezLightOffsetArray[offset];
+	}
+	
 	private void doLightPerezLightDistribution2FContinuousRemap(final int offset, final float u, final float v) {
 //		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
 		final boolean isUV = true;
@@ -1655,6 +1698,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		return this.lightPointLightArray[lightGetOffset() + CompiledLightCache.POINT_LIGHT_OFFSET_POSITION + 2];
 	}
 	
+	@SuppressWarnings("static-method")
+	private int doLightPointLightToOffset(final int offset) {
+		return offset * CompiledLightCache.POINT_LIGHT_LENGTH;
+	}
+	
 	private void doLightPointLightEvaluateRadianceEmitted() {
 		color3FLHSSet(0.0F, 0.0F, 0.0F);
 	}
@@ -1799,6 +1847,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	
 	private float doLightSpotLightGetPositionZ() {
 		return this.lightSpotLightArray[lightGetOffset() + CompiledLightCache.SPOT_LIGHT_OFFSET_POSITION + 2];
+	}
+	
+	@SuppressWarnings("static-method")
+	private int doLightSpotLightToOffset(final int offset) {
+		return offset * CompiledLightCache.SPOT_LIGHT_LENGTH;
 	}
 	
 	private void doLightSpotLightEvaluateRadianceEmitted() {

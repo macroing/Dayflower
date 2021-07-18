@@ -603,7 +603,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		final int light = super.lightIDAndOffsetArray[index];
 		final int lightID = (light >>> 16) & 0xFFFF;
-		final int lightOffset = light & 0xFFFF;
+		final int lightOffset = lightToOffset(lightID, light & 0xFFFF);
 		
 		lightSet(lightID, lightOffset);
 		

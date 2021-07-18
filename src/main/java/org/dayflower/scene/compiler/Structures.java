@@ -278,12 +278,11 @@ final class Structures {
 		return newStructureOffsets;
 	}
 	
-	public static int[] removeStructureIDAndOffset(final int[] structureIDsAndOffsets, final int structureID, final int structureOffset, final int structureLength) {
+	public static int[] removeStructureIDAndOffset(final int[] structureIDsAndOffsets, final int structureID, final int structureOffset) {
 		Objects.requireNonNull(structureIDsAndOffsets, "structureIDsAndOffsets == null");
 		
 		ParameterArguments.requireRange(structureID, 0, Integer.MAX_VALUE, "structureID");
 		ParameterArguments.requireRange(structureOffset, 0, Integer.MAX_VALUE, "structureOffset");
-		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
 		
 		final int structureIDAndOffset = pack(structureID, structureOffset);
 		final int index = Ints.indexOf(structureIDAndOffset, structureIDsAndOffsets);
@@ -303,7 +302,7 @@ final class Structures {
 			final int currentStructureOffset = currentStructureIDAndOffset[1];
 			
 			if(currentStructureID == structureID) {
-				newStructureIDsAndOffsets[i - 1] = pack(currentStructureID, currentStructureOffset - structureLength);
+				newStructureIDsAndOffsets[i - 1] = pack(currentStructureID, currentStructureOffset - 1);
 			} else {
 				newStructureIDsAndOffsets[i - 1] = pack(currentStructureID, currentStructureOffset);
 			}

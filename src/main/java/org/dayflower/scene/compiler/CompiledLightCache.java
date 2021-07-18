@@ -293,6 +293,62 @@ public final class CompiledLightCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Removes {@code diffuseAreaLight} from this {@code CompiledLightCache}, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code diffuseAreaLight} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code diffuseAreaLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code diffuseAreaLight.length} is not equal to {@code CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param diffuseAreaLight a {@link DiffuseAreaLight} instance in compiled form
+	 * @return {@code true} if, and only if, {@code diffuseAreaLight} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code diffuseAreaLight.length} is not equal to {@code CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code diffuseAreaLight} is {@code null}
+	 */
+	public boolean removeDiffuseAreaLight(final float[] diffuseAreaLight) {
+		final int absoluteOffset = getDiffuseAreaLightOffsetAbsolute(diffuseAreaLight);
+		final int relativeOffset = getDiffuseAreaLightOffsetRelative(diffuseAreaLight);
+		
+		if(absoluteOffset != -1 && relativeOffset != -1) {
+			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), DiffuseAreaLight.ID, relativeOffset));
+			setDiffuseAreaLights(Structures.removeStructure(getDiffuseAreaLights(), absoluteOffset, DIFFUSE_AREA_LIGHT_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code directionalLight} from this {@code CompiledLightCache}, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code directionalLight} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code directionalLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code directionalLight.length} is not equal to {@code CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param directionalLight a {@link DirectionalLight} instance in compiled form
+	 * @return {@code true} if, and only if, {@code directionalLight} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code directionalLight.length} is not equal to {@code CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code directionalLight} is {@code null}
+	 */
+	public boolean removeDirectionalLight(final float[] directionalLight) {
+		final int absoluteOffset = getDirectionalLightOffsetAbsolute(directionalLight);
+		final int relativeOffset = getDirectionalLightOffsetRelative(directionalLight);
+		
+		if(absoluteOffset != -1 && relativeOffset != -1) {
+			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), DirectionalLight.ID, relativeOffset));
+			setDirectionalLights(Structures.removeStructure(getDirectionalLights(), absoluteOffset, DIRECTIONAL_LIGHT_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Removes {@code lDRImageLight} from this {@code CompiledLightCache}, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code lDRImageLight} was removed, {@code false} otherwise.
@@ -308,9 +364,10 @@ public final class CompiledLightCache {
 	 */
 	public boolean removeLDRImageLight(final float[] lDRImageLight) {
 		final int absoluteOffset = getLDRImageLightOffsetAbsolute(lDRImageLight);
+		final int relativeOffset = getLDRImageLightOffsetRelative(lDRImageLight);
 		
-		if(absoluteOffset != -1) {
-			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, absoluteOffset, lDRImageLight.length));
+		if(absoluteOffset != -1 && relativeOffset != -1) {
+			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, relativeOffset));
 			setLDRImageLightOffsets(Structures.removeStructureOffset(getLDRImageLightOffsets(), absoluteOffset, lDRImageLight.length));
 			setLDRImageLights(Structures.removeStructure(getLDRImageLights(), absoluteOffset, lDRImageLight.length));
 			
@@ -336,11 +393,68 @@ public final class CompiledLightCache {
 	 */
 	public boolean removePerezLight(final float[] perezLight) {
 		final int absoluteOffset = getPerezLightOffsetAbsolute(perezLight);
+		final int relativeOffset = getPerezLightOffsetRelative(perezLight);
 		
-		if(absoluteOffset != -1) {
-			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), PerezLight.ID, absoluteOffset, perezLight.length));
+		if(absoluteOffset != -1 && relativeOffset != -1) {
+			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), PerezLight.ID, relativeOffset));
 			setPerezLightOffsets(Structures.removeStructureOffset(getPerezLightOffsets(), absoluteOffset, perezLight.length));
 			setPerezLights(Structures.removeStructure(getPerezLights(), absoluteOffset, perezLight.length));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code pointLight} from this {@code CompiledLightCache}, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code pointLight} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code pointLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code pointLight.length} is not equal to {@code CompiledLightCache.POINT_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param pointLight a {@link PointLight} instance in compiled form
+	 * @return {@code true} if, and only if, {@code pointLight} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code pointLight.length} is not equal to {@code CompiledLightCache.POINT_LIGHT_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code pointLight} is {@code null}
+	 */
+	public boolean removePointLight(final float[] pointLight) {
+		final int absoluteOffset = getPointLightOffsetAbsolute(pointLight);
+		final int relativeOffset = getPointLightOffsetRelative(pointLight);
+		
+		if(absoluteOffset != -1 && relativeOffset != -1) {
+			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), PointLight.ID, relativeOffset));
+			setPointLights(Structures.removeStructure(getPointLights(), absoluteOffset, POINT_LIGHT_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code spotLight} from this {@code CompiledLightCache}, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code spotLight} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code spotLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code spotLight.length} is not equal to {@code CompiledLightCache.SPOT_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param spotLight a {@link SpotLight} instance in compiled form
+	 * @return {@code true} if, and only if, {@code spotLight} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code spotLight.length} is not equal to {@code CompiledLightCache.SPOT_LIGHT_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code spotLight} is {@code null}
+	 */
+	public boolean removeSpotLight(final float[] spotLight) {
+		final int absoluteOffset = getSpotLightOffsetAbsolute(spotLight);
+		final int relativeOffset = getSpotLightOffsetRelative(spotLight);
+		
+		if(absoluteOffset != -1 && relativeOffset != -1) {
+			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), SpotLight.ID, relativeOffset));
+			setSpotLights(Structures.removeStructure(getSpotLights(), absoluteOffset, SPOT_LIGHT_LENGTH));
 			
 			return true;
 		}
@@ -403,6 +517,64 @@ public final class CompiledLightCache {
 	}
 	
 	/**
+	 * Adds {@code diffuseAreaLight} to this {@code CompiledLightCache} instance, if absent.
+	 * <p>
+	 * Returns the absolute offset to {@code diffuseAreaLight}.
+	 * <p>
+	 * If {@code diffuseAreaLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code diffuseAreaLight.length} is not equal to {@code CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param diffuseAreaLight a {@link DiffuseAreaLight} instance in compiled form
+	 * @return the absolute offset to {@code diffuseAreaLight}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code diffuseAreaLight.length} is not equal to {@code CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code diffuseAreaLight} is {@code null}
+	 */
+	public int addDiffuseAreaLight(final float[] diffuseAreaLight) {
+		final int absoluteOffsetOld = getDiffuseAreaLightOffsetAbsolute(diffuseAreaLight);
+		final int absoluteOffsetNew = this.diffuseAreaLights.length;
+		final int relativeOffsetNew = getDiffuseAreaLightCount();
+		
+		if(absoluteOffsetOld != -1) {
+			return absoluteOffsetOld;
+		}
+		
+		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), DiffuseAreaLight.ID, relativeOffsetNew));
+		setDiffuseAreaLights(Structures.addStructure(getDiffuseAreaLights(), diffuseAreaLight));
+		
+		return absoluteOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code directionalLight} to this {@code CompiledLightCache} instance, if absent.
+	 * <p>
+	 * Returns the absolute offset to {@code directionalLight}.
+	 * <p>
+	 * If {@code directionalLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code directionalLight.length} is not equal to {@code CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param directionalLight a {@link DirectionalLight} instance in compiled form
+	 * @return the absolute offset to {@code directionalLight}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code directionalLight.length} is not equal to {@code CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code directionalLight} is {@code null}
+	 */
+	public int addDirectionalLight(final float[] directionalLight) {
+		final int absoluteOffsetOld = getDirectionalLightOffsetAbsolute(directionalLight);
+		final int absoluteOffsetNew = this.directionalLights.length;
+		final int relativeOffsetNew = getDirectionalLightCount();
+		
+		if(absoluteOffsetOld != -1) {
+			return absoluteOffsetOld;
+		}
+		
+		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), DirectionalLight.ID, relativeOffsetNew));
+		setDirectionalLights(Structures.addStructure(getDirectionalLights(), directionalLight));
+		
+		return absoluteOffsetNew;
+	}
+	
+	/**
 	 * Adds {@code lDRImageLight} to this {@code CompiledLightCache} instance, if absent.
 	 * <p>
 	 * Returns the absolute offset to {@code lDRImageLight}.
@@ -419,12 +591,13 @@ public final class CompiledLightCache {
 	public int addLDRImageLight(final float[] lDRImageLight) {
 		final int absoluteOffsetOld = getLDRImageLightOffsetAbsolute(lDRImageLight);
 		final int absoluteOffsetNew = this.lDRImageLights.length;
+		final int relativeOffsetNew = this.lDRImageLightOffsets.length;
 		
 		if(absoluteOffsetOld != -1) {
 			return absoluteOffsetOld;
 		}
 		
-		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, absoluteOffsetNew));
+		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, relativeOffsetNew));
 		setLDRImageLightOffsets(Structures.addStructureOffset(getLDRImageLightOffsets(), absoluteOffsetNew));
 		setLDRImageLights(Structures.addStructure(getLDRImageLights(), lDRImageLight));
 		
@@ -448,14 +621,73 @@ public final class CompiledLightCache {
 	public int addPerezLight(final float[] perezLight) {
 		final int absoluteOffsetOld = getPerezLightOffsetAbsolute(perezLight);
 		final int absoluteOffsetNew = this.perezLights.length;
+		final int relativeOffsetNew = this.perezLightOffsets.length;
 		
 		if(absoluteOffsetOld != -1) {
 			return absoluteOffsetOld;
 		}
 		
-		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PerezLight.ID, absoluteOffsetNew));
+		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PerezLight.ID, relativeOffsetNew));
 		setPerezLightOffsets(Structures.addStructureOffset(getPerezLightOffsets(), absoluteOffsetNew));
 		setPerezLights(Structures.addStructure(getPerezLights(), perezLight));
+		
+		return absoluteOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code pointLight} to this {@code CompiledLightCache} instance, if absent.
+	 * <p>
+	 * Returns the absolute offset to {@code pointLight}.
+	 * <p>
+	 * If {@code pointLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code pointLight.length} is not equal to {@code CompiledLightCache.POINT_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param pointLight a {@link PointLight} instance in compiled form
+	 * @return the absolute offset to {@code pointLight}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code pointLight.length} is not equal to {@code CompiledLightCache.POINT_LIGHT_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code pointLight} is {@code null}
+	 */
+	public int addPointLight(final float[] pointLight) {
+		final int absoluteOffsetOld = getPointLightOffsetAbsolute(pointLight);
+		final int absoluteOffsetNew = this.pointLights.length;
+		final int relativeOffsetNew = getPointLightCount();
+		
+		if(absoluteOffsetOld != -1) {
+			return absoluteOffsetOld;
+		}
+		
+		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PointLight.ID, relativeOffsetNew));
+		setPointLights(Structures.addStructure(getPointLights(), pointLight));
+		
+		return absoluteOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code spotLight} to this {@code CompiledLightCache} instance, if absent.
+	 * <p>
+	 * Returns the absolute offset to {@code spotLight}.
+	 * <p>
+	 * If {@code spotLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code spotLight.length} is not equal to {@code CompiledLightCache.SPOT_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param spotLight a {@link SpotLight} instance in compiled form
+	 * @return the absolute offset to {@code spotLight}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code spotLight.length} is not equal to {@code CompiledLightCache.SPOT_LIGHT_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code spotLight} is {@code null}
+	 */
+	public int addSpotLight(final float[] spotLight) {
+		final int absoluteOffsetOld = getSpotLightOffsetAbsolute(spotLight);
+		final int absoluteOffsetNew = this.spotLights.length;
+		final int relativeOffsetNew = getSpotLightCount();
+		
+		if(absoluteOffsetOld != -1) {
+			return absoluteOffsetOld;
+		}
+		
+		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), SpotLight.ID, relativeOffsetNew));
+		setSpotLights(Structures.addStructure(getSpotLights(), spotLight));
 		
 		return absoluteOffsetNew;
 	}
@@ -1494,22 +1726,19 @@ public final class CompiledLightCache {
 	/**
 	 * Returns an {@code int[]} with the offsets for all {@link LDRImageLight} instances in {@code lDRImageLights} in compiled form.
 	 * <p>
-	 * If either {@code lDRImageLights}, at least one of its elements or {@code lDRImageLightOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param lDRImageLights a {@code List} of {@code LDRImageLight} instances
-	 * @param lDRImageLightOffsetFunction a {@code ToIntFunction} that returns the {@code LDRImageLight} offset
 	 * @return an {@code int[]} with the offsets for all {@code LDRImageLight} instances in {@code lDRImageLights} in compiled form
-	 * @throws NullPointerException thrown if, and only if, either {@code lDRImageLights}, at least one of its elements or {@code lDRImageLightOffsetFunction} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLights} or at least one of its elements are {@code null}
 	 */
-	public static int[] toLDRImageLightOffsets(final List<LDRImageLight> lDRImageLights, final ToIntFunction<LDRImageLight> lDRImageLightOffsetFunction) {
+	public static int[] toLDRImageLightOffsets(final List<LDRImageLight> lDRImageLights) {
 		ParameterArguments.requireNonNullList(lDRImageLights, "lDRImageLights");
-		
-		Objects.requireNonNull(lDRImageLightOffsetFunction, "lDRImageLightOffsetFunction == null");
 		
 		final int[] lDRImageLightOffsets = new int[lDRImageLights.size()];
 		
-		for(int i = 0; i < lDRImageLights.size(); i++) {
-			lDRImageLightOffsets[i] = lDRImageLightOffsetFunction.applyAsInt(lDRImageLights.get(i));
+		for(int i = 0, j = 0; i < lDRImageLights.size(); j += getLDRImageLightLength(lDRImageLights.get(i)), i++) {
+			lDRImageLightOffsets[i] = j;
 		}
 		
 		return lDRImageLightOffsets;
@@ -1544,22 +1773,19 @@ public final class CompiledLightCache {
 	/**
 	 * Returns an {@code int[]} with the offsets for all {@link PerezLight} instances in {@code perezLights} in compiled form.
 	 * <p>
-	 * If either {@code perezLights}, at least one of its elements or {@code perezLightOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code perezLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param perezLights a {@code List} of {@code PerezLight} instances
-	 * @param perezLightOffsetFunction a {@code ToIntFunction} that returns the {@code PerezLight} offset
 	 * @return an {@code int[]} with the offsets for all {@code PerezLight} instances in {@code perezLights} in compiled form
-	 * @throws NullPointerException thrown if, and only if, either {@code perezLights}, at least one of its elements or {@code perezLightOffsetFunction} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code perezLights} or at least one of its elements are {@code null}
 	 */
-	public static int[] toPerezLightOffsets(final List<PerezLight> perezLights, final ToIntFunction<PerezLight> perezLightOffsetFunction) {
+	public static int[] toPerezLightOffsets(final List<PerezLight> perezLights) {
 		ParameterArguments.requireNonNullList(perezLights, "perezLights");
-		
-		Objects.requireNonNull(perezLightOffsetFunction, "perezLightOffsetFunction == null");
 		
 		final int[] perezLightOffsets = new int[perezLights.size()];
 		
-		for(int i = 0; i < perezLights.size(); i++) {
-			perezLightOffsets[i] = perezLightOffsetFunction.applyAsInt(perezLights.get(i));
+		for(int i = 0, j = 0; i < perezLights.size(); j += getPerezLightLength(perezLights.get(i)), i++) {
+			perezLightOffsets[i] = j;
 		}
 		
 		return perezLightOffsets;

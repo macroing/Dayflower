@@ -246,35 +246,35 @@ final class TextureCache {
 		
 //		Create offset mappings for all distinct BlendTexture instances:
 		this.distinctToOffsetsBlendTextures.clear();
-		this.distinctToOffsetsBlendTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBlendTextures, 1));
+		this.distinctToOffsetsBlendTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBlendTextures));
 		
 //		Create offset mappings for all distinct BullseyeTexture instances:
 		this.distinctToOffsetsBullseyeTextures.clear();
-		this.distinctToOffsetsBullseyeTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBullseyeTextures, 1));
+		this.distinctToOffsetsBullseyeTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBullseyeTextures));
 		
 //		Create offset mappings for all distinct CheckerboardTexture instances:
 		this.distinctToOffsetsCheckerboardTextures.clear();
-		this.distinctToOffsetsCheckerboardTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCheckerboardTextures, 1));
+		this.distinctToOffsetsCheckerboardTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCheckerboardTextures));
 		
 //		Create offset mappings for all distinct ConstantTexture instances:
 		this.distinctToOffsetsConstantTextures.clear();
-		this.distinctToOffsetsConstantTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctConstantTextures, 1));
+		this.distinctToOffsetsConstantTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctConstantTextures));
 		
 //		Create offset mappings for all distinct LDRImageTexture instances:
 		this.distinctToOffsetsLDRImageTextures.clear();
-		this.distinctToOffsetsLDRImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageTextures, 1));
+		this.distinctToOffsetsLDRImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageTextures));
 		
 //		Create offset mappings for all distinct MarbleTexture instances:
 		this.distinctToOffsetsMarbleTextures.clear();
-		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures, 1));
+		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures));
 		
 //		Create offset mappings for all distinct PolkaDotTexture instances:
 		this.distinctToOffsetsPolkaDotTextures.clear();
-		this.distinctToOffsetsPolkaDotTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPolkaDotTextures, 1));
+		this.distinctToOffsetsPolkaDotTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPolkaDotTextures));
 		
 //		Create offset mappings for all distinct SimplexFractionalBrownianMotionTexture instances:
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
-		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSimplexFractionalBrownianMotionTextures, 1));
+		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSimplexFractionalBrownianMotionTextures));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

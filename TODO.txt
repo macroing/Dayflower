@@ -12,7 +12,6 @@ Renderer GPU API:
 	* ADD:		Add support for ConstructiveSolidGeometry3F.
 	* ADD:		Add support for the Ray Tracer algorithm.
 	* ADD:		Add support for the Scene-based BVH structure.
-	* CHANGE:	Change the offsets for Light instances from absolute to relative. Similar to how Texture instances are handled.
 	* FIX:		Fix the bug that resets the image occasionally using the Ambient Occlusion and Path Tracer algorithms.
 	* FIX:		Fix rendering of transmissive materials. Mainly in the Path Tracer.
 
@@ -23,7 +22,6 @@ Scene BSSRDF API:
 Scene Compiler API:
 
 	* ADD:		Add support for updating a CompiledScene instance on-the-fly.
-	* CHANGE:	Change the offsets for Light instances from absolute to relative. Similar to how Texture instances are handled.
 
 Scene Light API:
 

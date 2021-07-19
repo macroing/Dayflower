@@ -300,6 +300,58 @@ public final class CompiledTextureCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Removes {@code blendTexture} from this {@code CompiledTextureCache}, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code blendTexture} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param blendTexture a {@link BlendTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code blendTexture} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code blendTexture} is {@code null}
+	 */
+	public boolean removeBlendTexture(final float[] blendTexture) {
+		final int absoluteOffset = getBlendTextureOffsetAbsolute(blendTexture);
+		
+		if(absoluteOffset != -1) {
+			setBlendTextures(Structures.removeStructure(getBlendTextures(), absoluteOffset, BLEND_TEXTURE_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code bullseyeTexture} from this {@code CompiledTextureCache}, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code bullseyeTexture} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code bullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param bullseyeTexture a {@link BullseyeTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code bullseyeTexture} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTexture} is {@code null}
+	 */
+	public boolean removeBullseyeTexture(final float[] bullseyeTexture) {
+		final int absoluteOffset = getBullseyeTextureOffsetAbsolute(bullseyeTexture);
+		
+		if(absoluteOffset != -1) {
+			setBullseyeTextures(Structures.removeStructure(getBullseyeTextures(), absoluteOffset, BULLSEYE_TEXTURE_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link BlendTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code BlendTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
@@ -372,6 +424,60 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
+	 * Adds {@code blendTexture} to this {@code CompiledTextureCache} instance, if absent.
+	 * <p>
+	 * Returns the absolute offset to {@code blendTexture}.
+	 * <p>
+	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param blendTexture a {@link BlendTexture} instance in compiled form
+	 * @return the absolute offset to {@code blendTexture}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code blendTexture} is {@code null}
+	 */
+	public int addBlendTexture(final float[] blendTexture) {
+		final int absoluteOffsetOld = getBlendTextureOffsetAbsolute(blendTexture);
+		final int absoluteOffsetNew = this.blendTextures.length;
+		
+		if(absoluteOffsetOld != -1) {
+			return absoluteOffsetOld;
+		}
+		
+		setBlendTextures(Structures.addStructure(getBlendTextures(), blendTexture));
+		
+		return absoluteOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code bullseyeTexture} to this {@code CompiledTextureCache} instance, if absent.
+	 * <p>
+	 * Returns the absolute offset to {@code bullseyeTexture}.
+	 * <p>
+	 * If {@code bullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param bullseyeTexture a {@link BullseyeTexture} instance in compiled form
+	 * @return the absolute offset to {@code bullseyeTexture}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTexture} is {@code null}
+	 */
+	public int addBullseyeTexture(final float[] bullseyeTexture) {
+		final int absoluteOffsetOld = getBullseyeTextureOffsetAbsolute(bullseyeTexture);
+		final int absoluteOffsetNew = this.bullseyeTextures.length;
+		
+		if(absoluteOffsetOld != -1) {
+			return absoluteOffsetOld;
+		}
+		
+		setBullseyeTextures(Structures.addStructure(getBullseyeTextures(), bullseyeTexture));
+		
+		return absoluteOffsetNew;
+	}
+	
+	/**
 	 * Returns the {@link BlendTexture} count in this {@code CompiledTextureCache} instance.
 	 * 
 	 * @return the {@code BlendTexture} count in this {@code CompiledTextureCache} instance
@@ -384,26 +490,40 @@ public final class CompiledTextureCache {
 	 * Returns the absolute offset of {@code blendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param blendTexture a {@link BlendTexture} instance in compiled form
 	 * @return the absolute offset of {@code blendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code blendTexture} is {@code null}
 	 */
 	public int getBlendTextureOffsetAbsolute(final float[] blendTexture) {
-		return Structures.getStructureOffsetAbsolute(this.blendTextures, Objects.requireNonNull(blendTexture, "blendTexture == null"), getBlendTextureCount(), BLEND_TEXTURE_LENGTH);
+		Objects.requireNonNull(blendTexture, "blendTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(blendTexture, BLEND_TEXTURE_LENGTH, "blendTexture");
+		
+		return Structures.getStructureOffsetAbsolute(this.blendTextures, blendTexture, getBlendTextureCount(), BLEND_TEXTURE_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code blendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param blendTexture a {@link BlendTexture} instance in compiled form
 	 * @return the relative offset of {@code blendTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code blendTexture} is {@code null}
 	 */
 	public int getBlendTextureOffsetRelative(final float[] blendTexture) {
-		return Structures.getStructureOffsetRelative(this.blendTextures, Objects.requireNonNull(blendTexture, "blendTexture == null"), getBlendTextureCount(), BLEND_TEXTURE_LENGTH);
+		Objects.requireNonNull(blendTexture, "blendTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(blendTexture, BLEND_TEXTURE_LENGTH, "blendTexture");
+		
+		return Structures.getStructureOffsetRelative(this.blendTextures, blendTexture, getBlendTextureCount(), BLEND_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -419,26 +539,40 @@ public final class CompiledTextureCache {
 	 * Returns the absolute offset of {@code bullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code bullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param bullseyeTexture a {@link BullseyeTexture} instance in compiled form
 	 * @return the absolute offset of {@code bullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTexture} is {@code null}
 	 */
 	public int getBullseyeTextureOffsetAbsolute(final float[] bullseyeTexture) {
-		return Structures.getStructureOffsetAbsolute(this.bullseyeTextures, Objects.requireNonNull(bullseyeTexture, "bullseyeTexture == null"), getBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
+		Objects.requireNonNull(bullseyeTexture, "bullseyeTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(bullseyeTexture, BULLSEYE_TEXTURE_LENGTH, "bullseyeTexture");
+		
+		return Structures.getStructureOffsetAbsolute(this.bullseyeTextures, bullseyeTexture, getBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code bullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code bullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param bullseyeTexture a {@link BullseyeTexture} instance in compiled form
 	 * @return the relative offset of {@code bullseyeTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTexture} is {@code null}
 	 */
 	public int getBullseyeTextureOffsetRelative(final float[] bullseyeTexture) {
-		return Structures.getStructureOffsetRelative(this.bullseyeTextures, Objects.requireNonNull(bullseyeTexture, "bullseyeTexture == null"), getBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
+		Objects.requireNonNull(bullseyeTexture, "bullseyeTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(bullseyeTexture, BULLSEYE_TEXTURE_LENGTH, "bullseyeTexture");
+		
+		return Structures.getStructureOffsetRelative(this.bullseyeTextures, bullseyeTexture, getBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -678,24 +812,38 @@ public final class CompiledTextureCache {
 	 * Sets all {@link BlendTexture} instances in compiled form to {@code blendTextures}.
 	 * <p>
 	 * If {@code blendTextures} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code blendTextures.length % CompiledTextureCache.BLEND_TEXTURE_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param blendTextures the {@code BlendTexture} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code blendTextures.length % CompiledTextureCache.BLEND_TEXTURE_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code blendTextures} is {@code null}
 	 */
 	public void setBlendTextures(final float[] blendTextures) {
-		this.blendTextures = Objects.requireNonNull(blendTextures, "blendTextures == null");
+		Objects.requireNonNull(blendTextures, "blendTextures == null");
+		
+		ParameterArguments.requireExact(blendTextures.length % BLEND_TEXTURE_LENGTH, 0, "blendTextures.length % CompiledTextureCache.BLEND_TEXTURE_LENGTH");
+		
+		this.blendTextures = blendTextures;
 	}
 	
 	/**
 	 * Sets all {@link BullseyeTexture} instances in compiled form to {@code bullseyeTextures}.
 	 * <p>
 	 * If {@code bullseyeTextures} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeTextures.length % CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param bullseyeTextures the {@code BullseyeTexture} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeTextures.length % CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTextures} is {@code null}
 	 */
 	public void setBullseyeTextures(final float[] bullseyeTextures) {
-		this.bullseyeTextures = Objects.requireNonNull(bullseyeTextures, "bullseyeTextures == null");
+		Objects.requireNonNull(bullseyeTextures, "bullseyeTextures == null");
+		
+		ParameterArguments.requireExact(bullseyeTextures.length % BULLSEYE_TEXTURE_LENGTH, 0, "bullseyeTextures.length % CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH");
+		
+		this.bullseyeTextures = bullseyeTextures;
 	}
 	
 	/**

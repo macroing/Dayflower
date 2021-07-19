@@ -1,6 +1,10 @@
 2021-07-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods addBlendTexture(float[]) and removeBlendTexture(float[]) to the CompiledTextureCache class.
+	* ADD:		Add the methods addBullseyeTexture(float[]) and removeBullseyeTexture(float[]) to the CompiledTextureCache class.
 	* ADD:		Add the methods getLDRImageTextureCount(), getLDRImageTextureOffsetAbsolute(float[]) and getLDRImageTextureOffsetRelative(float[]) to the CompiledTextureCache class.
+	* CHANGE:	Add additional parameter validation to the methods getBlendTextureOffsetAbsolute(float[]), getBlendTextureOffsetRelative(float[]) and setBlendTextures(float[]) in the CompiledTextureCache class.
+	* CHANGE:	Add additional parameter validation to the methods getBullseyeTextureOffsetAbsolute(float[]), getBullseyeTextureOffsetRelative(float[]) and setBullseyeTextures(float[]) in the CompiledTextureCache class.
 
 2021-07-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

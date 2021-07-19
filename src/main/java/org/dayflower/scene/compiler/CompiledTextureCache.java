@@ -512,6 +512,55 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
+	 * Returns the {@link LDRImageTexture} count in this {@code CompiledTextureCache} instance.
+	 * 
+	 * @return the {@code LDRImageTexture} count in this {@code CompiledTextureCache} instance
+	 */
+	public int getLDRImageTextureCount() {
+		return Structures.getStructureCount(this.lDRImageTextures, 8, this.lDRImageTextureOffsets.length);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code lDRImageTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code lDRImageTexture.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param lDRImageTexture an {@link LDRImageTexture} instance in compiled form
+	 * @return the absolute offset of {@code lDRImageTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageTexture.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
+	 */
+	public int getLDRImageTextureOffsetAbsolute(final float[] lDRImageTexture) {
+		Objects.requireNonNull(lDRImageTexture, "lDRImageTexture == null");
+		
+		ParameterArguments.requireExact(lDRImageTexture.length % 8, 0, "lDRImageTexture.length % 8");
+		
+		return Structures.getStructureOffsetAbsolute(this.lDRImageTextures, lDRImageTexture, this.lDRImageTextureOffsets);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code lDRImageTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code lDRImageTexture.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param lDRImageTexture an {@link LDRImageTexture} instance in compiled form
+	 * @return the relative offset of {@code lDRImageTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageTexture.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
+	 */
+	public int getLDRImageTextureOffsetRelative(final float[] lDRImageTexture) {
+		Objects.requireNonNull(lDRImageTexture, "lDRImageTexture == null");
+		
+		ParameterArguments.requireExact(lDRImageTexture.length % 8, 0, "lDRImageTexture.length % 8");
+		
+		return Structures.getStructureOffsetRelative(this.lDRImageTextures, lDRImageTexture, this.lDRImageTextureOffsets);
+	}
+	
+	/**
 	 * Returns the {@link MarbleTexture} count in this {@code CompiledTextureCache} instance.
 	 * 
 	 * @return the {@code MarbleTexture} count in this {@code CompiledTextureCache} instance

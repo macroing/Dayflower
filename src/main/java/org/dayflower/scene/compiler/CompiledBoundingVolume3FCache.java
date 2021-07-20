@@ -83,7 +83,7 @@ public final class CompiledBoundingVolume3FCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Removes {@code axisAlignedBoundingBox3F} from this {@code CompiledBoundingVolume3FCache}, if present.
+	 * Removes {@code axisAlignedBoundingBox3F} from this {@code CompiledBoundingVolume3FCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code axisAlignedBoundingBox3F} was removed, {@code false} otherwise.
 	 * <p>
@@ -109,7 +109,7 @@ public final class CompiledBoundingVolume3FCache {
 	}
 	
 	/**
-	 * Removes {@code boundingSphere3F} from this {@code CompiledBoundingVolume3FCache}, if present.
+	 * Removes {@code boundingSphere3F} from this {@code CompiledBoundingVolume3FCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code boundingSphere3F} was removed, {@code false} otherwise.
 	 * <p>

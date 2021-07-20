@@ -300,7 +300,7 @@ public final class CompiledTextureCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Removes {@code blendTexture} from this {@code CompiledTextureCache}, if present.
+	 * Removes {@code blendTexture} from this {@code CompiledTextureCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code blendTexture} was removed, {@code false} otherwise.
 	 * <p>
@@ -326,7 +326,7 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
-	 * Removes {@code bullseyeTexture} from this {@code CompiledTextureCache}, if present.
+	 * Removes {@code bullseyeTexture} from this {@code CompiledTextureCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code bullseyeTexture} was removed, {@code false} otherwise.
 	 * <p>
@@ -344,6 +344,163 @@ public final class CompiledTextureCache {
 		
 		if(absoluteOffset != -1) {
 			setBullseyeTextures(Structures.removeStructure(getBullseyeTextures(), absoluteOffset, BULLSEYE_TEXTURE_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code checkerboardTexture} from this {@code CompiledTextureCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code checkerboardTexture} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code checkerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardTexture.length} is not equal to {@code CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param checkerboardTexture a {@link CheckerboardTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code checkerboardTexture} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardTexture.length} is not equal to {@code CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTexture} is {@code null}
+	 */
+	public boolean removeCheckerboardTexture(final float[] checkerboardTexture) {
+		final int absoluteOffset = getCheckerboardTextureOffsetAbsolute(checkerboardTexture);
+		
+		if(absoluteOffset != -1) {
+			setCheckerboardTextures(Structures.removeStructure(getCheckerboardTextures(), absoluteOffset, CHECKERBOARD_TEXTURE_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code constantTexture} from this {@code CompiledTextureCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code constantTexture} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code constantTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code constantTexture.length} is not equal to {@code CompiledTextureCache.CONSTANT_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param constantTexture a {@link ConstantTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code constantTexture} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code constantTexture.length} is not equal to {@code CompiledTextureCache.CONSTANT_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code constantTexture} is {@code null}
+	 */
+	public boolean removeConstantTexture(final float[] constantTexture) {
+		final int absoluteOffset = getConstantTextureOffsetAbsolute(constantTexture);
+		
+		if(absoluteOffset != -1) {
+			setConstantTextures(Structures.removeStructure(getConstantTextures(), absoluteOffset, CONSTANT_TEXTURE_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code lDRImageTexture} from this {@code CompiledTextureCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code lDRImageTexture} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code lDRImageTexture.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param lDRImageTexture an {@link LDRImageTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code lDRImageTexture} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageTexture.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
+	 */
+	public boolean removeLDRImageTexture(final float[] lDRImageTexture) {
+		final int absoluteOffset = getLDRImageTextureOffsetAbsolute(lDRImageTexture);
+		
+		if(absoluteOffset != -1) {
+			setLDRImageTextureOffsets(Structures.removeStructureOffset(getLDRImageTextureOffsets(), absoluteOffset, lDRImageTexture.length));
+			setLDRImageTextures(Structures.removeStructure(getLDRImageTextures(), absoluteOffset, lDRImageTexture.length));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code marbleTexture} from this {@code CompiledTextureCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code marbleTexture} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code marbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code marbleTexture.length} is not equal to {@code CompiledTextureCache.MARBLE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param marbleTexture a {@link MarbleTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code marbleTexture} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code marbleTexture.length} is not equal to {@code CompiledTextureCache.MARBLE_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code marbleTexture} is {@code null}
+	 */
+	public boolean removeMarbleTexture(final float[] marbleTexture) {
+		final int absoluteOffset = getMarbleTextureOffsetAbsolute(marbleTexture);
+		
+		if(absoluteOffset != -1) {
+			setMarbleTextures(Structures.removeStructure(getMarbleTextures(), absoluteOffset, MARBLE_TEXTURE_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code polkaDotTexture} from this {@code CompiledTextureCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code polkaDotTexture} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code polkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotTexture.length} is not equal to {@code CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polkaDotTexture a {@link PolkaDotTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code polkaDotTexture} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotTexture.length} is not equal to {@code CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTexture} is {@code null}
+	 */
+	public boolean removePolkaDotTexture(final float[] polkaDotTexture) {
+		final int absoluteOffset = getPolkaDotTextureOffsetAbsolute(polkaDotTexture);
+		
+		if(absoluteOffset != -1) {
+			setPolkaDotTextures(Structures.removeStructure(getPolkaDotTextures(), absoluteOffset, POLKA_DOT_TEXTURE_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code simplexFractionalBrownianMotionTexture} from this {@code CompiledTextureCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code simplexFractionalBrownianMotionTexture} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code simplexFractionalBrownianMotionTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code simplexFractionalBrownianMotionTexture.length} is not equal to {@code CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param simplexFractionalBrownianMotionTexture a {@link SimplexFractionalBrownianMotionTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code simplexFractionalBrownianMotionTexture} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture.length} is not equal to {@code CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture} is {@code null}
+	 */
+	public boolean removeSimplexFractionalBrownianMotionTexture(final float[] simplexFractionalBrownianMotionTexture) {
+		final int absoluteOffset = getSimplexFractionalBrownianMotionTextureOffsetAbsolute(simplexFractionalBrownianMotionTexture);
+		
+		if(absoluteOffset != -1) {
+			setSimplexFractionalBrownianMotionTextures(Structures.removeStructure(getSimplexFractionalBrownianMotionTextures(), absoluteOffset, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH));
 			
 			return true;
 		}
@@ -426,55 +583,219 @@ public final class CompiledTextureCache {
 	/**
 	 * Adds {@code blendTexture} to this {@code CompiledTextureCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code blendTexture}.
+	 * Returns the relative offset to {@code blendTexture}.
 	 * <p>
 	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param blendTexture a {@link BlendTexture} instance in compiled form
-	 * @return the absolute offset to {@code blendTexture}
+	 * @return the relative offset to {@code blendTexture}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code blendTexture.length} is not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code blendTexture} is {@code null}
 	 */
 	public int addBlendTexture(final float[] blendTexture) {
-		final int absoluteOffsetOld = getBlendTextureOffsetAbsolute(blendTexture);
-		final int absoluteOffsetNew = this.blendTextures.length;
+		final int relativeOffsetOld = getBlendTextureOffsetRelative(blendTexture);
+		final int relativeOffsetNew = getBlendTextureCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setBlendTextures(Structures.addStructure(getBlendTextures(), blendTexture));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
 	}
 	
 	/**
 	 * Adds {@code bullseyeTexture} to this {@code CompiledTextureCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code bullseyeTexture}.
+	 * Returns the relative offset to {@code bullseyeTexture}.
 	 * <p>
 	 * If {@code bullseyeTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param bullseyeTexture a {@link BullseyeTexture} instance in compiled form
-	 * @return the absolute offset to {@code bullseyeTexture}
+	 * @return the relative offset to {@code bullseyeTexture}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeTexture.length} is not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeTexture} is {@code null}
 	 */
 	public int addBullseyeTexture(final float[] bullseyeTexture) {
-		final int absoluteOffsetOld = getBullseyeTextureOffsetAbsolute(bullseyeTexture);
-		final int absoluteOffsetNew = this.bullseyeTextures.length;
+		final int relativeOffsetOld = getBullseyeTextureOffsetRelative(bullseyeTexture);
+		final int relativeOffsetNew = getBullseyeTextureCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setBullseyeTextures(Structures.addStructure(getBullseyeTextures(), bullseyeTexture));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code checkerboardTexture} to this {@code CompiledTextureCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code checkerboardTexture}.
+	 * <p>
+	 * If {@code checkerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardTexture.length} is not equal to {@code CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param checkerboardTexture a {@link CheckerboardTexture} instance in compiled form
+	 * @return the relative offset to {@code checkerboardTexture}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardTexture.length} is not equal to {@code CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTexture} is {@code null}
+	 */
+	public int addCheckerboardTexture(final float[] checkerboardTexture) {
+		final int relativeOffsetOld = getCheckerboardTextureOffsetRelative(checkerboardTexture);
+		final int relativeOffsetNew = getCheckerboardTextureCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setCheckerboardTextures(Structures.addStructure(getCheckerboardTextures(), checkerboardTexture));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code constantTexture} to this {@code CompiledTextureCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code constantTexture}.
+	 * <p>
+	 * If {@code constantTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code constantTexture.length} is not equal to {@code CompiledTextureCache.CONSTANT_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param constantTexture a {@link ConstantTexture} instance in compiled form
+	 * @return the relative offset to {@code constantTexture}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code constantTexture.length} is not equal to {@code CompiledTextureCache.CONSTANT_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code constantTexture} is {@code null}
+	 */
+	public int addConstantTexture(final float[] constantTexture) {
+		final int relativeOffsetOld = getConstantTextureOffsetRelative(constantTexture);
+		final int relativeOffsetNew = getConstantTextureCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setConstantTextures(Structures.addStructure(getConstantTextures(), constantTexture));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code lDRImageTexture} to this {@code CompiledTextureCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code lDRImageTexture}.
+	 * <p>
+	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code lDRImageTexture.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param lDRImageTexture an {@link LDRImageTexture} instance in compiled form
+	 * @return the relative offset to {@code lDRImageTexture}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageTexture.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
+	 */
+	public int addLDRImageTexture(final float[] lDRImageTexture) {
+		final int absoluteOffsetNew = this.lDRImageTextures.length;
+		final int relativeOffsetOld = getLDRImageTextureOffsetRelative(lDRImageTexture);
+		final int relativeOffsetNew = getLDRImageTextureCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setLDRImageTextureOffsets(Structures.addStructureOffset(getLDRImageTextureOffsets(), absoluteOffsetNew));
+		setLDRImageTextures(Structures.addStructure(getLDRImageTextures(), lDRImageTexture));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code marbleTexture} to this {@code CompiledTextureCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code marbleTexture}.
+	 * <p>
+	 * If {@code marbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code marbleTexture.length} is not equal to {@code CompiledTextureCache.MARBLE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param marbleTexture a {@link MarbleTexture} instance in compiled form
+	 * @return the relative offset to {@code marbleTexture}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code marbleTexture.length} is not equal to {@code CompiledTextureCache.MARBLE_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code marbleTexture} is {@code null}
+	 */
+	public int addMarbleTexture(final float[] marbleTexture) {
+		final int relativeOffsetOld = getMarbleTextureOffsetRelative(marbleTexture);
+		final int relativeOffsetNew = getMarbleTextureCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setMarbleTextures(Structures.addStructure(getMarbleTextures(), marbleTexture));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code polkaDotTexture} to this {@code CompiledTextureCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code polkaDotTexture}.
+	 * <p>
+	 * If {@code polkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotTexture.length} is not equal to {@code CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polkaDotTexture a {@link PolkaDotTexture} instance in compiled form
+	 * @return the relative offset to {@code polkaDotTexture}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotTexture.length} is not equal to {@code CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTexture} is {@code null}
+	 */
+	public int addPolkaDotTexture(final float[] polkaDotTexture) {
+		final int relativeOffsetOld = getPolkaDotTextureOffsetRelative(polkaDotTexture);
+		final int relativeOffsetNew = getPolkaDotTextureCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setPolkaDotTextures(Structures.addStructure(getPolkaDotTextures(), polkaDotTexture));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code simplexFractionalBrownianMotionTexture} to this {@code CompiledTextureCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code simplexFractionalBrownianMotionTexture}.
+	 * <p>
+	 * If {@code simplexFractionalBrownianMotionTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code simplexFractionalBrownianMotionTexture.length} is not equal to {@code CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param simplexFractionalBrownianMotionTexture a {@link SimplexFractionalBrownianMotionTexture} instance in compiled form
+	 * @return the relative offset to {@code simplexFractionalBrownianMotionTexture}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture.length} is not equal to {@code CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture} is {@code null}
+	 */
+	public int addSimplexFractionalBrownianMotionTexture(final float[] simplexFractionalBrownianMotionTexture) {
+		final int relativeOffsetOld = getSimplexFractionalBrownianMotionTextureOffsetRelative(simplexFractionalBrownianMotionTexture);
+		final int relativeOffsetNew = getSimplexFractionalBrownianMotionTextureCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setSimplexFractionalBrownianMotionTextures(Structures.addStructure(getSimplexFractionalBrownianMotionTextures(), simplexFractionalBrownianMotionTexture));
+		
+		return relativeOffsetNew;
 	}
 	
 	/**

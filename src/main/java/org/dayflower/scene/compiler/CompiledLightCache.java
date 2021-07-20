@@ -293,7 +293,7 @@ public final class CompiledLightCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Removes {@code diffuseAreaLight} from this {@code CompiledLightCache}, if present.
+	 * Removes {@code diffuseAreaLight} from this {@code CompiledLightCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code diffuseAreaLight} was removed, {@code false} otherwise.
 	 * <p>
@@ -321,7 +321,7 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Removes {@code directionalLight} from this {@code CompiledLightCache}, if present.
+	 * Removes {@code directionalLight} from this {@code CompiledLightCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code directionalLight} was removed, {@code false} otherwise.
 	 * <p>
@@ -349,7 +349,7 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Removes {@code lDRImageLight} from this {@code CompiledLightCache}, if present.
+	 * Removes {@code lDRImageLight} from this {@code CompiledLightCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code lDRImageLight} was removed, {@code false} otherwise.
 	 * <p>
@@ -378,7 +378,7 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Removes {@code perezLight} from this {@code CompiledLightCache}, if present.
+	 * Removes {@code perezLight} from this {@code CompiledLightCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code perezLight} was removed, {@code false} otherwise.
 	 * <p>
@@ -407,7 +407,7 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Removes {@code pointLight} from this {@code CompiledLightCache}, if present.
+	 * Removes {@code pointLight} from this {@code CompiledLightCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code pointLight} was removed, {@code false} otherwise.
 	 * <p>
@@ -435,7 +435,7 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Removes {@code spotLight} from this {@code CompiledLightCache}, if present.
+	 * Removes {@code spotLight} from this {@code CompiledLightCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code spotLight} was removed, {@code false} otherwise.
 	 * <p>
@@ -519,177 +519,173 @@ public final class CompiledLightCache {
 	/**
 	 * Adds {@code diffuseAreaLight} to this {@code CompiledLightCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code diffuseAreaLight}.
+	 * Returns the relative offset to {@code diffuseAreaLight}.
 	 * <p>
 	 * If {@code diffuseAreaLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code diffuseAreaLight.length} is not equal to {@code CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param diffuseAreaLight a {@link DiffuseAreaLight} instance in compiled form
-	 * @return the absolute offset to {@code diffuseAreaLight}
+	 * @return the relative offset to {@code diffuseAreaLight}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code diffuseAreaLight.length} is not equal to {@code CompiledLightCache.DIFFUSE_AREA_LIGHT_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code diffuseAreaLight} is {@code null}
 	 */
 	public int addDiffuseAreaLight(final float[] diffuseAreaLight) {
-		final int absoluteOffsetOld = getDiffuseAreaLightOffsetAbsolute(diffuseAreaLight);
-		final int absoluteOffsetNew = this.diffuseAreaLights.length;
+		final int relativeOffsetOld = getDiffuseAreaLightOffsetRelative(diffuseAreaLight);
 		final int relativeOffsetNew = getDiffuseAreaLightCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), DiffuseAreaLight.ID, relativeOffsetNew));
 		setDiffuseAreaLights(Structures.addStructure(getDiffuseAreaLights(), diffuseAreaLight));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
 	}
 	
 	/**
 	 * Adds {@code directionalLight} to this {@code CompiledLightCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code directionalLight}.
+	 * Returns the relative offset to {@code directionalLight}.
 	 * <p>
 	 * If {@code directionalLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code directionalLight.length} is not equal to {@code CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param directionalLight a {@link DirectionalLight} instance in compiled form
-	 * @return the absolute offset to {@code directionalLight}
+	 * @return the relative offset to {@code directionalLight}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code directionalLight.length} is not equal to {@code CompiledLightCache.DIRECTIONAL_LIGHT_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code directionalLight} is {@code null}
 	 */
 	public int addDirectionalLight(final float[] directionalLight) {
-		final int absoluteOffsetOld = getDirectionalLightOffsetAbsolute(directionalLight);
-		final int absoluteOffsetNew = this.directionalLights.length;
+		final int relativeOffsetOld = getDirectionalLightOffsetRelative(directionalLight);
 		final int relativeOffsetNew = getDirectionalLightCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), DirectionalLight.ID, relativeOffsetNew));
 		setDirectionalLights(Structures.addStructure(getDirectionalLights(), directionalLight));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
 	}
 	
 	/**
 	 * Adds {@code lDRImageLight} to this {@code CompiledLightCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code lDRImageLight}.
+	 * Returns the relative offset to {@code lDRImageLight}.
 	 * <p>
 	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code lDRImageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param lDRImageLight an {@link LDRImageLight} instance in compiled form
-	 * @return the absolute offset to {@code lDRImageLight}
+	 * @return the relative offset to {@code lDRImageLight}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageLight.length % 8} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
 	 */
 	public int addLDRImageLight(final float[] lDRImageLight) {
-		final int absoluteOffsetOld = getLDRImageLightOffsetAbsolute(lDRImageLight);
 		final int absoluteOffsetNew = this.lDRImageLights.length;
-		final int relativeOffsetNew = this.lDRImageLightOffsets.length;
+		final int relativeOffsetOld = getLDRImageLightOffsetRelative(lDRImageLight);
+		final int relativeOffsetNew = getLDRImageLightCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, relativeOffsetNew));
 		setLDRImageLightOffsets(Structures.addStructureOffset(getLDRImageLightOffsets(), absoluteOffsetNew));
 		setLDRImageLights(Structures.addStructure(getLDRImageLights(), lDRImageLight));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
 	}
 	
 	/**
 	 * Adds {@code perezLight} to this {@code CompiledLightCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code perezLight}.
+	 * Returns the relative offset to {@code perezLight}.
 	 * <p>
 	 * If {@code perezLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code perezLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param perezLight a {@link PerezLight} instance in compiled form
-	 * @return the absolute offset to {@code perezLight}
+	 * @return the relative offset to {@code perezLight}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code perezLight.length % 8} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code perezLight} is {@code null}
 	 */
 	public int addPerezLight(final float[] perezLight) {
-		final int absoluteOffsetOld = getPerezLightOffsetAbsolute(perezLight);
 		final int absoluteOffsetNew = this.perezLights.length;
-		final int relativeOffsetNew = this.perezLightOffsets.length;
+		final int relativeOffsetOld = getPerezLightOffsetRelative(perezLight);
+		final int relativeOffsetNew = getPerezLightCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PerezLight.ID, relativeOffsetNew));
 		setPerezLightOffsets(Structures.addStructureOffset(getPerezLightOffsets(), absoluteOffsetNew));
 		setPerezLights(Structures.addStructure(getPerezLights(), perezLight));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
 	}
 	
 	/**
 	 * Adds {@code pointLight} to this {@code CompiledLightCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code pointLight}.
+	 * Returns the relative offset to {@code pointLight}.
 	 * <p>
 	 * If {@code pointLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code pointLight.length} is not equal to {@code CompiledLightCache.POINT_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param pointLight a {@link PointLight} instance in compiled form
-	 * @return the absolute offset to {@code pointLight}
+	 * @return the relative offset to {@code pointLight}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code pointLight.length} is not equal to {@code CompiledLightCache.POINT_LIGHT_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code pointLight} is {@code null}
 	 */
 	public int addPointLight(final float[] pointLight) {
-		final int absoluteOffsetOld = getPointLightOffsetAbsolute(pointLight);
-		final int absoluteOffsetNew = this.pointLights.length;
+		final int relativeOffsetOld = getPointLightOffsetRelative(pointLight);
 		final int relativeOffsetNew = getPointLightCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PointLight.ID, relativeOffsetNew));
 		setPointLights(Structures.addStructure(getPointLights(), pointLight));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
 	}
 	
 	/**
 	 * Adds {@code spotLight} to this {@code CompiledLightCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code spotLight}.
+	 * Returns the relative offset to {@code spotLight}.
 	 * <p>
 	 * If {@code spotLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code spotLight.length} is not equal to {@code CompiledLightCache.SPOT_LIGHT_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param spotLight a {@link SpotLight} instance in compiled form
-	 * @return the absolute offset to {@code spotLight}
+	 * @return the relative offset to {@code spotLight}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code spotLight.length} is not equal to {@code CompiledLightCache.SPOT_LIGHT_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code spotLight} is {@code null}
 	 */
 	public int addSpotLight(final float[] spotLight) {
-		final int absoluteOffsetOld = getSpotLightOffsetAbsolute(spotLight);
-		final int absoluteOffsetNew = this.spotLights.length;
+		final int relativeOffsetOld = getSpotLightOffsetRelative(spotLight);
 		final int relativeOffsetNew = getSpotLightCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), SpotLight.ID, relativeOffsetNew));
 		setSpotLights(Structures.addStructure(getSpotLights(), spotLight));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
 	}
 	
 	/**

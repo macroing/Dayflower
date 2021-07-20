@@ -1,5 +1,13 @@
 2021-07-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods addCheckerboardTexture(float[]) and removeCheckerboardTexture(float[]) to the CompiledTextureCache class.
+	* ADD:		Add the methods addConstantTexture(float[]) and removeConstantTexture(float[]) to the CompiledTextureCache class.
+	* ADD:		Add the methods addLDRImageTexture(float[]) and removeLDRImageTexture(float[]) to the CompiledTextureCache class.
+	* ADD:		Add the methods addMarbleTexture(float[]) and removeMarbleTexture(float[]) to the CompiledTextureCache class.
+	* ADD:		Add the methods addPolkaDotTexture(float[]) and removePolkaDotTexture(float[]) to the CompiledTextureCache class.
+	* ADD:		Add the methods addSimplexFractionalBrownianMotionTexture(float[]) and removeSimplexFractionalBrownianMotionTexture(float[]) to the CompiledTextureCache class.
+	* CHANGE:	Change the returned offset from absolute to relative in the methods addDiffuseAreaLight(float[]), addDirectionalLight(float[]), addLDRImageLight(float[]), addPerezLight(float[]), addPointLight(float[]) and addSpotLight(float[]) of the CompiledLightCache class.
+	* CHANGE:	Change the returned offset from absolute to relative in the methods addBlendTexture(float[]) and addBullseyeTexture(float[]) of the CompiledTextureCache class.
 	* CHANGE:	Add additional parameter validation to the methods getCheckerboardTextureOffsetAbsolute(float[]), getCheckerboardTextureOffsetRelative(float[]) and setCheckerboardTextures(float[]) in the CompiledTextureCache class.
 	* CHANGE:	Add additional parameter validation to the methods getConstantTextureOffsetAbsolute(float[]), getConstantTextureOffsetRelative(float[]) and setConstantTextures(float[]) in the CompiledTextureCache class.
 	* CHANGE:	Add additional parameter validation to the methods getMarbleTextureOffsetAbsolute(float[]), getMarbleTextureOffsetRelative(float[]) and setMarbleTextures(float[]) in the CompiledTextureCache class.

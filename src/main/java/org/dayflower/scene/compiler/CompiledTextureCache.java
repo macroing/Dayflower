@@ -588,26 +588,40 @@ public final class CompiledTextureCache {
 	 * Returns the absolute offset of {@code checkerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code checkerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardTexture.length} is not equal to {@code CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param checkerboardTexture a {@link CheckerboardTexture} instance in compiled form
 	 * @return the absolute offset of {@code checkerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardTexture.length} is not equal to {@code CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTexture} is {@code null}
 	 */
 	public int getCheckerboardTextureOffsetAbsolute(final float[] checkerboardTexture) {
-		return Structures.getStructureOffsetAbsolute(this.checkerboardTextures, Objects.requireNonNull(checkerboardTexture, "checkerboardTexture == null"), getCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
+		Objects.requireNonNull(checkerboardTexture, "checkerboardTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(checkerboardTexture, CHECKERBOARD_TEXTURE_LENGTH, "checkerboardTexture");
+		
+		return Structures.getStructureOffsetAbsolute(this.checkerboardTextures, checkerboardTexture, getCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code checkerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code checkerboardTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardTexture.length} is not equal to {@code CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param checkerboardTexture a {@link CheckerboardTexture} instance in compiled form
 	 * @return the relative offset of {@code checkerboardTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardTexture.length} is not equal to {@code CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTexture} is {@code null}
 	 */
 	public int getCheckerboardTextureOffsetRelative(final float[] checkerboardTexture) {
-		return Structures.getStructureOffsetRelative(this.checkerboardTextures, Objects.requireNonNull(checkerboardTexture, "checkerboardTexture == null"), getCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
+		Objects.requireNonNull(checkerboardTexture, "checkerboardTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(checkerboardTexture, CHECKERBOARD_TEXTURE_LENGTH, "checkerboardTexture");
+		
+		return Structures.getStructureOffsetRelative(this.checkerboardTextures, checkerboardTexture, getCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -623,26 +637,40 @@ public final class CompiledTextureCache {
 	 * Returns the absolute offset of {@code constantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code constantTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code constantTexture.length} is not equal to {@code CompiledTextureCache.CONSTANT_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param constantTexture a {@link ConstantTexture} instance in compiled form
 	 * @return the absolute offset of {@code constantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code constantTexture.length} is not equal to {@code CompiledTextureCache.CONSTANT_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code constantTexture} is {@code null}
 	 */
 	public int getConstantTextureOffsetAbsolute(final float[] constantTexture) {
-		return Structures.getStructureOffsetAbsolute(this.constantTextures, Objects.requireNonNull(constantTexture, "constantTexture == null"), getConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
+		Objects.requireNonNull(constantTexture, "constantTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(constantTexture, CONSTANT_TEXTURE_LENGTH, "constantTexture");
+		
+		return Structures.getStructureOffsetAbsolute(this.constantTextures, constantTexture, getConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code constantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code constantTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code constantTexture.length} is not equal to {@code CompiledTextureCache.CONSTANT_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param constantTexture a {@link ConstantTexture} instance in compiled form
 	 * @return the relative offset of {@code constantTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code constantTexture.length} is not equal to {@code CompiledTextureCache.CONSTANT_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code constantTexture} is {@code null}
 	 */
 	public int getConstantTextureOffsetRelative(final float[] constantTexture) {
-		return Structures.getStructureOffsetRelative(this.constantTextures, Objects.requireNonNull(constantTexture, "constantTexture == null"), getConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
+		Objects.requireNonNull(constantTexture, "constantTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(constantTexture, CONSTANT_TEXTURE_LENGTH, "constantTexture");
+		
+		return Structures.getStructureOffsetRelative(this.constantTextures, constantTexture, getConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -707,26 +735,40 @@ public final class CompiledTextureCache {
 	 * Returns the absolute offset of {@code marbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code marbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code marbleTexture.length} is not equal to {@code CompiledTextureCache.MARBLE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param marbleTexture a {@link MarbleTexture} instance in compiled form
 	 * @return the absolute offset of {@code marbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code marbleTexture.length} is not equal to {@code CompiledTextureCache.MARBLE_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code marbleTexture} is {@code null}
 	 */
 	public int getMarbleTextureOffsetAbsolute(final float[] marbleTexture) {
-		return Structures.getStructureOffsetAbsolute(this.marbleTextures, Objects.requireNonNull(marbleTexture, "marbleTexture == null"), getMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
+		Objects.requireNonNull(marbleTexture, "marbleTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(marbleTexture, MARBLE_TEXTURE_LENGTH, "marbleTexture");
+		
+		return Structures.getStructureOffsetAbsolute(this.marbleTextures, marbleTexture, getMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code marbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code marbleTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code marbleTexture.length} is not equal to {@code CompiledTextureCache.MARBLE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param marbleTexture a {@link MarbleTexture} instance in compiled form
 	 * @return the relative offset of {@code marbleTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code marbleTexture.length} is not equal to {@code CompiledTextureCache.MARBLE_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code marbleTexture} is {@code null}
 	 */
 	public int getMarbleTextureOffsetRelative(final float[] marbleTexture) {
-		return Structures.getStructureOffsetRelative(this.marbleTextures, Objects.requireNonNull(marbleTexture, "marbleTexture == null"), getMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
+		Objects.requireNonNull(marbleTexture, "marbleTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(marbleTexture, MARBLE_TEXTURE_LENGTH, "marbleTexture");
+		
+		return Structures.getStructureOffsetRelative(this.marbleTextures, marbleTexture, getMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -742,26 +784,40 @@ public final class CompiledTextureCache {
 	 * Returns the absolute offset of {@code polkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code polkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotTexture.length} is not equal to {@code CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param polkaDotTexture a {@link PolkaDotTexture} instance in compiled form
 	 * @return the absolute offset of {@code polkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotTexture.length} is not equal to {@code CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTexture} is {@code null}
 	 */
 	public int getPolkaDotTextureOffsetAbsolute(final float[] polkaDotTexture) {
-		return Structures.getStructureOffsetAbsolute(this.polkaDotTextures, Objects.requireNonNull(polkaDotTexture, "polkaDotTexture == null"), getPolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
+		Objects.requireNonNull(polkaDotTexture, "polkaDotTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(polkaDotTexture, POLKA_DOT_TEXTURE_LENGTH, "polkaDotTexture");
+		
+		return Structures.getStructureOffsetAbsolute(this.polkaDotTextures, polkaDotTexture, getPolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code polkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code polkaDotTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotTexture.length} is not equal to {@code CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param polkaDotTexture a {@link PolkaDotTexture} instance in compiled form
 	 * @return the relative offset of {@code polkaDotTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotTexture.length} is not equal to {@code CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTexture} is {@code null}
 	 */
 	public int getPolkaDotTextureOffsetRelative(final float[] polkaDotTexture) {
-		return Structures.getStructureOffsetRelative(this.polkaDotTextures, Objects.requireNonNull(polkaDotTexture, "polkaDotTexture == null"), getPolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
+		Objects.requireNonNull(polkaDotTexture, "polkaDotTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(polkaDotTexture, POLKA_DOT_TEXTURE_LENGTH, "polkaDotTexture");
+		
+		return Structures.getStructureOffsetRelative(this.polkaDotTextures, polkaDotTexture, getPolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -777,26 +833,40 @@ public final class CompiledTextureCache {
 	 * Returns the absolute offset of {@code simplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code simplexFractionalBrownianMotionTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code simplexFractionalBrownianMotionTexture.length} is not equal to {@code CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param simplexFractionalBrownianMotionTexture a {@link SimplexFractionalBrownianMotionTexture} instance in compiled form
 	 * @return the absolute offset of {@code simplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture.length} is not equal to {@code CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture} is {@code null}
 	 */
 	public int getSimplexFractionalBrownianMotionTextureOffsetAbsolute(final float[] simplexFractionalBrownianMotionTexture) {
-		return Structures.getStructureOffsetAbsolute(this.simplexFractionalBrownianMotionTextures, Objects.requireNonNull(simplexFractionalBrownianMotionTexture, "simplexFractionalBrownianMotionTexture == null"), getSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
+		Objects.requireNonNull(simplexFractionalBrownianMotionTexture, "simplexFractionalBrownianMotionTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(simplexFractionalBrownianMotionTexture, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH, "simplexFractionalBrownianMotionTexture");
+		
+		return Structures.getStructureOffsetAbsolute(this.simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture, getSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code simplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code simplexFractionalBrownianMotionTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code simplexFractionalBrownianMotionTexture.length} is not equal to {@code CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param simplexFractionalBrownianMotionTexture a {@link SimplexFractionalBrownianMotionTexture} instance in compiled form
 	 * @return the relative offset of {@code simplexFractionalBrownianMotionTexture} in this {@code CompiledTextureCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture.length} is not equal to {@code CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTexture} is {@code null}
 	 */
 	public int getSimplexFractionalBrownianMotionTextureOffsetRelative(final float[] simplexFractionalBrownianMotionTexture) {
-		return Structures.getStructureOffsetRelative(this.simplexFractionalBrownianMotionTextures, Objects.requireNonNull(simplexFractionalBrownianMotionTexture, "simplexFractionalBrownianMotionTexture == null"), getSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
+		Objects.requireNonNull(simplexFractionalBrownianMotionTexture, "simplexFractionalBrownianMotionTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(simplexFractionalBrownianMotionTexture, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH, "simplexFractionalBrownianMotionTexture");
+		
+		return Structures.getStructureOffsetRelative(this.simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture, getSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
 	}
 	
 	/**
@@ -850,84 +920,133 @@ public final class CompiledTextureCache {
 	 * Sets all {@link CheckerboardTexture} instances in compiled form to {@code checkerboardTextures}.
 	 * <p>
 	 * If {@code checkerboardTextures} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardTextures.length % CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param checkerboardTextures the {@code CheckerboardTexture} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardTextures.length % CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardTextures} is {@code null}
 	 */
 	public void setCheckerboardTextures(final float[] checkerboardTextures) {
-		this.checkerboardTextures = Objects.requireNonNull(checkerboardTextures, "checkerboardTextures == null");
+		Objects.requireNonNull(checkerboardTextures, "checkerboardTextures == null");
+		
+		ParameterArguments.requireExact(checkerboardTextures.length % CHECKERBOARD_TEXTURE_LENGTH, 0, "checkerboardTextures.length % CompiledTextureCache.CHECKERBOARD_TEXTURE_LENGTH");
+		
+		this.checkerboardTextures = checkerboardTextures;
 	}
 	
 	/**
 	 * Sets all {@link ConstantTexture} instances in compiled form to {@code constantTextures}.
 	 * <p>
 	 * If {@code constantTextures} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code constantTextures.length % CompiledTextureCache.CONSTANT_TEXTURE_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param constantTextures the {@code ConstantTexture} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code constantTextures.length % CompiledTextureCache.CONSTANT_TEXTURE_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code constantTextures} is {@code null}
 	 */
 	public void setConstantTextures(final float[] constantTextures) {
-		this.constantTextures = Objects.requireNonNull(constantTextures, "constantTextures == null");
+		Objects.requireNonNull(constantTextures, "constantTextures == null");
+		
+		ParameterArguments.requireExact(constantTextures.length % CONSTANT_TEXTURE_LENGTH, 0, "constantTextures.length % CompiledTextureCache.CONSTANT_TEXTURE_LENGTH");
+		
+		this.constantTextures = constantTextures;
 	}
 	
 	/**
 	 * Sets the {@code int[]} that contains the offsets for all {@link LDRImageTexture} instances to {@code lDRImageTextureOffsets}.
 	 * <p>
 	 * If {@code lDRImageTextureOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If at least one offset in {@code lDRImageTextureOffsets} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param lDRImageTextureOffsets the {@code int[]} that contains the offsets for all {@code LDRImageTexture} instances
+	 * @throws IllegalArgumentException thrown if, and only if, at least one offset in {@code lDRImageTextureOffsets} is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTextureOffsets} is {@code null}
 	 */
 	public void setLDRImageTextureOffsets(final int[] lDRImageTextureOffsets) {
-		this.lDRImageTextureOffsets = Objects.requireNonNull(lDRImageTextureOffsets, "lDRImageTextureOffsets == null");
+		Objects.requireNonNull(lDRImageTextureOffsets, "lDRImageTextureOffsets == null");
+		
+		ParameterArguments.requireRange(lDRImageTextureOffsets, 0, Integer.MAX_VALUE, "lDRImageTextureOffsets");
+		
+		this.lDRImageTextureOffsets = lDRImageTextureOffsets;
 	}
 	
 	/**
 	 * Sets all {@link LDRImageTexture} instances in compiled form to {@code lDRImageTextures}.
 	 * <p>
 	 * If {@code lDRImageTextures} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code lDRImageTextures.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param lDRImageTextures the {@code LDRImageTexture} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageTextures.length % 8} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTextures} is {@code null}
 	 */
 	public void setLDRImageTextures(final float[] lDRImageTextures) {
-		this.lDRImageTextures = Objects.requireNonNull(lDRImageTextures, "lDRImageTextures == null");
+		Objects.requireNonNull(lDRImageTextures, "lDRImageTextures == null");
+		
+		ParameterArguments.requireExact(lDRImageTextures.length % 8, 0, "lDRImageTextures.length % 8");
+		
+		this.lDRImageTextures = lDRImageTextures;
 	}
 	
 	/**
 	 * Sets all {@link MarbleTexture} instances in compiled form to {@code marbleTextures}.
 	 * <p>
 	 * If {@code marbleTextures} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code marbleTextures.length % CompiledTextureCache.MARBLE_TEXTURE_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param marbleTextures the {@code MarbleTexture} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code marbleTextures.length % CompiledTextureCache.MARBLE_TEXTURE_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code marbleTextures} is {@code null}
 	 */
 	public void setMarbleTextures(final float[] marbleTextures) {
-		this.marbleTextures = Objects.requireNonNull(marbleTextures, "marbleTextures == null");
+		Objects.requireNonNull(marbleTextures, "marbleTextures == null");
+		
+		ParameterArguments.requireExact(marbleTextures.length % MARBLE_TEXTURE_LENGTH, 0, "marbleTextures.length % CompiledTextureCache.MARBLE_TEXTURE_LENGTH");
+		
+		this.marbleTextures = marbleTextures;
 	}
 	
 	/**
 	 * Sets all {@link PolkaDotTexture} instances in compiled form to {@code polkaDotTextures}.
 	 * <p>
 	 * If {@code polkaDotTextures} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotTextures.length % CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param polkaDotTextures the {@code PolkaDotTexture} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotTextures.length % CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotTextures} is {@code null}
 	 */
 	public void setPolkaDotTextures(final float[] polkaDotTextures) {
-		this.polkaDotTextures = Objects.requireNonNull(polkaDotTextures, "polkaDotTextures == null");
+		Objects.requireNonNull(polkaDotTextures, "polkaDotTextures == null");
+		
+		ParameterArguments.requireExact(polkaDotTextures.length % POLKA_DOT_TEXTURE_LENGTH, 0, "polkaDotTextures.length % CompiledTextureCache.POLKA_DOT_TEXTURE_LENGTH");
+		
+		this.polkaDotTextures = polkaDotTextures;
 	}
 	
 	/**
 	 * Sets all {@link SimplexFractionalBrownianMotionTexture} instances in compiled form to {@code simplexFractionalBrownianMotionTextures}.
 	 * <p>
 	 * If {@code simplexFractionalBrownianMotionTextures} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code simplexFractionalBrownianMotionTextures.length % CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param simplexFractionalBrownianMotionTextures the {@code SimplexFractionalBrownianMotionTexture} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code simplexFractionalBrownianMotionTextures.length % CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTextures} is {@code null}
 	 */
 	public void setSimplexFractionalBrownianMotionTextures(final float[] simplexFractionalBrownianMotionTextures) {
-		this.simplexFractionalBrownianMotionTextures = Objects.requireNonNull(simplexFractionalBrownianMotionTextures, "simplexFractionalBrownianMotionTextures == null");
+		Objects.requireNonNull(simplexFractionalBrownianMotionTextures, "simplexFractionalBrownianMotionTextures == null");
+		
+		ParameterArguments.requireExact(simplexFractionalBrownianMotionTextures.length % SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH, 0, "simplexFractionalBrownianMotionTextures.length % CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH");
+		
+		this.simplexFractionalBrownianMotionTextures = simplexFractionalBrownianMotionTextures;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

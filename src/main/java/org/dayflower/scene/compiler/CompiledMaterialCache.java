@@ -43,6 +43,7 @@ import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledMaterialCache} contains {@link Material} instances in compiled form.
@@ -393,26 +394,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code bullseyeMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code bullseyeMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeMaterial.length} is not equal to {@code CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param bullseyeMaterial a {@link BullseyeMaterial} instance in compiled form
 	 * @return the absolute offset of {@code bullseyeMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeMaterial.length} is not equal to {@code CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
 	 */
 	public int getBullseyeMaterialOffsetAbsolute(final float[] bullseyeMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.bullseyeMaterials, Objects.requireNonNull(bullseyeMaterial, "bullseyeMaterial == null"), getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
+		Objects.requireNonNull(bullseyeMaterial, "bullseyeMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(bullseyeMaterial, BULLSEYE_MATERIAL_LENGTH, "bullseyeMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.bullseyeMaterials, bullseyeMaterial, getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code bullseyeMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code bullseyeMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeMaterial.length} is not equal to {@code CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param bullseyeMaterial a {@link BullseyeMaterial} instance in compiled form
 	 * @return the relative offset of {@code bullseyeMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeMaterial.length} is not equal to {@code CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
 	 */
 	public int getBullseyeMaterialOffsetRelative(final float[] bullseyeMaterial) {
-		return Structures.getStructureOffsetRelative(this.bullseyeMaterials, Objects.requireNonNull(bullseyeMaterial, "bullseyeMaterial == null"), getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
+		Objects.requireNonNull(bullseyeMaterial, "bullseyeMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(bullseyeMaterial, BULLSEYE_MATERIAL_LENGTH, "bullseyeMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.bullseyeMaterials, bullseyeMaterial, getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -428,26 +443,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code checkerboardMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code checkerboardMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardMaterial.length} is not equal to {@code CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param checkerboardMaterial a {@link CheckerboardMaterial} instance in compiled form
 	 * @return the absolute offset of {@code checkerboardMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardMaterial.length} is not equal to {@code CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
 	 */
 	public int getCheckerboardMaterialOffsetAbsolute(final float[] checkerboardMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.checkerboardMaterials, Objects.requireNonNull(checkerboardMaterial, "checkerboardMaterial == null"), getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
+		Objects.requireNonNull(checkerboardMaterial, "checkerboardMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(checkerboardMaterial, CHECKERBOARD_MATERIAL_LENGTH, "checkerboardMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.checkerboardMaterials, checkerboardMaterial, getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code checkerboardMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code checkerboardMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardMaterial.length} is not equal to {@code CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param checkerboardMaterial a {@link CheckerboardMaterial} instance in compiled form
 	 * @return the relative offset of {@code checkerboardMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardMaterial.length} is not equal to {@code CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
 	 */
 	public int getCheckerboardMaterialOffsetRelative(final float[] checkerboardMaterial) {
-		return Structures.getStructureOffsetRelative(this.checkerboardMaterials, Objects.requireNonNull(checkerboardMaterial, "checkerboardMaterial == null"), getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
+		Objects.requireNonNull(checkerboardMaterial, "checkerboardMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(checkerboardMaterial, CHECKERBOARD_MATERIAL_LENGTH, "checkerboardMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.checkerboardMaterials, checkerboardMaterial, getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -463,26 +492,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code clearCoatMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code clearCoatMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code clearCoatMaterial.length} is not equal to {@code CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param clearCoatMaterial a {@link ClearCoatMaterial} instance in compiled form
 	 * @return the absolute offset of {@code clearCoatMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code clearCoatMaterial.length} is not equal to {@code CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterial} is {@code null}
 	 */
 	public int getClearCoatMaterialOffsetAbsolute(final int[] clearCoatMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.clearCoatMaterials, Objects.requireNonNull(clearCoatMaterial, "clearCoatMaterial == null"), getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
+		Objects.requireNonNull(clearCoatMaterial, "clearCoatMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(clearCoatMaterial, CLEAR_COAT_MATERIAL_LENGTH, "clearCoatMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.clearCoatMaterials, clearCoatMaterial, getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code clearCoatMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code clearCoatMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code clearCoatMaterial.length} is not equal to {@code CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param clearCoatMaterial a {@link ClearCoatMaterial} instance in compiled form
 	 * @return the relative offset of {@code clearCoatMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code clearCoatMaterial.length} is not equal to {@code CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterial} is {@code null}
 	 */
 	public int getClearCoatMaterialOffsetRelative(final int[] clearCoatMaterial) {
-		return Structures.getStructureOffsetRelative(this.clearCoatMaterials, Objects.requireNonNull(clearCoatMaterial, "clearCoatMaterial == null"), getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
+		Objects.requireNonNull(clearCoatMaterial, "clearCoatMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(clearCoatMaterial, CLEAR_COAT_MATERIAL_LENGTH, "clearCoatMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.clearCoatMaterials, clearCoatMaterial, getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -498,26 +541,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code disneyMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code disneyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disneyMaterial.length} is not equal to {@code CompiledMaterialCache.DISNEY_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param disneyMaterial a {@link DisneyMaterial} instance in compiled form
 	 * @return the absolute offset of {@code disneyMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disneyMaterial.length} is not equal to {@code CompiledMaterialCache.DISNEY_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterial} is {@code null}
 	 */
 	public int getDisneyMaterialOffsetAbsolute(final int[] disneyMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.disneyMaterials, Objects.requireNonNull(disneyMaterial, "disneyMaterial == null"), getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
+		Objects.requireNonNull(disneyMaterial, "disneyMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(disneyMaterial, DISNEY_MATERIAL_LENGTH, "disneyMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.disneyMaterials, disneyMaterial, getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code disneyMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code disneyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disneyMaterial.length} is not equal to {@code CompiledMaterialCache.DISNEY_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param disneyMaterial a {@link DisneyMaterial} instance in compiled form
 	 * @return the relative offset of {@code disneyMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disneyMaterial.length} is not equal to {@code CompiledMaterialCache.DISNEY_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterial} is {@code null}
 	 */
 	public int getDisneyMaterialOffsetRelative(final int[] disneyMaterial) {
-		return Structures.getStructureOffsetRelative(this.disneyMaterials, Objects.requireNonNull(disneyMaterial, "disneyMaterial == null"), getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
+		Objects.requireNonNull(disneyMaterial, "disneyMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(disneyMaterial, DISNEY_MATERIAL_LENGTH, "disneyMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.disneyMaterials, disneyMaterial, getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -533,26 +590,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code glassMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code glassMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glassMaterial.length} is not equal to {@code CompiledMaterialCache.GLASS_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param glassMaterial a {@link GlassMaterial} instance in compiled form
 	 * @return the absolute offset of {@code glassMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glassMaterial.length} is not equal to {@code CompiledMaterialCache.GLASS_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code glassMaterial} is {@code null}
 	 */
 	public int getGlassMaterialOffsetAbsolute(final int[] glassMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.glassMaterials, Objects.requireNonNull(glassMaterial, "glassMaterial == null"), getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
+		Objects.requireNonNull(glassMaterial, "glassMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(glassMaterial, GLASS_MATERIAL_LENGTH, "glassMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.glassMaterials, glassMaterial, getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code glassMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code glassMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glassMaterial.length} is not equal to {@code CompiledMaterialCache.GLASS_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param glassMaterial a {@link GlassMaterial} instance in compiled form
 	 * @return the relative offset of {@code glassMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glassMaterial.length} is not equal to {@code CompiledMaterialCache.GLASS_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code glassMaterial} is {@code null}
 	 */
 	public int getGlassMaterialOffsetRelative(final int[] glassMaterial) {
-		return Structures.getStructureOffsetRelative(this.glassMaterials, Objects.requireNonNull(glassMaterial, "glassMaterial == null"), getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
+		Objects.requireNonNull(glassMaterial, "glassMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(glassMaterial, GLASS_MATERIAL_LENGTH, "glassMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.glassMaterials, glassMaterial, getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -568,26 +639,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code glossyMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code glossyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glossyMaterial.length} is not equal to {@code CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param glossyMaterial a {@link GlossyMaterial} instance in compiled form
 	 * @return the absolute offset of {@code glossyMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glossyMaterial.length} is not equal to {@code CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterial} is {@code null}
 	 */
 	public int getGlossyMaterialOffsetAbsolute(final int[] glossyMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.glossyMaterials, Objects.requireNonNull(glossyMaterial, "glossyMaterial == null"), getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
+		Objects.requireNonNull(glossyMaterial, "glossyMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(glossyMaterial, GLOSSY_MATERIAL_LENGTH, "glossyMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.glossyMaterials, glossyMaterial, getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code glossyMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code glossyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glossyMaterial.length} is not equal to {@code CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param glossyMaterial a {@link GlossyMaterial} instance in compiled form
 	 * @return the relative offset of {@code glossyMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glossyMaterial.length} is not equal to {@code CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterial} is {@code null}
 	 */
 	public int getGlossyMaterialOffsetRelative(final int[] glossyMaterial) {
-		return Structures.getStructureOffsetRelative(this.glossyMaterials, Objects.requireNonNull(glossyMaterial, "glossyMaterial == null"), getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
+		Objects.requireNonNull(glossyMaterial, "glossyMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(glossyMaterial, GLOSSY_MATERIAL_LENGTH, "glossyMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.glossyMaterials, glossyMaterial, getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -603,26 +688,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code matteMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code matteMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matteMaterial.length} is not equal to {@code CompiledMaterialCache.MATTE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param matteMaterial a {@link MatteMaterial} instance in compiled form
 	 * @return the absolute offset of {@code matteMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matteMaterial.length} is not equal to {@code CompiledMaterialCache.MATTE_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code matteMaterial} is {@code null}
 	 */
 	public int getMatteMaterialOffsetAbsolute(final int[] matteMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.matteMaterials, Objects.requireNonNull(matteMaterial, "matteMaterial == null"), getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
+		Objects.requireNonNull(matteMaterial, "matteMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(matteMaterial, MATTE_MATERIAL_LENGTH, "matteMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.matteMaterials, matteMaterial, getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code matteMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code matteMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matteMaterial.length} is not equal to {@code CompiledMaterialCache.MATTE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param matteMaterial a {@link MatteMaterial} instance in compiled form
 	 * @return the relative offset of {@code matteMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matteMaterial.length} is not equal to {@code CompiledMaterialCache.MATTE_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code matteMaterial} is {@code null}
 	 */
 	public int getMatteMaterialOffsetRelative(final int[] matteMaterial) {
-		return Structures.getStructureOffsetRelative(this.matteMaterials, Objects.requireNonNull(matteMaterial, "matteMaterial == null"), getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
+		Objects.requireNonNull(matteMaterial, "matteMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(matteMaterial, MATTE_MATERIAL_LENGTH, "matteMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.matteMaterials, matteMaterial, getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -638,26 +737,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code metalMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code metalMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code metalMaterial.length} is not equal to {@code CompiledMaterialCache.METAL_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param metalMaterial a {@link MetalMaterial} instance in compiled form
 	 * @return the absolute offset of {@code metalMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code metalMaterial.length} is not equal to {@code CompiledMaterialCache.METAL_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code metalMaterial} is {@code null}
 	 */
 	public int getMetalMaterialOffsetAbsolute(final int[] metalMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.metalMaterials, Objects.requireNonNull(metalMaterial, "metalMaterial == null"), getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
+		Objects.requireNonNull(metalMaterial, "metalMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(metalMaterial, METAL_MATERIAL_LENGTH, "metalMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.metalMaterials, metalMaterial, getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code metalMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code metalMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code metalMaterial.length} is not equal to {@code CompiledMaterialCache.METAL_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param metalMaterial a {@link MetalMaterial} instance in compiled form
 	 * @return the relative offset of {@code metalMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code metalMaterial.length} is not equal to {@code CompiledMaterialCache.METAL_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code metalMaterial} is {@code null}
 	 */
 	public int getMetalMaterialOffsetRelative(final int[] metalMaterial) {
-		return Structures.getStructureOffsetRelative(this.metalMaterials, Objects.requireNonNull(metalMaterial, "metalMaterial == null"), getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
+		Objects.requireNonNull(metalMaterial, "metalMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(metalMaterial, METAL_MATERIAL_LENGTH, "metalMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.metalMaterials, metalMaterial, getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -673,26 +786,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code mirrorMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code mirrorMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code mirrorMaterial.length} is not equal to {@code CompiledMaterialCache.MIRROR_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param mirrorMaterial a {@link MirrorMaterial} instance in compiled form
 	 * @return the absolute offset of {@code mirrorMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code mirrorMaterial.length} is not equal to {@code CompiledMaterialCache.MIRROR_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterial} is {@code null}
 	 */
 	public int getMirrorMaterialOffsetAbsolute(final int[] mirrorMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.mirrorMaterials, Objects.requireNonNull(mirrorMaterial, "mirrorMaterial == null"), getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
+		Objects.requireNonNull(mirrorMaterial, "mirrorMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(mirrorMaterial, MIRROR_MATERIAL_LENGTH, "mirrorMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.mirrorMaterials, mirrorMaterial, getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code mirrorMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code mirrorMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code mirrorMaterial.length} is not equal to {@code CompiledMaterialCache.MIRROR_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param mirrorMaterial a {@link MirrorMaterial} instance in compiled form
 	 * @return the relative offset of {@code mirrorMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code mirrorMaterial.length} is not equal to {@code CompiledMaterialCache.MIRROR_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterial} is {@code null}
 	 */
 	public int getMirrorMaterialOffsetRelative(final int[] mirrorMaterial) {
-		return Structures.getStructureOffsetRelative(this.mirrorMaterials, Objects.requireNonNull(mirrorMaterial, "mirrorMaterial == null"), getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
+		Objects.requireNonNull(mirrorMaterial, "mirrorMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(mirrorMaterial, MIRROR_MATERIAL_LENGTH, "mirrorMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.mirrorMaterials, mirrorMaterial, getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -708,26 +835,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code plasticMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code plasticMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plasticMaterial.length} is not equal to {@code CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param plasticMaterial a {@link PlasticMaterial} instance in compiled form
 	 * @return the absolute offset of {@code plasticMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plasticMaterial.length} is not equal to {@code CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterial} is {@code null}
 	 */
 	public int getPlasticMaterialOffsetAbsolute(final int[] plasticMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.plasticMaterials, Objects.requireNonNull(plasticMaterial, "plasticMaterial == null"), getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
+		Objects.requireNonNull(plasticMaterial, "plasticMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(plasticMaterial, PLASTIC_MATERIAL_LENGTH, "plasticMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.plasticMaterials, plasticMaterial, getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code plasticMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code plasticMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plasticMaterial.length} is not equal to {@code CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param plasticMaterial a {@link PlasticMaterial} instance in compiled form
 	 * @return the relative offset of {@code plasticMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plasticMaterial.length} is not equal to {@code CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterial} is {@code null}
 	 */
 	public int getPlasticMaterialOffsetRelative(final int[] plasticMaterial) {
-		return Structures.getStructureOffsetRelative(this.plasticMaterials, Objects.requireNonNull(plasticMaterial, "plasticMaterial == null"), getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
+		Objects.requireNonNull(plasticMaterial, "plasticMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(plasticMaterial, PLASTIC_MATERIAL_LENGTH, "plasticMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.plasticMaterials, plasticMaterial, getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -743,26 +884,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code polkaDotMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code polkaDotMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotMaterial.length} is not equal to {@code CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param polkaDotMaterial a {@link PolkaDotMaterial} instance in compiled form
 	 * @return the absolute offset of {@code polkaDotMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotMaterial.length} is not equal to {@code CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterial} is {@code null}
 	 */
 	public int getPolkaDotMaterialOffsetAbsolute(final float[] polkaDotMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.polkaDotMaterials, Objects.requireNonNull(polkaDotMaterial, "polkaDotMaterial == null"), getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
+		Objects.requireNonNull(polkaDotMaterial, "polkaDotMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(polkaDotMaterial, POLKA_DOT_MATERIAL_LENGTH, "polkaDotMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.polkaDotMaterials, polkaDotMaterial, getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code polkaDotMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code polkaDotMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotMaterial.length} is not equal to {@code CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param polkaDotMaterial a {@link PolkaDotMaterial} instance in compiled form
 	 * @return the relative offset of {@code polkaDotMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotMaterial.length} is not equal to {@code CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterial} is {@code null}
 	 */
 	public int getPolkaDotMaterialOffsetRelative(final float[] polkaDotMaterial) {
-		return Structures.getStructureOffsetRelative(this.polkaDotMaterials, Objects.requireNonNull(polkaDotMaterial, "polkaDotMaterial == null"), getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
+		Objects.requireNonNull(polkaDotMaterial, "polkaDotMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(polkaDotMaterial, POLKA_DOT_MATERIAL_LENGTH, "polkaDotMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.polkaDotMaterials, polkaDotMaterial, getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -778,26 +933,40 @@ public final class CompiledMaterialCache {
 	 * Returns the absolute offset of {@code substrateMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code substrateMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code substrateMaterial.length} is not equal to {@code CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param substrateMaterial a {@link SubstrateMaterial} instance in compiled form
 	 * @return the absolute offset of {@code substrateMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code substrateMaterial.length} is not equal to {@code CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterial} is {@code null}
 	 */
 	public int getSubstrateMaterialOffsetAbsolute(final int[] substrateMaterial) {
-		return Structures.getStructureOffsetAbsolute(this.substrateMaterials, Objects.requireNonNull(substrateMaterial, "substrateMaterial == null"), getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
+		Objects.requireNonNull(substrateMaterial, "substrateMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(substrateMaterial, SUBSTRATE_MATERIAL_LENGTH, "substrateMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.substrateMaterials, substrateMaterial, getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code substrateMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code substrateMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code substrateMaterial.length} is not equal to {@code CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param substrateMaterial a {@link SubstrateMaterial} instance in compiled form
 	 * @return the relative offset of {@code substrateMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code substrateMaterial.length} is not equal to {@code CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterial} is {@code null}
 	 */
 	public int getSubstrateMaterialOffsetRelative(final int[] substrateMaterial) {
-		return Structures.getStructureOffsetRelative(this.substrateMaterials, Objects.requireNonNull(substrateMaterial, "substrateMaterial == null"), getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
+		Objects.requireNonNull(substrateMaterial, "substrateMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(substrateMaterial, SUBSTRATE_MATERIAL_LENGTH, "substrateMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.substrateMaterials, substrateMaterial, getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
 	}
 	
 	/**
@@ -885,144 +1054,228 @@ public final class CompiledMaterialCache {
 	 * Sets all {@link BullseyeMaterial} instances in compiled form to {@code bullseyeMaterials}.
 	 * <p>
 	 * If {@code bullseyeMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeMaterials.length % CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param bullseyeMaterials the {@code BullseyeMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeMaterials.length % CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterials} is {@code null}
 	 */
 	public void setBullseyeMaterials(final float[] bullseyeMaterials) {
-		this.bullseyeMaterials = Objects.requireNonNull(bullseyeMaterials, "bullseyeMaterials == null");
+		Objects.requireNonNull(bullseyeMaterials, "bullseyeMaterials == null");
+		
+		ParameterArguments.requireExact(bullseyeMaterials.length % BULLSEYE_MATERIAL_LENGTH, 0, "bullseyeMaterials.length % CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH");
+		
+		this.bullseyeMaterials = bullseyeMaterials;
 	}
 	
 	/**
 	 * Sets all {@link CheckerboardMaterial} instances in compiled form to {@code checkerboardMaterials}.
 	 * <p>
 	 * If {@code checkerboardMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardMaterials.length % CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param checkerboardMaterials the {@code CheckerboardMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardMaterials.length % CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterials} is {@code null}
 	 */
 	public void setCheckerboardMaterials(final float[] checkerboardMaterials) {
-		this.checkerboardMaterials = Objects.requireNonNull(checkerboardMaterials, "checkerboardMaterials == null");
+		Objects.requireNonNull(checkerboardMaterials, "checkerboardMaterials == null");
+		
+		ParameterArguments.requireExact(checkerboardMaterials.length % CHECKERBOARD_MATERIAL_LENGTH, 0, "checkerboardMaterials.length % CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH");
+		
+		this.checkerboardMaterials = checkerboardMaterials;
 	}
 	
 	/**
 	 * Sets all {@link ClearCoatMaterial} instances in compiled form to {@code clearCoatMaterials}.
 	 * <p>
 	 * If {@code clearCoatMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code clearCoatMaterials.length % CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param clearCoatMaterials the {@code ClearCoatMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code clearCoatMaterials.length % CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterials} is {@code null}
 	 */
 	public void setClearCoatMaterials(final int[] clearCoatMaterials) {
-		this.clearCoatMaterials = Objects.requireNonNull(clearCoatMaterials, "clearCoatMaterials == null");
+		Objects.requireNonNull(clearCoatMaterials, "clearCoatMaterials == null");
+		
+		ParameterArguments.requireExact(clearCoatMaterials.length % CLEAR_COAT_MATERIAL_LENGTH, 0, "clearCoatMaterials.length % CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH");
+		
+		this.clearCoatMaterials = clearCoatMaterials;
 	}
 	
 	/**
 	 * Sets all {@link DisneyMaterial} instances in compiled form to {@code disneyMaterials}.
 	 * <p>
 	 * If {@code disneyMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disneyMaterials.length % CompiledMaterialCache.DISNEY_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param disneyMaterials the {@code DisneyMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disneyMaterials.length % CompiledMaterialCache.DISNEY_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterials} is {@code null}
 	 */
 	public void setDisneyMaterials(final int[] disneyMaterials) {
-		this.disneyMaterials = Objects.requireNonNull(disneyMaterials, "disneyMaterials == null");
+		Objects.requireNonNull(disneyMaterials, "disneyMaterials == null");
+		
+		ParameterArguments.requireExact(disneyMaterials.length % DISNEY_MATERIAL_LENGTH, 0, "disneyMaterials.length % CompiledMaterialCache.DISNEY_MATERIAL_LENGTH");
+		
+		this.disneyMaterials = disneyMaterials;
 	}
 	
 	/**
 	 * Sets all {@link GlassMaterial} instances in compiled form to {@code glassMaterials}.
 	 * <p>
 	 * If {@code glassMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glassMaterials.length % CompiledMaterialCache.GLASS_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param glassMaterials the {@code GlassMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glassMaterials.length % CompiledMaterialCache.GLASS_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code glassMaterials} is {@code null}
 	 */
 	public void setGlassMaterials(final int[] glassMaterials) {
-		this.glassMaterials = Objects.requireNonNull(glassMaterials, "glassMaterials == null");
+		Objects.requireNonNull(glassMaterials, "glassMaterials == null");
+		
+		ParameterArguments.requireExact(glassMaterials.length % GLASS_MATERIAL_LENGTH, 0, "glassMaterials.length % CompiledMaterialCache.GLASS_MATERIAL_LENGTH");
+		
+		this.glassMaterials = glassMaterials;
 	}
 	
 	/**
 	 * Sets all {@link GlossyMaterial} instances in compiled form to {@code glossyMaterials}.
 	 * <p>
 	 * If {@code glossyMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glossyMaterials.length % CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param glossyMaterials the {@code GlossyMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glossyMaterials.length % CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterials} is {@code null}
 	 */
 	public void setGlossyMaterials(final int[] glossyMaterials) {
-		this.glossyMaterials = Objects.requireNonNull(glossyMaterials, "glossyMaterials == null");
+		Objects.requireNonNull(glossyMaterials, "glossyMaterials == null");
+		
+		ParameterArguments.requireExact(glossyMaterials.length % GLOSSY_MATERIAL_LENGTH, 0, "glossyMaterials.length % CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH");
+		
+		this.glossyMaterials = glossyMaterials;
 	}
 	
 	/**
 	 * Sets all {@link MatteMaterial} instances in compiled form to {@code matteMaterials}.
 	 * <p>
 	 * If {@code matteMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matteMaterials.length % CompiledMaterialCache.MATTE_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param matteMaterials the {@code MatteMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matteMaterials.length % CompiledMaterialCache.MATTE_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code matteMaterials} is {@code null}
 	 */
 	public void setMatteMaterials(final int[] matteMaterials) {
-		this.matteMaterials = Objects.requireNonNull(matteMaterials, "matteMaterials == null");
+		Objects.requireNonNull(matteMaterials, "matteMaterials == null");
+		
+		ParameterArguments.requireExact(matteMaterials.length % MATTE_MATERIAL_LENGTH, 0, "matteMaterials.length % CompiledMaterialCache.MATTE_MATERIAL_LENGTH");
+		
+		this.matteMaterials = matteMaterials;
 	}
 	
 	/**
 	 * Sets all {@link MetalMaterial} instances in compiled form to {@code metalMaterials}.
 	 * <p>
 	 * If {@code metalMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code metalMaterials.length % CompiledMaterialCache.METAL_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param metalMaterials the {@code MetalMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code metalMaterials.length % CompiledMaterialCache.METAL_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code metalMaterials} is {@code null}
 	 */
 	public void setMetalMaterials(final int[] metalMaterials) {
-		this.metalMaterials = Objects.requireNonNull(metalMaterials, "metalMaterials == null");
+		Objects.requireNonNull(metalMaterials, "metalMaterials == null");
+		
+		ParameterArguments.requireExact(metalMaterials.length % METAL_MATERIAL_LENGTH, 0, "metalMaterials.length % CompiledMaterialCache.METAL_MATERIAL_LENGTH");
+		
+		this.metalMaterials = metalMaterials;
 	}
 	
 	/**
 	 * Sets all {@link MirrorMaterial} instances in compiled form to {@code mirrorMaterials}.
 	 * <p>
 	 * If {@code mirrorMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code mirrorMaterials.length % CompiledMaterialCache.MIRROR_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param mirrorMaterials the {@code MirrorMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code mirrorMaterials.length % CompiledMaterialCache.MIRROR_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterials} is {@code null}
 	 */
 	public void setMirrorMaterials(final int[] mirrorMaterials) {
-		this.mirrorMaterials = Objects.requireNonNull(mirrorMaterials, "mirrorMaterials == null");
+		Objects.requireNonNull(mirrorMaterials, "mirrorMaterials == null");
+		
+		ParameterArguments.requireExact(mirrorMaterials.length % MIRROR_MATERIAL_LENGTH, 0, "mirrorMaterials.length % CompiledMaterialCache.MIRROR_MATERIAL_LENGTH");
+		
+		this.mirrorMaterials = mirrorMaterials;
 	}
 	
 	/**
 	 * Sets all {@link PlasticMaterial} instances in compiled form to {@code plasticMaterials}.
 	 * <p>
 	 * If {@code plasticMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plasticMaterials.length % CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param plasticMaterials the {@code PlasticMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plasticMaterials.length % CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterials} is {@code null}
 	 */
 	public void setPlasticMaterials(final int[] plasticMaterials) {
-		this.plasticMaterials = Objects.requireNonNull(plasticMaterials, "plasticMaterials == null");
+		Objects.requireNonNull(plasticMaterials, "plasticMaterials == null");
+		
+		ParameterArguments.requireExact(plasticMaterials.length % PLASTIC_MATERIAL_LENGTH, 0, "plasticMaterials.length % CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH");
+		
+		this.plasticMaterials = plasticMaterials;
 	}
 	
 	/**
 	 * Sets all {@link PolkaDotMaterial} instances in compiled form to {@code polkaDotMaterials}.
 	 * <p>
 	 * If {@code polkaDotMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotMaterials.length % CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param polkaDotMaterials the {@code PolkaDotMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotMaterials.length % CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterials} is {@code null}
 	 */
 	public void setPolkaDotMaterials(final float[] polkaDotMaterials) {
-		this.polkaDotMaterials = Objects.requireNonNull(polkaDotMaterials, "polkaDotMaterials == null");
+		Objects.requireNonNull(polkaDotMaterials, "polkaDotMaterials == null");
+		
+		ParameterArguments.requireExact(polkaDotMaterials.length % POLKA_DOT_MATERIAL_LENGTH, 0, "polkaDotMaterials.length % CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH");
+		
+		this.polkaDotMaterials = polkaDotMaterials;
 	}
 	
 	/**
 	 * Sets all {@link SubstrateMaterial} instances in compiled form to {@code substrateMaterials}.
 	 * <p>
 	 * If {@code substrateMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code substrateMaterials.length % CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param substrateMaterials the {@code SubstrateMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code substrateMaterials.length % CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterials} is {@code null}
 	 */
 	public void setSubstrateMaterials(final int[] substrateMaterials) {
-		this.substrateMaterials = Objects.requireNonNull(substrateMaterials, "substrateMaterials == null");
+		Objects.requireNonNull(substrateMaterials, "substrateMaterials == null");
+		
+		ParameterArguments.requireExact(substrateMaterials.length % SUBSTRATE_MATERIAL_LENGTH, 0, "substrateMaterials.length % CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH");
+		
+		this.substrateMaterials = substrateMaterials;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

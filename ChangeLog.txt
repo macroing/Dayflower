@@ -1,3 +1,18 @@
+2021-07-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Add additional parameter validation to the methods getBullseyeMaterialOffsetAbsolute(float[]), getBullseyeMaterialOffsetRelative(float[]) and setBullseyeMaterials(float[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getCheckerboardMaterialOffsetAbsolute(float[]), getCheckerboardMaterialOffsetRelative(float[]) and setCheckerboardMaterials(float[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getClearCoatMaterialOffsetAbsolute(int[]), getClearCoatMaterialOffsetRelative(int[]) and setClearCoatMaterials(int[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getDisneyMaterialOffsetAbsolute(int[]), getDisneyMaterialOffsetRelative(int[]) and setDisneyMaterials(int[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getGlassMaterialOffsetAbsolute(int[]), getGlassMaterialOffsetRelative(int[]) and setGlassMaterials(int[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getGlossyMaterialOffsetAbsolute(int[]), getGlossyMaterialOffsetRelative(int[]) and setGlossyMaterials(int[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getMatteMaterialOffsetAbsolute(int[]), getMatteMaterialOffsetRelative(int[]) and setMatteMaterials(int[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getMetalMaterialOffsetAbsolute(int[]), getMetalMaterialOffsetRelative(int[]) and setMetalMaterials(int[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getMirrorMaterialOffsetAbsolute(int[]), getMirrorMaterialOffsetRelative(int[]) and setMirrorMaterials(int[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getPlasticMaterialOffsetAbsolute(int[]), getPlasticMaterialOffsetRelative(int[]) and setPlasticMaterials(int[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getPolkaDotMaterialOffsetAbsolute(float[]), getPolkaDotMaterialOffsetRelative(float[]) and setPolkaDotMaterials(float[]) in the CompiledMaterialCache class.
+	* CHANGE:	Add additional parameter validation to the methods getSubstrateMaterialOffsetAbsolute(int[]), getSubstrateMaterialOffsetRelative(int[]) and setSubstrateMaterials(int[]) in the CompiledMaterialCache class.
+
 2021-07-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods addCheckerboardTexture(float[]) and removeCheckerboardTexture(float[]) to the CompiledTextureCache class.

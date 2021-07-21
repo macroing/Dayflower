@@ -1,5 +1,8 @@
 2021-07-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods addBullseyeMaterial(float[]) and removeBullseyeMaterial(float[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods addCheckerboardMaterial(float[]) and removeCheckerboardMaterial(float[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods addClearCoatMaterial(int[]) and removeClearCoatMaterial(int[]) to the CompiledMaterialCache class.
 	* CHANGE:	Add additional parameter validation to the methods getBullseyeMaterialOffsetAbsolute(float[]), getBullseyeMaterialOffsetRelative(float[]) and setBullseyeMaterials(float[]) in the CompiledMaterialCache class.
 	* CHANGE:	Add additional parameter validation to the methods getCheckerboardMaterialOffsetAbsolute(float[]), getCheckerboardMaterialOffsetRelative(float[]) and setCheckerboardMaterials(float[]) in the CompiledMaterialCache class.
 	* CHANGE:	Add additional parameter validation to the methods getClearCoatMaterialOffsetAbsolute(int[]), getClearCoatMaterialOffsetRelative(int[]) and setClearCoatMaterials(int[]) in the CompiledMaterialCache class.

@@ -355,6 +355,84 @@ public final class CompiledMaterialCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Removes {@code bullseyeMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code bullseyeMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code bullseyeMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeMaterial.length} is not equal to {@code CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param bullseyeMaterial a {@link BullseyeMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code bullseyeMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeMaterial.length} is not equal to {@code CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
+	 */
+	public boolean removeBullseyeMaterial(final float[] bullseyeMaterial) {
+		final int absoluteOffset = getBullseyeMaterialOffsetAbsolute(bullseyeMaterial);
+		
+		if(absoluteOffset != -1) {
+			setBullseyeMaterials(Structures.removeStructure(getBullseyeMaterials(), absoluteOffset, BULLSEYE_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code checkerboardMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code checkerboardMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code checkerboardMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardMaterial.length} is not equal to {@code CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param checkerboardMaterial a {@link CheckerboardMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code checkerboardMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardMaterial.length} is not equal to {@code CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
+	 */
+	public boolean removeCheckerboardMaterial(final float[] checkerboardMaterial) {
+		final int absoluteOffset = getCheckerboardMaterialOffsetAbsolute(checkerboardMaterial);
+		
+		if(absoluteOffset != -1) {
+			setCheckerboardMaterials(Structures.removeStructure(getCheckerboardMaterials(), absoluteOffset, CHECKERBOARD_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code clearCoatMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code clearCoatMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code clearCoatMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code clearCoatMaterial.length} is not equal to {@code CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param clearCoatMaterial a {@link ClearCoatMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code clearCoatMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code clearCoatMaterial.length} is not equal to {@code CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterial} is {@code null}
+	 */
+	public boolean removeClearCoatMaterial(final int[] clearCoatMaterial) {
+		final int absoluteOffset = getClearCoatMaterialOffsetAbsolute(clearCoatMaterial);
+		
+		if(absoluteOffset != -1) {
+			setClearCoatMaterials(Structures.removeStructure(getClearCoatMaterials(), absoluteOffset, CLEAR_COAT_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link BullseyeMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code BullseyeMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
@@ -379,6 +457,87 @@ public final class CompiledMaterialCache {
 	 */
 	public float[] getPolkaDotMaterials() {
 		return this.polkaDotMaterials;
+	}
+	
+	/**
+	 * Adds {@code bullseyeMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code bullseyeMaterial}.
+	 * <p>
+	 * If {@code bullseyeMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code bullseyeMaterial.length} is not equal to {@code CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param bullseyeMaterial a {@link BullseyeMaterial} instance in compiled form
+	 * @return the relative offset to {@code bullseyeMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bullseyeMaterial.length} is not equal to {@code CompiledMaterialCache.BULLSEYE_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
+	 */
+	public int addBullseyeMaterial(final float[] bullseyeMaterial) {
+		final int relativeOffsetOld = getBullseyeMaterialOffsetRelative(bullseyeMaterial);
+		final int relativeOffsetNew = getBullseyeMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setBullseyeMaterials(Structures.addStructure(getBullseyeMaterials(), bullseyeMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code checkerboardMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code checkerboardMaterial}.
+	 * <p>
+	 * If {@code checkerboardMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code checkerboardMaterial.length} is not equal to {@code CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param checkerboardMaterial a {@link CheckerboardMaterial} instance in compiled form
+	 * @return the relative offset to {@code checkerboardMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code checkerboardMaterial.length} is not equal to {@code CompiledMaterialCache.CHECKERBOARD_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
+	 */
+	public int addCheckerboardMaterial(final float[] checkerboardMaterial) {
+		final int relativeOffsetOld = getCheckerboardMaterialOffsetRelative(checkerboardMaterial);
+		final int relativeOffsetNew = getCheckerboardMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setCheckerboardMaterials(Structures.addStructure(getCheckerboardMaterials(), checkerboardMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code clearCoatMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code clearCoatMaterial}.
+	 * <p>
+	 * If {@code clearCoatMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code clearCoatMaterial.length} is not equal to {@code CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param clearCoatMaterial a {@link ClearCoatMaterial} instance in compiled form
+	 * @return the relative offset to {@code clearCoatMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code clearCoatMaterial.length} is not equal to {@code CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterial} is {@code null}
+	 */
+	public int addClearCoatMaterial(final int[] clearCoatMaterial) {
+		final int relativeOffsetOld = getClearCoatMaterialOffsetRelative(clearCoatMaterial);
+		final int relativeOffsetNew = getClearCoatMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setClearCoatMaterials(Structures.addStructure(getClearCoatMaterials(), clearCoatMaterial));
+		
+		return relativeOffsetNew;
 	}
 	
 	/**

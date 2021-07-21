@@ -249,6 +249,18 @@ final class Structures {
 		return -1;
 	}
 	
+	public static int[] addStructure(final int[] structures, final int[] structure) {
+		Objects.requireNonNull(structures, "structures == null");
+		Objects.requireNonNull(structure, "structure == null");
+		
+		final int[] newStructures = new int[structures.length + structure.length];
+		
+		System.arraycopy(structures, 0, newStructures, 0, structures.length);
+		System.arraycopy(structure, 0, newStructures, structures.length, structure.length);
+		
+		return newStructures;
+	}
+	
 	public static int[] addStructureIDAndOffset(final int[] structureIDsAndOffsets, final int structureID, final int structureOffset) {
 		Objects.requireNonNull(structureIDsAndOffsets, "structureIDsAndOffsets == null");
 		
@@ -276,6 +288,21 @@ final class Structures {
 		newStructureOffsets[newStructureOffsets.length - 1] = structureOffset;
 		
 		return newStructureOffsets;
+	}
+	
+	public static int[] removeStructure(final int[] structures, final int structureOffsetAbsolute, final int structureLength) {
+		Objects.requireNonNull(structures, "structures == null");
+		
+		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
+		ParameterArguments.requireRange(structureOffsetAbsolute, 0, structures.length - 1, "structureOffsetAbsolute");
+		ParameterArguments.requireRange(structureOffsetAbsolute + structureLength, 0, structures.length, "structureOffsetAbsolute + structureLength");
+		
+		final int[] newStructures = new int[structures.length - structureLength];
+		
+		System.arraycopy(structures, 0, newStructures, 0, structureOffsetAbsolute);
+		System.arraycopy(structures, structureOffsetAbsolute + structureLength, newStructures, structureOffsetAbsolute, structures.length - (structureOffsetAbsolute + structureLength));
+		
+		return newStructures;
 	}
 	
 	public static int[] removeStructureIDAndOffset(final int[] structureIDsAndOffsets, final int structureID, final int structureOffset) {

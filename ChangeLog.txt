@@ -10,6 +10,18 @@
 	* ADD:		Add the methods addPolkaDotMaterial(float[]) and removePolkaDotMaterial(float[]) to the CompiledMaterialCache class.
 	* ADD:		Add the methods addSubstrateMaterial(int[]) and removeSubstrateMaterial(int[]) to the CompiledMaterialCache class.
 	* CHANGE:	Change the returned offset from absolute to relative in the methods addAxisAlignedBoundingBox3F(float[]) and addBoundingSphere3F(float[]) of the CompiledBoundingVolume3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getCone3FOffsetAbsolute(float[]), getCone3FOffsetRelative(float[]) and setCone3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getCylinder3FOffsetAbsolute(float[]), getCylinder3FOffsetRelative(float[]) and setCylinder3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getDisk3FOffsetAbsolute(float[]), getDisk3FOffsetRelative(float[]) and setDisk3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getHyperboloid3FOffsetAbsolute(float[]), getHyperboloid3FOffsetRelative(float[]) and setHyperboloid3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getParaboloid3FOffsetAbsolute(float[]), getParaboloid3FOffsetRelative(float[]) and setParaboloid3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getPlane3FOffsetAbsolute(float[]), getPlane3FOffsetRelative(float[]) and setPlane3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getRectangle3FOffsetAbsolute(float[]), getRectangle3FOffsetRelative(float[]) and setRectangle3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getRectangularCuboid3FOffsetAbsolute(float[]), getRectangularCuboid3FOffsetRelative(float[]) and setRectangularCuboid3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getSphere3FOffsetAbsolute(float[]), getSphere3FOffsetRelative(float[]) and setSphere3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getTorus3FOffsetAbsolute(float[]), getTorus3FOffsetRelative(float[]) and setTorus3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the methods getTriangle3FOffsetAbsolute(float[]), getTriangle3FOffsetRelative(float[]) and setTriangle3Fs(float[]) in the CompiledShape3FCache class.
+	* CHANGE:	Add additional parameter validation to the method setTriangleMesh3Fs(int[]) in the CompiledShape3FCache class.
 
 2021-07-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

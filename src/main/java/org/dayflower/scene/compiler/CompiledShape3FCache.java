@@ -53,6 +53,7 @@ import org.dayflower.java.io.IntArrayOutputStream;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledShape3FCache} contains {@link Shape3F} instances in compiled form.
@@ -539,26 +540,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code cone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code cone3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3F.length} is not equal to {@code CompiledShape3FCache.CONE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param cone3F a {@link Cone3F} instance in compiled form
 	 * @return the absolute offset of {@code cone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cone3F.length} is not equal to {@code CompiledShape3FCache.CONE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code cone3F} is {@code null}
 	 */
 	public int getCone3FOffsetAbsolute(final float[] cone3F) {
-		return Structures.getStructureOffsetAbsolute(this.cone3Fs, Objects.requireNonNull(cone3F, "cone3F == null"), getCone3FCount(), CONE_3_F_LENGTH);
+		Objects.requireNonNull(cone3F, "cone3F == null");
+		
+		ParameterArguments.requireExactArrayLength(cone3F, CONE_3_F_LENGTH, "cone3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.cone3Fs, cone3F, getCone3FCount(), CONE_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code cone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code cone3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3F.length} is not equal to {@code CompiledShape3FCache.CONE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param cone3F a {@link Cone3F} instance in compiled form
 	 * @return the relative offset of {@code cone3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cone3F.length} is not equal to {@code CompiledShape3FCache.CONE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code cone3F} is {@code null}
 	 */
 	public int getCone3FOffsetRelative(final float[] cone3F) {
-		return Structures.getStructureOffsetRelative(this.cone3Fs, Objects.requireNonNull(cone3F, "cone3F == null"), getCone3FCount(), CONE_3_F_LENGTH);
+		Objects.requireNonNull(cone3F, "cone3F == null");
+		
+		ParameterArguments.requireExactArrayLength(cone3F, CONE_3_F_LENGTH, "cone3F");
+		
+		return Structures.getStructureOffsetRelative(this.cone3Fs, cone3F, getCone3FCount(), CONE_3_F_LENGTH);
 	}
 	
 	/**
@@ -574,26 +589,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code cylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code cylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3F.length} is not equal to {@code CompiledShape3FCache.CYLINDER_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param cylinder3F a {@link Cylinder3F} instance in compiled form
 	 * @return the absolute offset of {@code cylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cylinder3F.length} is not equal to {@code CompiledShape3FCache.CYLINDER_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3F} is {@code null}
 	 */
 	public int getCylinder3FOffsetAbsolute(final float[] cylinder3F) {
-		return Structures.getStructureOffsetAbsolute(this.cylinder3Fs, Objects.requireNonNull(cylinder3F, "cylinder3F == null"), getCylinder3FCount(), CYLINDER_3_F_LENGTH);
+		Objects.requireNonNull(cylinder3F, "cylinder3F == null");
+		
+		ParameterArguments.requireExactArrayLength(cylinder3F, CYLINDER_3_F_LENGTH, "cylinder3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.cylinder3Fs, cylinder3F, getCylinder3FCount(), CYLINDER_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code cylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code cylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3F.length} is not equal to {@code CompiledShape3FCache.CYLINDER_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param cylinder3F a {@link Cylinder3F} instance in compiled form
 	 * @return the relative offset of {@code cylinder3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cylinder3F.length} is not equal to {@code CompiledShape3FCache.CYLINDER_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3F} is {@code null}
 	 */
 	public int getCylinder3FOffsetRelative(final float[] cylinder3F) {
-		return Structures.getStructureOffsetRelative(this.cylinder3Fs, Objects.requireNonNull(cylinder3F, "cylinder3F == null"), getCylinder3FCount(), CYLINDER_3_F_LENGTH);
+		Objects.requireNonNull(cylinder3F, "cylinder3F == null");
+		
+		ParameterArguments.requireExactArrayLength(cylinder3F, CYLINDER_3_F_LENGTH, "cylinder3F");
+		
+		return Structures.getStructureOffsetRelative(this.cylinder3Fs, cylinder3F, getCylinder3FCount(), CYLINDER_3_F_LENGTH);
 	}
 	
 	/**
@@ -609,26 +638,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code disk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code disk3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disk3F.length} is not equal to {@code CompiledShape3FCache.DISK_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param disk3F a {@link Disk3F} instance in compiled form
 	 * @return the absolute offset of {@code disk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disk3F.length} is not equal to {@code CompiledShape3FCache.DISK_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code disk3F} is {@code null}
 	 */
 	public int getDisk3FOffsetAbsolute(final float[] disk3F) {
-		return Structures.getStructureOffsetAbsolute(this.disk3Fs, Objects.requireNonNull(disk3F, "disk3F == null"), getDisk3FCount(), DISK_3_F_LENGTH);
+		Objects.requireNonNull(disk3F, "disk3F == null");
+		
+		ParameterArguments.requireExactArrayLength(disk3F, DISK_3_F_LENGTH, "disk3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.disk3Fs, disk3F, getDisk3FCount(), DISK_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code disk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code disk3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disk3F.length} is not equal to {@code CompiledShape3FCache.DISK_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param disk3F a {@link Disk3F} instance in compiled form
 	 * @return the relative offset of {@code disk3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disk3F.length} is not equal to {@code CompiledShape3FCache.DISK_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code disk3F} is {@code null}
 	 */
 	public int getDisk3FOffsetRelative(final float[] disk3F) {
-		return Structures.getStructureOffsetRelative(this.disk3Fs, Objects.requireNonNull(disk3F, "disk3F == null"), getDisk3FCount(), DISK_3_F_LENGTH);
+		Objects.requireNonNull(disk3F, "disk3F == null");
+		
+		ParameterArguments.requireExactArrayLength(disk3F, DISK_3_F_LENGTH, "disk3F");
+		
+		return Structures.getStructureOffsetRelative(this.disk3Fs, disk3F, getDisk3FCount(), DISK_3_F_LENGTH);
 	}
 	
 	/**
@@ -644,26 +687,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code hyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code hyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code hyperboloid3F.length} is not equal to {@code CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param hyperboloid3F a {@link Hyperboloid3F} instance in compiled form
 	 * @return the absolute offset of {@code hyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code hyperboloid3F.length} is not equal to {@code CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3F} is {@code null}
 	 */
 	public int getHyperboloid3FOffsetAbsolute(final float[] hyperboloid3F) {
-		return Structures.getStructureOffsetAbsolute(this.hyperboloid3Fs, Objects.requireNonNull(hyperboloid3F, "hyperboloid3F == null"), getHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
+		Objects.requireNonNull(hyperboloid3F, "hyperboloid3F == null");
+		
+		ParameterArguments.requireExactArrayLength(hyperboloid3F, HYPERBOLOID_3_F_LENGTH, "hyperboloid3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.hyperboloid3Fs, hyperboloid3F, getHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code hyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code hyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code hyperboloid3F.length} is not equal to {@code CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param hyperboloid3F a {@link Hyperboloid3F} instance in compiled form
 	 * @return the relative offset of {@code hyperboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code hyperboloid3F.length} is not equal to {@code CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3F} is {@code null}
 	 */
 	public int getHyperboloid3FOffsetRelative(final float[] hyperboloid3F) {
-		return Structures.getStructureOffsetRelative(this.hyperboloid3Fs, Objects.requireNonNull(hyperboloid3F, "hyperboloid3F == null"), getHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
+		Objects.requireNonNull(hyperboloid3F, "hyperboloid3F == null");
+		
+		ParameterArguments.requireExactArrayLength(hyperboloid3F, HYPERBOLOID_3_F_LENGTH, "hyperboloid3F");
+		
+		return Structures.getStructureOffsetRelative(this.hyperboloid3Fs, hyperboloid3F, getHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -679,26 +736,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code paraboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code paraboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code paraboloid3F.length} is not equal to {@code CompiledShape3FCache.PARABOLOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param paraboloid3F a {@link Paraboloid3F} instance in compiled form
 	 * @return the absolute offset of {@code paraboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code paraboloid3F.length} is not equal to {@code CompiledShape3FCache.PARABOLOID_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3F} is {@code null}
 	 */
 	public int getParaboloid3FOffsetAbsolute(final float[] paraboloid3F) {
-		return Structures.getStructureOffsetAbsolute(this.paraboloid3Fs, Objects.requireNonNull(paraboloid3F, "paraboloid3F == null"), getParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
+		Objects.requireNonNull(paraboloid3F, "paraboloid3F == null");
+		
+		ParameterArguments.requireExactArrayLength(paraboloid3F, PARABOLOID_3_F_LENGTH, "paraboloid3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.paraboloid3Fs, paraboloid3F, getParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code paraboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code paraboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code paraboloid3F.length} is not equal to {@code CompiledShape3FCache.PARABOLOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param paraboloid3F a {@link Paraboloid3F} instance in compiled form
 	 * @return the relative offset of {@code paraboloid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code paraboloid3F.length} is not equal to {@code CompiledShape3FCache.PARABOLOID_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3F} is {@code null}
 	 */
 	public int getParaboloid3FOffsetRelative(final float[] paraboloid3F) {
-		return Structures.getStructureOffsetRelative(this.paraboloid3Fs, Objects.requireNonNull(paraboloid3F, "paraboloid3F == null"), getParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
+		Objects.requireNonNull(paraboloid3F, "paraboloid3F == null");
+		
+		ParameterArguments.requireExactArrayLength(paraboloid3F, PARABOLOID_3_F_LENGTH, "paraboloid3F");
+		
+		return Structures.getStructureOffsetRelative(this.paraboloid3Fs, paraboloid3F, getParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -714,26 +785,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param plane3F a {@link Plane3F} instance in compiled form
 	 * @return the absolute offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
 	 */
 	public int getPlane3FOffsetAbsolute(final float[] plane3F) {
-		return Structures.getStructureOffsetAbsolute(this.plane3Fs, Objects.requireNonNull(plane3F, "plane3F == null"), getPlane3FCount(), PLANE_3_F_LENGTH);
+		Objects.requireNonNull(plane3F, "plane3F == null");
+		
+		ParameterArguments.requireExactArrayLength(plane3F, PLANE_3_F_LENGTH, "plane3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.plane3Fs, plane3F, getPlane3FCount(), PLANE_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param plane3F a {@link Plane3F} instance in compiled form
 	 * @return the relative offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
 	 */
 	public int getPlane3FOffsetRelative(final float[] plane3F) {
-		return Structures.getStructureOffsetRelative(this.plane3Fs, Objects.requireNonNull(plane3F, "plane3F == null"), getPlane3FCount(), PLANE_3_F_LENGTH);
+		Objects.requireNonNull(plane3F, "plane3F == null");
+		
+		ParameterArguments.requireExactArrayLength(plane3F, PLANE_3_F_LENGTH, "plane3F");
+		
+		return Structures.getStructureOffsetRelative(this.plane3Fs, plane3F, getPlane3FCount(), PLANE_3_F_LENGTH);
 	}
 	
 	/**
@@ -749,26 +834,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code rectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code rectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangle3F.length} is not equal to {@code CompiledShape3FCache.RECTANGLE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param rectangle3F a {@link Rectangle3F} instance in compiled form
 	 * @return the absolute offset of {@code rectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangle3F.length} is not equal to {@code CompiledShape3FCache.RECTANGLE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle3F} is {@code null}
 	 */
 	public int getRectangle3FOffsetAbsolute(final float[] rectangle3F) {
-		return Structures.getStructureOffsetAbsolute(this.rectangle3Fs, Objects.requireNonNull(rectangle3F, "rectangle3F == null"), getRectangle3FCount(), RECTANGLE_3_F_LENGTH);
+		Objects.requireNonNull(rectangle3F, "rectangle3F == null");
+		
+		ParameterArguments.requireExactArrayLength(rectangle3F, RECTANGLE_3_F_LENGTH, "rectangle3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.rectangle3Fs, rectangle3F, getRectangle3FCount(), RECTANGLE_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code rectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code rectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangle3F.length} is not equal to {@code CompiledShape3FCache.RECTANGLE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param rectangle3F a {@link Rectangle3F} instance in compiled form
 	 * @return the relative offset of {@code rectangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangle3F.length} is not equal to {@code CompiledShape3FCache.RECTANGLE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle3F} is {@code null}
 	 */
 	public int getRectangle3FOffsetRelative(final float[] rectangle3F) {
-		return Structures.getStructureOffsetRelative(this.rectangle3Fs, Objects.requireNonNull(rectangle3F, "rectangle3F == null"), getRectangle3FCount(), RECTANGLE_3_F_LENGTH);
+		Objects.requireNonNull(rectangle3F, "rectangle3F == null");
+		
+		ParameterArguments.requireExactArrayLength(rectangle3F, RECTANGLE_3_F_LENGTH, "rectangle3F");
+		
+		return Structures.getStructureOffsetRelative(this.rectangle3Fs, rectangle3F, getRectangle3FCount(), RECTANGLE_3_F_LENGTH);
 	}
 	
 	/**
@@ -784,26 +883,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code rectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code rectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangularCuboid3F.length} is not equal to {@code CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param rectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
 	 * @return the absolute offset of {@code rectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangularCuboid3F.length} is not equal to {@code CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3F} is {@code null}
 	 */
 	public int getRectangularCuboid3FOffsetAbsolute(final float[] rectangularCuboid3F) {
-		return Structures.getStructureOffsetAbsolute(this.rectangularCuboid3Fs, Objects.requireNonNull(rectangularCuboid3F, "rectangularCuboid3F == null"), getRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
+		Objects.requireNonNull(rectangularCuboid3F, "rectangularCuboid3F == null");
+		
+		ParameterArguments.requireExactArrayLength(rectangularCuboid3F, RECTANGULAR_CUBOID_3_F_LENGTH, "rectangularCuboid3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.rectangularCuboid3Fs, rectangularCuboid3F, getRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code rectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code rectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangularCuboid3F.length} is not equal to {@code CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param rectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
 	 * @return the relative offset of {@code rectangularCuboid3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangularCuboid3F.length} is not equal to {@code CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3F} is {@code null}
 	 */
 	public int getRectangularCuboid3FOffsetRelative(final float[] rectangularCuboid3F) {
-		return Structures.getStructureOffsetRelative(this.rectangularCuboid3Fs, Objects.requireNonNull(rectangularCuboid3F, "rectangularCuboid3F == null"), getRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
+		Objects.requireNonNull(rectangularCuboid3F, "rectangularCuboid3F == null");
+		
+		ParameterArguments.requireExactArrayLength(rectangularCuboid3F, RECTANGULAR_CUBOID_3_F_LENGTH, "rectangularCuboid3F");
+		
+		return Structures.getStructureOffsetRelative(this.rectangularCuboid3Fs, rectangularCuboid3F, getRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
 	}
 	
 	/**
@@ -819,26 +932,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param sphere3F a {@link Sphere3F} instance in compiled form
 	 * @return the absolute offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
 	 */
 	public int getSphere3FOffsetAbsolute(final float[] sphere3F) {
-		return Structures.getStructureOffsetAbsolute(this.sphere3Fs, Objects.requireNonNull(sphere3F, "sphere3F == null"), getSphere3FCount(), SPHERE_3_F_LENGTH);
+		Objects.requireNonNull(sphere3F, "sphere3F == null");
+		
+		ParameterArguments.requireExactArrayLength(sphere3F, SPHERE_3_F_LENGTH, "sphere3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.sphere3Fs, sphere3F, getSphere3FCount(), SPHERE_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param sphere3F a {@link Sphere3F} instance in compiled form
 	 * @return the relative offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
 	 */
 	public int getSphere3FOffsetRelative(final float[] sphere3F) {
-		return Structures.getStructureOffsetRelative(this.sphere3Fs, Objects.requireNonNull(sphere3F, "sphere3F == null"), getSphere3FCount(), SPHERE_3_F_LENGTH);
+		Objects.requireNonNull(sphere3F, "sphere3F == null");
+		
+		ParameterArguments.requireExactArrayLength(sphere3F, SPHERE_3_F_LENGTH, "sphere3F");
+		
+		return Structures.getStructureOffsetRelative(this.sphere3Fs, sphere3F, getSphere3FCount(), SPHERE_3_F_LENGTH);
 	}
 	
 	/**
@@ -854,26 +981,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code torus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code torus3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code torus3F.length} is not equal to {@code CompiledShape3FCache.TORUS_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param torus3F a {@link Torus3F} instance in compiled form
 	 * @return the absolute offset of {@code torus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code torus3F.length} is not equal to {@code CompiledShape3FCache.TORUS_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code torus3F} is {@code null}
 	 */
 	public int getTorus3FOffsetAbsolute(final float[] torus3F) {
-		return Structures.getStructureOffsetAbsolute(this.torus3Fs, Objects.requireNonNull(torus3F, "torus3F == null"), getTorus3FCount(), TORUS_3_F_LENGTH);
+		Objects.requireNonNull(torus3F, "torus3F == null");
+		
+		ParameterArguments.requireExactArrayLength(torus3F, TORUS_3_F_LENGTH, "torus3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.torus3Fs, torus3F, getTorus3FCount(), TORUS_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code torus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code torus3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code torus3F.length} is not equal to {@code CompiledShape3FCache.TORUS_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param torus3F a {@link Torus3F} instance in compiled form
 	 * @return the relative offset of {@code torus3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code torus3F.length} is not equal to {@code CompiledShape3FCache.TORUS_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code torus3F} is {@code null}
 	 */
 	public int getTorus3FOffsetRelative(final float[] torus3F) {
-		return Structures.getStructureOffsetRelative(this.torus3Fs, Objects.requireNonNull(torus3F, "torus3F == null"), getTorus3FCount(), TORUS_3_F_LENGTH);
+		Objects.requireNonNull(torus3F, "torus3F == null");
+		
+		ParameterArguments.requireExactArrayLength(torus3F, TORUS_3_F_LENGTH, "torus3F");
+		
+		return Structures.getStructureOffsetRelative(this.torus3Fs, torus3F, getTorus3FCount(), TORUS_3_F_LENGTH);
 	}
 	
 	/**
@@ -889,26 +1030,40 @@ public final class CompiledShape3FCache {
 	 * Returns the absolute offset of {@code triangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code triangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangle3F.length} is not equal to {@code CompiledShape3FCache.TRIANGLE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param triangle3F a {@link Triangle3F} instance in compiled form
 	 * @return the absolute offset of {@code triangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangle3F.length} is not equal to {@code CompiledShape3FCache.TRIANGLE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code triangle3F} is {@code null}
 	 */
 	public int getTriangle3FOffsetAbsolute(final float[] triangle3F) {
-		return Structures.getStructureOffsetAbsolute(this.triangle3Fs, Objects.requireNonNull(triangle3F, "triangle3F == null"), getTriangle3FCount(), TRIANGLE_3_F_LENGTH);
+		Objects.requireNonNull(triangle3F, "triangle3F == null");
+		
+		ParameterArguments.requireExactArrayLength(triangle3F, TRIANGLE_3_F_LENGTH, "triangle3F");
+		
+		return Structures.getStructureOffsetAbsolute(this.triangle3Fs, triangle3F, getTriangle3FCount(), TRIANGLE_3_F_LENGTH);
 	}
 	
 	/**
 	 * Returns the relative offset of {@code triangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
 	 * If {@code triangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangle3F.length} is not equal to {@code CompiledShape3FCache.TRIANGLE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param triangle3F a {@link Triangle3F} instance in compiled form
 	 * @return the relative offset of {@code triangle3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangle3F.length} is not equal to {@code CompiledShape3FCache.TRIANGLE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code triangle3F} is {@code null}
 	 */
 	public int getTriangle3FOffsetRelative(final float[] triangle3F) {
-		return Structures.getStructureOffsetRelative(this.triangle3Fs, Objects.requireNonNull(triangle3F, "triangle3F == null"), getTriangle3FCount(), TRIANGLE_3_F_LENGTH);
+		Objects.requireNonNull(triangle3F, "triangle3F == null");
+		
+		ParameterArguments.requireExactArrayLength(triangle3F, TRIANGLE_3_F_LENGTH, "triangle3F");
+		
+		return Structures.getStructureOffsetRelative(this.triangle3Fs, triangle3F, getTriangle3FCount(), TRIANGLE_3_F_LENGTH);
 	}
 	
 	/**
@@ -924,144 +1079,228 @@ public final class CompiledShape3FCache {
 	 * Sets all {@link Cone3F} instances in compiled form to {@code cone3Fs}.
 	 * <p>
 	 * If {@code cone3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3Fs.length % CompiledShape3FCache.CONE_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param cone3Fs the {@code Cone3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cone3Fs.length % CompiledShape3FCache.CONE_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code cone3Fs} is {@code null}
 	 */
 	public void setCone3Fs(final float[] cone3Fs) {
-		this.cone3Fs = Objects.requireNonNull(cone3Fs, "cone3Fs == null");
+		Objects.requireNonNull(cone3Fs, "cone3Fs == null");
+		
+		ParameterArguments.requireExact(cone3Fs.length % CONE_3_F_LENGTH, 0, "cone3Fs.length % CompiledShape3FCache.CONE_3_F_LENGTH");
+		
+		this.cone3Fs = cone3Fs;
 	}
 	
 	/**
 	 * Sets all {@link Cylinder3F} instances in compiled form to {@code cylinder3Fs}.
 	 * <p>
 	 * If {@code cylinder3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3Fs.length % CompiledShape3FCache.CYLINDER_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param cylinder3Fs the {@code Cylinder3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cylinder3Fs.length % CompiledShape3FCache.CYLINDER_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3Fs} is {@code null}
 	 */
 	public void setCylinder3Fs(final float[] cylinder3Fs) {
-		this.cylinder3Fs = Objects.requireNonNull(cylinder3Fs, "cylinder3Fs == null");
+		Objects.requireNonNull(cylinder3Fs, "cylinder3Fs == null");
+		
+		ParameterArguments.requireExact(cylinder3Fs.length % CYLINDER_3_F_LENGTH, 0, "cylinder3Fs.length % CompiledShape3FCache.CYLINDER_3_F_LENGTH");
+		
+		this.cylinder3Fs = cylinder3Fs;
 	}
 	
 	/**
 	 * Sets all {@link Disk3F} instances in compiled form to {@code disk3Fs}.
 	 * <p>
 	 * If {@code disk3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disk3Fs.length % CompiledShape3FCache.DISK_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param disk3Fs the {@code Disk3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disk3Fs.length % CompiledShape3FCache.DISK_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code disk3Fs} is {@code null}
 	 */
 	public void setDisk3Fs(final float[] disk3Fs) {
-		this.disk3Fs = Objects.requireNonNull(disk3Fs, "disk3Fs == null");
+		Objects.requireNonNull(disk3Fs, "disk3Fs == null");
+		
+		ParameterArguments.requireExact(disk3Fs.length % DISK_3_F_LENGTH, 0, "disk3Fs.length % CompiledShape3FCache.DISK_3_F_LENGTH");
+		
+		this.disk3Fs = disk3Fs;
 	}
 	
 	/**
 	 * Sets all {@link Hyperboloid3F} instances in compiled form to {@code hyperboloid3Fs}.
 	 * <p>
 	 * If {@code hyperboloid3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code hyperboloid3Fs.length % CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param hyperboloid3Fs the {@code Hyperboloid3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code hyperboloid3Fs.length % CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3Fs} is {@code null}
 	 */
 	public void setHyperboloid3Fs(final float[] hyperboloid3Fs) {
-		this.hyperboloid3Fs = Objects.requireNonNull(hyperboloid3Fs, "hyperboloid3Fs == null");
+		Objects.requireNonNull(hyperboloid3Fs, "hyperboloid3Fs == null");
+		
+		ParameterArguments.requireExact(hyperboloid3Fs.length % HYPERBOLOID_3_F_LENGTH, 0, "hyperboloid3Fs.length % CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH");
+		
+		this.hyperboloid3Fs = hyperboloid3Fs;
 	}
 	
 	/**
 	 * Sets all {@link Paraboloid3F} instances in compiled form to {@code paraboloid3Fs}.
 	 * <p>
 	 * If {@code paraboloid3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code paraboloid3Fs.length % CompiledShape3FCache.PARABOLOID_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param paraboloid3Fs the {@code Paraboloid3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code paraboloid3Fs.length % CompiledShape3FCache.PARABOLOID_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3Fs} is {@code null}
 	 */
 	public void setParaboloid3Fs(final float[] paraboloid3Fs) {
-		this.paraboloid3Fs = Objects.requireNonNull(paraboloid3Fs, "paraboloid3Fs == null");
+		Objects.requireNonNull(paraboloid3Fs, "paraboloid3Fs == null");
+		
+		ParameterArguments.requireExact(paraboloid3Fs.length % PARABOLOID_3_F_LENGTH, 0, "paraboloid3Fs.length % CompiledShape3FCache.PARABOLOID_3_F_LENGTH");
+		
+		this.paraboloid3Fs = paraboloid3Fs;
 	}
 	
 	/**
 	 * Sets all {@link Plane3F} instances in compiled form to {@code plane3Fs}.
 	 * <p>
 	 * If {@code plane3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plane3Fs.length % CompiledShape3FCache.PLANE_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param plane3Fs the {@code Plane3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3Fs.length % CompiledShape3FCache.PLANE_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code plane3Fs} is {@code null}
 	 */
 	public void setPlane3Fs(final float[] plane3Fs) {
-		this.plane3Fs = Objects.requireNonNull(plane3Fs, "plane3Fs == null");
+		Objects.requireNonNull(plane3Fs, "plane3Fs == null");
+		
+		ParameterArguments.requireExact(plane3Fs.length % PLANE_3_F_LENGTH, 0, "plane3Fs.length % CompiledShape3FCache.PLANE_3_F_LENGTH");
+		
+		this.plane3Fs = plane3Fs;
 	}
 	
 	/**
 	 * Sets all {@link Rectangle3F} instances in compiled form to {@code rectangle3Fs}.
 	 * <p>
 	 * If {@code rectangle3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangle3Fs.length % CompiledShape3FCache.RECTANGLE_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param rectangle3Fs the {@code Rectangle3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangle3Fs.length % CompiledShape3FCache.RECTANGLE_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle3Fs} is {@code null}
 	 */
 	public void setRectangle3Fs(final float[] rectangle3Fs) {
-		this.rectangle3Fs = Objects.requireNonNull(rectangle3Fs, "rectangle3Fs == null");
+		Objects.requireNonNull(rectangle3Fs, "rectangle3Fs == null");
+		
+		ParameterArguments.requireExact(rectangle3Fs.length % RECTANGLE_3_F_LENGTH, 0, "rectangle3Fs.length % CompiledShape3FCache.RECTANGLE_3_F_LENGTH");
+		
+		this.rectangle3Fs = rectangle3Fs;
 	}
 	
 	/**
 	 * Sets all {@link RectangularCuboid3F} instances in compiled form to {@code rectangularCuboid3Fs}.
 	 * <p>
 	 * If {@code rectangularCuboid3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangularCuboid3Fs.length % CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param rectangularCuboid3Fs the {@code RectangularCuboid3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangularCuboid3Fs.length % CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3Fs} is {@code null}
 	 */
 	public void setRectangularCuboid3Fs(final float[] rectangularCuboid3Fs) {
-		this.rectangularCuboid3Fs = Objects.requireNonNull(rectangularCuboid3Fs, "rectangularCuboid3Fs == null");
+		Objects.requireNonNull(rectangularCuboid3Fs, "rectangularCuboid3Fs == null");
+		
+		ParameterArguments.requireExact(rectangularCuboid3Fs.length % RECTANGULAR_CUBOID_3_F_LENGTH, 0, "rectangularCuboid3Fs.length % CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH");
+		
+		this.rectangularCuboid3Fs = rectangularCuboid3Fs;
 	}
 	
 	/**
 	 * Sets all {@link Sphere3F} instances in compiled form to {@code sphere3Fs}.
 	 * <p>
 	 * If {@code sphere3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sphere3Fs.length % CompiledShape3FCache.SPHERE_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param sphere3Fs the {@code Sphere3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3Fs.length % CompiledShape3FCache.SPHERE_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code sphere3Fs} is {@code null}
 	 */
 	public void setSphere3Fs(final float[] sphere3Fs) {
-		this.sphere3Fs = Objects.requireNonNull(sphere3Fs, "sphere3Fs == null");
+		Objects.requireNonNull(sphere3Fs, "sphere3Fs == null");
+		
+		ParameterArguments.requireExact(sphere3Fs.length % SPHERE_3_F_LENGTH, 0, "sphere3Fs.length % CompiledShape3FCache.SPHERE_3_F_LENGTH");
+		
+		this.sphere3Fs = sphere3Fs;
 	}
 	
 	/**
 	 * Sets all {@link Torus3F} instances in compiled form to {@code torus3Fs}.
 	 * <p>
 	 * If {@code torus3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code torus3Fs.length % CompiledShape3FCache.TORUS_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param torus3Fs the {@code Torus3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code torus3Fs.length % CompiledShape3FCache.TORUS_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code torus3Fs} is {@code null}
 	 */
 	public void setTorus3Fs(final float[] torus3Fs) {
-		this.torus3Fs = Objects.requireNonNull(torus3Fs, "torus3Fs == null");
+		Objects.requireNonNull(torus3Fs, "torus3Fs == null");
+		
+		ParameterArguments.requireExact(torus3Fs.length % TORUS_3_F_LENGTH, 0, "torus3Fs.length % CompiledShape3FCache.TORUS_3_F_LENGTH");
+		
+		this.torus3Fs = torus3Fs;
 	}
 	
 	/**
 	 * Sets all {@link Triangle3F} instances in compiled form to {@code triangle3Fs}.
 	 * <p>
 	 * If {@code triangle3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangle3Fs.length % CompiledShape3FCache.TRIANGLE_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param triangle3Fs the {@code Triangle3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangle3Fs.length % CompiledShape3FCache.TRIANGLE_3_F_LENGTH} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code triangle3Fs} is {@code null}
 	 */
 	public void setTriangle3Fs(final float[] triangle3Fs) {
-		this.triangle3Fs = Objects.requireNonNull(triangle3Fs, "triangle3Fs == null");
+		Objects.requireNonNull(triangle3Fs, "triangle3Fs == null");
+		
+		ParameterArguments.requireExact(triangle3Fs.length % TRIANGLE_3_F_LENGTH, 0, "triangle3Fs.length % CompiledShape3FCache.TRIANGLE_3_F_LENGTH");
+		
+		this.triangle3Fs = triangle3Fs;
 	}
 	
 	/**
 	 * Sets all {@link TriangleMesh3F} instances in compiled form to {@code triangleMesh3Fs}.
 	 * <p>
 	 * If {@code triangleMesh3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangleMesh3Fs.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param triangleMesh3Fs the {@code TriangleMesh3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangleMesh3Fs.length % 8} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3Fs} is {@code null}
 	 */
 	public void setTriangleMesh3Fs(final int[] triangleMesh3Fs) {
-		this.triangleMesh3Fs = Objects.requireNonNull(triangleMesh3Fs, "triangleMesh3Fs == null");
+		Objects.requireNonNull(triangleMesh3Fs, "triangleMesh3Fs == null");
+		
+		ParameterArguments.requireExact(triangleMesh3Fs.length % 8, 0, "triangleMesh3Fs.length % 8");
+		
+		this.triangleMesh3Fs = triangleMesh3Fs;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

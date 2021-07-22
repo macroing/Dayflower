@@ -13,6 +13,7 @@
 	* ADD:		Add the methods addSphere3F(float[]) and removeSphere3F(float[]) to the CompiledShape3FCache class.
 	* ADD:		Add the methods addTorus3F(float[]) and removeTorus3F(float[]) to the CompiledShape3FCache class.
 	* ADD:		Add the methods addTriangle3F(float[]) and removeTriangle3F(float[]) to the CompiledShape3FCache class.
+	* ADD:		Add the methods addTriangleMesh3F(int[]) and removeTriangleMesh3F(int[]) to the CompiledShape3FCache class.
 	* ADD:		Add the methods getTriangleMesh3FCount(), getTriangleMesh3FOffsetAbsolute(int[]), getTriangleMesh3FOffsetRelative(int[]), getTriangleMesh3FOffsets(), setTriangleMesh3FOffsets(int[]) and toTriangleMesh3FOffsets(List<TriangleMesh3F>) to the CompiledShape3FCache class.
 	* ADD:		Add the methods addDisneyMaterial(int[]) and removeDisneyMaterial(int[]) to the CompiledMaterialCache class.
 	* ADD:		Add the methods addGlassMaterial(int[]) and removeGlassMaterial(int[]) to the CompiledMaterialCache class.

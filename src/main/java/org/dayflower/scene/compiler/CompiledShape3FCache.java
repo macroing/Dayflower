@@ -717,6 +717,33 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Removes {@code triangleMesh3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code triangleMesh3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code triangleMesh3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangleMesh3F.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param triangleMesh3F a {@link TriangleMesh3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code triangleMesh3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangleMesh3F.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3F} is {@code null}
+	 */
+	public boolean removeTriangleMesh3F(final int[] triangleMesh3F) {
+		final int absoluteOffset = getTriangleMesh3FOffsetAbsolute(triangleMesh3F);
+		
+		if(absoluteOffset != -1) {
+			setTriangleMesh3FOffsets(Structures.removeStructureOffset(getTriangleMesh3FOffsets(), absoluteOffset, triangleMesh3F.length));
+			setTriangleMesh3Fs(Structures.removeStructure(getTriangleMesh3Fs(), absoluteOffset, triangleMesh3F.length));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link Cone3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code Cone3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
@@ -1108,6 +1135,35 @@ public final class CompiledShape3FCache {
 		}
 		
 		setTriangle3Fs(Structures.addStructure(getTriangle3Fs(), triangle3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code triangleMesh3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code triangleMesh3F}.
+	 * <p>
+	 * If {@code triangleMesh3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangleMesh3F.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param triangleMesh3F a {@link TriangleMesh3F} instance in compiled form
+	 * @return the relative offset to {@code triangleMesh3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangleMesh3F.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3F} is {@code null}
+	 */
+	public int addTriangleMesh3F(final int[] triangleMesh3F) {
+		final int absoluteOffsetNew = this.triangleMesh3Fs.length;
+		final int relativeOffsetOld = getTriangleMesh3FOffsetRelative(triangleMesh3F);
+		final int relativeOffsetNew = getTriangleMesh3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setTriangleMesh3FOffsets(Structures.addStructureOffset(getTriangleMesh3FOffsets(), absoluteOffsetNew));
+		setTriangleMesh3Fs(Structures.addStructure(getTriangleMesh3Fs(), triangleMesh3F));
 		
 		return relativeOffsetNew;
 	}

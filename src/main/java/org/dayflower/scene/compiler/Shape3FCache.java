@@ -190,6 +190,10 @@ final class Shape3FCache {
 		return this.distinctToOffsetsTriangle3Fs.get(triangle3F).intValue();
 	}
 	
+	public int[] toTriangleMesh3FOffsets() {
+		return CompiledShape3FCache.toTriangleMesh3FOffsets(this.distinctTriangleMesh3Fs);
+	}
+	
 	public int[] toTriangleMesh3Fs() {
 		return CompiledShape3FCache.toTriangleMesh3Fs(this.distinctTriangleMesh3Fs, this.boundingVolume3FCache::findOffsetFor, this::findOffsetFor);
 	}
@@ -210,6 +214,7 @@ final class Shape3FCache {
 		compiledShape3FCache.setSphere3Fs(toSphere3Fs());
 		compiledShape3FCache.setTorus3Fs(toTorus3Fs());
 		compiledShape3FCache.setTriangle3Fs(toTriangle3Fs());
+		compiledShape3FCache.setTriangleMesh3FOffsets(toTriangleMesh3FOffsets());
 		compiledShape3FCache.setTriangleMesh3Fs(toTriangleMesh3Fs());
 	}
 	

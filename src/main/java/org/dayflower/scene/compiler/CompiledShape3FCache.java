@@ -404,6 +404,7 @@ public final class CompiledShape3FCache {
 	private float[] sphere3Fs;
 	private float[] torus3Fs;
 	private float[] triangle3Fs;
+	private int[] triangleMesh3FOffsets;
 	private int[] triangleMesh3Fs;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,6 +424,7 @@ public final class CompiledShape3FCache {
 		setSphere3Fs(new float[0]);
 		setTorus3Fs(new float[0]);
 		setTriangle3Fs(new float[0]);
+		setTriangleMesh3FOffsets(new int[0]);
 		setTriangleMesh3Fs(new int[0]);
 	}
 	
@@ -1067,6 +1069,64 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns the {@link TriangleMesh3F} count in this {@code CompiledShape3FCache} instance.
+	 * 
+	 * @return the {@code TriangleMesh3F} count in this {@code CompiledShape3FCache} instance
+	 */
+	public int getTriangleMesh3FCount() {
+		return Structures.getStructureCount(this.triangleMesh3Fs, 8, this.triangleMesh3FOffsets.length);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code triangleMesh3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code triangleMesh3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangleMesh3F.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param triangleMesh3F a {@link TriangleMesh3F} instance in compiled form
+	 * @return the absolute offset of {@code triangleMesh3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangleMesh3F.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3F} is {@code null}
+	 */
+	public int getTriangleMesh3FOffsetAbsolute(final int[] triangleMesh3F) {
+		Objects.requireNonNull(triangleMesh3F, "triangleMesh3F == null");
+		
+		ParameterArguments.requireExact(triangleMesh3F.length % 8, 0, "triangleMesh3F.length % 8");
+		
+		return Structures.getStructureOffsetAbsolute(this.triangleMesh3Fs, triangleMesh3F, this.triangleMesh3FOffsets);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code triangleMesh3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code triangleMesh3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangleMesh3F.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param triangleMesh3F a {@link TriangleMesh3F} instance in compiled form
+	 * @return the relative offset of {@code triangleMesh3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangleMesh3F.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3F} is {@code null}
+	 */
+	public int getTriangleMesh3FOffsetRelative(final int[] triangleMesh3F) {
+		Objects.requireNonNull(triangleMesh3F, "triangleMesh3F == null");
+		
+		ParameterArguments.requireExact(triangleMesh3F.length % 8, 0, "triangleMesh3F.length % 8");
+		
+		return Structures.getStructureOffsetRelative(this.triangleMesh3Fs, triangleMesh3F, this.triangleMesh3FOffsets);
+	}
+	
+	/**
+	 * Returns an {@code int[]} that contains the offsets for all {@link TriangleMesh3F} instances in this {@code CompiledShape3FCache} instance.
+	 * 
+	 * @return an {@code int[]} that contains the offsets for all {@code TriangleMesh3F} instances in this {@code CompiledShape3FCache} instance
+	 */
+	public int[] getTriangleMesh3FOffsets() {
+		return this.triangleMesh3FOffsets;
+	}
+	
+	/**
 	 * Returns an {@code int[]} that contains all {@link TriangleMesh3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
 	 * 
 	 * @return an {@code int[]} that contains all {@code TriangleMesh3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
@@ -1282,6 +1342,25 @@ public final class CompiledShape3FCache {
 		ParameterArguments.requireExact(triangle3Fs.length % TRIANGLE_3_F_LENGTH, 0, "triangle3Fs.length % CompiledShape3FCache.TRIANGLE_3_F_LENGTH");
 		
 		this.triangle3Fs = triangle3Fs;
+	}
+	
+	/**
+	 * Sets the {@code int[]} that contains the offsets for all {@link TriangleMesh3F} instances to {@code triangleMesh3FOffsets}.
+	 * <p>
+	 * If {@code triangleMesh3FOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If at least one offset in {@code triangleMesh3FOffsets} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param triangleMesh3FOffsets the {@code int[]} that contains the offsets for all {@code TriangleMesh3F} instances
+	 * @throws IllegalArgumentException thrown if, and only if, at least one offset in {@code triangleMesh3FOffsets} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3FOffsets} is {@code null}
+	 */
+	public void setTriangleMesh3FOffsets(final int[] triangleMesh3FOffsets) {
+		Objects.requireNonNull(triangleMesh3FOffsets, "triangleMesh3FOffsets == null");
+		
+		ParameterArguments.requireRange(triangleMesh3FOffsets, 0, Integer.MAX_VALUE, "triangleMesh3FOffsets");
+		
+		this.triangleMesh3FOffsets = triangleMesh3FOffsets;
 	}
 	
 	/**
@@ -1837,6 +1916,27 @@ public final class CompiledShape3FCache {
 		}
 		
 		return new int[0];
+	}
+	
+	/**
+	 * Returns an {@code int[]} with the offsets for all {@link TriangleMesh3F} instances in {@code triangleMesh3Fs} in compiled form.
+	 * <p>
+	 * If {@code triangleMesh3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangleMesh3Fs a {@code List} of {@code TriangleMesh3F} instances
+	 * @return an {@code int[]} with the offsets for all {@code TriangleMesh3F} instances in {@code triangleMesh3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code triangleMesh3Fs} or at least one of its elements are {@code null}
+	 */
+	public static int[] toTriangleMesh3FOffsets(final List<TriangleMesh3F> triangleMesh3Fs) {
+		ParameterArguments.requireNonNullList(triangleMesh3Fs, "triangleMesh3Fs");
+		
+		final int[] triangleMesh3FOffsets = new int[triangleMesh3Fs.size()];
+		
+		for(int i = 0, j = 0; i < triangleMesh3Fs.size(); j += getTriangleMesh3FLength(triangleMesh3Fs.get(i)), i++) {
+			triangleMesh3FOffsets[i] = j;
+		}
+		
+		return triangleMesh3FOffsets;
 	}
 	
 	/**

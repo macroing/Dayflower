@@ -9,6 +9,7 @@
 	* ADD:		Add the methods addPlasticMaterial(int[]) and removePlasticMaterial(int[]) to the CompiledMaterialCache class.
 	* ADD:		Add the methods addPolkaDotMaterial(float[]) and removePolkaDotMaterial(float[]) to the CompiledMaterialCache class.
 	* ADD:		Add the methods addSubstrateMaterial(int[]) and removeSubstrateMaterial(int[]) to the CompiledMaterialCache class.
+	* CHANGE:	Change the returned offset from absolute to relative in the methods addAxisAlignedBoundingBox3F(float[]) and addBoundingSphere3F(float[]) of the CompiledBoundingVolume3FCache class.
 
 2021-07-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

@@ -155,55 +155,55 @@ public final class CompiledBoundingVolume3FCache {
 	/**
 	 * Adds {@code axisAlignedBoundingBox3F} to this {@code CompiledBoundingVolume3FCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code axisAlignedBoundingBox3F}.
+	 * Returns the relative offset to {@code axisAlignedBoundingBox3F}.
 	 * <p>
 	 * If {@code axisAlignedBoundingBox3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param axisAlignedBoundingBox3F an {@link AxisAlignedBoundingBox3F} instance in compiled form
-	 * @return the absolute offset to {@code axisAlignedBoundingBox3F}
+	 * @return the relative offset to {@code axisAlignedBoundingBox3F}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code axisAlignedBoundingBox3F.length} is not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3F} is {@code null}
 	 */
 	public int addAxisAlignedBoundingBox3F(final float[] axisAlignedBoundingBox3F) {
-		final int absoluteOffsetOld = getAxisAlignedBoundingBox3FOffsetAbsolute(axisAlignedBoundingBox3F);
-		final int absoluteOffsetNew = this.axisAlignedBoundingBox3Fs.length;
+		final int relativeOffsetOld = getAxisAlignedBoundingBox3FOffsetRelative(axisAlignedBoundingBox3F);
+		final int relativeOffsetNew = getAxisAlignedBoundingBox3FCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setAxisAlignedBoundingBox3Fs(Structures.addStructure(getAxisAlignedBoundingBox3Fs(), axisAlignedBoundingBox3F));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
 	}
 	
 	/**
 	 * Adds {@code boundingSphere3F} to this {@code CompiledBoundingVolume3FCache} instance, if absent.
 	 * <p>
-	 * Returns the absolute offset to {@code boundingSphere3F}.
+	 * Returns the relative offset to {@code boundingSphere3F}.
 	 * <p>
 	 * If {@code boundingSphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param boundingSphere3F a {@link BoundingSphere3F} instance in compiled form
-	 * @return the absolute offset to {@code boundingSphere3F}
+	 * @return the relative offset to {@code boundingSphere3F}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code boundingSphere3F.length} is not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3F} is {@code null}
 	 */
 	public int addBoundingSphere3F(final float[] boundingSphere3F) {
-		final int absoluteOffsetOld = getBoundingSphere3FOffsetAbsolute(boundingSphere3F);
-		final int absoluteOffsetNew = this.boundingSphere3Fs.length;
+		final int relativeOffsetOld = getBoundingSphere3FOffsetRelative(boundingSphere3F);
+		final int relativeOffsetNew = getBoundingSphere3FCount();
 		
-		if(absoluteOffsetOld != -1) {
-			return absoluteOffsetOld;
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
 		}
 		
 		setBoundingSphere3Fs(Structures.addStructure(getBoundingSphere3Fs(), boundingSphere3F));
 		
-		return absoluteOffsetNew;
+		return relativeOffsetNew;
 	}
 	
 	/**

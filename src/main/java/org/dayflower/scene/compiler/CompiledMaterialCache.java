@@ -433,6 +433,84 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
+	 * Removes {@code disneyMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code disneyMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code disneyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disneyMaterial.length} is not equal to {@code CompiledMaterialCache.DISNEY_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param disneyMaterial a {@link DisneyMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code disneyMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disneyMaterial.length} is not equal to {@code CompiledMaterialCache.DISNEY_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterial} is {@code null}
+	 */
+	public boolean removeDisneyMaterial(final int[] disneyMaterial) {
+		final int absoluteOffset = getDisneyMaterialOffsetAbsolute(disneyMaterial);
+		
+		if(absoluteOffset != -1) {
+			setDisneyMaterials(Structures.removeStructure(getDisneyMaterials(), absoluteOffset, DISNEY_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code glassMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code glassMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code glassMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glassMaterial.length} is not equal to {@code CompiledMaterialCache.GLASS_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param glassMaterial a {@link GlassMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code glassMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glassMaterial.length} is not equal to {@code CompiledMaterialCache.GLASS_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code glassMaterial} is {@code null}
+	 */
+	public boolean removeGlassMaterial(final int[] glassMaterial) {
+		final int absoluteOffset = getGlassMaterialOffsetAbsolute(glassMaterial);
+		
+		if(absoluteOffset != -1) {
+			setGlassMaterials(Structures.removeStructure(getGlassMaterials(), absoluteOffset, GLASS_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code glossyMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code glossyMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code glossyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glossyMaterial.length} is not equal to {@code CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param glossyMaterial a {@link GlossyMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code glossyMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glossyMaterial.length} is not equal to {@code CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterial} is {@code null}
+	 */
+	public boolean removeGlossyMaterial(final int[] glossyMaterial) {
+		final int absoluteOffset = getGlossyMaterialOffsetAbsolute(glossyMaterial);
+		
+		if(absoluteOffset != -1) {
+			setGlossyMaterials(Structures.removeStructure(getGlossyMaterials(), absoluteOffset, GLOSSY_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link BullseyeMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code BullseyeMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
@@ -536,6 +614,87 @@ public final class CompiledMaterialCache {
 		}
 		
 		setClearCoatMaterials(Structures.addStructure(getClearCoatMaterials(), clearCoatMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code disneyMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code disneyMaterial}.
+	 * <p>
+	 * If {@code disneyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disneyMaterial.length} is not equal to {@code CompiledMaterialCache.DISNEY_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param disneyMaterial a {@link DisneyMaterial} instance in compiled form
+	 * @return the relative offset to {@code disneyMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disneyMaterial.length} is not equal to {@code CompiledMaterialCache.DISNEY_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code disneyMaterial} is {@code null}
+	 */
+	public int addDisneyMaterial(final int[] disneyMaterial) {
+		final int relativeOffsetOld = getDisneyMaterialOffsetRelative(disneyMaterial);
+		final int relativeOffsetNew = getDisneyMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setDisneyMaterials(Structures.addStructure(getDisneyMaterials(), disneyMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code glassMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code glassMaterial}.
+	 * <p>
+	 * If {@code glassMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glassMaterial.length} is not equal to {@code CompiledMaterialCache.GLASS_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param glassMaterial a {@link GlassMaterial} instance in compiled form
+	 * @return the relative offset to {@code glassMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glassMaterial.length} is not equal to {@code CompiledMaterialCache.GLASS_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code glassMaterial} is {@code null}
+	 */
+	public int addGlassMaterial(final int[] glassMaterial) {
+		final int relativeOffsetOld = getGlassMaterialOffsetRelative(glassMaterial);
+		final int relativeOffsetNew = getGlassMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setGlassMaterials(Structures.addStructure(getGlassMaterials(), glassMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code glossyMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code glossyMaterial}.
+	 * <p>
+	 * If {@code glossyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code glossyMaterial.length} is not equal to {@code CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param glossyMaterial a {@link GlossyMaterial} instance in compiled form
+	 * @return the relative offset to {@code glossyMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code glossyMaterial.length} is not equal to {@code CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code glossyMaterial} is {@code null}
+	 */
+	public int addGlossyMaterial(final int[] glossyMaterial) {
+		final int relativeOffsetOld = getGlossyMaterialOffsetRelative(glossyMaterial);
+		final int relativeOffsetNew = getGlossyMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setGlossyMaterials(Structures.addStructure(getGlossyMaterials(), glossyMaterial));
 		
 		return relativeOffsetNew;
 	}

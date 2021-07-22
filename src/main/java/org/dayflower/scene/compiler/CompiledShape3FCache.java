@@ -431,6 +431,162 @@ public final class CompiledShape3FCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Removes {@code cone3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code cone3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code cone3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3F.length} is not equal to {@code CompiledShape3FCache.CONE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param cone3F a {@link Cone3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code cone3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cone3F.length} is not equal to {@code CompiledShape3FCache.CONE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3F} is {@code null}
+	 */
+	public boolean removeCone3F(final float[] cone3F) {
+		final int absoluteOffset = getCone3FOffsetAbsolute(cone3F);
+		
+		if(absoluteOffset != -1) {
+			setCone3Fs(Structures.removeStructure(getCone3Fs(), absoluteOffset, CONE_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code cylinder3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code cylinder3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code cylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3F.length} is not equal to {@code CompiledShape3FCache.CYLINDER_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param cylinder3F a {@link Cylinder3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code cylinder3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cylinder3F.length} is not equal to {@code CompiledShape3FCache.CYLINDER_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3F} is {@code null}
+	 */
+	public boolean removeCylinder3F(final float[] cylinder3F) {
+		final int absoluteOffset = getCylinder3FOffsetAbsolute(cylinder3F);
+		
+		if(absoluteOffset != -1) {
+			setCylinder3Fs(Structures.removeStructure(getCylinder3Fs(), absoluteOffset, CYLINDER_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code disk3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code disk3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code disk3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disk3F.length} is not equal to {@code CompiledShape3FCache.DISK_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param disk3F a {@link Disk3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code disk3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disk3F.length} is not equal to {@code CompiledShape3FCache.DISK_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code disk3F} is {@code null}
+	 */
+	public boolean removeDisk3F(final float[] disk3F) {
+		final int absoluteOffset = getDisk3FOffsetAbsolute(disk3F);
+		
+		if(absoluteOffset != -1) {
+			setDisk3Fs(Structures.removeStructure(getDisk3Fs(), absoluteOffset, DISK_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code hyperboloid3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code hyperboloid3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code hyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code hyperboloid3F.length} is not equal to {@code CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param hyperboloid3F a {@link Hyperboloid3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code hyperboloid3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code hyperboloid3F.length} is not equal to {@code CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3F} is {@code null}
+	 */
+	public boolean removeHyperboloid3F(final float[] hyperboloid3F) {
+		final int absoluteOffset = getHyperboloid3FOffsetAbsolute(hyperboloid3F);
+		
+		if(absoluteOffset != -1) {
+			setHyperboloid3Fs(Structures.removeStructure(getHyperboloid3Fs(), absoluteOffset, HYPERBOLOID_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code paraboloid3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code paraboloid3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code paraboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code paraboloid3F.length} is not equal to {@code CompiledShape3FCache.PARABOLOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param paraboloid3F a {@link Paraboloid3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code paraboloid3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code paraboloid3F.length} is not equal to {@code CompiledShape3FCache.PARABOLOID_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3F} is {@code null}
+	 */
+	public boolean removeParaboloid3F(final float[] paraboloid3F) {
+		final int absoluteOffset = getParaboloid3FOffsetAbsolute(paraboloid3F);
+		
+		if(absoluteOffset != -1) {
+			setParaboloid3Fs(Structures.removeStructure(getParaboloid3Fs(), absoluteOffset, PARABOLOID_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code plane3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code plane3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param plane3F a {@link Plane3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code plane3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
+	 */
+	public boolean removePlane3F(final float[] plane3F) {
+		final int absoluteOffset = getPlane3FOffsetAbsolute(plane3F);
+		
+		if(absoluteOffset != -1) {
+			setPlane3Fs(Structures.removeStructure(getPlane3Fs(), absoluteOffset, PLANE_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link Cone3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code Cone3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
@@ -527,6 +683,168 @@ public final class CompiledShape3FCache {
 	 */
 	public float[] getTriangle3Fs() {
 		return this.triangle3Fs;
+	}
+	
+	/**
+	 * Adds {@code cone3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code cone3F}.
+	 * <p>
+	 * If {@code cone3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3F.length} is not equal to {@code CompiledShape3FCache.CONE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param cone3F a {@link Cone3F} instance in compiled form
+	 * @return the relative offset to {@code cone3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cone3F.length} is not equal to {@code CompiledShape3FCache.CONE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3F} is {@code null}
+	 */
+	public int addCone3F(final float[] cone3F) {
+		final int relativeOffsetOld = getCone3FOffsetRelative(cone3F);
+		final int relativeOffsetNew = getCone3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setCone3Fs(Structures.addStructure(getCone3Fs(), cone3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code cylinder3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code cylinder3F}.
+	 * <p>
+	 * If {@code cylinder3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3F.length} is not equal to {@code CompiledShape3FCache.CYLINDER_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param cylinder3F a {@link Cylinder3F} instance in compiled form
+	 * @return the relative offset to {@code cylinder3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code cylinder3F.length} is not equal to {@code CompiledShape3FCache.CYLINDER_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3F} is {@code null}
+	 */
+	public int addCylinder3F(final float[] cylinder3F) {
+		final int relativeOffsetOld = getCylinder3FOffsetRelative(cylinder3F);
+		final int relativeOffsetNew = getCylinder3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setCylinder3Fs(Structures.addStructure(getCylinder3Fs(), cylinder3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code disk3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code disk3F}.
+	 * <p>
+	 * If {@code disk3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code disk3F.length} is not equal to {@code CompiledShape3FCache.DISK_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param disk3F a {@link Disk3F} instance in compiled form
+	 * @return the relative offset to {@code disk3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code disk3F.length} is not equal to {@code CompiledShape3FCache.DISK_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code disk3F} is {@code null}
+	 */
+	public int addDisk3F(final float[] disk3F) {
+		final int relativeOffsetOld = getDisk3FOffsetRelative(disk3F);
+		final int relativeOffsetNew = getDisk3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setDisk3Fs(Structures.addStructure(getDisk3Fs(), disk3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code hyperboloid3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code hyperboloid3F}.
+	 * <p>
+	 * If {@code hyperboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code hyperboloid3F.length} is not equal to {@code CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param hyperboloid3F a {@link Hyperboloid3F} instance in compiled form
+	 * @return the relative offset to {@code hyperboloid3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code hyperboloid3F.length} is not equal to {@code CompiledShape3FCache.HYPERBOLOID_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3F} is {@code null}
+	 */
+	public int addHyperboloid3F(final float[] hyperboloid3F) {
+		final int relativeOffsetOld = getHyperboloid3FOffsetRelative(hyperboloid3F);
+		final int relativeOffsetNew = getHyperboloid3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setHyperboloid3Fs(Structures.addStructure(getHyperboloid3Fs(), hyperboloid3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code paraboloid3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code paraboloid3F}.
+	 * <p>
+	 * If {@code paraboloid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code paraboloid3F.length} is not equal to {@code CompiledShape3FCache.PARABOLOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param paraboloid3F a {@link Paraboloid3F} instance in compiled form
+	 * @return the relative offset to {@code paraboloid3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code paraboloid3F.length} is not equal to {@code CompiledShape3FCache.PARABOLOID_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3F} is {@code null}
+	 */
+	public int addParaboloid3F(final float[] paraboloid3F) {
+		final int relativeOffsetOld = getParaboloid3FOffsetRelative(paraboloid3F);
+		final int relativeOffsetNew = getParaboloid3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setParaboloid3Fs(Structures.addStructure(getParaboloid3Fs(), paraboloid3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code plane3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code plane3F}.
+	 * <p>
+	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param plane3F a {@link Plane3F} instance in compiled form
+	 * @return the relative offset to {@code plane3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
+	 */
+	public int addPlane3F(final float[] plane3F) {
+		final int relativeOffsetOld = getPlane3FOffsetRelative(plane3F);
+		final int relativeOffsetNew = getPlane3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setPlane3Fs(Structures.addStructure(getPlane3Fs(), plane3F));
+		
+		return relativeOffsetNew;
 	}
 	
 	/**

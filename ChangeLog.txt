@@ -1,11 +1,18 @@
 2021-07-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the constructor Triangle3D(Point3D, Point3D, Point3D) to the Triangle3D class.
+	* ADD:		Add the constructor Triangle3F(Point3F, Point3F, Point3F) to the Triangle3F class.
 	* ADD:		Add the methods addCone3F(float[]) and removeCone3F(float[]) to the CompiledShape3FCache class.
 	* ADD:		Add the methods addCylinder3F(float[]) and removeCylinder3F(float[]) to the CompiledShape3FCache class.
 	* ADD:		Add the methods addDisk3F(float[]) and removeDisk3F(float[]) to the CompiledShape3FCache class.
 	* ADD:		Add the methods addHyperboloid3F(float[]) and removeHyperboloid3F(float[]) to the CompiledShape3FCache class.
 	* ADD:		Add the methods addParaboloid3F(float[]) and removeParaboloid3F(float[]) to the CompiledShape3FCache class.
 	* ADD:		Add the methods addPlane3F(float[]) and removePlane3F(float[]) to the CompiledShape3FCache class.
+	* ADD:		Add the methods addRectangle3F(float[]) and removeRectangle3F(float[]) to the CompiledShape3FCache class.
+	* ADD:		Add the methods addRectangularCuboid3F(float[]) and removeRectangularCuboid3F(float[]) to the CompiledShape3FCache class.
+	* ADD:		Add the methods addSphere3F(float[]) and removeSphere3F(float[]) to the CompiledShape3FCache class.
+	* ADD:		Add the methods addTorus3F(float[]) and removeTorus3F(float[]) to the CompiledShape3FCache class.
+	* ADD:		Add the methods addTriangle3F(float[]) and removeTriangle3F(float[]) to the CompiledShape3FCache class.
 	* ADD:		Add the methods getTriangleMesh3FCount(), getTriangleMesh3FOffsetAbsolute(int[]), getTriangleMesh3FOffsetRelative(int[]), getTriangleMesh3FOffsets(), setTriangleMesh3FOffsets(int[]) and toTriangleMesh3FOffsets(List<TriangleMesh3F>) to the CompiledShape3FCache class.
 	* ADD:		Add the methods addDisneyMaterial(int[]) and removeDisneyMaterial(int[]) to the CompiledMaterialCache class.
 	* ADD:		Add the methods addGlassMaterial(int[]) and removeGlassMaterial(int[]) to the CompiledMaterialCache class.

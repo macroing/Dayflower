@@ -587,6 +587,136 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Removes {@code rectangle3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code rectangle3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code rectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangle3F.length} is not equal to {@code CompiledShape3FCache.RECTANGLE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param rectangle3F a {@link Rectangle3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code rectangle3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangle3F.length} is not equal to {@code CompiledShape3FCache.RECTANGLE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle3F} is {@code null}
+	 */
+	public boolean removeRectangle3F(final float[] rectangle3F) {
+		final int absoluteOffset = getRectangle3FOffsetAbsolute(rectangle3F);
+		
+		if(absoluteOffset != -1) {
+			setRectangle3Fs(Structures.removeStructure(getRectangle3Fs(), absoluteOffset, RECTANGLE_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code rectangularCuboid3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code rectangularCuboid3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code rectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangularCuboid3F.length} is not equal to {@code CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param rectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code rectangularCuboid3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangularCuboid3F.length} is not equal to {@code CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3F} is {@code null}
+	 */
+	public boolean removeRectangularCuboid3F(final float[] rectangularCuboid3F) {
+		final int absoluteOffset = getRectangularCuboid3FOffsetAbsolute(rectangularCuboid3F);
+		
+		if(absoluteOffset != -1) {
+			setRectangularCuboid3Fs(Structures.removeStructure(getRectangularCuboid3Fs(), absoluteOffset, RECTANGULAR_CUBOID_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code sphere3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code sphere3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param sphere3F a {@link Sphere3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code sphere3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
+	 */
+	public boolean removeSphere3F(final float[] sphere3F) {
+		final int absoluteOffset = getSphere3FOffsetAbsolute(sphere3F);
+		
+		if(absoluteOffset != -1) {
+			setSphere3Fs(Structures.removeStructure(getSphere3Fs(), absoluteOffset, SPHERE_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code torus3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code torus3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code torus3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code torus3F.length} is not equal to {@code CompiledShape3FCache.TORUS_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param torus3F a {@link Torus3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code torus3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code torus3F.length} is not equal to {@code CompiledShape3FCache.TORUS_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code torus3F} is {@code null}
+	 */
+	public boolean removeTorus3F(final float[] torus3F) {
+		final int absoluteOffset = getTorus3FOffsetAbsolute(torus3F);
+		
+		if(absoluteOffset != -1) {
+			setTorus3Fs(Structures.removeStructure(getTorus3Fs(), absoluteOffset, TORUS_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code triangle3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code triangle3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code triangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangle3F.length} is not equal to {@code CompiledShape3FCache.TRIANGLE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param triangle3F a {@link Triangle3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code triangle3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangle3F.length} is not equal to {@code CompiledShape3FCache.TRIANGLE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code triangle3F} is {@code null}
+	 */
+	public boolean removeTriangle3F(final float[] triangle3F) {
+		final int absoluteOffset = getTriangle3FOffsetAbsolute(triangle3F);
+		
+		if(absoluteOffset != -1) {
+			setTriangle3Fs(Structures.removeStructure(getTriangle3Fs(), absoluteOffset, TRIANGLE_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link Cone3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code Cone3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
@@ -843,6 +973,141 @@ public final class CompiledShape3FCache {
 		}
 		
 		setPlane3Fs(Structures.addStructure(getPlane3Fs(), plane3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code rectangle3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code rectangle3F}.
+	 * <p>
+	 * If {@code rectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangle3F.length} is not equal to {@code CompiledShape3FCache.RECTANGLE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param rectangle3F a {@link Rectangle3F} instance in compiled form
+	 * @return the relative offset to {@code rectangle3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangle3F.length} is not equal to {@code CompiledShape3FCache.RECTANGLE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle3F} is {@code null}
+	 */
+	public int addRectangle3F(final float[] rectangle3F) {
+		final int relativeOffsetOld = getRectangle3FOffsetRelative(rectangle3F);
+		final int relativeOffsetNew = getRectangle3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setRectangle3Fs(Structures.addStructure(getRectangle3Fs(), rectangle3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code rectangularCuboid3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code rectangularCuboid3F}.
+	 * <p>
+	 * If {@code rectangularCuboid3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code rectangularCuboid3F.length} is not equal to {@code CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param rectangularCuboid3F a {@link RectangularCuboid3F} instance in compiled form
+	 * @return the relative offset to {@code rectangularCuboid3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code rectangularCuboid3F.length} is not equal to {@code CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3F} is {@code null}
+	 */
+	public int addRectangularCuboid3F(final float[] rectangularCuboid3F) {
+		final int relativeOffsetOld = getRectangularCuboid3FOffsetRelative(rectangularCuboid3F);
+		final int relativeOffsetNew = getRectangularCuboid3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setRectangularCuboid3Fs(Structures.addStructure(getRectangularCuboid3Fs(), rectangularCuboid3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code sphere3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code sphere3F}.
+	 * <p>
+	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param sphere3F a {@link Sphere3F} instance in compiled form
+	 * @return the relative offset to {@code sphere3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
+	 */
+	public int addSphere3F(final float[] sphere3F) {
+		final int relativeOffsetOld = getSphere3FOffsetRelative(sphere3F);
+		final int relativeOffsetNew = getSphere3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setSphere3Fs(Structures.addStructure(getSphere3Fs(), sphere3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code torus3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code torus3F}.
+	 * <p>
+	 * If {@code torus3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code torus3F.length} is not equal to {@code CompiledShape3FCache.TORUS_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param torus3F a {@link Torus3F} instance in compiled form
+	 * @return the relative offset to {@code torus3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code torus3F.length} is not equal to {@code CompiledShape3FCache.TORUS_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code torus3F} is {@code null}
+	 */
+	public int addTorus3F(final float[] torus3F) {
+		final int relativeOffsetOld = getTorus3FOffsetRelative(torus3F);
+		final int relativeOffsetNew = getTorus3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setTorus3Fs(Structures.addStructure(getTorus3Fs(), torus3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code triangle3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code triangle3F}.
+	 * <p>
+	 * If {@code triangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code triangle3F.length} is not equal to {@code CompiledShape3FCache.TRIANGLE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param triangle3F a {@link Triangle3F} instance in compiled form
+	 * @return the relative offset to {@code triangle3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code triangle3F.length} is not equal to {@code CompiledShape3FCache.TRIANGLE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code triangle3F} is {@code null}
+	 */
+	public int addTriangle3F(final float[] triangle3F) {
+		final int relativeOffsetOld = getTriangle3FOffsetRelative(triangle3F);
+		final int relativeOffsetNew = getTriangle3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setTriangle3Fs(Structures.addStructure(getTriangle3Fs(), triangle3F));
 		
 		return relativeOffsetNew;
 	}

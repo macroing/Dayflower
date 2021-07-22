@@ -83,10 +83,24 @@ public final class Triangle3F implements Shape3F {
 	 * Constructs a new {@code Triangle3F} instance.
 	 */
 	public Triangle3F() {
-		this.a = Vertex3F.getCached(new Vertex3F(new Point2F(0.5F, 0.0F), new Point4F(+0.0F, +1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F))));
-		this.b = Vertex3F.getCached(new Vertex3F(new Point2F(1.0F, 1.0F), new Point4F(+1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F))));
-		this.c = Vertex3F.getCached(new Vertex3F(new Point2F(0.0F, 1.0F), new Point4F(-1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F))));
-		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(new Point3F(this.a.getPosition()), new Point3F(this.b.getPosition()), new Point3F(this.c.getPosition())));
+		this(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F));
+	}
+	
+	/**
+	 * Constructs a new {@code Triangle3F} instance.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@link Point3F} instance used as part of the position for the {@link Vertex3F} instance denoted by {@code A}
+	 * @param b a {@code Point3F} instance used as part of the position for the {@code Vertex3F} instance denoted by {@code B}
+	 * @param c a {@code Point3F} instance used as part of the position for the {@code Vertex3F} instance denoted by {@code C}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
+	public Triangle3F(final Point3F a, final Point3F b, final Point3F c) {
+		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(a, b, c));
+		this.a = Vertex3F.getCached(new Vertex3F(new Point2F(0.5F, 0.0F), new Point4F(a), this.surfaceNormal));
+		this.b = Vertex3F.getCached(new Vertex3F(new Point2F(1.0F, 1.0F), new Point4F(b), this.surfaceNormal));
+		this.c = Vertex3F.getCached(new Vertex3F(new Point2F(0.0F, 1.0F), new Point4F(c), this.surfaceNormal));
 	}
 	
 	/**

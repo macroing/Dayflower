@@ -511,6 +511,162 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
+	 * Removes {@code matteMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code matteMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code matteMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matteMaterial.length} is not equal to {@code CompiledMaterialCache.MATTE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param matteMaterial a {@link MatteMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code matteMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matteMaterial.length} is not equal to {@code CompiledMaterialCache.MATTE_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code matteMaterial} is {@code null}
+	 */
+	public boolean removeMatteMaterial(final int[] matteMaterial) {
+		final int absoluteOffset = getMatteMaterialOffsetAbsolute(matteMaterial);
+		
+		if(absoluteOffset != -1) {
+			setMatteMaterials(Structures.removeStructure(getMatteMaterials(), absoluteOffset, MATTE_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code metalMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code metalMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code metalMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code metalMaterial.length} is not equal to {@code CompiledMaterialCache.METAL_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param metalMaterial a {@link MetalMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code metalMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code metalMaterial.length} is not equal to {@code CompiledMaterialCache.METAL_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code metalMaterial} is {@code null}
+	 */
+	public boolean removeMetalMaterial(final int[] metalMaterial) {
+		final int absoluteOffset = getMetalMaterialOffsetAbsolute(metalMaterial);
+		
+		if(absoluteOffset != -1) {
+			setMetalMaterials(Structures.removeStructure(getMetalMaterials(), absoluteOffset, METAL_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code mirrorMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code mirrorMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code mirrorMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code mirrorMaterial.length} is not equal to {@code CompiledMaterialCache.MIRROR_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param mirrorMaterial a {@link MirrorMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code mirrorMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code mirrorMaterial.length} is not equal to {@code CompiledMaterialCache.MIRROR_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterial} is {@code null}
+	 */
+	public boolean removeMirrorMaterial(final int[] mirrorMaterial) {
+		final int absoluteOffset = getMirrorMaterialOffsetAbsolute(mirrorMaterial);
+		
+		if(absoluteOffset != -1) {
+			setMirrorMaterials(Structures.removeStructure(getMirrorMaterials(), absoluteOffset, MIRROR_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code plasticMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code plasticMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code plasticMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plasticMaterial.length} is not equal to {@code CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param plasticMaterial a {@link PlasticMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code plasticMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plasticMaterial.length} is not equal to {@code CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterial} is {@code null}
+	 */
+	public boolean removePlasticMaterial(final int[] plasticMaterial) {
+		final int absoluteOffset = getPlasticMaterialOffsetAbsolute(plasticMaterial);
+		
+		if(absoluteOffset != -1) {
+			setPlasticMaterials(Structures.removeStructure(getPlasticMaterials(), absoluteOffset, PLASTIC_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code polkaDotMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code polkaDotMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code polkaDotMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotMaterial.length} is not equal to {@code CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polkaDotMaterial a {@link PolkaDotMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code polkaDotMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotMaterial.length} is not equal to {@code CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterial} is {@code null}
+	 */
+	public boolean removePolkaDotMaterial(final float[] polkaDotMaterial) {
+		final int absoluteOffset = getPolkaDotMaterialOffsetAbsolute(polkaDotMaterial);
+		
+		if(absoluteOffset != -1) {
+			setPolkaDotMaterials(Structures.removeStructure(getPolkaDotMaterials(), absoluteOffset, POLKA_DOT_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code substrateMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code substrateMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code substrateMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code substrateMaterial.length} is not equal to {@code CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param substrateMaterial a {@link SubstrateMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code substrateMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code substrateMaterial.length} is not equal to {@code CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterial} is {@code null}
+	 */
+	public boolean removeSubstrateMaterial(final int[] substrateMaterial) {
+		final int absoluteOffset = getSubstrateMaterialOffsetAbsolute(substrateMaterial);
+		
+		if(absoluteOffset != -1) {
+			setSubstrateMaterials(Structures.removeStructure(getSubstrateMaterials(), absoluteOffset, SUBSTRATE_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link BullseyeMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code BullseyeMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
@@ -695,6 +851,168 @@ public final class CompiledMaterialCache {
 		}
 		
 		setGlossyMaterials(Structures.addStructure(getGlossyMaterials(), glossyMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code matteMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code matteMaterial}.
+	 * <p>
+	 * If {@code matteMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matteMaterial.length} is not equal to {@code CompiledMaterialCache.MATTE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param matteMaterial a {@link MatteMaterial} instance in compiled form
+	 * @return the relative offset to {@code matteMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matteMaterial.length} is not equal to {@code CompiledMaterialCache.MATTE_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code matteMaterial} is {@code null}
+	 */
+	public int addMatteMaterial(final int[] matteMaterial) {
+		final int relativeOffsetOld = getMatteMaterialOffsetRelative(matteMaterial);
+		final int relativeOffsetNew = getMatteMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setMatteMaterials(Structures.addStructure(getMatteMaterials(), matteMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code metalMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code metalMaterial}.
+	 * <p>
+	 * If {@code metalMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code metalMaterial.length} is not equal to {@code CompiledMaterialCache.METAL_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param metalMaterial a {@link MetalMaterial} instance in compiled form
+	 * @return the relative offset to {@code metalMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code metalMaterial.length} is not equal to {@code CompiledMaterialCache.METAL_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code metalMaterial} is {@code null}
+	 */
+	public int addMetalMaterial(final int[] metalMaterial) {
+		final int relativeOffsetOld = getMetalMaterialOffsetRelative(metalMaterial);
+		final int relativeOffsetNew = getMetalMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setMetalMaterials(Structures.addStructure(getMetalMaterials(), metalMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code mirrorMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code mirrorMaterial}.
+	 * <p>
+	 * If {@code mirrorMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code mirrorMaterial.length} is not equal to {@code CompiledMaterialCache.MIRROR_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param mirrorMaterial a {@link MirrorMaterial} instance in compiled form
+	 * @return the relative offset to {@code mirrorMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code mirrorMaterial.length} is not equal to {@code CompiledMaterialCache.MIRROR_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code mirrorMaterial} is {@code null}
+	 */
+	public int addMirrorMaterial(final int[] mirrorMaterial) {
+		final int relativeOffsetOld = getMirrorMaterialOffsetRelative(mirrorMaterial);
+		final int relativeOffsetNew = getMirrorMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setMirrorMaterials(Structures.addStructure(getMirrorMaterials(), mirrorMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code plasticMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code plasticMaterial}.
+	 * <p>
+	 * If {@code plasticMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code plasticMaterial.length} is not equal to {@code CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param plasticMaterial a {@link PlasticMaterial} instance in compiled form
+	 * @return the relative offset to {@code plasticMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code plasticMaterial.length} is not equal to {@code CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code plasticMaterial} is {@code null}
+	 */
+	public int addPlasticMaterial(final int[] plasticMaterial) {
+		final int relativeOffsetOld = getPlasticMaterialOffsetRelative(plasticMaterial);
+		final int relativeOffsetNew = getPlasticMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setPlasticMaterials(Structures.addStructure(getPlasticMaterials(), plasticMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code polkaDotMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code polkaDotMaterial}.
+	 * <p>
+	 * If {@code polkaDotMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polkaDotMaterial.length} is not equal to {@code CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polkaDotMaterial a {@link PolkaDotMaterial} instance in compiled form
+	 * @return the relative offset to {@code polkaDotMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polkaDotMaterial.length} is not equal to {@code CompiledMaterialCache.POLKA_DOT_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code polkaDotMaterial} is {@code null}
+	 */
+	public int addPolkaDotMaterial(final float[] polkaDotMaterial) {
+		final int relativeOffsetOld = getPolkaDotMaterialOffsetRelative(polkaDotMaterial);
+		final int relativeOffsetNew = getPolkaDotMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setPolkaDotMaterials(Structures.addStructure(getPolkaDotMaterials(), polkaDotMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code substrateMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code substrateMaterial}.
+	 * <p>
+	 * If {@code substrateMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code substrateMaterial.length} is not equal to {@code CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param substrateMaterial a {@link SubstrateMaterial} instance in compiled form
+	 * @return the relative offset to {@code substrateMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code substrateMaterial.length} is not equal to {@code CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code substrateMaterial} is {@code null}
+	 */
+	public int addSubstrateMaterial(final int[] substrateMaterial) {
+		final int relativeOffsetOld = getSubstrateMaterialOffsetRelative(substrateMaterial);
+		final int relativeOffsetNew = getSubstrateMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setSubstrateMaterials(Structures.addStructure(getSubstrateMaterials(), substrateMaterial));
 		
 		return relativeOffsetNew;
 	}

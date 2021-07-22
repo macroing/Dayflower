@@ -3,6 +3,12 @@
 	* ADD:		Add the methods addDisneyMaterial(int[]) and removeDisneyMaterial(int[]) to the CompiledMaterialCache class.
 	* ADD:		Add the methods addGlassMaterial(int[]) and removeGlassMaterial(int[]) to the CompiledMaterialCache class.
 	* ADD:		Add the methods addGlossyMaterial(int[]) and removeGlossyMaterial(int[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods addMatteMaterial(int[]) and removeMatteMaterial(int[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods addMetalMaterial(int[]) and removeMetalMaterial(int[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods addMirrorMaterial(int[]) and removeMirrorMaterial(int[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods addPlasticMaterial(int[]) and removePlasticMaterial(int[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods addPolkaDotMaterial(float[]) and removePolkaDotMaterial(float[]) to the CompiledMaterialCache class.
+	* ADD:		Add the methods addSubstrateMaterial(int[]) and removeSubstrateMaterial(int[]) to the CompiledMaterialCache class.
 
 2021-07-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

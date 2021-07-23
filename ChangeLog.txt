@@ -1,3 +1,11 @@
+2021-07-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the FloatArrays class to the Utility API.
+	* ADD:		Add the IntArrays class to the Utility API.
+	* ADD:		Add the methods updateAxisAlignedBoundingBox3F(float[], float[]) and updateBoundingSphere3F(float[], float[]) to the CompiledBoundingVolume3FCache class.
+	* REMOVE:	Remove the method equal(float[], float[], int, int, int) from the Floats class.
+	* REMOVE:	Remove the methods equal(int[], int[], int, int, int) and indexOf(int, int[]) from the Ints class.
+
 2021-07-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the constructor Triangle3D(Point3D, Point3D, Point3D) to the Triangle3D class.

@@ -38,6 +38,7 @@ import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.PolkaDotTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.Texture;
+import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 
@@ -509,6 +510,68 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
+	 * Updates {@code oldBlendTexture} to {@code newBlendTexture} in this {@code CompiledTextureCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code oldBlendTexture} was updated, {@code false} otherwise.
+	 * <p>
+	 * If either {@code oldBlendTexture} or {@code newBlendTexture} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code oldBlendTexture.length} or {@code newBlendTexture.length} are not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param oldBlendTexture the old {@link BlendTexture} instance in compiled form
+	 * @param newBlendTexture the new {@code BlendTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code oldBlendTexture} was updated, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code oldBlendTexture.length} or {@code newBlendTexture.length} are not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, either {@code oldBlendTexture} or {@code newBlendTexture} are {@code null}
+	 */
+	public boolean updateBlendTexture(final float[] oldBlendTexture, final float[] newBlendTexture) {
+		Objects.requireNonNull(oldBlendTexture, "oldBlendTexture == null");
+		Objects.requireNonNull(newBlendTexture, "newBlendTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(oldBlendTexture, BLEND_TEXTURE_LENGTH, "oldBlendTexture");
+		ParameterArguments.requireExactArrayLength(newBlendTexture, BLEND_TEXTURE_LENGTH, "newBlendTexture");
+		
+		final int absoluteOffset = getBlendTextureOffsetAbsolute(oldBlendTexture);
+		
+		if(absoluteOffset != -1) {
+			return Structures.updateStructure(this.blendTextures, oldBlendTexture, newBlendTexture, absoluteOffset);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Updates {@code oldBlendTexture} to {@code newBlendTexture} in this {@code CompiledTextureCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code oldBlendTexture} was updated, {@code false} otherwise.
+	 * <p>
+	 * If either {@code oldBlendTexture} or {@code newBlendTexture} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code oldBlendTexture.length} or {@code newBlendTexture.length} are not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param oldBlendTexture the old {@link BlendTexture} instance in compiled form
+	 * @param newBlendTexture the new {@code BlendTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code oldBlendTexture} was updated, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code oldBlendTexture.length} or {@code newBlendTexture.length} are not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, either {@code oldBlendTexture} or {@code newBlendTexture} are {@code null}
+	 */
+	public boolean updateBullseyeTexture(final float[] oldBullseyeTexture, final float[] newBullseyeTexture) {
+		Objects.requireNonNull(oldBullseyeTexture, "oldBullseyeTexture == null");
+		Objects.requireNonNull(newBullseyeTexture, "newBullseyeTexture == null");
+		
+		ParameterArguments.requireExactArrayLength(oldBullseyeTexture, BULLSEYE_TEXTURE_LENGTH, "oldBullseyeTexture");
+		ParameterArguments.requireExactArrayLength(newBullseyeTexture, BULLSEYE_TEXTURE_LENGTH, "newBullseyeTexture");
+		
+		final int absoluteOffset = getBullseyeTextureOffsetAbsolute(oldBullseyeTexture);
+		
+		if(absoluteOffset != -1) {
+			return Structures.updateStructure(this.bullseyeTextures, oldBullseyeTexture, newBullseyeTexture, absoluteOffset);
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link BlendTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code BlendTexture} instances in compiled form that are associated with this {@code CompiledTextureCache} instance
@@ -602,7 +665,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setBlendTextures(Structures.addStructure(getBlendTextures(), blendTexture));
+		setBlendTextures(FloatArrays.merge(getBlendTextures(), blendTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -629,7 +692,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setBullseyeTextures(Structures.addStructure(getBullseyeTextures(), bullseyeTexture));
+		setBullseyeTextures(FloatArrays.merge(getBullseyeTextures(), bullseyeTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -656,7 +719,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setCheckerboardTextures(Structures.addStructure(getCheckerboardTextures(), checkerboardTexture));
+		setCheckerboardTextures(FloatArrays.merge(getCheckerboardTextures(), checkerboardTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -683,7 +746,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setConstantTextures(Structures.addStructure(getConstantTextures(), constantTexture));
+		setConstantTextures(FloatArrays.merge(getConstantTextures(), constantTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -712,7 +775,7 @@ public final class CompiledTextureCache {
 		}
 		
 		setLDRImageTextureOffsets(Structures.addStructureOffset(getLDRImageTextureOffsets(), absoluteOffsetNew));
-		setLDRImageTextures(Structures.addStructure(getLDRImageTextures(), lDRImageTexture));
+		setLDRImageTextures(FloatArrays.merge(getLDRImageTextures(), lDRImageTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -739,7 +802,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setMarbleTextures(Structures.addStructure(getMarbleTextures(), marbleTexture));
+		setMarbleTextures(FloatArrays.merge(getMarbleTextures(), marbleTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -766,7 +829,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setPolkaDotTextures(Structures.addStructure(getPolkaDotTextures(), polkaDotTexture));
+		setPolkaDotTextures(FloatArrays.merge(getPolkaDotTextures(), polkaDotTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -793,7 +856,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setSimplexFractionalBrownianMotionTextures(Structures.addStructure(getSimplexFractionalBrownianMotionTextures(), simplexFractionalBrownianMotionTexture));
+		setSimplexFractionalBrownianMotionTextures(FloatArrays.merge(getSimplexFractionalBrownianMotionTextures(), simplexFractionalBrownianMotionTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -824,7 +887,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(blendTexture, BLEND_TEXTURE_LENGTH, "blendTexture");
 		
-		return Structures.getStructureOffsetAbsolute(this.blendTextures, blendTexture, getBlendTextureCount(), BLEND_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.blendTextures, blendTexture);
 	}
 	
 	/**
@@ -844,7 +907,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(blendTexture, BLEND_TEXTURE_LENGTH, "blendTexture");
 		
-		return Structures.getStructureOffsetRelative(this.blendTextures, blendTexture, getBlendTextureCount(), BLEND_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetRelative(this.blendTextures, blendTexture);
 	}
 	
 	/**
@@ -873,7 +936,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(bullseyeTexture, BULLSEYE_TEXTURE_LENGTH, "bullseyeTexture");
 		
-		return Structures.getStructureOffsetAbsolute(this.bullseyeTextures, bullseyeTexture, getBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.bullseyeTextures, bullseyeTexture);
 	}
 	
 	/**
@@ -893,7 +956,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(bullseyeTexture, BULLSEYE_TEXTURE_LENGTH, "bullseyeTexture");
 		
-		return Structures.getStructureOffsetRelative(this.bullseyeTextures, bullseyeTexture, getBullseyeTextureCount(), BULLSEYE_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetRelative(this.bullseyeTextures, bullseyeTexture);
 	}
 	
 	/**
@@ -922,7 +985,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(checkerboardTexture, CHECKERBOARD_TEXTURE_LENGTH, "checkerboardTexture");
 		
-		return Structures.getStructureOffsetAbsolute(this.checkerboardTextures, checkerboardTexture, getCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.checkerboardTextures, checkerboardTexture);
 	}
 	
 	/**
@@ -942,7 +1005,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(checkerboardTexture, CHECKERBOARD_TEXTURE_LENGTH, "checkerboardTexture");
 		
-		return Structures.getStructureOffsetRelative(this.checkerboardTextures, checkerboardTexture, getCheckerboardTextureCount(), CHECKERBOARD_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetRelative(this.checkerboardTextures, checkerboardTexture);
 	}
 	
 	/**
@@ -971,7 +1034,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(constantTexture, CONSTANT_TEXTURE_LENGTH, "constantTexture");
 		
-		return Structures.getStructureOffsetAbsolute(this.constantTextures, constantTexture, getConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.constantTextures, constantTexture);
 	}
 	
 	/**
@@ -991,7 +1054,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(constantTexture, CONSTANT_TEXTURE_LENGTH, "constantTexture");
 		
-		return Structures.getStructureOffsetRelative(this.constantTextures, constantTexture, getConstantTextureCount(), CONSTANT_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetRelative(this.constantTextures, constantTexture);
 	}
 	
 	/**
@@ -1000,7 +1063,7 @@ public final class CompiledTextureCache {
 	 * @return the {@code LDRImageTexture} count in this {@code CompiledTextureCache} instance
 	 */
 	public int getLDRImageTextureCount() {
-		return Structures.getStructureCount(this.lDRImageTextures, 8, this.lDRImageTextureOffsets.length);
+		return this.lDRImageTextureOffsets.length;
 	}
 	
 	/**
@@ -1069,7 +1132,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(marbleTexture, MARBLE_TEXTURE_LENGTH, "marbleTexture");
 		
-		return Structures.getStructureOffsetAbsolute(this.marbleTextures, marbleTexture, getMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.marbleTextures, marbleTexture);
 	}
 	
 	/**
@@ -1089,7 +1152,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(marbleTexture, MARBLE_TEXTURE_LENGTH, "marbleTexture");
 		
-		return Structures.getStructureOffsetRelative(this.marbleTextures, marbleTexture, getMarbleTextureCount(), MARBLE_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetRelative(this.marbleTextures, marbleTexture);
 	}
 	
 	/**
@@ -1118,7 +1181,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(polkaDotTexture, POLKA_DOT_TEXTURE_LENGTH, "polkaDotTexture");
 		
-		return Structures.getStructureOffsetAbsolute(this.polkaDotTextures, polkaDotTexture, getPolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.polkaDotTextures, polkaDotTexture);
 	}
 	
 	/**
@@ -1138,7 +1201,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(polkaDotTexture, POLKA_DOT_TEXTURE_LENGTH, "polkaDotTexture");
 		
-		return Structures.getStructureOffsetRelative(this.polkaDotTextures, polkaDotTexture, getPolkaDotTextureCount(), POLKA_DOT_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetRelative(this.polkaDotTextures, polkaDotTexture);
 	}
 	
 	/**
@@ -1167,7 +1230,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(simplexFractionalBrownianMotionTexture, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH, "simplexFractionalBrownianMotionTexture");
 		
-		return Structures.getStructureOffsetAbsolute(this.simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture, getSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture);
 	}
 	
 	/**
@@ -1187,7 +1250,7 @@ public final class CompiledTextureCache {
 		
 		ParameterArguments.requireExactArrayLength(simplexFractionalBrownianMotionTexture, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH, "simplexFractionalBrownianMotionTexture");
 		
-		return Structures.getStructureOffsetRelative(this.simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture, getSimplexFractionalBrownianMotionTextureCount(), SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH);
+		return Structures.getStructureOffsetRelative(this.simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture);
 	}
 	
 	/**

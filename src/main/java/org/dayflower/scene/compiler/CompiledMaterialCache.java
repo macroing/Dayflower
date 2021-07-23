@@ -41,7 +41,9 @@ import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.texture.Texture;
+import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
+import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
@@ -715,7 +717,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setBullseyeMaterials(Structures.addStructure(getBullseyeMaterials(), bullseyeMaterial));
+		setBullseyeMaterials(FloatArrays.merge(getBullseyeMaterials(), bullseyeMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -742,7 +744,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setCheckerboardMaterials(Structures.addStructure(getCheckerboardMaterials(), checkerboardMaterial));
+		setCheckerboardMaterials(FloatArrays.merge(getCheckerboardMaterials(), checkerboardMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -769,7 +771,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setClearCoatMaterials(Structures.addStructure(getClearCoatMaterials(), clearCoatMaterial));
+		setClearCoatMaterials(IntArrays.merge(getClearCoatMaterials(), clearCoatMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -796,7 +798,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setDisneyMaterials(Structures.addStructure(getDisneyMaterials(), disneyMaterial));
+		setDisneyMaterials(IntArrays.merge(getDisneyMaterials(), disneyMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -823,7 +825,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setGlassMaterials(Structures.addStructure(getGlassMaterials(), glassMaterial));
+		setGlassMaterials(IntArrays.merge(getGlassMaterials(), glassMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -850,7 +852,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setGlossyMaterials(Structures.addStructure(getGlossyMaterials(), glossyMaterial));
+		setGlossyMaterials(IntArrays.merge(getGlossyMaterials(), glossyMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -877,7 +879,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setMatteMaterials(Structures.addStructure(getMatteMaterials(), matteMaterial));
+		setMatteMaterials(IntArrays.merge(getMatteMaterials(), matteMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -904,7 +906,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setMetalMaterials(Structures.addStructure(getMetalMaterials(), metalMaterial));
+		setMetalMaterials(IntArrays.merge(getMetalMaterials(), metalMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -931,7 +933,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setMirrorMaterials(Structures.addStructure(getMirrorMaterials(), mirrorMaterial));
+		setMirrorMaterials(IntArrays.merge(getMirrorMaterials(), mirrorMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -958,7 +960,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setPlasticMaterials(Structures.addStructure(getPlasticMaterials(), plasticMaterial));
+		setPlasticMaterials(IntArrays.merge(getPlasticMaterials(), plasticMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -985,7 +987,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setPolkaDotMaterials(Structures.addStructure(getPolkaDotMaterials(), polkaDotMaterial));
+		setPolkaDotMaterials(FloatArrays.merge(getPolkaDotMaterials(), polkaDotMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -1012,7 +1014,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setSubstrateMaterials(Structures.addStructure(getSubstrateMaterials(), substrateMaterial));
+		setSubstrateMaterials(IntArrays.merge(getSubstrateMaterials(), substrateMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -1043,7 +1045,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(bullseyeMaterial, BULLSEYE_MATERIAL_LENGTH, "bullseyeMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.bullseyeMaterials, bullseyeMaterial, getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.bullseyeMaterials, bullseyeMaterial);
 	}
 	
 	/**
@@ -1063,7 +1065,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(bullseyeMaterial, BULLSEYE_MATERIAL_LENGTH, "bullseyeMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.bullseyeMaterials, bullseyeMaterial, getBullseyeMaterialCount(), BULLSEYE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.bullseyeMaterials, bullseyeMaterial);
 	}
 	
 	/**
@@ -1092,7 +1094,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(checkerboardMaterial, CHECKERBOARD_MATERIAL_LENGTH, "checkerboardMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.checkerboardMaterials, checkerboardMaterial, getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.checkerboardMaterials, checkerboardMaterial);
 	}
 	
 	/**
@@ -1112,7 +1114,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(checkerboardMaterial, CHECKERBOARD_MATERIAL_LENGTH, "checkerboardMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.checkerboardMaterials, checkerboardMaterial, getCheckerboardMaterialCount(), CHECKERBOARD_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.checkerboardMaterials, checkerboardMaterial);
 	}
 	
 	/**
@@ -1141,7 +1143,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(clearCoatMaterial, CLEAR_COAT_MATERIAL_LENGTH, "clearCoatMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.clearCoatMaterials, clearCoatMaterial, getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.clearCoatMaterials, clearCoatMaterial);
 	}
 	
 	/**
@@ -1161,7 +1163,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(clearCoatMaterial, CLEAR_COAT_MATERIAL_LENGTH, "clearCoatMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.clearCoatMaterials, clearCoatMaterial, getClearCoatMaterialCount(), CLEAR_COAT_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.clearCoatMaterials, clearCoatMaterial);
 	}
 	
 	/**
@@ -1190,7 +1192,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(disneyMaterial, DISNEY_MATERIAL_LENGTH, "disneyMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.disneyMaterials, disneyMaterial, getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.disneyMaterials, disneyMaterial);
 	}
 	
 	/**
@@ -1210,7 +1212,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(disneyMaterial, DISNEY_MATERIAL_LENGTH, "disneyMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.disneyMaterials, disneyMaterial, getDisneyMaterialCount(), DISNEY_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.disneyMaterials, disneyMaterial);
 	}
 	
 	/**
@@ -1239,7 +1241,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(glassMaterial, GLASS_MATERIAL_LENGTH, "glassMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.glassMaterials, glassMaterial, getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.glassMaterials, glassMaterial);
 	}
 	
 	/**
@@ -1259,7 +1261,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(glassMaterial, GLASS_MATERIAL_LENGTH, "glassMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.glassMaterials, glassMaterial, getGlassMaterialCount(), GLASS_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.glassMaterials, glassMaterial);
 	}
 	
 	/**
@@ -1288,7 +1290,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(glossyMaterial, GLOSSY_MATERIAL_LENGTH, "glossyMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.glossyMaterials, glossyMaterial, getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.glossyMaterials, glossyMaterial);
 	}
 	
 	/**
@@ -1308,7 +1310,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(glossyMaterial, GLOSSY_MATERIAL_LENGTH, "glossyMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.glossyMaterials, glossyMaterial, getGlossyMaterialCount(), GLOSSY_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.glossyMaterials, glossyMaterial);
 	}
 	
 	/**
@@ -1337,7 +1339,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(matteMaterial, MATTE_MATERIAL_LENGTH, "matteMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.matteMaterials, matteMaterial, getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.matteMaterials, matteMaterial);
 	}
 	
 	/**
@@ -1357,7 +1359,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(matteMaterial, MATTE_MATERIAL_LENGTH, "matteMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.matteMaterials, matteMaterial, getMatteMaterialCount(), MATTE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.matteMaterials, matteMaterial);
 	}
 	
 	/**
@@ -1386,7 +1388,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(metalMaterial, METAL_MATERIAL_LENGTH, "metalMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.metalMaterials, metalMaterial, getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.metalMaterials, metalMaterial);
 	}
 	
 	/**
@@ -1406,7 +1408,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(metalMaterial, METAL_MATERIAL_LENGTH, "metalMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.metalMaterials, metalMaterial, getMetalMaterialCount(), METAL_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.metalMaterials, metalMaterial);
 	}
 	
 	/**
@@ -1435,7 +1437,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(mirrorMaterial, MIRROR_MATERIAL_LENGTH, "mirrorMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.mirrorMaterials, mirrorMaterial, getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.mirrorMaterials, mirrorMaterial);
 	}
 	
 	/**
@@ -1455,7 +1457,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(mirrorMaterial, MIRROR_MATERIAL_LENGTH, "mirrorMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.mirrorMaterials, mirrorMaterial, getMirrorMaterialCount(), MIRROR_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.mirrorMaterials, mirrorMaterial);
 	}
 	
 	/**
@@ -1484,7 +1486,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(plasticMaterial, PLASTIC_MATERIAL_LENGTH, "plasticMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.plasticMaterials, plasticMaterial, getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.plasticMaterials, plasticMaterial);
 	}
 	
 	/**
@@ -1504,7 +1506,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(plasticMaterial, PLASTIC_MATERIAL_LENGTH, "plasticMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.plasticMaterials, plasticMaterial, getPlasticMaterialCount(), PLASTIC_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.plasticMaterials, plasticMaterial);
 	}
 	
 	/**
@@ -1533,7 +1535,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(polkaDotMaterial, POLKA_DOT_MATERIAL_LENGTH, "polkaDotMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.polkaDotMaterials, polkaDotMaterial, getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.polkaDotMaterials, polkaDotMaterial);
 	}
 	
 	/**
@@ -1553,7 +1555,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(polkaDotMaterial, POLKA_DOT_MATERIAL_LENGTH, "polkaDotMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.polkaDotMaterials, polkaDotMaterial, getPolkaDotMaterialCount(), POLKA_DOT_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.polkaDotMaterials, polkaDotMaterial);
 	}
 	
 	/**
@@ -1582,7 +1584,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(substrateMaterial, SUBSTRATE_MATERIAL_LENGTH, "substrateMaterial");
 		
-		return Structures.getStructureOffsetAbsolute(this.substrateMaterials, substrateMaterial, getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.substrateMaterials, substrateMaterial);
 	}
 	
 	/**
@@ -1602,7 +1604,7 @@ public final class CompiledMaterialCache {
 		
 		ParameterArguments.requireExactArrayLength(substrateMaterial, SUBSTRATE_MATERIAL_LENGTH, "substrateMaterial");
 		
-		return Structures.getStructureOffsetRelative(this.substrateMaterials, substrateMaterial, getSubstrateMaterialCount(), SUBSTRATE_MATERIAL_LENGTH);
+		return Structures.getStructureOffsetRelative(this.substrateMaterials, substrateMaterial);
 	}
 	
 	/**

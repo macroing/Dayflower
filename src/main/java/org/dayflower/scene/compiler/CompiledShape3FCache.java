@@ -51,7 +51,9 @@ import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.java.io.IntArrayOutputStream;
 import org.dayflower.node.NodeFilter;
+import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
+import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
@@ -864,7 +866,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setCone3Fs(Structures.addStructure(getCone3Fs(), cone3F));
+		setCone3Fs(FloatArrays.merge(getCone3Fs(), cone3F));
 		
 		return relativeOffsetNew;
 	}
@@ -891,7 +893,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setCylinder3Fs(Structures.addStructure(getCylinder3Fs(), cylinder3F));
+		setCylinder3Fs(FloatArrays.merge(getCylinder3Fs(), cylinder3F));
 		
 		return relativeOffsetNew;
 	}
@@ -918,7 +920,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setDisk3Fs(Structures.addStructure(getDisk3Fs(), disk3F));
+		setDisk3Fs(FloatArrays.merge(getDisk3Fs(), disk3F));
 		
 		return relativeOffsetNew;
 	}
@@ -945,7 +947,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setHyperboloid3Fs(Structures.addStructure(getHyperboloid3Fs(), hyperboloid3F));
+		setHyperboloid3Fs(FloatArrays.merge(getHyperboloid3Fs(), hyperboloid3F));
 		
 		return relativeOffsetNew;
 	}
@@ -972,7 +974,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setParaboloid3Fs(Structures.addStructure(getParaboloid3Fs(), paraboloid3F));
+		setParaboloid3Fs(FloatArrays.merge(getParaboloid3Fs(), paraboloid3F));
 		
 		return relativeOffsetNew;
 	}
@@ -999,7 +1001,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setPlane3Fs(Structures.addStructure(getPlane3Fs(), plane3F));
+		setPlane3Fs(FloatArrays.merge(getPlane3Fs(), plane3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1026,7 +1028,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setRectangle3Fs(Structures.addStructure(getRectangle3Fs(), rectangle3F));
+		setRectangle3Fs(FloatArrays.merge(getRectangle3Fs(), rectangle3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1053,7 +1055,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setRectangularCuboid3Fs(Structures.addStructure(getRectangularCuboid3Fs(), rectangularCuboid3F));
+		setRectangularCuboid3Fs(FloatArrays.merge(getRectangularCuboid3Fs(), rectangularCuboid3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1080,7 +1082,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setSphere3Fs(Structures.addStructure(getSphere3Fs(), sphere3F));
+		setSphere3Fs(FloatArrays.merge(getSphere3Fs(), sphere3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1107,7 +1109,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setTorus3Fs(Structures.addStructure(getTorus3Fs(), torus3F));
+		setTorus3Fs(FloatArrays.merge(getTorus3Fs(), torus3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1134,7 +1136,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setTriangle3Fs(Structures.addStructure(getTriangle3Fs(), triangle3F));
+		setTriangle3Fs(FloatArrays.merge(getTriangle3Fs(), triangle3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1163,7 +1165,7 @@ public final class CompiledShape3FCache {
 		}
 		
 		setTriangleMesh3FOffsets(Structures.addStructureOffset(getTriangleMesh3FOffsets(), absoluteOffsetNew));
-		setTriangleMesh3Fs(Structures.addStructure(getTriangleMesh3Fs(), triangleMesh3F));
+		setTriangleMesh3Fs(IntArrays.merge(getTriangleMesh3Fs(), triangleMesh3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1194,7 +1196,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(cone3F, CONE_3_F_LENGTH, "cone3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.cone3Fs, cone3F, getCone3FCount(), CONE_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.cone3Fs, cone3F);
 	}
 	
 	/**
@@ -1214,7 +1216,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(cone3F, CONE_3_F_LENGTH, "cone3F");
 		
-		return Structures.getStructureOffsetRelative(this.cone3Fs, cone3F, getCone3FCount(), CONE_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.cone3Fs, cone3F);
 	}
 	
 	/**
@@ -1243,7 +1245,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(cylinder3F, CYLINDER_3_F_LENGTH, "cylinder3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.cylinder3Fs, cylinder3F, getCylinder3FCount(), CYLINDER_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.cylinder3Fs, cylinder3F);
 	}
 	
 	/**
@@ -1263,7 +1265,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(cylinder3F, CYLINDER_3_F_LENGTH, "cylinder3F");
 		
-		return Structures.getStructureOffsetRelative(this.cylinder3Fs, cylinder3F, getCylinder3FCount(), CYLINDER_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.cylinder3Fs, cylinder3F);
 	}
 	
 	/**
@@ -1292,7 +1294,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(disk3F, DISK_3_F_LENGTH, "disk3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.disk3Fs, disk3F, getDisk3FCount(), DISK_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.disk3Fs, disk3F);
 	}
 	
 	/**
@@ -1312,7 +1314,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(disk3F, DISK_3_F_LENGTH, "disk3F");
 		
-		return Structures.getStructureOffsetRelative(this.disk3Fs, disk3F, getDisk3FCount(), DISK_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.disk3Fs, disk3F);
 	}
 	
 	/**
@@ -1341,7 +1343,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(hyperboloid3F, HYPERBOLOID_3_F_LENGTH, "hyperboloid3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.hyperboloid3Fs, hyperboloid3F, getHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.hyperboloid3Fs, hyperboloid3F);
 	}
 	
 	/**
@@ -1361,7 +1363,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(hyperboloid3F, HYPERBOLOID_3_F_LENGTH, "hyperboloid3F");
 		
-		return Structures.getStructureOffsetRelative(this.hyperboloid3Fs, hyperboloid3F, getHyperboloid3FCount(), HYPERBOLOID_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.hyperboloid3Fs, hyperboloid3F);
 	}
 	
 	/**
@@ -1390,7 +1392,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(paraboloid3F, PARABOLOID_3_F_LENGTH, "paraboloid3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.paraboloid3Fs, paraboloid3F, getParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.paraboloid3Fs, paraboloid3F);
 	}
 	
 	/**
@@ -1410,7 +1412,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(paraboloid3F, PARABOLOID_3_F_LENGTH, "paraboloid3F");
 		
-		return Structures.getStructureOffsetRelative(this.paraboloid3Fs, paraboloid3F, getParaboloid3FCount(), PARABOLOID_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.paraboloid3Fs, paraboloid3F);
 	}
 	
 	/**
@@ -1439,7 +1441,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(plane3F, PLANE_3_F_LENGTH, "plane3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.plane3Fs, plane3F, getPlane3FCount(), PLANE_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.plane3Fs, plane3F);
 	}
 	
 	/**
@@ -1459,7 +1461,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(plane3F, PLANE_3_F_LENGTH, "plane3F");
 		
-		return Structures.getStructureOffsetRelative(this.plane3Fs, plane3F, getPlane3FCount(), PLANE_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.plane3Fs, plane3F);
 	}
 	
 	/**
@@ -1488,7 +1490,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(rectangle3F, RECTANGLE_3_F_LENGTH, "rectangle3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.rectangle3Fs, rectangle3F, getRectangle3FCount(), RECTANGLE_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.rectangle3Fs, rectangle3F);
 	}
 	
 	/**
@@ -1508,7 +1510,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(rectangle3F, RECTANGLE_3_F_LENGTH, "rectangle3F");
 		
-		return Structures.getStructureOffsetRelative(this.rectangle3Fs, rectangle3F, getRectangle3FCount(), RECTANGLE_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.rectangle3Fs, rectangle3F);
 	}
 	
 	/**
@@ -1537,7 +1539,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(rectangularCuboid3F, RECTANGULAR_CUBOID_3_F_LENGTH, "rectangularCuboid3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.rectangularCuboid3Fs, rectangularCuboid3F, getRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.rectangularCuboid3Fs, rectangularCuboid3F);
 	}
 	
 	/**
@@ -1557,7 +1559,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(rectangularCuboid3F, RECTANGULAR_CUBOID_3_F_LENGTH, "rectangularCuboid3F");
 		
-		return Structures.getStructureOffsetRelative(this.rectangularCuboid3Fs, rectangularCuboid3F, getRectangularCuboid3FCount(), RECTANGULAR_CUBOID_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.rectangularCuboid3Fs, rectangularCuboid3F);
 	}
 	
 	/**
@@ -1586,7 +1588,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(sphere3F, SPHERE_3_F_LENGTH, "sphere3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.sphere3Fs, sphere3F, getSphere3FCount(), SPHERE_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.sphere3Fs, sphere3F);
 	}
 	
 	/**
@@ -1606,7 +1608,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(sphere3F, SPHERE_3_F_LENGTH, "sphere3F");
 		
-		return Structures.getStructureOffsetRelative(this.sphere3Fs, sphere3F, getSphere3FCount(), SPHERE_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.sphere3Fs, sphere3F);
 	}
 	
 	/**
@@ -1635,7 +1637,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(torus3F, TORUS_3_F_LENGTH, "torus3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.torus3Fs, torus3F, getTorus3FCount(), TORUS_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.torus3Fs, torus3F);
 	}
 	
 	/**
@@ -1655,7 +1657,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(torus3F, TORUS_3_F_LENGTH, "torus3F");
 		
-		return Structures.getStructureOffsetRelative(this.torus3Fs, torus3F, getTorus3FCount(), TORUS_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.torus3Fs, torus3F);
 	}
 	
 	/**
@@ -1684,7 +1686,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(triangle3F, TRIANGLE_3_F_LENGTH, "triangle3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.triangle3Fs, triangle3F, getTriangle3FCount(), TRIANGLE_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.triangle3Fs, triangle3F);
 	}
 	
 	/**
@@ -1704,7 +1706,7 @@ public final class CompiledShape3FCache {
 		
 		ParameterArguments.requireExactArrayLength(triangle3F, TRIANGLE_3_F_LENGTH, "triangle3F");
 		
-		return Structures.getStructureOffsetRelative(this.triangle3Fs, triangle3F, getTriangle3FCount(), TRIANGLE_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.triangle3Fs, triangle3F);
 	}
 	
 	/**
@@ -1713,7 +1715,7 @@ public final class CompiledShape3FCache {
 	 * @return the {@code TriangleMesh3F} count in this {@code CompiledShape3FCache} instance
 	 */
 	public int getTriangleMesh3FCount() {
-		return Structures.getStructureCount(this.triangleMesh3Fs, 8, this.triangleMesh3FOffsets.length);
+		return this.triangleMesh3FOffsets.length;
 	}
 	
 	/**

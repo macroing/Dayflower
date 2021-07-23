@@ -41,6 +41,7 @@ import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
+import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 
@@ -539,7 +540,7 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), DiffuseAreaLight.ID, relativeOffsetNew));
-		setDiffuseAreaLights(Structures.addStructure(getDiffuseAreaLights(), diffuseAreaLight));
+		setDiffuseAreaLights(FloatArrays.merge(getDiffuseAreaLights(), diffuseAreaLight));
 		
 		return relativeOffsetNew;
 	}
@@ -567,7 +568,7 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), DirectionalLight.ID, relativeOffsetNew));
-		setDirectionalLights(Structures.addStructure(getDirectionalLights(), directionalLight));
+		setDirectionalLights(FloatArrays.merge(getDirectionalLights(), directionalLight));
 		
 		return relativeOffsetNew;
 	}
@@ -597,7 +598,7 @@ public final class CompiledLightCache {
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, relativeOffsetNew));
 		setLDRImageLightOffsets(Structures.addStructureOffset(getLDRImageLightOffsets(), absoluteOffsetNew));
-		setLDRImageLights(Structures.addStructure(getLDRImageLights(), lDRImageLight));
+		setLDRImageLights(FloatArrays.merge(getLDRImageLights(), lDRImageLight));
 		
 		return relativeOffsetNew;
 	}
@@ -627,7 +628,7 @@ public final class CompiledLightCache {
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PerezLight.ID, relativeOffsetNew));
 		setPerezLightOffsets(Structures.addStructureOffset(getPerezLightOffsets(), absoluteOffsetNew));
-		setPerezLights(Structures.addStructure(getPerezLights(), perezLight));
+		setPerezLights(FloatArrays.merge(getPerezLights(), perezLight));
 		
 		return relativeOffsetNew;
 	}
@@ -655,7 +656,7 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PointLight.ID, relativeOffsetNew));
-		setPointLights(Structures.addStructure(getPointLights(), pointLight));
+		setPointLights(FloatArrays.merge(getPointLights(), pointLight));
 		
 		return relativeOffsetNew;
 	}
@@ -683,7 +684,7 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), SpotLight.ID, relativeOffsetNew));
-		setSpotLights(Structures.addStructure(getSpotLights(), spotLight));
+		setSpotLights(FloatArrays.merge(getSpotLights(), spotLight));
 		
 		return relativeOffsetNew;
 	}
@@ -714,7 +715,7 @@ public final class CompiledLightCache {
 		
 		ParameterArguments.requireExactArrayLength(diffuseAreaLight, DIFFUSE_AREA_LIGHT_LENGTH, "diffuseAreaLight");
 		
-		return Structures.getStructureOffsetAbsolute(this.diffuseAreaLights, diffuseAreaLight, getDiffuseAreaLightCount(), DIFFUSE_AREA_LIGHT_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.diffuseAreaLights, diffuseAreaLight);
 	}
 	
 	/**
@@ -734,7 +735,7 @@ public final class CompiledLightCache {
 		
 		ParameterArguments.requireExactArrayLength(diffuseAreaLight, DIFFUSE_AREA_LIGHT_LENGTH, "diffuseAreaLight");
 		
-		return Structures.getStructureOffsetRelative(this.diffuseAreaLights, diffuseAreaLight, getDiffuseAreaLightCount(), DIFFUSE_AREA_LIGHT_LENGTH);
+		return Structures.getStructureOffsetRelative(this.diffuseAreaLights, diffuseAreaLight);
 	}
 	
 	/**
@@ -763,7 +764,7 @@ public final class CompiledLightCache {
 		
 		ParameterArguments.requireExactArrayLength(directionalLight, DIRECTIONAL_LIGHT_LENGTH, "directionalLight");
 		
-		return Structures.getStructureOffsetAbsolute(this.directionalLights, directionalLight, getDirectionalLightCount(), DIRECTIONAL_LIGHT_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.directionalLights, directionalLight);
 	}
 	
 	/**
@@ -783,7 +784,7 @@ public final class CompiledLightCache {
 		
 		ParameterArguments.requireExactArrayLength(directionalLight, DIRECTIONAL_LIGHT_LENGTH, "directionalLight");
 		
-		return Structures.getStructureOffsetRelative(this.directionalLights, directionalLight, getDirectionalLightCount(), DIRECTIONAL_LIGHT_LENGTH);
+		return Structures.getStructureOffsetRelative(this.directionalLights, directionalLight);
 	}
 	
 	/**
@@ -792,7 +793,7 @@ public final class CompiledLightCache {
 	 * @return the {@code LDRImageLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getLDRImageLightCount() {
-		return Structures.getStructureCount(this.lDRImageLights, 8, this.lDRImageLightOffsets.length);
+		return this.lDRImageLightOffsets.length;
 	}
 	
 	/**
@@ -850,7 +851,7 @@ public final class CompiledLightCache {
 	 * @return the {@code PerezLight} count in this {@code CompiledLightCache} instance
 	 */
 	public int getPerezLightCount() {
-		return Structures.getStructureCount(this.perezLights, 8, this.perezLightOffsets.length);
+		return this.perezLightOffsets.length;
 	}
 	
 	/**
@@ -919,7 +920,7 @@ public final class CompiledLightCache {
 		
 		ParameterArguments.requireExactArrayLength(pointLight, POINT_LIGHT_LENGTH, "pointLight");
 		
-		return Structures.getStructureOffsetAbsolute(this.pointLights, pointLight, getPointLightCount(), POINT_LIGHT_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.pointLights, pointLight);
 	}
 	
 	/**
@@ -939,7 +940,7 @@ public final class CompiledLightCache {
 		
 		ParameterArguments.requireExactArrayLength(pointLight, POINT_LIGHT_LENGTH, "pointLight");
 		
-		return Structures.getStructureOffsetRelative(this.pointLights, pointLight, getPointLightCount(), POINT_LIGHT_LENGTH);
+		return Structures.getStructureOffsetRelative(this.pointLights, pointLight);
 	}
 	
 	/**
@@ -968,7 +969,7 @@ public final class CompiledLightCache {
 		
 		ParameterArguments.requireExactArrayLength(spotLight, SPOT_LIGHT_LENGTH, "spotLight");
 		
-		return Structures.getStructureOffsetAbsolute(this.spotLights, spotLight, getSpotLightCount(), SPOT_LIGHT_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.spotLights, spotLight);
 	}
 	
 	/**
@@ -988,7 +989,7 @@ public final class CompiledLightCache {
 		
 		ParameterArguments.requireExactArrayLength(spotLight, SPOT_LIGHT_LENGTH, "spotLight");
 		
-		return Structures.getStructureOffsetRelative(this.spotLights, spotLight, getSpotLightCount(), SPOT_LIGHT_LENGTH);
+		return Structures.getStructureOffsetRelative(this.spotLights, spotLight);
 	}
 	
 	/**

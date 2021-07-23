@@ -25,6 +25,7 @@ import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
+import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 
@@ -100,7 +101,7 @@ public final class CompiledBoundingVolume3FCache {
 		final int absoluteOffset = getAxisAlignedBoundingBox3FOffsetAbsolute(axisAlignedBoundingBox3F);
 		
 		if(absoluteOffset != -1) {
-			setAxisAlignedBoundingBox3Fs(Structures.removeStructure(getAxisAlignedBoundingBox3Fs(), absoluteOffset, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH));
+			setAxisAlignedBoundingBox3Fs(FloatArrays.splice(getAxisAlignedBoundingBox3Fs(), absoluteOffset, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH));
 			
 			return true;
 		}
@@ -126,9 +127,71 @@ public final class CompiledBoundingVolume3FCache {
 		final int absoluteOffset = getBoundingSphere3FOffsetAbsolute(boundingSphere3F);
 		
 		if(absoluteOffset != -1) {
-			setBoundingSphere3Fs(Structures.removeStructure(getBoundingSphere3Fs(), absoluteOffset, BOUNDING_SPHERE_3_F_LENGTH));
+			setBoundingSphere3Fs(FloatArrays.splice(getBoundingSphere3Fs(), absoluteOffset, BOUNDING_SPHERE_3_F_LENGTH));
 			
 			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Updates {@code oldAxisAlignedBoundingBox3F} to {@code newAxisAlignedBoundingBox3F} in this {@code CompiledBoundingVolume3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code oldAxisAlignedBoundingBox3F} was updated, {@code false} otherwise.
+	 * <p>
+	 * If either {@code oldAxisAlignedBoundingBox3F} or {@code newAxisAlignedBoundingBox3F} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code oldAxisAlignedBoundingBox3F.length} or {@code newAxisAlignedBoundingBox3F.length} are not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param oldAxisAlignedBoundingBox3F the old {@link AxisAlignedBoundingBox3F} instance in compiled form
+	 * @param newAxisAlignedBoundingBox3F the new {@code AxisAlignedBoundingBox3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code oldAxisAlignedBoundingBox3F} was updated, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code oldAxisAlignedBoundingBox3F.length} or {@code newAxisAlignedBoundingBox3F.length} are not equal to {@code CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, either {@code oldAxisAlignedBoundingBox3F} or {@code newAxisAlignedBoundingBox3F} are {@code null}
+	 */
+	public boolean updateAxisAlignedBoundingBox3F(final float[] oldAxisAlignedBoundingBox3F, final float[] newAxisAlignedBoundingBox3F) {
+		Objects.requireNonNull(oldAxisAlignedBoundingBox3F, "oldAxisAlignedBoundingBox3F == null");
+		Objects.requireNonNull(newAxisAlignedBoundingBox3F, "newAxisAlignedBoundingBox3F == null");
+		
+		ParameterArguments.requireExactArrayLength(oldAxisAlignedBoundingBox3F, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH, "oldAxisAlignedBoundingBox3F");
+		ParameterArguments.requireExactArrayLength(newAxisAlignedBoundingBox3F, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH, "newAxisAlignedBoundingBox3F");
+		
+		final int absoluteOffset = getAxisAlignedBoundingBox3FOffsetAbsolute(oldAxisAlignedBoundingBox3F);
+		
+		if(absoluteOffset != -1) {
+			return Structures.updateStructure(this.axisAlignedBoundingBox3Fs, oldAxisAlignedBoundingBox3F, newAxisAlignedBoundingBox3F, absoluteOffset);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Updates {@code oldBoundingSphere3F} to {@code newBoundingSphere3F} in this {@code CompiledBoundingVolume3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code oldBoundingSphere3F} was updated, {@code false} otherwise.
+	 * <p>
+	 * If either {@code oldBoundingSphere3F} or {@code newBoundingSphere3F} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code oldBoundingSphere3F.length} or {@code newBoundingSphere3F.length} are not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param oldBoundingSphere3F the old {@link BoundingSphere3F} instance in compiled form
+	 * @param newBoundingSphere3F the new {@code BoundingSphere3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code oldBoundingSphere3F} was updated, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code oldBoundingSphere3F.length} or {@code newBoundingSphere3F.length} are not equal to {@code CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, either {@code oldBoundingSphere3F} or {@code newBoundingSphere3F} are {@code null}
+	 */
+	public boolean updateBoundingSphere3F(final float[] oldBoundingSphere3F, final float[] newBoundingSphere3F) {
+		Objects.requireNonNull(oldBoundingSphere3F, "oldBoundingSphere3F == null");
+		Objects.requireNonNull(newBoundingSphere3F, "newBoundingSphere3F == null");
+		
+		ParameterArguments.requireExactArrayLength(oldBoundingSphere3F, BOUNDING_SPHERE_3_F_LENGTH, "oldBoundingSphere3F");
+		ParameterArguments.requireExactArrayLength(newBoundingSphere3F, BOUNDING_SPHERE_3_F_LENGTH, "newBoundingSphere3F");
+		
+		final int absoluteOffset = getBoundingSphere3FOffsetAbsolute(oldBoundingSphere3F);
+		
+		if(absoluteOffset != -1) {
+			return Structures.updateStructure(this.boundingSphere3Fs, oldBoundingSphere3F, newBoundingSphere3F, absoluteOffset);
 		}
 		
 		return false;
@@ -174,7 +237,7 @@ public final class CompiledBoundingVolume3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setAxisAlignedBoundingBox3Fs(Structures.addStructure(getAxisAlignedBoundingBox3Fs(), axisAlignedBoundingBox3F));
+		setAxisAlignedBoundingBox3Fs(FloatArrays.merge(getAxisAlignedBoundingBox3Fs(), axisAlignedBoundingBox3F));
 		
 		return relativeOffsetNew;
 	}
@@ -201,7 +264,7 @@ public final class CompiledBoundingVolume3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setBoundingSphere3Fs(Structures.addStructure(getBoundingSphere3Fs(), boundingSphere3F));
+		setBoundingSphere3Fs(FloatArrays.merge(getBoundingSphere3Fs(), boundingSphere3F));
 		
 		return relativeOffsetNew;
 	}
@@ -232,7 +295,7 @@ public final class CompiledBoundingVolume3FCache {
 		
 		ParameterArguments.requireExactArrayLength(axisAlignedBoundingBox3F, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH, "axisAlignedBoundingBox3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F, getAxisAlignedBoundingBox3FCount(), AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F);
 	}
 	
 	/**
@@ -252,7 +315,7 @@ public final class CompiledBoundingVolume3FCache {
 		
 		ParameterArguments.requireExactArrayLength(axisAlignedBoundingBox3F, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH, "axisAlignedBoundingBox3F");
 		
-		return Structures.getStructureOffsetRelative(this.axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F, getAxisAlignedBoundingBox3FCount(), AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F);
 	}
 	
 	/**
@@ -281,7 +344,7 @@ public final class CompiledBoundingVolume3FCache {
 		
 		ParameterArguments.requireExactArrayLength(boundingSphere3F, BOUNDING_SPHERE_3_F_LENGTH, "boundingSphere3F");
 		
-		return Structures.getStructureOffsetAbsolute(this.boundingSphere3Fs, boundingSphere3F, getBoundingSphere3FCount(), BOUNDING_SPHERE_3_F_LENGTH);
+		return Structures.getStructureOffsetAbsolute(this.boundingSphere3Fs, boundingSphere3F);
 	}
 	
 	/**
@@ -301,7 +364,7 @@ public final class CompiledBoundingVolume3FCache {
 		
 		ParameterArguments.requireExactArrayLength(boundingSphere3F, BOUNDING_SPHERE_3_F_LENGTH, "boundingSphere3F");
 		
-		return Structures.getStructureOffsetRelative(this.boundingSphere3Fs, boundingSphere3F, getBoundingSphere3FCount(), BOUNDING_SPHERE_3_F_LENGTH);
+		return Structures.getStructureOffsetRelative(this.boundingSphere3Fs, boundingSphere3F);
 	}
 	
 	/**

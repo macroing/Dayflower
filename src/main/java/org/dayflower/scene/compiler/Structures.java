@@ -52,21 +52,6 @@ final class Structures {
 		return false;
 	}
 	
-	public static float[] removeStructure(final float[] structures, final int structureOffsetAbsolute, final int structureLength) {
-		Objects.requireNonNull(structures, "structures == null");
-		
-		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
-		ParameterArguments.requireRange(structureOffsetAbsolute, 0, structures.length - 1, "structureOffsetAbsolute");
-		ParameterArguments.requireRange(structureOffsetAbsolute + structureLength, 0, structures.length, "structureOffsetAbsolute + structureLength");
-		
-		final float[] newStructures = new float[structures.length - structureLength];
-		
-		System.arraycopy(structures, 0, newStructures, 0, structureOffsetAbsolute);
-		System.arraycopy(structures, structureOffsetAbsolute + structureLength, newStructures, structureOffsetAbsolute, structures.length - (structureOffsetAbsolute + structureLength));
-		
-		return newStructures;
-	}
-	
 	public static int getStructureCount(final float[] structures, final int structureLength) {
 		Objects.requireNonNull(structures, "structures == null");
 		
@@ -84,21 +69,7 @@ final class Structures {
 	}
 	
 	public static int getStructureOffsetAbsolute(final float[] structures, final float[] structure) {
-		Objects.requireNonNull(structures, "structures == null");
-		Objects.requireNonNull(structure, "structure == null");
-		
-		ParameterArguments.requireExact(structures.length % structure.length, 0, "structures.length % structure.length");
-		
-		final int structureCount = structures.length / structure.length;
-		final int structureLength = structure.length;
-		
-		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetAbsolute += structureLength, offsetRelative++) {
-			if(FloatArrays.equal(structures, structure, offsetAbsolute, 0, structureLength)) {
-				return offsetAbsolute;
-			}
-		}
-		
-		return -1;
+		return FloatArrays.indexOf(structure, structures, true, false);
 	}
 	
 	public static int getStructureOffsetAbsolute(final float[] structures, final float[] structure, final int[] structureOffsets) {
@@ -122,21 +93,7 @@ final class Structures {
 	}
 	
 	public static int getStructureOffsetAbsolute(final int[] structures, final int[] structure) {
-		Objects.requireNonNull(structures, "structures == null");
-		Objects.requireNonNull(structure, "structure == null");
-		
-		ParameterArguments.requireExact(structures.length % structure.length, 0, "structures.length % structure.length");
-		
-		final int structureCount = structures.length / structure.length;
-		final int structureLength = structure.length;
-		
-		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetAbsolute += structureLength, offsetRelative++) {
-			if(IntArrays.equal(structures, structure, offsetAbsolute, 0, structureLength)) {
-				return offsetAbsolute;
-			}
-		}
-		
-		return -1;
+		return IntArrays.indexOf(structure, structures, true, false);
 	}
 	
 	public static int getStructureOffsetAbsolute(final int[] structures, final int[] structure, final int[] structureOffsets) {
@@ -160,21 +117,7 @@ final class Structures {
 	}
 	
 	public static int getStructureOffsetRelative(final float[] structures, final float[] structure) {
-		Objects.requireNonNull(structures, "structures == null");
-		Objects.requireNonNull(structure, "structure == null");
-		
-		ParameterArguments.requireExact(structures.length % structure.length, 0, "structures.length % structure.length");
-		
-		final int structureCount = structures.length / structure.length;
-		final int structureLength = structure.length;
-		
-		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetAbsolute += structureLength, offsetRelative++) {
-			if(FloatArrays.equal(structures, structure, offsetAbsolute, 0, structureLength)) {
-				return offsetRelative;
-			}
-		}
-		
-		return -1;
+		return FloatArrays.indexOf(structure, structures, true, true);
 	}
 	
 	public static int getStructureOffsetRelative(final float[] structures, final float[] structure, final int[] structureOffsets) {
@@ -198,21 +141,7 @@ final class Structures {
 	}
 	
 	public static int getStructureOffsetRelative(final int[] structures, final int[] structure) {
-		Objects.requireNonNull(structures, "structures == null");
-		Objects.requireNonNull(structure, "structure == null");
-		
-		ParameterArguments.requireExact(structures.length % structure.length, 0, "structures.length % structure.length");
-		
-		final int structureCount = structures.length / structure.length;
-		final int structureLength = structure.length;
-		
-		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetAbsolute += structureLength, offsetRelative++) {
-			if(IntArrays.equal(structures, structure, offsetAbsolute, 0, structureLength)) {
-				return offsetRelative;
-			}
-		}
-		
-		return -1;
+		return IntArrays.indexOf(structure, structures, true, true);
 	}
 	
 	public static int getStructureOffsetRelative(final int[] structures, final int[] structure, final int[] structureOffsets) {
@@ -248,35 +177,6 @@ final class Structures {
 		newStructureIDsAndOffsets[newStructureIDsAndOffsets.length - 1] = pack(structureID, structureOffset);
 		
 		return newStructureIDsAndOffsets;
-	}
-	
-	public static int[] addStructureOffset(final int[] structureOffsets, final int structureOffset) {
-		Objects.requireNonNull(structureOffsets, "structureOffsets == null");
-		
-		ParameterArguments.requireRange(structureOffset, 0, Integer.MAX_VALUE, "structureOffset");
-		
-		final int[] newStructureOffsets = new int[structureOffsets.length + 1];
-		
-		System.arraycopy(structureOffsets, 0, newStructureOffsets, 0, structureOffsets.length);
-		
-		newStructureOffsets[newStructureOffsets.length - 1] = structureOffset;
-		
-		return newStructureOffsets;
-	}
-	
-	public static int[] removeStructure(final int[] structures, final int structureOffsetAbsolute, final int structureLength) {
-		Objects.requireNonNull(structures, "structures == null");
-		
-		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
-		ParameterArguments.requireRange(structureOffsetAbsolute, 0, structures.length - 1, "structureOffsetAbsolute");
-		ParameterArguments.requireRange(structureOffsetAbsolute + structureLength, 0, structures.length, "structureOffsetAbsolute + structureLength");
-		
-		final int[] newStructures = new int[structures.length - structureLength];
-		
-		System.arraycopy(structures, 0, newStructures, 0, structureOffsetAbsolute);
-		System.arraycopy(structures, structureOffsetAbsolute + structureLength, newStructures, structureOffsetAbsolute, structures.length - (structureOffsetAbsolute + structureLength));
-		
-		return newStructures;
 	}
 	
 	public static int[] removeStructureIDAndOffset(final int[] structureIDsAndOffsets, final int structureID, final int structureOffset) {

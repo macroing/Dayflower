@@ -94,6 +94,72 @@ public final class IntArrays {
 	}
 	
 	/**
+	 * Returns the index of {@code value} in {@code array}, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If either {@code value} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code isIncrementingByValueLength} is {@code true} and {@code array.length % value.length} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If the parameter argument {@code isIncrementingByValueLength} is {@code true}, this method assumes {@code array} contains sub-structures with equal lengths, namely {@code value.length}. This will yield a faster search, but also restrictions on
+	 * {@code array}. It requires a length that is a multiple of {@code value.length}. If {@code array} does not contain sub-structures with equal lengths, {@code isIncrementingByValueLength} should be {@code false}.
+	 * <p>
+	 * If the parameter argument {@code isReturningRelativeIndex} is {@code true}, the relative index of {@code value} in {@code array} will be returned. The relative index represents the index of the sub-structure in {@code array}. It works best if
+	 * the parameter argument {@code isIncrementingByValueLength} is {@code true} and its restrictions are met.
+	 * <p>
+	 * If the parameter argument {@code isReturningRelativeIndex} is {@code false}, the absolute index of {@code value} in {@code array} will be returned. The absolute index represents the index in {@code array}.
+	 * 
+	 * @param value the {@code int[]} value to find the index for
+	 * @param array the {@code int[]} to search for {@code value} in
+	 * @param isIncrementingByValueLength {@code true} if, and only if, {@code array} consists of sub-structures with a length of {@code value.length}, {@code false} otherwise
+	 * @param isReturningRelativeIndex {@code true} if, and only if, the relative index should be returned, {@code false} otherwise
+	 * @return the index of {@code value} in {@code array}, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code isIncrementingByValueLength} is {@code true} and {@code array.length % value.length} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code value} or {@code array} are {@code null}
+	 */
+	public static int indexOf(final int[] value, final int[] array, final boolean isIncrementingByValueLength, final boolean isReturningRelativeIndex) {
+		Objects.requireNonNull(value, "value == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		if(isIncrementingByValueLength) {
+			ParameterArguments.requireExact(array.length % value.length, 0, "array.length % value.length");
+		}
+		
+		final int count = isIncrementingByValueLength ? array.length / value.length : array.length;
+		final int length = isIncrementingByValueLength ? value.length : 1;
+		
+		for(int indexAbsolute = 0, indexRelative = 0; indexRelative < count; indexAbsolute += length, indexRelative++) {
+			if(equal(array, value, indexAbsolute, 0, length)) {
+				return isReturningRelativeIndex ? indexRelative : indexAbsolute;
+			}
+		}
+		
+		return -1;
+	}
+	
+	/**
+	 * Performs a merge operation on the {@code int[]} instance {@code array} and the {@code int} {@code value}.
+	 * <p>
+	 * Returns a new {@code int[]} with {@code array} and {@code value} merged.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * IntArrays.merge(array, new int[] {value});
+	 * }
+	 * </pre>
+	 * 
+	 * @param array the {@code int[]} that comes first
+	 * @param value the {@code int} that comes second
+	 * @return a new {@code int[]} with {@code array} and {@code value} merged
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public static int[] merge(final int[] array, final int value) {
+		return merge(array, new int[] {value});
+	}
+	
+	/**
 	 * Performs a merge operation on the {@code int[]} instances {@code arrayA} and {@code arrayB}.
 	 * <p>
 	 * Returns a new {@code int[]} with {@code arrayA} and {@code arrayB} merged.
@@ -118,6 +184,29 @@ public final class IntArrays {
 		System.arraycopy(arrayB, 0, arrayC, offsetArrayB, arrayB.length);
 		
 		return arrayC;
+	}
+	
+	/**
+	 * Performs a splice operation on the {@code int[]} instance {@code array}.
+	 * <p>
+	 * Returns a new {@code int[]} with the result of the operation.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * IntArrays.splice(array, offset, array.length);
+	 * }
+	 * </pre>
+	 * 
+	 * @param array the input {@code int[]}
+	 * @param offset the offset for the removal, which may be negative
+	 * @return a new {@code int[]} with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public static int[] splice(final int[] array, final int offset) {
+		return splice(array, offset, array.length);
 	}
 	
 	/**

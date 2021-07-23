@@ -450,7 +450,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getCone3FOffsetAbsolute(cone3F);
 		
 		if(absoluteOffset != -1) {
-			setCone3Fs(Structures.removeStructure(getCone3Fs(), absoluteOffset, CONE_3_F_LENGTH));
+			setCone3Fs(FloatArrays.splice(getCone3Fs(), absoluteOffset, CONE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -476,7 +476,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getCylinder3FOffsetAbsolute(cylinder3F);
 		
 		if(absoluteOffset != -1) {
-			setCylinder3Fs(Structures.removeStructure(getCylinder3Fs(), absoluteOffset, CYLINDER_3_F_LENGTH));
+			setCylinder3Fs(FloatArrays.splice(getCylinder3Fs(), absoluteOffset, CYLINDER_3_F_LENGTH));
 			
 			return true;
 		}
@@ -502,7 +502,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getDisk3FOffsetAbsolute(disk3F);
 		
 		if(absoluteOffset != -1) {
-			setDisk3Fs(Structures.removeStructure(getDisk3Fs(), absoluteOffset, DISK_3_F_LENGTH));
+			setDisk3Fs(FloatArrays.splice(getDisk3Fs(), absoluteOffset, DISK_3_F_LENGTH));
 			
 			return true;
 		}
@@ -528,7 +528,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getHyperboloid3FOffsetAbsolute(hyperboloid3F);
 		
 		if(absoluteOffset != -1) {
-			setHyperboloid3Fs(Structures.removeStructure(getHyperboloid3Fs(), absoluteOffset, HYPERBOLOID_3_F_LENGTH));
+			setHyperboloid3Fs(FloatArrays.splice(getHyperboloid3Fs(), absoluteOffset, HYPERBOLOID_3_F_LENGTH));
 			
 			return true;
 		}
@@ -554,7 +554,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getParaboloid3FOffsetAbsolute(paraboloid3F);
 		
 		if(absoluteOffset != -1) {
-			setParaboloid3Fs(Structures.removeStructure(getParaboloid3Fs(), absoluteOffset, PARABOLOID_3_F_LENGTH));
+			setParaboloid3Fs(FloatArrays.splice(getParaboloid3Fs(), absoluteOffset, PARABOLOID_3_F_LENGTH));
 			
 			return true;
 		}
@@ -580,7 +580,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getPlane3FOffsetAbsolute(plane3F);
 		
 		if(absoluteOffset != -1) {
-			setPlane3Fs(Structures.removeStructure(getPlane3Fs(), absoluteOffset, PLANE_3_F_LENGTH));
+			setPlane3Fs(FloatArrays.splice(getPlane3Fs(), absoluteOffset, PLANE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -606,7 +606,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getRectangle3FOffsetAbsolute(rectangle3F);
 		
 		if(absoluteOffset != -1) {
-			setRectangle3Fs(Structures.removeStructure(getRectangle3Fs(), absoluteOffset, RECTANGLE_3_F_LENGTH));
+			setRectangle3Fs(FloatArrays.splice(getRectangle3Fs(), absoluteOffset, RECTANGLE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -632,7 +632,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getRectangularCuboid3FOffsetAbsolute(rectangularCuboid3F);
 		
 		if(absoluteOffset != -1) {
-			setRectangularCuboid3Fs(Structures.removeStructure(getRectangularCuboid3Fs(), absoluteOffset, RECTANGULAR_CUBOID_3_F_LENGTH));
+			setRectangularCuboid3Fs(FloatArrays.splice(getRectangularCuboid3Fs(), absoluteOffset, RECTANGULAR_CUBOID_3_F_LENGTH));
 			
 			return true;
 		}
@@ -658,7 +658,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getSphere3FOffsetAbsolute(sphere3F);
 		
 		if(absoluteOffset != -1) {
-			setSphere3Fs(Structures.removeStructure(getSphere3Fs(), absoluteOffset, SPHERE_3_F_LENGTH));
+			setSphere3Fs(FloatArrays.splice(getSphere3Fs(), absoluteOffset, SPHERE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -684,7 +684,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getTorus3FOffsetAbsolute(torus3F);
 		
 		if(absoluteOffset != -1) {
-			setTorus3Fs(Structures.removeStructure(getTorus3Fs(), absoluteOffset, TORUS_3_F_LENGTH));
+			setTorus3Fs(FloatArrays.splice(getTorus3Fs(), absoluteOffset, TORUS_3_F_LENGTH));
 			
 			return true;
 		}
@@ -710,7 +710,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getTriangle3FOffsetAbsolute(triangle3F);
 		
 		if(absoluteOffset != -1) {
-			setTriangle3Fs(Structures.removeStructure(getTriangle3Fs(), absoluteOffset, TRIANGLE_3_F_LENGTH));
+			setTriangle3Fs(FloatArrays.splice(getTriangle3Fs(), absoluteOffset, TRIANGLE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -737,7 +737,7 @@ public final class CompiledShape3FCache {
 		
 		if(absoluteOffset != -1) {
 			setTriangleMesh3FOffsets(Structures.removeStructureOffset(getTriangleMesh3FOffsets(), absoluteOffset, triangleMesh3F.length));
-			setTriangleMesh3Fs(Structures.removeStructure(getTriangleMesh3Fs(), absoluteOffset, triangleMesh3F.length));
+			setTriangleMesh3Fs(IntArrays.splice(getTriangleMesh3Fs(), absoluteOffset, triangleMesh3F.length));
 			
 			return true;
 		}
@@ -1164,7 +1164,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setTriangleMesh3FOffsets(Structures.addStructureOffset(getTriangleMesh3FOffsets(), absoluteOffsetNew));
+		setTriangleMesh3FOffsets(IntArrays.merge(getTriangleMesh3FOffsets(), absoluteOffsetNew));
 		setTriangleMesh3Fs(IntArrays.merge(getTriangleMesh3Fs(), triangleMesh3F));
 		
 		return relativeOffsetNew;

@@ -26,6 +26,7 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Lens;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledCameraCache} contains the {@link Camera} instance in compiled form.
@@ -122,12 +123,19 @@ public final class CompiledCameraCache {
 	 * Sets the {@link Camera} instance in compiled form to {@code camera}.
 	 * <p>
 	 * If {@code camera} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code camera.length} is not equal to {@code CompiledCameraCache.CAMERA_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param camera the {@code Camera} instance in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code camera.length} is not equal to {@code CompiledCameraCache.CAMERA_LENGTH}
 	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
 	 */
 	public void setCamera(final float[] camera) {
-		this.camera = Objects.requireNonNull(camera, "camera == null");
+		Objects.requireNonNull(camera, "camera == null");
+		
+		ParameterArguments.requireExactArrayLength(camera, CAMERA_LENGTH, "camera");
+		
+		this.camera = camera;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

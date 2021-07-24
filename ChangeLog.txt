@@ -1,3 +1,7 @@
+2021-07-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Add additional parameter validation to the method setCamera(float[]) in the CompiledCameraCache class.
+
 2021-07-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the FloatArrays class to the Utility API.

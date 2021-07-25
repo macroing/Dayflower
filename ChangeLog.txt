@@ -2,6 +2,8 @@
 
 	* ADD:		Add the method isSupported(BoundingVolume3F) to the CompiledBoundingVolume3FCache class.
 	* ADD:		Add the method isSupported(Light) to the CompiledLightCache class.
+	* ADD:		Add the method isSupported(Material) to the CompiledMaterialCache class.
+	* ADD:		Add the method isSupported(Texture) to the CompiledTextureCache class.
 	* ADD:		Add the method getInstanceID() to the Primitive class.
 	* ADD:		Add the constants MATRIX_4_4_F_LENGTH, PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET and PRIMITIVE_OFFSET_INSTANCE_ID to the CompiledPrimitiveCache class.
 	* ADD:		Add the methods addPrimitive(int[], float[]), getMatrix44FCount(), getPrimitiveOffsetAbsolute(int[]), getPrimitiveOffsetRelative(int[]) and removePrimitive(int[]) to the CompiledPrimitiveCache class.

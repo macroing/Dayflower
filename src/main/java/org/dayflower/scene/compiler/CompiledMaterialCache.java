@@ -49,6 +49,22 @@ import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledMaterialCache} contains {@link Material} instances in compiled form.
+ * <p>
+ * The {@code Material} implementations that are supported are the following:
+ * <ul>
+ * <li>{@link BullseyeMaterial}</li>
+ * <li>{@link CheckerboardMaterial}</li>
+ * <li>{@link ClearCoatMaterial}</li>
+ * <li>{@link DisneyMaterial}</li>
+ * <li>{@link GlassMaterial}</li>
+ * <li>{@link GlossyMaterial}</li>
+ * <li>{@link MatteMaterial}</li>
+ * <li>{@link MetalMaterial}</li>
+ * <li>{@link MirrorMaterial}</li>
+ * <li>{@link PlasticMaterial}</li>
+ * <li>{@link PolkaDotMaterial}</li>
+ * <li>{@link SubstrateMaterial}</li>
+ * </ul>
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -1919,6 +1935,47 @@ public final class CompiledMaterialCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code material} and all of its associated {@link Material} or {@link Texture} instances are supported, {@code false} otherwise.
+	 * <p>
+	 * If {@code material} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param material a {@code Material} instance
+	 * @return {@code true} if, and only if, {@code material} and all of its associated {@code Material} or {@code Texture} instances are supported, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code material} is {@code null}
+	 */
+	public static boolean isSupported(final Material material) {
+		Objects.requireNonNull(material, "material == null");
+		
+		if(material instanceof BullseyeMaterial) {
+			return doIsSupported(BullseyeMaterial.class.cast(material));
+		} else if(material instanceof CheckerboardMaterial) {
+			return doIsSupported(CheckerboardMaterial.class.cast(material));
+		} else if(material instanceof ClearCoatMaterial) {
+			return doIsSupported(ClearCoatMaterial.class.cast(material));
+		} else if(material instanceof DisneyMaterial) {
+			return doIsSupported(DisneyMaterial.class.cast(material));
+		} else if(material instanceof GlassMaterial) {
+			return doIsSupported(GlassMaterial.class.cast(material));
+		} else if(material instanceof GlossyMaterial) {
+			return doIsSupported(GlossyMaterial.class.cast(material));
+		} else if(material instanceof MatteMaterial) {
+			return doIsSupported(MatteMaterial.class.cast(material));
+		} else if(material instanceof MetalMaterial) {
+			return doIsSupported(MetalMaterial.class.cast(material));
+		} else if(material instanceof MirrorMaterial) {
+			return doIsSupported(MirrorMaterial.class.cast(material));
+		} else if(material instanceof PlasticMaterial) {
+			return doIsSupported(PlasticMaterial.class.cast(material));
+		} else if(material instanceof PolkaDotMaterial) {
+			return doIsSupported(PolkaDotMaterial.class.cast(material));
+		} else if(material instanceof SubstrateMaterial) {
+			return doIsSupported(SubstrateMaterial.class.cast(material));
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code bullseyeMaterial} in compiled form.
 	 * <p>
 	 * If {@code bullseyeMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -2967,5 +3024,259 @@ public final class CompiledMaterialCache {
 	 */
 	public static int[] toSubstrateMaterials(final List<SubstrateMaterial> substrateMaterials, final ToIntFunction<Texture> textureOffsetFunction) {
 		return Ints.toArray(substrateMaterials, substrateMaterial -> toSubstrateMaterial(substrateMaterial, textureOffsetFunction));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static boolean doIsSupported(final BullseyeMaterial bullseyeMaterial) {
+		if(!isSupported(bullseyeMaterial.getMaterialA())) {
+			return false;
+		}
+		
+		if(!isSupported(bullseyeMaterial.getMaterialB())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final CheckerboardMaterial checkerboardMaterial) {
+		if(!isSupported(checkerboardMaterial.getMaterialA())) {
+			return false;
+		}
+		
+		if(!isSupported(checkerboardMaterial.getMaterialB())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final ClearCoatMaterial clearCoatMaterial) {
+		if(!CompiledTextureCache.isSupported(clearCoatMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(clearCoatMaterial.getTextureKD())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(clearCoatMaterial.getTextureKS())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final DisneyMaterial disneyMaterial) {
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureAnisotropic())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureClearCoat())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureClearCoatGloss())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureColor())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureDiffuseTransmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureEta())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureFlatness())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureMetallic())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureRoughness())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureScatterDistance())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureSheen())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureSheenTint())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureSpecularTint())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(disneyMaterial.getTextureSpecularTransmission())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final GlassMaterial glassMaterial) {
+		if(!CompiledTextureCache.isSupported(glassMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(glassMaterial.getTextureEta())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(glassMaterial.getTextureKR())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(glassMaterial.getTextureKT())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(glassMaterial.getTextureRoughnessU())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(glassMaterial.getTextureRoughnessV())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final GlossyMaterial glossyMaterial) {
+		if(!CompiledTextureCache.isSupported(glossyMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(glossyMaterial.getTextureKR())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(glossyMaterial.getTextureRoughness())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final MatteMaterial matteMaterial) {
+		if(!CompiledTextureCache.isSupported(matteMaterial.getTextureAngle())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(matteMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final MetalMaterial metalMaterial) {
+		if(!CompiledTextureCache.isSupported(metalMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(metalMaterial.getTextureEta())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(metalMaterial.getTextureK())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(metalMaterial.getTextureRoughnessU())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(metalMaterial.getTextureRoughnessV())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final MirrorMaterial mirrorMaterial) {
+		if(!CompiledTextureCache.isSupported(mirrorMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(mirrorMaterial.getTextureKR())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final PlasticMaterial plasticMaterial) {
+		if(!CompiledTextureCache.isSupported(plasticMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(plasticMaterial.getTextureKD())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(plasticMaterial.getTextureKS())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(plasticMaterial.getTextureRoughness())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final PolkaDotMaterial polkaDotMaterial) {
+		if(!isSupported(polkaDotMaterial.getMaterialA())) {
+			return false;
+		}
+		
+		if(!isSupported(polkaDotMaterial.getMaterialB())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final SubstrateMaterial substrateMaterial) {
+		if(!CompiledTextureCache.isSupported(substrateMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(substrateMaterial.getTextureKD())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(substrateMaterial.getTextureKS())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(substrateMaterial.getTextureRoughnessU())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(substrateMaterial.getTextureRoughnessV())) {
+			return false;
+		}
+		
+		return true;
 	}
 }

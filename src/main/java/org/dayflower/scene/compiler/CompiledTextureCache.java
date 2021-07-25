@@ -37,7 +37,9 @@ import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.PolkaDotTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
+import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
+import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
@@ -45,6 +47,22 @@ import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledTextureCache} contains {@link Texture} instances in compiled form.
+ * <p>
+ * The {@code Texture} implementations that are supported are the following:
+ * <ul>
+ * <li>{@link BlendTexture}</li>
+ * <li>{@link BullseyeTexture}</li>
+ * <li>{@link CheckerboardTexture}</li>
+ * <li>{@link ConstantTexture}</li>
+ * <li>{@link LDRImageTexture}</li>
+ * <li>{@link MarbleTexture}</li>
+ * <li>{@link PolkaDotTexture}</li>
+ * <li>{@link SimplexFractionalBrownianMotionTexture}</li>
+ * <li>{@link SurfaceNormalTexture}</li>
+ * <li>{@link UVTexture}</li>
+ * </ul>
+ * <p>
+ * The {@code SurfaceNormalTexture} and {@code UVTexture} implementations only require IDs. They do not have their own compiled forms.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -1437,6 +1455,43 @@ public final class CompiledTextureCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code texture} and all of its associated {@link Texture} instances are supported, {@code false} otherwise.
+	 * <p>
+	 * If {@code texture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param texture a {@code Texture} instance
+	 * @return {@code true} if, and only if, {@code texture} and all of its associated {@code Texture} instances are supported, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code texture} is {@code null}
+	 */
+	public static boolean isSupported(final Texture texture) {
+		Objects.requireNonNull(texture, "texture == null");
+		
+		if(texture instanceof BlendTexture) {
+			return doIsSupported(BlendTexture.class.cast(texture));
+		} else if(texture instanceof BullseyeTexture) {
+			return doIsSupported(BullseyeTexture.class.cast(texture));
+		} else if(texture instanceof CheckerboardTexture) {
+			return doIsSupported(CheckerboardTexture.class.cast(texture));
+		} else if(texture instanceof ConstantTexture) {
+			return true;
+		} else if(texture instanceof LDRImageTexture) {
+			return true;
+		} else if(texture instanceof MarbleTexture) {
+			return true;
+		} else if(texture instanceof PolkaDotTexture) {
+			return doIsSupported(PolkaDotTexture.class.cast(texture));
+		} else if(texture instanceof SimplexFractionalBrownianMotionTexture) {
+			return true;
+		} else if(texture instanceof SurfaceNormalTexture) {
+			return true;
+		} else if(texture instanceof UVTexture) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code blendTexture} in compiled form.
 	 * <p>
 	 * If {@code blendTexture} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -2009,5 +2064,55 @@ public final class CompiledTextureCache {
 		}
 		
 		return lDRImageTextureOffsets;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static boolean doIsSupported(final BlendTexture blendTexture) {
+		if(!isSupported(blendTexture.getTextureA())) {
+			return false;
+		}
+		
+		if(!isSupported(blendTexture.getTextureB())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final BullseyeTexture bullseyeTexture) {
+		if(!isSupported(bullseyeTexture.getTextureA())) {
+			return false;
+		}
+		
+		if(!isSupported(bullseyeTexture.getTextureB())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final CheckerboardTexture checkerboardTexture) {
+		if(!isSupported(checkerboardTexture.getTextureA())) {
+			return false;
+		}
+		
+		if(!isSupported(checkerboardTexture.getTextureB())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final PolkaDotTexture polkaDotTexture) {
+		if(!isSupported(polkaDotTexture.getTextureA())) {
+			return false;
+		}
+		
+		if(!isSupported(polkaDotTexture.getTextureB())) {
+			return false;
+		}
+		
+		return true;
 	}
 }

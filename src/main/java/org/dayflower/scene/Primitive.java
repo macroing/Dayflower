@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Matrix44F;
@@ -52,6 +53,10 @@ import org.dayflower.utility.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class Primitive implements Node {
+	private static final AtomicInteger INSTANCE_ID = new AtomicInteger();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private AreaLight areaLight;
 	private BoundingVolume3F boundingVolume;
 	private final List<PrimitiveObserver> primitiveObservers;
@@ -59,6 +64,7 @@ public final class Primitive implements Node {
 	private Shape3F shape;
 	private Transform transform;
 	private final TransformObserver transformObserver;
+	private int instanceID;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -101,6 +107,7 @@ public final class Primitive implements Node {
 		this.transformObserver = new TransformObserverImpl(this::doSetBoundingVolume);
 		this.transform = transform;
 		this.transform.addTransformObserver(this.transformObserver);
+		this.instanceID = INSTANCE_ID.getAndIncrement();
 	}
 	
 	/**
@@ -123,6 +130,7 @@ public final class Primitive implements Node {
 		this.transformObserver = new TransformObserverImpl(this::doSetBoundingVolume);
 		this.transform = transform;
 		this.transform.addTransformObserver(this.transformObserver);
+		this.instanceID = INSTANCE_ID.getAndIncrement();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -378,6 +386,8 @@ public final class Primitive implements Node {
 			return false;
 		} else if(!Objects.equals(this.transform, Primitive.class.cast(object).transform)) {
 			return false;
+		} else if(this.instanceID != Primitive.class.cast(object).instanceID) {
+			return false;
 		} else {
 			return true;
 		}
@@ -485,13 +495,22 @@ public final class Primitive implements Node {
 	}
 	
 	/**
+	 * Returns the instance ID associated with this {@code Primitive} instance.
+	 * 
+	 * @return the instance ID associated with this {@code Primitive} instance
+	 */
+	public int getInstanceID() {
+		return this.instanceID;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Primitive} instance.
 	 * 
 	 * @return a hash code for this {@code Primitive} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.areaLight, this.boundingVolume, this.primitiveObservers, this.material, this.shape, this.transform);
+		return Objects.hash(this.areaLight, this.boundingVolume, this.primitiveObservers, this.material, this.shape, this.transform, Integer.valueOf(this.instanceID));
 	}
 	
 	/**

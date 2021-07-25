@@ -48,6 +48,16 @@ import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledLightCache} contains {@link Light} instances in compiled form.
+ * <p>
+ * The {@code Light} implementations that are supported are the following:
+ * <ul>
+ * <li>{@link DiffuseAreaLight}</li>
+ * <li>{@link DirectionalLight}</li>
+ * <li>{@link LDRImageLight}</li>
+ * <li>{@link PerezLight}</li>
+ * <li>{@link PointLight}</li>
+ * <li>{@link SpotLight}</li>
+ * </ul>
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -1187,6 +1197,35 @@ public final class CompiledLightCache {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code light} is supported, {@code false} otherwise.
+	 * <p>
+	 * If {@code light} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param light a {@link Light} instance
+	 * @return {@code true} if, and only if, {@code light} is supported, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code light} is {@code null}
+	 */
+	public static boolean isSupported(final Light light) {
+		Objects.requireNonNull(light, "light == null");
+		
+		if(light instanceof DiffuseAreaLight) {
+			return true;
+		} else if(light instanceof DirectionalLight) {
+			return true;
+		} else if(light instanceof LDRImageLight) {
+			return true;
+		} else if(light instanceof PerezLight) {
+			return true;
+		} else if(light instanceof PointLight) {
+			return true;
+		} else if(light instanceof SpotLight) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * Returns a {@code float[]} with {@code diffuseAreaLight} in compiled form.

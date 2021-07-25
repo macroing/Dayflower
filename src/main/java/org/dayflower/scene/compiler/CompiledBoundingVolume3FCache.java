@@ -25,12 +25,22 @@ import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
+import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledBoundingVolume3FCache} contains {@link BoundingVolume3F} instances in compiled form.
+ * <p>
+ * The {@code BoundingVolume3F} implementations that are supported are the following:
+ * <ul>
+ * <li>{@link AxisAlignedBoundingBox3F}</li>
+ * <li>{@link BoundingSphere3F}</li>
+ * <li>{@link InfiniteBoundingVolume3F}</li>
+ * </ul>
+ * <p>
+ * The {@code InfiniteBoundingVolume3F} implementation only requires an ID. It does not have a compiled form.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -406,6 +416,29 @@ public final class CompiledBoundingVolume3FCache {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code boundingVolume3F} is supported, {@code false} otherwise.
+	 * <p>
+	 * If {@code boundingVolume3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param boundingVolume3F a {@link BoundingVolume3F} instance
+	 * @return {@code true} if, and only if, {@code boundingVolume3F} is supported, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume3F} is {@code null}
+	 */
+	public static boolean isSupported(final BoundingVolume3F boundingVolume3F) {
+		Objects.requireNonNull(boundingVolume3F, "boundingVolume3F == null");
+		
+		if(boundingVolume3F instanceof AxisAlignedBoundingBox3F) {
+			return true;
+		} else if(boundingVolume3F instanceof BoundingSphere3F) {
+			return true;
+		} else if(boundingVolume3F instanceof InfiniteBoundingVolume3F) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * Returns a {@code float[]} with {@code axisAlignedBoundingBox3F} in compiled form.

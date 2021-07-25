@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene.compiler;
 
+import static org.dayflower.utility.Ints.pack;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,8 +32,11 @@ import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Transform;
+import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
+import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.Ints;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledPrimitiveCache} contains {@link Primitive} instances in compiled form.
@@ -41,19 +46,19 @@ import org.dayflower.utility.Ints;
  */
 public final class CompiledPrimitiveCache {
 	/**
+	 * The length of a compiled {@link Matrix44F} instance.
+	 */
+	public static final int MATRIX_4_4_F_LENGTH = 16;
+	
+	/**
 	 * The length of a compiled {@link Primitive} instance.
 	 */
 	public static final int PRIMITIVE_LENGTH = 8;
 	
 	/**
-	 * The offset for the {@link AreaLight} ID in a compiled {@link Primitive} instance.
+	 * The offset for the {@link AreaLight} ID and offset in a compiled {@link Primitive} instance.
 	 */
-	public static final int PRIMITIVE_OFFSET_AREA_LIGHT_ID = 0;
-	
-	/**
-	 * The offset for the {@link AreaLight} offset in a compiled {@link Primitive} instance.
-	 */
-	public static final int PRIMITIVE_OFFSET_AREA_LIGHT_OFFSET = 1;
+	public static final int PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET = 1;
 	
 	/**
 	 * The offset for the {@link BoundingVolume3F} ID in a compiled {@link Primitive} instance.
@@ -64,6 +69,11 @@ public final class CompiledPrimitiveCache {
 	 * The offset for the {@link BoundingVolume3F} offset in a compiled {@link Primitive} instance.
 	 */
 	public static final int PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET = 3;
+	
+	/**
+	 * The offset for the instance ID in a compiled {@link Primitive} instance.
+	 */
+	public static final int PRIMITIVE_OFFSET_INSTANCE_ID = 0;
 	
 	/**
 	 * The offset for the {@link Material} ID in a compiled {@link Primitive} instance.
@@ -103,6 +113,36 @@ public final class CompiledPrimitiveCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Removes {@code primitive} from this {@code CompiledPrimitiveCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code primitive} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code primitive} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code primitive.length} is not equal to {@code CompiledPrimitiveCache.PRIMITIVE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param primitive a {@link Primitive} instance in compiled form
+	 * @return {@code true} if, and only if, {@code primitive} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code primitive.length} is not equal to {@code CompiledPrimitiveCache.PRIMITIVE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
+	 */
+	public boolean removePrimitive(final int[] primitive) {
+		final int absoluteOffset = getPrimitiveOffsetAbsolute(primitive);
+		
+		if(absoluteOffset != -1) {
+			final int relativeOffset = absoluteOffset / PRIMITIVE_LENGTH;
+			final int absoluteOffsetMatrix44Fs = relativeOffset * MATRIX_4_4_F_LENGTH * 2;
+			
+			setMatrix44Fs(FloatArrays.splice(getMatrix44Fs(), absoluteOffsetMatrix44Fs, MATRIX_4_4_F_LENGTH * 2));
+			setPrimitives(IntArrays.splice(getPrimitives(), absoluteOffset, PRIMITIVE_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link Matrix44F} instances in compiled form that are associated with this {@code CompiledPrimitiveCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code Matrix44F} instances in compiled form that are associated with this {@code CompiledPrimitiveCache} instance
@@ -112,12 +152,92 @@ public final class CompiledPrimitiveCache {
 	}
 	
 	/**
+	 * Adds {@code primitive} and {@code matrix44Fs} to this {@code CompiledPrimitiveCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code primitive}.
+	 * <p>
+	 * If either {@code primitive} or {@code matrix44Fs} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code primitive.length} is not equal to {@code CompiledPrimitiveCache.PRIMITIVE_LENGTH} or {@code matrix44Fs.length} is not equal to {@code CompiledPrimitiveCache.MATRIX_4_4_F_LENGTH * 2}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param primitive a {@link Primitive} instance in compiled form
+	 * @param matrix44Fs two {@link Matrix44F} instances in compiled form
+	 * @return the relative offset to {@code primitive}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code primitive.length} is not equal to {@code CompiledPrimitiveCache.PRIMITIVE_LENGTH} or {@code matrix44Fs.length} is not equal to {@code CompiledPrimitiveCache.MATRIX_4_4_F_LENGTH * 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code primitive} or {@code matrix44Fs} are {@code null}
+	 */
+	public int addPrimitive(final int[] primitive, final float[] matrix44Fs) {
+		final int relativeOffsetOld = getPrimitiveOffsetRelative(primitive);
+		final int relativeOffsetNew = getPrimitiveCount();
+		
+		ParameterArguments.requireExactArrayLength(matrix44Fs, MATRIX_4_4_F_LENGTH * 2, "matrix44Fs");
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setMatrix44Fs(FloatArrays.merge(getMatrix44Fs(), matrix44Fs));
+		setPrimitives(IntArrays.merge(getPrimitives(), primitive));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Returns the {@link Matrix44F} count in this {@code CompiledPrimitiveCache} instance.
+	 * 
+	 * @return the {@code Matrix44F} count in this {@code CompiledPrimitiveCache} instance
+	 */
+	public int getMatrix44FCount() {
+		return Structures.getStructureCount(this.matrix44Fs, MATRIX_4_4_F_LENGTH);
+	}
+	
+	/**
 	 * Returns the {@link Primitive} count in this {@code CompiledPrimitiveCache} instance.
 	 * 
 	 * @return the {@code Primitive} count in this {@code CompiledPrimitiveCache} instance
 	 */
 	public int getPrimitiveCount() {
 		return Structures.getStructureCount(this.primitives, PRIMITIVE_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code primitive} in this {@code CompiledPrimitiveCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code primitive} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code primitive.length} is not equal to {@code CompiledPrimitiveCache.PRIMITIVE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param primitive a {@link Primitive} instance in compiled form
+	 * @return the absolute offset of {@code primitive} in this {@code CompiledPrimitiveCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code primitive.length} is not equal to {@code CompiledPrimitiveCache.PRIMITIVE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
+	 */
+	public int getPrimitiveOffsetAbsolute(final int[] primitive) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		
+		ParameterArguments.requireExactArrayLength(primitive, PRIMITIVE_LENGTH, "primitive");
+		
+		return Structures.getStructureOffsetAbsolute(this.primitives, primitive);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code primitive} in this {@code CompiledPrimitiveCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code primitive} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code primitive.length} is not equal to {@code CompiledPrimitiveCache.PRIMITIVE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param primitive a {@link Primitive} instance in compiled form
+	 * @return the relative offset of {@code primitive} in this {@code CompiledPrimitiveCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code primitive.length} is not equal to {@code CompiledPrimitiveCache.PRIMITIVE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
+	 */
+	public int getPrimitiveOffsetRelative(final int[] primitive) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		
+		ParameterArguments.requireExactArrayLength(primitive, PRIMITIVE_LENGTH, "primitive");
+		
+		return Structures.getStructureOffsetRelative(this.primitives, primitive);
 	}
 	
 	/**
@@ -223,16 +343,18 @@ public final class CompiledPrimitiveCache {
 		
 		final Shape3F shape = primitive.getShape();
 		
-		final int[] array = new int[CompiledPrimitiveCache.PRIMITIVE_LENGTH];
+		final int instanceID = primitive.getInstanceID();
 		
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID] = optionalAreaLight.isPresent() ? optionalAreaLight.get().getID() : 0;
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_OFFSET] = optionalAreaLight.isPresent() ? areaLightOffsetFunction.applyAsInt(optionalAreaLight.get()) : 0;
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID] = boundingVolume.getID();
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET] = boundingVolume3FOffsetFunction.applyAsInt(boundingVolume);
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_ID] = material.getID();
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_OFFSET] = materialOffsetFunction.applyAsInt(material);
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID] = shape.getID();
-		array[CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET] = shape3FOffsetFunction.applyAsInt(shape);
+		final int[] array = new int[PRIMITIVE_LENGTH];
+		
+		array[PRIMITIVE_OFFSET_INSTANCE_ID] = instanceID;
+		array[PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET] = optionalAreaLight.isPresent() ? pack(optionalAreaLight.get().getID(), areaLightOffsetFunction.applyAsInt(optionalAreaLight.get())) : 0;
+		array[PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID] = boundingVolume.getID();
+		array[PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET] = boundingVolume3FOffsetFunction.applyAsInt(boundingVolume);
+		array[PRIMITIVE_OFFSET_MATERIAL_ID] = material.getID();
+		array[PRIMITIVE_OFFSET_MATERIAL_OFFSET] = materialOffsetFunction.applyAsInt(material);
+		array[PRIMITIVE_OFFSET_SHAPE_ID] = shape.getID();
+		array[PRIMITIVE_OFFSET_SHAPE_OFFSET] = shape3FOffsetFunction.applyAsInt(shape);
 		
 		return array;
 	}

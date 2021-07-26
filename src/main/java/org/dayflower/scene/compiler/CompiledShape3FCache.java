@@ -51,6 +51,7 @@ import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.java.io.IntArrayOutputStream;
 import org.dayflower.node.NodeFilter;
+import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
@@ -2037,6 +2038,33 @@ public final class CompiledShape3FCache {
 		ParameterArguments.requireExact(triangleMesh3Fs.length % 8, 0, "triangleMesh3Fs.length % 8");
 		
 		this.triangleMesh3Fs = triangleMesh3Fs;
+	}
+	
+	/**
+	 * Writes this {@code CompiledShape3FCache} instance to {@code document}.
+	 * <p>
+	 * If {@code document} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param document a {@link Document} instance
+	 * @throws NullPointerException thrown if, and only if, {@code document} is {@code null}
+	 */
+	public void write(final Document document) {
+		document.line("CompiledShape3FCache {");
+		document.indent();
+		document.linef("cone3Fs[%d]", Integer.valueOf(getCone3FCount()));
+		document.linef("cylinder3Fs[%d]", Integer.valueOf(getCylinder3FCount()));
+		document.linef("disk3Fs[%d]", Integer.valueOf(getDisk3FCount()));
+		document.linef("hyperboloid3Fs[%d]", Integer.valueOf(getHyperboloid3FCount()));
+		document.linef("paraboloid3Fs[%d]", Integer.valueOf(getParaboloid3FCount()));
+		document.linef("plane3Fs[%d]", Integer.valueOf(getPlane3FCount()));
+		document.linef("rectangle3Fs[%d]", Integer.valueOf(getRectangle3FCount()));
+		document.linef("rectangularCuboid3Fs[%d]", Integer.valueOf(getRectangularCuboid3FCount()));
+		document.linef("sphere3Fs[%d]", Integer.valueOf(getSphere3FCount()));
+		document.linef("torus3Fs[%d]", Integer.valueOf(getTorus3FCount()));
+		document.linef("triangle3Fs[%d]", Integer.valueOf(getTriangle3FCount()));
+		document.linef("triangleMesh3Fs[%d]", Integer.valueOf(getTriangleMesh3FCount()));
+		document.outdent();
+		document.line("}");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

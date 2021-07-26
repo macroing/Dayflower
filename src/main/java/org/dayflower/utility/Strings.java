@@ -19,6 +19,7 @@
 package org.dayflower.utility;
 
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code String} instances.
@@ -36,6 +37,33 @@ public final class Strings {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code String} instance with {@code string} repeated {@code count} times.
+	 * <p>
+	 * If {@code string} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code count} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param string the {@code String} instance to repeat
+	 * @param count the repetition count
+	 * @return a {@code String} instance with {@code string} repeated {@code count} times
+	 * @throws IllegalArgumentException thrown if, and only if, {@code count} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code string} is {@code null}
+	 */
+	public static String repeat(final String string, final int count) {
+		Objects.requireNonNull(string, "string == null");
+		
+		ParameterArguments.requireRange(count, 0, Integer.MAX_VALUE, "count");
+		
+		final StringBuilder stringBuilder = new StringBuilder();
+		
+		for(int i = 0; i < count; i++) {
+			stringBuilder.append(string);
+		}
+		
+		return stringBuilder.toString();
+	}
 	
 	/**
 	 * Returns a {@code String} representation of {@code value} without scientific notation.

@@ -40,6 +40,7 @@ import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
+import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
@@ -1450,6 +1451,29 @@ public final class CompiledTextureCache {
 		ParameterArguments.requireExact(simplexFractionalBrownianMotionTextures.length % SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH, 0, "simplexFractionalBrownianMotionTextures.length % CompiledTextureCache.SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH");
 		
 		this.simplexFractionalBrownianMotionTextures = simplexFractionalBrownianMotionTextures;
+	}
+	
+	/**
+	 * Writes this {@code CompiledTextureCache} instance to {@code document}.
+	 * <p>
+	 * If {@code document} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param document a {@link Document} instance
+	 * @throws NullPointerException thrown if, and only if, {@code document} is {@code null}
+	 */
+	public void write(final Document document) {
+		document.line("CompiledTextureCache {");
+		document.indent();
+		document.linef("blendTextures[%d]", Integer.valueOf(getBlendTextureCount()));
+		document.linef("bullseyeTextures[%d]", Integer.valueOf(getBullseyeTextureCount()));
+		document.linef("checkerboardTextures[%d]", Integer.valueOf(getCheckerboardTextureCount()));
+		document.linef("constantTextures[%d]", Integer.valueOf(getConstantTextureCount()));
+		document.linef("lDRImageTextures[%d]", Integer.valueOf(getLDRImageTextureCount()));
+		document.linef("marbleTextures[%d]", Integer.valueOf(getMarbleTextureCount()));
+		document.linef("polkaDotTextures[%d]", Integer.valueOf(getPolkaDotTextureCount()));
+		document.linef("simplexFractionalBrownianMotionTextures[%d]", Integer.valueOf(getSimplexFractionalBrownianMotionTextureCount()));
+		document.outdent();
+		document.line("}");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

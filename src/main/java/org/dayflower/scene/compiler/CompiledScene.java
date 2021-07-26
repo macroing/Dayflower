@@ -19,6 +19,7 @@
 package org.dayflower.scene.compiler;
 
 import org.dayflower.scene.Scene;
+import org.dayflower.utility.Document;
 
 /**
  * A {@code CompiledScene} is a compiled version of a {@link Scene} instance.
@@ -113,5 +114,26 @@ public final class CompiledScene {
 	 */
 	public CompiledTextureCache getCompiledTextureCache() {
 		return this.compiledTextureCache;
+	}
+	
+	/**
+	 * Writes this {@code CompiledScene} instance to {@code document}.
+	 * <p>
+	 * If {@code document} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param document a {@link Document} instance
+	 * @throws NullPointerException thrown if, and only if, {@code document} is {@code null}
+	 */
+	public void write(final Document document) {
+		document.line("CompiledScene {");
+		document.indent();
+		
+		this.compiledBoundingVolume3FCache.write(document);
+		this.compiledMaterialCache.write(document);
+		this.compiledShape3FCache.write(document);
+		this.compiledTextureCache.write(document);
+		
+		document.outdent();
+		document.line("}");
 	}
 }

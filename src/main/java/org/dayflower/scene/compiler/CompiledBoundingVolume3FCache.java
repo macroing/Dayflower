@@ -26,6 +26,7 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
+import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
@@ -413,6 +414,23 @@ public final class CompiledBoundingVolume3FCache {
 		ParameterArguments.requireExact(boundingSphere3Fs.length % BOUNDING_SPHERE_3_F_LENGTH, 0, "boundingSphere3Fs.length % CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH");
 		
 		this.boundingSphere3Fs = boundingSphere3Fs;
+	}
+	
+	/**
+	 * Writes this {@code CompiledBoundingVolume3FCache} instance to {@code document}.
+	 * <p>
+	 * If {@code document} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param document a {@link Document} instance
+	 * @throws NullPointerException thrown if, and only if, {@code document} is {@code null}
+	 */
+	public void write(final Document document) {
+		document.line("CompiledBoundingVolume3FCache {");
+		document.indent();
+		document.linef("axisAlignedBoundingBox3Fs[%d]", Integer.valueOf(getAxisAlignedBoundingBox3FCount()));
+		document.linef("boundingSphere3Fs[%d]", Integer.valueOf(getBoundingSphere3FCount()));
+		document.outdent();
+		document.line("}");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

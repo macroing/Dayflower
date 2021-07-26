@@ -41,6 +41,7 @@ import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.texture.Texture;
+import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
@@ -1930,6 +1931,33 @@ public final class CompiledMaterialCache {
 		ParameterArguments.requireExact(substrateMaterials.length % SUBSTRATE_MATERIAL_LENGTH, 0, "substrateMaterials.length % CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH");
 		
 		this.substrateMaterials = substrateMaterials;
+	}
+	
+	/**
+	 * Writes this {@code CompiledMaterialCache} instance to {@code document}.
+	 * <p>
+	 * If {@code document} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param document a {@link Document} instance
+	 * @throws NullPointerException thrown if, and only if, {@code document} is {@code null}
+	 */
+	public void write(final Document document) {
+		document.line("CompiledMaterialCache {");
+		document.indent();
+		document.linef("bullseyeMaterials[%d]", Integer.valueOf(getBullseyeMaterialCount()));
+		document.linef("checkerboardMaterials[%d]", Integer.valueOf(getCheckerboardMaterialCount()));
+		document.linef("clearCoatMaterials[%d]", Integer.valueOf(getClearCoatMaterialCount()));
+		document.linef("disneyMaterials[%d]", Integer.valueOf(getDisneyMaterialCount()));
+		document.linef("glassMaterials[%d]", Integer.valueOf(getGlassMaterialCount()));
+		document.linef("glossyMaterials[%d]", Integer.valueOf(getGlossyMaterialCount()));
+		document.linef("matteMaterials[%d]", Integer.valueOf(getMatteMaterialCount()));
+		document.linef("metalMaterials[%d]", Integer.valueOf(getMetalMaterialCount()));
+		document.linef("mirrorMaterials[%d]", Integer.valueOf(getMirrorMaterialCount()));
+		document.linef("plasticMaterials[%d]", Integer.valueOf(getPlasticMaterialCount()));
+		document.linef("polkaDotMaterials[%d]", Integer.valueOf(getPolkaDotMaterialCount()));
+		document.linef("substrateMaterials[%d]", Integer.valueOf(getSubstrateMaterialCount()));
+		document.outdent();
+		document.line("}");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

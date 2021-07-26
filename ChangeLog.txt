@@ -1,5 +1,8 @@
 2021-07-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the method write(Document) to the CompiledBoundingVolume3FCache, CompiledMaterialCache, CompiledScene, CompiledShape3FCache and CompiledTextureCache classes.
+	* ADD:		Add the Document class to the Utility API.
+	* ADD:		Add the method repeat(String, int) to the Strings class.
 	* ADD:		Add the CompiledSceneModifier class to the Scene Compiler API.
 	* ADD:		Add the method isSupported(Primitive) to the CompiledPrimitiveCache class.
 	* ADD:		Add the method isSupported(Shape3F) to the CompiledShape3FCache class.

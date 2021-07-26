@@ -64,7 +64,7 @@ public final class Primitive implements Node {
 	private Shape3F shape;
 	private Transform transform;
 	private final TransformObserver transformObserver;
-	private int instanceID;
+	private final int instanceID;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

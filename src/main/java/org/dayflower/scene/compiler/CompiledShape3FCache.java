@@ -47,8 +47,8 @@ import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
-import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
+import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.java.io.IntArrayOutputStream;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.utility.FloatArrays;
@@ -59,6 +59,22 @@ import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code CompiledShape3FCache} contains {@link Shape3F} instances in compiled form.
+ * <p>
+ * The {@code Shape3F} implementations that are supported are the following:
+ * <ul>
+ * <li>{@link Cone3F}</li>
+ * <li>{@link Cylinder3F}</li>
+ * <li>{@link Disk3F}</li>
+ * <li>{@link Hyperboloid3F}</li>
+ * <li>{@link Paraboloid3F}</li>
+ * <li>{@link Plane3F}</li>
+ * <li>{@link Rectangle3F}</li>
+ * <li>{@link RectangularCuboid3F}</li>
+ * <li>{@link Sphere3F}</li>
+ * <li>{@link Torus3F}</li>
+ * <li>{@link Triangle3F}</li>
+ * <li>{@link TriangleMesh3F}</li>
+ * </ul>
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -2024,6 +2040,47 @@ public final class CompiledShape3FCache {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code shape3F} is supported, {@code false} otherwise.
+	 * <p>
+	 * If {@code shape3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape3F a {@link Shape3F} instance
+	 * @return {@code true} if, and only if, {@code shape3F} is supported, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code shape3F} is {@code null}
+	 */
+	public static boolean isSupported(final Shape3F shape3F) {
+		Objects.requireNonNull(shape3F, "shape3F == null");
+		
+		if(shape3F instanceof Cone3F) {
+			return true;
+		} else if(shape3F instanceof Cylinder3F) {
+			return true;
+		} else if(shape3F instanceof Disk3F) {
+			return true;
+		} else if(shape3F instanceof Hyperboloid3F) {
+			return true;
+		} else if(shape3F instanceof Paraboloid3F) {
+			return true;
+		} else if(shape3F instanceof Plane3F) {
+			return true;
+		} else if(shape3F instanceof Rectangle3F) {
+			return true;
+		} else if(shape3F instanceof RectangularCuboid3F) {
+			return true;
+		} else if(shape3F instanceof Sphere3F) {
+			return true;
+		} else if(shape3F instanceof Torus3F) {
+			return true;
+		} else if(shape3F instanceof Triangle3F) {
+			return true;
+		} else if(shape3F instanceof TriangleMesh3F) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * Returns a {@code float[]} with {@code cone3F} in compiled form.

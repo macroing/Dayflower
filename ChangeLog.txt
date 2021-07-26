@@ -1,3 +1,9 @@
+2021-07-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the CompiledSceneModifier class to the Scene Compiler API.
+	* ADD:		Add the method isSupported(Primitive) to the CompiledPrimitiveCache class.
+	* ADD:		Add the method isSupported(Shape3F) to the CompiledShape3FCache class.
+
 2021-07-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method isSupported(BoundingVolume3F) to the CompiledBoundingVolume3FCache class.

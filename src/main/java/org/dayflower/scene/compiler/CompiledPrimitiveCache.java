@@ -22,7 +22,6 @@ import static org.dayflower.utility.Ints.pack;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.ToIntFunction;
 
 import org.dayflower.geometry.BoundingVolume3F;
@@ -276,6 +275,45 @@ public final class CompiledPrimitiveCache {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code primitive} is supported, {@code false} otherwise.
+	 * <p>
+	 * If {@code primitive} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param primitive a {@link Primitive} instance
+	 * @return {@code true} if, and only if, {@code primitive} is supported, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
+	 */
+	public static boolean isSupported(final Primitive primitive) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		
+		final AreaLight areaLight = primitive.getAreaLight().orElse(null);
+		
+		final BoundingVolume3F boundingVolume3F = primitive.getBoundingVolume();
+		
+		final Material material = primitive.getMaterial();
+		
+		final Shape3F shape3F = primitive.getShape();
+		
+		if(areaLight != null && !CompiledLightCache.isSupported(areaLight)) {
+			return false;
+		}
+		
+		if(!CompiledBoundingVolume3FCache.isSupported(boundingVolume3F)) {
+			return false;
+		}
+		
+		if(!CompiledMaterialCache.isSupported(material)) {
+			return false;
+		}
+		
+		if(!CompiledShape3FCache.isSupported(shape3F)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
 	 * Returns a {@code float[]} with all {@link Matrix44F} instances in {@code primitives} in compiled form.
 	 * <p>
 	 * If {@code primitives} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
@@ -335,11 +373,11 @@ public final class CompiledPrimitiveCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code areaLightOffsetFunction}, {@code boundingVolume3FOffsetFunction}, {@code materialOffsetFunction} or {@code shape3FOffsetFunction} are {@code null}
 	 */
 	public static int[] toPrimitive(final Primitive primitive, final ToIntFunction<AreaLight> areaLightOffsetFunction, final ToIntFunction<BoundingVolume3F> boundingVolume3FOffsetFunction, final ToIntFunction<Material> materialOffsetFunction, final ToIntFunction<Shape3F> shape3FOffsetFunction) {
+		final AreaLight areaLight = primitive.getAreaLight().orElse(null);
+		
 		final BoundingVolume3F boundingVolume = primitive.getBoundingVolume();
 		
 		final Material material = primitive.getMaterial();
-		
-		final Optional<AreaLight> optionalAreaLight = primitive.getAreaLight();
 		
 		final Shape3F shape = primitive.getShape();
 		
@@ -348,7 +386,7 @@ public final class CompiledPrimitiveCache {
 		final int[] array = new int[PRIMITIVE_LENGTH];
 		
 		array[PRIMITIVE_OFFSET_INSTANCE_ID] = instanceID;
-		array[PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET] = optionalAreaLight.isPresent() ? pack(optionalAreaLight.get().getID(), areaLightOffsetFunction.applyAsInt(optionalAreaLight.get())) : 0;
+		array[PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET] = areaLight != null ? pack(areaLight.getID(), areaLightOffsetFunction.applyAsInt(areaLight)) : 0;
 		array[PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID] = boundingVolume.getID();
 		array[PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET] = boundingVolume3FOffsetFunction.applyAsInt(boundingVolume);
 		array[PRIMITIVE_OFFSET_MATERIAL_ID] = material.getID();

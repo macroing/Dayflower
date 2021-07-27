@@ -151,6 +151,13 @@ public final class FloatArrays {
 	 * Returns a new {@code float[]} with the result of the operation.
 	 * <p>
 	 * If either {@code array} or {@code arrayReplacement} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * FloatArrays.splice(array, offset, length, arrayReplacement, new float[0]);
+	 * }
+	 * </pre>
 	 * 
 	 * @param array the input {@code float[]}
 	 * @param offset the offset for the removal, which may be negative
@@ -160,6 +167,25 @@ public final class FloatArrays {
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayReplacement} are {@code null}
 	 */
 	public static float[] splice(final float[] array, final int offset, final int length, final float[] arrayReplacement) {
+		return splice(array, offset, length, arrayReplacement, new float[0]);
+	}
+	
+	/**
+	 * Performs a splice operation on the {@code float[]} instance {@code array}.
+	 * <p>
+	 * Returns a new {@code float[]} with the result of the operation.
+	 * <p>
+	 * If either {@code array}, {@code arrayReplacement} or {@code arrayMatcher} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param array the input {@code float[]}
+	 * @param offset the offset for the removal, which may be negative
+	 * @param length the length of the removal, which may be negative
+	 * @param arrayReplacement an {@code float[]} that acts as replacement
+	 * @param arrayMatcher a {@code float[]} that matches the part of {@code array} that will be replaced
+	 * @return a new {@code float[]} with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code array}, {@code arrayReplacement} or {@code arrayMatcher} are {@code null}
+	 */
+	public static float[] splice(final float[] array, final int offset, final int length, final float[] arrayReplacement, final float[] arrayMatcher) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayReplacement, "arrayReplacement == null");
 		
@@ -180,6 +206,10 @@ public final class FloatArrays {
 		final int arrayDSrcPos1 = arrayALength;
 		final int arrayDSrcPos2 = arrayALength + arrayBLength;
 		final int arrayDLength  = arrayA.length - (arrayCSrcPos - arrayALength) + arrayBLength;
+		
+		if(arrayCSrcPos - arrayALength > 0 && !equal(array, arrayMatcher, arrayALength, 0, Ints.min(arrayCSrcPos - arrayALength, arrayMatcher.length))) {
+			return array;
+		}
 		
 		final float[] arrayD = new float[arrayDLength];
 		

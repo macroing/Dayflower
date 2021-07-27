@@ -239,6 +239,13 @@ public final class IntArrays {
 	 * Returns a new {@code int[]} with the result of the operation.
 	 * <p>
 	 * If either {@code array} or {@code arrayReplacement} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * IntArrays.splice(array, offset, length, arrayReplacement, new int[0]);
+	 * }
+	 * </pre>
 	 * 
 	 * @param array the input {@code int[]}
 	 * @param offset the offset for the removal, which may be negative
@@ -248,8 +255,28 @@ public final class IntArrays {
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayReplacement} are {@code null}
 	 */
 	public static int[] splice(final int[] array, final int offset, final int length, final int[] arrayReplacement) {
+		return splice(array, offset, length, arrayReplacement, new int[0]);
+	}
+	
+	/**
+	 * Performs a splice operation on the {@code int[]} instance {@code array}.
+	 * <p>
+	 * Returns a new {@code int[]} with the result of the operation.
+	 * <p>
+	 * If either {@code array}, {@code arrayReplacement} or {@code arrayMatcher} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param array the input {@code int[]}
+	 * @param offset the offset for the removal, which may be negative
+	 * @param length the length of the removal, which may be negative
+	 * @param arrayReplacement an {@code int[]} that acts as replacement
+	 * @param arrayMatcher an {@code int[]} that matches the part of {@code array} that will be replaced
+	 * @return a new {@code int[]} with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code array}, {@code arrayReplacement} or {@code arrayMatcher} are {@code null}
+	 */
+	public static int[] splice(final int[] array, final int offset, final int length, final int[] arrayReplacement, final int[] arrayMatcher) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayReplacement, "arrayReplacement == null");
+		Objects.requireNonNull(arrayMatcher, "arrayMatcher == null");
 		
 		final int[] arrayA = array;
 		final int[] arrayB = arrayReplacement;
@@ -268,6 +295,10 @@ public final class IntArrays {
 		final int arrayDSrcPos1 = arrayALength;
 		final int arrayDSrcPos2 = arrayALength + arrayBLength;
 		final int arrayDLength  = arrayA.length - (arrayCSrcPos - arrayALength) + arrayBLength;
+		
+		if(arrayCSrcPos - arrayALength > 0 && !equal(array, arrayMatcher, arrayALength, 0, Ints.min(arrayCSrcPos - arrayALength, arrayMatcher.length))) {
+			return array;
+		}
 		
 		final int[] arrayD = new int[arrayDLength];
 		

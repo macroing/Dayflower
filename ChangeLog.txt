@@ -1,3 +1,8 @@
+2021-07-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method splice(float[], int, int, float[], float[]) to the FloatArrays class.
+	* ADD:		Add the method splice(int[], int, int, int[], int[]) to the IntArrays class.
+
 2021-07-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method write(Document) to the CompiledBoundingVolume3FCache, CompiledMaterialCache, CompiledScene, CompiledShape3FCache and CompiledTextureCache classes.

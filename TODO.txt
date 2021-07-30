@@ -25,6 +25,11 @@ Scene BSSRDF API:
 
 Scene Compiler API:
 
+	* ADD:		Add support for PrimitiveAreaLight.
+	* ADD:		Add support for UberMaterial.
+	* ADD:		Add support for LDRImageNormalMapModifier.
+	* ADD:		Add support for SimplexNoiseNormalMapModifier.
+	* ADD:		Add support for ConstructiveSolidGeometry3F.
 	* ADD:		Add support for updating a CompiledScene instance on-the-fly.
 
 Scene Light API:

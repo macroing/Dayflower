@@ -22,6 +22,7 @@ import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.MIN_VALUE;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
+import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isZero;
@@ -29,6 +30,9 @@ import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.positiveModulo;
 import static org.dayflower.utility.Doubles.sin;
+import static org.dayflower.utility.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.toDegrees;
+import static org.dayflower.utility.Doubles.toRadians;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -205,6 +209,28 @@ public final class Point2D implements Node {
 	}
 	
 	/**
+	 * Returns the value of the latitude.
+	 * <p>
+	 * The latitude is the same as component 2, Y or V.
+	 * 
+	 * @return the value of the latitude
+	 */
+	public double getLatitude() {
+		return this.component2;
+	}
+	
+	/**
+	 * Returns the value of the longitude.
+	 * <p>
+	 * The longitude is the same as component 1, X or U.
+	 * 
+	 * @return the value of the longitude
+	 */
+	public double getLongitude() {
+		return this.component1;
+	}
+	
+	/**
 	 * Returns the value of the U-component.
 	 * 
 	 * @return the value of the U-component
@@ -340,6 +366,31 @@ public final class Point2D implements Node {
 		final double component2 = pointLHS.component2 + scalarRHS;
 		
 		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Adds {@code distanceKmLongitude} and {@code distanceKmLatitude} to {@code point}.
+	 * <p>
+	 * Returns a new {@code Point2D} instance with the result of the addition.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point2D} instance
+	 * @param distanceKmLongitude the distance to add to the longitude, in Km
+	 * @param distanceKmLatitude the distance to add to the latitude, in Km
+	 * @return a new {@code Point2D} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Point2D addDistanceKm(final Point2D point, final double distanceKmLongitude, final double distanceKmLatitude) {
+		final double radius = 6371.0D;
+		
+		final double oldLongitude = point.getLongitude();
+		final double oldLatitude = point.getLatitude();
+		
+		final double newLongitude = oldLongitude + toDegrees(distanceKmLongitude / radius) / cos(toRadians(oldLatitude));
+		final double newLatitude = oldLatitude + toDegrees(distanceKmLatitude / radius);
+		
+		return new Point2D(newLongitude, newLatitude);
 	}
 	
 	/**
@@ -835,6 +886,35 @@ public final class Point2D implements Node {
 	 */
 	public static double distance(final Point2D eye, final Point2D lookAt) {
 		return Vector2D.direction(eye, lookAt).length();
+	}
+	
+	/**
+	 * Returns the distance between {@code pointA} and {@code pointB} in Km.
+	 * <p>
+	 * If either {@code pointA} or {@code pointB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method is using the longitude and latitude.
+	 * 
+	 * @param pointA a {@code Point2D} instance
+	 * @param pointB a {@code Point2D} instance
+	 * @return the distance between {@code pointA} and {@code pointB} in Km
+	 * @throws NullPointerException thrown if, and only if, either {@code pointA} or {@code pointB} are {@code null}
+	 */
+	public static double distanceKm(final Point2D pointA, final Point2D pointB) {
+		final double radius = 6371.0D;
+		
+		final double a = sin(toRadians(pointB.getLatitude() - pointA.getLatitude()) / 2.0D);
+		final double b = cos(toRadians(pointA.getLatitude()));
+		final double c = cos(toRadians(pointB.getLatitude()));
+		final double d = sin(toRadians(pointB.getLongitude() - pointA.getLongitude()) / 2.0D);
+		final double e = a * a + b * c * d * d;
+		
+		final double x = sqrt(1.0D - e);
+		final double y = sqrt(e);
+		
+		final double distance = radius * 2.0D * atan2(y, x);
+		
+		return distance;
 	}
 	
 	/**

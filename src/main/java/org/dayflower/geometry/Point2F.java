@@ -22,6 +22,7 @@ import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.MIN_VALUE;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.atan2;
 import static org.dayflower.utility.Floats.cos;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isZero;
@@ -29,6 +30,9 @@ import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.positiveModulo;
 import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.sqrt;
+import static org.dayflower.utility.Floats.toDegrees;
+import static org.dayflower.utility.Floats.toRadians;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -205,6 +209,28 @@ public final class Point2F implements Node {
 	}
 	
 	/**
+	 * Returns the value of the latitude.
+	 * <p>
+	 * The latitude is the same as component 2, Y or V.
+	 * 
+	 * @return the value of the latitude
+	 */
+	public float getLatitude() {
+		return this.component2;
+	}
+	
+	/**
+	 * Returns the value of the longitude.
+	 * <p>
+	 * The longitude is the same as component 1, X or U.
+	 * 
+	 * @return the value of the longitude
+	 */
+	public float getLongitude() {
+		return this.component1;
+	}
+	
+	/**
 	 * Returns the value of the U-component.
 	 * 
 	 * @return the value of the U-component
@@ -340,6 +366,31 @@ public final class Point2F implements Node {
 		final float component2 = pointLHS.component2 + scalarRHS;
 		
 		return new Point2F(component1, component2);
+	}
+	
+	/**
+	 * Adds {@code distanceKmLongitude} and {@code distanceKmLatitude} to {@code point}.
+	 * <p>
+	 * Returns a new {@code Point2F} instance with the result of the addition.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point2F} instance
+	 * @param distanceKmLongitude the distance to add to the longitude, in Km
+	 * @param distanceKmLatitude the distance to add to the latitude, in Km
+	 * @return a new {@code Point2F} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Point2F addDistanceKm(final Point2F point, final float distanceKmLongitude, final float distanceKmLatitude) {
+		final float radius = 6371.0F;
+		
+		final float oldLongitude = point.getLongitude();
+		final float oldLatitude = point.getLatitude();
+		
+		final float newLongitude = oldLongitude + toDegrees(distanceKmLongitude / radius) / cos(toRadians(oldLatitude));
+		final float newLatitude = oldLatitude + toDegrees(distanceKmLatitude / radius);
+		
+		return new Point2F(newLongitude, newLatitude);
 	}
 	
 	/**
@@ -835,6 +886,35 @@ public final class Point2F implements Node {
 	 */
 	public static float distance(final Point2F eye, final Point2F lookAt) {
 		return Vector2F.direction(eye, lookAt).length();
+	}
+	
+	/**
+	 * Returns the distance between {@code pointA} and {@code pointB} in Km.
+	 * <p>
+	 * If either {@code pointA} or {@code pointB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method is using the longitude and latitude.
+	 * 
+	 * @param pointA a {@code Point2F} instance
+	 * @param pointB a {@code Point2F} instance
+	 * @return the distance between {@code pointA} and {@code pointB} in Km
+	 * @throws NullPointerException thrown if, and only if, either {@code pointA} or {@code pointB} are {@code null}
+	 */
+	public static float distanceKm(final Point2F pointA, final Point2F pointB) {
+		final float radius = 6371.0F;
+		
+		final float a = sin(toRadians(pointB.getLatitude() - pointA.getLatitude()) / 2.0F);
+		final float b = cos(toRadians(pointA.getLatitude()));
+		final float c = cos(toRadians(pointB.getLatitude()));
+		final float d = sin(toRadians(pointB.getLongitude() - pointA.getLongitude()) / 2.0F);
+		final float e = a * a + b * c * d * d;
+		
+		final float x = sqrt(1.0F - e);
+		final float y = sqrt(e);
+		
+		final float distance = radius * 2.0F * atan2(y, x);
+		
+		return distance;
 	}
 	
 	/**

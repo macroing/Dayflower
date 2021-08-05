@@ -1,5 +1,6 @@
 2021-08-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the classes Line3F and Polygon3F.
 	* ADD:		Add the method fromPoints(Point3D...) to the AxisAlignedBoundingBox3D class.
 	* ADD:		Add the method fromPoints(Point3F...) to the AxisAlignedBoundingBox3F class.
 	* ADD:		Add the methods coplanar(Point3D...) and toString(Point3D...) to the Point3D class.

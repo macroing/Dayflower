@@ -33,6 +33,7 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * An {@code AxisAlignedBoundingBox3F} is an implementation of {@link BoundingVolume3F} that represents an axis-aligned bounding box (AABB).
@@ -429,6 +430,30 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	public static AxisAlignedBoundingBox3F expand(final AxisAlignedBoundingBox3F axisAlignedBoundingBox, final float delta) {
 		final Point3F maximum = Point3F.add(axisAlignedBoundingBox.maximum, delta);
 		final Point3F minimum = Point3F.subtract(axisAlignedBoundingBox.minimum, delta);
+		
+		return new AxisAlignedBoundingBox3F(maximum, minimum);
+	}
+	
+	/**
+	 * Returns an {@code AxisAlignedBoundingBox3F} instance that contains all {@link Point3F} instances in {@code points}.
+	 * <p>
+	 * If either {@code points} or an element in {@code points} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code Point3F[]} instance
+	 * @return an {@code AxisAlignedBoundingBox3F} instance that contains all {@code Point3F} instances in {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
+	 */
+	public static AxisAlignedBoundingBox3F fromPoints(final Point3F... points) {
+		ParameterArguments.requireNonNullArray(points, "points");
+		ParameterArguments.requireRange(points.length, 1, Integer.MAX_VALUE, "points.length");
+		
+		Point3F maximum = Point3F.MINIMUM;
+		Point3F minimum = Point3F.MAXIMUM;
+		
+		for(final Point3F point : points) {
+			maximum = Point3F.maximum(maximum, point);
+			minimum = Point3F.minimum(minimum, point);
+		}
 		
 		return new AxisAlignedBoundingBox3F(maximum, minimum);
 	}

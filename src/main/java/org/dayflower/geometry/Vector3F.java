@@ -1587,6 +1587,28 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
+	 * Returns the triple product of {@code vectorLHSDP}, {@code vectorLHSCP} and {@code vectorRHSCP}.
+	 * <p>
+	 * If either {@code vectorLHSDP}, {@code vectorLHSCP} or {@code vectorRHSCP} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector3F.dotProduct(vectorLHSDP, Vector3F.crossProduct(vectorLHSCP, vectorRHSCP));
+	 * }
+	 * </pre>
+	 * 
+	 * @param vectorLHSDP the {@code Vector3F} instance on the left-hand side of the dot product
+	 * @param vectorLHSCP the {@code Vector3F} instance of the left-hand side of the cross product
+	 * @param vectorRHSCP the {@code Vector3F} instance of the right-hand side of the cross product
+	 * @return the triple product of {@code vectorLHSDP}, {@code vectorLHSCP} and {@code vectorRHSCP}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHSDP}, {@code vectorLHSCP} or {@code vectorRHSCP} are {@code null}
+	 */
+	public static float tripleProduct(final Vector3F vectorLHSDP, final Vector3F vectorLHSCP, final Vector3F vectorRHSCP) {
+		return dotProduct(vectorLHSDP, crossProduct(vectorLHSCP, vectorRHSCP));
+	}
+	
+	/**
 	 * Returns the size of the cache.
 	 * 
 	 * @return the size of the cache

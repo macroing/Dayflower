@@ -33,6 +33,7 @@ import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * An {@code AxisAlignedBoundingBox3D} is an implementation of {@link BoundingVolume3D} that represents an axis-aligned bounding box (AABB).
@@ -429,6 +430,30 @@ public final class AxisAlignedBoundingBox3D implements BoundingVolume3D {
 	public static AxisAlignedBoundingBox3D expand(final AxisAlignedBoundingBox3D axisAlignedBoundingBox, final double delta) {
 		final Point3D maximum = Point3D.add(axisAlignedBoundingBox.maximum, delta);
 		final Point3D minimum = Point3D.subtract(axisAlignedBoundingBox.minimum, delta);
+		
+		return new AxisAlignedBoundingBox3D(maximum, minimum);
+	}
+	
+	/**
+	 * Returns an {@code AxisAlignedBoundingBox3D} instance that contains all {@link Point3D} instances in {@code points}.
+	 * <p>
+	 * If either {@code points} or an element in {@code points} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code Point3D[]} instance
+	 * @return an {@code AxisAlignedBoundingBox3D} instance that contains all {@code Point3D} instances in {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
+	 */
+	public static AxisAlignedBoundingBox3D fromPoints(final Point3D... points) {
+		ParameterArguments.requireNonNullArray(points, "points");
+		ParameterArguments.requireRange(points.length, 1, Integer.MAX_VALUE, "points.length");
+		
+		Point3D maximum = Point3D.MINIMUM;
+		Point3D minimum = Point3D.MAXIMUM;
+		
+		for(final Point3D point : points) {
+			maximum = Point3D.maximum(maximum, point);
+			minimum = Point3D.minimum(minimum, point);
+		}
 		
 		return new AxisAlignedBoundingBox3D(maximum, minimum);
 	}

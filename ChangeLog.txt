@@ -1,3 +1,12 @@
+2021-08-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method fromPoints(Point3D...) to the AxisAlignedBoundingBox3D class.
+	* ADD:		Add the method fromPoints(Point3F...) to the AxisAlignedBoundingBox3F class.
+	* ADD:		Add the methods coplanar(Point3D...) and toString(Point3D...) to the Point3D class.
+	* ADD:		Add the methods coplanar(Point3F...) and toString(Point3F...) to the Point3F class.
+	* ADD:		Add the method tripleProduct(Vector3D, Vector3D, Vector3D) to the Vector3D class.
+	* ADD:		Add the method tripleProduct(Vector3F, Vector3F, Vector3F) to the Vector3F class.
+
 2021-08-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getLatitude(), getLongitude(), addDistanceKm(Point2D, double, double) and distanceKm(Point2D, Point2D) to the Point2D class.

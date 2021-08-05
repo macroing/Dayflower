@@ -37,6 +37,7 @@ import java.util.Objects;
 
 import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Point3D} represents a point with three {@code double}-based components.
@@ -802,6 +803,68 @@ public final class Point3D implements Node {
 		final double component4 = matrixLHS.getElement41() * pointRHS.component1 + matrixLHS.getElement42() * pointRHS.component2 + matrixLHS.getElement43() * pointRHS.component3 + matrixLHS.getElement44();
 		
 		return equal(component4, 1.0D) || isZero(component4) ? new Point3D(component1, component2, component3) : new Point3D(component1 / component4, component2 / component4, component3 / component4);
+	}
+	
+	/**
+	 * Returns a {@code String} representation of {@code points}.
+	 * <p>
+	 * If either {@code points} or an element in {@code points} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code Point3D[]} instance
+	 * @return a {@code String} representation of {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
+	 */
+	public static String toString(final Point3D... points) {
+		ParameterArguments.requireNonNullArray(points, "points");
+		
+		final
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("new Point3D[] {");
+		
+		for(int i = 0; i < points.length; i++) {
+			stringBuilder.append(i > 0 ? ", " : "");
+			stringBuilder.append(points[i]);
+		}
+		
+		stringBuilder.append("}");
+		
+		return stringBuilder.toString();
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, all {@code Point3D} instances in {@code points} are coplanar, {@code false} otherwise.
+	 * <p>
+	 * If either {@code points} or an element in {@code points} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code points.length} is less than {@code 3}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param points a {@code Point3D[]} instance
+	 * @return {@code true} if, and only if, all {@code Point3D} instances in {@code points} are coplanar, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
+	 */
+	public static boolean coplanar(final Point3D... points) {
+		ParameterArguments.requireNonNullArray(points, "points");
+		ParameterArguments.requireRange(points.length, 3, Integer.MAX_VALUE, "points.length");
+		
+		final Point3D point0 = points[0];
+		final Point3D point1 = points[1];
+		final Point3D point2 = points[2];
+		
+		final Vector3D vector0 = Vector3D.directionNormalized(point0, point1);
+		final Vector3D vector1 = Vector3D.directionNormalized(point0, point2);
+		
+		for(int i = 3; i < points.length; i++) {
+			final Point3D pointI = points[i];
+			
+			final Vector3D vector2 = Vector3D.directionNormalized(point0, pointI);
+			
+			if(!isZero(Vector3D.tripleProduct(vector0, vector2, vector1))) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	/**

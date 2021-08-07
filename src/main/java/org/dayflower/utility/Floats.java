@@ -60,6 +60,11 @@ public final class Floats {
 	public static final float MIN_VALUE = -Float.MAX_VALUE;
 	
 	/**
+	 * The {@code float} value that represents Not-a-Number (NaN).
+	 */
+	public static final float NaN = Float.NaN;
+	
+	/**
 	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter.
 	 */
 	public static final float PI = (float)(Math.PI);

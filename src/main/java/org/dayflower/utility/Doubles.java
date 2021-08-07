@@ -60,6 +60,11 @@ public class Doubles {
 	public static final double MIN_VALUE = -Double.MAX_VALUE;
 	
 	/**
+	 * The {@code double} value that represents Not-a-Number (NaN).
+	 */
+	public static final double NaN = Double.NaN;
+	
+	/**
 	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter.
 	 */
 	public static final double PI = Math.PI;

@@ -1,7 +1,9 @@
 2021-08-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the Simplex API.
 	* ADD:		Add the constant NaN to the Doubles class.
 	* ADD:		Add the constant NaN to the Floats class.
+	* CHANGE:	Fix a message typo to an IllegalArgumentException in the Matrix44D class.
 
 2021-08-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

@@ -638,7 +638,7 @@ public final class Matrix44D implements Node {
 		final double determinantReciprocal = 1.0D / determinant;
 		
 		if(abs(determinant) < 1.0e-12D) {
-			throw new IllegalArgumentException("The Matrix44F 'matrix' cannot be inverted!");
+			throw new IllegalArgumentException("The Matrix44D 'matrix' cannot be inverted!");
 		}
 		
 		final double element11 = (+matrix.element22 * l - matrix.element23 * k + matrix.element24 * j) * determinantReciprocal;

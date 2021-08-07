@@ -37,7 +37,7 @@ public final class Matrix {
 	 * <p>
 	 * If {@code matrix44D} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44D.length} is less than {@code 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44D.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -48,7 +48,7 @@ public final class Matrix {
 	 * 
 	 * @param matrix44D a {@code double[]} that contains a matrix with four rows and four columns
 	 * @return the determinant of the matrix contained in {@code matrix44D} at offset {@code 0}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length} is less than {@code 16}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length < 16}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix44D} is {@code null}
 	 */
 	public static double matrix44DDeterminant(final double[] matrix44D) {
@@ -60,12 +60,12 @@ public final class Matrix {
 	 * <p>
 	 * If {@code matrix44D} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44D.length} is less than {@code matrix44DOffset + 16} or {@code matrix44DOffset} is less than {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44D.length < matrix44DOffset + 16} or {@code matrix44DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param matrix44D a {@code double[]} that contains a matrix with four rows and four columns
 	 * @param matrix44DOffset the offset in {@code matrix44D} to start at
 	 * @return the determinant of the matrix contained in {@code matrix44D} at offset {@code matrix44DOffset}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length} is less than {@code matrix44DOffset + 16} or {@code matrix44DOffset} is less than {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length < matrix44DOffset + 16} or {@code matrix44DOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix44D} is {@code null}
 	 */
 	public static double matrix44DDeterminant(final double[] matrix44D, final int matrix44DOffset) {
@@ -149,7 +149,7 @@ public final class Matrix {
 	 * <p>
 	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44DResult.length} is less than {@code 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -160,7 +160,7 @@ public final class Matrix {
 	 * 
 	 * @param matrix44DResult a {@code double[]} that contains a matrix with four rows and four columns
 	 * @return {@code matrix44DResult}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length} is less than {@code 16}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < 16}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
 	 */
 	public static double[] matrix44DIdentity(final double[] matrix44DResult) {
@@ -174,12 +174,12 @@ public final class Matrix {
 	 * <p>
 	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44DResult.length} is less than {@code matrix44DResultOffset + 16} or {@code matrix44DResultOffset} is less than {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param matrix44DResult a {@code double[]} that contains a matrix with four rows and four columns
 	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
 	 * @return {@code matrix44DResult}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length} is less than {@code matrix44DResultOffset + 16} or {@code matrix44DResultOffset} is less than {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
 	 */
 	public static double[] matrix44DIdentity(final double[] matrix44DResult, final int matrix44DResultOffset) {
@@ -191,7 +191,9 @@ public final class Matrix {
 	 * <p>
 	 * If {@code matrix44D} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44D.length} is less than {@code 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44D.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * If {@code matrix44D} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -202,7 +204,8 @@ public final class Matrix {
 	 * 
 	 * @param matrix44D a {@code double[]} that contains the matrix to invert
 	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the inverse of {@code matrix44D}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length} is less than {@code 16}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length < 16}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix44D} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, {@code matrix44D} is {@code null}
 	 */
 	public static double[] matrix44DInverse(final double[] matrix44D) {
@@ -214,7 +217,9 @@ public final class Matrix {
 	 * <p>
 	 * If either {@code matrix44D} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If either {@code matrix44D.length} or {@code matrix44DResult.length} are less than {@code 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If either {@code matrix44D.length < 16} or {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * If {@code matrix44D} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -226,7 +231,8 @@ public final class Matrix {
 	 * @param matrix44D a {@code double[]} that contains the matrix to invert
 	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
 	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the inverse of {@code matrix44D}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, either {@code matrix44D.length} or {@code matrix44DResult.length} are less than {@code 16}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, either {@code matrix44D.length < 16} or {@code matrix44DResult.length < 16}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix44D} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44D} or {@code matrix44DResult} are {@code null}
 	 */
 	public static double[] matrix44DInverse(final double[] matrix44D, final double[] matrix44DResult) {
@@ -238,16 +244,17 @@ public final class Matrix {
 	 * <p>
 	 * If either {@code matrix44D} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44D.length} is less than {@code matrix44DOffset + 16}, {@code matrix44DOffset} is less than {@code 0}, {@code matrix44DResult.length} is less than {@code matrix44DResultOffset + 16} or {@code matrix44DResultOffset} is less than
-	 * {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44D.length < matrix44DOffset + 16}, {@code matrix44DOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * If {@code matrix44D} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param matrix44D a {@code double[]} that contains the matrix to invert
 	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
 	 * @param matrix44DOffset the offset in {@code matrix44D} to start at
 	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
 	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the inverse of {@code matrix44D}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length} is less than {@code matrix44DOffset + 16}, {@code matrix44DOffset} is less than {@code 0}, {@code matrix44DResult.length} is less than
-	 *                                        {@code matrix44DResultOffset + 16} or {@code matrix44DResultOffset} is less than {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length < matrix44DOffset + 16}, {@code matrix44DOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix44D} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44D} or {@code matrix44DResult} are {@code null}
 	 */
 	public static double[] matrix44DInverse(final double[] matrix44D, final double[] matrix44DResult, final int matrix44DOffset, final int matrix44DResultOffset) {
@@ -294,17 +301,74 @@ public final class Matrix {
 		return matrix44DSet(matrix44DResult, element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, matrix44DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to the result of {@code matrix44DLHS} multiplied by {@code matrix44DRHS}.
+	 * <p>
+	 * If either {@code matrix44DLHS} or {@code matrix44DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DLHS.length < 16} or {@code matrix44DRHS.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DMultiply(matrix44DLHS, matrix44DRHS, Matrix.matrix44D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param matrix44DLHS a {@code double[]} that contains the matrix to multiply with on the left-hand side
+	 * @param matrix44DRHS a {@code double[]} that contains the matrix to multiply with on the right-hand side
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the result of {@code matrix44DLHS} multiplied by {@code matrix44DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < 16} or {@code matrix44DRHS.length < 16}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS} or {@code matrix44DRHS} are {@code null}
+	 */
 	public static double[] matrix44DMultiply(final double[] matrix44DLHS, final double[] matrix44DRHS) {
 		return matrix44DMultiply(matrix44DLHS, matrix44DRHS, matrix44D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to the result of {@code matrix44DLHS} multiplied by {@code matrix44DRHS}.
+	 * <p>
+	 * If either {@code matrix44DLHS}, {@code matrix44DRHS} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DLHS.length < 16}, {@code matrix44DRHS.length < 16} or {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DMultiply(matrix44DLHS, matrix44DRHS, matrix44DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param matrix44DLHS a {@code double[]} that contains the matrix to multiply with on the left-hand side
+	 * @param matrix44DRHS a {@code double[]} that contains the matrix to multiply with on the right-hand side
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the result of {@code matrix44DLHS} multiplied by {@code matrix44DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < 16}, {@code matrix44DRHS.length < 16} or {@code matrix44DResult.length < 16}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code matrix44DRHS} or {@code matrix44DResult} are {@code null}
+	 */
 	public static double[] matrix44DMultiply(final double[] matrix44DLHS, final double[] matrix44DRHS, final double[] matrix44DResult) {
 		return matrix44DMultiply(matrix44DLHS, matrix44DRHS, matrix44DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to the result of {@code matrix44DLHS} multiplied by {@code matrix44DRHS}.
+	 * <p>
+	 * If either {@code matrix44DLHS}, {@code matrix44DRHS} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code matrix44DRHS.length < matrix44DRHSOffset + 16}, {@code matrix44DRHSOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or
+	 * {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param matrix44DLHS a {@code double[]} that contains the matrix to multiply with on the left-hand side
+	 * @param matrix44DRHS a {@code double[]} that contains the matrix to multiply with on the right-hand side
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @param matrix44DLHSOffset the offset in {@code matrix44DLHS} to start at
+	 * @param matrix44DRHSOffset the offset in {@code matrix44DRHS} to start at
+	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the result of {@code matrix44DLHS} multiplied by {@code matrix44DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code matrix44DRHS.length < matrix44DRHSOffset + 16}, {@code matrix44DRHSOffset < 0},
+	 *                                        {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code matrix44DRHS} or {@code matrix44DResult} are {@code null}
+	 */
 	public static double[] matrix44DMultiply(final double[] matrix44DLHS, final double[] matrix44DRHS, final double[] matrix44DResult, final int matrix44DLHSOffset, final int matrix44DRHSOffset, final int matrix44DResultOffset) {
 		final double element11 = matrix44DLHS[matrix44DLHSOffset +  0] * matrix44DRHS[matrix44DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset +  1] * matrix44DRHS[matrix44DRHSOffset + 4] + matrix44DLHS[matrix44DLHSOffset +  2] * matrix44DRHS[matrix44DRHSOffset +  8] + matrix44DLHS[matrix44DLHSOffset +  3] * matrix44DRHS[matrix44DRHSOffset + 12];
 		final double element12 = matrix44DLHS[matrix44DLHSOffset +  0] * matrix44DRHS[matrix44DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  1] * matrix44DRHS[matrix44DRHSOffset + 5] + matrix44DLHS[matrix44DLHSOffset +  2] * matrix44DRHS[matrix44DRHSOffset +  9] + matrix44DLHS[matrix44DLHSOffset +  3] * matrix44DRHS[matrix44DRHSOffset + 13];
@@ -520,7 +584,7 @@ public final class Matrix {
 	 * <p>
 	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44DResult.length} is less than {@code 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -547,7 +611,7 @@ public final class Matrix {
 	 * @param element43 the value of the element at row 4 and column 3 or index 14
 	 * @param element44 the value of the element at row 4 and column 4 or index 15
 	 * @return {@code matrix44DResult}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length} is less than {@code 16}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < 16}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
 	 */
 	public static double[] matrix44DSet(final double[] matrix44DResult, final double element11, final double element12, final double element13, final double element14, final double element21, final double element22, final double element23, final double element24, final double element31, final double element32, final double element33, final double element34, final double element41, final double element42, final double element43, final double element44) {
@@ -561,7 +625,7 @@ public final class Matrix {
 	 * <p>
 	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44DResult.length} is less than {@code matrix44DResultOffset + 16} or {@code matrix44DResultOffset} is less than {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param matrix44DResult a {@code double[]} that contains a matrix with four rows and four columns
 	 * @param element11 the value of the element at row 1 and column 1 or index 0
@@ -582,7 +646,7 @@ public final class Matrix {
 	 * @param element44 the value of the element at row 4 and column 4 or index 15
 	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
 	 * @return {@code matrix44DResult}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length} is less than {@code matrix44DResultOffset + 16} or {@code matrix44DResultOffset} is less than {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
 	 */
 	public static double[] matrix44DSet(final double[] matrix44DResult, final double element11, final double element12, final double element13, final double element14, final double element21, final double element22, final double element23, final double element24, final double element31, final double element32, final double element33, final double element34, final double element41, final double element42, final double element43, final double element44, final int matrix44DResultOffset) {

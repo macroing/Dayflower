@@ -27,9 +27,6 @@ import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.sqrt;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs!
-import java.util.Objects;
-
-import org.dayflower.utility.ParameterArguments;
 
 //TODO: Add Javadocs!
 public final class Point {
@@ -39,114 +36,289 @@ public final class Point {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with two components.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2D(0.0D, 0.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code double[]} that contains a point with two components
+	 */
+	public static double[] point2D() {
+		return point2D(0.0D, 0.0D);
+	}
+	
+	/**
+	 * Returns a {@code double[]} that contains a point with two components.
+	 * 
+	 * @param component1 the value of component 1, also known as X or U
+	 * @param component2 the value of component 2, also known as Y or V
+	 * @return a {@code double[]} that contains a point with two components
+	 */
 	public static double[] point2D(final double component1, final double component2) {
 		return new double[] {component1, component2};
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
 	public static double[] point2DSampleDiskUniformDistribution() {
 		return point2DSampleDiskUniformDistribution(random(), random());
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
 	public static double[] point2DSampleDiskUniformDistribution(final double u, final double v) {
+		return point2DSampleDiskUniformDistribution(u, v, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point2DSampleDiskUniformDistribution(final double u, final double v, final double[] point2DResult) {
+		return point2DSampleDiskUniformDistribution(u, v, point2DResult, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point2DSampleDiskUniformDistribution(final double u, final double v, final double[] point2DResult, final int point2DResultOffset) {
 		final double r = sqrt(u);
 		final double theta = PI_MULTIPLIED_BY_2 * v;
 		
 		final double component1 = r * cos(theta);
 		final double component2 = r * sin(theta);
 		
-		return point2D(component1, component2);
+		return point2DSet(point2DResult, component1, component2, point2DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the component values of the point contained in {@code point2DResult} at offset {@code 0}.
+	 * <p>
+	 * Returns {@code point2DResult}.
+	 * <p>
+	 * If {@code point2DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DResult.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DSet(point2DResult, component1, component2, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2DResult a {@code double[]} that contains a point with two components
+	 * @param component1 the value of component 1, also known as X or U
+	 * @param component2 the value of component 2, also known as Y or V
+	 * @return {@code point2DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DResult.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code point2DResult} is {@code null}
+	 */
+	public static double[] point2DSet(final double[] point2DResult, final double component1, final double component2) {
+		return point2DSet(point2DResult, component1, component2, 0);
+	}
+	
+	/**
+	 * Sets the component values of the point contained in {@code point2DResult} at offset {@code point2DResultOffset}.
+	 * <p>
+	 * Returns {@code point2DResult}.
+	 * <p>
+	 * If {@code point2DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DResult.length < point2DResultOffset + 2} or {@code point2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2DResult a {@code double[]} that contains a point with two components
+	 * @param component1 the value of component 1, also known as X or U
+	 * @param component2 the value of component 2, also known as Y or V
+	 * @param point2DResultOffset the offset in {@code point2DResult} to start at
+	 * @return {@code point2DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DResult.length < point2DResultOffset + 2} or {@code point2DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code point2DResult} is {@code null}
+	 */
+	public static double[] point2DSet(final double[] point2DResult, final double component1, final double component2, final int point2DResultOffset) {
+		point2DResult[point2DResultOffset + 0] = component1;
+		point2DResult[point2DResultOffset + 1] = component2;
+		
+		return point2DResult;
+	}
+	
+	/**
+	 * Returns a {@code double[]} that contains a point with three components.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3D(0.0D, 0.0D, 0.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code double[]} that contains a point with three components
+	 */
+	public static double[] point3D() {
+		return point3D(0.0D, 0.0D, 0.0D);
+	}
+	
+	/**
+	 * Returns a {@code double[]} that contains a point with three components.
+	 * 
+	 * @param component1 the value of component 1, also known as X or U
+	 * @param component2 the value of component 2, also known as Y or V
+	 * @param component3 the value of component 3, also known as Z or W
+	 * @return a {@code double[]} that contains a point with three components
+	 */
 	public static double[] point3D(final double component1, final double component2, final double component3) {
 		return new double[] {component1, component2, component3};
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D) {
-		Objects.requireNonNull(point3D, "point3D == null");
-		Objects.requireNonNull(vector3D, "vector3D == null");
-		
-		ParameterArguments.requireExactArrayLength(point3D, 3, "point3D");
-		ParameterArguments.requireExactArrayLength(vector3D, 3, "vector3D");
-		
-		final double component1 = point3D[0] + vector3D[0];
-		final double component2 = point3D[1] + vector3D[1];
-		final double component3 = point3D[2] + vector3D[2];
-		
-		return point3D(component1, component2, component3);
+		return point3DAdd(point3D, vector3D, point3D());
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
+	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double[] point3DResult) {
+		return point3DAdd(point3D, vector3D, point3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double[] point3DResult, final int point3DOffset, final int vector3DOffset, final int point3DResultOffset) {
+		final double component1 = point3D[point3DOffset + 0] + vector3D[vector3DOffset + 0];
+		final double component2 = point3D[point3DOffset + 1] + vector3D[vector3DOffset + 1];
+		final double component3 = point3D[point3DOffset + 2] + vector3D[vector3DOffset + 2];
+		
+		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double scalar) {
-		Objects.requireNonNull(point3D, "point3D == null");
-		Objects.requireNonNull(vector3D, "vector3D == null");
-		
-		ParameterArguments.requireExactArrayLength(point3D, 3, "point3D");
-		ParameterArguments.requireExactArrayLength(vector3D, 3, "vector3D");
-		
-		final double component1 = point3D[0] + vector3D[0] * scalar;
-		final double component2 = point3D[1] + vector3D[1] * scalar;
-		final double component3 = point3D[2] + vector3D[2] * scalar;
-		
-		return point3D(component1, component2, component3);
+		return point3DAdd(point3D, vector3D, scalar, point3D());
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
+	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double scalar, final double[] point3DResult) {
+		return point3DAdd(point3D, vector3D, scalar, point3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double scalar, final double[] point3DResult, final int point3DOffset, final int vector3DOffset, final int point3DResultOffset) {
+		final double component1 = point3D[point3DOffset + 0] + vector3D[vector3DOffset + 0] * scalar;
+		final double component2 = point3D[point3DOffset + 1] + vector3D[vector3DOffset + 1] * scalar;
+		final double component3 = point3D[point3DOffset + 2] + vector3D[vector3DOffset + 2] * scalar;
+		
+		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] point3DFromVector3D(final double[] vector3D) {
-		Objects.requireNonNull(vector3D, "vector3D == null");
-		
-		ParameterArguments.requireExactArrayLength(vector3D, 3, "vector3D");
-		
-		final double component1 = vector3D[0];
-		final double component2 = vector3D[1];
-		final double component3 = vector3D[2];
-		
-		return point3D(component1, component2, component3);
+		return point3DFromVector3D(vector3D, point3D());
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
+	public static double[] point3DFromVector3D(final double[] vector3D, final double[] point3DResult) {
+		return point3DFromVector3D(vector3D, point3DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DFromVector3D(final double[] vector3D, final double[] point3DResult, final int vector3DOffset, final int point3DResultOffset) {
+		final double component1 = vector3D[vector3DOffset + 0];
+		final double component2 = vector3D[vector3DOffset + 1];
+		final double component3 = vector3D[vector3DOffset + 2];
+		
+		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
+	}
+	
+	/**
+	 * Sets the component values of the point contained in {@code point3DResult} at offset {@code 0}.
+	 * <p>
+	 * Returns {@code point3DResult}.
+	 * <p>
+	 * If {@code point3DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DSet(point3DResult, component1, component2, component3, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3DResult a {@code double[]} that contains a point with three components
+	 * @param component1 the value of component 1, also known as X or U
+	 * @param component2 the value of component 2, also known as Y or V
+	 * @param component3 the value of component 3, also known as Z or W
+	 * @return {@code point3DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code point3DResult} is {@code null}
+	 */
+	public static double[] point3DSet(final double[] point3DResult, final double component1, final double component2, final double component3) {
+		return point3DSet(point3DResult, component1, component2, component3, 0);
+	}
+	
+	/**
+	 * Sets the component values of the point contained in {@code point3DResult} at offset {@code point3DResultOffset}.
+	 * <p>
+	 * Returns {@code point3DResult}.
+	 * <p>
+	 * If {@code point3DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3DResult a {@code double[]} that contains a point with three components
+	 * @param component1 the value of component 1, also known as X or U
+	 * @param component2 the value of component 2, also known as Y or V
+	 * @param component3 the value of component 3, also known as Z or W
+	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
+	 * @return {@code point3DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code point3DResult} is {@code null}
+	 */
+	public static double[] point3DSet(final double[] point3DResult, final double component1, final double component2, final double component3, final int point3DResultOffset) {
+		point3DResult[point3DResultOffset + 0] = component1;
+		point3DResult[point3DResultOffset + 1] = component2;
+		point3DResult[point3DResultOffset + 2] = component3;
+		
+		return point3DResult;
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] point3DTransformMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS) {
-		Objects.requireNonNull(matrix44DLHS, "matrix44DLHS == null");
-		Objects.requireNonNull(point3DRHS, "point3DRHS == null");
-		
-		ParameterArguments.requireExactArrayLength(matrix44DLHS, 16, "matrix44DLHS");
-		ParameterArguments.requireExactArrayLength(point3DRHS, 3, "point3DRHS");
-		
-		final double component1 = matrix44DLHS[0] * point3DRHS[0] + matrix44DLHS[1] * point3DRHS[1] + matrix44DLHS[ 2] * point3DRHS[2] + matrix44DLHS[ 3];
-		final double component2 = matrix44DLHS[4] * point3DRHS[0] + matrix44DLHS[5] * point3DRHS[1] + matrix44DLHS[ 6] * point3DRHS[2] + matrix44DLHS[ 7];
-		final double component3 = matrix44DLHS[8] * point3DRHS[0] + matrix44DLHS[9] * point3DRHS[1] + matrix44DLHS[10] * point3DRHS[2] + matrix44DLHS[11];
-		
-		return point3D(component1, component2, component3);
+		return point3DTransformMatrix44D(matrix44DLHS, point3DRHS, point3D());
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
+	public static double[] point3DTransformMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult) {
+		return point3DTransformMatrix44D(matrix44DLHS, point3DRHS, point3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DTransformMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult, final int matrix44DLHSOffset, final int point3DRHSOffset, final int point3DResultOffset) {
+		final double component1 = matrix44DLHS[matrix44DLHSOffset + 0] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 1] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  2] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset +  3];
+		final double component2 = matrix44DLHS[matrix44DLHSOffset + 4] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 5] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  6] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset +  7];
+		final double component3 = matrix44DLHS[matrix44DLHSOffset + 8] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 9] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset + 10] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset + 11];
+		
+		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] point3DTransformAndDivideMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS) {
-		Objects.requireNonNull(matrix44DLHS, "matrix44DLHS == null");
-		Objects.requireNonNull(point3DRHS, "point3DRHS == null");
-		
-		ParameterArguments.requireExactArrayLength(matrix44DLHS, 16, "matrix44DLHS");
-		ParameterArguments.requireExactArrayLength(point3DRHS, 3, "point3DRHS");
-		
-		final double component1 = matrix44DLHS[ 0] * point3DRHS[0] + matrix44DLHS[ 1] * point3DRHS[1] + matrix44DLHS[ 2] * point3DRHS[2] + matrix44DLHS[ 3];
-		final double component2 = matrix44DLHS[ 4] * point3DRHS[0] + matrix44DLHS[ 5] * point3DRHS[1] + matrix44DLHS[ 6] * point3DRHS[2] + matrix44DLHS[ 7];
-		final double component3 = matrix44DLHS[ 8] * point3DRHS[0] + matrix44DLHS[ 9] * point3DRHS[1] + matrix44DLHS[10] * point3DRHS[2] + matrix44DLHS[11];
-		final double component4 = matrix44DLHS[12] * point3DRHS[0] + matrix44DLHS[13] * point3DRHS[1] + matrix44DLHS[14] * point3DRHS[2] + matrix44DLHS[15];
+		return point3DTransformAndDivideMatrix44D(matrix44DLHS, point3DRHS, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DTransformAndDivideMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult) {
+		return point3DTransformAndDivideMatrix44D(matrix44DLHS, point3DRHS, point3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DTransformAndDivideMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult, final int matrix44DLHSOffset, final int point3DRHSOffset, final int point3DResultOffset) {
+		final double component1 = matrix44DLHS[matrix44DLHSOffset +  0] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset +  1] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  2] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset +  3];
+		final double component2 = matrix44DLHS[matrix44DLHSOffset +  4] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset +  5] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  6] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset +  7];
+		final double component3 = matrix44DLHS[matrix44DLHSOffset +  8] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset +  9] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset + 10] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset + 11];
+		final double component4 = matrix44DLHS[matrix44DLHSOffset + 12] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 13] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset + 14] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset + 15];
 		
 		if(equal(component4, 1.0D) || isZero(component4)) {
-			return point3D(component1, component2, component3);
+			return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
 		}
 		
-		return point3D(component1 / component4, component2 / component4, component3 / component4);
+		return point3DSet(point3DResult, component1 / component4, component2 / component4, component3 / component4, point3DResultOffset);
 	}
 }

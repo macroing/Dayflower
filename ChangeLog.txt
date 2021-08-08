@@ -1,3 +1,8 @@
+2021-08-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add Javadocs to the Point and Vector classes in the new Simplex API.
+	* CHANGE:	Refactor the Point and Vector classes in the new Simplex API.
+
 2021-08-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Simplex API.

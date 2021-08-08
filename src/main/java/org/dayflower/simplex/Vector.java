@@ -22,7 +22,17 @@ import static org.dayflower.utility.Doubles.sqrt;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 
-//TODO: Add Javadocs!
+/**
+ * A class that consists exclusively of static methods that returns or performs various operations on vectors.
+ * <p>
+ * This class currently supports the following:
+ * <ul>
+ * <li>{@code Vector3D} - a 3-dimensional vector represented by a {@code double[]}.</li>
+ * </ul>
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Vector {
 	private Vector() {
 		

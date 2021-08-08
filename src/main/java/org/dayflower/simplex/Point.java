@@ -28,7 +28,18 @@ import static org.dayflower.utility.Doubles.sqrt;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 
-//TODO: Add Javadocs!
+/**
+ * A class that consists exclusively of static methods that returns or performs various operations on points.
+ * <p>
+ * This class currently supports the following:
+ * <ul>
+ * <li>{@code Point2D} - a 2-dimensional point represented by a {@code double[]}.</li>
+ * <li>{@code Point3D} - a 3-dimensional point represented by a {@code double[]}.</li>
+ * </ul>
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Point {
 	private Point() {
 		

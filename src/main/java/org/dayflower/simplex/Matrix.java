@@ -22,9 +22,17 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.sin;
 
-import java.lang.reflect.Field;//TODO: Add Javadocs!
-
-//TODO: Add Javadocs!
+/**
+ * A class that consists exclusively of static methods that returns or performs various operations on matrices.
+ * <p>
+ * This class currently supports the following:
+ * <ul>
+ * <li>{@code Matrix44D} - a 4x4 matrix represented by a {@code double[]}.</li>
+ * </ul>
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Matrix {
 	private Matrix() {
 		
@@ -217,7 +225,7 @@ public final class Matrix {
 	 * <p>
 	 * If either {@code matrix44D} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If either {@code matrix44D.length < 16} or {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44D.length < 16} or {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
 	 * If {@code matrix44D} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -231,7 +239,7 @@ public final class Matrix {
 	 * @param matrix44D a {@code double[]} that contains the matrix to invert
 	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
 	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the inverse of {@code matrix44D}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, either {@code matrix44D.length < 16} or {@code matrix44DResult.length < 16}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length < 16} or {@code matrix44DResult.length < 16}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix44D} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44D} or {@code matrix44DResult} are {@code null}
 	 */
@@ -393,18 +401,79 @@ public final class Matrix {
 		return matrix44DSet(matrix44DResult, element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, matrix44DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
-	public static double[] matrix44DRotate(final double[] vector3DU, final double[] vector3DV, final double[] vector3DW) {
-		return matrix44DRotate(vector3DU, vector3DV, vector3DW, matrix44D());
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate using {@code vector3DW}, {@code vector3DV} and {@code vector3DU}.
+	 * <p>
+	 * If either {@code vector3DW}, {@code vector3DV} or {@code vector3DU} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DW.length < 3}, {@code vector3DV.length < 3} or {@code vector3DU.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DRotateWVU(vector3DW, vector3DV, vector3DU, Matrix.matrix44D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DW a {@code double[]} that contains the W-vector of the rotation
+	 * @param vector3DV a {@code double[]} that contains the V-vector of the rotation
+	 * @param vector3DU a {@code double[]} that contains the U-vector of the rotation
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate using {@code vector3DW}, {@code vector3DV} and {@code vector3DU}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DW.length < 3}, {@code vector3DV.length < 3} or {@code vector3DU.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DW}, {@code vector3DV} or {@code vector3DU} are {@code null}
+	 */
+	public static double[] matrix44DRotateWVU(final double[] vector3DW, final double[] vector3DV, final double[] vector3DU) {
+		return matrix44DRotateWVU(vector3DW, vector3DV, vector3DU, matrix44D());
 	}
 	
-//	TODO: Add Javadocs!
-	public static double[] matrix44DRotate(final double[] vector3DU, final double[] vector3DV, final double[] vector3DW, final double[] matrix44DResult) {
-		return matrix44DRotate(vector3DU, vector3DV, vector3DW, matrix44DResult, 0, 0, 0, 0);
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate using {@code vector3DW}, {@code vector3DV} and {@code vector3DU}.
+	 * <p>
+	 * If either {@code vector3DW}, {@code vector3DV}, {@code vector3DU} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DW.length < 3}, {@code vector3DV.length < 3}, {@code vector3DU.length < 3} or {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DRotateWVU(vector3DW, vector3DV, vector3DU, matrix44DResult, 0, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DW a {@code double[]} that contains the W-vector of the rotation
+	 * @param vector3DV a {@code double[]} that contains the V-vector of the rotation
+	 * @param vector3DU a {@code double[]} that contains the U-vector of the rotation
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate using {@code vector3DW}, {@code vector3DV} and {@code vector3DU}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DW.length < 3}, {@code vector3DV.length < 3}, {@code vector3DU.length < 3} or {@code matrix44DResult.length < 16}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DW}, {@code vector3DV}, {@code vector3DU} or {@code matrix44DResult} are {@code null}
+	 */
+	public static double[] matrix44DRotateWVU(final double[] vector3DW, final double[] vector3DV, final double[] vector3DU, final double[] matrix44DResult) {
+		return matrix44DRotateWVU(vector3DW, vector3DV, vector3DU, matrix44DResult, 0, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
-	public static double[] matrix44DRotate(final double[] vector3DU, final double[] vector3DV, final double[] vector3DW, final double[] matrix44DResult, final int vector3DUOffset, final int vector3DVOffset, final int vector3DWOffset, final int matrix44DResultOffset) {
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate using {@code vector3DW}, {@code vector3DV} and {@code vector3DU}.
+	 * <p>
+	 * If either {@code vector3DW}, {@code vector3DV}, {@code vector3DU} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DW.length < vector3DWOffset + 3}, {@code vector3DWOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0}, {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0},
+	 * {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3DW a {@code double[]} that contains the W-vector of the rotation
+	 * @param vector3DV a {@code double[]} that contains the V-vector of the rotation
+	 * @param vector3DU a {@code double[]} that contains the U-vector of the rotation
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @param vector3DWOffset the offset in {@code vector3DW} to start at
+	 * @param vector3DVOffset the offset in {@code vector3DV} to start at
+	 * @param vector3DUOffset the offset in {@code vector3DU} to start at
+	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate using {@code vector3DW}, {@code vector3DV} and {@code vector3DU}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DW.length < vector3DWOffset + 3}, {@code vector3DWOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0},
+	 *                                        {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DW}, {@code vector3DV}, {@code vector3DU} or {@code matrix44DResult} are {@code null}
+	 */
+	public static double[] matrix44DRotateWVU(final double[] vector3DW, final double[] vector3DV, final double[] vector3DU, final double[] matrix44DResult, final int vector3DWOffset, final int vector3DVOffset, final int vector3DUOffset, final int matrix44DResultOffset) {
 		final double element11 = vector3DU[vector3DUOffset + 0];
 		final double element12 = vector3DV[vector3DVOffset + 0];
 		final double element13 = vector3DW[vector3DWOffset + 0];
@@ -428,17 +497,61 @@ public final class Matrix {
 		return matrix44DSet(matrix44DResult, element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, matrix44DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the X-axis.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DRotateX(angle, Matrix.matrix44D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle the angle to rotate, in radians
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the X-axis
+	 */
 	public static double[] matrix44DRotateX(final double angle) {
 		return matrix44DRotateX(angle, matrix44D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the X-axis.
+	 * <p>
+	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DRotateX(angle, matrix44DResult, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle the angle to rotate, in radians
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the X-axis
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < 16}
+	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
+	 */
 	public static double[] matrix44DRotateX(final double angle, final double[] matrix44DResult) {
 		return matrix44DRotateX(angle, matrix44DResult, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the X-axis.
+	 * <p>
+	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param angle the angle to rotate, in radians
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the X-axis
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
+	 */
 	public static double[] matrix44DRotateX(final double angle, final double[] matrix44DResult, final int matrix44DResultOffset) {
 		final double cos = cos(angle);
 		final double sin = sin(angle);
@@ -466,17 +579,61 @@ public final class Matrix {
 		return matrix44DSet(matrix44DResult, element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, matrix44DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Y-axis.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DRotateY(angle, Matrix.matrix44D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle the angle to rotate, in radians
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Y-axis
+	 */
 	public static double[] matrix44DRotateY(final double angle) {
 		return matrix44DRotateY(angle, matrix44D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Y-axis.
+	 * <p>
+	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DRotateY(angle, matrix44DResult, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle the angle to rotate, in radians
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Y-axis
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < 16}
+	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
+	 */
 	public static double[] matrix44DRotateY(final double angle, final double[] matrix44DResult) {
 		return matrix44DRotateY(angle, matrix44DResult, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Y-axis.
+	 * <p>
+	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param angle the angle to rotate, in radians
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Y-axis
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
+	 */
 	public static double[] matrix44DRotateY(final double angle, final double[] matrix44DResult, final int matrix44DResultOffset) {
 		final double cos = cos(angle);
 		final double sin = sin(angle);
@@ -504,17 +661,61 @@ public final class Matrix {
 		return matrix44DSet(matrix44DResult, element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, matrix44DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Z-axis.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DRotateZ(angle, Matrix.matrix44D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle the angle to rotate, in radians
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Z-axis
+	 */
 	public static double[] matrix44DRotateZ(final double angle) {
 		return matrix44DRotateZ(angle, matrix44D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Z-axis.
+	 * <p>
+	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DRotateZ(angle, matrix44DResult, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle the angle to rotate, in radians
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Z-axis
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < 16}
+	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
+	 */
 	public static double[] matrix44DRotateZ(final double angle, final double[] matrix44DResult) {
 		return matrix44DRotateZ(angle, matrix44DResult, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Z-axis.
+	 * <p>
+	 * If {@code matrix44DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param angle the angle to rotate, in radians
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate {@code angle} radians around the Z-axis
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code matrix44DResult} is {@code null}
+	 */
 	public static double[] matrix44DRotateZ(final double angle, final double[] matrix44DResult, final int matrix44DResultOffset) {
 		final double cos = cos(angle);
 		final double sin = sin(angle);
@@ -542,17 +743,68 @@ public final class Matrix {
 		return matrix44DSet(matrix44DResult, element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, matrix44DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to scale {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DScale(vector3D, Matrix.matrix44D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains the vector to scale
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to scale {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double[] matrix44DScale(final double[] vector3D) {
 		return matrix44DScale(vector3D, matrix44D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to scale {@code vector3D}.
+	 * <p>
+	 * If either {@code vector3D} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3} or {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DScale(vector3D, matrix44DResult, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains the vector to scale
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to scale {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3} or {@code matrix44DResult.length < 16}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3D} or {@code matrix44DResult} are {@code null}
+	 */
 	public static double[] matrix44DScale(final double[] vector3D, final double[] matrix44DResult) {
 		return matrix44DScale(vector3D, matrix44DResult, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to scale {@code vector3D}.
+	 * <p>
+	 * If either {@code vector3D} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains the vector to scale
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to scale {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3D} or {@code matrix44DResult} are {@code null}
+	 */
 	public static double[] matrix44DScale(final double[] vector3D, final double[] matrix44DResult, final int vector3DOffset, final int matrix44DResultOffset) {
 		final double element11 = vector3D[vector3DOffset + 0];
 		final double element12 = 0.0D;
@@ -673,17 +925,68 @@ public final class Matrix {
 		return matrix44DResult;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to translate {@code point3D}.
+	 * <p>
+	 * If {@code point3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DTranslate(point3D, Matrix.matrix44D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to translate
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to translate {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code point3D} is {@code null}
+	 */
 	public static double[] matrix44DTranslate(final double[] point3D) {
 		return matrix44DTranslate(point3D, matrix44D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to translate {@code point3D}.
+	 * <p>
+	 * If either {@code point3D} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3} or {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DTranslate(point3D, matrix44DResult, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to translate
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to translate {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3} or {@code matrix44DResult.length < 16}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code matrix44DResult} are {@code null}
+	 */
 	public static double[] matrix44DTranslate(final double[] point3D, final double[] matrix44DResult) {
 		return matrix44DTranslate(point3D, matrix44DResult, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to translate {@code point3D}.
+	 * <p>
+	 * If either {@code point3D} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to translate
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @param point3DOffset the offset in {@code point3D} to start at
+	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to translate {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code matrix44DResult} are {@code null}
+	 */
 	public static double[] matrix44DTranslate(final double[] point3D, final double[] matrix44DResult, final int point3DOffset, final int matrix44DResultOffset) {
 		final double element11 = 1.0D;
 		final double element12 = 0.0D;
@@ -708,17 +1011,68 @@ public final class Matrix {
 		return matrix44DSet(matrix44DResult, element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, matrix44DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to the transpose of {@code matrix44D}.
+	 * <p>
+	 * If {@code matrix44D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44D.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DTranspose(matrix44D, Matrix.matrix44D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param matrix44D a {@code double[]} that contains the matrix to transpose
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the transpose of {@code matrix44D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length < 16}
+	 * @throws NullPointerException thrown if, and only if, {@code matrix44D} is {@code null}
+	 */
 	public static double[] matrix44DTranspose(final double[] matrix44D) {
 		return matrix44DTranspose(matrix44D, matrix44D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to the transpose of {@code matrix44D}.
+	 * <p>
+	 * If either {@code matrix44D} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44D.length < 16} or {@code matrix44DResult.length < 16}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix.matrix44DTranspose(matrix44D, matrix44DResult, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param matrix44D a {@code double[]} that contains the matrix to transpose
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the transpose of {@code matrix44D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length < 16} or {@code matrix44DResult.length < 16}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44D} or {@code matrix44DResult} are {@code null}
+	 */
 	public static double[] matrix44DTranspose(final double[] matrix44D, final double[] matrix44DResult) {
 		return matrix44DTranspose(matrix44D, matrix44DResult, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a matrix with four rows and four columns and is set to the transpose of {@code matrix44D}.
+	 * <p>
+	 * If either {@code matrix44D} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44D.length < matrix44DOffset + 16}, {@code matrix44DOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param matrix44D a {@code double[]} that contains the matrix to transpose
+	 * @param matrix44DResult a {@code double[]} that contains the matrix to return
+	 * @param matrix44DOffset the offset in {@code matrix44D} to start at
+	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
+	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the transpose of {@code matrix44D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44D.length < matrix44DOffset + 16}, {@code matrix44DOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44D} or {@code matrix44DResult} are {@code null}
+	 */
 	public static double[] matrix44DTranspose(final double[] matrix44D, final double[] matrix44DResult, final int matrix44DOffset, final int matrix44DResultOffset) {
 		final double element11 = matrix44D[matrix44DOffset +  0];
 		final double element12 = matrix44D[matrix44DOffset +  4];

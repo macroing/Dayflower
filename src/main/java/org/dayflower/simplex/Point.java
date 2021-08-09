@@ -290,17 +290,74 @@ public final class Point {
 		return point3DResult;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed by {@code matrix44DLHS}.
+	 * <p>
+	 * If either {@code matrix44DLHS} or {@code point3DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DLHS.length < 16} or {@code point3DRHS.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DTransformMatrix44D(matrix44DLHS, point3DRHS, Point.point3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
+	 * @param point3DRHS a {@code double[]} that contains the point on the right-hand side of the transformation
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed by {@code matrix44DLHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < 16} or {@code point3DRHS.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS} or {@code point3DRHS} are {@code null}
+	 */
 	public static double[] point3DTransformMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS) {
 		return point3DTransformMatrix44D(matrix44DLHS, point3DRHS, point3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed by {@code matrix44DLHS}.
+	 * <p>
+	 * If either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DLHS.length < 16}, {@code point3DRHS.length < 3} or {@code point3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DTransformMatrix44D(matrix44DLHS, point3DRHS, point3DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
+	 * @param point3DRHS a {@code double[]} that contains the point on the right-hand side of the transformation
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed by {@code matrix44DLHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < 16}, {@code point3DRHS.length < 3} or {@code point3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DTransformMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult) {
 		return point3DTransformMatrix44D(matrix44DLHS, point3DRHS, point3DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed by {@code matrix44DLHS}.
+	 * <p>
+	 * If either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or
+	 * {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
+	 * @param point3DRHS a {@code double[]} that contains the point on the right-hand side of the transformation
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @param matrix44DLHSOffset the offset in {@code matrix44DLHS} to start at
+	 * @param point3DRHSOffset the offset in {@code point3DRHS} to start at
+	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed by {@code matrix44DLHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0},
+	 *                                        {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DTransformMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult, final int matrix44DLHSOffset, final int point3DRHSOffset, final int point3DResultOffset) {
 		final double component1 = matrix44DLHS[matrix44DLHSOffset + 0] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 1] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  2] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset +  3];
 		final double component2 = matrix44DLHS[matrix44DLHSOffset + 4] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 5] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  6] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset +  7];
@@ -309,17 +366,74 @@ public final class Point {
 		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed and divided by {@code matrix44DLHS}.
+	 * <p>
+	 * If either {@code matrix44DLHS} or {@code point3DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DLHS.length < 16} or {@code point3DRHS.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DTransformAndDivideMatrix44D(matrix44DLHS, point3DRHS, Point.point3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
+	 * @param point3DRHS a {@code double[]} that contains the point on the right-hand side of the transformation
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed and divided by {@code matrix44DLHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < 16} or {@code point3DRHS.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS} or {@code point3DRHS} are {@code null}
+	 */
 	public static double[] point3DTransformAndDivideMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS) {
 		return point3DTransformAndDivideMatrix44D(matrix44DLHS, point3DRHS, point3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed and divided by {@code matrix44DLHS}.
+	 * <p>
+	 * If either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DLHS.length < 16}, {@code point3DRHS.length < 3} or {@code point3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DTransformAndDivideMatrix44D(matrix44DLHS, point3DRHS, point3DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
+	 * @param point3DRHS a {@code double[]} that contains the point on the right-hand side of the transformation
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed and divided by {@code matrix44DLHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < 16}, {@code point3DRHS.length < 3} or {@code point3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DTransformAndDivideMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult) {
 		return point3DTransformAndDivideMatrix44D(matrix44DLHS, point3DRHS, point3DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed and divided by {@code matrix44DLHS}.
+	 * <p>
+	 * If either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or
+	 * {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
+	 * @param point3DRHS a {@code double[]} that contains the point on the right-hand side of the transformation
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @param matrix44DLHSOffset the offset in {@code matrix44DLHS} to start at
+	 * @param point3DRHSOffset the offset in {@code point3DRHS} to start at
+	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed and divided by {@code matrix44DLHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0},
+	 *                                        {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DTransformAndDivideMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult, final int matrix44DLHSOffset, final int point3DRHSOffset, final int point3DResultOffset) {
 		final double component1 = matrix44DLHS[matrix44DLHSOffset +  0] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset +  1] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  2] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset +  3];
 		final double component2 = matrix44DLHS[matrix44DLHSOffset +  4] * point3DRHS[point3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset +  5] * point3DRHS[point3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  6] * point3DRHS[point3DRHSOffset + 2] + matrix44DLHS[matrix44DLHSOffset +  7];

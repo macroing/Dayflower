@@ -1,3 +1,8 @@
+2021-08-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add Javadocs to the Simplex API.
+	* CHANGE:	Refactor the Simplex API.
+
 2021-08-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Simplex API.

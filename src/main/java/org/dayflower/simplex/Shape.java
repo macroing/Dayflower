@@ -19,6 +19,10 @@
 package org.dayflower.simplex;
 
 import static org.dayflower.simplex.Point.point3DAdd;
+import static org.dayflower.simplex.Ray.ray3DGetDirection;
+import static org.dayflower.simplex.Ray.ray3DGetOrigin;
+import static org.dayflower.simplex.Ray.ray3DGetTMaximum;
+import static org.dayflower.simplex.Ray.ray3DGetTMinimum;
 import static org.dayflower.simplex.Vector.vector3DCrossProduct;
 import static org.dayflower.simplex.Vector.vector3DDirection;
 import static org.dayflower.simplex.Vector.vector3DDotProduct;
@@ -44,12 +48,20 @@ public final class Shape {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public static double intersectionRayCone(final double[] rayOrigin, final double[] rayDirection, final double rayTMinimum, final double rayTMaximum, final double conePhiMax, final double coneRadius, final double coneZMax) {
+//	TODO: Refactor!
+	public static double intersectionRayCone(final double[] ray3D, final double conePhiMax, final double coneRadius, final double coneZMax) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D);
+		final double tMaximum = ray3DGetTMaximum(ray3D);
+		
 		final double k = (coneRadius / coneZMax) * (coneRadius / coneZMax);
 		
-		final double a = rayDirection[0] * rayDirection[0] + rayDirection[1] * rayDirection[1] - k * rayDirection[2] * rayDirection[2];
-		final double b = 2.0D * (rayDirection[0] * rayOrigin[0] + rayDirection[1] * rayOrigin[1] - k * rayDirection[2] * (rayOrigin[2] - coneZMax));
-		final double c = rayOrigin[0] * rayOrigin[0] + rayOrigin[1] * rayOrigin[1] - k * (rayOrigin[2] - coneZMax) * (rayOrigin[2] - coneZMax);
+		final double a = vector3DDirection[0] * vector3DDirection[0] + vector3DDirection[1] * vector3DDirection[1] - k * vector3DDirection[2] * vector3DDirection[2];
+		final double b = 2.0D * (vector3DDirection[0] * point3DOrigin[0] + vector3DDirection[1] * point3DOrigin[1] - k * vector3DDirection[2] * (point3DOrigin[2] - coneZMax));
+		final double c = point3DOrigin[0] * point3DOrigin[0] + point3DOrigin[1] * point3DOrigin[1] - k * (point3DOrigin[2] - coneZMax) * (point3DOrigin[2] - coneZMax);
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -60,12 +72,12 @@ public final class Shape {
 				return NaN;
 			}
 			
-			if(t > rayTMinimum && t < rayTMaximum) {
-				final double[] point = point3DAdd(rayOrigin, rayDirection, t);
+			if(t > tMinimum && t < tMaximum) {
+				final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
 				
-				final double phi = getOrAdd(atan2(point[1], point[0]), 0.0D, PI_MULTIPLIED_BY_2);
+				final double phi = getOrAdd(atan2(point3D[1], point3D[0]), 0.0D, PI_MULTIPLIED_BY_2);
 				
-				if(point[2] >= 0.0D && point[2] <= coneZMax && phi <= conePhiMax) {
+				if(point3D[2] >= 0.0D && point3D[2] <= coneZMax && phi <= conePhiMax) {
 					return t;
 				}
 			}
@@ -75,10 +87,18 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
-	public static double intersectionRayCylinder(final double[] rayOrigin, final double[] rayDirection, final double rayTMinimum, final double rayTMaximum, final double cylinderPhiMax, final double cylinderRadius, final double cylinderZMax, final double cylinderZMin) {
-		final double a = rayDirection[0] * rayDirection[0] + rayDirection[1] * rayDirection[1];
-		final double b = 2.0D * (rayDirection[0] * rayOrigin[0] + rayDirection[1] * rayOrigin[1]);
-		final double c = rayOrigin[0] * rayOrigin[0] + rayOrigin[1] * rayOrigin[1] - cylinderRadius * cylinderRadius;
+//	TODO: Refactor!
+	public static double intersectionRayCylinder(final double[] ray3D, final double cylinderPhiMax, final double cylinderRadius, final double cylinderZMax, final double cylinderZMin) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D);
+		final double tMaximum = ray3DGetTMaximum(ray3D);
+		
+		final double a = vector3DDirection[0] * vector3DDirection[0] + vector3DDirection[1] * vector3DDirection[1];
+		final double b = 2.0D * (vector3DDirection[0] * point3DOrigin[0] + vector3DDirection[1] * point3DOrigin[1]);
+		final double c = point3DOrigin[0] * point3DOrigin[0] + point3DOrigin[1] * point3DOrigin[1] - cylinderRadius * cylinderRadius;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -89,13 +109,13 @@ public final class Shape {
 				return NaN;
 			}
 			
-			if(t > rayTMinimum && t < rayTMaximum) {
-				final double[] point = point3DAdd(rayOrigin, rayDirection, t);
+			if(t > tMinimum && t < tMaximum) {
+				final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
 				
-				final double radius = sqrt(point[0] * point[0] + point[1] * point[1]);
-				final double phi = getOrAdd(atan2(point[1] * (cylinderRadius / radius), point[0] * (cylinderRadius / radius)), 0.0D, PI_MULTIPLIED_BY_2);
+				final double radius = sqrt(point3D[0] * point3D[0] + point3D[1] * point3D[1]);
+				final double phi = getOrAdd(atan2(point3D[1] * (cylinderRadius / radius), point3D[0] * (cylinderRadius / radius)), 0.0D, PI_MULTIPLIED_BY_2);
 				
-				if(point[2] >= cylinderZMin && point[2] <= cylinderZMax && phi <= cylinderPhiMax) {
+				if(point3D[2] >= cylinderZMin && point3D[2] <= cylinderZMax && phi <= cylinderPhiMax) {
 					return t;
 				}
 			}
@@ -105,26 +125,34 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
-	public static double intersectionRayDisk(final double[] rayOrigin, final double[] rayDirection, final double rayTMinimum, final double rayTMaximum, final double diskPhiMax, final double diskRadiusInner, final double diskRadiusOuter, final double diskZMax) {
-		if(isZero(rayDirection[2])) {
+//	TODO: Refactor!
+	public static double intersectionRayDisk(final double[] ray3D, final double diskPhiMax, final double diskRadiusInner, final double diskRadiusOuter, final double diskZMax) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D);
+		final double tMaximum = ray3DGetTMaximum(ray3D);
+		
+		if(isZero(vector3DDirection[2])) {
 			return NaN;
 		}
 		
-		final double t = (diskZMax - rayOrigin[2]) / rayDirection[2];
+		final double t = (diskZMax - point3DOrigin[2]) / vector3DDirection[2];
 		
-		if(t <= rayTMinimum || t >= rayTMaximum) {
+		if(t <= tMinimum || t >= tMaximum) {
 			return NaN;
 		}
 		
-		final double[] point = point3DAdd(rayOrigin, rayDirection, t);
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
 		
-		final double distanceSquared = point[0] * point[0] + point[1] * point[1];
+		final double distanceSquared = point3D[0] * point3D[0] + point3D[1] * point3D[1];
 		
 		if(distanceSquared > diskRadiusOuter * diskRadiusOuter || distanceSquared < diskRadiusInner * diskRadiusInner) {
 			return NaN;
 		}
 		
-		final double phi = getOrAdd(atan2(point[1], point[0]), 0.0D, PI_MULTIPLIED_BY_2);
+		final double phi = getOrAdd(atan2(point3D[1], point3D[0]), 0.0D, PI_MULTIPLIED_BY_2);
 		
 		if(phi > diskPhiMax) {
 			return NaN;
@@ -134,12 +162,20 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
-	public static double intersectionRayParaboloid(final double[] rayOrigin, final double[] rayDirection, final double rayTMinimum, final double rayTMaximum, final double paraboloidPhiMax, final double paraboloidRadius, final double paraboloidZMax, final double paraboloidZMin) {
+//	TODO: Refactor!
+	public static double intersectionRayParaboloid(final double[] ray3D, final double paraboloidPhiMax, final double paraboloidRadius, final double paraboloidZMax, final double paraboloidZMin) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D);
+		final double tMaximum = ray3DGetTMaximum(ray3D);
+		
 		final double k = paraboloidZMax / (paraboloidRadius * paraboloidRadius);
 		
-		final double a = k * (rayDirection[0] * rayDirection[0] + rayDirection[1] * rayDirection[1]);
-		final double b = 2.0D * k * (rayDirection[0] * rayOrigin[0] + rayDirection[1] * rayOrigin[1]) - rayDirection[2];
-		final double c = k * (rayOrigin[0] * rayOrigin[0] + rayOrigin[1] * rayOrigin[1]) - rayOrigin[2];
+		final double a = k * (vector3DDirection[0] * vector3DDirection[0] + vector3DDirection[1] * vector3DDirection[1]);
+		final double b = 2.0D * k * (vector3DDirection[0] * point3DOrigin[0] + vector3DDirection[1] * point3DOrigin[1]) - vector3DDirection[2];
+		final double c = k * (point3DOrigin[0] * point3DOrigin[0] + point3DOrigin[1] * point3DOrigin[1]) - point3DOrigin[2];
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -150,8 +186,8 @@ public final class Shape {
 				return NaN;
 			}
 			
-			if(t > rayTMinimum && t < rayTMaximum) {
-				final double[] point = point3DAdd(rayOrigin, rayDirection, t);
+			if(t > tMinimum && t < tMaximum) {
+				final double[] point = point3DAdd(point3DOrigin, vector3DDirection, t);
 				
 				final double phi = getOrAdd(atan2(point[1], point[0]), 0.0D, PI_MULTIPLIED_BY_2);
 				
@@ -165,7 +201,15 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
-	public static double intersectionRayPlane(final double[] rayOrigin, final double[] rayDirection, final double rayTMinimum, final double rayTMaximum, final double[] planeA, final double[] planeB, final double[] planeC) {
+//	TODO: Refactor!
+	public static double intersectionRayPlane(final double[] ray3D, final double[] planeA, final double[] planeB, final double[] planeC) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D);
+		final double tMaximum = ray3DGetTMaximum(ray3D);
+		
 		final double[] planeAB = vector3DDirection(planeA, planeB);
 		final double[] planeABNormalized = vector3DNormalize(planeAB);
 		
@@ -174,17 +218,17 @@ public final class Shape {
 		
 		final double[] planeSurfaceNormal = vector3DCrossProduct(planeABNormalized, planeACNormalized);
 		
-		final double planeSurfaceNormalDotRayDirection = vector3DDotProduct(planeSurfaceNormal, rayDirection);
+		final double planeSurfaceNormalDotRayDirection = vector3DDotProduct(planeSurfaceNormal, vector3DDirection);
 		
 		if(isZero(planeSurfaceNormalDotRayDirection)) {
 			return NaN;
 		}
 		
-		final double[] rayOriginToPlaneA = vector3DDirection(rayOrigin, planeA);
+		final double[] rayOriginToPlaneA = vector3DDirection(point3DOrigin, planeA);
 		
 		final double t = vector3DDotProduct(rayOriginToPlaneA, planeSurfaceNormal) / planeSurfaceNormalDotRayDirection;
 		
-		if(t > rayTMinimum && t < rayTMaximum) {
+		if(t > tMinimum && t < tMaximum) {
 			return t;
 		}
 		
@@ -192,11 +236,19 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
-	public static double intersectionRaySphere(final double[] rayOrigin, final double[] rayDirection, final double rayTMinimum, final double rayTMaximum, final double[] sphereCenter, final double sphereRadius) {
-		final double[] sphereCenterToRayOrigin = vector3DDirection(sphereCenter, rayOrigin);
+//	TODO: Refactor!
+	public static double intersectionRaySphere(final double[] ray3D, final double[] sphereCenter, final double sphereRadius) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
 		
-		final double a = vector3DLengthSquared(rayDirection);
-		final double b = vector3DDotProduct(sphereCenterToRayOrigin, rayDirection) * 2.0D;
+		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D);
+		final double tMaximum = ray3DGetTMaximum(ray3D);
+		
+		final double[] sphereCenterToRayOrigin = vector3DDirection(sphereCenter, point3DOrigin);
+		
+		final double a = vector3DLengthSquared(vector3DDirection);
+		final double b = vector3DDotProduct(sphereCenterToRayOrigin, vector3DDirection) * 2.0D;
 		final double c = vector3DLengthSquared(sphereCenterToRayOrigin) - sphereRadius * sphereRadius;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
@@ -204,11 +256,11 @@ public final class Shape {
 		final double t0 = ts[0];
 		final double t1 = ts[1];
 		
-		if(!isNaN(t0) && t0 > rayTMinimum && t0 < rayTMaximum) {
+		if(!isNaN(t0) && t0 > tMinimum && t0 < tMaximum) {
 			return t0;
 		}
 		
-		if(!isNaN(t1) && t1 > rayTMinimum && t1 < rayTMaximum) {
+		if(!isNaN(t1) && t1 > tMinimum && t1 < tMaximum) {
 			return t1;
 		}
 		
@@ -216,22 +268,30 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
-	public static double intersectionRayTriangle(final double[] rayOrigin, final double[] rayDirection, final double rayTMinimum, final double rayTMaximum, final double[] triangleA, final double[] triangleB, final double[] triangleC) {
+//	TODO: Refactor!
+	public static double intersectionRayTriangle(final double[] ray3D, final double[] triangleA, final double[] triangleB, final double[] triangleC) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D);
+		final double tMaximum = ray3DGetTMaximum(ray3D);
+		
 		final double[] triangleAB = vector3DDirection(triangleA, triangleB);
 		final double[] triangleCA = vector3DDirection(triangleC, triangleA);
 		final double[] triangleSurfaceNormal = vector3DCrossProduct(triangleAB, triangleCA);
 		
-		final double determinant = vector3DDotProduct(rayDirection, triangleSurfaceNormal);
+		final double determinant = vector3DDotProduct(vector3DDirection, triangleSurfaceNormal);
 		
-		final double[] rayOriginToTriangleA = vector3DDirection(rayOrigin, triangleA);
+		final double[] rayOriginToTriangleA = vector3DDirection(point3DOrigin, triangleA);
 		
 		final double t = vector3DDotProduct(triangleSurfaceNormal, rayOriginToTriangleA) / determinant;
 		
-		if(t <= rayTMinimum || t >= rayTMaximum) {
+		if(t <= tMinimum || t >= tMaximum) {
 			return NaN;
 		}
 		
-		final double[] direction = vector3DCrossProduct(rayOriginToTriangleA, rayDirection);
+		final double[] direction = vector3DCrossProduct(rayOriginToTriangleA, vector3DDirection);
 		
 		final double uScaled = vector3DDotProduct(direction, triangleCA);
 		final double u = uScaled / determinant;

@@ -26,8 +26,6 @@ import static org.dayflower.utility.Doubles.random;
 import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.sqrt;
 
-import java.lang.reflect.Field;//TODO: Add Javadocs!
-
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on points.
  * <p>
@@ -74,22 +72,80 @@ public final class Point {
 		return new double[] {component1, component2};
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with two components and is set to a disk sample with uniform distribution.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DSampleDiskUniformDistribution(Doubles.random(), Doubles.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code double[]} that contains a point with two components and is set to a disk sample with uniform distribution
+	 */
 	public static double[] point2DSampleDiskUniformDistribution() {
 		return point2DSampleDiskUniformDistribution(random(), random());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with two components and is set to a disk sample with uniform distribution.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DSampleDiskUniformDistribution(u, v, Point.point2D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @return a {@code double[]} that contains a point with two components and is set to a disk sample with uniform distribution
+	 */
 	public static double[] point2DSampleDiskUniformDistribution(final double u, final double v) {
 		return point2DSampleDiskUniformDistribution(u, v, point2D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with two components and is set to a disk sample with uniform distribution.
+	 * <p>
+	 * If {@code point2DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DResult.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DSampleDiskUniformDistribution(u, v, point2DResult, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param point2DResult a {@code double[]} that contains the point to return
+	 * @return a {@code double[]} that contains a point with two components and is set to a disk sample with uniform distribution
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DResult.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code point2DResult} is {@code null}
+	 */
 	public static double[] point2DSampleDiskUniformDistribution(final double u, final double v, final double[] point2DResult) {
 		return point2DSampleDiskUniformDistribution(u, v, point2DResult, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with two components and is set to a disk sample with uniform distribution.
+	 * <p>
+	 * If {@code point2DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DResult.length < point2DResultOffset + 2} or {@code point2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param point2DResult a {@code double[]} that contains the point to return
+	 * @param point2DResultOffset the offset in {@code point2DResult} to start at
+	 * @return a {@code double[]} that contains a point with two components and is set to a disk sample with uniform distribution
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DResult.length < point2DResultOffset + 2} or {@code point2DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code point2DResult} is {@code null}
+	 */
 	public static double[] point2DSampleDiskUniformDistribution(final double u, final double v, final double[] point2DResult, final int point2DResultOffset) {
 		final double r = sqrt(u);
 		final double theta = PI_MULTIPLIED_BY_2 * v;
@@ -179,17 +235,74 @@ public final class Point {
 		return new double[] {component1, component2, component3};
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D}.
+	 * <p>
+	 * If either {@code point3D} or {@code vector3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3} or {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DAdd(point3D, vector3D, Point.point3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains a point with three components
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3} or {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code vector3D} are {@code null}
+	 */
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D) {
 		return point3DAdd(point3D, vector3D, point3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D}.
+	 * <p>
+	 * If either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3}, {@code vector3D.length < 3} or {@code point3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DAdd(point3D, vector3D, point3DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains a point with three components
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3}, {@code vector3D.length < 3} or {@code point3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double[] point3DResult) {
 		return point3DAdd(point3D, vector3D, point3DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D}.
+	 * <p>
+	 * If either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an
+	 * {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3D a {@code double[]} that contains a point with three components
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @param point3DOffset the offset in {@code point3D} to start at
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0},
+	 *                                        {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double[] point3DResult, final int point3DOffset, final int vector3DOffset, final int point3DResultOffset) {
 		final double component1 = point3D[point3DOffset + 0] + vector3D[vector3DOffset + 0];
 		final double component2 = point3D[point3DOffset + 1] + vector3D[vector3DOffset + 1];
@@ -198,17 +311,77 @@ public final class Point {
 		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D * scalar}.
+	 * <p>
+	 * If either {@code point3D} or {@code vector3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3} or {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DAdd(point3D, vector3D, scalar, Point.point3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains a point with three components
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param scalar a {@code double} scalar value
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D * scalar}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3} or {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code vector3D} are {@code null}
+	 */
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double scalar) {
 		return point3DAdd(point3D, vector3D, scalar, point3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D * scalar}.
+	 * <p>
+	 * If either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3}, {@code vector3D.length < 3} or {@code point3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DAdd(point3D, vector3D, scalar, point3DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains a point with three components
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param scalar a {@code double} scalar value
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D * scalar}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3}, {@code vector3D.length < 3} or {@code point3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double scalar, final double[] point3DResult) {
 		return point3DAdd(point3D, vector3D, scalar, point3DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D * scalar}.
+	 * <p>
+	 * If either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an
+	 * {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3D a {@code double[]} that contains a point with three components
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param scalar a {@code double} scalar value
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @param point3DOffset the offset in {@code point3D} to start at
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
+	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D * scalar}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0},
+	 *                                        {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double scalar, final double[] point3DResult, final int point3DOffset, final int vector3DOffset, final int point3DResultOffset) {
 		final double component1 = point3D[point3DOffset + 0] + vector3D[vector3DOffset + 0] * scalar;
 		final double component2 = point3D[point3DOffset + 1] + vector3D[vector3DOffset + 1] * scalar;
@@ -217,17 +390,68 @@ public final class Point {
 		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the component values of the vector {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DFromVector3D(vector3D, Point.point3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return a {@code double[]} that contains a point with three components and is set to the component values of the vector {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double[] point3DFromVector3D(final double[] vector3D) {
 		return point3DFromVector3D(vector3D, point3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the component values of the vector {@code vector3D}.
+	 * <p>
+	 * If either {@code vector3D} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3} or {@code point3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point3DFromVector3D(vector3D, point3DResult, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @return a {@code double[]} that contains a point with three components and is set to the component values of the vector {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3} or {@code point3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3D} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DFromVector3D(final double[] vector3D, final double[] point3DResult) {
 		return point3DFromVector3D(vector3D, point3DResult, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a point with three components and is set to the component values of the vector {@code vector3D}.
+	 * <p>
+	 * If either {@code vector3D} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param point3DResult a {@code double[]} that contains the point to return
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
+	 * @return a {@code double[]} that contains a point with three components and is set to the component values of the vector {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3D} or {@code point3DResult} are {@code null}
+	 */
 	public static double[] point3DFromVector3D(final double[] vector3D, final double[] point3DResult, final int vector3DOffset, final int point3DResultOffset) {
 		final double component1 = vector3D[vector3DOffset + 0];
 		final double component2 = vector3D[vector3DOffset + 1];
@@ -286,6 +510,31 @@ public final class Point {
 		point3DResult[point3DResultOffset + 0] = component1;
 		point3DResult[point3DResultOffset + 1] = component2;
 		point3DResult[point3DResultOffset + 2] = component3;
+		
+		return point3DResult;
+	}
+	
+	/**
+	 * Sets the component values of the point contained in {@code point3DResult} at offset {@code point3DResultOffset}.
+	 * <p>
+	 * Returns {@code point3DResult}.
+	 * <p>
+	 * If either {@code point3DResult} or {@code point3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3DResult.length < point3DResultOffset + 3}, {@code point3DResultOffset < 0}, {@code point3D.length < point3DOffset + 3} or {@code point3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3DResult a {@code double[]} that contains a point with three components
+	 * @param point3D a {@code double[]} that contains a point component values to set
+	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
+	 * @param point3DOffset the offset in {@code point3D} to start at
+	 * @return {@code point3DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DResult.length < point3DResultOffset + 3}, {@code point3DResultOffset < 0}, {@code point3D.length < point3DOffset + 3} or {@code point3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3DResult} or {@code point3D} are {@code null}
+	 */
+	public static double[] point3DSet(final double[] point3DResult, final double[] point3D, final int point3DResultOffset, final int point3DOffset) {
+		point3DResult[point3DResultOffset + 0] = point3D[point3DOffset + 0];
+		point3DResult[point3DResultOffset + 1] = point3D[point3DOffset + 1];
+		point3DResult[point3DResultOffset + 2] = point3D[point3DOffset + 2];
 		
 		return point3DResult;
 	}

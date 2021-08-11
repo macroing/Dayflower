@@ -162,6 +162,7 @@ public final class Line2F implements Shape2F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Line2F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+	@Override
 	public boolean contains(final Point2F point) {
 		final float aX = this.a.getX();
 		final float aY = this.a.getY();

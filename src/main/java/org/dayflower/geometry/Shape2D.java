@@ -27,5 +27,14 @@ package org.dayflower.geometry;
  * @author J&#246;rgen Lundgren
  */
 public interface Shape2D extends Shape {
-	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Shape2D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Shape2D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	boolean contains(final Point2D point);
 }

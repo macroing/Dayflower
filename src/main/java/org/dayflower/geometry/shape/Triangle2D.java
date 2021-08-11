@@ -167,6 +167,27 @@ public final class Triangle2D implements Shape2D {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Triangle2D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Triangle2D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	@Override
+	public boolean contains(final Point2D point) {
+		final double signA = (point.getX() - this.b.getX()) * (this.a.getY() - this.b.getY()) - (this.a.getX() - this.b.getX()) * (point.getY() - this.b.getY());
+		final double signB = (point.getX() - this.c.getX()) * (this.b.getY() - this.c.getY()) - (this.b.getX() - this.c.getX()) * (point.getY() - this.c.getY());
+		final double signC = (point.getX() - this.a.getX()) * (this.c.getY() - this.a.getY()) - (this.c.getX() - this.a.getX()) * (point.getY() - this.a.getY());
+		
+		final boolean hasNegativeSign = signA < 0.0D || signB < 0.0D || signC < 0.0D;
+		final boolean hasPositiveSign = signA > 0.0D || signB > 0.0D || signC > 0.0D;
+		
+		return !(hasNegativeSign && hasPositiveSign);
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Triangle2D} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Triangle2D}, and their respective values are equal, {@code false} otherwise.

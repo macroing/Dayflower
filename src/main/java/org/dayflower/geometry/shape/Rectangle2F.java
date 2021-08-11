@@ -225,6 +225,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle2F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+	@Override
 	public boolean contains(final Point2F point) {
 		return point.getX() >= this.a.getX() && point.getX() <= this.c.getX() && point.getY() >= this.a.getY() && point.getY() <= this.c.getY();
 	}

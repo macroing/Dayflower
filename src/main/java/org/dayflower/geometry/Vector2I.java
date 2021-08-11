@@ -182,6 +182,15 @@ public final class Vector2I {
 	}
 	
 	/**
+	 * Returns the squared length of this {@code Vector2I} instance.
+	 * 
+	 * @return the squared length of this {@code Vector2I} instance
+	 */
+	public int lengthSquared() {
+		return this.component1 * this.component1 + this.component2 * this.component2;
+	}
+	
+	/**
 	 * Returns a {@code int[]} representation of this {@code Vector2I} instance.
 	 * 
 	 * @return a {@code int[]} representation of this {@code Vector2I} instance

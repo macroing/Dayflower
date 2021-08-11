@@ -162,6 +162,7 @@ public final class Line2D implements Shape2D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Line2D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+	@Override
 	public boolean contains(final Point2D point) {
 		final double aX = this.a.getX();
 		final double aY = this.a.getY();

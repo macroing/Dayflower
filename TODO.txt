@@ -1,3 +1,32 @@
+Geometry API:
+
+	* ADD:		Add method contains(Point3D) to Shape3D.
+	* ADD:		Add method contains(Point3F) to Shape3F.
+
+Geometry Shape API:
+
+	* ADD:		Line3FReader (LineSegment3FReader).
+	* ADD:		Line3D (LineSegment3D).
+	* ADD:		Line3DReader (LineSegment3DReader).
+	* ADD:		Polygon2D.
+	* ADD:		Polygon2DReader.
+	* ADD:		Polygon2F.
+	* ADD:		Polygon2FReader.
+	* ADD:		Polygon3D.
+	* ADD:		Polygon3DReader.
+	* ADD:		Polygon3FReader.
+	* ADD:		TriangleMesh3DReader.
+	* ADD:		TriangleMesh3FReader.
+	* CHANGE:	Implement Polygon3F.
+	* CHANGE:	Implement Line3F (LineSegment3F).
+	* CHANGE:	Change name from Line2D to LineSegment2D.
+	* CHANGE:	Change name from Line2DReader to LineSegment2DReader.
+	* CHANGE:	Change name from Line2F to LineSegment2F.
+	* CHANGE:	Change name from Line2FReader to LineSegment2FReader.
+	* CHANGE:	Change name from Line2I to LineSegment2I.
+	* CHANGE:	Change name from Line2IReader to LineSegment2IReader.
+	* CHANGE:	Change name from Line3F to LineSegment3F.
+
 JavaFX Application API:
 
 	* ADD:		Add support for FileParameter in the ParameterLoader implementation.

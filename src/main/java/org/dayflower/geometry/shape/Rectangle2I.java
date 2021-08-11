@@ -253,6 +253,7 @@ public final class Rectangle2I implements Shape2I {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+	@Override
 	public boolean contains(final Point2I point) {
 		return point.getX() >= this.a.getX() && point.getX() <= this.c.getX() && point.getY() >= this.a.getY() && point.getY() <= this.c.getY();
 	}

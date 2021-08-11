@@ -1,5 +1,9 @@
 2021-08-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the method contains(Point2D) to the interface Shape2D and the classes Circle2D and Triangle2D.
+	* ADD:		Add the method contains(Point2F) to the interface Shape2F and the classes Circle2F and Triangle2F.
+	* ADD:		Add the method contains(Point2I) to the interface Shape2I and the classes Circle2I and Triangle2I.
+	* ADD:		Add the method lengthSquared() to the Vector2I class.
 	* ADD:		Add Javadocs to the Simplex API.
 
 2021-08-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>

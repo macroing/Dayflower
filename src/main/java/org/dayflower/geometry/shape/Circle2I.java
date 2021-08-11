@@ -29,6 +29,7 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Shape2I;
+import org.dayflower.geometry.Vector2I;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
@@ -354,6 +355,20 @@ public final class Circle2I implements Shape2I {
 		} catch(final RuntimeException e) {
 			throw new NodeTraversalException(e);
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Circle2I} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2I} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Circle2I} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	@Override
+	public boolean contains(final Point2I point) {
+		return Vector2I.direction(this.center, point).lengthSquared() <= this.radius * this.radius;
 	}
 	
 	/**

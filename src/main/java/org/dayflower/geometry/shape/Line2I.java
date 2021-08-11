@@ -161,6 +161,7 @@ public final class Line2I implements Shape2I {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Line2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+	@Override
 	public boolean contains(final Point2I point) {
 		final int aX = this.a.getX();
 		final int aY = this.a.getY();

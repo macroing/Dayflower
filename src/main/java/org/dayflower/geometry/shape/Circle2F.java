@@ -27,6 +27,7 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Shape2F;
+import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
@@ -183,6 +184,20 @@ public final class Circle2F implements Shape2F {
 		} catch(final RuntimeException e) {
 			throw new NodeTraversalException(e);
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Circle2F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Circle2F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	@Override
+	public boolean contains(final Point2F point) {
+		return Vector2F.direction(this.center, point).lengthSquared() <= this.radius * this.radius;
 	}
 	
 	/**

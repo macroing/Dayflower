@@ -40,32 +40,125 @@ public final class Vector {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the dot product between the vectors contained in {@code vector3DLHS} and {@code vector3DRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < 3} or {@code vector3DRHS.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DDotProduct(vector3DLHS, vector3DRHS, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the dot product
+	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the dot product
+	 * @return a {@code double} that contains the dot product between the vectors contained in {@code vector3DLHS} and {@code vector3DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < 3} or {@code vector3DRHS.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}
+	 */
 	public static double vector3DDotProduct(final double[] vector3DLHS, final double[] vector3DRHS) {
 		return vector3DDotProduct(vector3DLHS, vector3DRHS, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the dot product between the vectors contained in {@code vector3DLHS} and {@code vector3DRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3} or {@code vector3DRHSOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the dot product
+	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the dot product
+	 * @param vector3DLHSOffset the offset in {@code vector3DLHS} to start at
+	 * @param vector3DRHSOffset the offset in {@code vector3DRHS} to start at
+	 * @return a {@code double} that contains the dot product between the vectors contained in {@code vector3DLHS} and {@code vector3DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3} or {@code vector3DRHSOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}
+	 */
 	public static double vector3DDotProduct(final double[] vector3DLHS, final double[] vector3DRHS, final int vector3DLHSOffset, final int vector3DRHSOffset) {
 		return vector3DLHS[vector3DLHSOffset + 0] * vector3DRHS[vector3DRHSOffset + 0] + vector3DLHS[vector3DLHSOffset + 1] * vector3DRHS[vector3DRHSOffset + 1] + vector3DLHS[vector3DLHSOffset + 2] * vector3DRHS[vector3DRHSOffset + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the length of the vector contained in {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DLength(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return a {@code double} that contains the length of the vector contained in {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DLength(final double[] vector3D) {
 		return vector3DLength(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the length of the vector contained in {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return a {@code double} that contains the length of the vector contained in {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DLength(final double[] vector3D, final int vector3DOffset) {
 		return sqrt(vector3DLengthSquared(vector3D, vector3DOffset));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the squared length of the vector contained in {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DLengthSquared(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return a {@code double} that contains the squared length of the vector contained in {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DLengthSquared(final double[] vector3D) {
 		return vector3DLengthSquared(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the squared length of the vector contained in {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return a {@code double} that contains the squared length of the vector contained in {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DLengthSquared(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 0] * vector3D[vector3DOffset + 0] + vector3D[vector3DOffset + 1] * vector3D[vector3DOffset + 1] + vector3D[vector3DOffset + 2] * vector3D[vector3DOffset + 2];
 	}
@@ -174,17 +267,74 @@ public final class Vector {
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the cross product between {@code vector3DLHS} and {@code vector3DRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < 3} or {@code vector3DRHS.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DCrossProduct(vector3DLHS, vector3DRHS, Vector.vector3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the cross product
+	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the cross product
+	 * @return a {@code double[]} that contains a vector with three components and is set to the cross product between {@code vector3DLHS} and {@code vector3DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < 3} or {@code vector3DRHS.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}
+	 */
 	public static double[] vector3DCrossProduct(final double[] vector3DLHS, final double[] vector3DRHS) {
 		return vector3DCrossProduct(vector3DLHS, vector3DRHS, vector3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the cross product between {@code vector3DLHS} and {@code vector3DRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < 3}, {@code vector3DRHS.length < 3} or {@code vector3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DCrossProduct(vector3DLHS, vector3DRHS, vector3DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the cross product
+	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the cross product
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with three components and is set to the cross product between {@code vector3DLHS} and {@code vector3DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < 3}, {@code vector3DRHS.length < 3} or {@code vector3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DCrossProduct(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult) {
 		return vector3DCrossProduct(vector3DLHS, vector3DRHS, vector3DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the cross product between {@code vector3DLHS} and {@code vector3DRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
+	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the cross product
+	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the cross product
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @param vector3DLHSOffset the offset in {@code vector3DLHS} to start at
+	 * @param vector3DRHSOffset the offset in {@code vector3DRHS} to start at
+	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
+	 * @return a {@code double[]} that contains a vector with three components and is set to the cross product between {@code vector3DLHS} and {@code vector3DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0},
+	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DCrossProduct(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
 		final double component1 = vector3DLHS[vector3DLHSOffset + 1] * vector3DRHS[vector3DRHSOffset + 2] - vector3DLHS[vector3DLHSOffset + 2] * vector3DRHS[vector3DRHSOffset + 1];
 		final double component2 = vector3DLHS[vector3DLHSOffset + 2] * vector3DRHS[vector3DRHSOffset + 0] - vector3DLHS[vector3DLHSOffset + 0] * vector3DRHS[vector3DRHSOffset + 2];
@@ -227,17 +377,71 @@ public final class Vector {
 		return vector3DNormalize(vector3DDirection(point3DEye, point3DTarget, vector3DResult, point3DEyeOffset, point3DTargetOffset, vector3DResultOffset), vector3DResult, vector3DResultOffset, vector3DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS / scalarRHS}.
+	 * <p>
+	 * If {@code vector3DLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DDivide(vector3DLHS, scalarRHS, Vector.vector3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param scalarRHS a {@code double} that contains the scalar value on the right-hand side of the expression
+	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS / scalarRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3DLHS} is {@code null}
+	 */
 	public static double[] vector3DDivide(final double[] vector3DLHS, final double scalarRHS) {
 		return vector3DDivide(vector3DLHS, scalarRHS, vector3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS / scalarRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < 3} or {@code vector3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DDivide(vector3DLHS, scalarRHS, vector3DResult, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param scalarRHS a {@code double} that contains the scalar value on the right-hand side of the expression
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS / scalarRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < 3} or {@code vector3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DDivide(final double[] vector3DLHS, final double scalarRHS, final double[] vector3DResult) {
 		return vector3DDivide(vector3DLHS, scalarRHS, vector3DResult, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS / scalarRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param scalarRHS a {@code double} that contains the scalar value on the right-hand side of the expression
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @param vector3DLHSOffset the offset in {@code vector3DLHS} to start at
+	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
+	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS / scalarRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DDivide(final double[] vector3DLHS, final double scalarRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DResultOffset) {
 		final double component1 = vector3DLHS[vector3DLHSOffset + 0] / scalarRHS;
 		final double component2 = vector3DLHS[vector3DLHSOffset + 1] / scalarRHS;
@@ -316,17 +520,71 @@ public final class Vector {
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS * scalarRHS}.
+	 * <p>
+	 * If {@code vector3DLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DMultiply(vector3DLHS, scalarRHS, Vector.vector3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param scalarRHS a {@code double} that contains the scalar value on the right-hand side of the expression
+	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS * scalarRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3DLHS} is {@code null}
+	 */
 	public static double[] vector3DMultiply(final double[] vector3DLHS, final double scalarRHS) {
 		return vector3DMultiply(vector3DLHS, scalarRHS, vector3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS * scalarRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < 3} or {@code vector3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DMultiply(vector3DLHS, scalarRHS, vector3DResult, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param scalarRHS a {@code double} that contains the scalar value on the right-hand side of the expression
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS * scalarRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < 3} or {@code vector3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DMultiply(final double[] vector3DLHS, final double scalarRHS, final double[] vector3DResult) {
 		return vector3DMultiply(vector3DLHS, scalarRHS, vector3DResult, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS * scalarRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param scalarRHS a {@code double} that contains the scalar value on the right-hand side of the expression
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @param vector3DLHSOffset the offset in {@code vector3DLHS} to start at
+	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
+	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS * scalarRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DMultiply(final double[] vector3DLHS, final double scalarRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DResultOffset) {
 		final double component1 = vector3DLHS[vector3DLHSOffset + 0] * scalarRHS;
 		final double component2 = vector3DLHS[vector3DLHSOffset + 1] * scalarRHS;

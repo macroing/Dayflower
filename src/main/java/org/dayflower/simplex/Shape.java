@@ -20,6 +20,7 @@ package org.dayflower.simplex;
 
 import static org.dayflower.simplex.Point.point3D;
 import static org.dayflower.simplex.Point.point3DAdd;
+import static org.dayflower.simplex.Point.point3DSet;
 import static org.dayflower.simplex.Ray.ray3DGetDirection;
 import static org.dayflower.simplex.Ray.ray3DGetOrigin;
 import static org.dayflower.simplex.Ray.ray3DGetTMaximum;
@@ -27,9 +28,9 @@ import static org.dayflower.simplex.Ray.ray3DGetTMinimum;
 import static org.dayflower.simplex.Vector.vector3D;
 import static org.dayflower.simplex.Vector.vector3DCrossProduct;
 import static org.dayflower.simplex.Vector.vector3DDirection;
+import static org.dayflower.simplex.Vector.vector3DDirectionNormalized;
 import static org.dayflower.simplex.Vector.vector3DDotProduct;
 import static org.dayflower.simplex.Vector.vector3DLengthSquared;
-import static org.dayflower.simplex.Vector.vector3DNormalize;
 import static org.dayflower.utility.Doubles.NaN;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.atan2;
@@ -76,6 +77,27 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static final int DISK_OFFSET_Z_MAX = 3;
+	
+//	TODO: Add Javadocs!
+	public static final int PARABOLOID_OFFSET_PHI_MAX = 0;
+	
+//	TODO: Add Javadocs!
+	public static final int PARABOLOID_OFFSET_RADIUS = 1;
+	
+//	TODO: Add Javadocs!
+	public static final int PARABOLOID_OFFSET_Z_MAX = 2;
+	
+//	TODO: Add Javadocs!
+	public static final int PARABOLOID_OFFSET_Z_MIN = 3;
+	
+//	TODO: Add Javadocs!
+	public static final int PLANE_OFFSET_A = 0;
+	
+//	TODO: Add Javadocs!
+	public static final int PLANE_OFFSET_B = 3;
+	
+//	TODO: Add Javadocs!
+	public static final int PLANE_OFFSET_C = 6;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -420,18 +442,69 @@ public final class Shape {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Paraboloid3D ////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
-	public static double intersectionRayParaboloid(final double[] ray3D, final double paraboloidPhiMax, final double paraboloidRadius, final double paraboloidZMax, final double paraboloidZMin) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+	public static double paraboloid3DGetPhiMax(final double[] paraboloid3D) {
+		return paraboloid3DGetPhiMax(paraboloid3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DGetPhiMax(final double[] paraboloid3D, final int paraboloid3DOffset) {
+		return paraboloid3D[paraboloid3DOffset + PARABOLOID_OFFSET_PHI_MAX];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DGetRadius(final double[] paraboloid3D) {
+		return paraboloid3DGetRadius(paraboloid3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DGetRadius(final double[] paraboloid3D, final int paraboloid3DOffset) {
+		return paraboloid3D[paraboloid3DOffset + PARABOLOID_OFFSET_RADIUS];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DGetZMax(final double[] paraboloid3D) {
+		return paraboloid3DGetZMax(paraboloid3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DGetZMax(final double[] paraboloid3D, final int paraboloid3DOffset) {
+		return paraboloid3D[paraboloid3DOffset + PARABOLOID_OFFSET_Z_MAX];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DGetZMin(final double[] paraboloid3D) {
+		return paraboloid3DGetZMin(paraboloid3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DGetZMin(final double[] paraboloid3D, final int paraboloid3DOffset) {
+		return paraboloid3D[paraboloid3DOffset + PARABOLOID_OFFSET_Z_MIN];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DIntersection(final double[] ray3D, final double[] paraboloid3D) {
+		return paraboloid3DIntersection(ray3D, paraboloid3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DIntersection(final double[] ray3D, final double[] paraboloid3D, final int ray3DOffset, final int paraboloid3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
 		
-		final double tMinimum = ray3DGetTMinimum(ray3D);
-		final double tMaximum = ray3DGetTMaximum(ray3D);
+		final double tMinimum = ray3DGetTMinimum(ray3D, ray3DOffset);
+		final double tMaximum = ray3DGetTMaximum(ray3D, ray3DOffset);
 		
-		final double k = paraboloidZMax / (paraboloidRadius * paraboloidRadius);
+		final double phiMax = paraboloid3DGetPhiMax(paraboloid3D, paraboloid3DOffset);
+		final double radius = paraboloid3DGetRadius(paraboloid3D, paraboloid3DOffset);
+		final double zMax = paraboloid3DGetZMax(paraboloid3D, paraboloid3DOffset);
+		final double zMin = paraboloid3DGetZMin(paraboloid3D, paraboloid3DOffset);
+		
+		final double k = zMax / (radius * radius);
 		
 		final double a = k * (vector3DDirection[0] * vector3DDirection[0] + vector3DDirection[1] * vector3DDirection[1]);
 		final double b = 2.0D * k * (vector3DDirection[0] * point3DOrigin[0] + vector3DDirection[1] * point3DOrigin[1]) - vector3DDirection[2];
@@ -447,11 +520,11 @@ public final class Shape {
 			}
 			
 			if(t > tMinimum && t < tMaximum) {
-				final double[] point = point3DAdd(point3DOrigin, vector3DDirection, t);
+				final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
 				
-				final double phi = getOrAdd(atan2(point[1], point[0]), 0.0D, PI_MULTIPLIED_BY_2);
+				final double phi = getOrAdd(atan2(point3D[1], point3D[0]), 0.0D, PI_MULTIPLIED_BY_2);
 				
-				if(point[2] >= paraboloidZMin && point[2] <= paraboloidZMax && phi <= paraboloidPhiMax) {
+				if(point3D[2] >= zMin && point3D[2] <= zMax && phi <= phiMax) {
 					return t;
 				}
 			}
@@ -461,32 +534,66 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
-	public static double intersectionRayPlane(final double[] ray3D, final double[] planeA, final double[] planeB, final double[] planeC) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+	public static double[] paraboloid3D() {
+		return paraboloid3D(toRadians(360.0D), 1.0D, 1.0D, 0.0D);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] paraboloid3D(final double phiMax, final double radius, final double zMax, final double zMin) {
+		return new double[] {phiMax, radius, zMax, zMin};
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] paraboloid3DSet(final double[] paraboloid3DResult, final double phiMax, final double radius, final double zMax, final double zMin) {
+		return paraboloid3DSet(paraboloid3DResult, phiMax, radius, zMax, zMin, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] paraboloid3DSet(final double[] paraboloid3DResult, final double phiMax, final double radius, final double zMax, final double zMin, final int paraboloid3DResultOffset) {
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_PHI_MAX] = phiMax;
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_RADIUS] = radius;
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_Z_MAX] = zMax;
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_Z_MIN] = zMin;
 		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		return paraboloid3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Plane3D /////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static double plane3DIntersection(final double[] ray3D, final double[] plane3D) {
+		return plane3DIntersection(ray3D, plane3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double plane3DIntersection(final double[] ray3D, final double[] plane3D, final int ray3DOffset, final int plane3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
-		final double tMinimum = ray3DGetTMinimum(ray3D);
-		final double tMaximum = ray3DGetTMaximum(ray3D);
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
 		
-		final double[] planeAB = vector3DDirection(planeA, planeB);
-		final double[] planeABNormalized = vector3DNormalize(planeAB);
+		final double tMinimum = ray3DGetTMinimum(ray3D, ray3DOffset);
+		final double tMaximum = ray3DGetTMaximum(ray3D, ray3DOffset);
 		
-		final double[] planeAC = vector3DDirection(planeA, planeC);
-		final double[] planeACNormalized = vector3DNormalize(planeAC);
+		final double[] point3DA = plane3DGetA(plane3D, point3D(), plane3DOffset, 0);
+		final double[] point3DB = plane3DGetB(plane3D, point3D(), plane3DOffset, 0);
+		final double[] point3DC = plane3DGetC(plane3D, point3D(), plane3DOffset, 0);
 		
-		final double[] planeSurfaceNormal = vector3DCrossProduct(planeABNormalized, planeACNormalized);
+		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
+		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
 		
-		final double planeSurfaceNormalDotRayDirection = vector3DDotProduct(planeSurfaceNormal, vector3DDirection);
+		final double[] vector3DSurfaceNormal = vector3DCrossProduct(vector3DAB, vector3DAC);
 		
-		if(isZero(planeSurfaceNormalDotRayDirection)) {
+		final double surfaceNormalDotDirection = vector3DDotProduct(vector3DSurfaceNormal, vector3DDirection);
+		
+		if(isZero(surfaceNormalDotDirection)) {
 			return NaN;
 		}
 		
-		final double[] rayOriginToPlaneA = vector3DDirection(point3DOrigin, planeA);
+		final double[] vector3DOriginToA = vector3DDirection(point3DOrigin, point3DA);
 		
-		final double t = vector3DDotProduct(rayOriginToPlaneA, planeSurfaceNormal) / planeSurfaceNormalDotRayDirection;
+		final double t = vector3DDotProduct(vector3DOriginToA, vector3DSurfaceNormal) / surfaceNormalDotDirection;
 		
 		if(t > tMinimum && t < tMaximum) {
 			return t;
@@ -494,6 +601,126 @@ public final class Shape {
 		
 		return NaN;
 	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3D() {
+		return plane3D(point3D(0.0D, 0.0D, 0.0D), point3D(0.0D, 0.0D, 1.0D), point3D(1.0D, 0.0D, 0.0D));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3D(final double[] point3DA, final double[] point3DB, final double[] point3DC) {
+		return plane3D(point3DA, point3DB, point3DC, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3D(final double[] point3DA, final double[] point3DB, final double[] point3DC, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset) {
+		final double aX = point3DA[point3DAOffset + 0];
+		final double aY = point3DA[point3DAOffset + 1];
+		final double aZ = point3DA[point3DAOffset + 2];
+		
+		final double bX = point3DB[point3DBOffset + 0];
+		final double bY = point3DB[point3DBOffset + 1];
+		final double bZ = point3DB[point3DBOffset + 2];
+		
+		final double cX = point3DC[point3DCOffset + 0];
+		final double cY = point3DC[point3DCOffset + 1];
+		final double cZ = point3DC[point3DCOffset + 2];
+		
+		return new double[] {aX, aY, aZ, bX, bY, bZ, cX, cY, cZ};
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DComputeSurfaceNormal(final double[] plane3D) {
+		return plane3DComputeSurfaceNormal(plane3D, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DComputeSurfaceNormal(final double[] plane3D, final double[] vector3DSurfaceNormalResult) {
+		return plane3DComputeSurfaceNormal(plane3D, vector3DSurfaceNormalResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DComputeSurfaceNormal(final double[] plane3D, final double[] vector3DSurfaceNormalResult, final int plane3DOffset, final int vector3DSurfaceNormalResultOffset) {
+		final double[] point3DA = plane3DGetA(plane3D, point3D(), plane3DOffset, 0);
+		final double[] point3DB = plane3DGetB(plane3D, point3D(), plane3DOffset, 0);
+		final double[] point3DC = plane3DGetC(plane3D, point3D(), plane3DOffset, 0);
+		
+		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
+		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
+		
+		final double[] vector3DSurfaceNormal = vector3DCrossProduct(vector3DAB, vector3DAC, vector3DSurfaceNormalResult, 0, 0, vector3DSurfaceNormalResultOffset);
+		
+		return vector3DSurfaceNormal;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DGetA(final double[] plane3D) {
+		return plane3DGetA(plane3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DGetA(final double[] plane3D, final double[] point3DAResult) {
+		return plane3DGetA(plane3D, point3DAResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DGetA(final double[] plane3D, final double[] point3DAResult, final int plane3DOffset, final int point3DAResultOffset) {
+		return point3DSet(point3DAResult, plane3D, point3DAResultOffset, plane3DOffset + PLANE_OFFSET_A);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DGetB(final double[] plane3D) {
+		return plane3DGetB(plane3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DGetB(final double[] plane3D, final double[] point3DBResult) {
+		return plane3DGetB(plane3D, point3DBResult);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DGetB(final double[] plane3D, final double[] point3DBResult, final int plane3DOffset, final int point3DBResultOffset) {
+		return point3DSet(point3DBResult, plane3D, point3DBResultOffset, plane3DOffset + PLANE_OFFSET_B);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DGetC(final double[] plane3D) {
+		return plane3DGetC(plane3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DGetC(final double[] plane3D, final double[] point3DCResult) {
+		return plane3DGetC(plane3D, point3DCResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DGetC(final double[] plane3D, final double[] point3DCResult, final int plane3DOffset, final int point3DCResultOffset) {
+		return point3DSet(point3DCResult, plane3D, point3DCResultOffset, plane3DOffset + PLANE_OFFSET_C);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DSet(final double[] plane3DResult, final double[] point3DA, final double[] point3DB, final double[] point3DC) {
+		return plane3DSet(plane3DResult, point3DA, point3DB, point3DC, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] plane3DSet(final double[] plane3DResult, final double[] point3DA, final double[] point3DB, final double[] point3DC, final int plane3DResultOffset, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset) {
+		plane3DResult[plane3DResultOffset + PLANE_OFFSET_A + 0] = point3DA[point3DAOffset + 0];
+		plane3DResult[plane3DResultOffset + PLANE_OFFSET_A + 1] = point3DA[point3DAOffset + 1];
+		plane3DResult[plane3DResultOffset + PLANE_OFFSET_A + 2] = point3DA[point3DAOffset + 2];
+		
+		plane3DResult[plane3DResultOffset + PLANE_OFFSET_B + 0] = point3DB[point3DBOffset + 0];
+		plane3DResult[plane3DResultOffset + PLANE_OFFSET_B + 1] = point3DB[point3DBOffset + 1];
+		plane3DResult[plane3DResultOffset + PLANE_OFFSET_B + 2] = point3DB[point3DBOffset + 2];
+		
+		plane3DResult[plane3DResultOffset + PLANE_OFFSET_C + 0] = point3DC[point3DCOffset + 0];
+		plane3DResult[plane3DResultOffset + PLANE_OFFSET_C + 1] = point3DC[point3DCOffset + 1];
+		plane3DResult[plane3DResultOffset + PLANE_OFFSET_C + 2] = point3DC[point3DCOffset + 2];
+		
+		return plane3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 //	TODO: Refactor!

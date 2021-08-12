@@ -68,12 +68,12 @@
  * <p>
  * The following list contains information about the data types that represents lines in this API.
  * <ul>
- * <li>{@link org.dayflower.geometry.shape.Line2D Line2D} is an implementation of {@code Shape2D} that represents a line.</li>
- * <li>{@link org.dayflower.geometry.shape.Line2DReader Line2DReader} is a {@code Shape2DReader} implementation that reads {@code Line2D} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.shape.Line2F Line2F} is an implementation of {@code Shape2F} that represents a line.</li>
- * <li>{@link org.dayflower.geometry.shape.Line2FReader Line2FReader} is a {@code Shape2FReader} implementation that reads {@code Line2F} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.shape.Line2I Line2I} is an implementation of {@code Shape2I} that represents a line.</li>
- * <li>{@link org.dayflower.geometry.shape.Line2IReader Line2IReader} is a {@code Shape2IReader} implementation that reads {@code Line2I} instances from a {@code DataInput} instance.</li>
+ * <li>{@link org.dayflower.geometry.shape.LineSegment2D LineSegment2D} is an implementation of {@code Shape2D} that represents a line segment.</li>
+ * <li>{@link org.dayflower.geometry.shape.LineSegment2DReader LineSegment2DReader} is a {@code Shape2DReader} implementation that reads {@code LineSegment2D} instances from a {@code DataInput} instance.</li>
+ * <li>{@link org.dayflower.geometry.shape.LineSegment2F LineSegment2F} is an implementation of {@code Shape2F} that represents a line segment.</li>
+ * <li>{@link org.dayflower.geometry.shape.LineSegment2FReader LineSegment2FReader} is a {@code Shape2FReader} implementation that reads {@code LineSegment2F} instances from a {@code DataInput} instance.</li>
+ * <li>{@link org.dayflower.geometry.shape.LineSegment2I LineSegment2I} is an implementation of {@code Shape2I} that represents a line segment.</li>
+ * <li>{@link org.dayflower.geometry.shape.LineSegment2IReader LineSegment2IReader} is a {@code Shape2IReader} implementation that reads {@code LineSegment2I} instances from a {@code DataInput} instance.</li>
  * </ul>
  * <p>
  * The following list contains information about the data types that represents paraboloids in this API.
@@ -155,7 +155,9 @@
  * The following list contains information about the data types that represents triangle meshes in this API.
  * <ul>
  * <li>{@link org.dayflower.geometry.shape.TriangleMesh3D TriangleMesh3D} is an implementation of {@code Shape3D} that represents a triangle mesh.</li>
+ * <li>{@link org.dayflower.geometry.shape.TriangleMesh3DReader TriangleMesh3DReader} is a {@code Shape3DReader} implementation that reads {@code TriangleMesh3D} instances from a {@code DataInput} instance.</li>
  * <li>{@link org.dayflower.geometry.shape.TriangleMesh3F TriangleMesh3F} is an implementation of {@code Shape3F} that represents a triangle mesh.</li>
+ * <li>{@link org.dayflower.geometry.shape.TriangleMesh3FReader TriangleMesh3FReader} is a {@code Shape3FReader} implementation that reads {@code TriangleMesh3F} instances from a {@code DataInput} instance.</li>
  * </ul>
  * <h3>Dependencies</h3>
  * <p>

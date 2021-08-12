@@ -32,21 +32,21 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Line2F} is an implementation of {@link Shape2F} that represents a line.
+ * A {@code LineSegment2F} is an implementation of {@link Shape2F} that represents a line segment.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Line2F implements Shape2F {
+public final class LineSegment2F implements Shape2F {
 	/**
-	 * The name of this {@code Line2F} class.
+	 * The name of this {@code LineSegment2F} class.
 	 */
-	public static final String NAME = "Line";
+	public static final String NAME = "Line Segment";
 	
 	/**
-	 * The ID of this {@code Line2F} class.
+	 * The ID of this {@code LineSegment2F} class.
 	 */
 	public static final int ID = 2;
 	
@@ -58,7 +58,7 @@ public final class Line2F implements Shape2F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code Line2F} instance given two {@link Point2F} instances, {@code a} and {@code b}.
+	 * Constructs a new {@code LineSegment2F} instance given two {@link Point2F} instances, {@code a} and {@code b}.
 	 * <p>
 	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -66,7 +66,7 @@ public final class Line2F implements Shape2F {
 	 * @param b a {@code Point2F} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-	public Line2F(final Point2F a, final Point2F b) {
+	public LineSegment2F(final Point2F a, final Point2F b) {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 	}
@@ -92,9 +92,9 @@ public final class Line2F implements Shape2F {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code Line2F} instance.
+	 * Returns a {@code String} with the name of this {@code LineSegment2F} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code Line2F} instance
+	 * @return a {@code String} with the name of this {@code LineSegment2F} instance
 	 */
 	@Override
 	public String getName() {
@@ -102,13 +102,13 @@ public final class Line2F implements Shape2F {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code Line2F} instance.
+	 * Returns a {@code String} representation of this {@code LineSegment2F} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code Line2F} instance
+	 * @return a {@code String} representation of this {@code LineSegment2F} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Line2F(%s, %s)", this.a, this.b);
+		return String.format("new LineSegment2F(%s, %s)", this.a, this.b);
 	}
 	
 	/**
@@ -154,12 +154,12 @@ public final class Line2F implements Shape2F {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Line2F} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code LineSegment2F} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param point a {@link Point2F} instance
-	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Line2F} instance, {@code false} otherwise
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code LineSegment2F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	@Override
@@ -188,22 +188,22 @@ public final class Line2F implements Shape2F {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code Line2F} instance for equality.
+	 * Compares {@code object} to this {@code LineSegment2F} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Line2F}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LineSegment2F}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code Line2F} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Line2F}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LineSegment2F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LineSegment2F}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof Line2F)) {
+		} else if(!(object instanceof LineSegment2F)) {
 			return false;
-		} else if(!Objects.equals(this.a, Line2F.class.cast(object).a)) {
+		} else if(!Objects.equals(this.a, LineSegment2F.class.cast(object).a)) {
 			return false;
-		} else if(!Objects.equals(this.b, Line2F.class.cast(object).b)) {
+		} else if(!Objects.equals(this.b, LineSegment2F.class.cast(object).b)) {
 			return false;
 		} else {
 			return true;
@@ -211,9 +211,9 @@ public final class Line2F implements Shape2F {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code Line2F} instance.
+	 * Returns an {@code int} with the ID of this {@code LineSegment2F} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code Line2F} instance
+	 * @return an {@code int} with the ID of this {@code LineSegment2F} instance
 	 */
 	@Override
 	public int getID() {
@@ -221,9 +221,9 @@ public final class Line2F implements Shape2F {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code Line2F} instance.
+	 * Returns a hash code for this {@code LineSegment2F} instance.
 	 * 
-	 * @return a hash code for this {@code Line2F} instance
+	 * @return a hash code for this {@code LineSegment2F} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -231,7 +231,7 @@ public final class Line2F implements Shape2F {
 	}
 	
 	/**
-	 * Writes this {@code Line2F} instance to {@code dataOutput}.
+	 * Writes this {@code LineSegment2F} instance to {@code dataOutput}.
 	 * <p>
 	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>

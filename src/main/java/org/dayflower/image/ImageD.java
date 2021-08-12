@@ -44,7 +44,7 @@ import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.rasterizer.Rasterizer2I;
 import org.dayflower.geometry.shape.Circle2I;
-import org.dayflower.geometry.shape.Line2I;
+import org.dayflower.geometry.shape.LineSegment2I;
 import org.dayflower.geometry.shape.Rectangle2D;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
@@ -806,71 +806,71 @@ public abstract class ImageD extends Image {
 	}
 	
 	/**
-	 * Draws {@code line} to this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
+	 * Draws {@code lineSegment} to this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
 	 * <p>
 	 * Returns this {@code ImageD} instance.
 	 * <p>
-	 * If {@code line} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lineSegment} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawLine(line, Color4D.BLACK);
+	 * image.drawLineSegment(lineSegment, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param line the {@link Line2I} to draw
+	 * @param lineSegment the {@link LineSegment2I} to draw
 	 * @return this {@code ImageD} instance
-	 * @throws NullPointerException thrown if, and only if, {@code line} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code lineSegment} is {@code null}
 	 */
-	public final ImageD drawLine(final Line2I line) {
-		return drawLine(line, Color4D.BLACK);
+	public final ImageD drawLineSegment(final LineSegment2I lineSegment) {
+		return drawLineSegment(lineSegment, Color4D.BLACK);
 	}
 	
 	/**
-	 * Draws {@code line} to this {@code ImageD} instance with {@code colorRGBA} as its color.
+	 * Draws {@code lineSegment} to this {@code ImageD} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * Returns this {@code ImageD} instance.
 	 * <p>
-	 * If either {@code line} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code lineSegment} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawLine(line, (color, point) -> colorRGBA);
+	 * image.drawLineSegment(line, (color, point) -> colorRGBA);
 	 * }
 	 * </pre>
 	 * 
-	 * @param line the {@link Line2I} to draw
+	 * @param lineSegment the {@link LineSegment2I} to draw
 	 * @param colorRGBA the {@link Color4D} to use as its color
 	 * @return this {@code ImageD} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code line} or {@code colorRGBA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code lineSegment} or {@code colorRGBA} are {@code null}
 	 */
-	public final ImageD drawLine(final Line2I line, final Color4D colorRGBA) {
-		Objects.requireNonNull(line, "line == null");
+	public final ImageD drawLineSegment(final LineSegment2I lineSegment, final Color4D colorRGBA) {
+		Objects.requireNonNull(lineSegment, "lineSegment == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
-		return drawLine(line, (color, point) -> colorRGBA);
+		return drawLineSegment(lineSegment, (color, point) -> colorRGBA);
 	}
 	
 	/**
-	 * Draws {@code line} to this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
+	 * Draws {@code lineSegment} to this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * Returns this {@code ImageD} instance.
 	 * <p>
-	 * If either {@code line} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code lineSegment} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param line the {@link Line2I} to draw
+	 * @param lineSegment the {@link LineSegment2I} to draw
 	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
 	 * @return this {@code ImageD} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code line} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code lineSegment} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final ImageD drawLine(final Line2I line, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
-		Objects.requireNonNull(line, "line == null");
+	public final ImageD drawLineSegment(final LineSegment2I lineSegment, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
+		Objects.requireNonNull(lineSegment, "lineSegment == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
 		doChangeBegin();
-		doDrawLine(line, biFunction);
+		doDrawLineSegment(lineSegment, biFunction);
 		doChangeEnd();
 		
 		return this;
@@ -1033,9 +1033,9 @@ public abstract class ImageD extends Image {
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
 		doChangeBegin();
-		doDrawLine(new Line2I(triangle.getA(), triangle.getB()), biFunction);
-		doDrawLine(new Line2I(triangle.getB(), triangle.getC()), biFunction);
-		doDrawLine(new Line2I(triangle.getC(), triangle.getA()), biFunction);
+		doDrawLineSegment(new LineSegment2I(triangle.getA(), triangle.getB()), biFunction);
+		doDrawLineSegment(new LineSegment2I(triangle.getB(), triangle.getC()), biFunction);
+		doDrawLineSegment(new LineSegment2I(triangle.getC(), triangle.getA()), biFunction);
 		doChangeEnd();
 		
 		return this;
@@ -2457,10 +2457,10 @@ public abstract class ImageD extends Image {
 		}
 	}
 	
-	private void doDrawLine(final Line2I line, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
+	private void doDrawLineSegment(final LineSegment2I lineSegment, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(getResolutionX(), getResolutionY()));
 		
-		final Point2I[] scanline = Rasterizer2I.rasterize(line, rectangle);
+		final Point2I[] scanline = Rasterizer2I.rasterize(lineSegment, rectangle);
 		
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();

@@ -34,7 +34,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Line3F} is an implementation of {@link Shape3F} that represents a line.
+ * A {@code LineSegment3F} is an implementation of {@link Shape3F} that represents a line segment.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
@@ -43,14 +43,14 @@ import org.dayflower.node.NodeTraversalException;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Line3F implements Shape3F {
+public final class LineSegment3F implements Shape3F {
 	/**
-	 * The name of this {@code Line3F} class.
+	 * The name of this {@code LineSegment3F} class.
 	 */
-	public static final String NAME = "Line";
+	public static final String NAME = "Line Segment";
 	
 	/**
-	 * The ID of this {@code Line3F} class.
+	 * The ID of this {@code LineSegment3F} class.
 	 */
 	public static final int ID = 18;
 	
@@ -62,7 +62,7 @@ public final class Line3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code Line3F} instance given two {@link Point3F} instances, {@code a} and {@code b}.
+	 * Constructs a new {@code LineSegment3F} instance given two {@link Point3F} instances, {@code a} and {@code b}.
 	 * <p>
 	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -70,7 +70,7 @@ public final class Line3F implements Shape3F {
 	 * @param b a {@code Point3F} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-	public Line3F(final Point3F a, final Point3F b) {
+	public LineSegment3F(final Point3F a, final Point3F b) {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 	}
@@ -78,9 +78,9 @@ public final class Line3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link BoundingVolume3F} instance that contains this {@code Line3F} instance.
+	 * Returns a {@link BoundingVolume3F} instance that contains this {@code LineSegment3F} instance.
 	 * 
-	 * @return a {@code BoundingVolume3F} instance that contains this {@code Line3F} instance
+	 * @return a {@code BoundingVolume3F} instance that contains this {@code LineSegment3F} instance
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
@@ -88,13 +88,13 @@ public final class Line3F implements Shape3F {
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code Line3F} instance.
+	 * Performs an intersection test between {@code ray} and this {@code LineSegment3F} instance.
 	 * <p>
 	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3F} instance that contains information about the intersection, if it was found.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Line3F} instance
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code LineSegment3F} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
@@ -127,9 +127,9 @@ public final class Line3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code Line3F} instance.
+	 * Returns a {@code String} with the name of this {@code LineSegment3F} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code Line3F} instance
+	 * @return a {@code String} with the name of this {@code LineSegment3F} instance
 	 */
 	@Override
 	public String getName() {
@@ -137,13 +137,13 @@ public final class Line3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code Line3F} instance.
+	 * Returns a {@code String} representation of this {@code LineSegment3F} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code Line3F} instance
+	 * @return a {@code String} representation of this {@code LineSegment3F} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Line3F(%s, %s)", this.a, this.b);
+		return String.format("new LineSegment3F(%s, %s)", this.a, this.b);
 	}
 	
 	/**
@@ -189,22 +189,22 @@ public final class Line3F implements Shape3F {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code Line3F} instance for equality.
+	 * Compares {@code object} to this {@code LineSegment3F} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Line3F}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LineSegment3F}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code Line3F} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Line3F}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LineSegment3F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LineSegment3F}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof Line3F)) {
+		} else if(!(object instanceof LineSegment3F)) {
 			return false;
-		} else if(!Objects.equals(this.a, Line3F.class.cast(object).a)) {
+		} else if(!Objects.equals(this.a, LineSegment3F.class.cast(object).a)) {
 			return false;
-		} else if(!Objects.equals(this.b, Line3F.class.cast(object).b)) {
+		} else if(!Objects.equals(this.b, LineSegment3F.class.cast(object).b)) {
 			return false;
 		} else {
 			return true;
@@ -212,11 +212,11 @@ public final class Line3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the surface area of this {@code Line3F} instance.
+	 * Returns the surface area of this {@code LineSegment3F} instance.
 	 * <p>
 	 * This method returns {@code 0.0F}.
 	 * 
-	 * @return the surface area of this {@code Line3F} instance
+	 * @return the surface area of this {@code LineSegment3F} instance
 	 */
 	@Override
 	public float getSurfaceArea() {
@@ -224,13 +224,13 @@ public final class Line3F implements Shape3F {
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code Line3F} instance.
+	 * Performs an intersection test between {@code ray} and this {@code LineSegment3F} instance.
 	 * <p>
 	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Line3F} instance
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code LineSegment3F} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
@@ -245,9 +245,9 @@ public final class Line3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code Line3F} instance.
+	 * Returns an {@code int} with the ID of this {@code LineSegment3F} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code Line3F} instance
+	 * @return an {@code int} with the ID of this {@code LineSegment3F} instance
 	 */
 	@Override
 	public int getID() {
@@ -255,9 +255,9 @@ public final class Line3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code Line3F} instance.
+	 * Returns a hash code for this {@code LineSegment3F} instance.
 	 * 
-	 * @return a hash code for this {@code Line3F} instance
+	 * @return a hash code for this {@code LineSegment3F} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -265,7 +265,7 @@ public final class Line3F implements Shape3F {
 	}
 	
 	/**
-	 * Writes this {@code Line3F} instance to {@code dataOutput}.
+	 * Writes this {@code LineSegment3F} instance to {@code dataOutput}.
 	 * <p>
 	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>

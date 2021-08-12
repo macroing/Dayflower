@@ -5,9 +5,9 @@ Geometry API:
 
 Geometry Shape API:
 
-	* ADD:		Line3FReader (LineSegment3FReader).
-	* ADD:		Line3D (LineSegment3D).
-	* ADD:		Line3DReader (LineSegment3DReader).
+	* ADD:		LineSegment3D.
+	* ADD:		LineSegment3DReader.
+	* ADD:		LineSegment3FReader.
 	* ADD:		Polygon2D.
 	* ADD:		Polygon2DReader.
 	* ADD:		Polygon2F.
@@ -15,17 +15,8 @@ Geometry Shape API:
 	* ADD:		Polygon3D.
 	* ADD:		Polygon3DReader.
 	* ADD:		Polygon3FReader.
-	* ADD:		TriangleMesh3DReader.
-	* ADD:		TriangleMesh3FReader.
 	* CHANGE:	Implement Polygon3F.
-	* CHANGE:	Implement Line3F (LineSegment3F).
-	* CHANGE:	Change name from Line2D to LineSegment2D.
-	* CHANGE:	Change name from Line2DReader to LineSegment2DReader.
-	* CHANGE:	Change name from Line2F to LineSegment2F.
-	* CHANGE:	Change name from Line2FReader to LineSegment2FReader.
-	* CHANGE:	Change name from Line2I to LineSegment2I.
-	* CHANGE:	Change name from Line2IReader to LineSegment2IReader.
-	* CHANGE:	Change name from Line3F to LineSegment3F.
+	* CHANGE:	Implement LineSegment3F.
 
 JavaFX Application API:
 

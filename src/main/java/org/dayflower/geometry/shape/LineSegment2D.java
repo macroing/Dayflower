@@ -18,54 +18,55 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Ints.abs;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.isZero;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.geometry.Point2I;
-import org.dayflower.geometry.Shape2I;
+import org.dayflower.geometry.Point2D;
+import org.dayflower.geometry.Shape2D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Line2I} is an implementation of {@link Shape2I} that represents a line.
+ * A {@code LineSegment2D} is an implementation of {@link Shape2D} that represents a line segment.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Line2I implements Shape2I {
+public final class LineSegment2D implements Shape2D {
 	/**
-	 * The name of this {@code Line2I} class.
+	 * The name of this {@code LineSegment2D} class.
 	 */
-	public static final String NAME = "Line";
+	public static final String NAME = "Line Segment";
 	
 	/**
-	 * The ID of this {@code Line2I} class.
+	 * The ID of this {@code LineSegment2D} class.
 	 */
 	public static final int ID = 2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Point2I a;
-	private final Point2I b;
+	private final Point2D a;
+	private final Point2D b;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code Line2I} instance given two {@link Point2I} instances, {@code a} and {@code b}.
+	 * Constructs a new {@code LineSegment2D} instance given two {@link Point2D} instances, {@code a} and {@code b}.
 	 * <p>
 	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param a a {@code Point2I} instance
-	 * @param b a {@code Point2I} instance
+	 * @param a a {@code Point2D} instance
+	 * @param b a {@code Point2D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-	public Line2I(final Point2I a, final Point2I b) {
+	public LineSegment2D(final Point2D a, final Point2D b) {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 	}
@@ -73,27 +74,27 @@ public final class Line2I implements Shape2I {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link Point2I} instance denoted by {@code A}.
+	 * Returns the {@link Point2D} instance denoted by {@code A}.
 	 * 
-	 * @return the {@code Point2I} instance denoted by {@code A}
+	 * @return the {@code Point2D} instance denoted by {@code A}
 	 */
-	public Point2I getA() {
+	public Point2D getA() {
 		return this.a;
 	}
 	
 	/**
-	 * Returns the {@link Point2I} instance denoted by {@code B}.
+	 * Returns the {@link Point2D} instance denoted by {@code B}.
 	 * 
-	 * @return the {@code Point2I} instance denoted by {@code B}
+	 * @return the {@code Point2D} instance denoted by {@code B}
 	 */
-	public Point2I getB() {
+	public Point2D getB() {
 		return this.b;
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code Line2I} instance.
+	 * Returns a {@code String} with the name of this {@code LineSegment2D} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code Line2I} instance
+	 * @return a {@code String} with the name of this {@code LineSegment2D} instance
 	 */
 	@Override
 	public String getName() {
@@ -101,13 +102,13 @@ public final class Line2I implements Shape2I {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code Line2I} instance.
+	 * Returns a {@code String} representation of this {@code LineSegment2D} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code Line2I} instance
+	 * @return a {@code String} representation of this {@code LineSegment2D} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Line2I(%s, %s)", this.a, this.b);
+		return String.format("new LineSegment2D(%s, %s)", this.a, this.b);
 	}
 	
 	/**
@@ -153,56 +154,56 @@ public final class Line2I implements Shape2I {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Line2I} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code LineSegment2D} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@link Point2I} instance
-	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Line2I} instance, {@code false} otherwise
+	 * @param point a {@link Point2D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code LineSegment2D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	@Override
-	public boolean contains(final Point2I point) {
-		final int aX = this.a.getX();
-		final int aY = this.a.getY();
-		final int bX = this.b.getX();
-		final int bY = this.b.getY();
-		final int pX = point.getX();
-		final int pY = point.getY();
+	public boolean contains(final Point2D point) {
+		final double aX = this.a.getX();
+		final double aY = this.a.getY();
+		final double bX = this.b.getX();
+		final double bY = this.b.getY();
+		final double pX = point.getX();
+		final double pY = point.getY();
 		
-		final int dAPX = pX - aX;
-		final int dAPY = pY - aY;
-		final int dABX = bX - aX;
-		final int dABY = bY - aY;
+		final double dAPX = pX - aX;
+		final double dAPY = pY - aY;
+		final double dABX = bX - aX;
+		final double dABY = bY - aY;
 		
-		final int crossProduct = dAPX * dABY - dAPY * dABX;
+		final double crossProduct = dAPX * dABY - dAPY * dABX;
 		
-		if(crossProduct != 0) {
+		if(!isZero(crossProduct)) {
 			return false;
 		} else if(abs(dABX) >= abs(dABY)) {
-			return dABX > 0 ? aX <= pX && pX <= bX : bX <= pX && pX <= aX;
+			return dABX > 0.0D ? aX <= pX && pX <= bX : bX <= pX && pX <= aX;
 		} else {
-			return dABY > 0 ? aY <= pY && pY <= bY : bY <= pY && pY <= aY;
+			return dABY > 0.0D ? aY <= pY && pY <= bY : bY <= pY && pY <= aY;
 		}
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code Line2I} instance for equality.
+	 * Compares {@code object} to this {@code LineSegment2D} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Line2I}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LineSegment2D}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code Line2I} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Line2I}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LineSegment2D} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LineSegment2D}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof Line2I)) {
+		} else if(!(object instanceof LineSegment2D)) {
 			return false;
-		} else if(!Objects.equals(this.a, Line2I.class.cast(object).a)) {
+		} else if(!Objects.equals(this.a, LineSegment2D.class.cast(object).a)) {
 			return false;
-		} else if(!Objects.equals(this.b, Line2I.class.cast(object).b)) {
+		} else if(!Objects.equals(this.b, LineSegment2D.class.cast(object).b)) {
 			return false;
 		} else {
 			return true;
@@ -210,9 +211,9 @@ public final class Line2I implements Shape2I {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code Line2I} instance.
+	 * Returns an {@code int} with the ID of this {@code LineSegment2D} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code Line2I} instance
+	 * @return an {@code int} with the ID of this {@code LineSegment2D} instance
 	 */
 	@Override
 	public int getID() {
@@ -220,9 +221,9 @@ public final class Line2I implements Shape2I {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code Line2I} instance.
+	 * Returns a hash code for this {@code LineSegment2D} instance.
 	 * 
-	 * @return a hash code for this {@code Line2I} instance
+	 * @return a hash code for this {@code LineSegment2D} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -230,7 +231,7 @@ public final class Line2I implements Shape2I {
 	}
 	
 	/**
-	 * Writes this {@code Line2I} instance to {@code dataOutput}.
+	 * Writes this {@code LineSegment2D} instance to {@code dataOutput}.
 	 * <p>
 	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>

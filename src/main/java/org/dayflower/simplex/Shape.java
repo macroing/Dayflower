@@ -18,11 +18,13 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.Point.point3D;
 import static org.dayflower.simplex.Point.point3DAdd;
 import static org.dayflower.simplex.Ray.ray3DGetDirection;
 import static org.dayflower.simplex.Ray.ray3DGetOrigin;
 import static org.dayflower.simplex.Ray.ray3DGetTMaximum;
 import static org.dayflower.simplex.Ray.ray3DGetTMinimum;
+import static org.dayflower.simplex.Vector.vector3D;
 import static org.dayflower.simplex.Vector.vector3DCrossProduct;
 import static org.dayflower.simplex.Vector.vector3DDirection;
 import static org.dayflower.simplex.Vector.vector3DDotProduct;
@@ -36,32 +38,108 @@ import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
 import static org.dayflower.utility.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.toRadians;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 
 //TODO: Add Javadocs!
 public final class Shape {
+//	TODO: Add Javadocs!
+	public static final int CONE_OFFSET_PHI_MAX = 0;
+	
+//	TODO: Add Javadocs!
+	public static final int CONE_OFFSET_RADIUS = 1;
+	
+//	TODO: Add Javadocs!
+	public static final int CONE_OFFSET_Z_MAX = 2;
+	
+//	TODO: Add Javadocs!
+	public static final int CYLINDER_OFFSET_PHI_MAX = 0;
+	
+//	TODO: Add Javadocs!
+	public static final int CYLINDER_OFFSET_RADIUS = 1;
+	
+//	TODO: Add Javadocs!
+	public static final int CYLINDER_OFFSET_Z_MAX = 2;
+	
+//	TODO: Add Javadocs!
+	public static final int CYLINDER_OFFSET_Z_MIN = 3;
+	
+//	TODO: Add Javadocs!
+	public static final int DISK_OFFSET_PHI_MAX = 0;
+	
+//	TODO: Add Javadocs!
+	public static final int DISK_OFFSET_RADIUS_INNER = 1;
+	
+//	TODO: Add Javadocs!
+	public static final int DISK_OFFSET_RADIUS_OUTER = 2;
+	
+//	TODO: Add Javadocs!
+	public static final int DISK_OFFSET_Z_MAX = 3;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private Shape() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Cone3D //////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
-	public static double intersectionRayCone(final double[] ray3D, final double conePhiMax, final double coneRadius, final double coneZMax) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+	public static double cone3DGetPhiMax(final double[] cone3D) {
+		return cone3DGetPhiMax(cone3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cone3DGetPhiMax(final double[] cone3D, final int cone3DOffset) {
+		return cone3D[cone3DOffset + CONE_OFFSET_PHI_MAX];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cone3DGetRadius(final double[] cone3D) {
+		return cone3DGetRadius(cone3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cone3DGetRadius(final double[] cone3D, final int cone3DOffset) {
+		return cone3D[cone3DOffset + CONE_OFFSET_RADIUS];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cone3DGetZMax(final double[] cone3D) {
+		return cone3DGetZMax(cone3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cone3DGetZMax(final double[] cone3D, final int cone3DOffset) {
+		return cone3D[cone3DOffset + CONE_OFFSET_Z_MAX];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cone3DIntersection(final double[] ray3D, final double[] cone3D) {
+		return cone3DIntersection(ray3D, cone3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cone3DIntersection(final double[] ray3D, final double[] cone3D, final int ray3DOffset, final int cone3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
 		
-		final double tMinimum = ray3DGetTMinimum(ray3D);
-		final double tMaximum = ray3DGetTMaximum(ray3D);
+		final double tMinimum = ray3DGetTMinimum(ray3D, ray3DOffset);
+		final double tMaximum = ray3DGetTMaximum(ray3D, ray3DOffset);
 		
-		final double k = (coneRadius / coneZMax) * (coneRadius / coneZMax);
+		final double phiMax = cone3DGetPhiMax(cone3D, cone3DOffset);
+		final double radius = cone3DGetRadius(cone3D, cone3DOffset);
+		final double zMax = cone3DGetZMax(cone3D, cone3DOffset);
+		
+		final double k = (radius / zMax) * (radius / zMax);
 		
 		final double a = vector3DDirection[0] * vector3DDirection[0] + vector3DDirection[1] * vector3DDirection[1] - k * vector3DDirection[2] * vector3DDirection[2];
-		final double b = 2.0D * (vector3DDirection[0] * point3DOrigin[0] + vector3DDirection[1] * point3DOrigin[1] - k * vector3DDirection[2] * (point3DOrigin[2] - coneZMax));
-		final double c = point3DOrigin[0] * point3DOrigin[0] + point3DOrigin[1] * point3DOrigin[1] - k * (point3DOrigin[2] - coneZMax) * (point3DOrigin[2] - coneZMax);
+		final double b = 2.0D * (vector3DDirection[0] * point3DOrigin[0] + vector3DDirection[1] * point3DOrigin[1] - k * vector3DDirection[2] * (point3DOrigin[2] - zMax));
+		final double c = point3DOrigin[0] * point3DOrigin[0] + point3DOrigin[1] * point3DOrigin[1] - k * (point3DOrigin[2] - zMax) * (point3DOrigin[2] - zMax);
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -77,7 +155,7 @@ public final class Shape {
 				
 				final double phi = getOrAdd(atan2(point3D[1], point3D[0]), 0.0D, PI_MULTIPLIED_BY_2);
 				
-				if(point3D[2] >= 0.0D && point3D[2] <= coneZMax && phi <= conePhiMax) {
+				if(point3D[2] >= 0.0D && point3D[2] <= zMax && phi <= phiMax) {
 					return t;
 				}
 			}
@@ -87,18 +165,95 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
-	public static double intersectionRayCylinder(final double[] ray3D, final double cylinderPhiMax, final double cylinderRadius, final double cylinderZMax, final double cylinderZMin) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+	public static double[] cone3D() {
+		return cone3D(toRadians(360.0D), 1.0D, 1.0D);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cone3D(final double phiMax, final double radius, final double zMax) {
+		return new double[] {phiMax, radius, zMax};
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cone3DSet(final double[] cone3DResult, final double phiMax, final double radius, final double zMax) {
+		return cone3DSet(cone3DResult, phiMax, radius, zMax, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cone3DSet(final double[] cone3DResult, final double phiMax, final double radius, final double zMax, final int cone3DResultOffset) {
+		cone3DResult[cone3DResultOffset + CONE_OFFSET_PHI_MAX] = phiMax;
+		cone3DResult[cone3DResultOffset + CONE_OFFSET_RADIUS] = radius;
+		cone3DResult[cone3DResultOffset + CONE_OFFSET_Z_MAX] = zMax;
 		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		return cone3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Cylinder3D //////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DGetPhiMax(final double[] cylinder3D) {
+		return cylinder3DGetPhiMax(cylinder3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DGetPhiMax(final double[] cylinder3D, final int cylinder3DOffset) {
+		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_PHI_MAX];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DGetRadius(final double[] cylinder3D) {
+		return cylinder3DGetRadius(cylinder3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DGetRadius(final double[] cylinder3D, final int cylinder3DOffset) {
+		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_RADIUS];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DGetZMax(final double[] cylinder3D) {
+		return cylinder3DGetZMax(cylinder3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DGetZMax(final double[] cylinder3D, final int cylinder3DOffset) {
+		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_Z_MAX];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DGetZMin(final double[] cylinder3D) {
+		return cylinder3DGetZMin(cylinder3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DGetZMin(final double[] cylinder3D, final int cylinder3DOffset) {
+		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_Z_MIN];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DIntersection(final double[] ray3D, final double[] cylinder3D) {
+		return cylinder3DIntersection(ray3D, cylinder3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DIntersection(final double[] ray3D, final double[] cylinder3D, final int ray3DOffset, final int cylinder3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
-		final double tMinimum = ray3DGetTMinimum(ray3D);
-		final double tMaximum = ray3DGetTMaximum(ray3D);
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D, ray3DOffset);
+		final double tMaximum = ray3DGetTMaximum(ray3D, ray3DOffset);
+		
+		final double phiMax = cylinder3DGetPhiMax(cylinder3D, cylinder3DOffset);
+		final double radius = cylinder3DGetRadius(cylinder3D, cylinder3DOffset);
+		final double zMax = cylinder3DGetZMax(cylinder3D, cylinder3DOffset);
+		final double zMin = cylinder3DGetZMin(cylinder3D, cylinder3DOffset);
 		
 		final double a = vector3DDirection[0] * vector3DDirection[0] + vector3DDirection[1] * vector3DDirection[1];
 		final double b = 2.0D * (vector3DDirection[0] * point3DOrigin[0] + vector3DDirection[1] * point3DOrigin[1]);
-		final double c = point3DOrigin[0] * point3DOrigin[0] + point3DOrigin[1] * point3DOrigin[1] - cylinderRadius * cylinderRadius;
+		final double c = point3DOrigin[0] * point3DOrigin[0] + point3DOrigin[1] * point3DOrigin[1] - radius * radius;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -112,10 +267,10 @@ public final class Shape {
 			if(t > tMinimum && t < tMaximum) {
 				final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
 				
-				final double radius = sqrt(point3D[0] * point3D[0] + point3D[1] * point3D[1]);
-				final double phi = getOrAdd(atan2(point3D[1] * (cylinderRadius / radius), point3D[0] * (cylinderRadius / radius)), 0.0D, PI_MULTIPLIED_BY_2);
+				final double r = sqrt(point3D[0] * point3D[0] + point3D[1] * point3D[1]);
+				final double phi = getOrAdd(atan2(point3D[1] * (radius / r), point3D[0] * (radius / r)), 0.0D, PI_MULTIPLIED_BY_2);
 				
-				if(point3D[2] >= cylinderZMin && point3D[2] <= cylinderZMax && phi <= cylinderPhiMax) {
+				if(point3D[2] >= zMin && point3D[2] <= zMax && phi <= phiMax) {
 					return t;
 				}
 			}
@@ -125,20 +280,98 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
-	public static double intersectionRayDisk(final double[] ray3D, final double diskPhiMax, final double diskRadiusInner, final double diskRadiusOuter, final double diskZMax) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+	public static double[] cylinder3D() {
+		return cylinder3D(toRadians(360.0D), 1.0D, 1.0D, -1.0D);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cylinder3D(final double phiMax, final double radius, final double zMax, final double zMin) {
+		return new double[] {phiMax, radius, zMax, zMin};
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cylinder3DSet(final double[] cylinder3DResult, final double phiMax, final double radius, final double zMax, final double zMin) {
+		return cylinder3DSet(cylinder3DResult, phiMax, radius, zMax, zMin, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cylinder3DSet(final double[] cylinder3DResult, final double phiMax, final double radius, final double zMax, final double zMin, final int cylinder3DResultOffset) {
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_PHI_MAX] = phiMax;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_RADIUS] = radius;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_Z_MAX] = zMax;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_Z_MIN] = zMin;
 		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		return cylinder3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Disk3D //////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static double disk3DGetPhiMax(final double[] disk3D) {
+		return disk3DGetPhiMax(disk3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DGetPhiMax(final double[] disk3D, final int disk3DOffset) {
+		return disk3D[disk3DOffset + DISK_OFFSET_PHI_MAX];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DGetRadiusInner(final double[] disk3D) {
+		return disk3DGetRadiusInner(disk3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DGetRadiusInner(final double[] disk3D, final int disk3DOffset) {
+		return disk3D[disk3DOffset + DISK_OFFSET_RADIUS_INNER];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DGetRadiusOuter(final double[] disk3D) {
+		return disk3DGetRadiusOuter(disk3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DGetRadiusOuter(final double[] disk3D, final int disk3DOffset) {
+		return disk3D[disk3DOffset + DISK_OFFSET_RADIUS_OUTER];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DGetZMax(final double[] disk3D) {
+		return disk3DGetZMax(disk3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DGetZMax(final double[] disk3D, final int disk3DOffset) {
+		return disk3D[disk3DOffset + DISK_OFFSET_Z_MAX];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DIntersection(final double[] ray3D, final double[] disk3D) {
+		return disk3DIntersection(ray3D, disk3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DIntersection(final double[] ray3D, final double[] disk3D, final int ray3DOffset, final int disk3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
-		final double tMinimum = ray3DGetTMinimum(ray3D);
-		final double tMaximum = ray3DGetTMaximum(ray3D);
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D, ray3DOffset);
+		final double tMaximum = ray3DGetTMaximum(ray3D, ray3DOffset);
 		
 		if(isZero(vector3DDirection[2])) {
 			return NaN;
 		}
 		
-		final double t = (diskZMax - point3DOrigin[2]) / vector3DDirection[2];
+		final double phiMax = disk3DGetPhiMax(disk3D, disk3DOffset);
+		final double radiusInner = disk3DGetRadiusInner(disk3D, disk3DOffset);
+		final double radiusOuter = disk3DGetRadiusOuter(disk3D, disk3DOffset);
+		final double zMax = disk3DGetZMax(disk3D, disk3DOffset);
+		
+		final double t = (zMax - point3DOrigin[2]) / vector3DDirection[2];
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return NaN;
@@ -148,18 +381,45 @@ public final class Shape {
 		
 		final double distanceSquared = point3D[0] * point3D[0] + point3D[1] * point3D[1];
 		
-		if(distanceSquared > diskRadiusOuter * diskRadiusOuter || distanceSquared < diskRadiusInner * diskRadiusInner) {
+		if(distanceSquared > radiusOuter * radiusOuter || distanceSquared < radiusInner * radiusInner) {
 			return NaN;
 		}
 		
 		final double phi = getOrAdd(atan2(point3D[1], point3D[0]), 0.0D, PI_MULTIPLIED_BY_2);
 		
-		if(phi > diskPhiMax) {
+		if(phi > phiMax) {
 			return NaN;
 		}
 		
 		return t;
 	}
+	
+//	TODO: Add Javadocs!
+	public static double[] disk3D() {
+		return disk3D(toRadians(360.0D), 0.0D, 1.0D, 0.0D);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] disk3D(final double phiMax, final double radiusInner, final double radiusOuter, final double zMax) {
+		return new double[] {phiMax, radiusInner, radiusOuter, zMax};
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] disk3DSet(final double[] disk3DResult, final double phiMax, final double radiusInner, final double radiusOuter, final double zMax) {
+		return disk3DSet(disk3DResult, phiMax, radiusInner, radiusOuter, zMax, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] disk3DSet(final double[] disk3DResult, final double phiMax, final double radiusInner, final double radiusOuter, final double zMax, final int disk3DResultOffset) {
+		disk3DResult[disk3DResultOffset + DISK_OFFSET_PHI_MAX] = phiMax;
+		disk3DResult[disk3DResultOffset + DISK_OFFSET_RADIUS_INNER] = radiusInner;
+		disk3DResult[disk3DResultOffset + DISK_OFFSET_RADIUS_OUTER] = radiusOuter;
+		disk3DResult[disk3DResultOffset + DISK_OFFSET_Z_MAX] = zMax;
+		
+		return disk3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 //	TODO: Refactor!

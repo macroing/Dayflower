@@ -1,3 +1,17 @@
+2021-08-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for reading TriangleMesh3D and TriangleMesh3F to the DefaultShape3DReader and DefaultShape3FReader classes, respectively.
+	* ADD:		Add the TriangleMesh3DReader and TriangleMesh3FReader classes.
+	* ADD:		Add Javadocs to the Simplex API.
+	* CHANGE:	Refactor the Simplex API.
+	* CHANGE:	Change the method signatures drawLine(Line2I), drawLine(Line2I, Color4D) and drawLine(Line2I, BiFunction<Color4D, Point2I, Color4D>) in the class ImageD to drawLineSegment(LineSegment2I), drawLineSegment(LineSegment2I, Color4D) and drawLineSegment(LineSegment2I, BiFunction<Color4D, Point2I, Color4D>), respectively.
+	* CHANGE:	Change the method signatures drawLine(Line2I), drawLine(Line2I, Color4F) and drawLine(Line2I, BiFunction<Color4F, Point2I, Color4F>) in the class ImageF to drawLineSegment(LineSegment2I), drawLineSegment(LineSegment2I, Color4F) and drawLineSegment(LineSegment2I, BiFunction<Color4F, Point2I, Color4F>), respectively.
+	* CHANGE:	Change the method signature rasterize(Line2I, Rectangle2I) in the class Rasterizer2I to rasterize(LineSegment2I, Rectangle2I).
+	* CHANGE:	Change the names of Line2D and Line2DReader to LineSegment2D and LineSegment2DReader, respectively.
+	* CHANGE:	Change the names of Line2F and Line2FReader to LineSegment2F and LineSegment2FReader, respectively.
+	* CHANGE:	Change the names of Line2I and Line2IReader to LineSegment2I and LineSegment2IReader, respectively.
+	* CHANGE:	Change the name of Line3F to LineSegment3F.
+
 2021-08-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method contains(Point2D) to the interface Shape2D and the classes Circle2D and Triangle2D.

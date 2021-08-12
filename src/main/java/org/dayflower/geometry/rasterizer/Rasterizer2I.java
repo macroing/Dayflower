@@ -23,12 +23,12 @@ import static org.dayflower.utility.Ints.abs;
 import static org.dayflower.utility.Ints.toInt;
 
 import org.dayflower.geometry.Point2I;
-import org.dayflower.geometry.shape.Line2I;
+import org.dayflower.geometry.shape.LineSegment2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
 
 /**
- * {@code Rasterizer2I} performs rasterization on {@link Line2I} and {@link Triangle2I} instances.
+ * {@code Rasterizer2I} performs rasterization on {@link LineSegment2I} and {@link Triangle2I} instances.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -41,22 +41,22 @@ public final class Rasterizer2I {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Clips {@code line} against {@code rectangle} and rasterizes the result.
+	 * Clips {@code lineSegment} against {@code rectangle} and rasterizes the result.
 	 * <p>
 	 * Returns a {@code Point2I[]} that represents a scanline.
 	 * <p>
-	 * If either {@code line} or {@code rectangle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code lineSegment} or {@code rectangle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param line the {@link Line2I} to rasterize
+	 * @param lineSegment the {@link LineSegment2I} to rasterize
 	 * @param rectangle the {@link Rectangle2I} to clip against
 	 * @return a {@code Point2I[]} that represents a scanline
-	 * @throws NullPointerException thrown if, and only if, either {@code line} or {@code rectangle} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code lineSegment} or {@code rectangle} are {@code null}
 	 */
-	public static Point2I[] rasterize(final Line2I line, final Rectangle2I rectangle) {
-		final int lAX = line.getA().getX();
-		final int lAY = line.getA().getY();
-		final int lBX = line.getB().getX();
-		final int lBY = line.getB().getY();
+	public static Point2I[] rasterize(final LineSegment2I lineSegment, final Rectangle2I rectangle) {
+		final int lAX = lineSegment.getA().getX();
+		final int lAY = lineSegment.getA().getY();
+		final int lBX = lineSegment.getB().getX();
+		final int lBY = lineSegment.getB().getY();
 		
 		final int rAX = rectangle.getA().getX();
 		final int rAY = rectangle.getA().getY();
@@ -171,7 +171,7 @@ public final class Rasterizer2I {
 			final Point2I a = new Point2I(toInt(x0), y);
 			final Point2I b = new Point2I(toInt(x1), y);
 			
-			final Line2I line = new Line2I(a, b);
+			final LineSegment2I line = new LineSegment2I(a, b);
 			
 			scanLines[i] = rasterize(line, rectangle);
 			
@@ -199,7 +199,7 @@ public final class Rasterizer2I {
 			final Point2I a = new Point2I(toInt(x0), y);
 			final Point2I b = new Point2I(toInt(x1), y);
 			
-			final Line2I line = new Line2I(a, b);
+			final LineSegment2I line = new LineSegment2I(a, b);
 			
 			scanLines[i] = rasterize(line, rectangle);
 			

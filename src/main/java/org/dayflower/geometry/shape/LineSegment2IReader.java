@@ -22,30 +22,30 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-import org.dayflower.geometry.Point2D;
-import org.dayflower.geometry.Shape2DReader;
+import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.Shape2IReader;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Line2DReader} is a {@link Shape2DReader} implementation that reads {@link Line2D} instances from a {@code DataInput} instance.
+ * A {@code LineSegment2IReader} is a {@link Shape2IReader} implementation that reads {@link LineSegment2I} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Line2DReader implements Shape2DReader {
+public final class LineSegment2IReader implements Shape2IReader {
 	/**
-	 * Constructs a new {@code Line2DReader} instance.
+	 * Constructs a new {@code LineSegment2IReader} instance.
 	 */
-	public Line2DReader() {
+	public LineSegment2IReader() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Reads a {@link Line2D} instance from {@code dataInput}.
+	 * Reads a {@link LineSegment2I} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Line2D} instance that was read.
+	 * Returns the {@code LineSegment2I} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -54,13 +54,13 @@ public final class Line2DReader implements Shape2DReader {
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @return the {@code Line2D} instance that was read
+	 * @return the {@code LineSegment2I} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Line2D read(final DataInput dataInput) {
+	public LineSegment2I read(final DataInput dataInput) {
 		try {
 			return read(dataInput, dataInput.readInt());
 		} catch(final IOException e) {
@@ -69,9 +69,9 @@ public final class Line2DReader implements Shape2DReader {
 	}
 	
 	/**
-	 * Reads a {@link Line2D} instance from {@code dataInput}.
+	 * Reads a {@link LineSegment2I} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Line2D} instance that was read.
+	 * Returns the {@code LineSegment2I} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -79,30 +79,30 @@ public final class Line2DReader implements Shape2DReader {
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
-	 * The ID of the {@code Line2D} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
+	 * The ID of the {@code LineSegment2I} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @param id the ID of the {@code Line2D} to read
-	 * @return the {@code Line2D} instance that was read
+	 * @param id the ID of the {@code Line2I} to read
+	 * @return the {@code LineSegment2I} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, {@code id} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Line2D read(final DataInput dataInput, final int id) {
-		ParameterArguments.requireExact(id, Line2D.ID, "id");
+	public LineSegment2I read(final DataInput dataInput, final int id) {
+		ParameterArguments.requireExact(id, LineSegment2I.ID, "id");
 		
-		return new Line2D(Point2D.read(dataInput), Point2D.read(dataInput));
+		return new LineSegment2I(Point2I.read(dataInput), Point2I.read(dataInput));
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code id == Line2D.ID}, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code id == LineSegment2I.ID}, {@code false} otherwise.
 	 * 
 	 * @param id the ID to check
-	 * @return {@code true} if, and only if, {@code id == Line2D.ID}, {@code false} otherwise
+	 * @return {@code true} if, and only if, {@code id == LineSegment2I.ID}, {@code false} otherwise
 	 */
 	@Override
 	public boolean isSupported(final int id) {
-		return id == Line2D.ID;
+		return id == LineSegment2I.ID;
 	}
 }

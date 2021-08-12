@@ -20,8 +20,6 @@ package org.dayflower.simplex;
 
 import static org.dayflower.utility.Doubles.sqrt;
 
-import java.lang.reflect.Field;//TODO: Add Javadocs!
-
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on vectors.
  * <p>
@@ -343,17 +341,74 @@ public final class Vector {
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the direction from {@code point3DEye} to {@code point3DTarget}.
+	 * <p>
+	 * If either {@code point3DEye} or {@code point3DTarget} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3DEye.length < 3} or {@code point3DTarget.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DDirection(point3DEye, point3DTarget, Vector.vector3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3DEye a {@code double[]} that contains the point to look from
+	 * @param point3DTarget a {@code double[]} that contains the point to look at
+	 * @return a {@code double[]} that contains a vector with three components and is set to the direction from {@code point3DEye} to {@code point3DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < 3} or {@code point3DTarget.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3DEye} or {@code point3DTarget} are {@code null}
+	 */
 	public static double[] vector3DDirection(final double[] point3DEye, final double[] point3DTarget) {
 		return vector3DDirection(point3DEye, point3DTarget, vector3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the direction from {@code point3DEye} to {@code point3DTarget}.
+	 * <p>
+	 * If either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3DEye.length < 3}, {@code point3DTarget.length < 3} or {@code vector3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DDirection(point3DEye, point3DTarget, vector3DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3DEye a {@code double[]} that contains the point to look from
+	 * @param point3DTarget a {@code double[]} that contains the point to look at
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with three components and is set to the direction from {@code point3DEye} to {@code point3DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < 3}, {@code point3DTarget.length < 3} or {@code vector3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DDirection(final double[] point3DEye, final double[] point3DTarget, final double[] vector3DResult) {
 		return vector3DDirection(point3DEye, point3DTarget, vector3DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the direction from {@code point3DEye} to {@code point3DTarget}.
+	 * <p>
+	 * If either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
+	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3DEye a {@code double[]} that contains the point to look from
+	 * @param point3DTarget a {@code double[]} that contains the point to look at
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @param point3DEyeOffset the offset in {@code point3DEye} to start at
+	 * @param point3DTargetOffset the offset in {@code point3DTarget} to start at
+	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
+	 * @return a {@code double[]} that contains a vector with three components and is set to the direction from {@code point3DEye} to {@code point3DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0},
+	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DDirection(final double[] point3DEye, final double[] point3DTarget, final double[] vector3DResult, final int point3DEyeOffset, final int point3DTargetOffset, final int vector3DResultOffset) {
 		final double component1 = point3DTarget[point3DTargetOffset + 0] - point3DEye[point3DEyeOffset + 0];
 		final double component2 = point3DTarget[point3DTargetOffset + 1] - point3DEye[point3DEyeOffset + 1];
@@ -362,17 +417,74 @@ public final class Vector {
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the normalized direction from {@code point3DEye} to {@code point3DTarget}.
+	 * <p>
+	 * If either {@code point3DEye} or {@code point3DTarget} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3DEye.length < 3} or {@code point3DTarget.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DDirectionNormalized(point3DEye, point3DTarget, Vector.vector3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3DEye a {@code double[]} that contains the point to look from
+	 * @param point3DTarget a {@code double[]} that contains the point to look at
+	 * @return a {@code double[]} that contains a vector with three components and is set to the normalized direction from {@code point3DEye} to {@code point3DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < 3} or {@code point3DTarget.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3DEye} or {@code point3DTarget} are {@code null}
+	 */
 	public static double[] vector3DDirectionNormalized(final double[] point3DEye, final double[] point3DTarget) {
 		return vector3DDirectionNormalized(point3DEye, point3DTarget, vector3D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the normalized direction from {@code point3DEye} to {@code point3DTarget}.
+	 * <p>
+	 * If either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3DEye.length < 3}, {@code point3DTarget.length < 3} or {@code vector3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DDirectionNormalized(point3DEye, point3DTarget, vector3DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3DEye a {@code double[]} that contains the point to look from
+	 * @param point3DTarget a {@code double[]} that contains the point to look at
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with three components and is set to the normalized direction from {@code point3DEye} to {@code point3DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < 3}, {@code point3DTarget.length < 3} or {@code vector3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DDirectionNormalized(final double[] point3DEye, final double[] point3DTarget, final double[] vector3DResult) {
 		return vector3DDirectionNormalized(point3DEye, point3DTarget, vector3DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the normalized direction from {@code point3DEye} to {@code point3DTarget}.
+	 * <p>
+	 * If either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
+	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3DEye a {@code double[]} that contains the point to look from
+	 * @param point3DTarget a {@code double[]} that contains the point to look at
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @param point3DEyeOffset the offset in {@code point3DEye} to start at
+	 * @param point3DTargetOffset the offset in {@code point3DTarget} to start at
+	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
+	 * @return a {@code double[]} that contains a vector with three components and is set to the normalized direction from {@code point3DEye} to {@code point3DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0},
+	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}
+	 */
 	public static double[] vector3DDirectionNormalized(final double[] point3DEye, final double[] point3DTarget, final double[] vector3DResult, final int point3DEyeOffset, final int point3DTargetOffset, final int vector3DResultOffset) {
 		return vector3DNormalize(vector3DDirection(point3DEye, point3DTarget, vector3DResult, point3DEyeOffset, point3DTargetOffset, vector3DResultOffset), vector3DResult, vector3DResultOffset, vector3DResultOffset);
 	}
@@ -711,6 +823,82 @@ public final class Vector {
 		vector3DResult[vector3DResultOffset + 2] = component3;
 		
 		return vector3DResult;
+	}
+	
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS - vector3DRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < 3} or {@code vector3DRHS.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DSubtract(vector3DLHS, vector3DRHS, Vector.vector3D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the expression
+	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS - vector3DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < 3} or {@code vector3DRHS.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}
+	 */
+	public static double[] vector3DSubtract(final double[] vector3DLHS, final double[] vector3DRHS) {
+		return vector3DSubtract(vector3DLHS, vector3DRHS, vector3D());
+	}
+	
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS - vector3DRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < 3}, {@code vector3DRHS.length < 3} or {@code vector3DResult.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DSubtract(vector3DLHS, vector3DRHS, vector3DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the expression
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS - vector3DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < 3}, {@code vector3DRHS.length < 3} or {@code vector3DResult.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
+	 */
+	public static double[] vector3DSubtract(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult) {
+		return vector3DSubtract(vector3DLHS, vector3DRHS, vector3DResult, 0, 0, 0);
+	}
+	
+	/**
+	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS - vector3DRHS}.
+	 * <p>
+	 * If either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
+	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the expression
+	 * @param vector3DResult a {@code double[]} that contains the vector to return
+	 * @param vector3DLHSOffset the offset in {@code vector3DLHS} to start at
+	 * @param vector3DRHSOffset the offset in {@code vector3DRHS} to start at
+	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
+	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS - vector3DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0},
+	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
+	 */
+	public static double[] vector3DSubtract(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
+		final double component1 = vector3DLHS[vector3DLHSOffset + 0] - vector3DRHS[vector3DRHSOffset + 0];
+		final double component2 = vector3DLHS[vector3DLHSOffset + 1] - vector3DRHS[vector3DRHSOffset + 1];
+		final double component3 = vector3DLHS[vector3DLHSOffset + 2] - vector3DRHS[vector3DRHSOffset + 2];
+		
+		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
 	
 	/**

@@ -21,31 +21,36 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.dayflower.geometry.Point2F;
-import org.dayflower.geometry.Shape2FReader;
+import org.dayflower.geometry.Shape3DReader;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Line2FReader} is a {@link Shape2FReader} implementation that reads {@link Line2F} instances from a {@code DataInput} instance.
+ * A {@code TriangleMesh3DReader} is a {@link Shape3DReader} implementation that reads {@link TriangleMesh3D} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Line2FReader implements Shape2FReader {
+public final class TriangleMesh3DReader implements Shape3DReader {
+	private final Triangle3DReader triangle3DReader;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
-	 * Constructs a new {@code Line2FReader} instance.
+	 * Constructs a new {@code TriangleMesh3DReader} instance.
 	 */
-	public Line2FReader() {
-		
+	public TriangleMesh3DReader() {
+		this.triangle3DReader = new Triangle3DReader();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Reads a {@link Line2F} instance from {@code dataInput}.
+	 * Reads a {@link TriangleMesh3D} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Line2F} instance that was read.
+	 * Returns the {@code TriangleMesh3D} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -54,13 +59,13 @@ public final class Line2FReader implements Shape2FReader {
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @return the {@code Line2F} instance that was read
+	 * @return the {@code TriangleMesh3D} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Line2F read(final DataInput dataInput) {
+	public TriangleMesh3D read(final DataInput dataInput) {
 		try {
 			return read(dataInput, dataInput.readInt());
 		} catch(final IOException e) {
@@ -69,9 +74,9 @@ public final class Line2FReader implements Shape2FReader {
 	}
 	
 	/**
-	 * Reads a {@link Line2F} instance from {@code dataInput}.
+	 * Reads a {@link TriangleMesh3D} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Line2F} instance that was read.
+	 * Returns the {@code TriangleMesh3D} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -79,30 +84,48 @@ public final class Line2FReader implements Shape2FReader {
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
-	 * The ID of the {@code Line2F} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
+	 * The ID of the {@code TriangleMesh3D} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @param id the ID of the {@code Line2F} to read
-	 * @return the {@code Line2F} instance that was read
+	 * @param id the ID of the {@code TriangleMesh3D} to read
+	 * @return the {@code TriangleMesh3D} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, {@code id} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Line2F read(final DataInput dataInput, final int id) {
-		ParameterArguments.requireExact(id, Line2F.ID, "id");
+	public TriangleMesh3D read(final DataInput dataInput, final int id) {
+		ParameterArguments.requireExact(id, TriangleMesh3D.ID, "id");
 		
-		return new Line2F(Point2F.read(dataInput), Point2F.read(dataInput));
+		try {
+			final List<Triangle3D> triangles = new ArrayList<>();
+			
+			final int triangleCount = dataInput.readInt();
+			
+			for(int i = 0; i < triangleCount; i++) {
+				triangles.add(this.triangle3DReader.read(dataInput));
+			}
+			
+			final String groupName = dataInput.readUTF();
+			final String materialName = dataInput.readUTF();
+			final String objectName = dataInput.readUTF();
+			
+			final boolean isUsingAccelerationStructure = dataInput.readBoolean();
+			
+			return new TriangleMesh3D(triangles, groupName, materialName, objectName, isUsingAccelerationStructure);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code id == Line2F.ID}, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code id == TriangleMesh3D.ID}, {@code false} otherwise.
 	 * 
 	 * @param id the ID to check
-	 * @return {@code true} if, and only if, {@code id == Line2F.ID}, {@code false} otherwise
+	 * @return {@code true} if, and only if, {@code id == TriangleMesh3D.ID}, {@code false} otherwise
 	 */
 	@Override
 	public boolean isSupported(final int id) {
-		return id == Line2F.ID;
+		return id == TriangleMesh3D.ID;
 	}
 }

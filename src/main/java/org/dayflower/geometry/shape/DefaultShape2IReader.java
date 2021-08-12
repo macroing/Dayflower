@@ -44,7 +44,7 @@ public final class DefaultShape2IReader implements Shape2IReader {
 	public DefaultShape2IReader() {
 		this.shape2IReaders = new LinkedHashMap<>();
 		this.shape2IReaders.put(Integer.valueOf(Circle2I.ID), new Circle2IReader());
-		this.shape2IReaders.put(Integer.valueOf(Line2I.ID), new Line2IReader());
+		this.shape2IReaders.put(Integer.valueOf(LineSegment2I.ID), new LineSegment2IReader());
 		this.shape2IReaders.put(Integer.valueOf(Rectangle2I.ID), new Rectangle2IReader());
 		this.shape2IReaders.put(Integer.valueOf(Triangle2I.ID), new Triangle2IReader());
 	}
@@ -101,7 +101,7 @@ public final class DefaultShape2IReader implements Shape2IReader {
 	public Shape2I read(final DataInput dataInput, final int id) {
 		switch(id) {
 			case Circle2I.ID:
-			case Line2I.ID:
+			case LineSegment2I.ID:
 			case Rectangle2I.ID:
 			case Triangle2I.ID:
 				return this.shape2IReaders.get(Integer.valueOf(id)).read(dataInput, id);

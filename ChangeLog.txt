@@ -1,5 +1,7 @@
 2021-08-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods load(URL) and load(URL, Filter2D) to the PixelImageD class.
+	* ADD:		Add the methods load(URL) and load(URL, Filter2F) to the PixelImageF class.
 	* CHANGE:	Refactor the Simplex API.
 
 2021-08-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>

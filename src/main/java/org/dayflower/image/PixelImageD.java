@@ -33,6 +33,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -969,6 +970,54 @@ public final class PixelImageD extends ImageD {
 	 */
 	public static PixelImageD load(final String pathname, final Filter2D filter) {
 		return load(new File(pathname), filter);
+	}
+	
+	/**
+	 * Loads a {@code PixelImageD} from the URL represented by {@code uRL}.
+	 * <p>
+	 * Returns a new {@code PixelImageD} instance.
+	 * <p>
+	 * If {@code uRL} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * PixelImageD.load(uRL, new MitchellFilter2D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param uRL a {@code URL} that represents the URL to load from
+	 * @return a new {@code PixelImageD} instance
+	 * @throws NullPointerException thrown if, and only if, {@code uRL} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static PixelImageD load(final URL uRL) {
+		return load(uRL, new MitchellFilter2D());
+	}
+	
+	/**
+	 * Loads a {@code PixelImageD} from the URL represented by {@code uRL}.
+	 * <p>
+	 * Returns a new {@code PixelImageD} instance.
+	 * <p>
+	 * If either {@code uRL} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param uRL a {@code URL} that represents the URL to load from
+	 * @param filter the {@link Filter2D} to use
+	 * @return a new {@code PixelImageD} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code uRL} or {@code filter} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static PixelImageD load(final URL uRL, final Filter2D filter) {
+		try {
+			return new PixelImageD(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null"))), filter);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

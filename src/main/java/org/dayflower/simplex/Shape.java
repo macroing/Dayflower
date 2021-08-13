@@ -99,6 +99,12 @@ public final class Shape {
 //	TODO: Add Javadocs!
 	public static final int PLANE_OFFSET_C = 6;
 	
+//	TODO: Add Javadocs!
+	public static final int SPHERE_OFFSET_CENTER = 0;
+	
+//	TODO: Add Javadocs!
+	public static final int SPHERE_OFFSET_RADIUS = 3;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Shape() {
@@ -721,22 +727,37 @@ public final class Shape {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Sphere3D ////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-//	TODO: Refactor!
-	public static double intersectionRaySphere(final double[] ray3D, final double[] sphereCenter, final double sphereRadius) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D);
+	public static double sphere3DGetRadius(final double[] sphere3D) {
+		return sphere3DGetRadius(sphere3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double sphere3DIntersection(final double[] ray3D, final double[] sphere3D) {
+		return sphere3DIntersection(ray3D, sphere3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double sphere3DIntersection(final double[] ray3D, final double[] sphere3D, final int ray3DOffset, final int sphere3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D);
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
 		
-		final double tMinimum = ray3DGetTMinimum(ray3D);
-		final double tMaximum = ray3DGetTMaximum(ray3D);
+		final double tMinimum = ray3DGetTMinimum(ray3D, ray3DOffset);
+		final double tMaximum = ray3DGetTMaximum(ray3D, ray3DOffset);
 		
-		final double[] sphereCenterToRayOrigin = vector3DDirection(sphereCenter, point3DOrigin);
+		final double[] point3DCenter = sphere3DGetCenter(sphere3D, point3D(), sphere3DOffset, 0);
+		
+		final double radius = sphere3DGetRadius(sphere3D, sphere3DOffset);
+		
+		final double[] vector3DCenterToOrigin = vector3DDirection(point3DCenter, point3DOrigin);
 		
 		final double a = vector3DLengthSquared(vector3DDirection);
-		final double b = vector3DDotProduct(sphereCenterToRayOrigin, vector3DDirection) * 2.0D;
-		final double c = vector3DLengthSquared(sphereCenterToRayOrigin) - sphereRadius * sphereRadius;
+		final double b = vector3DDotProduct(vector3DCenterToOrigin, vector3DDirection) * 2.0D;
+		final double c = vector3DLengthSquared(vector3DCenterToOrigin) - radius * radius;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -753,6 +774,62 @@ public final class Shape {
 		
 		return NaN;
 	}
+	
+//	TODO: Add Javadocs!
+	public static double sphere3DGetRadius(final double[] sphere3D, final int sphere3DOffset) {
+		return sphere3D[sphere3DOffset + SPHERE_OFFSET_RADIUS];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3D() {
+		return sphere3D(point3D(0.0D, 0.0D, 0.0D), 1.0D);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3D(final double[] point3DCenter, final double radius) {
+		return sphere3D(point3DCenter, radius, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3D(final double[] point3DCenter, final double radius, final int point3DCenterOffset) {
+		final double centerX = point3DCenter[point3DCenterOffset + 0];
+		final double centerY = point3DCenter[point3DCenterOffset + 1];
+		final double centerZ = point3DCenter[point3DCenterOffset + 2];
+		
+		return new double[] {centerX, centerY, centerZ, radius};
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DGetCenter(final double[] sphere3D) {
+		return sphere3DGetCenter(sphere3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DGetCenter(final double[] sphere3D, final double[] point3DCenterResult) {
+		return sphere3DGetCenter(sphere3D, point3DCenterResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DGetCenter(final double[] sphere3D, final double[] point3DCenterResult, final int sphere3DOffset, final int point3DCenterResultOffset) {
+		return point3DSet(point3DCenterResult, sphere3D, point3DCenterResultOffset, sphere3DOffset + SPHERE_OFFSET_CENTER);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DSet(final double[] sphere3DResult, final double[] point3DCenter, final double radius) {
+		return sphere3DSet(sphere3DResult, point3DCenter, radius, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DSet(final double[] sphere3DResult, final double[] point3DCenter, final double radius, final int sphere3DResultOffset, final int point3DCenterOffset) {
+		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 0] = point3DCenter[point3DCenterOffset + 0];
+		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 1] = point3DCenter[point3DCenterOffset + 1];
+		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 2] = point3DCenter[point3DCenterOffset + 2];
+		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_RADIUS] = radius;
+		
+		return sphere3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 //	TODO: Refactor!

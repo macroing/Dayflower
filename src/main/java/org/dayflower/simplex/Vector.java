@@ -826,6 +826,31 @@ public final class Vector {
 	}
 	
 	/**
+	 * Sets the component values of the vector contained in {@code vector3DResult} at offset {@code vector3DResultOffset}.
+	 * <p>
+	 * Returns {@code vector3DResult}.
+	 * <p>
+	 * If either {@code vector3DResult} or {@code vector3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DResult.length < vector3DResultOffset + 3}, {@code vector3DResultOffset < 0}, {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3DResult a {@code double[]} that contains a vector with three components
+	 * @param vector3D a {@code double[]} that contains a vector with component values to set
+	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return {@code point3DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DResult.length < vector3DResultOffset + 3}, {@code vector3DResultOffset < 0}, {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DResult} or {@code vector3D} are {@code null}
+	 */
+	public static double[] vector3DSet(final double[] vector3DResult, final double[] vector3D, final int vector3DResultOffset, final int vector3DOffset) {
+		vector3DResult[vector3DResultOffset + 0] = vector3D[vector3DOffset + 0];
+		vector3DResult[vector3DResultOffset + 1] = vector3D[vector3DOffset + 1];
+		vector3DResult[vector3DResultOffset + 2] = vector3D[vector3DOffset + 2];
+		
+		return vector3DResult;
+	}
+	
+	/**
 	 * Returns a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS - vector3DRHS}.
 	 * <p>
 	 * If either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}, a {@code NullPointerException} will be thrown.

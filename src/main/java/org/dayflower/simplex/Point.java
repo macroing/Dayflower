@@ -208,6 +208,30 @@ public final class Point {
 	}
 	
 	/**
+	 * Sets the component values of the point contained in {@code point2DResult} at offset {@code point2DResultOffset}.
+	 * <p>
+	 * Returns {@code point2DResult}.
+	 * <p>
+	 * If either {@code point2DResult} or {@code point2D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DResult.length < point2DResultOffset + 2}, {@code point2DResultOffset < 0}, {@code point2D.length < point2DOffset + 2} or {@code point2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2DResult a {@code double[]} that contains a point with two components
+	 * @param point2D a {@code double[]} that contains a point with component values to set
+	 * @param point2DResultOffset the offset in {@code point2DResult} to start at
+	 * @param point2DOffset the offset in {@code point2D} to start at
+	 * @return {@code point2DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DResult.length < point2DResultOffset + 2}, {@code point2DResultOffset < 0}, {@code point2D.length < point2DOffset + 2} or {@code point2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DResult} or {@code point2D} are {@code null}
+	 */
+	public static double[] point2DSet(final double[] point2DResult, final double[] point2D, final int point2DResultOffset, final int point2DOffset) {
+		point2DResult[point2DResultOffset + 0] = point2D[point2DOffset + 0];
+		point2DResult[point2DResultOffset + 1] = point2D[point2DOffset + 1];
+		
+		return point2DResult;
+	}
+	
+	/**
 	 * Returns a {@code double[]} that contains a point with three components.
 	 * <p>
 	 * Calling this method is equivalent to the following:
@@ -524,7 +548,7 @@ public final class Point {
 	 * If {@code point3DResult.length < point3DResultOffset + 3}, {@code point3DResultOffset < 0}, {@code point3D.length < point3DOffset + 3} or {@code point3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param point3DResult a {@code double[]} that contains a point with three components
-	 * @param point3D a {@code double[]} that contains a point component values to set
+	 * @param point3D a {@code double[]} that contains a point with component values to set
 	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
 	 * @param point3DOffset the offset in {@code point3D} to start at
 	 * @return {@code point3DResult}

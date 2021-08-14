@@ -155,12 +155,17 @@ public final class Camera {
 	}
 	
 //	TODO: Add Javadocs!
-	public static double[] camera3DCreatePrimaryRay(final double[] camera3D, final int camera3DOffset, final double imageX, final double imageY) {
-		return camera3DCreatePrimaryRay(camera3D, camera3DOffset, imageX, imageY, 0.5D, 0.5D);
+	public static double[] camera3DCreatePrimaryRay(final double[] camera3D, final double imageX, final double imageY) {
+		return camera3DCreatePrimaryRay(camera3D, imageX, imageY, 0.5D, 0.5D);
 	}
 	
 //	TODO: Add Javadocs!
-	public static double[] camera3DCreatePrimaryRay(final double[] camera3D, final int camera3DOffset, final double imageX, final double imageY, final double pixelX, final double pixelY) {
+	public static double[] camera3DCreatePrimaryRay(final double[] camera3D, final double imageX, final double imageY, final double pixelX, final double pixelY) {
+		return camera3DCreatePrimaryRay(camera3D, imageX, imageY, pixelX, pixelY, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] camera3DCreatePrimaryRay(final double[] camera3D, final double imageX, final double imageY, final double pixelX, final double pixelY, final int camera3DOffset) {
 		final double apertureRadius = camera3DGetApertureRadius(camera3D, camera3DOffset);
 		final double focalDistance = camera3DGetFocalDistance(camera3D, camera3DOffset);
 		

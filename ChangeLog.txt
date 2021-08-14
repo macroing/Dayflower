@@ -1,5 +1,7 @@
 2021-08-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the classes ByteArrays and DoubleArrays.
+	* ADD:		Add the methods indexOf(float, float[]) and merge(float[], float) to the FloatArrays class.
 	* ADD:		Add the methods convert(ArrayComponentOrder, ArrayComponentOrder, double[]) and convert(ArrayComponentOrder, ArrayComponentOrder, float[]) to the ArrayComponentOrder enum.
 	* ADD:		Add the methods readA(double[], int), readB(double[], int), readG(double[], int) and readR(double[], int) to the ArrayComponentOrder enum.
 	* ADD:		Add the methods readA(float[], int), readB(float[], int), readG(float[], int) and readR(float[], int) to the ArrayComponentOrder enum.

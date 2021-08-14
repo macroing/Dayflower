@@ -21,13 +21,13 @@ package org.dayflower.utility;
 import java.util.Objects;
 
 /**
- * A class that consists exclusively of static methods that returns or performs various operations on {@code float[]} instances.
+ * A class that consists exclusively of static methods that returns or performs various operations on {@code double[]} instances.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class FloatArrays {
-	private FloatArrays() {
+public final class DoubleArrays {
+	private DoubleArrays() {
 		
 	}
 	
@@ -41,8 +41,8 @@ public final class FloatArrays {
 	 * If {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to {@code arrayB.length}, {@code length} is less than {@code 0},
 	 * {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0} or greater than {@code arrayB.length}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param arrayA a {@code float[]}
-	 * @param arrayB a {@code float[]}
+	 * @param arrayA a {@code double[]}
+	 * @param arrayB a {@code double[]}
 	 * @param offsetArrayA the offset to start at in {@code arrayA}
 	 * @param offsetArrayB the offset to start at in {@code arrayB}
 	 * @param length the length of the sub-arrays to test for equality
@@ -52,7 +52,7 @@ public final class FloatArrays {
 	 *                                  or greater than {@code arrayB.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayA} or {@code arrayB} are {@code null}
 	 */
-	public static boolean equal(final float[] arrayA, final float[] arrayB, final int offsetArrayA, final int offsetArrayB, final int length) {
+	public static boolean equal(final double[] arrayA, final double[] arrayB, final int offsetArrayA, final int offsetArrayB, final int length) {
 		Objects.requireNonNull(arrayA, "arrayA == null");
 		Objects.requireNonNull(arrayB, "arrayB == null");
 		
@@ -63,7 +63,7 @@ public final class FloatArrays {
 		ParameterArguments.requireRange(offsetArrayB + length, 0, arrayB.length, "offsetArrayB + length");
 		
 		for(int i = 0; i < length; i++) {
-			if(!Floats.equal(arrayA[offsetArrayA + i], arrayB[offsetArrayB + i])) {
+			if(!Doubles.equal(arrayA[offsetArrayA + i], arrayB[offsetArrayB + i])) {
 				return false;
 			}
 		}
@@ -72,45 +72,45 @@ public final class FloatArrays {
 	}
 	
 	/**
-	 * Performs a merge operation on the {@code float[]} instance {@code array} and the {@code float} {@code value}.
+	 * Performs a merge operation on the {@code double[]} instance {@code array} and the {@code double} {@code value}.
 	 * <p>
-	 * Returns a new {@code float[]} with {@code array} and {@code value} merged.
+	 * Returns a new {@code double[]} with {@code array} and {@code value} merged.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * FloatArrays.merge(array, new float[] {value});
+	 * DoubleArrays.merge(array, new double[] {value});
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the {@code float[]} that comes first
-	 * @param value the {@code float} that comes second
-	 * @return a new {@code float[]} with {@code array} and {@code value} merged
+	 * @param array the {@code double[]} that comes first
+	 * @param value the {@code double} that comes second
+	 * @return a new {@code double[]} with {@code array} and {@code value} merged
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public static float[] merge(final float[] array, final float value) {
-		return merge(array, new float[] {value});
+	public static double[] merge(final double[] array, final double value) {
+		return merge(array, new double[] {value});
 	}
 	
 	/**
-	 * Performs a merge operation on the {@code float[]} instances {@code arrayA} and {@code arrayB}.
+	 * Performs a merge operation on the {@code double[]} instances {@code arrayA} and {@code arrayB}.
 	 * <p>
-	 * Returns a new {@code float[]} with {@code arrayA} and {@code arrayB} merged.
+	 * Returns a new {@code double[]} with {@code arrayA} and {@code arrayB} merged.
 	 * <p>
 	 * If either {@code arrayA} or {@code arrayB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param arrayA the {@code float[]} that comes first
-	 * @param arrayB the {@code float[]} that comes second
-	 * @return a new {@code float[]} with {@code arrayA} and {@code arrayB} merged
+	 * @param arrayA the {@code double[]} that comes first
+	 * @param arrayB the {@code double[]} that comes second
+	 * @return a new {@code double[]} with {@code arrayA} and {@code arrayB} merged
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayA} or {@code arrayB} are {@code null}
 	 */
-	public static float[] merge(final float[] arrayA, final float[] arrayB) {
+	public static double[] merge(final double[] arrayA, final double[] arrayB) {
 		Objects.requireNonNull(arrayA, "arrayA == null");
 		Objects.requireNonNull(arrayB, "arrayB == null");
 		
-		final float[] arrayC = new float[arrayA.length + arrayB.length];
+		final double[] arrayC = new double[arrayA.length + arrayB.length];
 		
 		final int offsetArrayA = 0;
 		final int offsetArrayB = arrayA.length;
@@ -122,99 +122,99 @@ public final class FloatArrays {
 	}
 	
 	/**
-	 * Performs a splice operation on the {@code float[]} instance {@code array}.
+	 * Performs a splice operation on the {@code double[]} instance {@code array}.
 	 * <p>
-	 * Returns a new {@code float[]} with the result of the operation.
+	 * Returns a new {@code double[]} with the result of the operation.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * FloatArrays.splice(array, offset, array.length);
+	 * DoubleArrays.splice(array, offset, array.length);
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the input {@code float[]}
+	 * @param array the input {@code double[]}
 	 * @param offset the offset for the removal, which may be negative
-	 * @return a new {@code float[]} with the result of the operation
+	 * @return a new {@code double[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public static float[] splice(final float[] array, final int offset) {
+	public static double[] splice(final double[] array, final int offset) {
 		return splice(array, offset, array.length);
 	}
 	
 	/**
-	 * Performs a splice operation on the {@code float[]} instance {@code array}.
+	 * Performs a splice operation on the {@code double[]} instance {@code array}.
 	 * <p>
-	 * Returns a new {@code float[]} with the result of the operation.
+	 * Returns a new {@code double[]} with the result of the operation.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * FloatArrays.splice(array, offset, length, new float[0]);
+	 * DoubleArrays.splice(array, offset, length, new double[0]);
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the input {@code float[]}
+	 * @param array the input {@code double[]}
 	 * @param offset the offset for the removal, which may be negative
 	 * @param length the length of the removal, which may be negative
-	 * @return a new {@code float[]} with the result of the operation
+	 * @return a new {@code double[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public static float[] splice(final float[] array, final int offset, final int length) {
-		return splice(array, offset, length, new float[0]);
+	public static double[] splice(final double[] array, final int offset, final int length) {
+		return splice(array, offset, length, new double[0]);
 	}
 	
 	/**
-	 * Performs a splice operation on the {@code float[]} instance {@code array}.
+	 * Performs a splice operation on the {@code double[]} instance {@code array}.
 	 * <p>
-	 * Returns a new {@code float[]} with the result of the operation.
+	 * Returns a new {@code double[]} with the result of the operation.
 	 * <p>
 	 * If either {@code array} or {@code arrayReplacement} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * FloatArrays.splice(array, offset, length, arrayReplacement, new float[0]);
+	 * DoubleArrays.splice(array, offset, length, arrayReplacement, new double[0]);
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the input {@code float[]}
+	 * @param array the input {@code double[]}
 	 * @param offset the offset for the removal, which may be negative
 	 * @param length the length of the removal, which may be negative
-	 * @param arrayReplacement an {@code float[]} that acts as replacement
-	 * @return a new {@code float[]} with the result of the operation
+	 * @param arrayReplacement an {@code double[]} that acts as replacement
+	 * @return a new {@code double[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayReplacement} are {@code null}
 	 */
-	public static float[] splice(final float[] array, final int offset, final int length, final float[] arrayReplacement) {
-		return splice(array, offset, length, arrayReplacement, new float[0]);
+	public static double[] splice(final double[] array, final int offset, final int length, final double[] arrayReplacement) {
+		return splice(array, offset, length, arrayReplacement, new double[0]);
 	}
 	
 	/**
-	 * Performs a splice operation on the {@code float[]} instance {@code array}.
+	 * Performs a splice operation on the {@code double[]} instance {@code array}.
 	 * <p>
-	 * Returns a new {@code float[]} with the result of the operation.
+	 * Returns a new {@code double[]} with the result of the operation.
 	 * <p>
 	 * If either {@code array}, {@code arrayReplacement} or {@code arrayMatcher} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param array the input {@code float[]}
+	 * @param array the input {@code double[]}
 	 * @param offset the offset for the removal, which may be negative
 	 * @param length the length of the removal, which may be negative
-	 * @param arrayReplacement an {@code float[]} that acts as replacement
-	 * @param arrayMatcher a {@code float[]} that matches the part of {@code array} that will be replaced
-	 * @return a new {@code float[]} with the result of the operation
+	 * @param arrayReplacement an {@code double[]} that acts as replacement
+	 * @param arrayMatcher a {@code double[]} that matches the part of {@code array} that will be replaced
+	 * @return a new {@code double[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code array}, {@code arrayReplacement} or {@code arrayMatcher} are {@code null}
 	 */
-	public static float[] splice(final float[] array, final int offset, final int length, final float[] arrayReplacement, final float[] arrayMatcher) {
+	public static double[] splice(final double[] array, final int offset, final int length, final double[] arrayReplacement, final double[] arrayMatcher) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayReplacement, "arrayReplacement == null");
 		
-		final float[] arrayA = array;
-		final float[] arrayB = arrayReplacement;
-		final float[] arrayC = array;
+		final double[] arrayA = array;
+		final double[] arrayB = arrayReplacement;
+		final double[] arrayC = array;
 		
 		final int arrayASrcPos = 0;
 		final int arrayALength = Ints.saturate(offset >= 0 ? offset : arrayA.length + offset, 0, arrayA.length);
@@ -234,7 +234,7 @@ public final class FloatArrays {
 			return array;
 		}
 		
-		final float[] arrayD = new float[arrayDLength];
+		final double[] arrayD = new double[arrayDLength];
 		
 		System.arraycopy(arrayA, arrayASrcPos, arrayD, arrayDSrcPos0, arrayALength);
 		System.arraycopy(arrayB, arrayBSrcPos, arrayD, arrayDSrcPos1, arrayBLength);
@@ -248,16 +248,16 @@ public final class FloatArrays {
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param value the {@code float} value to find the index for
-	 * @param array the {@code float[]} to search for {@code value} in
+	 * @param value the {@code double} value to find the index for
+	 * @param array the {@code double[]} to search for {@code value} in
 	 * @return the index of {@code value} in {@code array}, or {@code -1} if it cannot be found
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public static int indexOf(final float value, final float[] array) {
+	public static int indexOf(final double value, final double[] array) {
 		Objects.requireNonNull(array, "array == null");
 		
 		for(int i = 0; i < array.length; i++) {
-			if(Floats.equal(array[i], value)) {
+			if(Doubles.equal(array[i], value)) {
 				return i;
 			}
 		}
@@ -280,15 +280,15 @@ public final class FloatArrays {
 	 * <p>
 	 * If the parameter argument {@code isReturningRelativeIndex} is {@code false}, the absolute index of {@code value} in {@code array} will be returned. The absolute index represents the index in {@code array}.
 	 * 
-	 * @param value the {@code float[]} value to find the index for
-	 * @param array the {@code float[]} to search for {@code value} in
+	 * @param value the {@code double[]} value to find the index for
+	 * @param array the {@code double[]} to search for {@code value} in
 	 * @param isIncrementingByValueLength {@code true} if, and only if, {@code array} consists of sub-structures with a length of {@code value.length}, {@code false} otherwise
 	 * @param isReturningRelativeIndex {@code true} if, and only if, the relative index should be returned, {@code false} otherwise
 	 * @return the index of {@code value} in {@code array}, or {@code -1} if it cannot be found
 	 * @throws IllegalArgumentException thrown if, and only if, {@code isIncrementingByValueLength} is {@code true} and {@code array.length % value.length} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code value} or {@code array} are {@code null}
 	 */
-	public static int indexOf(final float[] value, final float[] array, final boolean isIncrementingByValueLength, final boolean isReturningRelativeIndex) {
+	public static int indexOf(final double[] value, final double[] array, final boolean isIncrementingByValueLength, final boolean isReturningRelativeIndex) {
 		Objects.requireNonNull(value, "value == null");
 		Objects.requireNonNull(array, "array == null");
 		

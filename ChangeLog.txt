@@ -1,3 +1,13 @@
+2021-08-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods convert(ArrayComponentOrder, ArrayComponentOrder, double[]) and convert(ArrayComponentOrder, ArrayComponentOrder, float[]) to the ArrayComponentOrder enum.
+	* ADD:		Add the methods readA(double[], int), readB(double[], int), readG(double[], int) and readR(double[], int) to the ArrayComponentOrder enum.
+	* ADD:		Add the methods readA(float[], int), readB(float[], int), readG(float[], int) and readR(float[], int) to the ArrayComponentOrder enum.
+	* ADD:		Add the methods readAAsInt(byte[], int), readBAsInt(byte[], int), readGAsInt(byte[], int) and readRAsInt(byte[], int) to the ArrayComponentOrder enum.
+	* ADD:		Add the methods difference(ImageD, ImageD) and load(URL) to the IntImageD class.
+	* ADD:		Add the methods difference(ImageF, ImageF) and load(URL) to the IntImageF class.
+	* CHANGE:	Change the return type of the methods readA(byte[], int), readB(byte[], int), readG(byte[], int) and readR(byte[], int) from int to byte in the ArrayComponentOrder enum.
+
 2021-08-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods load(URL) and load(URL, Filter2D) to the PixelImageD class.

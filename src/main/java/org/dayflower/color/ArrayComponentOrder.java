@@ -166,6 +166,210 @@ public enum ArrayComponentOrder {
 	}
 	
 	/**
+	 * Returns a {@code byte} with the A-component, or {@code (byte)(255)} if it does not have an offset for the A-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code byte} with the A-component, or {@code (byte)(255)} if it does not have an offset for the A-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public byte readA(final byte[] array, final int offset) {
+		return hasOffsetA() ? array[offset + getOffsetA()] : (byte)(255);
+	}
+	
+	/**
+	 * Returns a {@code byte} with the B-component, or {@code 0} if it does not have an offset for the B-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code byte} with the B-component, or {@code 0} if it does not have an offset for the B-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public byte readB(final byte[] array, final int offset) {
+		return hasOffsetB() ? array[offset + getOffsetB()] : 0;
+	}
+	
+	/**
+	 * Returns a {@code byte} with the G-component, or {@code 0} if it does not have an offset for the G-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code byte} with the G-component, or {@code 0} if it does not have an offset for the G-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public byte readG(final byte[] array, final int offset) {
+		return hasOffsetG() ? array[offset + getOffsetG()] : 0;
+	}
+	
+	/**
+	 * Returns a {@code byte} with the R-component, or {@code 0} if it does not have an offset for the R-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code byte} with the R-component, or {@code 0} if it does not have an offset for the R-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public byte readR(final byte[] array, final int offset) {
+		return hasOffsetR() ? array[offset + getOffsetR()] : 0;
+	}
+	
+	/**
+	 * Returns a {@code double} with the A-component, or {@code 1.0D} if it does not have an offset for the A-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code double} with the A-component, or {@code 1.0D} if it does not have an offset for the A-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public double readA(final double[] array, final int offset) {
+		return hasOffsetA() ? array[offset + getOffsetA()] : 1.0D;
+	}
+	
+	/**
+	 * Returns a {@code double} with the B-component, or {@code 0.0D} if it does not have an offset for the B-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code double} with the B-component, or {@code 0.0D} if it does not have an offset for the B-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public double readB(final double[] array, final int offset) {
+		return hasOffsetB() ? array[offset + getOffsetB()] : 0.0D;
+	}
+	
+	/**
+	 * Returns a {@code double} with the G-component, or {@code 0.0D} if it does not have an offset for the G-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code double} with the G-component, or {@code 0.0D} if it does not have an offset for the G-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public double readG(final double[] array, final int offset) {
+		return hasOffsetG() ? array[offset + getOffsetG()] : 0.0D;
+	}
+	
+	/**
+	 * Returns a {@code double} with the R-component, or {@code 0.0D} if it does not have an offset for the R-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code double} with the R-component, or {@code 0.0D} if it does not have an offset for the R-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public double readR(final double[] array, final int offset) {
+		return hasOffsetR() ? array[offset + getOffsetR()] : 0.0D;
+	}
+	
+	/**
+	 * Returns a {@code float} with the A-component, or {@code 1.0F} if it does not have an offset for the A-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code float} with the A-component, or {@code 1.0F} if it does not have an offset for the A-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public float readA(final float[] array, final int offset) {
+		return hasOffsetA() ? array[offset + getOffsetA()] : 1.0F;
+	}
+	
+	/**
+	 * Returns a {@code float} with the B-component, or {@code 0.0F} if it does not have an offset for the B-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code float} with the B-component, or {@code 0.0F} if it does not have an offset for the B-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public float readB(final float[] array, final int offset) {
+		return hasOffsetB() ? array[offset + getOffsetB()] : 0.0F;
+	}
+	
+	/**
+	 * Returns a {@code float} with the G-component, or {@code 0.0F} if it does not have an offset for the G-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code float} with the G-component, or {@code 0.0F} if it does not have an offset for the G-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public float readG(final float[] array, final int offset) {
+		return hasOffsetG() ? array[offset + getOffsetG()] : 0.0F;
+	}
+	
+	/**
+	 * Returns a {@code float} with the R-component, or {@code 0.0F} if it does not have an offset for the R-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return a {@code float} with the R-component, or {@code 0.0F} if it does not have an offset for the R-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public float readR(final float[] array, final int offset) {
+		return hasOffsetR() ? array[offset + getOffsetR()] : 0.0F;
+	}
+	
+	/**
 	 * Returns the component count of this {@code ArrayComponentOrder} instance.
 	 * 
 	 * @return the component count of this {@code ArrayComponentOrder} instance
@@ -223,7 +427,7 @@ public enum ArrayComponentOrder {
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public int readA(final byte[] array, final int offset) {
+	public int readA(final int[] array, final int offset) {
 		return hasOffsetA() ? array[offset + getOffsetA()] & 0xFF : 255;
 	}
 	
@@ -240,25 +444,8 @@ public enum ArrayComponentOrder {
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public int readA(final int[] array, final int offset) {
-		return hasOffsetA() ? array[offset + getOffsetA()] & 0xFF : 255;
-	}
-	
-	/**
-	 * Returns an {@code int} with the B-component, or {@code 0} if it does not have an offset for the B-component.
-	 * <p>
-	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
-	 * 
-	 * @param array the array to read from
-	 * @param offset the absolute offset in the array to read from
-	 * @return an {@code int} with the B-component, or {@code 0} if it does not have an offset for the B-component
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}
-	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
-	 */
-	public int readB(final byte[] array, final int offset) {
-		return hasOffsetB() ? array[offset + getOffsetB()] & 0xFF : 0;
+	public int readAAsInt(final byte[] array, final int offset) {
+		return readA(array, offset) & 0xFF;
 	}
 	
 	/**
@@ -279,20 +466,20 @@ public enum ArrayComponentOrder {
 	}
 	
 	/**
-	 * Returns an {@code int} with the G-component, or {@code 0} if it does not have an offset for the G-component.
+	 * Returns an {@code int} with the B-component, or {@code 0} if it does not have an offset for the B-component.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param array the array to read from
 	 * @param offset the absolute offset in the array to read from
-	 * @return an {@code int} with the G-component, or {@code 0} if it does not have an offset for the G-component
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @return an {@code int} with the B-component, or {@code 0} if it does not have an offset for the B-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public int readG(final byte[] array, final int offset) {
-		return hasOffsetG() ? array[offset + getOffsetG()] & 0xFF : 0;
+	public int readBAsInt(final byte[] array, final int offset) {
+		return readB(array, offset) & 0xFF;
 	}
 	
 	/**
@@ -313,20 +500,20 @@ public enum ArrayComponentOrder {
 	}
 	
 	/**
-	 * Returns an {@code int} with the R-component, or {@code 0} if it does not have an offset for the R-component.
+	 * Returns an {@code int} with the G-component, or {@code 0} if it does not have an offset for the G-component.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param array the array to read from
 	 * @param offset the absolute offset in the array to read from
-	 * @return an {@code int} with the R-component, or {@code 0} if it does not have an offset for the R-component
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @return an {@code int} with the G-component, or {@code 0} if it does not have an offset for the G-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public int readR(final byte[] array, final int offset) {
-		return hasOffsetR() ? array[offset + getOffsetR()] & 0xFF : 0;
+	public int readGAsInt(final byte[] array, final int offset) {
+		return readG(array, offset) & 0xFF;
 	}
 	
 	/**
@@ -344,6 +531,23 @@ public enum ArrayComponentOrder {
 	 */
 	public int readR(final int[] array, final int offset) {
 		return hasOffsetR() ? array[offset + getOffsetR()] & 0xFF : 0;
+	}
+	
+	/**
+	 * Returns an {@code int} with the R-component, or {@code 0} if it does not have an offset for the R-component.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param offset the absolute offset in the array to read from
+	 * @return an {@code int} with the R-component, or {@code 0} if it does not have an offset for the R-component
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public byte readRAsInt(final byte[] array, final int offset) {
+		return readR(array, offset);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -381,25 +585,141 @@ public enum ArrayComponentOrder {
 			final int offsetA = i * arrayComponentOrderA.getComponentCount();
 			final int offsetB = i * arrayComponentOrderB.getComponentCount();
 			
-			final int r = arrayComponentOrderA.readR(array, offsetA);
-			final int g = arrayComponentOrderA.readG(array, offsetA);
-			final int b = arrayComponentOrderA.readB(array, offsetA);
-			final int a = arrayComponentOrderA.readA(array, offsetA);
+			final byte r = arrayComponentOrderA.readR(array, offsetA);
+			final byte g = arrayComponentOrderA.readG(array, offsetA);
+			final byte b = arrayComponentOrderA.readB(array, offsetA);
+			final byte a = arrayComponentOrderA.readA(array, offsetA);
 			
 			if(arrayComponentOrderB.hasOffsetR()) {
-				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = (byte)(r);
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
 			}
 			
 			if(arrayComponentOrderB.hasOffsetG()) {
-				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = (byte)(g);
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
 			}
 			
 			if(arrayComponentOrderB.hasOffsetB()) {
-				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = (byte)(b);
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
 			}
 			
 			if(arrayComponentOrderB.hasOffsetA()) {
-				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = (byte)(a);
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;
+			}
+		}
+		
+		return arrayConverted;
+	}
+	
+	/**
+	 * Converts the {@code double[]} {@code array} stored as {@code arrayComponentOrderA} to a new {@code double[]} stored as {@code arrayComponentOrderB}.
+	 * <p>
+	 * Returns a new {@code double[]} with the result of the conversion.
+	 * <p>
+	 * If either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % arrayComponentOrderA.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param arrayComponentOrderA the {@code ArrayComponentOrder} to convert from
+	 * @param arrayComponentOrderB the {@code ArrayComponentOrder} to convert to
+	 * @param array a {@code double[]} with color component values
+	 * @return a new {@code double[]} with the result of the conversion
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrderA.getComponentCount() != 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code array} are {@code null}
+	 */
+	public static double[] convert(final ArrayComponentOrder arrayComponentOrderA, final ArrayComponentOrder arrayComponentOrderB, final double[] array) {
+		Objects.requireNonNull(arrayComponentOrderA, "arrayComponentOrderA == null");
+		Objects.requireNonNull(arrayComponentOrderB, "arrayComponentOrderB == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		if(array.length % arrayComponentOrderA.getComponentCount() != 0) {
+			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(array.length), Integer.valueOf(arrayComponentOrderA.getComponentCount())));
+		}
+		
+		final int resolution = array.length / arrayComponentOrderA.getComponentCount();
+		
+		final double[] arrayConverted = new double[resolution * arrayComponentOrderB.getComponentCount()];
+		
+		for(int i = 0; i < resolution; i++) {
+			final int offsetA = i * arrayComponentOrderA.getComponentCount();
+			final int offsetB = i * arrayComponentOrderB.getComponentCount();
+			
+			final double r = arrayComponentOrderA.readR(array, offsetA);
+			final double g = arrayComponentOrderA.readG(array, offsetA);
+			final double b = arrayComponentOrderA.readB(array, offsetA);
+			final double a = arrayComponentOrderA.readA(array, offsetA);
+			
+			if(arrayComponentOrderB.hasOffsetR()) {
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
+			}
+			
+			if(arrayComponentOrderB.hasOffsetG()) {
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
+			}
+			
+			if(arrayComponentOrderB.hasOffsetB()) {
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
+			}
+			
+			if(arrayComponentOrderB.hasOffsetA()) {
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;
+			}
+		}
+		
+		return arrayConverted;
+	}
+	
+	/**
+	 * Converts the {@code float[]} {@code array} stored as {@code arrayComponentOrderA} to a new {@code double[]} stored as {@code arrayComponentOrderB}.
+	 * <p>
+	 * Returns a new {@code float[]} with the result of the conversion.
+	 * <p>
+	 * If either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % arrayComponentOrderA.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param arrayComponentOrderA the {@code ArrayComponentOrder} to convert from
+	 * @param arrayComponentOrderB the {@code ArrayComponentOrder} to convert to
+	 * @param array a {@code float[]} with color component values
+	 * @return a new {@code float[]} with the result of the conversion
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrderA.getComponentCount() != 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code array} are {@code null}
+	 */
+	public static float[] convert(final ArrayComponentOrder arrayComponentOrderA, final ArrayComponentOrder arrayComponentOrderB, final float[] array) {
+		Objects.requireNonNull(arrayComponentOrderA, "arrayComponentOrderA == null");
+		Objects.requireNonNull(arrayComponentOrderB, "arrayComponentOrderB == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		if(array.length % arrayComponentOrderA.getComponentCount() != 0) {
+			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(array.length), Integer.valueOf(arrayComponentOrderA.getComponentCount())));
+		}
+		
+		final int resolution = array.length / arrayComponentOrderA.getComponentCount();
+		
+		final float[] arrayConverted = new float[resolution * arrayComponentOrderB.getComponentCount()];
+		
+		for(int i = 0; i < resolution; i++) {
+			final int offsetA = i * arrayComponentOrderA.getComponentCount();
+			final int offsetB = i * arrayComponentOrderB.getComponentCount();
+			
+			final float r = arrayComponentOrderA.readR(array, offsetA);
+			final float g = arrayComponentOrderA.readG(array, offsetA);
+			final float b = arrayComponentOrderA.readB(array, offsetA);
+			final float a = arrayComponentOrderA.readA(array, offsetA);
+			
+			if(arrayComponentOrderB.hasOffsetR()) {
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
+			}
+			
+			if(arrayComponentOrderB.hasOffsetG()) {
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
+			}
+			
+			if(arrayComponentOrderB.hasOffsetB()) {
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
+			}
+			
+			if(arrayComponentOrderB.hasOffsetA()) {
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;
 			}
 		}
 		

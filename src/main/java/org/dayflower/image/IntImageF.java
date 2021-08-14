@@ -25,6 +25,7 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -179,14 +180,7 @@ public final class IntImageF extends ImageF {
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
 		
 		if(indexTransformed >= 0 && indexTransformed < resolution) {
-			final int colorARGB = this.data[indexTransformed];
-			
-			final int r = PackedIntComponentOrder.ARGB.unpackR(colorARGB);
-			final int g = PackedIntComponentOrder.ARGB.unpackG(colorARGB);
-			final int b = PackedIntComponentOrder.ARGB.unpackB(colorARGB);
-			final int a = PackedIntComponentOrder.ARGB.unpackA(colorARGB);
-			
-			return new Color4F(r, g, b, a);
+			return Color4F.unpack(this.data[indexTransformed], PackedIntComponentOrder.ARGB);
 		}
 		
 		return Color4F.BLACK;
@@ -211,16 +205,7 @@ public final class IntImageF extends ImageF {
 		final int resolutionY = getResolutionY();
 		
 		if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
-			final int index = y * resolutionX + x;
-			
-			final int colorARGB = this.data[index];
-			
-			final int r = PackedIntComponentOrder.ARGB.unpackR(colorARGB);
-			final int g = PackedIntComponentOrder.ARGB.unpackG(colorARGB);
-			final int b = PackedIntComponentOrder.ARGB.unpackB(colorARGB);
-			final int a = PackedIntComponentOrder.ARGB.unpackA(colorARGB);
-			
-			return new Color4F(r, g, b, a);
+			return Color4F.unpack(this.data[y * resolutionX + x], PackedIntComponentOrder.ARGB);
 		}
 		
 		return Objects.requireNonNull(function.apply(new Point2I(x, y)));
@@ -248,16 +233,7 @@ public final class IntImageF extends ImageF {
 		final int yTransformed = pixelOperation.getY(y, resolutionY);
 		
 		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
-			final int index = yTransformed * resolutionX + xTransformed;
-			
-			final int colorARGB = this.data[index];
-			
-			final int r = PackedIntComponentOrder.ARGB.unpackR(colorARGB);
-			final int g = PackedIntComponentOrder.ARGB.unpackG(colorARGB);
-			final int b = PackedIntComponentOrder.ARGB.unpackB(colorARGB);
-			final int a = PackedIntComponentOrder.ARGB.unpackA(colorARGB);
-			
-			return new Color4F(r, g, b, a);
+			return Color4F.unpack(this.data[yTransformed * resolutionX + xTransformed], PackedIntComponentOrder.ARGB);
 		}
 		
 		return Color4F.BLACK;
@@ -553,6 +529,35 @@ public final class IntImageF extends ImageF {
 	}
 	
 	/**
+	 * Returns an {@code IntImageF} that shows the difference between {@code imageA} and {@code imageB} with {@code Color4F.BLACK}.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param imageA an {@code ImageF} instance
+	 * @param imageB an {@code ImageF} instance
+	 * @return an {@code IntImageF} that shows the difference between {@code imageA} and {@code imageB} with {@code Color4F.BLACK}
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static IntImageF difference(final ImageF imageA, final ImageF imageB) {
+		final int resolutionX = max(imageA.getResolutionX(), imageB.getResolutionX());
+		final int resolutionY = max(imageA.getResolutionY(), imageB.getResolutionY());
+		
+		final IntImageF intImageC = new IntImageF(resolutionX, resolutionY);
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				final Color4F colorA = imageA.getColorRGBA(x, y);
+				final Color4F colorB = imageB.getColorRGBA(x, y);
+				final Color4F colorC = colorA.equals(colorB) ? colorA : Color4F.BLACK;
+				
+				intImageC.setColorRGBA(colorC, x, y);
+			}
+		}
+		
+		return intImageC;
+	}
+	
+	/**
 	 * Loads an {@code IntImageF} from the file represented by {@code file}.
 	 * <p>
 	 * Returns a new {@code IntImageF} instance.
@@ -597,6 +602,28 @@ public final class IntImageF extends ImageF {
 	 */
 	public static IntImageF load(final String pathname) {
 		return load(new File(pathname));
+	}
+	
+	/**
+	 * Loads an {@code IntImageF} from the URL represented by {@code uRL}.
+	 * <p>
+	 * Returns a new {@code IntImageF} instance.
+	 * <p>
+	 * If {@code uRL} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param uRL a {@code URL} that represents the URL to load from
+	 * @return a new {@code IntImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code uRL} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static IntImageF load(final URL uRL) {
+		try {
+			return new IntImageF(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null"))));
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

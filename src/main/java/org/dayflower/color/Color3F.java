@@ -2502,9 +2502,9 @@ public final class Color3F {
 		final Color3F[] colors = new Color3F[array.length / arrayComponentOrder.getComponentCount()];
 		
 		for(int i = 0; i < colors.length; i++) {
-			final int r = arrayComponentOrder.readR(array, i * arrayComponentOrder.getComponentCount());
-			final int g = arrayComponentOrder.readG(array, i * arrayComponentOrder.getComponentCount());
-			final int b = arrayComponentOrder.readB(array, i * arrayComponentOrder.getComponentCount());
+			final int r = arrayComponentOrder.readRAsInt(array, i * arrayComponentOrder.getComponentCount());
+			final int g = arrayComponentOrder.readGAsInt(array, i * arrayComponentOrder.getComponentCount());
+			final int b = arrayComponentOrder.readBAsInt(array, i * arrayComponentOrder.getComponentCount());
 			
 			colors[i] = new Color3F(r, g, b);
 		}

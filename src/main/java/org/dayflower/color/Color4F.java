@@ -1620,10 +1620,10 @@ public final class Color4F {
 		final Color4F[] colors = new Color4F[array.length / arrayComponentOrder.getComponentCount()];
 		
 		for(int i = 0; i < colors.length; i++) {
-			final int r = arrayComponentOrder.readR(array, i * arrayComponentOrder.getComponentCount());
-			final int g = arrayComponentOrder.readG(array, i * arrayComponentOrder.getComponentCount());
-			final int b = arrayComponentOrder.readB(array, i * arrayComponentOrder.getComponentCount());
-			final int a = arrayComponentOrder.readA(array, i * arrayComponentOrder.getComponentCount());
+			final int r = arrayComponentOrder.readRAsInt(array, i * arrayComponentOrder.getComponentCount());
+			final int g = arrayComponentOrder.readGAsInt(array, i * arrayComponentOrder.getComponentCount());
+			final int b = arrayComponentOrder.readBAsInt(array, i * arrayComponentOrder.getComponentCount());
+			final int a = arrayComponentOrder.readAAsInt(array, i * arrayComponentOrder.getComponentCount());
 			
 			colors[i] = new Color4F(r, g, b, a);
 		}

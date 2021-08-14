@@ -18,6 +18,17 @@ Geometry Shape API:
 	* CHANGE:	Implement Polygon3F.
 	* CHANGE:	Implement LineSegment3F.
 
+Image API:
+
+	* ADD:		Add the constructor ByteImageD(BufferedImage) to the ByteImageD class.
+	* ADD:		Add the constructor ByteImageF(BufferedImage) to the ByteImageF class.
+	* ADD:		Add the constructor DoubleImageD(BufferedImage) to the DoubleImageD class.
+	* ADD:		Add the constructor FloatImageF(BufferedImage) to the FloatImageF class.
+	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageD, ImageD), load(File), load(String) and load(URL) to the ByteImageD class.
+	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageF, ImageF), load(File), load(String) and load(URL) to the ByteImageF class.
+	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageD, ImageD), load(File), load(String) and load(URL) to the DoubleImageD class.
+	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageF, ImageF), load(File), load(String) and load(URL) to the FloatImageF class.
+
 JavaFX Application API:
 
 	* ADD:		Add support for FileParameter in the ParameterLoader implementation.

@@ -281,10 +281,10 @@ public enum PackedIntComponentOrder {
 		for(int i = 0; i < resolution; i++) {
 			final int offset = i * arrayComponentOrder.getComponentCount();
 			
-			final int r = arrayComponentOrder.readR(array, offset);
-			final int g = arrayComponentOrder.readG(array, offset);
-			final int b = arrayComponentOrder.readB(array, offset);
-			final int a = arrayComponentOrder.readA(array, offset);
+			final int r = arrayComponentOrder.readRAsInt(array, offset);
+			final int g = arrayComponentOrder.readGAsInt(array, offset);
+			final int b = arrayComponentOrder.readBAsInt(array, offset);
+			final int a = arrayComponentOrder.readAAsInt(array, offset);
 			
 			arrayPacked[i] = pack(r, g, b, a);
 		}

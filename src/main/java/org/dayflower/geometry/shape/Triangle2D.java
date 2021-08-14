@@ -45,7 +45,7 @@ public final class Triangle2D implements Shape2D {
 	/**
 	 * The ID of this {@code Triangle2D} class.
 	 */
-	public static final int ID = 4;
+	public static final int ID = 5;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

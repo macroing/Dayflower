@@ -33,6 +33,7 @@ import org.dayflower.geometry.Shape2F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Rectangle2F} is an implementation of {@link Shape2F} that represents a rectangle.
@@ -51,7 +52,7 @@ public final class Rectangle2F implements Shape2F {
 	/**
 	 * The ID of this {@code Rectangle2F} class.
 	 */
-	public static final int ID = 3;
+	public static final int ID = 4;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -347,6 +348,33 @@ public final class Rectangle2F implements Shape2F {
 		}
 		
 		return Optional.of(new Rectangle2F(minimumC, maximumC));
+	}
+	
+	/**
+	 * Returns a {@code Rectangle2F} instance that contains all {@link Point2F} instances in {@code points}.
+	 * <p>
+	 * If either {@code points} or an element in {@code points} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code points.length} is less than {@code 1}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param points a {@code Point2F[]} instance
+	 * @return a {@code Rectangle2F} instance that contains all {@code Point2F} instances in {@code points}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 1}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
+	 */
+	public static Rectangle2F fromPoints(final Point2F... points) {
+		ParameterArguments.requireNonNullArray(points, "points");
+		ParameterArguments.requireRange(points.length, 1, Integer.MAX_VALUE, "points.length");
+		
+		Point2F maximum = Point2F.MINIMUM;
+		Point2F minimum = Point2F.MAXIMUM;
+		
+		for(final Point2F point : points) {
+			maximum = Point2F.maximum(maximum, point);
+			minimum = Point2F.minimum(minimum, point);
+		}
+		
+		return new Rectangle2F(maximum, minimum);
 	}
 	
 	/**

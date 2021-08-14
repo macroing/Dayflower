@@ -58,7 +58,7 @@ public final class Plane3D implements Shape3D {
 	/**
 	 * The ID of this {@code Plane3D} class.
 	 */
-	public static final int ID = 9;
+	public static final int ID = 10;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

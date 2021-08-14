@@ -67,7 +67,7 @@ public final class Torus3D implements Shape3D {
 	/**
 	 * The ID of this {@code Torus3D} class.
 	 */
-	public static final int ID = 14;
+	public static final int ID = 16;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

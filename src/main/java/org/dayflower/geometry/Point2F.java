@@ -44,6 +44,7 @@ import java.util.Objects;
 
 import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Point2F} represents a point with two {@code float}-based components.
@@ -872,6 +873,32 @@ public final class Point2F implements Node {
 		final float component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33();
 		
 		return equal(component3, 1.0F) || isZero(component3) ? new Point2F(component1, component2) : new Point2F(component1 / component3, component2 / component3);
+	}
+	
+	/**
+	 * Returns a {@code String} representation of {@code points}.
+	 * <p>
+	 * If either {@code points} or an element in {@code points} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code Point2F[]} instance
+	 * @return a {@code String} representation of {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
+	 */
+	public static String toString(final Point2F... points) {
+		ParameterArguments.requireNonNullArray(points, "points");
+		
+		final
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("new Point2F[] {");
+		
+		for(int i = 0; i < points.length; i++) {
+			stringBuilder.append(i > 0 ? ", " : "");
+			stringBuilder.append(points[i]);
+		}
+		
+		stringBuilder.append("}");
+		
+		return stringBuilder.toString();
 	}
 	
 	/**

@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Ints.MAX_VALUE;
+import static org.dayflower.utility.Ints.MIN_VALUE;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
@@ -29,6 +31,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Point2I} represents a point with two {@code int}-based components.
@@ -39,6 +42,19 @@ import org.dayflower.node.Node;
  * @author J&#246;rgen Lundgren
  */
 public final class Point2I implements Node {
+	/**
+	 * A {@code Point2I} instance with the largest component values.
+	 */
+	public static final Point2I MAXIMUM = maximum();
+	
+	/**
+	 * A {@code Point2I} instance with the smallest component values.
+	 */
+	public static final Point2I MINIMUM = minimum();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
 	private final int component1;
 	private final int component2;
 	
@@ -260,6 +276,18 @@ public final class Point2I implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a new {@code Point2I} instance with the largest component values.
+	 * 
+	 * @return a new {@code Point2I} instance with the largest component values
+	 */
+	public static Point2I maximum() {
+		final int component1 = MAX_VALUE;
+		final int component2 = MAX_VALUE;
+		
+		return new Point2I(component1, component2);
+	}
+	
+	/**
 	 * Returns a new {@code Point2I} instance with the largest component values of {@code a} and {@code b}.
 	 * <p>
 	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -277,6 +305,36 @@ public final class Point2I implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Point2I} instance with the largest component values of {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2I} instance
+	 * @param b a {@code Point2I} instance
+	 * @param c a {@code Point2I} instance
+	 * @return a new {@code Point2I} instance with the largest component values of {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
+	public static Point2I maximum(final Point2I a, final Point2I b, final Point2I c) {
+		final int component1 = max(a.component1, b.component1, c.component1);
+		final int component2 = max(a.component2, b.component2, c.component2);
+		
+		return new Point2I(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2I} instance with the smallest component values.
+	 * 
+	 * @return a new {@code Point2I} instance with the smallest component values
+	 */
+	public static Point2I minimum() {
+		final int component1 = MIN_VALUE;
+		final int component2 = MIN_VALUE;
+		
+		return new Point2I(component1, component2);
+	}
+	
+	/**
 	 * Returns a new {@code Point2I} instance with the smallest component values of {@code a} and {@code b}.
 	 * <p>
 	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -289,6 +347,24 @@ public final class Point2I implements Node {
 	public static Point2I minimum(final Point2I a, final Point2I b) {
 		final int component1 = min(a.component1, b.component1);
 		final int component2 = min(a.component2, b.component2);
+		
+		return new Point2I(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2I} instance with the smallest component values of {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2I} instance
+	 * @param b a {@code Point2I} instance
+	 * @param c a {@code Point2I} instance
+	 * @return a new {@code Point2I} instance with the smallest component values of {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
+	public static Point2I minimum(final Point2I a, final Point2I b, final Point2I c) {
+		final int component1 = min(a.component1, b.component1, c.component1);
+		final int component2 = min(a.component2, b.component2, c.component2);
 		
 		return new Point2I(component1, component2);
 	}
@@ -314,5 +390,31 @@ public final class Point2I implements Node {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	/**
+	 * Returns a {@code String} representation of {@code points}.
+	 * <p>
+	 * If either {@code points} or an element in {@code points} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code Point2I[]} instance
+	 * @return a {@code String} representation of {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
+	 */
+	public static String toString(final Point2I... points) {
+		ParameterArguments.requireNonNullArray(points, "points");
+		
+		final
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("new Point2I[] {");
+		
+		for(int i = 0; i < points.length; i++) {
+			stringBuilder.append(i > 0 ? ", " : "");
+			stringBuilder.append(points[i]);
+		}
+		
+		stringBuilder.append("}");
+		
+		return stringBuilder.toString();
 	}
 }

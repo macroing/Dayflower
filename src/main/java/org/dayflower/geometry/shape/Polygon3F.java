@@ -55,7 +55,7 @@ public final class Polygon3F implements Shape3F {
 	/**
 	 * The ID of this {@code Polygon3F} class.
 	 */
-	public static final int ID = 17;
+	public static final int ID = 11;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

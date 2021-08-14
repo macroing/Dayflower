@@ -78,7 +78,7 @@ public final class TriangleMesh3F implements Shape3F {
 	/**
 	 * The ID of this {@code TriangleMesh3F} class.
 	 */
-	public static final int ID = 16;
+	public static final int ID = 18;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

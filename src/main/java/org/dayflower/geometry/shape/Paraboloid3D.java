@@ -62,7 +62,7 @@ public final class Paraboloid3D implements Shape3D {
 	/**
 	 * The ID of this {@code Paraboloid3D} class.
 	 */
-	public static final int ID = 8;
+	public static final int ID = 9;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

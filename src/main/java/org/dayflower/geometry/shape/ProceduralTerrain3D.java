@@ -58,7 +58,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	/**
 	 * The ID of this {@code ProceduralTerrain3D} class.
 	 */
-	public static final int ID = 10;
+	public static final int ID = 12;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

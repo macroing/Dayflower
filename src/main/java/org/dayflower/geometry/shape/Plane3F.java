@@ -58,7 +58,7 @@ public final class Plane3F implements Shape3F {
 	/**
 	 * The ID of this {@code Plane3F} class.
 	 */
-	public static final int ID = 9;
+	public static final int ID = 10;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

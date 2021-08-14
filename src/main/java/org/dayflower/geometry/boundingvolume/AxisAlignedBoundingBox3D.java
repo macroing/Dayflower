@@ -438,9 +438,12 @@ public final class AxisAlignedBoundingBox3D implements BoundingVolume3D {
 	 * Returns an {@code AxisAlignedBoundingBox3D} instance that contains all {@link Point3D} instances in {@code points}.
 	 * <p>
 	 * If either {@code points} or an element in {@code points} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code points.length} is less than {@code 1}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param points a {@code Point3D[]} instance
 	 * @return an {@code AxisAlignedBoundingBox3D} instance that contains all {@code Point3D} instances in {@code points}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 1}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
 	public static AxisAlignedBoundingBox3D fromPoints(final Point3D... points) {

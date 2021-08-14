@@ -71,7 +71,7 @@ public final class Sphere3F implements Shape3F {
 	/**
 	 * The ID of this {@code Sphere3F} class.
 	 */
-	public static final int ID = 13;
+	public static final int ID = 15;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

@@ -24,12 +24,15 @@ import static org.dayflower.utility.Doubles.isZero;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Shape2D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code LineSegment2D} is an implementation of {@link Shape2D} that represents a line segment.
@@ -251,5 +254,37 @@ public final class LineSegment2D implements Shape2D {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} of {@code LineSegment2D} instances that are connecting the {@link Point2D} instances in {@code points}.
+	 * <p>
+	 * If either {@code points} or an element in {@code points} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code points.length} is less than {@code 2}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param points a {@code Point2D[]} instance
+	 * @return a {@code List} of {@code LineSegment2D} instances that are connecting the {@code Point2D} instances in {@code points}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
+	 */
+	public static List<LineSegment2D> fromPoints(final Point2D... points) {
+		ParameterArguments.requireNonNullArray(points, "points");
+		ParameterArguments.requireRange(points.length, 2, Integer.MAX_VALUE, "points.length");
+		
+		final List<LineSegment2D> lineSegments = new ArrayList<>(points.length);
+		
+		for(int i = 0, j = 1; i < points.length; i++, j = (j + 1) % points.length) {
+			final Point2D pointI = points[i];
+			final Point2D pointJ = points[j];
+			
+			final LineSegment2D lineSegment = new LineSegment2D(pointI, pointJ);
+			
+			lineSegments.add(lineSegment);
+		}
+		
+		return lineSegments;
 	}
 }

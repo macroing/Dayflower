@@ -58,7 +58,7 @@ public final class Rectangle3F implements Shape3F {
 	/**
 	 * The ID of this {@code Rectangle3F} class.
 	 */
-	public static final int ID = 11;
+	public static final int ID = 13;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

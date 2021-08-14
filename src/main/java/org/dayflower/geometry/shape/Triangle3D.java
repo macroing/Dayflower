@@ -68,7 +68,7 @@ public final class Triangle3D implements Shape3D {
 	/**
 	 * The ID of this {@code Triangle3D} class.
 	 */
-	public static final int ID = 15;
+	public static final int ID = 17;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

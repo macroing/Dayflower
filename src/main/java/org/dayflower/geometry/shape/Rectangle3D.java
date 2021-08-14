@@ -58,7 +58,7 @@ public final class Rectangle3D implements Shape3D {
 	/**
 	 * The ID of this {@code Rectangle3D} class.
 	 */
-	public static final int ID = 11;
+	public static final int ID = 13;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

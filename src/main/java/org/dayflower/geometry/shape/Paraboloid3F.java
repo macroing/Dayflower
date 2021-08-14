@@ -62,7 +62,7 @@ public final class Paraboloid3F implements Shape3F {
 	/**
 	 * The ID of this {@code Paraboloid3F} class.
 	 */
-	public static final int ID = 8;
+	public static final int ID = 9;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

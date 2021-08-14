@@ -1,6 +1,9 @@
 2021-08-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
-	* ADD:		Add the Polygon2D class.
+	* ADD:		Add support for reading Polygon2D, Polygon2F and Polygon2I to the DefaultShape2DReader, DefaultShape2FReader and DefaultShape2IReader classes, respectively.
+	* ADD:		Add the Polygon2D and Polygon2DReader classes.
+	* ADD:		Add the Polygon2F and Polygon2FReader classes.
+	* ADD:		Add the Polygon2I and Polygon2IReader classes.
 	* ADD:		Add the method toString(Point2D...) to the Point2D class.
 	* ADD:		Add the method toString(Point2F...) to the Point2F class.
 	* ADD:		Add the method toString(Point2I...) to the Point2I class.

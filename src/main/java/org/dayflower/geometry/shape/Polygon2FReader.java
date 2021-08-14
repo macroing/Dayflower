@@ -21,41 +21,31 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-import org.dayflower.geometry.Shape2F;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Shape2FReader;
+import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code DefaultShape2FReader} is a {@link Shape2FReader} implementation that reads all official {@link Shape2F} instances from a {@code DataInput} instance.
+ * A {@code Polygon2FReader} is a {@link Shape2FReader} implementation that reads {@link Polygon2F} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DefaultShape2FReader implements Shape2FReader {
-	private final Map<Integer, Shape2FReader> shape2FReaders;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+public final class Polygon2FReader implements Shape2FReader {
 	/**
-	 * Constructs a new {@code DefaultShape2FReader} instance.
+	 * Constructs a new {@code Polygon2FReader} instance.
 	 */
-	public DefaultShape2FReader() {
-		this.shape2FReaders = new LinkedHashMap<>();
-		this.shape2FReaders.put(Integer.valueOf(Circle2F.ID), new Circle2FReader());
-		this.shape2FReaders.put(Integer.valueOf(LineSegment2F.ID), new LineSegment2FReader());
-		this.shape2FReaders.put(Integer.valueOf(Polygon2F.ID), new Polygon2FReader());
-		this.shape2FReaders.put(Integer.valueOf(Rectangle2F.ID), new Rectangle2FReader());
-		this.shape2FReaders.put(Integer.valueOf(Triangle2F.ID), new Triangle2FReader());
+	public Polygon2FReader() {
+		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Reads a {@link Shape2F} instance from {@code dataInput}.
+	 * Reads a {@link Polygon2F} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Shape2F} instance that was read.
+	 * Returns the {@code Polygon2F} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -64,13 +54,13 @@ public final class DefaultShape2FReader implements Shape2FReader {
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @return the {@code Shape2F} instance that was read
+	 * @return the {@code Polygon2F} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Shape2F read(final DataInput dataInput) {
+	public Polygon2F read(final DataInput dataInput) {
 		try {
 			return read(dataInput, dataInput.readInt());
 		} catch(final IOException e) {
@@ -79,9 +69,9 @@ public final class DefaultShape2FReader implements Shape2FReader {
 	}
 	
 	/**
-	 * Reads a {@link Shape2F} instance from {@code dataInput}.
+	 * Reads a {@link Polygon2F} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Shape2F} instance that was read.
+	 * Returns the {@code Polygon2F} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -89,37 +79,42 @@ public final class DefaultShape2FReader implements Shape2FReader {
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
-	 * The ID of the {@code Shape2F} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
+	 * The ID of the {@code Polygon2F} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @param id the ID of the {@code Shape2F} type to read
-	 * @return the {@code Shape2F} instance that was read
+	 * @param id the ID of the {@code Polygon2F} to read
+	 * @return the {@code Polygon2F} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, {@code id} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Shape2F read(final DataInput dataInput, final int id) {
-		switch(id) {
-			case Circle2F.ID:
-			case LineSegment2F.ID:
-			case Polygon2F.ID:
-			case Rectangle2F.ID:
-			case Triangle2F.ID:
-				return this.shape2FReaders.get(Integer.valueOf(id)).read(dataInput, id);
-			default:
-				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));
+	public Polygon2F read(final DataInput dataInput, final int id) {
+		ParameterArguments.requireExact(id, Polygon2F.ID, "id");
+		
+		try {
+			final int pointCount = dataInput.readInt();
+			
+			final Point2F[] points = new Point2F[pointCount];
+			
+			for(int i = 0; i < pointCount; i++) {
+				points[i] = Point2F.read(dataInput);
+			}
+			
+			return new Polygon2F(points);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code DefaultShape2FReader} instance supports reading {@link Shape2F} instances with an ID of {@code id}, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code id == Polygon2F.ID}, {@code false} otherwise.
 	 * 
-	 * @param id the ID of the {@code Shape2F} type to check
-	 * @return {@code true} if, and only if, this {@code DefaultShape2FReader} instance supports reading {@code Shape2F} instances with an ID of {@code id}, {@code false} otherwise
+	 * @param id the ID to check
+	 * @return {@code true} if, and only if, {@code id == Polygon2F.ID}, {@code false} otherwise
 	 */
 	@Override
 	public boolean isSupported(final int id) {
-		return this.shape2FReaders.containsKey(Integer.valueOf(id));
+		return id == Polygon2F.ID;
 	}
 }

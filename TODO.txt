@@ -8,9 +8,6 @@ Geometry Shape API:
 	* ADD:		LineSegment3D.
 	* ADD:		LineSegment3DReader.
 	* ADD:		LineSegment3FReader.
-	* ADD:		Polygon2DReader.
-	* ADD:		Polygon2F.
-	* ADD:		Polygon2FReader.
 	* ADD:		Polygon3D.
 	* ADD:		Polygon3DReader.
 	* ADD:		Polygon3FReader.

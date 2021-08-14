@@ -21,41 +21,31 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-import org.dayflower.geometry.Shape2D;
+import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Shape2DReader;
+import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code DefaultShape2DReader} is a {@link Shape2DReader} implementation that reads all official {@link Shape2D} instances from a {@code DataInput} instance.
+ * A {@code Polygon2DReader} is a {@link Shape2DReader} implementation that reads {@link Polygon2D} instances from a {@code DataInput} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DefaultShape2DReader implements Shape2DReader {
-	private final Map<Integer, Shape2DReader> shape2DReaders;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+public final class Polygon2DReader implements Shape2DReader {
 	/**
-	 * Constructs a new {@code DefaultShape2DReader} instance.
+	 * Constructs a new {@code Polygon2DReader} instance.
 	 */
-	public DefaultShape2DReader() {
-		this.shape2DReaders = new LinkedHashMap<>();
-		this.shape2DReaders.put(Integer.valueOf(Circle2D.ID), new Circle2DReader());
-		this.shape2DReaders.put(Integer.valueOf(LineSegment2D.ID), new LineSegment2DReader());
-		this.shape2DReaders.put(Integer.valueOf(Polygon2D.ID), new Polygon2DReader());
-		this.shape2DReaders.put(Integer.valueOf(Rectangle2D.ID), new Rectangle2DReader());
-		this.shape2DReaders.put(Integer.valueOf(Triangle2D.ID), new Triangle2DReader());
+	public Polygon2DReader() {
+		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Reads a {@link Shape2D} instance from {@code dataInput}.
+	 * Reads a {@link Polygon2D} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Shape2D} instance that was read.
+	 * Returns the {@code Polygon2D} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -64,13 +54,13 @@ public final class DefaultShape2DReader implements Shape2DReader {
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @return the {@code Shape2D} instance that was read
+	 * @return the {@code Polygon2D} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, the ID is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Shape2D read(final DataInput dataInput) {
+	public Polygon2D read(final DataInput dataInput) {
 		try {
 			return read(dataInput, dataInput.readInt());
 		} catch(final IOException e) {
@@ -79,9 +69,9 @@ public final class DefaultShape2DReader implements Shape2DReader {
 	}
 	
 	/**
-	 * Reads a {@link Shape2D} instance from {@code dataInput}.
+	 * Reads a {@link Polygon2D} instance from {@code dataInput}.
 	 * <p>
-	 * Returns the {@code Shape2D} instance that was read.
+	 * Returns the {@code Polygon2D} instance that was read.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -89,37 +79,42 @@ public final class DefaultShape2DReader implements Shape2DReader {
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
-	 * The ID of the {@code Shape2D} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
+	 * The ID of the {@code Polygon2D} instance to read has already been read from {@code dataInput} when this method is called. It is passed to this method as a parameter argument.
 	 * 
 	 * @param dataInput the {@code DataInput} instance to read from
-	 * @param id the ID of the {@code Shape2D} type to read
-	 * @return the {@code Shape2D} instance that was read
+	 * @param id the ID of the {@code Polygon2D} to read
+	 * @return the {@code Polygon2D} instance that was read
 	 * @throws IllegalArgumentException thrown if, and only if, {@code id} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	@Override
-	public Shape2D read(final DataInput dataInput, final int id) {
-		switch(id) {
-			case Circle2D.ID:
-			case LineSegment2D.ID:
-			case Polygon2D.ID:
-			case Rectangle2D.ID:
-			case Triangle2D.ID:
-				return this.shape2DReaders.get(Integer.valueOf(id)).read(dataInput, id);
-			default:
-				throw new IllegalArgumentException(String.format("The ID %d is invalid.", Integer.valueOf(id)));
+	public Polygon2D read(final DataInput dataInput, final int id) {
+		ParameterArguments.requireExact(id, Polygon2D.ID, "id");
+		
+		try {
+			final int pointCount = dataInput.readInt();
+			
+			final Point2D[] points = new Point2D[pointCount];
+			
+			for(int i = 0; i < pointCount; i++) {
+				points[i] = Point2D.read(dataInput);
+			}
+			
+			return new Polygon2D(points);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code DefaultShape2DReader} instance supports reading {@link Shape2D} instances with an ID of {@code id}, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code id == Polygon2D.ID}, {@code false} otherwise.
 	 * 
-	 * @param id the ID of the {@code Shape2D} type to check
-	 * @return {@code true} if, and only if, this {@code DefaultShape2DReader} instance supports reading {@code Shape2D} instances with an ID of {@code id}, {@code false} otherwise
+	 * @param id the ID to check
+	 * @return {@code true} if, and only if, {@code id == Polygon2D.ID}, {@code false} otherwise
 	 */
 	@Override
 	public boolean isSupported(final int id) {
-		return this.shape2DReaders.containsKey(Integer.valueOf(id));
+		return id == Polygon2D.ID;
 	}
 }

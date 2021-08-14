@@ -66,7 +66,7 @@
  * <li>{@link org.dayflower.geometry.shape.Hyperboloid3FReader Hyperboloid3FReader} is a {@code Shape3FReader} implementation that reads {@code Hyperboloid3F} instances from a {@code DataInput} instance.</li>
  * </ul>
  * <p>
- * The following list contains information about the data types that represents lines in this API.
+ * The following list contains information about the data types that represents line segments in this API.
  * <ul>
  * <li>{@link org.dayflower.geometry.shape.LineSegment2D LineSegment2D} is an implementation of {@code Shape2D} that represents a line segment.</li>
  * <li>{@link org.dayflower.geometry.shape.LineSegment2DReader LineSegment2DReader} is a {@code Shape2DReader} implementation that reads {@code LineSegment2D} instances from a {@code DataInput} instance.</li>
@@ -90,6 +90,16 @@
  * <li>{@link org.dayflower.geometry.shape.Plane3DReader Plane3DReader} is a {@code Shape3DReader} implementation that reads {@code Plane3D} instances from a {@code DataInput} instance.</li>
  * <li>{@link org.dayflower.geometry.shape.Plane3F Plane3F} is an implementation of {@code Shape3F} that represents a plane.</li>
  * <li>{@link org.dayflower.geometry.shape.Plane3FReader Plane3FReader} is a {@code Shape3FReader} implementation that reads {@code Plane3F} instances from a {@code DataInput} instance.</li>
+ * </ul>
+ * <p>
+ * The following list contains information about the data types that represents polygons in this API.
+ * <ul>
+ * <li>{@link org.dayflower.geometry.shape.Polygon2D Polygon2D} is an implementation of {@code Shape2D} that represents a polygon.</li>
+ * <li>{@link org.dayflower.geometry.shape.Polygon2DReader Polygon2DReader} is a {@code Shape2DReader} implementation that reads {@code Polygon2D} instances from a {@code DataInput} instance.</li>
+ * <li>{@link org.dayflower.geometry.shape.Polygon2F Polygon2F} is an implementation of {@code Shape2F} that represents a polygon.</li>
+ * <li>{@link org.dayflower.geometry.shape.Polygon2FReader Polygon2FReader} is a {@code Shape2FReader} implementation that reads {@code Polygon2F} instances from a {@code DataInput} instance.</li>
+ * <li>{@link org.dayflower.geometry.shape.Polygon2I Polygon2I} is an implementation of {@code Shape2I} that represents a polygon.</li>
+ * <li>{@link org.dayflower.geometry.shape.Polygon2IReader Polygon2IReader} is a {@code Shape2IReader} implementation that reads {@code Polygon2I} instances from a {@code DataInput} instance.</li>
  * </ul>
  * <p>
  * The following list contains information about the data types that represents procedural terrains in this API.

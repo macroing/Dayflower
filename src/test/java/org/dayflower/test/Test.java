@@ -26,6 +26,7 @@ import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.shape.Circle2F;
 import org.dayflower.geometry.shape.Circle2I;
+import org.dayflower.geometry.shape.Polygon2I;
 import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
@@ -55,7 +56,9 @@ public final class Test {
 		doTestImageFConvolutionKernelSharpen();
 		doTestImageFConvolutionKernelUnsharpMasking();
 		doTestImageFCopy();
+		doTestImageFDrawPolygon();
 		doTestImageFFillCircleComplement();
+		doTestImageFFillPolygon();
 		doTestImageFFillRectangle();
 		doTestImageFFillShapes();
 		doTestImageFFillSimplexFractionalBrownianMotion();
@@ -209,11 +212,27 @@ public final class Test {
 		imageF.save("./generated/Test/Image-Copy.png");
 	}
 	
+	private static void doTestImageFDrawPolygon() {
+		final
+		ImageF imageF = new IntImageF(800, 800);
+		imageF.clear(Color4F.WHITE);
+		imageF.drawPolygon(new Polygon2I(new Point2I(100, 100), new Point2I(200, 100), new Point2I(300, 200), new Point2I(200, 300), new Point2I(100, 200)), Color4F.BLACK);
+		imageF.save("./generated/Test/Image-Draw-Polygon.png");
+	}
+	
 	private static void doTestImageFFillCircleComplement() {
 		final
 		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
 		imageF.fillCircleComplement(doCreateCircle2I(imageF), (oldColor, point) -> doCreateColor4F(oldColor, point, imageF));
 		imageF.save("./generated/Test/Image-Fill-Circle-Complement.png");
+	}
+	
+	private static void doTestImageFFillPolygon() {
+		final
+		ImageF imageF = new IntImageF(800, 800);
+		imageF.clear(Color4F.WHITE);
+		imageF.fillPolygon(new Polygon2I(new Point2I(100, 100), new Point2I(200, 100), new Point2I(300, 200), new Point2I(200, 300), new Point2I(100, 200)), Color4F.BLACK);
+		imageF.save("./generated/Test/Image-Fill-Polygon.png");
 	}
 	
 	private static void doTestImageFFillRectangle() {

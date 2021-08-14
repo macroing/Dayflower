@@ -45,6 +45,7 @@ import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.rasterizer.Rasterizer2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.LineSegment2I;
+import org.dayflower.geometry.shape.Polygon2I;
 import org.dayflower.geometry.shape.Rectangle2D;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
@@ -877,6 +878,83 @@ public abstract class ImageD extends Image {
 	}
 	
 	/**
+	 * Draws {@code polygon} to this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
+	 * <p>
+	 * Returns this {@code ImageD} instance.
+	 * <p>
+	 * If {@code polygon} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.drawPolygon(polygon, Color4D.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param polygon the {@link Polygon2I} to draw
+	 * @return this {@code ImageD} instance
+	 * @throws NullPointerException thrown if, and only if, {@code polygon} is {@code null}
+	 */
+	public final ImageD drawPolygon(final Polygon2I polygon) {
+		return drawPolygon(polygon, Color4D.BLACK);
+	}
+	
+	/**
+	 * Draws {@code polygon} to this {@code ImageD} instance with {@code colorRGBA} as its color.
+	 * <p>
+	 * Returns this {@code ImageD} instance.
+	 * <p>
+	 * If either {@code polygon} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.drawPolygon(polygon, (color, point) -> colorRGBA);
+	 * }
+	 * </pre>
+	 * 
+	 * @param polygon the {@link Polygon2I} to draw
+	 * @param colorRGBA the {@link Color4D} to use as its color
+	 * @return this {@code ImageD} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code polygon} or {@code colorRGBA} are {@code null}
+	 */
+	public final ImageD drawPolygon(final Polygon2I polygon, final Color4D colorRGBA) {
+		Objects.requireNonNull(polygon, "polygon == null");
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+		
+		return drawPolygon(polygon, (color, point) -> colorRGBA);
+	}
+	
+	/**
+	 * Draws {@code polygon} to this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
+	 * <p>
+	 * Returns this {@code ImageD} instance.
+	 * <p>
+	 * If either {@code polygon} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polygon the {@link Polygon2I} to draw
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
+	 * @return this {@code ImageD} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code polygon} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 */
+	public final ImageD drawPolygon(final Polygon2I polygon, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
+		Objects.requireNonNull(polygon, "polygon == null");
+		Objects.requireNonNull(biFunction, "biFunction == null");
+		
+		final List<LineSegment2I> lineSegments = polygon.getLineSegments();
+		
+		doChangeBegin();
+		
+		for(final LineSegment2I lineSegment : lineSegments) {
+			doDrawLineSegment(lineSegment, biFunction);
+		}
+		
+		doChangeEnd();
+		
+		return this;
+	}
+	
+	/**
 	 * Draws {@code rectangle} to this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
 	 * <p>
 	 * Returns this {@code ImageD} instance.
@@ -1347,6 +1425,79 @@ public abstract class ImageD extends Image {
 				}
 			}
 		}
+		
+		doChangeEnd();
+		
+		return this;
+	}
+	
+	/**
+	 * Fills {@code polygon} in this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
+	 * <p>
+	 * Returns this {@code ImageD} instance.
+	 * <p>
+	 * If {@code polygon} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillPolygon(polygon, Color4D.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param polygon the {@link Polygon2I} to fill
+	 * @return this {@code ImageD} instance
+	 * @throws NullPointerException thrown if, and only if, {@code polygon} is {@code null}
+	 */
+	public final ImageD fillPolygon(final Polygon2I polygon) {
+		return fillPolygon(polygon, Color4D.BLACK);
+	}
+	
+	/**
+	 * Fills {@code polygon} in this {@code ImageD} instance with {@code colorRGBA} as its color.
+	 * <p>
+	 * Returns this {@code ImageD} instance.
+	 * <p>
+	 * If either {@code polygon} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillPolygon(polygon, (color, point) -> colorRGBA);
+	 * }
+	 * </pre>
+	 * 
+	 * @param polygon the {@link Polygon2I} to fill
+	 * @param colorRGBA the {@link Color4D} to use as its color
+	 * @return this {@code ImageD} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code polygon} or {@code colorRGBA} are {@code null}
+	 */
+	public final ImageD fillPolygon(final Polygon2I polygon, final Color4D colorRGBA) {
+		Objects.requireNonNull(polygon, "polygon == null");
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+		
+		return fillPolygon(polygon, (color, point) -> colorRGBA);
+	}
+	
+	/**
+	 * Fills {@code polygon} in this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
+	 * <p>
+	 * Returns this {@code ImageD} instance.
+	 * <p>
+	 * If either {@code polygon} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polygon the {@link Polygon2I} to fill
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
+	 * @return this {@code ImageD} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code polygon} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 */
+	public final ImageD fillPolygon(final Polygon2I polygon, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
+		Objects.requireNonNull(polygon, "polygon == null");
+		Objects.requireNonNull(biFunction, "biFunction == null");
+		
+		doChangeBegin();
+		
+		polygon.findPointsOfIntersection(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
 		
 		doChangeEnd();
 		

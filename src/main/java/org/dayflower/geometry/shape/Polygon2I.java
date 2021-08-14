@@ -21,6 +21,7 @@ package org.dayflower.geometry.shape;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -52,7 +53,9 @@ public final class Polygon2I implements Shape2I {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final List<LineSegment2I> lineSegments;
 	private final Point2I[] points;
+	private final Rectangle2I rectangle;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -69,9 +72,87 @@ public final class Polygon2I implements Shape2I {
 	 */
 	public Polygon2I(final Point2I... points) {
 		this.points = doRequireValidPoints(points);
+		this.lineSegments = LineSegment2I.fromPoints(this.points);
+		this.rectangle = Rectangle2I.fromPoints(this.points);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} that contains {@link LineSegment2I} instances that connects all {@link Point2I} instances in this {@code Polygon2I} instance.
+	 * 
+	 * @return a {@code List} that contains {@code LineSegment2I} instances that connects all {@link Point2I} instances in this {@code Polygon2I} instance
+	 */
+	public List<LineSegment2I> getLineSegments() {
+		return new ArrayList<>(this.lineSegments);
+	}
+	
+	/**
+	 * Returns a {@code List} with {@link Point2I} instances that represents the intersection between this {@code Polygon2I} instance and {@code rectangle}.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * polygon.findPointsOfIntersection(rectangle, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param rectangle a {@link Rectangle2I} instance
+	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Polygon2I} instance and {@code rectangle}
+	 */
+	public List<Point2I> findPointsOfIntersection(final Rectangle2I rectangle) {
+		return findPointsOfIntersection(rectangle, false);
+	}
+	
+	/**
+	 * Returns a {@code List} with {@link Point2I} instances that represents the intersection between this {@code Polygon2I} instance and {@code rectangle}.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle a {@link Rectangle2I} instance
+	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Polygon2I} instance, {@code false} otherwise
+	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Polygon2I} instance and {@code rectangle}
+	 */
+	public List<Point2I> findPointsOfIntersection(final Rectangle2I rectangle, final boolean isIncludingBorderOnly) {
+		Objects.requireNonNull(rectangle, "rectangle == null");
+		
+		final List<Point2I> points = new ArrayList<>();
+		
+		Rectangle2I.intersection(this.rectangle, rectangle).ifPresent(rectangleIntersection -> {
+			final Point2I minimum = rectangleIntersection.getA();
+			final Point2I maximum = rectangleIntersection.getC();
+			
+			final int minimumX = minimum.getX();
+			final int minimumY = minimum.getY();
+			final int maximumX = maximum.getX();
+			final int maximumY = maximum.getY();
+			
+			for(int y = minimumY; y <= maximumY; y++) {
+				for(int x = minimumX; x <= maximumX; x++) {
+					final Point2I point = new Point2I(x, y);
+					
+					if(isIncludingBorderOnly && doContainsOnLineSegments(point)) {
+						points.add(point);
+					} else if(!isIncludingBorderOnly && (doContains(point) || doContainsOnLineSegments(point))) {
+						points.add(point);
+					}
+				}
+			}
+		});
+		
+		return points;
+	}
+	
+	/**
+	 * Returns a {@code List} that contains all {@link Point2I} instances in this {@code Polygon2I} instance.
+	 * 
+	 * @return a {@code List} that contains all {@code Point2I} instances in this {@code Polygon2I} instance
+	 */
+	public List<Point2I> getPoints() {
+		return new ArrayList<>(Arrays.asList(this.points));
+	}
 	
 	/**
 	 * Returns a {@code String} with the name of this {@code Polygon2I} instance.
@@ -120,10 +201,20 @@ public final class Polygon2I implements Shape2I {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				for(final LineSegment2I lineSegment : this.lineSegments) {
+					if(!lineSegment.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
 				for(final Point2I point : this.points) {
 					if(!point.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
+				}
+				
+				if(!this.rectangle.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
 			
@@ -144,41 +235,8 @@ public final class Polygon2I implements Shape2I {
 	 */
 	@Override
 	public boolean contains(final Point2I point) {
-		final Rectangle2I rectangle = Rectangle2I.fromPoints(this.points);
-		
-		if(rectangle.contains(point)) {
-			boolean isInside = false;
-			
-			final int pX = point.getX();
-			final int pY = point.getY();
-			
-			for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
-				final Point2I pointI = this.points[i];
-				final Point2I pointJ = this.points[j];
-				
-				final int iX = pointI.getX();
-				final int iY = pointI.getY();
-				final int jX = pointJ.getX();
-				final int jY = pointJ.getY();
-				
-				if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
-					isInside = !isInside;
-				}
-			}
-			
-			if(isInside) {
-				return true;
-			}
-			
-			final List<LineSegment2I> lineSegments = LineSegment2I.fromPoints(this.points);
-			
-			for(final LineSegment2I lineSegment : lineSegments) {
-				if(lineSegment.contains(point)) {
-					return true;
-				}
-			}
-			
-			return false;
+		if(this.rectangle.contains(point)) {
+			return doContains(point) || doContainsOnLineSegments(point);
 		}
 		
 		return false;
@@ -198,7 +256,11 @@ public final class Polygon2I implements Shape2I {
 			return true;
 		} else if(!(object instanceof Polygon2I)) {
 			return false;
+		} else if(!Objects.equals(this.lineSegments, Polygon2I.class.cast(object).lineSegments)) {
+			return false;
 		} else if(!Arrays.equals(this.points, Polygon2I.class.cast(object).points)) {
+			return false;
+		} else if(!Objects.equals(this.rectangle, Polygon2I.class.cast(object).rectangle)) {
 			return false;
 		} else {
 			return true;
@@ -222,7 +284,7 @@ public final class Polygon2I implements Shape2I {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)));
+		return Objects.hash(this.lineSegments, Integer.valueOf(Arrays.hashCode(this.points)), this.rectangle);
 	}
 	
 	/**
@@ -248,6 +310,41 @@ public final class Polygon2I implements Shape2I {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doContains(final Point2I point) {
+		boolean isInside = false;
+		
+		final int pX = point.getX();
+		final int pY = point.getY();
+		
+		for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
+			final Point2I pointI = this.points[i];
+			final Point2I pointJ = this.points[j];
+			
+			final int iX = pointI.getX();
+			final int iY = pointI.getY();
+			final int jX = pointJ.getX();
+			final int jY = pointJ.getY();
+			
+			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
+				isInside = !isInside;
+			}
+		}
+		
+		return isInside;
+	}
+	
+	private boolean doContainsOnLineSegments(final Point2I point) {
+		for(final LineSegment2I lineSegment : this.lineSegments) {
+			if(lineSegment.contains(point)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

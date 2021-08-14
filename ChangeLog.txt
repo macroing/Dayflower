@@ -1,5 +1,7 @@
 2021-08-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods drawPolygon(Polygon2I), drawPolygon(Polygon2I, Color4D), drawPolygon(Polygon2I, BiFunction<Color4D, Point2I, Color4D>), fillPolygon(Polygon2I), fillPolygon(Polygon2I, Color4D) and fillPolygon(Polygon2I, BiFunction<Color4D, Point2I, Color4D>) to the ImageD class.
+	* ADD:		Add the methods drawPolygon(Polygon2I), drawPolygon(Polygon2I, Color4F), drawPolygon(Polygon2I, BiFunction<Color4F, Point2I, Color4F>), fillPolygon(Polygon2I), fillPolygon(Polygon2I, Color4F) and fillPolygon(Polygon2I, BiFunction<Color4F, Point2I, Color4F>) to the ImageF class.
 	* ADD:		Add support for reading Polygon2D, Polygon2F and Polygon2I to the DefaultShape2DReader, DefaultShape2FReader and DefaultShape2IReader classes, respectively.
 	* ADD:		Add the Polygon2D and Polygon2DReader classes.
 	* ADD:		Add the Polygon2F and Polygon2FReader classes.

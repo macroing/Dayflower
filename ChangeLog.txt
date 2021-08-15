@@ -1,5 +1,8 @@
 2021-08-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods containsDifference(Point2D, Shape2D, Shape2D), containsIntersection(Point2D, Shape2D, Shape2D) and containsUnion(Point2D, Shape2D, Shape2D) to the Shape2D interface.
+	* ADD:		Add the methods containsDifference(Point2F, Shape2F, Shape2F), containsIntersection(Point2F, Shape2F, Shape2F) and containsUnion(Point2F, Shape2F, Shape2F) to the Shape2F interface.
+	* ADD:		Add the methods containsDifference(Point2I, Shape2I, Shape2I), containsIntersection(Point2I, Shape2I, Shape2I) and containsUnion(Point2I, Shape2I, Shape2I) to the Shape2I interface.
 	* ADD:		Add support for reading LineSegment3D and LineSegment3F to the DefaultShape3DReader and DefaultShape3FReader classes, respectively.
 	* ADD:		Add the LineSegment3D, LineSegment3DReader, LineSegment3FReader and Polygon3D classes.
 	* ADD:		Add the method contains(Point3F) to the LineSegment3F class.

@@ -23,6 +23,7 @@ import org.dayflower.color.Color4F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.Shape2I;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.shape.Circle2F;
 import org.dayflower.geometry.shape.Circle2I;
@@ -80,6 +81,7 @@ public final class Test {
 		doTestImageFScaleUp();
 		doTestImageFSepia();
 		doTestImageFUndoAndRedo();
+		doTestImageFUpdate();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -395,5 +397,15 @@ public final class Test {
 		imageF.save("./generated/Test/Image-Undo-And-Redo-6.png");
 		imageF.redo();
 		imageF.save("./generated/Test/Image-Undo-And-Redo-7.png");
+	}
+	
+	private static void doTestImageFUpdate() {
+		final Shape2I shapeLHS = new Rectangle2I(new Point2I(100, 100), new Point2I(400, 400));
+		final Shape2I shapeRHS = new Circle2I(new Point2I(100, 100), 100);
+		
+		final
+		ImageF imageF = new IntImageF(800, 800);
+		imageF.update((color, point) -> Shape2I.containsIntersection(point, shapeLHS, shapeRHS) ? Color4F.RED : Color4F.WHITE);
+		imageF.save("./generated/Test/Image-Update.png");
 	}
 }

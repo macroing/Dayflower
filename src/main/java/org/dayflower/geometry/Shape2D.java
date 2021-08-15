@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import java.util.Objects;
+
 /**
  * A {@code Shape2D} is a 2-dimensional extension of {@link Shape} that adds additional methods that operates on {@code double}-based data types.
  * <p>
@@ -37,4 +39,75 @@ public interface Shape2D extends Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	boolean contains(final Point2D point);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in {@code shapeLHS} but not in {@code shapeRHS}, {@code false} otherwise.
+	 * <p>
+	 * If either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2D} instance
+	 * @param shapeLHS the {@code Shape2D} instance on the left-hand side of the operation
+	 * @param shapeRHS the {@code Shape2D} instance on the right-hand side of the operation
+	 * @return {@code true} if, and only if, {@code point} is contained in {@code shapeLHS} but not in {@code shapeRHS}, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}
+	 */
+	static boolean containsDifference(final Point2D point, final Shape2D shapeLHS, final Shape2D shapeRHS) {
+		Objects.requireNonNull(point, "point == null");
+		Objects.requireNonNull(shapeLHS, "shapeLHS == null");
+		Objects.requireNonNull(shapeRHS, "shapeRHS == null");
+		
+		final boolean containsShapeLHS = shapeLHS.contains(point);
+		final boolean containsShapeRHS = shapeRHS.contains(point);
+		final boolean containsDifference = containsShapeLHS && !containsShapeRHS;
+		
+		return containsDifference;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in both {@code shapeLHS} and {@code shapeRHS}, {@code false} otherwise.
+	 * <p>
+	 * If either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2D} instance
+	 * @param shapeLHS the {@code Shape2D} instance on the left-hand side of the operation
+	 * @param shapeRHS the {@code Shape2D} instance on the right-hand side of the operation
+	 * @return {@code true} if, and only if, {@code point} is contained in both {@code shapeLHS} and {@code shapeRHS}, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}
+	 */
+	static boolean containsIntersection(final Point2D point, final Shape2D shapeLHS, final Shape2D shapeRHS) {
+		Objects.requireNonNull(point, "point == null");
+		Objects.requireNonNull(shapeLHS, "shapeLHS == null");
+		Objects.requireNonNull(shapeRHS, "shapeRHS == null");
+		
+		final boolean containsShapeLHS = shapeLHS.contains(point);
+		final boolean containsShapeRHS = shapeRHS.contains(point);
+		final boolean containsIntersection = containsShapeLHS && containsShapeRHS;
+		
+		return containsIntersection;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in either {@code shapeLHS} or {@code shapeRHS}, {@code false} otherwise.
+	 * <p>
+	 * If either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2D} instance
+	 * @param shapeLHS the {@code Shape2D} instance on the left-hand side of the operation
+	 * @param shapeRHS the {@code Shape2D} instance on the right-hand side of the operation
+	 * @return {@code true} if, and only if, {@code point} is contained in either {@code shapeLHS} or {@code shapeRHS}, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}
+	 */
+	static boolean containsUnion(final Point2D point, final Shape2D shapeLHS, final Shape2D shapeRHS) {
+		Objects.requireNonNull(point, "point == null");
+		Objects.requireNonNull(shapeLHS, "shapeLHS == null");
+		Objects.requireNonNull(shapeRHS, "shapeRHS == null");
+		
+		final boolean containsShapeLHS = shapeLHS.contains(point);
+		final boolean containsShapeRHS = shapeRHS.contains(point);
+		final boolean containsUnion = containsShapeLHS || containsShapeRHS;
+		
+		return containsUnion;
+	}
 }

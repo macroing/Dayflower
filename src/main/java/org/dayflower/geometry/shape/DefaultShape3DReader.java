@@ -50,6 +50,7 @@ public final class DefaultShape3DReader implements Shape3DReader {
 		this.shape3DReaders.put(Integer.valueOf(Cylinder3D.ID), new Cylinder3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Disk3D.ID), new Disk3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Hyperboloid3D.ID), new Hyperboloid3DReader());
+		this.shape3DReaders.put(Integer.valueOf(LineSegment3D.ID), new LineSegment3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Paraboloid3D.ID), new Paraboloid3DReader());
 		this.shape3DReaders.put(Integer.valueOf(Plane3D.ID), new Plane3DReader());
 		this.shape3DReaders.put(Integer.valueOf(ProceduralTerrain3D.ID), new ProceduralTerrain3DReader());
@@ -119,6 +120,7 @@ public final class DefaultShape3DReader implements Shape3DReader {
 			case Cylinder3D.ID:
 			case Disk3D.ID:
 			case Hyperboloid3D.ID:
+			case LineSegment3D.ID:
 			case Paraboloid3D.ID:
 			case Plane3D.ID:
 			case ProceduralTerrain3D.ID:

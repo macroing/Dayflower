@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Doubles.PI;
+import static org.dayflower.utility.Doubles.cos;
 
 import java.io.DataOutput;
 import java.io.IOException;
@@ -27,60 +27,60 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.Point2F;
-import org.dayflower.geometry.Point3F;
-import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.Shape3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
-import org.dayflower.geometry.Vector3F;
-import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+import org.dayflower.geometry.BoundingVolume3D;
+import org.dayflower.geometry.Point2D;
+import org.dayflower.geometry.Point3D;
+import org.dayflower.geometry.Ray3D;
+import org.dayflower.geometry.Shape3D;
+import org.dayflower.geometry.SurfaceIntersection3D;
+import org.dayflower.geometry.Vector3D;
+import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code LineSegment3F} is an implementation of {@link Shape3F} that represents a line segment.
+ * A {@code LineSegment3D} is an implementation of {@link Shape3D} that represents a line segment.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@code Shape3F} implementation is not supported on the GPU.
+ * This {@code Shape3D} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LineSegment3F implements Shape3F {
+public final class LineSegment3D implements Shape3D {
 	/**
-	 * The name of this {@code LineSegment3F} class.
+	 * The name of this {@code LineSegment3D} class.
 	 */
 	public static final String NAME = "Line Segment";
 	
 	/**
-	 * The ID of this {@code LineSegment3F} class.
+	 * The ID of this {@code LineSegment3D} class.
 	 */
 	public static final int ID = 8;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final float LINE_WIDTH = PI * 0.5F / 4096.0F;
-	private static final float LINE_WIDTH_COS = cos(LINE_WIDTH);
+	private static final double LINE_WIDTH = PI * 0.5D / 4096.0D;
+	private static final double LINE_WIDTH_COS = cos(LINE_WIDTH);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Point3F a;
-	private final Point3F b;
+	private final Point3D a;
+	private final Point3D b;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code LineSegment3F} instance given two {@link Point3F} instances, {@code a} and {@code b}.
+	 * Constructs a new {@code LineSegment3D} instance given two {@link Point3D} instances, {@code a} and {@code b}.
 	 * <p>
 	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param a a {@code Point3F} instance
-	 * @param b a {@code Point3F} instance
+	 * @param a a {@code Point3D} instance
+	 * @param b a {@code Point3D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-	public LineSegment3F(final Point3F a, final Point3F b) {
+	public LineSegment3D(final Point3D a, final Point3D b) {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 	}
@@ -88,58 +88,58 @@ public final class LineSegment3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link BoundingVolume3F} instance that contains this {@code LineSegment3F} instance.
+	 * Returns a {@link BoundingVolume3D} instance that contains this {@code LineSegment3D} instance.
 	 * 
-	 * @return a {@code BoundingVolume3F} instance that contains this {@code LineSegment3F} instance
+	 * @return a {@code BoundingVolume3D} instance that contains this {@code LineSegment3D} instance
 	 */
 	@Override
-	public BoundingVolume3F getBoundingVolume() {
-		return new AxisAlignedBoundingBox3F(this.a, this.b);
+	public BoundingVolume3D getBoundingVolume() {
+		return new AxisAlignedBoundingBox3D(this.a, this.b);
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code LineSegment3F} instance.
+	 * Performs an intersection test between {@code ray} and this {@code LineSegment3D} instance.
 	 * <p>
-	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3F} instance that contains information about the intersection, if it was found.
+	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3D} instance that contains information about the intersection, if it was found.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code LineSegment3F} instance
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code LineSegment3D} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
-	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
+	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		Objects.requireNonNull(ray, "ray == null");
 		
 //		TODO: Implement!
-		return SurfaceIntersection3F.EMPTY;
+		return SurfaceIntersection3D.EMPTY;
 	}
 	
 	/**
-	 * Returns the {@link Point3F} instance denoted by {@code A}.
+	 * Returns the {@link Point3D} instance denoted by {@code A}.
 	 * 
-	 * @return the {@code Point3F} instance denoted by {@code A}
+	 * @return the {@code Point3D} instance denoted by {@code A}
 	 */
-	public Point3F getA() {
+	public Point3D getA() {
 		return this.a;
 	}
 	
 	/**
-	 * Returns the {@link Point3F} instance denoted by {@code B}.
+	 * Returns the {@link Point3D} instance denoted by {@code B}.
 	 * 
-	 * @return the {@code Point3F} instance denoted by {@code B}
+	 * @return the {@code Point3D} instance denoted by {@code B}
 	 */
-	public Point3F getB() {
+	public Point3D getB() {
 		return this.b;
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code LineSegment3F} instance.
+	 * Returns a {@code String} with the name of this {@code LineSegment3D} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code LineSegment3F} instance
+	 * @return a {@code String} with the name of this {@code LineSegment3D} instance
 	 */
 	@Override
 	public String getName() {
@@ -147,13 +147,13 @@ public final class LineSegment3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code LineSegment3F} instance.
+	 * Returns a {@code String} representation of this {@code LineSegment3D} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code LineSegment3F} instance
+	 * @return a {@code String} representation of this {@code LineSegment3D} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LineSegment3F(%s, %s)", this.a, this.b);
+		return String.format("new LineSegment3D(%s, %s)", this.a, this.b);
 	}
 	
 	/**
@@ -199,56 +199,56 @@ public final class LineSegment3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code LineSegment3F} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code LineSegment3D} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@link Point2F} instance
-	 * @return {@code true} if, and only if, {@code point} is contained in this {@code LineSegment3F} instance, {@code false} otherwise
+	 * @param point a {@link Point2D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code LineSegment3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-	public boolean contains(final Point3F point) {
-		final Point3F p = Objects.requireNonNull(point, "point == null");
-		final Point3F a = this.a;
-		final Point3F b = this.b;
+	public boolean contains(final Point3D point) {
+		final Point3D p = Objects.requireNonNull(point, "point == null");
+		final Point3D a = this.a;
+		final Point3D b = this.b;
 		
 		if(p.equals(a) || p.equals(b)) {
 			return true;
 		}
 		
-		final Vector3F vP = new Vector3F(p);
-		final Vector3F vA = new Vector3F(a);
-		final Vector3F vB = new Vector3F(b);
+		final Vector3D vP = new Vector3D(p);
+		final Vector3D vA = new Vector3D(a);
+		final Vector3D vB = new Vector3D(b);
 		
-		final Vector3F vBP = Vector3F.direction(b, p);
-		final Vector3F vBA = Vector3F.direction(b, a);
+		final Vector3D vBP = Vector3D.direction(b, p);
+		final Vector3D vBA = Vector3D.direction(b, a);
 		
-		final float t = Vector3F.dotProduct(vBP, vBA) / Point3F.distanceSquared(a, b);
+		final double t = Vector3D.dotProduct(vBP, vBA) / Point3D.distanceSquared(a, b);
 		
-		final Vector3F projection = Vector3F.lerp(vB, vA, t);
+		final Vector3D projection = Vector3D.lerp(vB, vA, t);
 		
-		final boolean contains = Vector3F.dotProduct(projection, vP) / projection.length() / vP.length() >= LINE_WIDTH_COS;
+		final boolean contains = Vector3D.dotProduct(projection, vP) / projection.length() / vP.length() >= LINE_WIDTH_COS;
 		
 		return contains;
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LineSegment3F} instance for equality.
+	 * Compares {@code object} to this {@code LineSegment3D} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LineSegment3F}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LineSegment3D}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LineSegment3F} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LineSegment3F}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LineSegment3D} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LineSegment3D}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LineSegment3F)) {
+		} else if(!(object instanceof LineSegment3D)) {
 			return false;
-		} else if(!Objects.equals(this.a, LineSegment3F.class.cast(object).a)) {
+		} else if(!Objects.equals(this.a, LineSegment3D.class.cast(object).a)) {
 			return false;
-		} else if(!Objects.equals(this.b, LineSegment3F.class.cast(object).b)) {
+		} else if(!Objects.equals(this.b, LineSegment3D.class.cast(object).b)) {
 			return false;
 		} else {
 			return true;
@@ -256,42 +256,42 @@ public final class LineSegment3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the surface area of this {@code LineSegment3F} instance.
+	 * Returns the surface area of this {@code LineSegment3D} instance.
 	 * <p>
-	 * This method returns {@code 0.0F}.
+	 * This method returns {@code 0.0D}.
 	 * 
-	 * @return the surface area of this {@code LineSegment3F} instance
+	 * @return the surface area of this {@code LineSegment3D} instance
 	 */
 	@Override
-	public float getSurfaceArea() {
-		return 0.0F;
+	public double getSurfaceArea() {
+		return 0.0D;
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code LineSegment3F} instance.
+	 * Performs an intersection test between {@code ray} and this {@code LineSegment3D} instance.
 	 * <p>
-	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code LineSegment3F} instance
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code LineSegment3D} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
-	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		Objects.requireNonNull(ray, "ray == null");
 		
 //		TODO: Implement!
-		return Float.NaN;
+		return Double.NaN;
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code LineSegment3F} instance.
+	 * Returns an {@code int} with the ID of this {@code LineSegment3D} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code LineSegment3F} instance
+	 * @return an {@code int} with the ID of this {@code LineSegment3D} instance
 	 */
 	@Override
 	public int getID() {
@@ -299,9 +299,9 @@ public final class LineSegment3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LineSegment3F} instance.
+	 * Returns a hash code for this {@code LineSegment3D} instance.
 	 * 
-	 * @return a hash code for this {@code LineSegment3F} instance
+	 * @return a hash code for this {@code LineSegment3D} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -309,7 +309,7 @@ public final class LineSegment3F implements Shape3F {
 	}
 	
 	/**
-	 * Writes this {@code LineSegment3F} instance to {@code dataOutput}.
+	 * Writes this {@code LineSegment3D} instance to {@code dataOutput}.
 	 * <p>
 	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>

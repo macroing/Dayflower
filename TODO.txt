@@ -5,13 +5,11 @@ Geometry API:
 
 Geometry Shape API:
 
-	* ADD:		LineSegment3D.
-	* ADD:		LineSegment3DReader.
-	* ADD:		LineSegment3FReader.
-	* ADD:		Polygon3D.
 	* ADD:		Polygon3DReader.
 	* ADD:		Polygon3FReader.
+	* CHANGE:	Implement Polygon3D.
 	* CHANGE:	Implement Polygon3F.
+	* CHANGE:	Implement LineSegment3D.
 	* CHANGE:	Implement LineSegment3F.
 
 Image API:

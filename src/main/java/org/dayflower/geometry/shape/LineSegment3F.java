@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.cos;
+
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -25,10 +28,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
@@ -53,6 +58,11 @@ public final class LineSegment3F implements Shape3F {
 	 * The ID of this {@code LineSegment3F} class.
 	 */
 	public static final int ID = 8;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final float LINE_WIDTH = PI * 0.5F / 4096.0F;
+	private static final float LINE_WIDTH_COS = cos(LINE_WIDTH);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -189,6 +199,40 @@ public final class LineSegment3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code LineSegment3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code LineSegment3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point3F point) {
+		final Point3F p = Objects.requireNonNull(point, "point == null");
+		final Point3F a = this.a;
+		final Point3F b = this.b;
+		
+		if(p.equals(a) || p.equals(b)) {
+			return true;
+		}
+		
+		final Vector3F vP = new Vector3F(p);
+		final Vector3F vA = new Vector3F(a);
+		final Vector3F vB = new Vector3F(b);
+		
+		final Vector3F vBP = Vector3F.direction(b, p);
+		final Vector3F vBA = Vector3F.direction(b, a);
+		
+		final float t = Vector3F.dotProduct(vBP, vBA) / Point3F.distanceSquared(a, b);
+		
+		final Vector3F projection = Vector3F.lerp(vB, vA, t);
+		
+		final boolean contains = Vector3F.dotProduct(projection, vP) / projection.length() / vP.length() >= LINE_WIDTH_COS;
+		
+		return contains;
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code LineSegment3F} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LineSegment3F}, and their respective values are equal, {@code false} otherwise.
@@ -240,7 +284,6 @@ public final class LineSegment3F implements Shape3F {
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		Objects.requireNonNull(ray, "ray == null");
 		
-//		TODO: Implement!
 		return Float.NaN;
 	}
 	

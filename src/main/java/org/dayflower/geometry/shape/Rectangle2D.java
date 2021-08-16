@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
 
@@ -95,18 +96,23 @@ public final class Rectangle2D implements Shape2D {
 	 * Constructs a new {@code Rectangle2D} instance based on {@code a}, {@code b}, {@code c} and {@code d}.
 	 * <p>
 	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code a}, {@code b}, {@code c} and {@code d} does not form a rectangle, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param a a {@link Point2D} instance
 	 * @param b a {@code Point2D} instance
 	 * @param c a {@code Point2D} instance
 	 * @param d a {@code Point2D} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code a}, {@code b}, {@code c} and {@code d} does not form a rectangle
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public Rectangle2D(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
-		this.a = Objects.requireNonNull(a, "a == null");
-		this.b = Objects.requireNonNull(b, "b == null");
-		this.c = Objects.requireNonNull(c, "c == null");
-		this.d = Objects.requireNonNull(d, "d == null");
+		doCheckPointValidity(a, b, c, d);
+		
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.d = d;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -383,10 +389,13 @@ public final class Rectangle2D implements Shape2D {
 	 * Returns a new {@code Rectangle2D} instance with the result of the operation.
 	 * <p>
 	 * If either {@code rectangle} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If the rotated {@link Point2D} instances do not form a rectangle, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param rectangle the {@code Rectangle2D} instance to rotate
 	 * @param angle the {@link AngleD} instance to rotate with
 	 * @return a new {@code Rectangle2D} instance with the result of the operation
+	 * @throws IllegalArgumentException thrown if, and only if, the rotated {@code Point2D} instances do not form a rectangle
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code angle} are {@code null}
 	 */
 	public static Rectangle2D rotate(final Rectangle2D rectangle, final AngleD angle) {
@@ -434,5 +443,30 @@ public final class Rectangle2D implements Shape2D {
 		final Point2D maximum = Point2D.maximum(a.getC(), b.getC());
 		
 		return new Rectangle2D(minimum, maximum);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static void doCheckPointValidity(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
+		Objects.requireNonNull(a, "a == null");
+		Objects.requireNonNull(b, "b == null");
+		Objects.requireNonNull(c, "c == null");
+		Objects.requireNonNull(d, "d == null");
+		
+		final double distanceAB = Point2D.distance(a, b);
+		final double distanceBC = Point2D.distance(b, c);
+		final double distanceCD = Point2D.distance(c, d);
+		final double distanceDA = Point2D.distance(d, a);
+		
+		final double deltaABCD = abs(distanceAB - distanceCD);
+		final double deltaBCDA = abs(distanceBC - distanceDA);
+		
+		final boolean isValidABCD = deltaABCD <= 0.00001D;
+		final boolean isValidBCDA = deltaBCDA <= 0.00001D;
+		final boolean isValid = isValidABCD && isValidBCDA;
+		
+		if(!isValid) {
+			throw new IllegalArgumentException();
+		}
 	}
 }

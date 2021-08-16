@@ -1,3 +1,16 @@
+2021-08-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add rectangle validation to the method rotate(Rectangle2D, AngleD) of the Rectangle2D class.
+	* ADD:		Add rectangle validation to the method rotate(Rectangle2F, AngleF) of the Rectangle2F class.
+	* ADD:		Add the constructor Point2D(Point2F) to the Point2D class.
+	* ADD:		Add the constructor Point2F(Point2D) to the Point2F class.
+	* ADD:		Add the methods isAxisAligned() and isRotated() to the Rectangle2I class.
+	* ADD:		Add rectangle validation to the constructor Rectangle2D(Point2D, Point2D, Point2D, Point2D) of the Rectangle2D class.
+	* ADD:		Add rectangle validation to the constructor Rectangle2F(Point2F, Point2F, Point2F, Point2F) of the Rectangle2F class.
+	* ADD:		Add rectangle validation to the constructor Rectangle2I(Point2I, Point2I, Point2I, Point2I) of the Rectangle2I class.
+	* ADD:		Add the methods distance(Point2I, Point2I) and distanceSquared(Point2I, Point2I) to the Point2I class.
+	* ADD:		Add the method length() to the Vector2I class.
+
 2021-08-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods containsDifference(Point2D, Shape2D, Shape2D), containsIntersection(Point2D, Shape2D, Shape2D) and containsUnion(Point2D, Shape2D, Shape2D) to the Shape2D interface.

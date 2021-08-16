@@ -91,6 +91,25 @@ public final class Point2D implements Node {
 	}
 	
 	/**
+	 * Constructs a new {@code Point2D} instance given the component values {@code point.getComponent1()} and {@code point.getComponent2()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point2D(point.getComponent1(), point.getComponent2());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Point2D(final Point2F point) {
+		this(point.getComponent1(), point.getComponent2());
+	}
+	
+	/**
 	 * Constructs a new {@code Point2D} instance given the component values {@code vector.getComponent1()} and {@code vector.getComponent2()}.
 	 * <p>
 	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.

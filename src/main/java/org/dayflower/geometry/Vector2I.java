@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.sqrt;
+import static org.dayflower.utility.Ints.toInt;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -179,6 +182,15 @@ public final class Vector2I {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Integer.valueOf(this.component1), Integer.valueOf(this.component2));
+	}
+	
+	/**
+	 * Returns the length of this {@code Vector2I} instance.
+	 * 
+	 * @return the length of this {@code Vector2I} instance
+	 */
+	public int length() {
+		return toInt(sqrt(lengthSquared()));
 	}
 	
 	/**

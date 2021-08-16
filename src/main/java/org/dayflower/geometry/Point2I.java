@@ -417,4 +417,32 @@ public final class Point2I implements Node {
 		
 		return stringBuilder.toString();
 	}
+	
+	/**
+	 * Returns the distance from {@code eye} to {@code lookAt}.
+	 * <p>
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye a {@code Point2I} instance denoting the eye to look from
+	 * @param lookAt a {@code Point2I} instance denoting the target to look at
+	 * @return the distance from {@code eye} to {@code lookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
+	 */
+	public static int distance(final Point2I eye, final Point2I lookAt) {
+		return Vector2I.direction(eye, lookAt).length();
+	}
+	
+	/**
+	 * Returns the squared distance from {@code eye} to {@code lookAt}.
+	 * <p>
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye a {@code Point2I} instance denoting the eye to look from
+	 * @param lookAt a {@code Point2I} instance denoting the target to look at
+	 * @return the squared distance from {@code eye} to {@code lookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
+	 */
+	public static int distanceSquared(final Point2I eye, final Point2I lookAt) {
+		return Vector2I.direction(eye, lookAt).lengthSquared();
+	}
 }

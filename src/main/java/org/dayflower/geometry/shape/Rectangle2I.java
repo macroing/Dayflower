@@ -93,18 +93,23 @@ public final class Rectangle2I implements Shape2I {
 	 * Constructs a new {@code Rectangle2I} instance based on {@code a}, {@code b}, {@code c} and {@code d}.
 	 * <p>
 	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code a}, {@code b}, {@code c} and {@code d} does not form a rectangle, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param a a {@link Point2I} instance
 	 * @param b a {@code Point2I} instance
 	 * @param c a {@code Point2I} instance
 	 * @param d a {@code Point2I} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code a}, {@code b}, {@code c} and {@code d} does not form a rectangle
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public Rectangle2I(final Point2I a, final Point2I b, final Point2I c, final Point2I d) {
-		this.a = Objects.requireNonNull(a, "a == null");
-		this.b = Objects.requireNonNull(b, "b == null");
-		this.c = Objects.requireNonNull(c, "c == null");
-		this.d = Objects.requireNonNull(d, "d == null");
+		doCheckPointValidity(a, b, c, d);
+		
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.d = d;
 	}
 	
 	/**
@@ -287,6 +292,30 @@ public final class Rectangle2I implements Shape2I {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, this {@code Rectangle2I} instance is axis-aligned, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Rectangle2I} instance is axis-aligned, {@code false} otherwise
+	 */
+	public boolean isAxisAligned() {
+		final boolean isAxisAlignedAB = this.a.getY() == this.b.getY();
+		final boolean isAxisAlignedBC = this.b.getX() == this.c.getX();
+		final boolean isAxisAlignedCD = this.c.getY() == this.d.getY();
+		final boolean isAxisAlignedDA = this.d.getX() == this.a.getX();
+		final boolean isAxisAligned = isAxisAlignedAB && isAxisAlignedBC && isAxisAlignedCD && isAxisAlignedDA;
+		
+		return isAxisAligned;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Rectangle2I} instance is rotated, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Rectangle2I} instance is rotated, {@code false} otherwise
+	 */
+	public boolean isRotated() {
+		return !isAxisAligned();
+	}
+	
+	/**
 	 * Returns the height of this {@code Rectangle2I} instance.
 	 * 
 	 * @return the height of this {@code Rectangle2I} instance
@@ -420,5 +449,27 @@ public final class Rectangle2I implements Shape2I {
 		final Point2I maximum = Point2I.maximum(a.getC(), b.getC());
 		
 		return new Rectangle2I(minimum, maximum);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static void doCheckPointValidity(final Point2I a, final Point2I b, final Point2I c, final Point2I d) {
+		Objects.requireNonNull(a, "a == null");
+		Objects.requireNonNull(b, "b == null");
+		Objects.requireNonNull(c, "c == null");
+		Objects.requireNonNull(d, "d == null");
+		
+		final int distanceAB = Point2I.distance(a, b);
+		final int distanceBC = Point2I.distance(b, c);
+		final int distanceCD = Point2I.distance(c, d);
+		final int distanceDA = Point2I.distance(d, a);
+		
+		final boolean isValidABCD = distanceAB == distanceCD;
+		final boolean isValidBCDA = distanceBC == distanceDA;
+		final boolean isValid = isValidABCD && isValidBCDA;
+		
+		if(!isValid) {
+			throw new IllegalArgumentException();
+		}
 	}
 }

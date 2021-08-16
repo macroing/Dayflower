@@ -32,6 +32,7 @@ import static org.dayflower.utility.Floats.positiveModulo;
 import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Floats.sqrt;
 import static org.dayflower.utility.Floats.toDegrees;
+import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Floats.toRadians;
 
 import java.io.DataInput;
@@ -88,6 +89,25 @@ public final class Point2F implements Node {
 	 */
 	public Point2F() {
 		this(0.0F, 0.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code Point2F} instance given the component values {@code point.getComponent1()} and {@code point.getComponent2()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point2F(Floats.toFloat(point.getComponent1()), Floats.toFloat(point.getComponent2()));
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Point2F(final Point2D point) {
+		this(toFloat(point.getComponent1()), toFloat(point.getComponent2()));
 	}
 	
 	/**

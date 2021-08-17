@@ -18,7 +18,13 @@
  */
 package org.dayflower.utility;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.DoubleSupplier;
+import java.util.function.Function;
+
+import org.dayflower.java.io.DoubleArrayOutputStream;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code double[]} instances.
@@ -72,6 +78,158 @@ public final class DoubleArrays {
 	}
 	
 	/**
+	 * Returns a {@code double[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * DoubleArrays.convert(objects, arrayFunction, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code double[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code double[]} instances
+	 * @return a {@code double[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> double[] convert(final List<T> objects, final Function<T, double[]> arrayFunction) {
+		return convert(objects, arrayFunction, 0);
+	}
+	
+	/**
+	 * Returns a {@code double[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code double[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code double[]} instances
+	 * @param minimumLength the minimum length of the returned {@code double[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
+	 * @return a {@code double[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> double[] convert(final List<T> objects, final Function<T, double[]> arrayFunction, final int minimumLength) {
+		ParameterArguments.requireNonNullList(objects, "objects");
+		
+		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
+		
+		ParameterArguments.requireRange(minimumLength, 0, Integer.MAX_VALUE, "minimumLength");
+		
+		if(objects.isEmpty()) {
+			return create(minimumLength);
+		}
+		
+		try(final DoubleArrayOutputStream doubleArrayOutputStream = new DoubleArrayOutputStream()) {
+			for(final T object : objects) {
+				doubleArrayOutputStream.write(arrayFunction.apply(object));
+			}
+			
+			final double[] array = doubleArrayOutputStream.toDoubleArray();
+			
+			return array.length == 0 ? create(minimumLength) : array;
+		}
+	}
+	
+	/**
+	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code 0.0D}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * DoubleArrays.create(length, 0.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @param length the length of the {@code double[]}
+	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code 0.0D}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static double[] create(final int length) {
+		return create(length, 0.0D);
+	}
+	
+	/**
+	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code double} values from {@code doubleSupplier}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code doubleSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param length the length of the {@code double[]}
+	 * @param doubleSupplier the {@code DoubleSupplier} to fill the {@code double[]} with
+	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code double} values from {@code doubleSupplier}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code doubleSupplier} is {@code null}
+	 */
+	public static double[] create(final int length, final DoubleSupplier doubleSupplier) {
+		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Objects.requireNonNull(doubleSupplier, "doubleSupplier == null");
+		
+		for(int i = 0; i < array.length; i++) {
+			array[i] = doubleSupplier.getAsDouble();
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code value}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the {@code double[]}
+	 * @param value the {@code double} value to fill the {@code double[]} with
+	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static double[] create(final int length, final double value) {
+		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Arrays.fill(array, value);
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern.
+	 * <p>
+	 * If {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the {@code double[]}
+	 * @param value0 the {@code double} at the relative offset {@code 0}
+	 * @param value1 the {@code double} at the relative offset {@code 1}
+	 * @param value2 the {@code double} at the relative offset {@code 2}
+	 * @param value3 the {@code double} at the relative offset {@code 3}
+	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}
+	 */
+	public static double[] create(final int length, final double value0, final double value1, final double value2, final double value3) {
+		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		if(array.length % 4 != 0) {
+			throw new IllegalArgumentException(String.format("%d %% 4 != 0", Integer.valueOf(length)));
+		}
+		
+		for(int i = 0; i < length; i += 4) {
+			array[i + 0] = value0;
+			array[i + 1] = value1;
+			array[i + 2] = value2;
+			array[i + 3] = value3;
+		}
+		
+		return array;
+	}
+	
+	/**
 	 * Performs a merge operation on the {@code double[]} instance {@code array} and the {@code double} {@code value}.
 	 * <p>
 	 * Returns a new {@code double[]} with {@code array} and {@code value} merged.
@@ -119,6 +277,33 @@ public final class DoubleArrays {
 		System.arraycopy(arrayB, 0, arrayC, offsetArrayB, arrayB.length);
 		
 		return arrayC;
+	}
+	
+	/**
+	 * Performs a merge operation on the {@code double[]} instances in {@code arrays}.
+	 * <p>
+	 * Returns a new {@code double[]} with {@code arrays} merged.
+	 * <p>
+	 * If either {@code arrays} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrays the {@code double[][]} instance to combine into one {@code double[]}
+	 * @return a new {@code double[]} with {@code arrays} merged
+	 * @throws NullPointerException thrown if, and only if, either {@code arrays} or at least one of its elements are {@code null}
+	 */
+	public static double[] merge(final double[]... arrays) {
+		Objects.requireNonNull(arrays, "arrays == null");
+		
+		for(int i = 0; i < arrays.length; i++) {
+			Objects.requireNonNull(arrays[i], "arrays[" + i + "] == null");
+		}
+		
+		try(final DoubleArrayOutputStream doubleArrayOutputStream = new DoubleArrayOutputStream()) {
+			for(final double[] array : arrays) {
+				doubleArrayOutputStream.write(array);
+			}
+			
+			return doubleArrayOutputStream.toDoubleArray();
+		}
 	}
 	
 	/**

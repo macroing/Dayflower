@@ -18,7 +18,13 @@
  */
 package org.dayflower.utility;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+
+import org.dayflower.java.io.FloatArrayOutputStream;
+import org.dayflower.java.util.function.FloatSupplier;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code float[]} instances.
@@ -72,6 +78,158 @@ public final class FloatArrays {
 	}
 	
 	/**
+	 * Returns a {@code float[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * FloatArrays.convert(objects, arrayFunction, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code float[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code float[]} instances
+	 * @return a {@code float[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> float[] convert(final List<T> objects, final Function<T, float[]> arrayFunction) {
+		return convert(objects, arrayFunction, 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code float[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code float[]} instances
+	 * @param minimumLength the minimum length of the returned {@code float[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
+	 * @return a {@code float[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> float[] convert(final List<T> objects, final Function<T, float[]> arrayFunction, final int minimumLength) {
+		ParameterArguments.requireNonNullList(objects, "objects");
+		
+		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
+		
+		ParameterArguments.requireRange(minimumLength, 0, Integer.MAX_VALUE, "minimumLength");
+		
+		if(objects.isEmpty()) {
+			return create(minimumLength);
+		}
+		
+		try(final FloatArrayOutputStream floatArrayOutputStream = new FloatArrayOutputStream()) {
+			for(final T object : objects) {
+				floatArrayOutputStream.write(arrayFunction.apply(object));
+			}
+			
+			final float[] array = floatArrayOutputStream.toFloatArray();
+			
+			return array.length == 0 ? create(minimumLength) : array;
+		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code 0.0F}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * FloatArrays.create(length, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param length the length of the {@code float[]}
+	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code 0.0F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static float[] create(final int length) {
+		return create(length, 0.0F);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code float} values from {@code floatSupplier}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code floatSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param length the length of the {@code float[]}
+	 * @param floatSupplier the {@link FloatSupplier} to fill the {@code float[]} with
+	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code float} values from {@code floatSupplier}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code floatSupplier} is {@code null}
+	 */
+	public static float[] create(final int length, final FloatSupplier floatSupplier) {
+		final float[] array = new float[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Objects.requireNonNull(floatSupplier, "floatSupplier == null");
+		
+		for(int i = 0; i < array.length; i++) {
+			array[i] = floatSupplier.getAsFloat();
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code value}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the {@code float[]}
+	 * @param value the {@code float} value to fill the {@code float[]} with
+	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static float[] create(final int length, final float value) {
+		final float[] array = new float[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Arrays.fill(array, value);
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern.
+	 * <p>
+	 * If {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the {@code float[]}
+	 * @param value0 the {@code float} at the relative offset {@code 0}
+	 * @param value1 the {@code float} at the relative offset {@code 1}
+	 * @param value2 the {@code float} at the relative offset {@code 2}
+	 * @param value3 the {@code float} at the relative offset {@code 3}
+	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}
+	 */
+	public static float[] create(final int length, final float value0, final float value1, final float value2, final float value3) {
+		final float[] array = new float[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		if(array.length % 4 != 0) {
+			throw new IllegalArgumentException(String.format("%d %% 4 != 0", Integer.valueOf(length)));
+		}
+		
+		for(int i = 0; i < length; i += 4) {
+			array[i + 0] = value0;
+			array[i + 1] = value1;
+			array[i + 2] = value2;
+			array[i + 3] = value3;
+		}
+		
+		return array;
+	}
+	
+	/**
 	 * Performs a merge operation on the {@code float[]} instance {@code array} and the {@code float} {@code value}.
 	 * <p>
 	 * Returns a new {@code float[]} with {@code array} and {@code value} merged.
@@ -119,6 +277,33 @@ public final class FloatArrays {
 		System.arraycopy(arrayB, 0, arrayC, offsetArrayB, arrayB.length);
 		
 		return arrayC;
+	}
+	
+	/**
+	 * Performs a merge operation on the {@code float[]} instances in {@code arrays}.
+	 * <p>
+	 * Returns a new {@code float[]} with {@code arrays} merged.
+	 * <p>
+	 * If either {@code arrays} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrays the {@code float[][]} instance to combine into one {@code float[]}
+	 * @return a new {@code float[]} with {@code arrays} merged
+	 * @throws NullPointerException thrown if, and only if, either {@code arrays} or at least one of its elements are {@code null}
+	 */
+	public static float[] merge(final float[]... arrays) {
+		Objects.requireNonNull(arrays, "arrays == null");
+		
+		for(int i = 0; i < arrays.length; i++) {
+			Objects.requireNonNull(arrays[i], "arrays[" + i + "] == null");
+		}
+		
+		try(final FloatArrayOutputStream floatArrayOutputStream = new FloatArrayOutputStream()) {
+			for(final float[] array : arrays) {
+				floatArrayOutputStream.write(array);
+			}
+			
+			return floatArrayOutputStream.toFloatArray();
+		}
 	}
 	
 	/**

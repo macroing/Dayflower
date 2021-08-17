@@ -42,7 +42,6 @@ import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
 import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
@@ -1345,7 +1344,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code diffuseAreaLights}, at least one of its elements or {@code shapeOffsetFunction} are {@code null}
 	 */
 	public static float[] toDiffuseAreaLights(final List<DiffuseAreaLight> diffuseAreaLights, final ToIntFunction<Shape3F> shapeOffsetFunction) {
-		return Floats.toArray(diffuseAreaLights, diffuseAreaLight -> toDiffuseAreaLight(diffuseAreaLight, shapeOffsetFunction));
+		return FloatArrays.convert(diffuseAreaLights, diffuseAreaLight -> toDiffuseAreaLight(diffuseAreaLight, shapeOffsetFunction));
 	}
 	
 	/**
@@ -1389,7 +1388,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code directionalLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toDirectionalLights(final List<DirectionalLight> directionalLights) {
-		return Floats.toArray(directionalLights, directionalLight -> toDirectionalLight(directionalLight));
+		return FloatArrays.convert(directionalLights, directionalLight -> toDirectionalLight(directionalLight));
 	}
 	
 	/**
@@ -1491,7 +1490,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toLDRImageLights(final List<LDRImageLight> lDRImageLights) {
-		return Floats.toArray(lDRImageLights, lDRImageLight -> toLDRImageLight(lDRImageLight));
+		return FloatArrays.convert(lDRImageLights, lDRImageLight -> toLDRImageLight(lDRImageLight));
 	}
 	
 	/**
@@ -1618,7 +1617,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code perezLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toPerezLights(final List<PerezLight> perezLights) {
-		return Floats.toArray(perezLights, perezLight -> toPerezLight(perezLight));
+		return FloatArrays.convert(perezLights, perezLight -> toPerezLight(perezLight));
 	}
 	
 	/**
@@ -1660,7 +1659,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code pointLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toPointLights(final List<PointLight> pointLights) {
-		return Floats.toArray(pointLights, pointLight -> toPointLight(pointLight));
+		return FloatArrays.convert(pointLights, pointLight -> toPointLight(pointLight));
 	}
 	
 	/**
@@ -1724,7 +1723,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code spotLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toSpotLights(final List<SpotLight> spotLights) {
-		return Floats.toArray(spotLights, spotLight -> toSpotLight(spotLight));
+		return FloatArrays.convert(spotLights, spotLight -> toSpotLight(spotLight));
 	}
 	
 	/**

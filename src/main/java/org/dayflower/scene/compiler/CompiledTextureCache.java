@@ -42,7 +42,6 @@ import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
@@ -1602,7 +1601,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code blendTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static float[] toBlendTextures(final List<BlendTexture> blendTextures, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Floats.toArray(blendTextures, blendTexture -> toBlendTexture(blendTexture, textureOffsetFunction));
+		return FloatArrays.convert(blendTextures, blendTexture -> toBlendTexture(blendTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -1692,7 +1691,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static float[] toBullseyeTextures(final List<BullseyeTexture> bullseyeTextures, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Floats.toArray(bullseyeTextures, bullseyeTexture -> toBullseyeTexture(bullseyeTexture, textureOffsetFunction));
+		return FloatArrays.convert(bullseyeTextures, bullseyeTexture -> toBullseyeTexture(bullseyeTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -1782,7 +1781,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static float[] toCheckerboardTextures(final List<CheckerboardTexture> checkerboardTextures, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Floats.toArray(checkerboardTextures, checkerboardTexture -> toCheckerboardTexture(checkerboardTexture, textureOffsetFunction));
+		return FloatArrays.convert(checkerboardTextures, checkerboardTexture -> toCheckerboardTexture(checkerboardTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -1818,7 +1817,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code constantTextures} or at least one of its elements are {@code null}
 	 */
 	public static float[] toConstantTextures(final List<ConstantTexture> constantTextures) {
-		return Floats.toArray(constantTextures, constantTexture -> toConstantTexture(constantTexture));
+		return FloatArrays.convert(constantTextures, constantTexture -> toConstantTexture(constantTexture));
 	}
 	
 	/**
@@ -1869,7 +1868,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTextures} or at least one of its elements are {@code null}
 	 */
 	public static float[] toLDRImageTextures(final List<LDRImageTexture> lDRImageTextures) {
-		return Floats.toArray(lDRImageTextures, lDRImageTexture -> toLDRImageTexture(lDRImageTexture));
+		return FloatArrays.convert(lDRImageTextures, lDRImageTexture -> toLDRImageTexture(lDRImageTexture));
 	}
 	
 	/**
@@ -1917,7 +1916,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code marbleTextures} or at least one of its elements are {@code null}
 	 */
 	public static float[] toMarbleTextures(final List<MarbleTexture> marbleTextures) {
-		return Floats.toArray(marbleTextures, marbleTexture -> toMarbleTexture(marbleTexture));
+		return FloatArrays.convert(marbleTextures, marbleTexture -> toMarbleTexture(marbleTexture));
 	}
 	
 	/**
@@ -2008,7 +2007,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static float[] toPolkaDotTextures(final List<PolkaDotTexture> polkaDotTextures, final ToIntFunction<Texture> textureOffsetFunction) {
-		return Floats.toArray(polkaDotTextures, polkaDotTexture -> toPolkaDotTexture(polkaDotTexture, textureOffsetFunction));
+		return FloatArrays.convert(polkaDotTextures, polkaDotTexture -> toPolkaDotTexture(polkaDotTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -2049,7 +2048,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTextures} or at least one of its elements are {@code null}
 	 */
 	public static float[] toSimplexFractionalBrownianMotionTextures(final List<SimplexFractionalBrownianMotionTexture> simplexFractionalBrownianMotionTextures) {
-		return Floats.toArray(simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> toSimplexFractionalBrownianMotionTexture(simplexFractionalBrownianMotionTexture));
+		return FloatArrays.convert(simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> toSimplexFractionalBrownianMotionTexture(simplexFractionalBrownianMotionTexture));
 	}
 	
 	/**

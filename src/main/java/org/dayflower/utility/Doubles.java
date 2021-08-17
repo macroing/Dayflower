@@ -18,14 +18,7 @@
  */
 package org.dayflower.utility;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-import java.util.function.DoubleSupplier;
-import java.util.function.Function;
-
-import org.dayflower.java.io.DoubleArrayOutputStream;
 
 /**
  * The class {@code Doubles} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.
@@ -142,44 +135,6 @@ public class Doubles {
 	 */
 	public static boolean equal(final double a, final double b, final double c) {
 		return equal(a, b) && equal(b, c);
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the elements of {@code arrayA} starting at {@code offsetArrayA} are equal to the elements of {@code arrayB} starting at {@code offsetArrayB}, {@code false} otherwise.
-	 * <p>
-	 * If either {@code arrayA} or {@code arrayB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to {@code arrayB.length}, {@code length} is less than {@code 0},
-	 * {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0} or greater than {@code arrayB.length}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param arrayA a {@code double[]}
-	 * @param arrayB a {@code double[]}
-	 * @param offsetArrayA the offset to start at in {@code arrayA}
-	 * @param offsetArrayB the offset to start at in {@code arrayB}
-	 * @param length the length of the sub-arrays to test for equality
-	 * @return {@code true} if, and only if, the elements of {@code arrayA} starting at {@code offsetArrayA} are equal to the elements of {@code arrayB} starting at {@code offsetArrayB}, {@code false} otherwise
-	 * @throws IllegalArgumentException thrown if, and only if, {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to
-	 *                                  {@code arrayB.length}, {@code length} is less than {@code 0}, {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0}
-	 *                                  or greater than {@code arrayB.length}
-	 * @throws NullPointerException thrown if, and only if, either {@code arrayA} or {@code arrayB} are {@code null}
-	 */
-	public static boolean equal(final double[] arrayA, final double[] arrayB, final int offsetArrayA, final int offsetArrayB, final int length) {
-		Objects.requireNonNull(arrayA, "arrayA == null");
-		Objects.requireNonNull(arrayB, "arrayB == null");
-		
-		ParameterArguments.requireRange(offsetArrayA, 0, arrayA.length - 1, "offsetArrayA");
-		ParameterArguments.requireRange(offsetArrayB, 0, arrayB.length - 1, "offsetArrayB");
-		ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length");
-		ParameterArguments.requireRange(offsetArrayA + length, 0, arrayA.length, "offsetArrayA + length");
-		ParameterArguments.requireRange(offsetArrayB + length, 0, arrayB.length, "offsetArrayB + length");
-		
-		for(int i = 0; i < length; i++) {
-			if(!equal(arrayA[offsetArrayA + i], arrayB[offsetArrayB + i])) {
-				return false;
-			}
-		}
-		
-		return true;
 	}
 	
 	/**
@@ -1204,124 +1159,6 @@ public class Doubles {
 	}
 	
 	/**
-	 * Returns a {@code double[]} that is a combination of all {@code double[]} instances in {@code arrays}.
-	 * <p>
-	 * If either {@code arrays} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param arrays the {@code double[][]} instance to combine into one {@code double[]}
-	 * @return a {@code double[]} that is a combination of all {@code double[]} instances in {@code arrays}
-	 * @throws NullPointerException thrown if, and only if, either {@code arrays} or at least one of its elements are {@code null}
-	 */
-	public static double[] array(final double[]... arrays) {
-		Objects.requireNonNull(arrays, "arrays == null");
-		
-		for(int i = 0; i < arrays.length; i++) {
-			Objects.requireNonNull(arrays[i], "arrays[" + i + "] == null");
-		}
-		
-		try(final DoubleArrayOutputStream doubleArrayOutputStream = new DoubleArrayOutputStream()) {
-			for(final double[] array : arrays) {
-				doubleArrayOutputStream.write(array);
-			}
-			
-			return doubleArrayOutputStream.toDoubleArray();
-		}
-	}
-	
-	/**
-	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code 0.0D}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Doubles.array(length, 0.0D);
-	 * }
-	 * </pre>
-	 * 
-	 * @param length the length of the {@code double[]}
-	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code 0.0D}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 */
-	public static double[] array(final int length) {
-		return array(length, 0.0D);
-	}
-	
-	/**
-	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code double} values from {@code doubleSupplier}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * If {@code doubleSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param length the length of the {@code double[]}
-	 * @param doubleSupplier the {@code DoubleSupplier} to fill the {@code double[]} with
-	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code double} values from {@code doubleSupplier}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code doubleSupplier} is {@code null}
-	 */
-	public static double[] array(final int length, final DoubleSupplier doubleSupplier) {
-		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		Objects.requireNonNull(doubleSupplier, "doubleSupplier == null");
-		
-		for(int i = 0; i < array.length; i++) {
-			array[i] = doubleSupplier.getAsDouble();
-		}
-		
-		return array;
-	}
-	
-	/**
-	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code value}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param length the length of the {@code double[]}
-	 * @param value the {@code double} value to fill the {@code double[]} with
-	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code value}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 */
-	public static double[] array(final int length, final double value) {
-		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		Arrays.fill(array, value);
-		
-		return array;
-	}
-	
-	/**
-	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern.
-	 * <p>
-	 * If {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param length the length of the {@code double[]}
-	 * @param value0 the {@code double} at the relative offset {@code 0}
-	 * @param value1 the {@code double} at the relative offset {@code 1}
-	 * @param value2 the {@code double} at the relative offset {@code 2}
-	 * @param value3 the {@code double} at the relative offset {@code 3}
-	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}
-	 */
-	public static double[] array(final int length, final double value0, final double value1, final double value2, final double value3) {
-		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		if(array.length % 4 != 0) {
-			throw new IllegalArgumentException(String.format("%d %% 4 != 0", Integer.valueOf(length)));
-		}
-		
-		for(int i = 0; i < length; i += 4) {
-			array[i + 0] = value0;
-			array[i + 1] = value1;
-			array[i + 2] = value2;
-			array[i + 3] = value3;
-		}
-		
-		return array;
-	}
-	
-	/**
 	 * Attempts to solve the quadratic system based on the values {@code a}, {@code b} and {@code c}.
 	 * <p>
 	 * Returns a {@code double[]}, with a length of {@code 2}, that contains the result.
@@ -1446,65 +1283,6 @@ public class Doubles {
 			};
 		} else {
 			return new double[0];
-		}
-	}
-	
-	/**
-	 * Returns a {@code double[]} representation of {@code objects} using {@code arrayFunction}.
-	 * <p>
-	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Doubles.toArray(objects, arrayFunction, 0);
-	 * }
-	 * </pre>
-	 * 
-	 * @param <T> the generic type
-	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code double[]} instances
-	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code double[]} instances
-	 * @return a {@code double[]} representation of {@code objects} using {@code arrayFunction}
-	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
-	 */
-	public static <T> double[] toArray(final List<T> objects, final Function<T, double[]> arrayFunction) {
-		return toArray(objects, arrayFunction, 0);
-	}
-	
-	/**
-	 * Returns a {@code double[]} representation of {@code objects} using {@code arrayFunction}.
-	 * <p>
-	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param <T> the generic type
-	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code double[]} instances
-	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code double[]} instances
-	 * @param minimumLength the minimum length of the returned {@code double[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
-	 * @return a {@code double[]} representation of {@code objects} using {@code arrayFunction}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
-	 */
-	public static <T> double[] toArray(final List<T> objects, final Function<T, double[]> arrayFunction, final int minimumLength) {
-		ParameterArguments.requireNonNullList(objects, "objects");
-		
-		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
-		
-		ParameterArguments.requireRange(minimumLength, 0, Integer.MAX_VALUE, "minimumLength");
-		
-		if(objects.isEmpty()) {
-			return array(minimumLength);
-		}
-		
-		try(final DoubleArrayOutputStream doubleArrayOutputStream = new DoubleArrayOutputStream()) {
-			for(final T object : objects) {
-				doubleArrayOutputStream.write(arrayFunction.apply(object));
-			}
-			
-			final double[] array = doubleArrayOutputStream.toDoubleArray();
-			
-			return array.length == 0 ? array(minimumLength) : array;
 		}
 	}
 }

@@ -53,7 +53,6 @@ import org.dayflower.java.io.IntArrayOutputStream;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
@@ -2143,7 +2142,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code cone3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toCone3Fs(final List<Cone3F> cone3Fs) {
-		return Floats.toArray(cone3Fs, cone3F -> toCone3F(cone3F));
+		return FloatArrays.convert(cone3Fs, cone3F -> toCone3F(cone3F));
 	}
 	
 	/**
@@ -2181,7 +2180,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toCylinder3Fs(final List<Cylinder3F> cylinder3Fs) {
-		return Floats.toArray(cylinder3Fs, cylinder3F -> toCylinder3F(cylinder3F));
+		return FloatArrays.convert(cylinder3Fs, cylinder3F -> toCylinder3F(cylinder3F));
 	}
 	
 	/**
@@ -2219,7 +2218,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code disk3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toDisk3Fs(final List<Disk3F> disk3Fs) {
-		return Floats.toArray(disk3Fs, disk3F -> toDisk3F(disk3F));
+		return FloatArrays.convert(disk3Fs, disk3F -> toDisk3F(disk3F));
 	}
 	
 	/**
@@ -2270,7 +2269,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toHyperboloid3Fs(final List<Hyperboloid3F> hyperboloid3Fs) {
-		return Floats.toArray(hyperboloid3Fs, hyperboloid3F -> toHyperboloid3F(hyperboloid3F));
+		return FloatArrays.convert(hyperboloid3Fs, hyperboloid3F -> toHyperboloid3F(hyperboloid3F));
 	}
 	
 	/**
@@ -2308,7 +2307,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toParaboloid3Fs(final List<Paraboloid3F> paraboloid3Fs) {
-		return Floats.toArray(paraboloid3Fs, paraboloid3F -> toParaboloid3F(paraboloid3F));
+		return FloatArrays.convert(paraboloid3Fs, paraboloid3F -> toParaboloid3F(paraboloid3F));
 	}
 	
 	/**
@@ -2359,7 +2358,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code plane3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toPlane3Fs(final List<Plane3F> plane3Fs) {
-		return Floats.toArray(plane3Fs, plane3F -> toPlane3F(plane3F));
+		return FloatArrays.convert(plane3Fs, plane3F -> toPlane3F(plane3F));
 	}
 	
 	/**
@@ -2410,7 +2409,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toRectangle3Fs(final List<Rectangle3F> rectangle3Fs) {
-		return Floats.toArray(rectangle3Fs, rectangle3F -> toRectangle3F(rectangle3F));
+		return FloatArrays.convert(rectangle3Fs, rectangle3F -> toRectangle3F(rectangle3F));
 	}
 	
 	/**
@@ -2450,7 +2449,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toRectangularCuboid3Fs(final List<RectangularCuboid3F> rectangularCuboid3Fs) {
-		return Floats.toArray(rectangularCuboid3Fs, rectangularCuboid3F -> toRectangularCuboid3F(rectangularCuboid3F));
+		return FloatArrays.convert(rectangularCuboid3Fs, rectangularCuboid3F -> toRectangularCuboid3F(rectangularCuboid3F));
 	}
 	
 	/**
@@ -2487,7 +2486,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code sphere3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toSphere3Fs(final List<Sphere3F> sphere3Fs) {
-		return Floats.toArray(sphere3Fs, sphere3F -> toSphere3F(sphere3F));
+		return FloatArrays.convert(sphere3Fs, sphere3F -> toSphere3F(sphere3F));
 	}
 	
 	/**
@@ -2521,7 +2520,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code torus3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toTorus3Fs(final List<Torus3F> torus3Fs) {
-		return Floats.toArray(torus3Fs, torus3F -> toTorus3F(torus3F));
+		return FloatArrays.convert(torus3Fs, torus3F -> toTorus3F(torus3F));
 	}
 	
 	/**
@@ -2580,7 +2579,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code triangle3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toTriangle3Fs(final List<Triangle3F> triangle3Fs) {
-		return Floats.toArray(triangle3Fs, triangle3F -> toTriangle3F(triangle3F));
+		return FloatArrays.convert(triangle3Fs, triangle3F -> toTriangle3F(triangle3F));
 	}
 	
 	/**

@@ -28,7 +28,6 @@ import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -495,7 +494,7 @@ public final class CompiledBoundingVolume3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toAxisAlignedBoundingBox3Fs(final List<AxisAlignedBoundingBox3F> axisAlignedBoundingBox3Fs) {
-		return Floats.toArray(axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> toAxisAlignedBoundingBox3F(axisAlignedBoundingBox3F));
+		return FloatArrays.convert(axisAlignedBoundingBox3Fs, axisAlignedBoundingBox3F -> toAxisAlignedBoundingBox3F(axisAlignedBoundingBox3F));
 	}
 	
 	/**
@@ -532,6 +531,6 @@ public final class CompiledBoundingVolume3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code boundingSphere3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toBoundingSphere3Fs(final List<BoundingSphere3F> boundingSphere3Fs) {
-		return Floats.toArray(boundingSphere3Fs, boundingSphere3F -> toBoundingSphere3F(boundingSphere3F));
+		return FloatArrays.convert(boundingSphere3Fs, boundingSphere3F -> toBoundingSphere3F(boundingSphere3F));
 	}
 }

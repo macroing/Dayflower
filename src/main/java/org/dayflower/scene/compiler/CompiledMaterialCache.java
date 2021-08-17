@@ -43,7 +43,6 @@ import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
@@ -2089,7 +2088,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
 	 */
 	public static float[] toBullseyeMaterials(final List<BullseyeMaterial> bullseyeMaterials, final ToIntFunction<Material> materialOffsetFunction) {
-		return Floats.toArray(bullseyeMaterials, bullseyeMaterial -> toBullseyeMaterial(bullseyeMaterial, materialOffsetFunction));
+		return FloatArrays.convert(bullseyeMaterials, bullseyeMaterial -> toBullseyeMaterial(bullseyeMaterial, materialOffsetFunction));
 	}
 	
 	/**
@@ -2179,7 +2178,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
 	 */
 	public static float[] toCheckerboardMaterials(final List<CheckerboardMaterial> checkerboardMaterials, final ToIntFunction<Material> materialOffsetFunction) {
-		return Floats.toArray(checkerboardMaterials, checkerboardMaterial -> toCheckerboardMaterial(checkerboardMaterial, materialOffsetFunction));
+		return FloatArrays.convert(checkerboardMaterials, checkerboardMaterial -> toCheckerboardMaterial(checkerboardMaterial, materialOffsetFunction));
 	}
 	
 	/**
@@ -2270,7 +2269,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
 	 */
 	public static float[] toPolkaDotMaterials(final List<PolkaDotMaterial> polkaDotMaterials, final ToIntFunction<Material> materialOffsetFunction) {
-		return Floats.toArray(polkaDotMaterials, polkaDotMaterial -> toPolkaDotMaterial(polkaDotMaterial, materialOffsetFunction));
+		return FloatArrays.convert(polkaDotMaterials, polkaDotMaterial -> toPolkaDotMaterial(polkaDotMaterial, materialOffsetFunction));
 	}
 	
 	/**

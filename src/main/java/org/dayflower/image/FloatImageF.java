@@ -30,7 +30,7 @@ import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.Floats;
+import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -88,7 +88,7 @@ public final class FloatImageF extends ImageF {
 	public FloatImageF(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
-		this.data = Floats.array(resolutionX * resolutionY * 4, 0.0F, 0.0F, 0.0F, 1.0F);
+		this.data = FloatArrays.create(resolutionX * resolutionY * 4, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
 	/**

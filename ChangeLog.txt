@@ -2,6 +2,14 @@
 
 	* ADD:		Add the method convert(byte[]) to the IntArrays class.
 	* ADD:		Add the method toNonScientificNotation(double) to the Strings class.
+	* CHANGE:	Change the method names of toArray(List<T>, Function<T, float[]>) and toArray(List<T>, Function<T, float[]>, int) in the FloatArrays class to convert(List<T>, Function<T, float[]>) and convert(List<T>, Function<T, float[]>, int).
+	* CHANGE:	Change the method names of array(int), array(int, FloatSupplier), array(int, float) and array(int, float, float, float, float) in the FloatArrays class to create(int), create(int, FloatSupplier), create(int, float) and create(int, float, float, float, float).
+	* CHANGE:	Change the method name of array(float[]...) in the FloatArrays class to merge(float[]...).
+	* CHANGE:	Move the methods array(float[]...), array(int), array(int, FloatSupplier), array(int, float), array(int, float, float, float, float), toArray(List<T>, Function<T, float[]>) and toArray(List<T>, Function<T, float[]>, int) from the Floats class to the FloatArrays class.
+	* CHANGE:	Change the method names of toArray(List<T>, Function<T, double[]>) and toArray(List<T>, Function<T, double[]>, int) in the DoubleArrays class to convert(List<T>, Function<T, double[]>) and convert(List<T>, Function<T, double[]>, int).
+	* CHANGE:	Change the method names of array(int), array(int, DoubleSupplier), array(int, double) and array(int, double, double, double, double) in the DoubleArrays class to create(int), create(int, DoubleSupplier), create(int, double) and create(int, double, double, double, double).
+	* CHANGE:	Change the method name of array(double[]...) in the DoubleArrays class to merge(double[]...).
+	* CHANGE:	Move the methods array(double[]...), array(int), array(int, DoubleSupplier), array(int, double), array(int, double, double, double, double), toArray(List<T>, Function<T, double[]>) and toArray(List<T>, Function<T, double[]>, int) from the Doubles class to the DoubleArrays class.
 	* CHANGE:	Change the method names of toArray(List<T>, Function<T, int[]>), toArray(List<T>, Function<T, int[]>, int) and toArray(byte[], boolean) in the IntArrays class to convert(List<T>, Function<T, int[]>), convert(List<T>, Function<T, int[]>, int) and convert(byte[], boolean).
 	* CHANGE:	Change the method names of array(int), array(int, IntSupplier) and array(int, int) in the IntArrays class to create(int), create(int, IntSupplier) and create(int, int).
 	* CHANGE:	Move the methods array(int), array(int, IntSupplier), array(int, int), toArray(List<T>, Function<T, int[]>), toArray(List<T>, Function<T, int[]>, int) and toArray(byte[], boolean) from the Ints class to the IntArrays class.
@@ -9,6 +17,7 @@
 	* CHANGE:	Change the method names of array(int), array(int, byte) and array(int, byte, byte, byte, byte) in the ByteArrays class to create(int), create(int, byte) and create(int, byte, byte, byte, byte).
 	* CHANGE:	Move the methods array(int), array(int, byte), array(int, byte, byte, byte, byte) and toArray(int[]) from the Bytes class to the ByteArrays class.
 	* CHANGE:	Move the class Strings from the Utility API to the Java Lang API.
+	* REMOVE:	Remove the method equal(double[], double[], int, int, int) from the Doubles class.
 
 2021-08-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

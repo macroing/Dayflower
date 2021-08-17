@@ -30,7 +30,7 @@ import org.dayflower.color.Color4D;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.Doubles;
+import org.dayflower.utility.DoubleArrays;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -88,7 +88,7 @@ public final class DoubleImageD extends ImageD {
 	public DoubleImageD(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
-		this.data = Doubles.array(resolutionX * resolutionY * 4, 0.0D, 0.0D, 0.0D, 1.0D);
+		this.data = DoubleArrays.create(resolutionX * resolutionY * 4, 0.0D, 0.0D, 0.0D, 1.0D);
 	}
 	
 	/**

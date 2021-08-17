@@ -32,7 +32,6 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Transform;
 import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
@@ -322,7 +321,7 @@ public final class CompiledPrimitiveCache {
 	 * @throws NullPointerException thrown if, and only if, {@code primitives} or at least one of its elements are {@code null}
 	 */
 	public static float[] toMatrix44Fs(final List<Primitive> primitives) {
-		return Floats.toArray(primitives, primitive -> toMatrix44Fs(primitive.getTransform()));
+		return FloatArrays.convert(primitives, primitive -> toMatrix44Fs(primitive.getTransform()));
 	}
 	
 	/**
@@ -335,7 +334,7 @@ public final class CompiledPrimitiveCache {
 	 * @throws NullPointerException thrown if, and only if, {@code transform} is {@code null}
 	 */
 	public static float[] toMatrix44Fs(final Transform transform) {
-		return Floats.array(transform.getObjectToWorld().toArray(), transform.getWorldToObject().toArray());
+		return FloatArrays.merge(transform.getObjectToWorld().toArray(), transform.getWorldToObject().toArray());
 	}
 	
 	/**

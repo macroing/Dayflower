@@ -89,6 +89,4 @@ Utility API:
 	* ADD:		Add methods to convert from float[] to byte[], double[], int[] and long[] in the FloatArrays class.
 	* ADD:		Add methods to convert from int[] to double[], float[] and long[] in the IntArrays class.
 	* ADD:		Add methods to convert from long[] to byte[], double[], float[] and int[] in the LongArrays class.
-	* CHANGE:	Move array creation methods from the class Doubles to the class DoubleArrays.
-	* CHANGE:	Move array creation methods from the class Floats to the class FloatArrays.
 	* CHANGE:	Move array creation methods from the class Longs to the class LongArrays.

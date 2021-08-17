@@ -18,13 +18,12 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.utility.Floats.array;
-
 import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.sampler.Distribution1F;
 import org.dayflower.scene.Scene;
+import org.dayflower.utility.FloatArrays;
 
 /**
  * A {@code UniformLightDistribution} is an implementation of {@link LightDistribution} that is using a uniform probability distribution.
@@ -46,7 +45,7 @@ public final class UniformLightDistribution implements LightDistribution {
 	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
 	 */
 	public UniformLightDistribution(final Scene scene) {
-		this.distribution = new Distribution1F(array(scene.getLightCount(), 1.0F));
+		this.distribution = new Distribution1F(FloatArrays.create(scene.getLightCount(), 1.0F));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

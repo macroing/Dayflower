@@ -20,7 +20,7 @@ package org.dayflower.renderer.gpu;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.utility.ByteArrays;
-import org.dayflower.utility.Floats;
+import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.IntArrays;
 
 /**
@@ -1118,7 +1118,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private void doSetupFilmColorFloatArray() {
-		put(this.filmColorFloatArray = Floats.array(getResolution() * 3, 0.0F));
+		put(this.filmColorFloatArray = FloatArrays.create(getResolution() * 3, 0.0F));
 	}
 	
 	private void doSetupFilmSampleIntArray() {
@@ -1130,6 +1130,6 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	private void doSetupImageColorFloatArray() {
-		put(this.imageColorFloatArray = Floats.array(getResolution() * 3, 0.0F));
+		put(this.imageColorFloatArray = FloatArrays.create(getResolution() * 3, 0.0F));
 	}
 }

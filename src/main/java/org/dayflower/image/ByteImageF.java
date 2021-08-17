@@ -18,6 +18,7 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.utility.Bytes.toByte;
 import static org.dayflower.utility.Ints.max;
 
 import java.util.Arrays;
@@ -30,7 +31,7 @@ import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.Bytes;
+import org.dayflower.utility.ByteArrays;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -88,7 +89,7 @@ public final class ByteImageF extends ImageF {
 	public ByteImageF(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
-		this.data = Bytes.array(resolutionX * resolutionY * 4, (byte)(0), (byte)(0), (byte)(0), (byte)(255));
+		this.data = ByteArrays.create(resolutionX * resolutionY * 4, toByte(0), toByte(0), toByte(0), toByte(255));
 	}
 	
 	/**

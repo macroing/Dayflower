@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.utility;
+package org.dayflower.java.lang;
 
 import java.text.DecimalFormat;
 import java.util.Objects;
+
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code String} instances.
@@ -63,6 +65,16 @@ public final class Strings {
 		}
 		
 		return stringBuilder.toString();
+	}
+	
+	/**
+	 * Returns a {@code String} representation of {@code value} without scientific notation.
+	 * 
+	 * @param value a {@code double} value
+	 * @return a {@code String} representation of {@code value} without scientific notation
+	 */
+	public static String toNonScientificNotation(final double value) {
+		return DECIMAL_FORMAT.format(value).replace(',', '.');
 	}
 	
 	/**

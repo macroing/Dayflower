@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.utility.Strings;
+import org.dayflower.java.lang.Strings;
 
 /**
  * An {@code OpticalDensityStatement} represents an optical density (or index of refraction) statement ({@code "Ni"}) of a Wavefront Material file.

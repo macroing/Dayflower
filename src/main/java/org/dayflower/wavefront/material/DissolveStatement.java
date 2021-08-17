@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.utility.Strings;
+import org.dayflower.java.lang.Strings;
 
 /**
  * A {@code DissolveStatement} represents a dissolve statement ({@code "d"}) of a Wavefront Material file.

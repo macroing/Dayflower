@@ -20,7 +20,7 @@ package org.dayflower.wavefront.object;
 
 import java.util.Objects;
 
-import org.dayflower.utility.Strings;
+import org.dayflower.java.lang.Strings;
 
 /**
  * A {@code GeometricVertexStatement} represents a geometric vertex statement ({@code "v"}) of a Wavefront Object file.

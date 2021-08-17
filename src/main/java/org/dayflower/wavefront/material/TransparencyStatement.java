@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.utility.Strings;
+import org.dayflower.java.lang.Strings;
 
 /**
  * A {@code TransparencyStatement} represents a non-official transparency statement ({@code "Tr"}) of a Wavefront Material file.

@@ -84,14 +84,11 @@ Scene Texture API:
 Utility API:
 
 	* ADD:		Add the class LongArrays.
-	* ADD:		Add methods to convert from byte[] to double[], float[] int[], and long[] in the ByteArrays class.
+	* ADD:		Add methods to convert from byte[] to double[], float[] and long[] in the ByteArrays class.
 	* ADD:		Add methods to convert from double[] to byte[], float[], int[] and long[] in the DoubleArrays class.
 	* ADD:		Add methods to convert from float[] to byte[], double[], int[] and long[] in the FloatArrays class.
-	* ADD:		Add methods to convert from int[] to byte[], double[], float[] and long[] in the IntArrays class.
+	* ADD:		Add methods to convert from int[] to double[], float[] and long[] in the IntArrays class.
 	* ADD:		Add methods to convert from long[] to byte[], double[], float[] and int[] in the LongArrays class.
-	* CHANGE:	Move array creation methods from the class Bytes to the class ByteArrays.
 	* CHANGE:	Move array creation methods from the class Doubles to the class DoubleArrays.
 	* CHANGE:	Move array creation methods from the class Floats to the class FloatArrays.
-	* CHANGE:	Move array creation methods from the class Ints to the class IntArrays.
 	* CHANGE:	Move array creation methods from the class Longs to the class LongArrays.
-	* CHANGE:	Move the class Strings to the Java Lang API.

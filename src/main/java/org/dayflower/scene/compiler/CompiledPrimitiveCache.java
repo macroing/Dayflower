@@ -34,7 +34,6 @@ import org.dayflower.scene.Transform;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
-import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -433,6 +432,6 @@ public final class CompiledPrimitiveCache {
 	 *                              are {@code null}
 	 */
 	public static int[] toPrimitives(final List<Primitive> primitives, final ToIntFunction<AreaLight> areaLightOffsetFunction, final ToIntFunction<BoundingVolume3F> boundingVolume3FOffsetFunction, final ToIntFunction<Material> materialOffsetFunction, final ToIntFunction<Shape3F> shape3FOffsetFunction) {
-		return Ints.toArray(primitives, primitive -> toPrimitive(primitive, areaLightOffsetFunction, boundingVolume3FOffsetFunction, materialOffsetFunction, shape3FOffsetFunction));
+		return IntArrays.convert(primitives, primitive -> toPrimitive(primitive, areaLightOffsetFunction, boundingVolume3FOffsetFunction, materialOffsetFunction, shape3FOffsetFunction));
 	}
 }

@@ -19,9 +19,9 @@
 package org.dayflower.renderer.gpu;
 
 import org.dayflower.color.Color3F;
-import org.dayflower.utility.Bytes;
+import org.dayflower.utility.ByteArrays;
 import org.dayflower.utility.Floats;
-import org.dayflower.utility.Ints;
+import org.dayflower.utility.IntArrays;
 
 /**
  * An {@code AbstractImageKernel} is an abstract extension of the {@code AbstractKernel} class that adds additional features.
@@ -1122,11 +1122,11 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	private void doSetupFilmSampleIntArray() {
-		put(this.filmSampleIntArray = Ints.array(getResolution(), 0));
+		put(this.filmSampleIntArray = IntArrays.create(getResolution(), 0));
 	}
 	
 	private void doSetupImageColorByteArray() {
-		put(this.imageColorByteArray = Bytes.array(getResolution() * 4));
+		put(this.imageColorByteArray = ByteArrays.create(getResolution() * 4));
 	}
 	
 	private void doSetupImageColorFloatArray() {

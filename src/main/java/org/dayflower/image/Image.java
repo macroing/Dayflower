@@ -33,7 +33,7 @@ import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.Bytes;
+import org.dayflower.utility.ByteArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import javafx.scene.image.PixelFormat;
@@ -191,7 +191,7 @@ public abstract class Image {
 	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
 	 */
 	public byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder) {
-		return Bytes.toArray(toIntArray(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null")));
+		return ByteArrays.convert(toIntArray(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null")));
 	}
 	
 	/**

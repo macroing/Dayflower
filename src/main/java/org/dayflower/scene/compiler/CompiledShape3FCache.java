@@ -55,7 +55,6 @@ import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.IntArrays;
-import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -2697,7 +2696,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code triangleMesh3Fs}, at least one of its elements, {@code boundingVolume3FOffsetFunction} or {@code triangle3FOffsetFunction} are {@code null}
 	 */
 	public static int[] toTriangleMesh3Fs(final List<TriangleMesh3F> triangleMesh3Fs, final ToIntFunction<BoundingVolume3F> boundingVolume3FOffsetFunction, final ToIntFunction<Triangle3F> triangle3FOffsetFunction) {
-		return Ints.toArray(triangleMesh3Fs, triangleMesh3F -> toTriangleMesh3F(triangleMesh3F, boundingVolume3FOffsetFunction, triangle3FOffsetFunction));
+		return IntArrays.convert(triangleMesh3Fs, triangleMesh3F -> toTriangleMesh3F(triangleMesh3F, boundingVolume3FOffsetFunction, triangle3FOffsetFunction));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

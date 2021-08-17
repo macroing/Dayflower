@@ -18,7 +18,13 @@
  */
 package org.dayflower.utility;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.IntSupplier;
+
+import org.dayflower.java.io.IntArrayOutputStream;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code int[]} instances.
@@ -134,6 +140,170 @@ public final class IntArrays {
 		}
 		
 		return -1;
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * IntArrays.convert(objects, arrayFunction, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code int[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code int[]} instances
+	 * @return an {@code int[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> int[] convert(final List<T> objects, final Function<T, int[]> arrayFunction) {
+		return convert(objects, arrayFunction, 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code int[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code int[]} instances
+	 * @param minimumLength the minimum length of the returned {@code int[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
+	 * @return an {@code int[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> int[] convert(final List<T> objects, final Function<T, int[]> arrayFunction, final int minimumLength) {
+		ParameterArguments.requireNonNullList(objects, "objects");
+		
+		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
+		
+		ParameterArguments.requireRange(minimumLength, 0, Integer.MAX_VALUE, "minimumLength");
+		
+		if(objects.isEmpty()) {
+			return create(minimumLength);
+		}
+		
+		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
+			for(final T object : objects) {
+				intArrayOutputStream.write(arrayFunction.apply(object));
+			}
+			
+			final int[] array = intArrayOutputStream.toIntArray();
+			
+			return array.length == 0 ? create(minimumLength) : array;
+		}
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of {@code byteArray}.
+	 * <p>
+	 * If {@code byteArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * IntArrays.convert(byteArray, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param byteArray a {@code byte[]}
+	 * @return an {@code int[]} representation of {@code byteArray}
+	 * @throws NullPointerException thrown if, and only if, {@code byteArray} is {@code null}
+	 */
+	public static int[] convert(final byte[] byteArray) {
+		return convert(byteArray, false);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of {@code byteArray}.
+	 * <p>
+	 * If {@code byteArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param byteArray a {@code byte[]}
+	 * @param isUnsigned {@code true} if, and only if, unsigned values should be used, {@code false} otherwise
+	 * @return an {@code int[]} representation of {@code byteArray}
+	 * @throws NullPointerException thrown if, and only if, {@code byteArray} is {@code null}
+	 */
+	public static int[] convert(final byte[] byteArray, final boolean isUnsigned) {
+		Objects.requireNonNull(byteArray, "byteArray == null");
+		
+		final int[] intArray = new int[byteArray.length];
+		
+		for(int i = 0; i < byteArray.length; i++) {
+			intArray[i] = isUnsigned ? byteArray[i] & 0xFF : byteArray[i];
+		}
+		
+		return intArray;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code 0}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * IntArrays.create(length, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param length the length of the {@code int[]}
+	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static int[] create(final int length) {
+		return create(length, 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code int} values from {@code intSupplier}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code intSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param length the length of the {@code int[]}
+	 * @param intSupplier the {@code IntSupplier} to fill the {@code int[]} with
+	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code int} values from {@code intSupplier}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code intSupplier} is {@code null}
+	 */
+	public static int[] create(final int length, final IntSupplier intSupplier) {
+		final int[] array = new int[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Objects.requireNonNull(intSupplier, "intSupplier == null");
+		
+		for(int i = 0; i < array.length; i++) {
+			array[i] = intSupplier.getAsInt();
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code value}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the {@code int[]}
+	 * @param value the {@code int} value to fill the {@code int[]} with
+	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static int[] create(final int length, final int value) {
+		final int[] array = new int[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Arrays.fill(array, value);
+		
+		return array;
 	}
 	
 	/**

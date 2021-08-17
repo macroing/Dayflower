@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.utility.Strings;
+import org.dayflower.java.lang.Strings;
 
 /**
  * An {@code RGBDiffuseReflectivityStatement} represents a diffuse reflectivity statement using RGB ({@code "Kd"}) of a Wavefront Material file.

@@ -1,3 +1,15 @@
+2021-08-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method convert(byte[]) to the IntArrays class.
+	* ADD:		Add the method toNonScientificNotation(double) to the Strings class.
+	* CHANGE:	Change the method names of toArray(List<T>, Function<T, int[]>), toArray(List<T>, Function<T, int[]>, int) and toArray(byte[], boolean) in the IntArrays class to convert(List<T>, Function<T, int[]>), convert(List<T>, Function<T, int[]>, int) and convert(byte[], boolean).
+	* CHANGE:	Change the method names of array(int), array(int, IntSupplier) and array(int, int) in the IntArrays class to create(int), create(int, IntSupplier) and create(int, int).
+	* CHANGE:	Move the methods array(int), array(int, IntSupplier), array(int, int), toArray(List<T>, Function<T, int[]>), toArray(List<T>, Function<T, int[]>, int) and toArray(byte[], boolean) from the Ints class to the IntArrays class.
+	* CHANGE:	Change the method name of toArray(int[]) in the ByteArrays class to convert(int[]).
+	* CHANGE:	Change the method names of array(int), array(int, byte) and array(int, byte, byte, byte, byte) in the ByteArrays class to create(int), create(int, byte) and create(int, byte, byte, byte, byte).
+	* CHANGE:	Move the methods array(int), array(int, byte), array(int, byte, byte, byte, byte) and toArray(int[]) from the Bytes class to the ByteArrays class.
+	* CHANGE:	Move the class Strings from the Utility API to the Java Lang API.
+
 2021-08-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add rectangle validation to the method rotate(Rectangle2D, AngleD) of the Rectangle2D class.

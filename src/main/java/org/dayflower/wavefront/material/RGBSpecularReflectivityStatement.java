@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.utility.Strings;
+import org.dayflower.java.lang.Strings;
 
 /**
  * An {@code RGBSpecularReflectivityStatement} represents a specular reflectivity statement using RGB ({@code "Ks"}) of a Wavefront Material file.

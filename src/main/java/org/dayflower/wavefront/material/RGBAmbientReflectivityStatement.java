@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.utility.Strings;
+import org.dayflower.java.lang.Strings;
 
 /**
  * An {@code RGBAmbientReflectivityStatement} represents an ambient reflectivity statement using RGB ({@code "Ka"}) of a Wavefront Material file.

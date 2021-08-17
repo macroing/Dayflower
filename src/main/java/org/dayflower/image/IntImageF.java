@@ -39,7 +39,7 @@ import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.java.awt.image.BufferedImages;
-import org.dayflower.utility.Ints;
+import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -109,7 +109,7 @@ public final class IntImageF extends ImageF {
 	public IntImageF(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
-		this.data = Ints.array(resolutionX * resolutionY, PackedIntComponentOrder.ARGB.pack(0, 0, 0, 255));
+		this.data = IntArrays.create(resolutionX * resolutionY, PackedIntComponentOrder.ARGB.pack(0, 0, 0, 255));
 	}
 	
 	/**

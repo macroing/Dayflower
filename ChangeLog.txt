@@ -1,5 +1,9 @@
 2021-08-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageD, ImageD), load(File), load(String) and load(URL) to the ByteImageD class.
+	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageF, ImageF), load(File), load(String) and load(URL) to the ByteImageF class.
+	* ADD:		Add the constructor ByteImageD(BufferedImage) to the ByteImageD class.
+	* ADD:		Add the constructor ByteImageF(BufferedImage) to the ByteImageF class.
 	* ADD:		Add the method merge(int[]...) to the IntArrays class.
 	* ADD:		Add the LongArrays class.
 	* ADD:		Add the LongArrayOutputStream class.

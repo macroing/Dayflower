@@ -21,16 +21,25 @@ package org.dayflower.image;
 import static org.dayflower.utility.Bytes.toByte;
 import static org.dayflower.utility.Ints.max;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+
+import javax.imageio.ImageIO;
 
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.ByteArrays;
 import org.dayflower.utility.ParameterArguments;
 
@@ -61,6 +70,20 @@ public final class ByteImageF extends ImageF {
 	 */
 	public ByteImageF() {
 		this(800, 800);
+	}
+	
+	/**
+	 * Constructs a new {@code ByteImageF} instance from {@code bufferedImage}.
+	 * <p>
+	 * If {@code bufferedImage} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bufferedImage a {@code BufferedImage} instance
+	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
+	 */
+	public ByteImageF(final BufferedImage bufferedImage) {
+		super(bufferedImage.getWidth(), bufferedImage.getHeight());
+		
+		this.data = ByteArrays.convert(PackedIntComponentOrder.ARGB.unpack(ArrayComponentOrder.RGBA, DataBufferInt.class.cast(BufferedImages.getCompatibleBufferedImage(bufferedImage).getRaster().getDataBuffer()).getData().clone()));
 	}
 	
 	/**
@@ -526,6 +549,125 @@ public final class ByteImageF extends ImageF {
 		}
 		
 		return byteImageC;
+	}
+	
+	/**
+	 * Creates a {@code ByteImageF} by capturing the contents of the screen, without the mouse cursor.
+	 * <p>
+	 * Returns a new {@code ByteImageF} instance.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If the permission {@code readDisplayPixels} is not granted, a {@code SecurityException} will be thrown.
+	 * 
+	 * @param rectangle a {@link Rectangle2I} that contains the bounds
+	 * @return a new {@code ByteImageF} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
+	 */
+	public static ByteImageF createScreenCapture(final Rectangle2I rectangle) {
+		return new ByteImageF(BufferedImages.createScreenCapture(rectangle.getA().getX(), rectangle.getA().getY(), rectangle.getC().getX() - rectangle.getA().getX(), rectangle.getC().getY() - rectangle.getA().getY()));
+	}
+	
+	/**
+	 * Returns a {@code ByteImageF} that shows the difference between {@code imageA} and {@code imageB} with {@code Color4F.BLACK}.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param imageA an {@code ImageF} instance
+	 * @param imageB an {@code ImageF} instance
+	 * @return a {@code ByteImageF} that shows the difference between {@code imageA} and {@code imageB} with {@code Color4F.BLACK}
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static ByteImageF difference(final ImageF imageA, final ImageF imageB) {
+		final int resolutionX = max(imageA.getResolutionX(), imageB.getResolutionX());
+		final int resolutionY = max(imageA.getResolutionY(), imageB.getResolutionY());
+		
+		final ByteImageF byteImageC = new ByteImageF(resolutionX, resolutionY);
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				final Color4F colorA = imageA.getColorRGBA(x, y);
+				final Color4F colorB = imageB.getColorRGBA(x, y);
+				final Color4F colorC = colorA.equals(colorB) ? colorA : Color4F.BLACK;
+				
+				byteImageC.setColorRGBA(colorC, x, y);
+			}
+		}
+		
+		return byteImageC;
+	}
+	
+	/**
+	 * Loads a {@code ByteImageF} from the file represented by {@code file}.
+	 * <p>
+	 * Returns a new {@code ByteImageF} instance.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} that represents the file to load from
+	 * @return a new {@code ByteImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static ByteImageF load(final File file) {
+		try {
+			return new ByteImageF(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))));
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
+	 * Loads a {@code ByteImageF} from the file represented by the pathname {@code pathname}.
+	 * <p>
+	 * Returns a new {@code ByteImageF} instance.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * ByteImageF.load(new File(pathname));
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} that represents the pathname of the file to load from
+	 * @return a new {@code ByteImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static ByteImageF load(final String pathname) {
+		return load(new File(pathname));
+	}
+	
+	/**
+	 * Loads a {@code ByteImageF} from the URL represented by {@code uRL}.
+	 * <p>
+	 * Returns a new {@code ByteImageF} instance.
+	 * <p>
+	 * If {@code uRL} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param uRL a {@code URL} that represents the URL to load from
+	 * @return a new {@code ByteImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code uRL} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static ByteImageF load(final URL uRL) {
+		try {
+			return new ByteImageF(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null"))));
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

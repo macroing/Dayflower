@@ -1,3 +1,10 @@
+2021-08-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method merge(int[]...) to the IntArrays class.
+	* ADD:		Add the LongArrays class.
+	* ADD:		Add the LongArrayOutputStream class.
+	* REMOVE:	Remove the methods array(int), array(int, LongSupplier) and array(int, long) from the Longs class.
+
 2021-08-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method convert(byte[]) to the IntArrays class.

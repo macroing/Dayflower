@@ -18,10 +18,6 @@
  */
 package org.dayflower.utility;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.function.LongSupplier;
-
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code long} values.
  * 
@@ -46,68 +42,5 @@ public final class Longs {
 		final long value1 = Ints.reverseBits((int)(value >>> 32));
 		
 		return (value0 << 32) | value1;
-	}
-	
-	/**
-	 * Returns a {@code long[]} with a length of {@code length} and is filled with {@code 0L}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Longs.array(length, 0L);
-	 * }
-	 * </pre>
-	 * 
-	 * @param length the length of the {@code long[]}
-	 * @return a {@code long[]} with a length of {@code length} and is filled with {@code 0L}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 */
-	public static long[] array(final int length) {
-		return array(length, 0L);
-	}
-	
-	/**
-	 * Returns a {@code long[]} with a length of {@code length} and is filled with {@code long} values from {@code longSupplier}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * If {@code longSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param length the length of the {@code long[]}
-	 * @param longSupplier the {@code LongSupplier} to fill the {@code long[]} with
-	 * @return a {@code long[]} with a length of {@code length} and is filled with {@code long} values from {@code longSupplier}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code longSupplier} is {@code null}
-	 */
-	public static long[] array(final int length, final LongSupplier longSupplier) {
-		final long[] array = new long[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		Objects.requireNonNull(longSupplier, "longSupplier == null");
-		
-		for(int i = 0; i < array.length; i++) {
-			array[i] = longSupplier.getAsLong();
-		}
-		
-		return array;
-	}
-	
-	/**
-	 * Returns a {@code long[]} with a length of {@code length} and is filled with {@code value}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param length the length of the {@code long[]}
-	 * @param value the {@code long} value to fill the {@code long[]} with
-	 * @return a {@code long[]} with a length of {@code length} and is filled with {@code value}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 */
-	public static long[] array(final int length, final long value) {
-		final long[] array = new long[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		Arrays.fill(array, value);
-		
-		return array;
 	}
 }

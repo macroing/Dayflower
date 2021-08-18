@@ -21,7 +21,7 @@ package org.dayflower.renderer.gpu;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.dayflower.utility.Longs;
+import org.dayflower.utility.LongArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import com.amd.aparapi.Kernel;
@@ -171,7 +171,7 @@ public abstract class AbstractKernel extends Kernel {
 		put(this.simplexGradient4Array = doCreateSimplexGradient4Array());
 		put(this.permutationsBArray = doCreatePermutationsBArray());
 		put(this.permutationsBModulo12Array = doCreatePermutationsBModulo12Array());
-		put(this.seedArray = Longs.array(getResolution(), () -> ThreadLocalRandom.current().nextLong()));
+		put(this.seedArray = LongArrays.create(getResolution(), () -> ThreadLocalRandom.current().nextLong()));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

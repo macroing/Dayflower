@@ -22,18 +22,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
 
-import org.dayflower.java.io.IntArrayOutputStream;
+import org.dayflower.java.io.LongArrayOutputStream;
 
 /**
- * A class that consists exclusively of static methods that returns or performs various operations on {@code int[]} instances.
+ * A class that consists exclusively of static methods that returns or performs various operations on {@code long[]} instances.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class IntArrays {
-	private IntArrays() {
+public final class LongArrays {
+	private LongArrays() {
 		
 	}
 	
@@ -47,8 +47,8 @@ public final class IntArrays {
 	 * If {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to {@code arrayB.length}, {@code length} is less than {@code 0},
 	 * {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0} or greater than {@code arrayB.length}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param arrayA an {@code int[]}
-	 * @param arrayB an {@code int[]}
+	 * @param arrayA a {@code long[]}
+	 * @param arrayB a {@code long[]}
 	 * @param offsetArrayA the offset to start at in {@code arrayA}
 	 * @param offsetArrayB the offset to start at in {@code arrayB}
 	 * @param length the length of the sub-arrays to test for equality
@@ -58,7 +58,7 @@ public final class IntArrays {
 	 *                                  or greater than {@code arrayB.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayA} or {@code arrayB} are {@code null}
 	 */
-	public static boolean equal(final int[] arrayA, final int[] arrayB, final int offsetArrayA, final int offsetArrayB, final int length) {
+	public static boolean equal(final long[] arrayA, final long[] arrayB, final int offsetArrayA, final int offsetArrayB, final int length) {
 		Objects.requireNonNull(arrayA, "arrayA == null");
 		Objects.requireNonNull(arrayB, "arrayB == null");
 		
@@ -82,12 +82,12 @@ public final class IntArrays {
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param value the {@code int} value to find the index for
-	 * @param array the {@code int[]} to search for {@code value} in
+	 * @param value the {@code long} value to find the index for
+	 * @param array the {@code long[]} to search for {@code value} in
 	 * @return the index of {@code value} in {@code array}, or {@code -1} if it cannot be found
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public static int indexOf(final int value, final int[] array) {
+	public static int indexOf(final long value, final long[] array) {
 		Objects.requireNonNull(array, "array == null");
 		
 		for(int i = 0; i < array.length; i++) {
@@ -114,15 +114,15 @@ public final class IntArrays {
 	 * <p>
 	 * If the parameter argument {@code isReturningRelativeIndex} is {@code false}, the absolute index of {@code value} in {@code array} will be returned. The absolute index represents the index in {@code array}.
 	 * 
-	 * @param value the {@code int[]} value to find the index for
-	 * @param array the {@code int[]} to search for {@code value} in
+	 * @param value the {@code long[]} value to find the index for
+	 * @param array the {@code long[]} to search for {@code value} in
 	 * @param isIncrementingByValueLength {@code true} if, and only if, {@code array} consists of sub-structures with a length of {@code value.length}, {@code false} otherwise
 	 * @param isReturningRelativeIndex {@code true} if, and only if, the relative index should be returned, {@code false} otherwise
 	 * @return the index of {@code value} in {@code array}, or {@code -1} if it cannot be found
 	 * @throws IllegalArgumentException thrown if, and only if, {@code isIncrementingByValueLength} is {@code true} and {@code array.length % value.length} is not equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code value} or {@code array} are {@code null}
 	 */
-	public static int indexOf(final int[] value, final int[] array, final boolean isIncrementingByValueLength, final boolean isReturningRelativeIndex) {
+	public static int indexOf(final long[] value, final long[] array, final boolean isIncrementingByValueLength, final boolean isReturningRelativeIndex) {
 		Objects.requireNonNull(value, "value == null");
 		Objects.requireNonNull(array, "array == null");
 		
@@ -143,43 +143,43 @@ public final class IntArrays {
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of {@code objects} using {@code arrayFunction}.
+	 * Returns a {@code long[]} representation of {@code objects} using {@code arrayFunction}.
 	 * <p>
 	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * IntArrays.convert(objects, arrayFunction, 0);
+	 * LongArrays.convert(objects, arrayFunction, 0);
 	 * }
 	 * </pre>
 	 * 
 	 * @param <T> the generic type
-	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code int[]} instances
-	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code int[]} instances
-	 * @return an {@code int[]} representation of {@code objects} using {@code arrayFunction}
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code long[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code long[]} instances
+	 * @return a {@code long[]} representation of {@code objects} using {@code arrayFunction}
 	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
 	 */
-	public static <T> int[] convert(final List<T> objects, final Function<T, int[]> arrayFunction) {
+	public static <T> long[] convert(final List<T> objects, final Function<T, long[]> arrayFunction) {
 		return convert(objects, arrayFunction, 0);
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of {@code objects} using {@code arrayFunction}.
+	 * Returns a {@code long[]} representation of {@code objects} using {@code arrayFunction}.
 	 * <p>
 	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param <T> the generic type
-	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code int[]} instances
-	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code int[]} instances
-	 * @param minimumLength the minimum length of the returned {@code int[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
-	 * @return an {@code int[]} representation of {@code objects} using {@code arrayFunction}
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code long[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code long[]} instances
+	 * @param minimumLength the minimum length of the returned {@code long[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
+	 * @return a {@code long[]} representation of {@code objects} using {@code arrayFunction}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
 	 */
-	public static <T> int[] convert(final List<T> objects, final Function<T, int[]> arrayFunction, final int minimumLength) {
+	public static <T> long[] convert(final List<T> objects, final Function<T, long[]> arrayFunction, final int minimumLength) {
 		ParameterArguments.requireNonNullList(objects, "objects");
 		
 		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
@@ -190,116 +190,116 @@ public final class IntArrays {
 			return create(minimumLength);
 		}
 		
-		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
+		try(final LongArrayOutputStream longArrayOutputStream = new LongArrayOutputStream()) {
 			for(final T object : objects) {
-				intArrayOutputStream.write(arrayFunction.apply(object));
+				longArrayOutputStream.write(arrayFunction.apply(object));
 			}
 			
-			final int[] array = intArrayOutputStream.toIntArray();
+			final long[] array = longArrayOutputStream.toLongArray();
 			
 			return array.length == 0 ? create(minimumLength) : array;
 		}
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of {@code byteArray}.
+	 * Returns a {@code long[]} representation of {@code byteArray}.
 	 * <p>
 	 * If {@code byteArray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * IntArrays.convert(byteArray, false);
+	 * LongArrays.convert(byteArray, false);
 	 * }
 	 * </pre>
 	 * 
 	 * @param byteArray a {@code byte[]}
-	 * @return an {@code int[]} representation of {@code byteArray}
+	 * @return a {@code long[]} representation of {@code byteArray}
 	 * @throws NullPointerException thrown if, and only if, {@code byteArray} is {@code null}
 	 */
-	public static int[] convert(final byte[] byteArray) {
+	public static long[] convert(final byte[] byteArray) {
 		return convert(byteArray, false);
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of {@code byteArray}.
+	 * Returns a {@code long[]} representation of {@code byteArray}.
 	 * <p>
 	 * If {@code byteArray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param byteArray a {@code byte[]}
 	 * @param isUnsigned {@code true} if, and only if, unsigned values should be used, {@code false} otherwise
-	 * @return an {@code int[]} representation of {@code byteArray}
+	 * @return a {@code long[]} representation of {@code byteArray}
 	 * @throws NullPointerException thrown if, and only if, {@code byteArray} is {@code null}
 	 */
-	public static int[] convert(final byte[] byteArray, final boolean isUnsigned) {
+	public static long[] convert(final byte[] byteArray, final boolean isUnsigned) {
 		Objects.requireNonNull(byteArray, "byteArray == null");
 		
-		final int[] intArray = new int[byteArray.length];
+		final long[] longArray = new long[byteArray.length];
 		
 		for(int i = 0; i < byteArray.length; i++) {
-			intArray[i] = isUnsigned ? byteArray[i] & 0xFF : byteArray[i];
+			longArray[i] = isUnsigned ? byteArray[i] & 0xFF : byteArray[i];
 		}
 		
-		return intArray;
+		return longArray;
 	}
 	
 	/**
-	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code 0}.
+	 * Returns a {@code long[]} with a length of {@code length} and is filled with {@code 0L}.
 	 * <p>
 	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * IntArrays.create(length, 0);
+	 * LongArrays.create(length, 0L);
 	 * }
 	 * </pre>
 	 * 
-	 * @param length the length of the {@code int[]}
-	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code 0}
+	 * @param length the length of the {@code long[]}
+	 * @return a {@code long[]} with a length of {@code length} and is filled with {@code 0L}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
-	public static int[] create(final int length) {
-		return create(length, 0);
+	public static long[] create(final int length) {
+		return create(length, 0L);
 	}
 	
 	/**
-	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code int} values from {@code intSupplier}.
+	 * Returns a {@code long[]} with a length of {@code length} and is filled with {@code long} values from {@code longSupplier}.
 	 * <p>
 	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If {@code intSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code longSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param length the length of the {@code int[]}
-	 * @param intSupplier the {@code IntSupplier} to fill the {@code int[]} with
-	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code int} values from {@code intSupplier}
+	 * @param length the length of the {@code long[]}
+	 * @param longSupplier the {@code LongSupplier} to fill the {@code long[]} with
+	 * @return a {@code long[]} with a length of {@code length} and is filled with {@code long} values from {@code longSupplier}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code intSupplier} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code longSupplier} is {@code null}
 	 */
-	public static int[] create(final int length, final IntSupplier intSupplier) {
-		final int[] array = new int[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+	public static long[] create(final int length, final LongSupplier longSupplier) {
+		final long[] array = new long[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
-		Objects.requireNonNull(intSupplier, "intSupplier == null");
+		Objects.requireNonNull(longSupplier, "longSupplier == null");
 		
 		for(int i = 0; i < array.length; i++) {
-			array[i] = intSupplier.getAsInt();
+			array[i] = longSupplier.getAsLong();
 		}
 		
 		return array;
 	}
 	
 	/**
-	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code value}.
+	 * Returns a {@code long[]} with a length of {@code length} and is filled with {@code value}.
 	 * <p>
 	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param length the length of the {@code int[]}
-	 * @param value the {@code int} value to fill the {@code int[]} with
-	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code value}
+	 * @param length the length of the {@code long[]}
+	 * @param value the {@code long} value to fill the {@code long[]} with
+	 * @return a {@code long[]} with a length of {@code length} and is filled with {@code value}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
-	public static int[] create(final int length, final int value) {
-		final int[] array = new int[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+	public static long[] create(final int length, final long value) {
+		final long[] array = new long[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
 		Arrays.fill(array, value);
 		
@@ -307,45 +307,45 @@ public final class IntArrays {
 	}
 	
 	/**
-	 * Performs a merge operation on the {@code int[]} instance {@code array} and the {@code int} {@code value}.
+	 * Performs a merge operation on the {@code long[]} instance {@code array} and the {@code long} {@code value}.
 	 * <p>
-	 * Returns a new {@code int[]} with {@code array} and {@code value} merged.
+	 * Returns a new {@code long[]} with {@code array} and {@code value} merged.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * IntArrays.merge(array, new int[] {value});
+	 * LongArrays.merge(array, new long[] {value});
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the {@code int[]} that comes first
-	 * @param value the {@code int} that comes second
-	 * @return a new {@code int[]} with {@code array} and {@code value} merged
+	 * @param array the {@code long[]} that comes first
+	 * @param value the {@code long} that comes second
+	 * @return a new {@code long[]} with {@code array} and {@code value} merged
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public static int[] merge(final int[] array, final int value) {
-		return merge(array, new int[] {value});
+	public static long[] merge(final long[] array, final long value) {
+		return merge(array, new long[] {value});
 	}
 	
 	/**
-	 * Performs a merge operation on the {@code int[]} instances {@code arrayA} and {@code arrayB}.
+	 * Performs a merge operation on the {@code long[]} instances {@code arrayA} and {@code arrayB}.
 	 * <p>
-	 * Returns a new {@code int[]} with {@code arrayA} and {@code arrayB} merged.
+	 * Returns a new {@code long[]} with {@code arrayA} and {@code arrayB} merged.
 	 * <p>
 	 * If either {@code arrayA} or {@code arrayB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param arrayA the {@code int[]} that comes first
-	 * @param arrayB the {@code int[]} that comes second
-	 * @return a new {@code int[]} with {@code arrayA} and {@code arrayB} merged
+	 * @param arrayA the {@code long[]} that comes first
+	 * @param arrayB the {@code long[]} that comes second
+	 * @return a new {@code long[]} with {@code arrayA} and {@code arrayB} merged
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayA} or {@code arrayB} are {@code null}
 	 */
-	public static int[] merge(final int[] arrayA, final int[] arrayB) {
+	public static long[] merge(final long[] arrayA, final long[] arrayB) {
 		Objects.requireNonNull(arrayA, "arrayA == null");
 		Objects.requireNonNull(arrayB, "arrayB == null");
 		
-		final int[] arrayC = new int[arrayA.length + arrayB.length];
+		final long[] arrayC = new long[arrayA.length + arrayB.length];
 		
 		final int offsetArrayA = 0;
 		final int offsetArrayB = arrayA.length;
@@ -357,127 +357,127 @@ public final class IntArrays {
 	}
 	
 	/**
-	 * Performs a merge operation on the {@code int[]} instances in {@code arrays}.
+	 * Performs a merge operation on the {@code long[]} instances in {@code arrays}.
 	 * <p>
-	 * Returns a new {@code int[]} with {@code arrays} merged.
+	 * Returns a new {@code long[]} with {@code arrays} merged.
 	 * <p>
 	 * If either {@code arrays} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param arrays the {@code int[][]} instance to combine into one {@code int[]}
-	 * @return a new {@code int[]} with {@code arrays} merged
+	 * @param arrays the {@code long[][]} instance to combine into one {@code long[]}
+	 * @return a new {@code long[]} with {@code arrays} merged
 	 * @throws NullPointerException thrown if, and only if, either {@code arrays} or at least one of its elements are {@code null}
 	 */
-	public static int[] merge(final int[]... arrays) {
+	public static long[] merge(final long[]... arrays) {
 		Objects.requireNonNull(arrays, "arrays == null");
 		
 		for(int i = 0; i < arrays.length; i++) {
 			Objects.requireNonNull(arrays[i], "arrays[" + i + "] == null");
 		}
 		
-		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
-			for(final int[] array : arrays) {
-				intArrayOutputStream.write(array);
+		try(final LongArrayOutputStream longArrayOutputStream = new LongArrayOutputStream()) {
+			for(final long[] array : arrays) {
+				longArrayOutputStream.write(array);
 			}
 			
-			return intArrayOutputStream.toIntArray();
+			return longArrayOutputStream.toLongArray();
 		}
 	}
 	
 	/**
-	 * Performs a splice operation on the {@code int[]} instance {@code array}.
+	 * Performs a splice operation on the {@code long[]} instance {@code array}.
 	 * <p>
-	 * Returns a new {@code int[]} with the result of the operation.
+	 * Returns a new {@code long[]} with the result of the operation.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * IntArrays.splice(array, offset, array.length);
+	 * LongArrays.splice(array, offset, array.length);
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the input {@code int[]}
+	 * @param array the input {@code long[]}
 	 * @param offset the offset for the removal, which may be negative
-	 * @return a new {@code int[]} with the result of the operation
+	 * @return a new {@code long[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public static int[] splice(final int[] array, final int offset) {
+	public static long[] splice(final long[] array, final int offset) {
 		return splice(array, offset, array.length);
 	}
 	
 	/**
-	 * Performs a splice operation on the {@code int[]} instance {@code array}.
+	 * Performs a splice operation on the {@code long[]} instance {@code array}.
 	 * <p>
-	 * Returns a new {@code int[]} with the result of the operation.
+	 * Returns a new {@code long[]} with the result of the operation.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * IntArrays.splice(array, offset, length, new int[0]);
+	 * LongArrays.splice(array, offset, length, new long[0]);
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the input {@code int[]}
+	 * @param array the input {@code long[]}
 	 * @param offset the offset for the removal, which may be negative
 	 * @param length the length of the removal, which may be negative
-	 * @return a new {@code int[]} with the result of the operation
+	 * @return a new {@code long[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-	public static int[] splice(final int[] array, final int offset, final int length) {
-		return splice(array, offset, length, new int[0]);
+	public static long[] splice(final long[] array, final int offset, final int length) {
+		return splice(array, offset, length, new long[0]);
 	}
 	
 	/**
-	 * Performs a splice operation on the {@code int[]} instance {@code array}.
+	 * Performs a splice operation on the {@code long[]} instance {@code array}.
 	 * <p>
-	 * Returns a new {@code int[]} with the result of the operation.
+	 * Returns a new {@code long[]} with the result of the operation.
 	 * <p>
 	 * If either {@code array} or {@code arrayReplacement} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * IntArrays.splice(array, offset, length, arrayReplacement, new int[0]);
+	 * LongArrays.splice(array, offset, length, arrayReplacement, new long[0]);
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the input {@code int[]}
+	 * @param array the input {@code long[]}
 	 * @param offset the offset for the removal, which may be negative
 	 * @param length the length of the removal, which may be negative
-	 * @param arrayReplacement an {@code int[]} that acts as replacement
-	 * @return a new {@code int[]} with the result of the operation
+	 * @param arrayReplacement an {@code long[]} that acts as replacement
+	 * @return a new {@code long[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayReplacement} are {@code null}
 	 */
-	public static int[] splice(final int[] array, final int offset, final int length, final int[] arrayReplacement) {
-		return splice(array, offset, length, arrayReplacement, new int[0]);
+	public static long[] splice(final long[] array, final int offset, final int length, final long[] arrayReplacement) {
+		return splice(array, offset, length, arrayReplacement, new long[0]);
 	}
 	
 	/**
-	 * Performs a splice operation on the {@code int[]} instance {@code array}.
+	 * Performs a splice operation on the {@code long[]} instance {@code array}.
 	 * <p>
-	 * Returns a new {@code int[]} with the result of the operation.
+	 * Returns a new {@code long[]} with the result of the operation.
 	 * <p>
 	 * If either {@code array}, {@code arrayReplacement} or {@code arrayMatcher} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param array the input {@code int[]}
+	 * @param array the input {@code long[]}
 	 * @param offset the offset for the removal, which may be negative
 	 * @param length the length of the removal, which may be negative
-	 * @param arrayReplacement an {@code int[]} that acts as replacement
-	 * @param arrayMatcher an {@code int[]} that matches the part of {@code array} that will be replaced
-	 * @return a new {@code int[]} with the result of the operation
+	 * @param arrayReplacement an {@code long[]} that acts as replacement
+	 * @param arrayMatcher an {@code long[]} that matches the part of {@code array} that will be replaced
+	 * @return a new {@code long[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code array}, {@code arrayReplacement} or {@code arrayMatcher} are {@code null}
 	 */
-	public static int[] splice(final int[] array, final int offset, final int length, final int[] arrayReplacement, final int[] arrayMatcher) {
+	public static long[] splice(final long[] array, final int offset, final int length, final long[] arrayReplacement, final long[] arrayMatcher) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayReplacement, "arrayReplacement == null");
 		Objects.requireNonNull(arrayMatcher, "arrayMatcher == null");
 		
-		final int[] arrayA = array;
-		final int[] arrayB = arrayReplacement;
-		final int[] arrayC = array;
+		final long[] arrayA = array;
+		final long[] arrayB = arrayReplacement;
+		final long[] arrayC = array;
 		
 		final int arrayASrcPos = 0;
 		final int arrayALength = Ints.saturate(offset >= 0 ? offset : arrayA.length + offset, 0, arrayA.length);
@@ -497,7 +497,7 @@ public final class IntArrays {
 			return array;
 		}
 		
-		final int[] arrayD = new int[arrayDLength];
+		final long[] arrayD = new long[arrayDLength];
 		
 		System.arraycopy(arrayA, arrayASrcPos, arrayD, arrayDSrcPos0, arrayALength);
 		System.arraycopy(arrayB, arrayBSrcPos, arrayD, arrayDSrcPos1, arrayBLength);

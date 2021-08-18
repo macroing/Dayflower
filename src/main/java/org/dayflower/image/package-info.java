@@ -47,6 +47,7 @@
  * <li>The Geometry Shape API</li>
  * <li>The Java AWT Image API</li>
  * <li>The Java I/O API</li>
+ * <li>The Java Lang API</li>
  * <li>The Java Util Function API</li>
  * <li>The Node API</li>
  * <li>The Noise API</li>

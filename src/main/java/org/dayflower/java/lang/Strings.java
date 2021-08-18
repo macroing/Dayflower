@@ -21,8 +21,6 @@ package org.dayflower.java.lang;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-import org.dayflower.utility.ParameterArguments;
-
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code String} instances.
  * 
@@ -56,7 +54,9 @@ public final class Strings {
 	public static String repeat(final String string, final int count) {
 		Objects.requireNonNull(string, "string == null");
 		
-		ParameterArguments.requireRange(count, 0, Integer.MAX_VALUE, "count");
+		if(count < 0) {
+			throw new IllegalArgumentException(String.format("count < 0: count == %d", Integer.valueOf(count)));
+		}
 		
 		final StringBuilder stringBuilder = new StringBuilder();
 		

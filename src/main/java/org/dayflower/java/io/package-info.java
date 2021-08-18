@@ -9,6 +9,7 @@
  * <li>{@link org.dayflower.java.io.DoubleArrayOutputStream DoubleArrayOutputStream} is an {@code OutputStream} implementation that writes data to a {@code double} array.</li>
  * <li>{@link org.dayflower.java.io.FloatArrayOutputStream FloatArrayOutputStream} is an {@code OutputStream} implementation that writes data to a {@code float} array.</li>
  * <li>{@link org.dayflower.java.io.IntArrayOutputStream IntArrayOutputStream} is an {@code OutputStream} implementation that writes data to an {@code int} array.</li>
+ * <li>{@link org.dayflower.java.io.LongArrayOutputStream LongArrayOutputStream} is an {@code OutputStream} implementation that writes data to a {@code long} array.</li>
  * </ul>
  * <p>
  * The following list contains information about the remaining classes.

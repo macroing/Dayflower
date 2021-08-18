@@ -24,6 +24,8 @@
  * <li>The Image API</li>
  * <li>The Java AWT Image API</li>
  * <li>The Java I/O API</li>
+ * <li>The Java Lang API</li>
+ * <li>The Java Util Concurrent Atomic API</li>
  * <li>The Java Util Function API</li>
  * <li>The JavaFX Concurrent API</li>
  * <li>The JavaFX Scene Canvas API</li>
@@ -32,6 +34,7 @@
  * <li>The JavaFX Scene Layout API</li>
  * <li>The Node API</li>
  * <li>The Noise API</li>
+ * <li>The Parameter API</li>
  * <li>The Renderer API</li>
  * <li>The Renderer CPU API</li>
  * <li>The Renderer GPU API</li>

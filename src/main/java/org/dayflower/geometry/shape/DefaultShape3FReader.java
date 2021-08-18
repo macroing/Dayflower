@@ -53,6 +53,7 @@ public final class DefaultShape3FReader implements Shape3FReader {
 		this.shape3FReaders.put(Integer.valueOf(LineSegment3F.ID), new LineSegment3FReader());
 		this.shape3FReaders.put(Integer.valueOf(Paraboloid3F.ID), new Paraboloid3FReader());
 		this.shape3FReaders.put(Integer.valueOf(Plane3F.ID), new Plane3FReader());
+		this.shape3FReaders.put(Integer.valueOf(Polygon3F.ID), new Polygon3FReader());
 		this.shape3FReaders.put(Integer.valueOf(ProceduralTerrain3F.ID), new ProceduralTerrain3FReader());
 		this.shape3FReaders.put(Integer.valueOf(Rectangle3F.ID), new Rectangle3FReader());
 		this.shape3FReaders.put(Integer.valueOf(RectangularCuboid3F.ID), new RectangularCuboid3FReader());
@@ -123,6 +124,7 @@ public final class DefaultShape3FReader implements Shape3FReader {
 			case LineSegment3F.ID:
 			case Paraboloid3F.ID:
 			case Plane3F.ID:
+			case Polygon3F.ID:
 			case ProceduralTerrain3F.ID:
 			case Rectangle3F.ID:
 			case RectangularCuboid3F.ID:

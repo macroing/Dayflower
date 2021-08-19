@@ -1,3 +1,8 @@
+2021-08-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add methods to the Color class in the Simplex API.
+	* CHANGE:	Refactor the Image class in the Simplex API.
+
 2021-08-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for reading Polygon3D and Polygon3F to the DefaultShape3DReader and DefaultShape3FReader classes, respectively.

@@ -19,12 +19,23 @@
 package org.dayflower.simplex;
 
 import static org.dayflower.simplex.Color.color4D;
+import static org.dayflower.simplex.Color.color4DFromColor4I;
+import static org.dayflower.simplex.Color.color4DSet;
 import static org.dayflower.simplex.Color.color4I;
-import static org.dayflower.utility.Doubles.saturate;
-import static org.dayflower.utility.Ints.saturate;
+import static org.dayflower.simplex.Color.color4IPacked;
+import static org.dayflower.simplex.Color.color4IPackedFromColor4I;
+import static org.dayflower.simplex.Color.color4IFromColor4D;
+import static org.dayflower.simplex.Color.color4ISet;
 import static org.dayflower.utility.Ints.toInt;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Javadocs!
+
+import javax.imageio.ImageIO;
 
 //TODO: Add Javadocs!
 public final class Image {
@@ -61,10 +72,7 @@ public final class Image {
 		image4D[1] = resolutionY;
 		
 		for(int i = 0; i < resolution; i++) {
-			image4D[2 + i * 4 + 0] = color4D[color4DOffset + 0];
-			image4D[2 + i * 4 + 1] = color4D[color4DOffset + 1];
-			image4D[2 + i * 4 + 2] = color4D[color4DOffset + 2];
-			image4D[2 + i * 4 + 3] = color4D[color4DOffset + 3];
+			color4DSet(image4D, color4D, 2 + i * 4, color4DOffset);
 		}
 		
 		return image4D;
@@ -90,13 +98,26 @@ public final class Image {
 		image4DResult[image4DResultOffset + 1] = resolutionY;
 		
 		for(int i = 0; i < resolution; i++) {
-			image4DResult[image4DResultOffset + 2 + i * 4 + 0] = saturate(image4I[image4IOffset + 2 + i * 4 + 0]) / 255.0D;
-			image4DResult[image4DResultOffset + 2 + i * 4 + 1] = saturate(image4I[image4IOffset + 2 + i * 4 + 1]) / 255.0D;
-			image4DResult[image4DResultOffset + 2 + i * 4 + 2] = saturate(image4I[image4IOffset + 2 + i * 4 + 2]) / 255.0D;
-			image4DResult[image4DResultOffset + 2 + i * 4 + 3] = saturate(image4I[image4IOffset + 2 + i * 4 + 3]) / 255.0D;
+			color4DSet(image4DResult, color4DFromColor4I(image4I, color4D(), image4IOffset + 2 + i * 4, 0), image4DResultOffset + 2 + i * 4, 0);
 		}
 		
 		return image4DResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] image4DSetColor4D(final double[] image4D, final double[] color4D, final int x, final int y) {
+		return image4DSetColor4D(image4D, color4D, x, y, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] image4DSetColor4D(final double[] image4D, final double[] color4D, final int x, final int y, final int image4DOffset, final int color4DOffset) {
+		final int resolutionX = image4DGetResolutionX(image4D, image4DOffset);
+		
+		final int index = (y * resolutionX + x) * 4;
+		
+		color4DSet(image4D, color4D, image4DOffset + 2 + index, color4DOffset);
+		
+		return image4D;
 	}
 	
 //	TODO: Add Javadocs!
@@ -127,6 +148,36 @@ public final class Image {
 //	TODO: Add Javadocs!
 	public static int image4DGetResolutionY(final double[] image4D, final int image4DOffset) {
 		return toInt(image4D[image4DOffset + 1]);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4DSave(final double[] image4D, final File file) {
+		image4DSave(image4D, file, "png");
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4DSave(final double[] image4D, final File file, final String formatName) {
+		image4DSave(image4D, file, formatName, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4DSave(final double[] image4D, final File file, final String formatName, final int image4DOffset) {
+		image4ISave(image4IFromImage4D(image4D, image4I(image4DGetResolutionX(image4D, image4DOffset), image4DGetResolutionY(image4D, image4DOffset)), image4DOffset, 0), file, formatName);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4DSave(final double[] image4D, final String pathname) {
+		image4DSave(image4D, pathname, "png");
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4DSave(final double[] image4D, final String pathname, final String formatName) {
+		image4DSave(image4D, pathname, formatName, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4DSave(final double[] image4D, final String pathname, final String formatName, final int image4DOffset) {
+		image4DSave(image4D, new File(pathname), formatName, image4DOffset);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,10 +239,7 @@ public final class Image {
 		image4I[1] = resolutionY;
 		
 		for(int i = 0; i < resolution; i++) {
-			image4I[2 + i * 4 + 0] = color4I[color4IOffset + 0];
-			image4I[2 + i * 4 + 1] = color4I[color4IOffset + 1];
-			image4I[2 + i * 4 + 2] = color4I[color4IOffset + 2];
-			image4I[2 + i * 4 + 3] = color4I[color4IOffset + 3];
+			color4ISet(image4I, color4I, 2 + i * 4, color4IOffset);
 		}
 		
 		return image4I;
@@ -217,12 +265,193 @@ public final class Image {
 		image4IResult[image4IResultOffset + 1] = resolutionY;
 		
 		for(int i = 0; i < resolution; i++) {
-			image4IResult[image4IResultOffset + 2 + i * 4 + 0] = toInt(saturate(image4D[image4DOffset + 2 + i * 4 + 0]) * 255.0D + 0.5D);
-			image4IResult[image4IResultOffset + 2 + i * 4 + 1] = toInt(saturate(image4D[image4DOffset + 2 + i * 4 + 1]) * 255.0D + 0.5D);
-			image4IResult[image4IResultOffset + 2 + i * 4 + 2] = toInt(saturate(image4D[image4DOffset + 2 + i * 4 + 2]) * 255.0D + 0.5D);
-			image4IResult[image4IResultOffset + 2 + i * 4 + 3] = toInt(saturate(image4D[image4DOffset + 2 + i * 4 + 3]) * 255.0D + 0.5D);
+			color4ISet(image4IResult, color4IFromColor4D(image4D, color4I(), image4DOffset + 2 + i * 4, 0), image4IResultOffset + 2 + i * 4, 0);
 		}
 		
 		return image4IResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4ISave(final int[] image4I, final File file) {
+		image4ISave(image4I, file, "png");
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4ISave(final int[] image4I, final File file, final String formatName) {
+		image4ISave(image4I, file, formatName, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4ISave(final int[] image4I, final File file, final String formatName, final int image4IOffset) {
+		image4IPackedSave(image4IPackedFromImage4I(image4I, image4IPacked(image4IGetResolutionX(image4I, image4IOffset), image4IGetResolutionY(image4I, image4IOffset)), image4IOffset, 0), file, formatName);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4ISave(final int[] image4I, final String pathname) {
+		image4ISave(image4I, pathname, "png");
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4ISave(final int[] image4I, final String pathname, final String formatName) {
+		image4ISave(image4I, pathname, formatName, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4ISave(final int[] image4I, final String pathname, final String formatName, final int image4IOffset) {
+		image4ISave(image4I, new File(pathname), formatName, image4IOffset);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Image4IPacked ///////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static int image4IPackedGetResolution(final int[] image4IPacked) {
+		return image4IPackedGetResolution(image4IPacked, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int image4IPackedGetResolution(final int[] image4IPacked, final int image4IPackedOffset) {
+		return image4IPackedGetResolutionX(image4IPacked, image4IPackedOffset) * image4IPackedGetResolutionY(image4IPacked, image4IPackedOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int image4IPackedGetResolutionX(final int[] image4IPacked) {
+		return image4IPackedGetResolutionX(image4IPacked, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int image4IPackedGetResolutionX(final int[] image4IPacked, final int image4IPackedOffset) {
+		return image4IPacked[image4IPackedOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static int image4IPackedGetResolutionY(final int[] image4IPacked) {
+		return image4IPackedGetResolutionY(image4IPacked, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int image4IPackedGetResolutionY(final int[] image4IPacked, final int image4IPackedOffset) {
+		return image4IPacked[image4IPackedOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPacked() {
+		return image4IPacked(800, 800);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPacked(final int resolutionX, final int resolutionY) {
+		return image4IPacked(resolutionX, resolutionY, color4IPacked());
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPacked(final int resolutionX, final int resolutionY, final int color4IPacked) {
+		final int resolution = resolutionX * resolutionY;
+		
+		final int[] image4IPacked = new int[2 + resolution];
+		
+		image4IPacked[0] = resolutionX;
+		image4IPacked[1] = resolutionY;
+		
+		for(int i = 0; i < resolution; i++) {
+			image4IPacked[2 + i] = color4IPacked;
+		}
+		
+		return image4IPacked;
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPackedCopyData(final int[] image4IPacked) {
+		return image4IPackedCopyData(image4IPacked, new int[image4IPackedGetResolution(image4IPacked)]);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPackedCopyData(final int[] image4IPacked, final int[] dataResult) {
+		return image4IPackedCopyData(image4IPacked, dataResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPackedCopyData(final int[] image4IPacked, final int[] dataResult, final int image4IPackedOffset, final int dataResultOffset) {
+		final int resolution = image4IPackedGetResolution(image4IPacked, image4IPackedOffset);
+		
+		System.arraycopy(image4IPacked, image4IPackedOffset + 2, dataResult, dataResultOffset, resolution);
+		
+		return dataResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPackedFromImage4I(final int[] image4I) {
+		return image4IPackedFromImage4I(image4I, image4IPacked(image4IGetResolutionX(image4I), image4IGetResolutionY(image4I)));
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPackedFromImage4I(final int[] image4I, final int[] image4IPackedResult) {
+		return image4IPackedFromImage4I(image4I, image4IPackedResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPackedFromImage4I(final int[] image4I, final int[] image4IPackedResult, final int image4IOffset, final int image4IPackedResultOffset) {
+		final int resolutionX = image4IGetResolutionX(image4I, image4IOffset);
+		final int resolutionY = image4IGetResolutionY(image4I, image4IOffset);
+		final int resolution = resolutionX * resolutionY;
+		
+		image4IPackedResult[image4IPackedResultOffset + 0] = resolutionX;
+		image4IPackedResult[image4IPackedResultOffset + 1] = resolutionY;
+		
+		for(int i = 0; i < resolution; i++) {
+			image4IPackedResult[2 + i] = color4IPackedFromColor4I(image4I, image4IOffset + 2 + i * 4);
+		}
+		
+		return image4IPackedResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4IPackedSave(final int[] image4IPacked, final File file) {
+		image4IPackedSave(image4IPacked, file, "png");
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4IPackedSave(final int[] image4IPacked, final File file, final String formatName) {
+		image4IPackedSave(image4IPacked, file, formatName, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4IPackedSave(final int[] image4IPacked, final File file, final String formatName, final int image4IPackedOffset) {
+		try {
+			final File parentFile = file.getParentFile();
+			
+			if(parentFile != null && !parentFile.isDirectory()) {
+				parentFile.mkdirs();
+			}
+			
+			final int resolutionX = image4IPackedGetResolutionX(image4IPacked, image4IPackedOffset);
+			final int resolutionY = image4IPackedGetResolutionY(image4IPacked, image4IPackedOffset);
+			
+			final BufferedImage bufferedImage = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_ARGB);
+			
+			final int[] dataResult = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
+			
+			image4IPackedCopyData(image4IPacked, dataResult, image4IPackedOffset, 0);
+			
+			ImageIO.write(bufferedImage, formatName, file);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4IPackedSave(final int[] image4IPacked, final String pathname) {
+		image4IPackedSave(image4IPacked, pathname, "png");
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4IPackedSave(final int[] image4IPacked, final String pathname, final String formatName) {
+		image4IPackedSave(image4IPacked, pathname, formatName, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void image4IPackedSave(final int[] image4IPacked, final String pathname, final String formatName, final int image4IPackedOffset) {
+		image4IPackedSave(image4IPacked, new File(pathname), formatName, image4IPackedOffset);
 	}
 }

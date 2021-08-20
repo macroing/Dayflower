@@ -205,12 +205,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 			
 			filmClear();
 			
-			if(image instanceof PixelImageF) {
-				final
-				PixelImageF pixelImageF = PixelImageF.class.cast(image);
-				pixelImageF.filmClear();
-				pixelImageF.filmRender();
-			}
+			doClearImageF(image);
 			
 			rendererObserver.onRenderDisplay(this, image);
 			
@@ -227,60 +222,13 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		
 		execute(range);
 		
+		doUpdateImageF(image);
+		
 		final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 		
-		if(image instanceof ByteImageF) {
-			final ByteImageF byteImage = ByteImageF.class.cast(image);
-			
-			final byte[] bytes = byteImage.getData(true);
-			final byte[] imageColorByteArray = getImageColorByteArray();
-			
-			System.arraycopy(imageColorByteArray, 0, bytes, 0, bytes.length);
-		} else if(image instanceof PixelImageF) {
-			final PixelImageF pixelImage = PixelImageF.class.cast(image);
-			
-			final float[] imageColorFloatArray = getImageColorFloatArray();
-			final float[] pixelArray = getPixelArray();
-			
-			for(int y = 0; y < resolutionY; y++) {
-				for(int x = 0; x < resolutionX; x++) {
-					final int index = y * resolutionX + x;
-					final int indexPixelArray = index * 2;
-					final int indexRadianceRGBFloatArray = index * 3;
-					
-					final float r = imageColorFloatArray[indexRadianceRGBFloatArray + 0];
-					final float g = imageColorFloatArray[indexRadianceRGBFloatArray + 1];
-					final float b = imageColorFloatArray[indexRadianceRGBFloatArray + 2];
-					
-					final float imageX = x;
-					final float imageY = y;
-					final float pixelX = pixelArray[indexPixelArray + 0];
-					final float pixelY = pixelArray[indexPixelArray + 1];
-					
-					final Color3F colorRGB = new Color3F(r, g, b);
-					final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
-					
-					if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
-						pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
-					}
-				}
-			}
-		}
-		
 		rendererObserver.onRenderPassProgress(this, getRenderPass(), 1.0D);
-		
-		if(image instanceof PixelImageF) {
-			final
-			PixelImageF pixelImageF = PixelImageF.class.cast(image);
-			pixelImageF.filmRender();
-		}
-		
 		rendererObserver.onRenderDisplay(this, image);
 		rendererObserver.onRenderPassComplete(this, getRenderPass(), elapsedTimeMillis);
-		
-		if(!this.isRendering.get()) {
-			return true;
-		}
 		
 		this.isRendering.set(false);
 		
@@ -526,5 +474,69 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	protected final boolean renderingAlgorithmIsRayTracing() {
 		return this.renderingAlgorithmOrdinal == RENDERING_ALGORITHM_ORDINAL_RAY_TRACING;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doUpdateByteImageF(final ByteImageF byteImage) {
+		final byte[] bytes = byteImage.getData(true);
+		final byte[] imageColorByteArray = getImageColorByteArray();
+		
+		System.arraycopy(imageColorByteArray, 0, bytes, 0, bytes.length);
+	}
+	
+	private void doUpdateImageF(final ImageF image) {
+		if(image instanceof ByteImageF) {
+			doUpdateByteImageF(ByteImageF.class.cast(image));
+		} else if(image instanceof PixelImageF) {
+			doUpdatePixelImageF(PixelImageF.class.cast(image));
+		}
+	}
+	
+	private void doUpdatePixelImageF(final PixelImageF pixelImage) {
+		final int resolutionX = pixelImage.getResolutionX();
+		final int resolutionY = pixelImage.getResolutionY();
+		
+		final float[] imageColorFloatArray = getImageColorFloatArray();
+		final float[] pixelArray = getPixelArray();
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				final int index = y * resolutionX + x;
+				final int indexPixelArray = index * 2;
+				final int indexRadianceRGBFloatArray = index * 3;
+				
+				final float r = imageColorFloatArray[indexRadianceRGBFloatArray + 0];
+				final float g = imageColorFloatArray[indexRadianceRGBFloatArray + 1];
+				final float b = imageColorFloatArray[indexRadianceRGBFloatArray + 2];
+				
+				final float imageX = x;
+				final float imageY = y;
+				final float pixelX = pixelArray[indexPixelArray + 0];
+				final float pixelY = pixelArray[indexPixelArray + 1];
+				
+				final Color3F colorRGB = new Color3F(r, g, b);
+				final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
+				
+				if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
+					pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
+				}
+			}
+		}
+		
+		pixelImage.filmRender();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static void doClearImageF(final ImageF image) {
+		if(image instanceof PixelImageF) {
+			doClearPixelImageF(PixelImageF.class.cast(image));
+		}
+	}
+	
+	private static void doClearPixelImageF(final PixelImageF pixelImage) {
+		pixelImage.filmClear();
+		pixelImage.filmRender();
 	}
 }

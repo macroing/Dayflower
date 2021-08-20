@@ -21,6 +21,7 @@ package org.dayflower.renderer.cpu;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.color.Color3F;
@@ -45,18 +46,16 @@ import org.dayflower.utility.Timer;
 public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrderRenderer {
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
+	private final AtomicInteger renderPass;
 	private final AtomicReference<RendererObserver> rendererObserver;
 	private ImageF image;
 	private RenderingAlgorithm renderingAlgorithm;
 	private Scene scene;
-	private Timer timer;
+	private final Timer timer;
 	private boolean isPreviewMode;
 	private float maximumDistance;
 	private int maximumBounce;
 	private int minimumBounceRussianRoulette;
-	private int renderPass;
-	private int renderPasses;
-	private int renderPassesPerDisplayUpdate;
 	private int samples;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +71,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	protected AbstractCPURenderer(final RendererObserver rendererObserver) {
 		this.isClearing = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
+		this.renderPass = new AtomicInteger();
 		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
 		this.image = new PixelImageF(800, 800);
 		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
@@ -81,9 +81,6 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 		this.maximumDistance = 20.0F;
 		this.maximumBounce = 20;
 		this.minimumBounceRussianRoulette = 5;
-		this.renderPass = 0;
-		this.renderPasses = 1000;
-		this.renderPassesPerDisplayUpdate = 10;
 		this.samples = 10;
 	}
 	
@@ -186,74 +183,67 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 		
 		final Timer timer = getTimer();
 		
-		final int renderPasses = getRenderPasses();
-		final int renderPassesPerDisplayUpdate = getRenderPassesPerDisplayUpdate();
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
 		
 		final Camera camera = scene.getCameraCopy();
 		
-		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
-			if(this.isClearing.compareAndSet(true, false)) {
-				setRenderPass(0);
-				
-				pixelImage.filmClear();
-				pixelImage.filmRender();
-				
-				rendererObserver.onRenderDisplay(this, image);
-				
-				timer.restart();
-			}
+		if(this.isClearing.compareAndSet(true, false)) {
+			this.renderPass.set(0);
 			
-			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 0.0D);
+			pixelImage.filmClear();
+			pixelImage.filmRender();
 			
-			final long currentTimeMillis = System.currentTimeMillis();
+			rendererObserver.onRenderDisplay(this, image);
 			
-			for(int y = 0; y < resolutionY; y++) {
-				for(int x = 0; x < resolutionX; x++) {
-					final Sample2F sample = sampler.sample2();
+			timer.restart();
+		}
+		
+		this.renderPass.incrementAndGet();
+		
+		rendererObserver.onRenderPassProgress(this, getRenderPass(), 0.0D);
+		
+		final long currentTimeMillis = System.currentTimeMillis();
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				final Sample2F sample = sampler.sample2();
+				
+				final float imageX = x;
+				final float imageY = y;
+				final float pixelX = sample.getX();
+				final float pixelY = sample.getY();
+				
+				final Optional<Ray3F> optionalRay = camera.createPrimaryRay(imageX, imageY, pixelX, pixelY);
+				
+				if(optionalRay.isPresent()) {
+					final Ray3F ray = optionalRay.get();
 					
-					final float imageX = x;
-					final float imageY = y;
-					final float pixelX = sample.getX();
-					final float pixelY = sample.getY();
+					final Color3F colorRGB = radiance(ray);
 					
-					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(imageX, imageY, pixelX, pixelY);
-					
-					if(optionalRay.isPresent()) {
-						final Ray3F ray = optionalRay.get();
+					if(!colorRGB.hasInfinites() && !colorRGB.hasNaNs() && colorRGB.luminance() >= -1.0e-5F) {
+						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
 						
-						final Color3F colorRGB = radiance(ray);
-						
-						if(!colorRGB.hasInfinites() && !colorRGB.hasNaNs() && colorRGB.luminance() >= -1.0e-5F) {
-							final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
-							
-							pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
-						}
+						pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
 					}
 				}
-				
-				final double percent = ((y + 1.0D) * resolutionX) / (resolutionX * resolutionY);
-				
-				rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, percent);
-				
-				if(!this.isRendering.get()) {
-					return false;
-				}
 			}
 			
-			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
+			final double percent = ((y + 1.0D) * resolutionX) / (resolutionX * resolutionY);
 			
-			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
-				pixelImage.filmRender();
-				
-				rendererObserver.onRenderDisplay(this, image);
+			rendererObserver.onRenderPassProgress(this, getRenderPass(), percent);
+			
+			if(!this.isRendering.get()) {
+				return false;
 			}
-			
-			setRenderPass(getRenderPass() + 1);
-			
-			rendererObserver.onRenderPassComplete(this, renderPass, renderPasses, elapsedTimeMillis);
 		}
+		
+		final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
+		
+		pixelImage.filmRender();
+		
+		rendererObserver.onRenderDisplay(this, image);
+		rendererObserver.onRenderPassComplete(this, getRenderPass(), elapsedTimeMillis);
 		
 		this.isRendering.set(false);
 		
@@ -309,27 +299,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final int getRenderPass() {
-		return this.renderPass;
-	}
-	
-	/**
-	 * Returns the render passes to perform.
-	 * 
-	 * @return the render passes to perform
-	 */
-	@Override
-	public final int getRenderPasses() {
-		return this.renderPasses;
-	}
-	
-	/**
-	 * Returns the render passes to perform before the display is updated.
-	 * 
-	 * @return the render passes to perform before the display is updated
-	 */
-	@Override
-	public final int getRenderPassesPerDisplayUpdate() {
-		return this.renderPassesPerDisplayUpdate;
+		return this.renderPass.get();
 	}
 	
 	/**
@@ -427,36 +397,6 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	}
 	
 	/**
-	 * Sets the current render pass to {@code renderPass}.
-	 * 
-	 * @param renderPass the current render pass
-	 */
-	@Override
-	public final void setRenderPass(final int renderPass) {
-		this.renderPass = renderPass;
-	}
-	
-	/**
-	 * Sets the render passes to perform to {@code renderPasses}.
-	 * 
-	 * @param renderPasses the render passes to perform
-	 */
-	@Override
-	public final void setRenderPasses(final int renderPasses) {
-		this.renderPasses = renderPasses;
-	}
-	
-	/**
-	 * Sets the render passes to perform before the display is updated to {@code renderPassesPerDisplayUpdate}.
-	 * 
-	 * @param renderPassesPerDisplayUpdate the render passes to perform before the display is updated
-	 */
-	@Override
-	public final void setRenderPassesPerDisplayUpdate(final int renderPassesPerDisplayUpdate) {
-		this.renderPassesPerDisplayUpdate = renderPassesPerDisplayUpdate;
-	}
-	
-	/**
 	 * Sets the {@link RendererObserver} instance associated with this {@code AbstractCPURenderer} instance to {@code rendererObserver}.
 	 * <p>
 	 * If {@code rendererObserver} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -503,19 +443,6 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	@Override
 	public final void setScene(final Scene scene) {
 		this.scene = Objects.requireNonNull(scene, "scene == null");
-	}
-	
-	/**
-	 * Sets the {@link Timer} instance associated with this {@code AbstractCPURenderer} instance to {@code timer}.
-	 * <p>
-	 * If {@code timer} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param timer the {@code Timer} instance associated with this {@code AbstractCPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code timer} is {@code null}
-	 */
-	@Override
-	public final void setTimer(final Timer timer) {
-		this.timer = Objects.requireNonNull(timer, "timer == null");
 	}
 	
 	/**

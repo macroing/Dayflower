@@ -101,16 +101,15 @@ public final class NoOpRendererObserver implements RendererObserver {
 	 * 
 	 * @param renderer the {@link Renderer} instance that called this method
 	 * @param renderPass the current render pass
-	 * @param renderPasses the total number of render passes
 	 * @param elapsedTimeMillis the total number of milliseconds required to complete this render pass
 	 * @throws NullPointerException thrown if, and only if, {@code renderer} is {@code null}
 	 */
 	@Override
-	public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
+	public void onRenderPassComplete(final Renderer renderer, final int renderPass, final long elapsedTimeMillis) {
 		Objects.requireNonNull(renderer, "renderer == null");
 		
 		if(this.isPrintingOnComplete) {
-			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
+			System.out.printf("Pass: %s, Millis: %s%n", Integer.toString(renderPass), Long.toString(elapsedTimeMillis));
 		}
 	}
 	
@@ -121,12 +120,11 @@ public final class NoOpRendererObserver implements RendererObserver {
 	 * 
 	 * @param renderer the {@link Renderer} instance that called this method
 	 * @param renderPass the current render pass
-	 * @param renderPasses the total number of render passes
 	 * @param percent the progress in percent between {@code 0.0D} and {@code 1.0D}
 	 * @throws NullPointerException thrown if, and only if, {@code renderer} is {@code null}
 	 */
 	@Override
-	public void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent) {
+	public void onRenderPassProgress(final Renderer renderer, final int renderPass, final double percent) {
 		Objects.requireNonNull(renderer, "renderer == null");
 		
 		if(this.isPrintingOnProgress) {

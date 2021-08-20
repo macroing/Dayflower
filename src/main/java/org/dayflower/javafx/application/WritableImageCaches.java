@@ -107,9 +107,11 @@ final class WritableImageCaches {
 		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(32, 32, Color4F.BLACK, new BoxFilter2F()));
 		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
-		combinedProgressiveImageOrderRenderer.setRenderPasses(10);
 		combinedProgressiveImageOrderRenderer.setScene(doCreateMaterialPreviewScene(material));
-		combinedProgressiveImageOrderRenderer.render();
+		
+		for(int i = 0; i < 10; i++) {
+			combinedProgressiveImageOrderRenderer.render();
+		}
 		
 		final
 		ImageF imageF = combinedProgressiveImageOrderRenderer.getImage();

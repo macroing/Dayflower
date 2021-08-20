@@ -107,7 +107,7 @@ final class RendererStatusBar extends HBox {
 		}
 		
 		@Override
-		public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
+		public void onRenderPassComplete(final Renderer renderer, final int renderPass, final long elapsedTimeMillis) {
 			if(renderer instanceof ProgressiveImageOrderRenderer) {
 				final ProgressiveImageOrderRenderer progressiveImageOrderRenderer = ProgressiveImageOrderRenderer.class.cast(renderer);
 				
@@ -116,7 +116,7 @@ final class RendererStatusBar extends HBox {
 		}
 		
 		@Override
-		public void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent) {
+		public void onRenderPassProgress(final Renderer renderer, final int renderPass, final double percent) {
 			if(renderer instanceof ProgressiveImageOrderRenderer) {
 				final ProgressiveImageOrderRenderer progressiveImageOrderRenderer = ProgressiveImageOrderRenderer.class.cast(renderer);
 				

@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.Objects;
 
 import org.dayflower.image.ImageF;
+import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererObserver;
 
@@ -36,6 +37,7 @@ public final class FileRendererObserver implements RendererObserver {
 	private final boolean isPrintingOnComplete;
 	private final boolean isPrintingOnDisplay;
 	private final boolean isPrintingOnProgress;
+	private final int renderPassesPerFileSave;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -117,6 +119,13 @@ public final class FileRendererObserver implements RendererObserver {
 	 * Constructs a new {@code FileRendererObserver} instance.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new FileRendererObserver(file, isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay, 1);
+	 * }
+	 * </pre>
 	 * 
 	 * @param file a {@code File} instance
 	 * @param isPrintingOnComplete {@code true} if, and only if, printing to standard output on complete should be enabled, {@code false} otherwise
@@ -125,10 +134,27 @@ public final class FileRendererObserver implements RendererObserver {
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 */
 	public FileRendererObserver(final File file, final boolean isPrintingOnComplete, final boolean isPrintingOnProgress, final boolean isPrintingOnDisplay) {
+		this(file, isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay, 1);
+	}
+	
+	/**
+	 * Constructs a new {@code FileRendererObserver} instance.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param file a {@code File} instance
+	 * @param isPrintingOnComplete {@code true} if, and only if, printing to standard output on complete should be enabled, {@code false} otherwise
+	 * @param isPrintingOnProgress {@code true} if, and only if, printing to standard output on progress should be enabled, {@code false} otherwise
+	 * @param isPrintingOnDisplay {@code true} if, and only if, printing to standard output on display should be enabled, {@code false} otherwise
+	 * @param renderPassesPerFileSave the number of render passes per file save
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 */
+	public FileRendererObserver(final File file, final boolean isPrintingOnComplete, final boolean isPrintingOnProgress, final boolean isPrintingOnDisplay, final int renderPassesPerFileSave) {
 		this.file = Objects.requireNonNull(file, "file == null");
 		this.isPrintingOnComplete = isPrintingOnComplete;
 		this.isPrintingOnProgress = isPrintingOnProgress;
 		this.isPrintingOnDisplay = isPrintingOnDisplay;
+		this.renderPassesPerFileSave = renderPassesPerFileSave;
 	}
 	
 	/**
@@ -199,7 +225,7 @@ public final class FileRendererObserver implements RendererObserver {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new FileRendererObserver(new File(pathname), isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay);
+	 * new FileRendererObserver(pathname, isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay, 1);
 	 * }
 	 * </pre>
 	 * 
@@ -210,7 +236,30 @@ public final class FileRendererObserver implements RendererObserver {
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 */
 	public FileRendererObserver(final String pathname, final boolean isPrintingOnComplete, final boolean isPrintingOnProgress, final boolean isPrintingOnDisplay) {
-		this(new File(pathname), isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay);
+		this(pathname, isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay, 1);
+	}
+	
+	/**
+	 * Constructs a new {@code FileRendererObserver} instance.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new FileRendererObserver(new File(pathname), isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay, renderPassesPerFileSave);
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} instance with the pathname to a {@code File} instance
+	 * @param isPrintingOnComplete {@code true} if, and only if, printing to standard output on complete should be enabled, {@code false} otherwise
+	 * @param isPrintingOnProgress {@code true} if, and only if, printing to standard output on progress should be enabled, {@code false} otherwise
+	 * @param isPrintingOnDisplay {@code true} if, and only if, printing to standard output on display should be enabled, {@code false} otherwise
+	 * @param renderPassesPerFileSave the number of render passes per file save
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 */
+	public FileRendererObserver(final String pathname, final boolean isPrintingOnComplete, final boolean isPrintingOnProgress, final boolean isPrintingOnDisplay, final int renderPassesPerFileSave) {
+		this(new File(pathname), isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay, renderPassesPerFileSave);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,11 +278,25 @@ public final class FileRendererObserver implements RendererObserver {
 		Objects.requireNonNull(renderer, "renderer == null");
 		Objects.requireNonNull(image, "image == null");
 		
-		if(this.isPrintingOnDisplay) {
-			System.out.printf("Saving image to \"%s\"...%n", this.file.getPath());
+		if(renderer instanceof ProgressiveImageOrderRenderer) {
+			final ProgressiveImageOrderRenderer progressiveImageOrderRenderer = ProgressiveImageOrderRenderer.class.cast(renderer);
+			
+			final int renderPass = progressiveImageOrderRenderer.getRenderPass();
+			
+			if(renderPass % this.renderPassesPerFileSave == 0) {
+				if(this.isPrintingOnDisplay) {
+					System.out.printf("Saving image to \"%s\"...%n", this.file.getPath());
+				}
+				
+				image.save(this.file);
+			}
+		} else {
+			if(this.isPrintingOnDisplay) {
+				System.out.printf("Saving image to \"%s\"...%n", this.file.getPath());
+			}
+			
+			image.save(this.file);
 		}
-		
-		image.save(this.file);
 	}
 	
 	/**
@@ -243,16 +306,15 @@ public final class FileRendererObserver implements RendererObserver {
 	 * 
 	 * @param renderer the {@link Renderer} instance that called this method
 	 * @param renderPass the current render pass
-	 * @param renderPasses the total number of render passes
 	 * @param elapsedTimeMillis the total number of milliseconds required to complete this render pass
 	 * @throws NullPointerException thrown if, and only if, {@code renderer} is {@code null}
 	 */
 	@Override
-	public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
+	public void onRenderPassComplete(final Renderer renderer, final int renderPass, final long elapsedTimeMillis) {
 		Objects.requireNonNull(renderer, "renderer == null");
 		
 		if(this.isPrintingOnComplete) {
-			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
+			System.out.printf("Pass: %s, Millis: %s%n", Integer.toString(renderPass), Long.toString(elapsedTimeMillis));
 		}
 	}
 	
@@ -263,12 +325,11 @@ public final class FileRendererObserver implements RendererObserver {
 	 * 
 	 * @param renderer the {@link Renderer} instance that called this method
 	 * @param renderPass the current render pass
-	 * @param renderPasses the total number of render passes
 	 * @param percent the progress in percent between {@code 0.0D} and {@code 1.0D}
 	 * @throws NullPointerException thrown if, and only if, {@code renderer} is {@code null}
 	 */
 	@Override
-	public void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent) {
+	public void onRenderPassProgress(final Renderer renderer, final int renderPass, final double percent) {
 		Objects.requireNonNull(renderer, "renderer == null");
 		
 		if(this.isPrintingOnProgress) {

@@ -54,14 +54,14 @@ public interface ProgressiveImageOrderRenderer extends ImageOrderRenderer {
 	 * 
 	 * @return the render passes to perform
 	 */
-	int getRenderPasses();
+//	int getRenderPasses();
 	
 	/**
 	 * Returns the render passes to perform before the display is updated.
 	 * 
 	 * @return the render passes to perform before the display is updated
 	 */
-	int getRenderPassesPerDisplayUpdate();
+//	int getRenderPassesPerDisplayUpdate();
 	
 	/**
 	 * Call this method to clear the {@link ImageF} in the next {@link #render()} call.
@@ -73,29 +73,19 @@ public interface ProgressiveImageOrderRenderer extends ImageOrderRenderer {
 	 * 
 	 * @param renderPass the current render pass
 	 */
-	void setRenderPass(final int renderPass);
+//	void setRenderPass(final int renderPass);
 	
 	/**
 	 * Sets the render passes to perform to {@code renderPasses}.
 	 * 
 	 * @param renderPasses the render passes to perform
 	 */
-	void setRenderPasses(final int renderPasses);
+//	void setRenderPasses(final int renderPasses);
 	
 	/**
 	 * Sets the render passes to perform before the display is updated to {@code renderPassesPerDisplayUpdate}.
 	 * 
 	 * @param renderPassesPerDisplayUpdate the render passes to perform before the display is updated
 	 */
-	void setRenderPassesPerDisplayUpdate(final int renderPassesPerDisplayUpdate);
-	
-	/**
-	 * Sets the {@link Timer} instance associated with this {@code ProgressiveImageOrderRenderer} instance to {@code timer}.
-	 * <p>
-	 * If {@code timer} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param timer the {@code Timer} instance associated with this {@code ProgressiveImageOrderRenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code timer} is {@code null}
-	 */
-	void setTimer(final Timer timer);
+//	void setRenderPassesPerDisplayUpdate(final int renderPassesPerDisplayUpdate);
 }

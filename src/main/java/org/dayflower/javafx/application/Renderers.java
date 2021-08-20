@@ -43,8 +43,6 @@ final class Renderers {
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = isUsingGPU ? new GPURenderer(new NoOpRendererObserver()) : new CPURenderer(new NoOpRendererObserver());
 		combinedProgressiveImageOrderRenderer.setImage(isUsingGPU ? new ByteImageF(resolutionX, resolutionY) : new PixelImageF(resolutionX, resolutionY));
-		combinedProgressiveImageOrderRenderer.setRenderPasses(1);
-		combinedProgressiveImageOrderRenderer.setRenderPassesPerDisplayUpdate(1);
 		combinedProgressiveImageOrderRenderer.setSamples(1);
 		combinedProgressiveImageOrderRenderer.setScene(scene);
 		combinedProgressiveImageOrderRenderer.setup();

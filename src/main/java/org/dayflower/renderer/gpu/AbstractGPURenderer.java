@@ -20,6 +20,7 @@ package org.dayflower.renderer.gpu;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.color.Color3F;
@@ -78,14 +79,12 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
+	private final AtomicInteger renderPass;
 	private final AtomicReference<RendererObserver> rendererObserver;
 	private ImageF image;
 	private RenderingAlgorithm renderingAlgorithm;
-	private Timer timer;
+	private final Timer timer;
 	private boolean isPreviewMode;
-	private int renderPass;
-	private int renderPasses;
-	private int renderPassesPerDisplayUpdate;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -100,6 +99,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	protected AbstractGPURenderer(final RendererObserver rendererObserver) {
 		this.isClearing = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
+		this.renderPass = new AtomicInteger();
 		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
 		this.image = new PixelImageF(800, 800);
 		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
@@ -109,9 +109,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		this.maximumDistance = 20.0F;
 		this.maximumBounce = 20;
 		this.minimumBounceRussianRoulette = 5;
-		this.renderPass = 0;
-		this.renderPasses = 1000;
-		this.renderPassesPerDisplayUpdate = 10;
 		this.samples = 10;
 	}
 	
@@ -194,8 +191,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		
 		final Timer timer = getTimer();
 		
-		final int renderPasses = getRenderPasses();
-		final int renderPassesPerDisplayUpdate = getRenderPassesPerDisplayUpdate();
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
 		
@@ -205,91 +200,86 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		
 		final Range range = Range.create(resolutionX * resolutionY);
 		
-		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
-			if(this.isClearing.compareAndSet(true, false)) {
-				setRenderPass(0);
-				
-				filmClear();
-				
-				if(image instanceof PixelImageF) {
-					final
-					PixelImageF pixelImageF = PixelImageF.class.cast(image);
-					pixelImageF.filmClear();
-					pixelImageF.filmRender();
-				}
-				
-				rendererObserver.onRenderDisplay(this, image);
-				
-				timer.restart();
-			} else {
-				filmClearFilmFlags();
+		if(this.isClearing.compareAndSet(true, false)) {
+			this.renderPass.set(0);
+			
+			filmClear();
+			
+			if(image instanceof PixelImageF) {
+				final
+				PixelImageF pixelImageF = PixelImageF.class.cast(image);
+				pixelImageF.filmClear();
+				pixelImageF.filmRender();
 			}
 			
-			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 0.0D);
+			rendererObserver.onRenderDisplay(this, image);
 			
-			final long currentTimeMillis = System.currentTimeMillis();
+			timer.restart();
+		} else {
+			filmClearFilmFlags();
+		}
+		
+		this.renderPass.incrementAndGet();
+		
+		rendererObserver.onRenderPassProgress(this, getRenderPass(), 0.0D);
+		
+		final long currentTimeMillis = System.currentTimeMillis();
+		
+		execute(range);
+		
+		final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
+		
+		if(image instanceof ByteImageF) {
+			final ByteImageF byteImage = ByteImageF.class.cast(image);
 			
-			execute(range);
+			final byte[] bytes = byteImage.getData(true);
+			final byte[] imageColorByteArray = getImageColorByteArray();
 			
-			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
+			System.arraycopy(imageColorByteArray, 0, bytes, 0, bytes.length);
+		} else if(image instanceof PixelImageF) {
+			final PixelImageF pixelImage = PixelImageF.class.cast(image);
 			
-			if(image instanceof ByteImageF) {
-				final ByteImageF byteImage = ByteImageF.class.cast(image);
-				
-				final byte[] bytes = byteImage.getData(true);
-				final byte[] imageColorByteArray = getImageColorByteArray();
-				
-				System.arraycopy(imageColorByteArray, 0, bytes, 0, bytes.length);
-			} else if(image instanceof PixelImageF) {
-				final PixelImageF pixelImage = PixelImageF.class.cast(image);
-				
-				final float[] imageColorFloatArray = getImageColorFloatArray();
-				final float[] pixelArray = getPixelArray();
-				
-				for(int y = 0; y < resolutionY; y++) {
-					for(int x = 0; x < resolutionX; x++) {
-						final int index = y * resolutionX + x;
-						final int indexPixelArray = index * 2;
-						final int indexRadianceRGBFloatArray = index * 3;
-						
-						final float r = imageColorFloatArray[indexRadianceRGBFloatArray + 0];
-						final float g = imageColorFloatArray[indexRadianceRGBFloatArray + 1];
-						final float b = imageColorFloatArray[indexRadianceRGBFloatArray + 2];
-						
-						final float imageX = x;
-						final float imageY = y;
-						final float pixelX = pixelArray[indexPixelArray + 0];
-						final float pixelY = pixelArray[indexPixelArray + 1];
-						
-						final Color3F colorRGB = new Color3F(r, g, b);
-						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
-						
-						if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
-							pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
-						}
+			final float[] imageColorFloatArray = getImageColorFloatArray();
+			final float[] pixelArray = getPixelArray();
+			
+			for(int y = 0; y < resolutionY; y++) {
+				for(int x = 0; x < resolutionX; x++) {
+					final int index = y * resolutionX + x;
+					final int indexPixelArray = index * 2;
+					final int indexRadianceRGBFloatArray = index * 3;
+					
+					final float r = imageColorFloatArray[indexRadianceRGBFloatArray + 0];
+					final float g = imageColorFloatArray[indexRadianceRGBFloatArray + 1];
+					final float b = imageColorFloatArray[indexRadianceRGBFloatArray + 2];
+					
+					final float imageX = x;
+					final float imageY = y;
+					final float pixelX = pixelArray[indexPixelArray + 0];
+					final float pixelY = pixelArray[indexPixelArray + 1];
+					
+					final Color3F colorRGB = new Color3F(r, g, b);
+					final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
+					
+					if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
+						pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
 					}
 				}
 			}
-			
-			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 1.0D);
-			
-			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
-				if(image instanceof PixelImageF) {
-					final
-					PixelImageF pixelImageF = PixelImageF.class.cast(image);
-					pixelImageF.filmRender();
-				}
-				
-				rendererObserver.onRenderDisplay(this, image);
-			}
-			
-			setRenderPass(getRenderPass() + 1);
-			
-			rendererObserver.onRenderPassComplete(this, renderPass, renderPasses, elapsedTimeMillis);
-			
-			if(!this.isRendering.get()) {
-				return true;
-			}
+		}
+		
+		rendererObserver.onRenderPassProgress(this, getRenderPass(), 1.0D);
+		
+		if(image instanceof PixelImageF) {
+			final
+			PixelImageF pixelImageF = PixelImageF.class.cast(image);
+			pixelImageF.filmRender();
+		}
+		
+		rendererObserver.onRenderDisplay(this, image);
+		rendererObserver.onRenderPassComplete(this, getRenderPass(), elapsedTimeMillis);
+		
+		if(!this.isRendering.get()) {
+			return true;
 		}
 		
 		this.isRendering.set(false);
@@ -346,27 +336,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	@Override
 	public final int getRenderPass() {
-		return this.renderPass;
-	}
-	
-	/**
-	 * Returns the render passes to perform.
-	 * 
-	 * @return the render passes to perform
-	 */
-	@Override
-	public final int getRenderPasses() {
-		return this.renderPasses;
-	}
-	
-	/**
-	 * Returns the render passes to perform before the display is updated.
-	 * 
-	 * @return the render passes to perform before the display is updated
-	 */
-	@Override
-	public final int getRenderPassesPerDisplayUpdate() {
-		return this.renderPassesPerDisplayUpdate;
+		return this.renderPass.get();
 	}
 	
 	/**
@@ -456,36 +426,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	}
 	
 	/**
-	 * Sets the current render pass to {@code renderPass}.
-	 * 
-	 * @param renderPass the current render pass
-	 */
-	@Override
-	public final void setRenderPass(final int renderPass) {
-		this.renderPass = renderPass;
-	}
-	
-	/**
-	 * Sets the render passes to perform to {@code renderPasses}.
-	 * 
-	 * @param renderPasses the render passes to perform
-	 */
-	@Override
-	public final void setRenderPasses(final int renderPasses) {
-		this.renderPasses = renderPasses;
-	}
-	
-	/**
-	 * Sets the render passes to perform before the display is updated to {@code renderPassesPerDisplayUpdate}.
-	 * 
-	 * @param renderPassesPerDisplayUpdate the render passes to perform before the display is updated
-	 */
-	@Override
-	public final void setRenderPassesPerDisplayUpdate(final int renderPassesPerDisplayUpdate) {
-		this.renderPassesPerDisplayUpdate = renderPassesPerDisplayUpdate;
-	}
-	
-	/**
 	 * Sets the {@link RendererObserver} instance associated with this {@code AbstractGPURenderer} instance to {@code rendererObserver}.
 	 * <p>
 	 * If {@code rendererObserver} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -520,19 +460,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	@Override
 	public final void setSamples(final int samples) {
 		this.samples = samples;
-	}
-	
-	/**
-	 * Sets the {@link Timer} instance associated with this {@code AbstractGPURenderer} instance to {@code timer}.
-	 * <p>
-	 * If {@code timer} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param timer the {@code Timer} instance associated with this {@code AbstractGPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code timer} is {@code null}
-	 */
-	@Override
-	public final void setTimer(final Timer timer) {
-		this.timer = Objects.requireNonNull(timer, "timer == null");
 	}
 	
 	/**

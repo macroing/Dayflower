@@ -1,3 +1,13 @@
+2021-08-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the constructors FileRendererObserver(File, boolean, boolean, boolean, int) and FileRendererObserver(String, boolean, boolean, boolean, int) to the FileRendererObserver class.
+	* REMOVE:	Remove the parameter argument renderPasses from the methods onRenderPassComplete(Renderer, int, int, long) and onRenderPassProgress(Renderer, int, int, long) in the FileRendererObserver class.
+	* REMOVE:	Remove the parameter argument renderPasses from the methods onRenderPassComplete(Renderer, int, int, long) and onRenderPassProgress(Renderer, int, int, long) in the NoOpRendererObserver class.
+	* REMOVE:	Remove the parameter argument renderPasses from the methods onRenderPassComplete(Renderer, int, int, long) and onRenderPassProgress(Renderer, int, int, long) in the RendererObserver interface.
+	* REMOVE:	Remove the methods getRenderPasses(), getRenderPassesPerDisplayUpdate(), setRenderPass(int), setRenderPasses(int), setRenderPassesPerDisplayUpdate(int) and setTimer(Timer) from the AbstractCPURenderer class.
+	* REMOVE:	Remove the methods getRenderPasses(), getRenderPassesPerDisplayUpdate(), setRenderPass(int), setRenderPasses(int), setRenderPassesPerDisplayUpdate(int) and setTimer(Timer) from the AbstractGPURenderer class.
+	* REMOVE:	Remove the methods getRenderPasses(), getRenderPassesPerDisplayUpdate(), setRenderPass(int), setRenderPasses(int), setRenderPassesPerDisplayUpdate(int) and setTimer(Timer) from the ProgressiveImageOrderRenderer interface.
+
 2021-08-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add methods to the Color class in the Simplex API.

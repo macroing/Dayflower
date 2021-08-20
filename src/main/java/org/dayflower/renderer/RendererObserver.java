@@ -45,11 +45,10 @@ public interface RendererObserver {
 	 * 
 	 * @param renderer the {@link Renderer} instance that called this method
 	 * @param renderPass the current render pass
-	 * @param renderPasses the total number of render passes
 	 * @param elapsedTimeMillis the total number of milliseconds required to complete this render pass
 	 * @throws NullPointerException thrown if, and only if, {@code renderer} is {@code null}
 	 */
-	void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis);
+	void onRenderPassComplete(final Renderer renderer, final int renderPass, final long elapsedTimeMillis);
 	
 	/**
 	 * This method is called by {@code renderer} when {@code renderPass} is processed.
@@ -58,9 +57,8 @@ public interface RendererObserver {
 	 * 
 	 * @param renderer the {@link Renderer} instance that called this method
 	 * @param renderPass the current render pass
-	 * @param renderPasses the total number of render passes
 	 * @param percent the progress in percent between {@code 0.0D} and {@code 1.0D}
 	 * @throws NullPointerException thrown if, and only if, {@code renderer} is {@code null}
 	 */
-	void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent);
+	void onRenderPassProgress(final Renderer renderer, final int renderPass, final double percent);
 }

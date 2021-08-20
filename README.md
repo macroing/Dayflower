@@ -37,8 +37,6 @@ public class CPURendererExample {
         cPURenderer.setImage();
         cPURenderer.setMaximumBounce(20);
         cPURenderer.setMinimumBounceRussianRoulette(5);
-        cPURenderer.setRenderPasses(1000);
-        cPURenderer.setRenderPassesPerDisplayUpdate(1);
         cPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
         cPURenderer.setup();
         cPURenderer.render();
@@ -59,8 +57,6 @@ public class GPURendererExample {
         gPURenderer.setImage();
         gPURenderer.setMaximumBounce(20);
         gPURenderer.setMinimumBounceRussianRoulette(5);
-        gPURenderer.setRenderPasses(100);
-        gPURenderer.setRenderPassesPerDisplayUpdate(10);
         gPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
         gPURenderer.setup();
         gPURenderer.render();

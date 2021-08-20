@@ -50,42 +50,7 @@ public interface ProgressiveImageOrderRenderer extends ImageOrderRenderer {
 	int getRenderPass();
 	
 	/**
-	 * Returns the render passes to perform.
-	 * 
-	 * @return the render passes to perform
-	 */
-//	int getRenderPasses();
-	
-	/**
-	 * Returns the render passes to perform before the display is updated.
-	 * 
-	 * @return the render passes to perform before the display is updated
-	 */
-//	int getRenderPassesPerDisplayUpdate();
-	
-	/**
 	 * Call this method to clear the {@link ImageF} in the next {@link #render()} call.
 	 */
 	void clear();
-	
-	/**
-	 * Sets the current render pass to {@code renderPass}.
-	 * 
-	 * @param renderPass the current render pass
-	 */
-//	void setRenderPass(final int renderPass);
-	
-	/**
-	 * Sets the render passes to perform to {@code renderPasses}.
-	 * 
-	 * @param renderPasses the render passes to perform
-	 */
-//	void setRenderPasses(final int renderPasses);
-	
-	/**
-	 * Sets the render passes to perform before the display is updated to {@code renderPassesPerDisplayUpdate}.
-	 * 
-	 * @param renderPassesPerDisplayUpdate the render passes to perform before the display is updated
-	 */
-//	void setRenderPassesPerDisplayUpdate(final int renderPassesPerDisplayUpdate);
 }

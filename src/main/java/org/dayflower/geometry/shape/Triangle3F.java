@@ -339,15 +339,6 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		return getSurfaceAreaSquared() * 0.5F;
-	}
-	
-	/**
-	 * Returns the squared surface area of this {@code Triangle3F} instance.
-	 * 
-	 * @return the squared surface area of this {@code Triangle3F} instance
-	 */
-	public float getSurfaceAreaSquared() {
 		final Point4F a = this.a.getPosition();
 		final Point4F b = this.b.getPosition();
 		final Point4F c = this.c.getPosition();
@@ -356,7 +347,7 @@ public final class Triangle3F implements Shape3F {
 		final Vector3F edgeAC = Vector3F.direction(a, c);
 		final Vector3F edgeABCrossEdgeAC = Vector3F.crossProduct(edgeAB, edgeAC);
 		
-		return edgeABCrossEdgeAC.length();
+		return edgeABCrossEdgeAC.length() * 0.5F;
 	}
 	
 	/**

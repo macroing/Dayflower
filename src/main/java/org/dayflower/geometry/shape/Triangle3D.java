@@ -339,15 +339,6 @@ public final class Triangle3D implements Shape3D {
 	 */
 	@Override
 	public double getSurfaceArea() {
-		return getSurfaceAreaSquared() * 0.5D;
-	}
-	
-	/**
-	 * Returns the squared surface area of this {@code Triangle3D} instance.
-	 * 
-	 * @return the squared surface area of this {@code Triangle3D} instance
-	 */
-	public double getSurfaceAreaSquared() {
 		final Point4D a = this.a.getPosition();
 		final Point4D b = this.b.getPosition();
 		final Point4D c = this.c.getPosition();
@@ -356,7 +347,7 @@ public final class Triangle3D implements Shape3D {
 		final Vector3D edgeAC = Vector3D.direction(a, c);
 		final Vector3D edgeABCrossEdgeAC = Vector3D.crossProduct(edgeAB, edgeAC);
 		
-		return edgeABCrossEdgeAC.length();
+		return edgeABCrossEdgeAC.length() * 0.5D;
 	}
 	
 	/**

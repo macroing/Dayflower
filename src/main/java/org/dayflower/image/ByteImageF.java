@@ -617,7 +617,7 @@ public final class ByteImageF extends ImageF {
 	 */
 	public static ByteImageF load(final File file) {
 		try {
-			return new ByteImageF(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))));
+			return new ByteImageF(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -664,7 +664,7 @@ public final class ByteImageF extends ImageF {
 	 */
 	public static ByteImageF load(final URL uRL) {
 		try {
-			return new ByteImageF(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null"))));
+			return new ByteImageF(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null")));
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}

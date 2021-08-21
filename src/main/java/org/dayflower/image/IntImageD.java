@@ -573,7 +573,7 @@ public final class IntImageD extends ImageD {
 	 */
 	public static IntImageD load(final File file) {
 		try {
-			return new IntImageD(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))));
+			return new IntImageD(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -620,7 +620,7 @@ public final class IntImageD extends ImageD {
 	 */
 	public static IntImageD load(final URL uRL) {
 		try {
-			return new IntImageD(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null"))));
+			return new IntImageD(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null")));
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}

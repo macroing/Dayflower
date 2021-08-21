@@ -915,7 +915,7 @@ public final class PixelImageF extends ImageF {
 	 */
 	public static PixelImageF load(final File file, final Filter2F filter) {
 		try {
-			return new PixelImageF(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))), filter);
+			return new PixelImageF(ImageIO.read(Objects.requireNonNull(file, "file == null")), filter);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -1014,7 +1014,7 @@ public final class PixelImageF extends ImageF {
 	 */
 	public static PixelImageF load(final URL uRL, final Filter2F filter) {
 		try {
-			return new PixelImageF(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null"))), filter);
+			return new PixelImageF(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null")), filter);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}

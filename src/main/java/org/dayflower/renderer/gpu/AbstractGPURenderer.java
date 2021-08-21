@@ -18,6 +18,8 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.utility.Ints.toInt;
+
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -78,13 +80,14 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final AtomicBoolean isClearing;
+	private final AtomicBoolean isPreviewMode;
 	private final AtomicBoolean isRendering;
 	private final AtomicInteger renderPass;
+	private final AtomicReference<ImageF> image;
+	private final AtomicReference<Range> range;
 	private final AtomicReference<RendererObserver> rendererObserver;
-	private ImageF image;
-	private RenderingAlgorithm renderingAlgorithm;
+	private final AtomicReference<RenderingAlgorithm> renderingAlgorithm;
 	private final Timer timer;
-	private boolean isPreviewMode;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -98,14 +101,15 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	protected AbstractGPURenderer(final RendererObserver rendererObserver) {
 		this.isClearing = new AtomicBoolean();
+		this.isPreviewMode = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
 		this.renderPass = new AtomicInteger();
+		this.image = new AtomicReference<>(new ByteImageF(800, 800));
+		this.range = new AtomicReference<>(Range.create(this.image.get().getResolution()));
 		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
-		this.image = new PixelImageF(800, 800);
-		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
-		this.renderingAlgorithmOrdinal = this.renderingAlgorithm.ordinal();
+		this.renderingAlgorithm = new AtomicReference<>(RenderingAlgorithm.PATH_TRACING);
+		this.renderingAlgorithmOrdinal = this.renderingAlgorithm.get().ordinal();
 		this.timer = new Timer();
-		this.isPreviewMode = false;
 		this.maximumDistance = 20.0F;
 		this.maximumBounce = 20;
 		this.minimumBounceRussianRoulette = 5;
@@ -121,7 +125,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	@Override
 	public final ImageF getImage() {
-		return this.image;
+		return this.image.get();
 	}
 	
 	/**
@@ -141,7 +145,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	@Override
 	public final RenderingAlgorithm getRenderingAlgorithm() {
-		return this.renderingAlgorithm;
+		return this.renderingAlgorithm.get();
 	}
 	
 	/**
@@ -171,7 +175,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	@Override
 	public final boolean isPreviewMode() {
-		return this.isPreviewMode;
+		return this.isPreviewMode.get();
 	}
 	
 	/**
@@ -189,8 +193,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		
 		final ImageF image = getImage();
 		
-		final Timer timer = getTimer();
-		
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
 		
@@ -198,7 +200,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 			setup(false);
 		}
 		
-		final Range range = Range.create(resolutionX * resolutionY);
+		final Range range = this.range.get();
 		
 		if(this.isClearing.compareAndSet(true, false)) {
 			this.renderPass.set(0);
@@ -209,14 +211,16 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 			
 			rendererObserver.onRenderDisplay(this, image);
 			
+			final
+			Timer timer = getTimer();
 			timer.restart();
 		} else {
 			filmClearFilmFlags();
 		}
 		
-		this.renderPass.incrementAndGet();
+		final int renderPass = this.renderPass.incrementAndGet();
 		
-		rendererObserver.onRenderPassProgress(this, getRenderPass(), 0.0D);
+		rendererObserver.onRenderPassProgress(this, renderPass, 0.0D);
 		
 		final long currentTimeMillis = System.currentTimeMillis();
 		
@@ -226,9 +230,9 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		
 		final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 		
-		rendererObserver.onRenderPassProgress(this, getRenderPass(), 1.0D);
+		rendererObserver.onRenderPassProgress(this, renderPass, 1.0D);
 		rendererObserver.onRenderDisplay(this, image);
-		rendererObserver.onRenderPassComplete(this, getRenderPass(), elapsedTimeMillis);
+		rendererObserver.onRenderPassComplete(this, renderPass, elapsedTimeMillis);
 		
 		this.isRendering.set(false);
 		
@@ -314,10 +318,10 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		
 		final Camera camera = scene.getCamera();
 		
-		final int resolutionX = (int)(camera.getResolutionX());
-		final int resolutionY = (int)(camera.getResolutionY());
+		final int resolutionX = toInt(camera.getResolutionX());
+		final int resolutionY = toInt(camera.getResolutionY());
 		
-		this.image = new ByteImageF(resolutionX, resolutionY);
+		setImage(new ByteImageF(resolutionX, resolutionY));
 	}
 	
 	/**
@@ -330,7 +334,8 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	@Override
 	public final void setImage(final ImageF image) {
-		this.image = Objects.requireNonNull(image, "image == null");
+		this.image.set(Objects.requireNonNull(image, "image == null"));
+		this.range.set(Range.create(this.image.get().getResolution()));
 	}
 	
 	/**
@@ -370,7 +375,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	@Override
 	public final void setPreviewMode(final boolean isPreviewMode) {
-		this.isPreviewMode = isPreviewMode;
+		this.isPreviewMode.set(isPreviewMode);
 	}
 	
 	/**
@@ -396,8 +401,8 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	@Override
 	public final void setRenderingAlgorithm(final RenderingAlgorithm renderingAlgorithm) {
-		this.renderingAlgorithm = Objects.requireNonNull(renderingAlgorithm, "renderingAlgorithm == null");
-		this.renderingAlgorithmOrdinal = this.renderingAlgorithm.ordinal();
+		this.renderingAlgorithm.set(Objects.requireNonNull(renderingAlgorithm, "renderingAlgorithm == null"));
+		this.renderingAlgorithmOrdinal = this.renderingAlgorithm.get().ordinal();
 	}
 	
 	/**

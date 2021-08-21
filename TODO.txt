@@ -18,13 +18,6 @@ Geometry Shape API:
 	* CHANGE:	The method intersection(Rectangle2F, Rectangle2F) of the Rectangle2F class might require updating. It does not support rotations.
 	* CHANGE:	The method intersection(Rectangle2I, Rectangle2I) of the Rectangle2I class might require updating. It does not support rotations.
 
-Image API:
-
-	* ADD:		Add the constructor DoubleImageD(BufferedImage) to the DoubleImageD class.
-	* ADD:		Add the constructor FloatImageF(BufferedImage) to the FloatImageF class.
-	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageD, ImageD), load(File), load(String) and load(URL) to the DoubleImageD class.
-	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageF, ImageF), load(File), load(String) and load(URL) to the FloatImageF class.
-
 JavaFX Application API:
 
 	* ADD:		Add support for FileParameter in the ParameterLoader implementation.

@@ -1,3 +1,10 @@
+2021-08-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageD, ImageD), load(File), load(String) and load(URL) to the DoubleImageD class.
+	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageF, ImageF), load(File), load(String) and load(URL) to the FloatImageF class.
+	* ADD:		Add the constructor DoubleImageD(BufferedImage) to the DoubleImageD class.
+	* ADD:		Add the constructor FloatImageF(BufferedImage) to the FloatImageF class.
+
 2021-08-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the constructors FileRendererObserver(File, boolean, boolean, boolean, int) and FileRendererObserver(String, boolean, boolean, boolean, int) to the FileRendererObserver class.

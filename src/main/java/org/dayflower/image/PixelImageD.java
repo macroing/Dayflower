@@ -915,7 +915,7 @@ public final class PixelImageD extends ImageD {
 	 */
 	public static PixelImageD load(final File file, final Filter2D filter) {
 		try {
-			return new PixelImageD(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))), filter);
+			return new PixelImageD(ImageIO.read(Objects.requireNonNull(file, "file == null")), filter);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -1014,7 +1014,7 @@ public final class PixelImageD extends ImageD {
 	 */
 	public static PixelImageD load(final URL uRL, final Filter2D filter) {
 		try {
-			return new PixelImageD(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null"))), filter);
+			return new PixelImageD(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null")), filter);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}

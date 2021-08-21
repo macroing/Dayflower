@@ -45,14 +45,14 @@ import org.dayflower.utility.Timer;
  */
 public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrderRenderer {
 	private final AtomicBoolean isClearing;
+	private final AtomicBoolean isPreviewMode;
 	private final AtomicBoolean isRendering;
 	private final AtomicInteger renderPass;
+	private final AtomicReference<ImageF> image;
 	private final AtomicReference<RendererObserver> rendererObserver;
-	private ImageF image;
-	private RenderingAlgorithm renderingAlgorithm;
-	private Scene scene;
+	private final AtomicReference<RenderingAlgorithm> renderingAlgorithm;
+	private final AtomicReference<Scene> scene;
 	private final Timer timer;
-	private boolean isPreviewMode;
 	private float maximumDistance;
 	private int maximumBounce;
 	private int minimumBounceRussianRoulette;
@@ -70,14 +70,14 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	protected AbstractCPURenderer(final RendererObserver rendererObserver) {
 		this.isClearing = new AtomicBoolean();
+		this.isPreviewMode = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
 		this.renderPass = new AtomicInteger();
+		this.image = new AtomicReference<>(new PixelImageF(800, 800));
 		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
-		this.image = new PixelImageF(800, 800);
-		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
-		this.scene = new Scene();
+		this.renderingAlgorithm = new AtomicReference<>(RenderingAlgorithm.PATH_TRACING);
+		this.scene = new AtomicReference<>(new Scene());
 		this.timer = new Timer();
-		this.isPreviewMode = false;
 		this.maximumDistance = 20.0F;
 		this.maximumBounce = 20;
 		this.minimumBounceRussianRoulette = 5;
@@ -93,7 +93,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final ImageF getImage() {
-		return this.image;
+		return this.image.get();
 	}
 	
 	/**
@@ -113,7 +113,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final RenderingAlgorithm getRenderingAlgorithm() {
-		return this.renderingAlgorithm;
+		return this.renderingAlgorithm.get();
 	}
 	
 	/**
@@ -123,7 +123,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final Scene getScene() {
-		return this.scene;
+		return this.scene.get();
 	}
 	
 	/**
@@ -153,7 +153,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final boolean isPreviewMode() {
-		return this.isPreviewMode;
+		return this.isPreviewMode.get();
 	}
 	
 	/**
@@ -181,8 +181,6 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 		
 		final Scene scene = getScene();
 		
-		final Timer timer = getTimer();
-		
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
 		
@@ -196,6 +194,8 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 			
 			rendererObserver.onRenderDisplay(this, image);
 			
+			final
+			Timer timer = getTimer();
 			timer.restart();
 		}
 		
@@ -333,14 +333,14 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final void setImage() {
-		final Scene scene = this.scene;
+		final Scene scene = getScene();
 		
 		final Camera camera = scene.getCamera();
 		
 		final int resolutionX = (int)(camera.getResolutionX());
 		final int resolutionY = (int)(camera.getResolutionY());
 		
-		this.image = new PixelImageF(resolutionX, resolutionY);
+		setImage(new PixelImageF(resolutionX, resolutionY));
 	}
 	
 	/**
@@ -353,7 +353,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final void setImage(final ImageF image) {
-		this.image = Objects.requireNonNull(image, "image == null");
+		this.image.set(Objects.requireNonNull(image, "image == null"));
 	}
 	
 	/**
@@ -393,7 +393,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final void setPreviewMode(final boolean isPreviewMode) {
-		this.isPreviewMode = isPreviewMode;
+		this.isPreviewMode.set(isPreviewMode);
 	}
 	
 	/**
@@ -419,7 +419,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final void setRenderingAlgorithm(final RenderingAlgorithm renderingAlgorithm) {
-		this.renderingAlgorithm = Objects.requireNonNull(renderingAlgorithm, "renderingAlgorithm == null");
+		this.renderingAlgorithm.set(Objects.requireNonNull(renderingAlgorithm, "renderingAlgorithm == null"));
 	}
 	
 	/**
@@ -442,7 +442,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	 */
 	@Override
 	public final void setScene(final Scene scene) {
-		this.scene = Objects.requireNonNull(scene, "scene == null");
+		this.scene.set(Objects.requireNonNull(scene, "scene == null"));
 	}
 	
 	/**

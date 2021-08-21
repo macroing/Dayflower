@@ -20,17 +20,27 @@ package org.dayflower.image;
 
 import static org.dayflower.utility.Ints.max;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+
+import javax.imageio.ImageIO;
 
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color4D;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.DoubleArrays;
+import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -60,6 +70,20 @@ public final class DoubleImageD extends ImageD {
 	 */
 	public DoubleImageD() {
 		this(800, 800);
+	}
+	
+	/**
+	 * Constructs a new {@code DoubleImageD} instance from {@code bufferedImage}.
+	 * <p>
+	 * If {@code bufferedImage} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bufferedImage a {@code BufferedImage} instance
+	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
+	 */
+	public DoubleImageD(final BufferedImage bufferedImage) {
+		super(bufferedImage.getWidth(), bufferedImage.getHeight());
+		
+		this.data = doGetData(bufferedImage);
 	}
 	
 	/**
@@ -523,6 +547,125 @@ public final class DoubleImageD extends ImageD {
 		return doubleImageC;
 	}
 	
+	/**
+	 * Creates a {@code DoubleImageD} by capturing the contents of the screen, without the mouse cursor.
+	 * <p>
+	 * Returns a new {@code DoubleImageD} instance.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If the permission {@code readDisplayPixels} is not granted, a {@code SecurityException} will be thrown.
+	 * 
+	 * @param rectangle a {@link Rectangle2I} that contains the bounds
+	 * @return a new {@code DoubleImageD} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
+	 */
+	public static DoubleImageD createScreenCapture(final Rectangle2I rectangle) {
+		return new DoubleImageD(BufferedImages.createScreenCapture(rectangle.getA().getX(), rectangle.getA().getY(), rectangle.getC().getX() - rectangle.getA().getX(), rectangle.getC().getY() - rectangle.getA().getY()));
+	}
+	
+	/**
+	 * Returns a {@code DoubleImageD} that shows the difference between {@code imageA} and {@code imageB} with {@code Color4D.BLACK}.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param imageA an {@code ImageD} instance
+	 * @param imageB an {@code ImageD} instance
+	 * @return a {@code DoubleImageD} that shows the difference between {@code imageA} and {@code imageB} with {@code Color4D.BLACK}
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static DoubleImageD difference(final ImageD imageA, final ImageD imageB) {
+		final int resolutionX = max(imageA.getResolutionX(), imageB.getResolutionX());
+		final int resolutionY = max(imageA.getResolutionY(), imageB.getResolutionY());
+		
+		final DoubleImageD doubleImageC = new DoubleImageD(resolutionX, resolutionY);
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				final Color4D colorA = imageA.getColorRGBA(x, y);
+				final Color4D colorB = imageB.getColorRGBA(x, y);
+				final Color4D colorC = colorA.equals(colorB) ? colorA : Color4D.BLACK;
+				
+				doubleImageC.setColorRGBA(colorC, x, y);
+			}
+		}
+		
+		return doubleImageC;
+	}
+	
+	/**
+	 * Loads a {@code DoubleImageD} from the file represented by {@code file}.
+	 * <p>
+	 * Returns a new {@code DoubleImageD} instance.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} that represents the file to load from
+	 * @return a new {@code DoubleImageD} instance
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static DoubleImageD load(final File file) {
+		try {
+			return new DoubleImageD(ImageIO.read(Objects.requireNonNull(file, "file == null")));
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
+	 * Loads a {@code DoubleImageD} from the file represented by the pathname {@code pathname}.
+	 * <p>
+	 * Returns a new {@code DoubleImageD} instance.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * DoubleImageD.load(new File(pathname));
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} that represents the pathname of the file to load from
+	 * @return a new {@code DoubleImageD} instance
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static DoubleImageD load(final String pathname) {
+		return load(new File(pathname));
+	}
+	
+	/**
+	 * Loads a {@code DoubleImageD} from the URL represented by {@code uRL}.
+	 * <p>
+	 * Returns a new {@code DoubleImageD} instance.
+	 * <p>
+	 * If {@code uRL} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param uRL a {@code URL} that represents the URL to load from
+	 * @return a new {@code DoubleImageD} instance
+	 * @throws NullPointerException thrown if, and only if, {@code uRL} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static DoubleImageD load(final URL uRL) {
+		try {
+			return new DoubleImageD(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null")));
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -559,5 +702,24 @@ public final class DoubleImageD extends ImageD {
 			this.data[index * 4 + 2] = colorRGBA.getB();
 			this.data[index * 4 + 3] = colorRGBA.getA();
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static double[] doGetData(final BufferedImage bufferedImage) {
+		final BufferedImage compatibleBufferedImage = BufferedImages.getCompatibleBufferedImage(bufferedImage);
+		
+		final DataBufferInt dataBufferInt = DataBufferInt.class.cast(compatibleBufferedImage.getRaster().getDataBuffer());
+		
+		final int[] dataInt = dataBufferInt.getData().clone();
+		final int[] dataIntUnpacked = PackedIntComponentOrder.ARGB.unpack(ArrayComponentOrder.RGBA, dataInt);
+		
+		final double[] data = new double[dataIntUnpacked.length];
+		
+		for(int i = 0; i < data.length; i++) {
+			data[i] = Ints.saturate(dataIntUnpacked[i]) / 255.0D;
+		}
+		
+		return data;
 	}
 }

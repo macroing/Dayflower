@@ -23,7 +23,6 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.java.io.Files;
@@ -40,10 +39,8 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -61,18 +58,18 @@ import javafx.stage.Stage;
  */
 public final class DayflowerApplication extends Application {
 	private static final File INITIAL_DIRECTORY_SCENES = new File("./resources/scenes");
+	private static final String PATH_ELEMENT_C_P_U_RENDERER = "CPU Renderer";
 	private static final String PATH_ELEMENT_FILE = "File";
-	private static final String PATH_ELEMENT_RENDERER = "Renderer";
+	private static final String PATH_ELEMENT_G_P_U_RENDERER = "GPU Renderer";
 	private static final String PATH_FILE = "File";
-	private static final String PATH_RENDERER = "Renderer";
+	private static final String PATH_FILE_NEW = "File.New";
+	private static final String PATH_FILE_OPEN = "File.Open";
+	private static final String TEXT_C_P_U_RENDERER = "CPU Renderer";
 	private static final String TEXT_EXIT = "Exit";
 	private static final String TEXT_FILE = "File";
-	private static final String TEXT_G_P_U = "GPU";
-	private static final String TEXT_NEW = "New";
-	private static final String TEXT_OPEN = "Open";
-	private static final String TEXT_RENDERER = "Renderer";
-	private static final String TEXT_SAVE = "Save";
-	private static final String TEXT_SAVE_AS = "Save As...";
+	private static final String TEXT_G_P_U_RENDERER = "GPU Renderer";
+	private static final String TEXT_SAVE_IMAGE = "Save Image";
+	private static final String TEXT_SAVE_IMAGE_AS = "Save Image As...";
 	private static final String TITLE = "Dayflower";
 	private static final String TITLE_OPEN = "Open";
 	private static final double MINIMUM_RESOLUTION_X = 400.0D;
@@ -80,7 +77,6 @@ public final class DayflowerApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final AtomicBoolean isUsingGPU;
 	private final AtomicReference<Stage> stage;
 	private final BorderPane borderPane;
 	private final ExecutorService executorService;
@@ -93,7 +89,6 @@ public final class DayflowerApplication extends Application {
 	 * Constructs a new {@code DayflowerApplication} instance.
 	 */
 	public DayflowerApplication() {
-		this.isUsingGPU = new AtomicBoolean();
 		this.stage = new AtomicReference<>();
 		this.borderPane = new BorderPane();
 		this.executorService = Executors.newFixedThreadPool(4);
@@ -159,16 +154,18 @@ public final class DayflowerApplication extends Application {
 	}
 	
 	private void doConfigurePathMenuBar() {
+		this.pathMenuBar.setPathElementText(PATH_ELEMENT_C_P_U_RENDERER, TEXT_C_P_U_RENDERER);
 		this.pathMenuBar.setPathElementText(PATH_ELEMENT_FILE, TEXT_FILE);
-		this.pathMenuBar.setPathElementText(PATH_ELEMENT_RENDERER, TEXT_RENDERER);
-		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_NEW, e -> doNew(), new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), true);
-		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_OPEN, e -> doOpen(), new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), true);
+		this.pathMenuBar.setPathElementText(PATH_ELEMENT_G_P_U_RENDERER, TEXT_G_P_U_RENDERER);
+		this.pathMenuBar.addMenuItem(PATH_FILE_NEW, TEXT_C_P_U_RENDERER, e -> doNew(false), null, true);
+		this.pathMenuBar.addMenuItem(PATH_FILE_NEW, TEXT_G_P_U_RENDERER, e -> doNew(true), null, true);
+		this.pathMenuBar.addMenuItem(PATH_FILE_OPEN, TEXT_C_P_U_RENDERER, e -> doOpen(false), null, true);
+		this.pathMenuBar.addMenuItem(PATH_FILE_OPEN, TEXT_G_P_U_RENDERER, e -> doOpen(true), null, true);
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
-		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE, e -> doSave(), new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), false);
-		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_AS, e -> doSaveAs(), null, false);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_IMAGE, e -> doSave(), new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), false);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_IMAGE_AS, e -> doSaveAs(), null, false);
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, e -> doExit(), null, true);
-		this.pathMenuBar.addCheckMenuItem(PATH_RENDERER, TEXT_G_P_U, this::doGPU, true, false);
 	}
 	
 	private void doCreateAndStartAnimationTimer() {
@@ -198,22 +195,14 @@ public final class DayflowerApplication extends Application {
 		Platform.exit();
 	}
 	
-	private void doGPU(final ActionEvent actionEvent) {
-		final Object source = actionEvent.getSource();
-		
-		if(source instanceof CheckMenuItem) {
-			this.isUsingGPU.set(CheckMenuItem.class.cast(source).isSelected());
-		}
-	}
-	
 	@SuppressWarnings("unused")
 	private void doHandleTabChangeNodeSelectionTabPane(final ObservableValue<? extends Tab> observableValue, final Tab oldTab, final Tab newTab) {
 		if(newTab != null) {
-			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE).setDisable(false);
-			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_AS).setDisable(false);
+			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_IMAGE).setDisable(false);
+			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_IMAGE_AS).setDisable(false);
 		} else {
-			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE).setDisable(true);
-			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_AS).setDisable(true);
+			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_IMAGE).setDisable(true);
+			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_IMAGE_AS).setDisable(true);
 		}
 		
 		Platform.runLater(() -> {
@@ -227,19 +216,19 @@ public final class DayflowerApplication extends Application {
 		});
 	}
 	
-	private void doNew() {
+	private void doNew(final boolean isUsingGPU) {
 		this.executorService.execute(() -> {
 			final
 			Scene scene = new Scene();
 			scene.addLight(new PerezLight());
 			
-			final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = Renderers.createCombinedProgressiveImageOrderRenderer(scene, this.isUsingGPU.get());
+			final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = Renderers.createCombinedProgressiveImageOrderRenderer(scene, isUsingGPU);
 			
 			this.nodeSelectionTabPane.addLater(combinedProgressiveImageOrderRenderer, tab -> tab.setOnClosed(new TabOnClosedEventHandler(combinedProgressiveImageOrderRenderer, tab)));
 		});
 	}
 	
-	private void doOpen() {
+	private void doOpen(final boolean isUsingGPU) {
 		try {
 			final
 			FileChooser fileChooser = new FileChooser();
@@ -249,19 +238,19 @@ public final class DayflowerApplication extends Application {
 			final File file = fileChooser.showOpenDialog(doGetStage());
 			
 			if(file != null) {
-				this.executorService.execute(() -> doOpen(file));
+				this.executorService.execute(() -> doOpen(isUsingGPU, file));
 			}
 		} catch(final IllegalArgumentException e) {
 //			Do nothing for now.
 		}
 	}
 	
-	private void doOpen(final File file) {
+	private void doOpen(final boolean isUsingGPU, final File file) {
 		final SceneLoader sceneLoader = new JavaSceneLoader();
 		
 		final Scene scene = sceneLoader.load(file, new Scene(), new ParameterList(new ParameterLoaderImpl(doGetStage())));
 		
-		final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = Renderers.createCombinedProgressiveImageOrderRenderer(scene, this.isUsingGPU.get());
+		final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = Renderers.createCombinedProgressiveImageOrderRenderer(scene, isUsingGPU);
 		
 		this.nodeSelectionTabPane.addLater(combinedProgressiveImageOrderRenderer, tab -> tab.setOnClosed(new TabOnClosedEventHandler(combinedProgressiveImageOrderRenderer, tab)));
 	}

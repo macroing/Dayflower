@@ -4,6 +4,7 @@
 	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageF, ImageF), load(File), load(String) and load(URL) to the FloatImageF class.
 	* ADD:		Add the constructor DoubleImageD(BufferedImage) to the DoubleImageD class.
 	* ADD:		Add the constructor FloatImageF(BufferedImage) to the FloatImageF class.
+	* CHANGE:	Update the menu bar in the application. The "Renderer" menu and its "GPU" checkbox are gone. Both the "New" and "Open" menu items are now menus with "CPU Renderer" and "GPU Renderer" as menu items. The "Save" and "Save As..." menu items are called "Save Image" and "Save Image As...", respectively.
 
 2021-08-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

@@ -1,5 +1,6 @@
 2021-08-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add a new accordion with primitive properties below the scene tree view in the application. It contains nothing at this point.
 	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageD, ImageD), load(File), load(String) and load(URL) to the DoubleImageD class.
 	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageF, ImageF), load(File), load(String) and load(URL) to the FloatImageF class.
 	* ADD:		Add the constructor DoubleImageD(BufferedImage) to the DoubleImageD class.

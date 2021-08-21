@@ -49,6 +49,7 @@ import javafx.scene.paint.Color;
 
 final class ScenePropertyView extends VBox {
 	private final ObjectTreeView<String, Object> objectTreeView;
+	private final PrimitiveConfigurationView primitiveConfigurationView;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -56,6 +57,7 @@ final class ScenePropertyView extends VBox {
 		Objects.requireNonNull(scene, "scene == null");
 		
 		this.objectTreeView = doCreateObjectTreeView(scene);
+		this.primitiveConfigurationView = new PrimitiveConfigurationView();
 		
 		for(final Primitive primitive : scene.getPrimitives()) {
 			this.objectTreeView.add(primitive);
@@ -67,8 +69,9 @@ final class ScenePropertyView extends VBox {
 		setSpacing(20.0D);
 		
 		getChildren().add(this.objectTreeView);
+		getChildren().add(this.primitiveConfigurationView);
 		
-		VBox.setVgrow(this.objectTreeView, Priority.ALWAYS);
+		VBox.setVgrow(this.primitiveConfigurationView, Priority.ALWAYS);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +156,7 @@ final class ScenePropertyView extends VBox {
 				
 				return String.format("[%+.10f, %+.10f, %+.10f]", Float.valueOf(position.getX()), Float.valueOf(position.getY()), Float.valueOf(position.getZ()));
 			} else if(object instanceof Primitive) {
-				return "Primitive";
+				return "Primitive " + Primitive.class.cast(object).getInstanceID();
 			} else if(object instanceof Quaternion4F) {
 				final Quaternion4F rotation = Quaternion4F.class.cast(object);
 				

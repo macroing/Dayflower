@@ -1,3 +1,10 @@
+2021-08-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method contains(Point3D) to the Plane3D, ProceduralTerrain3D, RectangularCuboid3D, Sphere3D and Triangle3D classes.
+	* ADD:		Add the method contains(Point3F) to the Plane3F, ProceduralTerrain3F, RectangularCuboid3F, Sphere3F and Triangle3F classes.
+	* CHANGE:	Fix the method contains(Point3D) in the BoundingSphere3D class.
+	* CHANGE:	Fix the method contains(Point3F) in the BoundingSphere3F class.
+
 2021-08-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a new accordion with primitive properties below the scene tree view in the application. It contains nothing at this point.

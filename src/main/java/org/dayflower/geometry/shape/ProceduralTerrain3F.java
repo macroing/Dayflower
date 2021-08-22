@@ -148,6 +148,19 @@ public final class ProceduralTerrain3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code ProceduralTerrain3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code ProceduralTerrain3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point3F point) {
+		return point.getY() < doApplyAsFloat(point.getX(), point.getZ());
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code ProceduralTerrain3F} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ProceduralTerrain3F}, and their respective values are equal, {@code false} otherwise.

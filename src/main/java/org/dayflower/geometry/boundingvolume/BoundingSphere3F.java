@@ -242,7 +242,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 */
 	@Override
 	public boolean contains(final Point3F point) {
-		return Point3F.distanceSquared(this.center, point) < this.radius * this.radius;
+		return Point3F.distanceSquared(this.center, point) <= this.radius * this.radius;
 	}
 	
 	/**

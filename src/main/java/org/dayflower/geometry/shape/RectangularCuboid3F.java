@@ -242,6 +242,19 @@ public final class RectangularCuboid3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code RectangularCuboid3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code RectangularCuboid3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point3F point) {
+		return point.getX() >= this.minimum.getX() && point.getX() <= this.maximum.getX() && point.getY() >= this.minimum.getY() && point.getY() <= this.maximum.getY() && point.getZ() >= this.minimum.getZ() && point.getZ() <= this.maximum.getZ();
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code RectangularCuboid3F} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code RectangularCuboid3F}, and their respective values are equal, {@code false} otherwise.

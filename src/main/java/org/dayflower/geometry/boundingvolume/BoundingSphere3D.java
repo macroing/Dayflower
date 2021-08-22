@@ -242,7 +242,7 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 */
 	@Override
 	public boolean contains(final Point3D point) {
-		return Point3D.distanceSquared(this.center, point) < this.radius * this.radius;
+		return Point3D.distanceSquared(this.center, point) <= this.radius * this.radius;
 	}
 	
 	/**

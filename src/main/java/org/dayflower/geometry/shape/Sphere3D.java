@@ -379,6 +379,19 @@ public final class Sphere3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Sphere3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Sphere3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point3D point) {
+		return Point3D.distanceSquared(this.center, point) <= this.radius * this.radius;
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Sphere3D} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Sphere3D}, and their respective values are equal, {@code false} otherwise.

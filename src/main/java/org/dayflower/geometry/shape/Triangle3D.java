@@ -306,6 +306,43 @@ public final class Triangle3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Triangle3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Triangle3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point3D point) {
+		final Point3D a = new Point3D(this.a.getPosition());
+		final Point3D b = new Point3D(this.b.getPosition());
+		final Point3D c = new Point3D(this.c.getPosition());
+		final Point3D p = Objects.requireNonNull(point, "point == null");
+		
+		if(Point3D.coplanar(a, b, c, point)) {
+			final Vector3D surfaceNormal = this.surfaceNormal;
+			
+			final Vector3D edgeAB = Vector3D.direction(a, b);
+			final Vector3D edgeBC = Vector3D.direction(b, c);
+			final Vector3D edgeCA = Vector3D.direction(c, a);
+			
+			final Vector3D edgeAP = Vector3D.direction(a, p);
+			final Vector3D edgeBP = Vector3D.direction(b, p);
+			final Vector3D edgeCP = Vector3D.direction(c, p);
+			
+			final boolean isInsideA = Vector3D.tripleProduct(surfaceNormal, edgeAB, edgeAP) > 0.0D;
+			final boolean isInsideB = Vector3D.tripleProduct(surfaceNormal, edgeBC, edgeBP) > 0.0D;
+			final boolean isInsideC = Vector3D.tripleProduct(surfaceNormal, edgeCA, edgeCP) > 0.0D;
+			final boolean isInside = isInsideA && isInsideB && isInsideC;
+			
+			return isInside;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Triangle3D} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Triangle3D}, and their respective values are equal, {@code false} otherwise.

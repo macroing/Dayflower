@@ -37,7 +37,19 @@ import java.lang.reflect.Field;//TODO: Add Javadocs!
 
 import javax.imageio.ImageIO;
 
-//TODO: Add Javadocs!
+/**
+ * A class that consists exclusively of static methods that returns or performs various operations on images.
+ * <p>
+ * This class currently supports the following:
+ * <ul>
+ * <li>{@code Image4D} - an image represented by a {@code double[]} that contains four {@code double} values per pixel.</li>
+ * <li>{@code Image4I} - an image represented by an {@code int[]} that contains four {@code int} values per pixel.</li>
+ * <li>{@code Image4IPacked} - an image represented by an {@code int[]} that contains one {@code int} value per pixel.</li>
+ * </ul>
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Image {
 	private Image() {
 		

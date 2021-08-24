@@ -1,5 +1,12 @@
 2021-08-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods crossProduct(Vector2D, Vector2D), directionXY(Point3D), directionYZ(Point3D) and directionZY(Point3D) to the Vector2D class.
+	* ADD:		Add the methods crossProduct(Vector2F, Vector2F), directionXY(Point3F), directionYZ(Point3F) and directionZY(Point3F) to the Vector2F class.
+	* ADD:		Add the method contains(Point3D) to the Polygon3D class.
+	* ADD:		Add the method contains(Point3F) to the Polygon3F class.
+	* CHANGE:	Add an implementation for intersection(Ray3D, double, double) and intersectionT(Ray3D, double, double) to the Polygon3D class.
+	* CHANGE:	Add an implementation for intersection(Ray3F, float, float) and intersectionT(Ray3F, float, float) to the Polygon3F class.
+	* CHANGE:	Optimize Polygon2D and Polygon2F.
 	* CHANGE:	Refactor the classes Rectangle3D and Rectangle3F.
 	* CHANGE:	Update the classes Rectangle3DReader and Rectangle3FReader.
 

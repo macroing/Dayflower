@@ -52,7 +52,9 @@ public final class Polygon2F implements Shape2F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final List<LineSegment2F> lineSegments;
 	private final Point2F[] points;
+	private final Rectangle2F rectangle;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -69,6 +71,8 @@ public final class Polygon2F implements Shape2F {
 	 */
 	public Polygon2F(final Point2F... points) {
 		this.points = doRequireValidPoints(points);
+		this.lineSegments = LineSegment2F.fromPoints(this.points);
+		this.rectangle = Rectangle2F.fromPoints(this.points);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,10 +124,20 @@ public final class Polygon2F implements Shape2F {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				for(final LineSegment2F lineSegment : this.lineSegments) {
+					if(!lineSegment.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
 				for(final Point2F point : this.points) {
 					if(!point.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
+				}
+				
+				if(!this.rectangle.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
 			
@@ -144,9 +158,7 @@ public final class Polygon2F implements Shape2F {
 	 */
 	@Override
 	public boolean contains(final Point2F point) {
-		final Rectangle2F rectangle = Rectangle2F.fromPoints(this.points);
-		
-		if(rectangle.contains(point)) {
+		if(this.rectangle.contains(point)) {
 			boolean isInside = false;
 			
 			final float pX = point.getX();
@@ -170,9 +182,7 @@ public final class Polygon2F implements Shape2F {
 				return true;
 			}
 			
-			final List<LineSegment2F> lineSegments = LineSegment2F.fromPoints(this.points);
-			
-			for(final LineSegment2F lineSegment : lineSegments) {
+			for(final LineSegment2F lineSegment : this.lineSegments) {
 				if(lineSegment.contains(point)) {
 					return true;
 				}
@@ -198,7 +208,11 @@ public final class Polygon2F implements Shape2F {
 			return true;
 		} else if(!(object instanceof Polygon2F)) {
 			return false;
+		} else if(!Objects.equals(this.lineSegments, Polygon2F.class.cast(object).lineSegments)) {
+			return false;
 		} else if(!Arrays.equals(this.points, Polygon2F.class.cast(object).points)) {
+			return false;
+		} else if(!Objects.equals(this.rectangle, Polygon2F.class.cast(object).rectangle)) {
 			return false;
 		} else {
 			return true;
@@ -222,7 +236,7 @@ public final class Polygon2F implements Shape2F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)));
+		return Objects.hash(this.lineSegments, Integer.valueOf(Arrays.hashCode(this.points)), this.rectangle);
 	}
 	
 	/**

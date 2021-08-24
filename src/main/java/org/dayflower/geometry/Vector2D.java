@@ -380,6 +380,45 @@ public final class Vector2D implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Vector2D} instance that points in the direction of {@code point.getX()} and {@code point.getY()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return a {@code Vector2D} instance that points in the direction of {@code point.getX()} and {@code point.getY()}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Vector2D directionXY(final Point3D point) {
+		return new Vector2D(point.getX(), point.getY());
+	}
+	
+	/**
+	 * Returns a {@code Vector2D} instance that points in the direction of {@code point.getY()} and {@code point.getZ()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return a {@code Vector2D} instance that points in the direction of {@code point.getY()} and {@code point.getZ()}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Vector2D directionYZ(final Point3D point) {
+		return new Vector2D(point.getY(), point.getZ());
+	}
+	
+	/**
+	 * Returns a {@code Vector2D} instance that points in the direction of {@code point.getZ()} and {@code point.getX()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return a {@code Vector2D} instance that points in the direction of {@code point.getZ()} and {@code point.getX()}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Vector2D directionZX(final Point3D point) {
+		return new Vector2D(point.getZ(), point.getX());
+	}
+	
+	/**
 	 * Divides the component values of {@code vectorLHS} with {@code scalarRHS}.
 	 * <p>
 	 * Returns a new {@code Vector2D} instance with the result of the division.
@@ -735,6 +774,20 @@ public final class Vector2D implements Node {
 		final boolean isDotProductLTEThreshold = dotProduct <= 0.0D + 0.000001D;
 		
 		return isDotProductGTEThreshold && isDotProductLTEThreshold;
+	}
+	
+	/**
+	 * Returns the cross product of {@code vectorLHS} and {@code vectorRHS}.
+	 * <p>
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectorLHS the {@code Vector2D} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector2D} instance on the right-hand side
+	 * @return the cross product of {@code vectorLHS} and {@code vectorRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static double crossProduct(final Vector2D vectorLHS, final Vector2D vectorRHS) {
+		return vectorLHS.component1 * vectorRHS.component2 - vectorLHS.component2 * vectorRHS.component1;
 	}
 	
 	/**

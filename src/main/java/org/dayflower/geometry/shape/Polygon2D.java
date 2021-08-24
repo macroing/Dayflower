@@ -52,7 +52,9 @@ public final class Polygon2D implements Shape2D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final List<LineSegment2D> lineSegments;
 	private final Point2D[] points;
+	private final Rectangle2D rectangle;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -69,6 +71,8 @@ public final class Polygon2D implements Shape2D {
 	 */
 	public Polygon2D(final Point2D... points) {
 		this.points = doRequireValidPoints(points);
+		this.lineSegments = LineSegment2D.fromPoints(this.points);
+		this.rectangle = Rectangle2D.fromPoints(this.points);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,10 +124,20 @@ public final class Polygon2D implements Shape2D {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				for(final LineSegment2D lineSegment : this.lineSegments) {
+					if(!lineSegment.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
 				for(final Point2D point : this.points) {
 					if(!point.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
+				}
+				
+				if(!this.rectangle.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
 			
@@ -144,9 +158,7 @@ public final class Polygon2D implements Shape2D {
 	 */
 	@Override
 	public boolean contains(final Point2D point) {
-		final Rectangle2D rectangle = Rectangle2D.fromPoints(this.points);
-		
-		if(rectangle.contains(point)) {
+		if(this.rectangle.contains(point)) {
 			boolean isInside = false;
 			
 			final double pX = point.getX();
@@ -170,9 +182,7 @@ public final class Polygon2D implements Shape2D {
 				return true;
 			}
 			
-			final List<LineSegment2D> lineSegments = LineSegment2D.fromPoints(this.points);
-			
-			for(final LineSegment2D lineSegment : lineSegments) {
+			for(final LineSegment2D lineSegment : this.lineSegments) {
 				if(lineSegment.contains(point)) {
 					return true;
 				}
@@ -198,7 +208,11 @@ public final class Polygon2D implements Shape2D {
 			return true;
 		} else if(!(object instanceof Polygon2D)) {
 			return false;
+		} else if(!Objects.equals(this.lineSegments, Polygon2D.class.cast(object).lineSegments)) {
+			return false;
 		} else if(!Arrays.equals(this.points, Polygon2D.class.cast(object).points)) {
+			return false;
+		} else if(!Objects.equals(this.rectangle, Polygon2D.class.cast(object).rectangle)) {
 			return false;
 		} else {
 			return true;
@@ -222,7 +236,7 @@ public final class Polygon2D implements Shape2D {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)));
+		return Objects.hash(this.lineSegments, Integer.valueOf(Arrays.hashCode(this.points)), this.rectangle);
 	}
 	
 	/**

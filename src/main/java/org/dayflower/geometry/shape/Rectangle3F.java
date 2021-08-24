@@ -336,7 +336,7 @@ public final class Rectangle3F implements Shape3F {
 		final Point3F c = this.c;
 		final Point3F p = Objects.requireNonNull(point, "point == null");
 		
-		if(!Point3F.coplanar(this.a, this.b, this.c, p)) {
+		if(!Point3F.coplanar(a, b, p)) {
 			return false;
 		}
 		

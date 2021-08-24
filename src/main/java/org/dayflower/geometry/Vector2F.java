@@ -381,6 +381,45 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Vector2F} instance that points in the direction of {@code point.getX()} and {@code point.getY()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return a {@code Vector2F} instance that points in the direction of {@code point.getX()} and {@code point.getY()}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Vector2F directionXY(final Point3F point) {
+		return new Vector2F(point.getX(), point.getY());
+	}
+	
+	/**
+	 * Returns a {@code Vector2F} instance that points in the direction of {@code point.getY()} and {@code point.getZ()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return a {@code Vector2F} instance that points in the direction of {@code point.getY()} and {@code point.getZ()}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Vector2F directionYZ(final Point3F point) {
+		return new Vector2F(point.getY(), point.getZ());
+	}
+	
+	/**
+	 * Returns a {@code Vector2F} instance that points in the direction of {@code point.getZ()} and {@code point.getX()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return a {@code Vector2F} instance that points in the direction of {@code point.getZ()} and {@code point.getX()}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Vector2F directionZX(final Point3F point) {
+		return new Vector2F(point.getZ(), point.getX());
+	}
+	
+	/**
 	 * Divides the component values of {@code vectorLHS} with {@code scalarRHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the division.
@@ -736,6 +775,20 @@ public final class Vector2F implements Node {
 		final boolean isDotProductLTEThreshold = dotProduct <= 0.0F + 0.000001F;
 		
 		return isDotProductGTEThreshold && isDotProductLTEThreshold;
+	}
+	
+	/**
+	 * Returns the cross product of {@code vectorLHS} and {@code vectorRHS}.
+	 * <p>
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector2F} instance on the right-hand side
+	 * @return the cross product of {@code vectorLHS} and {@code vectorRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static float crossProduct(final Vector2F vectorLHS, final Vector2F vectorRHS) {
+		return vectorLHS.component1 * vectorRHS.component2 - vectorLHS.component2 * vectorRHS.component1;
 	}
 	
 	/**

@@ -336,7 +336,7 @@ public final class Rectangle3D implements Shape3D {
 		final Point3D c = this.c;
 		final Point3D p = Objects.requireNonNull(point, "point == null");
 		
-		if(!Point3D.coplanar(this.a, this.b, this.c, p)) {
+		if(!Point3D.coplanar(a, b, c, p)) {
 			return false;
 		}
 		

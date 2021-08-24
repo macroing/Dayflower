@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Floats.isZero;
+
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -26,10 +28,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -60,6 +65,7 @@ public final class Polygon3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Point3F[] points;
+	private final Polygon2F polygon;
 	private final Vector3F surfaceNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +84,7 @@ public final class Polygon3F implements Shape3F {
 	public Polygon3F(final Point3F... points) {
 		this.points = doRequireValidPoints(points);
 		this.surfaceNormal = Vector3F.normalNormalized(this.points[0], this.points[1], this.points[2]);
+		this.polygon = doCreatePolygon(this.points, this.surfaceNormal);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,10 +114,40 @@ public final class Polygon3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		Objects.requireNonNull(ray, "ray == null");
+		final Vector3F direction = ray.getDirection();
+		final Vector3F surfaceNormal = this.surfaceNormal;
 		
-//		TODO: Implement!
-		return SurfaceIntersection3F.EMPTY;
+		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
+		
+		if(isZero(nDotD)) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final Point3F origin = ray.getOrigin();
+		final Point3F a = this.points[0];
+		final Point3F b = this.points[1];
+		final Point3F c = this.points[this.points.length - 1];
+		
+		final float t = Vector3F.dotProduct(Vector3F.direction(origin, a), surfaceNormal) / nDotD;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final Point3F p = Point3F.add(origin, direction, t);
+		
+		if(!doContains(p)) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormal);
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2F textureCoordinates = doComputeTextureCoordinates(a, b, c, p);
+		
+		final Vector3F surfaceIntersectionPointError = new Vector3F();
+		
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, p, ray, this, surfaceIntersectionPointError, t));
 	}
 	
 	/**
@@ -166,6 +203,10 @@ public final class Polygon3F implements Shape3F {
 					}
 				}
 				
+				if(!this.polygon.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.surfaceNormal.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -175,6 +216,28 @@ public final class Polygon3F implements Shape3F {
 		} catch(final RuntimeException e) {
 			throw new NodeTraversalException(e);
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Polygon3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Polygon3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point3F point) {
+		final Point3F a = this.points[0];
+		final Point3F b = this.points[1];
+		final Point3F c = this.points[2];
+		final Point3F p = Objects.requireNonNull(point, "point == null");
+		
+		if(!Point3F.coplanar(a, b, c, p)) {
+			return false;
+		}
+		
+		return doContains(point);
 	}
 	
 	/**
@@ -193,6 +256,8 @@ public final class Polygon3F implements Shape3F {
 			return false;
 		} else if(!Arrays.equals(this.points, Polygon3F.class.cast(object).points)) {
 			return false;
+		} else if(!Objects.equals(this.polygon, Polygon3F.class.cast(object).polygon)) {
+			return false;
 		} else if(!Objects.equals(this.surfaceNormal, Polygon3F.class.cast(object).surfaceNormal)) {
 			return false;
 		} else {
@@ -207,8 +272,13 @@ public final class Polygon3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-//		TODO: Implement!
-		return 0.0F;
+		Vector3F surfaceArea = Vector3F.ZERO;
+		
+		for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i, i++) {
+			surfaceArea = Vector3F.add(surfaceArea, Vector3F.crossProduct(new Vector3F(this.points[i]), new Vector3F(this.points[j])));
+		}
+		
+		return 0.5F * Vector3F.dotProductAbs(this.surfaceNormal, surfaceArea);
 	}
 	
 	/**
@@ -226,10 +296,31 @@ public final class Polygon3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		Objects.requireNonNull(ray, "ray == null");
+		final Vector3F direction = ray.getDirection();
+		final Vector3F surfaceNormal = this.surfaceNormal;
 		
-//		TODO: Implement!
-		return Float.NaN;
+		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
+		
+		if(isZero(nDotD)) {
+			return Float.NaN;
+		}
+		
+		final Point3F origin = ray.getOrigin();
+		final Point3F a = this.points[0];
+		
+		final float t = Vector3F.dotProduct(Vector3F.direction(origin, a), surfaceNormal) / nDotD;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return Float.NaN;
+		}
+		
+		final Point3F p = Point3F.add(origin, direction, t);
+		
+		if(!doContains(p)) {
+			return Float.NaN;
+		}
+		
+		return t;
 	}
 	
 	/**
@@ -249,7 +340,7 @@ public final class Polygon3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)), this.surfaceNormal);
+		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)), this.polygon, this.surfaceNormal);
 	}
 	
 	/**
@@ -279,6 +370,49 @@ public final class Polygon3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private Point2F doComputeTextureCoordinates(final Point3F a, final Point3F b, final Point3F c, final Point3F p) {
+		final Vector3F surfaceNormalAbs = Vector3F.absolute(this.surfaceNormal);
+		
+		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
+		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
+		
+		final Vector2F vA = isX ? Vector2F.directionYZ(a) : isY ? Vector2F.directionZX(a) : Vector2F.directionXY(a);
+		final Vector2F vB = isX ? Vector2F.directionYZ(c) : isY ? Vector2F.directionZX(c) : Vector2F.directionXY(c);
+		final Vector2F vC = isX ? Vector2F.directionYZ(b) : isY ? Vector2F.directionZX(b) : Vector2F.directionXY(b);
+		final Vector2F vAB = Vector2F.subtract(vB, vA);
+		final Vector2F vAC = Vector2F.subtract(vC, vA);
+		
+		final float determinant = Vector2F.crossProduct(vAB, vAC);
+		final float determinantReciprocal = 1.0F / determinant;
+		
+		final float hU = isX ? p.getY() : isY ? p.getZ() : p.getX();
+		final float hV = isX ? p.getZ() : isY ? p.getX() : p.getY();
+		
+		final float u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2F.crossProduct(vA, vAB) * determinantReciprocal;
+		final float v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2F.crossProduct(vAC, vA) * determinantReciprocal;
+		
+		return new Point2F(u, v);
+	}
+	
+	private boolean doContains(final Point3F point) {
+		final Point3F a = this.points[0];
+		final Point3F b = this.points[1];
+		final Point3F p = point;
+		
+		final Vector3F w = this.surfaceNormal;
+		final Vector3F u = Vector3F.directionNormalized(a, b);
+		final Vector3F v = Vector3F.crossProduct(w, u);
+		
+		final Vector3F directionAP = Vector3F.direction(a, p);
+		
+		final float x = Vector3F.dotProduct(directionAP, u);
+		final float y = Vector3F.dotProduct(directionAP, v);
+		
+		return this.polygon.contains(new Point2F(x, y));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static Point3F[] doRequireValidPoints(final Point3F[] points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 3, Integer.MAX_VALUE, "points.length");
@@ -288,5 +422,29 @@ public final class Polygon3F implements Shape3F {
 		}
 		
 		throw new IllegalArgumentException("The provided Point3F instances are not coplanar.");
+	}
+	
+	private static Polygon2F doCreatePolygon(final Point3F[] points, final Vector3F surfaceNormal) {
+		final Point3F a = points[0];
+		final Point3F b = points[1];
+		
+		final Vector3F w = surfaceNormal;
+		final Vector3F u = Vector3F.directionNormalized(a, b);
+		final Vector3F v = Vector3F.crossProduct(w, u);
+		
+		final Point2F[] point2Fs = new Point2F[points.length];
+		
+		for(int i = 0; i < points.length; i++) {
+			final Vector3F directionAI = Vector3F.direction(a, points[i]);
+			
+			final float x = Vector3F.dotProduct(directionAI, u);
+			final float y = Vector3F.dotProduct(directionAI, v);
+			
+			point2Fs[i] = new Point2F(x, y);
+		}
+		
+		final Polygon2F polygon = new Polygon2F(point2Fs);
+		
+		return polygon;
 	}
 }

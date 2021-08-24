@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Doubles.isZero;
+
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -26,10 +28,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3D;
+import org.dayflower.geometry.OrthonormalBasis33D;
+import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
+import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -60,6 +65,7 @@ public final class Polygon3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Point3D[] points;
+	private final Polygon2D polygon;
 	private final Vector3D surfaceNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +84,7 @@ public final class Polygon3D implements Shape3D {
 	public Polygon3D(final Point3D... points) {
 		this.points = doRequireValidPoints(points);
 		this.surfaceNormal = Vector3D.normalNormalized(this.points[0], this.points[1], this.points[2]);
+		this.polygon = doCreatePolygon(this.points, this.surfaceNormal);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,10 +114,40 @@ public final class Polygon3D implements Shape3D {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		Objects.requireNonNull(ray, "ray == null");
+		final Vector3D direction = ray.getDirection();
+		final Vector3D surfaceNormal = this.surfaceNormal;
 		
-//		TODO: Implement!
-		return SurfaceIntersection3D.EMPTY;
+		final double nDotD = Vector3D.dotProduct(surfaceNormal, direction);
+		
+		if(isZero(nDotD)) {
+			return SurfaceIntersection3D.EMPTY;
+		}
+		
+		final Point3D origin = ray.getOrigin();
+		final Point3D a = this.points[0];
+		final Point3D b = this.points[1];
+		final Point3D c = this.points[this.points.length - 1];
+		
+		final double t = Vector3D.dotProduct(Vector3D.direction(origin, a), surfaceNormal) / nDotD;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return SurfaceIntersection3D.EMPTY;
+		}
+		
+		final Point3D p = Point3D.add(origin, direction, t);
+		
+		if(!doContains(p)) {
+			return SurfaceIntersection3D.EMPTY;
+		}
+		
+		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormal);
+		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2D textureCoordinates = doComputeTextureCoordinates(a, b, c, p);
+		
+		final Vector3D surfaceIntersectionPointError = new Vector3D();
+		
+		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, p, ray, this, surfaceIntersectionPointError, t));
 	}
 	
 	/**
@@ -166,6 +203,10 @@ public final class Polygon3D implements Shape3D {
 					}
 				}
 				
+				if(!this.polygon.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.surfaceNormal.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -175,6 +216,28 @@ public final class Polygon3D implements Shape3D {
 		} catch(final RuntimeException e) {
 			throw new NodeTraversalException(e);
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Polygon3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Polygon3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point3D point) {
+		final Point3D a = this.points[0];
+		final Point3D b = this.points[1];
+		final Point3D c = this.points[2];
+		final Point3D p = Objects.requireNonNull(point, "point == null");
+		
+		if(!Point3D.coplanar(a, b, c, p)) {
+			return false;
+		}
+		
+		return doContains(point);
 	}
 	
 	/**
@@ -193,6 +256,8 @@ public final class Polygon3D implements Shape3D {
 			return false;
 		} else if(!Arrays.equals(this.points, Polygon3D.class.cast(object).points)) {
 			return false;
+		} else if(!Objects.equals(this.polygon, Polygon3D.class.cast(object).polygon)) {
+			return false;
 		} else if(!Objects.equals(this.surfaceNormal, Polygon3D.class.cast(object).surfaceNormal)) {
 			return false;
 		} else {
@@ -207,8 +272,13 @@ public final class Polygon3D implements Shape3D {
 	 */
 	@Override
 	public double getSurfaceArea() {
-//		TODO: Implement!
-		return 0.0D;
+		Vector3D surfaceArea = Vector3D.ZERO;
+		
+		for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i, i++) {
+			surfaceArea = Vector3D.add(surfaceArea, Vector3D.crossProduct(new Vector3D(this.points[i]), new Vector3D(this.points[j])));
+		}
+		
+		return 0.5D * Vector3D.dotProductAbs(this.surfaceNormal, surfaceArea);
 	}
 	
 	/**
@@ -226,10 +296,31 @@ public final class Polygon3D implements Shape3D {
 	 */
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		Objects.requireNonNull(ray, "ray == null");
+		final Vector3D direction = ray.getDirection();
+		final Vector3D surfaceNormal = this.surfaceNormal;
 		
-//		TODO: Implement!
-		return Double.NaN;
+		final double nDotD = Vector3D.dotProduct(surfaceNormal, direction);
+		
+		if(isZero(nDotD)) {
+			return Double.NaN;
+		}
+		
+		final Point3D origin = ray.getOrigin();
+		final Point3D a = this.points[0];
+		
+		final double t = Vector3D.dotProduct(Vector3D.direction(origin, a), surfaceNormal) / nDotD;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return Double.NaN;
+		}
+		
+		final Point3D p = Point3D.add(origin, direction, t);
+		
+		if(!doContains(p)) {
+			return Double.NaN;
+		}
+		
+		return t;
 	}
 	
 	/**
@@ -249,7 +340,7 @@ public final class Polygon3D implements Shape3D {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)), this.surfaceNormal);
+		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)), this.polygon, this.surfaceNormal);
 	}
 	
 	/**
@@ -279,6 +370,49 @@ public final class Polygon3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private Point2D doComputeTextureCoordinates(final Point3D a, final Point3D b, final Point3D c, final Point3D p) {
+		final Vector3D surfaceNormalAbs = Vector3D.absolute(this.surfaceNormal);
+		
+		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
+		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
+		
+		final Vector2D vA = isX ? Vector2D.directionYZ(a) : isY ? Vector2D.directionZX(a) : Vector2D.directionXY(a);
+		final Vector2D vB = isX ? Vector2D.directionYZ(c) : isY ? Vector2D.directionZX(c) : Vector2D.directionXY(c);
+		final Vector2D vC = isX ? Vector2D.directionYZ(b) : isY ? Vector2D.directionZX(b) : Vector2D.directionXY(b);
+		final Vector2D vAB = Vector2D.subtract(vB, vA);
+		final Vector2D vAC = Vector2D.subtract(vC, vA);
+		
+		final double determinant = Vector2D.crossProduct(vAB, vAC);
+		final double determinantReciprocal = 1.0D / determinant;
+		
+		final double hU = isX ? p.getY() : isY ? p.getZ() : p.getX();
+		final double hV = isX ? p.getZ() : isY ? p.getX() : p.getY();
+		
+		final double u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2D.crossProduct(vA, vAB) * determinantReciprocal;
+		final double v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2D.crossProduct(vAC, vA) * determinantReciprocal;
+		
+		return new Point2D(u, v);
+	}
+	
+	private boolean doContains(final Point3D point) {
+		final Point3D a = this.points[0];
+		final Point3D b = this.points[1];
+		final Point3D p = point;
+		
+		final Vector3D w = this.surfaceNormal;
+		final Vector3D u = Vector3D.directionNormalized(a, b);
+		final Vector3D v = Vector3D.crossProduct(w, u);
+		
+		final Vector3D directionAP = Vector3D.direction(a, p);
+		
+		final double x = Vector3D.dotProduct(directionAP, u);
+		final double y = Vector3D.dotProduct(directionAP, v);
+		
+		return this.polygon.contains(new Point2D(x, y));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static Point3D[] doRequireValidPoints(final Point3D[] points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 3, Integer.MAX_VALUE, "points.length");
@@ -288,5 +422,29 @@ public final class Polygon3D implements Shape3D {
 		}
 		
 		throw new IllegalArgumentException("The provided Point3D instances are not coplanar.");
+	}
+	
+	private static Polygon2D doCreatePolygon(final Point3D[] points, final Vector3D surfaceNormal) {
+		final Point3D a = points[0];
+		final Point3D b = points[1];
+		
+		final Vector3D w = surfaceNormal;
+		final Vector3D u = Vector3D.directionNormalized(a, b);
+		final Vector3D v = Vector3D.crossProduct(w, u);
+		
+		final Point2D[] point2Fs = new Point2D[points.length];
+		
+		for(int i = 0; i < points.length; i++) {
+			final Vector3D directionAI = Vector3D.direction(a, points[i]);
+			
+			final double x = Vector3D.dotProduct(directionAI, u);
+			final double y = Vector3D.dotProduct(directionAI, v);
+			
+			point2Fs[i] = new Point2D(x, y);
+		}
+		
+		final Polygon2D polygon = new Polygon2D(point2Fs);
+		
+		return polygon;
 	}
 }

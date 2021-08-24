@@ -62,9 +62,10 @@ public final class Rectangle3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Point3D position;
-	private final Vector3D sideA;
-	private final Vector3D sideB;
+	private final Point3D a;
+	private final Point3D b;
+	private final Point3D c;
+	private final Point3D d;
 	private final Vector3D surfaceNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,48 +76,36 @@ public final class Rectangle3D implements Shape3D {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Rectangle3D(new Point3D());
+	 * new Rectangle3D(new Point3D(-2.0D, +2.0D, 0.0D), new Point3D(+2.0D, +2.0D, 0.0D), new Point3D(+2.0D, -2.0D, 0.0D), new Point3D(-2.0D, -2.0D, 0.0D));
 	 * }
 	 * </pre>
 	 */
 	public Rectangle3D() {
-		this(new Point3D());
+		this(new Point3D(-2.0D, +2.0D, 0.0D), new Point3D(+2.0D, +2.0D, 0.0D), new Point3D(+2.0D, -2.0D, 0.0D), new Point3D(-2.0D, -2.0D, 0.0D));
 	}
 	
 	/**
 	 * Constructs a new {@code Rectangle3D} instance.
 	 * <p>
-	 * If {@code position} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Rectangle3D(position, Vector3D.x(2.0D), Vector3D.y(2.0D));
-	 * }
-	 * </pre>
+	 * If the provided {@link Point3D} instances are not coplanar or they do not represent a rectangle, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param position the position to use
-	 * @throws NullPointerException thrown if, and only if, {@code position} is {@code null}
+	 * @param a the {@code Point3D} instance denoted by {@code A}
+	 * @param b the {@code Point3D} instance denoted by {@code B}
+	 * @param c the {@code Point3D} instance denoted by {@code C}
+	 * @param d the {@code Point3D} instance denoted by {@code D}
+	 * @throws IllegalArgumentException thrown if, and only if, the provided {@code Point3D} instances are not coplanar or they do not represent a rectangle
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-	public Rectangle3D(final Point3D position) {
-		this(position, Vector3D.x(2.0D), Vector3D.y(2.0D));
-	}
-	
-	/**
-	 * Constructs a new {@code Rectangle3D} instance.
-	 * <p>
-	 * If either {@code position}, {@code sideA} or {@code sideB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param position the position to use
-	 * @param sideA the direction and length of the side denoted by {@code A}
-	 * @param sideB the direction and length of the side denoted by {@code B}
-	 * @throws NullPointerException thrown if, and only if, either {@code position}, {@code sideA} or {@code sideB} are {@code null}
-	 */
-	public Rectangle3D(final Point3D position, final Vector3D sideA, final Vector3D sideB) {
-		this.position = Objects.requireNonNull(position, "position == null");
-		this.sideA = Objects.requireNonNull(sideA, "sideA == null");
-		this.sideB = Objects.requireNonNull(sideB, "sideB == null");
-		this.surfaceNormal = Vector3D.normalize(Vector3D.crossProduct(sideA, sideB));
+	public Rectangle3D(final Point3D a, final Point3D b, final Point3D c, final Point3D d) {
+		doCheckPointValidity(a, b, c, d);
+		
+		this.a = Point3D.getCached(a);
+		this.b = Point3D.getCached(b);
+		this.c = Point3D.getCached(c);
+		this.d = Point3D.getCached(d);
+		this.surfaceNormal = Vector3D.getCached(Vector3D.normalNormalized(a, b, c));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +117,7 @@ public final class Rectangle3D implements Shape3D {
 	 */
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
-		return AxisAlignedBoundingBox3D.union(new AxisAlignedBoundingBox3D(this.position, Point3D.add(this.position, this.sideA)), Point3D.add(this.position, this.sideB));
+		return AxisAlignedBoundingBox3D.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -156,33 +145,27 @@ public final class Rectangle3D implements Shape3D {
 		}
 		
 		final Point3D origin = ray.getOrigin();
-		final Point3D position = this.position;
+		final Point3D a = this.a;
+		final Point3D b = this.b;
+		final Point3D c = this.c;
+		final Point3D d = this.d;
 		
-		final Vector3D originToPosition = Vector3D.direction(origin, position);
-		
-		final double t = Vector3D.dotProduct(originToPosition, surfaceNormal) / nDotD;
+		final double t = Vector3D.dotProduct(Vector3D.direction(origin, a), surfaceNormal) / nDotD;
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final Vector3D sideA = this.sideA;
-		final Vector3D sideB = this.sideB;
+		final Point3D p = Point3D.add(origin, direction, t);
 		
-		final double sideALength = sideA.length();
-		final double sideBLength = sideB.length();
+		final Vector3D directionAB = Vector3D.direction(a, b);
+		final Vector3D directionBC = Vector3D.direction(b, c);
+		final Vector3D directionAP = Vector3D.direction(a, p);
 		
-		final Vector3D sideANormalized = Vector3D.normalize(sideA);
-		final Vector3D sideBNormalized = Vector3D.normalize(sideB);
+		final double dotProductAPAB = Vector3D.dotProduct(directionAP, Vector3D.normalize(directionAB));
+		final double dotProductAPBC = Vector3D.dotProduct(directionAP, Vector3D.normalize(directionBC));
 		
-		final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
-		
-		final Vector3D positionToSurfaceIntersectionPoint = Vector3D.direction(position, surfaceIntersectionPoint);
-		
-		final double sideX = Vector3D.dotProduct(positionToSurfaceIntersectionPoint, sideANormalized);
-		final double sideY = Vector3D.dotProduct(positionToSurfaceIntersectionPoint, sideBNormalized);
-		
-		if(sideX < 0.0D || sideX > sideALength || sideY < 0.0D || sideY > sideBLength) {
+		if(dotProductAPAB < 0.0D || dotProductAPAB > directionAB.length() || dotProductAPBC < 0.0D || dotProductAPBC > directionBC.length()) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -196,22 +179,18 @@ public final class Rectangle3D implements Shape3D {
 		final boolean isX = x > y && x > z;
 		final boolean isY = y > z;
 		
-		final Point3D a = position;
-		final Point3D b = Point3D.add(a, sideA);
-		final Point3D c = Point3D.add(a, sideB);
-		
 		final double aX = isX ? a.getY()      : isY ? a.getZ()      : a.getX();
 		final double aY = isX ? a.getZ()      : isY ? a.getX()      : a.getY();
-		final double bX = isX ? c.getY() - aX : isY ? c.getZ() - aX : c.getX() - aX;
-		final double bY = isX ? c.getZ() - aY : isY ? c.getX() - aY : c.getY() - aY;
+		final double bX = isX ? d.getY() - aX : isY ? d.getZ() - aX : d.getX() - aX;
+		final double bY = isX ? d.getZ() - aY : isY ? d.getX() - aY : d.getY() - aY;
 		final double cX = isX ? b.getY() - aX : isY ? b.getZ() - aX : b.getX() - aX;
 		final double cY = isX ? b.getZ() - aY : isY ? b.getX() - aY : b.getY() - aY;
 		
 		final double determinant = bX * cY - bY * cX;
 		final double determinantReciprocal = 1.0D / determinant;
 		
-		final double hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
-		final double hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
+		final double hU = isX ? p.getY() : isY ? p.getZ() : p.getX();
+		final double hV = isX ? p.getZ() : isY ? p.getX() : p.getY();
 		
 		final double u = hU * (-bY * determinantReciprocal) + hV * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
 		final double v = hU * (+cY * determinantReciprocal) + hV * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
@@ -220,16 +199,43 @@ public final class Rectangle3D implements Shape3D {
 		
 		final Vector3D surfaceIntersectionPointError = new Vector3D();
 		
-		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, p, ray, this, surfaceIntersectionPointError, t));
 	}
 	
 	/**
-	 * Returns the position of this {@code Rectangle3D} instance.
+	 * Returns the {@link Point3D} instance denoted by {@code A}.
 	 * 
-	 * @return the position of this {@code Rectangle3D} instance
+	 * @return the {@code Point3D} instance denoted by {@code A}
 	 */
-	public Point3D getPosition() {
-		return this.position;
+	public Point3D getA() {
+		return this.a;
+	}
+	
+	/**
+	 * Returns the {@link Point3D} instance denoted by {@code B}.
+	 * 
+	 * @return the {@code Point3D} instance denoted by {@code B}
+	 */
+	public Point3D getB() {
+		return this.b;
+	}
+	
+	/**
+	 * Returns the {@link Point3D} instance denoted by {@code C}.
+	 * 
+	 * @return the {@code Point3D} instance denoted by {@code C}
+	 */
+	public Point3D getC() {
+		return this.c;
+	}
+	
+	/**
+	 * Returns the {@link Point3D} instance denoted by {@code D}.
+	 * 
+	 * @return the {@code Point3D} instance denoted by {@code D}
+	 */
+	public Point3D getD() {
+		return this.d;
 	}
 	
 	/**
@@ -249,25 +255,7 @@ public final class Rectangle3D implements Shape3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Rectangle3D(%s, %s, %s)", this.position, this.sideA, this.sideB);
-	}
-	
-	/**
-	 * Returns the direction and length of the side denoted by {@code A}.
-	 * 
-	 * @return the direction and length of the side denoted by {@code A}
-	 */
-	public Vector3D getSideA() {
-		return this.sideA;
-	}
-	
-	/**
-	 * Returns the direction and length of the side denoted by {@code B}.
-	 * 
-	 * @return the direction and length of the side denoted by {@code B}
-	 */
-	public Vector3D getSideB() {
-		return this.sideB;
+		return String.format("new Rectangle3D(%s, %s, %s, %s)", this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -306,15 +294,19 @@ public final class Rectangle3D implements Shape3D {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.position.accept(nodeHierarchicalVisitor)) {
+				if(!this.a.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.sideA.accept(nodeHierarchicalVisitor)) {
+				if(!this.b.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.sideB.accept(nodeHierarchicalVisitor)) {
+				if(!this.c.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.d.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -327,6 +319,35 @@ public final class Rectangle3D implements Shape3D {
 		} catch(final RuntimeException e) {
 			throw new NodeTraversalException(e);
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Rectangle3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point3D point) {
+		final Point3D a = this.a;
+		final Point3D b = this.b;
+		final Point3D c = this.c;
+		final Point3D p = Objects.requireNonNull(point, "point == null");
+		
+		if(!Point3D.coplanar(this.a, this.b, this.c, p)) {
+			return false;
+		}
+		
+		final Vector3D directionAB = Vector3D.direction(a, b);
+		final Vector3D directionBC = Vector3D.direction(b, c);
+		final Vector3D directionAP = Vector3D.direction(a, p);
+		
+		final double dotProductAPAB = Vector3D.dotProduct(directionAP, Vector3D.normalize(directionAB));
+		final double dotProductAPBC = Vector3D.dotProduct(directionAP, Vector3D.normalize(directionBC));
+		
+		return dotProductAPAB >= 0.0D && dotProductAPAB <= directionAB.length() && dotProductAPBC >= 0.0D && dotProductAPBC <= directionBC.length();
 	}
 	
 	/**
@@ -343,11 +364,13 @@ public final class Rectangle3D implements Shape3D {
 			return true;
 		} else if(!(object instanceof Rectangle3D)) {
 			return false;
-		} else if(!Objects.equals(this.position, Rectangle3D.class.cast(object).position)) {
+		} else if(!Objects.equals(this.a, Rectangle3D.class.cast(object).a)) {
 			return false;
-		} else if(!Objects.equals(this.sideA, Rectangle3D.class.cast(object).sideA)) {
+		} else if(!Objects.equals(this.b, Rectangle3D.class.cast(object).b)) {
 			return false;
-		} else if(!Objects.equals(this.sideB, Rectangle3D.class.cast(object).sideB)) {
+		} else if(!Objects.equals(this.c, Rectangle3D.class.cast(object).c)) {
+			return false;
+		} else if(!Objects.equals(this.d, Rectangle3D.class.cast(object).d)) {
 			return false;
 		} else if(!Objects.equals(this.surfaceNormal, Rectangle3D.class.cast(object).surfaceNormal)) {
 			return false;
@@ -363,7 +386,7 @@ public final class Rectangle3D implements Shape3D {
 	 */
 	@Override
 	public double getSurfaceArea() {
-		return Vector3D.crossProduct(this.sideA, this.sideB).length();
+		return Vector3D.crossProduct(Vector3D.direction(this.a, this.b), Vector3D.direction(this.b, this.c)).length();
 	}
 	
 	/**
@@ -391,33 +414,26 @@ public final class Rectangle3D implements Shape3D {
 		}
 		
 		final Point3D origin = ray.getOrigin();
-		final Point3D position = this.position;
+		final Point3D a = this.a;
+		final Point3D b = this.b;
+		final Point3D c = this.c;
 		
-		final Vector3D originToPosition = Vector3D.direction(origin, position);
-		
-		final double t = Vector3D.dotProduct(originToPosition, surfaceNormal) / nDotD;
+		final double t = Vector3D.dotProduct(Vector3D.direction(origin, a), surfaceNormal) / nDotD;
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return Double.NaN;
 		}
 		
-		final Vector3D sideA = this.sideA;
-		final Vector3D sideB = this.sideB;
+		final Point3D p = Point3D.add(origin, direction, t);
 		
-		final double sideALength = sideA.length();
-		final double sideBLength = sideB.length();
+		final Vector3D directionAB = Vector3D.direction(a, b);
+		final Vector3D directionBC = Vector3D.direction(b, c);
+		final Vector3D directionAP = Vector3D.direction(a, p);
 		
-		final Vector3D sideANormalized = Vector3D.normalize(sideA);
-		final Vector3D sideBNormalized = Vector3D.normalize(sideB);
+		final double dotProductAPAB = Vector3D.dotProduct(directionAP, Vector3D.normalize(directionAB));
+		final double dotProductAPBC = Vector3D.dotProduct(directionAP, Vector3D.normalize(directionBC));
 		
-		final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
-		
-		final Vector3D positionToSurfaceIntersectionPoint = Vector3D.direction(position, surfaceIntersectionPoint);
-		
-		final double sideX = Vector3D.dotProduct(positionToSurfaceIntersectionPoint, sideANormalized);
-		final double sideY = Vector3D.dotProduct(positionToSurfaceIntersectionPoint, sideBNormalized);
-		
-		if(sideX < 0.0D || sideX > sideALength || sideY < 0.0D || sideY > sideBLength) {
+		if(dotProductAPAB < 0.0D || dotProductAPAB > directionAB.length() || dotProductAPBC < 0.0D || dotProductAPBC > directionBC.length()) {
 			return Double.NaN;
 		}
 		
@@ -441,7 +457,7 @@ public final class Rectangle3D implements Shape3D {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.position, this.sideA, this.sideB, this.surfaceNormal);
+		return Objects.hash(this.a, this.b, this.c, this.d, this.surfaceNormal);
 	}
 	
 	/**
@@ -460,11 +476,41 @@ public final class Rectangle3D implements Shape3D {
 		try {
 			dataOutput.writeInt(ID);
 			
-			this.position.write(dataOutput);
-			this.sideA.write(dataOutput);
-			this.sideB.write(dataOutput);
+			this.a.write(dataOutput);
+			this.b.write(dataOutput);
+			this.c.write(dataOutput);
+			this.d.write(dataOutput);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static void doCheckPointValidity(final Point3D a, final Point3D b, final Point3D c, final Point3D d) {
+		Objects.requireNonNull(a, "a == null");
+		Objects.requireNonNull(b, "b == null");
+		Objects.requireNonNull(c, "c == null");
+		Objects.requireNonNull(d, "d == null");
+		
+		if(!Point3D.coplanar(a, b, c, d)) {
+			throw new IllegalArgumentException("The provided Point3D instances are not coplanar.");
+		}
+		
+		final double distanceAB = Point3D.distance(a, b);
+		final double distanceBC = Point3D.distance(b, c);
+		final double distanceCD = Point3D.distance(c, d);
+		final double distanceDA = Point3D.distance(d, a);
+		
+		final double deltaABCD = abs(distanceAB - distanceCD);
+		final double deltaBCDA = abs(distanceBC - distanceDA);
+		
+		final boolean isValidABCD = deltaABCD <= 0.00001D;
+		final boolean isValidBCDA = deltaBCDA <= 0.00001D;
+		final boolean isValid = isValidABCD && isValidBCDA;
+		
+		if(!isValid) {
+			throw new IllegalArgumentException();
 		}
 	}
 }

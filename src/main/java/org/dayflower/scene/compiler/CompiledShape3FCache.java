@@ -2371,10 +2371,10 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle3F} is {@code null}
 	 */
 	public static float[] toRectangle3F(final Rectangle3F rectangle3F) {
-		final Point3F position = rectangle3F.getPosition();
+		final Point3F position = rectangle3F.getA();
 		
-		final Vector3F sideA = rectangle3F.getSideA();
-		final Vector3F sideB = rectangle3F.getSideB();
+		final Vector3F sideA = Vector3F.direction(rectangle3F.getA(), rectangle3F.getB());
+		final Vector3F sideB = Vector3F.direction(rectangle3F.getB(), rectangle3F.getC());
 		final Vector3F surfaceNormal = rectangle3F.getSurfaceNormal();
 		
 		final float[] array = new float[RECTANGLE_3_F_LENGTH];

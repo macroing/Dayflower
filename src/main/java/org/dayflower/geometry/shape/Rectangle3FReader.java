@@ -24,7 +24,6 @@ import java.io.UncheckedIOException;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3FReader;
-import org.dayflower.geometry.Vector3F;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -93,7 +92,7 @@ public final class Rectangle3FReader implements Shape3FReader {
 	public Rectangle3F read(final DataInput dataInput, final int id) {
 		ParameterArguments.requireExact(id, Rectangle3F.ID, "id");
 		
-		return new Rectangle3F(Point3F.read(dataInput), Vector3F.read(dataInput), Vector3F.read(dataInput));
+		return new Rectangle3F(Point3F.read(dataInput), Point3F.read(dataInput), Point3F.read(dataInput), Point3F.read(dataInput));
 	}
 	
 	/**

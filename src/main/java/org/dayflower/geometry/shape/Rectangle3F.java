@@ -62,9 +62,10 @@ public final class Rectangle3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Point3F position;
-	private final Vector3F sideA;
-	private final Vector3F sideB;
+	private final Point3F a;
+	private final Point3F b;
+	private final Point3F c;
+	private final Point3F d;
 	private final Vector3F surfaceNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,48 +76,36 @@ public final class Rectangle3F implements Shape3F {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Rectangle3F(new Point3F());
+	 * new Rectangle3F(new Point3F(-2.0F, +2.0F, 0.0F), new Point3F(+2.0F, +2.0F, 0.0F), new Point3F(+2.0F, -2.0F, 0.0F), new Point3F(-2.0F, -2.0F, 0.0F));
 	 * }
 	 * </pre>
 	 */
 	public Rectangle3F() {
-		this(new Point3F());
+		this(new Point3F(-2.0F, +2.0F, 0.0F), new Point3F(+2.0F, +2.0F, 0.0F), new Point3F(+2.0F, -2.0F, 0.0F), new Point3F(-2.0F, -2.0F, 0.0F));
 	}
 	
 	/**
 	 * Constructs a new {@code Rectangle3F} instance.
 	 * <p>
-	 * If {@code position} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Rectangle3F(position, Vector3F.x(2.0F), Vector3F.y(2.0F));
-	 * }
-	 * </pre>
+	 * If the provided {@link Point3F} instances are not coplanar or they do not represent a rectangle, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param position the position to use
-	 * @throws NullPointerException thrown if, and only if, {@code position} is {@code null}
+	 * @param a the {@code Point3F} instance denoted by {@code A}
+	 * @param b the {@code Point3F} instance denoted by {@code B}
+	 * @param c the {@code Point3F} instance denoted by {@code C}
+	 * @param d the {@code Point3F} instance denoted by {@code D}
+	 * @throws IllegalArgumentException thrown if, and only if, the provided {@code Point3F} instances are not coplanar or they do not represent a rectangle
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-	public Rectangle3F(final Point3F position) {
-		this(position, Vector3F.x(2.0F), Vector3F.y(2.0F));
-	}
-	
-	/**
-	 * Constructs a new {@code Rectangle3F} instance.
-	 * <p>
-	 * If either {@code position}, {@code sideA} or {@code sideB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param position the position to use
-	 * @param sideA the direction and length of the side denoted by {@code A}
-	 * @param sideB the direction and length of the side denoted by {@code B}
-	 * @throws NullPointerException thrown if, and only if, either {@code position}, {@code sideA} or {@code sideB} are {@code null}
-	 */
-	public Rectangle3F(final Point3F position, final Vector3F sideA, final Vector3F sideB) {
-		this.position = Objects.requireNonNull(position, "position == null");
-		this.sideA = Objects.requireNonNull(sideA, "sideA == null");
-		this.sideB = Objects.requireNonNull(sideB, "sideB == null");
-		this.surfaceNormal = Vector3F.normalize(Vector3F.crossProduct(sideA, sideB));
+	public Rectangle3F(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
+		doCheckPointValidity(a, b, c, d);
+		
+		this.a = Point3F.getCached(a);
+		this.b = Point3F.getCached(b);
+		this.c = Point3F.getCached(c);
+		this.d = Point3F.getCached(d);
+		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(a, b, c));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +117,7 @@ public final class Rectangle3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return AxisAlignedBoundingBox3F.union(new AxisAlignedBoundingBox3F(this.position, Point3F.add(this.position, this.sideA)), Point3F.add(this.position, this.sideB));
+		return AxisAlignedBoundingBox3F.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -156,33 +145,27 @@ public final class Rectangle3F implements Shape3F {
 		}
 		
 		final Point3F origin = ray.getOrigin();
-		final Point3F position = this.position;
+		final Point3F a = this.a;
+		final Point3F b = this.b;
+		final Point3F c = this.c;
+		final Point3F d = this.d;
 		
-		final Vector3F originToPosition = Vector3F.direction(origin, position);
-		
-		final float t = Vector3F.dotProduct(originToPosition, surfaceNormal) / nDotD;
+		final float t = Vector3F.dotProduct(Vector3F.direction(origin, a), surfaceNormal) / nDotD;
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final Vector3F sideA = this.sideA;
-		final Vector3F sideB = this.sideB;
+		final Point3F p = Point3F.add(origin, direction, t);
 		
-		final float sideALength = sideA.length();
-		final float sideBLength = sideB.length();
+		final Vector3F directionAB = Vector3F.direction(a, b);
+		final Vector3F directionBC = Vector3F.direction(b, c);
+		final Vector3F directionAP = Vector3F.direction(a, p);
 		
-		final Vector3F sideANormalized = Vector3F.normalize(sideA);
-		final Vector3F sideBNormalized = Vector3F.normalize(sideB);
+		final float dotProductAPAB = Vector3F.dotProduct(directionAP, Vector3F.normalize(directionAB));
+		final float dotProductAPBC = Vector3F.dotProduct(directionAP, Vector3F.normalize(directionBC));
 		
-		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);
-		
-		final Vector3F positionToSurfaceIntersectionPoint = Vector3F.direction(position, surfaceIntersectionPoint);
-		
-		final float sideX = Vector3F.dotProduct(positionToSurfaceIntersectionPoint, sideANormalized);
-		final float sideY = Vector3F.dotProduct(positionToSurfaceIntersectionPoint, sideBNormalized);
-		
-		if(sideX < 0.0F || sideX > sideALength || sideY < 0.0F || sideY > sideBLength) {
+		if(dotProductAPAB < 0.0F || dotProductAPAB > directionAB.length() || dotProductAPBC < 0.0F || dotProductAPBC > directionBC.length()) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -196,22 +179,18 @@ public final class Rectangle3F implements Shape3F {
 		final boolean isX = x > y && x > z;
 		final boolean isY = y > z;
 		
-		final Point3F a = position;
-		final Point3F b = Point3F.add(a, sideA);
-		final Point3F c = Point3F.add(a, sideB);
-		
 		final float aX = isX ? a.getY()      : isY ? a.getZ()      : a.getX();
 		final float aY = isX ? a.getZ()      : isY ? a.getX()      : a.getY();
-		final float bX = isX ? c.getY() - aX : isY ? c.getZ() - aX : c.getX() - aX;
-		final float bY = isX ? c.getZ() - aY : isY ? c.getX() - aY : c.getY() - aY;
+		final float bX = isX ? d.getY() - aX : isY ? d.getZ() - aX : d.getX() - aX;
+		final float bY = isX ? d.getZ() - aY : isY ? d.getX() - aY : d.getY() - aY;
 		final float cX = isX ? b.getY() - aX : isY ? b.getZ() - aX : b.getX() - aX;
 		final float cY = isX ? b.getZ() - aY : isY ? b.getX() - aY : b.getY() - aY;
 		
 		final float determinant = bX * cY - bY * cX;
 		final float determinantReciprocal = 1.0F / determinant;
 		
-		final float hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
-		final float hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
+		final float hU = isX ? p.getY() : isY ? p.getZ() : p.getX();
+		final float hV = isX ? p.getZ() : isY ? p.getX() : p.getY();
 		
 		final float u = hU * (-bY * determinantReciprocal) + hV * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
 		final float v = hU * (+cY * determinantReciprocal) + hV * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
@@ -220,16 +199,43 @@ public final class Rectangle3F implements Shape3F {
 		
 		final Vector3F surfaceIntersectionPointError = new Vector3F();
 		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, p, ray, this, surfaceIntersectionPointError, t));
 	}
 	
 	/**
-	 * Returns the position of this {@code Rectangle3F} instance.
+	 * Returns the {@link Point3F} instance denoted by {@code A}.
 	 * 
-	 * @return the position of this {@code Rectangle3F} instance
+	 * @return the {@code Point3F} instance denoted by {@code A}
 	 */
-	public Point3F getPosition() {
-		return this.position;
+	public Point3F getA() {
+		return this.a;
+	}
+	
+	/**
+	 * Returns the {@link Point3F} instance denoted by {@code B}.
+	 * 
+	 * @return the {@code Point3F} instance denoted by {@code B}
+	 */
+	public Point3F getB() {
+		return this.b;
+	}
+	
+	/**
+	 * Returns the {@link Point3F} instance denoted by {@code C}.
+	 * 
+	 * @return the {@code Point3F} instance denoted by {@code C}
+	 */
+	public Point3F getC() {
+		return this.c;
+	}
+	
+	/**
+	 * Returns the {@link Point3F} instance denoted by {@code D}.
+	 * 
+	 * @return the {@code Point3F} instance denoted by {@code D}
+	 */
+	public Point3F getD() {
+		return this.d;
 	}
 	
 	/**
@@ -249,25 +255,7 @@ public final class Rectangle3F implements Shape3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Rectangle3F(%s, %s, %s)", this.position, this.sideA, this.sideB);
-	}
-	
-	/**
-	 * Returns the direction and length of the side denoted by {@code A}.
-	 * 
-	 * @return the direction and length of the side denoted by {@code A}
-	 */
-	public Vector3F getSideA() {
-		return this.sideA;
-	}
-	
-	/**
-	 * Returns the direction and length of the side denoted by {@code B}.
-	 * 
-	 * @return the direction and length of the side denoted by {@code B}
-	 */
-	public Vector3F getSideB() {
-		return this.sideB;
+		return String.format("new Rectangle3F(%s, %s, %s, %s)", this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -306,15 +294,19 @@ public final class Rectangle3F implements Shape3F {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.position.accept(nodeHierarchicalVisitor)) {
+				if(!this.a.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.sideA.accept(nodeHierarchicalVisitor)) {
+				if(!this.b.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.sideB.accept(nodeHierarchicalVisitor)) {
+				if(!this.c.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.d.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -327,6 +319,35 @@ public final class Rectangle3F implements Shape3F {
 		} catch(final RuntimeException e) {
 			throw new NodeTraversalException(e);
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Rectangle3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point3F point) {
+		final Point3F a = this.a;
+		final Point3F b = this.b;
+		final Point3F c = this.c;
+		final Point3F p = Objects.requireNonNull(point, "point == null");
+		
+		if(!Point3F.coplanar(this.a, this.b, this.c, p)) {
+			return false;
+		}
+		
+		final Vector3F directionAB = Vector3F.direction(a, b);
+		final Vector3F directionBC = Vector3F.direction(b, c);
+		final Vector3F directionAP = Vector3F.direction(a, p);
+		
+		final float dotProductAPAB = Vector3F.dotProduct(directionAP, Vector3F.normalize(directionAB));
+		final float dotProductAPBC = Vector3F.dotProduct(directionAP, Vector3F.normalize(directionBC));
+		
+		return dotProductAPAB >= 0.0F && dotProductAPAB <= directionAB.length() && dotProductAPBC >= 0.0F && dotProductAPBC <= directionBC.length();
 	}
 	
 	/**
@@ -343,11 +364,13 @@ public final class Rectangle3F implements Shape3F {
 			return true;
 		} else if(!(object instanceof Rectangle3F)) {
 			return false;
-		} else if(!Objects.equals(this.position, Rectangle3F.class.cast(object).position)) {
+		} else if(!Objects.equals(this.a, Rectangle3F.class.cast(object).a)) {
 			return false;
-		} else if(!Objects.equals(this.sideA, Rectangle3F.class.cast(object).sideA)) {
+		} else if(!Objects.equals(this.b, Rectangle3F.class.cast(object).b)) {
 			return false;
-		} else if(!Objects.equals(this.sideB, Rectangle3F.class.cast(object).sideB)) {
+		} else if(!Objects.equals(this.c, Rectangle3F.class.cast(object).c)) {
+			return false;
+		} else if(!Objects.equals(this.d, Rectangle3F.class.cast(object).d)) {
 			return false;
 		} else if(!Objects.equals(this.surfaceNormal, Rectangle3F.class.cast(object).surfaceNormal)) {
 			return false;
@@ -363,7 +386,7 @@ public final class Rectangle3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		return Vector3F.crossProduct(this.sideA, this.sideB).length();
+		return Vector3F.crossProduct(Vector3F.direction(this.a, this.b), Vector3F.direction(this.b, this.c)).length();
 	}
 	
 	/**
@@ -391,33 +414,26 @@ public final class Rectangle3F implements Shape3F {
 		}
 		
 		final Point3F origin = ray.getOrigin();
-		final Point3F position = this.position;
+		final Point3F a = this.a;
+		final Point3F b = this.b;
+		final Point3F c = this.c;
 		
-		final Vector3F originToPosition = Vector3F.direction(origin, position);
-		
-		final float t = Vector3F.dotProduct(originToPosition, surfaceNormal) / nDotD;
+		final float t = Vector3F.dotProduct(Vector3F.direction(origin, a), surfaceNormal) / nDotD;
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return Float.NaN;
 		}
 		
-		final Vector3F sideA = this.sideA;
-		final Vector3F sideB = this.sideB;
+		final Point3F p = Point3F.add(origin, direction, t);
 		
-		final float sideALength = sideA.length();
-		final float sideBLength = sideB.length();
+		final Vector3F directionAB = Vector3F.direction(a, b);
+		final Vector3F directionBC = Vector3F.direction(b, c);
+		final Vector3F directionAP = Vector3F.direction(a, p);
 		
-		final Vector3F sideANormalized = Vector3F.normalize(sideA);
-		final Vector3F sideBNormalized = Vector3F.normalize(sideB);
+		final float dotProductAPAB = Vector3F.dotProduct(directionAP, Vector3F.normalize(directionAB));
+		final float dotProductAPBC = Vector3F.dotProduct(directionAP, Vector3F.normalize(directionBC));
 		
-		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);
-		
-		final Vector3F positionToSurfaceIntersectionPoint = Vector3F.direction(position, surfaceIntersectionPoint);
-		
-		final float sideX = Vector3F.dotProduct(positionToSurfaceIntersectionPoint, sideANormalized);
-		final float sideY = Vector3F.dotProduct(positionToSurfaceIntersectionPoint, sideBNormalized);
-		
-		if(sideX < 0.0F || sideX > sideALength || sideY < 0.0F || sideY > sideBLength) {
+		if(dotProductAPAB < 0.0F || dotProductAPAB > directionAB.length() || dotProductAPBC < 0.0F || dotProductAPBC > directionBC.length()) {
 			return Float.NaN;
 		}
 		
@@ -441,7 +457,7 @@ public final class Rectangle3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.position, this.sideA, this.sideB, this.surfaceNormal);
+		return Objects.hash(this.a, this.b, this.c, this.d, this.surfaceNormal);
 	}
 	
 	/**
@@ -460,11 +476,41 @@ public final class Rectangle3F implements Shape3F {
 		try {
 			dataOutput.writeInt(ID);
 			
-			this.position.write(dataOutput);
-			this.sideA.write(dataOutput);
-			this.sideB.write(dataOutput);
+			this.a.write(dataOutput);
+			this.b.write(dataOutput);
+			this.c.write(dataOutput);
+			this.d.write(dataOutput);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static void doCheckPointValidity(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
+		Objects.requireNonNull(a, "a == null");
+		Objects.requireNonNull(b, "b == null");
+		Objects.requireNonNull(c, "c == null");
+		Objects.requireNonNull(d, "d == null");
+		
+		if(!Point3F.coplanar(a, b, c, d)) {
+			throw new IllegalArgumentException("The provided Point3F instances are not coplanar.");
+		}
+		
+		final float distanceAB = Point3F.distance(a, b);
+		final float distanceBC = Point3F.distance(b, c);
+		final float distanceCD = Point3F.distance(c, d);
+		final float distanceDA = Point3F.distance(d, a);
+		
+		final float deltaABCD = abs(distanceAB - distanceCD);
+		final float deltaBCDA = abs(distanceBC - distanceDA);
+		
+		final boolean isValidABCD = deltaABCD <= 0.00001F;
+		final boolean isValidBCDA = deltaBCDA <= 0.00001F;
+		final boolean isValid = isValidABCD && isValidBCDA;
+		
+		if(!isValid) {
+			throw new IllegalArgumentException();
 		}
 	}
 }

@@ -50,26 +50,80 @@ import java.lang.reflect.Field;//TODO: Add Javadocs!
 
 //TODO: Add Javadocs!
 public final class Shape {
-//	TODO: Add Javadocs!
-	public static final int CONE_OFFSET_PHI_MAX = 0;
+	/**
+	 * The ID of a cone.
+	 */
+	public static final int CONE_ID = 0;
 	
-//	TODO: Add Javadocs!
-	public static final int CONE_OFFSET_RADIUS = 1;
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a cone.
+	 */
+	public static final int CONE_OFFSET_ID = 0;
 	
-//	TODO: Add Javadocs!
-	public static final int CONE_OFFSET_Z_MAX = 2;
+	/**
+	 * The relative offset for the maximum phi angle in a {@code double[]} that contains a cone.
+	 */
+	public static final int CONE_OFFSET_PHI_MAX = 2;
 	
-//	TODO: Add Javadocs!
-	public static final int CYLINDER_OFFSET_PHI_MAX = 0;
+	/**
+	 * The relative offset for the radius in a {@code double[]} that contains a cone.
+	 */
+	public static final int CONE_OFFSET_RADIUS = 3;
 	
-//	TODO: Add Javadocs!
-	public static final int CYLINDER_OFFSET_RADIUS = 1;
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a cone.
+	 */
+	public static final int CONE_OFFSET_SIZE = 1;
 	
-//	TODO: Add Javadocs!
-	public static final int CYLINDER_OFFSET_Z_MAX = 2;
+	/**
+	 * The relative offset for the maximum Z-value in a {@code double[]} that contains a cone.
+	 */
+	public static final int CONE_OFFSET_Z_MAX = 4;
 	
-//	TODO: Add Javadocs!
-	public static final int CYLINDER_OFFSET_Z_MIN = 3;
+	/**
+	 * The size of a cone.
+	 */
+	public static final int CONE_SIZE = 5;
+	
+	/**
+	 * The ID of a cylinder.
+	 */
+	public static final int CYLINDER_ID = 1;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a cylinder.
+	 */
+	public static final int CYLINDER_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the maximum phi angle in a {@code double[]} that contains a cylinder.
+	 */
+	public static final int CYLINDER_OFFSET_PHI_MAX = 2;
+	
+	/**
+	 * The relative offset for the radius in a {@code double[]} that contains a cylinder.
+	 */
+	public static final int CYLINDER_OFFSET_RADIUS = 3;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a cylinder.
+	 */
+	public static final int CYLINDER_OFFSET_SIZE = 1;
+	
+	/**
+	 * The relative offset for the maximum Z-value in a {@code double[]} that contains a cylinder.
+	 */
+	public static final int CYLINDER_OFFSET_Z_MAX = 4;
+	
+	/**
+	 * The relative offset for the minimum Z-value in a {@code double[]} that contains a cylinder.
+	 */
+	public static final int CYLINDER_OFFSET_Z_MIN = 5;
+	
+	/**
+	 * The size of a cylinder.
+	 */
+	public static final int CYLINDER_SIZE = 6;
 	
 //	TODO: Add Javadocs!
 	public static final int DISK_OFFSET_PHI_MAX = 0;
@@ -153,42 +207,169 @@ public final class Shape {
 	// Cone3D //////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the maximum phi angle assigned to the cone contained in {@code cone3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code cone3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cone3DGetPhiMax(cone3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cone3D a {@code double[]} that contains a cone
+	 * @return the maximum phi angle assigned to the cone contained in {@code cone3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cone3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3D} is {@code null}
+	 */
 	public static double cone3DGetPhiMax(final double[] cone3D) {
 		return cone3DGetPhiMax(cone3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the maximum phi angle assigned to the cone contained in {@code cone3D} at offset {@code cone3DOffset}.
+	 * <p>
+	 * If {@code cone3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3D.length < cone3DOffset + 3} or {@code cone3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param cone3D a {@code double[]} that contains a cone
+	 * @param cone3DOffset the offset in {@code cone3D} to start at
+	 * @return the maximum phi angle assigned to the cone contained in {@code cone3D} at offset {@code cone3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cone3D.length < cone3DOffset + 3} or {@code cone3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3D} is {@code null}
+	 */
 	public static double cone3DGetPhiMax(final double[] cone3D, final int cone3DOffset) {
 		return cone3D[cone3DOffset + CONE_OFFSET_PHI_MAX];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the radius assigned to the cone contained in {@code cone3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code cone3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3D.length < 4}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cone3DGetRadius(cone3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cone3D a {@code double[]} that contains a cone
+	 * @return the radius assigned to the cone contained in {@code cone3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cone3D.length < 4}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3D} is {@code null}
+	 */
 	public static double cone3DGetRadius(final double[] cone3D) {
 		return cone3DGetRadius(cone3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the radius assigned to the cone contained in {@code cone3D} at offset {@code cone3DOffset}.
+	 * <p>
+	 * If {@code cone3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3D.length < cone3DOffset + 4} or {@code cone3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param cone3D a {@code double[]} that contains a cone
+	 * @param cone3DOffset the offset in {@code cone3D} to start at
+	 * @return the radius assigned to the cone contained in {@code cone3D} at offset {@code cone3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cone3D.length < cone3DOffset + 4} or {@code cone3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3D} is {@code null}
+	 */
 	public static double cone3DGetRadius(final double[] cone3D, final int cone3DOffset) {
 		return cone3D[cone3DOffset + CONE_OFFSET_RADIUS];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the maximum Z-value assigned to the cone contained in {@code cone3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code cone3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3D.length < 5}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cone3DGetZMax(cone3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cone3D a {@code double[]} that contains a cone
+	 * @return the maximum Z-value assigned to the cone contained in {@code cone3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cone3D.length < 5}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3D} is {@code null}
+	 */
 	public static double cone3DGetZMax(final double[] cone3D) {
 		return cone3DGetZMax(cone3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the maximum Z-value assigned to the cone contained in {@code cone3D} at offset {@code cone3DOffset}.
+	 * <p>
+	 * If {@code cone3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3D.length < cone3DOffset + 5} or {@code cone3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param cone3D a {@code double[]} that contains a cone
+	 * @param cone3DOffset the offset in {@code cone3D} to start at
+	 * @return the maximum Z-value assigned to the cone contained in {@code cone3D} at offset {@code cone3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cone3D.length < cone3DOffset + 5} or {@code cone3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3D} is {@code null}
+	 */
 	public static double cone3DGetZMax(final double[] cone3D, final int cone3DOffset) {
 		return cone3D[cone3DOffset + CONE_OFFSET_Z_MAX];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the cone contained in {@code cone3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code cone3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < 8} or {@code cone3D.length < 5}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cone3DIntersection(ray3D, cone3D, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param cone3D a {@code double[]} that contains a cone
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < 8} or {@code cone3D.length < 5}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code cone3D} are {@code null}
+	 */
 	public static double cone3DIntersection(final double[] ray3D, final double[] cone3D) {
 		return cone3DIntersection(ray3D, cone3D, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the cone contained in {@code cone3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code cone3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code cone3D.length < cone3DOffset + 5} or {@code cone3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param cone3D a {@code double[]} that contains a cone
+	 * @param ray3DOffset the offset in {@code ray3D} to start at
+	 * @param cone3DOffset the offset in {@code cone3D} to start at
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code cone3D.length < cone3DOffset + 5} or {@code cone3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code cone3D} are {@code null}
+	 */
 	public static double cone3DIntersection(final double[] ray3D, final double[] cone3D, final int ray3DOffset, final int cone3DOffset) {
 		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
@@ -230,23 +411,83 @@ public final class Shape {
 		return NaN;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a cone.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cone3D(Doubles.toRadians(360.0D), 1.0D, 1.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code double[]} that contains a cone
+	 */
 	public static double[] cone3D() {
 		return cone3D(toRadians(360.0D), 1.0D, 1.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a cone.
+	 * 
+	 * @param phiMax the maximum phi angle of the cone
+	 * @param radius the radius of the cone
+	 * @param zMax the maximum Z-value of the cone
+	 * @return a {@code double[]} that contains a cone
+	 */
 	public static double[] cone3D(final double phiMax, final double radius, final double zMax) {
-		return new double[] {phiMax, radius, zMax};
+		return cone3DSet(new double[CONE_SIZE], phiMax, radius, zMax);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the values of the cone contained in {@code cone3DResult} at offset {@code 0}.
+	 * <p>
+	 * Returns {@code cone3DResult}.
+	 * <p>
+	 * If {@code cone3DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3DResult.length < 5}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cone3DSet(cone3DResult, phiMax, radius, zMax, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cone3DResult a {@code double[]} that contains a cone
+	 * @param phiMax the maximum phi angle of the cone
+	 * @param radius the radius of the cone
+	 * @param zMax the maximum Z-value of the cone
+	 * @return {@code cone3DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cone3DResult.length < 5}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3DResult} is {@code null}
+	 */
 	public static double[] cone3DSet(final double[] cone3DResult, final double phiMax, final double radius, final double zMax) {
 		return cone3DSet(cone3DResult, phiMax, radius, zMax, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the values of the cone contained in {@code cone3DResult} at offset {@code cone3DResultOffset}.
+	 * <p>
+	 * Returns {@code cone3DResult}.
+	 * <p>
+	 * If {@code cone3DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cone3DResult.length < cone3DResultOffset + 5} or {@code cone3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param cone3DResult a {@code double[]} that contains a cone
+	 * @param phiMax the maximum phi angle of the cone
+	 * @param radius the radius of the cone
+	 * @param zMax the maximum Z-value of the cone
+	 * @param cone3DResultOffset the offset in {@code cone3DResult} to start at
+	 * @return {@code cone3DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cone3DResult.length < cone3DResultOffset + 5} or {@code cone3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code cone3DResult} is {@code null}
+	 */
 	public static double[] cone3DSet(final double[] cone3DResult, final double phiMax, final double radius, final double zMax, final int cone3DResultOffset) {
+		cone3DResult[cone3DResultOffset + CONE_OFFSET_ID] = CONE_ID;
+		cone3DResult[cone3DResultOffset + CONE_OFFSET_SIZE] = CONE_SIZE;
 		cone3DResult[cone3DResultOffset + CONE_OFFSET_PHI_MAX] = phiMax;
 		cone3DResult[cone3DResultOffset + CONE_OFFSET_RADIUS] = radius;
 		cone3DResult[cone3DResultOffset + CONE_OFFSET_Z_MAX] = zMax;
@@ -258,52 +499,209 @@ public final class Shape {
 	// Cylinder3D //////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the maximum phi angle assigned to the cylinder contained in {@code cylinder3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code cylinder3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cylinder3DGetPhiMax(cylinder3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @return the maximum phi angle assigned to the cylinder contained in {@code cylinder3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
+	 */
 	public static double cylinder3DGetPhiMax(final double[] cylinder3D) {
 		return cylinder3DGetPhiMax(cylinder3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the maximum phi angle assigned to the cylinder contained in {@code cylinder3D} at offset {@code cylinder3DOffset}.
+	 * <p>
+	 * If {@code cylinder3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3D.length < cylinder3DOffset + 3} or {@code cylinder3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @param cylinder3DOffset the offset in {@code cylinder3D} to start at
+	 * @return the maximum phi angle assigned to the cylinder contained in {@code cylinder3D} at offset {@code cylinder3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3D.length < cylinder3DOffset + 3} or {@code cylinder3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
+	 */
 	public static double cylinder3DGetPhiMax(final double[] cylinder3D, final int cylinder3DOffset) {
 		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_PHI_MAX];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the radius assigned to the cylinder contained in {@code cylinder3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code cylinder3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3D.length < 4}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cylinder3DGetRadius(cylinder3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @return the radius assigned to the cylinder contained in {@code cylinder3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3D.length < 4}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
+	 */
 	public static double cylinder3DGetRadius(final double[] cylinder3D) {
 		return cylinder3DGetRadius(cylinder3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the radius assigned to the cylinder contained in {@code cylinder3D} at offset {@code cylinder3DOffset}.
+	 * <p>
+	 * If {@code cylinder3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3D.length < cylinder3DOffset + 4} or {@code cylinder3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @param cylinder3DOffset the offset in {@code cylinder3D} to start at
+	 * @return the radius assigned to the cylinder contained in {@code cylinder3D} at offset {@code cylinder3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3D.length < cylinder3DOffset + 4} or {@code cylinder3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
+	 */
 	public static double cylinder3DGetRadius(final double[] cylinder3D, final int cylinder3DOffset) {
 		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_RADIUS];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the maximum Z-value assigned to the cylinder contained in {@code cylinder3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code cylinder3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3D.length < 5}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cylinder3DGetZMax(cylinder3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @return the maximum Z-value assigned to the cylinder contained in {@code cylinder3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3D.length < 5}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
+	 */
 	public static double cylinder3DGetZMax(final double[] cylinder3D) {
 		return cylinder3DGetZMax(cylinder3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the maximum Z-value assigned to the cylinder contained in {@code cylinder3D} at offset {@code cylinder3DOffset}.
+	 * <p>
+	 * If {@code cylinder3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3D.length < cylinder3DOffset + 5} or {@code cylinder3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @param cylinder3DOffset the offset in {@code cylinder3D} to start at
+	 * @return the maximum Z-value assigned to the cylinder contained in {@code cylinder3D} at offset {@code cylinder3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3D.length < cylinder3DOffset + 5} or {@code cylinder3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
+	 */
 	public static double cylinder3DGetZMax(final double[] cylinder3D, final int cylinder3DOffset) {
 		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_Z_MAX];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the minimum Z-value assigned to the cylinder contained in {@code cylinder3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code cylinder3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3D.length < 6}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cylinder3DGetZMin(cylinder3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @return the minimum Z-value assigned to the cylinder contained in {@code cylinder3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3D.length < 6}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
+	 */
 	public static double cylinder3DGetZMin(final double[] cylinder3D) {
 		return cylinder3DGetZMin(cylinder3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the minimum Z-value assigned to the cylinder contained in {@code cylinder3D} at offset {@code cylinder3DOffset}.
+	 * <p>
+	 * If {@code cylinder3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3D.length < cylinder3DOffset + 6} or {@code cylinder3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @param cylinder3DOffset the offset in {@code cylinder3D} to start at
+	 * @return the minimum Z-value assigned to the cylinder contained in {@code cylinder3D} at offset {@code cylinder3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3D.length < cylinder3DOffset + 6} or {@code cylinder3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
+	 */
 	public static double cylinder3DGetZMin(final double[] cylinder3D, final int cylinder3DOffset) {
 		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_Z_MIN];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the cylinder contained in {@code cylinder3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code cylinder3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < 8} or {@code cylinder3D.length < 6}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cylinder3DIntersection(ray3D, cylinder3D, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < 8} or {@code cylinder3D.length < 6}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code cylinder3D} are {@code null}
+	 */
 	public static double cylinder3DIntersection(final double[] ray3D, final double[] cylinder3D) {
 		return cylinder3DIntersection(ray3D, cylinder3D, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the cylinder contained in {@code cylinder3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code cylinder3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code cylinder3D.length < cylinder3DOffset + 6} or {@code cylinder3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param cylinder3D a {@code double[]} that contains a cylinder
+	 * @param ray3DOffset the offset in {@code ray3D} to start at
+	 * @param cylinder3DOffset the offset in {@code cylinder3D} to start at
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code cylinder3D.length < cylinder3DOffset + 6} or {@code cylinder3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code cylinder3D} are {@code null}
+	 */
 	public static double cylinder3DIntersection(final double[] ray3D, final double[] cylinder3D, final int ray3DOffset, final int cylinder3DOffset) {
 		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
@@ -345,23 +743,86 @@ public final class Shape {
 		return NaN;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a cylinder.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cylinder3D(Doubles.toRadians(360.0D), 1.0D, 1.0D, -1.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code double[]} that contains a cylinder
+	 */
 	public static double[] cylinder3D() {
 		return cylinder3D(toRadians(360.0D), 1.0D, 1.0D, -1.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a cylinder.
+	 * 
+	 * @param phiMax the maximum phi angle of the cylinder
+	 * @param radius the radius of the cylinder
+	 * @param zMax the maximum Z-value of the cylinder
+	 * @param zMin the minimum Z-value of the cylinder
+	 * @return a {@code double[]} that contains a cylinder
+	 */
 	public static double[] cylinder3D(final double phiMax, final double radius, final double zMax, final double zMin) {
-		return new double[] {phiMax, radius, zMax, zMin};
+		return cylinder3DSet(new double[CYLINDER_SIZE], phiMax, radius, zMax, zMin);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the values of the cylinder contained in {@code cylinder3DResult} at offset {@code 0}.
+	 * <p>
+	 * Returns {@code cylinder3DResult}.
+	 * <p>
+	 * If {@code cylinder3DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3DResult.length < 6}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Shape.cylinder3DSet(cylinder3DResult, phiMax, radius, zMax, zMin, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cylinder3DResult a {@code double[]} that contains a cylinder
+	 * @param phiMax the maximum phi angle of the cylinder
+	 * @param radius the radius of the cylinder
+	 * @param zMax the maximum Z-value of the cylinder
+	 * @param zMin the minimum Z-value of the cylinder
+	 * @return {@code cylinder3DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3DResult.length < 6}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3DResult} is {@code null}
+	 */
 	public static double[] cylinder3DSet(final double[] cylinder3DResult, final double phiMax, final double radius, final double zMax, final double zMin) {
 		return cylinder3DSet(cylinder3DResult, phiMax, radius, zMax, zMin, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the values of the cylinder contained in {@code cylinder3DResult} at offset {@code cylinder3DResultOffset}.
+	 * <p>
+	 * Returns {@code cylinder3DResult}.
+	 * <p>
+	 * If {@code cylinder3DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code cylinder3DResult.length < cylinder3DResultOffset + 6} or {@code cylinder3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param cylinder3DResult a {@code double[]} that contains a cylinder
+	 * @param phiMax the maximum phi angle of the cylinder
+	 * @param radius the radius of the cylinder
+	 * @param zMax the maximum Z-value of the cylinder
+	 * @param zMin the minimum Z-value of the cylinder
+	 * @param cylinder3DResultOffset the offset in {@code cylinder3DResult} to start at
+	 * @return {@code cylinder3DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code cylinder3DResult.length < cylinder3DResultOffset + 6} or {@code cylinder3DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code cylinder3DResult} is {@code null}
+	 */
 	public static double[] cylinder3DSet(final double[] cylinder3DResult, final double phiMax, final double radius, final double zMax, final double zMin, final int cylinder3DResultOffset) {
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_ID] = CYLINDER_ID;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_SIZE] = CYLINDER_SIZE;
 		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_PHI_MAX] = phiMax;
 		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_RADIUS] = radius;
 		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_Z_MAX] = zMax;

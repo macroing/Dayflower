@@ -1,7 +1,8 @@
 2021-08-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add methods to compute the orthonormal basis, surface normal and texture coordinates for a Cone3D data structure in the Shape class in the Simplex API.
 	* ADD:		Add Javadocs to the Shape class in the Simplex API.
-	* CHANGE:	Add ID and size parameters to the Cone3D and Cylinder3D data structures in the Shape class in the Simplex API.
+	* CHANGE:	Add ID and size parameters to the Cone3D, Cylinder3D and Disk3D data structures in the Shape class in the Simplex API.
 
 2021-08-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

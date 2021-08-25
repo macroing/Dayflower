@@ -18,6 +18,7 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33D;
 import static org.dayflower.simplex.Point.point2D;
 import static org.dayflower.simplex.Point.point2DSet;
 import static org.dayflower.simplex.Point.point3D;
@@ -34,6 +35,7 @@ import static org.dayflower.simplex.Vector.vector3DDirectionNormalized;
 import static org.dayflower.simplex.Vector.vector3DDotProduct;
 import static org.dayflower.simplex.Vector.vector3DFromPoint3D;
 import static org.dayflower.simplex.Vector.vector3DLengthSquared;
+import static org.dayflower.simplex.Vector.vector3DNormalize;
 import static org.dayflower.simplex.Vector.vector3DSet;
 import static org.dayflower.utility.Doubles.NaN;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
@@ -125,17 +127,45 @@ public final class Shape {
 	 */
 	public static final int CYLINDER_SIZE = 6;
 	
-//	TODO: Add Javadocs!
-	public static final int DISK_OFFSET_PHI_MAX = 0;
+	/**
+	 * The ID of a disk.
+	 */
+	public static final int DISK_ID = 2;
 	
-//	TODO: Add Javadocs!
-	public static final int DISK_OFFSET_RADIUS_INNER = 1;
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a disk.
+	 */
+	public static final int DISK_OFFSET_ID = 0;
 	
-//	TODO: Add Javadocs!
-	public static final int DISK_OFFSET_RADIUS_OUTER = 2;
+	/**
+	 * The relative offset for the maximum phi angle in a {@code double[]} that contains a disk.
+	 */
+	public static final int DISK_OFFSET_PHI_MAX = 2;
 	
-//	TODO: Add Javadocs!
-	public static final int DISK_OFFSET_Z_MAX = 3;
+	/**
+	 * The relative offset for the inner radius in a {@code double[]} that contains a disk.
+	 */
+	public static final int DISK_OFFSET_RADIUS_INNER = 3;
+	
+	/**
+	 * The relative offset for the outer radius in a {@code double[]} that contains a disk.
+	 */
+	public static final int DISK_OFFSET_RADIUS_OUTER = 4;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a disk.
+	 */
+	public static final int DISK_OFFSET_SIZE = 1;
+	
+	/**
+	 * The relative offset for the maximum Z-value in a {@code double[]} that contains a disk.
+	 */
+	public static final int DISK_OFFSET_Z_MAX = 5;
+	
+	/**
+	 * The size of a disk.
+	 */
+	public static final int DISK_SIZE = 6;
 	
 //	TODO: Add Javadocs!
 	public static final int PARABOLOID_OFFSET_PHI_MAX = 0;
@@ -437,6 +467,80 @@ public final class Shape {
 	 */
 	public static double[] cone3D(final double phiMax, final double radius, final double zMax) {
 		return cone3DSet(new double[CONE_SIZE], phiMax, radius, zMax);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cone3DComputeOrthonormalBasis(final double[] ray3D, final double[] cone3D, final double t) {
+		return cone3DComputeOrthonormalBasis(ray3D, cone3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cone3DComputeOrthonormalBasis(final double[] ray3D, final double[] cone3D, final double t, final int ray3DOffset, final int cone3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double phiMax = cone3DGetPhiMax(cone3D, cone3DOffset);
+		final double zMax = cone3DGetZMax(cone3D, cone3DOffset);
+		
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double v = point3D[2] / zMax;
+		
+		final double[] vector3DU = vector3DNormalize(vector3D(-phiMax * point3D[1], phiMax * point3D[0], 0.0D));
+		final double[] vector3DV = vector3DNormalize(vector3D(-point3D[0] / (1.0D - v), -point3D[1] / (1.0D - v), zMax));
+		final double[] vector3DW = vector3DCrossProduct(vector3DU, vector3DV);
+		
+		return orthonormalBasis33D(vector3DU, vector3DV, vector3DW);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cone3DComputeSurfaceNormal(final double[] ray3D, final double[] cone3D, final double t) {
+		return cone3DComputeSurfaceNormal(ray3D, cone3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cone3DComputeSurfaceNormal(final double[] ray3D, final double[] cone3D, final double t, final int ray3DOffset, final int cone3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double phiMax = cone3DGetPhiMax(cone3D, cone3DOffset);
+		final double zMax = cone3DGetZMax(cone3D, cone3DOffset);
+		
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double v = point3D[2] / zMax;
+		
+		final double[] vector3DU = vector3DNormalize(vector3D(-phiMax * point3D[1], phiMax * point3D[0], 0.0D));
+		final double[] vector3DV = vector3DNormalize(vector3D(-point3D[0] / (1.0D - v), -point3D[1] / (1.0D - v), zMax));
+		final double[] vector3DW = vector3DCrossProduct(vector3DU, vector3DV);
+		
+		return vector3DW;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cone3DComputeTextureCoordinates(final double[] ray3D, final double[] cone3D, final double t) {
+		return cone3DComputeTextureCoordinates(ray3D, cone3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] cone3DComputeTextureCoordinates(final double[] ray3D, final double[] cone3D, final double t, final int ray3DOffset, final int cone3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double phiMax = cone3DGetPhiMax(cone3D, cone3DOffset);
+		final double zMax = cone3DGetZMax(cone3D, cone3DOffset);
+		
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double phi = getOrAdd(atan2(point3D[1], point3D[0]), 0.0D, PI_MULTIPLIED_BY_2);
+		
+		final double u = phi / phiMax;
+		final double v = point3D[2] / zMax;
+		
+		return point2D(u, v);
 	}
 	
 	/**
@@ -928,7 +1032,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] disk3D(final double phiMax, final double radiusInner, final double radiusOuter, final double zMax) {
-		return new double[] {phiMax, radiusInner, radiusOuter, zMax};
+		return disk3DSet(new double[DISK_SIZE], phiMax, radiusInner, radiusOuter, zMax);
 	}
 	
 //	TODO: Add Javadocs!
@@ -938,6 +1042,8 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] disk3DSet(final double[] disk3DResult, final double phiMax, final double radiusInner, final double radiusOuter, final double zMax, final int disk3DResultOffset) {
+		disk3DResult[disk3DResultOffset + DISK_OFFSET_ID] = DISK_ID;
+		disk3DResult[disk3DResultOffset + DISK_OFFSET_SIZE] = DISK_SIZE;
 		disk3DResult[disk3DResultOffset + DISK_OFFSET_PHI_MAX] = phiMax;
 		disk3DResult[disk3DResultOffset + DISK_OFFSET_RADIUS_INNER] = radiusInner;
 		disk3DResult[disk3DResultOffset + DISK_OFFSET_RADIUS_OUTER] = radiusOuter;

@@ -65,11 +65,3 @@ Scene Material API:
 Scene Texture API:
 
 	* ADD:		Add an HDRImageTexture class.
-
-Utility API:
-
-	* ADD:		Add methods to convert from double[], float[] and long[] to byte[] in the ByteArrays class.
-	* ADD:		Add methods to convert from byte[], float[], int[] and long[] to double[] in the DoubleArrays class.
-	* ADD:		Add methods to convert from byte[], double[], int[] and long[] to float[] in the FloatArrays class.
-	* ADD:		Add methods to convert from double[], float[] and long[] to int[] in the IntArrays class.
-	* ADD:		Add methods to convert from double[], float[] and int[] to long[] in the LongArrays class.

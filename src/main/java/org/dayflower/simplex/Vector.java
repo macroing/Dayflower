@@ -18,13 +18,19 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.Point.point3DGetX;
+import static org.dayflower.simplex.Point.point3DGetY;
+import static org.dayflower.simplex.Point.point3DGetZ;
 import static org.dayflower.utility.Doubles.sqrt;
+
+import java.lang.reflect.Field;//TODO: Add Javadocs!
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on vectors.
  * <p>
  * This class currently supports the following:
  * <ul>
+ * <li>{@code Vector2D} - a 2-dimensional vector represented by a {@code double[]}.</li>
  * <li>{@code Vector3D} - a 3-dimensional vector represented by a {@code double[]}.</li>
  * </ul>
  * 
@@ -34,6 +40,175 @@ import static org.dayflower.utility.Doubles.sqrt;
 public final class Vector {
 	private Vector() {
 		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Vector2D ////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static double vector2DCrossProduct(final double[] vector2DLHS, final double[] vector2DRHS) {
+		return vector2DCrossProduct(vector2DLHS, vector2DRHS, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DCrossProduct(final double[] vector2DLHS, final double[] vector2DRHS, final int vector2DLHSOffset, final int vector2DRHSOffset) {
+		return vector2DLHS[vector2DLHSOffset + 0] * vector2DRHS[vector2DRHSOffset + 1] - vector2DLHS[vector2DLHSOffset + 1] * vector2DRHS[vector2DRHSOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetComponent1(final double[] vector2D) {
+		return vector2DGetComponent1(vector2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetComponent1(final double[] vector2D, final int vector2DOffset) {
+		return vector2D[vector2DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetComponent2(final double[] vector2D) {
+		return vector2DGetComponent2(vector2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetComponent2(final double[] vector2D, final int vector2DOffset) {
+		return vector2D[vector2DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetU(final double[] vector2D) {
+		return vector2DGetU(vector2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetU(final double[] vector2D, final int vector2DOffset) {
+		return vector2D[vector2DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetV(final double[] vector2D) {
+		return vector2DGetV(vector2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetV(final double[] vector2D, final int vector2DOffset) {
+		return vector2D[vector2DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetX(final double[] vector2D) {
+		return vector2DGetX(vector2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetX(final double[] vector2D, final int vector2DOffset) {
+		return vector2D[vector2DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetY(final double[] vector2D) {
+		return vector2DGetY(vector2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector2DGetY(final double[] vector2D, final int vector2DOffset) {
+		return vector2D[vector2DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2D() {
+		return vector2D(0.0D, 0.0D);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2D(final double component1, final double component2) {
+		return new double[] {component1, component2};
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DDirectionXY(final double[] point3D) {
+		return vector2DDirectionXY(point3D, vector2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DDirectionXY(final double[] point3D, final double[] vector2DResult) {
+		return vector2DDirectionXY(point3D, vector2DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DDirectionXY(final double[] point3D, final double[] vector2DResult, final int point3DOffset, final int vector2DResultOffset) {
+		final double component1 = point3DGetX(point3D, point3DOffset);
+		final double component2 = point3DGetY(point3D, point3DOffset);
+		
+		return vector2DSet(vector2DResult, component1, component2, vector2DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DDirectionYZ(final double[] point3D) {
+		return vector2DDirectionYZ(point3D, vector2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DDirectionYZ(final double[] point3D, final double[] vector2DResult) {
+		return vector2DDirectionYZ(point3D, vector2DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DDirectionYZ(final double[] point3D, final double[] vector2DResult, final int point3DOffset, final int vector2DResultOffset) {
+		final double component1 = point3DGetY(point3D, point3DOffset);
+		final double component2 = point3DGetZ(point3D, point3DOffset);
+		
+		return vector2DSet(vector2DResult, component1, component2, vector2DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DDirectionZX(final double[] point3D) {
+		return vector2DDirectionZX(point3D, vector2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DDirectionZX(final double[] point3D, final double[] vector2DResult) {
+		return vector2DDirectionZX(point3D, vector2DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DDirectionZX(final double[] point3D, final double[] vector2DResult, final int point3DOffset, final int vector2DResultOffset) {
+		final double component1 = point3DGetZ(point3D, point3DOffset);
+		final double component2 = point3DGetX(point3D, point3DOffset);
+		
+		return vector2DSet(vector2DResult, component1, component2, vector2DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DSet(final double[] vector2DResult, final double component1, final double component2) {
+		return vector2DSet(vector2DResult, component1, component2, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DSet(final double[] vector2DResult, final double component1, final double component2, final int vector2DResultOffset) {
+		vector2DResult[vector2DResultOffset + 0] = component1;
+		vector2DResult[vector2DResultOffset + 1] = component2;
+		
+		return vector2DResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DSubtract(final double[] vector2DLHS, final double[] vector2DRHS) {
+		return vector2DSubtract(vector2DLHS, vector2DRHS, vector2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DSubtract(final double[] vector2DLHS, final double[] vector2DRHS, final double[] vector2DResult) {
+		return vector2DSubtract(vector2DLHS, vector2DRHS, vector2DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector2DSubtract(final double[] vector2DLHS, final double[] vector2DRHS, final double[] vector2DResult, final int vector2DLHSOffset, final int vector2DRHSOffset, final int vector2DResultOffset) {
+		final double component1 = vector2DLHS[vector2DLHSOffset + 0] - vector2DRHS[vector2DRHSOffset + 0];
+		final double component2 = vector2DLHS[vector2DLHSOffset + 1] - vector2DRHS[vector2DRHSOffset + 1];
+		
+		return vector2DSet(vector2DResult, component1, component2, vector2DResultOffset);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +256,96 @@ public final class Vector {
 	 */
 	public static double vector3DDotProduct(final double[] vector3DLHS, final double[] vector3DRHS, final int vector3DLHSOffset, final int vector3DRHSOffset) {
 		return vector3DLHS[vector3DLHSOffset + 0] * vector3DRHS[vector3DRHSOffset + 0] + vector3DLHS[vector3DLHSOffset + 1] * vector3DRHS[vector3DRHSOffset + 1] + vector3DLHS[vector3DLHSOffset + 2] * vector3DRHS[vector3DRHSOffset + 2];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetComponent1(final double[] vector3D) {
+		return vector3DGetComponent1(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetComponent1(final double[] vector3D, final int vector3DOffset) {
+		return vector3D[vector3DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetComponent2(final double[] vector3D) {
+		return vector3DGetComponent2(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetComponent2(final double[] vector3D, final int vector3DOffset) {
+		return vector3D[vector3DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetComponent3(final double[] vector3D) {
+		return vector3DGetComponent3(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetComponent3(final double[] vector3D, final int vector3DOffset) {
+		return vector3D[vector3DOffset + 2];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetU(final double[] vector3D) {
+		return vector3DGetU(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetU(final double[] vector3D, final int vector3DOffset) {
+		return vector3D[vector3DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetV(final double[] vector3D) {
+		return vector3DGetV(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetV(final double[] vector3D, final int vector3DOffset) {
+		return vector3D[vector3DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetW(final double[] vector3D) {
+		return vector3DGetW(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetW(final double[] vector3D, final int vector3DOffset) {
+		return vector3D[vector3DOffset + 2];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetX(final double[] vector3D) {
+		return vector3DGetX(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetX(final double[] vector3D, final int vector3DOffset) {
+		return vector3D[vector3DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetY(final double[] vector3D) {
+		return vector3DGetY(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetY(final double[] vector3D, final int vector3DOffset) {
+		return vector3D[vector3DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetZ(final double[] vector3D) {
+		return vector3DGetZ(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DGetZ(final double[] vector3D, final int vector3DOffset) {
+		return vector3D[vector3DOffset + 2];
 	}
 	
 	/**

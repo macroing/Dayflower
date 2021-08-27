@@ -20,8 +20,12 @@ package org.dayflower.simplex;
 
 import static org.dayflower.simplex.Vector.vector3D;
 import static org.dayflower.simplex.Vector.vector3DCrossProduct;
+import static org.dayflower.simplex.Vector.vector3DGetX;
+import static org.dayflower.simplex.Vector.vector3DGetY;
+import static org.dayflower.simplex.Vector.vector3DGetZ;
 import static org.dayflower.simplex.Vector.vector3DNormalize;
 import static org.dayflower.simplex.Vector.vector3DSet;
+import static org.dayflower.utility.Doubles.abs;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 
@@ -136,6 +140,32 @@ public final class OrthonormalBasis {
 		final double wZ = vector3DW[vector3DWOffset + 2];
 		
 		return new double[] {uX, uY, uZ, vX, vY, vZ, wX, wY, wZ};
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] orthonormalBasis33DFromW(final double[] vector3DW) {
+		return orthonormalBasis33DFromW(vector3DW, orthonormalBasis33D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] orthonormalBasis33DFromW(final double[] vector3DW, final double[] orthonormalBasis33DResult) {
+		return orthonormalBasis33DFromW(vector3DW, orthonormalBasis33DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] orthonormalBasis33DFromW(final double[] vector3DW, final double[] orthonormalBasis33DResult, final int vector3DWOffset, final int orthonormalBasis33DResultOffset) {
+		final double[] vector3DWNormalized = vector3DNormalize(vector3DW, vector3D(), vector3DWOffset, 0);
+		
+		final double x = vector3DGetX(vector3DWNormalized);
+		final double y = vector3DGetY(vector3DWNormalized);
+		final double z = vector3DGetZ(vector3DWNormalized);
+		
+		final double[] vector3DV = abs(x) < abs(y) && abs(x) < abs(z) ? vector3D(0.0D, z, -y) : abs(y) < abs(z) ? vector3D(z, 0.0D, -x) : vector3D(y, -x, 0.0D);
+		final double[] vector3DVNormalized = vector3DNormalize(vector3DV);
+		
+		final double[] vector3DUNormalized = vector3DCrossProduct(vector3DVNormalized, vector3DWNormalized);
+		
+		return orthonormalBasis33DSet(orthonormalBasis33DResult, vector3DUNormalized, vector3DVNormalized, vector3DWNormalized, orthonormalBasis33DResultOffset, 0, 0, 0);
 	}
 	
 //	TODO: Add Javadocs!

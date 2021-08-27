@@ -26,6 +26,8 @@ import static org.dayflower.utility.Doubles.random;
 import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.sqrt;
 
+import java.lang.reflect.Field;//TODO: Add Javadocs!
+
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on points.
  * <p>
@@ -46,6 +48,66 @@ public final class Point {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Point2D /////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetComponent1(final double[] point2D) {
+		return point2DGetComponent1(point2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetComponent1(final double[] point2D, final int point2DOffset) {
+		return point2D[point2DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetComponent2(final double[] point2D) {
+		return point2DGetComponent2(point2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetComponent2(final double[] point2D, final int point2DOffset) {
+		return point2D[point2DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetU(final double[] point2D) {
+		return point2DGetU(point2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetU(final double[] point2D, final int point2DOffset) {
+		return point2D[point2DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetV(final double[] point2D) {
+		return point2DGetV(point2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetV(final double[] point2D, final int point2DOffset) {
+		return point2D[point2DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetX(final double[] point2D) {
+		return point2DGetX(point2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetX(final double[] point2D, final int point2DOffset) {
+		return point2D[point2DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetY(final double[] point2D) {
+		return point2DGetY(point2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DGetY(final double[] point2D, final int point2DOffset) {
+		return point2D[point2DOffset + 1];
+	}
 	
 	/**
 	 * Returns a {@code double[]} that contains a point with two components.
@@ -236,6 +298,96 @@ public final class Point {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Point3D /////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetComponent1(final double[] point3D) {
+		return point3DGetComponent1(point3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetComponent1(final double[] point3D, final int point3DOffset) {
+		return point3D[point3DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetComponent2(final double[] point3D) {
+		return point3DGetComponent2(point3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetComponent2(final double[] point3D, final int point3DOffset) {
+		return point3D[point3DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetComponent3(final double[] point3D) {
+		return point3DGetComponent3(point3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetComponent3(final double[] point3D, final int point3DOffset) {
+		return point3D[point3DOffset + 2];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetU(final double[] point3D) {
+		return point3DGetU(point3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetU(final double[] point3D, final int point3DOffset) {
+		return point3D[point3DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetV(final double[] point3D) {
+		return point3DGetV(point3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetV(final double[] point3D, final int point3DOffset) {
+		return point3D[point3DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetW(final double[] point3D) {
+		return point3DGetW(point3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetW(final double[] point3D, final int point3DOffset) {
+		return point3D[point3DOffset + 2];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetX(final double[] point3D) {
+		return point3DGetX(point3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetX(final double[] point3D, final int point3DOffset) {
+		return point3D[point3DOffset + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetY(final double[] point3D) {
+		return point3DGetY(point3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetY(final double[] point3D, final int point3DOffset) {
+		return point3D[point3DOffset + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetZ(final double[] point3D) {
+		return point3DGetZ(point3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DGetZ(final double[] point3D, final int point3DOffset) {
+		return point3D[point3DOffset + 2];
+	}
 	
 	/**
 	 * Returns a {@code double[]} that contains a point with three components.

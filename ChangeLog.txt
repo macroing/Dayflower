@@ -1,3 +1,7 @@
+2021-08-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the Simplex API.
+
 2021-08-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add methods to compute the orthonormal basis, surface normal and texture coordinates for a Cone3D data structure in the Shape class in the Simplex API.

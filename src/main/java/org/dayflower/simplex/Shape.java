@@ -20,9 +20,11 @@ package org.dayflower.simplex;
 
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33D;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromW;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromWV;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DGetW;
 import static org.dayflower.simplex.Point.point2D;
 import static org.dayflower.simplex.Point.point2DSet;
+import static org.dayflower.simplex.Point.point2DSphericalCoordinates;
 import static org.dayflower.simplex.Point.point3D;
 import static org.dayflower.simplex.Point.point3DAdd;
 import static org.dayflower.simplex.Point.point3DGetX;
@@ -53,12 +55,17 @@ import static org.dayflower.simplex.Vector.vector3DLengthSquared;
 import static org.dayflower.simplex.Vector.vector3DNormalize;
 import static org.dayflower.simplex.Vector.vector3DSet;
 import static org.dayflower.utility.Doubles.NaN;
+import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
 import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.asin;
 import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
 import static org.dayflower.utility.Doubles.solveQuartic;
 import static org.dayflower.utility.Doubles.sqrt;
@@ -269,17 +276,65 @@ public final class Shape {
 	 */
 	public static final int SHAPE_OFFSET_SIZE = 1;
 	
-//	TODO: Add Javadocs!
-	public static final int SPHERE_OFFSET_CENTER = 0;
+	/**
+	 * The ID of a sphere.
+	 */
+	public static final int SPHERE_ID = 5;
 	
-//	TODO: Add Javadocs!
-	public static final int SPHERE_OFFSET_RADIUS = 3;
+	/**
+	 * The relative offset for the point denoted by Center in a {@code double[]} that contains a sphere.
+	 */
+	public static final int SPHERE_OFFSET_CENTER = 2;
 	
-//	TODO: Add Javadocs!
-	public static final int TORUS_OFFSET_RADIUS_INNER = 0;
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a sphere.
+	 */
+	public static final int SPHERE_OFFSET_ID = 0;
 	
-//	TODO: Add Javadocs!
-	public static final int TORUS_OFFSET_RADIUS_OUTER = 1;
+	/**
+	 * The relative offset for the radius in a {@code double[]} that contains a sphere.
+	 */
+	public static final int SPHERE_OFFSET_RADIUS = 5;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a sphere.
+	 */
+	public static final int SPHERE_OFFSET_SIZE = 1;
+	
+	/**
+	 * The size of a sphere.
+	 */
+	public static final int SPHERE_SIZE = 6;
+	
+	/**
+	 * The ID of a torus.
+	 */
+	public static final int TORUS_ID = 6;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a torus.
+	 */
+	public static final int TORUS_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the inner radius in a {@code double[]} that contains a torus.
+	 */
+	public static final int TORUS_OFFSET_RADIUS_INNER = 2;
+	
+	/**
+	 * The relative offset for the outer radius in a {@code double[]} that contains a torus.
+	 */
+	public static final int TORUS_OFFSET_RADIUS_OUTER = 3;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a torus.
+	 */
+	public static final int TORUS_OFFSET_SIZE = 1;
+	
+	/**
+	 * The size of a torus.
+	 */
+	public static final int TORUS_SIZE = 4;
 	
 //	TODO: Add Javadocs!
 	public static final int TRIANGLE_OFFSET_POSITION_A = 0;
@@ -1645,6 +1700,10 @@ public final class Shape {
 				return paraboloid3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case PLANE_ID:
 				return plane3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
+			case SPHERE_ID:
+				return sphere3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
+			case TORUS_ID:
+				return torus3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			default:
 				return NaN;
 		}
@@ -1668,6 +1727,10 @@ public final class Shape {
 				return paraboloid3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case PLANE_ID:
 				return plane3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case SPHERE_ID:
+				return sphere3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case TORUS_ID:
+				return torus3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			default:
 				return orthonormalBasis33D();
 		}
@@ -1701,6 +1764,10 @@ public final class Shape {
 				return paraboloid3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case PLANE_ID:
 				return plane3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case SPHERE_ID:
+				return sphere3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case TORUS_ID:
+				return torus3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			default:
 				return point2D();
 		}
@@ -1792,11 +1859,47 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] sphere3D(final double[] point3DCenter, final double radius, final int point3DCenterOffset) {
-		final double centerX = point3DCenter[point3DCenterOffset + 0];
-		final double centerY = point3DCenter[point3DCenterOffset + 1];
-		final double centerZ = point3DCenter[point3DCenterOffset + 2];
+		return sphere3DSet(new double[SPHERE_SIZE], point3DCenter, radius, 0, point3DCenterOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DComputeOrthonormalBasis(final double[] ray3D, final double[] sphere3D, final double t) {
+		return sphere3DComputeOrthonormalBasis(ray3D, sphere3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DComputeOrthonormalBasis(final double[] ray3D, final double[] sphere3D, final double t, final int ray3DOffset, final int sphere3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
-		return new double[] {centerX, centerY, centerZ, radius};
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double[] point3DCenter = sphere3DGetCenter(sphere3D, point3D(), sphere3DOffset, 0);
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double[] vector3DW = vector3DDirectionNormalized(point3DCenter, point3D);
+		final double[] vector3DV = vector3D(-PI_MULTIPLIED_BY_2 * vector3DGetY(vector3DW), PI_MULTIPLIED_BY_2 * vector3DGetX(vector3DW), 0.0D);
+		
+		return orthonormalBasis33DFromWV(vector3DW, vector3DV);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DComputeSurfaceNormal(final double[] ray3D, final double[] sphere3D, final double t) {
+		return sphere3DComputeSurfaceNormal(ray3D, sphere3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DComputeSurfaceNormal(final double[] ray3D, final double[] sphere3D, final double t, final int ray3DOffset, final int sphere3DOffset) {
+		return orthonormalBasis33DGetW(sphere3DComputeOrthonormalBasis(ray3D, sphere3D, t, ray3DOffset, sphere3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DComputeTextureCoordinates(final double[] ray3D, final double[] sphere3D, final double t) {
+		return sphere3DComputeTextureCoordinates(ray3D, sphere3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] sphere3DComputeTextureCoordinates(final double[] ray3D, final double[] sphere3D, final double t, final int ray3DOffset, final int sphere3DOffset) {
+		return point2DSphericalCoordinates(sphere3DComputeSurfaceNormal(ray3D, sphere3D, t, ray3DOffset, sphere3DOffset));
 	}
 	
 //	TODO: Add Javadocs!
@@ -1821,9 +1924,11 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] sphere3DSet(final double[] sphere3DResult, final double[] point3DCenter, final double radius, final int sphere3DResultOffset, final int point3DCenterOffset) {
-		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 0] = point3DCenter[point3DCenterOffset + 0];
-		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 1] = point3DCenter[point3DCenterOffset + 1];
-		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 2] = point3DCenter[point3DCenterOffset + 2];
+		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_ID] = SPHERE_ID;
+		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_SIZE] = SPHERE_SIZE;
+		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 0] = point3DGetX(point3DCenter, point3DCenterOffset);
+		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 1] = point3DGetY(point3DCenter, point3DCenterOffset);
+		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 2] = point3DGetZ(point3DCenter, point3DCenterOffset);
 		
 		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_RADIUS] = radius;
 		
@@ -1913,7 +2018,64 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] torus3D(final double radiusInner, final double radiusOuter) {
-		return new double[] {radiusInner, radiusOuter};
+		return torus3DSet(new double[TORUS_SIZE], radiusInner, radiusOuter);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] torus3DComputeOrthonormalBasis(final double[] ray3D, final double[] torus3D, final double t) {
+		return torus3DComputeOrthonormalBasis(ray3D, torus3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] torus3DComputeOrthonormalBasis(final double[] ray3D, final double[] torus3D, final double t, final int ray3DOffset, final int torus3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double radiusInner = torus3DGetRadiusInner(torus3D, torus3DOffset);
+		final double radiusInnerSquared = radiusInner * radiusInner;
+		
+		final double radiusOuter = torus3DGetRadiusOuter(torus3D, torus3DOffset);
+		final double radiusOuterSquared = radiusOuter * radiusOuter;
+		
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double derivative = vector3DLengthSquared(vector3DFromPoint3D(point3D)) - radiusInnerSquared - radiusOuterSquared;
+		
+		final double[] vector3DW = vector3DNormalize(vector3D(point3DGetX(point3D) * derivative, point3DGetY(point3D) * derivative, point3DGetZ(point3D) * derivative + 2.0D * radiusOuterSquared * point3DGetZ(point3D)));
+		
+		return orthonormalBasis33DFromW(vector3DW);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] torus3DComputeSurfaceNormal(final double[] ray3D, final double[] torus3D, final double t) {
+		return torus3DComputeSurfaceNormal(ray3D, torus3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] torus3DComputeSurfaceNormal(final double[] ray3D, final double[] torus3D, final double t, final int ray3DOffset, final int torus3DOffset) {
+		return orthonormalBasis33DGetW(torus3DComputeOrthonormalBasis(ray3D, torus3D, t, ray3DOffset, torus3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] torus3DComputeTextureCoordinates(final double[] ray3D, final double[] torus3D, final double t) {
+		return torus3DComputeTextureCoordinates(ray3D, torus3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] torus3DComputeTextureCoordinates(final double[] ray3D, final double[] torus3D, final double t, final int ray3DOffset, final int torus3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double radiusInner = torus3DGetRadiusInner(torus3D, torus3DOffset);
+		
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double u = getOrAdd(atan2(point3DGetY(point3D), point3DGetX(point3D)), 0.0D, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final double v = (asin(saturate(point3DGetZ(point3D) / radiusInner, -1.0D, 1.0D)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
+		
+		return point2D(u, v);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1923,6 +2085,8 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] torus3DSet(final double[] torus3DResult, final double radiusInner, final double radiusOuter, final int torus3DResultOffset) {
+		torus3DResult[torus3DResultOffset + TORUS_OFFSET_ID] = TORUS_ID;
+		torus3DResult[torus3DResultOffset + TORUS_OFFSET_SIZE] = TORUS_SIZE;
 		torus3DResult[torus3DResultOffset + TORUS_OFFSET_RADIUS_INNER] = radiusInner;
 		torus3DResult[torus3DResultOffset + TORUS_OFFSET_RADIUS_OUTER] = radiusOuter;
 		

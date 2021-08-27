@@ -21,6 +21,11 @@ package org.dayflower.simplex;
 import static org.dayflower.simplex.Point.point3DGetX;
 import static org.dayflower.simplex.Point.point3DGetY;
 import static org.dayflower.simplex.Point.point3DGetZ;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Doubles.acos;
+import static org.dayflower.utility.Doubles.getOrAdd;
+import static org.dayflower.utility.Doubles.atan2;
+import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.sqrt;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs!
@@ -426,6 +431,26 @@ public final class Vector {
 	 */
 	public static double vector3DLengthSquared(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 0] * vector3D[vector3DOffset + 0] + vector3D[vector3DOffset + 1] * vector3D[vector3DOffset + 1] + vector3D[vector3DOffset + 2] * vector3D[vector3DOffset + 2];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DSphericalPhi(final double[] vector3D) {
+		return vector3DSphericalPhi(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DSphericalPhi(final double[] vector3D, final int vector3DOffset) {
+		return getOrAdd(atan2(vector3DGetY(vector3D, vector3DOffset), vector3DGetX(vector3D, vector3DOffset)), 0.0D, PI_MULTIPLIED_BY_2);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DSphericalTheta(final double[] vector3D) {
+		return vector3DSphericalTheta(vector3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DSphericalTheta(final double[] vector3D, final int vector3DOffset) {
+		return acos(saturate(vector3DGetZ(vector3D, vector3DOffset), -1.0D, 1.0D));
 	}
 	
 	/**

@@ -18,7 +18,11 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.Vector.vector3DSphericalPhi;
+import static org.dayflower.simplex.Vector.vector3DSphericalTheta;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isZero;
@@ -293,6 +297,24 @@ public final class Point {
 		point2DResult[point2DResultOffset + 1] = point2D[point2DOffset + 1];
 		
 		return point2DResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point2DSphericalCoordinates(final double[] vector3D) {
+		return point2DSphericalCoordinates(vector3D, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point2DSphericalCoordinates(final double[] vector3D, final double[] point2DResult) {
+		return point2DSphericalCoordinates(vector3D, point2DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point2DSphericalCoordinates(final double[] vector3D, final double[] point2DResult, final int vector3DOffset, final int point2DResultOffset) {
+		final double component1 = vector3DSphericalPhi(vector3D, vector3DOffset) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final double component2 = vector3DSphericalTheta(vector3D, vector3DOffset) * PI_RECIPROCAL;
+		
+		return point2DSet(point2DResult, component1, component2, point2DResultOffset);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -64,72 +64,269 @@ public final class Vector {
 		return vector2DLHS[vector2DLHSOffset + 0] * vector2DRHS[vector2DRHSOffset + 1] - vector2DLHS[vector2DLHSOffset + 1] * vector2DRHS[vector2DRHSOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 from the vector contained in {@code vector2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DGetComponent1(vector2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @return the value of component 1 from the vector contained in {@code vector2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < 1}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetComponent1(final double[] vector2D) {
 		return vector2DGetComponent1(vector2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 from the vector contained in {@code vector2D} at offset {@code vector2DOffset}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < vector2DOffset + 1} or {@code vector2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @param vector2DOffset the offset in {@code vector2D} to start at
+	 * @return the value of component 1 from the vector contained in {@code vector2D} at offset {@code vector2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < vector2DOffset + 1} or {@code vector2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetComponent1(final double[] vector2D, final int vector2DOffset) {
 		return vector2D[vector2DOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 from the vector contained in {@code vector2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DGetComponent2(vector2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @return the value of component 2 from the vector contained in {@code vector2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetComponent2(final double[] vector2D) {
 		return vector2DGetComponent2(vector2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 from the vector contained in {@code vector2D} at offset {@code vector2DOffset}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @param vector2DOffset the offset in {@code vector2D} to start at
+	 * @return the value of component 2 from the vector contained in {@code vector2D} at offset {@code vector2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetComponent2(final double[] vector2D, final int vector2DOffset) {
 		return vector2D[vector2DOffset + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component from the vector contained in {@code vector2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DGetU(vector2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @return the value of the U-component from the vector contained in {@code vector2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < 1}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetU(final double[] vector2D) {
 		return vector2DGetU(vector2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component from the vector contained in {@code vector2D} at offset {@code vector2DOffset}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < vector2DOffset + 1} or {@code vector2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @param vector2DOffset the offset in {@code vector2D} to start at
+	 * @return the value of the U-component from the vector contained in {@code vector2D} at offset {@code vector2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < vector2DOffset + 1} or {@code vector2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetU(final double[] vector2D, final int vector2DOffset) {
 		return vector2D[vector2DOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the V-component from the vector contained in {@code vector2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DGetV(vector2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @return the value of the V-component from the vector contained in {@code vector2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetV(final double[] vector2D) {
 		return vector2DGetV(vector2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the V-component from the vector contained in {@code vector2D} at offset {@code vector2DOffset}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @param vector2DOffset the offset in {@code vector2D} to start at
+	 * @return the value of the V-component from the vector contained in {@code vector2D} at offset {@code vector2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetV(final double[] vector2D, final int vector2DOffset) {
 		return vector2D[vector2DOffset + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component from the vector contained in {@code vector2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DGetX(vector2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @return the value of the X-component from the vector contained in {@code vector2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < 1}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetX(final double[] vector2D) {
 		return vector2DGetX(vector2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component from the vector contained in {@code vector2D} at offset {@code vector2DOffset}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < vector2DOffset + 1} or {@code vector2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @param vector2DOffset the offset in {@code vector2D} to start at
+	 * @return the value of the X-component from the vector contained in {@code vector2D} at offset {@code vector2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < vector2DOffset + 1} or {@code vector2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetX(final double[] vector2D, final int vector2DOffset) {
 		return vector2D[vector2DOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component from the vector contained in {@code vector2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DGetY(vector2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @return the value of the Y-component from the vector contained in {@code vector2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetY(final double[] vector2D) {
 		return vector2DGetY(vector2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component from the vector contained in {@code vector2D} at offset {@code vector2DOffset}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @param vector2DOffset the offset in {@code vector2D} to start at
+	 * @return the value of the Y-component from the vector contained in {@code vector2D} at offset {@code vector2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
 	public static double vector2DGetY(final double[] vector2D, final int vector2DOffset) {
 		return vector2D[vector2DOffset + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2D(0.0D, 0.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code double[]} that contains a vector with two components
+	 */
 	public static double[] vector2D() {
 		return vector2D(0.0D, 0.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components.
+	 * 
+	 * @param component1 the value of component 1, also known as X and U
+	 * @param component2 the value of component 2, also known as Y and V
+	 * @return a {@code double[]} that contains a vector with two components
+	 */
 	public static double[] vector2D(final double component1, final double component2) {
 		return new double[] {component1, component2};
 	}
@@ -263,12 +460,50 @@ public final class Vector {
 		return vector2DSet(vector2DResult, component1, component2, vector2DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the component values of the vector contained in {@code vector2DResult} at offset {@code 0}.
+	 * <p>
+	 * Returns {@code vector2DResult}.
+	 * <p>
+	 * If {@code vector2DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2DResult.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DSet(vector2DResult, component1, component2, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2DResult a {@code double[]} that contains a vector with two components
+	 * @param component1 the value of component 1, also known as X or U
+	 * @param component2 the value of component 2, also known as Y or V
+	 * @return {@code vector2DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2DResult.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2DResult} is {@code null}
+	 */
 	public static double[] vector2DSet(final double[] vector2DResult, final double component1, final double component2) {
 		return vector2DSet(vector2DResult, component1, component2, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the component values of the vector contained in {@code vector2DResult} at offset {@code vector2DResultOffset}.
+	 * <p>
+	 * Returns {@code vector2DResult}.
+	 * <p>
+	 * If {@code vector2DResult} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2DResult a {@code double[]} that contains a vector with two components
+	 * @param component1 the value of component 1, also known as X or U
+	 * @param component2 the value of component 2, also known as Y or V
+	 * @param vector2DResultOffset the offset in {@code vector2DResult} to start at
+	 * @return {@code vector2DResult}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2DResult} is {@code null}
+	 */
 	public static double[] vector2DSet(final double[] vector2DResult, final double component1, final double component2, final int vector2DResultOffset) {
 		vector2DResult[vector2DResultOffset + 0] = component1;
 		vector2DResult[vector2DResultOffset + 1] = component2;
@@ -276,17 +511,74 @@ public final class Vector {
 		return vector2DResult;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the result of {@code vector2DLHS - vector2DRHS}.
+	 * <p>
+	 * If either {@code vector2DLHS} or {@code vector2DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2DLHS.length < 2} or {@code vector2DRHS.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DSubtract(vector2DLHS, vector2DRHS, Vector.vector2D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param vector2DRHS a {@code double[]} that contains the vector on the right-hand side of the expression
+	 * @return a {@code double[]} that contains a vector with two components and is set to the result of {@code vector2DLHS - vector2DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2DLHS.length < 2} or {@code vector2DRHS.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector2DLHS} or {@code vector2DRHS} are {@code null}
+	 */
 	public static double[] vector2DSubtract(final double[] vector2DLHS, final double[] vector2DRHS) {
 		return vector2DSubtract(vector2DLHS, vector2DRHS, vector2D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the result of {@code vector2DLHS - vector2DRHS}.
+	 * <p>
+	 * If either {@code vector2DLHS}, {@code vector2DRHS} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2DLHS.length < 2}, {@code vector2DRHS.length < 2} or {@code vector2DResult.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DSubtract(vector2DLHS, vector2DRHS, vector2DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param vector2DRHS a {@code double[]} that contains the vector on the right-hand side of the expression
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with two components and is set to the result of {@code vector2DLHS - vector2DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2DLHS.length < 2}, {@code vector2DRHS.length < 2} or {@code vector2DResult.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector2DLHS}, {@code vector2DRHS} or {@code vector2DResult} are {@code null}
+	 */
 	public static double[] vector2DSubtract(final double[] vector2DLHS, final double[] vector2DRHS, final double[] vector2DResult) {
 		return vector2DSubtract(vector2DLHS, vector2DRHS, vector2DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the result of {@code vector2DLHS - vector2DRHS}.
+	 * <p>
+	 * If either {@code vector2DLHS}, {@code vector2DRHS} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2DLHS.length < vector2DLHSOffset + 2}, {@code vector2DLHSOffset < 0}, {@code vector2DRHS.length < vector2DRHSOffset + 2}, {@code vector2DRHSOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or
+	 * {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
+	 * @param vector2DRHS a {@code double[]} that contains the vector on the right-hand side of the expression
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @param vector2DLHSOffset the offset in {@code vector2DLHS} to start at
+	 * @param vector2DRHSOffset the offset in {@code vector2DRHS} to start at
+	 * @param vector2DResultOffset the offset in {@code vector2DResult} to start at
+	 * @return a {@code double[]} that contains a vector with two components and is set to the result of {@code vector2DLHS - vector2DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2DLHS.length < vector2DLHSOffset + 2}, {@code vector2DLHSOffset < 0}, {@code vector2DRHS.length < vector2DRHSOffset + 2}, {@code vector2DRHSOffset < 0},
+	 *                                        {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector2DLHS}, {@code vector2DRHS} or {@code vector2DResult} are {@code null}
+	 */
 	public static double[] vector2DSubtract(final double[] vector2DLHS, final double[] vector2DRHS, final double[] vector2DResult, final int vector2DLHSOffset, final int vector2DRHSOffset, final int vector2DResultOffset) {
 		final double component1 = vector2DLHS[vector2DLHSOffset + 0] - vector2DRHS[vector2DRHSOffset + 0];
 		final double component2 = vector2DLHS[vector2DLHSOffset + 1] - vector2DRHS[vector2DRHSOffset + 1];

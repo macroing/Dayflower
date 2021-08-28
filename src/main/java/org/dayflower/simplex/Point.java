@@ -18,8 +18,14 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.Vector.vector3D;
+import static org.dayflower.simplex.Vector.vector3DDirection;
+import static org.dayflower.simplex.Vector.vector3DDirectionNormalized;
+import static org.dayflower.simplex.Vector.vector3DLength;
+import static org.dayflower.simplex.Vector.vector3DLengthSquared;
 import static org.dayflower.simplex.Vector.vector3DSphericalPhi;
 import static org.dayflower.simplex.Vector.vector3DSphericalTheta;
+import static org.dayflower.simplex.Vector.vector3DTripleProduct;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
@@ -138,6 +144,37 @@ public final class Point {
 	 */
 	public static double[] point2D(final double component1, final double component2) {
 		return new double[] {component1, component2};
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point2DFromBarycentricCoordinates(final double[] point2DA, final double[] point2DB, final double[] point2DC, final double[] point3DBarycentricCoordinates) {
+		return point2DFromBarycentricCoordinates(point2DA, point2DB, point2DC, point3DBarycentricCoordinates, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point2DFromBarycentricCoordinates(final double[] point2DA, final double[] point2DB, final double[] point2DC, final double[] point3DBarycentricCoordinates, final double[] point2DResult) {
+		return point2DFromBarycentricCoordinates(point2DA, point2DB, point2DC, point3DBarycentricCoordinates, point2DResult, 0, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point2DFromBarycentricCoordinates(final double[] point2DA, final double[] point2DB, final double[] point2DC, final double[] point3DBarycentricCoordinates, final double[] point2DResult, final int point2DAOffset, final int point2DBOffset, final int point2DCOffset, final int point3DBarycentricCoordinatesOffset, final int point2DResultOffset) {
+		final double aU = point2DGetU(point2DA, point2DAOffset);
+		final double aV = point2DGetV(point2DA, point2DAOffset);
+		
+		final double bU = point2DGetU(point2DB, point2DBOffset);
+		final double bV = point2DGetV(point2DB, point2DBOffset);
+		
+		final double cU = point2DGetU(point2DC, point2DCOffset);
+		final double cV = point2DGetV(point2DC, point2DCOffset);
+		
+		final double barycentricCoordinatesU = point3DGetU(point3DBarycentricCoordinates, point3DBarycentricCoordinatesOffset);
+		final double barycentricCoordinatesV = point3DGetV(point3DBarycentricCoordinates, point3DBarycentricCoordinatesOffset);
+		final double barycentricCoordinatesW = point3DGetW(point3DBarycentricCoordinates, point3DBarycentricCoordinatesOffset);
+		
+		final double component1 = aU * barycentricCoordinatesU + bU * barycentricCoordinatesV + cU * barycentricCoordinatesW;
+		final double component2 = aV * barycentricCoordinatesU + bV * barycentricCoordinatesV + cV * barycentricCoordinatesW;
+		
+		return point2DSet(point2DResult, component1, component2, point2DResultOffset);
 	}
 	
 	/**
@@ -320,6 +357,42 @@ public final class Point {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Point3D /////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean point3DCoplanar(final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] point3DD) {
+		return point3DCoplanar(point3DA, point3DB, point3DC, point3DD, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean point3DCoplanar(final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] point3DD, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset, final int point3DDOffset) {
+		final double[] vector3DEdgeAB = vector3DDirectionNormalized(point3DA, point3DB, vector3D(), point3DAOffset, point3DBOffset, 0);
+		final double[] vector3DEdgeAC = vector3DDirectionNormalized(point3DA, point3DC, vector3D(), point3DAOffset, point3DCOffset, 0);
+		final double[] vector3DEdgeAD = vector3DDirectionNormalized(point3DA, point3DD, vector3D(), point3DAOffset, point3DDOffset, 0);
+		
+		final double tripleProduct = vector3DTripleProduct(vector3DEdgeAB, vector3DEdgeAD, vector3DEdgeAC);
+		
+		return isZero(tripleProduct);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DDistance(final double[] point3DEye, final double[] point3DTarget) {
+		return point3DDistance(point3DEye, point3DTarget, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DDistance(final double[] point3DEye, final double[] point3DTarget, final int point3DEyeOffset, final int point3DTargetOffset) {
+		return vector3DLength(vector3DDirection(point3DEye, point3DTarget, vector3D(), point3DEyeOffset, point3DTargetOffset, 0));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DDistanceSquared(final double[] point3DEye, final double[] point3DTarget) {
+		return point3DDistanceSquared(point3DEye, point3DTarget, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point3DDistanceSquared(final double[] point3DEye, final double[] point3DTarget, final int point3DEyeOffset, final int point3DTargetOffset) {
+		return vector3DLengthSquared(vector3DDirection(point3DEye, point3DTarget, vector3D(), point3DEyeOffset, point3DTargetOffset, 0));
+	}
 	
 //	TODO: Add Javadocs!
 	public static double point3DGetComponent1(final double[] point3D) {

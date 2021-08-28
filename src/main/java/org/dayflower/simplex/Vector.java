@@ -18,6 +18,9 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.Point.point3DGetU;
+import static org.dayflower.simplex.Point.point3DGetV;
+import static org.dayflower.simplex.Point.point3DGetW;
 import static org.dayflower.simplex.Point.point3DGetX;
 import static org.dayflower.simplex.Point.point3DGetY;
 import static org.dayflower.simplex.Point.point3DGetZ;
@@ -129,6 +132,81 @@ public final class Vector {
 //	TODO: Add Javadocs!
 	public static double[] vector2D(final double component1, final double component2) {
 		return new double[] {component1, component2};
+	}
+	
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from {@code point2DEye} to {@code point2DTarget}.
+	 * <p>
+	 * If either {@code point2DEye} or {@code point2DTarget} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DEye.length < 2} or {@code point2DTarget.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DDirection(point2DEye, point2DTarget, Vector.vector2D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2DEye a {@code double[]} that contains the point to look from
+	 * @param point2DTarget a {@code double[]} that contains the point to look at
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from {@code point2DEye} to {@code point2DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DEye.length < 2} or {@code point2DTarget.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DEye} or {@code point2DTarget} are {@code null}
+	 */
+	public static double[] vector2DDirection(final double[] point2DEye, final double[] point2DTarget) {
+		return vector2DDirection(point2DEye, point2DTarget, vector2D());
+	}
+	
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from {@code point2DEye} to {@code point2DTarget}.
+	 * <p>
+	 * If either {@code point2DEye}, {@code point2DTarget} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DEye.length < 2}, {@code point2DTarget.length < 2} or {@code vector2DResult.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DDirection(point2DEye, point2DTarget, vector2DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2DEye a {@code double[]} that contains the point to look from
+	 * @param point2DTarget a {@code double[]} that contains the point to look at
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from {@code point2DEye} to {@code point2DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DEye.length < 2}, {@code point2DTarget.length < 2} or {@code vector2DResult.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DEye}, {@code point2DTarget} or {@code vector2DResult} are {@code null}
+	 */
+	public static double[] vector2DDirection(final double[] point2DEye, final double[] point2DTarget, final double[] vector2DResult) {
+		return vector2DDirection(point2DEye, point2DTarget, vector2DResult, 0, 0, 0);
+	}
+	
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from {@code point2DEye} to {@code point2DTarget}.
+	 * <p>
+	 * If either {@code point2DEye}, {@code point2DTarget} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2}, {@code point2DTargetOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or
+	 * {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2DEye a {@code double[]} that contains the point to look from
+	 * @param point2DTarget a {@code double[]} that contains the point to look at
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @param point2DEyeOffset the offset in {@code point2DEye} to start at
+	 * @param point2DTargetOffset the offset in {@code point2DTarget} to start at
+	 * @param vector2DResultOffset the offset in {@code vector2DResult} to start at
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from {@code point2DEye} to {@code point2DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2}, {@code point2DTargetOffset < 0},
+	 *                                        {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DEye}, {@code point2DTarget} or {@code vector2DResult} are {@code null}
+	 */
+	public static double[] vector2DDirection(final double[] point2DEye, final double[] point2DTarget, final double[] vector2DResult, final int point2DEyeOffset, final int point2DTargetOffset, final int vector2DResultOffset) {
+		final double component1 = point2DTarget[point2DTargetOffset + 0] - point2DEye[point2DEyeOffset + 0];
+		final double component2 = point2DTarget[point2DTargetOffset + 1] - point2DEye[point2DEyeOffset + 1];
+		
+		return vector2DSet(vector2DResult, component1, component2, vector2DResultOffset);
 	}
 	
 //	TODO: Add Javadocs!
@@ -451,6 +529,16 @@ public final class Vector {
 //	TODO: Add Javadocs!
 	public static double vector3DSphericalTheta(final double[] vector3D, final int vector3DOffset) {
 		return acos(saturate(vector3DGetZ(vector3D, vector3DOffset), -1.0D, 1.0D));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DTripleProduct(final double[] vector3DLHSDP, final double[] vector3DLHSCP, final double[] vector3DRHSCP) {
+		return vector3DTripleProduct(vector3DLHSDP, vector3DLHSCP, vector3DRHSCP, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double vector3DTripleProduct(final double[] vector3DLHSDP, final double[] vector3DLHSCP, final double[] vector3DRHSCP, final int vector3DLHSDPOffset, final int vector3DLHSCPOffset, final int vector3DRHSCPOffset) {
+		return vector3DDotProduct(vector3DLHSDP, vector3DCrossProduct(vector3DLHSCP, vector3DRHSCP, vector3D(), vector3DLHSCPOffset, vector3DRHSCPOffset, 0), vector3DLHSDPOffset, 0);
 	}
 	
 	/**
@@ -852,6 +940,56 @@ public final class Vector {
 		final double component3 = vector3DLHS[vector3DLHSOffset + 2] / scalarRHS;
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DFromBarycentricCoordinates(final double[] vector3DA, final double[] vector3DB, final double[] vector3DC, final double[] point3DBarycentricCoordinates) {
+		return vector3DFromBarycentricCoordinates(vector3DA, vector3DB, vector3DC, point3DBarycentricCoordinates, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DFromBarycentricCoordinates(final double[] vector3DA, final double[] vector3DB, final double[] vector3DC, final double[] point3DBarycentricCoordinates, final double[] vector3DResult) {
+		return vector3DFromBarycentricCoordinates(vector3DA, vector3DB, vector3DC, point3DBarycentricCoordinates, vector3DResult, 0, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DFromBarycentricCoordinates(final double[] vector3DA, final double[] vector3DB, final double[] vector3DC, final double[] point3DBarycentricCoordinates, final double[] vector3DResult, final int vector3DAOffset, final int vector3DBOffset, final int vector3DCOffset, final int point3DBarycentricCoordinatesOffset, final int vector3DResultOffset) {
+		final double aComponent1 = vector3DGetComponent1(vector3DA, vector3DAOffset);
+		final double aComponent2 = vector3DGetComponent2(vector3DA, vector3DAOffset);
+		final double aComponent3 = vector3DGetComponent3(vector3DA, vector3DAOffset);
+		
+		final double bComponent1 = vector3DGetComponent1(vector3DB, vector3DBOffset);
+		final double bComponent2 = vector3DGetComponent2(vector3DB, vector3DBOffset);
+		final double bComponent3 = vector3DGetComponent3(vector3DB, vector3DBOffset);
+		
+		final double cComponent1 = vector3DGetComponent1(vector3DC, vector3DCOffset);
+		final double cComponent2 = vector3DGetComponent2(vector3DC, vector3DCOffset);
+		final double cComponent3 = vector3DGetComponent3(vector3DC, vector3DCOffset);
+		
+		final double barycentricCoordinatesU = point3DGetU(point3DBarycentricCoordinates, point3DBarycentricCoordinatesOffset);
+		final double barycentricCoordinatesV = point3DGetV(point3DBarycentricCoordinates, point3DBarycentricCoordinatesOffset);
+		final double barycentricCoordinatesW = point3DGetW(point3DBarycentricCoordinates, point3DBarycentricCoordinatesOffset);
+		
+		final double component1 = aComponent1 * barycentricCoordinatesU + bComponent1 * barycentricCoordinatesV + cComponent1 * barycentricCoordinatesW;
+		final double component2 = aComponent2 * barycentricCoordinatesU + bComponent2 * barycentricCoordinatesV + cComponent2 * barycentricCoordinatesW;
+		final double component3 = aComponent3 * barycentricCoordinatesU + bComponent3 * barycentricCoordinatesV + cComponent3 * barycentricCoordinatesW;
+		
+		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DFromBarycentricCoordinatesNormalized(final double[] vector3DA, final double[] vector3DB, final double[] vector3DC, final double[] point3DBarycentricCoordinates) {
+		return vector3DFromBarycentricCoordinatesNormalized(vector3DA, vector3DB, vector3DC, point3DBarycentricCoordinates, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DFromBarycentricCoordinatesNormalized(final double[] vector3DA, final double[] vector3DB, final double[] vector3DC, final double[] point3DBarycentricCoordinates, final double[] vector3DResult) {
+		return vector3DFromBarycentricCoordinatesNormalized(vector3DA, vector3DB, vector3DC, point3DBarycentricCoordinates, vector3DResult, 0, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DFromBarycentricCoordinatesNormalized(final double[] vector3DA, final double[] vector3DB, final double[] vector3DC, final double[] point3DBarycentricCoordinates, final double[] vector3DResult, final int vector3DAOffset, final int vector3DBOffset, final int vector3DCOffset, final int point3DBarycentricCoordinatesOffset, final int vector3DResultOffset) {
+		return vector3DNormalize(vector3DFromBarycentricCoordinates(vector3DA, vector3DB, vector3DC, point3DBarycentricCoordinates, vector3DResult, vector3DAOffset, vector3DBOffset, vector3DCOffset, point3DBarycentricCoordinatesOffset, vector3DResultOffset), vector3DResult, vector3DResultOffset, vector3DResultOffset);
 	}
 	
 	/**

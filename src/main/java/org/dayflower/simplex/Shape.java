@@ -23,10 +23,13 @@ import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromW;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromWV;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DGetW;
 import static org.dayflower.simplex.Point.point2D;
+import static org.dayflower.simplex.Point.point2DFromBarycentricCoordinates;
 import static org.dayflower.simplex.Point.point2DSet;
 import static org.dayflower.simplex.Point.point2DSphericalCoordinates;
 import static org.dayflower.simplex.Point.point3D;
 import static org.dayflower.simplex.Point.point3DAdd;
+import static org.dayflower.simplex.Point.point3DCoplanar;
+import static org.dayflower.simplex.Point.point3DDistanceSquared;
 import static org.dayflower.simplex.Point.point3DGetX;
 import static org.dayflower.simplex.Point.point3DGetY;
 import static org.dayflower.simplex.Point.point3DGetZ;
@@ -36,6 +39,7 @@ import static org.dayflower.simplex.Ray.ray3DGetOrigin;
 import static org.dayflower.simplex.Ray.ray3DGetTMaximum;
 import static org.dayflower.simplex.Ray.ray3DGetTMinimum;
 import static org.dayflower.simplex.Vector.vector2DCrossProduct;
+import static org.dayflower.simplex.Vector.vector2DDirection;
 import static org.dayflower.simplex.Vector.vector2DDirectionXY;
 import static org.dayflower.simplex.Vector.vector2DDirectionYZ;
 import static org.dayflower.simplex.Vector.vector2DDirectionZX;
@@ -47,10 +51,12 @@ import static org.dayflower.simplex.Vector.vector3DCrossProduct;
 import static org.dayflower.simplex.Vector.vector3DDirection;
 import static org.dayflower.simplex.Vector.vector3DDirectionNormalized;
 import static org.dayflower.simplex.Vector.vector3DDotProduct;
+import static org.dayflower.simplex.Vector.vector3DFromBarycentricCoordinatesNormalized;
 import static org.dayflower.simplex.Vector.vector3DFromPoint3D;
 import static org.dayflower.simplex.Vector.vector3DGetX;
 import static org.dayflower.simplex.Vector.vector3DGetY;
 import static org.dayflower.simplex.Vector.vector3DGetZ;
+import static org.dayflower.simplex.Vector.vector3DLength;
 import static org.dayflower.simplex.Vector.vector3DLengthSquared;
 import static org.dayflower.simplex.Vector.vector3DNormalize;
 import static org.dayflower.simplex.Vector.vector3DSet;
@@ -58,6 +64,7 @@ import static org.dayflower.utility.Doubles.NaN;
 import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
 import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.asin;
@@ -65,6 +72,7 @@ import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.pow;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
 import static org.dayflower.utility.Doubles.solveQuartic;
@@ -192,9 +200,14 @@ public final class Shape {
 	public static final int DISK_SIZE = 6;
 	
 	/**
+	 * The ID of a hyperboloid.
+	 */
+	public static final int HYPERBOLOID_ID = 3;
+	
+	/**
 	 * The ID of a paraboloid.
 	 */
-	public static final int PARABOLOID_ID = 3;
+	public static final int PARABOLOID_ID = 4;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a paraboloid.
@@ -234,7 +247,7 @@ public final class Shape {
 	/**
 	 * The ID of a plane.
 	 */
-	public static final int PLANE_ID = 4;
+	public static final int PLANE_ID = 5;
 	
 	/**
 	 * The relative offset for the point denoted by A in a {@code double[]} that contains a plane.
@@ -267,6 +280,51 @@ public final class Shape {
 	public static final int PLANE_SIZE = 11;
 	
 	/**
+	 * The ID of a rectangle.
+	 */
+	public static final int RECTANGLE_ID = 7;
+	
+	/**
+	 * The relative offset for the point denoted by A in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_OFFSET_A = 2;
+	
+	/**
+	 * The relative offset for the point denoted by B in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_OFFSET_B = 5;
+	
+	/**
+	 * The relative offset for the point denoted by C in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_OFFSET_C = 8;
+	
+	/**
+	 * The relative offset for the point denoted by C in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_OFFSET_D = 11;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_OFFSET_SIZE = 1;
+	
+	/**
+	 * The size of a rectangle.
+	 */
+	public static final int RECTANGLE_SIZE = 14;
+	
+	/**
+	 * The ID of a rectangular cuboid.
+	 */
+	public static final int RECTANGULAR_CUBOID_ID = 8;
+	
+	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a shape.
 	 */
 	public static final int SHAPE_OFFSET_ID = 0;
@@ -279,7 +337,7 @@ public final class Shape {
 	/**
 	 * The ID of a sphere.
 	 */
-	public static final int SPHERE_ID = 5;
+	public static final int SPHERE_ID = 9;
 	
 	/**
 	 * The relative offset for the point denoted by Center in a {@code double[]} that contains a sphere.
@@ -309,7 +367,7 @@ public final class Shape {
 	/**
 	 * The ID of a torus.
 	 */
-	public static final int TORUS_ID = 6;
+	public static final int TORUS_ID = 10;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a torus.
@@ -336,32 +394,70 @@ public final class Shape {
 	 */
 	public static final int TORUS_SIZE = 4;
 	
-//	TODO: Add Javadocs!
-	public static final int TRIANGLE_OFFSET_POSITION_A = 0;
+	/**
+	 * The ID of a triangle.
+	 */
+	public static final int TRIANGLE_ID = 11;
 	
-//	TODO: Add Javadocs!
-	public static final int TRIANGLE_OFFSET_POSITION_B = 3;
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_ID = 0;
 	
-//	TODO: Add Javadocs!
-	public static final int TRIANGLE_OFFSET_POSITION_C = 6;
+	/**
+	 * The relative offset for the point denoted by Position A in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_POSITION_A = 2;
 	
-//	TODO: Add Javadocs!
-	public static final int TRIANGLE_OFFSET_SURFACE_NORMAL_A = 9;
+	/**
+	 * The relative offset for the point denoted by Position B in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_POSITION_B = 5;
 	
-//	TODO: Add Javadocs!
-	public static final int TRIANGLE_OFFSET_SURFACE_NORMAL_B = 12;
+	/**
+	 * The relative offset for the point denoted by Position C in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_POSITION_C = 8;
 	
-//	TODO: Add Javadocs!
-	public static final int TRIANGLE_OFFSET_SURFACE_NORMAL_C = 15;
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_SIZE = 1;
 	
-//	TODO: Add Javadocs!
-	public static final int TRIANGLE_OFFSET_TEXTURE_COORDINATES_A = 18;
+	/**
+	 * The relative offset for the vector denoted by Surface Normal A in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_SURFACE_NORMAL_A = 11;
 	
-//	TODO: Add Javadocs!
-	public static final int TRIANGLE_OFFSET_TEXTURE_COORDINATES_B = 20;
+	/**
+	 * The relative offset for the vector denoted by Surface Normal B in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_SURFACE_NORMAL_B = 14;
 	
-//	TODO: Add Javadocs!
-	public static final int TRIANGLE_OFFSET_TEXTURE_COORDINATES_C = 22;
+	/**
+	 * The relative offset for the vector denoted by Surface Normal C in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_SURFACE_NORMAL_C = 17;
+	
+	/**
+	 * The relative offset for the point denoted by Texture Coordinates A in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_TEXTURE_COORDINATES_A = 20;
+	
+	/**
+	 * The relative offset for the point denoted by Texture Coordinates B in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_TEXTURE_COORDINATES_B = 22;
+	
+	/**
+	 * The relative offset for the point denoted by Texture Coordinates C in a {@code double[]} that contains a triangle.
+	 */
+	public static final int TRIANGLE_OFFSET_TEXTURE_COORDINATES_C = 24;
+	
+	/**
+	 * The size of a triangle.
+	 */
+	public static final int TRIANGLE_SIZE = 26;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -575,6 +671,26 @@ public final class Shape {
 		}
 		
 		return NaN;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cone3DSurfaceArea(final double[] cone3D) {
+		return cone3DSurfaceArea(cone3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cone3DSurfaceArea(final double[] cone3D, final int cone3DOffset) {
+		final double phiMax = cone3DGetPhiMax(cone3D, cone3DOffset);
+		
+		final double radius = cone3DGetRadius(cone3D, cone3DOffset);
+		final double radiusSquared = radius * radius;
+		
+		final double zMax = cone3DGetZMax(cone3D, cone3DOffset);
+		final double zMaxSquared = zMax * zMax;
+		
+		final double surfaceArea = radius * sqrt(zMaxSquared + radiusSquared) * phiMax / 2.0D;
+		
+		return surfaceArea;
 	}
 	
 	/**
@@ -968,6 +1084,25 @@ public final class Shape {
 		return NaN;
 	}
 	
+//	TODO: Add Javadocs!
+	public static double cylinder3DSurfaceArea(final double[] cylinder3D) {
+		return cylinder3DSurfaceArea(cylinder3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double cylinder3DSurfaceArea(final double[] cylinder3D, final int cylinder3DOffset) {
+		final double phiMax = cylinder3DGetPhiMax(cylinder3D, cylinder3DOffset);
+		
+		final double radius = cylinder3DGetRadius(cylinder3D, cylinder3DOffset);
+		
+		final double zMax = cylinder3DGetZMax(cylinder3D, cylinder3DOffset);
+		final double zMin = cylinder3DGetZMin(cylinder3D, cylinder3DOffset);
+		
+		final double surfaceArea = (zMax - zMin) * radius * phiMax;
+		
+		return surfaceArea;
+	}
+	
 	/**
 	 * Returns a {@code double[]} that contains a cylinder.
 	 * <p>
@@ -1211,6 +1346,26 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
+	public static double disk3DSurfaceArea(final double[] disk3D) {
+		return disk3DSurfaceArea(disk3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double disk3DSurfaceArea(final double[] disk3D, final int disk3DOffset) {
+		final double phiMax = disk3DGetPhiMax(disk3D, disk3DOffset);
+		
+		final double radiusInner = disk3DGetRadiusInner(disk3D, disk3DOffset);
+		final double radiusInnerSquared = radiusInner * radiusInner;
+		
+		final double radiusOuter = disk3DGetRadiusOuter(disk3D, disk3DOffset);
+		final double radiusOuterSquared = radiusOuter * radiusOuter;
+		
+		final double surfaceArea = phiMax * 0.5D * (radiusOuterSquared - radiusInnerSquared);
+		
+		return surfaceArea;
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] disk3D() {
 		return disk3D(toRadians(360.0D), 0.0D, 1.0D, 0.0D);
 	}
@@ -1393,6 +1548,31 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
+	public static double paraboloid3DSurfaceArea(final double[] paraboloid3D) {
+		return paraboloid3DSurfaceArea(paraboloid3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double paraboloid3DSurfaceArea(final double[] paraboloid3D, final int paraboloid3DOffset) {
+		final double phiMax = paraboloid3DGetPhiMax(paraboloid3D, paraboloid3DOffset);
+		
+		final double radius = paraboloid3DGetRadius(paraboloid3D, paraboloid3DOffset);
+		final double radiusSquared = radius * radius;
+		
+		final double zMax = paraboloid3DGetZMax(paraboloid3D, paraboloid3DOffset);
+		final double zMin = paraboloid3DGetZMin(paraboloid3D, paraboloid3DOffset);
+		
+		final double k = 4.0D * zMax / radiusSquared;
+		
+		final double a = radiusSquared * radiusSquared * phiMax / (12.0D * zMax * zMax);
+		final double b = pow(k * zMax + 1.0D, 1.5D) - pow(k * zMin + 1.0D, 1.5D);
+		
+		final double surfaceArea = a * b;
+		
+		return surfaceArea;
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] paraboloid3D() {
 		return paraboloid3D(toRadians(360.0D), 1.0D, 1.0D, 0.0D);
 	}
@@ -1481,6 +1661,22 @@ public final class Shape {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Plane3D /////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean plane3DContainsPoint3D(final double[] plane3D, final double[] point3D) {
+		return plane3DContainsPoint3D(plane3D, point3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean plane3DContainsPoint3D(final double[] plane3D, final double[] point3D, final int plane3DOffset, final int point3DOffset) {
+		final double[] point3DA = plane3DGetA(plane3D, point3D(), plane3DOffset, 0);
+		final double[] point3DB = plane3DGetB(plane3D, point3D(), plane3DOffset, 0);
+		final double[] point3DC = plane3DGetC(plane3D, point3D(), plane3DOffset, 0);
+		
+		final boolean contains = point3DCoplanar(point3DA, point3DB, point3DC, point3D, 0, 0, 0, point3DOffset);
+		
+		return contains;
+	}
 	
 //	TODO: Add Javadocs!
 	public static double plane3DIntersection(final double[] ray3D, final double[] plane3D) {
@@ -1663,19 +1859,268 @@ public final class Shape {
 		plane3DResult[plane3DResultOffset + PLANE_OFFSET_ID] = PLANE_ID;
 		plane3DResult[plane3DResultOffset + PLANE_OFFSET_SIZE] = PLANE_SIZE;
 		
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_A + 0] = point3DGetX(point3DA, point3DAOffset);
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_A + 1] = point3DGetY(point3DA, point3DAOffset);
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_A + 2] = point3DGetZ(point3DA, point3DAOffset);
-		
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_B + 0] = point3DGetX(point3DB, point3DBOffset);
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_B + 1] = point3DGetY(point3DB, point3DBOffset);
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_B + 2] = point3DGetZ(point3DB, point3DBOffset);
-		
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_C + 0] = point3DGetX(point3DC, point3DCOffset);
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_C + 1] = point3DGetY(point3DC, point3DCOffset);
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_C + 2] = point3DGetZ(point3DC, point3DCOffset);
+		point3DSet(plane3DResult, point3DA, plane3DResultOffset + PLANE_OFFSET_A, point3DAOffset);
+		point3DSet(plane3DResult, point3DB, plane3DResultOffset + PLANE_OFFSET_B, point3DBOffset);
+		point3DSet(plane3DResult, point3DC, plane3DResultOffset + PLANE_OFFSET_C, point3DCOffset);
 		
 		return plane3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Rectangle3D /////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangle3DContainsPoint3D(final double[] rectangle3D, final double[] point3D) {
+		return rectangle3DContainsPoint3D(rectangle3D, point3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangle3DContainsPoint3D(final double[] rectangle3D, final double[] point3D, final int rectangle3DOffset, final int point3DOffset) {
+		final double[] point3DA = rectangle3DGetA(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DB = rectangle3DGetB(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DC = rectangle3DGetC(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DP = point3DSet(point3D(), point3D, 0, point3DOffset);
+		
+		final boolean containsPlane = point3DCoplanar(point3DA, point3DB, point3DC, point3DP);
+		
+		if(containsPlane) {
+			return false;
+		}
+		
+		final double[] vector3DEdgeAB = vector3DDirection(point3DA, point3DB);
+		final double[] vector3DEdgeBC = vector3DDirection(point3DB, point3DC);
+		final double[] vector3DEdgeAP = vector3DDirection(point3DA, point3DP);
+		
+		final double dotProductAPAB = vector3DDotProduct(vector3DEdgeAP, vector3DNormalize(vector3DEdgeAB));
+		final double dotProductAPBC = vector3DDotProduct(vector3DEdgeAP, vector3DNormalize(vector3DEdgeBC));
+		
+		final boolean containsAPAB = dotProductAPAB >= 0.0D && dotProductAPAB <= vector3DLength(vector3DEdgeAB);
+		final boolean containsAPBC = dotProductAPBC >= 0.0D && dotProductAPBC <= vector3DLength(vector3DEdgeBC);
+		final boolean contains = containsAPAB && containsAPBC;
+		
+		return contains;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double rectangle3DIntersection(final double[] ray3D, final double[] rectangle3D) {
+		return rectangle3DIntersection(ray3D, rectangle3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double rectangle3DIntersection(final double[] ray3D, final double[] rectangle3D, final int ray3DOffset, final int rectangle3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D, ray3DOffset);
+		final double tMaximum = ray3DGetTMaximum(ray3D, ray3DOffset);
+		
+		final double[] point3DA = rectangle3DGetA(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DB = rectangle3DGetB(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DC = rectangle3DGetC(rectangle3D, point3D(), rectangle3DOffset, 0);
+		
+		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
+		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
+		
+		final double[] vector3DSurfaceNormal = vector3DCrossProduct(vector3DAB, vector3DAC);
+		
+		final double surfaceNormalDotDirection = vector3DDotProduct(vector3DSurfaceNormal, vector3DDirection);
+		
+		if(isZero(surfaceNormalDotDirection)) {
+			return NaN;
+		}
+		
+		final double[] vector3DOriginToA = vector3DDirection(point3DOrigin, point3DA);
+		
+		final double t = vector3DDotProduct(vector3DOriginToA, vector3DSurfaceNormal) / surfaceNormalDotDirection;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return NaN;
+		}
+		
+		final double[] point3DP = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double[] vector3DEdgeAB = vector3DDirection(point3DA, point3DB);
+		final double[] vector3DEdgeBC = vector3DDirection(point3DB, point3DC);
+		final double[] vector3DEdgeAP = vector3DDirection(point3DA, point3DP);
+		
+		final double dotProductAPAB = vector3DDotProduct(vector3DEdgeAP, vector3DNormalize(vector3DEdgeAB));
+		final double dotProductAPBC = vector3DDotProduct(vector3DEdgeAP, vector3DNormalize(vector3DEdgeBC));
+		
+		final boolean containsAPAB = dotProductAPAB >= 0.0D && dotProductAPAB <= vector3DLength(vector3DEdgeAB);
+		final boolean containsAPBC = dotProductAPBC >= 0.0D && dotProductAPBC <= vector3DLength(vector3DEdgeBC);
+		final boolean contains = containsAPAB && containsAPBC;
+		
+		if(contains) {
+			return t;
+		}
+		
+		return NaN;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3D() {
+		return rectangle3D(point3D(-1.0D, 1.0D, 0.0D), point3D(1.0D, 1.0D, 0.0D), point3D(1.0D, -1.0D, 0.0D), point3D(-1.0D, -1.0D, 0.0D));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3D(final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] point3DD) {
+		return rectangle3D(point3DA, point3DB, point3DC, point3DD, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3D(final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] point3DD, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset, final int point3DDOffset) {
+		return rectangle3DSet(new double[RECTANGLE_SIZE], point3DA, point3DB, point3DC, point3DD, 0, point3DAOffset, point3DBOffset, point3DCOffset, point3DDOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DComputeOrthonormalBasis(final double[] ray3D, final double[] rectangle3D, final double t) {
+		return rectangle3DComputeOrthonormalBasis(ray3D, rectangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] rectangle3DComputeOrthonormalBasis(final double[] ray3D, final double[] rectangle3D, final double t, final int ray3DOffset, final int rectangle3DOffset) {
+		final double[] point3DA = rectangle3DGetA(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DB = rectangle3DGetB(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DC = rectangle3DGetC(rectangle3D, point3D(), rectangle3DOffset, 0);
+		
+		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
+		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
+		
+		final double[] vector3DW = vector3DCrossProduct(vector3DAB, vector3DAC);
+		
+		return orthonormalBasis33DFromW(vector3DW);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DComputeSurfaceNormal(final double[] ray3D, final double[] rectangle3D, final double t) {
+		return rectangle3DComputeSurfaceNormal(ray3D, rectangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DComputeSurfaceNormal(final double[] ray3D, final double[] rectangle3D, final double t, final int ray3DOffset, final int rectangle3DOffset) {
+		return orthonormalBasis33DGetW(rectangle3DComputeOrthonormalBasis(ray3D, rectangle3D, t, ray3DOffset, rectangle3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DComputeTextureCoordinates(final double[] ray3D, final double[] rectangle3D, final double t) {
+		return rectangle3DComputeTextureCoordinates(ray3D, rectangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DComputeTextureCoordinates(final double[] ray3D, final double[] rectangle3D, final double t, final int ray3DOffset, final int rectangle3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double[] point3DA = rectangle3DGetA(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DB = rectangle3DGetB(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DD = rectangle3DGetD(rectangle3D, point3D(), rectangle3DOffset, 0);
+		
+		final double[] vector3DSurfaceNormal = rectangle3DComputeSurfaceNormal(ray3D, rectangle3D, t, ray3DOffset, rectangle3DOffset);
+		
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final boolean isX = abs(vector3DGetX(vector3DSurfaceNormal)) > abs(vector3DGetY(vector3DSurfaceNormal)) && abs(vector3DGetX(vector3DSurfaceNormal)) > abs(vector3DGetZ(vector3DSurfaceNormal));
+		final boolean isY = abs(vector3DGetY(vector3DSurfaceNormal)) > abs(vector3DGetZ(vector3DSurfaceNormal));
+		
+		final double[] vector2DA = isX ? vector2DDirectionYZ(point3DA) : isY ? vector2DDirectionZX(point3DA) : vector2DDirectionXY(point3DA);
+		final double[] vector2DB = isX ? vector2DDirectionYZ(point3DD) : isY ? vector2DDirectionZX(point3DD) : vector2DDirectionXY(point3DD);
+		final double[] vector2DC = isX ? vector2DDirectionYZ(point3DB) : isY ? vector2DDirectionZX(point3DB) : vector2DDirectionXY(point3DB);
+		
+		final double[] vector2DAB = vector2DSubtract(vector2DB, vector2DA);
+		final double[] vector2DAC = vector2DSubtract(vector2DC, vector2DA);
+		
+		final double determinant = vector2DCrossProduct(vector2DAB, vector2DAC);
+		final double determinantReciprocal = 1.0D / determinant;
+		
+		final double hU = isX ? point3DGetY(point3D) : isY ? point3DGetZ(point3D) : point3DGetX(point3D);
+		final double hV = isX ? point3DGetZ(point3D) : isY ? point3DGetX(point3D) : point3DGetY(point3D);
+		
+		final double u = hU * (-vector2DGetY(vector2DAB) * determinantReciprocal) + hV * (+vector2DGetX(vector2DAB) * determinantReciprocal) + vector2DCrossProduct(vector2DA, vector2DAB) * determinantReciprocal;
+		final double v = hU * (+vector2DGetY(vector2DAC) * determinantReciprocal) + hV * (-vector2DGetX(vector2DAC) * determinantReciprocal) + vector2DCrossProduct(vector2DAC, vector2DA) * determinantReciprocal;
+		
+		return point2D(u, v);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetA(final double[] rectangle3D) {
+		return rectangle3DGetA(rectangle3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetA(final double[] rectangle3D, final double[] point3DAResult) {
+		return rectangle3DGetA(rectangle3D, point3DAResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetA(final double[] rectangle3D, final double[] point3DAResult, final int rectangle3DOffset, final int point3DAResultOffset) {
+		return point3DSet(point3DAResult, rectangle3D, point3DAResultOffset, rectangle3DOffset + RECTANGLE_OFFSET_A);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetB(final double[] rectangle3D) {
+		return rectangle3DGetB(rectangle3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetB(final double[] rectangle3D, final double[] point3DBResult) {
+		return rectangle3DGetB(rectangle3D, point3DBResult);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetB(final double[] rectangle3D, final double[] point3DBResult, final int rectangle3DOffset, final int point3DBResultOffset) {
+		return point3DSet(point3DBResult, rectangle3D, point3DBResultOffset, rectangle3DOffset + RECTANGLE_OFFSET_B);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetC(final double[] rectangle3D) {
+		return rectangle3DGetC(rectangle3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetC(final double[] rectangle3D, final double[] point3DCResult) {
+		return rectangle3DGetC(rectangle3D, point3DCResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetC(final double[] rectangle3D, final double[] point3DCResult, final int rectangle3DOffset, final int point3DCResultOffset) {
+		return point3DSet(point3DCResult, rectangle3D, point3DCResultOffset, rectangle3DOffset + RECTANGLE_OFFSET_C);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetD(final double[] rectangle3D) {
+		return rectangle3DGetD(rectangle3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetD(final double[] rectangle3D, final double[] point3DDResult) {
+		return rectangle3DGetD(rectangle3D, point3DDResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DGetD(final double[] rectangle3D, final double[] point3DDResult, final int rectangle3DOffset, final int point3DDResultOffset) {
+		return point3DSet(point3DDResult, rectangle3D, point3DDResultOffset, rectangle3DOffset + RECTANGLE_OFFSET_D);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DSet(final double[] rectangle3DResult, final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] point3DD) {
+		return rectangle3DSet(rectangle3DResult, point3DA, point3DB, point3DC, point3DD, 0, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle3DSet(final double[] rectangle3DResult, final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] point3DD, final int rectangle3DResultOffset, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset, final int point3DDOffset) {
+		rectangle3DResult[rectangle3DResultOffset + RECTANGLE_OFFSET_ID] = RECTANGLE_ID;
+		rectangle3DResult[rectangle3DResultOffset + RECTANGLE_OFFSET_SIZE] = RECTANGLE_SIZE;
+		
+		point3DSet(rectangle3DResult, point3DA, rectangle3DResultOffset + RECTANGLE_OFFSET_A, point3DAOffset);
+		point3DSet(rectangle3DResult, point3DB, rectangle3DResultOffset + RECTANGLE_OFFSET_B, point3DBOffset);
+		point3DSet(rectangle3DResult, point3DC, rectangle3DResultOffset + RECTANGLE_OFFSET_C, point3DCOffset);
+		point3DSet(rectangle3DResult, point3DD, rectangle3DResultOffset + RECTANGLE_OFFSET_D, point3DDOffset);
+		
+		return rectangle3DResult;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1700,10 +2145,14 @@ public final class Shape {
 				return paraboloid3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case PLANE_ID:
 				return plane3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
+			case RECTANGLE_ID:
+				return rectangle3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case SPHERE_ID:
 				return sphere3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case TORUS_ID:
 				return torus3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
+			case TRIANGLE_ID:
+				return triangle3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			default:
 				return NaN;
 		}
@@ -1727,10 +2176,14 @@ public final class Shape {
 				return paraboloid3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case PLANE_ID:
 				return plane3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case RECTANGLE_ID:
+				return rectangle3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case SPHERE_ID:
 				return sphere3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case TORUS_ID:
 				return torus3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case TRIANGLE_ID:
+				return triangle3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			default:
 				return orthonormalBasis33D();
 		}
@@ -1764,10 +2217,14 @@ public final class Shape {
 				return paraboloid3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case PLANE_ID:
 				return plane3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case RECTANGLE_ID:
+				return rectangle3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case SPHERE_ID:
 				return sphere3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case TORUS_ID:
 				return torus3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case TRIANGLE_ID:
+				return triangle3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			default:
 				return point2D();
 		}
@@ -1796,6 +2253,25 @@ public final class Shape {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Sphere3D ////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean sphere3DContainsPoint3D(final double[] sphere3D, final double[] point3D) {
+		return sphere3DContainsPoint3D(sphere3D, point3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean sphere3DContainsPoint3D(final double[] sphere3D, final double[] point3D, final int sphere3DOffset, final int point3DOffset) {
+		final double radius = sphere3DGetRadius(sphere3D, sphere3DOffset);
+		final double radiusSquared = radius * radius;
+		
+		final double[] point3DCenter = sphere3DGetCenter(sphere3D, point3D(), sphere3DOffset, 0);
+		
+		final double distanceSquared = point3DDistanceSquared(point3DCenter, point3D, 0, point3DOffset);
+		
+		final boolean contains = distanceSquared <= radiusSquared;
+		
+		return contains;
+	}
 	
 //	TODO: Add Javadocs!
 	public static double sphere3DGetRadius(final double[] sphere3D) {
@@ -1845,6 +2321,21 @@ public final class Shape {
 		}
 		
 		return NaN;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double sphere3DSurfaceArea(final double[] sphere3D) {
+		return sphere3DSurfaceArea(sphere3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double sphere3DSurfaceArea(final double[] sphere3D, final int sphere3DOffset) {
+		final double radius = sphere3DGetRadius(sphere3D, sphere3DOffset);
+		final double radiusSquared = radius * radius;
+		
+		final double surfaceArea = PI_MULTIPLIED_BY_4 * radiusSquared;
+		
+		return surfaceArea;
 	}
 	
 //	TODO: Add Javadocs!
@@ -1926,11 +2417,9 @@ public final class Shape {
 	public static double[] sphere3DSet(final double[] sphere3DResult, final double[] point3DCenter, final double radius, final int sphere3DResultOffset, final int point3DCenterOffset) {
 		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_ID] = SPHERE_ID;
 		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_SIZE] = SPHERE_SIZE;
-		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 0] = point3DGetX(point3DCenter, point3DCenterOffset);
-		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 1] = point3DGetY(point3DCenter, point3DCenterOffset);
-		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_CENTER + 2] = point3DGetZ(point3DCenter, point3DCenterOffset);
-		
 		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_RADIUS] = radius;
+		
+		point3DSet(sphere3DResult, point3DCenter, sphere3DResultOffset + SPHERE_OFFSET_CENTER, point3DCenterOffset);
 		
 		return sphere3DResult;
 	}
@@ -2129,21 +2618,21 @@ public final class Shape {
 			return NaN;
 		}
 		
-		final double uScaled = vector3DDotProduct(vector3DOriginToPositionACrossDirection, vector3DEdgeCA);
-		final double u = uScaled / determinant;
+		final double barycentricCoordinatesUScaled = vector3DDotProduct(vector3DOriginToPositionACrossDirection, vector3DEdgeCA);
+		final double barycentricCoordinatesU = barycentricCoordinatesUScaled / determinant;
 		
-		if(u < 0.0D) {
+		if(barycentricCoordinatesU < 0.0D) {
 			return NaN;
 		}
 		
-		final double vScaled = vector3DDotProduct(vector3DOriginToPositionACrossDirection, vector3DEdgeAB);
-		final double v = vScaled / determinant;
+		final double barycentricCoordinatesVScaled = vector3DDotProduct(vector3DOriginToPositionACrossDirection, vector3DEdgeAB);
+		final double barycentricCoordinatesV = barycentricCoordinatesVScaled / determinant;
 		
-		if(v < 0.0D) {
+		if(barycentricCoordinatesV < 0.0D) {
 			return NaN;
 		}
 		
-		if((uScaled + vScaled) * determinant > determinant * determinant) {
+		if((barycentricCoordinatesUScaled + barycentricCoordinatesVScaled) * determinant > determinant * determinant) {
 			return NaN;
 		}
 		
@@ -2177,40 +2666,118 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3D(final double[] point3DPositionA, final double[] point3DPositionB, final double[] point3DPositionC, final double[] vector3DSurfaceNormalA, final double[] vector3DSurfaceNormalB, final double[] vector3DSurfaceNormalC, final double[] point2DTextureCoordinatesA, final double[] point2DTextureCoordinatesB, final double[] point2DTextureCoordinatesC, final int point3DPositionAOffset, final int point3DPositionBOffset, final int point3DPositionCOffset, final int vector3DSurfaceNormalAOffset, final int vector3DSurfaceNormalBOffset, final int vector3DSurfaceNormalCOffset, final int point2DTextureCoordinatesAOffset, final int point2DTextureCoordinatesBOffset, final int point2DTextureCoordinatesCOffset) {
-		final double positionAX = point3DPositionA[point3DPositionAOffset + 0];
-		final double positionAY = point3DPositionA[point3DPositionAOffset + 1];
-		final double positionAZ = point3DPositionA[point3DPositionAOffset + 2];
+		return triangle3DSet(new double[TRIANGLE_SIZE], point3DPositionA, point3DPositionB, point3DPositionC, vector3DSurfaceNormalA, vector3DSurfaceNormalB, vector3DSurfaceNormalC, point2DTextureCoordinatesA, point2DTextureCoordinatesB, point2DTextureCoordinatesC, 0, point3DPositionAOffset, point3DPositionBOffset, point3DPositionCOffset, vector3DSurfaceNormalAOffset, vector3DSurfaceNormalBOffset, vector3DSurfaceNormalCOffset, point2DTextureCoordinatesAOffset, point2DTextureCoordinatesBOffset, point2DTextureCoordinatesCOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] triangle3DComputeOrthonormalBasis(final double[] ray3D, final double[] triangle3D, final double t) {
+		return triangle3DComputeOrthonormalBasis(ray3D, triangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] triangle3DComputeOrthonormalBasis(final double[] ray3D, final double[] triangle3D, final double t, final int ray3DOffset, final int triangle3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
-		final double positionBX = point3DPositionB[point3DPositionBOffset + 0];
-		final double positionBY = point3DPositionB[point3DPositionBOffset + 1];
-		final double positionBZ = point3DPositionB[point3DPositionBOffset + 2];
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
 		
-		final double positionCX = point3DPositionC[point3DPositionCOffset + 0];
-		final double positionCY = point3DPositionC[point3DPositionCOffset + 1];
-		final double positionCZ = point3DPositionC[point3DPositionCOffset + 2];
+		final double[] point2DTextureCoordinatesA = triangle3DGetTextureCoordinatesA(triangle3D, point2D(), triangle3DOffset, 0);
+		final double[] point2DTextureCoordinatesB = triangle3DGetTextureCoordinatesB(triangle3D, point2D(), triangle3DOffset, 0);
+		final double[] point2DTextureCoordinatesC = triangle3DGetTextureCoordinatesC(triangle3D, point2D(), triangle3DOffset, 0);
 		
-		final double surfaceNormalAX = vector3DSurfaceNormalA[vector3DSurfaceNormalAOffset + 0];
-		final double surfaceNormalAY = vector3DSurfaceNormalA[vector3DSurfaceNormalAOffset + 1];
-		final double surfaceNormalAZ = vector3DSurfaceNormalA[vector3DSurfaceNormalAOffset + 2];
+		final double[] point3DPositionA = triangle3DGetPositionA(triangle3D, point3D(), triangle3DOffset, 0);
+		final double[] point3DPositionB = triangle3DGetPositionB(triangle3D, point3D(), triangle3DOffset, 0);
+		final double[] point3DPositionC = triangle3DGetPositionC(triangle3D, point3D(), triangle3DOffset, 0);
 		
-		final double surfaceNormalBX = vector3DSurfaceNormalB[vector3DSurfaceNormalBOffset + 0];
-		final double surfaceNormalBY = vector3DSurfaceNormalB[vector3DSurfaceNormalBOffset + 1];
-		final double surfaceNormalBZ = vector3DSurfaceNormalB[vector3DSurfaceNormalBOffset + 2];
+		final double[] vector3DSurfaceNormalA = triangle3DGetSurfaceNormalA(triangle3D, vector3D(), triangle3DOffset, 0);
+		final double[] vector3DSurfaceNormalB = triangle3DGetSurfaceNormalB(triangle3D, vector3D(), triangle3DOffset, 0);
+		final double[] vector3DSurfaceNormalC = triangle3DGetSurfaceNormalC(triangle3D, vector3D(), triangle3DOffset, 0);
 		
-		final double surfaceNormalCX = vector3DSurfaceNormalC[vector3DSurfaceNormalCOffset + 0];
-		final double surfaceNormalCY = vector3DSurfaceNormalC[vector3DSurfaceNormalCOffset + 1];
-		final double surfaceNormalCZ = vector3DSurfaceNormalC[vector3DSurfaceNormalCOffset + 2];
+		final double[] vector3DEdgeAB = vector3DDirection(point3DPositionA, point3DPositionB);
+		final double[] vector3DEdgeCA = vector3DDirection(point3DPositionC, point3DPositionA);
+		final double[] vector3DEdgeCB = vector3DDirection(point3DPositionC, point3DPositionB);
+		final double[] vector3DEdgeABCrossEdgeCA = vector3DCrossProduct(vector3DEdgeAB, vector3DEdgeCA);
+		final double[] vector3DOriginToPositionA = vector3DDirection(point3DOrigin, point3DPositionA);
+		final double[] vector3DOriginToPositionACrossDirection = vector3DCrossProduct(vector3DOriginToPositionA, vector3DDirection);
 		
-		final double textureCoordinatesAU = point2DTextureCoordinatesA[point2DTextureCoordinatesAOffset + 0];
-		final double textureCoordinatesAV = point2DTextureCoordinatesA[point2DTextureCoordinatesAOffset + 1];
+		final double determinant = vector3DDotProduct(vector3DDirection, vector3DEdgeABCrossEdgeCA);
 		
-		final double textureCoordinatesBU = point2DTextureCoordinatesB[point2DTextureCoordinatesBOffset + 0];
-		final double textureCoordinatesBV = point2DTextureCoordinatesB[point2DTextureCoordinatesBOffset + 1];
+		final double barycentricCoordinatesU = vector3DDotProduct(vector3DOriginToPositionACrossDirection, vector3DEdgeCA) / determinant;
+		final double barycentricCoordinatesV = vector3DDotProduct(vector3DOriginToPositionACrossDirection, vector3DEdgeAB) / determinant;
+		final double barycentricCoordinatesW = 1.0D - barycentricCoordinatesU - barycentricCoordinatesV;
 		
-		final double textureCoordinatesCU = point2DTextureCoordinatesC[point2DTextureCoordinatesCOffset + 0];
-		final double textureCoordinatesCV = point2DTextureCoordinatesC[point2DTextureCoordinatesCOffset + 1];
+		final double[] point3DBarycentricCoordinates = point3D(barycentricCoordinatesU, barycentricCoordinatesV, barycentricCoordinatesW);
 		
-		return new double[] {positionAX, positionAY, positionAZ, positionBX, positionBY, positionBZ, positionCX, positionCY, positionCZ, surfaceNormalAX, surfaceNormalAY, surfaceNormalAZ, surfaceNormalBX, surfaceNormalBY, surfaceNormalBZ, surfaceNormalCX, surfaceNormalCY, surfaceNormalCZ, textureCoordinatesAU, textureCoordinatesAV, textureCoordinatesBU, textureCoordinatesBV, textureCoordinatesCU, textureCoordinatesCV};
+		final double[] vector2DEdgeCA = vector2DDirection(point2DTextureCoordinatesC, point2DTextureCoordinatesA);
+		final double[] vector2DEdgeCB = vector2DDirection(point2DTextureCoordinatesC, point2DTextureCoordinatesB);
+		
+		final double determinantUV = vector2DCrossProduct(vector2DEdgeCA, vector2DEdgeCB);
+		
+		if(isZero(determinantUV)) {
+			final double[] vector3DW = vector3DFromBarycentricCoordinatesNormalized(vector3DSurfaceNormalA, vector3DSurfaceNormalB, vector3DSurfaceNormalC, point3DBarycentricCoordinates);
+			
+			return orthonormalBasis33DFromW(vector3DW);
+		}
+		
+		final double determinantUVReciprocal = 1.0D / determinantUV;
+		
+		final double x = (-vector2DGetX(vector2DEdgeCB) * vector3DGetX(vector3DEdgeCA) + vector2DGetX(vector2DEdgeCA) * vector3DGetX(vector3DEdgeCB)) * determinantUVReciprocal;
+		final double y = (-vector2DGetX(vector2DEdgeCB) * vector3DGetY(vector3DEdgeCA) + vector2DGetX(vector2DEdgeCA) * vector3DGetY(vector3DEdgeCB)) * determinantUVReciprocal;
+		final double z = (-vector2DGetX(vector2DEdgeCB) * vector3DGetZ(vector3DEdgeCA) + vector2DGetX(vector2DEdgeCA) * vector3DGetZ(vector3DEdgeCB)) * determinantUVReciprocal;
+		
+		final double[] vector3DW = vector3DFromBarycentricCoordinatesNormalized(vector3DSurfaceNormalA, vector3DSurfaceNormalB, vector3DSurfaceNormalC, point3DBarycentricCoordinates);
+		final double[] vector3DV = vector3D(x, y, z);
+		
+		return orthonormalBasis33DFromWV(vector3DW, vector3DV);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] triangle3DComputeSurfaceNormal(final double[] ray3D, final double[] triangle3D, final double t) {
+		return triangle3DComputeSurfaceNormal(ray3D, triangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] triangle3DComputeSurfaceNormal(final double[] ray3D, final double[] triangle3D, final double t, final int ray3DOffset, final int triangle3DOffset) {
+		return orthonormalBasis33DGetW(triangle3DComputeOrthonormalBasis(ray3D, triangle3D, t, ray3DOffset, triangle3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] triangle3DComputeTextureCoordinates(final double[] ray3D, final double[] triangle3D, final double t) {
+		return triangle3DComputeTextureCoordinates(ray3D, triangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] triangle3DComputeTextureCoordinates(final double[] ray3D, final double[] triangle3D, final double t, final int ray3DOffset, final int triangle3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double[] point2DTextureCoordinatesA = triangle3DGetTextureCoordinatesA(triangle3D, point2D(), triangle3DOffset, 0);
+		final double[] point2DTextureCoordinatesB = triangle3DGetTextureCoordinatesB(triangle3D, point2D(), triangle3DOffset, 0);
+		final double[] point2DTextureCoordinatesC = triangle3DGetTextureCoordinatesC(triangle3D, point2D(), triangle3DOffset, 0);
+		
+		final double[] point3DPositionA = triangle3DGetPositionA(triangle3D, point3D(), triangle3DOffset, 0);
+		final double[] point3DPositionB = triangle3DGetPositionB(triangle3D, point3D(), triangle3DOffset, 0);
+		final double[] point3DPositionC = triangle3DGetPositionC(triangle3D, point3D(), triangle3DOffset, 0);
+		
+		final double[] vector3DEdgeAB = vector3DDirection(point3DPositionA, point3DPositionB);
+		final double[] vector3DEdgeCA = vector3DDirection(point3DPositionC, point3DPositionA);
+		final double[] vector3DEdgeABCrossEdgeCA = vector3DCrossProduct(vector3DEdgeAB, vector3DEdgeCA);
+		final double[] vector3DOriginToPositionA = vector3DDirection(point3DOrigin, point3DPositionA);
+		final double[] vector3DOriginToPositionACrossDirection = vector3DCrossProduct(vector3DOriginToPositionA, vector3DDirection);
+		
+		final double determinant = vector3DDotProduct(vector3DDirection, vector3DEdgeABCrossEdgeCA);
+		
+		final double barycentricCoordinatesU = vector3DDotProduct(vector3DOriginToPositionACrossDirection, vector3DEdgeCA) / determinant;
+		final double barycentricCoordinatesV = vector3DDotProduct(vector3DOriginToPositionACrossDirection, vector3DEdgeAB) / determinant;
+		final double barycentricCoordinatesW = 1.0D - barycentricCoordinatesU - barycentricCoordinatesV;
+		
+		final double[] point3DBarycentricCoordinates = point3D(barycentricCoordinatesU, barycentricCoordinatesV, barycentricCoordinatesW);
+		
+		final double[] point2DTextureCoordinates = point2DFromBarycentricCoordinates(point2DTextureCoordinatesA, point2DTextureCoordinatesB, point2DTextureCoordinatesC, point3DBarycentricCoordinates);
+		
+		return point2DTextureCoordinates;
 	}
 	
 //	TODO: Add Javadocs!
@@ -2355,38 +2922,20 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DSet(final double[] triangle3DResult, final double[] point3DPositionA, final double[] point3DPositionB, final double[] point3DPositionC, final double[] vector3DSurfaceNormalA, final double[] vector3DSurfaceNormalB, final double[] vector3DSurfaceNormalC, final double[] point2DTextureCoordinatesA, final double[] point2DTextureCoordinatesB, final double[] point2DTextureCoordinatesC, final int triangle3DResultOffset, final int point3DPositionAOffset, final int point3DPositionBOffset, final int point3DPositionCOffset, final int vector3DSurfaceNormalAOffset, final int vector3DSurfaceNormalBOffset, final int vector3DSurfaceNormalCOffset, final int point2DTextureCoordinatesAOffset, final int point2DTextureCoordinatesBOffset, final int point2DTextureCoordinatesCOffset) {
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_A + 0] = point3DPositionA[point3DPositionAOffset + 0];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_A + 1] = point3DPositionA[point3DPositionAOffset + 1];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_A + 2] = point3DPositionA[point3DPositionAOffset + 2];
+		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_ID] = TRIANGLE_ID;
+		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SIZE] = TRIANGLE_SIZE;
 		
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_B + 0] = point3DPositionB[point3DPositionBOffset + 0];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_B + 1] = point3DPositionB[point3DPositionBOffset + 1];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_B + 2] = point3DPositionB[point3DPositionBOffset + 2];
+		point3DSet(triangle3DResult, point3DPositionA, triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_A, point3DPositionAOffset);
+		point3DSet(triangle3DResult, point3DPositionB, triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_B, point3DPositionBOffset);
+		point3DSet(triangle3DResult, point3DPositionC, triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_C, point3DPositionCOffset);
 		
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_C + 0] = point3DPositionC[point3DPositionCOffset + 0];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_C + 1] = point3DPositionC[point3DPositionCOffset + 1];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_C + 2] = point3DPositionC[point3DPositionCOffset + 2];
+		vector3DSet(triangle3DResult, vector3DSurfaceNormalA, triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_A, vector3DSurfaceNormalAOffset);
+		vector3DSet(triangle3DResult, vector3DSurfaceNormalB, triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_B, vector3DSurfaceNormalBOffset);
+		vector3DSet(triangle3DResult, vector3DSurfaceNormalC, triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_C, vector3DSurfaceNormalCOffset);
 		
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_A + 0] = vector3DSurfaceNormalA[vector3DSurfaceNormalAOffset + 0];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_A + 1] = vector3DSurfaceNormalA[vector3DSurfaceNormalAOffset + 1];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_A + 2] = vector3DSurfaceNormalA[vector3DSurfaceNormalAOffset + 2];
-		
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_B + 0] = vector3DSurfaceNormalB[vector3DSurfaceNormalBOffset + 0];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_B + 1] = vector3DSurfaceNormalB[vector3DSurfaceNormalBOffset + 1];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_B + 2] = vector3DSurfaceNormalB[vector3DSurfaceNormalBOffset + 2];
-		
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_C + 0] = vector3DSurfaceNormalC[vector3DSurfaceNormalCOffset + 0];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_C + 1] = vector3DSurfaceNormalC[vector3DSurfaceNormalCOffset + 1];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_C + 2] = vector3DSurfaceNormalC[vector3DSurfaceNormalCOffset + 2];
-		
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_A + 0] = point2DTextureCoordinatesA[point2DTextureCoordinatesAOffset + 0];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_A + 1] = point2DTextureCoordinatesA[point2DTextureCoordinatesAOffset + 1];
-		
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_B + 0] = point2DTextureCoordinatesB[point2DTextureCoordinatesBOffset + 0];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_B + 1] = point2DTextureCoordinatesB[point2DTextureCoordinatesBOffset + 1];
-		
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_C + 0] = point2DTextureCoordinatesC[point2DTextureCoordinatesCOffset + 0];
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_C + 1] = point2DTextureCoordinatesC[point2DTextureCoordinatesCOffset + 1];
+		point2DSet(triangle3DResult, point2DTextureCoordinatesA, triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_A, point2DTextureCoordinatesAOffset);
+		point2DSet(triangle3DResult, point2DTextureCoordinatesB, triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_B, point2DTextureCoordinatesBOffset);
+		point2DSet(triangle3DResult, point2DTextureCoordinatesC, triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_C, point2DTextureCoordinatesCOffset);
 		
 		return triangle3DResult;
 	}

@@ -33,6 +33,9 @@ import static org.dayflower.simplex.Point.point3DDistanceSquared;
 import static org.dayflower.simplex.Point.point3DGetX;
 import static org.dayflower.simplex.Point.point3DGetY;
 import static org.dayflower.simplex.Point.point3DGetZ;
+import static org.dayflower.simplex.Point.point3DMaximum;
+import static org.dayflower.simplex.Point.point3DMidpoint;
+import static org.dayflower.simplex.Point.point3DMinimum;
 import static org.dayflower.simplex.Point.point3DSet;
 import static org.dayflower.simplex.Ray.ray3DGetDirection;
 import static org.dayflower.simplex.Ray.ray3DGetOrigin;
@@ -58,7 +61,9 @@ import static org.dayflower.simplex.Vector.vector3DGetY;
 import static org.dayflower.simplex.Vector.vector3DGetZ;
 import static org.dayflower.simplex.Vector.vector3DLength;
 import static org.dayflower.simplex.Vector.vector3DLengthSquared;
+import static org.dayflower.simplex.Vector.vector3DMultiply;
 import static org.dayflower.simplex.Vector.vector3DNormalize;
+import static org.dayflower.simplex.Vector.vector3DReciprocal;
 import static org.dayflower.simplex.Vector.vector3DSet;
 import static org.dayflower.utility.Doubles.NaN;
 import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_2;
@@ -72,6 +77,9 @@ import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.normalize;
 import static org.dayflower.utility.Doubles.pow;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
@@ -323,6 +331,31 @@ public final class Shape {
 	 * The ID of a rectangular cuboid.
 	 */
 	public static final int RECTANGULAR_CUBOID_ID = 8;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a rectangular cuboid.
+	 */
+	public static final int RECTANGULAR_CUBOID_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the point denoted by Maximum in a {@code double[]} that contains a rectangular cuboid.
+	 */
+	public static final int RECTANGULAR_CUBOID_OFFSET_MAXIMUM = 2;
+	
+	/**
+	 * The relative offset for the point denoted by Minimum in a {@code double[]} that contains a rectangular cuboid.
+	 */
+	public static final int RECTANGULAR_CUBOID_OFFSET_MINIMUM = 5;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a rectangular cuboid.
+	 */
+	public static final int RECTANGULAR_CUBOID_OFFSET_SIZE = 1;
+	
+	/**
+	 * The size of a rectangular cuboid.
+	 */
+	public static final int RECTANGULAR_CUBOID_SIZE = 8;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a shape.
@@ -1699,7 +1732,7 @@ public final class Shape {
 		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
 		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
 		
-		final double[] vector3DSurfaceNormal = vector3DCrossProduct(vector3DAB, vector3DAC);
+		final double[] vector3DSurfaceNormal = vector3DNormalize(vector3DCrossProduct(vector3DAB, vector3DAC));
 		
 		final double surfaceNormalDotDirection = vector3DDotProduct(vector3DSurfaceNormal, vector3DDirection);
 		
@@ -1923,7 +1956,7 @@ public final class Shape {
 		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
 		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
 		
-		final double[] vector3DSurfaceNormal = vector3DCrossProduct(vector3DAB, vector3DAC);
+		final double[] vector3DSurfaceNormal = vector3DNormalize(vector3DCrossProduct(vector3DAB, vector3DAC));
 		
 		final double surfaceNormalDotDirection = vector3DDotProduct(vector3DSurfaceNormal, vector3DDirection);
 		
@@ -2144,6 +2177,225 @@ public final class Shape {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// RectangularCuboid3D /////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangularCuboid3DContainsPoint3D(final double[] rectangularCuboid3D, final double[] point3D) {
+		return rectangularCuboid3DContainsPoint3D(rectangularCuboid3D, point3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangularCuboid3DContainsPoint3D(final double[] rectangularCuboid3D, final double[] point3D, final int rectangularCuboid3DOffset, final int point3DOffset) {
+		final double[] point3DMaximum = rectangularCuboid3DGetMaximum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		final double[] point3DMinimum = rectangularCuboid3DGetMinimum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		
+		final boolean containsX = point3DGetX(point3D, point3DOffset) >= point3DGetX(point3DMinimum) && point3DGetX(point3D, point3DOffset) <= point3DGetX(point3DMaximum);
+		final boolean containsY = point3DGetY(point3D, point3DOffset) >= point3DGetY(point3DMinimum) && point3DGetY(point3D, point3DOffset) <= point3DGetY(point3DMaximum);
+		final boolean containsZ = point3DGetZ(point3D, point3DOffset) >= point3DGetZ(point3DMinimum) && point3DGetZ(point3D, point3DOffset) <= point3DGetZ(point3DMaximum);
+		final boolean contains = containsX && containsY && containsZ;
+		
+		return contains;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double rectangularCuboid3DIntersection(final double[] ray3D, final double[] rectangularCuboid3D) {
+		return rectangularCuboid3DIntersection(ray3D, rectangularCuboid3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double rectangularCuboid3DIntersection(final double[] ray3D, final double[] rectangularCuboid3D, final int ray3DOffset, final int rectangularCuboid3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		final double[] vector3DDirectionReciprocal = vector3DReciprocal(vector3DDirection);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D, ray3DOffset);
+		final double tMaximum = ray3DGetTMaximum(ray3D, ray3DOffset);
+		
+		final double[] point3DMaximum = rectangularCuboid3DGetMaximum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		final double[] point3DMinimum = rectangularCuboid3DGetMinimum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		
+		final double[] vector3DOriginToMaximum = vector3DDirection(point3DOrigin, point3DMaximum);
+		final double[] vector3DOriginToMinimum = vector3DDirection(point3DOrigin, point3DMinimum);
+		
+		final double t0X = vector3DGetX(vector3DOriginToMinimum) * vector3DGetX(vector3DDirectionReciprocal);
+		final double t0Y = vector3DGetY(vector3DOriginToMinimum) * vector3DGetY(vector3DDirectionReciprocal);
+		final double t0Z = vector3DGetZ(vector3DOriginToMinimum) * vector3DGetZ(vector3DDirectionReciprocal);
+		final double t1X = vector3DGetX(vector3DOriginToMaximum) * vector3DGetX(vector3DDirectionReciprocal);
+		final double t1Y = vector3DGetY(vector3DOriginToMaximum) * vector3DGetY(vector3DDirectionReciprocal);
+		final double t1Z = vector3DGetZ(vector3DOriginToMaximum) * vector3DGetZ(vector3DDirectionReciprocal);
+		
+		final double t0 = max(min(t0X, t1X), min(t0Y, t1Y), min(t0Z, t1Z));
+		final double t1 = min(max(t0X, t1X), max(t0Y, t1Y), max(t0Z, t1Z));
+		
+		if(t0 > t1) {
+			return NaN;
+		}
+		
+		if(t0 > tMinimum && t0 < tMaximum) {
+			return t0;
+		}
+		
+		if(t1 > tMinimum && t1 < tMaximum) {
+			return t1;
+		}
+		
+		return NaN;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double rectangularCuboid3DSurfaceArea(final double[] rectangularCuboid3D) {
+		return rectangularCuboid3DSurfaceArea(rectangularCuboid3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double rectangularCuboid3DSurfaceArea(final double[] rectangularCuboid3D, final int rectangularCuboid3DOffset) {
+		final double[] point3DMaximum = rectangularCuboid3DGetMaximum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		final double[] point3DMinimum = rectangularCuboid3DGetMinimum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		
+		final double[] vector3DDirection = vector3DDirection(point3DMinimum, point3DMaximum);
+		
+		final double x = vector3DGetX(vector3DDirection);
+		final double y = vector3DGetY(vector3DDirection);
+		final double z = vector3DGetZ(vector3DDirection);
+		
+		final double surfaceArea = 2.0D * (x * y + y * z + z * x);
+		
+		return surfaceArea;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3D() {
+		return rectangularCuboid3D(point3D(-1.0D, -1.0D, -1.0D), point3D(1.0D, 1.0D, 1.0D));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3D(final double[] point3DA, final double[] point3DB) {
+		return rectangularCuboid3D(point3DA, point3DB, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3D(final double[] point3DA, final double[] point3DB, final int point3DAOffset, final int point3DBOffset) {
+		return rectangularCuboid3DSet(new double[RECTANGULAR_CUBOID_SIZE], point3DA, point3DB, 0, point3DAOffset, point3DBOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DComputeOrthonormalBasis(final double[] ray3D, final double[] rectangularCuboid3D, final double t) {
+		return rectangularCuboid3DComputeOrthonormalBasis(ray3D, rectangularCuboid3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DComputeOrthonormalBasis(final double[] ray3D, final double[] rectangularCuboid3D, final double t, final int ray3DOffset, final int rectangularCuboid3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double[] point3DMaximum = rectangularCuboid3DGetMaximum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		final double[] point3DMinimum = rectangularCuboid3DGetMinimum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final int face = doRectangularCuboid3DComputeFace(point3D, point3DMaximum, point3DMinimum);
+		
+		switch(face) {
+			case 1:
+				return orthonormalBasis33DFromW(vector3D(-1.0D, +0.0D, +0.0D));
+			case 2:
+				return orthonormalBasis33DFromW(vector3D(+1.0D, +0.0D, +0.0D));
+			case 3:
+				return orthonormalBasis33DFromW(vector3D(+0.0D, -1.0D, +0.0D));
+			case 4:
+				return orthonormalBasis33DFromW(vector3D(+0.0D, +1.0D, +0.0D));
+			case 5:
+				return orthonormalBasis33DFromW(vector3D(+0.0D, +0.0D, -1.0D));
+			case 6:
+				return orthonormalBasis33DFromW(vector3D(+0.0D, +0.0D, +1.0D));
+			default:
+				return orthonormalBasis33D();
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DComputeSurfaceNormal(final double[] ray3D, final double[] rectangularCuboid3D, final double t) {
+		return rectangularCuboid3DComputeSurfaceNormal(ray3D, rectangularCuboid3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DComputeSurfaceNormal(final double[] ray3D, final double[] rectangularCuboid3D, final double t, final int ray3DOffset, final int rectangularCuboid3DOffset) {
+		return orthonormalBasis33DGetW(rectangularCuboid3DComputeOrthonormalBasis(ray3D, rectangularCuboid3D, t, ray3DOffset, rectangularCuboid3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DComputeTextureCoordinates(final double[] ray3D, final double[] rectangularCuboid3D, final double t) {
+		return rectangularCuboid3DComputeTextureCoordinates(ray3D, rectangularCuboid3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DComputeTextureCoordinates(final double[] ray3D, final double[] rectangularCuboid3D, final double t, final int ray3DOffset, final int rectangularCuboid3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double[] point3DMaximum = rectangularCuboid3DGetMaximum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		final double[] point3DMinimum = rectangularCuboid3DGetMinimum(rectangularCuboid3D, point3D(), rectangularCuboid3DOffset, 0);
+		
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final int face = doRectangularCuboid3DComputeFace(point3D, point3DMaximum, point3DMinimum);
+		
+		switch(face) {
+			case 1:
+			case 2:
+				return point2D(normalize(point3DGetZ(point3D), point3DGetZ(point3DMinimum), point3DGetZ(point3DMaximum)), normalize(point3DGetY(point3D), point3DGetY(point3DMinimum), point3DGetY(point3DMaximum)));
+			case 3:
+			case 4:
+				return point2D(normalize(point3DGetX(point3D), point3DGetX(point3DMinimum), point3DGetX(point3DMaximum)), normalize(point3DGetZ(point3D), point3DGetZ(point3DMinimum), point3DGetZ(point3DMaximum)));
+			case 5:
+			case 6:
+				return point2D(normalize(point3DGetX(point3D), point3DGetX(point3DMinimum), point3DGetX(point3DMaximum)), normalize(point3DGetY(point3D), point3DGetY(point3DMinimum), point3DGetY(point3DMaximum)));
+			default:
+				return point2D(0.5D, 0.5D);
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DGetMaximum(final double[] rectangularCuboid3D, final double[] point3DMaximumResult) {
+		return rectangularCuboid3DGetMaximum(rectangularCuboid3D, point3DMaximumResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DGetMaximum(final double[] rectangularCuboid3D, final double[] point3DMaximumResult, final int rectangularCuboid3DOffset, final int point3DMaximumResultOffset) {
+		return point3DSet(point3DMaximumResult, rectangularCuboid3D, point3DMaximumResultOffset, rectangularCuboid3DOffset + RECTANGULAR_CUBOID_OFFSET_MAXIMUM);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DGetMinimum(final double[] rectangularCuboid3D, final double[] point3DMinimumResult) {
+		return rectangularCuboid3DGetMinimum(rectangularCuboid3D, point3DMinimumResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DGetMinimum(final double[] rectangularCuboid3D, final double[] point3DMinimumResult, final int rectangularCuboid3DOffset, final int point3DMinimumResultOffset) {
+		return point3DSet(point3DMinimumResult, rectangularCuboid3D, point3DMinimumResultOffset, rectangularCuboid3DOffset + RECTANGULAR_CUBOID_OFFSET_MINIMUM);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DSet(final double[] rectangularCuboid3DResult, final double[] point3DA, final double[] point3DB) {
+		return rectangularCuboid3DSet(rectangularCuboid3DResult, point3DA, point3DB, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangularCuboid3DSet(final double[] rectangularCuboid3DResult, final double[] point3DA, final double[] point3DB, final int rectangularCuboid3DResultOffset, final int point3DAOffset, final int point3DBOffset) {
+		rectangularCuboid3DResult[rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_OFFSET_ID] = RECTANGULAR_CUBOID_ID;
+		rectangularCuboid3DResult[rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_OFFSET_SIZE] = RECTANGULAR_CUBOID_SIZE;
+		
+		point3DSet(rectangularCuboid3DResult, point3DMaximum(point3DA, point3DB, point3D(), point3DAOffset, point3DBOffset, 0), rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_OFFSET_MAXIMUM, 0);
+		point3DSet(rectangularCuboid3DResult, point3DMinimum(point3DA, point3DB, point3D(), point3DAOffset, point3DBOffset, 0), rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_OFFSET_MINIMUM, 0);
+		
+		return rectangularCuboid3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Shape3D /////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -2167,6 +2419,8 @@ public final class Shape {
 				return plane3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case RECTANGLE_ID:
 				return rectangle3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
+			case RECTANGULAR_CUBOID_ID:
+				return rectangularCuboid3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case SPHERE_ID:
 				return sphere3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case TORUS_ID:
@@ -2198,6 +2452,8 @@ public final class Shape {
 				return plane3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case RECTANGLE_ID:
 				return rectangle3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case RECTANGULAR_CUBOID_ID:
+				return rectangularCuboid3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case SPHERE_ID:
 				return sphere3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case TORUS_ID:
@@ -2239,6 +2495,8 @@ public final class Shape {
 				return plane3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case RECTANGLE_ID:
 				return rectangle3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case RECTANGULAR_CUBOID_ID:
+				return rectangularCuboid3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case SPHERE_ID:
 				return sphere3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case TORUS_ID:
@@ -2666,7 +2924,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3D(final double[] point3DPositionA, final double[] point3DPositionB, final double[] point3DPositionC) {
-		return triangle3D(point3DPositionA, point3DPositionB, point3DPositionC, vector3DCrossProduct(vector3DDirectionNormalized(point3DPositionA, point3DPositionB), vector3DDirectionNormalized(point3DPositionA, point3DPositionC)));
+		return triangle3D(point3DPositionA, point3DPositionB, point3DPositionC, vector3DNormalize(vector3DCrossProduct(vector3DDirectionNormalized(point3DPositionA, point3DPositionB), vector3DDirectionNormalized(point3DPositionA, point3DPositionC))));
 	}
 	
 //	TODO: Add Javadocs!
@@ -2958,5 +3216,41 @@ public final class Shape {
 		point2DSet(triangle3DResult, point2DTextureCoordinatesC, triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_C, point2DTextureCoordinatesCOffset);
 		
 		return triangle3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static int doRectangularCuboid3DComputeFace(final double[] point3D, final double[] point3DMaximum, final double[] point3DMinimum) {
+		final double[] point3DMidpoint = point3DMidpoint(point3DMaximum, point3DMinimum);
+		
+		final double[] vector3DHalfDistance = vector3DMultiply(vector3DDirection(point3DMinimum, point3DMaximum), 0.5D);
+		
+		final double epsilon = 0.0001D;
+		
+		if(point3DGetX(point3D) + vector3DGetX(vector3DHalfDistance) - epsilon < point3DGetX(point3DMidpoint)) {
+			return 1;
+		}
+		
+		if(point3DGetX(point3D) - vector3DGetX(vector3DHalfDistance) + epsilon > point3DGetX(point3DMidpoint)) {
+			return 2;
+		}
+		
+		if(point3DGetY(point3D) + vector3DGetY(vector3DHalfDistance) - epsilon < point3DGetY(point3DMidpoint)) {
+			return 3;
+		}
+		
+		if(point3DGetY(point3D) - vector3DGetY(vector3DHalfDistance) + epsilon > point3DGetY(point3DMidpoint)) {
+			return 4;
+		}
+		
+		if(point3DGetZ(point3D) + vector3DGetZ(vector3DHalfDistance) - epsilon < point3DGetZ(point3DMidpoint)) {
+			return 5;
+		}
+		
+		if(point3DGetZ(point3D) - vector3DGetZ(vector3DHalfDistance) + epsilon > point3DGetZ(point3DMidpoint)) {
+			return 6;
+		}
+		
+		return 0;
 	}
 }

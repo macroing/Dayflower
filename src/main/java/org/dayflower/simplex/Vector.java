@@ -1763,6 +1763,25 @@ public final class Vector {
 		return vector3DDivide(vector3D, vector3DLength(vector3D, vector3DOffset), vector3DResult, vector3DOffset, vector3DResultOffset);
 	}
 	
+//	TODO: Add Javadocs!
+	public static double[] vector3DReciprocal(final double[] vector3D) {
+		return vector3DReciprocal(vector3D, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DReciprocal(final double[] vector3D, final double[] vector3DResult) {
+		return vector3DReciprocal(vector3D, vector3DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DReciprocal(final double[] vector3D, final double[] vector3DResult, final int vector3DOffset, final int vector3DResultOffset) {
+		final double component1 = 1.0D / vector3DGetComponent1(vector3D, vector3DOffset);
+		final double component2 = 1.0D / vector3DGetComponent2(vector3D, vector3DOffset);
+		final double component3 = 1.0D / vector3DGetComponent3(vector3D, vector3DOffset);
+		
+		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
+	}
+	
 	/**
 	 * Sets the component values of the vector contained in {@code vector3DResult} at offset {@code 0}.
 	 * <p>

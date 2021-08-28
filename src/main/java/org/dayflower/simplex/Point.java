@@ -32,6 +32,8 @@ import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.random;
 import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.sqrt;
@@ -733,6 +735,63 @@ public final class Point {
 		final double component1 = vector3D[vector3DOffset + 0];
 		final double component2 = vector3D[vector3DOffset + 1];
 		final double component3 = vector3D[vector3DOffset + 2];
+		
+		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DMaximum(final double[] point3DA, final double[] point3DB) {
+		return point3DMaximum(point3DA, point3DB, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DMaximum(final double[] point3DA, final double[] point3DB, final double[] point3DResult) {
+		return point3DMaximum(point3DA, point3DB, point3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DMaximum(final double[] point3DA, final double[] point3DB, final double[] point3DResult, final int point3DAOffset, final int point3DBOffset, final int point3DResultOffset) {
+		final double component1 = max(point3DGetComponent1(point3DA, point3DAOffset), point3DGetComponent1(point3DB, point3DBOffset));
+		final double component2 = max(point3DGetComponent2(point3DA, point3DAOffset), point3DGetComponent2(point3DB, point3DBOffset));
+		final double component3 = max(point3DGetComponent3(point3DA, point3DAOffset), point3DGetComponent3(point3DB, point3DBOffset));
+		
+		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DMidpoint(final double[] point3DA, final double[] point3DB) {
+		return point3DMidpoint(point3DA, point3DB, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DMidpoint(final double[] point3DA, final double[] point3DB, final double[] point3DResult) {
+		return point3DMidpoint(point3DA, point3DB, point3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DMidpoint(final double[] point3DA, final double[] point3DB, final double[] point3DResult, final int point3DAOffset, final int point3DBOffset, final int point3DResultOffset) {
+		final double component1 = (point3DGetComponent1(point3DA, point3DAOffset) + point3DGetComponent1(point3DB, point3DBOffset)) * 0.5D;
+		final double component2 = (point3DGetComponent2(point3DA, point3DAOffset) + point3DGetComponent2(point3DB, point3DBOffset)) * 0.5D;
+		final double component3 = (point3DGetComponent3(point3DA, point3DAOffset) + point3DGetComponent3(point3DB, point3DBOffset)) * 0.5D;
+		
+		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DMinimum(final double[] point3DA, final double[] point3DB) {
+		return point3DMinimum(point3DA, point3DB, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DMinimum(final double[] point3DA, final double[] point3DB, final double[] point3DResult) {
+		return point3DMinimum(point3DA, point3DB, point3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DMinimum(final double[] point3DA, final double[] point3DB, final double[] point3DResult, final int point3DAOffset, final int point3DBOffset, final int point3DResultOffset) {
+		final double component1 = min(point3DGetComponent1(point3DA, point3DAOffset), point3DGetComponent1(point3DB, point3DBOffset));
+		final double component2 = min(point3DGetComponent2(point3DA, point3DAOffset), point3DGetComponent2(point3DB, point3DBOffset));
+		final double component3 = min(point3DGetComponent3(point3DA, point3DAOffset), point3DGetComponent3(point3DB, point3DBOffset));
 		
 		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
 	}

@@ -341,92 +341,362 @@ public final class Vector {
 		return vector3DLHS[vector3DLHSOffset + 0] * vector3DRHS[vector3DRHSOffset + 0] + vector3DLHS[vector3DLHSOffset + 1] * vector3DRHS[vector3DRHSOffset + 1] + vector3DLHS[vector3DLHSOffset + 2] * vector3DRHS[vector3DRHSOffset + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 from the vector contained in {@code vector3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DGetComponent1(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return the value of component 1 from the vector contained in {@code vector3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 1}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetComponent1(final double[] vector3D) {
 		return vector3DGetComponent1(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 from the vector contained in {@code vector3D} at offset {@code vector3DOffset}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 1} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return the value of component 1 from the vector contained in {@code vector3D} at offset {@code vector3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 1} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetComponent1(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 from the vector contained in {@code vector3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DGetComponent2(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return the value of component 2 from the vector contained in {@code vector3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetComponent2(final double[] vector3D) {
 		return vector3DGetComponent2(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 from the vector contained in {@code vector3D} at offset {@code vector3DOffset}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 2} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return the value of component 2 from the vector contained in {@code vector3D} at offset {@code vector3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 2} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetComponent2(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 from the vector contained in {@code vector3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DGetComponent3(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return the value of component 3 from the vector contained in {@code vector3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetComponent3(final double[] vector3D) {
 		return vector3DGetComponent3(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 from the vector contained in {@code vector3D} at offset {@code vector3DOffset}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return the value of component 3 from the vector contained in {@code vector3D} at offset {@code vector3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetComponent3(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component from the vector contained in {@code vector3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DGetU(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return the value of the U-component from the vector contained in {@code vector3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 1}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetU(final double[] vector3D) {
 		return vector3DGetU(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 1} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return the value of the U-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 1} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetU(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the V-component from the vector contained in {@code vector3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DGetV(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return the value of the V-component from the vector contained in {@code vector3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetV(final double[] vector3D) {
 		return vector3DGetV(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the V-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 2} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return the value of the V-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 2} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetV(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the W-component from the vector contained in {@code vector3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DGetW(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return the value of the W-component from the vector contained in {@code vector3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetW(final double[] vector3D) {
 		return vector3DGetW(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the W-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return the value of the W-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetW(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component from the vector contained in {@code vector3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DGetX(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return the value of the X-component from the vector contained in {@code vector3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 1}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetX(final double[] vector3D) {
 		return vector3DGetX(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 1} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return the value of the X-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 1} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetX(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component from the vector contained in {@code vector3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DGetY(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return the value of the Y-component from the vector contained in {@code vector3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetY(final double[] vector3D) {
 		return vector3DGetY(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 2} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return the value of the Y-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 2} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetY(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Z-component from the vector contained in {@code vector3D} at offset {@code 0}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DGetZ(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return the value of the Z-component from the vector contained in {@code vector3D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetZ(final double[] vector3D) {
 		return vector3DGetZ(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Z-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return the value of the Z-component from the vector contained in {@code vector3D} at offset {@code vector3DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DGetZ(final double[] vector3D, final int vector3DOffset) {
 		return vector3D[vector3DOffset + 2];
 	}

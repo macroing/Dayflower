@@ -1960,6 +1960,26 @@ public final class Shape {
 	}
 	
 //	TODO: Add Javadocs!
+	public static double rectangle3DSurfaceArea(final double[] rectangle3D) {
+		return rectangle3DSurfaceArea(rectangle3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double rectangle3DSurfaceArea(final double[] rectangle3D, final int rectangle3DOffset) {
+		final double[] point3DA = rectangle3DGetA(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DB = rectangle3DGetB(rectangle3D, point3D(), rectangle3DOffset, 0);
+		final double[] point3DC = rectangle3DGetC(rectangle3D, point3D(), rectangle3DOffset, 0);
+		
+		final double[] vector3DEdgeAB = vector3DDirection(point3DA, point3DB);
+		final double[] vector3DEdgeBC = vector3DDirection(point3DB, point3DC);
+		final double[] vector3DEdgeABCrossEdgeBC = vector3DCrossProduct(vector3DEdgeAB, vector3DEdgeBC);
+		
+		final double surfaceArea = vector3DLength(vector3DEdgeABCrossEdgeBC);
+		
+		return surfaceArea;
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] rectangle3D() {
 		return rectangle3D(point3D(-1.0D, 1.0D, 0.0D), point3D(1.0D, 1.0D, 0.0D), point3D(1.0D, -1.0D, 0.0D), point3D(-1.0D, -1.0D, 0.0D));
 	}

@@ -23,7 +23,11 @@ import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromW;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromWV;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DGetW;
 import static org.dayflower.simplex.Point.point2D;
+import static org.dayflower.simplex.Point.point2DEquals;
 import static org.dayflower.simplex.Point.point2DFromBarycentricCoordinates;
+import static org.dayflower.simplex.Point.point2DDistance;
+import static org.dayflower.simplex.Point.point2DGetX;
+import static org.dayflower.simplex.Point.point2DGetY;
 import static org.dayflower.simplex.Point.point2DSet;
 import static org.dayflower.simplex.Point.point2DSphericalCoordinates;
 import static org.dayflower.simplex.Point.point3D;
@@ -80,6 +84,7 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.asin;
 import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.cos;
+import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
@@ -221,6 +226,36 @@ public final class Shape {
 	/**
 	 * The ID of a line segment.
 	 */
+	public static final int LINE_SEGMENT_2_ID = 4;
+	
+	/**
+	 * The relative offset for the point denoted by A in a {@code double[]} that contains a line segment.
+	 */
+	public static final int LINE_SEGMENT_2_OFFSET_A = 2;
+	
+	/**
+	 * The relative offset for the point denoted by B in a {@code double[]} that contains a line segment.
+	 */
+	public static final int LINE_SEGMENT_2_OFFSET_B = 4;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a line segment.
+	 */
+	public static final int LINE_SEGMENT_2_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a line segment.
+	 */
+	public static final int LINE_SEGMENT_2_OFFSET_SIZE = 1;
+	
+	/**
+	 * The size of a line segment.
+	 */
+	public static final int LINE_SEGMENT_2_SIZE = 6;
+	
+	/**
+	 * The ID of a line segment.
+	 */
 	public static final int LINE_SEGMENT_3_ID = 4;
 	
 	/**
@@ -326,6 +361,31 @@ public final class Shape {
 	/**
 	 * The ID of a polygon.
 	 */
+	public static final int POLYGON_2_ID = 7;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a polygon.
+	 */
+	public static final int POLYGON_2_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the point count in a {@code double[]} that contains a polygon.
+	 */
+	public static final int POLYGON_2_OFFSET_POINT_COUNT = 2;
+	
+	/**
+	 * The relative offset for the first point in a {@code double[]} that contains a polygon.
+	 */
+	public static final int POLYGON_2_OFFSET_POINT_FIRST = 3;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a polygon.
+	 */
+	public static final int POLYGON_2_OFFSET_SIZE = 1;
+	
+	/**
+	 * The ID of a polygon.
+	 */
 	public static final int POLYGON_3_ID = 7;
 	
 	/**
@@ -347,6 +407,46 @@ public final class Shape {
 	 * The relative offset for the size in a {@code double[]} that contains a polygon.
 	 */
 	public static final int POLYGON_3_OFFSET_SIZE = 1;
+	
+	/**
+	 * The ID of a rectangle.
+	 */
+	public static final int RECTANGLE_2_ID = 8;
+	
+	/**
+	 * The relative offset for the point denoted by A in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_2_OFFSET_A = 2;
+	
+	/**
+	 * The relative offset for the point denoted by B in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_2_OFFSET_B = 4;
+	
+	/**
+	 * The relative offset for the point denoted by C in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_2_OFFSET_C = 6;
+	
+	/**
+	 * The relative offset for the point denoted by C in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_2_OFFSET_D = 8;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_2_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a rectangle.
+	 */
+	public static final int RECTANGLE_2_OFFSET_SIZE = 1;
+	
+	/**
+	 * The size of a rectangle.
+	 */
+	public static final int RECTANGLE_2_SIZE = 10;
 	
 	/**
 	 * The ID of a rectangle.
@@ -417,6 +517,16 @@ public final class Shape {
 	 * The size of a rectangular cuboid.
 	 */
 	public static final int RECTANGULAR_CUBOID_3_SIZE = 8;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a shape.
+	 */
+	public static final int SHAPE_2_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a shape.
+	 */
+	public static final int SHAPE_2_OFFSET_SIZE = 1;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a shape.
@@ -1550,6 +1660,112 @@ public final class Shape {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// LineSegment2D ///////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean lineSegment2DContainsPoint2D(final double[] lineSegment2D, final double[] point2D) {
+		return lineSegment2DContainsPoint2D(lineSegment2D, point2D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean lineSegment2DContainsPoint2D(final double[] lineSegment2D, final double[] point2D, final int lineSegment2DOffset, final int point2DOffset) {
+		final double[] point2DA = lineSegment2DGetA(lineSegment2D, point2D(), lineSegment2DOffset, 0);
+		final double[] point2DB = lineSegment2DGetB(lineSegment2D, point2D(), lineSegment2DOffset, 0);
+		final double[] point2DP = point2DSet(point2D(), point2D, 0, point2DOffset);
+		
+		if(point2DEquals(point2DP, point2DA) || point2DEquals(point2DP, point2DB)) {
+			return true;
+		}
+		
+		final double[] vector2DAB = vector2DDirection(point2DA, point2DB);
+		final double[] vector2DAP = vector2DDirection(point2DA, point2DP);
+		
+		final double crossProduct = vector2DCrossProduct(vector2DAP, vector2DAB);
+		
+		if(!isZero(crossProduct)) {
+			return false;
+		}
+		
+		final double aX = point2DGetX(point2DA);
+		final double aY = point2DGetY(point2DA);
+		final double bX = point2DGetX(point2DB);
+		final double bY = point2DGetY(point2DB);
+		final double pX = point2DGetX(point2DP);
+		final double pY = point2DGetY(point2DP);
+		
+		final double x = vector2DGetX(vector2DAB);
+		final double y = vector2DGetY(vector2DAB);
+		
+		final boolean containsX = x > 0.0D ? aX <= pX && pX <= bX : bX <= pX && pX <= aX;
+		final boolean containsY = y > 0.0D ? aY <= pY && pY <= bY : bY <= pY && pY <= aY;
+		final boolean contains = abs(x) >= abs(y) ? containsX : containsY;
+		
+		return contains;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2D() {
+		return lineSegment2D(point2D(0.0D, 0.0D), point2D(1.0D, 1.0D));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2D(final double[] point2DA, final double[] point2DB) {
+		return lineSegment2D(point2DA, point2DB, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2D(final double[] point2DA, final double[] point2DB, final int point2DAOffset, final int point2DBOffset) {
+		return lineSegment2DSet(new double[LINE_SEGMENT_2_SIZE], point2DA, point2DB, 0, point2DAOffset, point2DBOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2DGetA(final double[] lineSegment2D) {
+		return lineSegment2DGetA(lineSegment2D, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2DGetA(final double[] lineSegment2D, final double[] point2DAResult) {
+		return lineSegment2DGetA(lineSegment2D, point2DAResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2DGetA(final double[] lineSegment2D, final double[] point2DAResult, final int lineSegment2DOffset, final int point2DAResultOffset) {
+		return point2DSet(point2DAResult, lineSegment2D, point2DAResultOffset, lineSegment2DOffset + LINE_SEGMENT_2_OFFSET_A);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2DGetB(final double[] lineSegment2D) {
+		return lineSegment2DGetB(lineSegment2D, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2DGetB(final double[] lineSegment2D, final double[] point2DBResult) {
+		return lineSegment2DGetB(lineSegment2D, point2DBResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2DGetB(final double[] lineSegment2D, final double[] point2DBResult, final int lineSegment2DOffset, final int point2DBResultOffset) {
+		return point2DSet(point2DBResult, lineSegment2D, point2DBResultOffset, lineSegment2DOffset + LINE_SEGMENT_2_OFFSET_B);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2DSet(final double[] lineSegment2DResult, final double[] point2DA, final double[] point2DB) {
+		return lineSegment2DSet(lineSegment2DResult, point2DA, point2DB, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment2DSet(final double[] lineSegment2DResult, final double[] point2DA, final double[] point2DB, final int lineSegment2DResultOffset, final int point2DAOffset, final int point2DBOffset) {
+		lineSegment2DResult[lineSegment2DResultOffset + LINE_SEGMENT_2_OFFSET_ID] = LINE_SEGMENT_2_ID;
+		lineSegment2DResult[lineSegment2DResultOffset + LINE_SEGMENT_2_OFFSET_SIZE] = LINE_SEGMENT_2_SIZE;
+		
+		point2DSet(lineSegment2DResult, point2DA, lineSegment2DResultOffset + LINE_SEGMENT_2_OFFSET_A, point2DAOffset);
+		point2DSet(lineSegment2DResult, point2DB, lineSegment2DResultOffset + LINE_SEGMENT_2_OFFSET_B, point2DBOffset);
+		
+		return lineSegment2DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// LineSegment3D ///////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -2054,6 +2270,119 @@ public final class Shape {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Polygon2D ///////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean polygon2DContainsPoint2D(final double[] polygon2D, final double[] point2D) {
+		return polygon2DContainsPoint2D(polygon2D, point2D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean polygon2DContainsPoint2D(final double[] polygon2D, final double[] point2D, final int polygon2DOffset, final int point2DOffset) {
+		final double[] point2DP = point2DSet(point2D(), point2D, 0, point2DOffset);
+		
+		final int point2DCount = polygon2DGetPoint2DCount(polygon2D, polygon2DOffset);
+		
+		final double pX = point2DGetX(point2DP);
+		final double pY = point2DGetY(point2DP);
+		
+		boolean isInside = false;
+		
+		for(int i = 0, j = point2DCount - 1; i < point2DCount; j = i++) {
+			final double[] point2DI = polygon2DGetPoint2D(polygon2D, i, point2D(), polygon2DOffset, 0);
+			final double[] point2DJ = polygon2DGetPoint2D(polygon2D, j, point2D(), polygon2DOffset, 0);
+			
+			final double[] lineSegment2D = lineSegment2D(point2DI, point2DJ);
+			
+			if(lineSegment2DContainsPoint2D(lineSegment2D, point2DP)) {
+				isInside = true;
+				
+				break;
+			}
+			
+			final double iX = point2DGetX(point2DI);
+			final double iY = point2DGetY(point2DI);
+			final double jX = point2DGetX(point2DJ);
+			final double jY = point2DGetY(point2DJ);
+			
+			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
+				isInside = !isInside;
+			}
+		}
+		
+		return isInside;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2D() {
+		return polygon2D(merge(point2D(-2.0D, 2.0D), point2D(0.0D, 3.0D), point2D(2.0D, 2.0D), point2D(2.0D, -2.0D), point2D(-2.0D, -2.0D)));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2D(final double[] point2D) {
+		return polygon2D(point2D, point2D.length / 2);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2D(final double[] point2D, final int point2DCount) {
+		return polygon2D(point2D, point2DCount, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2D(final double[] point2D, final int point2DCount, final int point2DOffset) {
+		return polygon2DSet(new double[3 + point2DCount * 2], point2D, point2DCount, 0, point2DOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2DGetPoint2D(final double[] polygon2D, final int point2DIndex) {
+		return polygon2DGetPoint2D(polygon2D, point2DIndex, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2DGetPoint2D(final double[] polygon2D, final int point2DIndex, final double[] point2DResult) {
+		return polygon2DGetPoint2D(polygon2D, point2DIndex, point2DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2DGetPoint2D(final double[] polygon2D, final int point2DIndex, final double[] point2DResult, final int polygon2DOffset, final int point2DResultOffset) {
+		return point2DSet(point2DResult, polygon2D, point2DResultOffset, polygon2DOffset + POLYGON_2_OFFSET_POINT_FIRST + point2DIndex * 2);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2DSet(final double[] polygon2DResult, final double[] point2D) {
+		return polygon2DSet(polygon2DResult, point2D, point2D.length / 2);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2DSet(final double[] polygon2DResult, final double[] point2D, final int point2DCount) {
+		return polygon2DSet(polygon2DResult, point2D, point2DCount, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2DSet(final double[] polygon2DResult, final double[] point2D, final int point2DCount, final int polygon2DResultOffset, final int point2DOffset) {
+		polygon2DResult[polygon2DResultOffset + POLYGON_2_OFFSET_ID] = POLYGON_2_ID;
+		polygon2DResult[polygon2DResultOffset + POLYGON_2_OFFSET_SIZE] = 3 + point2DCount * 2;
+		polygon2DResult[polygon2DResultOffset + POLYGON_2_OFFSET_POINT_COUNT] = point2DCount;
+		
+		for(int i = 0; i < point2DCount; i++) {
+			point2DSet(polygon2DResult, point2D, polygon2DResultOffset + POLYGON_2_OFFSET_POINT_FIRST + i * 2, point2DOffset + i * 2);
+		}
+		
+		return polygon2DResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static int polygon2DGetPoint2DCount(final double[] polygon2D) {
+		return polygon2DGetPoint2DCount(polygon2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int polygon2DGetPoint2DCount(final double[] polygon2D, final int polygon2DOffset) {
+		return toInt(polygon2D[polygon2DOffset + POLYGON_2_OFFSET_POINT_COUNT]);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Polygon3D ///////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -2098,6 +2427,174 @@ public final class Shape {
 		}
 		
 		return polygon3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Rectangle2D /////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangle2DContainsPoint2D(final double[] rectangle2D, final double[] point2D) {
+		return rectangle2DContainsPoint2D(rectangle2D, point2D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangle2DContainsPoint2D(final double[] rectangle2D, final double[] point2D, final int rectangle2DOffset, final int point2DOffset) {
+		final double[] point2DA = rectangle2DGetA(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DB = rectangle2DGetB(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DC = rectangle2DGetC(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DD = rectangle2DGetD(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DP = point2DSet(point2D(), point2D, 0, point2DOffset);
+		
+		if(rectangle2DIsAxisAligned(rectangle2D, rectangle2DOffset) && rectangle2DIsRectangular(rectangle2D, rectangle2DOffset)) {
+			final boolean containsX = point2DGetX(point2DP) >= point2DGetX(point2DA) && point2DGetX(point2DP) <= point2DGetX(point2DC);
+			final boolean containsY = point2DGetY(point2DP) >= point2DGetY(point2DA) && point2DGetY(point2DP) <= point2DGetY(point2DC);
+			final boolean contains = containsX && containsY;
+			
+			return contains;
+		}
+		
+		final double[] polygon2D = polygon2D(merge(point2DA, point2DB, point2DC, point2DD));
+		
+		final boolean contains = polygon2DContainsPoint2D(polygon2D, point2DP);
+		
+		return contains;
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangle2DIsAxisAligned(final double[] rectangle2D) {
+		return rectangle2DIsAxisAligned(rectangle2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangle2DIsAxisAligned(final double[] rectangle2D, final int rectangle2DOffset) {
+		final double[] point2DA = rectangle2DGetA(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DB = rectangle2DGetB(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DC = rectangle2DGetC(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DD = rectangle2DGetD(rectangle2D, point2D(), rectangle2DOffset, 0);
+		
+		final boolean isAxisAlignedAB = equal(point2DGetY(point2DA), point2DGetY(point2DB));
+		final boolean isAxisAlignedBC = equal(point2DGetX(point2DB), point2DGetX(point2DC));
+		final boolean isAxisAlignedCD = equal(point2DGetY(point2DC), point2DGetY(point2DD));
+		final boolean isAxisAlignedDA = equal(point2DGetX(point2DD), point2DGetX(point2DA));
+		final boolean isAxisAligned = isAxisAlignedAB && isAxisAlignedBC && isAxisAlignedCD && isAxisAlignedDA;
+		
+		return isAxisAligned;
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangle2DIsRectangular(final double[] rectangle2D) {
+		return rectangle2DIsRectangular(rectangle2D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean rectangle2DIsRectangular(final double[] rectangle2D, final int rectangle2DOffset) {
+		final double[] point2DA = rectangle2DGetA(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DB = rectangle2DGetB(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DC = rectangle2DGetC(rectangle2D, point2D(), rectangle2DOffset, 0);
+		final double[] point2DD = rectangle2DGetD(rectangle2D, point2D(), rectangle2DOffset, 0);
+		
+		final double distanceAB = abs(point2DDistance(point2DA, point2DB));
+		final double distanceBC = abs(point2DDistance(point2DB, point2DC));
+		final double distanceCD = abs(point2DDistance(point2DC, point2DD));
+		final double distanceDA = abs(point2DDistance(point2DD, point2DA));
+		
+		final boolean isRectangular = equal(distanceAB, distanceCD) && equal(distanceBC, distanceDA);
+		
+		return isRectangular;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2D() {
+		return rectangle2D(point2D(-1.0D, -1.0D), point2D(1.0D, -1.0D), point2D(1.0D, 1.0D), point2D(-1.0D, 1.0D));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2D(final double[] point2DA, final double[] point2DB, final double[] point2DC, final double[] point2DD) {
+		return rectangle2D(point2DA, point2DB, point2DC, point2DD, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2D(final double[] point2DA, final double[] point2DB, final double[] point2DC, final double[] point2DD, final int point2DAOffset, final int point2DBOffset, final int point2DCOffset, final int point2DDOffset) {
+		return rectangle2DSet(new double[RECTANGLE_2_SIZE], point2DA, point2DB, point2DC, point2DD, 0, point2DAOffset, point2DBOffset, point2DCOffset, point2DDOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetA(final double[] rectangle2D) {
+		return rectangle2DGetA(rectangle2D, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetA(final double[] rectangle2D, final double[] point2DAResult) {
+		return rectangle2DGetA(rectangle2D, point2DAResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetA(final double[] rectangle2D, final double[] point2DAResult, final int rectangle2DOffset, final int point2DAResultOffset) {
+		return point2DSet(point2DAResult, rectangle2D, point2DAResultOffset, rectangle2DOffset + RECTANGLE_2_OFFSET_A);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetB(final double[] rectangle2D) {
+		return rectangle2DGetB(rectangle2D, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetB(final double[] rectangle2D, final double[] point2DBResult) {
+		return rectangle2DGetB(rectangle2D, point2DBResult);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetB(final double[] rectangle2D, final double[] point2DBResult, final int rectangle2DOffset, final int point2DBResultOffset) {
+		return point2DSet(point2DBResult, rectangle2D, point2DBResultOffset, rectangle2DOffset + RECTANGLE_2_OFFSET_B);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetC(final double[] rectangle2D) {
+		return rectangle2DGetC(rectangle2D, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetC(final double[] rectangle2D, final double[] point2DCResult) {
+		return rectangle2DGetC(rectangle2D, point2DCResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetC(final double[] rectangle2D, final double[] point2DCResult, final int rectangle2DOffset, final int point2DCResultOffset) {
+		return point2DSet(point2DCResult, rectangle2D, point2DCResultOffset, rectangle2DOffset + RECTANGLE_2_OFFSET_C);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetD(final double[] rectangle2D) {
+		return rectangle2DGetD(rectangle2D, point2D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetD(final double[] rectangle2D, final double[] point2DDResult) {
+		return rectangle2DGetD(rectangle2D, point2DDResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DGetD(final double[] rectangle2D, final double[] point2DDResult, final int rectangle2DOffset, final int point2DDResultOffset) {
+		return point2DSet(point2DDResult, rectangle2D, point2DDResultOffset, rectangle2DOffset + RECTANGLE_2_OFFSET_D);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DSet(final double[] rectangle2DResult, final double[] point2DA, final double[] point2DB, final double[] point2DC, final double[] point2DD) {
+		return rectangle2DSet(rectangle2DResult, point2DA, point2DB, point2DC, point2DD, 0, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] rectangle2DSet(final double[] rectangle2DResult, final double[] point2DA, final double[] point2DB, final double[] point2DC, final double[] point2DD, final int rectangle2DResultOffset, final int point2DAOffset, final int point2DBOffset, final int point2DCOffset, final int point2DDOffset) {
+		rectangle2DResult[rectangle2DResultOffset + RECTANGLE_2_OFFSET_ID] = RECTANGLE_2_ID;
+		rectangle2DResult[rectangle2DResultOffset + RECTANGLE_2_OFFSET_SIZE] = RECTANGLE_2_SIZE;
+		
+		point2DSet(rectangle2DResult, point2DA, rectangle2DResultOffset + RECTANGLE_2_OFFSET_A, point2DAOffset);
+		point2DSet(rectangle2DResult, point2DB, rectangle2DResultOffset + RECTANGLE_2_OFFSET_B, point2DBOffset);
+		point2DSet(rectangle2DResult, point2DC, rectangle2DResultOffset + RECTANGLE_2_OFFSET_C, point2DCOffset);
+		point2DSet(rectangle2DResult, point2DD, rectangle2DResultOffset + RECTANGLE_2_OFFSET_D, point2DDOffset);
+		
+		return rectangle2DResult;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

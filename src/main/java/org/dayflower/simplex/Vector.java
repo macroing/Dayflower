@@ -310,6 +310,91 @@ public final class Vector {
 	}
 	
 	/**
+	 * Returns a {@code double} that contains the length of the vector contained in {@code vector2D}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DLength(vector2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @return a {@code double} that contains the length of the vector contained in {@code vector2D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
+	public static double vector2DLength(final double[] vector2D) {
+		return vector2DLength(vector2D, 0);
+	}
+	
+	/**
+	 * Returns a {@code double} that contains the length of the vector contained in {@code vector2D}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @param vector2DOffset the offset in {@code vector2D} to start at
+	 * @return a {@code double} that contains the length of the vector contained in {@code vector2D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
+	public static double vector2DLength(final double[] vector2D, final int vector2DOffset) {
+		return sqrt(vector2DLengthSquared(vector2D, vector2DOffset));
+	}
+	
+	/**
+	 * Returns a {@code double} that contains the squared length of the vector contained in {@code vector2D}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DLengthSquared(vector2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @return a {@code double} that contains the squared length of the vector contained in {@code vector2D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
+	public static double vector2DLengthSquared(final double[] vector2D) {
+		return vector2DLengthSquared(vector2D, 0);
+	}
+	
+	/**
+	 * Returns a {@code double} that contains the squared length of the vector contained in {@code vector2D}.
+	 * <p>
+	 * If {@code vector2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2D a {@code double[]} that contains a vector with two components
+	 * @param vector2DOffset the offset in {@code vector2D} to start at
+	 * @return a {@code double} that contains the squared length of the vector contained in {@code vector2D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2D.length < vector2DOffset + 2} or {@code vector2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector2D} is {@code null}
+	 */
+	public static double vector2DLengthSquared(final double[] vector2D, final int vector2DOffset) {
+		final double component1 = vector2DGetComponent1(vector2D, vector2DOffset);
+		final double component2 = vector2DGetComponent2(vector2D, vector2DOffset);
+		
+		final double lengthSquared = component1 * component1 + component2 * component2;
+		
+		return lengthSquared;
+	}
+	
+	/**
 	 * Returns a {@code double[]} that contains a vector with two components.
 	 * <p>
 	 * Calling this method is equivalent to the following:

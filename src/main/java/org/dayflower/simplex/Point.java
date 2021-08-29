@@ -18,6 +18,10 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.Vector.vector2D;
+import static org.dayflower.simplex.Vector.vector2DDirection;
+import static org.dayflower.simplex.Vector.vector2DLength;
+import static org.dayflower.simplex.Vector.vector2DLengthSquared;
 import static org.dayflower.simplex.Vector.vector3D;
 import static org.dayflower.simplex.Vector.vector3DDirection;
 import static org.dayflower.simplex.Vector.vector3DDirectionNormalized;
@@ -60,6 +64,44 @@ public final class Point {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Point2D /////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean point2DEquals(final double[] point2DA, final double[] point2DB) {
+		return point2DEquals(point2DA, point2DB, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean point2DEquals(final double[] point2DA, final double[] point2DB, final int point2DAOffset, final int point2DBOffset) {
+		final double component1A = point2DGetComponent1(point2DA, point2DAOffset);
+		final double component2A = point2DGetComponent2(point2DA, point2DAOffset);
+		
+		final double component1B = point2DGetComponent1(point2DB, point2DBOffset);
+		final double component2B = point2DGetComponent2(point2DB, point2DBOffset);
+		
+		final boolean equals = equal(component1A, component1B) && equal(component2A, component2B);
+		
+		return equals;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DDistance(final double[] point2DEye, final double[] point2DTarget) {
+		return point2DDistance(point2DEye, point2DTarget, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DDistance(final double[] point2DEye, final double[] point2DTarget, final int point2DEyeOffset, final int point2DTargetOffset) {
+		return vector2DLength(vector2DDirection(point2DEye, point2DTarget, vector2D(), point2DEyeOffset, point2DTargetOffset, 0));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DDistanceSquared(final double[] point2DEye, final double[] point2DTarget) {
+		return point2DDistanceSquared(point2DEye, point2DTarget, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double point2DDistanceSquared(final double[] point2DEye, final double[] point2DTarget, final int point2DEyeOffset, final int point2DTargetOffset) {
+		return vector2DLengthSquared(vector2DDirection(point2DEye, point2DTarget, vector2D(), point2DEyeOffset, point2DTargetOffset, 0));
+	}
 	
 //	TODO: Add Javadocs!
 	public static double point2DGetComponent1(final double[] point2D) {

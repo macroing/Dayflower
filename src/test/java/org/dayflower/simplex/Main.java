@@ -39,6 +39,7 @@ import static org.dayflower.simplex.Shape.cylinder3D;
 import static org.dayflower.simplex.Shape.disk3D;
 import static org.dayflower.simplex.Shape.paraboloid3D;
 import static org.dayflower.simplex.Shape.plane3D;
+import static org.dayflower.simplex.Shape.polygon3D;
 import static org.dayflower.simplex.Shape.rectangle3D;
 import static org.dayflower.simplex.Shape.rectangularCuboid3D;
 import static org.dayflower.simplex.Shape.shape3DComputeSurfaceNormal;
@@ -71,6 +72,7 @@ public final class Main {
 		doRender("./generated/Simplex/Disk.png", 0.0D, disk3D());
 		doRender("./generated/Simplex/Paraboloid.png", 270.0D, paraboloid3D());
 		doRender("./generated/Simplex/Plane.png", 0.0D, plane3D(point3D(0.0D, -1.0D, 0.0D), point3D(0.0D, -1.0D, 1.0D), point3D(1.0D, -1.0D, 0.0D)));
+		doRender("./generated/Simplex/Polygon.png", 0.0D, polygon3D());
 		doRender("./generated/Simplex/Rectangle.png", 0.0D, rectangle3D());
 		doRender("./generated/Simplex/RectangularCuboid.png", 0.0D, rectangularCuboid3D());
 		doRender("./generated/Simplex/Sphere.png", 270.0D, sphere3D());

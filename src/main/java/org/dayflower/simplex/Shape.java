@@ -55,6 +55,7 @@ import static org.dayflower.simplex.Vector.vector2DGetX;
 import static org.dayflower.simplex.Vector.vector2DGetY;
 import static org.dayflower.simplex.Vector.vector2DSubtract;
 import static org.dayflower.simplex.Vector.vector3D;
+import static org.dayflower.simplex.Vector.vector3DAdd;
 import static org.dayflower.simplex.Vector.vector3DCrossProduct;
 import static org.dayflower.simplex.Vector.vector3DDirection;
 import static org.dayflower.simplex.Vector.vector3DDirectionNormalized;
@@ -2289,7 +2290,7 @@ public final class Shape {
 		
 		boolean isInside = false;
 		
-		for(int i = 0, j = point2DCount - 1; i < point2DCount; j = i++) {
+		for(int i = 0, j = point2DCount - 1; i < point2DCount; j = i, i++) {
 			final double[] point2DI = polygon2DGetPoint2D(polygon2D, i, point2D(), polygon2DOffset, 0);
 			final double[] point2DJ = polygon2DGetPoint2D(polygon2D, j, point2D(), polygon2DOffset, 0);
 			
@@ -2332,6 +2333,38 @@ public final class Shape {
 //	TODO: Add Javadocs!
 	public static double[] polygon2D(final double[] point2D, final int point2DCount, final int point2DOffset) {
 		return polygon2DSet(new double[3 + point2DCount * 2], point2D, point2DCount, 0, point2DOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2DFromPolygon3D(final double[] polygon3D) {
+		return polygon2DFromPolygon3D(polygon3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon2DFromPolygon3D(final double[] polygon3D, final int polygon3DOffset) {
+		final int point3DCount = polygon3DGetPoint3DCount(polygon3D, polygon3DOffset);
+		
+		final double[] point3DA = polygon3DGetPoint3D(polygon3D, 0, point3D(), polygon3DOffset, 0);
+		final double[] point3DB = polygon3DGetPoint3D(polygon3D, 1, point3D(), polygon3DOffset, 0);
+		
+		final double[] vector3DW = polygon3DGetSurfaceNormal(polygon3D, vector3D(), polygon3DOffset, 0);
+		final double[] vector3DU = vector3DDirectionNormalized(point3DA, point3DB);
+		final double[] vector3DV = vector3DCrossProduct(vector3DW, vector3DU);
+		
+		final double[] point2D = new double[point3DCount * 2];
+		
+		for(int i = 0; i < point3DCount; i++) {
+			final double[] point3DI = polygon3DGetPoint3D(polygon3D, i, point3D(), polygon3DOffset, 0);
+			
+			final double[] vector3DDirectionAI = vector3DDirection(point3DA, point3DI);
+			
+			final double x = vector3DDotProduct(vector3DDirectionAI, vector3DU);
+			final double y = vector3DDotProduct(vector3DDirectionAI, vector3DV);
+			
+			point2DSet(point2D, x, y, i * 2);
+		}
+		
+		return polygon2D(point2D);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2387,8 +2420,121 @@ public final class Shape {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
+	public static boolean polygon3DContainsPoint3D(final double[] polygon3D, final double[] point3D) {
+		return polygon3DContainsPoint3D(polygon3D, point3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean polygon3DContainsPoint3D(final double[] polygon3D, final double[] point3D, final int polygon3DOffset, final int point3DOffset) {
+		final double[] point3DA = polygon3DGetPoint3D(polygon3D, 0, point3D(), polygon3DOffset, 0);
+		final double[] point3DB = polygon3DGetPoint3D(polygon3D, 1, point3D(), polygon3DOffset, 0);
+		final double[] point3DC = polygon3DGetPoint3D(polygon3D, 2, point3D(), polygon3DOffset, 0);
+		final double[] point3DP = point3DSet(point3D(), point3D, 0, point3DOffset);
+		
+		if(!point3DCoplanar(point3DA, point3DB, point3DC, point3DP)) {
+			return false;
+		}
+		
+		final double[] polygon2D = polygon2DFromPolygon3D(polygon3D, polygon3DOffset);
+		
+		final double[] vector3DW = polygon3DGetSurfaceNormal(polygon3D, vector3D(), polygon3DOffset, 0);
+		final double[] vector3DU = vector3DDirectionNormalized(point3DA, point3DB);
+		final double[] vector3DV = vector3DCrossProduct(vector3DW, vector3DU);
+		
+		final double[] vector3DDirectionAP = vector3DDirection(point3DA, point3DP);
+		
+		final double[] point2DP = point2D(vector3DDotProduct(vector3DDirectionAP, vector3DU), vector3DDotProduct(vector3DDirectionAP, vector3DV));
+		
+		final boolean contains = polygon2DContainsPoint2D(polygon2D, point2DP);
+		
+		return contains;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double polygon3DIntersection(final double[] ray3D, final double[] polygon3D) {
+		return polygon3DIntersection(ray3D, polygon3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double polygon3DIntersection(final double[] ray3D, final double[] polygon3D, final int ray3DOffset, final int polygon3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double tMinimum = ray3DGetTMinimum(ray3D, ray3DOffset);
+		final double tMaximum = ray3DGetTMaximum(ray3D, ray3DOffset);
+		
+		final double[] point3DA = polygon3DGetPoint3D(polygon3D, 0, point3D(), polygon3DOffset, 0);
+		final double[] point3DB = polygon3DGetPoint3D(polygon3D, 1, point3D(), polygon3DOffset, 0);
+		
+		final double[] vector3DSurfaceNormal = polygon3DGetSurfaceNormal(polygon3D, vector3D(), polygon3DOffset, 0);
+		
+		final double surfaceNormalDotDirection = vector3DDotProduct(vector3DSurfaceNormal, vector3DDirection);
+		
+		if(isZero(surfaceNormalDotDirection)) {
+			return NaN;
+		}
+		
+		final double[] vector3DOriginToA = vector3DDirection(point3DOrigin, point3DA);
+		
+		final double t = vector3DDotProduct(vector3DOriginToA, vector3DSurfaceNormal) / surfaceNormalDotDirection;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return NaN;
+		}
+		
+		final double[] polygon2D = polygon2DFromPolygon3D(polygon3D, polygon3DOffset);
+		
+		final double[] point3DP = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double[] vector3DW = vector3DSurfaceNormal;
+		final double[] vector3DU = vector3DDirectionNormalized(point3DA, point3DB);
+		final double[] vector3DV = vector3DCrossProduct(vector3DW, vector3DU);
+		
+		final double[] vector3DDirectionAP = vector3DDirection(point3DA, point3DP);
+		
+		final double[] point2DP = point2D(vector3DDotProduct(vector3DDirectionAP, vector3DU), vector3DDotProduct(vector3DDirectionAP, vector3DV));
+		
+		final boolean contains = polygon2DContainsPoint2D(polygon2D, point2DP);
+		
+		if(contains) {
+			return t;
+		}
+		
+		return NaN;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double polygon3DSurfaceArea(final double[] polygon3D) {
+		return polygon3DSurfaceArea(polygon3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double polygon3DSurfaceArea(final double[] polygon3D, final int polygon3DOffset) {
+		final double[] vector3DSurfaceArea = vector3D();
+		
+		final int point3DCount = polygon3DGetPoint3DCount(polygon3D, polygon3DOffset);
+		
+		for(int i = 0, j = point3DCount - 1; i < point3DCount; j = i, i++) {
+			final double[] point3DI = polygon3DGetPoint3D(polygon3D, i, point3D(), polygon3DOffset, 0);
+			final double[] point3DJ = polygon3DGetPoint3D(polygon3D, j, point3D(), polygon3DOffset, 0);
+			
+			final double[] vector3DI = vector3DFromPoint3D(point3DI);
+			final double[] vector3DJ = vector3DFromPoint3D(point3DJ);
+			
+			vector3DAdd(vector3DSurfaceArea, vector3DCrossProduct(vector3DI, vector3DJ), vector3DSurfaceArea);
+		}
+		
+		final double[] vector3DSurfaceNormal = polygon3DGetSurfaceNormal(polygon3D, vector3D(), polygon3DOffset, 0);
+		
+		final double surfaceArea = 0.5D * abs(vector3DDotProduct(vector3DSurfaceNormal, vector3DSurfaceArea));
+		
+		return surfaceArea;
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] polygon3D() {
-		return polygon3D(merge(point3D(-2.0D, 2.0D, 0.0D), point3D(0.0D, 3.0D, 0.0D), point3D(2.0D, 2.0D, 0.0D), point3D(2.0D, -2.0D, 0.0D), point3D(-2.0D, -2.0D, 0.0D)));
+		return polygon3D(merge(point3D(-1.0D, 1.0D, 0.0D), point3D(0.0D, 1.5D, 0.0D), point3D(1.0D, 1.0D, 0.0D), point3D(1.0D, -1.0D, 0.0D), point3D(-1.0D, -1.0D, 0.0D)));
 	}
 	
 //	TODO: Add Javadocs!
@@ -2404,6 +2550,108 @@ public final class Shape {
 //	TODO: Add Javadocs!
 	public static double[] polygon3D(final double[] point3D, final int point3DCount, final int point3DOffset) {
 		return polygon3DSet(new double[3 + point3DCount * 3], point3D, point3DCount, 0, point3DOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DComputeOrthonormalBasis(final double[] ray3D, final double[] polygon3D, final double t) {
+		return polygon3DComputeOrthonormalBasis(ray3D, polygon3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] polygon3DComputeOrthonormalBasis(final double[] ray3D, final double[] polygon3D, final double t, final int ray3DOffset, final int polygon3DOffset) {
+		final double[] vector3DW = polygon3DGetSurfaceNormal(polygon3D, vector3D(), polygon3DOffset, 0);
+		
+		return orthonormalBasis33DFromW(vector3DW);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DComputeSurfaceNormal(final double[] ray3D, final double[] polygon3D, final double t) {
+		return polygon3DComputeSurfaceNormal(ray3D, polygon3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DComputeSurfaceNormal(final double[] ray3D, final double[] polygon3D, final double t, final int ray3DOffset, final int polygon3DOffset) {
+		return orthonormalBasis33DGetW(polygon3DComputeOrthonormalBasis(ray3D, polygon3D, t, ray3DOffset, polygon3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DComputeTextureCoordinates(final double[] ray3D, final double[] polygon3D, final double t) {
+		return polygon3DComputeTextureCoordinates(ray3D, polygon3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DComputeTextureCoordinates(final double[] ray3D, final double[] polygon3D, final double t, final int ray3DOffset, final int polygon3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final int n = polygon3DGetPoint3DCount(polygon3D, polygon3DOffset) - 1;
+		
+		final double[] point3DA = polygon3DGetPoint3D(polygon3D, 0, point3D(), polygon3DOffset, 0);
+		final double[] point3DB = polygon3DGetPoint3D(polygon3D, 1, point3D(), polygon3DOffset, 0);
+		final double[] point3DN = polygon3DGetPoint3D(polygon3D, n, point3D(), polygon3DOffset, 0);
+		
+		final double[] vector3DSurfaceNormal = polygon3DGetSurfaceNormal(polygon3D, vector3D(), polygon3DOffset, 0);
+		
+		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final boolean isX = abs(vector3DGetX(vector3DSurfaceNormal)) > abs(vector3DGetY(vector3DSurfaceNormal)) && abs(vector3DGetX(vector3DSurfaceNormal)) > abs(vector3DGetZ(vector3DSurfaceNormal));
+		final boolean isY = abs(vector3DGetY(vector3DSurfaceNormal)) > abs(vector3DGetZ(vector3DSurfaceNormal));
+		
+		final double[] vector2DA = isX ? vector2DDirectionYZ(point3DA) : isY ? vector2DDirectionZX(point3DA) : vector2DDirectionXY(point3DA);
+		final double[] vector2DB = isX ? vector2DDirectionYZ(point3DN) : isY ? vector2DDirectionZX(point3DN) : vector2DDirectionXY(point3DN);
+		final double[] vector2DC = isX ? vector2DDirectionYZ(point3DB) : isY ? vector2DDirectionZX(point3DB) : vector2DDirectionXY(point3DB);
+		
+		final double[] vector2DAB = vector2DSubtract(vector2DB, vector2DA);
+		final double[] vector2DAC = vector2DSubtract(vector2DC, vector2DA);
+		
+		final double determinant = vector2DCrossProduct(vector2DAB, vector2DAC);
+		final double determinantReciprocal = 1.0D / determinant;
+		
+		final double hU = isX ? point3DGetY(point3D) : isY ? point3DGetZ(point3D) : point3DGetX(point3D);
+		final double hV = isX ? point3DGetZ(point3D) : isY ? point3DGetX(point3D) : point3DGetY(point3D);
+		
+		final double u = hU * (-vector2DGetY(vector2DAB) * determinantReciprocal) + hV * (+vector2DGetX(vector2DAB) * determinantReciprocal) + vector2DCrossProduct(vector2DA, vector2DAB) * determinantReciprocal;
+		final double v = hU * (+vector2DGetY(vector2DAC) * determinantReciprocal) + hV * (-vector2DGetX(vector2DAC) * determinantReciprocal) + vector2DCrossProduct(vector2DAC, vector2DA) * determinantReciprocal;
+		
+		return point2D(u, v);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DGetPoint3D(final double[] polygon3D, final int point3DIndex) {
+		return polygon3DGetPoint3D(polygon3D, point3DIndex, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DGetPoint3D(final double[] polygon3D, final int point3DIndex, final double[] point3DResult) {
+		return polygon3DGetPoint3D(polygon3D, point3DIndex, point3DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DGetPoint3D(final double[] polygon3D, final int point3DIndex, final double[] point3DResult, final int polygon3DOffset, final int point3DResultOffset) {
+		return point3DSet(point3DResult, polygon3D, point3DResultOffset, polygon3DOffset + POLYGON_3_OFFSET_POINT_FIRST + point3DIndex * 3);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DGetSurfaceNormal(final double[] polygon3D) {
+		return polygon3DGetSurfaceNormal(polygon3D, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DGetSurfaceNormal(final double[] polygon3D, final double[] vector3DSurfaceNormalResult) {
+		return polygon3DGetSurfaceNormal(polygon3D, vector3DSurfaceNormalResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DGetSurfaceNormal(final double[] polygon3D, final double[] vector3DSurfaceNormalResult, final int polygon3DOffset, final int vector3DSurfaceNormalResultOffset) {
+		final double[] point3DA = polygon3DGetPoint3D(polygon3D, 0, point3D(), polygon3DOffset, 0);
+		final double[] point3DB = polygon3DGetPoint3D(polygon3D, 1, point3D(), polygon3DOffset, 0);
+		final double[] point3DC = polygon3DGetPoint3D(polygon3D, 2, point3D(), polygon3DOffset, 0);
+		
+		final double[] vector3DSurfaceNormal = vector3DNormalNormalized(point3DA, point3DB, point3DC, vector3DSurfaceNormalResult, 0, 0, 0, vector3DSurfaceNormalResultOffset);
+		
+		return vector3DSurfaceNormal;
 	}
 	
 //	TODO: Add Javadocs!
@@ -2429,6 +2677,16 @@ public final class Shape {
 		return polygon3DResult;
 	}
 	
+//	TODO: Add Javadocs!
+	public static int polygon3DGetPoint3DCount(final double[] polygon3D) {
+		return polygon3DGetPoint3DCount(polygon3D, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int polygon3DGetPoint3DCount(final double[] polygon3D, final int polygon3DOffset) {
+		return toInt(polygon3D[polygon3DOffset + POLYGON_3_OFFSET_POINT_COUNT]);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Rectangle2D /////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2446,13 +2704,24 @@ public final class Shape {
 		final double[] point2DD = rectangle2DGetD(rectangle2D, point2D(), rectangle2DOffset, 0);
 		final double[] point2DP = point2DSet(point2D(), point2D, 0, point2DOffset);
 		
-		if(rectangle2DIsAxisAligned(rectangle2D, rectangle2DOffset) && rectangle2DIsRectangular(rectangle2D, rectangle2DOffset)) {
-			final boolean containsX = point2DGetX(point2DP) >= point2DGetX(point2DA) && point2DGetX(point2DP) <= point2DGetX(point2DC);
-			final boolean containsY = point2DGetY(point2DP) >= point2DGetY(point2DA) && point2DGetY(point2DP) <= point2DGetY(point2DC);
-			final boolean contains = containsX && containsY;
+		/*
+		 * The following code is faster. But it has too many restrictions.
+		 * 
+		 * 1. The rectangle has to be axis-aligned and not rotated.
+		 * 2. The rectangle has to be rectangular with two sets of two equal sides.
+		 * 3. The point denoted by A has to be the minimum point in both directions.
+		 * 4. The point denoted by C has to be the maximum point in both directions.
+		 * 
+		 * Performing checks to verify that these restrictions are met is probably worse performance-wize than using the Polygon2D in all cases.
+		 */
+		
+//		if(rectangle2DIsAxisAligned(rectangle2D, rectangle2DOffset) && rectangle2DIsRectangular(rectangle2D, rectangle2DOffset)) {
+//			final boolean containsX = point2DGetX(point2DP) >= point2DGetX(point2DA) && point2DGetX(point2DP) <= point2DGetX(point2DC);
+//			final boolean containsY = point2DGetY(point2DP) >= point2DGetY(point2DA) && point2DGetY(point2DP) <= point2DGetY(point2DC);
+//			final boolean contains = containsX && containsY;
 			
-			return contains;
-		}
+//			return contains;
+//		}
 		
 		final double[] polygon2D = polygon2D(merge(point2DA, point2DB, point2DC, point2DD));
 		
@@ -3109,6 +3378,8 @@ public final class Shape {
 				return paraboloid3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case PLANE_3_ID:
 				return plane3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
+			case POLYGON_3_ID:
+				return polygon3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case RECTANGLE_3_ID:
 				return rectangle3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			case RECTANGULAR_CUBOID_3_ID:
@@ -3142,6 +3413,8 @@ public final class Shape {
 				return paraboloid3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case PLANE_3_ID:
 				return plane3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case POLYGON_3_ID:
+				return polygon3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case RECTANGLE_3_ID:
 				return rectangle3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case RECTANGULAR_CUBOID_3_ID:
@@ -3185,6 +3458,8 @@ public final class Shape {
 				return paraboloid3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case PLANE_3_ID:
 				return plane3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case POLYGON_3_ID:
+				return polygon3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case RECTANGLE_3_ID:
 				return rectangle3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			case RECTANGULAR_CUBOID_3_ID:

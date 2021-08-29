@@ -19,12 +19,15 @@
 package org.dayflower.simplex;
 
 import static org.dayflower.simplex.Point.point3D;
+import static org.dayflower.simplex.Point.point3DAdd;
+import static org.dayflower.simplex.Point.point3DDistance;
 import static org.dayflower.simplex.Point.point3DSet;
 import static org.dayflower.simplex.Point.point3DTransformAndDivideMatrix44D;
 import static org.dayflower.simplex.Vector.vector3D;
 import static org.dayflower.simplex.Vector.vector3DSet;
 import static org.dayflower.simplex.Vector.vector3DTransformMatrix44D;
 import static org.dayflower.utility.Doubles.MAX_VALUE;
+import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
 
@@ -72,6 +75,21 @@ public final class Ray {
 //	TODO: Add Javadocs!
 	public static double ray3DGetTMinimum(final double[] ray3D, final int ray3DOffset) {
 		return ray3D[ray3DOffset + RAY_OFFSET_T_MINIMUM];
+	}
+	
+//	TODO: Add Javadocs!
+	public static double ray3DTransformT(final double t, final double[] matrix44DLHS, final double[] ray3DRHS) {
+		return ray3DTransformT(t, matrix44DLHS, ray3DRHS, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double ray3DTransformT(final double t, final double[] matrix44DLHS, final double[] ray3DRHS, final int matrix44DLHSOffset, final int ray3DRHSOffset) {
+		final double[] point3DOriginOldSpace = ray3DGetOrigin(ray3DRHS, point3D(), ray3DRHSOffset, 0);
+		final double[] point3DOriginNewSpace = point3DTransformAndDivideMatrix44D(matrix44DLHS, point3DOriginOldSpace, point3D(), matrix44DLHSOffset, 0, 0);
+		
+		final double[] vector3DDirectionOldSpace = ray3DGetDirection(ray3DRHS, vector3D(), ray3DRHSOffset, 0);
+		
+		return !isNaN(t) && !isZero(t) && t < MAX_VALUE ? abs(point3DDistance(point3DOriginNewSpace, point3DTransformAndDivideMatrix44D(matrix44DLHS, point3DAdd(point3DOriginOldSpace, vector3DDirectionOldSpace, t)))) : t;
 	}
 	
 //	TODO: Add Javadocs!
@@ -184,9 +202,8 @@ public final class Ray {
 		final double[] vector3DDirectionOldSpace = ray3DGetDirection(ray3DRHS, vector3D(), ray3DRHSOffset, 0);
 		final double[] vector3DDirectionNewSpace = vector3DTransformMatrix44D(matrix44DLHS, vector3DDirectionOldSpace, vector3D(), matrix44DLHSOffset, 0, 0);
 		
-//		TODO: Implement abs(Point3D.distance(rayNewSpace.getOrigin(), Point3D.transformAndDivide(matrix, Point3D.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))):
 		final double tMaximumOldSpace = ray3DGetTMaximum(ray3DRHS, ray3DRHSOffset);
-		final double tMaximumNewSpace = !isNaN(tMaximumOldSpace) && !isZero(tMaximumOldSpace) && tMaximumOldSpace < MAX_VALUE ? tMaximumOldSpace : tMaximumOldSpace;
+		final double tMaximumNewSpace = !isNaN(tMaximumOldSpace) && !isZero(tMaximumOldSpace) && tMaximumOldSpace < MAX_VALUE ? abs(point3DDistance(point3DOriginNewSpace, point3DTransformAndDivideMatrix44D(matrix44DLHS, point3DAdd(point3DOriginOldSpace, vector3DDirectionOldSpace, tMaximumOldSpace)))) : tMaximumOldSpace;
 		
 		final double tMinimumOldSpace = ray3DGetTMinimum(ray3DRHS, ray3DRHSOffset);
 		final double tMinimumNewSpace = tMinimumOldSpace;

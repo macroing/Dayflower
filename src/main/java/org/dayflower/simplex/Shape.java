@@ -30,6 +30,7 @@ import static org.dayflower.simplex.Point.point3D;
 import static org.dayflower.simplex.Point.point3DAdd;
 import static org.dayflower.simplex.Point.point3DCoplanar;
 import static org.dayflower.simplex.Point.point3DDistanceSquared;
+import static org.dayflower.simplex.Point.point3DEquals;
 import static org.dayflower.simplex.Point.point3DGetX;
 import static org.dayflower.simplex.Point.point3DGetY;
 import static org.dayflower.simplex.Point.point3DGetZ;
@@ -61,11 +62,15 @@ import static org.dayflower.simplex.Vector.vector3DGetY;
 import static org.dayflower.simplex.Vector.vector3DGetZ;
 import static org.dayflower.simplex.Vector.vector3DLength;
 import static org.dayflower.simplex.Vector.vector3DLengthSquared;
+import static org.dayflower.simplex.Vector.vector3DLerp;
 import static org.dayflower.simplex.Vector.vector3DMultiply;
+import static org.dayflower.simplex.Vector.vector3DNormalNormalized;
 import static org.dayflower.simplex.Vector.vector3DNormalize;
 import static org.dayflower.simplex.Vector.vector3DReciprocal;
 import static org.dayflower.simplex.Vector.vector3DSet;
+import static org.dayflower.utility.DoubleArrays.merge;
 import static org.dayflower.utility.Doubles.NaN;
+import static org.dayflower.utility.Doubles.PI;
 import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
@@ -74,6 +79,7 @@ import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.asin;
 import static org.dayflower.utility.Doubles.atan2;
+import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
@@ -95,402 +101,457 @@ public final class Shape {
 	/**
 	 * The ID of a cone.
 	 */
-	public static final int CONE_ID = 0;
+	public static final int CONE_3_ID = 0;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a cone.
 	 */
-	public static final int CONE_OFFSET_ID = 0;
+	public static final int CONE_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the maximum phi angle in a {@code double[]} that contains a cone.
 	 */
-	public static final int CONE_OFFSET_PHI_MAX = 2;
+	public static final int CONE_3_OFFSET_PHI_MAX = 2;
 	
 	/**
 	 * The relative offset for the radius in a {@code double[]} that contains a cone.
 	 */
-	public static final int CONE_OFFSET_RADIUS = 3;
+	public static final int CONE_3_OFFSET_RADIUS = 3;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a cone.
 	 */
-	public static final int CONE_OFFSET_SIZE = 1;
+	public static final int CONE_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The relative offset for the maximum Z-value in a {@code double[]} that contains a cone.
 	 */
-	public static final int CONE_OFFSET_Z_MAX = 4;
+	public static final int CONE_3_OFFSET_Z_MAX = 4;
 	
 	/**
 	 * The size of a cone.
 	 */
-	public static final int CONE_SIZE = 5;
+	public static final int CONE_3_SIZE = 5;
 	
 	/**
 	 * The ID of a cylinder.
 	 */
-	public static final int CYLINDER_ID = 1;
+	public static final int CYLINDER_3_ID = 1;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a cylinder.
 	 */
-	public static final int CYLINDER_OFFSET_ID = 0;
+	public static final int CYLINDER_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the maximum phi angle in a {@code double[]} that contains a cylinder.
 	 */
-	public static final int CYLINDER_OFFSET_PHI_MAX = 2;
+	public static final int CYLINDER_3_OFFSET_PHI_MAX = 2;
 	
 	/**
 	 * The relative offset for the radius in a {@code double[]} that contains a cylinder.
 	 */
-	public static final int CYLINDER_OFFSET_RADIUS = 3;
+	public static final int CYLINDER_3_OFFSET_RADIUS = 3;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a cylinder.
 	 */
-	public static final int CYLINDER_OFFSET_SIZE = 1;
+	public static final int CYLINDER_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The relative offset for the maximum Z-value in a {@code double[]} that contains a cylinder.
 	 */
-	public static final int CYLINDER_OFFSET_Z_MAX = 4;
+	public static final int CYLINDER_3_OFFSET_Z_MAX = 4;
 	
 	/**
 	 * The relative offset for the minimum Z-value in a {@code double[]} that contains a cylinder.
 	 */
-	public static final int CYLINDER_OFFSET_Z_MIN = 5;
+	public static final int CYLINDER_3_OFFSET_Z_MIN = 5;
 	
 	/**
 	 * The size of a cylinder.
 	 */
-	public static final int CYLINDER_SIZE = 6;
+	public static final int CYLINDER_3_SIZE = 6;
 	
 	/**
 	 * The ID of a disk.
 	 */
-	public static final int DISK_ID = 2;
+	public static final int DISK_3_ID = 2;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a disk.
 	 */
-	public static final int DISK_OFFSET_ID = 0;
+	public static final int DISK_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the maximum phi angle in a {@code double[]} that contains a disk.
 	 */
-	public static final int DISK_OFFSET_PHI_MAX = 2;
+	public static final int DISK_3_OFFSET_PHI_MAX = 2;
 	
 	/**
 	 * The relative offset for the inner radius in a {@code double[]} that contains a disk.
 	 */
-	public static final int DISK_OFFSET_RADIUS_INNER = 3;
+	public static final int DISK_3_OFFSET_RADIUS_INNER = 3;
 	
 	/**
 	 * The relative offset for the outer radius in a {@code double[]} that contains a disk.
 	 */
-	public static final int DISK_OFFSET_RADIUS_OUTER = 4;
+	public static final int DISK_3_OFFSET_RADIUS_OUTER = 4;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a disk.
 	 */
-	public static final int DISK_OFFSET_SIZE = 1;
+	public static final int DISK_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The relative offset for the maximum Z-value in a {@code double[]} that contains a disk.
 	 */
-	public static final int DISK_OFFSET_Z_MAX = 5;
+	public static final int DISK_3_OFFSET_Z_MAX = 5;
 	
 	/**
 	 * The size of a disk.
 	 */
-	public static final int DISK_SIZE = 6;
+	public static final int DISK_3_SIZE = 6;
 	
 	/**
 	 * The ID of a hyperboloid.
 	 */
-	public static final int HYPERBOLOID_ID = 3;
+	public static final int HYPERBOLOID_3_ID = 3;
+	
+	/**
+	 * The ID of a line segment.
+	 */
+	public static final int LINE_SEGMENT_3_ID = 4;
+	
+	/**
+	 * The relative offset for the point denoted by A in a {@code double[]} that contains a line segment.
+	 */
+	public static final int LINE_SEGMENT_3_OFFSET_A = 2;
+	
+	/**
+	 * The relative offset for the point denoted by B in a {@code double[]} that contains a line segment.
+	 */
+	public static final int LINE_SEGMENT_3_OFFSET_B = 5;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a line segment.
+	 */
+	public static final int LINE_SEGMENT_3_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a line segment.
+	 */
+	public static final int LINE_SEGMENT_3_OFFSET_SIZE = 1;
+	
+	/**
+	 * The size of a line segment.
+	 */
+	public static final int LINE_SEGMENT_3_SIZE = 8;
 	
 	/**
 	 * The ID of a paraboloid.
 	 */
-	public static final int PARABOLOID_ID = 4;
+	public static final int PARABOLOID_3_ID = 5;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a paraboloid.
 	 */
-	public static final int PARABOLOID_OFFSET_ID = 0;
+	public static final int PARABOLOID_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the maximum phi angle in a {@code double[]} that contains a paraboloid.
 	 */
-	public static final int PARABOLOID_OFFSET_PHI_MAX = 2;
+	public static final int PARABOLOID_3_OFFSET_PHI_MAX = 2;
 	
 	/**
 	 * The relative offset for the radius in a {@code double[]} that contains a paraboloid.
 	 */
-	public static final int PARABOLOID_OFFSET_RADIUS = 3;
+	public static final int PARABOLOID_3_OFFSET_RADIUS = 3;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a paraboloid.
 	 */
-	public static final int PARABOLOID_OFFSET_SIZE = 1;
+	public static final int PARABOLOID_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The relative offset for the maximum Z-value in a {@code double[]} that contains a paraboloid.
 	 */
-	public static final int PARABOLOID_OFFSET_Z_MAX = 4;
+	public static final int PARABOLOID_3_OFFSET_Z_MAX = 4;
 	
 	/**
 	 * The relative offset for the minimum Z-value in a {@code double[]} that contains a paraboloid.
 	 */
-	public static final int PARABOLOID_OFFSET_Z_MIN = 5;
+	public static final int PARABOLOID_3_OFFSET_Z_MIN = 5;
 	
 	/**
 	 * The size of a paraboloid.
 	 */
-	public static final int PARABOLOID_SIZE = 6;
+	public static final int PARABOLOID_3_SIZE = 6;
 	
 	/**
 	 * The ID of a plane.
 	 */
-	public static final int PLANE_ID = 5;
+	public static final int PLANE_3_ID = 6;
 	
 	/**
 	 * The relative offset for the point denoted by A in a {@code double[]} that contains a plane.
 	 */
-	public static final int PLANE_OFFSET_A = 2;
+	public static final int PLANE_3_OFFSET_A = 2;
 	
 	/**
 	 * The relative offset for the point denoted by B in a {@code double[]} that contains a plane.
 	 */
-	public static final int PLANE_OFFSET_B = 5;
+	public static final int PLANE_3_OFFSET_B = 5;
 	
 	/**
 	 * The relative offset for the point denoted by C in a {@code double[]} that contains a plane.
 	 */
-	public static final int PLANE_OFFSET_C = 8;
+	public static final int PLANE_3_OFFSET_C = 8;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a plane.
 	 */
-	public static final int PLANE_OFFSET_ID = 0;
+	public static final int PLANE_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a plane.
 	 */
-	public static final int PLANE_OFFSET_SIZE = 1;
+	public static final int PLANE_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The size of a plane.
 	 */
-	public static final int PLANE_SIZE = 11;
+	public static final int PLANE_3_SIZE = 11;
+	
+	/**
+	 * The ID of a polygon.
+	 */
+	public static final int POLYGON_3_ID = 7;
+	
+	/**
+	 * The relative offset for the ID in a {@code double[]} that contains a polygon.
+	 */
+	public static final int POLYGON_3_OFFSET_ID = 0;
+	
+	/**
+	 * The relative offset for the point count in a {@code double[]} that contains a polygon.
+	 */
+	public static final int POLYGON_3_OFFSET_POINT_COUNT = 2;
+	
+	/**
+	 * The relative offset for the first point in a {@code double[]} that contains a polygon.
+	 */
+	public static final int POLYGON_3_OFFSET_POINT_FIRST = 3;
+	
+	/**
+	 * The relative offset for the size in a {@code double[]} that contains a polygon.
+	 */
+	public static final int POLYGON_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The ID of a rectangle.
 	 */
-	public static final int RECTANGLE_ID = 7;
+	public static final int RECTANGLE_3_ID = 8;
 	
 	/**
 	 * The relative offset for the point denoted by A in a {@code double[]} that contains a rectangle.
 	 */
-	public static final int RECTANGLE_OFFSET_A = 2;
+	public static final int RECTANGLE_3_OFFSET_A = 2;
 	
 	/**
 	 * The relative offset for the point denoted by B in a {@code double[]} that contains a rectangle.
 	 */
-	public static final int RECTANGLE_OFFSET_B = 5;
+	public static final int RECTANGLE_3_OFFSET_B = 5;
 	
 	/**
 	 * The relative offset for the point denoted by C in a {@code double[]} that contains a rectangle.
 	 */
-	public static final int RECTANGLE_OFFSET_C = 8;
+	public static final int RECTANGLE_3_OFFSET_C = 8;
 	
 	/**
 	 * The relative offset for the point denoted by C in a {@code double[]} that contains a rectangle.
 	 */
-	public static final int RECTANGLE_OFFSET_D = 11;
+	public static final int RECTANGLE_3_OFFSET_D = 11;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a rectangle.
 	 */
-	public static final int RECTANGLE_OFFSET_ID = 0;
+	public static final int RECTANGLE_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a rectangle.
 	 */
-	public static final int RECTANGLE_OFFSET_SIZE = 1;
+	public static final int RECTANGLE_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The size of a rectangle.
 	 */
-	public static final int RECTANGLE_SIZE = 14;
+	public static final int RECTANGLE_3_SIZE = 14;
 	
 	/**
 	 * The ID of a rectangular cuboid.
 	 */
-	public static final int RECTANGULAR_CUBOID_ID = 8;
+	public static final int RECTANGULAR_CUBOID_3_ID = 9;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a rectangular cuboid.
 	 */
-	public static final int RECTANGULAR_CUBOID_OFFSET_ID = 0;
+	public static final int RECTANGULAR_CUBOID_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the point denoted by Maximum in a {@code double[]} that contains a rectangular cuboid.
 	 */
-	public static final int RECTANGULAR_CUBOID_OFFSET_MAXIMUM = 2;
+	public static final int RECTANGULAR_CUBOID_3_OFFSET_MAXIMUM = 2;
 	
 	/**
 	 * The relative offset for the point denoted by Minimum in a {@code double[]} that contains a rectangular cuboid.
 	 */
-	public static final int RECTANGULAR_CUBOID_OFFSET_MINIMUM = 5;
+	public static final int RECTANGULAR_CUBOID_3_OFFSET_MINIMUM = 5;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a rectangular cuboid.
 	 */
-	public static final int RECTANGULAR_CUBOID_OFFSET_SIZE = 1;
+	public static final int RECTANGULAR_CUBOID_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The size of a rectangular cuboid.
 	 */
-	public static final int RECTANGULAR_CUBOID_SIZE = 8;
+	public static final int RECTANGULAR_CUBOID_3_SIZE = 8;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a shape.
 	 */
-	public static final int SHAPE_OFFSET_ID = 0;
+	public static final int SHAPE_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a shape.
 	 */
-	public static final int SHAPE_OFFSET_SIZE = 1;
+	public static final int SHAPE_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The ID of a sphere.
 	 */
-	public static final int SPHERE_ID = 9;
+	public static final int SPHERE_3_ID = 10;
 	
 	/**
 	 * The relative offset for the point denoted by Center in a {@code double[]} that contains a sphere.
 	 */
-	public static final int SPHERE_OFFSET_CENTER = 2;
+	public static final int SPHERE_3_OFFSET_CENTER = 2;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a sphere.
 	 */
-	public static final int SPHERE_OFFSET_ID = 0;
+	public static final int SPHERE_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the radius in a {@code double[]} that contains a sphere.
 	 */
-	public static final int SPHERE_OFFSET_RADIUS = 5;
+	public static final int SPHERE_3_OFFSET_RADIUS = 5;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a sphere.
 	 */
-	public static final int SPHERE_OFFSET_SIZE = 1;
+	public static final int SPHERE_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The size of a sphere.
 	 */
-	public static final int SPHERE_SIZE = 6;
+	public static final int SPHERE_3_SIZE = 6;
 	
 	/**
 	 * The ID of a torus.
 	 */
-	public static final int TORUS_ID = 10;
+	public static final int TORUS_3_ID = 11;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a torus.
 	 */
-	public static final int TORUS_OFFSET_ID = 0;
+	public static final int TORUS_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the inner radius in a {@code double[]} that contains a torus.
 	 */
-	public static final int TORUS_OFFSET_RADIUS_INNER = 2;
+	public static final int TORUS_3_OFFSET_RADIUS_INNER = 2;
 	
 	/**
 	 * The relative offset for the outer radius in a {@code double[]} that contains a torus.
 	 */
-	public static final int TORUS_OFFSET_RADIUS_OUTER = 3;
+	public static final int TORUS_3_OFFSET_RADIUS_OUTER = 3;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a torus.
 	 */
-	public static final int TORUS_OFFSET_SIZE = 1;
+	public static final int TORUS_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The size of a torus.
 	 */
-	public static final int TORUS_SIZE = 4;
+	public static final int TORUS_3_SIZE = 4;
 	
 	/**
 	 * The ID of a triangle.
 	 */
-	public static final int TRIANGLE_ID = 11;
+	public static final int TRIANGLE_3_ID = 12;
 	
 	/**
 	 * The relative offset for the ID in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_ID = 0;
+	public static final int TRIANGLE_3_OFFSET_ID = 0;
 	
 	/**
 	 * The relative offset for the point denoted by Position A in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_POSITION_A = 2;
+	public static final int TRIANGLE_3_OFFSET_POSITION_A = 2;
 	
 	/**
 	 * The relative offset for the point denoted by Position B in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_POSITION_B = 5;
+	public static final int TRIANGLE_3_OFFSET_POSITION_B = 5;
 	
 	/**
 	 * The relative offset for the point denoted by Position C in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_POSITION_C = 8;
+	public static final int TRIANGLE_3_OFFSET_POSITION_C = 8;
 	
 	/**
 	 * The relative offset for the size in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_SIZE = 1;
+	public static final int TRIANGLE_3_OFFSET_SIZE = 1;
 	
 	/**
 	 * The relative offset for the vector denoted by Surface Normal A in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_SURFACE_NORMAL_A = 11;
+	public static final int TRIANGLE_3_OFFSET_SURFACE_NORMAL_A = 11;
 	
 	/**
 	 * The relative offset for the vector denoted by Surface Normal B in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_SURFACE_NORMAL_B = 14;
+	public static final int TRIANGLE_3_OFFSET_SURFACE_NORMAL_B = 14;
 	
 	/**
 	 * The relative offset for the vector denoted by Surface Normal C in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_SURFACE_NORMAL_C = 17;
+	public static final int TRIANGLE_3_OFFSET_SURFACE_NORMAL_C = 17;
 	
 	/**
 	 * The relative offset for the point denoted by Texture Coordinates A in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_TEXTURE_COORDINATES_A = 20;
+	public static final int TRIANGLE_3_OFFSET_TEXTURE_COORDINATES_A = 20;
 	
 	/**
 	 * The relative offset for the point denoted by Texture Coordinates B in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_TEXTURE_COORDINATES_B = 22;
+	public static final int TRIANGLE_3_OFFSET_TEXTURE_COORDINATES_B = 22;
 	
 	/**
 	 * The relative offset for the point denoted by Texture Coordinates C in a {@code double[]} that contains a triangle.
 	 */
-	public static final int TRIANGLE_OFFSET_TEXTURE_COORDINATES_C = 24;
+	public static final int TRIANGLE_3_OFFSET_TEXTURE_COORDINATES_C = 24;
 	
 	/**
 	 * The size of a triangle.
 	 */
-	public static final int TRIANGLE_SIZE = 26;
+	public static final int TRIANGLE_3_SIZE = 26;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -539,7 +600,7 @@ public final class Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code cone3D} is {@code null}
 	 */
 	public static double cone3DGetPhiMax(final double[] cone3D, final int cone3DOffset) {
-		return cone3D[cone3DOffset + CONE_OFFSET_PHI_MAX];
+		return cone3D[cone3DOffset + CONE_3_OFFSET_PHI_MAX];
 	}
 	
 	/**
@@ -579,7 +640,7 @@ public final class Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code cone3D} is {@code null}
 	 */
 	public static double cone3DGetRadius(final double[] cone3D, final int cone3DOffset) {
-		return cone3D[cone3DOffset + CONE_OFFSET_RADIUS];
+		return cone3D[cone3DOffset + CONE_3_OFFSET_RADIUS];
 	}
 	
 	/**
@@ -619,7 +680,7 @@ public final class Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code cone3D} is {@code null}
 	 */
 	public static double cone3DGetZMax(final double[] cone3D, final int cone3DOffset) {
-		return cone3D[cone3DOffset + CONE_OFFSET_Z_MAX];
+		return cone3D[cone3DOffset + CONE_3_OFFSET_Z_MAX];
 	}
 	
 	/**
@@ -751,7 +812,7 @@ public final class Shape {
 	 * @return a {@code double[]} that contains a cone
 	 */
 	public static double[] cone3D(final double phiMax, final double radius, final double zMax) {
-		return cone3DSet(new double[CONE_SIZE], phiMax, radius, zMax);
+		return cone3DSet(new double[CONE_3_SIZE], phiMax, radius, zMax);
 	}
 	
 //	TODO: Add Javadocs!
@@ -860,11 +921,11 @@ public final class Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code cone3DResult} is {@code null}
 	 */
 	public static double[] cone3DSet(final double[] cone3DResult, final double phiMax, final double radius, final double zMax, final int cone3DResultOffset) {
-		cone3DResult[cone3DResultOffset + CONE_OFFSET_ID] = CONE_ID;
-		cone3DResult[cone3DResultOffset + CONE_OFFSET_SIZE] = CONE_SIZE;
-		cone3DResult[cone3DResultOffset + CONE_OFFSET_PHI_MAX] = phiMax;
-		cone3DResult[cone3DResultOffset + CONE_OFFSET_RADIUS] = radius;
-		cone3DResult[cone3DResultOffset + CONE_OFFSET_Z_MAX] = zMax;
+		cone3DResult[cone3DResultOffset + CONE_3_OFFSET_ID] = CONE_3_ID;
+		cone3DResult[cone3DResultOffset + CONE_3_OFFSET_SIZE] = CONE_3_SIZE;
+		cone3DResult[cone3DResultOffset + CONE_3_OFFSET_PHI_MAX] = phiMax;
+		cone3DResult[cone3DResultOffset + CONE_3_OFFSET_RADIUS] = radius;
+		cone3DResult[cone3DResultOffset + CONE_3_OFFSET_Z_MAX] = zMax;
 		
 		return cone3DResult;
 	}
@@ -910,7 +971,7 @@ public final class Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
 	 */
 	public static double cylinder3DGetPhiMax(final double[] cylinder3D, final int cylinder3DOffset) {
-		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_PHI_MAX];
+		return cylinder3D[cylinder3DOffset + CYLINDER_3_OFFSET_PHI_MAX];
 	}
 	
 	/**
@@ -950,7 +1011,7 @@ public final class Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
 	 */
 	public static double cylinder3DGetRadius(final double[] cylinder3D, final int cylinder3DOffset) {
-		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_RADIUS];
+		return cylinder3D[cylinder3DOffset + CYLINDER_3_OFFSET_RADIUS];
 	}
 	
 	/**
@@ -990,7 +1051,7 @@ public final class Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
 	 */
 	public static double cylinder3DGetZMax(final double[] cylinder3D, final int cylinder3DOffset) {
-		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_Z_MAX];
+		return cylinder3D[cylinder3DOffset + CYLINDER_3_OFFSET_Z_MAX];
 	}
 	
 	/**
@@ -1030,7 +1091,7 @@ public final class Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3D} is {@code null}
 	 */
 	public static double cylinder3DGetZMin(final double[] cylinder3D, final int cylinder3DOffset) {
-		return cylinder3D[cylinder3DOffset + CYLINDER_OFFSET_Z_MIN];
+		return cylinder3D[cylinder3DOffset + CYLINDER_3_OFFSET_Z_MIN];
 	}
 	
 	/**
@@ -1162,7 +1223,7 @@ public final class Shape {
 	 * @return a {@code double[]} that contains a cylinder
 	 */
 	public static double[] cylinder3D(final double phiMax, final double radius, final double zMax, final double zMin) {
-		return cylinder3DSet(new double[CYLINDER_SIZE], phiMax, radius, zMax, zMin);
+		return cylinder3DSet(new double[CYLINDER_3_SIZE], phiMax, radius, zMax, zMin);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1278,12 +1339,12 @@ public final class Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3DResult} is {@code null}
 	 */
 	public static double[] cylinder3DSet(final double[] cylinder3DResult, final double phiMax, final double radius, final double zMax, final double zMin, final int cylinder3DResultOffset) {
-		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_ID] = CYLINDER_ID;
-		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_SIZE] = CYLINDER_SIZE;
-		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_PHI_MAX] = phiMax;
-		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_RADIUS] = radius;
-		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_Z_MAX] = zMax;
-		cylinder3DResult[cylinder3DResultOffset + CYLINDER_OFFSET_Z_MIN] = zMin;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_3_OFFSET_ID] = CYLINDER_3_ID;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_3_OFFSET_SIZE] = CYLINDER_3_SIZE;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_3_OFFSET_PHI_MAX] = phiMax;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_3_OFFSET_RADIUS] = radius;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_3_OFFSET_Z_MAX] = zMax;
+		cylinder3DResult[cylinder3DResultOffset + CYLINDER_3_OFFSET_Z_MIN] = zMin;
 		
 		return cylinder3DResult;
 	}
@@ -1299,7 +1360,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double disk3DGetPhiMax(final double[] disk3D, final int disk3DOffset) {
-		return disk3D[disk3DOffset + DISK_OFFSET_PHI_MAX];
+		return disk3D[disk3DOffset + DISK_3_OFFSET_PHI_MAX];
 	}
 	
 //	TODO: Add Javadocs!
@@ -1309,7 +1370,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double disk3DGetRadiusInner(final double[] disk3D, final int disk3DOffset) {
-		return disk3D[disk3DOffset + DISK_OFFSET_RADIUS_INNER];
+		return disk3D[disk3DOffset + DISK_3_OFFSET_RADIUS_INNER];
 	}
 	
 //	TODO: Add Javadocs!
@@ -1319,7 +1380,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double disk3DGetRadiusOuter(final double[] disk3D, final int disk3DOffset) {
-		return disk3D[disk3DOffset + DISK_OFFSET_RADIUS_OUTER];
+		return disk3D[disk3DOffset + DISK_3_OFFSET_RADIUS_OUTER];
 	}
 	
 //	TODO: Add Javadocs!
@@ -1329,7 +1390,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double disk3DGetZMax(final double[] disk3D, final int disk3DOffset) {
-		return disk3D[disk3DOffset + DISK_OFFSET_Z_MAX];
+		return disk3D[disk3DOffset + DISK_3_OFFSET_Z_MAX];
 	}
 	
 //	TODO: Add Javadocs!
@@ -1405,7 +1466,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] disk3D(final double phiMax, final double radiusInner, final double radiusOuter, final double zMax) {
-		return disk3DSet(new double[DISK_SIZE], phiMax, radiusInner, radiusOuter, zMax);
+		return disk3DSet(new double[DISK_3_SIZE], phiMax, radiusInner, radiusOuter, zMax);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1478,14 +1539,113 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] disk3DSet(final double[] disk3DResult, final double phiMax, final double radiusInner, final double radiusOuter, final double zMax, final int disk3DResultOffset) {
-		disk3DResult[disk3DResultOffset + DISK_OFFSET_ID] = DISK_ID;
-		disk3DResult[disk3DResultOffset + DISK_OFFSET_SIZE] = DISK_SIZE;
-		disk3DResult[disk3DResultOffset + DISK_OFFSET_PHI_MAX] = phiMax;
-		disk3DResult[disk3DResultOffset + DISK_OFFSET_RADIUS_INNER] = radiusInner;
-		disk3DResult[disk3DResultOffset + DISK_OFFSET_RADIUS_OUTER] = radiusOuter;
-		disk3DResult[disk3DResultOffset + DISK_OFFSET_Z_MAX] = zMax;
+		disk3DResult[disk3DResultOffset + DISK_3_OFFSET_ID] = DISK_3_ID;
+		disk3DResult[disk3DResultOffset + DISK_3_OFFSET_SIZE] = DISK_3_SIZE;
+		disk3DResult[disk3DResultOffset + DISK_3_OFFSET_PHI_MAX] = phiMax;
+		disk3DResult[disk3DResultOffset + DISK_3_OFFSET_RADIUS_INNER] = radiusInner;
+		disk3DResult[disk3DResultOffset + DISK_3_OFFSET_RADIUS_OUTER] = radiusOuter;
+		disk3DResult[disk3DResultOffset + DISK_3_OFFSET_Z_MAX] = zMax;
 		
 		return disk3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// LineSegment3D ///////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static boolean lineSegment3DContainsPoint3D(final double[] lineSegment3D, final double[] point3D) {
+		return lineSegment3DContainsPoint3D(lineSegment3D, point3D, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean lineSegment3DContainsPoint3D(final double[] lineSegment3D, final double[] point3D, final int lineSegment3DOffset, final int point3DOffset) {
+		final double[] point3DA = lineSegment3DGetA(lineSegment3D, point3D(), lineSegment3DOffset, 0);
+		final double[] point3DB = lineSegment3DGetB(lineSegment3D, point3D(), lineSegment3DOffset, 0);
+		final double[] point3DP = point3DSet(point3D(), point3D, 0, point3DOffset);
+		
+		if(point3DEquals(point3DP, point3DA) || point3DEquals(point3DP, point3DB)) {
+			return true;
+		}
+		
+		final double[] vector3DA = vector3DFromPoint3D(point3DA);
+		final double[] vector3DB = vector3DFromPoint3D(point3DB);
+		final double[] vector3DP = vector3DFromPoint3D(point3DP);
+		
+		final double[] vector3DBA = vector3DDirection(point3DB, point3DA);
+		final double[] vector3DBP = vector3DDirection(point3DB, point3DP);
+		
+		final double t = vector3DDotProduct(vector3DBA, vector3DBP) / point3DDistanceSquared(point3DA, point3DB);
+		
+		final double[] vector3DProjection = vector3DLerp(vector3DB, vector3DA, t);
+		
+		final double lineWidth = PI * 0.5D / 4096.0D;
+		final double lineWidthCos = cos(lineWidth);
+		
+		final boolean contains = vector3DDotProduct(vector3DProjection, vector3DP) / vector3DLength(vector3DProjection) / vector3DLength(vector3DP) >= lineWidthCos;
+		
+		return contains;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3D() {
+		return lineSegment3D(point3D(0.0D, 0.0D, 0.0D), point3D(1.0D, 1.0D, 1.0D));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3D(final double[] point3DA, final double[] point3DB) {
+		return lineSegment3D(point3DA, point3DB, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3D(final double[] point3DA, final double[] point3DB, final int point3DAOffset, final int point3DBOffset) {
+		return lineSegment3DSet(new double[LINE_SEGMENT_3_SIZE], point3DA, point3DB, 0, point3DAOffset, point3DBOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3DGetA(final double[] lineSegment3D) {
+		return lineSegment3DGetA(lineSegment3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3DGetA(final double[] lineSegment3D, final double[] point3DAResult) {
+		return lineSegment3DGetA(lineSegment3D, point3DAResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3DGetA(final double[] lineSegment3D, final double[] point3DAResult, final int lineSegment3DOffset, final int point3DAResultOffset) {
+		return point3DSet(point3DAResult, lineSegment3D, point3DAResultOffset, lineSegment3DOffset + LINE_SEGMENT_3_OFFSET_A);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3DGetB(final double[] lineSegment3D) {
+		return lineSegment3DGetB(lineSegment3D, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3DGetB(final double[] lineSegment3D, final double[] point3DBResult) {
+		return lineSegment3DGetB(lineSegment3D, point3DBResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3DGetB(final double[] lineSegment3D, final double[] point3DBResult, final int lineSegment3DOffset, final int point3DBResultOffset) {
+		return point3DSet(point3DBResult, lineSegment3D, point3DBResultOffset, lineSegment3DOffset + LINE_SEGMENT_3_OFFSET_B);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3DSet(final double[] lineSegment3DResult, final double[] point3DA, final double[] point3DB) {
+		return lineSegment3DSet(lineSegment3DResult, point3DA, point3DB, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] lineSegment3DSet(final double[] lineSegment3DResult, final double[] point3DA, final double[] point3DB, final int lineSegment3DResultOffset, final int point3DAOffset, final int point3DBOffset) {
+		lineSegment3DResult[lineSegment3DResultOffset + LINE_SEGMENT_3_OFFSET_ID] = LINE_SEGMENT_3_ID;
+		lineSegment3DResult[lineSegment3DResultOffset + LINE_SEGMENT_3_OFFSET_SIZE] = LINE_SEGMENT_3_SIZE;
+		
+		point3DSet(lineSegment3DResult, point3DA, lineSegment3DResultOffset + LINE_SEGMENT_3_OFFSET_A, point3DAOffset);
+		point3DSet(lineSegment3DResult, point3DB, lineSegment3DResultOffset + LINE_SEGMENT_3_OFFSET_B, point3DBOffset);
+		
+		return lineSegment3DResult;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1499,7 +1659,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double paraboloid3DGetPhiMax(final double[] paraboloid3D, final int paraboloid3DOffset) {
-		return paraboloid3D[paraboloid3DOffset + PARABOLOID_OFFSET_PHI_MAX];
+		return paraboloid3D[paraboloid3DOffset + PARABOLOID_3_OFFSET_PHI_MAX];
 	}
 	
 //	TODO: Add Javadocs!
@@ -1509,7 +1669,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double paraboloid3DGetRadius(final double[] paraboloid3D, final int paraboloid3DOffset) {
-		return paraboloid3D[paraboloid3DOffset + PARABOLOID_OFFSET_RADIUS];
+		return paraboloid3D[paraboloid3DOffset + PARABOLOID_3_OFFSET_RADIUS];
 	}
 	
 //	TODO: Add Javadocs!
@@ -1519,7 +1679,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double paraboloid3DGetZMax(final double[] paraboloid3D, final int paraboloid3DOffset) {
-		return paraboloid3D[paraboloid3DOffset + PARABOLOID_OFFSET_Z_MAX];
+		return paraboloid3D[paraboloid3DOffset + PARABOLOID_3_OFFSET_Z_MAX];
 	}
 	
 //	TODO: Add Javadocs!
@@ -1529,7 +1689,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double paraboloid3DGetZMin(final double[] paraboloid3D, final int paraboloid3DOffset) {
-		return paraboloid3D[paraboloid3DOffset + PARABOLOID_OFFSET_Z_MIN];
+		return paraboloid3D[paraboloid3DOffset + PARABOLOID_3_OFFSET_Z_MIN];
 	}
 	
 //	TODO: Add Javadocs!
@@ -1612,7 +1772,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] paraboloid3D(final double phiMax, final double radius, final double zMax, final double zMin) {
-		return paraboloid3DSet(new double[PARABOLOID_SIZE], phiMax, radius, zMax, zMin);
+		return paraboloid3DSet(new double[PARABOLOID_3_SIZE], phiMax, radius, zMax, zMin);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1681,12 +1841,12 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] paraboloid3DSet(final double[] paraboloid3DResult, final double phiMax, final double radius, final double zMax, final double zMin, final int paraboloid3DResultOffset) {
-		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_ID] = PARABOLOID_ID;
-		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_SIZE] = PARABOLOID_SIZE;
-		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_PHI_MAX] = phiMax;
-		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_RADIUS] = radius;
-		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_Z_MAX] = zMax;
-		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_OFFSET_Z_MIN] = zMin;
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_3_OFFSET_ID] = PARABOLOID_3_ID;
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_3_OFFSET_SIZE] = PARABOLOID_3_SIZE;
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_3_OFFSET_PHI_MAX] = phiMax;
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_3_OFFSET_RADIUS] = radius;
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_3_OFFSET_Z_MAX] = zMax;
+		paraboloid3DResult[paraboloid3DResultOffset + PARABOLOID_3_OFFSET_Z_MIN] = zMin;
 		
 		return paraboloid3DResult;
 	}
@@ -1729,10 +1889,7 @@ public final class Shape {
 		final double[] point3DB = plane3DGetB(plane3D, point3D(), plane3DOffset, 0);
 		final double[] point3DC = plane3DGetC(plane3D, point3D(), plane3DOffset, 0);
 		
-		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
-		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
-		
-		final double[] vector3DSurfaceNormal = vector3DNormalize(vector3DCrossProduct(vector3DAB, vector3DAC));
+		final double[] vector3DSurfaceNormal = vector3DNormalNormalized(point3DA, point3DB, point3DC);
 		
 		final double surfaceNormalDotDirection = vector3DDotProduct(vector3DSurfaceNormal, vector3DDirection);
 		
@@ -1763,7 +1920,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] plane3D(final double[] point3DA, final double[] point3DB, final double[] point3DC, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset) {
-		return plane3DSet(new double[PLANE_SIZE], point3DA, point3DB, point3DC, 0, point3DAOffset, point3DBOffset, point3DCOffset);
+		return plane3DSet(new double[PLANE_3_SIZE], point3DA, point3DB, point3DC, 0, point3DAOffset, point3DBOffset, point3DCOffset);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1778,10 +1935,7 @@ public final class Shape {
 		final double[] point3DB = plane3DGetB(plane3D, point3D(), plane3DOffset, 0);
 		final double[] point3DC = plane3DGetC(plane3D, point3D(), plane3DOffset, 0);
 		
-		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
-		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
-		
-		final double[] vector3DW = vector3DCrossProduct(vector3DAB, vector3DAC);
+		final double[] vector3DW = vector3DNormalNormalized(point3DA, point3DB, point3DC);
 		
 		return orthonormalBasis33DFromW(vector3DW);
 	}
@@ -1849,7 +2003,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] plane3DGetA(final double[] plane3D, final double[] point3DAResult, final int plane3DOffset, final int point3DAResultOffset) {
-		return point3DSet(point3DAResult, plane3D, point3DAResultOffset, plane3DOffset + PLANE_OFFSET_A);
+		return point3DSet(point3DAResult, plane3D, point3DAResultOffset, plane3DOffset + PLANE_3_OFFSET_A);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1864,7 +2018,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] plane3DGetB(final double[] plane3D, final double[] point3DBResult, final int plane3DOffset, final int point3DBResultOffset) {
-		return point3DSet(point3DBResult, plane3D, point3DBResultOffset, plane3DOffset + PLANE_OFFSET_B);
+		return point3DSet(point3DBResult, plane3D, point3DBResultOffset, plane3DOffset + PLANE_3_OFFSET_B);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1879,7 +2033,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] plane3DGetC(final double[] plane3D, final double[] point3DCResult, final int plane3DOffset, final int point3DCResultOffset) {
-		return point3DSet(point3DCResult, plane3D, point3DCResultOffset, plane3DOffset + PLANE_OFFSET_C);
+		return point3DSet(point3DCResult, plane3D, point3DCResultOffset, plane3DOffset + PLANE_3_OFFSET_C);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1889,14 +2043,61 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] plane3DSet(final double[] plane3DResult, final double[] point3DA, final double[] point3DB, final double[] point3DC, final int plane3DResultOffset, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset) {
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_ID] = PLANE_ID;
-		plane3DResult[plane3DResultOffset + PLANE_OFFSET_SIZE] = PLANE_SIZE;
+		plane3DResult[plane3DResultOffset + PLANE_3_OFFSET_ID] = PLANE_3_ID;
+		plane3DResult[plane3DResultOffset + PLANE_3_OFFSET_SIZE] = PLANE_3_SIZE;
 		
-		point3DSet(plane3DResult, point3DA, plane3DResultOffset + PLANE_OFFSET_A, point3DAOffset);
-		point3DSet(plane3DResult, point3DB, plane3DResultOffset + PLANE_OFFSET_B, point3DBOffset);
-		point3DSet(plane3DResult, point3DC, plane3DResultOffset + PLANE_OFFSET_C, point3DCOffset);
+		point3DSet(plane3DResult, point3DA, plane3DResultOffset + PLANE_3_OFFSET_A, point3DAOffset);
+		point3DSet(plane3DResult, point3DB, plane3DResultOffset + PLANE_3_OFFSET_B, point3DBOffset);
+		point3DSet(plane3DResult, point3DC, plane3DResultOffset + PLANE_3_OFFSET_C, point3DCOffset);
 		
 		return plane3DResult;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Polygon3D ///////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3D() {
+		return polygon3D(merge(point3D(-2.0D, 2.0D, 0.0D), point3D(0.0D, 3.0D, 0.0D), point3D(2.0D, 2.0D, 0.0D), point3D(2.0D, -2.0D, 0.0D), point3D(-2.0D, -2.0D, 0.0D)));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3D(final double[] point3D) {
+		return polygon3D(point3D, point3D.length / 3);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3D(final double[] point3D, final int point3DCount) {
+		return polygon3D(point3D, point3DCount, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3D(final double[] point3D, final int point3DCount, final int point3DOffset) {
+		return polygon3DSet(new double[3 + point3DCount * 3], point3D, point3DCount, 0, point3DOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DSet(final double[] polygon3DResult, final double[] point3D) {
+		return polygon3DSet(polygon3DResult, point3D, point3D.length / 3);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DSet(final double[] polygon3DResult, final double[] point3D, final int point3DCount) {
+		return polygon3DSet(polygon3DResult, point3D, point3DCount, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] polygon3DSet(final double[] polygon3DResult, final double[] point3D, final int point3DCount, final int polygon3DResultOffset, final int point3DOffset) {
+		polygon3DResult[polygon3DResultOffset + POLYGON_3_OFFSET_ID] = POLYGON_3_ID;
+		polygon3DResult[polygon3DResultOffset + POLYGON_3_OFFSET_SIZE] = 3 + point3DCount * 3;
+		polygon3DResult[polygon3DResultOffset + POLYGON_3_OFFSET_POINT_COUNT] = point3DCount;
+		
+		for(int i = 0; i < point3DCount; i++) {
+			point3DSet(polygon3DResult, point3D, polygon3DResultOffset + POLYGON_3_OFFSET_POINT_FIRST + i * 3, point3DOffset + i * 3);
+		}
+		
+		return polygon3DResult;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1953,10 +2154,7 @@ public final class Shape {
 		final double[] point3DB = rectangle3DGetB(rectangle3D, point3D(), rectangle3DOffset, 0);
 		final double[] point3DC = rectangle3DGetC(rectangle3D, point3D(), rectangle3DOffset, 0);
 		
-		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
-		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
-		
-		final double[] vector3DSurfaceNormal = vector3DNormalize(vector3DCrossProduct(vector3DAB, vector3DAC));
+		final double[] vector3DSurfaceNormal = vector3DNormalNormalized(point3DA, point3DB, point3DC);
 		
 		final double surfaceNormalDotDirection = vector3DDotProduct(vector3DSurfaceNormal, vector3DDirection);
 		
@@ -2024,7 +2222,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangle3D(final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] point3DD, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset, final int point3DDOffset) {
-		return rectangle3DSet(new double[RECTANGLE_SIZE], point3DA, point3DB, point3DC, point3DD, 0, point3DAOffset, point3DBOffset, point3DCOffset, point3DDOffset);
+		return rectangle3DSet(new double[RECTANGLE_3_SIZE], point3DA, point3DB, point3DC, point3DD, 0, point3DAOffset, point3DBOffset, point3DCOffset, point3DDOffset);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2039,10 +2237,7 @@ public final class Shape {
 		final double[] point3DB = rectangle3DGetB(rectangle3D, point3D(), rectangle3DOffset, 0);
 		final double[] point3DC = rectangle3DGetC(rectangle3D, point3D(), rectangle3DOffset, 0);
 		
-		final double[] vector3DAB = vector3DDirectionNormalized(point3DA, point3DB);
-		final double[] vector3DAC = vector3DDirectionNormalized(point3DA, point3DC);
-		
-		final double[] vector3DW = vector3DCrossProduct(vector3DAB, vector3DAC);
+		final double[] vector3DW = vector3DNormalNormalized(point3DA, point3DB, point3DC);
 		
 		return orthonormalBasis33DFromW(vector3DW);
 	}
@@ -2110,7 +2305,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangle3DGetA(final double[] rectangle3D, final double[] point3DAResult, final int rectangle3DOffset, final int point3DAResultOffset) {
-		return point3DSet(point3DAResult, rectangle3D, point3DAResultOffset, rectangle3DOffset + RECTANGLE_OFFSET_A);
+		return point3DSet(point3DAResult, rectangle3D, point3DAResultOffset, rectangle3DOffset + RECTANGLE_3_OFFSET_A);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2125,7 +2320,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangle3DGetB(final double[] rectangle3D, final double[] point3DBResult, final int rectangle3DOffset, final int point3DBResultOffset) {
-		return point3DSet(point3DBResult, rectangle3D, point3DBResultOffset, rectangle3DOffset + RECTANGLE_OFFSET_B);
+		return point3DSet(point3DBResult, rectangle3D, point3DBResultOffset, rectangle3DOffset + RECTANGLE_3_OFFSET_B);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2140,7 +2335,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangle3DGetC(final double[] rectangle3D, final double[] point3DCResult, final int rectangle3DOffset, final int point3DCResultOffset) {
-		return point3DSet(point3DCResult, rectangle3D, point3DCResultOffset, rectangle3DOffset + RECTANGLE_OFFSET_C);
+		return point3DSet(point3DCResult, rectangle3D, point3DCResultOffset, rectangle3DOffset + RECTANGLE_3_OFFSET_C);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2155,7 +2350,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangle3DGetD(final double[] rectangle3D, final double[] point3DDResult, final int rectangle3DOffset, final int point3DDResultOffset) {
-		return point3DSet(point3DDResult, rectangle3D, point3DDResultOffset, rectangle3DOffset + RECTANGLE_OFFSET_D);
+		return point3DSet(point3DDResult, rectangle3D, point3DDResultOffset, rectangle3DOffset + RECTANGLE_3_OFFSET_D);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2165,13 +2360,13 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangle3DSet(final double[] rectangle3DResult, final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] point3DD, final int rectangle3DResultOffset, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset, final int point3DDOffset) {
-		rectangle3DResult[rectangle3DResultOffset + RECTANGLE_OFFSET_ID] = RECTANGLE_ID;
-		rectangle3DResult[rectangle3DResultOffset + RECTANGLE_OFFSET_SIZE] = RECTANGLE_SIZE;
+		rectangle3DResult[rectangle3DResultOffset + RECTANGLE_3_OFFSET_ID] = RECTANGLE_3_ID;
+		rectangle3DResult[rectangle3DResultOffset + RECTANGLE_3_OFFSET_SIZE] = RECTANGLE_3_SIZE;
 		
-		point3DSet(rectangle3DResult, point3DA, rectangle3DResultOffset + RECTANGLE_OFFSET_A, point3DAOffset);
-		point3DSet(rectangle3DResult, point3DB, rectangle3DResultOffset + RECTANGLE_OFFSET_B, point3DBOffset);
-		point3DSet(rectangle3DResult, point3DC, rectangle3DResultOffset + RECTANGLE_OFFSET_C, point3DCOffset);
-		point3DSet(rectangle3DResult, point3DD, rectangle3DResultOffset + RECTANGLE_OFFSET_D, point3DDOffset);
+		point3DSet(rectangle3DResult, point3DA, rectangle3DResultOffset + RECTANGLE_3_OFFSET_A, point3DAOffset);
+		point3DSet(rectangle3DResult, point3DB, rectangle3DResultOffset + RECTANGLE_3_OFFSET_B, point3DBOffset);
+		point3DSet(rectangle3DResult, point3DC, rectangle3DResultOffset + RECTANGLE_3_OFFSET_C, point3DCOffset);
+		point3DSet(rectangle3DResult, point3DD, rectangle3DResultOffset + RECTANGLE_3_OFFSET_D, point3DDOffset);
 		
 		return rectangle3DResult;
 	}
@@ -2277,7 +2472,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangularCuboid3D(final double[] point3DA, final double[] point3DB, final int point3DAOffset, final int point3DBOffset) {
-		return rectangularCuboid3DSet(new double[RECTANGULAR_CUBOID_SIZE], point3DA, point3DB, 0, point3DAOffset, point3DBOffset);
+		return rectangularCuboid3DSet(new double[RECTANGULAR_CUBOID_3_SIZE], point3DA, point3DB, 0, point3DAOffset, point3DBOffset);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2366,7 +2561,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangularCuboid3DGetMaximum(final double[] rectangularCuboid3D, final double[] point3DMaximumResult, final int rectangularCuboid3DOffset, final int point3DMaximumResultOffset) {
-		return point3DSet(point3DMaximumResult, rectangularCuboid3D, point3DMaximumResultOffset, rectangularCuboid3DOffset + RECTANGULAR_CUBOID_OFFSET_MAXIMUM);
+		return point3DSet(point3DMaximumResult, rectangularCuboid3D, point3DMaximumResultOffset, rectangularCuboid3DOffset + RECTANGULAR_CUBOID_3_OFFSET_MAXIMUM);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2376,7 +2571,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangularCuboid3DGetMinimum(final double[] rectangularCuboid3D, final double[] point3DMinimumResult, final int rectangularCuboid3DOffset, final int point3DMinimumResultOffset) {
-		return point3DSet(point3DMinimumResult, rectangularCuboid3D, point3DMinimumResultOffset, rectangularCuboid3DOffset + RECTANGULAR_CUBOID_OFFSET_MINIMUM);
+		return point3DSet(point3DMinimumResult, rectangularCuboid3D, point3DMinimumResultOffset, rectangularCuboid3DOffset + RECTANGULAR_CUBOID_3_OFFSET_MINIMUM);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2386,11 +2581,11 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] rectangularCuboid3DSet(final double[] rectangularCuboid3DResult, final double[] point3DA, final double[] point3DB, final int rectangularCuboid3DResultOffset, final int point3DAOffset, final int point3DBOffset) {
-		rectangularCuboid3DResult[rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_OFFSET_ID] = RECTANGULAR_CUBOID_ID;
-		rectangularCuboid3DResult[rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_OFFSET_SIZE] = RECTANGULAR_CUBOID_SIZE;
+		rectangularCuboid3DResult[rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_3_OFFSET_ID] = RECTANGULAR_CUBOID_3_ID;
+		rectangularCuboid3DResult[rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_3_OFFSET_SIZE] = RECTANGULAR_CUBOID_3_SIZE;
 		
-		point3DSet(rectangularCuboid3DResult, point3DMaximum(point3DA, point3DB, point3D(), point3DAOffset, point3DBOffset, 0), rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_OFFSET_MAXIMUM, 0);
-		point3DSet(rectangularCuboid3DResult, point3DMinimum(point3DA, point3DB, point3D(), point3DAOffset, point3DBOffset, 0), rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_OFFSET_MINIMUM, 0);
+		point3DSet(rectangularCuboid3DResult, point3DMaximum(point3DA, point3DB, point3D(), point3DAOffset, point3DBOffset, 0), rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_3_OFFSET_MAXIMUM, 0);
+		point3DSet(rectangularCuboid3DResult, point3DMinimum(point3DA, point3DB, point3D(), point3DAOffset, point3DBOffset, 0), rectangularCuboid3DResultOffset + RECTANGULAR_CUBOID_3_OFFSET_MINIMUM, 0);
 		
 		return rectangularCuboid3DResult;
 	}
@@ -2407,25 +2602,25 @@ public final class Shape {
 //	TODO: Add Javadocs!
 	public static double shape3DIntersection(final double[] ray3D, final double[] shape3D, final int ray3DOffset, final int shape3DOffset) {
 		switch(shape3DGetID(shape3D, shape3DOffset)) {
-			case CONE_ID:
+			case CONE_3_ID:
 				return cone3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
-			case CYLINDER_ID:
+			case CYLINDER_3_ID:
 				return cylinder3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
-			case DISK_ID:
+			case DISK_3_ID:
 				return disk3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
-			case PARABOLOID_ID:
+			case PARABOLOID_3_ID:
 				return paraboloid3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
-			case PLANE_ID:
+			case PLANE_3_ID:
 				return plane3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
-			case RECTANGLE_ID:
+			case RECTANGLE_3_ID:
 				return rectangle3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
-			case RECTANGULAR_CUBOID_ID:
+			case RECTANGULAR_CUBOID_3_ID:
 				return rectangularCuboid3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
-			case SPHERE_ID:
+			case SPHERE_3_ID:
 				return sphere3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
-			case TORUS_ID:
+			case TORUS_3_ID:
 				return torus3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
-			case TRIANGLE_ID:
+			case TRIANGLE_3_ID:
 				return triangle3DIntersection(ray3D, shape3D, ray3DOffset, shape3DOffset);
 			default:
 				return NaN;
@@ -2440,25 +2635,25 @@ public final class Shape {
 //	TODO: Add Javadocs!
 	public static double[] shape3DComputeOrthonormalBasis(final double[] ray3D, final double[] shape3D, final double t, final int ray3DOffset, final int shape3DOffset) {
 		switch(shape3DGetID(shape3D, shape3DOffset)) {
-			case CONE_ID:
+			case CONE_3_ID:
 				return cone3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case CYLINDER_ID:
+			case CYLINDER_3_ID:
 				return cylinder3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case DISK_ID:
+			case DISK_3_ID:
 				return disk3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case PARABOLOID_ID:
+			case PARABOLOID_3_ID:
 				return paraboloid3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case PLANE_ID:
+			case PLANE_3_ID:
 				return plane3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case RECTANGLE_ID:
+			case RECTANGLE_3_ID:
 				return rectangle3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case RECTANGULAR_CUBOID_ID:
+			case RECTANGULAR_CUBOID_3_ID:
 				return rectangularCuboid3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case SPHERE_ID:
+			case SPHERE_3_ID:
 				return sphere3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case TORUS_ID:
+			case TORUS_3_ID:
 				return torus3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case TRIANGLE_ID:
+			case TRIANGLE_3_ID:
 				return triangle3DComputeOrthonormalBasis(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			default:
 				return orthonormalBasis33D();
@@ -2483,25 +2678,25 @@ public final class Shape {
 //	TODO: Add Javadocs!
 	public static double[] shape3DComputeTextureCoordinates(final double[] ray3D, final double[] shape3D, final double t, final int ray3DOffset, final int shape3DOffset) {
 		switch(shape3DGetID(shape3D, shape3DOffset)) {
-			case CONE_ID:
+			case CONE_3_ID:
 				return cone3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case CYLINDER_ID:
+			case CYLINDER_3_ID:
 				return cylinder3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case DISK_ID:
+			case DISK_3_ID:
 				return disk3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case PARABOLOID_ID:
+			case PARABOLOID_3_ID:
 				return paraboloid3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case PLANE_ID:
+			case PLANE_3_ID:
 				return plane3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case RECTANGLE_ID:
+			case RECTANGLE_3_ID:
 				return rectangle3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case RECTANGULAR_CUBOID_ID:
+			case RECTANGULAR_CUBOID_3_ID:
 				return rectangularCuboid3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case SPHERE_ID:
+			case SPHERE_3_ID:
 				return sphere3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case TORUS_ID:
+			case TORUS_3_ID:
 				return torus3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
-			case TRIANGLE_ID:
+			case TRIANGLE_3_ID:
 				return triangle3DComputeTextureCoordinates(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
 			default:
 				return point2D();
@@ -2515,7 +2710,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static int shape3DGetID(final double[] shape3D, final int shape3DOffset) {
-		return toInt(shape3D[shape3DOffset + SHAPE_OFFSET_ID]);
+		return toInt(shape3D[shape3DOffset + SHAPE_3_OFFSET_ID]);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2525,7 +2720,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static int shape3DGetSize(final double[] shape3D, final int shape3DOffset) {
-		return toInt(shape3D[shape3DOffset + SHAPE_OFFSET_SIZE]);
+		return toInt(shape3D[shape3DOffset + SHAPE_3_OFFSET_SIZE]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2558,7 +2753,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double sphere3DGetRadius(final double[] sphere3D, final int sphere3DOffset) {
-		return sphere3D[sphere3DOffset + SPHERE_OFFSET_RADIUS];
+		return sphere3D[sphere3DOffset + SPHERE_3_OFFSET_RADIUS];
 	}
 	
 //	TODO: Add Javadocs!
@@ -2628,7 +2823,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] sphere3D(final double[] point3DCenter, final double radius, final int point3DCenterOffset) {
-		return sphere3DSet(new double[SPHERE_SIZE], point3DCenter, radius, 0, point3DCenterOffset);
+		return sphere3DSet(new double[SPHERE_3_SIZE], point3DCenter, radius, 0, point3DCenterOffset);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2683,7 +2878,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] sphere3DGetCenter(final double[] sphere3D, final double[] point3DCenterResult, final int sphere3DOffset, final int point3DCenterResultOffset) {
-		return point3DSet(point3DCenterResult, sphere3D, point3DCenterResultOffset, sphere3DOffset + SPHERE_OFFSET_CENTER);
+		return point3DSet(point3DCenterResult, sphere3D, point3DCenterResultOffset, sphere3DOffset + SPHERE_3_OFFSET_CENTER);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2693,11 +2888,11 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] sphere3DSet(final double[] sphere3DResult, final double[] point3DCenter, final double radius, final int sphere3DResultOffset, final int point3DCenterOffset) {
-		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_ID] = SPHERE_ID;
-		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_SIZE] = SPHERE_SIZE;
-		sphere3DResult[sphere3DResultOffset + SPHERE_OFFSET_RADIUS] = radius;
+		sphere3DResult[sphere3DResultOffset + SPHERE_3_OFFSET_ID] = SPHERE_3_ID;
+		sphere3DResult[sphere3DResultOffset + SPHERE_3_OFFSET_SIZE] = SPHERE_3_SIZE;
+		sphere3DResult[sphere3DResultOffset + SPHERE_3_OFFSET_RADIUS] = radius;
 		
-		point3DSet(sphere3DResult, point3DCenter, sphere3DResultOffset + SPHERE_OFFSET_CENTER, point3DCenterOffset);
+		point3DSet(sphere3DResult, point3DCenter, sphere3DResultOffset + SPHERE_3_OFFSET_CENTER, point3DCenterOffset);
 		
 		return sphere3DResult;
 	}
@@ -2713,7 +2908,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double torus3DGetRadiusInner(final double[] torus3D, final int torus3DOffset) {
-		return torus3D[torus3DOffset + TORUS_OFFSET_RADIUS_INNER];
+		return torus3D[torus3DOffset + TORUS_3_OFFSET_RADIUS_INNER];
 	}
 	
 //	TODO: Add Javadocs!
@@ -2723,7 +2918,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double torus3DGetRadiusOuter(final double[] torus3D, final int torus3DOffset) {
-		return torus3D[torus3DOffset + TORUS_OFFSET_RADIUS_OUTER];
+		return torus3D[torus3DOffset + TORUS_3_OFFSET_RADIUS_OUTER];
 	}
 	
 //	TODO: Add Javadocs!
@@ -2785,7 +2980,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] torus3D(final double radiusInner, final double radiusOuter) {
-		return torus3DSet(new double[TORUS_SIZE], radiusInner, radiusOuter);
+		return torus3DSet(new double[TORUS_3_SIZE], radiusInner, radiusOuter);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2852,10 +3047,10 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] torus3DSet(final double[] torus3DResult, final double radiusInner, final double radiusOuter, final int torus3DResultOffset) {
-		torus3DResult[torus3DResultOffset + TORUS_OFFSET_ID] = TORUS_ID;
-		torus3DResult[torus3DResultOffset + TORUS_OFFSET_SIZE] = TORUS_SIZE;
-		torus3DResult[torus3DResultOffset + TORUS_OFFSET_RADIUS_INNER] = radiusInner;
-		torus3DResult[torus3DResultOffset + TORUS_OFFSET_RADIUS_OUTER] = radiusOuter;
+		torus3DResult[torus3DResultOffset + TORUS_3_OFFSET_ID] = TORUS_3_ID;
+		torus3DResult[torus3DResultOffset + TORUS_3_OFFSET_SIZE] = TORUS_3_SIZE;
+		torus3DResult[torus3DResultOffset + TORUS_3_OFFSET_RADIUS_INNER] = radiusInner;
+		torus3DResult[torus3DResultOffset + TORUS_3_OFFSET_RADIUS_OUTER] = radiusOuter;
 		
 		return torus3DResult;
 	}
@@ -2924,7 +3119,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3D(final double[] point3DPositionA, final double[] point3DPositionB, final double[] point3DPositionC) {
-		return triangle3D(point3DPositionA, point3DPositionB, point3DPositionC, vector3DNormalize(vector3DCrossProduct(vector3DDirectionNormalized(point3DPositionA, point3DPositionB), vector3DDirectionNormalized(point3DPositionA, point3DPositionC))));
+		return triangle3D(point3DPositionA, point3DPositionB, point3DPositionC, vector3DNormalNormalized(point3DPositionA, point3DPositionB, point3DPositionC));
 	}
 	
 //	TODO: Add Javadocs!
@@ -2944,7 +3139,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3D(final double[] point3DPositionA, final double[] point3DPositionB, final double[] point3DPositionC, final double[] vector3DSurfaceNormalA, final double[] vector3DSurfaceNormalB, final double[] vector3DSurfaceNormalC, final double[] point2DTextureCoordinatesA, final double[] point2DTextureCoordinatesB, final double[] point2DTextureCoordinatesC, final int point3DPositionAOffset, final int point3DPositionBOffset, final int point3DPositionCOffset, final int vector3DSurfaceNormalAOffset, final int vector3DSurfaceNormalBOffset, final int vector3DSurfaceNormalCOffset, final int point2DTextureCoordinatesAOffset, final int point2DTextureCoordinatesBOffset, final int point2DTextureCoordinatesCOffset) {
-		return triangle3DSet(new double[TRIANGLE_SIZE], point3DPositionA, point3DPositionB, point3DPositionC, vector3DSurfaceNormalA, vector3DSurfaceNormalB, vector3DSurfaceNormalC, point2DTextureCoordinatesA, point2DTextureCoordinatesB, point2DTextureCoordinatesC, 0, point3DPositionAOffset, point3DPositionBOffset, point3DPositionCOffset, vector3DSurfaceNormalAOffset, vector3DSurfaceNormalBOffset, vector3DSurfaceNormalCOffset, point2DTextureCoordinatesAOffset, point2DTextureCoordinatesBOffset, point2DTextureCoordinatesCOffset);
+		return triangle3DSet(new double[TRIANGLE_3_SIZE], point3DPositionA, point3DPositionB, point3DPositionC, vector3DSurfaceNormalA, vector3DSurfaceNormalB, vector3DSurfaceNormalC, point2DTextureCoordinatesA, point2DTextureCoordinatesB, point2DTextureCoordinatesC, 0, point3DPositionAOffset, point3DPositionBOffset, point3DPositionCOffset, vector3DSurfaceNormalAOffset, vector3DSurfaceNormalBOffset, vector3DSurfaceNormalCOffset, point2DTextureCoordinatesAOffset, point2DTextureCoordinatesBOffset, point2DTextureCoordinatesCOffset);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3070,7 +3265,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DGetPositionA(final double[] triangle3D, final double[] point3DPositionAResult, final int triangle3DOffset, final int point3DPositionAResultOffset) {
-		return point3DSet(point3DPositionAResult, triangle3D, point3DPositionAResultOffset, triangle3DOffset + TRIANGLE_OFFSET_POSITION_A);
+		return point3DSet(point3DPositionAResult, triangle3D, point3DPositionAResultOffset, triangle3DOffset + TRIANGLE_3_OFFSET_POSITION_A);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3085,7 +3280,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DGetPositionB(final double[] triangle3D, final double[] point3DPositionBResult, final int triangle3DOffset, final int point3DPositionBResultOffset) {
-		return point3DSet(point3DPositionBResult, triangle3D, point3DPositionBResultOffset, triangle3DOffset + TRIANGLE_OFFSET_POSITION_B);
+		return point3DSet(point3DPositionBResult, triangle3D, point3DPositionBResultOffset, triangle3DOffset + TRIANGLE_3_OFFSET_POSITION_B);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3100,7 +3295,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DGetPositionC(final double[] triangle3D, final double[] point3DPositionCResult, final int triangle3DOffset, final int point3DPositionCResultOffset) {
-		return point3DSet(point3DPositionCResult, triangle3D, point3DPositionCResultOffset, triangle3DOffset + TRIANGLE_OFFSET_POSITION_C);
+		return point3DSet(point3DPositionCResult, triangle3D, point3DPositionCResultOffset, triangle3DOffset + TRIANGLE_3_OFFSET_POSITION_C);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3115,7 +3310,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DGetSurfaceNormalA(final double[] triangle3D, final double[] vector3DSurfaceNormalAResult, final int triangle3DOffset, final int vector3DSurfaceNormalAResultOffset) {
-		return vector3DSet(vector3DSurfaceNormalAResult, triangle3D, vector3DSurfaceNormalAResultOffset, triangle3DOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_A);
+		return vector3DSet(vector3DSurfaceNormalAResult, triangle3D, vector3DSurfaceNormalAResultOffset, triangle3DOffset + TRIANGLE_3_OFFSET_SURFACE_NORMAL_A);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3130,7 +3325,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DGetSurfaceNormalB(final double[] triangle3D, final double[] vector3DSurfaceNormalBResult, final int triangle3DOffset, final int vector3DSurfaceNormalBResultOffset) {
-		return vector3DSet(vector3DSurfaceNormalBResult, triangle3D, vector3DSurfaceNormalBResultOffset, triangle3DOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_B);
+		return vector3DSet(vector3DSurfaceNormalBResult, triangle3D, vector3DSurfaceNormalBResultOffset, triangle3DOffset + TRIANGLE_3_OFFSET_SURFACE_NORMAL_B);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3145,7 +3340,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DGetSurfaceNormalC(final double[] triangle3D, final double[] vector3DSurfaceNormalCResult, final int triangle3DOffset, final int vector3DSurfaceNormalCResultOffset) {
-		return vector3DSet(vector3DSurfaceNormalCResult, triangle3D, vector3DSurfaceNormalCResultOffset, triangle3DOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_C);
+		return vector3DSet(vector3DSurfaceNormalCResult, triangle3D, vector3DSurfaceNormalCResultOffset, triangle3DOffset + TRIANGLE_3_OFFSET_SURFACE_NORMAL_C);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3160,7 +3355,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DGetTextureCoordinatesA(final double[] triangle3D, final double[] point2DTextureCoordinatesAResult, final int triangle3DOffset, final int point2DTextureCoordinatesAResultOffset) {
-		return point2DSet(point2DTextureCoordinatesAResult, triangle3D, point2DTextureCoordinatesAResultOffset, triangle3DOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_A);
+		return point2DSet(point2DTextureCoordinatesAResult, triangle3D, point2DTextureCoordinatesAResultOffset, triangle3DOffset + TRIANGLE_3_OFFSET_TEXTURE_COORDINATES_A);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3175,7 +3370,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DGetTextureCoordinatesB(final double[] triangle3D, final double[] point2DTextureCoordinatesBResult, final int triangle3DOffset, final int point2DTextureCoordinatesBResultOffset) {
-		return point2DSet(point2DTextureCoordinatesBResult, triangle3D, point2DTextureCoordinatesBResultOffset, triangle3DOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_B);
+		return point2DSet(point2DTextureCoordinatesBResult, triangle3D, point2DTextureCoordinatesBResultOffset, triangle3DOffset + TRIANGLE_3_OFFSET_TEXTURE_COORDINATES_B);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3190,7 +3385,7 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DGetTextureCoordinatesC(final double[] triangle3D, final double[] point2DTextureCoordinatesCResult, final int triangle3DOffset, final int point2DTextureCoordinatesCResultOffset) {
-		return point2DSet(point2DTextureCoordinatesCResult, triangle3D, point2DTextureCoordinatesCResultOffset, triangle3DOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_C);
+		return point2DSet(point2DTextureCoordinatesCResult, triangle3D, point2DTextureCoordinatesCResultOffset, triangle3DOffset + TRIANGLE_3_OFFSET_TEXTURE_COORDINATES_C);
 	}
 	
 //	TODO: Add Javadocs!
@@ -3200,20 +3395,20 @@ public final class Shape {
 	
 //	TODO: Add Javadocs!
 	public static double[] triangle3DSet(final double[] triangle3DResult, final double[] point3DPositionA, final double[] point3DPositionB, final double[] point3DPositionC, final double[] vector3DSurfaceNormalA, final double[] vector3DSurfaceNormalB, final double[] vector3DSurfaceNormalC, final double[] point2DTextureCoordinatesA, final double[] point2DTextureCoordinatesB, final double[] point2DTextureCoordinatesC, final int triangle3DResultOffset, final int point3DPositionAOffset, final int point3DPositionBOffset, final int point3DPositionCOffset, final int vector3DSurfaceNormalAOffset, final int vector3DSurfaceNormalBOffset, final int vector3DSurfaceNormalCOffset, final int point2DTextureCoordinatesAOffset, final int point2DTextureCoordinatesBOffset, final int point2DTextureCoordinatesCOffset) {
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_ID] = TRIANGLE_ID;
-		triangle3DResult[triangle3DResultOffset + TRIANGLE_OFFSET_SIZE] = TRIANGLE_SIZE;
+		triangle3DResult[triangle3DResultOffset + TRIANGLE_3_OFFSET_ID] = TRIANGLE_3_ID;
+		triangle3DResult[triangle3DResultOffset + TRIANGLE_3_OFFSET_SIZE] = TRIANGLE_3_SIZE;
 		
-		point3DSet(triangle3DResult, point3DPositionA, triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_A, point3DPositionAOffset);
-		point3DSet(triangle3DResult, point3DPositionB, triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_B, point3DPositionBOffset);
-		point3DSet(triangle3DResult, point3DPositionC, triangle3DResultOffset + TRIANGLE_OFFSET_POSITION_C, point3DPositionCOffset);
+		point3DSet(triangle3DResult, point3DPositionA, triangle3DResultOffset + TRIANGLE_3_OFFSET_POSITION_A, point3DPositionAOffset);
+		point3DSet(triangle3DResult, point3DPositionB, triangle3DResultOffset + TRIANGLE_3_OFFSET_POSITION_B, point3DPositionBOffset);
+		point3DSet(triangle3DResult, point3DPositionC, triangle3DResultOffset + TRIANGLE_3_OFFSET_POSITION_C, point3DPositionCOffset);
 		
-		vector3DSet(triangle3DResult, vector3DSurfaceNormalA, triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_A, vector3DSurfaceNormalAOffset);
-		vector3DSet(triangle3DResult, vector3DSurfaceNormalB, triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_B, vector3DSurfaceNormalBOffset);
-		vector3DSet(triangle3DResult, vector3DSurfaceNormalC, triangle3DResultOffset + TRIANGLE_OFFSET_SURFACE_NORMAL_C, vector3DSurfaceNormalCOffset);
+		vector3DSet(triangle3DResult, vector3DSurfaceNormalA, triangle3DResultOffset + TRIANGLE_3_OFFSET_SURFACE_NORMAL_A, vector3DSurfaceNormalAOffset);
+		vector3DSet(triangle3DResult, vector3DSurfaceNormalB, triangle3DResultOffset + TRIANGLE_3_OFFSET_SURFACE_NORMAL_B, vector3DSurfaceNormalBOffset);
+		vector3DSet(triangle3DResult, vector3DSurfaceNormalC, triangle3DResultOffset + TRIANGLE_3_OFFSET_SURFACE_NORMAL_C, vector3DSurfaceNormalCOffset);
 		
-		point2DSet(triangle3DResult, point2DTextureCoordinatesA, triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_A, point2DTextureCoordinatesAOffset);
-		point2DSet(triangle3DResult, point2DTextureCoordinatesB, triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_B, point2DTextureCoordinatesBOffset);
-		point2DSet(triangle3DResult, point2DTextureCoordinatesC, triangle3DResultOffset + TRIANGLE_OFFSET_TEXTURE_COORDINATES_C, point2DTextureCoordinatesCOffset);
+		point2DSet(triangle3DResult, point2DTextureCoordinatesA, triangle3DResultOffset + TRIANGLE_3_OFFSET_TEXTURE_COORDINATES_A, point2DTextureCoordinatesAOffset);
+		point2DSet(triangle3DResult, point2DTextureCoordinatesB, triangle3DResultOffset + TRIANGLE_3_OFFSET_TEXTURE_COORDINATES_B, point2DTextureCoordinatesBOffset);
+		point2DSet(triangle3DResult, point2DTextureCoordinatesC, triangle3DResultOffset + TRIANGLE_3_OFFSET_TEXTURE_COORDINATES_C, point2DTextureCoordinatesCOffset);
 		
 		return triangle3DResult;
 	}

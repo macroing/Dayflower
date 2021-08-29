@@ -377,6 +377,26 @@ public final class Point {
 	}
 	
 //	TODO: Add Javadocs!
+	public static boolean point3DEquals(final double[] point3DA, final double[] point3DB) {
+		return point3DEquals(point3DA, point3DB, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static boolean point3DEquals(final double[] point3DA, final double[] point3DB, final int point3DAOffset, final int point3DBOffset) {
+		final double component1A = point3DGetComponent1(point3DA, point3DAOffset);
+		final double component2A = point3DGetComponent2(point3DA, point3DAOffset);
+		final double component3A = point3DGetComponent3(point3DA, point3DAOffset);
+		
+		final double component1B = point3DGetComponent1(point3DB, point3DBOffset);
+		final double component2B = point3DGetComponent2(point3DB, point3DBOffset);
+		final double component3B = point3DGetComponent3(point3DB, point3DBOffset);
+		
+		final boolean equals = equal(component1A, component1B) && equal(component2A, component2B) && equal(component3A, component3B);
+		
+		return equals;
+	}
+	
+//	TODO: Add Javadocs!
 	public static double point3DDistance(final double[] point3DEye, final double[] point3DTarget) {
 		return point3DDistance(point3DEye, point3DTarget, 0, 0);
 	}

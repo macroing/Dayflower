@@ -18,6 +18,10 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.Point.point3D;
+import static org.dayflower.simplex.Point.point3DGetComponent1;
+import static org.dayflower.simplex.Point.point3DGetComponent2;
+import static org.dayflower.simplex.Point.point3DGetComponent3;
 import static org.dayflower.simplex.Point.point3DGetU;
 import static org.dayflower.simplex.Point.point3DGetV;
 import static org.dayflower.simplex.Point.point3DGetW;
@@ -28,6 +32,7 @@ import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.acos;
 import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.atan2;
+import static org.dayflower.utility.Doubles.lerp;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.sqrt;
 
@@ -630,7 +635,17 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DRHS} are {@code null}
 	 */
 	public static double vector3DDotProduct(final double[] vector3DLHS, final double[] vector3DRHS, final int vector3DLHSOffset, final int vector3DRHSOffset) {
-		return vector3DLHS[vector3DLHSOffset + 0] * vector3DRHS[vector3DRHSOffset + 0] + vector3DLHS[vector3DLHSOffset + 1] * vector3DRHS[vector3DRHSOffset + 1] + vector3DLHS[vector3DLHSOffset + 2] * vector3DRHS[vector3DRHSOffset + 2];
+		final double component1LHS = vector3DGetComponent1(vector3DLHS, vector3DLHSOffset);
+		final double component2LHS = vector3DGetComponent2(vector3DLHS, vector3DLHSOffset);
+		final double component3LHS = vector3DGetComponent3(vector3DLHS, vector3DLHSOffset);
+		
+		final double component1RHS = vector3DGetComponent1(vector3DRHS, vector3DRHSOffset);
+		final double component2RHS = vector3DGetComponent2(vector3DRHS, vector3DRHSOffset);
+		final double component3RHS = vector3DGetComponent3(vector3DRHS, vector3DRHSOffset);
+		
+		final double dotProduct = component1LHS * component1RHS + component2LHS * component2RHS + component3LHS * component3RHS;
+		
+		return dotProduct;
 	}
 	
 	/**
@@ -1070,7 +1085,13 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
 	 */
 	public static double vector3DLengthSquared(final double[] vector3D, final int vector3DOffset) {
-		return vector3D[vector3DOffset + 0] * vector3D[vector3DOffset + 0] + vector3D[vector3DOffset + 1] * vector3D[vector3DOffset + 1] + vector3D[vector3DOffset + 2] * vector3D[vector3DOffset + 2];
+		final double component1 = vector3DGetComponent1(vector3D, vector3DOffset);
+		final double component2 = vector3DGetComponent2(vector3D, vector3DOffset);
+		final double component3 = vector3DGetComponent3(vector3D, vector3DOffset);
+		
+		final double lengthSquared = component1 * component1 + component2 * component2 + component3 * component3;
+		
+		return lengthSquared;
 	}
 	
 //	TODO: Add Javadocs!
@@ -1200,9 +1221,9 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DAdd(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
-		final double component1 = vector3DLHS[vector3DLHSOffset + 0] + vector3DRHS[vector3DRHSOffset + 0];
-		final double component2 = vector3DLHS[vector3DLHSOffset + 1] + vector3DRHS[vector3DRHSOffset + 1];
-		final double component3 = vector3DLHS[vector3DLHSOffset + 2] + vector3DRHS[vector3DRHSOffset + 2];
+		final double component1 = vector3DGetComponent1(vector3DLHS, vector3DLHSOffset) + vector3DGetComponent1(vector3DRHS, vector3DRHSOffset);
+		final double component2 = vector3DGetComponent2(vector3DLHS, vector3DLHSOffset) + vector3DGetComponent2(vector3DRHS, vector3DRHSOffset);
+		final double component3 = vector3DGetComponent3(vector3DLHS, vector3DLHSOffset) + vector3DGetComponent3(vector3DRHS, vector3DRHSOffset);
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
@@ -1276,9 +1297,17 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DCrossProduct(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
-		final double component1 = vector3DLHS[vector3DLHSOffset + 1] * vector3DRHS[vector3DRHSOffset + 2] - vector3DLHS[vector3DLHSOffset + 2] * vector3DRHS[vector3DRHSOffset + 1];
-		final double component2 = vector3DLHS[vector3DLHSOffset + 2] * vector3DRHS[vector3DRHSOffset + 0] - vector3DLHS[vector3DLHSOffset + 0] * vector3DRHS[vector3DRHSOffset + 2];
-		final double component3 = vector3DLHS[vector3DLHSOffset + 0] * vector3DRHS[vector3DRHSOffset + 1] - vector3DLHS[vector3DLHSOffset + 1] * vector3DRHS[vector3DRHSOffset + 0];
+		final double component1LHS = vector3DGetComponent1(vector3DLHS, vector3DLHSOffset);
+		final double component2LHS = vector3DGetComponent2(vector3DLHS, vector3DLHSOffset);
+		final double component3LHS = vector3DGetComponent3(vector3DLHS, vector3DLHSOffset);
+		
+		final double component1RHS = vector3DGetComponent1(vector3DRHS, vector3DRHSOffset);
+		final double component2RHS = vector3DGetComponent2(vector3DRHS, vector3DRHSOffset);
+		final double component3RHS = vector3DGetComponent3(vector3DRHS, vector3DRHSOffset);
+		
+		final double component1 = component2LHS * component3RHS - component3LHS * component2RHS;
+		final double component2 = component3LHS * component1RHS - component1LHS * component3RHS;
+		final double component3 = component1LHS * component2RHS - component2LHS * component1RHS;
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
@@ -1352,9 +1381,9 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DDirection(final double[] point3DEye, final double[] point3DTarget, final double[] vector3DResult, final int point3DEyeOffset, final int point3DTargetOffset, final int vector3DResultOffset) {
-		final double component1 = point3DTarget[point3DTargetOffset + 0] - point3DEye[point3DEyeOffset + 0];
-		final double component2 = point3DTarget[point3DTargetOffset + 1] - point3DEye[point3DEyeOffset + 1];
-		final double component3 = point3DTarget[point3DTargetOffset + 2] - point3DEye[point3DEyeOffset + 2];
+		final double component1 = point3DGetComponent1(point3DTarget, point3DTargetOffset) - point3DGetComponent1(point3DEye, point3DEyeOffset);
+		final double component2 = point3DGetComponent2(point3DTarget, point3DTargetOffset) - point3DGetComponent2(point3DEye, point3DEyeOffset);
+		final double component3 = point3DGetComponent3(point3DTarget, point3DTargetOffset) - point3DGetComponent3(point3DEye, point3DEyeOffset);
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
@@ -1497,9 +1526,9 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DDivide(final double[] vector3DLHS, final double scalarRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DResultOffset) {
-		final double component1 = vector3DLHS[vector3DLHSOffset + 0] / scalarRHS;
-		final double component2 = vector3DLHS[vector3DLHSOffset + 1] / scalarRHS;
-		final double component3 = vector3DLHS[vector3DLHSOffset + 2] / scalarRHS;
+		final double component1 = vector3DGetComponent1(vector3DLHS, vector3DLHSOffset) / scalarRHS;
+		final double component2 = vector3DGetComponent2(vector3DLHS, vector3DLHSOffset) / scalarRHS;
+		final double component3 = vector3DGetComponent3(vector3DLHS, vector3DLHSOffset) / scalarRHS;
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
@@ -1516,25 +1545,25 @@ public final class Vector {
 	
 //	TODO: Add Javadocs!
 	public static double[] vector3DFromBarycentricCoordinates(final double[] vector3DA, final double[] vector3DB, final double[] vector3DC, final double[] point3DBarycentricCoordinates, final double[] vector3DResult, final int vector3DAOffset, final int vector3DBOffset, final int vector3DCOffset, final int point3DBarycentricCoordinatesOffset, final int vector3DResultOffset) {
-		final double aComponent1 = vector3DGetComponent1(vector3DA, vector3DAOffset);
-		final double aComponent2 = vector3DGetComponent2(vector3DA, vector3DAOffset);
-		final double aComponent3 = vector3DGetComponent3(vector3DA, vector3DAOffset);
+		final double component1A = vector3DGetComponent1(vector3DA, vector3DAOffset);
+		final double component2A = vector3DGetComponent2(vector3DA, vector3DAOffset);
+		final double component3A = vector3DGetComponent3(vector3DA, vector3DAOffset);
 		
-		final double bComponent1 = vector3DGetComponent1(vector3DB, vector3DBOffset);
-		final double bComponent2 = vector3DGetComponent2(vector3DB, vector3DBOffset);
-		final double bComponent3 = vector3DGetComponent3(vector3DB, vector3DBOffset);
+		final double component1B = vector3DGetComponent1(vector3DB, vector3DBOffset);
+		final double component2B = vector3DGetComponent2(vector3DB, vector3DBOffset);
+		final double component3B = vector3DGetComponent3(vector3DB, vector3DBOffset);
 		
-		final double cComponent1 = vector3DGetComponent1(vector3DC, vector3DCOffset);
-		final double cComponent2 = vector3DGetComponent2(vector3DC, vector3DCOffset);
-		final double cComponent3 = vector3DGetComponent3(vector3DC, vector3DCOffset);
+		final double component1C = vector3DGetComponent1(vector3DC, vector3DCOffset);
+		final double component2C = vector3DGetComponent2(vector3DC, vector3DCOffset);
+		final double component3C = vector3DGetComponent3(vector3DC, vector3DCOffset);
 		
 		final double barycentricCoordinatesU = point3DGetU(point3DBarycentricCoordinates, point3DBarycentricCoordinatesOffset);
 		final double barycentricCoordinatesV = point3DGetV(point3DBarycentricCoordinates, point3DBarycentricCoordinatesOffset);
 		final double barycentricCoordinatesW = point3DGetW(point3DBarycentricCoordinates, point3DBarycentricCoordinatesOffset);
 		
-		final double component1 = aComponent1 * barycentricCoordinatesU + bComponent1 * barycentricCoordinatesV + cComponent1 * barycentricCoordinatesW;
-		final double component2 = aComponent2 * barycentricCoordinatesU + bComponent2 * barycentricCoordinatesV + cComponent2 * barycentricCoordinatesW;
-		final double component3 = aComponent3 * barycentricCoordinatesU + bComponent3 * barycentricCoordinatesV + cComponent3 * barycentricCoordinatesW;
+		final double component1 = component1A * barycentricCoordinatesU + component1B * barycentricCoordinatesV + component1C * barycentricCoordinatesW;
+		final double component2 = component2A * barycentricCoordinatesU + component2B * barycentricCoordinatesV + component2C * barycentricCoordinatesW;
+		final double component3 = component3A * barycentricCoordinatesU + component3B * barycentricCoordinatesV + component3C * barycentricCoordinatesW;
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
@@ -1617,9 +1646,28 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DFromPoint3D(final double[] point3D, final double[] vector3DResult, final int point3DOffset, final int vector3DResultOffset) {
-		final double component1 = point3D[point3DOffset + 0];
-		final double component2 = point3D[point3DOffset + 1];
-		final double component3 = point3D[point3DOffset + 2];
+		final double component1 = point3DGetComponent1(point3D, point3DOffset);
+		final double component2 = point3DGetComponent2(point3D, point3DOffset);
+		final double component3 = point3DGetComponent3(point3D, point3DOffset);
+		
+		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DLerp(final double[] vector3DA, final double[] vector3DB, final double t) {
+		return vector3DLerp(vector3DA, vector3DB, t, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DLerp(final double[] vector3DA, final double[] vector3DB, final double t, final double[] vector3DResult) {
+		return vector3DLerp(vector3DA, vector3DB, t, vector3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DLerp(final double[] vector3DA, final double[] vector3DB, final double t, final double[] vector3DResult, final int vector3DAOffset, final int vector3DBOffset, final int vector3DResultOffset) {
+		final double component1 = lerp(vector3DGetComponent1(vector3DA, vector3DAOffset), vector3DGetComponent1(vector3DB, vector3DBOffset), t);
+		final double component2 = lerp(vector3DGetComponent2(vector3DA, vector3DAOffset), vector3DGetComponent2(vector3DB, vector3DBOffset), t);
+		final double component3 = lerp(vector3DGetComponent3(vector3DA, vector3DAOffset), vector3DGetComponent3(vector3DB, vector3DBOffset), t);
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
@@ -1690,11 +1738,44 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DMultiply(final double[] vector3DLHS, final double scalarRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DResultOffset) {
-		final double component1 = vector3DLHS[vector3DLHSOffset + 0] * scalarRHS;
-		final double component2 = vector3DLHS[vector3DLHSOffset + 1] * scalarRHS;
-		final double component3 = vector3DLHS[vector3DLHSOffset + 2] * scalarRHS;
+		final double component1 = vector3DGetComponent1(vector3DLHS, vector3DLHSOffset) * scalarRHS;
+		final double component2 = vector3DGetComponent2(vector3DLHS, vector3DLHSOffset) * scalarRHS;
+		final double component3 = vector3DGetComponent3(vector3DLHS, vector3DLHSOffset) * scalarRHS;
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DNormal(final double[] point3DA, final double[] point3DB, final double[] point3DC) {
+		return vector3DNormal(point3DA, point3DB, point3DC, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DNormal(final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] vector3DResult) {
+		return vector3DNormal(point3DA, point3DB, point3DC, vector3DResult, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DNormal(final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] vector3DResult, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset, final int vector3DResultOffset) {
+		final double[] vector3DEdgeAB = vector3DDirectionNormalized(point3DA, point3DB, point3D(), point3DAOffset, point3DBOffset, 0);
+		final double[] vector3DEdgeAC = vector3DDirectionNormalized(point3DA, point3DC, point3D(), point3DAOffset, point3DCOffset, 0);
+		
+		return vector3DCrossProduct(vector3DEdgeAB, vector3DEdgeAC, vector3DResult, 0, 0, vector3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DNormalNormalized(final double[] point3DA, final double[] point3DB, final double[] point3DC) {
+		return vector3DNormalNormalized(point3DA, point3DB, point3DC, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DNormalNormalized(final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] vector3DResult) {
+		return vector3DNormalNormalized(point3DA, point3DB, point3DC, vector3DResult, 0, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DNormalNormalized(final double[] point3DA, final double[] point3DB, final double[] point3DC, final double[] vector3DResult, final int point3DAOffset, final int point3DBOffset, final int point3DCOffset, final int vector3DResultOffset) {
+		return vector3DNormalize(vector3DNormal(point3DA, point3DB, point3DC, vector3DResult, point3DAOffset, point3DBOffset, point3DCOffset, vector3DResultOffset), vector3DResult, vector3DResultOffset, vector3DResultOffset);
 	}
 	
 	/**
@@ -1854,9 +1935,9 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DResult} or {@code vector3D} are {@code null}
 	 */
 	public static double[] vector3DSet(final double[] vector3DResult, final double[] vector3D, final int vector3DResultOffset, final int vector3DOffset) {
-		vector3DResult[vector3DResultOffset + 0] = vector3D[vector3DOffset + 0];
-		vector3DResult[vector3DResultOffset + 1] = vector3D[vector3DOffset + 1];
-		vector3DResult[vector3DResultOffset + 2] = vector3D[vector3DOffset + 2];
+		vector3DResult[vector3DResultOffset + 0] = vector3DGetComponent1(vector3D, vector3DOffset);
+		vector3DResult[vector3DResultOffset + 1] = vector3DGetComponent2(vector3D, vector3DOffset);
+		vector3DResult[vector3DResultOffset + 2] = vector3DGetComponent3(vector3D, vector3DOffset);
 		
 		return vector3DResult;
 	}
@@ -1930,9 +2011,9 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DSubtract(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
-		final double component1 = vector3DLHS[vector3DLHSOffset + 0] - vector3DRHS[vector3DRHSOffset + 0];
-		final double component2 = vector3DLHS[vector3DLHSOffset + 1] - vector3DRHS[vector3DRHSOffset + 1];
-		final double component3 = vector3DLHS[vector3DLHSOffset + 2] - vector3DRHS[vector3DRHSOffset + 2];
+		final double component1 = vector3DGetComponent1(vector3DLHS, vector3DLHSOffset) - vector3DGetComponent1(vector3DRHS, vector3DRHSOffset);
+		final double component2 = vector3DGetComponent2(vector3DLHS, vector3DLHSOffset) - vector3DGetComponent2(vector3DRHS, vector3DRHSOffset);
+		final double component3 = vector3DGetComponent3(vector3DLHS, vector3DLHSOffset) - vector3DGetComponent3(vector3DRHS, vector3DRHSOffset);
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
@@ -2006,9 +2087,13 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DTransformMatrix44D(final double[] matrix44DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int matrix44DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
-		final double component1 = matrix44DLHS[matrix44DLHSOffset + 0] * vector3DRHS[vector3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 1] * vector3DRHS[vector3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  2] * vector3DRHS[vector3DRHSOffset + 2];
-		final double component2 = matrix44DLHS[matrix44DLHSOffset + 4] * vector3DRHS[vector3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 5] * vector3DRHS[vector3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  6] * vector3DRHS[vector3DRHSOffset + 2];
-		final double component3 = matrix44DLHS[matrix44DLHSOffset + 8] * vector3DRHS[vector3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 9] * vector3DRHS[vector3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset + 10] * vector3DRHS[vector3DRHSOffset + 2];
+		final double component1RHS = vector3DGetComponent1(vector3DRHS, vector3DRHSOffset);
+		final double component2RHS = vector3DGetComponent2(vector3DRHS, vector3DRHSOffset);
+		final double component3RHS = vector3DGetComponent3(vector3DRHS, vector3DRHSOffset);
+		
+		final double component1 = matrix44DLHS[matrix44DLHSOffset + 0] * component1RHS + matrix44DLHS[matrix44DLHSOffset + 1] * component2RHS + matrix44DLHS[matrix44DLHSOffset +  2] * component3RHS;
+		final double component2 = matrix44DLHS[matrix44DLHSOffset + 4] * component1RHS + matrix44DLHS[matrix44DLHSOffset + 5] * component2RHS + matrix44DLHS[matrix44DLHSOffset +  6] * component3RHS;
+		final double component3 = matrix44DLHS[matrix44DLHSOffset + 8] * component1RHS + matrix44DLHS[matrix44DLHSOffset + 9] * component2RHS + matrix44DLHS[matrix44DLHSOffset + 10] * component3RHS;
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}
@@ -2082,9 +2167,13 @@ public final class Vector {
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DTransformTransposeMatrix44D(final double[] matrix44DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int matrix44DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
-		final double component1 = matrix44DLHS[matrix44DLHSOffset + 0] * vector3DRHS[vector3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 4] * vector3DRHS[vector3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  8] * vector3DRHS[vector3DRHSOffset + 2];
-		final double component2 = matrix44DLHS[matrix44DLHSOffset + 1] * vector3DRHS[vector3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 5] * vector3DRHS[vector3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset +  9] * vector3DRHS[vector3DRHSOffset + 2];
-		final double component3 = matrix44DLHS[matrix44DLHSOffset + 2] * vector3DRHS[vector3DRHSOffset + 0] + matrix44DLHS[matrix44DLHSOffset + 6] * vector3DRHS[vector3DRHSOffset + 1] + matrix44DLHS[matrix44DLHSOffset + 10] * vector3DRHS[vector3DRHSOffset + 2];
+		final double component1RHS = vector3DGetComponent1(vector3DRHS, vector3DRHSOffset);
+		final double component2RHS = vector3DGetComponent2(vector3DRHS, vector3DRHSOffset);
+		final double component3RHS = vector3DGetComponent3(vector3DRHS, vector3DRHSOffset);
+		
+		final double component1 = matrix44DLHS[matrix44DLHSOffset + 0] * component1RHS + matrix44DLHS[matrix44DLHSOffset + 4] * component2RHS + matrix44DLHS[matrix44DLHSOffset +  8] * component3RHS;
+		final double component2 = matrix44DLHS[matrix44DLHSOffset + 1] * component1RHS + matrix44DLHS[matrix44DLHSOffset + 5] * component2RHS + matrix44DLHS[matrix44DLHSOffset +  9] * component3RHS;
+		final double component3 = matrix44DLHS[matrix44DLHSOffset + 2] * component1RHS + matrix44DLHS[matrix44DLHSOffset + 6] * component2RHS + matrix44DLHS[matrix44DLHSOffset + 10] * component3RHS;
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}

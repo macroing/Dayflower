@@ -36,6 +36,7 @@ import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.lerp;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.random;
@@ -802,6 +803,25 @@ public final class Point {
 	}
 	
 //	TODO: Add Javadocs!
+	public static double[] point3DLerp(final double[] point3DA, final double[] point3DB, final double t) {
+		return point3DLerp(point3DA, point3DB, t, point3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DLerp(final double[] point3DA, final double[] point3DB, final double t, final double[] point3DResult) {
+		return point3DLerp(point3DA, point3DB, t, point3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DLerp(final double[] point3DA, final double[] point3DB, final double t, final double[] point3DResult, final int point3DAOffset, final int point3DBOffset, final int point3DResultOffset) {
+		final double component1 = lerp(point3DGetComponent1(point3DA, point3DAOffset), point3DGetComponent1(point3DB, point3DBOffset), t);
+		final double component2 = lerp(point3DGetComponent2(point3DA, point3DAOffset), point3DGetComponent2(point3DB, point3DBOffset), t);
+		final double component3 = lerp(point3DGetComponent3(point3DA, point3DAOffset), point3DGetComponent3(point3DB, point3DBOffset), t);
+		
+		return point3DSet(point3DResult, component1, component2, component3, point3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] point3DMaximum(final double[] point3DA, final double[] point3DB) {
 		return point3DMaximum(point3DA, point3DB, point3D());
 	}
@@ -1092,5 +1112,24 @@ public final class Point {
 		}
 		
 		return point3DSet(point3DResult, component1 / component4, component2 / component4, component3 / component4, point3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void point3DSwap(final double[] point3DA, final double[] point3DB) {
+		point3DSwap(point3DA, point3DB, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static void point3DSwap(final double[] point3DA, final double[] point3DB, final int point3DAOffset, final int point3DBOffset) {
+		final double component1A = point3DGetComponent1(point3DA, point3DAOffset);
+		final double component2A = point3DGetComponent2(point3DA, point3DAOffset);
+		final double component3A = point3DGetComponent3(point3DA, point3DAOffset);
+		
+		final double component1B = point3DGetComponent1(point3DB, point3DBOffset);
+		final double component2B = point3DGetComponent2(point3DB, point3DBOffset);
+		final double component3B = point3DGetComponent3(point3DB, point3DBOffset);
+		
+		point3DSet(point3DA, component1B, component2B, component3B, point3DAOffset);
+		point3DSet(point3DB, component1A, component2A, component3A, point3DBOffset);
 	}
 }

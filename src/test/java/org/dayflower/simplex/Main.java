@@ -37,6 +37,7 @@ import static org.dayflower.simplex.Ray.ray3DTransformMatrix44D;
 import static org.dayflower.simplex.Shape.cone3D;
 import static org.dayflower.simplex.Shape.cylinder3D;
 import static org.dayflower.simplex.Shape.disk3D;
+import static org.dayflower.simplex.Shape.hyperboloid3D;
 import static org.dayflower.simplex.Shape.paraboloid3D;
 import static org.dayflower.simplex.Shape.plane3D;
 import static org.dayflower.simplex.Shape.polygon3D;
@@ -70,6 +71,7 @@ public final class Main {
 		doRender("./generated/Simplex/Cone.png", 270.0D, cone3D());
 		doRender("./generated/Simplex/Cylinder.png", 270.0D, cylinder3D());
 		doRender("./generated/Simplex/Disk.png", 0.0D, disk3D());
+		doRender("./generated/Simplex/Hyperboloid.png", 270.0D, hyperboloid3D());
 		doRender("./generated/Simplex/Paraboloid.png", 270.0D, paraboloid3D());
 		doRender("./generated/Simplex/Plane.png", 0.0D, plane3D(point3D(0.0D, -1.0D, 0.0D), point3D(0.0D, -1.0D, 1.0D), point3D(1.0D, -1.0D, 0.0D)));
 		doRender("./generated/Simplex/Polygon.png", 0.0D, polygon3D());

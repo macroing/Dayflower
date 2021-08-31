@@ -19,13 +19,18 @@
 package org.dayflower.simplex;
 
 import static org.dayflower.simplex.Color.color4D;
+import static org.dayflower.simplex.Color.color4DBlend;
 import static org.dayflower.simplex.Color.color4DFromColor4I;
 import static org.dayflower.simplex.Color.color4DSet;
 import static org.dayflower.simplex.Color.color4I;
 import static org.dayflower.simplex.Color.color4IPacked;
 import static org.dayflower.simplex.Color.color4IPackedFromColor4I;
 import static org.dayflower.simplex.Color.color4IFromColor4D;
+import static org.dayflower.simplex.Color.color4IFromColor4IPacked;
 import static org.dayflower.simplex.Color.color4ISet;
+import static org.dayflower.utility.Doubles.ceil;
+import static org.dayflower.utility.Doubles.floor;
+import static org.dayflower.utility.Ints.positiveModulo;
 import static org.dayflower.utility.Ints.toInt;
 
 import java.awt.image.BufferedImage;
@@ -36,6 +41,8 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 
 import javax.imageio.ImageIO;
+
+import org.dayflower.java.awt.image.BufferedImages;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on images.
@@ -117,6 +124,80 @@ public final class Image {
 	}
 	
 //	TODO: Add Javadocs!
+	public static double[] image4DGetColor4D(final double[] image4D, final double x, final double y) {
+		return image4DGetColor4D(image4D, x, y, color4D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] image4DGetColor4D(final double[] image4D, final double x, final double y, final double[] color4DResult) {
+		return image4DGetColor4D(image4D, x, y, color4DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] image4DGetColor4D(final double[] image4D, final double x, final double y, final double[] color4DResult, final int image4DOffset, final int color4DResultOffset) {
+		final int minimumX = toInt(floor(x));
+		final int maximumX = toInt(ceil(x));
+		
+		final int minimumY = toInt(floor(y));
+		final int maximumY = toInt(ceil(y));
+		
+		if(minimumX == maximumX && minimumY == maximumY) {
+			return image4DGetColor4D(image4D, minimumX, minimumY, color4DResult, image4DOffset, color4DResultOffset);
+		}
+		
+		final double[] color4D11 = image4DGetColor4D(image4D, minimumX, minimumY, color4D(), image4DOffset, 0);
+		final double[] color4D12 = image4DGetColor4D(image4D, maximumX, minimumY, color4D(), image4DOffset, 0);
+		final double[] color4D21 = image4DGetColor4D(image4D, minimumX, maximumY, color4D(), image4DOffset, 0);
+		final double[] color4D22 = image4DGetColor4D(image4D, maximumX, maximumY, color4D(), image4DOffset, 0);
+		
+		final double tX = x - minimumX;
+		final double tY = y - minimumY;
+		
+		final double[] color4D31 = color4DBlend(color4D11, color4D12, tX);
+		final double[] color4D32 = color4DBlend(color4D21, color4D22, tX);
+		final double[] color4D41 = color4DBlend(color4D31, color4D32, tY);
+		
+		return color4DSet(color4DResult, color4D41, color4DResultOffset, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] image4DGetColor4D(final double[] image4D, final int x, final int y) {
+		return image4DGetColor4D(image4D, x, y, color4D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] image4DGetColor4D(final double[] image4D, final int x, final int y, final double[] color4DResult) {
+		return image4DGetColor4D(image4D, x, y, color4DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] image4DGetColor4D(final double[] image4D, final int x, final int y, final double[] color4DResult, final int image4DOffset, final int color4DResultOffset) {
+		final int resolutionX = image4DGetResolutionX(image4D, image4DOffset);
+		final int resolutionY = image4DGetResolutionY(image4D, image4DOffset);
+		
+		final int currentX = positiveModulo(x, resolutionX);
+		final int currentY = positiveModulo(y, resolutionY);
+		
+		if(currentX >= 0 && currentX < resolutionX && currentY >= 0 && currentY < resolutionY) {
+			final int index = (currentY * resolutionX + currentX) * 4;
+			
+			return color4DSet(color4DResult, image4D, color4DResultOffset, image4DOffset + 2 + index);
+		}
+		
+		return color4D();
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] image4DLoad(final File file) {
+		return image4DFromImage4I(image4ILoad(file));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] image4DLoad(final String pathname) {
+		return image4DLoad(new File(pathname));
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] image4DSetColor4D(final double[] image4D, final double[] color4D, final int x, final int y) {
 		return image4DSetColor4D(image4D, color4D, x, y, 0, 0);
 	}
@@ -124,10 +205,13 @@ public final class Image {
 //	TODO: Add Javadocs!
 	public static double[] image4DSetColor4D(final double[] image4D, final double[] color4D, final int x, final int y, final int image4DOffset, final int color4DOffset) {
 		final int resolutionX = image4DGetResolutionX(image4D, image4DOffset);
+		final int resolutionY = image4DGetResolutionY(image4D, image4DOffset);
 		
-		final int index = (y * resolutionX + x) * 4;
-		
-		color4DSet(image4D, color4D, image4DOffset + 2 + index, color4DOffset);
+		if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
+			final int index = (y * resolutionX + x) * 4;
+			
+			color4DSet(image4D, color4D, image4DOffset + 2 + index, color4DOffset);
+		}
 		
 		return image4D;
 	}
@@ -284,6 +368,42 @@ public final class Image {
 	}
 	
 //	TODO: Add Javadocs!
+	public static int[] image4IFromImage4IPacked(final int[] image4IPacked) {
+		return image4IFromImage4IPacked(image4IPacked, image4I(image4IPackedGetResolutionX(image4IPacked), image4IPackedGetResolutionY(image4IPacked)));
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IFromImage4IPacked(final int[] image4IPacked, final int[] image4IResult) {
+		return image4IFromImage4IPacked(image4IPacked, image4IResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IFromImage4IPacked(final int[] image4IPacked, final int[] image4IResult, final int image4IPackedOffset, final int image4IResultOffset) {
+		final int resolutionX = image4IPackedGetResolutionX(image4IPacked, image4IPackedOffset);
+		final int resolutionY = image4IPackedGetResolutionY(image4IPacked, image4IPackedOffset);
+		final int resolution = resolutionX * resolutionY;
+		
+		image4IResult[image4IResultOffset + 0] = resolutionX;
+		image4IResult[image4IResultOffset + 1] = resolutionY;
+		
+		for(int i = 0; i < resolution; i++) {
+			color4ISet(image4IResult, color4IFromColor4IPacked(image4IPacked[image4IPackedOffset + 2 + i]), image4IResultOffset + 2 + i * 4, 0);
+		}
+		
+		return image4IResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4ILoad(final File file) {
+		return image4IFromImage4IPacked(image4IPackedLoad(file));
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4ILoad(final String pathname) {
+		return image4ILoad(new File(pathname));
+	}
+	
+//	TODO: Add Javadocs!
 	public static void image4ISave(final int[] image4I, final File file) {
 		image4ISave(image4I, file, "png");
 	}
@@ -416,6 +536,31 @@ public final class Image {
 		}
 		
 		return image4IPackedResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPackedLoad(final File file) {
+		try {
+			final BufferedImage bufferedImage = BufferedImages.getCompatibleBufferedImage(ImageIO.read(file), BufferedImage.TYPE_INT_ARGB);
+			
+			final int[] dataResult = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
+			
+			final int resolutionX = bufferedImage.getWidth();
+			final int resolutionY = bufferedImage.getHeight();
+			
+			final int[] image4IPacked = image4IPacked(resolutionX, resolutionY);
+			
+			System.arraycopy(dataResult, 0, image4IPacked, 2, dataResult.length);
+			
+			return image4IPacked;
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] image4IPackedLoad(final String pathname) {
+		return image4IPackedLoad(new File(pathname));
 	}
 	
 //	TODO: Add Javadocs!

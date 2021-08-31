@@ -18,6 +18,20 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromCone3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromCylinder3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromDisk3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromHyperboloid3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromParaboloid3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromPlane3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromPolygon3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromRectangle3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromRectangularCuboid3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromShape3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromSphere3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromTorus3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromTriangle3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DGetW;
 import static org.dayflower.simplex.Point.point3D;
 import static org.dayflower.simplex.Point.point3DGetComponent1;
 import static org.dayflower.simplex.Point.point3DGetComponent2;
@@ -2101,6 +2115,136 @@ public final class Vector {
 		final double component3 = vector3DGetComponent3(vector3DLHS, vector3DLHSOffset) - vector3DGetComponent3(vector3DRHS, vector3DRHSOffset);
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalCone3D(final double[] ray3D, final double[] cone3D, final double t) {
+		return vector3DSurfaceNormalCone3D(ray3D, cone3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalCone3D(final double[] ray3D, final double[] cone3D, final double t, final int ray3DOffset, final int cone3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromCone3D(ray3D, cone3D, t, ray3DOffset, cone3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalCylinder3D(final double[] ray3D, final double[] cylinder3D, final double t) {
+		return vector3DSurfaceNormalCylinder3D(ray3D, cylinder3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalCylinder3D(final double[] ray3D, final double[] cylinder3D, final double t, final int ray3DOffset, final int cylinder3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromCylinder3D(ray3D, cylinder3D, t, ray3DOffset, cylinder3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalDisk3D(final double[] ray3D, final double[] disk3D, final double t) {
+		return vector3DSurfaceNormalDisk3D(ray3D, disk3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalDisk3D(final double[] ray3D, final double[] disk3D, final double t, final int ray3DOffset, final int disk3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromDisk3D(ray3D, disk3D, t, ray3DOffset, disk3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalHyperboloid3D(final double[] ray3D, final double[] hyperboloid3D, final double t) {
+		return vector3DSurfaceNormalHyperboloid3D(ray3D, hyperboloid3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalHyperboloid3D(final double[] ray3D, final double[] hyperboloid3D, final double t, final int ray3DOffset, final int hyperboloid3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromHyperboloid3D(ray3D, hyperboloid3D, t, ray3DOffset, hyperboloid3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalParaboloid3D(final double[] ray3D, final double[] paraboloid3D, final double t) {
+		return vector3DSurfaceNormalParaboloid3D(ray3D, paraboloid3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalParaboloid3D(final double[] ray3D, final double[] paraboloid3D, final double t, final int ray3DOffset, final int paraboloid3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromParaboloid3D(ray3D, paraboloid3D, t, ray3DOffset, paraboloid3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalPlane3D(final double[] ray3D, final double[] plane3D, final double t) {
+		return vector3DSurfaceNormalPlane3D(ray3D, plane3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalPlane3D(final double[] ray3D, final double[] plane3D, final double t, final int ray3DOffset, final int plane3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromPlane3D(ray3D, plane3D, t, ray3DOffset, plane3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalPolygon3D(final double[] ray3D, final double[] polygon3D, final double t) {
+		return vector3DSurfaceNormalPolygon3D(ray3D, polygon3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalPolygon3D(final double[] ray3D, final double[] polygon3D, final double t, final int ray3DOffset, final int polygon3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromPolygon3D(ray3D, polygon3D, t, ray3DOffset, polygon3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalRectangle3D(final double[] ray3D, final double[] rectangle3D, final double t) {
+		return vector3DSurfaceNormalRectangle3D(ray3D, rectangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalRectangle3D(final double[] ray3D, final double[] rectangle3D, final double t, final int ray3DOffset, final int rectangle3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromRectangle3D(ray3D, rectangle3D, t, ray3DOffset, rectangle3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalRectangularCuboid3D(final double[] ray3D, final double[] rectangularCuboid3D, final double t) {
+		return vector3DSurfaceNormalRectangularCuboid3D(ray3D, rectangularCuboid3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalRectangularCuboid3D(final double[] ray3D, final double[] rectangularCuboid3D, final double t, final int ray3DOffset, final int rectangularCuboid3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromRectangularCuboid3D(ray3D, rectangularCuboid3D, t, ray3DOffset, rectangularCuboid3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalShape3D(final double[] ray3D, final double[] shape3D, final double t) {
+		return vector3DSurfaceNormalShape3D(ray3D, shape3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalShape3D(final double[] ray3D, final double[] shape3D, final double t, final int ray3DOffset, final int shape3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromShape3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalSphere3D(final double[] ray3D, final double[] sphere3D, final double t) {
+		return vector3DSurfaceNormalSphere3D(ray3D, sphere3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalSphere3D(final double[] ray3D, final double[] sphere3D, final double t, final int ray3DOffset, final int sphere3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromSphere3D(ray3D, sphere3D, t, ray3DOffset, sphere3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalTorus3D(final double[] ray3D, final double[] torus3D, final double t) {
+		return vector3DSurfaceNormalTorus3D(ray3D, torus3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalTorus3D(final double[] ray3D, final double[] torus3D, final double t, final int ray3DOffset, final int torus3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromTorus3D(ray3D, torus3D, t, ray3DOffset, torus3DOffset));
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalTriangle3D(final double[] ray3D, final double[] triangle3D, final double t) {
+		return vector3DSurfaceNormalTriangle3D(ray3D, triangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DSurfaceNormalTriangle3D(final double[] ray3D, final double[] triangle3D, final double t, final int ray3DOffset, final int triangle3DOffset) {
+		return orthonormalBasis33DGetW(orthonormalBasis33DFromTriangle3D(ray3D, triangle3D, t, ray3DOffset, triangle3DOffset));
 	}
 	
 	/**

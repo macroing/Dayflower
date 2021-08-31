@@ -18,6 +18,7 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.utility.Doubles.lerp;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Ints.saturate;
 import static org.dayflower.utility.Ints.toInt;
@@ -316,6 +317,36 @@ public final class Color {
 		return new double[] {component1, component2, component3, component4};
 	}
 	
+//	TODO: Add Javadocs!
+	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS) {
+		return color4DBlend(color4DLHS, color4DRHS, 0.5D);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS, final double t) {
+		return color4DBlend(color4DLHS, color4DRHS, t, t, t, t);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS, final double tComponent1, final double tComponent2, final double tComponent3, final double tComponent4) {
+		return color4DBlend(color4DLHS, color4DRHS, tComponent1, tComponent2, tComponent3, tComponent4, color4D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS, final double tComponent1, final double tComponent2, final double tComponent3, final double tComponent4, final double[] color4DResult) {
+		return color4DBlend(color4DLHS, color4DRHS, tComponent1, tComponent2, tComponent3, tComponent4, color4DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS, final double tComponent1, final double tComponent2, final double tComponent3, final double tComponent4, final double[] color4DResult, final int color4DLHSOffset, final int color4DRHSOffset, final int color4DResultOffset) {
+		final double component1 = lerp(color4DGetComponent1(color4DLHS, color4DLHSOffset), color4DGetComponent1(color4DRHS, color4DRHSOffset), tComponent1);
+		final double component2 = lerp(color4DGetComponent2(color4DLHS, color4DLHSOffset), color4DGetComponent2(color4DRHS, color4DRHSOffset), tComponent2);
+		final double component3 = lerp(color4DGetComponent3(color4DLHS, color4DLHSOffset), color4DGetComponent3(color4DRHS, color4DRHSOffset), tComponent3);
+		final double component4 = lerp(color4DGetComponent4(color4DLHS, color4DLHSOffset), color4DGetComponent4(color4DRHS, color4DRHSOffset), tComponent4);
+		
+		return color4DSet(color4DResult, component1, component2, component3, component4, color4DResultOffset);
+	}
+	
 	/**
 	 * Returns a {@code double[]} that contains a color with four components and is set to the component values of the color {@code color4I}.
 	 * <p>
@@ -383,6 +414,26 @@ public final class Color {
 		final double component2 = saturate(color4IGetComponent2(color4I, color4IOffset)) / 255.0D;
 		final double component3 = saturate(color4IGetComponent3(color4I, color4IOffset)) / 255.0D;
 		final double component4 = saturate(color4IGetComponent4(color4I, color4IOffset)) / 255.0D;
+		
+		return color4DSet(color4DResult, component1, component2, component3, component4, color4DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] color4DMultiply(final double[] color4DLHS, final double[] color4DRHS) {
+		return color4DMultiply(color4DLHS, color4DRHS, color4D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] color4DMultiply(final double[] color4DLHS, final double[] color4DRHS, final double[] color4DResult) {
+		return color4DMultiply(color4DLHS, color4DRHS, color4DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] color4DMultiply(final double[] color4DLHS, final double[] color4DRHS, final double[] color4DResult, final int color4DLHSOffset, final int color4DRHSOffset, final int color4DResultOffset) {
+		final double component1 = color4DGetComponent1(color4DLHS, color4DLHSOffset) * color4DGetComponent1(color4DRHS, color4DRHSOffset);
+		final double component2 = color4DGetComponent2(color4DLHS, color4DLHSOffset) * color4DGetComponent2(color4DRHS, color4DRHSOffset);
+		final double component3 = color4DGetComponent3(color4DLHS, color4DLHSOffset) * color4DGetComponent3(color4DRHS, color4DRHSOffset);
+		final double component4 = color4DGetComponent4(color4DLHS, color4DLHSOffset) * color4DGetComponent4(color4DRHS, color4DRHSOffset);
 		
 		return color4DSet(color4DResult, component1, component2, component3, component4, color4DResultOffset);
 	}
@@ -1064,6 +1115,26 @@ public final class Color {
 		final int component2 = toInt(saturate(color4DGetComponent2(color4D, color4DOffset)) * 255.0D + 0.5D);
 		final int component3 = toInt(saturate(color4DGetComponent3(color4D, color4DOffset)) * 255.0D + 0.5D);
 		final int component4 = toInt(saturate(color4DGetComponent4(color4D, color4DOffset)) * 255.0D + 0.5D);
+		
+		return color4ISet(color4IResult, component1, component2, component3, component4, color4IResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] color4IFromColor4IPacked(final int color4IPacked) {
+		return color4IFromColor4IPacked(color4IPacked, color4I());
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] color4IFromColor4IPacked(final int color4IPacked, final int[] color4IResult) {
+		return color4IFromColor4IPacked(color4IPacked, color4IResult, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int[] color4IFromColor4IPacked(final int color4IPacked, final int[] color4IResult, final int color4IResultOffset) {
+		final int component1 = color4IPackedGetComponent1(color4IPacked);
+		final int component2 = color4IPackedGetComponent2(color4IPacked);
+		final int component3 = color4IPackedGetComponent3(color4IPacked);
+		final int component4 = color4IPackedGetComponent4(color4IPacked);
 		
 		return color4ISet(color4IResult, component1, component2, component3, component4, color4IResultOffset);
 	}

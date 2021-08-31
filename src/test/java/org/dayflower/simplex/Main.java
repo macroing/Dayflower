@@ -20,19 +20,17 @@ package org.dayflower.simplex;
 
 import static org.dayflower.simplex.Camera.camera3D;
 import static org.dayflower.simplex.Camera.camera3DCreatePrimaryRay;
-import static org.dayflower.simplex.Color.color4D;
+import static org.dayflower.simplex.Color.color4DMultiply;
 import static org.dayflower.simplex.Image.image4D;
 import static org.dayflower.simplex.Image.image4DSave;
 import static org.dayflower.simplex.Image.image4DSetColor4D;
 import static org.dayflower.simplex.Matrix.matrix44DInverse;
 import static org.dayflower.simplex.Matrix.matrix44DRotateX;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33D;
-import static org.dayflower.simplex.Point.point2DGetU;
-import static org.dayflower.simplex.Point.point2DGetV;
+import static org.dayflower.simplex.Point.point2DTextureCoordinatesShape3D;
 import static org.dayflower.simplex.Point.point3D;
-import static org.dayflower.simplex.Point.point3DAdd;
 import static org.dayflower.simplex.Ray.ray3DGetDirection;
-import static org.dayflower.simplex.Ray.ray3DGetOrigin;
+import static org.dayflower.simplex.Ray.ray3DIntersectionShape3D;
 import static org.dayflower.simplex.Ray.ray3DTransformMatrix44D;
 import static org.dayflower.simplex.Shape.cone3D;
 import static org.dayflower.simplex.Shape.cylinder3D;
@@ -43,21 +41,13 @@ import static org.dayflower.simplex.Shape.plane3D;
 import static org.dayflower.simplex.Shape.polygon3D;
 import static org.dayflower.simplex.Shape.rectangle3D;
 import static org.dayflower.simplex.Shape.rectangularCuboid3D;
-import static org.dayflower.simplex.Shape.shape3DComputeSurfaceNormal;
-import static org.dayflower.simplex.Shape.shape3DComputeTextureCoordinates;
-import static org.dayflower.simplex.Shape.shape3DIntersection;
 import static org.dayflower.simplex.Shape.sphere3D;
 import static org.dayflower.simplex.Shape.torus3D;
 import static org.dayflower.simplex.Shape.triangle3D;
-import static org.dayflower.simplex.Vector.vector3DDirection;
-import static org.dayflower.simplex.Vector.vector3DDotProduct;
-import static org.dayflower.simplex.Vector.vector3DLength;
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.fractionalPart;
+import static org.dayflower.simplex.Texture.checkerboardTextureGetColor4D;
+import static org.dayflower.simplex.Texture.dotProductTextureGetColor4D;
+import static org.dayflower.simplex.Vector.vector3DSurfaceNormalShape3D;
 import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.remainder;
-import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.toRadians;
 
 public final class Main {
@@ -84,67 +74,6 @@ public final class Main {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static double[] doColor4D(final double[] point2DTextureCoordinates, final double[] point3DSurfaceIntersectionPoint, final double[] vector3DDirection, final double[] vector3DSurfaceNormal) {
-		final boolean isBullseye = false;
-		final boolean isCheckerboard = true;
-		
-		final double[] color4DBullseye = doColor4DBullseye(point3DSurfaceIntersectionPoint);
-		final double[] color4DCheckerboard = doColor4DCheckerboard(point2DTextureCoordinates);
-		final double[] color4DDotProduct = doColor4DDotProduct(vector3DDirection, vector3DSurfaceNormal);
-		
-		final double component1 = color4DDotProduct[0] * ((isBullseye ? color4DBullseye[0] : 0.0D) + (isCheckerboard ? color4DCheckerboard[0] : 0.0D));
-		final double component2 = color4DDotProduct[1] * ((isBullseye ? color4DBullseye[1] : 0.0D) + (isCheckerboard ? color4DCheckerboard[1] : 0.0D));
-		final double component3 = color4DDotProduct[2] * ((isBullseye ? color4DBullseye[2] : 0.0D) + (isCheckerboard ? color4DCheckerboard[2] : 0.0D));
-		
-		return color4D(component1, component2, component3);
-	}
-	
-	private static double[] doColor4DBullseye(final double[] point3DSurfaceIntersectionPoint) {
-		final double[] vector3DDirection = vector3DDirection(point3D(10.0D, 10.0D, 10.0D), point3DSurfaceIntersectionPoint);
-		
-		final double directionLength = vector3DLength(vector3DDirection);
-		final double directionLengthScaled = directionLength * 4.0D;
-		final double directionLengthScaledRemainder = remainder(directionLengthScaled, 1.0D);
-		
-		final boolean is = directionLengthScaledRemainder > 0.5D;
-		
-		final double component1 = is ? 1.0D : 0.0D;
-		final double component2 = is ? 0.0D : 1.0D;
-		final double component3 = is ? 0.0D : 0.0D;
-		
-		return color4D(component1, component2, component3);
-	}
-	
-	private static double[] doColor4DCheckerboard(final double[] point2DTextureCoordinates) {
-		final double angle = toRadians(0.0D);
-		final double angleCos = cos(angle);
-		final double angleSin = sin(angle);
-		
-		final double scaleU = 4.0D;
-		final double scaleV = 4.0D;
-		
-		final double u = point2DGetU(point2DTextureCoordinates);
-		final double v = point2DGetV(point2DTextureCoordinates);
-		
-		final boolean isU = fractionalPart((u * angleCos - v * angleSin) * scaleU) > 0.5D;
-		final boolean isV = fractionalPart((v * angleCos + u * angleSin) * scaleV) > 0.5D;
-		final boolean is = isU ^ isV;
-		
-		final double component1 = is ? 1.0D : 0.0D;
-		final double component2 = is ? 0.0D : 1.0D;
-		final double component3 = is ? 0.0D : 0.0D;
-		
-		return color4D(component1, component2, component3);
-	}
-	
-	private static double[] doColor4DDotProduct(final double[] vector3DDirection, final double[] vector3DSurfaceNormal) {
-		final double directionDotSurfaceNormal = abs(vector3DDotProduct(vector3DDirection, vector3DSurfaceNormal));
-		
-		final double component = 0.5D * directionDotSurfaceNormal;
-		
-		return color4D(component);
-	}
-	
 	private static void doRender(final String pathname, final double angle, final double[] shape3D) {
 		final double[] camera3D = camera3D(toRadians(40.0D), toRadians(40.0D), 0, orthonormalBasis33D(), point3D(0.0D, 0.0D, -5.0D), 0.0D, 30.0D, 800.0D, 800.0D);
 		
@@ -163,18 +92,18 @@ public final class Main {
 				final double[] ray3D = camera3DCreatePrimaryRay(camera3D, x, y);
 				final double[] ray3DTransformed = ray3DTransformMatrix44D(matrix44DWorldToObject, ray3D);
 				
-				final double t = shape3DIntersection(ray3DTransformed, shape3D);
+				final double t = ray3DIntersectionShape3D(ray3DTransformed, shape3D);
 				
 				if(!isNaN(t)) {
-					final double[] point2DTextureCoordinates = shape3DComputeTextureCoordinates(ray3DTransformed, shape3D, t);
+					final double[] point2DTextureCoordinates = point2DTextureCoordinatesShape3D(ray3DTransformed, shape3D, t);
 					
 					final double[] vector3DDirection = ray3DGetDirection(ray3DTransformed);
-					final double[] vector3DSurfaceNormal = shape3DComputeSurfaceNormal(ray3DTransformed, shape3D, t);
+					final double[] vector3DSurfaceNormal = vector3DSurfaceNormalShape3D(ray3DTransformed, shape3D, t);
 					
-					final double[] point3DOrigin = ray3DGetOrigin(ray3DTransformed);
-					final double[] point3DSurfaceIntersectionPoint = point3DAdd(point3DOrigin, vector3DDirection, t);
+//					final double[] point3DOrigin = ray3DGetOrigin(ray3DTransformed);
+//					final double[] point3DSurfaceIntersectionPoint = point3DAdd(point3DOrigin, vector3DDirection, t);
 					
-					final double[] color4D = doColor4D(point2DTextureCoordinates, point3DSurfaceIntersectionPoint, vector3DDirection, vector3DSurfaceNormal);
+					final double[] color4D = color4DMultiply(dotProductTextureGetColor4D(vector3DDirection, vector3DSurfaceNormal), checkerboardTextureGetColor4D(point2DTextureCoordinates));
 					
 					image4DSetColor4D(image4D, color4D, x, y);
 				}

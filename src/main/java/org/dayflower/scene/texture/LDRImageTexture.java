@@ -62,7 +62,7 @@ public final class LDRImageTexture implements Texture {
 	/**
 	 * The ID of this {@code LDRImageTexture} class.
 	 */
-	public static final int ID = 6;
+	public static final int ID = 7;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

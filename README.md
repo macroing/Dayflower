@@ -129,6 +129,7 @@ The lists below show the main features of the renderer.
 * Bullseye Texture (CPU & GPU)
 * Checkerboard Texture (CPU & GPU)
 * Constant Texture (CPU & GPU)
+* Dot Product Texture (CPU)
 * Function Texture (CPU)
 * Low-Dynamic-Range (LDR) Image Texture (CPU & GPU)
 * Marble Texture (CPU & GPU)

@@ -39,7 +39,7 @@ public final class FunctionTexture implements Texture {
 	/**
 	 * The ID of this {@code FunctionTexture} class.
 	 */
-	public static final int ID = 5;
+	public static final int ID = 6;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

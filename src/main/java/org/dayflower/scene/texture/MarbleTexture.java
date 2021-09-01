@@ -44,7 +44,7 @@ public final class MarbleTexture implements Texture {
 	/**
 	 * The ID of this {@code MarbleTexture} class.
 	 */
-	public static final int ID = 7;
+	public static final int ID = 8;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

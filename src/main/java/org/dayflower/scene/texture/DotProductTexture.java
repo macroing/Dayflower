@@ -25,27 +25,27 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Intersection;
 
 /**
- * A {@code SurfaceNormalTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance based on the surface normal of a surface.
+ * A {@code DotProductTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance based on the absolute dot product between the surface normal and ray direction.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@code Texture} implementation is supported on the GPU.
+ * This {@code Texture} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class SurfaceNormalTexture implements Texture {
+public final class DotProductTexture implements Texture {
 	/**
-	 * The ID of this {@code SurfaceNormalTexture} class.
+	 * The ID of this {@code DotProductTexture} class.
 	 */
-	public static final int ID = 11;
+	public static final int ID = 5;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code SurfaceNormalTexture} instance.
+	 * Constructs a new {@code DotProductTexture} instance.
 	 */
-	public SurfaceNormalTexture() {
+	public DotProductTexture() {
 		
 	}
 	
@@ -62,38 +62,32 @@ public final class SurfaceNormalTexture implements Texture {
 	 */
 	@Override
 	public Color3F getColor(final Intersection intersection) {
-		final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
-		
-		final float r = (surfaceNormal.getX() + 1.0F) / 2.0F;
-		final float g = (surfaceNormal.getY() + 1.0F) / 2.0F;
-		final float b = (surfaceNormal.getZ() + 1.0F) / 2.0F;
-		
-		return new Color3F(r, g, b);
+		return new Color3F(Vector3F.dotProductAbs(intersection.getSurfaceNormalS(), intersection.getRay().getDirection()));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code SurfaceNormalTexture} instance.
+	 * Returns a {@code String} representation of this {@code DotProductTexture} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code SurfaceNormalTexture} instance
+	 * @return a {@code String} representation of this {@code DotProductTexture} instance
 	 */
 	@Override
 	public String toString() {
-		return "new SurfaceNormalTexture()";
+		return "new DotProductTexture()";
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code SurfaceNormalTexture} instance for equality.
+	 * Compares {@code object} to this {@code DotProductTexture} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SurfaceNormalTexture}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DotProductTexture}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code SurfaceNormalTexture} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SurfaceNormalTexture}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code DotProductTexture} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DotProductTexture}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof SurfaceNormalTexture)) {
+		} else if(!(object instanceof DotProductTexture)) {
 			return false;
 		} else {
 			return true;
@@ -115,9 +109,9 @@ public final class SurfaceNormalTexture implements Texture {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code SurfaceNormalTexture} instance.
+	 * Returns an {@code int} with the ID of this {@code DotProductTexture} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code SurfaceNormalTexture} instance
+	 * @return an {@code int} with the ID of this {@code DotProductTexture} instance
 	 */
 	@Override
 	public int getID() {
@@ -125,9 +119,9 @@ public final class SurfaceNormalTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code SurfaceNormalTexture} instance.
+	 * Returns a hash code for this {@code DotProductTexture} instance.
 	 * 
-	 * @return a hash code for this {@code SurfaceNormalTexture} instance
+	 * @return a hash code for this {@code DotProductTexture} instance
 	 */
 	@Override
 	public int hashCode() {

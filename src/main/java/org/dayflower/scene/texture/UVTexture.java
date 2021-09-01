@@ -38,7 +38,7 @@ public final class UVTexture implements Texture {
 	/**
 	 * The ID of this {@code UVTexture} class.
 	 */
-	public static final int ID = 11;
+	public static final int ID = 12;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

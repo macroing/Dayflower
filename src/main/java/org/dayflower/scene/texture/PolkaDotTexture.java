@@ -45,7 +45,7 @@ public final class PolkaDotTexture implements Texture {
 	/**
 	 * The ID of this {@code PolkaDotTexture} class.
 	 */
-	public static final int ID = 8;
+	public static final int ID = 9;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

@@ -18,10 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.pow;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
@@ -201,75 +198,13 @@ public final class Paraboloid3D implements Shape3D {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Point3D origin = ray.getOrigin();
+		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		final Vector3D direction = ray.getDirection();
-		
-		final double originX = origin.getX();
-		final double originY = origin.getY();
-		final double originZ = origin.getZ();
-		
-		final double directionX = direction.getX();
-		final double directionY = direction.getY();
-		final double directionZ = direction.getZ();
-		
-		final double phiMax = this.phiMax.getRadians();
-		final double radius = this.radius;
-		final double zMax = this.zMax;
-		final double zMin = this.zMin;
-		
-		final double k = zMax / (radius * radius);
-		
-		final double a = k * (directionX * directionX + directionY * directionY);
-		final double b = 2.0D * k * (directionX * originX + directionY * originY) - directionZ;
-		final double c = k * (originX * originX + originY * originY) - originZ;
-		
-		final double[] ts = solveQuadraticSystem(a, b, c);
-		
-		final double t0 = ts[0];
-		final double t1 = ts[1];
-		
-		final double tClosest = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-		
-		if(isNaN(tClosest)) {
+		if(isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final Point3D pointClosest = Point3D.add(origin, direction, tClosest);
-		
-		final double xClosest = pointClosest.getX();
-		final double yClosest = pointClosest.getY();
-		final double zClosest = pointClosest.getZ();
-		
-		final double phiClosest = getOrAdd(atan2(yClosest, xClosest), 0.0D, PI_MULTIPLIED_BY_2);
-		
-		if(zClosest < zMin || zClosest > zMax || phiClosest > phiMax) {
-			if(equal(tClosest, t1)) {
-				return SurfaceIntersection3D.EMPTY;
-			}
-			
-			final double tClipped = !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-			
-			if(isNaN(tClipped)) {
-				return SurfaceIntersection3D.EMPTY;
-			}
-			
-			final Point3D pointClipped = Point3D.add(origin, direction, tClipped);
-			
-			final double xClipped = pointClipped.getX();
-			final double yClipped = pointClipped.getY();
-			final double zClipped = pointClipped.getZ();
-			
-			final double phiClipped = getOrAdd(atan2(yClipped, xClipped), 0.0D, PI_MULTIPLIED_BY_2);
-			
-			if(zClipped < zMin || zClipped > zMax || phiClipped > phiMax) {
-				return SurfaceIntersection3D.EMPTY;
-			}
-			
-			return Optional.of(doCreateSurfaceIntersection(ray, phiClipped, tClipped, xClipped, yClipped, zClipped));
-		}
-		
-		return Optional.of(doCreateSurfaceIntersection(ray, phiClosest, tClosest, xClosest, yClosest, zClosest));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -384,71 +319,31 @@ public final class Paraboloid3D implements Shape3D {
 		
 		final Vector3D direction = ray.getDirection();
 		
-		final double originX = origin.getX();
-		final double originY = origin.getY();
-		final double originZ = origin.getZ();
+		final double k = this.zMax / (this.radius * this.radius);
 		
-		final double directionX = direction.getX();
-		final double directionY = direction.getY();
-		final double directionZ = direction.getZ();
-		
-		final double phiMax = this.phiMax.getRadians();
-		final double radius = this.radius;
-		final double zMax = this.zMax;
-		final double zMin = this.zMin;
-		
-		final double k = zMax / (radius * radius);
-		
-		final double a = k * (directionX * directionX + directionY * directionY);
-		final double b = 2.0D * k * (directionX * originX + directionY * originY) - directionZ;
-		final double c = k * (originX * originX + originY * originY) - originZ;
+		final double a = k * (direction.getX() * direction.getX() + direction.getY() * direction.getY());
+		final double b = 2.0D * k * (direction.getX() * origin.getX() + direction.getY() * origin.getY()) - direction.getZ();
+		final double c = k * (origin.getX() * origin.getX() + origin.getY() * origin.getY()) - origin.getZ();
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
-		final double t0 = ts[0];
-		final double t1 = ts[1];
-		
-		final double tClosest = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-		
-		if(isNaN(tClosest)) {
-			return Double.NaN;
+		for(int i = 0; i < ts.length; i++) {
+			final double t = ts[i];
+			
+			if(isNaN(t)) {
+				return Double.NaN;
+			}
+			
+			if(t > tMinimum && t < tMaximum) {
+				final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+				
+				if(surfaceIntersectionPoint.getZ() >= this.zMin && surfaceIntersectionPoint.getZ() <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+					return t;
+				}
+			}
 		}
 		
-		final Point3D pointClosest = Point3D.add(origin, direction, tClosest);
-		
-		final double xClosest = pointClosest.getX();
-		final double yClosest = pointClosest.getY();
-		final double zClosest = pointClosest.getZ();
-		
-		final double phiClosest = getOrAdd(atan2(yClosest, xClosest), 0.0D, PI_MULTIPLIED_BY_2);
-		
-		if(zClosest < zMin || zClosest > zMax || phiClosest > phiMax) {
-			if(equal(tClosest, t1)) {
-				return Double.NaN;
-			}
-			
-			final double tClipped = !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-			
-			if(isNaN(tClipped)) {
-				return Double.NaN;
-			}
-			
-			final Point3D pointClipped = Point3D.add(origin, direction, tClipped);
-			
-			final double xClipped = pointClipped.getX();
-			final double yClipped = pointClipped.getY();
-			final double zClipped = pointClipped.getZ();
-			
-			final double phiClipped = getOrAdd(atan2(yClipped, xClipped), 0.0D, PI_MULTIPLIED_BY_2);
-			
-			if(zClipped < zMin || zClipped > zMax || phiClipped > phiMax) {
-				return Double.NaN;
-			}
-			
-			return tClipped;
-		}
-		
-		return tClosest;
+		return Double.NaN;
 	}
 	
 	/**
@@ -499,45 +394,45 @@ public final class Paraboloid3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double phi, final double t, final double x, final double y, final double z) {
-		final double phiMax = this.phiMax.getRadians();
-		final double zMax = this.zMax;
-		final double zMin = this.zMin;
+	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
+		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
+		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final double uZ = +0.0D;
 		
-		final double u = phi / phiMax;
-		final double v = (z - zMin) / (zMax - zMin);
+		final double vX = (this.zMax - this.zMin) * (surfaceIntersectionPoint.getX() / (2.0D * surfaceIntersectionPoint.getZ()));
+		final double vY = (this.zMax - this.zMin) * (surfaceIntersectionPoint.getY() / (2.0D * surfaceIntersectionPoint.getZ()));
+		final double vZ = this.zMax - this.zMin;
 		
-		final Vector3D dPDU = Vector3D.normalize(new Vector3D(-phiMax * y, phiMax * x, 0.0D));
-		final Vector3D dPDV = Vector3D.normalize(new Vector3D((zMax - zMin) * (x / (2.0D * z)), (zMax - zMin) * (y / (2.0D * z)), zMax - zMin));
+		final Vector3D u = Vector3D.normalize(new Vector3D(uX, uY, uZ));
+		final Vector3D v = Vector3D.normalize(new Vector3D(vX, vY, vZ));
+		final Vector3D w = Vector3D.crossProduct(u, v);
 		
-//		final Vector3D d2PDUU = new Vector3D(-phiMax * phiMax * x, -phiMax * phiMax * y, 0.0D);
-//		final Vector3D d2PDUV = new Vector3D((zMax - zMin) * phiMax * (-y / (2.0D * z)), (zMax - zMin) * phiMax * (x / (2.0D * z)), 0.0D);
-//		final Vector3D d2PDVV = new Vector3D(-(zMax - zMin) * (zMax - zMin) * (x / (4.0D * z * z)), -(zMax - zMin) * (zMax - zMin) * (y / (4.0D * z * z)), 0.0D);
+		return new OrthonormalBasis33D(w, v, u);
+	}
+	
+	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
+		final double u = surfaceIntersectionPoint.sphericalPhi() / this.phiMax.getRadians();
+		final double v = (surfaceIntersectionPoint.getZ() - this.zMin) / (this.zMax - this.zMin);
 		
-//		final double e0 = Vector3D.dotProduct(dPDU, dPDU);
-//		final double f0 = Vector3D.dotProduct(dPDU, dPDV);
-//		final double g0 = Vector3D.dotProduct(dPDV, dPDV);
+		return new Point2D(u, v);
+	}
+	
+	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double t) {
+		final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
-		final Vector3D surfaceNormalG = Vector3D.crossProduct(dPDU, dPDV);
-		
-//		final double e1 = Vector3D.dotProduct(surfaceNormalG, d2PDUU);
-//		final double f1 = Vector3D.dotProduct(surfaceNormalG, d2PDUV);
-//		final double g1 = Vector3D.dotProduct(surfaceNormalG, d2PDVV);
-		
-//		final double inverseEGFF = 1.0D / (e0 * g0 - f0 * f0);
-		
-//		final Vector3D dNDU = Vector3D.add(Vector3D.multiply(dPDU, (f1 * f0 - e1 * g0) * inverseEGFF), Vector3D.multiply(dPDV, (e1 * f0 - f1 * e0) * inverseEGFF));
-//		final Vector3D dNDV = Vector3D.add(Vector3D.multiply(dPDU, (g1 * f0 - f1 * g0) * inverseEGFF), Vector3D.multiply(dPDV, (f1 * f0 - g1 * e0) * inverseEGFF));
-		
-		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormalG, dPDV, dPDU);
+		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
 		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 		
-		final Point3D surfaceIntersectionPoint = new Point3D(x, y, z);
-		
-		final Point2D textureCoordinates = new Point2D(u, v);
+		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
 		
 		final Vector3D surfaceIntersectionPointError = new Vector3D();
 		
 		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
+		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
 	}
 }

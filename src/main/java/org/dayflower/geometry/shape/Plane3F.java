@@ -18,7 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
 
 import java.io.DataOutput;
@@ -34,6 +34,7 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -127,61 +128,13 @@ public final class Plane3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Vector3F direction = ray.getDirection();
-		final Vector3F surfaceNormal = this.surfaceNormal;
+		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
-		
-		if(isZero(nDotD)) {
+		if(isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final Point3F origin = ray.getOrigin();
-		final Point3F a = this.a;
-		final Point3F b = this.b;
-		final Point3F c = this.c;
-		
-		final Vector3F originToA = Vector3F.direction(origin, a);
-		
-		final float t = Vector3F.dotProduct(originToA, surfaceNormal) / nDotD;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormal);
-		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
-		
-		final float x = abs(surfaceNormal.getX());
-		final float y = abs(surfaceNormal.getY());
-		final float z = abs(surfaceNormal.getZ());
-		
-		final boolean isX = x > y && x > z;
-		final boolean isY = y > z;
-		
-		final float aX = isX ? a.getY()      : isY ? a.getZ()      : a.getX();
-		final float aY = isX ? a.getZ()      : isY ? a.getX()      : a.getY();
-		final float bX = isX ? c.getY() - aX : isY ? c.getZ() - aX : c.getX() - aX;
-		final float bY = isX ? c.getZ() - aY : isY ? c.getX() - aY : c.getY() - aY;
-		final float cX = isX ? b.getY() - aX : isY ? b.getZ() - aX : b.getX() - aX;
-		final float cY = isX ? b.getZ() - aY : isY ? b.getX() - aY : b.getY() - aY;
-		
-		final float determinant = bX * cY - bY * cX;
-		final float determinantReciprocal = 1.0F / determinant;
-		
-		final float hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
-		final float hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
-		
-		final float u = hU * (-bY * determinantReciprocal) + hV * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
-		final float v = hU * (+cY * determinantReciprocal) + hV * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
-		
-		final Point2F textureCoordinates = new Point2F(u, v);
-		
-		final Vector3F surfaceIntersectionPointError = new Vector3F();
-		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -357,27 +310,19 @@ public final class Plane3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Vector3F direction = ray.getDirection();
-		final Vector3F surfaceNormal = this.surfaceNormal;
+		final float dotProduct = Vector3F.dotProduct(this.surfaceNormal, ray.getDirection());
 		
-		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
-		
-		if(isZero(nDotD)) {
+		if(isZero(dotProduct)) {
 			return Float.NaN;
 		}
 		
-		final Point3F origin = ray.getOrigin();
-		final Point3F a = this.a;
+		final float t = Vector3F.dotProduct(Vector3F.direction(ray.getOrigin(), this.a), this.surfaceNormal) / dotProduct;
 		
-		final Vector3F originToA = Vector3F.direction(origin, a);
-		
-		final float t = Vector3F.dotProduct(originToA, surfaceNormal) / nDotD;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return Float.NaN;
+		if(t > tMinimum && t < tMaximum) {
+			return t;
 		}
 		
-		return t;
+		return Float.NaN;
 	}
 	
 	/**
@@ -422,5 +367,54 @@ public final class Plane3F implements Shape3F {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private OrthonormalBasis33F doCreateOrthonormalBasisG() {
+		return new OrthonormalBasis33F(this.surfaceNormal);
+	}
+	
+	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
+		final Vector3F surfaceNormalAbs = Vector3F.absolute(this.surfaceNormal);
+		
+		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
+		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
+		
+		final Vector2F vA = isX ? Vector2F.directionYZ(this.a) : isY ? Vector2F.directionZX(this.a) : Vector2F.directionXY(this.a);
+		final Vector2F vB = isX ? Vector2F.directionYZ(this.c) : isY ? Vector2F.directionZX(this.c) : Vector2F.directionXY(this.c);
+		final Vector2F vC = isX ? Vector2F.directionYZ(this.b) : isY ? Vector2F.directionZX(this.b) : Vector2F.directionXY(this.b);
+		final Vector2F vAB = Vector2F.subtract(vB, vA);
+		final Vector2F vAC = Vector2F.subtract(vC, vA);
+		
+		final float determinant = Vector2F.crossProduct(vAB, vAC);
+		final float determinantReciprocal = 1.0F / determinant;
+		
+		final float hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
+		final float hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
+		
+		final float u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2F.crossProduct(vA, vAB) * determinantReciprocal;
+		final float v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2F.crossProduct(vAC, vA) * determinantReciprocal;
+		
+		return new Point2F(u, v);
+	}
+	
+	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float t) {
+		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+		
+		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG();
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		
+		final Vector3F surfaceIntersectionPointError = new Vector3F();
+		
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
+		return Point3F.add(ray.getOrigin(), ray.getDirection(), t);
 	}
 }

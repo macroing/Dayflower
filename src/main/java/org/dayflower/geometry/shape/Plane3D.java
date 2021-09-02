@@ -18,7 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
 
 import java.io.DataOutput;
@@ -34,6 +34,7 @@ import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
+import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -127,61 +128,13 @@ public final class Plane3D implements Shape3D {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Vector3D direction = ray.getDirection();
-		final Vector3D surfaceNormal = this.surfaceNormal;
+		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		final double nDotD = Vector3D.dotProduct(surfaceNormal, direction);
-		
-		if(isZero(nDotD)) {
+		if(isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final Point3D origin = ray.getOrigin();
-		final Point3D a = this.a;
-		final Point3D b = this.b;
-		final Point3D c = this.c;
-		
-		final Vector3D originToA = Vector3D.direction(origin, a);
-		
-		final double t = Vector3D.dotProduct(originToA, surfaceNormal) / nDotD;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return SurfaceIntersection3D.EMPTY;
-		}
-		
-		final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
-		
-		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormal);
-		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
-		
-		final double x = abs(surfaceNormal.getX());
-		final double y = abs(surfaceNormal.getY());
-		final double z = abs(surfaceNormal.getZ());
-		
-		final boolean isX = x > y && x > z;
-		final boolean isY = y > z;
-		
-		final double aX = isX ? a.getY()      : isY ? a.getZ()      : a.getX();
-		final double aY = isX ? a.getZ()      : isY ? a.getX()      : a.getY();
-		final double bX = isX ? c.getY() - aX : isY ? c.getZ() - aX : c.getX() - aX;
-		final double bY = isX ? c.getZ() - aY : isY ? c.getX() - aY : c.getY() - aY;
-		final double cX = isX ? b.getY() - aX : isY ? b.getZ() - aX : b.getX() - aX;
-		final double cY = isX ? b.getZ() - aY : isY ? b.getX() - aY : b.getY() - aY;
-		
-		final double determinant = bX * cY - bY * cX;
-		final double determinantReciprocal = 1.0D / determinant;
-		
-		final double hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
-		final double hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
-		
-		final double u = hU * (-bY * determinantReciprocal) + hV * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
-		final double v = hU * (+cY * determinantReciprocal) + hV * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
-		
-		final Point2D textureCoordinates = new Point2D(u, v);
-		
-		final Vector3D surfaceIntersectionPointError = new Vector3D();
-		
-		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -357,27 +310,19 @@ public final class Plane3D implements Shape3D {
 	 */
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Vector3D direction = ray.getDirection();
-		final Vector3D surfaceNormal = this.surfaceNormal;
+		final double dotProduct = Vector3D.dotProduct(this.surfaceNormal, ray.getDirection());
 		
-		final double nDotD = Vector3D.dotProduct(surfaceNormal, direction);
-		
-		if(isZero(nDotD)) {
+		if(isZero(dotProduct)) {
 			return Double.NaN;
 		}
 		
-		final Point3D origin = ray.getOrigin();
-		final Point3D a = this.a;
+		final double t = Vector3D.dotProduct(Vector3D.direction(ray.getOrigin(), this.a), this.surfaceNormal) / dotProduct;
 		
-		final Vector3D originToA = Vector3D.direction(origin, a);
-		
-		final double t = Vector3D.dotProduct(originToA, surfaceNormal) / nDotD;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return Double.NaN;
+		if(t > tMinimum && t < tMaximum) {
+			return t;
 		}
 		
-		return t;
+		return Double.NaN;
 	}
 	
 	/**
@@ -422,5 +367,54 @@ public final class Plane3D implements Shape3D {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private OrthonormalBasis33D doCreateOrthonormalBasisG() {
+		return new OrthonormalBasis33D(this.surfaceNormal);
+	}
+	
+	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
+		final Vector3D surfaceNormalAbs = Vector3D.absolute(this.surfaceNormal);
+		
+		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
+		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
+		
+		final Vector2D vA = isX ? Vector2D.directionYZ(this.a) : isY ? Vector2D.directionZX(this.a) : Vector2D.directionXY(this.a);
+		final Vector2D vB = isX ? Vector2D.directionYZ(this.c) : isY ? Vector2D.directionZX(this.c) : Vector2D.directionXY(this.c);
+		final Vector2D vC = isX ? Vector2D.directionYZ(this.b) : isY ? Vector2D.directionZX(this.b) : Vector2D.directionXY(this.b);
+		final Vector2D vAB = Vector2D.subtract(vB, vA);
+		final Vector2D vAC = Vector2D.subtract(vC, vA);
+		
+		final double determinant = Vector2D.crossProduct(vAB, vAC);
+		final double determinantReciprocal = 1.0D / determinant;
+		
+		final double hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
+		final double hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
+		
+		final double u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2D.crossProduct(vA, vAB) * determinantReciprocal;
+		final double v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2D.crossProduct(vAC, vA) * determinantReciprocal;
+		
+		return new Point2D(u, v);
+	}
+	
+	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double t) {
+		final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+		
+		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG();
+		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		
+		final Vector3D surfaceIntersectionPointError = new Vector3D();
+		
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
+		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
 	}
 }

@@ -99,6 +99,25 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
+	 * Constructs a new {@code Vector2F} instance given the component values {@code point.getComponent1()} and {@code point.getComponent2()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Vector2F(point.getComponent1(), point.getComponent2());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Vector2F(final Point3F point) {
+		this(point.getComponent1(), point.getComponent2());
+	}
+	
+	/**
 	 * Constructs a new {@code Vector2F} instance given the component values {@code component} and {@code component}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:

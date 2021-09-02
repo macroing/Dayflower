@@ -26,6 +26,9 @@ import static org.dayflower.simplex.Point.point3DGetY;
 import static org.dayflower.simplex.Point.point3DGetZ;
 import static org.dayflower.simplex.Point.point3DLerp;
 import static org.dayflower.simplex.Point.point3DMidpoint;
+import static org.dayflower.simplex.Point.point3DSurfaceIntersectionPointCone3D;
+import static org.dayflower.simplex.Point.point3DSurfaceIntersectionPointCylinder3D;
+import static org.dayflower.simplex.Point.point3DSurfaceIntersectionPointDisk3D;
 import static org.dayflower.simplex.Ray.ray3DGetDirection;
 import static org.dayflower.simplex.Ray.ray3DGetOrigin;
 import static org.dayflower.simplex.Shape.CONE_3_ID;
@@ -223,19 +226,23 @@ public final class OrthonormalBasis {
 	
 //	TODO: Add Javadocs!
 	public static double[] orthonormalBasis33DFromCone3D(final double[] ray3D, final double[] cone3D, final double t, final int ray3DOffset, final int cone3DOffset) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
-		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
-		
 		final double phiMax = cone3DGetPhiMax(cone3D, cone3DOffset);
 		final double zMax = cone3DGetZMax(cone3D, cone3DOffset);
 		
-		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		final double[] point3DSurfaceIntersectionPoint = point3DSurfaceIntersectionPointCone3D(ray3D, cone3D, t, ray3DOffset, cone3DOffset);
 		
-		final double v = point3DGetZ(point3D) / zMax;
+		final double v = point3DGetZ(point3DSurfaceIntersectionPoint) / zMax;
 		
-		final double[] vector3DU = vector3DNormalize(vector3D(-phiMax * point3DGetY(point3D), phiMax * point3DGetX(point3D), 0.0D));
-		final double[] vector3DV = vector3DNormalize(vector3D(-point3DGetX(point3D) / (1.0D - v), -point3DGetY(point3D) / (1.0D - v), zMax));
+		final double uX = -phiMax * point3DGetY(point3DSurfaceIntersectionPoint);
+		final double uY = +phiMax * point3DGetX(point3DSurfaceIntersectionPoint);
+		final double uZ = +0.0D;
+		
+		final double vX = -point3DGetX(point3DSurfaceIntersectionPoint) / (1.0D - v);
+		final double vY = -point3DGetY(point3DSurfaceIntersectionPoint) / (1.0D - v);
+		final double vZ = +zMax;
+		
+		final double[] vector3DU = vector3DNormalize(vector3D(uX, uY, uZ));
+		final double[] vector3DV = vector3DNormalize(vector3D(vX, vY, vZ));
 		final double[] vector3DW = vector3DCrossProduct(vector3DU, vector3DV);
 		
 		return orthonormalBasis33D(vector3DU, vector3DV, vector3DW);
@@ -248,18 +255,22 @@ public final class OrthonormalBasis {
 	
 //	TODO: Add Javadocs!
 	public static double[] orthonormalBasis33DFromCylinder3D(final double[] ray3D, final double[] cylinder3D, final double t, final int ray3DOffset, final int cylinder3DOffset) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
-		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
-		
 		final double phiMax = cylinder3DGetPhiMax(cylinder3D, cylinder3DOffset);
 		final double zMax = cylinder3DGetZMax(cylinder3D, cylinder3DOffset);
 		final double zMin = cylinder3DGetZMin(cylinder3D, cylinder3DOffset);
 		
-		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		final double[] point3DSurfaceIntersectionPoint = point3DSurfaceIntersectionPointCylinder3D(ray3D, cylinder3D, t, ray3DOffset, cylinder3DOffset);
 		
-		final double[] vector3DU = vector3DNormalize(vector3D(-phiMax * point3DGetY(point3D), phiMax * point3DGetX(point3D), 0.0D));
-		final double[] vector3DV = vector3DNormalize(vector3D(0.0D, 0.0D, zMax - zMin));
+		final double uX = -phiMax * point3DGetY(point3DSurfaceIntersectionPoint);
+		final double uY = +phiMax * point3DGetX(point3DSurfaceIntersectionPoint);
+		final double uZ = +0.0D;
+		
+		final double vX = 0.0D;
+		final double vY = 0.0D;
+		final double vZ = zMax - zMin;
+		
+		final double[] vector3DU = vector3DNormalize(vector3D(uX, uY, uZ));
+		final double[] vector3DV = vector3DNormalize(vector3D(vX, vY, vZ));
 		final double[] vector3DW = vector3DCrossProduct(vector3DU, vector3DV);
 		
 		return orthonormalBasis33D(vector3DU, vector3DV, vector3DW);
@@ -272,20 +283,24 @@ public final class OrthonormalBasis {
 	
 //	TODO: Add Javadocs!
 	public static double[] orthonormalBasis33DFromDisk3D(final double[] ray3D, final double[] disk3D, final double t, final int ray3DOffset, final int disk3DOffset) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
-		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
-		
 		final double phiMax = disk3DGetPhiMax(disk3D, disk3DOffset);
 		final double radiusInner = disk3DGetRadiusInner(disk3D, disk3DOffset);
 		final double radiusOuter = disk3DGetRadiusOuter(disk3D, disk3DOffset);
 		
-		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		final double[] point3DSurfaceIntersectionPoint = point3DSurfaceIntersectionPointDisk3D(ray3D, disk3D, t, ray3DOffset, disk3DOffset);
 		
-		final double distance = sqrt(point3DGetX(point3D) * point3DGetX(point3D) + point3DGetY(point3D) * point3DGetY(point3D));
+		final double distance = sqrt(point3DGetX(point3DSurfaceIntersectionPoint) * point3DGetX(point3DSurfaceIntersectionPoint) + point3DGetY(point3DSurfaceIntersectionPoint) * point3DGetY(point3DSurfaceIntersectionPoint));
 		
-		final double[] vector3DU = vector3DNormalize(vector3D(-phiMax * point3DGetY(point3D), phiMax * point3DGetX(point3D), 0.0D));
-		final double[] vector3DV = vector3DNormalize(vector3D(point3DGetX(point3D) * (radiusInner - radiusOuter) / distance, point3DGetY(point3D) * (radiusInner - radiusOuter) / distance, 0.0D));
+		final double uX = -phiMax * point3DGetY(point3DSurfaceIntersectionPoint);
+		final double uY = +phiMax * point3DGetX(point3DSurfaceIntersectionPoint);
+		final double uZ = +0.0D;
+		
+		final double vX = point3DGetX(point3DSurfaceIntersectionPoint) * (radiusInner - radiusOuter) / distance;
+		final double vY = point3DGetY(point3DSurfaceIntersectionPoint) * (radiusInner - radiusOuter) / distance;
+		final double vZ = 0.0D;
+		
+		final double[] vector3DU = vector3DNormalize(vector3D(uX, uY, uZ));
+		final double[] vector3DV = vector3DNormalize(vector3D(vX, vY, vZ));
 		final double[] vector3DW = vector3DCrossProduct(vector3DU, vector3DV);
 		
 		return orthonormalBasis33D(vector3DU, vector3DV, vector3DW);
@@ -320,7 +335,7 @@ public final class OrthonormalBasis {
 		
 		final double uX = -phiMax * point3DGetY(point3DTransformed);
 		final double uY = +phiMax * point3DGetX(point3DTransformed);
-		final double uZ = 0.0D;
+		final double uZ = +0.0D;
 		
 		final double vX = (point3DGetX(point3DB) - point3DGetX(point3DA)) * cosPhi - (point3DGetY(point3DB) - point3DGetY(point3DA)) * sinPhi;
 		final double vY = (point3DGetX(point3DB) - point3DGetX(point3DA)) * sinPhi + (point3DGetY(point3DB) - point3DGetY(point3DA)) * cosPhi;

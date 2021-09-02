@@ -27,6 +27,7 @@ import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.finiteOrDefault;
 import static org.dayflower.utility.Doubles.gamma;
+import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.saturate;
@@ -396,10 +397,7 @@ public final class Vector3D implements Node {
 	 * @return the spherical phi angle
 	 */
 	public double sphericalPhi() {
-		final double sphericalPhi0 = atan2(this.component2, this.component1);
-		final double sphericalPhi1 = sphericalPhi0 < 0.0D ? sphericalPhi0 + 2.0D * PI : sphericalPhi0;
-		
-		return sphericalPhi1;
+		return getOrAdd(atan2(this.component2, this.component1), 0.0D, PI_MULTIPLIED_BY_2);
 	}
 	
 	/**

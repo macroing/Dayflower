@@ -1,3 +1,11 @@
+2021-09-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the constructor Vector2D(Point3D) to the Vector2D class.
+	* ADD:		Add the constructor Vector2F(Point3F) to the Vector2F class.
+	* ADD:		Add the methods scale(Point3D, Vector2D), scale(Point3D, Vector3D) and sphericalPhi() to the Point3D class.
+	* ADD:		Add the methods scale(Point3F, Vector2F), scale(Point3F, Vector3F) and sphericalPhi() to the Point3F class.
+	* CHANGE:	Update the Simplex API.
+
 2021-09-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the DotProductTexture class.

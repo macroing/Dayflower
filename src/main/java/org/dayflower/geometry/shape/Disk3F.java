@@ -18,12 +18,9 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.atan2;
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.getOrAdd;
+import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.sqrt;
 
 import java.io.DataOutput;
 import java.io.IOException;
@@ -39,6 +36,7 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 
@@ -200,61 +198,13 @@ public final class Disk3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F origin = ray.getOrigin();
+		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		final Vector3F direction = ray.getDirection();
-		
-		if(isZero(direction.getZ())) {
+		if(isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final float t = (this.zMax - origin.getZ()) / direction.getZ();
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final Point3F point = Point3F.add(origin, direction, t);
-		
-		final float x = point.getX();
-		final float y = point.getY();
-		
-		final float distanceSquared = x * x + y * y;
-		
-		final float radiusInner = this.radiusInner;
-		final float radiusOuter = this.radiusOuter;
-		
-		if(distanceSquared > radiusOuter * radiusOuter || distanceSquared < radiusInner * radiusInner) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final float phi = getOrAdd(atan2(y, x), 0.0F, PI_MULTIPLIED_BY_2);
-		final float phiMax = this.phiMax.getRadians();
-		
-		if(phi > phiMax) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final float distance = sqrt(distanceSquared);
-		
-		final float u = phi / phiMax;
-		final float v = (radiusOuter - distance) / (radiusOuter - radiusInner);
-		
-		final Vector3F dPDU = Vector3F.normalize(new Vector3F(-phiMax * y, phiMax * x, 0.0F));
-		final Vector3F dPDV = Vector3F.normalize(new Vector3F(x * (radiusInner - radiusOuter) / distance, y * (radiusInner - radiusOuter) / distance, 0.0F));
-		
-		final Vector3F surfaceNormalG = Vector3F.crossProduct(dPDU, dPDV);
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG, dPDV, dPDU);
-		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
-		
-		final Point3F surfaceIntersectionPoint = new Point3F(x, y, this.zMax);
-		
-		final Point2F textureCoordinates = new Point2F(u, v);
-		
-		final Vector3F surfaceIntersectionPointError = new Vector3F();
-		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -370,24 +320,11 @@ public final class Disk3F implements Shape3F {
 			return Float.NaN;
 		}
 		
-		final Point3F point = Point3F.add(origin, direction, t);
+		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
-		final float x = point.getX();
-		final float y = point.getY();
+		final float lengthSquared = new Vector2F(surfaceIntersectionPoint).lengthSquared();
 		
-		final float distanceSquared = x * x + y * y;
-		
-		final float radiusInner = this.radiusInner;
-		final float radiusOuter = this.radiusOuter;
-		
-		if(distanceSquared > radiusOuter * radiusOuter || distanceSquared < radiusInner * radiusInner) {
-			return Float.NaN;
-		}
-		
-		final float phi = getOrAdd(atan2(y, x), 0.0F, PI_MULTIPLIED_BY_2);
-		final float phiMax = this.phiMax.getRadians();
-		
-		if(phi > phiMax) {
+		if(lengthSquared > this.radiusOuter * this.radiusOuter || lengthSquared < this.radiusInner * this.radiusInner || surfaceIntersectionPoint.sphericalPhi() > this.phiMax.getRadians()) {
 			return Float.NaN;
 		}
 		
@@ -438,5 +375,52 @@ public final class Disk3F implements Shape3F {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
+		final float length = new Vector2F(surfaceIntersectionPoint).length();
+		
+		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
+		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final float uZ = +0.0F;
+		
+		final float vX = surfaceIntersectionPoint.getX() * (this.radiusInner - this.radiusOuter) / length;
+		final float vY = surfaceIntersectionPoint.getY() * (this.radiusInner - this.radiusOuter) / length;
+		final float vZ = 0.0F;
+		
+		final Vector3F u = Vector3F.normalize(new Vector3F(uX, uY, uZ));
+		final Vector3F v = Vector3F.normalize(new Vector3F(vX, vY, vZ));
+		final Vector3F w = Vector3F.crossProduct(u, v);
+		
+		return new OrthonormalBasis33F(w, v, u);
+	}
+	
+	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
+		final float u = surfaceIntersectionPoint.sphericalPhi() / this.phiMax.getRadians();
+		final float v = (this.radiusOuter - new Vector2F(surfaceIntersectionPoint).length()) / (this.radiusOuter - this.radiusInner);
+		
+		return new Point2F(u, v);
+	}
+	
+	private Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
+		final Point3F surfaceIntersectionPoint = Point3F.add(ray.getOrigin(), ray.getDirection(), t);
+		final Point3F surfaceIntersectionPointTransformed = new Point3F(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getY(), this.zMax);
+		
+		return surfaceIntersectionPointTransformed;
+	}
+	
+	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float t) {
+		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+		
+		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		
+		final Vector3F surfaceIntersectionPointError = new Vector3F();
+		
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
 	}
 }

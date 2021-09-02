@@ -20,7 +20,10 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.MIN_VALUE;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Floats.atan2;
 import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.getOrAdd;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
@@ -289,6 +292,15 @@ public final class Point3F implements Node {
 	 */
 	public float getZ() {
 		return this.component3;
+	}
+	
+	/**
+	 * Returns the spherical phi angle.
+	 * 
+	 * @return the spherical phi angle
+	 */
+	public float sphericalPhi() {
+		return getOrAdd(atan2(this.component2, this.component1), 0.0F, PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -722,6 +734,46 @@ public final class Point3F implements Node {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	/**
+	 * Scales {@code point} using {@code scale}.
+	 * <p>
+	 * Returns a new {@code Point3F} instance with the scale applied.
+	 * <p>
+	 * If either {@code point} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point3F} instance
+	 * @param scale a {@link Vector2F} instance
+	 * @return a new {@code Point3F} instance with the scale applied
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
+	 */
+	public static Point3F scale(final Point3F point, final Vector2F scale) {
+		final float component1 = point.component1 * scale.getComponent1();
+		final float component2 = point.component2 * scale.getComponent2();
+		final float component3 = point.component3;
+		
+		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Scales {@code point} using {@code scale}.
+	 * <p>
+	 * Returns a new {@code Point3F} instance with the scale applied.
+	 * <p>
+	 * If either {@code point} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point3F} instance
+	 * @param scale a {@link Vector3F} instance
+	 * @return a new {@code Point3F} instance with the scale applied
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
+	 */
+	public static Point3F scale(final Point3F point, final Vector3F scale) {
+		final float component1 = point.component1 * scale.getComponent1();
+		final float component2 = point.component2 * scale.getComponent2();
+		final float component3 = point.component3 * scale.getComponent3();
+		
+		return new Point3F(component1, component2, component3);
 	}
 	
 	/**

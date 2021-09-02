@@ -27,6 +27,7 @@ import static org.dayflower.utility.Floats.cos;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.finiteOrDefault;
 import static org.dayflower.utility.Floats.gamma;
+import static org.dayflower.utility.Floats.getOrAdd;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.saturate;
@@ -396,10 +397,7 @@ public final class Vector3F implements Node {
 	 * @return the spherical phi angle
 	 */
 	public float sphericalPhi() {
-		final float sphericalPhi0 = atan2(this.component2, this.component1);
-		final float sphericalPhi1 = sphericalPhi0 < 0.0F ? sphericalPhi0 + 2.0F * PI : sphericalPhi0;
-		
-		return sphericalPhi1;
+		return getOrAdd(atan2(this.component2, this.component1), 0.0F, PI_MULTIPLIED_BY_2);
 	}
 	
 	/**

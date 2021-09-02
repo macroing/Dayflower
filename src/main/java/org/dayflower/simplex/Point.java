@@ -41,6 +41,7 @@ import static org.dayflower.simplex.Shape.cylinder3DGetZMin;
 import static org.dayflower.simplex.Shape.disk3DGetPhiMax;
 import static org.dayflower.simplex.Shape.disk3DGetRadiusInner;
 import static org.dayflower.simplex.Shape.disk3DGetRadiusOuter;
+import static org.dayflower.simplex.Shape.disk3DGetZMax;
 import static org.dayflower.simplex.Shape.hyperboloid3DGetA;
 import static org.dayflower.simplex.Shape.hyperboloid3DGetB;
 import static org.dayflower.simplex.Shape.hyperboloid3DGetPhiMax;
@@ -519,19 +520,15 @@ public final class Point {
 	
 //	TODO: Add Javadocs!
 	public static double[] point2DTextureCoordinatesCone3D(final double[] ray3D, final double[] cone3D, final double t, final int ray3DOffset, final int cone3DOffset) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
-		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
-		
 		final double phiMax = cone3DGetPhiMax(cone3D, cone3DOffset);
 		final double zMax = cone3DGetZMax(cone3D, cone3DOffset);
 		
-		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		final double[] point3DSurfaceIntersectionPoint = point3DSurfaceIntersectionPointCone3D(ray3D, cone3D, t, ray3DOffset, cone3DOffset);
 		
-		final double phi = getOrAdd(atan2(point3DGetY(point3D), point3DGetX(point3D)), 0.0D, PI_MULTIPLIED_BY_2);
+		final double phi = getOrAdd(atan2(point3DGetY(point3DSurfaceIntersectionPoint), point3DGetX(point3DSurfaceIntersectionPoint)), 0.0D, PI_MULTIPLIED_BY_2);
 		
 		final double u = phi / phiMax;
-		final double v = point3DGetZ(point3D) / zMax;
+		final double v = point3DGetZ(point3DSurfaceIntersectionPoint) / zMax;
 		
 		return point2D(u, v);
 	}
@@ -543,25 +540,16 @@ public final class Point {
 	
 //	TODO: Add Javadocs!
 	public static double[] point2DTextureCoordinatesCylinder3D(final double[] ray3D, final double[] cylinder3D, final double t, final int ray3DOffset, final int cylinder3DOffset) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
-		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
-		
 		final double phiMax = cylinder3DGetPhiMax(cylinder3D, cylinder3DOffset);
-		final double radius = cylinder3DGetRadius(cylinder3D, cylinder3DOffset);
 		final double zMax = cylinder3DGetZMax(cylinder3D, cylinder3DOffset);
 		final double zMin = cylinder3DGetZMin(cylinder3D, cylinder3DOffset);
 		
-		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		final double[] point3DSurfaceIntersectionPoint = point3DSurfaceIntersectionPointCylinder3D(ray3D, cylinder3D, t, ray3DOffset, cylinder3DOffset);
 		
-		final double r = sqrt(point3DGetX(point3D) * point3DGetX(point3D) + point3DGetY(point3D) * point3DGetY(point3D));
-		
-		final double[] point3DTransformed = point3D(point3DGetX(point3D) * (radius / r), point3DGetY(point3D) * (radius / r), point3DGetZ(point3D));
-		
-		final double phi = getOrAdd(atan2(point3DGetY(point3DTransformed), point3DGetX(point3DTransformed)), 0.0D, PI_MULTIPLIED_BY_2);
+		final double phi = getOrAdd(atan2(point3DGetY(point3DSurfaceIntersectionPoint), point3DGetX(point3DSurfaceIntersectionPoint)), 0.0D, PI_MULTIPLIED_BY_2);
 		
 		final double u = phi / phiMax;
-		final double v = (point3DGetZ(point3DTransformed) - zMin) / (zMax - zMin);
+		final double v = (point3DGetZ(point3DSurfaceIntersectionPoint) - zMin) / (zMax - zMin);
 		
 		return point2D(u, v);
 	}
@@ -573,19 +561,15 @@ public final class Point {
 	
 //	TODO: Add Javadocs!
 	public static double[] point2DTextureCoordinatesDisk3D(final double[] ray3D, final double[] disk3D, final double t, final int ray3DOffset, final int disk3DOffset) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
-		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
-		
 		final double phiMax = disk3DGetPhiMax(disk3D, disk3DOffset);
 		final double radiusInner = disk3DGetRadiusInner(disk3D, disk3DOffset);
 		final double radiusOuter = disk3DGetRadiusOuter(disk3D, disk3DOffset);
 		
-		final double[] point3D = point3DAdd(point3DOrigin, vector3DDirection, t);
+		final double[] point3DSurfaceIntersectionPoint = point3DSurfaceIntersectionPointDisk3D(ray3D, disk3D, t, ray3DOffset, disk3DOffset);
 		
-		final double distance = sqrt(point3DGetX(point3D) * point3DGetX(point3D) + point3DGetY(point3D) * point3DGetY(point3D));
+		final double distance = sqrt(point3DGetX(point3DSurfaceIntersectionPoint) * point3DGetX(point3DSurfaceIntersectionPoint) + point3DGetY(point3DSurfaceIntersectionPoint) * point3DGetY(point3DSurfaceIntersectionPoint));
 		
-		final double phi = getOrAdd(atan2(point3DGetY(point3D), point3DGetX(point3D)), 0.0D, PI_MULTIPLIED_BY_2);
+		final double phi = getOrAdd(atan2(point3DGetY(point3DSurfaceIntersectionPoint), point3DGetX(point3DSurfaceIntersectionPoint)), 0.0D, PI_MULTIPLIED_BY_2);
 		
 		final double u = phi / phiMax;
 		final double v = (radiusOuter - distance) / (radiusOuter - radiusInner);
@@ -1498,6 +1482,65 @@ public final class Point {
 		point3DResult[point3DResultOffset + 2] = point3D[point3DOffset + 2];
 		
 		return point3DResult;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointCone3D(final double[] ray3D, final double[] cone3D, final double t) {
+		return point3DSurfaceIntersectionPointCone3D(ray3D, cone3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointCone3D(final double[] ray3D, final double[] cone3D, final double t, final int ray3DOffset, final int cone3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double[] point3DSurfaceIntersectionPoint = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		return point3DSurfaceIntersectionPoint;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointCylinder3D(final double[] ray3D, final double[] cylinder3D, final double t) {
+		return point3DSurfaceIntersectionPointCylinder3D(ray3D, cylinder3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointCylinder3D(final double[] ray3D, final double[] cylinder3D, final double t, final int ray3DOffset, final int cylinder3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double[] point3DSurfaceIntersectionPoint = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double radius = cylinder3DGetRadius(cylinder3D, cylinder3DOffset);
+		final double length = sqrt(point3DGetX(point3DSurfaceIntersectionPoint) * point3DGetX(point3DSurfaceIntersectionPoint) + point3DGetY(point3DSurfaceIntersectionPoint) * point3DGetY(point3DSurfaceIntersectionPoint));
+		final double scale = radius / length;
+		
+		final double[] point3DSurfaceIntersectionPointTransformed = point3D(point3DGetX(point3DSurfaceIntersectionPoint) * scale, point3DGetY(point3DSurfaceIntersectionPoint) * scale, point3DGetZ(point3DSurfaceIntersectionPoint));
+		
+		return point3DSurfaceIntersectionPointTransformed;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointDisk3D(final double[] ray3D, final double[] disk3D, final double t) {
+		return point3DSurfaceIntersectionPointDisk3D(ray3D, disk3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointDisk3D(final double[] ray3D, final double[] disk3D, final double t, final int ray3DOffset, final int disk3DOffset) {
+		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
+		
+		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
+		
+		final double[] point3DSurfaceIntersectionPoint = point3DAdd(point3DOrigin, vector3DDirection, t);
+		
+		final double zMax = disk3DGetZMax(disk3D, disk3DOffset);
+		
+		final double[] point3DSurfaceIntersectionPointTransformed = point3D(point3DGetX(point3DSurfaceIntersectionPoint), point3DGetY(point3DSurfaceIntersectionPoint), zMax);
+		
+		return point3DSurfaceIntersectionPointTransformed;
 	}
 	
 	/**

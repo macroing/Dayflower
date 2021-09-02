@@ -18,10 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.atan2;
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.getOrAdd;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.solveQuadraticSystem;
 import static org.dayflower.utility.Floats.sqrt;
@@ -177,74 +174,13 @@ public final class Cone3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F origin = ray.getOrigin();
+		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		final Vector3F direction = ray.getDirection();
-		
-		final float originX = origin.getX();
-		final float originY = origin.getY();
-		final float originZ = origin.getZ();
-		
-		final float directionX = direction.getX();
-		final float directionY = direction.getY();
-		final float directionZ = direction.getZ();
-		
-		final float phiMax = this.phiMax.getRadians();
-		final float radius = this.radius;
-		final float zMax = this.zMax;
-		
-		final float k = (radius / zMax) * (radius / zMax);
-		
-		final float a = directionX * directionX + directionY * directionY - k * directionZ * directionZ;
-		final float b = 2.0F * (directionX * originX + directionY * originY - k * directionZ * (originZ - zMax));
-		final float c = originX * originX + originY * originY - k * (originZ - zMax) * (originZ - zMax);
-		
-		final float[] ts = solveQuadraticSystem(a, b, c);
-		
-		final float t0 = ts[0];
-		final float t1 = ts[1];
-		
-		final float tClosest = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
-		
-		if(isNaN(tClosest)) {
+		if(isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final Point3F pointClosest = Point3F.add(origin, direction, tClosest);
-		
-		final float xClosest = pointClosest.getX();
-		final float yClosest = pointClosest.getY();
-		final float zClosest = pointClosest.getZ();
-		
-		final float phiClosest = getOrAdd(atan2(yClosest, xClosest), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		if(zClosest < 0.0F || zClosest > zMax || phiClosest > phiMax) {
-			if(equal(tClosest, t1)) {
-				return SurfaceIntersection3F.EMPTY;
-			}
-			
-			final float tClipped = !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
-			
-			if(isNaN(tClipped)) {
-				return SurfaceIntersection3F.EMPTY;
-			}
-			
-			final Point3F pointClipped = Point3F.add(origin, direction, tClipped);
-			
-			final float xClipped = pointClipped.getX();
-			final float yClipped = pointClipped.getY();
-			final float zClipped = pointClipped.getZ();
-			
-			final float phiClipped = getOrAdd(atan2(yClipped, xClipped), 0.0F, PI_MULTIPLIED_BY_2);
-			
-			if(zClipped < 0.0F || zClipped > zMax || phiClipped > phiMax) {
-				return SurfaceIntersection3F.EMPTY;
-			}
-			
-			return Optional.of(doCreateSurfaceIntersection(ray, phiClipped, tClipped, xClipped, yClipped, zClipped));
-		}
-		
-		return Optional.of(doCreateSurfaceIntersection(ray, phiClosest, tClosest, xClosest, yClosest, zClosest));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -339,70 +275,30 @@ public final class Cone3F implements Shape3F {
 		
 		final Vector3F direction = ray.getDirection();
 		
-		final float originX = origin.getX();
-		final float originY = origin.getY();
-		final float originZ = origin.getZ();
-		
-		final float directionX = direction.getX();
-		final float directionY = direction.getY();
-		final float directionZ = direction.getZ();
-	
-		final float phiMax = this.phiMax.getRadians();
-		final float radius = this.radius;
-		final float zMax = this.zMax;
-		
-		final float k = (radius / zMax) * (radius / zMax);
-		
-		final float a = directionX * directionX + directionY * directionY - k * directionZ * directionZ;
-		final float b = 2.0F * (directionX * originX + directionY * originY - k * directionZ * (originZ - zMax));
-		final float c = originX * originX + originY * originY - k * (originZ - zMax) * (originZ - zMax);
+		final float k = (this.radius / this.zMax) * (this.radius / this.zMax);
+		final float a = direction.getX() * direction.getX() + direction.getY() * direction.getY() - k * direction.getZ() * direction.getZ();
+		final float b = 2.0F * (direction.getX() * origin.getX() + direction.getY() * origin.getY() - k * direction.getZ() * (origin.getZ() - this.zMax));
+		final float c = origin.getX() * origin.getX() + origin.getY() * origin.getY() - k * (origin.getZ() - this.zMax) * (origin.getZ() - this.zMax);
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
-		final float t0 = ts[0];
-		final float t1 = ts[1];
-		
-		final float tClosest = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
-		
-		if(isNaN(tClosest)) {
-			return Float.NaN;
+		for(int i = 0; i < ts.length; i++) {
+			final float t = ts[i];
+			
+			if(isNaN(t)) {
+				return Float.NaN;
+			}
+			
+			if(t > tMinimum && t < tMaximum) {
+				final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+				
+				if(surfaceIntersectionPoint.getZ() >= 0.0F && surfaceIntersectionPoint.getZ() <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+					return t;
+				}
+			}
 		}
 		
-		final Point3F pointClosest = Point3F.add(origin, direction, tClosest);
-		
-		final float xClosest = pointClosest.getX();
-		final float yClosest = pointClosest.getY();
-		final float zClosest = pointClosest.getZ();
-		
-		final float phiClosest = getOrAdd(atan2(yClosest, xClosest), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		if(zClosest < 0.0F || zClosest > zMax || phiClosest > phiMax) {
-			if(equal(tClosest, t1)) {
-				return Float.NaN;
-			}
-			
-			final float tClipped = !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
-			
-			if(isNaN(tClipped)) {
-				return Float.NaN;
-			}
-			
-			final Point3F pointClipped = Point3F.add(origin, direction, tClipped);
-			
-			final float xClipped = pointClipped.getX();
-			final float yClipped = pointClipped.getY();
-			final float zClipped = pointClipped.getZ();
-			
-			final float phiClipped = getOrAdd(atan2(yClipped, xClipped), 0.0F, PI_MULTIPLIED_BY_2);
-			
-			if(zClipped < 0.0F || zClipped > zMax || phiClipped > phiMax) {
-				return Float.NaN;
-			}
-			
-			return tClipped;
-		}
-		
-		return tClosest;
+		return Float.NaN;
 	}
 	
 	/**
@@ -452,44 +348,47 @@ public final class Cone3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float phi, final float t, final float x, final float y, final float z) {
-		final float phiMax = this.phiMax.getRadians();
-		final float zMax = this.zMax;
+	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
+		final float value = 1.0F - (surfaceIntersectionPoint.getZ() / this.zMax);
 		
-		final float u = phi / phiMax;
-		final float v = z / zMax;
+		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
+		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final float uZ = +0.0F;
 		
-		final Vector3F dPDU = Vector3F.normalize(new Vector3F(-phiMax * y, phiMax * x, 0.0F));
-		final Vector3F dPDV = Vector3F.normalize(new Vector3F(-x / (1.0F - v), -y / (1.0F - v), zMax));
+		final float vX = -surfaceIntersectionPoint.getX() / value;
+		final float vY = -surfaceIntersectionPoint.getY() / value;
+		final float vZ = +this.zMax;
 		
-//		final Vector3F d2PDUU = new Vector3F(x * -phiMax * phiMax, y * -phiMax * phiMax, 0.0F);
-//		final Vector3F d2PDUV = new Vector3F(y * (phiMax / (1.0F - v)), -x * (phiMax / (1.0F - v)), 0.0F);
-//		final Vector3F d2PDVV = new Vector3F();
+		final Vector3F u = Vector3F.normalize(new Vector3F(uX, uY, uZ));
+		final Vector3F v = Vector3F.normalize(new Vector3F(vX, vY, vZ));
+		final Vector3F w = Vector3F.crossProduct(u, v);
 		
-//		final float e0 = Vector3F.dotProduct(dPDU, dPDU);
-//		final float f0 = Vector3F.dotProduct(dPDU, dPDV);
-//		final float g0 = Vector3F.dotProduct(dPDV, dPDV);
+		return new OrthonormalBasis33F(w, v, u);
+	}
+	
+	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
+		final float u = surfaceIntersectionPoint.sphericalPhi() / this.phiMax.getRadians();
+		final float v = surfaceIntersectionPoint.getZ() / this.zMax;
 		
-		final Vector3F surfaceNormalG = Vector3F.crossProduct(dPDU, dPDV);
+		return new Point2F(u, v);
+	}
+	
+	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float t) {
+		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
-//		final float e1 = Vector3F.dotProduct(surfaceNormalG, d2PDUU);
-//		final float f1 = Vector3F.dotProduct(surfaceNormalG, d2PDUV);
-//		final float g1 = Vector3F.dotProduct(surfaceNormalG, d2PDVV);
-		
-//		final float inverseEGFF = 1.0F / (e0 * g0 - f0 * f0);
-		
-//		final Vector3F dNDU = Vector3F.add(Vector3F.multiply(dPDU, (f1 * f0 - e1 * g0) * inverseEGFF), Vector3F.multiply(dPDV, (e1 * f0 - f1 * e0) * inverseEGFF));
-//		final Vector3F dNDV = Vector3F.add(Vector3F.multiply(dPDU, (g1 * f0 - f1 * g0) * inverseEGFF), Vector3F.multiply(dPDV, (f1 * f0 - g1 * e0) * inverseEGFF));
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG, dPDV, dPDU);
+		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
-		final Point3F surfaceIntersectionPoint = new Point3F(x, y, z);
-		
-		final Point2F textureCoordinates = new Point2F(u, v);
+		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
 		
 		final Vector3F surfaceIntersectionPointError = new Vector3F();
 		
 		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
+		return Point3F.add(ray.getOrigin(), ray.getDirection(), t);
 	}
 }

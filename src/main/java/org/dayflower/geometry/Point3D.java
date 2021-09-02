@@ -20,7 +20,10 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.MIN_VALUE;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
@@ -289,6 +292,15 @@ public final class Point3D implements Node {
 	 */
 	public double getZ() {
 		return this.component3;
+	}
+	
+	/**
+	 * Returns the spherical phi angle.
+	 * 
+	 * @return the spherical phi angle
+	 */
+	public double sphericalPhi() {
+		return getOrAdd(atan2(this.component2, this.component1), 0.0D, PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -722,6 +734,46 @@ public final class Point3D implements Node {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	/**
+	 * Scales {@code point} using {@code scale}.
+	 * <p>
+	 * Returns a new {@code Point3D} instance with the scale applied.
+	 * <p>
+	 * If either {@code point} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point3D} instance
+	 * @param scale a {@link Vector2D} instance
+	 * @return a new {@code Point3D} instance with the scale applied
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
+	 */
+	public static Point3D scale(final Point3D point, final Vector2D scale) {
+		final double component1 = point.component1 * scale.getComponent1();
+		final double component2 = point.component2 * scale.getComponent2();
+		final double component3 = point.component3;
+		
+		return new Point3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Scales {@code point} using {@code scale}.
+	 * <p>
+	 * Returns a new {@code Point3D} instance with the scale applied.
+	 * <p>
+	 * If either {@code point} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point3D} instance
+	 * @param scale a {@link Vector3D} instance
+	 * @return a new {@code Point3D} instance with the scale applied
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
+	 */
+	public static Point3D scale(final Point3D point, final Vector3D scale) {
+		final double component1 = point.component1 * scale.getComponent1();
+		final double component2 = point.component2 * scale.getComponent2();
+		final double component3 = point.component3 * scale.getComponent3();
+		
+		return new Point3D(component1, component2, component3);
 	}
 	
 	/**

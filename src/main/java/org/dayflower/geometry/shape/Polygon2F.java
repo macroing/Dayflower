@@ -21,6 +21,7 @@ package org.dayflower.geometry.shape;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -76,6 +77,24 @@ public final class Polygon2F implements Shape2F {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} that contains {@link LineSegment2F} instances that connects all {@link Point2F} instances in this {@code Polygon2F} instance.
+	 * 
+	 * @return a {@code List} that contains {@code LineSegment2F} instances that connects all {@link Point2F} instances in this {@code Polygon2F} instance
+	 */
+	public List<LineSegment2F> getLineSegments() {
+		return new ArrayList<>(this.lineSegments);
+	}
+	
+	/**
+	 * Returns the {@link Rectangle2F} instance that contains this {@code Polygon2F} instance.
+	 * 
+	 * @return the {@code Rectangle2F} instance that contains this {@code Polygon2F} instance
+	 */
+	public Rectangle2F getRectangle() {
+		return this.rectangle;
+	}
 	
 	/**
 	 * Returns a {@code String} with the name of this {@code Polygon2F} instance.
@@ -158,40 +177,7 @@ public final class Polygon2F implements Shape2F {
 	 */
 	@Override
 	public boolean contains(final Point2F point) {
-		if(this.rectangle.contains(point)) {
-			boolean isInside = false;
-			
-			final float pX = point.getX();
-			final float pY = point.getY();
-			
-			for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
-				final Point2F pointI = this.points[i];
-				final Point2F pointJ = this.points[j];
-				
-				final float iX = pointI.getX();
-				final float iY = pointI.getY();
-				final float jX = pointJ.getX();
-				final float jY = pointJ.getY();
-				
-				if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
-					isInside = !isInside;
-				}
-			}
-			
-			if(isInside) {
-				return true;
-			}
-			
-			for(final LineSegment2F lineSegment : this.lineSegments) {
-				if(lineSegment.contains(point)) {
-					return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		return false;
+		return this.rectangle.contains(point) ? doContains(point) || doContainsOnLineSegments(point) : false;
 	}
 	
 	/**
@@ -262,6 +248,41 @@ public final class Polygon2F implements Shape2F {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doContains(final Point2F point) {
+		boolean isInside = false;
+		
+		final float pX = point.getX();
+		final float pY = point.getY();
+		
+		for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
+			final Point2F pointI = this.points[i];
+			final Point2F pointJ = this.points[j];
+			
+			final float iX = pointI.getX();
+			final float iY = pointI.getY();
+			final float jX = pointJ.getX();
+			final float jY = pointJ.getY();
+			
+			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
+				isInside = !isInside;
+			}
+		}
+		
+		return isInside;
+	}
+	
+	private boolean doContainsOnLineSegments(final Point2F point) {
+		for(final LineSegment2F lineSegment : this.lineSegments) {
+			if(lineSegment.contains(point)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

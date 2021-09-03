@@ -884,6 +884,24 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Vector3F} instance that contains the Hadamard product of {@code vectorLHS} and {@code vectorRHS}.
+	 * <p>
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side
+	 * @return a {@code Vector3F} instance that contains the Hadamard product of {@code vectorLHS} and {@code vectorRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static Vector3F hadamardProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
+		final float component1 = vectorLHS.component1 * vectorRHS.component1;
+		final float component2 = vectorLHS.component2 * vectorRHS.component2;
+		final float component3 = vectorLHS.component3 * vectorRHS.component3;
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Returns {@code n} or {@code Vector3F.normalize(Vector3F.subtract(o, i))} as {@code Vector3F.dotProduct(o, i)} is greater than {@code 0.999F} or less than or equal to {@code 0.999F}, respectively.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.

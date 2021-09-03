@@ -272,43 +272,13 @@ public final class Sphere3D implements Shape3D {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Point3D origin = ray.getOrigin();
-		final Point3D center = this.center;
-		
-		final Vector3D direction = ray.getDirection();
-		final Vector3D centerToOrigin = Vector3D.direction(center, origin);
-		
-		final double radius = this.radius;
-		final double radiusSquared = radius * radius;
-		
-		final double a = direction.lengthSquared();
-		final double b = 2.0D * Vector3D.dotProduct(centerToOrigin, direction);
-		final double c = centerToOrigin.lengthSquared() - radiusSquared;
-		
-		final double[] ts = solveQuadraticSystem(a, b, c);
-		
-		final double t0 = ts[0];
-		final double t1 = ts[1];
-		
-		final double t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
+		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
 		if(isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
-		
-		final Vector3D surfaceNormalG = Vector3D.directionNormalized(center, surfaceIntersectionPoint);
-		final Vector3D vG = new Vector3D(-PI_MULTIPLIED_BY_2 * surfaceNormalG.getY(), PI_MULTIPLIED_BY_2 * surfaceNormalG.getX(), 0.0D);
-		
-		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormalG, vG);
-		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
-		
-		final Point2D textureCoordinates = Point2D.sphericalCoordinates(surfaceNormalG);
-		
-		final Vector3D surfaceIntersectionPointError = Vector3D.multiply(Vector3D.absolute(new Vector3D(surfaceIntersectionPoint)), gamma(5));
-		
-		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -500,52 +470,28 @@ public final class Sphere3D implements Shape3D {
 	 */
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Point3D origin = ray.getOrigin();
-		final Point3D center = this.center;
-		
 		final Vector3D direction = ray.getDirection();
-//		final Vector3D centerToOrigin = Vector3D.direction(center, origin);
+		final Vector3D centerToOrigin = Vector3D.direction(this.center, ray.getOrigin());
 		
-//		final double radius = this.radius;
-//		final double radiusSquared = radius * radius;
-		
-//		final double a = direction.lengthSquared();
-//		final double b = 2.0D * Vector3D.dotProduct(centerToOrigin, direction);
-//		final double c = centerToOrigin.lengthSquared() - radiusSquared;
-		
-//		The code below resulted in an optimization, but not in the intersection(Ray3D, double, double) method:
-		final double originX = origin.getX();
-		final double originY = origin.getY();
-		final double originZ = origin.getZ();
-		
-		final double centerX = center.getX();
-		final double centerY = center.getY();
-		final double centerZ = center.getZ();
-		
-		final double directionX = direction.getX();
-		final double directionY = direction.getY();
-		final double directionZ = direction.getZ();
-		
-		final double centerToOriginX = originX - centerX;
-		final double centerToOriginY = originY - centerY;
-		final double centerToOriginZ = originZ - centerZ;
-		
-		final double radius = this.radius;
-		final double radiusSquared = radius * radius;
-		
-		final double a = directionX * directionX + directionY * directionY + directionZ * directionZ;
-		final double b = 2.0D * (centerToOriginX * directionX + centerToOriginY * directionY + centerToOriginZ * directionZ);
-		final double c = (centerToOriginX * centerToOriginX + centerToOriginY * centerToOriginY + centerToOriginZ * centerToOriginZ) - radiusSquared;
-//		The code above resulted in an optimization, but not in the intersection(Ray3D, double, double) method.
+		final double a = direction.lengthSquared();
+		final double b = 2.0D * Vector3D.dotProduct(centerToOrigin, direction);
+		final double c = centerToOrigin.lengthSquared() - this.radius * this.radius;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
-		final double t0 = ts[0];
-		final double t1 = ts[1];
+		for(int i = 0; i < ts.length; i++) {
+			final double t = ts[i];
+			
+			if(isNaN(t)) {
+				return Double.NaN;
+			}
+			
+			if(t > tMinimum && t < tMaximum) {
+				return t;
+			}
+		}
 		
-		final double t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-		
-		return t;
+		return Double.NaN;
 	}
 	
 	/**
@@ -593,80 +539,37 @@ public final class Sphere3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	private double doIntersectionTAnalytic(final Ray3D ray, final double tMinimum, final double tMaximum) {
-//		final Point3D origin = ray.getOrigin();
-//		final Point3D center = getCenter();
-//		
-//		final Vector3D direction = ray.getDirection();
-//		final Vector3D centerToOrigin = Vector3D.direction(center, origin);
-//		
-//		final double radiusSquared = getRadiusSquared();
-//		
-//		final double a = direction.lengthSquared();
-//		final double b = 2.0D * Vector3D.dotProduct(centerToOrigin, direction);
-//		final double c = centerToOrigin.lengthSquared() - radiusSquared;
-//		
-//		final double[] ts = solveQuadraticSystem(a, b, c);
-//		
-//		final double t0 = ts[0];
-//		final double t1 = ts[1];
-//		
-//		final double t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-//		
-//		return t;
-//	}
+	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
+		final Vector3D w = Vector3D.directionNormalized(this.center, surfaceIntersectionPoint);
+		final Vector3D v = new Vector3D(-PI_MULTIPLIED_BY_2 * w.getY(), PI_MULTIPLIED_BY_2 * w.getX(), 0.0D);
+		
+		return new OrthonormalBasis33D(w, v);
+	}
 	
-//	private double doIntersectionTGeometric1(final Ray3D ray, final double tMinimum, final double tMaximum) {
-//		final Point3D origin = ray.getOrigin();
-//		final Point3D center = getCenter();
-//		
-//		final Vector3D direction = ray.getDirection();
-//		final Vector3D originToCenter = Vector3D.direction(origin, center);
-//		
-//		final double radiusSquared = getRadiusSquared();
-//		
-//		final double b = Vector3D.dotProduct(originToCenter, direction);
-//		
-//		final double discriminantSquared = originToCenter.lengthSquared() - b * b;
-//		
-//		if(discriminantSquared > radiusSquared) {
-//			return Double.NaN;
-//		}
-//		
-//		final double discriminant = sqrt(radiusSquared - discriminantSquared);
-//		
-//		final double t0 = min(b - discriminant, b + discriminant);
-//		final double t1 = max(b - discriminant, b + discriminant);
-//		
-//		final double t = t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-//		
-//		return t;
-//	}
+	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
+		return Point2D.sphericalCoordinates(Vector3D.directionNormalized(this.center, surfaceIntersectionPoint));
+	}
 	
-//	private double doIntersectionTGeometric2(final Ray3D ray, final double tMinimum, final double tMaximum) {
-//		final Point3D origin = ray.getOrigin();
-//		final Point3D center = getCenter();
-//		
-//		final Vector3D direction = ray.getDirection();
-//		final Vector3D originToCenter = Vector3D.direction(origin, center);
-//		
-//		final double radiusSquared = getRadiusSquared();
-//		
-//		final double b = Vector3D.dotProduct(originToCenter, direction);
-//		
-//		final double discriminantSquared = b * b - originToCenter.lengthSquared() + radiusSquared;
-//		
-//		if(discriminantSquared < 0.0D) {
-//			return Double.NaN;
-//		}
-//		
-//		final double discriminant = sqrt(discriminantSquared);
-//		
-//		final double t0 = min(b - discriminant, b + discriminant);
-//		final double t1 = max(b - discriminant, b + discriminant);
-//		
-//		final double t = t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-//		
-//		return t;
-//	}
+	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double t) {
+		final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+		
+		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
+		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		
+		final Vector3D surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(surfaceIntersectionPoint);
+		
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
+		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
+	}
+	
+	private static Vector3D doCreateSurfaceIntersectionPointError(final Point3D surfaceIntersectionPoint) {
+		return Vector3D.multiply(Vector3D.absolute(new Vector3D(surfaceIntersectionPoint)), gamma(5));
+	}
 }

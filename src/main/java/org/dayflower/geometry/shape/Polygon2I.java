@@ -155,6 +155,15 @@ public final class Polygon2I implements Shape2I {
 	}
 	
 	/**
+	 * Returns the {@link Rectangle2I} instance that contains this {@code Polygon2I} instance.
+	 * 
+	 * @return the {@code Rectangle2I} instance that contains this {@code Polygon2I} instance
+	 */
+	public Rectangle2I getRectangle() {
+		return this.rectangle;
+	}
+	
+	/**
 	 * Returns a {@code String} with the name of this {@code Polygon2I} instance.
 	 * 
 	 * @return a {@code String} with the name of this {@code Polygon2I} instance
@@ -235,11 +244,7 @@ public final class Polygon2I implements Shape2I {
 	 */
 	@Override
 	public boolean contains(final Point2I point) {
-		if(this.rectangle.contains(point)) {
-			return doContains(point) || doContainsOnLineSegments(point);
-		}
-		
-		return false;
+		return this.rectangle.contains(point) ? doContains(point) || doContainsOnLineSegments(point) : false;
 	}
 	
 	/**

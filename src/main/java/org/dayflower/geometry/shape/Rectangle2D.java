@@ -25,6 +25,8 @@ import static org.dayflower.utility.Doubles.min;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -57,6 +59,7 @@ public final class Rectangle2D implements Shape2D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final List<LineSegment2D> lineSegments;
 	private final Point2D a;
 	private final Point2D b;
 	private final Point2D c;
@@ -90,6 +93,7 @@ public final class Rectangle2D implements Shape2D {
 		this.b = new Point2D(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.c = new Point2D(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.d = new Point2D(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
+		this.lineSegments = LineSegment2D.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -113,41 +117,59 @@ public final class Rectangle2D implements Shape2D {
 		this.b = b;
 		this.c = c;
 		this.d = d;
+		this.lineSegments = LineSegment2D.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link Point2D} with the minimum X and minimum Y coordinate values.
+	 * Returns a {@code List} that contains {@link LineSegment2D} instances that connects all {@link Point2D} instances in this {@code Rectangle2D} instance.
 	 * 
-	 * @return the {@code Point2D} with the minimum X and minimum Y coordinate values
+	 * @return a {@code List} that contains {@code LineSegment2D} instances that connects all {@link Point2D} instances in this {@code Rectangle2D} instance
+	 */
+	public List<LineSegment2D> getLineSegments() {
+		return new ArrayList<>(this.lineSegments);
+	}
+	
+	/**
+	 * Returns the {@link Point2D} instance denoted by A.
+	 * <p>
+	 * This {@code Point2D} instance usually contains the minimum X and minimum Y component values.
+	 * 
+	 * @return the {@code Point2D} instance denoted by A
 	 */
 	public Point2D getA() {
 		return this.a;
 	}
 	
 	/**
-	 * Returns the {@link Point2D} with the minimum X and maximum Y coordinate values.
+	 * Returns the {@link Point2D} instance denoted by B.
+	 * <p>
+	 * This {@code Point2D} instance usually contains the minimum X and maximum Y component values.
 	 * 
-	 * @return the {@code Point2D} with the minimum X and maximum Y coordinate values
+	 * @return the {@code Point2D} instance denoted by B
 	 */
 	public Point2D getB() {
 		return this.b;
 	}
 	
 	/**
-	 * Returns the {@link Point2D} with the maximum X and maximum Y coordinate values.
+	 * Returns the {@link Point2D} instance denoted by C.
+	 * <p>
+	 * This {@code Point2D} instance usually contains the maximum X and maximum Y component values.
 	 * 
-	 * @return the {@code Point2D} with the maximum X and maximum Y coordinate values
+	 * @return the {@code Point2D} instance denoted by C
 	 */
 	public Point2D getC() {
 		return this.c;
 	}
 	
 	/**
-	 * Returns the {@link Point2D} with the maximum X and minimum Y coordinate values.
+	 * Returns the {@link Point2D} instance denoted by D.
+	 * <p>
+	 * This {@code Point2D} instance usually contains the maximum X and minimum Y component values.
 	 * 
-	 * @return the {@code Point2D} with the maximum X and minimum Y coordinate values
+	 * @return the {@code Point2D} instance denoted by D
 	 */
 	public Point2D getD() {
 		return this.d;
@@ -200,6 +222,12 @@ public final class Rectangle2D implements Shape2D {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				for(final LineSegment2D lineSegment : this.lineSegments) {
+					if(!lineSegment.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
 				if(!this.a.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -234,7 +262,7 @@ public final class Rectangle2D implements Shape2D {
 	 */
 	@Override
 	public boolean contains(final Point2D point) {
-		return point.getX() >= this.a.getX() && point.getX() <= this.c.getX() && point.getY() >= this.a.getY() && point.getY() <= this.c.getY();
+		return doContains(point) || doContainsOnLineSegments(point);
 	}
 	
 	/**
@@ -250,6 +278,8 @@ public final class Rectangle2D implements Shape2D {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Rectangle2D)) {
+			return false;
+		} else if(!Objects.equals(this.lineSegments, Rectangle2D.class.cast(object).lineSegments)) {
 			return false;
 		} else if(!Objects.equals(this.a, Rectangle2D.class.cast(object).a)) {
 			return false;
@@ -270,7 +300,10 @@ public final class Rectangle2D implements Shape2D {
 	 * @return the height of this {@code Rectangle2D} instance
 	 */
 	public double getHeight() {
-		return this.c.getY() - this.a.getY();
+		final double maximumY = max(max(this.a.getY(), this.b.getY()), max(this.c.getY(), this.d.getY()));
+		final double minimumY = min(min(this.a.getY(), this.b.getY()), min(this.c.getY(), this.d.getY()));
+		
+		return maximumY - minimumY;
 	}
 	
 	/**
@@ -279,7 +312,10 @@ public final class Rectangle2D implements Shape2D {
 	 * @return the width of this {@code Rectangle2D} instance
 	 */
 	public double getWidth() {
-		return this.c.getX() - this.a.getX();
+		final double maximumX = max(max(this.a.getX(), this.b.getX()), max(this.c.getX(), this.d.getX()));
+		final double minimumX = min(min(this.a.getX(), this.b.getX()), min(this.c.getX(), this.d.getX()));
+		
+		return maximumX - minimumX;
 	}
 	
 	/**
@@ -299,7 +335,7 @@ public final class Rectangle2D implements Shape2D {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.a, this.b, this.c, this.d);
+		return Objects.hash(this.lineSegments, this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -443,6 +479,43 @@ public final class Rectangle2D implements Shape2D {
 		final Point2D maximum = Point2D.maximum(a.getC(), b.getC());
 		
 		return new Rectangle2D(minimum, maximum);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doContains(final Point2D point) {
+		boolean isInside = false;
+		
+		final double pX = point.getX();
+		final double pY = point.getY();
+		
+		final Point2D[] points = {this.a, this.b, this.c, this.d};
+		
+		for(int i = 0, j = points.length - 1; i < points.length; j = i++) {
+			final Point2D pointI = points[i];
+			final Point2D pointJ = points[j];
+			
+			final double iX = pointI.getX();
+			final double iY = pointI.getY();
+			final double jX = pointJ.getX();
+			final double jY = pointJ.getY();
+			
+			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
+				isInside = !isInside;
+			}
+		}
+		
+		return isInside;
+	}
+	
+	private boolean doContainsOnLineSegments(final Point2D point) {
+		for(final LineSegment2D lineSegment : this.lineSegments) {
+			if(lineSegment.contains(point)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

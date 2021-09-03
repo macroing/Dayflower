@@ -18,12 +18,15 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Ints.abs;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -54,6 +57,7 @@ public final class Rectangle2I implements Shape2I {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final List<LineSegment2I> lineSegments;
 	private final Point2I a;
 	private final Point2I b;
 	private final Point2I c;
@@ -87,6 +91,7 @@ public final class Rectangle2I implements Shape2I {
 		this.b = new Point2I(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.c = new Point2I(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.d = new Point2I(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
+		this.lineSegments = LineSegment2I.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -110,6 +115,7 @@ public final class Rectangle2I implements Shape2I {
 		this.b = b;
 		this.c = c;
 		this.d = d;
+		this.lineSegments = LineSegment2I.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -125,6 +131,7 @@ public final class Rectangle2I implements Shape2I {
 		this.b = new Point2I(rectangle.getB());
 		this.c = new Point2I(rectangle.getC());
 		this.d = new Point2I(rectangle.getD());
+		this.lineSegments = LineSegment2I.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -140,41 +147,59 @@ public final class Rectangle2I implements Shape2I {
 		this.b = new Point2I(rectangle.getB());
 		this.c = new Point2I(rectangle.getC());
 		this.d = new Point2I(rectangle.getD());
+		this.lineSegments = LineSegment2I.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link Point2I} with the minimum X and minimum Y coordinate values.
+	 * Returns a {@code List} that contains {@link LineSegment2I} instances that connects all {@link Point2I} instances in this {@code Rectangle2I} instance.
 	 * 
-	 * @return the {@code Point2I} with the minimum X and minimum Y coordinate values
+	 * @return a {@code List} that contains {@code LineSegment2I} instances that connects all {@link Point2I} instances in this {@code Rectangle2I} instance
+	 */
+	public List<LineSegment2I> getLineSegments() {
+		return new ArrayList<>(this.lineSegments);
+	}
+	
+	/**
+	 * Returns the {@link Point2I} instance denoted by A.
+	 * <p>
+	 * This {@code Point2I} instance usually contains the minimum X and minimum Y component values.
+	 * 
+	 * @return the {@code Point2I} instance denoted by A
 	 */
 	public Point2I getA() {
 		return this.a;
 	}
 	
 	/**
-	 * Returns the {@link Point2I} with the minimum X and maximum Y coordinate values.
+	 * Returns the {@link Point2I} instance denoted by B.
+	 * <p>
+	 * This {@code Point2I} instance usually contains the minimum X and maximum Y component values.
 	 * 
-	 * @return the {@code Point2I} with the minimum X and maximum Y coordinate values
+	 * @return the {@code Point2I} instance denoted by B
 	 */
 	public Point2I getB() {
 		return this.b;
 	}
 	
 	/**
-	 * Returns the {@link Point2I} with the maximum X and maximum Y coordinate values.
+	 * Returns the {@link Point2I} instance denoted by C.
+	 * <p>
+	 * This {@code Point2I} instance usually contains the maximum X and maximum Y component values.
 	 * 
-	 * @return the {@code Point2I} with the maximum X and maximum Y coordinate values
+	 * @return the {@code Point2I} instance denoted by C
 	 */
 	public Point2I getC() {
 		return this.c;
 	}
 	
 	/**
-	 * Returns the {@link Point2I} with the maximum X and minimum Y coordinate values.
+	 * Returns the {@link Point2I} instance denoted by D.
+	 * <p>
+	 * This {@code Point2I} instance usually contains the maximum X and minimum Y component values.
 	 * 
-	 * @return the {@code Point2I} with the maximum X and minimum Y coordinate values
+	 * @return the {@code Point2I} instance denoted by D
 	 */
 	public Point2I getD() {
 		return this.d;
@@ -227,6 +252,12 @@ public final class Rectangle2I implements Shape2I {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				for(final LineSegment2I lineSegment : this.lineSegments) {
+					if(!lineSegment.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
 				if(!this.a.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -261,7 +292,7 @@ public final class Rectangle2I implements Shape2I {
 	 */
 	@Override
 	public boolean contains(final Point2I point) {
-		return point.getX() >= this.a.getX() && point.getX() <= this.c.getX() && point.getY() >= this.a.getY() && point.getY() <= this.c.getY();
+		return doContains(point) || doContainsOnLineSegments(point);
 	}
 	
 	/**
@@ -277,6 +308,8 @@ public final class Rectangle2I implements Shape2I {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Rectangle2I)) {
+			return false;
+		} else if(!Objects.equals(this.lineSegments, Rectangle2I.class.cast(object).lineSegments)) {
 			return false;
 		} else if(!Objects.equals(this.a, Rectangle2I.class.cast(object).a)) {
 			return false;
@@ -321,7 +354,10 @@ public final class Rectangle2I implements Shape2I {
 	 * @return the height of this {@code Rectangle2I} instance
 	 */
 	public int getHeight() {
-		return this.c.getY() - this.a.getY();
+		final int maximumY = max(max(this.a.getY(), this.b.getY()), max(this.c.getY(), this.d.getY()));
+		final int minimumY = min(min(this.a.getY(), this.b.getY()), min(this.c.getY(), this.d.getY()));
+		
+		return maximumY - minimumY;
 	}
 	
 	/**
@@ -340,7 +376,10 @@ public final class Rectangle2I implements Shape2I {
 	 * @return the width of this {@code Rectangle2I} instance
 	 */
 	public int getWidth() {
-		return this.c.getX() - this.a.getX();
+		final int maximumX = max(max(this.a.getX(), this.b.getX()), max(this.c.getX(), this.d.getX()));
+		final int minimumX = min(min(this.a.getX(), this.b.getX()), min(this.c.getX(), this.d.getX()));
+		
+		return maximumX - minimumX;
 	}
 	
 	/**
@@ -350,7 +389,7 @@ public final class Rectangle2I implements Shape2I {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.a, this.b, this.c, this.d);
+		return Objects.hash(this.lineSegments, this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -453,6 +492,43 @@ public final class Rectangle2I implements Shape2I {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private boolean doContains(final Point2I point) {
+		boolean isInside = false;
+		
+		final int pX = point.getX();
+		final int pY = point.getY();
+		
+		final Point2I[] points = {this.a, this.b, this.c, this.d};
+		
+		for(int i = 0, j = points.length - 1; i < points.length; j = i++) {
+			final Point2I pointI = points[i];
+			final Point2I pointJ = points[j];
+			
+			final int iX = pointI.getX();
+			final int iY = pointI.getY();
+			final int jX = pointJ.getX();
+			final int jY = pointJ.getY();
+			
+			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
+				isInside = !isInside;
+			}
+		}
+		
+		return isInside;
+	}
+	
+	private boolean doContainsOnLineSegments(final Point2I point) {
+		for(final LineSegment2I lineSegment : this.lineSegments) {
+			if(lineSegment.contains(point)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static void doCheckPointValidity(final Point2I a, final Point2I b, final Point2I c, final Point2I d) {
 		Objects.requireNonNull(a, "a == null");
 		Objects.requireNonNull(b, "b == null");
@@ -464,8 +540,11 @@ public final class Rectangle2I implements Shape2I {
 		final int distanceCD = Point2I.distance(c, d);
 		final int distanceDA = Point2I.distance(d, a);
 		
-		final boolean isValidABCD = distanceAB == distanceCD;
-		final boolean isValidBCDA = distanceBC == distanceDA;
+		final int deltaABCD = abs(distanceAB - distanceCD);
+		final int deltaBCDA = abs(distanceBC - distanceDA);
+		
+		final boolean isValidABCD = deltaABCD == 0;
+		final boolean isValidBCDA = deltaBCDA == 0;
 		final boolean isValid = isValidABCD && isValidBCDA;
 		
 		if(!isValid) {

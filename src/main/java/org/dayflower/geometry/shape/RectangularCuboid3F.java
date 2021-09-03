@@ -124,41 +124,13 @@ public final class RectangularCuboid3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F maximum = getMaximum();
-		final Point3F minimum = getMinimum();
-		final Point3F origin = ray.getOrigin();
-		
-		final Vector3F direction = ray.getDirection();
-		final Vector3F directionReciprocal = Vector3F.reciprocal(direction);
-		
-		final float t0X = (minimum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float t0Y = (minimum.getY() - origin.getY()) * directionReciprocal.getY();
-		final float t0Z = (minimum.getZ() - origin.getZ()) * directionReciprocal.getZ();
-		final float t1X = (maximum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float t1Y = (maximum.getY() - origin.getY()) * directionReciprocal.getY();
-		final float t1Z = (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ();
-		
-		final float t0 = max(min(t0X, t1X), min(t0Y, t1Y), min(t0Z, t1Z));
-		final float t1 = min(max(t0X, t1X), max(t0Y, t1Y), max(t0Z, t1Z));
-		
-		final float t = t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
 		if(isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);
-		
-		final int face = doCalculateFace(surfaceIntersectionPoint, maximum, minimum);
-		
-		final Point2F textureCoordinates = doCalculateTextureCoordinates(surfaceIntersectionPoint, maximum, minimum, face);
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(doCalculateSurfaceNormalG(face));
-		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
-		
-		final Vector3F surfaceIntersectionPointError = new Vector3F();
-		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -321,26 +293,26 @@ public final class RectangularCuboid3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F maximum = getMaximum();
-		final Point3F minimum = getMinimum();
-		final Point3F origin = ray.getOrigin();
+		final Vector3F directionReciprocal = Vector3F.reciprocal(ray.getDirection());
+		final Vector3F directionA = Vector3F.hadamardProduct(Vector3F.direction(ray.getOrigin(), getMinimum()), directionReciprocal);
+		final Vector3F directionB = Vector3F.hadamardProduct(Vector3F.direction(ray.getOrigin(), getMaximum()), directionReciprocal);
 		
-		final Vector3F direction = ray.getDirection();
-		final Vector3F directionReciprocal = Vector3F.reciprocal(direction);
+		final float t0 = max(min(directionA.getX(), directionB.getX()), min(directionA.getY(), directionB.getY()), min(directionA.getZ(), directionB.getZ()));
+		final float t1 = min(max(directionA.getX(), directionB.getX()), max(directionA.getY(), directionB.getY()), max(directionA.getZ(), directionB.getZ()));
 		
-		final float t0X = (minimum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float t0Y = (minimum.getY() - origin.getY()) * directionReciprocal.getY();
-		final float t0Z = (minimum.getZ() - origin.getZ()) * directionReciprocal.getZ();
-		final float t1X = (maximum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float t1Y = (maximum.getY() - origin.getY()) * directionReciprocal.getY();
-		final float t1Z = (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ();
+		if(t0 > t1) {
+			return Float.NaN;
+		}
 		
-		final float t0 = max(min(t0X, t1X), min(t0Y, t1Y), min(t0Z, t1Z));
-		final float t1 = min(max(t0X, t1X), max(t0Y, t1Y), max(t0Z, t1Z));
+		if(t0 > tMinimum && t0 < tMaximum) {
+			return t0;
+		}
 		
-		final float t = t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+		if(t1 > tMinimum && t1 < tMaximum) {
+			return t1;
+		}
 		
-		return t;
+		return Float.NaN;
 	}
 	
 	/**
@@ -388,75 +360,83 @@ public final class RectangularCuboid3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Point2F doCalculateTextureCoordinates(final Point3F surfaceIntersectionPoint, final Point3F maximum, final Point3F minimum, final int face) {
-		switch(face) {
-			case 1:
-				return new Point2F(normalize(surfaceIntersectionPoint.getZ(), minimum.getZ(), maximum.getZ()), normalize(surfaceIntersectionPoint.getY(), minimum.getY(), maximum.getY()));
-			case 2:
-				return new Point2F(normalize(surfaceIntersectionPoint.getZ(), minimum.getZ(), maximum.getZ()), normalize(surfaceIntersectionPoint.getY(), minimum.getY(), maximum.getY()));
-			case 3:
-				return new Point2F(normalize(surfaceIntersectionPoint.getX(), minimum.getX(), maximum.getX()), normalize(surfaceIntersectionPoint.getZ(), minimum.getZ(), maximum.getZ()));
-			case 4:
-				return new Point2F(normalize(surfaceIntersectionPoint.getX(), minimum.getX(), maximum.getX()), normalize(surfaceIntersectionPoint.getZ(), minimum.getZ(), maximum.getZ()));
-			case 5:
-				return new Point2F(normalize(surfaceIntersectionPoint.getX(), minimum.getX(), maximum.getX()), normalize(surfaceIntersectionPoint.getY(), minimum.getY(), maximum.getY()));
-			case 6:
-				return new Point2F(normalize(surfaceIntersectionPoint.getX(), minimum.getX(), maximum.getX()), normalize(surfaceIntersectionPoint.getY(), minimum.getY(), maximum.getY()));
-			default:
-				return new Point2F(0.5F, 0.5F);
+	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
+		final Point3F midpoint = Point3F.midpoint(this.maximum, this.minimum);
+		
+		final Vector3F halfDirection = Vector3F.multiply(Vector3F.direction(this.minimum, this.maximum), 0.5F);
+		
+		if(surfaceIntersectionPoint.getX() + halfDirection.getX() - 0.0001F < midpoint.getX()) {
+			return new OrthonormalBasis33F(Vector3F.x(-1.0F));
 		}
+		
+		if(surfaceIntersectionPoint.getX() - halfDirection.getX() + 0.0001F > midpoint.getX()) {
+			return new OrthonormalBasis33F(Vector3F.x(+1.0F));
+		}
+		
+		if(surfaceIntersectionPoint.getY() + halfDirection.getY() - 0.0001F < midpoint.getY()) {
+			return new OrthonormalBasis33F(Vector3F.y(-1.0F));
+		}
+		
+		if(surfaceIntersectionPoint.getY() - halfDirection.getY() + 0.0001F > midpoint.getY()) {
+			return new OrthonormalBasis33F(Vector3F.y(+1.0F));
+		}
+		
+		if(surfaceIntersectionPoint.getZ() + halfDirection.getZ() - 0.0001F < midpoint.getZ()) {
+			return new OrthonormalBasis33F(Vector3F.z(-1.0F));
+		}
+		
+		if(surfaceIntersectionPoint.getZ() - halfDirection.getZ() + 0.0001F > midpoint.getZ()) {
+			return new OrthonormalBasis33F(Vector3F.z(+1.0F));
+		}
+		
+		return new OrthonormalBasis33F();
 	}
 	
-	private static Vector3F doCalculateSurfaceNormalG(final int face) {
-		switch(face) {
-			case 1:
-				return Vector3F.x(-1.0F);
-			case 2:
-				return Vector3F.x(+1.0F);
-			case 3:
-				return Vector3F.y(-1.0F);
-			case 4:
-				return Vector3F.y(+1.0F);
-			case 5:
-				return Vector3F.z(-1.0F);
-			case 6:
-				return Vector3F.z(+1.0F);
-			default:
-				return new Vector3F();
+	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
+		final Point3F midpoint = Point3F.midpoint(this.maximum, this.minimum);
+		
+		final Vector3F halfDirection = Vector3F.multiply(Vector3F.direction(this.minimum, this.maximum), 0.5F);
+		
+		if(surfaceIntersectionPoint.getX() + halfDirection.getX() - 0.0001F < midpoint.getX() || surfaceIntersectionPoint.getX() - halfDirection.getX() + 0.0001F > midpoint.getX()) {
+			final float u = normalize(surfaceIntersectionPoint.getZ(), this.minimum.getZ(), this.maximum.getZ());
+			final float v = normalize(surfaceIntersectionPoint.getY(), this.minimum.getY(), this.maximum.getY());
+			
+			return new Point2F(u, v);
 		}
+		
+		if(surfaceIntersectionPoint.getY() + halfDirection.getY() - 0.0001F < midpoint.getY() || surfaceIntersectionPoint.getY() - halfDirection.getY() + 0.0001F > midpoint.getY()) {
+			final float u = normalize(surfaceIntersectionPoint.getX(), this.minimum.getX(), this.maximum.getX());
+			final float v = normalize(surfaceIntersectionPoint.getZ(), this.minimum.getZ(), this.maximum.getZ());
+			
+			return new Point2F(u, v);
+		}
+		
+		if(surfaceIntersectionPoint.getZ() + halfDirection.getZ() - 0.0001F < midpoint.getZ() || surfaceIntersectionPoint.getZ() - halfDirection.getZ() + 0.0001F > midpoint.getZ()) {
+			final float u = normalize(surfaceIntersectionPoint.getX(), this.minimum.getX(), this.maximum.getX());
+			final float v = normalize(surfaceIntersectionPoint.getY(), this.minimum.getY(), this.maximum.getY());
+			
+			return new Point2F(u, v);
+		}
+		
+		return new Point2F();
 	}
 	
-	private static int doCalculateFace(final Point3F surfaceIntersectionPoint, final Point3F maximum, final Point3F minimum) {
-		final Point3F midpoint = Point3F.midpoint(maximum, minimum);
+	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float t) {
+		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
-		final float surfaceIntersectionPointX = surfaceIntersectionPoint.getX();
-		final float surfaceIntersectionPointY = surfaceIntersectionPoint.getY();
-		final float surfaceIntersectionPointZ = surfaceIntersectionPoint.getZ();
+		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
 		
-		final float maximumX = maximum.getX();
-		final float maximumY = maximum.getY();
-		final float maximumZ = maximum.getZ();
+		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
-		final float minimumX = minimum.getX();
-		final float minimumY = minimum.getY();
-		final float minimumZ = minimum.getZ();
+		final Vector3F surfaceIntersectionPointError = new Vector3F();
 		
-		final float midpointX = midpoint.getX();
-		final float midpointY = midpoint.getY();
-		final float midpointZ = midpoint.getZ();
-		
-		final float halfX = (maximumX - minimumX) * 0.5F;
-		final float halfY = (maximumY - minimumY) * 0.5F;
-		final float halfZ = (maximumZ - minimumZ) * 0.5F;
-		
-		final float epsilon = 0.0001F;
-		
-		final int faceX = surfaceIntersectionPointX < midpointX && surfaceIntersectionPointX + halfX - epsilon < midpointX ? -1 : surfaceIntersectionPointX > midpointX && surfaceIntersectionPointX - halfX + epsilon > midpointX ? 1 : 0;
-		final int faceY = surfaceIntersectionPointY < midpointY && surfaceIntersectionPointY + halfY - epsilon < midpointY ? -1 : surfaceIntersectionPointY > midpointY && surfaceIntersectionPointY - halfY + epsilon > midpointY ? 1 : 0;
-		final int faceZ = surfaceIntersectionPointZ < midpointZ && surfaceIntersectionPointZ + halfZ - epsilon < midpointZ ? -1 : surfaceIntersectionPointZ > midpointZ && surfaceIntersectionPointZ - halfZ + epsilon > midpointZ ? 1 : 0;
-		
-		final int face = faceX == -1 ? 1 : faceX == 1 ? 2 : faceY == -1 ? 3 : faceY == 1 ? 4 : faceZ == -1 ? 5 : faceZ == 1 ? 6 : 0;
-		
-		return face;
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
+		return Point3F.add(ray.getOrigin(), ray.getDirection(), t);
 	}
 }

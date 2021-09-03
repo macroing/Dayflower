@@ -272,43 +272,13 @@ public final class Sphere3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F origin = ray.getOrigin();
-		final Point3F center = this.center;
-		
-		final Vector3F direction = ray.getDirection();
-		final Vector3F centerToOrigin = Vector3F.direction(center, origin);
-		
-		final float radius = this.radius;
-		final float radiusSquared = radius * radius;
-		
-		final float a = direction.lengthSquared();
-		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
-		final float c = centerToOrigin.lengthSquared() - radiusSquared;
-		
-		final float[] ts = solveQuadraticSystem(a, b, c);
-		
-		final float t0 = ts[0];
-		final float t1 = ts[1];
-		
-		final float t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
 		if(isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);
-		
-		final Vector3F surfaceNormalG = Vector3F.directionNormalized(center, surfaceIntersectionPoint);
-		final Vector3F vG = new Vector3F(-PI_MULTIPLIED_BY_2 * surfaceNormalG.getY(), PI_MULTIPLIED_BY_2 * surfaceNormalG.getX(), 0.0F);
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG, vG);
-		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
-		
-		final Point2F textureCoordinates = Point2F.sphericalCoordinates(surfaceNormalG);
-		
-		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(Vector3F.absolute(new Vector3F(surfaceIntersectionPoint)), gamma(5));
-		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -500,52 +470,28 @@ public final class Sphere3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F origin = ray.getOrigin();
-		final Point3F center = this.center;
-		
 		final Vector3F direction = ray.getDirection();
-//		final Vector3F centerToOrigin = Vector3F.direction(center, origin);
+		final Vector3F centerToOrigin = Vector3F.direction(this.center, ray.getOrigin());
 		
-//		final float radius = this.radius;
-//		final float radiusSquared = radius * radius;
-		
-//		final float a = direction.lengthSquared();
-//		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
-//		final float c = centerToOrigin.lengthSquared() - radiusSquared;
-		
-//		The code below resulted in an optimization, but not in the intersection(Ray3F, float, float) method:
-		final float originX = origin.getX();
-		final float originY = origin.getY();
-		final float originZ = origin.getZ();
-		
-		final float centerX = center.getX();
-		final float centerY = center.getY();
-		final float centerZ = center.getZ();
-		
-		final float directionX = direction.getX();
-		final float directionY = direction.getY();
-		final float directionZ = direction.getZ();
-		
-		final float centerToOriginX = originX - centerX;
-		final float centerToOriginY = originY - centerY;
-		final float centerToOriginZ = originZ - centerZ;
-		
-		final float radius = this.radius;
-		final float radiusSquared = radius * radius;
-		
-		final float a = directionX * directionX + directionY * directionY + directionZ * directionZ;
-		final float b = 2.0F * (centerToOriginX * directionX + centerToOriginY * directionY + centerToOriginZ * directionZ);
-		final float c = (centerToOriginX * centerToOriginX + centerToOriginY * centerToOriginY + centerToOriginZ * centerToOriginZ) - radiusSquared;
-//		The code above resulted in an optimization, but not in the intersection(Ray3F, float, float) method.
+		final float a = direction.lengthSquared();
+		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
+		final float c = centerToOrigin.lengthSquared() - this.radius * this.radius;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
-		final float t0 = ts[0];
-		final float t1 = ts[1];
+		for(int i = 0; i < ts.length; i++) {
+			final float t = ts[i];
+			
+			if(isNaN(t)) {
+				return Float.NaN;
+			}
+			
+			if(t > tMinimum && t < tMaximum) {
+				return t;
+			}
+		}
 		
-		final float t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
-		
-		return t;
+		return Float.NaN;
 	}
 	
 	/**
@@ -593,80 +539,37 @@ public final class Sphere3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	private float doIntersectionTAnalytic(final Ray3F ray, final float tMinimum, final float tMaximum) {
-//		final Point3F origin = ray.getOrigin();
-//		final Point3F center = getCenter();
-//		
-//		final Vector3F direction = ray.getDirection();
-//		final Vector3F centerToOrigin = Vector3F.direction(center, origin);
-//		
-//		final float radiusSquared = getRadiusSquared();
-//		
-//		final float a = direction.lengthSquared();
-//		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
-//		final float c = centerToOrigin.lengthSquared() - radiusSquared;
-//		
-//		final float[] ts = solveQuadraticSystem(a, b, c);
-//		
-//		final float t0 = ts[0];
-//		final float t1 = ts[1];
-//		
-//		final float t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
-//		
-//		return t;
-//	}
+	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
+		final Vector3F w = Vector3F.directionNormalized(this.center, surfaceIntersectionPoint);
+		final Vector3F v = new Vector3F(-PI_MULTIPLIED_BY_2 * w.getY(), PI_MULTIPLIED_BY_2 * w.getX(), 0.0F);
+		
+		return new OrthonormalBasis33F(w, v);
+	}
 	
-//	private float doIntersectionTGeometric1(final Ray3F ray, final float tMinimum, final float tMaximum) {
-//		final Point3F origin = ray.getOrigin();
-//		final Point3F center = getCenter();
-//		
-//		final Vector3F direction = ray.getDirection();
-//		final Vector3F originToCenter = Vector3F.direction(origin, center);
-//		
-//		final float radiusSquared = getRadiusSquared();
-//		
-//		final float b = Vector3F.dotProduct(originToCenter, direction);
-//		
-//		final float discriminantSquared = originToCenter.lengthSquared() - b * b;
-//		
-//		if(discriminantSquared > radiusSquared) {
-//			return Float.NaN;
-//		}
-//		
-//		final float discriminant = sqrt(radiusSquared - discriminantSquared);
-//		
-//		final float t0 = min(b - discriminant, b + discriminant);
-//		final float t1 = max(b - discriminant, b + discriminant);
-//		
-//		final float t = t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
-//		
-//		return t;
-//	}
+	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
+		return Point2F.sphericalCoordinates(Vector3F.directionNormalized(this.center, surfaceIntersectionPoint));
+	}
 	
-//	private float doIntersectionTGeometric2(final Ray3F ray, final float tMinimum, final float tMaximum) {
-//		final Point3F origin = ray.getOrigin();
-//		final Point3F center = getCenter();
-//		
-//		final Vector3F direction = ray.getDirection();
-//		final Vector3F originToCenter = Vector3F.direction(origin, center);
-//		
-//		final float radiusSquared = getRadiusSquared();
-//		
-//		final float b = Vector3F.dotProduct(originToCenter, direction);
-//		
-//		final float discriminantSquared = b * b - originToCenter.lengthSquared() + radiusSquared;
-//		
-//		if(discriminantSquared < 0.0F) {
-//			return Float.NaN;
-//		}
-//		
-//		final float discriminant = sqrt(discriminantSquared);
-//		
-//		final float t0 = min(b - discriminant, b + discriminant);
-//		final float t1 = max(b - discriminant, b + discriminant);
-//		
-//		final float t = t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
-//		
-//		return t;
-//	}
+	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float t) {
+		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+		
+		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		
+		final Vector3F surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(surfaceIntersectionPoint);
+		
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
+		return Point3F.add(ray.getOrigin(), ray.getDirection(), t);
+	}
+	
+	private static Vector3F doCreateSurfaceIntersectionPointError(final Point3F surfaceIntersectionPoint) {
+		return Vector3F.multiply(Vector3F.absolute(new Vector3F(surfaceIntersectionPoint)), gamma(5));
+	}
 }

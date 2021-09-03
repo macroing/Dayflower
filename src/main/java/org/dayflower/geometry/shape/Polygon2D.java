@@ -21,6 +21,7 @@ package org.dayflower.geometry.shape;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -76,6 +77,24 @@ public final class Polygon2D implements Shape2D {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} that contains {@link LineSegment2D} instances that connects all {@link Point2D} instances in this {@code Polygon2D} instance.
+	 * 
+	 * @return a {@code List} that contains {@code LineSegment2D} instances that connects all {@link Point2D} instances in this {@code Polygon2D} instance
+	 */
+	public List<LineSegment2D> getLineSegments() {
+		return new ArrayList<>(this.lineSegments);
+	}
+	
+	/**
+	 * Returns the {@link Rectangle2D} instance that contains this {@code Polygon2D} instance.
+	 * 
+	 * @return the {@code Rectangle2D} instance that contains this {@code Polygon2D} instance
+	 */
+	public Rectangle2D getRectangle() {
+		return this.rectangle;
+	}
 	
 	/**
 	 * Returns a {@code String} with the name of this {@code Polygon2D} instance.
@@ -158,40 +177,7 @@ public final class Polygon2D implements Shape2D {
 	 */
 	@Override
 	public boolean contains(final Point2D point) {
-		if(this.rectangle.contains(point)) {
-			boolean isInside = false;
-			
-			final double pX = point.getX();
-			final double pY = point.getY();
-			
-			for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
-				final Point2D pointI = this.points[i];
-				final Point2D pointJ = this.points[j];
-				
-				final double iX = pointI.getX();
-				final double iY = pointI.getY();
-				final double jX = pointJ.getX();
-				final double jY = pointJ.getY();
-				
-				if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
-					isInside = !isInside;
-				}
-			}
-			
-			if(isInside) {
-				return true;
-			}
-			
-			for(final LineSegment2D lineSegment : this.lineSegments) {
-				if(lineSegment.contains(point)) {
-					return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		return false;
+		return this.rectangle.contains(point) ? doContains(point) || doContainsOnLineSegments(point) : false;
 	}
 	
 	/**
@@ -262,6 +248,41 @@ public final class Polygon2D implements Shape2D {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doContains(final Point2D point) {
+		boolean isInside = false;
+		
+		final double pX = point.getX();
+		final double pY = point.getY();
+		
+		for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
+			final Point2D pointI = this.points[i];
+			final Point2D pointJ = this.points[j];
+			
+			final double iX = pointI.getX();
+			final double iY = pointI.getY();
+			final double jX = pointJ.getX();
+			final double jY = pointJ.getY();
+			
+			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
+				isInside = !isInside;
+			}
+		}
+		
+		return isInside;
+	}
+	
+	private boolean doContainsOnLineSegments(final Point2D point) {
+		for(final LineSegment2D lineSegment : this.lineSegments) {
+			if(lineSegment.contains(point)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

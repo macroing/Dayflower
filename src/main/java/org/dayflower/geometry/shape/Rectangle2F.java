@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
@@ -26,6 +25,8 @@ import static org.dayflower.utility.Floats.min;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -58,6 +59,7 @@ public final class Rectangle2F implements Shape2F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final List<LineSegment2F> lineSegments;
 	private final Point2F a;
 	private final Point2F b;
 	private final Point2F c;
@@ -91,6 +93,7 @@ public final class Rectangle2F implements Shape2F {
 		this.b = new Point2F(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.c = new Point2F(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.d = new Point2F(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
+		this.lineSegments = LineSegment2F.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -114,41 +117,59 @@ public final class Rectangle2F implements Shape2F {
 		this.b = b;
 		this.c = c;
 		this.d = d;
+		this.lineSegments = LineSegment2F.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link Point2F} with the minimum X and minimum Y coordinate values.
+	 * Returns a {@code List} that contains {@link LineSegment2F} instances that connects all {@link Point2F} instances in this {@code Rectangle2F} instance.
 	 * 
-	 * @return the {@code Point2F} with the minimum X and minimum Y coordinate values
+	 * @return a {@code List} that contains {@code LineSegment2F} instances that connects all {@link Point2F} instances in this {@code Rectangle2F} instance
+	 */
+	public List<LineSegment2F> getLineSegments() {
+		return new ArrayList<>(this.lineSegments);
+	}
+	
+	/**
+	 * Returns the {@link Point2F} instance denoted by A.
+	 * <p>
+	 * This {@code Point2F} instance usually contains the minimum X and minimum Y component values.
+	 * 
+	 * @return the {@code Point2F} instance denoted by A
 	 */
 	public Point2F getA() {
 		return this.a;
 	}
 	
 	/**
-	 * Returns the {@link Point2F} with the minimum X and maximum Y coordinate values.
+	 * Returns the {@link Point2F} instance denoted by B.
+	 * <p>
+	 * This {@code Point2F} instance usually contains the minimum X and maximum Y component values.
 	 * 
-	 * @return the {@code Point2F} with the minimum X and maximum Y coordinate values
+	 * @return the {@code Point2F} instance denoted by B
 	 */
 	public Point2F getB() {
 		return this.b;
 	}
 	
 	/**
-	 * Returns the {@link Point2F} with the maximum X and maximum Y coordinate values.
+	 * Returns the {@link Point2F} instance denoted by C.
+	 * <p>
+	 * This {@code Point2F} instance usually contains the maximum X and maximum Y component values.
 	 * 
-	 * @return the {@code Point2F} with the maximum X and maximum Y coordinate values
+	 * @return the {@code Point2F} instance denoted by C
 	 */
 	public Point2F getC() {
 		return this.c;
 	}
 	
 	/**
-	 * Returns the {@link Point2F} with the maximum X and minimum Y coordinate values.
+	 * Returns the {@link Point2F} instance denoted by D.
+	 * <p>
+	 * This {@code Point2F} instance usually contains the maximum X and minimum Y component values.
 	 * 
-	 * @return the {@code Point2F} with the maximum X and minimum Y coordinate values
+	 * @return the {@code Point2F} instance denoted by D
 	 */
 	public Point2F getD() {
 		return this.d;
@@ -201,6 +222,12 @@ public final class Rectangle2F implements Shape2F {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				for(final LineSegment2F lineSegment : this.lineSegments) {
+					if(!lineSegment.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
 				if(!this.a.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -235,7 +262,7 @@ public final class Rectangle2F implements Shape2F {
 	 */
 	@Override
 	public boolean contains(final Point2F point) {
-		return point.getX() >= this.a.getX() && point.getX() <= this.c.getX() && point.getY() >= this.a.getY() && point.getY() <= this.c.getY();
+		return doContains(point) || doContainsOnLineSegments(point);
 	}
 	
 	/**
@@ -251,6 +278,8 @@ public final class Rectangle2F implements Shape2F {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Rectangle2F)) {
+			return false;
+		} else if(!Objects.equals(this.lineSegments, Rectangle2F.class.cast(object).lineSegments)) {
 			return false;
 		} else if(!Objects.equals(this.a, Rectangle2F.class.cast(object).a)) {
 			return false;
@@ -271,7 +300,10 @@ public final class Rectangle2F implements Shape2F {
 	 * @return the height of this {@code Rectangle2F} instance
 	 */
 	public float getHeight() {
-		return this.c.getY() - this.a.getY();
+		final float maximumY = max(max(this.a.getY(), this.b.getY()), max(this.c.getY(), this.d.getY()));
+		final float minimumY = min(min(this.a.getY(), this.b.getY()), min(this.c.getY(), this.d.getY()));
+		
+		return maximumY - minimumY;
 	}
 	
 	/**
@@ -280,7 +312,10 @@ public final class Rectangle2F implements Shape2F {
 	 * @return the width of this {@code Rectangle2F} instance
 	 */
 	public float getWidth() {
-		return this.c.getX() - this.a.getX();
+		final float maximumX = max(max(this.a.getX(), this.b.getX()), max(this.c.getX(), this.d.getX()));
+		final float minimumX = min(min(this.a.getX(), this.b.getX()), min(this.c.getX(), this.d.getX()));
+		
+		return maximumX - minimumX;
 	}
 	
 	/**
@@ -300,7 +335,7 @@ public final class Rectangle2F implements Shape2F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.a, this.b, this.c, this.d);
+		return Objects.hash(this.lineSegments, this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -448,6 +483,43 @@ public final class Rectangle2F implements Shape2F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private boolean doContains(final Point2F point) {
+		boolean isInside = false;
+		
+		final float pX = point.getX();
+		final float pY = point.getY();
+		
+		final Point2F[] points = {this.a, this.b, this.c, this.d};
+		
+		for(int i = 0, j = points.length - 1; i < points.length; j = i++) {
+			final Point2F pointI = points[i];
+			final Point2F pointJ = points[j];
+			
+			final float iX = pointI.getX();
+			final float iY = pointI.getY();
+			final float jX = pointJ.getX();
+			final float jY = pointJ.getY();
+			
+			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
+				isInside = !isInside;
+			}
+		}
+		
+		return isInside;
+	}
+	
+	private boolean doContainsOnLineSegments(final Point2F point) {
+		for(final LineSegment2F lineSegment : this.lineSegments) {
+			if(lineSegment.contains(point)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static void doCheckPointValidity(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
 		Objects.requireNonNull(a, "a == null");
 		Objects.requireNonNull(b, "b == null");
@@ -462,7 +534,6 @@ public final class Rectangle2F implements Shape2F {
 		final float deltaABCD = abs(distanceAB - distanceCD);
 		final float deltaBCDA = abs(distanceBC - distanceDA);
 		
-//		TODO: Find a way to check for precision errors. Multiple rotations will fail.
 		final boolean isValidABCD = deltaABCD <= 0.1F;
 		final boolean isValidBCDA = deltaBCDA <= 0.1F;
 		final boolean isValid = isValidABCD && isValidBCDA;

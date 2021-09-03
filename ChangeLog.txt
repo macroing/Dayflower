@@ -1,3 +1,16 @@
+2021-09-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods getLineSegments() and getRectangle() to the Polygon2D class.
+	* ADD:		Add the methods getLineSegments() and getRectangle() to the Polygon2F class.
+	* ADD:		Add the method getRectangle() to the Polygon2I class.
+	* ADD:		Add the method getLineSegments() to the Rectangle2D class.
+	* ADD:		Add the method getLineSegments() to the Rectangle2F class.
+	* ADD:		Add the method hadamardProduct(Vector3D, Vector3D) to the Vector3D class.
+	* ADD:		Add the method hadamardProduct(Vector3F, Vector3F) to the Vector3F class.
+	* CHANGE:	Update the methods contains(Point2D), getHeight() and getWidth() of the Rectangle2D class.
+	* CHANGE:	Update the methods contains(Point2F), getHeight() and getWidth() of the Rectangle2F class.
+	* CHANGE:	Update the methods contains(Point2I), getHeight() and getWidth() of the Rectangle2I class.
+
 2021-09-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the constructor Vector2D(Point3D) to the Vector2D class.

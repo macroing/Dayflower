@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
 
 import java.io.DataOutput;
@@ -114,40 +115,13 @@ public final class Polygon3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Vector3F direction = ray.getDirection();
-		final Vector3F surfaceNormal = this.surfaceNormal;
+		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
-		
-		if(isZero(nDotD)) {
+		if(isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final Point3F origin = ray.getOrigin();
-		final Point3F a = this.points[0];
-		final Point3F b = this.points[1];
-		final Point3F c = this.points[this.points.length - 1];
-		
-		final float t = Vector3F.dotProduct(Vector3F.direction(origin, a), surfaceNormal) / nDotD;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final Point3F p = Point3F.add(origin, direction, t);
-		
-		if(!doContains(p)) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormal);
-		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
-		
-		final Point2F textureCoordinates = doComputeTextureCoordinates(a, b, c, p);
-		
-		final Vector3F surfaceIntersectionPointError = new Vector3F();
-		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, p, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -296,31 +270,19 @@ public final class Polygon3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Vector3F direction = ray.getDirection();
-		final Vector3F surfaceNormal = this.surfaceNormal;
+		final float dotProduct = Vector3F.dotProduct(this.surfaceNormal, ray.getDirection());
 		
-		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
-		
-		if(isZero(nDotD)) {
+		if(isZero(dotProduct)) {
 			return Float.NaN;
 		}
 		
-		final Point3F origin = ray.getOrigin();
-		final Point3F a = this.points[0];
+		final float t = Vector3F.dotProduct(Vector3F.direction(ray.getOrigin(), this.points[0]), this.surfaceNormal) / dotProduct;
 		
-		final float t = Vector3F.dotProduct(Vector3F.direction(origin, a), surfaceNormal) / nDotD;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return Float.NaN;
+		if(t > tMinimum && t < tMaximum && doContains(doCreateSurfaceIntersectionPoint(ray, t))) {
+			return t;
 		}
 		
-		final Point3F p = Point3F.add(origin, direction, t);
-		
-		if(!doContains(p)) {
-			return Float.NaN;
-		}
-		
-		return t;
+		return Float.NaN;
 	}
 	
 	/**
@@ -370,11 +332,19 @@ public final class Polygon3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Point2F doComputeTextureCoordinates(final Point3F a, final Point3F b, final Point3F c, final Point3F p) {
+	private OrthonormalBasis33F doCreateOrthonormalBasisG() {
+		return new OrthonormalBasis33F(this.surfaceNormal);
+	}
+	
+	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
 		final Vector3F surfaceNormalAbs = Vector3F.absolute(this.surfaceNormal);
 		
 		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
 		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
+		
+		final Point3F a = this.points[0];
+		final Point3F b = this.points[1];
+		final Point3F c = this.points[this.points.length - 1];
 		
 		final Vector2F vA = isX ? Vector2F.directionYZ(a) : isY ? Vector2F.directionZX(a) : Vector2F.directionXY(a);
 		final Vector2F vB = isX ? Vector2F.directionYZ(c) : isY ? Vector2F.directionZX(c) : Vector2F.directionXY(c);
@@ -385,13 +355,26 @@ public final class Polygon3F implements Shape3F {
 		final float determinant = Vector2F.crossProduct(vAB, vAC);
 		final float determinantReciprocal = 1.0F / determinant;
 		
-		final float hU = isX ? p.getY() : isY ? p.getZ() : p.getX();
-		final float hV = isX ? p.getZ() : isY ? p.getX() : p.getY();
+		final float hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
+		final float hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
 		
 		final float u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2F.crossProduct(vA, vAB) * determinantReciprocal;
 		final float v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2F.crossProduct(vAC, vA) * determinantReciprocal;
 		
 		return new Point2F(u, v);
+	}
+	
+	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float t) {
+		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+		
+		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG();
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		
+		final Vector3F surfaceIntersectionPointError = new Vector3F();
+		
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
 	}
 	
 	private boolean doContains(final Point3F point) {
@@ -412,6 +395,10 @@ public final class Polygon3F implements Shape3F {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
+		return Point3F.add(ray.getOrigin(), ray.getDirection(), t);
+	}
 	
 	private static Point3F[] doRequireValidPoints(final Point3F[] points) {
 		ParameterArguments.requireNonNullArray(points, "points");

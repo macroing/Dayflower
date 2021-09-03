@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
 
 import java.io.DataOutput;
@@ -114,40 +115,13 @@ public final class Polygon3D implements Shape3D {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Vector3D direction = ray.getDirection();
-		final Vector3D surfaceNormal = this.surfaceNormal;
+		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		final double nDotD = Vector3D.dotProduct(surfaceNormal, direction);
-		
-		if(isZero(nDotD)) {
+		if(isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final Point3D origin = ray.getOrigin();
-		final Point3D a = this.points[0];
-		final Point3D b = this.points[1];
-		final Point3D c = this.points[this.points.length - 1];
-		
-		final double t = Vector3D.dotProduct(Vector3D.direction(origin, a), surfaceNormal) / nDotD;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return SurfaceIntersection3D.EMPTY;
-		}
-		
-		final Point3D p = Point3D.add(origin, direction, t);
-		
-		if(!doContains(p)) {
-			return SurfaceIntersection3D.EMPTY;
-		}
-		
-		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormal);
-		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
-		
-		final Point2D textureCoordinates = doComputeTextureCoordinates(a, b, c, p);
-		
-		final Vector3D surfaceIntersectionPointError = new Vector3D();
-		
-		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, p, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -296,31 +270,19 @@ public final class Polygon3D implements Shape3D {
 	 */
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Vector3D direction = ray.getDirection();
-		final Vector3D surfaceNormal = this.surfaceNormal;
+		final double dotProduct = Vector3D.dotProduct(this.surfaceNormal, ray.getDirection());
 		
-		final double nDotD = Vector3D.dotProduct(surfaceNormal, direction);
-		
-		if(isZero(nDotD)) {
+		if(isZero(dotProduct)) {
 			return Double.NaN;
 		}
 		
-		final Point3D origin = ray.getOrigin();
-		final Point3D a = this.points[0];
+		final double t = Vector3D.dotProduct(Vector3D.direction(ray.getOrigin(), this.points[0]), this.surfaceNormal) / dotProduct;
 		
-		final double t = Vector3D.dotProduct(Vector3D.direction(origin, a), surfaceNormal) / nDotD;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return Double.NaN;
+		if(t > tMinimum && t < tMaximum && doContains(doCreateSurfaceIntersectionPoint(ray, t))) {
+			return t;
 		}
 		
-		final Point3D p = Point3D.add(origin, direction, t);
-		
-		if(!doContains(p)) {
-			return Double.NaN;
-		}
-		
-		return t;
+		return Double.NaN;
 	}
 	
 	/**
@@ -370,11 +332,19 @@ public final class Polygon3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Point2D doComputeTextureCoordinates(final Point3D a, final Point3D b, final Point3D c, final Point3D p) {
+	private OrthonormalBasis33D doCreateOrthonormalBasisG() {
+		return new OrthonormalBasis33D(this.surfaceNormal);
+	}
+	
+	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
 		final Vector3D surfaceNormalAbs = Vector3D.absolute(this.surfaceNormal);
 		
 		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
 		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
+		
+		final Point3D a = this.points[0];
+		final Point3D b = this.points[1];
+		final Point3D c = this.points[this.points.length - 1];
 		
 		final Vector2D vA = isX ? Vector2D.directionYZ(a) : isY ? Vector2D.directionZX(a) : Vector2D.directionXY(a);
 		final Vector2D vB = isX ? Vector2D.directionYZ(c) : isY ? Vector2D.directionZX(c) : Vector2D.directionXY(c);
@@ -385,13 +355,26 @@ public final class Polygon3D implements Shape3D {
 		final double determinant = Vector2D.crossProduct(vAB, vAC);
 		final double determinantReciprocal = 1.0D / determinant;
 		
-		final double hU = isX ? p.getY() : isY ? p.getZ() : p.getX();
-		final double hV = isX ? p.getZ() : isY ? p.getX() : p.getY();
+		final double hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
+		final double hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
 		
 		final double u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2D.crossProduct(vA, vAB) * determinantReciprocal;
 		final double v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2D.crossProduct(vAC, vA) * determinantReciprocal;
 		
 		return new Point2D(u, v);
+	}
+	
+	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double t) {
+		final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+		
+		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG();
+		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		
+		final Vector3D surfaceIntersectionPointError = new Vector3D();
+		
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
 	}
 	
 	private boolean doContains(final Point3D point) {
@@ -412,6 +395,10 @@ public final class Polygon3D implements Shape3D {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
+		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
+	}
 	
 	private static Point3D[] doRequireValidPoints(final Point3D[] points) {
 		ParameterArguments.requireNonNullArray(points, "points");

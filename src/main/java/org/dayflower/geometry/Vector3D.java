@@ -884,6 +884,24 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Vector3D} instance that contains the Hadamard product of {@code vectorLHS} and {@code vectorRHS}.
+	 * <p>
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector3D} instance on the right-hand side
+	 * @return a {@code Vector3D} instance that contains the Hadamard product of {@code vectorLHS} and {@code vectorRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static Vector3D hadamardProduct(final Vector3D vectorLHS, final Vector3D vectorRHS) {
+		final double component1 = vectorLHS.component1 * vectorRHS.component1;
+		final double component2 = vectorLHS.component2 * vectorRHS.component2;
+		final double component3 = vectorLHS.component3 * vectorRHS.component3;
+		
+		return new Vector3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Returns {@code n} or {@code Vector3D.normalize(Vector3D.subtract(o, i))} as {@code Vector3D.dotProduct(o, i)} is greater than {@code 0.999D} or less than or equal to {@code 0.999D}, respectively.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.

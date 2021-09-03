@@ -7,6 +7,7 @@
 	* ADD:		Add the method getLineSegments() to the Rectangle2F class.
 	* ADD:		Add the method hadamardProduct(Vector3D, Vector3D) to the Vector3D class.
 	* ADD:		Add the method hadamardProduct(Vector3F, Vector3F) to the Vector3F class.
+	* CHANGE:	Update the Simplex API.
 	* CHANGE:	Update the methods contains(Point2D), getHeight() and getWidth() of the Rectangle2D class.
 	* CHANGE:	Update the methods contains(Point2F), getHeight() and getWidth() of the Rectangle2F class.
 	* CHANGE:	Update the methods contains(Point2I), getHeight() and getWidth() of the Rectangle2I class.

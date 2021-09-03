@@ -1492,13 +1492,7 @@ public final class Point {
 //	TODO: Add Javadocs!
 	@SuppressWarnings("unused")
 	public static double[] point3DSurfaceIntersectionPointCone3D(final double[] ray3D, final double[] cone3D, final double t, final int ray3DOffset, final int cone3DOffset) {
-		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
-		
-		final double[] vector3DDirection = ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0);
-		
-		final double[] point3DSurfaceIntersectionPoint = point3DAdd(point3DOrigin, vector3DDirection, t);
-		
-		return point3DSurfaceIntersectionPoint;
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1541,6 +1535,142 @@ public final class Point {
 		final double[] point3DSurfaceIntersectionPointTransformed = point3D(point3DGetX(point3DSurfaceIntersectionPoint), point3DGetY(point3DSurfaceIntersectionPoint), zMax);
 		
 		return point3DSurfaceIntersectionPointTransformed;
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointHyperboloid3D(final double[] ray3D, final double[] hyperboloid3D, final double t) {
+		return point3DSurfaceIntersectionPointHyperboloid3D(ray3D, hyperboloid3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointHyperboloid3D(final double[] ray3D, final double[] hyperboloid3D, final double t, final int ray3DOffset, final int hyperboloid3DOffset) {
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointParaboloid3D(final double[] ray3D, final double[] paraboloid3D, final double t) {
+		return point3DSurfaceIntersectionPointParaboloid3D(ray3D, paraboloid3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointParaboloid3D(final double[] ray3D, final double[] paraboloid3D, final double t, final int ray3DOffset, final int paraboloid3DOffset) {
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointPlane3D(final double[] ray3D, final double[] plane3D, final double t) {
+		return point3DSurfaceIntersectionPointPlane3D(ray3D, plane3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointPlane3D(final double[] ray3D, final double[] plane3D, final double t, final int ray3DOffset, final int plane3DOffset) {
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointPolygon3D(final double[] ray3D, final double[] polygon3D, final double t) {
+		return point3DSurfaceIntersectionPointPolygon3D(ray3D, polygon3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointPolygon3D(final double[] ray3D, final double[] polygon3D, final double t, final int ray3DOffset, final int polygon3DOffset) {
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointRectangle3D(final double[] ray3D, final double[] rectangle3D, final double t) {
+		return point3DSurfaceIntersectionPointRectangle3D(ray3D, rectangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointRectangle3D(final double[] ray3D, final double[] rectangle3D, final double t, final int ray3DOffset, final int rectangle3DOffset) {
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointRectangularCuboid3D(final double[] ray3D, final double[] rectangularCuboid3D, final double t) {
+		return point3DSurfaceIntersectionPointRectangularCuboid3D(ray3D, rectangularCuboid3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointRectangularCuboid3D(final double[] ray3D, final double[] rectangularCuboid3D, final double t, final int ray3DOffset, final int rectangularCuboid3DOffset) {
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointShape3D(final double[] ray3D, final double[] shape3D, final double t) {
+		return point3DSurfaceIntersectionPointShape3D(ray3D, shape3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointShape3D(final double[] ray3D, final double[] shape3D, final double t, final int ray3DOffset, final int shape3DOffset) {
+		switch(shape3DGetID(shape3D, shape3DOffset)) {
+			case CONE_3_ID:
+				return point3DSurfaceIntersectionPointCone3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case CYLINDER_3_ID:
+				return point3DSurfaceIntersectionPointCylinder3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case DISK_3_ID:
+				return point3DSurfaceIntersectionPointDisk3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case HYPERBOLOID_3_ID:
+				return point3DSurfaceIntersectionPointHyperboloid3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case PARABOLOID_3_ID:
+				return point3DSurfaceIntersectionPointParaboloid3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case PLANE_3_ID:
+				return point3DSurfaceIntersectionPointPlane3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case POLYGON_3_ID:
+				return point3DSurfaceIntersectionPointPolygon3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case RECTANGLE_3_ID:
+				return point3DSurfaceIntersectionPointRectangle3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case RECTANGULAR_CUBOID_3_ID:
+				return point3DSurfaceIntersectionPointRectangularCuboid3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case SPHERE_3_ID:
+				return point3DSurfaceIntersectionPointSphere3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case TORUS_3_ID:
+				return point3DSurfaceIntersectionPointTorus3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			case TRIANGLE_3_ID:
+				return point3DSurfaceIntersectionPointTriangle3D(ray3D, shape3D, t, ray3DOffset, shape3DOffset);
+			default:
+				return point2D();
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointSphere3D(final double[] ray3D, final double[] sphere3D, final double t) {
+		return point3DSurfaceIntersectionPointSphere3D(ray3D, sphere3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointSphere3D(final double[] ray3D, final double[] sphere3D, final double t, final int ray3DOffset, final int sphere3DOffset) {
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointTorus3D(final double[] ray3D, final double[] torus3D, final double t) {
+		return point3DSurfaceIntersectionPointTorus3D(ray3D, torus3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointTorus3D(final double[] ray3D, final double[] torus3D, final double t, final int ray3DOffset, final int torus3DOffset) {
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] point3DSurfaceIntersectionPointTriangle3D(final double[] ray3D, final double[] triangle3D, final double t) {
+		return point3DSurfaceIntersectionPointTriangle3D(ray3D, triangle3D, t, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	public static double[] point3DSurfaceIntersectionPointTriangle3D(final double[] ray3D, final double[] triangle3D, final double t, final int ray3DOffset, final int triangle3DOffset) {
+		return point3DAdd(ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0), ray3DGetDirection(ray3D, vector3D(), ray3DOffset, 0), t);
 	}
 	
 	/**

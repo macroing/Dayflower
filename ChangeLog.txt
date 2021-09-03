@@ -1,5 +1,7 @@
 2021-09-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods readGeo(File) and readGeo(String) to the TriangleMesh3D class.
+	* ADD:		Add the methods readGeo(File) and readGeo(String) to the TriangleMesh3F class.
 	* ADD:		Add the methods getLineSegments() and getRectangle() to the Polygon2D class.
 	* ADD:		Add the methods getLineSegments() and getRectangle() to the Polygon2F class.
 	* ADD:		Add the method getRectangle() to the Polygon2I class.

@@ -29,6 +29,7 @@ import static org.dayflower.utility.Floats.minOrNaN;
 import java.io.BufferedReader;
 import java.io.DataOutput;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Scanner;
 
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Matrix44F;
@@ -764,6 +766,122 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	public static List<TriangleMesh3F> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final float scale, final boolean isUsingAccelerationStructure) {
 		return readWavefrontObject(new File(Objects.requireNonNull(pathname, "pathname == null")), isFlippingTextureCoordinateY, scale, isUsingAccelerationStructure);
+	}
+	
+	/**
+	 * Reads a Geo file into a {@code TriangleMesh3F} instance.
+	 * <p>
+	 * Returns a {@code TriangleMesh3F} instance.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * If the {@code float} values cannot be parsed, a {@code NumberFormatException} will be thrown.
+	 * 
+	 * @param file a {@code File} instance
+	 * @return a {@code TriangleMesh3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws NumberFormatException thrown if, and only if, the {@code float} values cannot be parsed
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static TriangleMesh3F readGeo(final File file) {
+		try(final Scanner scanner = new Scanner(Objects.requireNonNull(file, "file == null"))) {
+			final int[] faceIndices = new int[scanner.nextInt()];
+			
+			int vertexIndexCount = 0;
+			
+			for(int i = 0; i < faceIndices.length; i++) {
+				faceIndices[i] = scanner.nextInt();
+				
+				vertexIndexCount += faceIndices[i];
+			}
+			
+			final int[] vertexIndices = new int[vertexIndexCount];
+			
+			int vertexCount = 0;
+			
+			for(int i = 0; i < vertexIndices.length; i++) {
+				vertexIndices[i] = scanner.nextInt();
+				
+				if(vertexIndices[i] > vertexCount) {
+					vertexCount = vertexIndices[i];
+				}
+			}
+			
+			vertexCount++;
+			
+			final Point4F[] positions = new Point4F[vertexCount];
+			
+			for(int i = 0; i < positions.length; i++) {
+				positions[i] = new Point4F(Float.parseFloat(scanner.next()), Float.parseFloat(scanner.next()), Float.parseFloat(scanner.next()));
+			}
+			
+			final Vector3F[] normals = new Vector3F[vertexIndexCount];
+			
+			for(int i = 0; i < normals.length; i++) {
+				normals[i] = new Vector3F(Float.parseFloat(scanner.next()), Float.parseFloat(scanner.next()), Float.parseFloat(scanner.next()));
+			}
+			
+			final Point2F[] textureCoordinates = new Point2F[vertexIndexCount];
+			
+			for(int i = 0; i < textureCoordinates.length; i++) {
+				textureCoordinates[i] = new Point2F(Float.parseFloat(scanner.next()), Float.parseFloat(scanner.next()));
+			}
+			
+			final List<Triangle3F> triangles = new ArrayList<>();
+			
+			for(int i = 0, j = 0; i < faceIndices.length; j += faceIndices[i], i++) {
+				for(int k = 0; k < faceIndices[i] - 2; k++) {
+					final int indexA = j;
+					final int indexB = j + k + 1;
+					final int indexC = j + k + 2;
+					
+					final Point4F positionA = positions[vertexIndices[indexA]];
+					final Point4F positionB = positions[vertexIndices[indexB]];
+					final Point4F positionC = positions[vertexIndices[indexC]];
+					
+					final Point2F textureCoordinatesA = textureCoordinates[indexA];
+					final Point2F textureCoordinatesB = textureCoordinates[indexB];
+					final Point2F textureCoordinatesC = textureCoordinates[indexC];
+					
+					final Vector3F normalA = Vector3F.normalize(normals[indexA]);
+					final Vector3F normalB = Vector3F.normalize(normals[indexB]);
+					final Vector3F normalC = Vector3F.normalize(normals[indexC]);
+					
+					final Vertex3F vertexA = new Vertex3F(textureCoordinatesA, positionA, normalA);
+					final Vertex3F vertexB = new Vertex3F(textureCoordinatesB, positionB, normalB);
+					final Vertex3F vertexC = new Vertex3F(textureCoordinatesC, positionC, normalC);
+					
+					triangles.add(new Triangle3F(vertexA, vertexB, vertexC));
+				}
+			}
+			
+			return new TriangleMesh3F(triangles, "", "", "");
+		} catch(final FileNotFoundException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
+	 * Reads a Geo file into a {@code TriangleMesh3F} instance.
+	 * <p>
+	 * Returns a {@code TriangleMesh3F} instance.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * If the {@code float} values cannot be parsed, a {@code NumberFormatException} will be thrown.
+	 * 
+	 * @param pathname a {@code String} instance with the pathname to a file
+	 * @return a {@code TriangleMesh3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 * @throws NumberFormatException thrown if, and only if, the {@code float} values cannot be parsed
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static TriangleMesh3F readGeo(final String pathname) {
+		return readGeo(new File(Objects.requireNonNull(pathname, "pathname == null")));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

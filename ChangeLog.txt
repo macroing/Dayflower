@@ -1,3 +1,12 @@
+2021-09-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method getNormal() to the Triangle3D.Vertex3D class.
+	* ADD:		Add the method getNormal() to the Triangle3F.Vertex3F class.
+	* REMOVE:	Remove the method getOrthonormalBasis() from the Triangle3D.Vertex3D class.
+	* REMOVE:	Remove the method getOrthonormalBasis() from the Triangle3F.Vertex3F class.
+	* REMOVE:	Remove the constructors Vertex3D(Point2D, Point4D, OrthonormalBasis33D) and Vertex3D(Point2D, Point4D, Vector3D, Vector3D) from the Triangle3D.Vertex3D class.
+	* REMOVE:	Remove the constructors Vertex3F(Point2F, Point4F, OrthonormalBasis33F) and Vertex3F(Point2F, Point4F, Vector3F, Vector3F) from the Triangle3F.Vertex3F class.
+
 2021-09-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods readGeo(File) and readGeo(String) to the TriangleMesh3D class.

@@ -575,7 +575,7 @@ public final class TriangleMesh3D implements Shape3D {
 			final List<String> materialNames = indexedObjectModel.getMaterialNames();
 			final List<String> objectNames = indexedObjectModel.getObjectNames();
 			final List<Vector3D> normals = indexedObjectModel.getNormals();
-			final List<Vector3D> tangents = indexedObjectModel.getTangents();
+//			final List<Vector3D> tangents = indexedObjectModel.getTangents();
 			final List<Triangle3D> triangles = new ArrayList<>();
 			final List<TriangleMesh3D> triangleMeshes = new ArrayList<>();
 			
@@ -641,13 +641,13 @@ public final class TriangleMesh3D implements Shape3D {
 				final Vector3D normalB = isScaling ? Vector3D.transformTranspose(matrixInverse, normals.get(indexB)) : normals.get(indexB);
 				final Vector3D normalC = isScaling ? Vector3D.transformTranspose(matrixInverse, normals.get(indexC)) : normals.get(indexC);
 				
-				final Vector3D tangentA = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexA)) : tangents.get(indexA);
-				final Vector3D tangentB = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexB)) : tangents.get(indexB);
-				final Vector3D tangentC = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexC)) : tangents.get(indexC);
+//				final Vector3D tangentA = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexA)) : tangents.get(indexA);
+//				final Vector3D tangentB = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexB)) : tangents.get(indexB);
+//				final Vector3D tangentC = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexC)) : tangents.get(indexC);
 				
-				final Vertex3D a = new Vertex3D(textureCoordinatesA, positionA, normalA, tangentA);
-				final Vertex3D b = new Vertex3D(textureCoordinatesB, positionB, normalB, tangentB);
-				final Vertex3D c = new Vertex3D(textureCoordinatesC, positionC, normalC, tangentC);
+				final Vertex3D a = new Vertex3D(textureCoordinatesA, positionA, normalA);
+				final Vertex3D b = new Vertex3D(textureCoordinatesB, positionB, normalB);
+				final Vertex3D c = new Vertex3D(textureCoordinatesC, positionC, normalC);
 				
 				final Triangle3D triangle = new Triangle3D(a, b, c);
 				
@@ -1196,9 +1196,9 @@ public final class TriangleMesh3D implements Shape3D {
 			return this.normals;
 		}
 		
-		public List<Vector3D> getTangents() {
-			return this.tangents;
-		}
+//		public List<Vector3D> getTangents() {
+//			return this.tangents;
+//		}
 		
 		public Vector3D getNormal(final int index) {
 			return this.normals.get(index);

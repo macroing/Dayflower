@@ -21,7 +21,6 @@ package org.dayflower.geometry.shape;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.gamma;
 import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.max;
 
 import java.io.DataOutput;
 import java.io.IOException;
@@ -42,7 +41,6 @@ import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
-import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.Node;
@@ -156,9 +154,9 @@ public final class Triangle3F implements Shape3F {
 		final Point4F positionB = this.b.getPosition();
 		final Point4F positionC = this.c.getPosition();
 		
-		final Vector3F normalA = this.a.getOrthonormalBasis().getW();
-		final Vector3F normalB = this.b.getOrthonormalBasis().getW();
-		final Vector3F normalC = this.c.getOrthonormalBasis().getW();
+		final Vector3F normalA = this.a.getNormal();
+		final Vector3F normalB = this.b.getNormal();
+		final Vector3F normalC = this.c.getNormal();
 		
 		final float x = positionA.getX() * barycentricCoordinates.getX() + positionB.getX() * barycentricCoordinates.getY() + positionC.getX() * barycentricCoordinates.getZ();
 		final float y = positionA.getY() * barycentricCoordinates.getX() + positionB.getY() * barycentricCoordinates.getY() + positionC.getY() * barycentricCoordinates.getZ();
@@ -194,9 +192,7 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-//		return doIntersectionOld(ray, tMinimum, tMaximum);
-//		return doIntersectionPBRT(ray, tMinimum, tMaximum);
-		return doIntersectionSunflow(ray, tMinimum, tMaximum);
+		return doIntersection(ray, tMinimum, tMaximum);
 	}
 	
 	/**
@@ -402,9 +398,7 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-//		return doIntersectionTOld(ray, tMinimum, tMaximum);
-//		return doIntersectionTPBRT(ray, tMinimum, tMaximum);
-		return doIntersectionTSunflow(ray, tMinimum, tMaximum);
+		return doIntersectionT(ray, tMinimum, tMaximum);
 	}
 	
 	/**
@@ -466,71 +460,29 @@ public final class Triangle3F implements Shape3F {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		private final OrthonormalBasis33F orthonormalBasis;
 		private final Point2F textureCoordinates;
 		private final Point4F position;
+		private final Vector3F normal;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		/**
 		 * Constructs a new {@code Vertex3F} instance.
 		 * <p>
-		 * If either {@code textureCoordinates}, {@code position} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * If either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
 		 * 
 		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3F} instance
 		 * @param position the position associated with this {@code Vertex3F} instance
-		 * @param orthonormalBasis the orthonormal basis associated with this {@code Vertex3F} instance
-		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code orthonormalBasis} are {@code null}
+		 * @param normal the normal associated with this {@code Vertex3F} instance
+		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}
 		 */
-		public Vertex3F(final Point2F textureCoordinates, final Point4F position, final OrthonormalBasis33F orthonormalBasis) {
+		public Vertex3F(final Point2F textureCoordinates, final Point4F position, final Vector3F normal) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
 			this.position = Point4F.getCached(Objects.requireNonNull(position, "position == null"));
-			this.orthonormalBasis = OrthonormalBasis33F.getCached(Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null"));
-		}
-		
-		/**
-		 * Constructs a new {@code Vertex3F} instance.
-		 * <p>
-		 * If either {@code textureCoordinates}, {@code position} or {@code w} are {@code null}, a {@code NullPointerException} will be thrown.
-		 * 
-		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3F} instance
-		 * @param position the position associated with this {@code Vertex3F} instance
-		 * @param w the W-direction associated with this {@code Vertex3F} instance
-		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code w} are {@code null}
-		 */
-		public Vertex3F(final Point2F textureCoordinates, final Point4F position, final Vector3F w) {
-			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
-			this.position = Point4F.getCached(Objects.requireNonNull(position, "position == null"));
-			this.orthonormalBasis = OrthonormalBasis33F.getCached(new OrthonormalBasis33F(Objects.requireNonNull(w, "w == null")));
-		}
-		
-		/**
-		 * Constructs a new {@code Vertex3F} instance.
-		 * <p>
-		 * If either {@code textureCoordinates}, {@code position}, {@code w} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
-		 * 
-		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3F} instance
-		 * @param position the position associated with this {@code Vertex3F} instance
-		 * @param w the W-direction associated with this {@code Vertex3F} instance
-		 * @param v the V-direction associated with this {@code Vertex3F} instance
-		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position}, {@code w} or {@code v} are {@code null}
-		 */
-		public Vertex3F(final Point2F textureCoordinates, final Point4F position, final Vector3F w, final Vector3F v) {
-			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
-			this.position = Point4F.getCached(Objects.requireNonNull(position, "position == null"));
-			this.orthonormalBasis = OrthonormalBasis33F.getCached(new OrthonormalBasis33F(Objects.requireNonNull(w, "w == null"), Objects.requireNonNull(v, "v == null")));
+			this.normal = Vector3F.getCached(Objects.requireNonNull(normal, "normal == null"));
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		/**
-		 * Returns the orthonormal basis associated with this {@code Vertex3F} instance.
-		 * 
-		 * @return the orthonormal basis associated with this {@code Vertex3F} instance
-		 */
-		public OrthonormalBasis33F getOrthonormalBasis() {
-			return this.orthonormalBasis;
-		}
 		
 		/**
 		 * Returns the texture coordinates associated with this {@code Vertex3F} instance.
@@ -557,7 +509,16 @@ public final class Triangle3F implements Shape3F {
 		 */
 		@Override
 		public String toString() {
-			return String.format("new Vertex3F(%s, %s, %s)", this.textureCoordinates, this.position, this.orthonormalBasis);
+			return String.format("new Vertex3F(%s, %s, %s)", this.textureCoordinates, this.position, this.normal);
+		}
+		
+		/**
+		 * Returns the normal associated with this {@code Vertex3F} instance.
+		 * 
+		 * @return the normal associated with this {@code Vertex3F} instance
+		 */
+		public Vector3F getNormal() {
+			return this.normal;
 		}
 		
 		/**
@@ -587,15 +548,15 @@ public final class Triangle3F implements Shape3F {
 			
 			try {
 				if(nodeHierarchicalVisitor.visitEnter(this)) {
-					if(!this.orthonormalBasis.accept(nodeHierarchicalVisitor)) {
-						return nodeHierarchicalVisitor.visitLeave(this);
-					}
-					
 					if(!this.textureCoordinates.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
 					
 					if(!this.position.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+					
+					if(!this.normal.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
 				}
@@ -620,11 +581,11 @@ public final class Triangle3F implements Shape3F {
 				return true;
 			} else if(!(object instanceof Vertex3F)) {
 				return false;
-			} else if(!Objects.equals(this.orthonormalBasis, Vertex3F.class.cast(object).orthonormalBasis)) {
-				return false;
 			} else if(!Objects.equals(this.textureCoordinates, Vertex3F.class.cast(object).textureCoordinates)) {
 				return false;
 			} else if(!Objects.equals(this.position, Vertex3F.class.cast(object).position)) {
+				return false;
+			} else if(!Objects.equals(this.normal, Vertex3F.class.cast(object).normal)) {
 				return false;
 			} else {
 				return true;
@@ -638,7 +599,7 @@ public final class Triangle3F implements Shape3F {
 		 */
 		@Override
 		public int hashCode() {
-			return Objects.hash(this.orthonormalBasis, this.textureCoordinates, this.position);
+			return Objects.hash(this.textureCoordinates, this.position, this.normal);
 		}
 		
 		/**
@@ -655,7 +616,7 @@ public final class Triangle3F implements Shape3F {
 		public void write(final DataOutput dataOutput) {
 			this.textureCoordinates.write(dataOutput);
 			this.position.write(dataOutput);
-			this.orthonormalBasis.write(dataOutput);
+			this.normal.write(dataOutput);
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -691,9 +652,9 @@ public final class Triangle3F implements Shape3F {
 			
 			final Point4F position = Point4F.lerp(a.position, b.position, t);
 			
-			final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.lerp(a.orthonormalBasis, b.orthonormalBasis, t);
+			final Vector3F normal = Vector3F.normalize(Vector3F.lerp(a.normal, b.normal, t));
 			
-			return new Vertex3F(textureCoordinates, position, orthonormalBasis);
+			return new Vertex3F(textureCoordinates, position, normal);
 		}
 		
 		/**
@@ -714,9 +675,9 @@ public final class Triangle3F implements Shape3F {
 			
 			final Point4F position = Point4F.transform(matrix, vertex.position);
 			
-			final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.transform(matrixInverse, vertex.orthonormalBasis);
+			final Vector3F normal = Vector3F.normalize(Vector3F.transformTranspose(matrixInverse, vertex.normal));
 			
-			return new Vertex3F(textureCoordinates, position, orthonormalBasis);
+			return new Vertex3F(textureCoordinates, position, normal);
 		}
 		
 		/**
@@ -737,9 +698,9 @@ public final class Triangle3F implements Shape3F {
 			
 			final Point4F position = Point4F.transformAndDivide(matrix, vertex.position);
 			
-			final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.transform(matrixInverse, vertex.orthonormalBasis);
+			final Vector3F normal = Vector3F.normalize(Vector3F.transformTranspose(matrixInverse, vertex.normal));
 			
-			return new Vertex3F(textureCoordinates, position, orthonormalBasis);
+			return new Vertex3F(textureCoordinates, position, normal);
 		}
 		
 		/**
@@ -761,217 +722,7 @@ public final class Triangle3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	@SuppressWarnings("unused")
-	private Optional<SurfaceIntersection3F> doIntersectionOld(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point4F a = this.a.getPosition();
-		final Point4F b = this.b.getPosition();
-		final Point4F c = this.c.getPosition();
-		
-		final Vector3F edgeAB = Vector3F.direction(a, b);
-		final Vector3F edgeAC = Vector3F.direction(a, c);
-		final Vector3F direction0 = ray.getDirection();
-		final Vector3F direction1 = Vector3F.crossProduct(direction0, edgeAC);
-		
-		final float determinant = Vector3F.dotProduct(edgeAB, direction1);
-		
-		if(determinant >= -0.0001F && determinant <= 0.0001F) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final Point3F origin = ray.getOrigin();
-		
-		final Vector3F direction2 = Vector3F.direction(new Point3F(a), origin);
-		
-		final float determinantReciprocal = 1.0F / determinant;
-		final float u = Vector3F.dotProduct(direction2, direction1) * determinantReciprocal;
-		
-		if(u < 0.0F || u > 1.0F) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final Vector3F direction3 = Vector3F.crossProduct(direction2, edgeAB);
-		
-		final float v = Vector3F.dotProduct(direction0, direction3) * determinantReciprocal;
-		
-		if(v < 0.0F || u + v > 1.0F) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final float t = Vector3F.dotProduct(edgeAC, direction3) * determinantReciprocal;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final float w = 1.0F - u - v;
-		
-		final Point3F barycentricCoordinates = new Point3F(w, u, v);
-		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction0, t);
-		
-		final Point2F textureCoordinates = Point2F.createTextureCoordinates(this.a.getTextureCoordinates(), this.b.getTextureCoordinates(), this.c.getTextureCoordinates(), barycentricCoordinates);
-		
-		final OrthonormalBasis33F aOrthonormalBasis = this.a.getOrthonormalBasis();
-		final OrthonormalBasis33F bOrthonormalBasis = this.b.getOrthonormalBasis();
-		final OrthonormalBasis33F cOrthonormalBasis = this.c.getOrthonormalBasis();
-		
-		final Vector3F gW = this.surfaceNormal;
-		final Vector3F sW = Vector3F.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
-		
-		final Vector3F gV = Vector3F.directionNormalized(a, b);
-		final Vector3F sV = Vector3F.normalNormalized(aOrthonormalBasis.getV(), bOrthonormalBasis.getV(), cOrthonormalBasis.getV(), barycentricCoordinates);
-		
-//		final Vector3F gU = Vector3F.directionNormalized(a, c);
-//		final Vector3F sU = Vector3F.normalNormalized(aOrthonormalBasis.getU(), bOrthonormalBasis.getU(), cOrthonormalBasis.getU(), barycentricCoordinates);
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW, gV);
-		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW, sV);
-//		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW, gV, gU);
-//		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW, sV, sU);
-		
-		final float xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
-		final float yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
-		final float zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
-		
-		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
-		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
-	}
-	
-	@SuppressWarnings("unused")
-	private Optional<SurfaceIntersection3F> doIntersectionPBRT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F p0 = new Point3F(this.a.getPosition());
-		final Point3F p1 = new Point3F(this.b.getPosition());
-		final Point3F p2 = new Point3F(this.c.getPosition());
-		
-		final int kZ = doMaxDimension(Vector3F.absolute(ray.getDirection()));
-		final int kX = kZ == 2 ? 0 : kZ + 1;
-		final int kY = kX == 2 ? 0 : kX + 1;
-		
-		final Vector3F d = doPermute(ray.getDirection(), kX, kY, kZ);
-		
-		final float shearX = -d.getX() / d.getZ();
-		final float shearY = -d.getY() / d.getZ();
-		final float shearZ = 1.0F / d.getZ();
-		
-		final Point3F p0T = doShear(doPermute(Point3F.subtract(p0, new Vector3F(ray.getOrigin())), kX, kY, kZ), shearX, shearY, shearZ);
-		final Point3F p1T = doShear(doPermute(Point3F.subtract(p1, new Vector3F(ray.getOrigin())), kX, kY, kZ), shearX, shearY, shearZ);
-		final Point3F p2T = doShear(doPermute(Point3F.subtract(p2, new Vector3F(ray.getOrigin())), kX, kY, kZ), shearX, shearY, shearZ);
-		
-		float e0 = p1T.getX() * p2T.getY() - p1T.getY() * p2T.getX();
-		float e1 = p2T.getX() * p0T.getY() - p2T.getY() * p0T.getX();
-		float e2 = p0T.getX() * p1T.getY() - p0T.getY() * p1T.getX();
-		
-		if(isZero(e0) || isZero(e1) || isZero(e2)) {
-			final double p2TXP1TY = (double)(p2T.getX()) * (double)(p1T.getY());
-			final double p2TYP1TX = (double)(p2T.getY()) * (double)(p1T.getX());
-			final double p0TXP2TY = (double)(p0T.getX()) * (double)(p2T.getY());
-			final double p0TYP2TX = (double)(p0T.getY()) * (double)(p2T.getX());
-			final double p1TXP0TY = (double)(p1T.getX()) * (double)(p0T.getY());
-			final double p1TYP0TX = (double)(p1T.getY()) * (double)(p0T.getX());
-			
-			e0 = (float)(p2TYP1TX - p2TXP1TY);
-			e1 = (float)(p0TYP2TX - p0TXP2TY);
-			e2 = (float)(p1TYP0TX - p1TXP0TY);
-		}
-		
-		if((e0 < 0.0F || e1 < 0.0F || e2 < 0.0F) && (e0 > 0.0F || e1 > 0.0F || e2 > 0.0F)) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final float det = e0 + e1 + e2;
-		
-		if(isZero(det)) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final float tScaled = e0 * p0T.getZ() + e1 * p1T.getZ() + e2 * p2T.getZ();
-		
-		if(det < 0.0F && (tScaled >= 0.0F || tScaled < tMaximum * det)) {
-			return SurfaceIntersection3F.EMPTY;
-		} else if(det > 0.0F && (tScaled <= 0.0F || tScaled > tMaximum * det)) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final float invDet = 1.0F / det;
-		
-		final float b0 = e0 * invDet;
-		final float b1 = e1 * invDet;
-		final float b2 = e2 * invDet;
-		
-		final float t = tScaled * invDet;
-		
-		final float maxE = max(abs(e0), abs(e1), abs(e2));
-		
-		final float maxXT = max(abs(p0T.getX()), abs(p1T.getX()), abs(p2T.getX()));
-		final float maxYT = max(abs(p0T.getY()), abs(p1T.getY()), abs(p2T.getY()));
-		final float maxZT = max(abs(p0T.getZ()), abs(p1T.getZ()), abs(p2T.getZ()));
-		
-		final float deltaX = gamma(5) * (maxXT + maxZT);
-		final float deltaY = gamma(5) * (maxYT + maxZT);
-		final float deltaZ = gamma(3) * maxZT;
-		final float deltaE = 2.0F * (gamma(2) * maxXT * maxYT + deltaY * maxXT + deltaX * maxYT);
-		final float deltaT = 3.0F * (gamma(3) * maxE * maxZT + deltaE * maxZT + deltaZ * maxE) * abs(invDet);
-		
-		if(t <= deltaT) {
-			return SurfaceIntersection3F.EMPTY;
-		}
-		
-		final Point2F textureCoordinates0 = this.a.getTextureCoordinates();
-		final Point2F textureCoordinates1 = this.b.getTextureCoordinates();
-		final Point2F textureCoordinates2 = this.c.getTextureCoordinates();
-		
-		final Vector2F dUV02 = Vector2F.direction(textureCoordinates2, textureCoordinates0);
-		final Vector2F dUV12 = Vector2F.direction(textureCoordinates2, textureCoordinates1);
-		
-		final Vector3F dP02 = Vector3F.direction(p2, p0);
-		final Vector3F dP12 = Vector3F.direction(p2, p1);
-		
-		final float determinant = dUV02.getX() * dUV12.getY() - dUV02.getY() * dUV12.getX();
-		
-		final boolean hasDegenerateUVs = abs(determinant) < 1.0e-8F;
-		
-		Vector3F dPDU = new Vector3F();
-		Vector3F dPDV = new Vector3F();
-		
-		if(!hasDegenerateUVs) {
-			final float invDeterminant = 1.0F / determinant;
-			
-			dPDU = Vector3F.multiply(Vector3F.subtract(Vector3F.multiply(dP02, dUV12.getY()), Vector3F.multiply(dP12, dUV02.getY())), invDeterminant);
-			dPDV = Vector3F.multiply(Vector3F.add(Vector3F.multiply(dP02, -dUV12.getX()), Vector3F.multiply(dP12, dUV02.getX())), invDeterminant);
-		}
-		
-		if(hasDegenerateUVs || isZero(Vector3F.crossProduct(dPDU, dPDV).lengthSquared())) {
-			final Vector3F ng = Vector3F.crossProduct(Vector3F.direction(p0, p2), Vector3F.direction(p0, p1));
-			
-			if(isZero(ng.lengthSquared())) {
-				return SurfaceIntersection3F.EMPTY;
-			}
-			
-			final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.coordinateSystem(Vector3F.normalize(ng));
-			
-			dPDU = orthonormalBasis.getU();
-			dPDV = orthonormalBasis.getV();
-		}
-		
-		final float xAbsSum = abs(b0 * p0.getX()) + abs(b1 * p1.getX()) + abs(b2 * p2.getX());
-		final float yAbsSum = abs(b0 * p0.getY()) + abs(b1 * p1.getY()) + abs(b2 * p2.getY());
-		final float zAbsSum = abs(b0 * p0.getZ()) + abs(b1 * p1.getZ()) + abs(b2 * p2.getZ());
-		
-		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
-		
-		final Point3F surfaceIntersectionPoint = new Point3F(b0 * p0.getX() + b1 * p1.getX() + b2 * p2.getX(), b0 * p0.getY() + b1 * p1.getY() + b2 * p2.getY(), b0 * p0.getZ() + b1 * p1.getZ() + b2 * p2.getZ());
-		
-		final Point2F textureCoordinates = new Point2F(b0 * textureCoordinates0.getU() + b1 + textureCoordinates1.getU() + b2 * textureCoordinates2.getU(), b0 * textureCoordinates0.getV() + b1 * textureCoordinates1.getV() + b2 * textureCoordinates2.getV());
-		
-		final Vector3F surfaceNormalG = Vector3F.normalize(Vector3F.crossProduct(dP02, dP12));
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG, dPDV, dPDU);
-		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
-		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
-	}
-	
-	private Optional<SurfaceIntersection3F> doIntersectionSunflow(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	private Optional<SurfaceIntersection3F> doIntersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point4F a = this.a.getPosition();
 		final Point4F b = this.b.getPosition();
 		final Point4F c = this.c.getPosition();
@@ -1024,12 +775,12 @@ public final class Triangle3F implements Shape3F {
 		final Point2F textureCoordinatesC = this.c.getTextureCoordinates();
 		final Point2F textureCoordinates = Point2F.createTextureCoordinates(textureCoordinatesA, textureCoordinatesB, textureCoordinatesC, barycentricCoordinates);
 		
-		final OrthonormalBasis33F orthonormalBasisA = this.a.getOrthonormalBasis();
-		final OrthonormalBasis33F orthonormalBasisB = this.b.getOrthonormalBasis();
-		final OrthonormalBasis33F orthonormalBasisC = this.c.getOrthonormalBasis();
+		final Vector3F normalA = this.a.getNormal();
+		final Vector3F normalB = this.b.getNormal();
+		final Vector3F normalC = this.c.getNormal();
 		
 		final Vector3F surfaceNormalG = this.surfaceNormal;
-		final Vector3F surfaceNormalS = Vector3F.normalNormalized(orthonormalBasisA.getW(), orthonormalBasisB.getW(), orthonormalBasisC.getW(), barycentricCoordinates);
+		final Vector3F surfaceNormalS = Vector3F.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
 		
 		final float dU1 = textureCoordinatesA.getU() - textureCoordinatesC.getU();
 		final float dU2 = textureCoordinatesB.getU() - textureCoordinatesC.getU();
@@ -1070,130 +821,7 @@ public final class Triangle3F implements Shape3F {
 		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
 	}
 	
-	@SuppressWarnings("unused")
-	private float doIntersectionTOld(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point4F a = this.a.getPosition();
-		final Point4F b = this.b.getPosition();
-		final Point4F c = this.c.getPosition();
-		
-		final Vector3F edgeAB = Vector3F.direction(a, b);
-		final Vector3F edgeAC = Vector3F.direction(a, c);
-		final Vector3F direction0 = ray.getDirection();
-		final Vector3F direction1 = Vector3F.crossProduct(direction0, edgeAC);
-		
-		final float determinant = Vector3F.dotProduct(edgeAB, direction1);
-		
-		if(determinant >= -0.0001F && determinant <= 0.0001F) {
-			return Float.NaN;
-		}
-		
-		final Point3F origin = ray.getOrigin();
-		
-		final Vector3F direction2 = Vector3F.direction(new Point3F(a), origin);
-		
-		final float determinantReciprocal = 1.0F / determinant;
-		final float u = Vector3F.dotProduct(direction2, direction1) * determinantReciprocal;
-		
-		if(u < 0.0F || u > 1.0F) {
-			return Float.NaN;
-		}
-		
-		final Vector3F direction3 = Vector3F.crossProduct(direction2, edgeAB);
-		
-		final float v = Vector3F.dotProduct(direction0, direction3) * determinantReciprocal;
-		
-		if(v < 0.0F || u + v > 1.0F) {
-			return Float.NaN;
-		}
-		
-		final float t = Vector3F.dotProduct(edgeAC, direction3) * determinantReciprocal;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return Float.NaN;
-		}
-		
-		return t;
-	}
-	
-	@SuppressWarnings("unused")
-	private float doIntersectionTPBRT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F p0 = new Point3F(this.a.getPosition());
-		final Point3F p1 = new Point3F(this.b.getPosition());
-		final Point3F p2 = new Point3F(this.c.getPosition());
-		
-		final int kZ = doMaxDimension(Vector3F.absolute(ray.getDirection()));
-		final int kX = kZ == 2 ? 0 : kZ + 1;
-		final int kY = kX == 2 ? 0 : kX + 1;
-		
-		final Vector3F d = doPermute(ray.getDirection(), kX, kY, kZ);
-		
-		final float shearX = -d.getX() / d.getZ();
-		final float shearY = -d.getY() / d.getZ();
-		final float shearZ = 1.0F / d.getZ();
-		
-		final Point3F p0T = doShear(doPermute(Point3F.subtract(p0, new Vector3F(ray.getOrigin())), kX, kY, kZ), shearX, shearY, shearZ);
-		final Point3F p1T = doShear(doPermute(Point3F.subtract(p1, new Vector3F(ray.getOrigin())), kX, kY, kZ), shearX, shearY, shearZ);
-		final Point3F p2T = doShear(doPermute(Point3F.subtract(p2, new Vector3F(ray.getOrigin())), kX, kY, kZ), shearX, shearY, shearZ);
-		
-		float e0 = p1T.getX() * p2T.getY() - p1T.getY() * p2T.getX();
-		float e1 = p2T.getX() * p0T.getY() - p2T.getY() * p0T.getX();
-		float e2 = p0T.getX() * p1T.getY() - p0T.getY() * p1T.getX();
-		
-		if(isZero(e0) || isZero(e1) || isZero(e2)) {
-			final double p2TXP1TY = (double)(p2T.getX()) * (double)(p1T.getY());
-			final double p2TYP1TX = (double)(p2T.getY()) * (double)(p1T.getX());
-			final double p0TXP2TY = (double)(p0T.getX()) * (double)(p2T.getY());
-			final double p0TYP2TX = (double)(p0T.getY()) * (double)(p2T.getX());
-			final double p1TXP0TY = (double)(p1T.getX()) * (double)(p0T.getY());
-			final double p1TYP0TX = (double)(p1T.getY()) * (double)(p0T.getX());
-			
-			e0 = (float)(p2TYP1TX - p2TXP1TY);
-			e1 = (float)(p0TYP2TX - p0TXP2TY);
-			e2 = (float)(p1TYP0TX - p1TXP0TY);
-		}
-		
-		if((e0 < 0.0F || e1 < 0.0F || e2 < 0.0F) && (e0 > 0.0F || e1 > 0.0F || e2 > 0.0F)) {
-			return Float.NaN;
-		}
-		
-		final float det = e0 + e1 + e2;
-		
-		if(isZero(det)) {
-			return Float.NaN;
-		}
-		
-		final float tScaled = e0 * p0T.getZ() + e1 * p1T.getZ() + e2 * p2T.getZ();
-		
-		if(det < 0.0F && (tScaled >= 0.0F || tScaled < tMaximum * det)) {
-			return Float.NaN;
-		} else if(det > 0.0F && (tScaled <= 0.0F || tScaled > tMaximum * det)) {
-			return Float.NaN;
-		}
-		
-		final float invDet = 1.0F / det;
-		
-		final float t = tScaled * invDet;
-		
-		final float maxE = max(abs(e0), abs(e1), abs(e2));
-		
-		final float maxXT = max(abs(p0T.getX()), abs(p1T.getX()), abs(p2T.getX()));
-		final float maxYT = max(abs(p0T.getY()), abs(p1T.getY()), abs(p2T.getY()));
-		final float maxZT = max(abs(p0T.getZ()), abs(p1T.getZ()), abs(p2T.getZ()));
-		
-		final float deltaX = gamma(5) * (maxXT + maxZT);
-		final float deltaY = gamma(5) * (maxYT + maxZT);
-		final float deltaZ = gamma(3) * maxZT;
-		final float deltaE = 2.0F * (gamma(2) * maxXT * maxYT + deltaY * maxXT + deltaX * maxYT);
-		final float deltaT = 3.0F * (gamma(3) * maxE * maxZT + deltaE * maxZT + deltaZ * maxE) * abs(invDet);
-		
-		if(t <= deltaT) {
-			return Float.NaN;
-		}
-		
-		return t;
-	}
-	
-	private float doIntersectionTSunflow(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	private float doIntersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point4F a = this.a.getPosition();
 		final Point4F b = this.b.getPosition();
 		final Point4F c = this.c.getPosition();
@@ -1237,35 +865,5 @@ public final class Triangle3F implements Shape3F {
 		}
 		
 		return t;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Point3F doPermute(final Point3F point, final int x, final int y, final int z) {
-		final float component1 = x == 0 ? point.getX() : x == 1 ? point.getY() : point.getZ();
-		final float component2 = y == 0 ? point.getX() : y == 1 ? point.getY() : point.getZ();
-		final float component3 = z == 0 ? point.getX() : z == 1 ? point.getY() : point.getZ();
-		
-		return new Point3F(component1, component2, component3);
-	}
-	
-	private static Point3F doShear(final Point3F point, final float shearX, final float shearY, final float shearZ) {
-		final float component1 = point.getX() + shearX * point.getZ();
-		final float component2 = point.getY() + shearY * point.getZ();
-		final float component3 = point.getZ() * shearZ;
-		
-		return new Point3F(component1, component2, component3);
-	}
-	
-	private static Vector3F doPermute(final Vector3F vector, final int x, final int y, final int z) {
-		final float component1 = x == 0 ? vector.getX() : x == 1 ? vector.getY() : vector.getZ();
-		final float component2 = y == 0 ? vector.getX() : y == 1 ? vector.getY() : vector.getZ();
-		final float component3 = z == 0 ? vector.getX() : z == 1 ? vector.getY() : vector.getZ();
-		
-		return new Vector3F(component1, component2, component3);
-	}
-	
-	private static int doMaxDimension(final Vector3F vector) {
-		return vector.getX() > vector.getY() ? vector.getX() > vector.getZ() ? 0 : 2 : vector.getY() > vector.getZ() ? 1 : 2;
 	}
 }

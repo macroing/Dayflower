@@ -22,10 +22,10 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point4F;
 import org.dayflower.geometry.Shape3FReader;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.utility.ParameterArguments;
 
@@ -95,9 +95,9 @@ public final class Triangle3FReader implements Shape3FReader {
 	public Triangle3F read(final DataInput dataInput, final int id) {
 		ParameterArguments.requireExact(id, Triangle3F.ID, "id");
 		
-		final Vertex3F a = new Vertex3F(Point2F.read(dataInput), Point4F.read(dataInput), OrthonormalBasis33F.read(dataInput));
-		final Vertex3F b = new Vertex3F(Point2F.read(dataInput), Point4F.read(dataInput), OrthonormalBasis33F.read(dataInput));
-		final Vertex3F c = new Vertex3F(Point2F.read(dataInput), Point4F.read(dataInput), OrthonormalBasis33F.read(dataInput));
+		final Vertex3F a = new Vertex3F(Point2F.read(dataInput), Point4F.read(dataInput), Vector3F.read(dataInput));
+		final Vertex3F b = new Vertex3F(Point2F.read(dataInput), Point4F.read(dataInput), Vector3F.read(dataInput));
+		final Vertex3F c = new Vertex3F(Point2F.read(dataInput), Point4F.read(dataInput), Vector3F.read(dataInput));
 		
 		return new Triangle3F(a, b, c);
 	}

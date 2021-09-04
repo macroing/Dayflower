@@ -22,10 +22,10 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-import org.dayflower.geometry.OrthonormalBasis33D;
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Point4D;
 import org.dayflower.geometry.Shape3DReader;
+import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.shape.Triangle3D.Vertex3D;
 import org.dayflower.utility.ParameterArguments;
 
@@ -95,9 +95,9 @@ public final class Triangle3DReader implements Shape3DReader {
 	public Triangle3D read(final DataInput dataInput, final int id) {
 		ParameterArguments.requireExact(id, Triangle3D.ID, "id");
 		
-		final Vertex3D a = new Vertex3D(Point2D.read(dataInput), Point4D.read(dataInput), OrthonormalBasis33D.read(dataInput));
-		final Vertex3D b = new Vertex3D(Point2D.read(dataInput), Point4D.read(dataInput), OrthonormalBasis33D.read(dataInput));
-		final Vertex3D c = new Vertex3D(Point2D.read(dataInput), Point4D.read(dataInput), OrthonormalBasis33D.read(dataInput));
+		final Vertex3D a = new Vertex3D(Point2D.read(dataInput), Point4D.read(dataInput), Vector3D.read(dataInput));
+		final Vertex3D b = new Vertex3D(Point2D.read(dataInput), Point4D.read(dataInput), Vector3D.read(dataInput));
+		final Vertex3D c = new Vertex3D(Point2D.read(dataInput), Point4D.read(dataInput), Vector3D.read(dataInput));
 		
 		return new Triangle3D(a, b, c);
 	}

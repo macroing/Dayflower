@@ -575,7 +575,7 @@ public final class TriangleMesh3F implements Shape3F {
 			final List<String> materialNames = indexedObjectModel.getMaterialNames();
 			final List<String> objectNames = indexedObjectModel.getObjectNames();
 			final List<Vector3F> normals = indexedObjectModel.getNormals();
-			final List<Vector3F> tangents = indexedObjectModel.getTangents();
+//			final List<Vector3F> tangents = indexedObjectModel.getTangents();
 			final List<Triangle3F> triangles = new ArrayList<>();
 			final List<TriangleMesh3F> triangleMeshes = new ArrayList<>();
 			
@@ -641,13 +641,13 @@ public final class TriangleMesh3F implements Shape3F {
 				final Vector3F normalB = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexB)) : normals.get(indexB);
 				final Vector3F normalC = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexC)) : normals.get(indexC);
 				
-				final Vector3F tangentA = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexA)) : tangents.get(indexA);
-				final Vector3F tangentB = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexB)) : tangents.get(indexB);
-				final Vector3F tangentC = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexC)) : tangents.get(indexC);
+//				final Vector3F tangentA = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexA)) : tangents.get(indexA);
+//				final Vector3F tangentB = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexB)) : tangents.get(indexB);
+//				final Vector3F tangentC = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexC)) : tangents.get(indexC);
 				
-				final Vertex3F a = new Vertex3F(textureCoordinatesA, positionA, normalA, tangentA);
-				final Vertex3F b = new Vertex3F(textureCoordinatesB, positionB, normalB, tangentB);
-				final Vertex3F c = new Vertex3F(textureCoordinatesC, positionC, normalC, tangentC);
+				final Vertex3F a = new Vertex3F(textureCoordinatesA, positionA, normalA);
+				final Vertex3F b = new Vertex3F(textureCoordinatesB, positionB, normalB);
+				final Vertex3F c = new Vertex3F(textureCoordinatesC, positionC, normalC);
 				
 				final Triangle3F triangle = new Triangle3F(a, b, c);
 				
@@ -1196,9 +1196,9 @@ public final class TriangleMesh3F implements Shape3F {
 			return this.normals;
 		}
 		
-		public List<Vector3F> getTangents() {
-			return this.tangents;
-		}
+//		public List<Vector3F> getTangents() {
+//			return this.tangents;
+//		}
 		
 		public Vector3F getNormal(final int index) {
 			return this.normals.get(index);

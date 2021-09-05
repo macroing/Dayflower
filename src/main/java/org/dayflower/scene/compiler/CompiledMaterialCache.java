@@ -40,6 +40,7 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
@@ -137,72 +138,72 @@ public final class CompiledMaterialCache {
 	/**
 	 * The length of a compiled {@link DisneyMaterial} instance.
 	 */
-	public static final int DISNEY_MATERIAL_LENGTH = 8;
+	public static final int DISNEY_MATERIAL_LENGTH = 16;
 	
 	/**
 	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Clear Coat} and {@code Clear Coat Gloss} in a compiled {@link DisneyMaterial} instance.
 	 */
-	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS = 1;
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS = 2;
 	
 	/**
 	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Color} and {@code Diffuse Transmission} in a compiled {@link DisneyMaterial} instance.
 	 */
-	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION = 2;
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION = 3;
 	
 	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code Anisotropic} in a compiled {@link DisneyMaterial} instance.
+	 * The ID and offset for the {@link Texture} instance denoted by {@code Anisotropic} in a compiled {@link DisneyMaterial} instance.
 	 */
-	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC = 0;
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_ANISOTROPIC = 1;
 	
 	/**
 	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Eta} and {@code Flatness} in a compiled {@link DisneyMaterial} instance.
 	 */
-	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS = 3;
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS = 4;
 	
 	/**
 	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Metallic} and {@code Roughness} in a compiled {@link DisneyMaterial} instance.
 	 */
-	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS = 4;
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS = 5;
 	
 	/**
 	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Scatter Distance} and {@code Sheen} in a compiled {@link DisneyMaterial} instance.
 	 */
-	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN = 5;
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN = 6;
 	
 	/**
 	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Sheen Tint} and {@code Specular Tint} in a compiled {@link DisneyMaterial} instance.
 	 */
-	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT = 6;
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT = 7;
 	
 	/**
 	 * The ID and offset for the {@link Texture} instance denoted by {@code Specular Transmission} and the thin flag in a compiled {@link DisneyMaterial} instance.
 	 */
-	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN = 7;
+	public static final int DISNEY_MATERIAL_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN = 8;
 	
 	/**
 	 * The length of a compiled {@link GlassMaterial} instance.
 	 */
-	public static final int GLASS_MATERIAL_LENGTH = 4;
+	public static final int GLASS_MATERIAL_LENGTH = 8;
 	
 	/**
 	 * The offset for the roughness remapping flag in a compiled {@link GlassMaterial} instance.
 	 */
-	public static final int GLASS_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
+	public static final int GLASS_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS = 4;
 	
 	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code Eta} in a compiled {@link GlassMaterial} instance.
+	 * The ID and offset for the {@link Texture} instance denoted by {@code Eta} in a compiled {@link GlassMaterial} instance.
 	 */
-	public static final int GLASS_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA = 0;
+	public static final int GLASS_MATERIAL_OFFSET_TEXTURE_ETA = 1;
 	
 	/**
 	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KR} and {@code KT} in a compiled {@link GlassMaterial} instance.
 	 */
-	public static final int GLASS_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T = 1;
+	public static final int GLASS_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T = 2;
 	
 	/**
 	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Roughness U} and {@code Roughness V} in a compiled {@link GlassMaterial} instance.
 	 */
-	public static final int GLASS_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
+	public static final int GLASS_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 3;
 	
 	/**
 	 * The length of a compiled {@link GlossyMaterial} instance.
@@ -215,9 +216,9 @@ public final class CompiledMaterialCache {
 	public static final int GLOSSY_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_ROUGHNESS = 1;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Emission} in a compiled {@link Material} instance.
+	 * The IDs and offsets for the {@link Texture} instance denoted by {@code Emission} and the {@link Modifier} instance in a compiled {@link Material} instance.
 	 */
-	public static final int MATERIAL_OFFSET_TEXTURE_EMISSION = 0;
+	public static final int MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER = 0;
 	
 	/**
 	 * The length of a compiled {@link MatteMaterial} instance.
@@ -252,12 +253,12 @@ public final class CompiledMaterialCache {
 	/**
 	 * The length of a compiled {@link MirrorMaterial} instance.
 	 */
-	public static final int MIRROR_MATERIAL_LENGTH = 1;
+	public static final int MIRROR_MATERIAL_LENGTH = 2;
 	
 	/**
-	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code KR} in a compiled {@link MirrorMaterial} instance.
+	 * The ID and offset for the {@link Texture} instance denoted by {@code KR} in a compiled {@link MirrorMaterial} instance.
 	 */
-	public static final int MIRROR_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_K_R = 0;
+	public static final int MIRROR_MATERIAL_OFFSET_TEXTURE_K_R = 1;
 	
 	/**
 	 * The length of a compiled {@link PlasticMaterial} instance.
@@ -2307,13 +2308,13 @@ public final class CompiledMaterialCache {
 		final Texture textureKD = clearCoatMaterial.getTextureKD();
 		final Texture textureKS = clearCoatMaterial.getTextureKS();
 		
-		final int textureEmissionValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
 		final int textureKDAndTextureKSValue = pack(textureKD.getID(), textureOffsetFunction.applyAsInt(textureKD), textureKS.getID(), textureOffsetFunction.applyAsInt(textureKS));
 		
 		final int[] array = new int[CLEAR_COAT_MATERIAL_LENGTH];
 		
 //		Because the ClearCoatMaterial occupy 2/8 positions in a block, it should be aligned.
-		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = textureEmissionValue;								//Block #1
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;		//Block #1
 		array[CLEAR_COAT_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = textureKDAndTextureKSValue;	//Block #1
 		
 		return array;
@@ -2402,7 +2403,8 @@ public final class CompiledMaterialCache {
 		
 		final boolean isThin = disneyMaterial.isThin();
 		
-		final int textureEmissionAndTextureAnisotropicValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), textureAnisotropic.getID(), textureOffsetFunction.applyAsInt(textureAnisotropic));
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
+		final int textureAnisotropicValue = pack(textureAnisotropic.getID(), textureOffsetFunction.applyAsInt(textureAnisotropic), 0, 0);
 		final int textureClearCoatAndTextureClearCoatGlossValue = pack(textureClearCoat.getID(), textureOffsetFunction.applyAsInt(textureClearCoat), textureClearCoatGloss.getID(), textureOffsetFunction.applyAsInt(textureClearCoatGloss));
 		final int textureColorAndTextureDiffuseTransmissionValue = pack(textureColor.getID(), textureOffsetFunction.applyAsInt(textureColor), textureDiffuseTransmission.getID(), textureOffsetFunction.applyAsInt(textureDiffuseTransmission));
 		final int textureEtaAndTextureFlatnessValue = pack(textureEta.getID(), textureOffsetFunction.applyAsInt(textureEta), textureFlatness.getID(), textureOffsetFunction.applyAsInt(textureFlatness));
@@ -2413,8 +2415,9 @@ public final class CompiledMaterialCache {
 		
 		final int[] array = new int[DISNEY_MATERIAL_LENGTH];
 		
-//		Because the DisneyMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[DISNEY_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC] = textureEmissionAndTextureAnisotropicValue;				//Block #1
+//		Because the DisneyMaterial occupy 16/16 positions in two blocks, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;											//Block #1
+		array[DISNEY_MATERIAL_OFFSET_TEXTURE_ANISOTROPIC] = textureAnisotropicValue;													//Block #1
 		array[DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS] = textureClearCoatAndTextureClearCoatGlossValue;	//Block #1
 		array[DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION] = textureColorAndTextureDiffuseTransmissionValue;	//Block #1
 		array[DISNEY_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS] = textureEtaAndTextureFlatnessValue;								//Block #1
@@ -2500,14 +2503,16 @@ public final class CompiledMaterialCache {
 		
 		final boolean isRemappingRoughness = glassMaterial.isRemappingRoughness();
 		
-		final int textureEmissionAndTextureEtaValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), textureEta.getID(), textureOffsetFunction.applyAsInt(textureEta));
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
+		final int textureEtaValue = pack(textureEta.getID(), textureOffsetFunction.applyAsInt(textureEta), 0, 0);
 		final int textureKRAndTextureKTValue = pack(textureKR.getID(), textureOffsetFunction.applyAsInt(textureKR), textureKT.getID(), textureOffsetFunction.applyAsInt(textureKT));
 		final int textureRoughnessUAndTextureRoughnessVValue = pack(textureRoughnessU.getID(), textureOffsetFunction.applyAsInt(textureRoughnessU), textureRoughnessV.getID(), textureOffsetFunction.applyAsInt(textureRoughnessV));
 		
 		final int[] array = new int[GLASS_MATERIAL_LENGTH];
 		
-//		Because the GlassMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[GLASS_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA] = textureEmissionAndTextureEtaValue;						//Block #1
+//		Because the GlassMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;									//Block #1
+		array[GLASS_MATERIAL_OFFSET_TEXTURE_ETA] = textureEtaValue;																//Block #1
 		array[GLASS_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T] = textureKRAndTextureKTValue;									//Block #1
 		array[GLASS_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = textureRoughnessUAndTextureRoughnessVValue;	//Block #1
 		array[GLASS_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;										//Block #1
@@ -2584,13 +2589,13 @@ public final class CompiledMaterialCache {
 		final Texture textureKR = glossyMaterial.getTextureKR();
 		final Texture textureRoughness = glossyMaterial.getTextureRoughness();
 		
-		final int textureEmissionValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
 		final int textureKRAndTextureRoughnessValue = pack(textureKR.getID(), textureOffsetFunction.applyAsInt(textureKR), textureRoughness.getID(), textureOffsetFunction.applyAsInt(textureRoughness));
 		
 		final int[] array = new int[GLOSSY_MATERIAL_LENGTH];
 		
 //		Because the GlossyMaterial occupy 2/8 positions in a block, it should be aligned.
-		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = textureEmissionValue;										//Block #1
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;				//Block #1
 		array[GLOSSY_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_ROUGHNESS] = textureKRAndTextureRoughnessValue;//Block #1
 		
 		return array;
@@ -2665,13 +2670,13 @@ public final class CompiledMaterialCache {
 		final Texture textureAngle = matteMaterial.getTextureAngle();
 		final Texture textureKD = matteMaterial.getTextureKD();
 		
-		final int textureEmissionValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
 		final int textureAngleAndTextureKDValue = pack(textureAngle.getID(), textureOffsetFunction.applyAsInt(textureAngle), textureKD.getID(), textureOffsetFunction.applyAsInt(textureKD));
 		
 		final int[] array = new int[MATTE_MATERIAL_LENGTH];
 		
 //		Because the MatteMaterial occupy 2/8 positions in a block, it should be aligned.
-		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = textureEmissionValue;								//Block #1
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;		//Block #1
 		array[MATTE_MATERIAL_OFFSET_TEXTURE_ANGLE_AND_TEXTURE_K_D] = textureAngleAndTextureKDValue;	//Block #1
 		
 		return array;
@@ -2750,14 +2755,14 @@ public final class CompiledMaterialCache {
 		
 		final boolean isRemappingRoughness = metalMaterial.isRemappingRoughness();
 		
-		final int textureEmissionValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
 		final int textureEtaAndTextureKValue = pack(textureEta.getID(), textureOffsetFunction.applyAsInt(textureEta), textureK.getID(), textureOffsetFunction.applyAsInt(textureK));
 		final int textureRoughnessUAndTextureRoughnessVValue = pack(textureRoughnessU.getID(), textureOffsetFunction.applyAsInt(textureRoughnessU), textureRoughnessV.getID(), textureOffsetFunction.applyAsInt(textureRoughnessV));
 		
 		final int[] array = new int[METAL_MATERIAL_LENGTH];
 		
 //		Because the MetalMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = textureEmissionValue;															//Block #1
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;									//Block #1
 		array[METAL_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_K] = textureEtaAndTextureKValue;									//Block #1
 		array[METAL_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = textureRoughnessUAndTextureRoughnessVValue;	//Block #1
 		array[METAL_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;										//Block #1
@@ -2833,12 +2838,14 @@ public final class CompiledMaterialCache {
 		final Texture textureEmission = mirrorMaterial.getTextureEmission();
 		final Texture textureKR = mirrorMaterial.getTextureKR();
 		
-		final int textureEmissionAndTextureKRValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), textureKR.getID(), textureOffsetFunction.applyAsInt(textureKR));
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
+		final int textureKRValue = pack(textureKR.getID(), textureOffsetFunction.applyAsInt(textureKR), 0, 0);
 		
 		final int[] array = new int[MIRROR_MATERIAL_LENGTH];
 		
-//		Because the MirrorMaterial occupy 1/8 positions in a block, it should be aligned.
-		array[MIRROR_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_K_R] = textureEmissionAndTextureKRValue;//Block #1
+//		Because the MirrorMaterial occupy 2/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;	//Block #1
+		array[MIRROR_MATERIAL_OFFSET_TEXTURE_K_R] = textureKRValue;								//Block #1
 		
 		return array;
 	}
@@ -2915,14 +2922,14 @@ public final class CompiledMaterialCache {
 		
 		final boolean isRemappingRoughness = plasticMaterial.isRemappingRoughness();
 		
-		final int textureEmissionValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
 		final int textureKDAndTextureKSValue = pack(textureKD.getID(), textureOffsetFunction.applyAsInt(textureKD), textureKS.getID(), textureOffsetFunction.applyAsInt(textureKS));
 		final int textureRoughnessValue = pack(textureRoughness.getID(), textureOffsetFunction.applyAsInt(textureRoughness), 0, 0);
 		
 		final int[] array = new int[PLASTIC_MATERIAL_LENGTH];
 		
 //		Because the PlasticMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = textureEmissionValue;							//Block #1
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;	//Block #1
 		array[PLASTIC_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = textureKDAndTextureKSValue;//Block #1
 		array[PLASTIC_MATERIAL_OFFSET_TEXTURE_ROUGHNESS] = textureRoughnessValue;				//Block #1
 		array[PLASTIC_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;	//Block #1
@@ -3003,14 +3010,14 @@ public final class CompiledMaterialCache {
 		
 		final boolean isRemappingRoughness = substrateMaterial.isRemappingRoughness();
 		
-		final int textureEmissionValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), 0, 0);
 		final int textureKDAndTextureKSValue = pack(textureKD.getID(), textureOffsetFunction.applyAsInt(textureKD), textureKS.getID(), textureOffsetFunction.applyAsInt(textureKS));
 		final int textureRoughnessUAndTextureRoughnessVValue = pack(textureRoughnessU.getID(), textureOffsetFunction.applyAsInt(textureRoughnessU), textureRoughnessV.getID(), textureOffsetFunction.applyAsInt(textureRoughnessV));
 		
 		final int[] array = new int[SUBSTRATE_MATERIAL_LENGTH];
 		
 //		Because the SubstrateMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[MATERIAL_OFFSET_TEXTURE_EMISSION] = textureEmissionValue;																//Block #1
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;										//Block #1
 		array[SUBSTRATE_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = textureKDAndTextureKSValue;									//Block #1
 		array[SUBSTRATE_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = textureRoughnessUAndTextureRoughnessVValue;	//Block #1
 		array[SUBSTRATE_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;										//Block #1

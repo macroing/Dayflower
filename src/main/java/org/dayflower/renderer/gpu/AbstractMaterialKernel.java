@@ -1052,7 +1052,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			}
 		}
 		
-		final int materialOffsetTextureEmission = currentMaterialOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION;
+		final int materialOffsetTextureEmission = currentMaterialOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER;
 		
 		int textureEmission = 0;
 		
@@ -1213,7 +1213,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 * Evaluate the Texture instances:
 		 */
 		
-		final int textureEmissionAndTextureAnisotropic = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC];
+		final int textureAnisotropic = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_ANISOTROPIC];
 		final int textureClearCoatAndTextureClearCoatGloss = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS];
 		final int textureColorAndTextureDiffuseTransmission = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION];
 		final int textureEtaAndTextureFlatness = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS];
@@ -1223,8 +1223,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final int textureSpecularTransmissionAndIsThin = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN];
 		
 //		Retrieve the ID and offset for the Anisotropic Texture:
-		final int textureAnisotropicID     = (textureEmissionAndTextureAnisotropic >> 16) & 0xFF;
-		final int textureAnisotropicOffset = (textureEmissionAndTextureAnisotropic >> 24) & 0xFF;
+		final int textureAnisotropicID     = (textureAnisotropic >> 0) & 0xFF;
+		final int textureAnisotropicOffset = (textureAnisotropic >> 8) & 0xFF;
 		
 //		Retrieve the ID and offset for the Clear Coat Texture:
 		final int textureClearCoatID     = (textureClearCoatAndTextureClearCoatGloss >> 0) & 0xFF;
@@ -1444,7 +1444,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 * Evaluate the Texture instances:
 		 */
 		
-		final int textureEmissionAndTextureEta = this.materialGlassMaterialArray[materialGlassMaterialArrayOffset + CompiledMaterialCache.GLASS_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA];
+		final int textureEta = this.materialGlassMaterialArray[materialGlassMaterialArrayOffset + CompiledMaterialCache.GLASS_MATERIAL_OFFSET_TEXTURE_ETA];
 		final int textureKRAndTextureKT = this.materialGlassMaterialArray[materialGlassMaterialArrayOffset + CompiledMaterialCache.GLASS_MATERIAL_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T];
 		final int textureRoughnessUAndTextureRoughnessV = this.materialGlassMaterialArray[materialGlassMaterialArrayOffset + CompiledMaterialCache.GLASS_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V];
 		
@@ -1457,8 +1457,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final int textureKTOffset = (textureKRAndTextureKT >> 24) & 0xFF;
 		
 //		Retrieve the ID and offset for the Eta Texture:
-		final int textureEtaID     = (textureEmissionAndTextureEta >> 16) & 0xFF;
-		final int textureEtaOffset = (textureEmissionAndTextureEta >> 24) & 0xFF;
+		final int textureEtaID     = (textureEta >> 0) & 0xFF;
+		final int textureEtaOffset = (textureEta >> 8) & 0xFF;
 		
 //		Retrieve the ID and offset for the Roughness U Texture:
 		final int textureRoughnessUID     = (textureRoughnessUAndTextureRoughnessV >> 0) & 0xFF;
@@ -1770,11 +1770,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 * Evaluate the Texture instances:
 		 */
 		
-		final int textureEmissionAndTextureKR = this.materialMirrorMaterialArray[materialMirrorMaterialArrayOffset + CompiledMaterialCache.MIRROR_MATERIAL_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_K_R];
+		final int textureKR = this.materialMirrorMaterialArray[materialMirrorMaterialArrayOffset + CompiledMaterialCache.MIRROR_MATERIAL_OFFSET_TEXTURE_K_R];
 		
 //		Retrieve the ID and offset for the KR Texture:
-		final int textureKRID     = (textureEmissionAndTextureKR >> 16) & 0xFF;
-		final int textureKROffset = (textureEmissionAndTextureKR >> 24) & 0xFF;
+		final int textureKRID     = (textureKR >> 0) & 0xFF;
+		final int textureKROffset = (textureKR >> 8) & 0xFF;
 		
 //		Evaluate the KR Texture:
 		textureEvaluate(textureKRID, textureKROffset);

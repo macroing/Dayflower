@@ -1,6 +1,7 @@
 2021-09-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for DotProductTexture to the GPU-renderer.
+	* CHANGE:	Change the structure for some compiled Material instances, in order to make room for their associated Modifier instances.
 
 2021-09-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

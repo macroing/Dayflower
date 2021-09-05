@@ -33,6 +33,7 @@ import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.DotProductTexture;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.PolkaDotTexture;
@@ -54,6 +55,7 @@ import org.dayflower.utility.ParameterArguments;
  * <li>{@link BullseyeTexture}</li>
  * <li>{@link CheckerboardTexture}</li>
  * <li>{@link ConstantTexture}</li>
+ * <li>{@link DotProductTexture}</li>
  * <li>{@link LDRImageTexture}</li>
  * <li>{@link MarbleTexture}</li>
  * <li>{@link PolkaDotTexture}</li>
@@ -1496,6 +1498,8 @@ public final class CompiledTextureCache {
 		} else if(texture instanceof CheckerboardTexture) {
 			return doIsSupported(CheckerboardTexture.class.cast(texture));
 		} else if(texture instanceof ConstantTexture) {
+			return true;
+		} else if(texture instanceof DotProductTexture) {
 			return true;
 		} else if(texture instanceof LDRImageTexture) {
 			return true;

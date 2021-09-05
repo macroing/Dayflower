@@ -31,6 +31,7 @@ import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.DotProductTexture;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.PolkaDotTexture;
@@ -44,6 +45,7 @@ final class TextureCache {
 	private final List<BullseyeTexture> distinctBullseyeTextures;
 	private final List<CheckerboardTexture> distinctCheckerboardTextures;
 	private final List<ConstantTexture> distinctConstantTextures;
+	private final List<DotProductTexture> distinctDotProductTextures;
 	private final List<LDRImageTexture> distinctLDRImageTextures;
 	private final List<MarbleTexture> distinctMarbleTextures;
 	private final List<PolkaDotTexture> distinctPolkaDotTextures;
@@ -69,6 +71,7 @@ final class TextureCache {
 		this.distinctBullseyeTextures = new ArrayList<>();
 		this.distinctCheckerboardTextures = new ArrayList<>();
 		this.distinctConstantTextures = new ArrayList<>();
+		this.distinctDotProductTextures = new ArrayList<>();
 		this.distinctLDRImageTextures = new ArrayList<>();
 		this.distinctMarbleTextures = new ArrayList<>();
 		this.distinctPolkaDotTextures = new ArrayList<>();
@@ -173,6 +176,7 @@ final class TextureCache {
 		this.distinctBullseyeTextures.clear();
 		this.distinctCheckerboardTextures.clear();
 		this.distinctConstantTextures.clear();
+		this.distinctDotProductTextures.clear();
 		this.distinctLDRImageTextures.clear();
 		this.distinctMarbleTextures.clear();
 		this.distinctPolkaDotTextures.clear();
@@ -207,6 +211,10 @@ final class TextureCache {
 		this.distinctConstantTextures.clear();
 		this.distinctConstantTextures.addAll(this.nodeCache.getAllDistinct(ConstantTexture.class));
 		
+//		Add all distinct DotProductTexture instances:
+		this.distinctDotProductTextures.clear();
+		this.distinctDotProductTextures.addAll(this.nodeCache.getAllDistinct(DotProductTexture.class));
+		
 //		Add all distinct LDRImageTexture instances:
 		this.distinctLDRImageTextures.clear();
 		this.distinctLDRImageTextures.addAll(this.nodeCache.getAllDistinct(LDRImageTexture.class));
@@ -237,6 +245,7 @@ final class TextureCache {
 		this.distinctTextures.addAll(this.distinctBullseyeTextures);
 		this.distinctTextures.addAll(this.distinctCheckerboardTextures);
 		this.distinctTextures.addAll(this.distinctConstantTextures);
+		this.distinctTextures.addAll(this.distinctDotProductTextures);
 		this.distinctTextures.addAll(this.distinctLDRImageTextures);
 		this.distinctTextures.addAll(this.distinctMarbleTextures);
 		this.distinctTextures.addAll(this.distinctPolkaDotTextures);

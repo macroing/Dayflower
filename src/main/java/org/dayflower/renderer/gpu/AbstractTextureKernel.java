@@ -23,6 +23,7 @@ import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.DotProductTexture;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.PolkaDotTexture;
@@ -40,6 +41,7 @@ import org.dayflower.scene.texture.UVTexture;
  * <li>{@link BullseyeTexture}</li>
  * <li>{@link CheckerboardTexture}</li>
  * <li>{@link ConstantTexture}</li>
+ * <li>{@link DotProductTexture}</li>
  * <li>{@link LDRImageTexture}</li>
  * <li>{@link MarbleTexture}</li>
  * <li>{@link PolkaDotTexture}</li>
@@ -258,6 +260,20 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 				component1 = this.textureConstantTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CONSTANT_TEXTURE_OFFSET_COLOR + 0];
 				component2 = this.textureConstantTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CONSTANT_TEXTURE_OFFSET_COLOR + 1];
 				component3 = this.textureConstantTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.CONSTANT_TEXTURE_OFFSET_COLOR + 2];
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			} else if(currentTextureID == DotProductTexture.ID) {
+				final float directionX = ray3FGetDirectionComponent1();
+				final float directionY = ray3FGetDirectionComponent2();
+				final float directionZ = ray3FGetDirectionComponent3();
+				
+				final float dotProduct = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
+				final float dotProductAbs = abs(dotProduct);
+				
+				component1 = dotProductAbs;
+				component2 = dotProductAbs;
+				component3 = dotProductAbs;
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;

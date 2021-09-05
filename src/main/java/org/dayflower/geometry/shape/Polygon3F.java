@@ -386,15 +386,19 @@ public final class Polygon3F implements Shape3F {
 		final Vector3F u = Vector3F.directionNormalized(a, b);
 		final Vector3F v = Vector3F.crossProduct(w, u);
 		
-		final Vector3F directionAP = Vector3F.direction(a, p);
-		
-		final float x = Vector3F.dotProduct(directionAP, u);
-		final float y = Vector3F.dotProduct(directionAP, v);
-		
-		return this.polygon.contains(new Point2F(x, y));
+		return this.polygon.contains(doMap(a, p, u, v));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point2F doMap(final Point3F a, final Point3F b, final Vector3F u, final Vector3F v) {
+		final Vector3F directionAB = Vector3F.direction(a, b);
+		
+		final float x = Vector3F.dotProduct(directionAB, u);
+		final float y = Vector3F.dotProduct(directionAB, v);
+		
+		return new Point2F(x, y);
+	}
 	
 	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
 		return Point3F.add(ray.getOrigin(), ray.getDirection(), t);
@@ -422,12 +426,7 @@ public final class Polygon3F implements Shape3F {
 		final Point2F[] point2Fs = new Point2F[points.length];
 		
 		for(int i = 0; i < points.length; i++) {
-			final Vector3F directionAI = Vector3F.direction(a, points[i]);
-			
-			final float x = Vector3F.dotProduct(directionAI, u);
-			final float y = Vector3F.dotProduct(directionAI, v);
-			
-			point2Fs[i] = new Point2F(x, y);
+			point2Fs[i] = doMap(a, points[i], u, v);
 		}
 		
 		final Polygon2F polygon = new Polygon2F(point2Fs);

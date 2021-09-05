@@ -386,15 +386,19 @@ public final class Polygon3D implements Shape3D {
 		final Vector3D u = Vector3D.directionNormalized(a, b);
 		final Vector3D v = Vector3D.crossProduct(w, u);
 		
-		final Vector3D directionAP = Vector3D.direction(a, p);
-		
-		final double x = Vector3D.dotProduct(directionAP, u);
-		final double y = Vector3D.dotProduct(directionAP, v);
-		
-		return this.polygon.contains(new Point2D(x, y));
+		return this.polygon.contains(doMap(a, p, u, v));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point2D doMap(final Point3D a, final Point3D b, final Vector3D u, final Vector3D v) {
+		final Vector3D directionAB = Vector3D.direction(a, b);
+		
+		final double x = Vector3D.dotProduct(directionAB, u);
+		final double y = Vector3D.dotProduct(directionAB, v);
+		
+		return new Point2D(x, y);
+	}
 	
 	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
 		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
@@ -422,12 +426,7 @@ public final class Polygon3D implements Shape3D {
 		final Point2D[] point2Fs = new Point2D[points.length];
 		
 		for(int i = 0; i < points.length; i++) {
-			final Vector3D directionAI = Vector3D.direction(a, points[i]);
-			
-			final double x = Vector3D.dotProduct(directionAI, u);
-			final double y = Vector3D.dotProduct(directionAI, v);
-			
-			point2Fs[i] = new Point2D(x, y);
+			point2Fs[i] = doMap(a, points[i], u, v);
 		}
 		
 		final Polygon2D polygon = new Polygon2D(point2Fs);

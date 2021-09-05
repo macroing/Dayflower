@@ -765,6 +765,50 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	}
 	
 	/**
+	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @param component1 component 1 of the W-direction
+	 * @param component2 component 2 of the W-direction
+	 * @param component3 component 3 of the W-direction
+	 */
+	protected final void intersectionSetOrthonormalBasisSW(final float component1, final float component2, final float component3) {
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = component1;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = component2;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = component3;
+	}
+	
+	/**
+	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24} to a transformed representation.
+	 * 
+	 * @param component1 component 1 of the vector to transform with
+	 * @param component2 component 2 of the vector to transform with
+	 * @param component3 component 3 of the vector to transform with
+	 */
+	protected final void intersectionSetOrthonormalBasisSWTransform(final float component1, final float component2, final float component3) {
+		final float oldUComponent1 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
+		final float oldUComponent2 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
+		final float oldUComponent3 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
+		final float oldVComponent1 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
+		final float oldVComponent2 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
+		final float oldVComponent3 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
+		final float oldWComponent1 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float oldWComponent2 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float oldWComponent3 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		final float newWComponent1 = component1 * oldUComponent1 + component2 * oldVComponent1 + component3 * oldWComponent1;
+		final float newWComponent2 = component1 * oldUComponent2 + component2 * oldVComponent2 + component3 * oldWComponent2;
+		final float newWComponent3 = component1 * oldUComponent3 + component2 * oldVComponent3 + component3 * oldWComponent3;
+		final float newWLengthReciprocal = vector3FLengthReciprocal(newWComponent1, newWComponent2, newWComponent3);
+		final float newWNormalizedComponent1 = newWComponent1 * newWLengthReciprocal;
+		final float newWNormalizedComponent2 = newWComponent2 * newWLengthReciprocal;
+		final float newWNormalizedComponent3 = newWComponent3 * newWLengthReciprocal;
+		
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = newWNormalizedComponent1;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = newWNormalizedComponent2;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = newWNormalizedComponent3;
+	}
+	
+	/**
 	 * Sets the primitive index in {@link #intersectionArray_$private$24}.
 	 * 
 	 * @param primitiveIndex the primitive index

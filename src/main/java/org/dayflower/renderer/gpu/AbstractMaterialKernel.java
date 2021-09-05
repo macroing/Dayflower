@@ -1088,6 +1088,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doMaterialClearCoatMaterialComputeBSDF(final int materialClearCoatMaterialArrayOffset) {
 		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialClearCoatMaterialArray[materialClearCoatMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		
+		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
+		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
+		
+		modifierModify(modifierID, modifierOffset);
+		
+		/*
 		 * Evaluate the Texture instances:
 		 */
 		
@@ -1209,6 +1220,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doMaterialDisneyMaterialComputeBSDF(final int materialDisneyMaterialArrayOffset) {
+		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		
+		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
+		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
+		
+		modifierModify(modifierID, modifierOffset);
+		
 		/*
 		 * Evaluate the Texture instances:
 		 */
@@ -1441,6 +1463,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doMaterialGlassMaterialComputeBSDF(final int materialGlassMaterialArrayOffset) {
 		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialGlassMaterialArray[materialGlassMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		
+		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
+		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
+		
+		modifierModify(modifierID, modifierOffset);
+		
+		/*
 		 * Evaluate the Texture instances:
 		 */
 		
@@ -1582,6 +1615,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doMaterialGlossyMaterialComputeBSDF(final int materialGlossyMaterialArrayOffset) {
 		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialGlossyMaterialArray[materialGlossyMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		
+		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
+		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
+		
+		modifierModify(modifierID, modifierOffset);
+		
+		/*
 		 * Evaluate the Texture instances:
 		 */
 		
@@ -1628,6 +1672,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doMaterialMatteMaterialComputeBSDF(final int materialMatteMaterialArrayOffset) {
+		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialMatteMaterialArray[materialMatteMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		
+		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
+		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
+		
+		modifierModify(modifierID, modifierOffset);
+		
 		/*
 		 * Evaluate the Texture instances:
 		 */
@@ -1694,6 +1749,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doMaterialMetalMaterialComputeBSDF(final int materialMetalMaterialArrayOffset) {
+		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialMetalMaterialArray[materialMetalMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		
+		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
+		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
+		
+		modifierModify(modifierID, modifierOffset);
+		
 		/*
 		 * Evaluate the Texture instances:
 		 */
@@ -1767,6 +1833,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doMaterialMirrorMaterialComputeBSDF(final int materialMirrorMaterialArrayOffset) {
 		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialMirrorMaterialArray[materialMirrorMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		
+		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
+		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
+		
+		modifierModify(modifierID, modifierOffset);
+		
+		/*
 		 * Evaluate the Texture instances:
 		 */
 		
@@ -1809,6 +1886,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doMaterialPlasticMaterialComputeBSDF(final int materialPlasticMaterialArrayOffset) {
+		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialPlasticMaterialArray[materialPlasticMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		
+		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
+		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
+		
+		modifierModify(modifierID, modifierOffset);
+		
 		/*
 		 * Evaluate the Texture instances:
 		 */
@@ -1894,6 +1982,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doMaterialSubstrateMaterialComputeBSDF(final int materialSubstrateMaterialArrayOffset) {
+		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialSubstrateMaterialArray[materialSubstrateMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		
+		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
+		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
+		
+		modifierModify(modifierID, modifierOffset);
+		
 		/*
 		 * Evaluate the Texture instances:
 		 */

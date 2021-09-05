@@ -101,9 +101,9 @@ The lists below show the main features of the renderer.
 * Uber Material (CPU)
 
 #### Supported Modifiers
-* Low-Dynamic-Range (LDR) Image Normal Map Modifier (CPU)
-* No-Op Modifier (CPU)
-* Simplex Noise Normal Map Modifier (CPU)
+* Low-Dynamic-Range (LDR) Image Normal Map Modifier (CPU & GPU)
+* No-Op Modifier (CPU & GPU)
+* Simplex Noise Normal Map Modifier (CPU & GPU)
 
 #### Supported Shapes
 * Cone (CPU & GPU)

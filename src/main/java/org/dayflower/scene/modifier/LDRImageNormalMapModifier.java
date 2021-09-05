@@ -56,6 +56,13 @@ import org.dayflower.utility.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class LDRImageNormalMapModifier implements Modifier {
+	/**
+	 * The ID of this {@code LDRImageNormalMapModifier} class.
+	 */
+	public static final int ID = 1;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AngleF angle;
 	private final Vector2F scale;
 	private final int resolution;
@@ -295,6 +302,16 @@ public final class LDRImageNormalMapModifier implements Modifier {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code LDRImageNormalMapModifier} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code LDRImageNormalMapModifier} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

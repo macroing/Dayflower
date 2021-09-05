@@ -67,13 +67,15 @@ final class MaterialCache {
 	private final Map<PlasticMaterial, Integer> distinctToOffsetsPlasticMaterials;
 	private final Map<PolkaDotMaterial, Integer> distinctToOffsetsPolkaDotMaterials;
 	private final Map<SubstrateMaterial, Integer> distinctToOffsetsSubstrateMaterials;
+	private final ModifierCache modifierCache;
 	private final NodeCache nodeCache;
 	private final TextureCache textureCache;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public MaterialCache(final NodeCache nodeCache, final TextureCache textureCache) {
+	public MaterialCache(final NodeCache nodeCache, final ModifierCache modifierCache, final TextureCache textureCache) {
 		this.nodeCache = Objects.requireNonNull(nodeCache, "nodeCache == null");
+		this.modifierCache = Objects.requireNonNull(modifierCache, "modifierCache == null");
 		this.textureCache = Objects.requireNonNull(textureCache, "textureCache == null");
 		this.distinctBullseyeMaterials = new ArrayList<>();
 		this.distinctCheckerboardMaterials = new ArrayList<>();
@@ -153,39 +155,39 @@ final class MaterialCache {
 	}
 	
 	public int[] toClearCoatMaterials() {
-		return CompiledMaterialCache.toClearCoatMaterials(this.distinctClearCoatMaterials, this.textureCache::findOffsetFor);
+		return CompiledMaterialCache.toClearCoatMaterials(this.distinctClearCoatMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
 	public int[] toDisneyMaterials() {
-		return CompiledMaterialCache.toDisneyMaterials(this.distinctDisneyMaterials, this.textureCache::findOffsetFor);
+		return CompiledMaterialCache.toDisneyMaterials(this.distinctDisneyMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
 	public int[] toGlassMaterials() {
-		return CompiledMaterialCache.toGlassMaterials(this.distinctGlassMaterials, this.textureCache::findOffsetFor);
+		return CompiledMaterialCache.toGlassMaterials(this.distinctGlassMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
 	public int[] toGlossyMaterials() {
-		return CompiledMaterialCache.toGlossyMaterials(this.distinctGlossyMaterials, this.textureCache::findOffsetFor);
+		return CompiledMaterialCache.toGlossyMaterials(this.distinctGlossyMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
 	public int[] toMatteMaterials() {
-		return CompiledMaterialCache.toMatteMaterials(this.distinctMatteMaterials, this.textureCache::findOffsetFor);
+		return CompiledMaterialCache.toMatteMaterials(this.distinctMatteMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
 	public int[] toMetalMaterials() {
-		return CompiledMaterialCache.toMetalMaterials(this.distinctMetalMaterials, this.textureCache::findOffsetFor);
+		return CompiledMaterialCache.toMetalMaterials(this.distinctMetalMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
 	public int[] toMirrorMaterials() {
-		return CompiledMaterialCache.toMirrorMaterials(this.distinctMirrorMaterials, this.textureCache::findOffsetFor);
+		return CompiledMaterialCache.toMirrorMaterials(this.distinctMirrorMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
 	public int[] toPlasticMaterials() {
-		return CompiledMaterialCache.toPlasticMaterials(this.distinctPlasticMaterials, this.textureCache::findOffsetFor);
+		return CompiledMaterialCache.toPlasticMaterials(this.distinctPlasticMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
 	public int[] toSubstrateMaterials() {
-		return CompiledMaterialCache.toSubstrateMaterials(this.distinctSubstrateMaterials, this.textureCache::findOffsetFor);
+		return CompiledMaterialCache.toSubstrateMaterials(this.distinctSubstrateMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
 	public void build(final CompiledMaterialCache compiledMaterialCache) {

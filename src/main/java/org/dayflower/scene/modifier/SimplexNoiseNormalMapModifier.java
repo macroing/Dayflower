@@ -36,6 +36,13 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class SimplexNoiseNormalMapModifier implements Modifier {
+	/**
+	 * The ID of this {@code SimplexNoiseNormalMapModifier} class.
+	 */
+	public static final int ID = 3;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final float frequency;
 	private final float scale;
 	
@@ -117,6 +124,16 @@ public final class SimplexNoiseNormalMapModifier implements Modifier {
 	 */
 	public float getScale() {
 		return this.scale;
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code SimplexNoiseNormalMapModifier} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code SimplexNoiseNormalMapModifier} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

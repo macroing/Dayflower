@@ -39,6 +39,7 @@ public final class SceneCompiler {
 	private final CameraCache cameraCache;
 	private final LightCache lightCache;
 	private final MaterialCache materialCache;
+	private final ModifierCache modifierCache;
 	private final NodeCache nodeCache;
 	private final PrimitiveCache primitiveCache;
 	private final Shape3FCache shape3FCache;
@@ -57,8 +58,9 @@ public final class SceneCompiler {
 		this.cameraCache = new CameraCache();
 		this.shape3FCache = new Shape3FCache(this.nodeCache, this.boundingVolume3FCache);
 		this.lightCache = new LightCache(this.nodeCache, this.shape3FCache);
+		this.modifierCache = new ModifierCache(this.nodeCache);
 		this.textureCache = new TextureCache(this.nodeCache);
-		this.materialCache = new MaterialCache(this.nodeCache, this.textureCache);
+		this.materialCache = new MaterialCache(this.nodeCache, this.modifierCache, this.textureCache);
 		this.primitiveCache = new PrimitiveCache(this.boundingVolume3FCache, this.lightCache, this.materialCache, this.shape3FCache);
 	}
 	
@@ -99,6 +101,7 @@ public final class SceneCompiler {
 		this.cameraCache.build(compiledScene);
 		this.lightCache.build(compiledScene);
 		this.materialCache.build(compiledScene);
+		this.modifierCache.build(compiledScene);
 		this.primitiveCache.build(compiledScene);
 		this.shape3FCache.build(compiledScene);
 		this.textureCache.build(compiledScene);
@@ -111,6 +114,7 @@ public final class SceneCompiler {
 		this.cameraCache.clear();
 		this.lightCache.clear();
 		this.materialCache.clear();
+		this.modifierCache.clear();
 		this.primitiveCache.clear();
 		this.shape3FCache.clear();
 		this.textureCache.clear();
@@ -144,6 +148,7 @@ public final class SceneCompiler {
 		this.boundingVolume3FCache.setup();
 		this.lightCache.setup();
 		this.materialCache.setup();
+		this.modifierCache.setup();
 		this.shape3FCache.setup();
 		this.textureCache.setup();
 		
@@ -154,6 +159,6 @@ public final class SceneCompiler {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static boolean doFilter(final Node node) {
-		return BoundingVolume3FCache.filter(node) || LightCache.filter(node) || MaterialCache.filter(node) || Shape3FCache.filter(node) || TextureCache.filter(node);
+		return BoundingVolume3FCache.filter(node) || LightCache.filter(node) || MaterialCache.filter(node) || ModifierCache.filter(node) || Shape3FCache.filter(node) || TextureCache.filter(node);
 	}
 }

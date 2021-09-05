@@ -35,6 +35,13 @@ import org.dayflower.scene.Intersection;
  */
 public interface Modifier extends Node {
 	/**
+	 * Returns an {@code int} with the ID of this {@code Modifier} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Modifier} instance
+	 */
+	int getID();
+	
+	/**
 	 * Modifies the surface at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.

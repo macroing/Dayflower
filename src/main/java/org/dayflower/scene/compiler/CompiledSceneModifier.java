@@ -60,6 +60,10 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.modifier.LDRImageNormalMapModifier;
+import org.dayflower.scene.modifier.Modifier;
+import org.dayflower.scene.modifier.NoOpModifier;
+import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -295,56 +299,56 @@ public final class CompiledSceneModifier {
 		} else if(material instanceof ClearCoatMaterial) {
 			final ClearCoatMaterial clearCoatMaterial = ClearCoatMaterial.class.cast(material);
 			
-			final int offsetRelative = compiledMaterialCache.addClearCoatMaterial(CompiledMaterialCache.toClearCoatMaterial(clearCoatMaterial, this::doAddTexture));
+			final int offsetRelative = compiledMaterialCache.addClearCoatMaterial(CompiledMaterialCache.toClearCoatMaterial(clearCoatMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.CLEAR_COAT_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
 		} else if(material instanceof DisneyMaterial) {
 			final DisneyMaterial disneyMaterial = DisneyMaterial.class.cast(material);
 			
-			final int offsetRelative = compiledMaterialCache.addDisneyMaterial(CompiledMaterialCache.toDisneyMaterial(disneyMaterial, this::doAddTexture));
+			final int offsetRelative = compiledMaterialCache.addDisneyMaterial(CompiledMaterialCache.toDisneyMaterial(disneyMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.DISNEY_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
 		} else if(material instanceof GlassMaterial) {
 			final GlassMaterial glassMaterial = GlassMaterial.class.cast(material);
 			
-			final int offsetRelative = compiledMaterialCache.addGlassMaterial(CompiledMaterialCache.toGlassMaterial(glassMaterial, this::doAddTexture));
+			final int offsetRelative = compiledMaterialCache.addGlassMaterial(CompiledMaterialCache.toGlassMaterial(glassMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.GLASS_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
 		} else if(material instanceof GlossyMaterial) {
 			final GlossyMaterial glossyMaterial = GlossyMaterial.class.cast(material);
 			
-			final int offsetRelative = compiledMaterialCache.addGlossyMaterial(CompiledMaterialCache.toGlossyMaterial(glossyMaterial, this::doAddTexture));
+			final int offsetRelative = compiledMaterialCache.addGlossyMaterial(CompiledMaterialCache.toGlossyMaterial(glossyMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.GLOSSY_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
 		} else if(material instanceof MatteMaterial) {
 			final MatteMaterial matteMaterial = MatteMaterial.class.cast(material);
 			
-			final int offsetRelative = compiledMaterialCache.addMatteMaterial(CompiledMaterialCache.toMatteMaterial(matteMaterial, this::doAddTexture));
+			final int offsetRelative = compiledMaterialCache.addMatteMaterial(CompiledMaterialCache.toMatteMaterial(matteMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.MATTE_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
 		} else if(material instanceof MetalMaterial) {
 			final MetalMaterial metalMaterial = MetalMaterial.class.cast(material);
 			
-			final int offsetRelative = compiledMaterialCache.addMetalMaterial(CompiledMaterialCache.toMetalMaterial(metalMaterial, this::doAddTexture));
+			final int offsetRelative = compiledMaterialCache.addMetalMaterial(CompiledMaterialCache.toMetalMaterial(metalMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.METAL_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
 		} else if(material instanceof MirrorMaterial) {
 			final MirrorMaterial mirrorMaterial = MirrorMaterial.class.cast(material);
 			
-			final int offsetRelative = compiledMaterialCache.addMirrorMaterial(CompiledMaterialCache.toMirrorMaterial(mirrorMaterial, this::doAddTexture));
+			final int offsetRelative = compiledMaterialCache.addMirrorMaterial(CompiledMaterialCache.toMirrorMaterial(mirrorMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.MIRROR_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
 		} else if(material instanceof PlasticMaterial) {
 			final PlasticMaterial plasticMaterial = PlasticMaterial.class.cast(material);
 			
-			final int offsetRelative = compiledMaterialCache.addPlasticMaterial(CompiledMaterialCache.toPlasticMaterial(plasticMaterial, this::doAddTexture));
+			final int offsetRelative = compiledMaterialCache.addPlasticMaterial(CompiledMaterialCache.toPlasticMaterial(plasticMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.PLASTIC_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
@@ -358,10 +362,32 @@ public final class CompiledSceneModifier {
 		} else if(material instanceof SubstrateMaterial) {
 			final SubstrateMaterial substrateMaterial = SubstrateMaterial.class.cast(material);
 			
-			final int offsetRelative = compiledMaterialCache.addSubstrateMaterial(CompiledMaterialCache.toSubstrateMaterial(substrateMaterial, this::doAddTexture));
+			final int offsetRelative = compiledMaterialCache.addSubstrateMaterial(CompiledMaterialCache.toSubstrateMaterial(substrateMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	private int doAddModifier(final Modifier modifier) {
+		final CompiledModifierCache compiledModifierCache = this.compiledScene.getCompiledModifierCache();
+		
+		if(modifier instanceof LDRImageNormalMapModifier) {
+			final LDRImageNormalMapModifier lDRImageNormalMapModifier = LDRImageNormalMapModifier.class.cast(modifier);
+			
+			final int offsetRelative = compiledModifierCache.addLDRImageNormalMapModifier(CompiledModifierCache.toLDRImageNormalMapModifier(lDRImageNormalMapModifier));
+			
+			return offsetRelative;
+		} else if(modifier instanceof NoOpModifier) {
+			return 0;
+		} else if(modifier instanceof SimplexNoiseNormalMapModifier) {
+			final SimplexNoiseNormalMapModifier simplexNoiseNormalMapModifier = SimplexNoiseNormalMapModifier.class.cast(modifier);
+			
+			final int offsetRelative = compiledModifierCache.addSimplexNoiseNormalMapModifier(CompiledModifierCache.toSimplexNoiseNormalMapModifier(simplexNoiseNormalMapModifier));
+			
+			return offsetRelative;
 		} else {
 			throw new IllegalArgumentException();
 		}

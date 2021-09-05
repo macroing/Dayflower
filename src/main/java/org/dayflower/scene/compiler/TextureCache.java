@@ -51,7 +51,6 @@ final class TextureCache {
 	private final List<PolkaDotTexture> distinctPolkaDotTextures;
 	private final List<SimplexFractionalBrownianMotionTexture> distinctSimplexFractionalBrownianMotionTextures;
 	private final List<SurfaceNormalTexture> distinctSurfaceNormalTextures;
-	private final List<Texture> distinctTextures;
 	private final List<UVTexture> distinctUVTextures;
 	private final Map<BlendTexture, Integer> distinctToOffsetsBlendTextures;
 	private final Map<BullseyeTexture, Integer> distinctToOffsetsBullseyeTextures;
@@ -77,7 +76,6 @@ final class TextureCache {
 		this.distinctPolkaDotTextures = new ArrayList<>();
 		this.distinctSimplexFractionalBrownianMotionTextures = new ArrayList<>();
 		this.distinctSurfaceNormalTextures = new ArrayList<>();
-		this.distinctTextures = new ArrayList<>();
 		this.distinctUVTextures = new ArrayList<>();
 		this.distinctToOffsetsBlendTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsBullseyeTextures = new LinkedHashMap<>();
@@ -182,7 +180,6 @@ final class TextureCache {
 		this.distinctPolkaDotTextures.clear();
 		this.distinctSimplexFractionalBrownianMotionTextures.clear();
 		this.distinctSurfaceNormalTextures.clear();
-		this.distinctTextures.clear();
 		this.distinctUVTextures.clear();
 		this.distinctToOffsetsBlendTextures.clear();
 		this.distinctToOffsetsBullseyeTextures.clear();
@@ -238,20 +235,6 @@ final class TextureCache {
 //		Add all distinct UVTexture instances:
 		this.distinctUVTextures.clear();
 		this.distinctUVTextures.addAll(this.nodeCache.getAllDistinct(UVTexture.class));
-		
-//		Add all distinct Texture instances:
-		this.distinctTextures.clear();
-		this.distinctTextures.addAll(this.distinctBlendTextures);
-		this.distinctTextures.addAll(this.distinctBullseyeTextures);
-		this.distinctTextures.addAll(this.distinctCheckerboardTextures);
-		this.distinctTextures.addAll(this.distinctConstantTextures);
-		this.distinctTextures.addAll(this.distinctDotProductTextures);
-		this.distinctTextures.addAll(this.distinctLDRImageTextures);
-		this.distinctTextures.addAll(this.distinctMarbleTextures);
-		this.distinctTextures.addAll(this.distinctPolkaDotTextures);
-		this.distinctTextures.addAll(this.distinctSimplexFractionalBrownianMotionTextures);
-		this.distinctTextures.addAll(this.distinctSurfaceNormalTextures);
-		this.distinctTextures.addAll(this.distinctUVTextures);
 		
 //		Create offset mappings for all distinct BlendTexture instances:
 		this.distinctToOffsetsBlendTextures.clear();

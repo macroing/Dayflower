@@ -32,6 +32,13 @@ import org.dayflower.scene.Intersection;
  */
 public final class NoOpModifier implements Modifier {
 	/**
+	 * The ID of this {@code NoOpModifier} class.
+	 */
+	public static final int ID = 2;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * Constructs a new {@code NoOpModifier} instance.
 	 */
 	public NoOpModifier() {
@@ -67,6 +74,16 @@ public final class NoOpModifier implements Modifier {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code NoOpModifier} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code NoOpModifier} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

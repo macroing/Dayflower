@@ -32,6 +32,7 @@ public final class CompiledScene {
 	private final CompiledCameraCache compiledCameraCache;
 	private final CompiledLightCache compiledLightCache;
 	private final CompiledMaterialCache compiledMaterialCache;
+	private final CompiledModifierCache compiledModifierCache;
 	private final CompiledPrimitiveCache compiledPrimitiveCache;
 	private final CompiledShape3FCache compiledShape3FCache;
 	private final CompiledTextureCache compiledTextureCache;
@@ -46,6 +47,7 @@ public final class CompiledScene {
 		this.compiledCameraCache = new CompiledCameraCache();
 		this.compiledLightCache = new CompiledLightCache();
 		this.compiledMaterialCache = new CompiledMaterialCache();
+		this.compiledModifierCache = new CompiledModifierCache();
 		this.compiledPrimitiveCache = new CompiledPrimitiveCache();
 		this.compiledShape3FCache = new CompiledShape3FCache();
 		this.compiledTextureCache = new CompiledTextureCache();
@@ -90,6 +92,15 @@ public final class CompiledScene {
 	}
 	
 	/**
+	 * Returns the {@link CompiledModifierCache} instance associated with this {@code CompiledScene} instance.
+	 * 
+	 * @return the {@code CompiledModifierCache} instance associated with this {@code CompiledScene} instance
+	 */
+	public CompiledModifierCache getCompiledModifierCache() {
+		return this.compiledModifierCache;
+	}
+	
+	/**
 	 * Returns the {@link CompiledPrimitiveCache} instance associated with this {@code CompiledScene} instance.
 	 * 
 	 * @return the {@code CompiledPrimitiveCache} instance associated with this {@code CompiledScene} instance
@@ -130,6 +141,7 @@ public final class CompiledScene {
 		
 		this.compiledBoundingVolume3FCache.write(document);
 		this.compiledMaterialCache.write(document);
+		this.compiledModifierCache.write(document);
 		this.compiledShape3FCache.write(document);
 		this.compiledTextureCache.write(document);
 		

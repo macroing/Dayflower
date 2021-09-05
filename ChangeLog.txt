@@ -1,7 +1,12 @@
 2021-09-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the method getCompiledModifierCache() to the CompiledScene class.
+	* ADD:		Add the CompiledModifierCache class.
+	* ADD:		Add the constant ID to the LDRImageNormalMapModifier, NoOpModifier and SimplexNoiseNormalMapModifier classes.
+	* ADD:		Add the method getID() to the Modifier interface and the LDRImageNormalMapModifier, NoOpModifier and SimplexNoiseNormalMapModifier classes.
 	* ADD:		Add support for DotProductTexture to the GPU-renderer.
-	* CHANGE:	Change the structure for some compiled Material instances, in order to make room for their associated Modifier instances.
+	* CHANGE:	Change the signature of the methods to*Material(*Material, ToIntFunction<Texture>) and to*Materials(List<*Material>, ToIntFunction<Texture>) in the CompiledMaterialCache class to to*Material(*Material, ToIntFunction<Modifier>, ToIntFunction<Texture>) and to*Materials(List<*Material>, ToIntFunction<Modifier>, ToIntFunction<Texture>), respectively.
+	* CHANGE:	Change the structure for some compiled Material instances, in order to make room for their associated Modifier instances. Some constants were refactored.
 
 2021-09-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

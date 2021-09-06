@@ -19,6 +19,7 @@
 package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
 
@@ -292,6 +293,30 @@ public final class Rectangle2D implements Shape2D {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Rectangle2D} instance is axis-aligned, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Rectangle2D} instance is axis-aligned, {@code false} otherwise
+	 */
+	public boolean isAxisAligned() {
+		final boolean isAxisAlignedAB = equal(this.a.getY(), this.b.getY());
+		final boolean isAxisAlignedBC = equal(this.b.getX(), this.c.getX());
+		final boolean isAxisAlignedCD = equal(this.c.getY(), this.d.getY());
+		final boolean isAxisAlignedDA = equal(this.d.getX(), this.a.getX());
+		final boolean isAxisAligned = isAxisAlignedAB && isAxisAlignedBC && isAxisAlignedCD && isAxisAlignedDA;
+		
+		return isAxisAligned;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Rectangle2D} instance is rotated, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Rectangle2D} instance is rotated, {@code false} otherwise
+	 */
+	public boolean isRotated() {
+		return !isAxisAligned();
 	}
 	
 	/**

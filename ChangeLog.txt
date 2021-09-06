@@ -1,3 +1,8 @@
+2021-09-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods isAxisAligned() and isRotated() to the Rectangle2D class.
+	* ADD:		Add the methods isAxisAligned() and isRotated() to the Rectangle2F class.
+
 2021-09-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods intersectionSetOrthonormalBasisSW(float, float, float) and intersectionSetOrthonormalBasisSWTransform(float, float, float) to the AbstractGeometryKernel class.

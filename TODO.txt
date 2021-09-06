@@ -5,8 +5,6 @@ Geometry API:
 
 Geometry Shape API:
 
-	* ADD:		Add methods to Rectangle2D that checks whether it is axis-aligned or rotated.
-	* ADD:		Add methods to Rectangle2F that checks whether it is axis-aligned or rotated.
 	* ADD:		Add a method to Rectangle2D that returns the intersection of two Rectangle2D instances using a Polygon2D instance.
 	* ADD:		Add a method to Rectangle2F that returns the intersection of two Rectangle2F instances using a Polygon2F instance.
 	* ADD:		Add a method to Rectangle2I that returns the intersection of two Rectangle2I instances using a Polygon2I instance.

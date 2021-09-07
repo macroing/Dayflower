@@ -31,6 +31,8 @@ import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromShap
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromSphere3D;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromTorus3D;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromTriangle3D;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DGetU;
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DGetV;
 import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DGetW;
 import static org.dayflower.simplex.Point.point3D;
 import static org.dayflower.simplex.Point.point3DGetComponent1;
@@ -1845,6 +1847,25 @@ public final class Vector {
 	}
 	
 //	TODO: Add Javadocs!
+	public static double[] vector3DNegate(final double[] vector3D) {
+		return vector3DNegate(vector3D, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DNegate(final double[] vector3D, final double[] vector3DResult) {
+		return vector3DNegate(vector3D, vector3DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DNegate(final double[] vector3D, final double[] vector3DResult, final int vector3DOffset, final int vector3DResultOffset) {
+		final double component1 = -vector3DGetComponent1(vector3D, vector3DOffset);
+		final double component2 = -vector3DGetComponent2(vector3D, vector3DOffset);
+		final double component3 = -vector3DGetComponent3(vector3D, vector3DOffset);
+		
+		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
 	public static double[] vector3DNormal(final double[] point3DA, final double[] point3DB, final double[] point3DC) {
 		return vector3DNormal(point3DA, point3DB, point3DC, vector3D());
 	}
@@ -2323,6 +2344,52 @@ public final class Vector {
 		final double component1 = matrix44DLHS[matrix44DLHSOffset + 0] * component1RHS + matrix44DLHS[matrix44DLHSOffset + 1] * component2RHS + matrix44DLHS[matrix44DLHSOffset +  2] * component3RHS;
 		final double component2 = matrix44DLHS[matrix44DLHSOffset + 4] * component1RHS + matrix44DLHS[matrix44DLHSOffset + 5] * component2RHS + matrix44DLHS[matrix44DLHSOffset +  6] * component3RHS;
 		final double component3 = matrix44DLHS[matrix44DLHSOffset + 8] * component1RHS + matrix44DLHS[matrix44DLHSOffset + 9] * component2RHS + matrix44DLHS[matrix44DLHSOffset + 10] * component3RHS;
+		
+		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DTransformOrthonormalBasis33D(final double[] vector3DLHS, final double[] orthonormalBasis33DRHS) {
+		return vector3DTransformOrthonormalBasis33D(vector3DLHS, orthonormalBasis33DRHS, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DTransformOrthonormalBasis33D(final double[] vector3DLHS, final double[] orthonormalBasis33DRHS, final double[] vector3DResult) {
+		return vector3DTransformOrthonormalBasis33D(vector3DLHS, orthonormalBasis33DRHS, vector3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DTransformOrthonormalBasis33D(final double[] vector3DLHS, final double[] orthonormalBasis33DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int orthonormalBasis33DRHSOffset, final int vector3DResultOffset) {
+		final double[] vector3DU = orthonormalBasis33DGetU(orthonormalBasis33DRHS, vector3D(), orthonormalBasis33DRHSOffset, 0);
+		final double[] vector3DV = orthonormalBasis33DGetV(orthonormalBasis33DRHS, vector3D(), orthonormalBasis33DRHSOffset, 0);
+		final double[] vector3DW = orthonormalBasis33DGetW(orthonormalBasis33DRHS, vector3D(), orthonormalBasis33DRHSOffset, 0);
+		
+		final double component1 = vector3DGetComponent1(vector3DLHS, vector3DLHSOffset) * vector3DGetComponent1(vector3DU) + vector3DGetComponent2(vector3DLHS, vector3DLHSOffset) * vector3DGetComponent1(vector3DV) + vector3DGetComponent3(vector3DLHS, vector3DLHSOffset) * vector3DGetComponent1(vector3DW);
+		final double component2 = vector3DGetComponent1(vector3DLHS, vector3DLHSOffset) * vector3DGetComponent2(vector3DU) + vector3DGetComponent2(vector3DLHS, vector3DLHSOffset) * vector3DGetComponent2(vector3DV) + vector3DGetComponent3(vector3DLHS, vector3DLHSOffset) * vector3DGetComponent2(vector3DW);
+		final double component3 = vector3DGetComponent1(vector3DLHS, vector3DLHSOffset) * vector3DGetComponent3(vector3DU) + vector3DGetComponent2(vector3DLHS, vector3DLHSOffset) * vector3DGetComponent3(vector3DV) + vector3DGetComponent3(vector3DLHS, vector3DLHSOffset) * vector3DGetComponent3(vector3DW);
+		
+		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DTransformReverseOrthonormalBasis33D(final double[] vector3DLHS, final double[] orthonormalBasis33DRHS) {
+		return vector3DTransformReverseOrthonormalBasis33D(vector3DLHS, orthonormalBasis33DRHS, vector3D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DTransformReverseOrthonormalBasis33D(final double[] vector3DLHS, final double[] orthonormalBasis33DRHS, final double[] vector3DResult) {
+		return vector3DTransformReverseOrthonormalBasis33D(vector3DLHS, orthonormalBasis33DRHS, vector3DResult, 0, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] vector3DTransformReverseOrthonormalBasis33D(final double[] vector3DLHS, final double[] orthonormalBasis33DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int orthonormalBasis33DRHSOffset, final int vector3DResultOffset) {
+		final double[] vector3DU = orthonormalBasis33DGetU(orthonormalBasis33DRHS, vector3D(), orthonormalBasis33DRHSOffset, 0);
+		final double[] vector3DV = orthonormalBasis33DGetV(orthonormalBasis33DRHS, vector3D(), orthonormalBasis33DRHSOffset, 0);
+		final double[] vector3DW = orthonormalBasis33DGetW(orthonormalBasis33DRHS, vector3D(), orthonormalBasis33DRHSOffset, 0);
+		
+		final double component1 = vector3DDotProduct(vector3DLHS, vector3DU, vector3DLHSOffset, 0);
+		final double component2 = vector3DDotProduct(vector3DLHS, vector3DV, vector3DLHSOffset, 0);
+		final double component3 = vector3DDotProduct(vector3DLHS, vector3DW, vector3DLHSOffset, 0);
 		
 		return vector3DSet(vector3DResult, component1, component2, component3, vector3DResultOffset);
 	}

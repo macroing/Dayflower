@@ -46,7 +46,7 @@ import java.lang.reflect.Field;//TODO: Add Javadocs and refactor!
 
 //TODO: Add Javadocs!
 public final class Texture {
-	private static final double[] IMAGE_4_D = image4DLoad("./generated/Test/Image-Original.jpg");//TODO: Refactor!
+	private static final double[] IMAGE_4_D = image4DLoad("./resources/textures/bricks2.jpg");//image4DLoad("./generated/Test/Image-Original.jpg");//TODO: Refactor!
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -109,7 +109,7 @@ public final class Texture {
 	public static double[] image4DTextureGetColor4D(final double[] point2DTextureCoordinates) {
 		final double angle = toRadians(0.0D);
 		
-		final double[] vector2DScale = vector2D(1.0D, 1.0D);
+		final double[] vector2DScale = vector2D(4.0D, 4.0D);
 		
 		final int resolutionX = image4DGetResolutionX(IMAGE_4_D);
 		final int resolutionY = image4DGetResolutionY(IMAGE_4_D);

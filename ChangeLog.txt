@@ -1,3 +1,7 @@
+2021-09-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the Simplex API.
+
 2021-09-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods isAxisAligned() and isRotated() to the Rectangle2D class.

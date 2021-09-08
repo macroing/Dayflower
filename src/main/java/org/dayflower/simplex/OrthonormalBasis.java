@@ -18,6 +18,7 @@
  */
 package org.dayflower.simplex;
 
+import static org.dayflower.simplex.OrthonormalBasis.orthonormalBasis33DFromWV;
 import static org.dayflower.simplex.Point.point2D;
 import static org.dayflower.simplex.Point.point3D;
 import static org.dayflower.simplex.Point.point3DAdd;
@@ -57,6 +58,9 @@ import static org.dayflower.simplex.Shape.hyperboloid3DGetPhiMax;
 import static org.dayflower.simplex.Shape.paraboloid3DGetPhiMax;
 import static org.dayflower.simplex.Shape.paraboloid3DGetZMax;
 import static org.dayflower.simplex.Shape.paraboloid3DGetZMin;
+import static org.dayflower.simplex.Shape.plane3DGetA;
+import static org.dayflower.simplex.Shape.plane3DGetB;
+import static org.dayflower.simplex.Shape.plane3DGetC;
 import static org.dayflower.simplex.Shape.plane3DGetSurfaceNormal;
 import static org.dayflower.simplex.Shape.polygon3DGetSurfaceNormal;
 import static org.dayflower.simplex.Shape.rectangle3DGetA;
@@ -329,16 +333,15 @@ public final class OrthonormalBasis {
 		final double y = point3DGetY(point3D) * point3DGetX(point3DTransformed) - point3DGetX(point3D) * point3DGetY(point3DTransformed);
 		
 		final double phi = getOrAdd(atan2(y, x), 0.0D, PI_MULTIPLIED_BY_2);
+		final double phiCos = cos(phi);
+		final double phiSin = sin(phi);
 		
-		final double cosPhi = cos(phi);
-		final double sinPhi = sin(phi);
-		
-		final double uX = -phiMax * point3DGetY(point3DTransformed);
-		final double uY = +phiMax * point3DGetX(point3DTransformed);
+		final double uX = -phiMax * point3DGetY(point3D);
+		final double uY = +phiMax * point3DGetX(point3D);
 		final double uZ = +0.0D;
 		
-		final double vX = (point3DGetX(point3DB) - point3DGetX(point3DA)) * cosPhi - (point3DGetY(point3DB) - point3DGetY(point3DA)) * sinPhi;
-		final double vY = (point3DGetX(point3DB) - point3DGetX(point3DA)) * sinPhi + (point3DGetY(point3DB) - point3DGetY(point3DA)) * cosPhi;
+		final double vX = (point3DGetX(point3DB) - point3DGetX(point3DA)) * phiCos - (point3DGetY(point3DB) - point3DGetY(point3DA)) * phiSin;
+		final double vY = (point3DGetX(point3DB) - point3DGetX(point3DA)) * phiSin + (point3DGetY(point3DB) - point3DGetY(point3DA)) * phiCos;
 		final double vZ = point3DGetZ(point3DB) - point3DGetZ(point3DA);
 		
 		final double[] vector3DU = vector3DNormalize(vector3D(uX, uY, uZ));
@@ -380,6 +383,38 @@ public final class OrthonormalBasis {
 //	TODO: Add Javadocs!
 	@SuppressWarnings("unused")
 	public static double[] orthonormalBasis33DFromPlane3D(final double[] ray3D, final double[] plane3D, final double t, final int ray3DOffset, final int plane3DOffset) {
+		/*
+		final double[] point2DA = point2D(0.0D, 1.0D);
+		final double[] point2DB = point2D(0.0D, 0.0D);
+		final double[] point2DC = point2D(1.0D, 0.0D);
+		
+		final double[] point3DA = plane3DGetA(plane3D, point3D(), plane3DOffset, 0);
+		final double[] point3DB = plane3DGetB(plane3D, point3D(), plane3DOffset, 0);
+		final double[] point3DC = plane3DGetC(plane3D, point3D(), plane3DOffset, 0);
+		
+		final double[] vector3DSurfaceNormalA = plane3DGetSurfaceNormal(plane3D, vector3D(), plane3DOffset, 0);
+		
+		final double[] vector3DEdgeCA = vector3DDirection(point3DC, point3DA);
+		final double[] vector3DEdgeCB = vector3DDirection(point3DC, point3DB);
+		
+		final double[] vector2DEdgeCA = vector2DDirection(point2DC, point2DA);
+		final double[] vector2DEdgeCB = vector2DDirection(point2DC, point2DB);
+		
+		final double determinantUV = vector2DCrossProduct(vector2DEdgeCA, vector2DEdgeCB);
+		
+		if(isZero(determinantUV)) {
+			return orthonormalBasis33DFromW(vector3DSurfaceNormalA);
+		}
+		
+		final double determinantUVReciprocal = 1.0D / determinantUV;
+		
+		final double x = (-vector2DGetX(vector2DEdgeCB) * vector3DGetX(vector3DEdgeCA) + vector2DGetX(vector2DEdgeCA) * vector3DGetX(vector3DEdgeCB)) * determinantUVReciprocal;
+		final double y = (-vector2DGetX(vector2DEdgeCB) * vector3DGetY(vector3DEdgeCA) + vector2DGetX(vector2DEdgeCA) * vector3DGetY(vector3DEdgeCB)) * determinantUVReciprocal;
+		final double z = (-vector2DGetX(vector2DEdgeCB) * vector3DGetZ(vector3DEdgeCA) + vector2DGetX(vector2DEdgeCA) * vector3DGetZ(vector3DEdgeCB)) * determinantUVReciprocal;
+		
+		return orthonormalBasis33DFromWV(vector3DSurfaceNormalA, vector3D(x, y, z));
+		*/
+		
 		final double[] vector3DW = plane3DGetSurfaceNormal(plane3D, vector3D(), plane3DOffset, 0);
 		
 		return orthonormalBasis33DFromW(vector3DW);

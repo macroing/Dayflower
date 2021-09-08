@@ -39,6 +39,7 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.fractionalPart;
 import static org.dayflower.utility.Doubles.remainder;
+import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.toRadians;
 
@@ -100,16 +101,16 @@ public final class Texture {
 	public static double[] dotProductTextureGetColor4D(final double[] vector3DDirection, final double[] vector3DSurfaceNormal) {
 		final double directionDotSurfaceNormal = abs(vector3DDotProduct(vector3DDirection, vector3DSurfaceNormal));
 		
-		final double component = 0.5D * directionDotSurfaceNormal;
+		final double component = saturate(0.5D * directionDotSurfaceNormal + 0.2D);
 		
 		return color4D(component);
 	}
 	
 //	TODO: Refactor!
-	public static double[] image4DTextureGetColor4D(final double[] point2DTextureCoordinates) {
+	public static double[] image4DTextureGetColor4D(final double[] point2DTextureCoordinates, final double scale) {
 		final double angle = toRadians(0.0D);
 		
-		final double[] vector2DScale = vector2D(4.0D, 4.0D);
+		final double[] vector2DScale = vector2D(scale, scale);
 		
 		final int resolutionX = image4DGetResolutionX(IMAGE_4_D);
 		final int resolutionY = image4DGetResolutionY(IMAGE_4_D);

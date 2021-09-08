@@ -63,6 +63,8 @@ import static org.dayflower.simplex.Vector.vector2D;
 import static org.dayflower.simplex.Vector.vector3D;
 import static org.dayflower.simplex.Vector.vector3DGetX;
 import static org.dayflower.simplex.Vector.vector3DGetY;
+import static org.dayflower.simplex.Vector.vector3DGetZ;
+import static org.dayflower.simplex.Vector.vector3DMultiply;
 import static org.dayflower.simplex.Vector.vector3DNegate;
 import static org.dayflower.simplex.Vector.vector3DNormalize;
 import static org.dayflower.simplex.Vector.vector3DTransformOrthonormalBasis33D;
@@ -84,29 +86,29 @@ public final class Main {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(final String[] args) {
-		doRender("./generated/Simplex/Cone.png", 270.0D, cone3D());
-		doRender("./generated/Simplex/Cylinder.png", 270.0D, cylinder3D());
-		doRender("./generated/Simplex/Disk.png", 0.0D, disk3D());
-		doRender("./generated/Simplex/Hyperboloid.png", 270.0D, hyperboloid3D());
-		doRender("./generated/Simplex/Paraboloid.png", 270.0D, paraboloid3D());
-		doRender("./generated/Simplex/Plane.png", 0.0D, plane3D(point3D(0.0D, -1.0D, 0.0D), point3D(0.0D, -1.0D, 1.0D), point3D(1.0D, -1.0D, 0.0D)));
-		doRender("./generated/Simplex/Polygon.png", 0.0D, polygon3D());
-		doRender("./generated/Simplex/Rectangle.png", 0.0D, rectangle3D());
-		doRender("./generated/Simplex/RectangularCuboid.png", 0.0D, rectangularCuboid3D());
-		doRender("./generated/Simplex/Sphere.png", 270.0D, sphere3D());
-		doRender("./generated/Simplex/Torus.png", 0.0D, torus3D());
-		doRender("./generated/Simplex/Triangle.png", 0.0D, triangle3D());
+		doRender("./generated/Simplex/Cone.png", 270.0D, cone3D(), 4.0D);
+		doRender("./generated/Simplex/Cylinder.png", 270.0D, cylinder3D(), 4.0D);
+		doRender("./generated/Simplex/Disk.png", 0.0D, disk3D(), 2.0D);
+		doRender("./generated/Simplex/Hyperboloid.png", 270.0D, hyperboloid3D(), 4.0D);
+		doRender("./generated/Simplex/Paraboloid.png", 270.0D, paraboloid3D(), 4.0D);
+		doRender("./generated/Simplex/Plane.png", 0.0D, plane3D(point3D(0.0D, -1.0D, 0.0D), point3D(0.0D, -1.0D, 1.0D), point3D(1.0D, -1.0D, 0.0D)), 0.1D);
+		doRender("./generated/Simplex/Polygon.png", 0.0D, polygon3D(), 4.0D);
+		doRender("./generated/Simplex/Rectangle.png", 0.0D, rectangle3D(), 4.0D);
+		doRender("./generated/Simplex/RectangularCuboid.png", 0.0D, rectangularCuboid3D(), 4.0D);
+		doRender("./generated/Simplex/Sphere.png", 270.0D, sphere3D(), 4.0D);
+		doRender("./generated/Simplex/Torus.png", 0.0D, torus3D(), 4.0D);
+		doRender("./generated/Simplex/Triangle.png", 0.0D, triangle3D(), 4.0D);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static double[] doComputeParallaxMapping(final double[] orthonormalBasis33D, final double[] point2DTextureCoordinates, final double[] vector3DDirectionToOrigin) {
+	private static double[] doComputeColor4D(final double[] image4D, final double[] point2DTextureCoordinates, final double scale) {
 		final double angle = toRadians(0.0D);
 		
-		final double[] vector2DScale = vector2D(4.0D, 4.0D);
+		final double[] vector2DScale = vector2D(scale, scale);
 		
-		final int resolutionX = image4DGetResolutionX(IMAGE_4_D_DISPLACEMENT_MAP);
-		final int resolutionY = image4DGetResolutionY(IMAGE_4_D_DISPLACEMENT_MAP);
+		final int resolutionX = image4DGetResolutionX(image4D);
+		final int resolutionY = image4DGetResolutionY(image4D);
 		
 		final double[] point2DTextureCoordinatesRotated = point2DRotate(point2DTextureCoordinates, angle);
 		final double[] point2DTextureCoordinatesScaled = point2DScale(point2DTextureCoordinatesRotated, vector2DScale);
@@ -115,11 +117,28 @@ public final class Main {
 		final double x = point2DGetX(point2DTextureCoordinatesWrappedAround);
 		final double y = point2DGetY(point2DTextureCoordinatesWrappedAround);
 		
-		final double[] color4D = image4DGetColor4D(IMAGE_4_D_DISPLACEMENT_MAP, x, y);
+		final double[] color4D = image4DGetColor4D(image4D, x, y);
 		
+		return color4D;
+	}
+	
+	private static double[] doComputeParallaxMapping(final double[] orthonormalBasis33D, final double[] point2DTextureCoordinates, final double[] vector3DDirection, final double scale) {
+		final double[] color4D = doComputeColor4D(IMAGE_4_D_DISPLACEMENT_MAP, point2DTextureCoordinates, scale);
+		
+		final double height = color4DGetComponent1(color4D);
+		final double heightScale = 0.1D;
+		
+		final double[] vector3D = vector3DNormalize(vector3DTransformReverseOrthonormalBasis33D(vector3DDirection, orthonormalBasis33D));
+		
+		final double u = point2DGetX(point2DTextureCoordinates) + (vector3DGetX(vector3D) / vector3DGetZ(vector3D) * (height * heightScale));
+		final double v = point2DGetY(point2DTextureCoordinates) + (vector3DGetY(vector3D) / vector3DGetZ(vector3D) * (height * heightScale));
+		
+		return point2D(u, v);
+		
+		/*
 		final double r = color4DGetComponent1(color4D);
 		
-		final double[] vector3D = vector3DTransformReverseOrthonormalBasis33D(vector3DDirectionToOrigin, orthonormalBasis33D);
+		final double[] vector3D = vector3DNormalize(vector3DTransformReverseOrthonormalBasis33D(vector3DDirection, orthonormalBasis33D));
 		
 		final double offset = -1.0D;
 		final double scale = 0.04D;
@@ -130,24 +149,61 @@ public final class Main {
 		final double v = point2DGetY(point2DTextureCoordinates) + vector3DGetY(vector3D) * (r * scale + bias);
 		
 		return point2D(u, v);
+		*/
 	}
 	
-	private static double[] doComputeSurfaceNormal(final double[] orthonormalBasis33D, final double[] point2DTextureCoordinates) {
-		final double angle = toRadians(0.0D);
+	/*
+		vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir) { 
+//			const float numLayers = 10;
+//			
+//			float layerDepth = 1.0 / numLayers;
+//			float currentLayerDepth = 0.0;
+//			
+//			vec2 P = viewDir.xy * height_scale; 
+//			vec2 deltaTexCoords = P / numLayers;
+//			
+//			vec2  currentTexCoords = texCoords;
+//			
+//			float currentDepthMapValue = texture(depthMap, currentTexCoords).r;
+//			
+			while(currentLayerDepth < currentDepthMapValue) {
+				currentTexCoords -= deltaTexCoords;
+				currentDepthMapValue = texture(depthMap, currentTexCoords).r;  
+				currentLayerDepth += layerDepth;  
+			}
+			
+			return currentTexCoords;
+		}
+	 */
+	
+	private static double[] doComputeSteepParallaxMapping(final double[] orthonormalBasis33D, final double[] point2DTextureCoordinates, final double[] vector3DDirection, final double scale) {
+		final double layers = 10.0D;
+		final double layersReciprocal = 1.0D / layers;
 		
-		final double[] vector2DScale = vector2D(4.0D, 4.0D);
+		final double heightScale = 0.1D;
 		
-		final int resolutionX = image4DGetResolutionX(IMAGE_4_D_NORMAL_MAP);
-		final int resolutionY = image4DGetResolutionY(IMAGE_4_D_NORMAL_MAP);
+		final double[] vector3D = vector3DNormalize(vector3DTransformReverseOrthonormalBasis33D(vector3DDirection, orthonormalBasis33D));
+		final double[] vector3DScaled = vector3DMultiply(vector3D, heightScale);
 		
-		final double[] point2DTextureCoordinatesRotated = point2DRotate(point2DTextureCoordinates, angle);
-		final double[] point2DTextureCoordinatesScaled = point2DScale(point2DTextureCoordinatesRotated, vector2DScale);
-		final double[] point2DTextureCoordinatesWrappedAround = point2DWrapAround(point2DTextureCoordinatesScaled, resolutionX, resolutionY);
+		final double[] point2DTextureCoordinatesDelta = point2D(vector3DGetX(vector3DScaled) / layers, vector3DGetY(vector3DScaled) / layers);
+		final double[] point2DTextureCoordinatesCurrent = point2D(point2DGetX(point2DTextureCoordinates), point2DGetY(point2DTextureCoordinates));
 		
-		final double x = point2DGetX(point2DTextureCoordinatesWrappedAround);
-		final double y = point2DGetY(point2DTextureCoordinatesWrappedAround);
+		double currentHeight = color4DGetComponent1(doComputeColor4D(IMAGE_4_D_DISPLACEMENT_MAP, point2DTextureCoordinatesCurrent, scale));
+		double currentLayerDepth = 0.0D;
 		
-		final double[] color4D = image4DGetColor4D(IMAGE_4_D_NORMAL_MAP, x, y);
+		while(currentLayerDepth < currentHeight) {
+			point2DTextureCoordinatesCurrent[0] -= point2DTextureCoordinatesDelta[0];
+			point2DTextureCoordinatesCurrent[1] -= point2DTextureCoordinatesDelta[1];
+			
+			currentHeight = color4DGetComponent1(doComputeColor4D(IMAGE_4_D_DISPLACEMENT_MAP, point2DTextureCoordinatesCurrent, scale));
+			currentLayerDepth += layersReciprocal;
+		}
+		
+		return point2DTextureCoordinatesCurrent;
+	}
+	
+	private static double[] doComputeSurfaceNormal(final double[] orthonormalBasis33D, final double[] point2DTextureCoordinates, final double scale) {
+		final double[] color4D = doComputeColor4D(IMAGE_4_D_NORMAL_MAP, point2DTextureCoordinates, scale);
 		
 		final double r = color4DGetComponent1(color4D);
 		final double g = color4DGetComponent2(color4D);
@@ -160,7 +216,7 @@ public final class Main {
 		return vector3DSurfaceNormal;
 	}
 	
-	private static void doRender(final String pathname, final double angle, final double[] shape3D) {
+	private static void doRender(final String pathname, final double angle, final double[] shape3D, final double scale) {
 		final double[] camera3D = camera3D(toRadians(40.0D), toRadians(40.0D), 0, orthonormalBasis33D(), point3D(0.0D, 0.0D, -5.0D), 0.0D, 30.0D, 800.0D, 800.0D);
 		
 		final double[] matrix44DObjectToWorld = matrix44DRotateX(toRadians(angle));
@@ -187,15 +243,16 @@ public final class Main {
 					final double[] vector3DDirectionNegated = vector3DNegate(vector3DDirection);
 					
 //					final double[] point2DTextureCoordinates = point2DTextureCoordinatesShape3D(ray3DTransformed, shape3D, t);
-					final double[] point2DTextureCoordinates = doComputeParallaxMapping(orthonormalBasis33D, point2DTextureCoordinatesShape3D(ray3DTransformed, shape3D, t), vector3DDirectionNegated);
+					final double[] point2DTextureCoordinates = doComputeSteepParallaxMapping(orthonormalBasis33D, point2DTextureCoordinatesShape3D(ray3DTransformed, shape3D, t), vector3DDirectionNegated, scale);
 					
 //					final double[] vector3DSurfaceNormal = vector3DSurfaceNormalShape3D(ray3DTransformed, shape3D, t);
-					final double[] vector3DSurfaceNormal = doComputeSurfaceNormal(orthonormalBasis33D, point2DTextureCoordinates);
+					final double[] vector3DSurfaceNormal = doComputeSurfaceNormal(orthonormalBasis33D, point2DTextureCoordinates, scale);
 					
 //					final double[] point3DOrigin = ray3DGetOrigin(ray3DTransformed);
 //					final double[] point3DSurfaceIntersectionPoint = point3DAdd(point3DOrigin, vector3DDirection, t);
 					
-					final double[] color4D = color4DMultiply(dotProductTextureGetColor4D(vector3DDirection, vector3DSurfaceNormal), image4DTextureGetColor4D(point2DTextureCoordinates));
+//					final double[] color4DSurfaceNormal = {(vector3DSurfaceNormal[0] + 1.0D) / 2.0D, (vector3DSurfaceNormal[1] + 1.0D) / 2.0D, (vector3DSurfaceNormal[2] + 1.0D) / 2.0D, 1.0D};
+					final double[] color4D = color4DMultiply(dotProductTextureGetColor4D(vector3DDirection, vector3DSurfaceNormal), image4DTextureGetColor4D(point2DTextureCoordinates, scale));
 					
 					image4DSetColor4D(image4D, color4D, x, y);
 				}

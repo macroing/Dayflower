@@ -35,13 +35,13 @@ import static org.dayflower.simplex.Vector.vector2D;
 import static org.dayflower.simplex.Vector.vector3DDirection;
 import static org.dayflower.simplex.Vector.vector3DDotProduct;
 import static org.dayflower.simplex.Vector.vector3DLength;
-import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.fractionalPart;
 import static org.dayflower.utility.Doubles.remainder;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.toRadians;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs and refactor!
 
@@ -99,29 +99,41 @@ public final class Texture {
 	
 //	TODO: Refactor!
 	public static double[] dotProductTextureGetColor4D(final double[] vector3DDirection, final double[] vector3DSurfaceNormal) {
-		final double directionDotSurfaceNormal = abs(vector3DDotProduct(vector3DDirection, vector3DSurfaceNormal));
+		final double directionDotSurfaceNormal = -vector3DDotProduct(vector3DDirection, vector3DSurfaceNormal);
 		
-		final double component = saturate(0.5D * directionDotSurfaceNormal + 0.2D);
+		final double component = saturate(directionDotSurfaceNormal);
 		
 		return color4D(component);
 	}
 	
 //	TODO: Refactor!
 	public static double[] image4DTextureGetColor4D(final double[] point2DTextureCoordinates, final double scale) {
+		return image4DTextureGetColor4D(point2DTextureCoordinates, scale, IMAGE_4_D, true);
+	}
+	
+//	TODO: Refactor!
+	public static double[] image4DTextureGetColor4D(final double[] point2DTextureCoordinates, final double scale, final double[] image4D, final boolean isInterpolating) {
 		final double angle = toRadians(0.0D);
 		
 		final double[] vector2DScale = vector2D(scale, scale);
 		
-		final int resolutionX = image4DGetResolutionX(IMAGE_4_D);
-		final int resolutionY = image4DGetResolutionY(IMAGE_4_D);
+		final int resolutionX = image4DGetResolutionX(image4D);
+		final int resolutionY = image4DGetResolutionY(image4D);
 		
 		final double[] point2DTextureCoordinatesRotated = point2DRotate(point2DTextureCoordinates, angle);
 		final double[] point2DTextureCoordinatesScaled = point2DScale(point2DTextureCoordinatesRotated, vector2DScale);
 		final double[] point2DTextureCoordinatesWrappedAround = point2DWrapAround(point2DTextureCoordinatesScaled, resolutionX, resolutionY);
 		
-		final double x = point2DGetX(point2DTextureCoordinatesWrappedAround);
-		final double y = point2DGetY(point2DTextureCoordinatesWrappedAround);
+		if(isInterpolating) {
+			final double x = point2DGetX(point2DTextureCoordinatesWrappedAround);
+			final double y = point2DGetY(point2DTextureCoordinatesWrappedAround);
+			
+			return image4DGetColor4D(image4D, x, y);
+		}
 		
-		return image4DGetColor4D(IMAGE_4_D, x, y);
+		final int x = toInt(point2DGetX(point2DTextureCoordinatesWrappedAround));
+		final int y = toInt(point2DGetY(point2DTextureCoordinatesWrappedAround));
+		
+		return image4DGetColor4D(image4D, x, y);
 	}
 }

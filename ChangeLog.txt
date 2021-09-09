@@ -1,3 +1,7 @@
+2021-09-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the Simplex API.
+
 2021-09-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.

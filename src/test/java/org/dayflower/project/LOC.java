@@ -46,6 +46,7 @@ public final class LOC {
 		Counter counter = new Counter(extension);
 		counter.count(directory);
 		
+		final int charCount = counter.getCharCount();
 		final int fileCount = counter.getFileCount();
 		final int lineCount = counter.getLineCount();
 		
@@ -54,6 +55,7 @@ public final class LOC {
 		stringBuilder.append(directory);
 		stringBuilder.append("\n  Line Count: " + lineCount);
 		stringBuilder.append("\n  File Count: " + fileCount);
+		stringBuilder.append("\n  Char Count: " + charCount);
 		
 		System.out.println(stringBuilder);
 	}
@@ -72,6 +74,10 @@ public final class LOC {
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public int getCharCount() {
+			return this.files.stream().mapToInt(file -> file.stream().mapToInt(string -> string.length()).sum()).sum();
+		}
 		
 		public int getFileCount() {
 			return this.files.size();

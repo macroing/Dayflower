@@ -177,7 +177,7 @@ public final class Camera {
 		final double cameraX = 2.0D * ((imageX + pixelX) / (camera3DGetResolutionX(camera3D, camera3DOffset) - 1.0D)) - 1.0D;
 		final double cameraY = 2.0D * ((imageY + pixelY) / (camera3DGetResolutionY(camera3D, camera3DOffset) - 1.0D)) - 1.0D;
 		
-		final double[] orthonormalBasis33D = camera3DGetOrthonormalBasis(camera3D, camera3DOffset);
+		final double[] orthonormalBasis33D = camera3DGetOrthonormalBasis(camera3D, orthonormalBasis33D(), camera3DOffset, 0);
 		
 		final double[] vector3DU = orthonormalBasis33DGetU(orthonormalBasis33D);
 		final double[] vector3DV = orthonormalBasis33DGetV(orthonormalBasis33D);
@@ -185,7 +185,7 @@ public final class Camera {
 		
 		final double[] point2D = point2DSampleDiskUniformDistribution();
 		
-		final double[] point3DEye = camera3DGetEye(camera3D, camera3DOffset);
+		final double[] point3DEye = camera3DGetEye(camera3D, point3D(), camera3DOffset, 0);
 		final double[] point3DOnPlaneOneUnitAwayFromEye = point3DFromVector3D(vector3DAdd(vector3DAdd(vector3DMultiply(vector3DU, fieldOfViewX * cameraX), vector3DMultiply(vector3DV, fieldOfViewY * cameraY)), vector3DAdd(vector3DFromPoint3D(point3DEye), vector3DW)));
 		final double[] point3DOnImagePlane = point3DAdd(point3DEye, vector3DDirection(point3DEye, point3DOnPlaneOneUnitAwayFromEye), focalDistance);
 		final double[] point3DOrigin = apertureRadius > 0.00001D ? point3DAdd(point3DEye, vector3DAdd(vector3DMultiply(vector3DU, point2D[0] * apertureRadius), vector3DMultiply(vector3DV, point2D[1] * apertureRadius))) : point3DEye;
@@ -196,12 +196,32 @@ public final class Camera {
 	}
 	
 //	TODO: Add Javadocs!
-	public static double[] camera3DGetEye(final double[] camera3D, final int camera3DOffset) {
-		return point3DSet(point3D(), camera3D, 0, camera3DOffset + CAMERA_OFFSET_EYE);
+	public static double[] camera3DGetEye(final double[] camera3D) {
+		return camera3DGetEye(camera3D, point3D());
 	}
 	
 //	TODO: Add Javadocs!
-	public static double[] camera3DGetOrthonormalBasis(final double[] camera3D, final int camera3DOffset) {
-		return orthonormalBasis33DSet(orthonormalBasis33D(), camera3D, 0, camera3DOffset + CAMERA_OFFSET_ORTHONORMAL_BASIS);
+	public static double[] camera3DGetEye(final double[] camera3D, final double[] point3DEyeResult) {
+		return camera3DGetEye(camera3D, point3DEyeResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] camera3DGetEye(final double[] camera3D, final double[] point3DEyeResult, final int camera3DOffset, final int point3DEyeResultOffset) {
+		return point3DSet(point3DEyeResult, camera3D, point3DEyeResultOffset, camera3DOffset + CAMERA_OFFSET_EYE);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] camera3DGetOrthonormalBasis(final double[] camera3D) {
+		return camera3DGetOrthonormalBasis(camera3D, orthonormalBasis33D());
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] camera3DGetOrthonormalBasis(final double[] camera3D, final double[] orthonormalBasis33DResult) {
+		return camera3DGetOrthonormalBasis(camera3D, orthonormalBasis33DResult, 0, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static double[] camera3DGetOrthonormalBasis(final double[] camera3D, final double[] orthonormalBasis33DResult, final int camera3DOffset, final int orthonormalBasis33DResultOffset) {
+		return orthonormalBasis33DSet(orthonormalBasis33DResult, camera3D, orthonormalBasis33DResultOffset, camera3DOffset + CAMERA_OFFSET_ORTHONORMAL_BASIS);
 	}
 }

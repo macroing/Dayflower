@@ -322,12 +322,49 @@ public final class Intersection {
 		return NaN;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the disk contained in {@code disk3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code disk3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < 8} or {@code disk3D.length < 6}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Intersection.intersectionDisk3D(ray3D, disk3D, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param disk3D a {@code double[]} that contains a disk
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < 8} or {@code disk3D.length < 6}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code disk3D} are {@code null}
+	 */
 	public static double intersectionDisk3D(final double[] ray3D, final double[] disk3D) {
 		return intersectionDisk3D(ray3D, disk3D, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the disk contained in {@code disk3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code disk3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code disk3D.length < disk3DOffset + 6} or {@code disk3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param disk3D a {@code double[]} that contains a disk
+	 * @param ray3DOffset the offset in {@code ray3D} to start at
+	 * @param disk3DOffset the offset in {@code disk3D} to start at
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code disk3D.length < disk3DOffset + 6} or {@code disk3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code disk3D} are {@code null}
+	 */
 	public static double intersectionDisk3D(final double[] ray3D, final double[] disk3D, final int ray3DOffset, final int disk3DOffset) {
 		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
@@ -368,12 +405,49 @@ public final class Intersection {
 		return t;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the hyperboloid contained in {@code hyperboloid3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code hyperboloid3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < 8} or {@code hyperboloid3D.length < 14}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Intersection.intersectionHyperboloid3D(ray3D, hyperboloid3D, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param hyperboloid3D a {@code double[]} that contains a hyperboloid
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < 8} or {@code hyperboloid3D.length < 14}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code hyperboloid3D} are {@code null}
+	 */
 	public static double intersectionHyperboloid3D(final double[] ray3D, final double[] hyperboloid3D) {
 		return intersectionHyperboloid3D(ray3D, hyperboloid3D, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the hyperboloid contained in {@code hyperboloid3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code hyperboloid3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code hyperboloid3D.length < hyperboloid3DOffset + 14} or {@code hyperboloid3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param hyperboloid3D a {@code double[]} that contains a hyperboloid
+	 * @param ray3DOffset the offset in {@code ray3D} to start at
+	 * @param hyperboloid3DOffset the offset in {@code hyperboloid3D} to start at
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code hyperboloid3D.length < hyperboloid3DOffset + 14} or {@code hyperboloid3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code hyperboloid3D} are {@code null}
+	 */
 	public static double intersectionHyperboloid3D(final double[] ray3D, final double[] hyperboloid3D, final int ray3DOffset, final int hyperboloid3DOffset) {
 		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
@@ -422,12 +496,49 @@ public final class Intersection {
 		return NaN;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the paraboloid contained in {@code paraboloid3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code paraboloid3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < 8} or {@code paraboloid3D.length < 6}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Intersection.intersectionParaboloid3D(ray3D, paraboloid3D, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param paraboloid3D a {@code double[]} that contains a paraboloid
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < 8} or {@code paraboloid3D.length < 6}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code paraboloid3D} are {@code null}
+	 */
 	public static double intersectionParaboloid3D(final double[] ray3D, final double[] paraboloid3D) {
 		return intersectionParaboloid3D(ray3D, paraboloid3D, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the paraboloid contained in {@code paraboloid3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code paraboloid3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code paraboloid3D.length < paraboloid3DOffset + 6} or {@code paraboloid3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param paraboloid3D a {@code double[]} that contains a paraboloid
+	 * @param ray3DOffset the offset in {@code ray3D} to start at
+	 * @param paraboloid3DOffset the offset in {@code paraboloid3D} to start at
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code paraboloid3D.length < paraboloid3DOffset + 6} or {@code paraboloid3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code paraboloid3D} are {@code null}
+	 */
 	public static double intersectionParaboloid3D(final double[] ray3D, final double[] paraboloid3D, final int ray3DOffset, final int paraboloid3DOffset) {
 		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
@@ -470,12 +581,49 @@ public final class Intersection {
 		return NaN;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the plane contained in {@code plane3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code plane3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < 8} or {@code plane3D.length < 11}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Intersection.intersectionPlane3D(ray3D, plane3D, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param plane3D a {@code double[]} that contains a plane
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < 8} or {@code plane3D.length < 11}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code plane3D} are {@code null}
+	 */
 	public static double intersectionPlane3D(final double[] ray3D, final double[] plane3D) {
 		return intersectionPlane3D(ray3D, plane3D, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the plane contained in {@code plane3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code plane3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code plane3D.length < plane3DOffset + 11} or {@code plane3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param plane3D a {@code double[]} that contains a plane
+	 * @param ray3DOffset the offset in {@code ray3D} to start at
+	 * @param plane3DOffset the offset in {@code plane3D} to start at
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code plane3D.length < plane3DOffset + 11} or {@code plane3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code plane3D} are {@code null}
+	 */
 	public static double intersectionPlane3D(final double[] ray3D, final double[] plane3D, final int ray3DOffset, final int plane3DOffset) {
 		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		
@@ -1002,8 +1150,9 @@ public final class Intersection {
 	@SuppressWarnings("unused")
 	public static double[] intersectionOrthonormalBasisPlane3D(final double[] ray3D, final double[] plane3D, final double t, final int ray3DOffset, final int plane3DOffset) {
 		final double[] vector3DW = plane3DGetSurfaceNormal(plane3D, vector3D(), plane3DOffset, 0);
+		final double[] vector3DV = vector3DDirectionNormalized(plane3DGetA(plane3D, point3D(), plane3DOffset, 0), plane3DGetB(plane3D, point3D(), plane3DOffset, 0));
 		
-		return orthonormalBasis33DFromW(vector3DW);
+		return orthonormalBasis33DFromWV(vector3DW, vector3DV);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1015,8 +1164,9 @@ public final class Intersection {
 	@SuppressWarnings("unused")
 	public static double[] intersectionOrthonormalBasisPolygon3D(final double[] ray3D, final double[] polygon3D, final double t, final int ray3DOffset, final int polygon3DOffset) {
 		final double[] vector3DW = polygon3DGetSurfaceNormal(polygon3D, vector3D(), polygon3DOffset, 0);
+		final double[] vector3DV = vector3DDirectionNormalized(polygon3DGetPoint3D(polygon3D, 0, point3D(), polygon3DOffset, 0), polygon3DGetPoint3D(polygon3D, 1, point3D(), polygon3DOffset, 0));
 		
-		return orthonormalBasis33DFromW(vector3DW);
+		return orthonormalBasis33DFromWV(vector3DW, vector3DV);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1032,8 +1182,9 @@ public final class Intersection {
 		final double[] point3DC = rectangle3DGetC(rectangle3D, point3D(), rectangle3DOffset, 0);
 		
 		final double[] vector3DW = vector3DNormalNormalized(point3DA, point3DB, point3DC);
+		final double[] vector3DV = vector3DDirectionNormalized(point3DA, point3DB);
 		
-		return orthonormalBasis33DFromW(vector3DW);
+		return orthonormalBasis33DFromWV(vector3DW, vector3DV);
 	}
 	
 //	TODO: Add Javadocs!

@@ -42,8 +42,10 @@ import static org.dayflower.simplex.Point.point2D;
 import static org.dayflower.simplex.Point.point2DGetX;
 import static org.dayflower.simplex.Point.point2DGetY;
 import static org.dayflower.simplex.Point.point3D;
+import static org.dayflower.simplex.Point.point3DAdd;
 import static org.dayflower.simplex.Point.point3DDistanceSquared;
 import static org.dayflower.simplex.Point.point3DTransformAndDivideMatrix44D;
+import static org.dayflower.simplex.Ray.ray3D;
 import static org.dayflower.simplex.Ray.ray3DGetDirection;
 import static org.dayflower.simplex.Ray.ray3DTransformMatrix44D;
 import static org.dayflower.simplex.Shape.cone3D;
@@ -108,24 +110,33 @@ public final class Main {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static double[] doColor4D(final double[] color4DReflectance, final double[] point3DSurfaceIntersectionPointWS, final double[] vector3DSurfaceNormalWS) {
-		final double[] point3DPointLightPositionWS = point3D(0.0D, 0.0D, -5.0D);
+	private static double[] doColor4D(final double[] color4DReflectance, final double[] matrix44DWorldToObject, final double[] orthonormalBasis33DWS, final double[] point3DSurfaceIntersectionPointWS, final double[] shape3D, final double[] vector3DSurfaceNormalWS) {
+		final double[] point3DPointLightPositionWS = point3D(2.0D, 0.0D, -5.0D);
 		
-		final double[] vector3DIncoming = vector3DDirectionNormalized(point3DSurfaceIntersectionPointWS, point3DPointLightPositionWS);
+		final double[] vector3DIncomingWS = vector3DDirectionNormalized(point3DSurfaceIntersectionPointWS, point3DPointLightPositionWS);
 		
-		final double dotProduct = vector3DDotProduct(vector3DIncoming, vector3DSurfaceNormalWS);
-		final double dotProductAbs = abs(dotProduct);
+		final double[] ray3DWS = ray3D(point3DAdd(point3DSurfaceIntersectionPointWS, orthonormalBasis33DGetW(orthonormalBasis33DWS), 0.0001D), vector3DIncomingWS);
+		final double[] ray3DOS = ray3DTransformMatrix44D(matrix44DWorldToObject, ray3DWS);
 		
-		final double distanceSquared = point3DDistanceSquared(point3DSurfaceIntersectionPointWS, point3DPointLightPositionWS);
+		final double tOS = intersectionShape3D(ray3DOS, shape3D);
 		
-		final double intensity = 50.0D;
+		if(isNaN(tOS)) {
+			final double dotProduct = vector3DDotProduct(vector3DIncomingWS, vector3DSurfaceNormalWS);
+			final double dotProductAbs = abs(dotProduct);
+			
+			final double distanceSquared = point3DDistanceSquared(point3DSurfaceIntersectionPointWS, point3DPointLightPositionWS);
+			
+			final double intensity = 50.0D;
+			
+			final double r = color4DGetComponent1(color4DReflectance) / PI * dotProductAbs * (intensity / distanceSquared);
+			final double g = color4DGetComponent2(color4DReflectance) / PI * dotProductAbs * (intensity / distanceSquared);
+			final double b = color4DGetComponent3(color4DReflectance) / PI * dotProductAbs * (intensity / distanceSquared);
+			final double a = 1.0D;
+			
+			return color4D(r, g, b, a);
+		}
 		
-		final double r = color4DGetComponent1(color4DReflectance) / PI * dotProductAbs * (intensity / distanceSquared);
-		final double g = color4DGetComponent2(color4DReflectance) / PI * dotProductAbs * (intensity / distanceSquared);
-		final double b = color4DGetComponent3(color4DReflectance) / PI * dotProductAbs * (intensity / distanceSquared);
-		final double a = 1.0D;
-		
-		return color4D(r, g, b, a);
+		return color4D();
 	}
 	
 	private static double[] doColor4DSurfaceNormal(final double[] orthonormalBasis33D) {
@@ -245,7 +256,7 @@ public final class Main {
 					
 					final double[] vector3DSurfaceNormalWS = doComputeSurfaceNormal(orthonormalBasis33DWS, point2DTextureCoordinates, scale);
 					
-					final double[] color4D = doColor4D(image4DTextureGetColor4D(point2DTextureCoordinates, scale), point3DSurfaceIntersectionPointWS, vector3DSurfaceNormalWS);
+					final double[] color4D = doColor4D(image4DTextureGetColor4D(point2DTextureCoordinates, scale), matrix44DWorldToObject, orthonormalBasis33DWS, point3DSurfaceIntersectionPointWS, shape3D, vector3DSurfaceNormalWS);
 					
 					image4DSetColor4D(image4D, color4D, x, y);
 				}

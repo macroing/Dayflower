@@ -27,6 +27,7 @@ import static org.dayflower.utility.Doubles.asin;
 import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.getOrAdd;
+import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.solveQuartic;
 
@@ -134,53 +135,13 @@ public final class Torus3D implements Shape3D {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Point3D origin = ray.getOrigin();
+		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		final Vector3D direction = ray.getDirection();
-		final Vector3D directionToOrigin = new Vector3D(origin);
-		
-		final double f0 = direction.lengthSquared();
-		final double f1 = Vector3D.dotProduct(directionToOrigin, direction) * 2.0D;
-		final double f2 = this.radiusInnerSquared;
-		final double f3 = this.radiusOuterSquared;
-		final double f4 = directionToOrigin.lengthSquared() - f2 - f3;
-		final double f5 = direction.getZ();
-		final double f6 = directionToOrigin.getZ();
-		
-		final double a = f0 * f0;
-		final double b = f0 * 2.0D * f1;
-		final double c = f1 * f1 + 2.0D * f0 * f4 + 4.0D * f3 * f5 * f5;
-		final double d = f1 * 2.0D * f4 + 8.0D * f3 * f6 * f5;
-		final double e = f4 * f4 + 4.0D * f3 * f6 * f6 - 4.0D * f3 * f2;
-		
-		final double[] ts = solveQuartic(a, b, c, d, e);
-		
-		if(ts.length == 0) {
-			return Optional.empty();
+		if(isNaN(t)) {
+			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		if(ts[0] >= tMaximum || ts[ts.length - 1] <= tMinimum) {
-			return Optional.empty();
-		}
-		
-		for(int i = 0; i < ts.length; i++) {
-			if(ts[i] > tMinimum) {
-				final double t = ts[i];
-				
-				final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
-				
-				final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint, this.radiusInner);
-				
-				final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(doCreateSurfaceNormalG(surfaceIntersectionPoint, this.radiusInnerSquared, this.radiusOuterSquared));
-				final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
-				
-				final Vector3D surfaceIntersectionPointError = new Vector3D();
-				
-				return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
-			}
-		}
-		
-		return Optional.empty();
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -422,8 +383,22 @@ public final class Torus3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint, final double radiusInner) {
-		final double phi = asin(saturate(surfaceIntersectionPoint.getZ() / radiusInner, -1.0D, 1.0D));
+	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
+		final Vector3D direction = new Vector3D(surfaceIntersectionPoint);
+		
+		final double derivative = direction.lengthSquared() - this.radiusInnerSquared - this.radiusOuterSquared;
+		
+		final double x = surfaceIntersectionPoint.getX() * derivative;
+		final double y = surfaceIntersectionPoint.getY() * derivative;
+		final double z = surfaceIntersectionPoint.getZ() * derivative + 2.0D * this.radiusOuterSquared * surfaceIntersectionPoint.getZ();
+		
+		final Vector3D w = Vector3D.normalize(new Vector3D(x, y, z));
+		
+		return new OrthonormalBasis33D(w);
+	}
+	
+	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
+		final double phi = asin(saturate(surfaceIntersectionPoint.getZ() / this.radiusInner, -1.0D, 1.0D));
 		final double theta = getOrAdd(atan2(surfaceIntersectionPoint.getY(), surfaceIntersectionPoint.getX()), 0.0D, PI_MULTIPLIED_BY_2);
 		
 		final double u = theta * PI_MULTIPLIED_BY_2_RECIPROCAL;
@@ -432,15 +407,22 @@ public final class Torus3D implements Shape3D {
 		return new Point2D(u, v);
 	}
 	
-	private static Vector3D doCreateSurfaceNormalG(final Point3D surfaceIntersectionPoint, final double radiusInnerSquared, final double radiusOuterSquared) {
-		final Vector3D direction = new Vector3D(surfaceIntersectionPoint);
+	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double t) {
+		final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
-		final double derivative = direction.lengthSquared() - radiusInnerSquared - radiusOuterSquared;
+		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
+		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 		
-		final double x = surfaceIntersectionPoint.getX() * derivative;
-		final double y = surfaceIntersectionPoint.getY() * derivative;
-		final double z = surfaceIntersectionPoint.getZ() * derivative + 2.0D * radiusOuterSquared * surfaceIntersectionPoint.getZ();
+		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
 		
-		return Vector3D.normalize(new Vector3D(x, y, z));
+		final Vector3D surfaceIntersectionPointError = new Vector3D();
+		
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
+		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
 	}
 }

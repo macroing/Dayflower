@@ -1111,14 +1111,7 @@ public final class Curve3F implements Shape3F {
 			final float yMaximum = 0.0F;
 			final float zMaximum = rayDirectionLength * tMaximum;
 			
-			final boolean isInsideAX = max(points[0].getX(), points[1].getX(), points[2].getX(), points[3].getX()) + widthC >= tMinimum && min(points[0].getX(), points[1].getX(), points[2].getX(), points[3].getX()) - widthC <= xMaximum;
-			final boolean isInsideAY = max(points[0].getY(), points[1].getY(), points[2].getY(), points[3].getY()) + widthC >= tMinimum && min(points[0].getY(), points[1].getY(), points[2].getY(), points[3].getY()) - widthC <= yMaximum;
-			final boolean isInsideAZ = max(points[0].getZ(), points[1].getZ(), points[2].getZ(), points[3].getZ()) + widthC >= tMinimum && min(points[0].getZ(), points[1].getZ(), points[2].getZ(), points[3].getZ()) - widthC <= zMaximum;
-			final boolean isInsideBX = max(points[3].getX(), points[4].getX(), points[5].getX(), points[6].getX()) + widthD >= tMinimum && min(points[3].getX(), points[4].getX(), points[5].getX(), points[6].getX()) - widthD <= xMaximum;
-			final boolean isInsideBY = max(points[3].getY(), points[4].getY(), points[5].getY(), points[6].getY()) + widthD >= tMinimum && min(points[3].getY(), points[4].getY(), points[5].getY(), points[6].getY()) - widthD <= yMaximum;
-			final boolean isInsideBZ = max(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) + widthD >= tMinimum && min(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) - widthD <= zMaximum;
-			
-			if(isInsideAX && isInsideAY && isInsideAZ) {
+			if(doIsInsideX(points, widthC, tMinimum, xMaximum, 0) && doIsInsideY(points, widthC, tMinimum, yMaximum, 0) && doIsInsideZ(points, widthC, tMinimum, zMaximum, 0)) {
 				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = doIntersectionRecursive(ray, tMinimum, tMaximum, objectToRay, rayToObject, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
 				
 				if(optionalSurfaceIntersection.isPresent()) {
@@ -1126,7 +1119,7 @@ public final class Curve3F implements Shape3F {
 				}
 			}
 			
-			if(isInsideBX && isInsideBY && isInsideBZ) {
+			if(doIsInsideX(points, widthD, tMinimum, xMaximum, 3) && doIsInsideY(points, widthD, tMinimum, yMaximum, 3) && doIsInsideZ(points, widthD, tMinimum, zMaximum, 3)) {
 				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = doIntersectionRecursive(ray, tMinimum, tMaximum, objectToRay, rayToObject, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
 				
 				if(optionalSurfaceIntersection.isPresent()) {
@@ -1211,14 +1204,7 @@ public final class Curve3F implements Shape3F {
 			final float yMaximum = 0.0F;
 			final float zMaximum = rayDirectionLength * tMaximum;
 			
-			final boolean isInsideAX = max(points[0].getX(), points[1].getX(), points[2].getX(), points[3].getX()) + widthC >= tMinimum && min(points[0].getX(), points[1].getX(), points[2].getX(), points[3].getX()) - widthC <= xMaximum;
-			final boolean isInsideAY = max(points[0].getY(), points[1].getY(), points[2].getY(), points[3].getY()) + widthC >= tMinimum && min(points[0].getY(), points[1].getY(), points[2].getY(), points[3].getY()) - widthC <= yMaximum;
-			final boolean isInsideAZ = max(points[0].getZ(), points[1].getZ(), points[2].getZ(), points[3].getZ()) + widthC >= tMinimum && min(points[0].getZ(), points[1].getZ(), points[2].getZ(), points[3].getZ()) - widthC <= zMaximum;
-			final boolean isInsideBX = max(points[3].getX(), points[4].getX(), points[5].getX(), points[6].getX()) + widthD >= tMinimum && min(points[3].getX(), points[4].getX(), points[5].getX(), points[6].getX()) - widthD <= xMaximum;
-			final boolean isInsideBY = max(points[3].getY(), points[4].getY(), points[5].getY(), points[6].getY()) + widthD >= tMinimum && min(points[3].getY(), points[4].getY(), points[5].getY(), points[6].getY()) - widthD <= yMaximum;
-			final boolean isInsideBZ = max(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) + widthD >= tMinimum && min(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) - widthD <= zMaximum;
-			
-			if(isInsideAX && isInsideAY && isInsideAZ) {
+			if(doIsInsideX(points, widthC, tMinimum, xMaximum, 0) && doIsInsideY(points, widthC, tMinimum, yMaximum, 0) && doIsInsideZ(points, widthC, tMinimum, zMaximum, 0)) {
 				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
 				
 				if(!isNaN(t)) {
@@ -1226,7 +1212,7 @@ public final class Curve3F implements Shape3F {
 				}
 			}
 			
-			if(isInsideBX && isInsideBY && isInsideBZ) {
+			if(doIsInsideX(points, widthD, tMinimum, xMaximum, 3) && doIsInsideY(points, widthD, tMinimum, yMaximum, 3) && doIsInsideZ(points, widthD, tMinimum, zMaximum, 3)) {
 				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
 				
 				if(!isNaN(t)) {
@@ -1377,6 +1363,33 @@ public final class Curve3F implements Shape3F {
 		} else {
 			return Vector3F.normalize(new Vector3F(0.0F, directionR.getZ(), -directionR.getY()));
 		}
+	}
+	
+	private static boolean doIsInsideX(final Point3F[] points, final float width, final float minimum, final float maximum, final int offset) {
+		final float max = max(points[offset + 0].getX(), points[offset + 1].getX(), points[offset + 2].getX(), points[offset + 3].getX());
+		final float min = min(points[offset + 0].getX(), points[offset + 1].getX(), points[offset + 2].getX(), points[offset + 3].getX());
+		
+		final boolean isInside = max + width >= minimum && min - width <= maximum;
+		
+		return isInside;
+	}
+	
+	private static boolean doIsInsideY(final Point3F[] points, final float width, final float minimum, final float maximum, final int offset) {
+		final float max = max(points[offset + 0].getY(), points[offset + 1].getY(), points[offset + 2].getY(), points[offset + 3].getY());
+		final float min = min(points[offset + 0].getY(), points[offset + 1].getY(), points[offset + 2].getY(), points[offset + 3].getY());
+		
+		final boolean isInside = max + width >= minimum && min - width <= maximum;
+		
+		return isInside;
+	}
+	
+	private static boolean doIsInsideZ(final Point3F[] points, final float width, final float minimum, final float maximum, final int offset) {
+		final float max = max(points[offset + 0].getZ(), points[offset + 1].getZ(), points[offset + 2].getZ(), points[offset + 3].getZ());
+		final float min = min(points[offset + 0].getZ(), points[offset + 1].getZ(), points[offset + 2].getZ(), points[offset + 3].getZ());
+		
+		final boolean isInside = max + width >= minimum && min - width <= maximum;
+		
+		return isInside;
 	}
 	
 	private static float doComputeHitWidth(final Data data, final Ray3F ray, final float u) {

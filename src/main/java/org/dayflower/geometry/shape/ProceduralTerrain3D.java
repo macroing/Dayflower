@@ -105,26 +105,13 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final double t = doIntersection(ray);
+		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(!isNaN(t)) {
-			final Point3D origin = ray.getOrigin();
-			
-			final Vector3D direction = ray.getDirection();
-			
-			final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
-			
-			final Point2D textureCoordinates = new Point2D(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getZ());
-			
-			final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(doCalculateSurfaceNormalG(surfaceIntersectionPoint));
-			final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
-			
-			final Vector3D surfaceIntersectionPointError = new Vector3D();
-			
-			return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		if(isNaN(t)) {
+			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		return SurfaceIntersection3D.EMPTY;
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -208,7 +195,33 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 */
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		return doIntersection(ray);
+		final Point3D origin = ray.getOrigin();
+		
+		final Vector3D direction = ray.getDirection();
+		
+		double t = 0.0D;
+		double tDelta = 0.01D;
+		
+		double lastH = 0.0D;
+		double lastY = 0.0D;
+		
+		for(double tCurrent = tMinimum; tCurrent < tMaximum; tCurrent += tDelta) {
+			final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, tCurrent);
+			
+			final double h = doApplyAsDouble(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getZ());
+			
+			if(surfaceIntersectionPoint.getY() < h) {
+				t = tCurrent - tDelta + tDelta * (lastH - lastY) / (surfaceIntersectionPoint.getY() - lastY - h + lastH);
+				tCurrent = tMaximum;
+			}
+			
+			tDelta = 0.01D * tCurrent;
+			
+			lastH = h;
+			lastY = surfaceIntersectionPoint.getY();
+		}
+		
+		return t > 0.0D ? t : Double.NaN;
 	}
 	
 	/**
@@ -294,61 +307,40 @@ public final class ProceduralTerrain3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Vector3D doCalculateSurfaceNormalG(final Point3D surfaceIntersectionPoint) {
+	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
 		final double x = doApplyAsDouble(surfaceIntersectionPoint.getX() - 0.0001D, surfaceIntersectionPoint.getZ() - 0.0000D) - doApplyAsDouble(surfaceIntersectionPoint.getX() + 0.0001D, surfaceIntersectionPoint.getZ() + 0.0000D);
 		final double y = 2.0D * 0.0001D;
 		final double z = doApplyAsDouble(surfaceIntersectionPoint.getX() - 0.0000D, surfaceIntersectionPoint.getZ() - 0.0001D) - doApplyAsDouble(surfaceIntersectionPoint.getX() + 0.0000D, surfaceIntersectionPoint.getZ() + 0.0001D);
 		
-		return Vector3D.normalize(new Vector3D(x, y, z));
+		final Vector3D w = Vector3D.normalize(new Vector3D(x, y, z));
+		
+		return new OrthonormalBasis33D(w);
+	}
+	
+	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double t) {
+		final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+		
+		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
+		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		
+		final Vector3D surfaceIntersectionPointError = new Vector3D();
+		
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
 	}
 	
 	private double doApplyAsDouble(final double x, final double y) {
 		return this.doubleBinaryOperator.applyAsDouble(x, y);
 	}
 	
-	private double doIntersection(final Ray3D ray) {
-		return doIntersection(ray, 0.001D, 100.0D);
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
+		return new Point2D(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getZ());
 	}
 	
-	private double doIntersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Point3D origin = ray.getOrigin();
-		
-		final Vector3D direction = ray.getDirection();
-		
-		final double originX = origin.getX();
-		final double originY = origin.getY();
-		final double originZ = origin.getZ();
-		
-		final double directionX = direction.getX();
-		final double directionY = direction.getY();
-		final double directionZ = direction.getZ();
-		
-		double t = 0.0D;
-		
-		double tDelta = 0.01D;
-		
-		double lastH = 0.0D;
-		double lastY = 0.0D;
-		
-		for(double tCurrent = tMinimum; tCurrent < tMaximum; tCurrent += tDelta) {
-			final double surfaceIntersectionPointX = originX + directionX * tCurrent;
-			final double surfaceIntersectionPointY = originY + directionY * tCurrent;
-			final double surfaceIntersectionPointZ = originZ + directionZ * tCurrent;
-			
-			final double h = doApplyAsDouble(surfaceIntersectionPointX, surfaceIntersectionPointZ);
-			
-			if(surfaceIntersectionPointY < h) {
-				t = tCurrent - tDelta + tDelta * (lastH - lastY) / (surfaceIntersectionPointY - lastY - h + lastH);
-				
-				tCurrent = tMaximum;
-			}
-			
-			tDelta = 0.01D * tCurrent;
-			
-			lastH = h;
-			lastY = surfaceIntersectionPointY;
-		}
-		
-		return t > 0.0D ? t : Double.NaN;
+	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
+		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
 	}
 }

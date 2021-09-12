@@ -20,6 +20,7 @@ package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.gamma;
+import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
 
 import java.io.DataOutput;
@@ -41,6 +42,7 @@ import org.dayflower.geometry.SampleGeneratorD;
 import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.SurfaceSample3D;
+import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.Node;
@@ -192,7 +194,13 @@ public final class Triangle3D implements Shape3D {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		return doIntersection(ray, tMinimum, tMaximum);
+		final double t = intersectionT(ray, tMinimum, tMaximum);
+		
+		if(isNaN(t)) {
+			return SurfaceIntersection3D.EMPTY;
+		}
+		
+		return Optional.of(doCreateSurfaceIntersection(ray, t));
 	}
 	
 	/**
@@ -398,7 +406,49 @@ public final class Triangle3D implements Shape3D {
 	 */
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		return doIntersectionT(ray, tMinimum, tMaximum);
+		final Point4D a = this.a.getPosition();
+		final Point4D b = this.b.getPosition();
+		final Point4D c = this.c.getPosition();
+		
+		final Vector3D edgeAB = Vector3D.direction(a, b);
+		final Vector3D edgeCA = Vector3D.direction(c, a);
+		final Vector3D direction0 = ray.getDirection();
+		final Vector3D direction1 = Vector3D.crossProduct(edgeAB, edgeCA);
+		
+		final double determinant = Vector3D.dotProduct(direction0, direction1);
+		final double determinantReciprocal = 1.0D / determinant;
+		
+		final Point3D origin = ray.getOrigin();
+		
+		final Vector3D direction2 = Vector3D.direction(origin, new Point3D(a));
+		
+		final double t = Vector3D.dotProduct(direction1, direction2) * determinantReciprocal;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return Double.NaN;
+		}
+		
+		final Vector3D direction3 = Vector3D.crossProduct(direction2, direction0);
+		
+		final double uScaled = Vector3D.dotProduct(direction3, edgeCA);
+		final double u = uScaled * determinantReciprocal;
+		
+		if(u < 0.0D) {
+			return Double.NaN;
+		}
+		
+		final double vScaled = Vector3D.dotProduct(direction3, edgeAB);
+		final double v = vScaled * determinantReciprocal;
+		
+		if(v < 0.0D) {
+			return Double.NaN;
+		}
+		
+		if((uScaled + vScaled) * determinant > determinant * determinant) {
+			return Double.NaN;
+		}
+		
+		return t;
 	}
 	
 	/**
@@ -722,112 +772,65 @@ public final class Triangle3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Optional<SurfaceIntersection3D> doIntersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
+	private OrthonormalBasis33D doCreateOrthonormalBasisG() {
+		return new OrthonormalBasis33D(this.surfaceNormal);
+	}
+	
+	private OrthonormalBasis33D doCreateOrthonormalBasisS(final Point3D barycentricCoordinates) {
+		final Point2D textureCoordinatesA = this.a.getTextureCoordinates();
+		final Point2D textureCoordinatesB = this.b.getTextureCoordinates();
+		final Point2D textureCoordinatesC = this.c.getTextureCoordinates();
+		
+		final Vector2D textureCoordinatesCA = Vector2D.direction(textureCoordinatesC, textureCoordinatesA);
+		final Vector2D textureCoordinatesCB = Vector2D.direction(textureCoordinatesC, textureCoordinatesB);
+		
 		final Point4D a = this.a.getPosition();
 		final Point4D b = this.b.getPosition();
 		final Point4D c = this.c.getPosition();
 		
-		final Vector3D edgeAB = Vector3D.direction(a, b);
 		final Vector3D edgeCA = Vector3D.direction(c, a);
-		final Vector3D direction0 = ray.getDirection();
-		final Vector3D direction1 = Vector3D.crossProduct(edgeAB, edgeCA);
-		
-		final double determinant = Vector3D.dotProduct(direction0, direction1);
-		final double determinantReciprocal = 1.0D / determinant;
-		
-		final Point3D origin = ray.getOrigin();
-		
-		final Vector3D direction2 = Vector3D.direction(origin, new Point3D(a));
-		
-		final double t = Vector3D.dotProduct(direction1, direction2) * determinantReciprocal;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return SurfaceIntersection3D.EMPTY;
-		}
-		
-		final Vector3D direction3 = Vector3D.crossProduct(direction2, direction0);
-		
-		final double uScaled = Vector3D.dotProduct(direction3, edgeCA);
-		final double u = uScaled * determinantReciprocal;
-		
-		if(u < 0.0D) {
-			return SurfaceIntersection3D.EMPTY;
-		}
-		
-		final double vScaled = Vector3D.dotProduct(direction3, edgeAB);
-		final double v = vScaled * determinantReciprocal;
-		
-		if(v < 0.0D) {
-			return SurfaceIntersection3D.EMPTY;
-		}
-		
-		if((uScaled + vScaled) * determinant > determinant * determinant) {
-			return SurfaceIntersection3D.EMPTY;
-		}
-		
-		final double w = 1.0D - u - v;
-		
-		final Point3D barycentricCoordinates = new Point3D(w, u, v);
-		final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction0, t);
-		
-		final Point2D textureCoordinatesA = this.a.getTextureCoordinates();
-		final Point2D textureCoordinatesB = this.b.getTextureCoordinates();
-		final Point2D textureCoordinatesC = this.c.getTextureCoordinates();
-		final Point2D textureCoordinates = Point2D.createTextureCoordinates(textureCoordinatesA, textureCoordinatesB, textureCoordinatesC, barycentricCoordinates);
+		final Vector3D edgeCB = Vector3D.direction(c, b);
 		
 		final Vector3D normalA = this.a.getNormal();
 		final Vector3D normalB = this.b.getNormal();
 		final Vector3D normalC = this.c.getNormal();
 		
-		final Vector3D surfaceNormalG = this.surfaceNormal;
-		final Vector3D surfaceNormalS = Vector3D.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
+		final Vector3D w = Vector3D.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
 		
-		final double dU1 = textureCoordinatesA.getU() - textureCoordinatesC.getU();
-		final double dU2 = textureCoordinatesB.getU() - textureCoordinatesC.getU();
-		final double dV1 = textureCoordinatesA.getV() - textureCoordinatesC.getV();
-		final double dV2 = textureCoordinatesB.getV() - textureCoordinatesC.getV();
+		final double determinant = Vector2D.crossProduct(textureCoordinatesCA, textureCoordinatesCB);
 		
-		final double determinantUV = dU1 * dV2 - dV1 * dU2;
-		
-		if(isZero(determinantUV)) {
-			final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormalG);
-			final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(surfaceNormalS);
-			
-			final double xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
-			final double yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
-			final double zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
-			
-			final Vector3D surfaceIntersectionPointError = Vector3D.multiply(new Vector3D(xAbsSum, yAbsSum, zAbsSum), gamma(7));
-			
-			return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		if(isZero(determinant)) {
+			return new OrthonormalBasis33D(w);
 		}
 		
-		final double determinantUVReciprocal = 1.0D / determinantUV;
+		final double determinantReciprocal = 1.0D / determinant;
 		
-		final Vector3D dPU = Vector3D.direction(c, a);
-		final Vector3D dPV = Vector3D.direction(c, b);
+		final double x = (-textureCoordinatesCB.getU() * edgeCA.getX() + textureCoordinatesCA.getU() * edgeCB.getX()) * determinantReciprocal;
+		final double y = (-textureCoordinatesCB.getU() * edgeCA.getY() + textureCoordinatesCA.getU() * edgeCB.getY()) * determinantReciprocal;
+		final double z = (-textureCoordinatesCB.getU() * edgeCA.getZ() + textureCoordinatesCA.getU() * edgeCB.getZ()) * determinantReciprocal;
 		
-		final Vector3D vS = new Vector3D((-dU2 * dPU.getX() + dU1 * dPV.getX()) * determinantUVReciprocal, (-dU2 * dPU.getY() + dU1 * dPV.getY()) * determinantUVReciprocal, (-dU2 * dPU.getZ() + dU1 * dPV.getZ()) * determinantUVReciprocal);
+		final Vector3D v = new Vector3D(x, y, z);
 		
-		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormalG);
-		final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(surfaceNormalS, vS);
-		
-		final double xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
-		final double yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
-		final double zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
-		
-		final Vector3D surfaceIntersectionPointError = Vector3D.multiply(new Vector3D(xAbsSum, yAbsSum, zAbsSum), gamma(7));
-		
-		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return new OrthonormalBasis33D(w, v);
 	}
 	
-	private double doIntersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
+	private Point2D doCreateTextureCoordinates(final Point3D barycentricCoordinates) {
+		final Point2D textureCoordinatesA = this.a.getTextureCoordinates();
+		final Point2D textureCoordinatesB = this.b.getTextureCoordinates();
+		final Point2D textureCoordinatesC = this.c.getTextureCoordinates();
+		final Point2D textureCoordinates = Point2D.createTextureCoordinates(textureCoordinatesA, textureCoordinatesB, textureCoordinatesC, barycentricCoordinates);
+		
+		return textureCoordinates;
+	}
+	
+	private Point3D doCreateBarycentricCoordinates(final Ray3D ray) {
 		final Point4D a = this.a.getPosition();
 		final Point4D b = this.b.getPosition();
 		final Point4D c = this.c.getPosition();
 		
 		final Vector3D edgeAB = Vector3D.direction(a, b);
 		final Vector3D edgeCA = Vector3D.direction(c, a);
+		
 		final Vector3D direction0 = ray.getDirection();
 		final Vector3D direction1 = Vector3D.crossProduct(edgeAB, edgeCA);
 		
@@ -837,33 +840,44 @@ public final class Triangle3D implements Shape3D {
 		final Point3D origin = ray.getOrigin();
 		
 		final Vector3D direction2 = Vector3D.direction(origin, new Point3D(a));
-		
-		final double t = Vector3D.dotProduct(direction1, direction2) * determinantReciprocal;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return Double.NaN;
-		}
-		
 		final Vector3D direction3 = Vector3D.crossProduct(direction2, direction0);
 		
-		final double uScaled = Vector3D.dotProduct(direction3, edgeCA);
-		final double u = uScaled * determinantReciprocal;
+		final double u = Vector3D.dotProduct(direction3, edgeCA) * determinantReciprocal;
+		final double v = Vector3D.dotProduct(direction3, edgeAB) * determinantReciprocal;
+		final double w = 1.0D - u - v;
 		
-		if(u < 0.0D) {
-			return Double.NaN;
-		}
+		return new Point3D(w, u, v);
+	}
+	
+	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double t) {
+		final Point3D barycentricCoordinates = doCreateBarycentricCoordinates(ray);
+		final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
-		final double vScaled = Vector3D.dotProduct(direction3, edgeAB);
-		final double v = vScaled * determinantReciprocal;
+		final Point2D textureCoordinates = doCreateTextureCoordinates(barycentricCoordinates);
 		
-		if(v < 0.0D) {
-			return Double.NaN;
-		}
+		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG();
+		final OrthonormalBasis33D orthonormalBasisS = doCreateOrthonormalBasisS(barycentricCoordinates);
 		
-		if((uScaled + vScaled) * determinant > determinant * determinant) {
-			return Double.NaN;
-		}
+		final Vector3D surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(barycentricCoordinates);
 		
-		return t;
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+	}
+	
+	private Vector3D doCreateSurfaceIntersectionPointError(final Point3D barycentricCoordinates) {
+		final Point4D a = this.a.getPosition();
+		final Point4D b = this.b.getPosition();
+		final Point4D c = this.c.getPosition();
+		
+		final double xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
+		final double yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
+		final double zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
+		
+		return Vector3D.multiply(new Vector3D(xAbsSum, yAbsSum, zAbsSum), gamma(7));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
+		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
 	}
 }

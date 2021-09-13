@@ -653,12 +653,49 @@ public final class Intersection {
 		return NaN;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the polygon contained in {@code polygon3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code polygon3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < 8} or {@code polygon3D.length < 13}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Intersection.intersectionPolygon3D(ray3D, polygon3D, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param polygon3D a {@code double[]} that contains a polygon
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < 8} or {@code polygon3D.length < 13}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code polygon3D} are {@code null}
+	 */
 	public static double intersectionPolygon3D(final double[] ray3D, final double[] polygon3D) {
 		return intersectionPolygon3D(ray3D, polygon3D, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the polygon contained in {@code polygon3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code polygon3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code polygon3D.length < polygon3DOffset + 13} or {@code polygon3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param polygon3D a {@code double[]} that contains a polygon
+	 * @param ray3DOffset the offset in {@code ray3D} to start at
+	 * @param polygon3DOffset the offset in {@code polygon3D} to start at
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code polygon3D.length < polygon3DOffset + 13} or {@code polygon3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code polygon3D} are {@code null}
+	 */
 	public static double intersectionPolygon3D(final double[] ray3D, final double[] polygon3D, final int ray3DOffset, final int polygon3DOffset) {
 		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		

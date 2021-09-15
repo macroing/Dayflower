@@ -744,12 +744,49 @@ public final class Intersection {
 		return NaN;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the rectangle contained in {@code rectangle3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code rectangle3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < 8} or {@code rectangle3D.length < 11}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Intersection.intersectionRectangle3D(ray3D, rectangle3D, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param rectangle3D a {@code double[]} that contains a rectangle
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < 8} or {@code rectangle3D.length < 11}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code rectangle3D} are {@code null}
+	 */
 	public static double intersectionRectangle3D(final double[] ray3D, final double[] rectangle3D) {
 		return intersectionRectangle3D(ray3D, rectangle3D, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between the ray contained in {@code ray3D} and the rectangle contained in {@code rectangle3D}.
+	 * <p>
+	 * Returns the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection.
+	 * <p>
+	 * If either {@code ray3D} or {@code rectangle3D} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code rectangle3D.length < rectangle3DOffset + 11} or {@code rectangle3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param ray3D a {@code double[]} that contains a ray
+	 * @param rectangle3D a {@code double[]} that contains a rectangle
+	 * @param ray3DOffset the offset in {@code ray3D} to start at
+	 * @param rectangle3DOffset the offset in {@code rectangle3D} to start at
+	 * @return the parametric distance to the point of intersection, or {@code Doubles.NaN} if there is no intersection
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code ray3D.length < ray3DOffset + 8}, {@code ray3DOffset < 0}, {@code rectangle3D.length < rectangle3DOffset + 11} or {@code rectangle3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code ray3D} or {@code rectangle3D} are {@code null}
+	 */
 	public static double intersectionRectangle3D(final double[] ray3D, final double[] rectangle3D, final int ray3DOffset, final int rectangle3DOffset) {
 		final double[] point3DOrigin = ray3DGetOrigin(ray3D, point3D(), ray3DOffset, 0);
 		

@@ -62,12 +62,45 @@ public final class Vector {
 	// Vector2D ////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cross product between the two vectors in {@code vector2DLHS} and {@code vector2DRHS}.
+	 * <p>
+	 * If either {@code vector2DLHS} or {@code vector2DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2DLHS.length < 2} or {@code vector2DRHS.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DCrossProduct(vector2DLHS, vector2DRHS, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector2DLHS a {@code double[]} that contains a vector with two components
+	 * @param vector2DRHS a {@code double[]} that contains a vector with two components
+	 * @return the cross product between the two vectors in {@code vector2DLHS} and {@code vector2DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2DLHS.length < 2} or {@code vector2DRHS.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector2DLHS} or {@code vector2DRHS} are {@code null}
+	 */
 	public static double vector2DCrossProduct(final double[] vector2DLHS, final double[] vector2DRHS) {
 		return vector2DCrossProduct(vector2DLHS, vector2DRHS, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cross product between the two vectors in {@code vector2DLHS} and {@code vector2DRHS}.
+	 * <p>
+	 * If either {@code vector2DLHS} or {@code vector2DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector2DLHS.length < vector2DLHSOffset + 2}, {@code vector2DLHSOffset < 0}, {@code vector2DRHS.length < vector2DRHSOffset + 2} or {@code vector2DRHSOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector2DLHS a {@code double[]} that contains a vector with two components
+	 * @param vector2DRHS a {@code double[]} that contains a vector with two components
+	 * @param vector2DLHSOffset the offset in {@code vector2DLHS} to start at
+	 * @param vector2DRHSOffset the offset in {@code vector2DRHS} to start at
+	 * @return the cross product between the two vectors in {@code vector2DLHS} and {@code vector2DRHS}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2DLHS.length < vector2DLHSOffset + 2}, {@code vector2DLHSOffset < 0}, {@code vector2DRHS.length < vector2DRHSOffset + 2} or {@code vector2DRHSOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector2DLHS} or {@code vector2DRHS} are {@code null}
+	 */
 	public static double vector2DCrossProduct(final double[] vector2DLHS, final double[] vector2DRHS, final int vector2DLHSOffset, final int vector2DRHSOffset) {
 		return vector2DLHS[vector2DLHSOffset + 0] * vector2DRHS[vector2DRHSOffset + 1] - vector2DLHS[vector2DLHSOffset + 1] * vector2DRHS[vector2DRHSOffset + 0];
 	}
@@ -499,17 +532,68 @@ public final class Vector {
 		return vector2DSet(vector2DResult, component1, component2, vector2DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from origin to the X- and Y-component values of {@code point3D}.
+	 * <p>
+	 * If {@code point3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DDirectionXY(point3D, Vector.vector2D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to look at
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from origin to the X- and Y-component values of {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code point3D} is {@code null}
+	 */
 	public static double[] vector2DDirectionXY(final double[] point3D) {
 		return vector2DDirectionXY(point3D, vector2D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from origin to the X- and Y-component values of {@code point3D}.
+	 * <p>
+	 * If either {@code point3D} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 2} or {@code vector2DResult.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DDirectionXY(point3D, vector2DResult, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to look at
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from origin to the X- and Y-component values of {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 2} or {@code vector2DResult.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code vector2DResult} are {@code null}
+	 */
 	public static double[] vector2DDirectionXY(final double[] point3D, final double[] vector2DResult) {
 		return vector2DDirectionXY(point3D, vector2DResult, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from origin to the X- and Y-component values of {@code point3D}.
+	 * <p>
+	 * If either {@code point3D} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < point3DOffset + 2}, {@code point3DOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to look at
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @param point3DOffset the offset in {@code point3D} to start at
+	 * @param vector2DResultOffset the offset in {@code vector2DResult} to start at
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from origin to the X- and Y-component values of {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 2}, {@code point3DOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code vector2DResult} are {@code null}
+	 */
 	public static double[] vector2DDirectionXY(final double[] point3D, final double[] vector2DResult, final int point3DOffset, final int vector2DResultOffset) {
 		final double component1 = point3DGetX(point3D, point3DOffset);
 		final double component2 = point3DGetY(point3D, point3DOffset);
@@ -517,17 +601,68 @@ public final class Vector {
 		return vector2DSet(vector2DResult, component1, component2, vector2DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Y- and Z-component values of {@code point3D}.
+	 * <p>
+	 * If {@code point3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DDirectionYZ(point3D, Vector.vector2D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to look at
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Y- and Z-component values of {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code point3D} is {@code null}
+	 */
 	public static double[] vector2DDirectionYZ(final double[] point3D) {
 		return vector2DDirectionYZ(point3D, vector2D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Y- and Z-component values of {@code point3D}.
+	 * <p>
+	 * If either {@code point3D} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3} or {@code vector2DResult.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DDirectionYZ(point3D, vector2DResult, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to look at
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Y- and Z-component values of {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3} or {@code vector2DResult.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code vector2DResult} are {@code null}
+	 */
 	public static double[] vector2DDirectionYZ(final double[] point3D, final double[] vector2DResult) {
 		return vector2DDirectionYZ(point3D, vector2DResult, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Y- and Z-component values of {@code point3D}.
+	 * <p>
+	 * If either {@code point3D} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to look at
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @param point3DOffset the offset in {@code point3D} to start at
+	 * @param vector2DResultOffset the offset in {@code vector2DResult} to start at
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Y- and Z-component values of {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code vector2DResult} are {@code null}
+	 */
 	public static double[] vector2DDirectionYZ(final double[] point3D, final double[] vector2DResult, final int point3DOffset, final int vector2DResultOffset) {
 		final double component1 = point3DGetY(point3D, point3DOffset);
 		final double component2 = point3DGetZ(point3D, point3DOffset);
@@ -535,17 +670,68 @@ public final class Vector {
 		return vector2DSet(vector2DResult, component1, component2, vector2DResultOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Z- and X-component values of {@code point3D}.
+	 * <p>
+	 * If {@code point3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DDirectionZX(point3D, Vector.vector2D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to look at
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Z- and X-component values of {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code point3D} is {@code null}
+	 */
 	public static double[] vector2DDirectionZX(final double[] point3D) {
 		return vector2DDirectionZX(point3D, vector2D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Z- and X-component values of {@code point3D}.
+	 * <p>
+	 * If either {@code point3D} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < 3} or {@code vector2DResult.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector2DDirectionZX(point3D, vector2DResult, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to look at
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Z- and X-component values of {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < 3} or {@code vector2DResult.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code vector2DResult} are {@code null}
+	 */
 	public static double[] vector2DDirectionZX(final double[] point3D, final double[] vector2DResult) {
 		return vector2DDirectionZX(point3D, vector2DResult, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Z- and X-component values of {@code point3D}.
+	 * <p>
+	 * If either {@code point3D} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point3D a {@code double[]} that contains the point to look at
+	 * @param vector2DResult a {@code double[]} that contains the vector to return
+	 * @param point3DOffset the offset in {@code point3D} to start at
+	 * @param vector2DResultOffset the offset in {@code vector2DResult} to start at
+	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from origin to the Z- and X-component values of {@code point3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point3D} or {@code vector2DResult} are {@code null}
+	 */
 	public static double[] vector2DDirectionZX(final double[] point3D, final double[] vector2DResult, final int point3DOffset, final int vector2DResultOffset) {
 		final double component1 = point3DGetZ(point3D, point3DOffset);
 		final double component2 = point3DGetX(point3D, point3DOffset);

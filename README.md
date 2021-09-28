@@ -101,6 +101,7 @@ The lists below show the main features of the renderer.
 * Uber Material (CPU)
 
 #### Supported Modifiers
+* Bi Modifier (CPU)
 * Low-Dynamic-Range (LDR) Image Normal Map Modifier (CPU & GPU)
 * No-Op Modifier (CPU & GPU)
 * Simplex Noise Normal Map Modifier (CPU & GPU)

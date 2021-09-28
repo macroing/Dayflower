@@ -1,3 +1,8 @@
+2021-09-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the BiModifier class.
+	* CHANGE:	Change the IDs of the LDRImageNormalMapModifier, NoOpModifier and SimplexNoiseNormalMapModifier classes.
+
 2021-09-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Simplex API.

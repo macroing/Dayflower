@@ -249,7 +249,8 @@ public final class Main {
 					final double[] orthonormalBasis33DOS = intersectionOrthonormalBasisShape3D(ray3DOS, shape3D, tOS);
 					final double[] orthonormalBasis33DWS = orthonormalBasis33DTransformMatrix44D(matrix44DObjectToWorld, orthonormalBasis33DOS);
 					
-					final double[] point2DTextureCoordinates = intersectionTextureCoordinatesShape3D(ray3DOS, shape3D, tOS);
+//					final double[] point2DTextureCoordinates = intersectionTextureCoordinatesShape3D(ray3DOS, shape3D, tOS);
+					final double[] point2DTextureCoordinates = doComputeSteepParallaxMapping(orthonormalBasis33DWS, intersectionTextureCoordinatesShape3D(ray3DOS, shape3D, tOS), vector3DNegate(ray3DGetDirection(ray3DWS)), scale);
 					
 					final double[] point3DSurfaceIntersectionPointOS = intersectionSurfaceIntersectionPointShape3D(ray3DOS, shape3D, tOS);
 					final double[] point3DSurfaceIntersectionPointWS = point3DTransformAndDivideMatrix44D(matrix44DObjectToWorld, point3DSurfaceIntersectionPointOS);

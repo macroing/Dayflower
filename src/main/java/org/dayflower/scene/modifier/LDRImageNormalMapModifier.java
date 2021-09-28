@@ -59,7 +59,7 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	/**
 	 * The ID of this {@code LDRImageNormalMapModifier} class.
 	 */
-	public static final int ID = 1;
+	public static final int ID = 2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

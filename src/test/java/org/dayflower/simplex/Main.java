@@ -24,14 +24,12 @@ import static org.dayflower.simplex.Color.color4D;
 import static org.dayflower.simplex.Color.color4DGetComponent1;
 import static org.dayflower.simplex.Color.color4DGetComponent2;
 import static org.dayflower.simplex.Color.color4DGetComponent3;
-import static org.dayflower.simplex.Color.color4DMultiply;
 import static org.dayflower.simplex.Image.image4D;
 import static org.dayflower.simplex.Image.image4DSave;
 import static org.dayflower.simplex.Image.image4DSetColor4D;
 import static org.dayflower.simplex.Intersection.intersectionOrthonormalBasisShape3D;
 import static org.dayflower.simplex.Intersection.intersectionShape3D;
 import static org.dayflower.simplex.Intersection.intersectionSurfaceIntersectionPointShape3D;
-import static org.dayflower.simplex.Intersection.intersectionSurfaceNormalShape3D;
 import static org.dayflower.simplex.Intersection.intersectionTextureCoordinatesShape3D;
 import static org.dayflower.simplex.Matrix.matrix44DInverse;
 import static org.dayflower.simplex.Matrix.matrix44DRotateX;
@@ -60,7 +58,6 @@ import static org.dayflower.simplex.Shape.rectangularCuboid3D;
 import static org.dayflower.simplex.Shape.sphere3D;
 import static org.dayflower.simplex.Shape.torus3D;
 import static org.dayflower.simplex.Shape.triangle3D;
-import static org.dayflower.simplex.Texture.dotProductTextureGetColor4D;
 import static org.dayflower.simplex.Texture.image4DTextureGetColor4D;
 import static org.dayflower.simplex.Vector.vector3D;
 import static org.dayflower.simplex.Vector.vector3DDirectionNormalized;
@@ -71,10 +68,8 @@ import static org.dayflower.simplex.Vector.vector3DGetZ;
 import static org.dayflower.simplex.Vector.vector3DMultiply;
 import static org.dayflower.simplex.Vector.vector3DNegate;
 import static org.dayflower.simplex.Vector.vector3DNormalize;
-import static org.dayflower.simplex.Vector.vector3DTransformMatrix44D;
 import static org.dayflower.simplex.Vector.vector3DTransformOrthonormalBasis33D;
 import static org.dayflower.simplex.Vector.vector3DTransformReverseOrthonormalBasis33D;
-import static org.dayflower.simplex.Vector.vector3DTransformTransposeMatrix44D;
 import static org.dayflower.utility.Doubles.PI;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.isNaN;
@@ -139,6 +134,7 @@ public final class Main {
 		return color4D();
 	}
 	
+	@SuppressWarnings("unused")
 	private static double[] doColor4DSurfaceNormal(final double[] orthonormalBasis33D) {
 //		final double[] surfaceNormal = vector3DNormalize(vector3DTransformReverseOrthonormalBasis33D(orthonormalBasis33DGetW(orthonormalBasis33D), orthonormalBasis33D));
 		final double[] surfaceNormal = orthonormalBasis33DGetW(orthonormalBasis33D);
@@ -155,6 +151,7 @@ public final class Main {
 		return color4D(r, g, b, a);
 	}
 	
+	@SuppressWarnings("unused")
 	private static double[] doComputeParallaxMapping(final double[] orthonormalBasis33D, final double[] point2DTextureCoordinates, final double[] vector3DDirection, final double scale) {
 		final double[] color4D = image4DTextureGetColor4D(point2DTextureCoordinates, scale, IMAGE_4_D_DISPLACEMENT_MAP, false);
 		

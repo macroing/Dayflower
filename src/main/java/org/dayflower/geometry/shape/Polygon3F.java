@@ -66,7 +66,7 @@ public final class Polygon3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Point3F[] points;
-	private final Polygon2F polygon;
+	private final Polygon2F projectedPolygon;
 	private final Vector3F surfaceNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ public final class Polygon3F implements Shape3F {
 	public Polygon3F(final Point3F... points) {
 		this.points = doRequireValidPoints(points);
 		this.surfaceNormal = Vector3F.normalNormalized(this.points[0], this.points[1], this.points[2]);
-		this.polygon = doCreatePolygon(this.points, this.surfaceNormal);
+		this.projectedPolygon = doCreateProjectedPolygon(this.points, this.surfaceNormal);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,6 +125,30 @@ public final class Polygon3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns the {@link Point3F} instance at index {@code index} in this {@code Polygon3F} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index of the {@code Point3F} to return
+	 * @return the {@code Point3F} instance at index {@code index} in this {@code Polygon3F} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}
+	 */
+	public Point3F getPoint(final int index) {
+		ParameterArguments.requireRange(index, 0, getPointCount() - 1, "index");
+		
+		return this.points[index];
+	}
+	
+	/**
+	 * Returns a {@link Polygon2F} instance that contains the projected polygon.
+	 * 
+	 * @return a {@code Polygon2F} instance that contains the projected polygon
+	 */
+	public Polygon2F getProjectedPolygon() {
+		return this.projectedPolygon;
+	}
+	
+	/**
 	 * Returns a {@code String} with the name of this {@code Polygon3F} instance.
 	 * 
 	 * @return a {@code String} with the name of this {@code Polygon3F} instance
@@ -142,6 +166,15 @@ public final class Polygon3F implements Shape3F {
 	@Override
 	public String toString() {
 		return String.format("new Polygon3F(%s)", Point3F.toString(this.points));
+	}
+	
+	/**
+	 * Returns a {@link Vector3F} instance with the surface normal associated with this {@code Polygon3F} instance.
+	 * 
+	 * @return a {@code Vector3F} instance with the surface normal associated with this {@code Polygon3F} instance
+	 */
+	public Vector3F getSurfaceNormal() {
+		return this.surfaceNormal;
 	}
 	
 	/**
@@ -177,7 +210,7 @@ public final class Polygon3F implements Shape3F {
 					}
 				}
 				
-				if(!this.polygon.accept(nodeHierarchicalVisitor)) {
+				if(!this.projectedPolygon.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -230,7 +263,7 @@ public final class Polygon3F implements Shape3F {
 			return false;
 		} else if(!Arrays.equals(this.points, Polygon3F.class.cast(object).points)) {
 			return false;
-		} else if(!Objects.equals(this.polygon, Polygon3F.class.cast(object).polygon)) {
+		} else if(!Objects.equals(this.projectedPolygon, Polygon3F.class.cast(object).projectedPolygon)) {
 			return false;
 		} else if(!Objects.equals(this.surfaceNormal, Polygon3F.class.cast(object).surfaceNormal)) {
 			return false;
@@ -296,13 +329,22 @@ public final class Polygon3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns the {@link Point3F} count of this {@code Polygon3F} instance.
+	 * 
+	 * @return the {@code Point3F} count of this {@code Polygon3F} instance
+	 */
+	public int getPointCount() {
+		return this.points.length;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Polygon3F} instance.
 	 * 
 	 * @return a hash code for this {@code Polygon3F} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)), this.polygon, this.surfaceNormal);
+		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)), this.projectedPolygon, this.surfaceNormal);
 	}
 	
 	/**
@@ -386,7 +428,7 @@ public final class Polygon3F implements Shape3F {
 		final Vector3F u = Vector3F.directionNormalized(a, b);
 		final Vector3F v = Vector3F.crossProduct(w, u);
 		
-		return this.polygon.contains(doMap(a, p, u, v));
+		return this.projectedPolygon.contains(doMap(a, p, u, v));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,7 +457,7 @@ public final class Polygon3F implements Shape3F {
 		throw new IllegalArgumentException("The provided Point3F instances are not coplanar.");
 	}
 	
-	private static Polygon2F doCreatePolygon(final Point3F[] points, final Vector3F surfaceNormal) {
+	private static Polygon2F doCreateProjectedPolygon(final Point3F[] points, final Vector3F surfaceNormal) {
 		final Point3F a = points[0];
 		final Point3F b = points[1];
 		

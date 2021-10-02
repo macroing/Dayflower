@@ -66,7 +66,7 @@ public final class Polygon3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Point3D[] points;
-	private final Polygon2D polygon;
+	private final Polygon2D projectedPolygon;
 	private final Vector3D surfaceNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ public final class Polygon3D implements Shape3D {
 	public Polygon3D(final Point3D... points) {
 		this.points = doRequireValidPoints(points);
 		this.surfaceNormal = Vector3D.normalNormalized(this.points[0], this.points[1], this.points[2]);
-		this.polygon = doCreatePolygon(this.points, this.surfaceNormal);
+		this.projectedPolygon = doCreateProjectedPolygon(this.points, this.surfaceNormal);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,6 +125,30 @@ public final class Polygon3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns the {@link Point3D} instance at index {@code index} in this {@code Polygon3D} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index of the {@code Point3D} to return
+	 * @return the {@code Point3D} instance at index {@code index} in this {@code Polygon3D} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}
+	 */
+	public Point3D getPoint(final int index) {
+		ParameterArguments.requireRange(index, 0, getPointCount() - 1, "index");
+		
+		return this.points[index];
+	}
+	
+	/**
+	 * Returns a {@link Polygon2D} instance that contains the projected polygon.
+	 * 
+	 * @return a {@code Polygon2D} instance that contains the projected polygon
+	 */
+	public Polygon2D getProjectedPolygon() {
+		return this.projectedPolygon;
+	}
+	
+	/**
 	 * Returns a {@code String} with the name of this {@code Polygon3D} instance.
 	 * 
 	 * @return a {@code String} with the name of this {@code Polygon3D} instance
@@ -142,6 +166,15 @@ public final class Polygon3D implements Shape3D {
 	@Override
 	public String toString() {
 		return String.format("new Polygon3D(%s)", Point3D.toString(this.points));
+	}
+	
+	/**
+	 * Returns a {@link Vector3D} instance with the surface normal associated with this {@code Polygon3D} instance.
+	 * 
+	 * @return a {@code Vector3D} instance with the surface normal associated with this {@code Polygon3D} instance
+	 */
+	public Vector3D getSurfaceNormal() {
+		return this.surfaceNormal;
 	}
 	
 	/**
@@ -177,7 +210,7 @@ public final class Polygon3D implements Shape3D {
 					}
 				}
 				
-				if(!this.polygon.accept(nodeHierarchicalVisitor)) {
+				if(!this.projectedPolygon.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -230,7 +263,7 @@ public final class Polygon3D implements Shape3D {
 			return false;
 		} else if(!Arrays.equals(this.points, Polygon3D.class.cast(object).points)) {
 			return false;
-		} else if(!Objects.equals(this.polygon, Polygon3D.class.cast(object).polygon)) {
+		} else if(!Objects.equals(this.projectedPolygon, Polygon3D.class.cast(object).projectedPolygon)) {
 			return false;
 		} else if(!Objects.equals(this.surfaceNormal, Polygon3D.class.cast(object).surfaceNormal)) {
 			return false;
@@ -296,13 +329,22 @@ public final class Polygon3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns the {@link Point3D} count of this {@code Polygon3D} instance.
+	 * 
+	 * @return the {@code Point3D} count of this {@code Polygon3D} instance
+	 */
+	public int getPointCount() {
+		return this.points.length;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Polygon3D} instance.
 	 * 
 	 * @return a hash code for this {@code Polygon3D} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)), this.polygon, this.surfaceNormal);
+		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)), this.projectedPolygon, this.surfaceNormal);
 	}
 	
 	/**
@@ -386,7 +428,7 @@ public final class Polygon3D implements Shape3D {
 		final Vector3D u = Vector3D.directionNormalized(a, b);
 		final Vector3D v = Vector3D.crossProduct(w, u);
 		
-		return this.polygon.contains(doMap(a, p, u, v));
+		return this.projectedPolygon.contains(doMap(a, p, u, v));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,7 +457,7 @@ public final class Polygon3D implements Shape3D {
 		throw new IllegalArgumentException("The provided Point3D instances are not coplanar.");
 	}
 	
-	private static Polygon2D doCreatePolygon(final Point3D[] points, final Vector3D surfaceNormal) {
+	private static Polygon2D doCreateProjectedPolygon(final Point3D[] points, final Vector3D surfaceNormal) {
 		final Point3D a = points[0];
 		final Point3D b = points[1];
 		

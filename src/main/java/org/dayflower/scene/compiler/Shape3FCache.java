@@ -31,6 +31,7 @@ import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Hyperboloid3F;
 import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.Polygon3F;
 import org.dayflower.geometry.shape.Rectangle3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -49,6 +50,7 @@ final class Shape3FCache {
 	private final List<Hyperboloid3F> distinctHyperboloid3Fs;
 	private final List<Paraboloid3F> distinctParaboloid3Fs;
 	private final List<Plane3F> distinctPlane3Fs;
+	private final List<Polygon3F> distinctPolygon3Fs;
 	private final List<Rectangle3F> distinctRectangle3Fs;
 	private final List<RectangularCuboid3F> distinctRectangularCuboid3Fs;
 	private final List<Shape3F> distinctShape3Fs;
@@ -62,6 +64,7 @@ final class Shape3FCache {
 	private final Map<Hyperboloid3F, Integer> distinctToOffsetsHyperboloid3Fs;
 	private final Map<Paraboloid3F, Integer> distinctToOffsetsParaboloid3Fs;
 	private final Map<Plane3F, Integer> distinctToOffsetsPlane3Fs;
+	private final Map<Polygon3F, Integer> distinctToOffsetsPolygon3Fs;
 	private final Map<Rectangle3F, Integer> distinctToOffsetsRectangle3Fs;
 	private final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboid3Fs;
 	private final Map<Sphere3F, Integer> distinctToOffsetsSphere3Fs;
@@ -81,6 +84,7 @@ final class Shape3FCache {
 		this.distinctHyperboloid3Fs = new ArrayList<>();
 		this.distinctParaboloid3Fs = new ArrayList<>();
 		this.distinctPlane3Fs = new ArrayList<>();
+		this.distinctPolygon3Fs = new ArrayList<>();
 		this.distinctRectangle3Fs = new ArrayList<>();
 		this.distinctRectangularCuboid3Fs = new ArrayList<>();
 		this.distinctShape3Fs = new ArrayList<>();
@@ -94,6 +98,7 @@ final class Shape3FCache {
 		this.distinctToOffsetsHyperboloid3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsParaboloid3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsPlane3Fs = new LinkedHashMap<>();
+		this.distinctToOffsetsPolygon3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsRectangle3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsRectangularCuboid3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsSphere3Fs = new LinkedHashMap<>();
@@ -132,6 +137,10 @@ final class Shape3FCache {
 		return CompiledShape3FCache.toPlane3Fs(this.distinctPlane3Fs);
 	}
 	
+	public float[] toPolygon3Fs() {
+		return CompiledShape3FCache.toPolygon3Fs(this.distinctPolygon3Fs);
+	}
+	
 	public float[] toRectangle3Fs() {
 		return CompiledShape3FCache.toRectangle3Fs(this.distinctRectangle3Fs);
 	}
@@ -167,6 +176,8 @@ final class Shape3FCache {
 			return this.distinctToOffsetsParaboloid3Fs.get(shape3F).intValue();
 		} else if(shape3F instanceof Plane3F) {
 			return this.distinctToOffsetsPlane3Fs.get(shape3F).intValue();
+		} else if(shape3F instanceof Polygon3F) {
+			return this.distinctToOffsetsPolygon3Fs.get(shape3F).intValue();
 		} else if(shape3F instanceof Rectangle3F) {
 			return this.distinctToOffsetsRectangle3Fs.get(shape3F).intValue();
 		} else if(shape3F instanceof RectangularCuboid3F) {
@@ -190,6 +201,10 @@ final class Shape3FCache {
 		return this.distinctToOffsetsTriangle3Fs.get(triangle3F).intValue();
 	}
 	
+	public int[] toPolygon3FOffsets() {
+		return CompiledShape3FCache.toPolygon3FOffsets(this.distinctPolygon3Fs);
+	}
+	
 	public int[] toTriangleMesh3FOffsets() {
 		return CompiledShape3FCache.toTriangleMesh3FOffsets(this.distinctTriangleMesh3Fs);
 	}
@@ -209,6 +224,8 @@ final class Shape3FCache {
 		compiledShape3FCache.setHyperboloid3Fs(toHyperboloid3Fs());
 		compiledShape3FCache.setParaboloid3Fs(toParaboloid3Fs());
 		compiledShape3FCache.setPlane3Fs(toPlane3Fs());
+		compiledShape3FCache.setPolygon3FOffsets(toPolygon3FOffsets());
+		compiledShape3FCache.setPolygon3Fs(toPolygon3Fs());
 		compiledShape3FCache.setRectangle3Fs(toRectangle3Fs());
 		compiledShape3FCache.setRectangularCuboid3Fs(toRectangularCuboid3Fs());
 		compiledShape3FCache.setSphere3Fs(toSphere3Fs());
@@ -225,6 +242,7 @@ final class Shape3FCache {
 		this.distinctHyperboloid3Fs.clear();
 		this.distinctParaboloid3Fs.clear();
 		this.distinctPlane3Fs.clear();
+		this.distinctPolygon3Fs.clear();
 		this.distinctRectangle3Fs.clear();
 		this.distinctRectangularCuboid3Fs.clear();
 		this.distinctShape3Fs.clear();
@@ -238,6 +256,7 @@ final class Shape3FCache {
 		this.distinctToOffsetsHyperboloid3Fs.clear();
 		this.distinctToOffsetsParaboloid3Fs.clear();
 		this.distinctToOffsetsPlane3Fs.clear();
+		this.distinctToOffsetsPolygon3Fs.clear();
 		this.distinctToOffsetsRectangle3Fs.clear();
 		this.distinctToOffsetsRectangularCuboid3Fs.clear();
 		this.distinctToOffsetsSphere3Fs.clear();
@@ -271,6 +290,10 @@ final class Shape3FCache {
 		this.distinctPlane3Fs.clear();
 		this.distinctPlane3Fs.addAll(this.nodeCache.getAllDistinct(Plane3F.class));
 		
+//		Add all distinct Polygon3F instances:
+		this.distinctPolygon3Fs.clear();
+		this.distinctPolygon3Fs.addAll(this.nodeCache.getAllDistinct(Polygon3F.class));
+		
 //		Add all distinct Rectangle3F instances:
 		this.distinctRectangle3Fs.clear();
 		this.distinctRectangle3Fs.addAll(this.nodeCache.getAllDistinct(Rectangle3F.class));
@@ -303,6 +326,7 @@ final class Shape3FCache {
 		this.distinctShape3Fs.addAll(this.distinctHyperboloid3Fs);
 		this.distinctShape3Fs.addAll(this.distinctParaboloid3Fs);
 		this.distinctShape3Fs.addAll(this.distinctPlane3Fs);
+		this.distinctShape3Fs.addAll(this.distinctPolygon3Fs);
 		this.distinctShape3Fs.addAll(this.distinctRectangle3Fs);
 		this.distinctShape3Fs.addAll(this.distinctRectangularCuboid3Fs);
 		this.distinctShape3Fs.addAll(this.distinctSphere3Fs);
@@ -333,6 +357,10 @@ final class Shape3FCache {
 //		Create offset mappings for all distinct Plane3F instances:
 		this.distinctToOffsetsPlane3Fs.clear();
 		this.distinctToOffsetsPlane3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlane3Fs, CompiledShape3FCache.PLANE_3_F_LENGTH));
+		
+//		Create offset mappings for all distinct Polygon3F instances:
+		this.distinctToOffsetsPolygon3Fs.clear();
+		this.distinctToOffsetsPolygon3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPolygon3Fs, polygon3F -> CompiledShape3FCache.getPolygon3FLength(polygon3F)));
 		
 //		Create offset mappings for all distinct Rectangle3F instances:
 		this.distinctToOffsetsRectangle3Fs.clear();

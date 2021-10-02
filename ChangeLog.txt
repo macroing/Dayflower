@@ -1,3 +1,12 @@
+2021-10-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods getPoint(int) and getPointCount() to the Polygon2D class.
+	* ADD:		Add the methods getPoint(int) and getPointCount() to the Polygon2F class.
+	* ADD:		Add the methods getPoint(int), getPointCount(), getProjectedPolygon() and getSurfaceNormal() to the Polygon3D class.
+	* ADD:		Add the methods getPoint(int), getPointCount(), getProjectedPolygon() and getSurfaceNormal() to the Polygon3F class.
+	* ADD:		Add the constants POLYGON_3_F_OFFSET_POINT_2_F_COUNT, POLYGON_3_F_OFFSET_POINT_2_F, POLYGON_3_F_OFFSET_POINT_3_F_0, POLYGON_3_F_OFFSET_POINT_3_F_1, POLYGON_3_F_OFFSET_POINT_3_F_2 and POLYGON_3_F_OFFSET_SURFACE_NORMAL to the CompiledShape3FCache class.
+	* ADD:		Add the methods addPolygon3F(float[]), getPolygon3FCount(), getPolygon3FLength(Polygon3F), getPolygon3FOffsetAbsolute(float[]), getPolygon3FOffsetRelative(float[]), getPolygon3FOffsets(), getPolygon3Fs(), removePolygon3F(float[]), setPolygon3FOffsets(int[]), setPolygon3Fs(float[]), toPolygon3F(Polygon3F), toPolygon3FOffsets(List<Polygon3F>) and toPolygon3Fs(List<Polygon3F>) to the CompiledShape3FCache class.
+
 2021-09-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the BiModifier class.

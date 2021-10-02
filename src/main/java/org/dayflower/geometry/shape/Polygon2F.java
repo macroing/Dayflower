@@ -88,6 +88,21 @@ public final class Polygon2F implements Shape2F {
 	}
 	
 	/**
+	 * Returns the {@link Point2F} instance at index {@code index} in this {@code Polygon2F} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index of the {@code Point2F} to return
+	 * @return the {@code Point2F} instance at index {@code index} in this {@code Polygon2F} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}
+	 */
+	public Point2F getPoint(final int index) {
+		ParameterArguments.requireRange(index, 0, getPointCount() - 1, "index");
+		
+		return this.points[index];
+	}
+	
+	/**
 	 * Returns the {@link Rectangle2F} instance that contains this {@code Polygon2F} instance.
 	 * 
 	 * @return the {@code Rectangle2F} instance that contains this {@code Polygon2F} instance
@@ -213,6 +228,15 @@ public final class Polygon2F implements Shape2F {
 	@Override
 	public int getID() {
 		return ID;
+	}
+	
+	/**
+	 * Returns the {@link Point2F} count of this {@code Polygon2F} instance.
+	 * 
+	 * @return the {@code Point2F} count of this {@code Polygon2F} instance
+	 */
+	public int getPointCount() {
+		return this.points.length;
 	}
 	
 	/**

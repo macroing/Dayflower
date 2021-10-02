@@ -42,6 +42,8 @@ import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Hyperboloid3F;
 import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.Polygon2F;
+import org.dayflower.geometry.shape.Polygon3F;
 import org.dayflower.geometry.shape.Rectangle3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -67,6 +69,7 @@ import org.dayflower.utility.ParameterArguments;
  * <li>{@link Hyperboloid3F}</li>
  * <li>{@link Paraboloid3F}</li>
  * <li>{@link Plane3F}</li>
+ * <li>{@link Polygon3F}</li>
  * <li>{@link Rectangle3F}</li>
  * <li>{@link RectangularCuboid3F}</li>
  * <li>{@link Sphere3F}</li>
@@ -245,6 +248,36 @@ public final class CompiledShape3FCache {
 	public static final int PLANE_3_F_OFFSET_SURFACE_NORMAL = 9;
 	
 	/**
+	 * The offset for the {@link Point2F} count in a compiled {@link Polygon3F} instance.
+	 */
+	public static final int POLYGON_3_F_OFFSET_POINT_2_F_COUNT = 12;
+	
+	/**
+	 * The offset for the {@link Point2F} instance on index {@code 0} in a compiled {@link Polygon3F} instance.
+	 */
+	public static final int POLYGON_3_F_OFFSET_POINT_2_F = 13;
+	
+	/**
+	 * The offset for the {@link Point3F} instance on index {@code 0} in a compiled {@link Polygon3F} instance.
+	 */
+	public static final int POLYGON_3_F_OFFSET_POINT_3_F_0 = 0;
+	
+	/**
+	 * The offset for the {@link Point3F} instance on index {@code 1} in a compiled {@link Polygon3F} instance.
+	 */
+	public static final int POLYGON_3_F_OFFSET_POINT_3_F_1 = 3;
+	
+	/**
+	 * The offset for the {@link Point3F} instance on index {@code 2} in a compiled {@link Polygon3F} instance.
+	 */
+	public static final int POLYGON_3_F_OFFSET_POINT_3_F_2 = 6;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance that represents the surface normal in a compiled {@link Polygon3F} instance.
+	 */
+	public static final int POLYGON_3_F_OFFSET_SURFACE_NORMAL = 9;
+	
+	/**
 	 * The length of a compiled {@link Rectangle3F} instance.
 	 */
 	public static final int RECTANGLE_3_F_LENGTH = 16;
@@ -416,11 +449,13 @@ public final class CompiledShape3FCache {
 	private float[] hyperboloid3Fs;
 	private float[] paraboloid3Fs;
 	private float[] plane3Fs;
+	private float[] polygon3Fs;
 	private float[] rectangle3Fs;
 	private float[] rectangularCuboid3Fs;
 	private float[] sphere3Fs;
 	private float[] torus3Fs;
 	private float[] triangle3Fs;
+	private int[] polygon3FOffsets;
 	private int[] triangleMesh3FOffsets;
 	private int[] triangleMesh3Fs;
 	
@@ -436,6 +471,8 @@ public final class CompiledShape3FCache {
 		setHyperboloid3Fs(new float[0]);
 		setParaboloid3Fs(new float[0]);
 		setPlane3Fs(new float[0]);
+		setPolygon3FOffsets(new int[0]);
+		setPolygon3Fs(new float[0]);
 		setRectangle3Fs(new float[0]);
 		setRectangularCuboid3Fs(new float[0]);
 		setSphere3Fs(new float[0]);
@@ -596,6 +633,33 @@ public final class CompiledShape3FCache {
 		
 		if(absoluteOffset != -1) {
 			setPlane3Fs(FloatArrays.splice(getPlane3Fs(), absoluteOffset, PLANE_3_F_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code polygon3F} from this {@code CompiledShape3FCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code polygon3F} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code polygon3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polygon3F.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polygon3F a {@link Polygon3F} instance in compiled form
+	 * @return {@code true} if, and only if, {@code polygon3F} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polygon3F.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3F} is {@code null}
+	 */
+	public boolean removePolygon3F(final float[] polygon3F) {
+		final int absoluteOffset = getPolygon3FOffsetAbsolute(polygon3F);
+		
+		if(absoluteOffset != -1) {
+			setPolygon3FOffsets(Structures.removeStructureOffset(getPolygon3FOffsets(), absoluteOffset, polygon3F.length));
+			setPolygon3Fs(FloatArrays.splice(getPolygon3Fs(), absoluteOffset, polygon3F.length));
 			
 			return true;
 		}
@@ -815,6 +879,15 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} that contains all {@link Polygon3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
+	 * 
+	 * @return a {@code float[]} that contains all {@code Polygon3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
+	 */
+	public float[] getPolygon3Fs() {
+		return this.polygon3Fs;
+	}
+	
+	/**
 	 * Returns a {@code float[]} that contains all {@link Rectangle3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code Rectangle3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
@@ -1017,6 +1090,35 @@ public final class CompiledShape3FCache {
 		}
 		
 		setPlane3Fs(FloatArrays.merge(getPlane3Fs(), plane3F));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code polygon3F} to this {@code CompiledShape3FCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code polygon3F}.
+	 * <p>
+	 * If {@code polygon3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polygon3F.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polygon3F a {@link Polygon3F} instance in compiled form
+	 * @return the relative offset to {@code polygon3F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polygon3F.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3F} is {@code null}
+	 */
+	public int addPolygon3F(final float[] polygon3F) {
+		final int absoluteOffsetNew = this.polygon3Fs.length;
+		final int relativeOffsetOld = getPolygon3FOffsetRelative(polygon3F);
+		final int relativeOffsetNew = getPolygon3FCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setPolygon3FOffsets(IntArrays.merge(getPolygon3FOffsets(), absoluteOffsetNew));
+		setPolygon3Fs(FloatArrays.merge(getPolygon3Fs(), polygon3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1480,6 +1582,55 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns the {@link Polygon3F} count in this {@code CompiledShape3FCache} instance.
+	 * 
+	 * @return the {@code Polygon3F} count in this {@code CompiledShape3FCache} instance
+	 */
+	public int getPolygon3FCount() {
+		return this.polygon3FOffsets.length;
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code polygon3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code polygon3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polygon3F.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polygon3F a {@link Polygon3F} instance in compiled form
+	 * @return the absolute offset of {@code polygon3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polygon3F.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3F} is {@code null}
+	 */
+	public int getPolygon3FOffsetAbsolute(final float[] polygon3F) {
+		Objects.requireNonNull(polygon3F, "polygon3F == null");
+		
+		ParameterArguments.requireExact(polygon3F.length % 8, 0, "polygon3F.length % 8");
+		
+		return Structures.getStructureOffsetAbsolute(this.polygon3Fs, polygon3F, this.polygon3FOffsets);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code polygon3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code polygon3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polygon3F.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polygon3F a {@link Polygon3F} instance in compiled form
+	 * @return the relative offset of {@code polygon3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polygon3F.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3F} is {@code null}
+	 */
+	public int getPolygon3FOffsetRelative(final float[] polygon3F) {
+		Objects.requireNonNull(polygon3F, "polygon3F == null");
+		
+		ParameterArguments.requireExact(polygon3F.length % 8, 0, "polygon3F.length % 8");
+		
+		return Structures.getStructureOffsetRelative(this.polygon3Fs, polygon3F, this.polygon3FOffsets);
+	}
+	
+	/**
 	 * Returns the {@link Rectangle3F} count in this {@code CompiledShape3FCache} instance.
 	 * 
 	 * @return the {@code Rectangle3F} count in this {@code CompiledShape3FCache} instance
@@ -1774,6 +1925,15 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns an {@code int[]} that contains the offsets for all {@link Polygon3F} instances in this {@code CompiledShape3FCache} instance.
+	 * 
+	 * @return an {@code int[]} that contains the offsets for all {@code Polygon3F} instances in this {@code CompiledShape3FCache} instance
+	 */
+	public int[] getPolygon3FOffsets() {
+		return this.polygon3FOffsets;
+	}
+	
+	/**
 	 * Returns an {@code int[]} that contains the offsets for all {@link TriangleMesh3F} instances in this {@code CompiledShape3FCache} instance.
 	 * 
 	 * @return an {@code int[]} that contains the offsets for all {@code TriangleMesh3F} instances in this {@code CompiledShape3FCache} instance
@@ -1903,6 +2063,44 @@ public final class CompiledShape3FCache {
 		ParameterArguments.requireExact(plane3Fs.length % PLANE_3_F_LENGTH, 0, "plane3Fs.length % CompiledShape3FCache.PLANE_3_F_LENGTH");
 		
 		this.plane3Fs = plane3Fs;
+	}
+	
+	/**
+	 * Sets the {@code int[]} that contains the offsets for all {@link Polygon3F} instances to {@code polygon3FOffsets}.
+	 * <p>
+	 * If {@code polygon3FOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If at least one offset in {@code polygon3FOffsets} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polygon3FOffsets the {@code int[]} that contains the offsets for all {@code Polygon3F} instances
+	 * @throws IllegalArgumentException thrown if, and only if, at least one offset in {@code polygon3FOffsets} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3FOffsets} is {@code null}
+	 */
+	public void setPolygon3FOffsets(final int[] polygon3FOffsets) {
+		Objects.requireNonNull(polygon3FOffsets, "polygon3FOffsets == null");
+		
+		ParameterArguments.requireRange(polygon3FOffsets, 0, Integer.MAX_VALUE, "polygon3FOffsets");
+		
+		this.polygon3FOffsets = polygon3FOffsets;
+	}
+	
+	/**
+	 * Sets all {@link Polygon3F} instances in compiled form to {@code polygon3Fs}.
+	 * <p>
+	 * If {@code polygon3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code polygon3Fs.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param polygon3Fs the {@code Polygon3F} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code polygon3Fs.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3Fs} is {@code null}
+	 */
+	public void setPolygon3Fs(final float[] polygon3Fs) {
+		Objects.requireNonNull(polygon3Fs, "polygon3Fs == null");
+		
+		ParameterArguments.requireExact(polygon3Fs.length % 8, 0, "polygon3Fs.length % 8");
+		
+		this.polygon3Fs = polygon3Fs;
 	}
 	
 	/**
@@ -2055,6 +2253,7 @@ public final class CompiledShape3FCache {
 		document.linef("hyperboloid3Fs[%d]", Integer.valueOf(getHyperboloid3FCount()));
 		document.linef("paraboloid3Fs[%d]", Integer.valueOf(getParaboloid3FCount()));
 		document.linef("plane3Fs[%d]", Integer.valueOf(getPlane3FCount()));
+		document.linef("polygon3Fs[%d]", Integer.valueOf(getPolygon3FCount()));
 		document.linef("rectangle3Fs[%d]", Integer.valueOf(getRectangle3FCount()));
 		document.linef("rectangularCuboid3Fs[%d]", Integer.valueOf(getRectangularCuboid3FCount()));
 		document.linef("sphere3Fs[%d]", Integer.valueOf(getSphere3FCount()));
@@ -2090,6 +2289,8 @@ public final class CompiledShape3FCache {
 		} else if(shape3F instanceof Paraboloid3F) {
 			return true;
 		} else if(shape3F instanceof Plane3F) {
+			return true;
+		} else if(shape3F instanceof Polygon3F) {
 			return true;
 		} else if(shape3F instanceof Rectangle3F) {
 			return true;
@@ -2362,6 +2563,63 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns a {@code float[]} with {@code polygon3F} in compiled form.
+	 * <p>
+	 * If {@code polygon3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polygon3F a {@link Polygon3F} instance
+	 * @return a {@code float[]} with {@code polygon3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3F} is {@code null}
+	 */
+	public static float[] toPolygon3F(final Polygon3F polygon3F) {
+		final Point3F point0 = polygon3F.getPoint(0);
+		final Point3F point1 = polygon3F.getPoint(1);
+		final Point3F point2 = polygon3F.getPoint(2);
+		
+		final Polygon2F projectedPolygon = polygon3F.getProjectedPolygon();
+		
+		final Vector3F surfaceNormal = polygon3F.getSurfaceNormal();
+		
+		final float[] array = new float[getPolygon3FLength(polygon3F)];
+		
+		array[POLYGON_3_F_OFFSET_POINT_3_F_0 + 0] = point0.getX();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_0 + 1] = point0.getY();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_0 + 2] = point0.getZ();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 0] = point1.getX();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 1] = point1.getY();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 2] = point1.getZ();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_2 + 0] = point2.getX();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_2 + 1] = point2.getY();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_2 + 2] = point2.getZ();
+		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();
+		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();
+		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();
+		array[POLYGON_3_F_OFFSET_POINT_2_F_COUNT] = projectedPolygon.getPointCount();
+		
+		for(int i = 0; i < projectedPolygon.getPointCount(); i++) {
+			final Point2F pointI = projectedPolygon.getPoint(i);
+			
+			array[POLYGON_3_F_OFFSET_POINT_2_F + i * 2 + 0] = pointI.getX();
+			array[POLYGON_3_F_OFFSET_POINT_2_F + i * 2 + 1] = pointI.getY();
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with all {@link Polygon3F} instances in {@code polygon3Fs} in compiled form.
+	 * <p>
+	 * If {@code polygon3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polygon3Fs a {@code List} of {@code Polygon3F} instances
+	 * @return a {@code float[]} with all {@code Polygon3F} instances in {@code polygon3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3Fs} or at least one of its elements are {@code null}
+	 */
+	public static float[] toPolygon3Fs(final List<Polygon3F> polygon3Fs) {
+		return FloatArrays.convert(polygon3Fs, polygon3F -> toPolygon3F(polygon3F));
+	}
+	
+	/**
 	 * Returns a {@code float[]} with {@code rectangle3F} in compiled form.
 	 * <p>
 	 * If {@code rectangle3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -2583,6 +2841,24 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
+	 * Returns the length of {@code polygon3F} in compiled form.
+	 * <p>
+	 * If {@code polygon3F} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polygon3F a {@link Polygon3F} instance
+	 * @return the length of {@code polygon3F} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3F} is {@code null}
+	 */
+	public static int getPolygon3FLength(final Polygon3F polygon3F) {
+		final int a = 13;
+		final int b = polygon3F.getPointCount() * 2;
+		final int c = padding(a + b);
+		final int d = a + b + c;
+		
+		return d;
+	}
+	
+	/**
 	 * Returns the length of {@code triangleMesh3F} in compiled form.
 	 * <p>
 	 * If {@code triangleMesh3F} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -2599,6 +2875,27 @@ public final class CompiledShape3FCache {
 		}
 		
 		return 0;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with the offsets for all {@link Polygon3F} instances in {@code polygon3Fs} in compiled form.
+	 * <p>
+	 * If {@code polygon3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param polygon3Fs a {@code List} of {@code Polygon3F} instances
+	 * @return an {@code int[]} with the offsets for all {@code Polygon3F} instances in {@code polygon3Fs} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code polygon3Fs} or at least one of its elements are {@code null}
+	 */
+	public static int[] toPolygon3FOffsets(final List<Polygon3F> polygon3Fs) {
+		ParameterArguments.requireNonNullList(polygon3Fs, "polygon3Fs");
+		
+		final int[] polygon3FOffsets = new int[polygon3Fs.size()];
+		
+		for(int i = 0, j = 0; i < polygon3Fs.size(); j += getPolygon3FLength(polygon3Fs.get(i)), i++) {
+			polygon3FOffsets[i] = j;
+		}
+		
+		return polygon3FOffsets;
 	}
 	
 	/**

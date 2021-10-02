@@ -88,6 +88,21 @@ public final class Polygon2D implements Shape2D {
 	}
 	
 	/**
+	 * Returns the {@link Point2D} instance at index {@code index} in this {@code Polygon2D} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index of the {@code Point2D} to return
+	 * @return the {@code Point2D} instance at index {@code index} in this {@code Polygon2D} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}
+	 */
+	public Point2D getPoint(final int index) {
+		ParameterArguments.requireRange(index, 0, getPointCount() - 1, "index");
+		
+		return this.points[index];
+	}
+	
+	/**
 	 * Returns the {@link Rectangle2D} instance that contains this {@code Polygon2D} instance.
 	 * 
 	 * @return the {@code Rectangle2D} instance that contains this {@code Polygon2D} instance
@@ -213,6 +228,15 @@ public final class Polygon2D implements Shape2D {
 	@Override
 	public int getID() {
 		return ID;
+	}
+	
+	/**
+	 * Returns the {@link Point2D} count of this {@code Polygon2D} instance.
+	 * 
+	 * @return the {@code Point2D} count of this {@code Polygon2D} instance
+	 */
+	public int getPointCount() {
+		return this.points.length;
 	}
 	
 	/**

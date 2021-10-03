@@ -32,6 +32,7 @@ import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Hyperboloid3F;
 import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.Polygon3F;
 import org.dayflower.geometry.shape.Rectangle3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -220,6 +221,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					tObjectSpace = shape3FParaboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
 					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Polygon3F.ID) {
+					tObjectSpace = shape3FPolygon3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Rectangle3F.ID) {
 					tObjectSpace = shape3FRectangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == RectangularCuboid3F.ID) {
@@ -268,6 +271,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				shape3FParaboloid3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Plane3F.ID) {
 				shape3FPlane3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Polygon3F.ID) {
+				shape3FPolygon3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Rectangle3F.ID) {
 				shape3FRectangle3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == RectangularCuboid3F.ID) {
@@ -344,6 +349,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					isIntersectingShape = shape3FParaboloid3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
 					isIntersectingShape = shape3FPlane3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Polygon3F.ID) {
+					isIntersectingShape = shape3FPolygon3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Rectangle3F.ID) {
 					isIntersectingShape = shape3FRectangle3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == RectangularCuboid3F.ID) {
@@ -527,6 +534,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					tObjectSpace = shape3FParaboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
 					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Polygon3F.ID) {
+					tObjectSpace = shape3FPolygon3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Rectangle3F.ID) {
 					tObjectSpace = shape3FRectangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == RectangularCuboid3F.ID) {
@@ -1118,6 +1127,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.shape3FHyperboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getHyperboloid3Fs()));
 		put(super.shape3FParaboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getParaboloid3Fs()));
 		put(super.shape3FPlane3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getPlane3Fs()));
+		put(super.shape3FPolygon3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getPolygon3Fs()));
 		put(super.shape3FRectangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangle3Fs()));
 		put(super.shape3FRectangularCuboid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangularCuboid3Fs()));
 		put(super.shape3FSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getSphere3Fs()));

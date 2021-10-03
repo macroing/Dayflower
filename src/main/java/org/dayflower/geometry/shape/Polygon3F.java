@@ -47,7 +47,7 @@ import org.dayflower.utility.ParameterArguments;
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@code Shape3F} implementation is not supported on the GPU.
+ * This {@code Shape3F} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

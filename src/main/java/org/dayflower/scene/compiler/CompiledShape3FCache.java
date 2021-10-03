@@ -268,9 +268,9 @@ public final class CompiledShape3FCache {
 	public static final int POLYGON_3_F_OFFSET_POINT_3_F_1 = 3;
 	
 	/**
-	 * The offset for the {@link Point3F} instance on index {@code 2} in a compiled {@link Polygon3F} instance.
+	 * The offset for the {@link Point3F} instance on index {@code n}, the last index, in a compiled {@link Polygon3F} instance.
 	 */
-	public static final int POLYGON_3_F_OFFSET_POINT_3_F_2 = 6;
+	public static final int POLYGON_3_F_OFFSET_POINT_3_F_N = 6;
 	
 	/**
 	 * The offset for the {@link Vector3F} instance that represents the surface normal in a compiled {@link Polygon3F} instance.
@@ -2574,7 +2574,7 @@ public final class CompiledShape3FCache {
 	public static float[] toPolygon3F(final Polygon3F polygon3F) {
 		final Point3F point0 = polygon3F.getPoint(0);
 		final Point3F point1 = polygon3F.getPoint(1);
-		final Point3F point2 = polygon3F.getPoint(2);
+		final Point3F pointN = polygon3F.getPoint(polygon3F.getPointCount() - 1);
 		
 		final Polygon2F projectedPolygon = polygon3F.getProjectedPolygon();
 		
@@ -2588,9 +2588,9 @@ public final class CompiledShape3FCache {
 		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 0] = point1.getX();
 		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 1] = point1.getY();
 		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 2] = point1.getZ();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_2 + 0] = point2.getX();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_2 + 1] = point2.getY();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_2 + 2] = point2.getZ();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 0] = pointN.getX();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 1] = pointN.getY();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 2] = pointN.getZ();
 		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();
 		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();
 		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();

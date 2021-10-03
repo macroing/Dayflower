@@ -1,3 +1,11 @@
+2021-10-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for Polygon3F to the GPU-renderer.
+	* ADD:		Add the method checkIsNearlyEqual(float, float) to the AbstractKernel class.
+	* ADD:		Add the methods shape2FLine2FContains(float, float, float, float, float, float), shape3FPolygon3FIntersectionCompute(float, int, int), shape3FPolygon3FIntersectionT(int, float, float) and shape3FPolygon3FIntersects(int, float, float) to the AbstractGeometryKernel class.
+	* ADD:		Add the field shape3FPolygon3FArray to the AbstractGeometryKernel class.
+	* CHANGE:	Rename the constant POLYGON_3_F_OFFSET_POINT_3_F_2 to POLYGON_3_F_OFFSET_POINT_3_F_N in the CompiledShape3FCache class.
+
 2021-10-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getPoint(int) and getPointCount() to the Polygon2D class.

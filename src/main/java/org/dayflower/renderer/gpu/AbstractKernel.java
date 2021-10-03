@@ -209,6 +209,25 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code a} and {@code b} are nearly equal, {@code false} otherwise.
+	 * 
+	 * @param a a {@code float} value
+	 * @param b a {@code float} value
+	 * @return {@code true} if, and only if, {@code a} and {@code b} are nearly equal, {@code false} otherwise
+	 */
+	protected final boolean checkIsNearlyEqual(final float a, final float b) {
+		if(a == b) {
+			return true;
+		}
+		
+		final float epsilon = 128.0F * 0.00000006F;
+		final float difference = abs(a - b);
+		final float norm = min(abs(a) + abs(b), Float.MAX_VALUE);
+		
+		return difference < max(Float.MIN_VALUE, epsilon * norm);
+	}
+	
+	/**
 	 * Returns {@code true} if, and only if, {@code value} is zero, {@code false} otherwise.
 	 * 
 	 * @param value the {@code float} value to check

@@ -160,6 +160,11 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected float[] shape3FPlane3FArray;
 	
 	/**
+	 * A {@code float[]} that contains polygons.
+	 */
+	protected float[] shape3FPolygon3FArray;
+	
+	/**
 	 * A {@code float[]} that contains rectangles.
 	 */
 	protected float[] shape3FRectangle3FArray;
@@ -218,6 +223,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.shape3FHyperboloid3FArray = new float[1];
 		this.shape3FParaboloid3FArray = new float[1];
 		this.shape3FPlane3FArray = new float[1];
+		this.shape3FPolygon3FArray = new float[1];
 		this.shape3FRectangle3FArray = new float[1];
 		this.shape3FRectangularCuboid3FArray = new float[1];
 		this.shape3FSphere3FArray = new float[1];
@@ -1471,6 +1477,49 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Shape2F - Line2F ////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, the line denoted by the points {@code pointAX}, {@code pointAY}, {@code pointBX} and {@code pointBY} contains the point denoted by {@code pointPX} and {@code pointPY}, {@code false} otherwise.
+	 * 
+	 * @param pointAX the X-component of the point denoted by A on the line
+	 * @param pointAY the Y-component of the point denoted by A on the line
+	 * @param pointBX the X-component of the point denoted by B on the line
+	 * @param pointBY the Y-component of the point denoted by B on the line
+	 * @param pointPX the X-component of the point to check
+	 * @param pointPY the Y-component of the point to check
+	 * @return {@code true} if, and only if, the line denoted by the points {@code pointAX}, {@code pointAY}, {@code pointBX} and {@code pointBY} contains the point denoted by {@code pointPX} and {@code pointPY}, {@code false} otherwise
+	 */
+	protected final boolean shape2FLine2FContains(final float pointAX, final float pointAY, final float pointBX, final float pointBY, final float pointPX, final float pointPY) {
+		if(checkIsNearlyEqual(pointPX, pointAX) && checkIsNearlyEqual(pointPY, pointAY)) {
+			return true;
+		}
+		
+		if(checkIsNearlyEqual(pointPX, pointBX) && checkIsNearlyEqual(pointPY, pointBY)) {
+			return true;
+		}
+		
+		final float vectorABX = pointBX - pointAX;
+		final float vectorABY = pointBY - pointAY;
+		
+		final float vectorAPX = pointPX - pointAX;
+		final float vectorAPY = pointPY - pointAY;
+		
+		final float crossProduct = vectorAPX * vectorABY - vectorAPY * vectorABX;
+		
+		if(!checkIsZero(crossProduct)) {
+			return false;
+		}
+		
+		final boolean containsX = vectorABX > 0.0F ? pointAX <= pointPX && pointPX <= pointBX : pointBX <= pointPX && pointPX <= pointAX;
+		final boolean containsY = vectorABY > 0.0F ? pointAY <= pointPY && pointPY <= pointBY : pointBY <= pointPY && pointPY <= pointAY;
+		final boolean contains = abs(vectorABX) >= abs(vectorABY) ? containsX : containsY;
+		
+		return contains;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Shape3F - Cone3F ////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -2324,6 +2373,221 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float bY = isXLarger ? planeCZ - aY : isYLarger ? planeCX - aY : planeCY - aY;
 		final float cX = isXLarger ? planeBY - aX : isYLarger ? planeBZ - aX : planeBX - aX;
 		final float cY = isXLarger ? planeBZ - aY : isYLarger ? planeBX - aY : planeBY - aY;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float determinant = bX * cY - bY * cX;
+		final float determinantReciprocal = 1.0F / determinant;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
+		final float v = isXLarger ? surfaceIntersectionPointZ : isYLarger ? surfaceIntersectionPointX : surfaceIntersectionPointY;
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = u * (-bY * determinantReciprocal) + v * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
+		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
+		
+//		Update the intersection array:
+		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetPrimitiveIndex(primitiveIndex);
+		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Shape3F - Polygon3F /////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given polygon in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FPolygon3FArrayOffset the offset for the polygon in {@link #shape3FPolygon3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given polygon in object space, {@code false} otherwise
+	 */
+	protected final boolean shape3FPolygon3FIntersects(final int shape3FPolygon3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return shape3FPolygon3FIntersectionT(shape3FPolygon3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns the parametric T value for a given polygon in object space, or {@code 0.0F} if no intersection was found.
+	 * 
+	 * @param shape3FPolygon3FArrayOffset the offset for the polygon in {@link #shape3FPolygon3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given polygon in object space, or {@code 0.0F} if no intersection was found
+	 */
+	protected final float shape3FPolygon3FIntersectionT(final int shape3FPolygon3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the polygon variables that will be referred to by 'polygonA', 'polygonB' and 'polygonSurfaceNormal' in the comments:
+		final float polygonAX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 0];
+		final float polygonAY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 1];
+		final float polygonAZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 2];
+		final float polygonBX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_1 + 0];
+		final float polygonBY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_1 + 1];
+		final float polygonBZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_1 + 2];
+		final float polygonSurfaceNormalX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 0];
+		final float polygonSurfaceNormalY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1];
+		final float polygonSurfaceNormalZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2];
+		
+//		Compute the determinant, which is the dot product between 'polygonSurfaceNormal' and 'rayDirection':
+		final float determinant = polygonSurfaceNormalX * rayDirectionX + polygonSurfaceNormalY * rayDirectionY + polygonSurfaceNormalZ * rayDirectionZ;
+		
+//		Check if the determinant is close to 0.0 and, if that is the case, return a miss:
+		if(determinant >= -0.0001F && determinant <= +0.0001F) {
+			return 0.0F;
+		}
+		
+//		Compute the direction from 'rayOrigin' to 'polygonA', denoted by 'rayOriginToPolygonA' in the comments:
+		final float rayOriginToPolygonAX = polygonAX - rayOriginX;
+		final float rayOriginToPolygonAY = polygonAY - rayOriginY;
+		final float rayOriginToPolygonAZ = polygonAZ - rayOriginZ;
+		
+//		Compute the intersection as the dot product between 'rayOriginToPolygonA' and 'polygonSurfaceNormal' followed by a division with the determinant:
+		final float intersectionT = (rayOriginToPolygonAX * polygonSurfaceNormalX + rayOriginToPolygonAY * polygonSurfaceNormalY + rayOriginToPolygonAZ * polygonSurfaceNormalZ) / determinant;
+		
+		if(intersectionT <= rayTMinimum || intersectionT >= rayTMaximum) {
+			return 0.0F;
+		}
+		
+//		Compute the surface intersection point, denoted by 'surfaceIntersectionPoint' in the comments:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * intersectionT;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * intersectionT;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * intersectionT;
+		
+//		Set the orthonormal basis W-direction to 'polygonSurfaceNormal', denoted by 'orthonormalBasisW' in the comments:
+		final float orthonormalBasisWNormalizedX = polygonSurfaceNormalX;
+		final float orthonormalBasisWNormalizedY = polygonSurfaceNormalY;
+		final float orthonormalBasisWNormalizedZ = polygonSurfaceNormalZ;
+		
+//		Compute the orthonormal basis U-direction as the normalized direction from 'polygonA' to 'polygonB', denoted by 'orthonormalBasisU' in the comments:
+		final float orthonormalBasisUX = polygonBX - polygonAX;
+		final float orthonormalBasisUY = polygonBY - polygonAY;
+		final float orthonormalBasisUZ = polygonBZ - polygonAZ;
+		final float orthonormalBasisULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisUX, orthonormalBasisUY, orthonormalBasisUZ);
+		final float orthonormalBasisUNormalizedX = orthonormalBasisUX * orthonormalBasisULengthReciprocal;
+		final float orthonormalBasisUNormalizedY = orthonormalBasisUY * orthonormalBasisULengthReciprocal;
+		final float orthonormalBasisUNormalizedZ = orthonormalBasisUZ * orthonormalBasisULengthReciprocal;
+		
+//		Compute the orthonormal basis V-direction as the cross product between 'orthonormalBasisW' and 'orthonormalBasisU', denoted by 'orthonormalBasisV' in the comments:
+		final float orthonormalBasisVNormalizedX = orthonormalBasisWNormalizedY * orthonormalBasisUNormalizedZ - orthonormalBasisWNormalizedZ * orthonormalBasisUNormalizedY;
+		final float orthonormalBasisVNormalizedY = orthonormalBasisWNormalizedZ * orthonormalBasisUNormalizedX - orthonormalBasisWNormalizedX * orthonormalBasisUNormalizedZ;
+		final float orthonormalBasisVNormalizedZ = orthonormalBasisWNormalizedX * orthonormalBasisUNormalizedY - orthonormalBasisWNormalizedY * orthonormalBasisUNormalizedX;
+		
+//		Compute the direction from 'polygonA' to 'surfaceIntersectionPoint', denoted by 'polygonAToSurfaceIntersectionPoint' in the comments:
+		final float polygonAToSurfaceIntersectionPointX = surfaceIntersectionPointX - polygonAX;
+		final float polygonAToSurfaceIntersectionPointY = surfaceIntersectionPointY - polygonAY;
+		final float polygonAToSurfaceIntersectionPointZ = surfaceIntersectionPointZ - polygonAZ;
+		
+//		Compute the 2D-projected surface intersection point, denoted by 'projectedSurfaceIntersectionPoint' in the comments:
+		final float projectedSurfaceIntersectionPointX = vector3FDotProduct(polygonAToSurfaceIntersectionPointX, polygonAToSurfaceIntersectionPointY, polygonAToSurfaceIntersectionPointZ, orthonormalBasisUNormalizedX, orthonormalBasisUNormalizedY, orthonormalBasisUNormalizedZ);
+		final float projectedSurfaceIntersectionPointY = vector3FDotProduct(polygonAToSurfaceIntersectionPointX, polygonAToSurfaceIntersectionPointY, polygonAToSurfaceIntersectionPointZ, orthonormalBasisVNormalizedX, orthonormalBasisVNormalizedY, orthonormalBasisVNormalizedZ);
+		
+//		Retrieve the polygon variable that will be referred to by 'polygonPointCount' in the comments:
+		final int polygonPointCount = (int)(this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_2_F_COUNT + 0]);
+		
+		boolean isInside = false;
+		
+		for(int i = 0, j = polygonPointCount - 1; i < polygonPointCount; j = i, i++) {
+			final float pointIX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_2_F + i * 2 + 0];
+			final float pointIY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_2_F + i * 2 + 1];
+			final float pointJX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_2_F + j * 2 + 0];
+			final float pointJY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_2_F + j * 2 + 1];
+			
+			if(shape2FLine2FContains(pointIX, pointIY, pointJX, pointJY, projectedSurfaceIntersectionPointX, projectedSurfaceIntersectionPointY)) {
+				return intersectionT;
+			}
+			
+			if((pointIY > projectedSurfaceIntersectionPointY) != (pointJY > projectedSurfaceIntersectionPointY) && projectedSurfaceIntersectionPointX < (pointJX - pointIX) * (projectedSurfaceIntersectionPointY - pointIY) / (pointJY - pointIY) + pointIX) {
+				isInside = !isInside;
+			}
+		}
+		
+		return isInside ? intersectionT : 0.0F;
+	}
+	
+	/**
+	 * Computes the intersection properties for the polygon at offset {@code shape3FPolygon3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the polygon
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FPolygon3FArrayOffset the offset in {@link #shape3FPolygon3FArray}
+	 */
+	protected final void shape3FPolygon3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FPolygon3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the polygon variables:
+		final float polygonAX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 0];
+		final float polygonAY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 1];
+		final float polygonAZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 2];
+		final float polygonBX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_1 + 0];
+		final float polygonBY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_1 + 1];
+		final float polygonBZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_1 + 2];
+		final float polygonCX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_N + 0];
+		final float polygonCY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_N + 1];
+		final float polygonCZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_N + 2];
+		final float polygonSurfaceNormalX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 0];
+		final float polygonSurfaceNormalY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1];
+		final float polygonSurfaceNormalZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2];
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Retrieve the W-direction (surface normal) of the geometric orthonormal basis:
+		final float orthonormalBasisGWNormalizedX = polygonSurfaceNormalX;
+		final float orthonormalBasisGWNormalizedY = polygonSurfaceNormalY;
+		final float orthonormalBasisGWNormalizedZ = polygonSurfaceNormalZ;
+		
+//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis and other things:
+		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
+		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
+		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
+		
+//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
+		final boolean isXSmaller = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
+		final boolean isYSmaller = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGVX = isXSmaller ? +0.0F                          : isYSmaller ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGVY = isXSmaller ? +orthonormalBasisGWNormalizedZ : isYSmaller ? +0.0F                          : -orthonormalBasisGWNormalizedX;
+		final float orthonormalBasisGVZ = isXSmaller ? -orthonormalBasisGWNormalizedY : isYSmaller ? -orthonormalBasisGWNormalizedX : +0.0F;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+//		Compute the U-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final boolean isXLarger = orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedZAbs;
+		final boolean isYLarger = orthonormalBasisGWNormalizedYAbs > orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float aX = isXLarger ? polygonAY      : isYLarger ? polygonAZ      : polygonAX;
+		final float aY = isXLarger ? polygonAZ      : isYLarger ? polygonAX      : polygonAY;
+		final float bX = isXLarger ? polygonCY - aX : isYLarger ? polygonCZ - aX : polygonCX - aX;
+		final float bY = isXLarger ? polygonCZ - aY : isYLarger ? polygonCX - aY : polygonCY - aY;
+		final float cX = isXLarger ? polygonBY - aX : isYLarger ? polygonBZ - aX : polygonBX - aX;
+		final float cY = isXLarger ? polygonBZ - aY : isYLarger ? polygonBX - aY : polygonBY - aY;
 		
 //		Compute variables necessary for computing the texture coordinates:
 		final float determinant = bX * cY - bY * cX;

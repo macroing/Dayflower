@@ -59,7 +59,7 @@ public final class Cone3D implements Shape3D {
 	/**
 	 * The ID of this {@code Cone3D} class.
 	 */
-	public static final int ID = 1;
+	public static final int ID = 2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

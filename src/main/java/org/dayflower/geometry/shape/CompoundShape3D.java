@@ -41,52 +41,52 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Curves3D} is an implementation of {@link Shape3D} that contains a list of {@link Curve3D} instances.
+ * A {@code CompoundShape3D} is an implementation of {@link Shape3D} that contains a list of {@code Shape3D} instances.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is immutable and thread-safe if its {@code Shape3D} instances are.
  * <p>
  * This {@code Shape3D} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Curves3D implements Shape3D {
+public final class CompoundShape3D implements Shape3D {
 	/**
-	 * The name of this {@code Curves3D} class.
+	 * The name of this {@code CompoundShape3D} class.
 	 */
-	public static final String NAME = "Curves";
+	public static final String NAME = "Compound Shape";
 	
 	/**
-	 * The ID of this {@code Curves3D} class.
+	 * The ID of this {@code CompoundShape3D} class.
 	 */
-	public static final int ID = 4;
+	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final List<Curve3D> curves;
+	private final List<? extends Shape3D> shapes;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code Curves3D} instance.
+	 * Constructs a new {@code CompoundShape3D} instance.
 	 * <p>
-	 * If either {@code curves} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code shapes} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * Modifying {@code curves} will not affect this {@code Curves3D} instance.
+	 * Modifying {@code shapes} will not affect this {@code CompoundShape3D} instance.
 	 * 
-	 * @param curves a {@code List} of {@link Curve3D} instances
-	 * @throws NullPointerException thrown if, and only if, either {@code curves} or at least one of its elements are {@code null}
+	 * @param shapes a {@code List} of {@link Shape3D} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code shapes} or at least one of its elements are {@code null}
 	 */
-	public Curves3D(final List<Curve3D> curves) {
-		this.curves = new ArrayList<>(ParameterArguments.requireNonNullList(curves, "curves"));
+	public CompoundShape3D(final List<? extends Shape3D> shapes) {
+		this.shapes = new ArrayList<>(ParameterArguments.requireNonNullList(shapes, "shapes"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link BoundingVolume3D} instance that contains this {@code Curves3D} instance.
+	 * Returns a {@link BoundingVolume3D} instance that contains this {@code CompoundShape3D} instance.
 	 * 
-	 * @return a {@code BoundingVolume3D} instance that contains this {@code Curves3D} instance
+	 * @return a {@code BoundingVolume3D} instance that contains this {@code CompoundShape3D} instance
 	 */
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
@@ -94,13 +94,13 @@ public final class Curves3D implements Shape3D {
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code Curves3D} instance.
+	 * Performs an intersection test between {@code ray} and this {@code CompoundShape3D} instance.
 	 * <p>
 	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3D} instance that contains information about the intersection, if it was found.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code Curves3D} instance
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code CompoundShape3D} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
@@ -110,17 +110,17 @@ public final class Curves3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final SurfaceIntersector3D surfaceIntersector = new SurfaceIntersector3D(ray, tMinimum, tMaximum);
 		
-		for(final Curve3D curve : this.curves) {
-			surfaceIntersector.intersection(curve);
+		for(final Shape3D shape : this.shapes) {
+			surfaceIntersector.intersection(shape);
 		}
 		
 		return surfaceIntersector.computeSurfaceIntersection();
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code Curves3D} instance.
+	 * Returns a {@code String} with the name of this {@code CompoundShape3D} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code Curves3D} instance
+	 * @return a {@code String} with the name of this {@code CompoundShape3D} instance
 	 */
 	@Override
 	public String getName() {
@@ -128,13 +128,13 @@ public final class Curves3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code Curves3D} instance.
+	 * Returns a {@code String} representation of this {@code CompoundShape3D} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code Curves3D} instance
+	 * @return a {@code String} representation of this {@code CompoundShape3D} instance
 	 */
 	@Override
 	public String toString() {
-		return "new Curves3D(...)";
+		return "new CompoundShape3D(...)";
 	}
 	
 	/**
@@ -164,8 +164,8 @@ public final class Curves3D implements Shape3D {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				for(final Curve3D curve : this.curves) {
-					if(!curve.accept(nodeHierarchicalVisitor)) {
+				for(final Shape3D shape : this.shapes) {
+					if(!shape.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
 				}
@@ -178,20 +178,20 @@ public final class Curves3D implements Shape3D {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code Curves3D} instance for equality.
+	 * Compares {@code object} to this {@code CompoundShape3D} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Curves3D}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code CompoundShape3D}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code Curves3D} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Curves3D}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code CompoundShape3D} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CompoundShape3D}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof Curves3D)) {
+		} else if(!(object instanceof CompoundShape3D)) {
 			return false;
-		} else if(!Objects.equals(this.curves, Curves3D.class.cast(object).curves)) {
+		} else if(!Objects.equals(this.shapes, CompoundShape3D.class.cast(object).shapes)) {
 			return false;
 		} else {
 			return true;
@@ -199,29 +199,29 @@ public final class Curves3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns the surface area of this {@code Curves3D} instance.
+	 * Returns the surface area of this {@code CompoundShape3D} instance.
 	 * 
-	 * @return the surface area of this {@code Curves3D} instance
+	 * @return the surface area of this {@code CompoundShape3D} instance
 	 */
 	@Override
 	public double getSurfaceArea() {
 		double surfaceArea = 0.0D;
 		
-		for(final Curve3D curve : this.curves) {
-			surfaceArea += curve.getSurfaceArea();
+		for(final Shape3D shape : this.shapes) {
+			surfaceArea += shape.getSurfaceArea();
 		}
 		
 		return surfaceArea;
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code Curves3D} instance.
+	 * Performs an intersection test between {@code ray} and this {@code CompoundShape3D} instance.
 	 * <p>
 	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code Curves3D} instance
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code CompoundShape3D} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
@@ -233,8 +233,8 @@ public final class Curves3D implements Shape3D {
 		double tMax = tMaximum;
 		double tMin = tMinimum;
 		
-		for(final Curve3D curve : this.curves) {
-			t = minOrNaN(t, curve.intersectionT(ray, tMin, tMax));
+		for(final Shape3D shape : this.shapes) {
+			t = minOrNaN(t, shape.intersectionT(ray, tMin, tMax));
 			
 			if(!isNaN(t)) {
 				tMax = t;
@@ -245,9 +245,9 @@ public final class Curves3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code Curves3D} instance.
+	 * Returns an {@code int} with the ID of this {@code CompoundShape3D} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code Curves3D} instance
+	 * @return an {@code int} with the ID of this {@code CompoundShape3D} instance
 	 */
 	@Override
 	public int getID() {
@@ -255,17 +255,17 @@ public final class Curves3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code Curves3D} instance.
+	 * Returns a hash code for this {@code CompoundShape3D} instance.
 	 * 
-	 * @return a hash code for this {@code Curves3D} instance
+	 * @return a hash code for this {@code CompoundShape3D} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.curves);
+		return Objects.hash(this.shapes);
 	}
 	
 	/**
-	 * Writes this {@code Curves3D} instance to {@code dataOutput}.
+	 * Writes this {@code CompoundShape3D} instance to {@code dataOutput}.
 	 * <p>
 	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -279,10 +279,10 @@ public final class Curves3D implements Shape3D {
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeInt(ID);
-			dataOutput.writeInt(this.curves.size());
+			dataOutput.writeInt(this.shapes.size());
 			
-			for(final Curve3D curve : this.curves) {
-				curve.write(dataOutput);
+			for(final Shape3D shape : this.shapes) {
+				shape.write(dataOutput);
 			}
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
@@ -296,6 +296,6 @@ public final class Curves3D implements Shape3D {
 	}
 	
 	private List<BoundingVolume3D> doGetBoundingVolumes() {
-		return this.curves.stream().map(curve -> curve.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+		return this.shapes.stream().map(shape -> shape.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	}
 }

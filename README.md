@@ -107,6 +107,7 @@ The lists below show the main features of the renderer.
 * Simplex Noise Normal Map Modifier (CPU & GPU)
 
 #### Supported Shapes
+* Compound Shape (CPU)
 * Cone (CPU & GPU)
 * Constructive Solid Geometry (CSG) (CPU)
 * Curve (CPU)

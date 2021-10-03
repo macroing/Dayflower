@@ -41,52 +41,52 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code Curves3F} is an implementation of {@link Shape3F} that contains a list of {@link Curve3F} instances.
+ * A {@code CompoundShape3F} is an implementation of {@link Shape3F} that contains a list of {@code Shape3F} instances.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is immutable and thread-safe if its {@code Shape3F} instances are.
  * <p>
  * This {@code Shape3F} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Curves3F implements Shape3F {
+public final class CompoundShape3F implements Shape3F {
 	/**
-	 * The name of this {@code Curves3F} class.
+	 * The name of this {@code CompoundShape3F} class.
 	 */
-	public static final String NAME = "Curves";
+	public static final String NAME = "Compound Shape";
 	
 	/**
-	 * The ID of this {@code Curves3F} class.
+	 * The ID of this {@code CompoundShape3F} class.
 	 */
-	public static final int ID = 4;
+	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final List<Curve3F> curves;
+	private final List<? extends Shape3F> shapes;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code Curves3F} instance.
+	 * Constructs a new {@code CompoundShape3F} instance.
 	 * <p>
-	 * If either {@code curves} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code shapes} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * Modifying {@code curves} will not affect this {@code Curves3F} instance.
+	 * Modifying {@code shapes} will not affect this {@code CompoundShape3F} instance.
 	 * 
-	 * @param curves a {@code List} of {@link Curve3F} instances
-	 * @throws NullPointerException thrown if, and only if, either {@code curves} or at least one of its elements are {@code null}
+	 * @param shapes a {@code List} of {@link Shape3F} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code shapes} or at least one of its elements are {@code null}
 	 */
-	public Curves3F(final List<Curve3F> curves) {
-		this.curves = new ArrayList<>(ParameterArguments.requireNonNullList(curves, "curves"));
+	public CompoundShape3F(final List<? extends Shape3F> shapes) {
+		this.shapes = new ArrayList<>(ParameterArguments.requireNonNullList(shapes, "shapes"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link BoundingVolume3F} instance that contains this {@code Curves3F} instance.
+	 * Returns a {@link BoundingVolume3F} instance that contains this {@code CompoundShape3F} instance.
 	 * 
-	 * @return a {@code BoundingVolume3F} instance that contains this {@code Curves3F} instance
+	 * @return a {@code BoundingVolume3F} instance that contains this {@code CompoundShape3F} instance
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
@@ -94,13 +94,13 @@ public final class Curves3F implements Shape3F {
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code Curves3F} instance.
+	 * Performs an intersection test between {@code ray} and this {@code CompoundShape3F} instance.
 	 * <p>
 	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3F} instance that contains information about the intersection, if it was found.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Curves3F} instance
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code CompoundShape3F} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
@@ -110,17 +110,17 @@ public final class Curves3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final SurfaceIntersector3F surfaceIntersector = new SurfaceIntersector3F(ray, tMinimum, tMaximum);
 		
-		for(final Curve3F curve : this.curves) {
-			surfaceIntersector.intersection(curve);
+		for(final Shape3F shape : this.shapes) {
+			surfaceIntersector.intersection(shape);
 		}
 		
 		return surfaceIntersector.computeSurfaceIntersection();
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code Curves3F} instance.
+	 * Returns a {@code String} with the name of this {@code CompoundShape3F} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code Curves3F} instance
+	 * @return a {@code String} with the name of this {@code CompoundShape3F} instance
 	 */
 	@Override
 	public String getName() {
@@ -128,13 +128,13 @@ public final class Curves3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code Curves3F} instance.
+	 * Returns a {@code String} representation of this {@code CompoundShape3F} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code Curves3F} instance
+	 * @return a {@code String} representation of this {@code CompoundShape3F} instance
 	 */
 	@Override
 	public String toString() {
-		return "new Curves3F(...)";
+		return "new CompoundShape3F(...)";
 	}
 	
 	/**
@@ -164,8 +164,8 @@ public final class Curves3F implements Shape3F {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				for(final Curve3F curve : this.curves) {
-					if(!curve.accept(nodeHierarchicalVisitor)) {
+				for(final Shape3F shape : this.shapes) {
+					if(!shape.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
 				}
@@ -178,20 +178,20 @@ public final class Curves3F implements Shape3F {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code Curves3F} instance for equality.
+	 * Compares {@code object} to this {@code CompoundShape3F} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Curves3F}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code CompoundShape3F}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code Curves3F} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Curves3F}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code CompoundShape3F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CompoundShape3F}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof Curves3F)) {
+		} else if(!(object instanceof CompoundShape3F)) {
 			return false;
-		} else if(!Objects.equals(this.curves, Curves3F.class.cast(object).curves)) {
+		} else if(!Objects.equals(this.shapes, CompoundShape3F.class.cast(object).shapes)) {
 			return false;
 		} else {
 			return true;
@@ -199,29 +199,29 @@ public final class Curves3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the surface area of this {@code Curves3F} instance.
+	 * Returns the surface area of this {@code CompoundShape3F} instance.
 	 * 
-	 * @return the surface area of this {@code Curves3F} instance
+	 * @return the surface area of this {@code CompoundShape3F} instance
 	 */
 	@Override
 	public float getSurfaceArea() {
 		float surfaceArea = 0.0F;
 		
-		for(final Curve3F curve : this.curves) {
-			surfaceArea += curve.getSurfaceArea();
+		for(final Shape3F shape : this.shapes) {
+			surfaceArea += shape.getSurfaceArea();
 		}
 		
 		return surfaceArea;
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code Curves3F} instance.
+	 * Performs an intersection test between {@code ray} and this {@code CompoundShape3F} instance.
 	 * <p>
 	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Curves3F} instance
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code CompoundShape3F} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
@@ -233,8 +233,8 @@ public final class Curves3F implements Shape3F {
 		float tMax = tMaximum;
 		float tMin = tMinimum;
 		
-		for(final Curve3F curve : this.curves) {
-			t = minOrNaN(t, curve.intersectionT(ray, tMin, tMax));
+		for(final Shape3F shape : this.shapes) {
+			t = minOrNaN(t, shape.intersectionT(ray, tMin, tMax));
 			
 			if(!isNaN(t)) {
 				tMax = t;
@@ -245,9 +245,9 @@ public final class Curves3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code Curves3F} instance.
+	 * Returns an {@code int} with the ID of this {@code CompoundShape3F} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code Curves3F} instance
+	 * @return an {@code int} with the ID of this {@code CompoundShape3F} instance
 	 */
 	@Override
 	public int getID() {
@@ -255,17 +255,17 @@ public final class Curves3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code Curves3F} instance.
+	 * Returns a hash code for this {@code CompoundShape3F} instance.
 	 * 
-	 * @return a hash code for this {@code Curves3F} instance
+	 * @return a hash code for this {@code CompoundShape3F} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.curves);
+		return Objects.hash(this.shapes);
 	}
 	
 	/**
-	 * Writes this {@code Curves3F} instance to {@code dataOutput}.
+	 * Writes this {@code CompoundShape3F} instance to {@code dataOutput}.
 	 * <p>
 	 * If {@code dataOutput} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -279,10 +279,10 @@ public final class Curves3F implements Shape3F {
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeInt(ID);
-			dataOutput.writeInt(this.curves.size());
+			dataOutput.writeInt(this.shapes.size());
 			
-			for(final Curve3F curve : this.curves) {
-				curve.write(dataOutput);
+			for(final Shape3F shape : this.shapes) {
+				shape.write(dataOutput);
 			}
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
@@ -296,6 +296,6 @@ public final class Curves3F implements Shape3F {
 	}
 	
 	private List<BoundingVolume3F> doGetBoundingVolumes() {
-		return this.curves.stream().map(curve -> curve.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+		return this.shapes.stream().map(shape -> shape.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	}
 }

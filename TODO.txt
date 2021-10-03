@@ -8,8 +8,6 @@ Geometry Shape API:
 	* ADD:		Add a method to Rectangle2D that returns the intersection of two Rectangle2D instances using a Polygon2D instance.
 	* ADD:		Add a method to Rectangle2F that returns the intersection of two Rectangle2F instances using a Polygon2F instance.
 	* ADD:		Add a method to Rectangle2I that returns the intersection of two Rectangle2I instances using a Polygon2I instance.
-	* CHANGE:	Refactor the Curves3D and Curves3DReader classes to CompoundShape3D and CompoundShape3DReader. They should support any Shape3D, not just Curve3D.
-	* CHANGE:	Refactor the Curves3F and Curves3FReader classes to CompoundShape3F and CompoundShape3FReader. They should support any Shape3F, not just Curve3F.
 	* CHANGE:	Implement LineSegment3D.
 	* CHANGE:	Implement LineSegment3F.
 	* CHANGE:	The method intersection(Rectangle2D, Rectangle2D) of the Rectangle2D class might require updating. It does not support rotations.

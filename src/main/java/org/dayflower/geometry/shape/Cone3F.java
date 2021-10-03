@@ -59,7 +59,7 @@ public final class Cone3F implements Shape3F {
 	/**
 	 * The ID of this {@code Cone3F} class.
 	 */
-	public static final int ID = 1;
+	public static final int ID = 2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

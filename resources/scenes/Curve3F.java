@@ -4,7 +4,7 @@ final Material material1 = new MatteMaterial();
 final Material material2 = new MatteMaterial(new CheckerboardTexture(Color3F.GRAY_0_50, Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F)));
 
 final Shape3F shape1 = new Plane3F();
-final Shape3F shape2 = new Curves3F(Curve3F.createCurvesByBezier());
+final Shape3F shape2 = new CompoundShape3F(Curve3F.createCurvesByBezier());
 
 final Transform transform1 = new Transform(new Point3F(0.0F, 0.0F, 0.0F));
 final Transform transform2 = new Transform(new Point3F(0.0F, 2.0F, 0.0F));
@@ -18,4 +18,4 @@ scene.addLight(light1);
 scene.addPrimitive(primitive1);
 scene.addPrimitive(primitive2);
 scene.setCamera(camera);
-scene.setName("Curves3F");
+scene.setName("Curve3F");

@@ -77,7 +77,7 @@ public final class Curve3D implements Shape3D {
 	/**
 	 * The ID of this {@code Curve3D} class.
 	 */
-	public static final int ID = 3;
+	public static final int ID = 4;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

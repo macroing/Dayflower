@@ -14,6 +14,14 @@
  * <li>{@link org.dayflower.geometry.shape.Circle2IReader Circle2IReader} is a {@code Shape2IReader} implementation that reads {@code Circle2I} instances from a {@code DataInput} instance.</li>
  * </ul>
  * <p>
+ * The following list contains information about the data types that represents compound shapes in this API.
+ * <ul>
+ * <li>{@link org.dayflower.geometry.shape.CompoundShape3D CompoundShape3D} is an implementation of {@code Shape3D} that contains a list of {@code Shape3D} instances.</li>
+ * <li>{@link org.dayflower.geometry.shape.CompoundShape3DReader CompoundShape3DReader} is a {@code Shape3DReader} implementation that reads {@code CompoundShape3D} instances from a {@code DataInput} instance.</li>
+ * <li>{@link org.dayflower.geometry.shape.CompoundShape3F CompoundShape3F} is an implementation of {@code Shape3F} that contains a list of {@code Shape3F} instances.</li>
+ * <li>{@link org.dayflower.geometry.shape.CompoundShape3FReader CompoundShape3FReader} is a {@code Shape3FReader} implementation that reads {@code CompoundShape3F} instances from a {@code DataInput} instance.</li>
+ * </ul>
+ * <p>
  * The following list contains information about the data types that represents cones in this API.
  * <ul>
  * <li>{@link org.dayflower.geometry.shape.Cone3D Cone3D} is an implementation of {@code Shape3D} that represents a cone.</li>
@@ -36,10 +44,6 @@
  * <li>{@link org.dayflower.geometry.shape.Curve3DReader Curve3DReader} is a {@code Shape3DReader} implementation that reads {@code Curve3D} instances from a {@code DataInput} instance.</li>
  * <li>{@link org.dayflower.geometry.shape.Curve3F Curve3F} is an implementation of {@code Shape3F} that represents a curve.</li>
  * <li>{@link org.dayflower.geometry.shape.Curve3FReader Curve3FReader} is a {@code Shape3FReader} implementation that reads {@code Curve3F} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.shape.Curves3D Curves3D} is an implementation of {@code Shape3D} that contains a list of {@code Curve3D} instances.</li>
- * <li>{@link org.dayflower.geometry.shape.Curves3DReader Curves3DReader} is a {@code Shape3DReader} implementation that reads {@code Curves3D} instances from a {@code DataInput} instance.</li>
- * <li>{@link org.dayflower.geometry.shape.Curves3F Curves3F} is an implementation of {@code Shape3F} that contains a list of {@code Curve3F} instances.</li>
- * <li>{@link org.dayflower.geometry.shape.Curves3FReader Curves3FReader} is a {@code Shape3FReader} implementation that reads {@code Curves3F} instances from a {@code DataInput} instance.</li>
  * </ul>
  * <p>
  * The following list contains information about the data types that represents cylinders in this API.

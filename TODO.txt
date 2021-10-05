@@ -14,10 +14,6 @@ Geometry Shape API:
 	* CHANGE:	The method intersection(Rectangle2F, Rectangle2F) of the Rectangle2F class might require updating. It does not support rotations.
 	* CHANGE:	The method intersection(Rectangle2I, Rectangle2I) of the Rectangle2I class might require updating. It does not support rotations.
 
-Image API:
-
-	* ADD:		Add the methods luminanceMaximum() and luminanceMinimum() to the ImageD and ImageF classes.
-
 JavaFX Application API:
 
 	* ADD:		Add support for FileParameter in the ParameterLoader implementation.

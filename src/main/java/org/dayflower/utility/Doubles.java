@@ -635,6 +635,33 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns the greater value of {@code a} and {@code b}.
+	 * <p>
+	 * The result is the value closer to positive infinity.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value. If one value is NaN, then the result is the other value. Unlike the numerical comparison operators, this method considers negative zero to be strictly smaller than positive
+	 * zero. If one argument is positive zero and the other is negative zero, the result is positive zero.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @return the greater value of {@code a} and {@code b}
+	 */
+	public static double maxOrNaN(final double a, final double b) {
+		final boolean isNaNA = isNaN(a);
+		final boolean isNaNB = isNaN(b);
+		
+		if(!isNaNA && !isNaNB) {
+			return max(a, b);
+		} else if(!isNaNA) {
+			return a;
+		} else if(!isNaNB) {
+			return b;
+		} else {
+			return Double.NaN;
+		}
+	}
+	
+	/**
 	 * Returns the smaller value of {@code a} and {@code b}.
 	 * <p>
 	 * The result is the value closer to negative infinity.

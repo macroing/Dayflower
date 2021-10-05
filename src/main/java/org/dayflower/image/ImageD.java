@@ -18,10 +18,13 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.utility.Doubles.NaN;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.ceil;
 import static org.dayflower.utility.Doubles.floor;
+import static org.dayflower.utility.Doubles.maxOrNaN;
 import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.minOrNaN;
 import static org.dayflower.utility.Doubles.toDouble;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
@@ -2499,6 +2502,36 @@ public abstract class ImageD extends Image {
 		}
 		
 		return rectangles;
+	}
+	
+	/**
+	 * Returns the maximum luminance in this {@code ImageD} instance.
+	 * 
+	 * @return the maximum luminance in this {@code ImageD} instance
+	 */
+	public final double luminanceMaximum() {
+		double luminanceMaximum = NaN;
+		
+		for(int i = 0; i < getResolution(); i++) {
+			luminanceMaximum = maxOrNaN(luminanceMaximum, getColorRGB(i).luminance());
+		}
+		
+		return luminanceMaximum;
+	}
+	
+	/**
+	 * Returns the minimum luminance in this {@code ImageD} instance.
+	 * 
+	 * @return the minimum luminance in this {@code ImageD} instance
+	 */
+	public final double luminanceMinimum() {
+		double luminanceMinimum = NaN;
+		
+		for(int i = 0; i < getResolution(); i++) {
+			luminanceMinimum = minOrNaN(luminanceMinimum, getColorRGB(i).luminance());
+		}
+		
+		return luminanceMinimum;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

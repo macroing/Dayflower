@@ -1,3 +1,10 @@
+2021-10-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods luminanceMaximum() and luminanceMinimum() to the ImageD class.
+	* ADD:		Add the methods luminanceMaximum() and luminanceMinimum() to the ImageF class.
+	* ADD:		Add the method maxOrNaN(double, double) to the Doubles class.
+	* ADD:		Add the method maxOrNaN(float, float) to the Floats class.
+
 2021-10-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for Polygon3F to the GPU-renderer.

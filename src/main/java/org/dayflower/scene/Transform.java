@@ -390,6 +390,43 @@ public final class Transform implements Node {
 	}
 	
 	/**
+	 * Sets the {@link Matrix44F} instance that is used to transform from object space to world space.
+	 * <p>
+	 * If {@code objectToWorld} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method will also set the {@code Matrix44F} instance that is used to transform from world space to object space.
+	 * 
+	 * @param objectToWorld the {@code Matrix44F} instance that is used to transform from object space to world space
+	 * @throws NullPointerException thrown if, and only if, {@code objectToWorld} is {@code null}
+	 */
+	public void setObjectToWorld(final Matrix44F objectToWorld) {
+		Objects.requireNonNull(objectToWorld, "objectToWorld == null");
+		
+		final Matrix44F oldObjectToWorld = this.objectToWorld;
+		final Matrix44F newObjectToWorld =      objectToWorld;
+		
+		if(!Objects.equals(oldObjectToWorld, newObjectToWorld)) {
+			this.objectToWorld = newObjectToWorld;
+			
+			final Matrix44F oldWorldToObject = this.worldToObject;
+			final Matrix44F newWorldToObject = Matrix44F.inverse(newObjectToWorld);
+			
+			if(!Objects.equals(oldWorldToObject, newWorldToObject)) {
+				this.worldToObject = newWorldToObject;
+				
+				for(final TransformObserver transformObserver : this.transformObservers) {
+					transformObserver.onChangeObjectToWorld(this, newObjectToWorld);
+					transformObserver.onChangeWorldToObject(this, newWorldToObject);
+				}
+			} else {
+				for(final TransformObserver transformObserver : this.transformObservers) {
+					transformObserver.onChangeObjectToWorld(this, newObjectToWorld);
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Sets the position associated with this {@code Transform} instance to {@code position}.
 	 * <p>
 	 * If {@code position} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -477,6 +514,43 @@ public final class Transform implements Node {
 	 */
 	public void setTransformObservers(final List<TransformObserver> transformObservers) {
 		this.transformObservers = new ArrayList<>(ParameterArguments.requireNonNullList(transformObservers, "transformObservers"));
+	}
+	
+	/**
+	 * Sets the {@link Matrix44F} instance that is used to transform from world space to object space.
+	 * <p>
+	 * If {@code worldToObject} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method will also set the {@code Matrix44F} instance that is used to transform from object space to world space.
+	 * 
+	 * @param worldToObject the {@code Matrix44F} instance that is used to transform from world space to object space
+	 * @throws NullPointerException thrown if, and only if, {@code worldToObject} is {@code null}
+	 */
+	public void setWorldToObject(final Matrix44F worldToObject) {
+		Objects.requireNonNull(worldToObject, "worldToObject == null");
+		
+		final Matrix44F oldWorldToObject = this.worldToObject;
+		final Matrix44F newWorldToObject =      worldToObject;
+		
+		if(!Objects.equals(oldWorldToObject, newWorldToObject)) {
+			this.worldToObject = newWorldToObject;
+			
+			final Matrix44F oldObjectToWorld = this.objectToWorld;
+			final Matrix44F newObjectToWorld = Matrix44F.inverse(newWorldToObject);
+			
+			if(!Objects.equals(oldObjectToWorld, newObjectToWorld)) {
+				this.objectToWorld = newObjectToWorld;
+				
+				for(final TransformObserver transformObserver : this.transformObservers) {
+					transformObserver.onChangeWorldToObject(this, newWorldToObject);
+					transformObserver.onChangeObjectToWorld(this, newObjectToWorld);
+				}
+			} else {
+				for(final TransformObserver transformObserver : this.transformObservers) {
+					transformObserver.onChangeWorldToObject(this, newWorldToObject);
+				}
+			}
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

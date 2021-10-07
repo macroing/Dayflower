@@ -28,6 +28,7 @@ Renderer GPU API:
 	* ADD:		Add support for PrimitiveAreaLight.
 	* ADD:		Add support for UberMaterial.
 	* ADD:		Add support for ConstructiveSolidGeometry3F.
+	* ADD:		Add support for BiModifier.
 	* ADD:		Add support for the Ray Tracer algorithm.
 	* ADD:		Add support for the Scene-based BVH structure.
 	* FIX:		Fix the bug that resets the image occasionally using the Ambient Occlusion and Path Tracer algorithms.
@@ -42,6 +43,7 @@ Scene Compiler API:
 	* ADD:		Add support for PrimitiveAreaLight.
 	* ADD:		Add support for UberMaterial.
 	* ADD:		Add support for ConstructiveSolidGeometry3F.
+	* ADD:		Add support for BiModifier.
 	* ADD:		Add support for updating a CompiledScene instance on-the-fly.
 
 Scene Light API:
@@ -55,6 +57,11 @@ Scene Material API:
 	* ADD:		Add a Builder to the SubstrateMaterial class.
 	* ADD:		Add a Builder to the UberMaterial class.
 	* FIX:		Fix the HairMaterial class.
+
+Scene Modifier API:
+
+	* ADD:		Add an LDRImageParallaxMapModifier class.
+	* ADD:		Add an LDRImageSteepParallaxMapModifier class.
 
 Scene Texture API:
 

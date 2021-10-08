@@ -22,6 +22,7 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.sin;
+import static org.dayflower.utility.Doubles.toRadians;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -958,6 +959,58 @@ public final class Matrix44D implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Matrix44D} instance that rotates along the X-axis.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 * 1,   0,    0, 0
+	 * 0, cos, -sin, 0
+	 * 0, sin,  cos, 0
+	 * 0,   0,    0, 1
+	 * }
+	 * </pre>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix44D.rotateX(angle, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an angle in degrees
+	 * @return a {@code Matrix44D} instance that rotates along the X-axis
+	 */
+	public static Matrix44D rotateX(final double angle) {
+		return rotateX(angle, false);
+	}
+	
+	/**
+	 * Returns a {@code Matrix44D} instance that rotates along the X-axis.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 * 1,   0,    0, 0
+	 * 0, cos, -sin, 0
+	 * 0, sin,  cos, 0
+	 * 0,   0,    0, 1
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an angle in degrees or radians
+	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
+	 * @return a {@code Matrix44D} instance that rotates along the X-axis
+	 */
+	public static Matrix44D rotateX(final double angle, final boolean isRadians) {
+		final double angleRadians = isRadians ? angle : toRadians(angle);
+		
+		final double cos = cos(angleRadians);
+		final double sin = sin(angleRadians);
+		
+		return new Matrix44D(1.0D, 0.0D, 0.0D, 0.0D, 0.0D, cos, -sin, 0.0D, 0.0D, sin, cos, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
+	}
+	
+	/**
 	 * Returns a {@code Matrix44D} instance that rotates along the Y-axis.
 	 * <p>
 	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -984,6 +1037,58 @@ public final class Matrix44D implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Matrix44D} instance that rotates along the Y-axis.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 *  cos, 0, sin, 0
+	 *    0, 1,   0, 0
+	 * -sin, 0, cos, 0
+	 *    0, 0,   0, 1
+	 * }
+	 * </pre>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix44D.rotateY(angle, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an angle in degrees
+	 * @return a {@code Matrix44D} instance that rotates along the Y-axis
+	 */
+	public static Matrix44D rotateY(final double angle) {
+		return rotateY(angle, false);
+	}
+	
+	/**
+	 * Returns a {@code Matrix44D} instance that rotates along the Y-axis.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 *  cos, 0, sin, 0
+	 *    0, 1,   0, 0
+	 * -sin, 0, cos, 0
+	 *    0, 0,   0, 1
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an angle in degrees or radians
+	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
+	 * @return a {@code Matrix44D} instance that rotates along the Y-axis
+	 */
+	public static Matrix44D rotateY(final double angle, final boolean isRadians) {
+		final double angleRadians = isRadians ? angle : toRadians(angle);
+		
+		final double cos = cos(angleRadians);
+		final double sin = sin(angleRadians);
+		
+		return new Matrix44D(cos, 0.0D, sin, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, -sin, 0.0D, cos, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
+	}
+	
+	/**
 	 * Returns a {@code Matrix44D} instance that rotates along the Z-axis.
 	 * <p>
 	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1005,6 +1110,58 @@ public final class Matrix44D implements Node {
 	public static Matrix44D rotateZ(final AngleD angle) {
 		final double cos = cos(angle.getRadians());
 		final double sin = sin(angle.getRadians());
+		
+		return new Matrix44D(cos, -sin, 0.0D, 0.0D, sin, cos, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
+	}
+	
+	/**
+	 * Returns a {@code Matrix44D} instance that rotates along the Z-axis.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 * cos, -sin, 0, 0
+	 * sin,  cos, 0, 0
+	 *   0,    0, 1, 0
+	 *   0,    0, 0, 1
+	 * }
+	 * </pre>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix44D.rotateZ(angle, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an angle in degrees
+	 * @return a {@code Matrix44D} instance that rotates along the Z-axis
+	 */
+	public static Matrix44D rotateZ(final double angle) {
+		return rotateZ(angle, false);
+	}
+	
+	/**
+	 * Returns a {@code Matrix44D} instance that rotates along the Z-axis.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 * cos, -sin, 0, 0
+	 * sin,  cos, 0, 0
+	 *   0,    0, 1, 0
+	 *   0,    0, 0, 1
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an angle in degrees or radians
+	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
+	 * @return a {@code Matrix44D} instance that rotates along the Z-axis
+	 */
+	public static Matrix44D rotateZ(final double angle, final boolean isRadians) {
+		final double angleRadians = isRadians ? angle : toRadians(angle);
+		
+		final double cos = cos(angleRadians);
+		final double sin = sin(angleRadians);
 		
 		return new Matrix44D(cos, -sin, 0.0D, 0.0D, sin, cos, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
 	}

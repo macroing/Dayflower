@@ -1,3 +1,8 @@
+2021-10-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods rotateX(double), rotateX(double, boolean), rotateY(double), rotateY(double, boolean), rotateZ(double) and rotateZ(double, boolean) to the Matrix44D class.
+	* ADD:		Add the methods rotateX(float), rotateX(float, boolean), rotateY(float), rotateY(float, boolean), rotateZ(float) and rotateZ(float, boolean) to the Matrix44F class.
+
 2021-10-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods setObjectToWorld(Matrix44F) and setWorldToObject(Matrix44F) to the Transform class.

@@ -66,6 +66,30 @@ public interface Renderer {
 	boolean render();
 	
 	/**
+	 * Renders the associated {@link Scene} instance to the associated {@link ImageF} instance and, optionally, updates the associated {@link RendererObserver} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, rendering was performed for all render passes, {@code false} otherwise.
+	 * <p>
+	 * If {@code renderPasses} is less than {@code 1}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * <code>
+	 * for(int renderPass = 0; renderPass < renderPasses; renderPass++) {
+	 *     if(!renderer.render()) {
+	 *         break;
+	 *     }
+	 * }
+	 * </code>
+	 * </pre>
+	 * 
+	 * @param renderPasses the number of render passes to perform rendering
+	 * @return {@code true} if, and only if, rendering was performed for all render passes, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code renderPasses} is less than {@code 1}
+	 */
+	boolean render(final int renderPasses);
+	
+	/**
 	 * Attempts to shutdown the rendering process of this {@code Renderer} instance.
 	 * <p>
 	 * Returns {@code true} if, and only if, this {@code Renderer} instance was rendering and is shutting down, {@code false} otherwise.

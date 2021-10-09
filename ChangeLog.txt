@@ -1,3 +1,8 @@
+2021-10-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method render(int) to the AbstractCPURenderer and AbstractGPURenderer classes.
+	* ADD:		Add the method render(int) to the Renderer interface.
+
 2021-10-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods rotateX(double), rotateX(double, boolean), rotateY(double), rotateY(double, boolean), rotateZ(double) and rotateZ(double, boolean) to the Matrix44D class.

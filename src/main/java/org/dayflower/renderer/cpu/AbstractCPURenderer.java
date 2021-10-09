@@ -35,6 +35,7 @@ import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
+import org.dayflower.utility.ParameterArguments;
 import org.dayflower.utility.Timer;
 
 /**
@@ -246,6 +247,41 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 		rendererObserver.onRenderPassComplete(this, getRenderPass(), elapsedTimeMillis);
 		
 		this.isRendering.set(false);
+		
+		return true;
+	}
+	
+	/**
+	 * Renders the associated {@link Scene} instance to the associated {@link ImageF} instance and, optionally, updates the associated {@link RendererObserver} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, rendering was performed for all render passes, {@code false} otherwise.
+	 * <p>
+	 * If {@code renderPasses} is less than {@code 1}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * <code>
+	 * for(int renderPass = 0; renderPass < renderPasses; renderPass++) {
+	 *     if(!abstractCPURenderer.render()) {
+	 *         break;
+	 *     }
+	 * }
+	 * </code>
+	 * </pre>
+	 * 
+	 * @param renderPasses the number of render passes to perform rendering
+	 * @return {@code true} if, and only if, rendering was performed for all render passes, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code renderPasses} is less than {@code 1}
+	 */
+	@Override
+	public final boolean render(final int renderPasses) {
+		ParameterArguments.requireRange(renderPasses, 1, Integer.MAX_VALUE, "renderPasses");
+		
+		for(int renderPass = 0; renderPass < renderPasses; renderPass++) {
+			if(!render()) {
+				return false;
+			}
+		}
 		
 		return true;
 	}

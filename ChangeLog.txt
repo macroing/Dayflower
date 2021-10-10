@@ -1,3 +1,8 @@
+2021-10-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method materialBSDFResultBXDFHasTransmission() to the AbstractMaterialKernel class.
+	* CHANGE:	Update the way transmissive materials are handled for the Path Tracer in the GPURenderer class.
+
 2021-10-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method render(int) to the AbstractCPURenderer and AbstractGPURenderer classes.

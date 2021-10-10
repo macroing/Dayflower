@@ -54,9 +54,9 @@ public final class ImageGenerator {
 		
 		System.out.println("Rendering " + scene.getName() + "...");
 		
-		final String pathname = String.format("./generated/scenes/%s.png", scene.getName());
+		final String pathname = String.format("./generated/scenes/%s-2.png", scene.getName());
 		
-		final RendererObserver rendererObserver = new FileRendererObserver(pathname, false, false, true, 100);
+		final RendererObserver rendererObserver = new FileRendererObserver(pathname, false, false, true, 500);
 		
 		final
 		GPURenderer gPURenderer = new GPURenderer(rendererObserver);
@@ -66,11 +66,7 @@ public final class ImageGenerator {
 		gPURenderer.setMinimumBounceRussianRoulette(5);
 		gPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
 		gPURenderer.setup();
-		
-		for(int i = 0; i < 2000; i++) {
-			gPURenderer.render();
-		}
-		
+		gPURenderer.render(2000);
 		gPURenderer.dispose();
 		
 		System.out.println("Done.");

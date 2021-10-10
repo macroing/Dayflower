@@ -32,7 +32,6 @@ Renderer GPU API:
 	* ADD:		Add support for the Ray Tracer algorithm.
 	* ADD:		Add support for the Scene-based BVH structure.
 	* FIX:		Fix the bug that resets the image occasionally using the Ambient Occlusion and Path Tracer algorithms.
-	* FIX:		Fix rendering of transmissive materials. Mainly in the Path Tracer.
 
 Scene BSSRDF API:
 

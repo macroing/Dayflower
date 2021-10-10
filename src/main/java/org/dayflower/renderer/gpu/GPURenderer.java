@@ -118,15 +118,17 @@ public final class GPURenderer extends AbstractGPURenderer {
 		float throughputG = 1.0F;
 		float throughputB = 1.0F;
 		
-		final float pixel0X = 2.0F * random();
-		final float pixel1X = pixel0X < 1.0F ? sqrt(pixel0X) - 1.0F : 1.0F - sqrt(2.0F - pixel0X);
-		final float pixel0Y = 2.0F * random();
-		final float pixel1Y = pixel0Y < 1.0F ? sqrt(pixel0Y) - 1.0F : 1.0F - sqrt(2.0F - pixel0Y);
+//		final float pixel0X = 2.0F * random();
+//		final float pixel1X = pixel0X < 1.0F ? sqrt(pixel0X) - 1.0F : 1.0F - sqrt(2.0F - pixel0X);
+//		final float pixel0Y = 2.0F * random();
+//		final float pixel1Y = pixel0Y < 1.0F ? sqrt(pixel0Y) - 1.0F : 1.0F - sqrt(2.0F - pixel0Y);
 		
-		if(ray3FCameraGenerate(pixel1X, pixel1Y)) {
+		if(ray3FCameraGenerate(random(), random())) {
 			int currentBounce = 0;
 			
 			boolean isSpecularBounce = false;
+			
+			float etaScale = 1.0F;
 			
 			while(currentBounce < maximumBounce) {
 				if(primitiveIntersectionCompute()) {
@@ -158,6 +160,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 							final float resultG = materialBSDFResultGetResultG();
 							final float resultB = materialBSDFResultGetResultB();
 							
+							final float surfaceNormalGX = intersectionGetOrthonormalBasisGWComponent1();
+							final float surfaceNormalGY = intersectionGetOrthonormalBasisGWComponent2();
+							final float surfaceNormalGZ = intersectionGetOrthonormalBasisGWComponent3();
 							final float surfaceNormalSX = intersectionGetOrthonormalBasisSWComponent1();
 							final float surfaceNormalSY = intersectionGetOrthonormalBasisSWComponent2();
 							final float surfaceNormalSZ = intersectionGetOrthonormalBasisSWComponent3();
@@ -165,9 +170,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 							final float incomingDotSurfaceNormalS = vector3FDotProduct(incomingX, incomingY, incomingZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
 							final float incomingDotSurfaceNormalSAbs = abs(incomingDotSurfaceNormalS);
 							
-							final boolean isProbabilityDensityFunctionValueValue = checkIsFinite(probabilityDensityFunctionValue) && probabilityDensityFunctionValue > 0.0F;
+							final boolean isProbabilityDensityFunctionValueValid = checkIsFinite(probabilityDensityFunctionValue) && probabilityDensityFunctionValue > 0.0F;
 							
-							if(isProbabilityDensityFunctionValueValue) {
+							if(isProbabilityDensityFunctionValueValid) {
 								throughputR *= resultR * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
 								throughputG *= resultG * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
 								throughputB *= resultB * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
@@ -175,23 +180,42 @@ public final class GPURenderer extends AbstractGPURenderer {
 							
 							isSpecularBounce = materialBSDFResultBXDFIsSpecular();
 							
+							if(isSpecularBounce && materialBSDFResultBXDFHasTransmission()) {
+								final float outgoingX = -ray3FGetDirectionComponent1();
+								final float outgoingY = -ray3FGetDirectionComponent2();
+								final float outgoingZ = -ray3FGetDirectionComponent3();
+								
+								final float eta = materialBSDFGetEta();
+								
+								final float outgoingDotSurfaceNormalG = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
+								
+								etaScale *= outgoingDotSurfaceNormalG > 0.0F ? eta * eta : 1.0F / (eta * eta);
+							}
+							
 							vector3FSet(incomingX, incomingY, incomingZ);
 							
 							ray3FSetFromSurfaceIntersectionPointAndVector3F();
 							
-							if(currentBounce >= minimumBounceRussianRoulette) {
-								final float probability = max(throughputR, throughputG, throughputB);
+							final float russianRouletteThroughputR = throughputR * etaScale;
+							final float russianRouletteThroughputG = throughputG * etaScale;
+							final float russianRouletteThroughputB = throughputB * etaScale;
+							
+							final float russianRouletteThroughputMaximum = max(russianRouletteThroughputR, russianRouletteThroughputG, russianRouletteThroughputB);
+							
+							if(isProbabilityDensityFunctionValueValid && currentBounce >= minimumBounceRussianRoulette && russianRouletteThroughputMaximum < 1.0F) {
+								final float probability = max(0.05F, 1.0F - russianRouletteThroughputMaximum);
+								final float probabilityReciprocal = 1.0F / (1.0F - probability);
 								
-								if(random() > probability) {
+								if(random() < probability) {
 									currentBounce = maximumBounce;
 								} else {
-									throughputR /= probability;
-									throughputG /= probability;
-									throughputB /= probability;
+									throughputR *= probabilityReciprocal;
+									throughputG *= probabilityReciprocal;
+									throughputB *= probabilityReciprocal;
 								}
 							}
 							
-							currentBounce = isProbabilityDensityFunctionValueValue ? currentBounce + 1 : maximumBounce;
+							currentBounce = isProbabilityDensityFunctionValueValid ? currentBounce + 1 : maximumBounce;
 						} else {
 							currentBounce = maximumBounce;
 						}

@@ -623,6 +623,15 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, the {@link BXDF} instance that is associated with the current {@link BSDFResult} instance has transmission, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the {@code BXDF} instance that is associated with the current {@code BSDFResult} instance has transmission, {@code false} otherwise
+	 */
+	protected final boolean materialBSDFResultBXDFHasTransmission() {
+		return doBXDFHasTransmission(materialBSDFResultGetBXDFID());
+	}
+	
+	/**
 	 * Returns {@code true} if, and only if, the {@link BXDF} instance that is associated with the current {@link BSDFResult} instance is specular, {@code false} otherwise.
 	 * 
 	 * @return {@code true} if, and only if, the {@code BXDF} instance that is associated with the current {@code BSDFResult} instance is specular, {@code false} otherwise

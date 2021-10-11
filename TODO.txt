@@ -65,3 +65,7 @@ Scene Modifier API:
 Scene Texture API:
 
 	* ADD:		Add an HDRImageTexture class.
+
+Simplex API:
+
+	* ADD:		Add Javadocs.

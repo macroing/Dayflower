@@ -69,3 +69,4 @@ Scene Texture API:
 Simplex API:
 
 	* ADD:		Add Javadocs.
+	* CHANGE:	Refactor the APIs.

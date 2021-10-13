@@ -22,7 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
+import java.util.List;
 
 import org.dayflower.change.Change;
 import org.dayflower.change.ChangeCombiner;
@@ -62,6 +65,36 @@ public final class ChangeAPIUnitTests {
 		
 //		Assert that the List returned by changeCombiner.getChanges() is empty:
 		assertEquals(changeCombiner.getChanges().size(), 0);
+	}
+	
+	@Test
+	public void testChangeCombinerToChangeAndChangeRedoAndUndo() {
+		final List<String> list = new ArrayList<>();
+		final List<String> listReverseOrder = new ArrayList<>();
+		
+		final
+		ChangeCombiner changeCombiner = new ChangeCombiner();
+		changeCombiner.add(new Change(() -> list.add("A"), () -> listReverseOrder.add(list.remove(0))));
+		changeCombiner.add(new Change(() -> list.add("B"), () -> listReverseOrder.add(list.remove(1))));
+		changeCombiner.add(new Change(() -> list.add("C"), () -> listReverseOrder.add(list.remove(2))));
+		
+		final Change change = changeCombiner.toChange();
+		
+//		Assert that list is empty:
+		assertEquals(list, Arrays.asList());
+		
+		change.redo();
+		
+//		Assert that list contains the String instances "A", "B" and "C":
+		assertEquals(list, Arrays.asList("A", "B", "C"));
+		
+		change.undo();
+		
+//		Assert that list is empty:
+		assertEquals(list, Arrays.asList());
+		
+//		Assert that listReverseOrder contains the String instances "C", "B" and "A":
+		assertEquals(listReverseOrder, Arrays.asList("C", "B", "A"));
 	}
 	
 	@Test

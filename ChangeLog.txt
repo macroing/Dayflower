@@ -1,3 +1,8 @@
+2021-10-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the constructor ConstructiveSolidGeometry3D(Operation, Shape3D, Shape3D, Matrix44D, Matrix44D) to the ConstructiveSolidGeometry3D class.
+	* ADD:		Add the constructor ConstructiveSolidGeometry3F(Operation, Shape3F, Shape3F, Matrix44F, Matrix44F) to the ConstructiveSolidGeometry3F class.
+
 2021-10-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Unit Tests for the Change API to the ChangeAPIUnitTests class in the Test API.

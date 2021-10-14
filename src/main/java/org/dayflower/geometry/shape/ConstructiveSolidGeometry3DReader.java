@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
+import org.dayflower.geometry.Matrix44D;
 import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.Shape3DReader;
 import org.dayflower.geometry.shape.ConstructiveSolidGeometry3D.Operation;
@@ -109,7 +110,10 @@ public final class ConstructiveSolidGeometry3DReader implements Shape3DReader {
 			final Shape3D shapeL = this.shape3DReader.read(dataInput);
 			final Shape3D shapeR = this.shape3DReader.read(dataInput);
 			
-			return new ConstructiveSolidGeometry3D(operation, shapeL, shapeR);
+			final Matrix44D shapeLToObject = Matrix44D.read(dataInput);
+			final Matrix44D shapeRToObject = Matrix44D.read(dataInput);
+			
+			return new ConstructiveSolidGeometry3D(operation, shapeL, shapeR, shapeLToObject, shapeRToObject);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}

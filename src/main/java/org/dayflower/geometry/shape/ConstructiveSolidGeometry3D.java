@@ -18,7 +18,10 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Doubles.MAX_VALUE;
+import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.minOrNaN;
 
@@ -29,6 +32,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3D;
+import org.dayflower.geometry.Matrix44D;
+import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
@@ -60,6 +65,10 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final BoundingVolume3D boundingVolume;
+	private final Matrix44D objectToShapeL;
+	private final Matrix44D objectToShapeR;
+	private final Matrix44D shapeLToObject;
+	private final Matrix44D shapeRToObject;
 	private final Operation operation;
 	private final Shape3D shapeL;
 	private final Shape3D shapeR;
@@ -70,17 +79,47 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * Constructs a new {@code ConstructiveSolidGeometry3D} instance.
 	 * <p>
 	 * If either {@code operation}, {@code shapeL} or {@code shapeR} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ConstructiveSolidGeometry3D(operation, shapeL, shapeR, new Matrix44D(), new Matrix44D());
+	 * }
+	 * </pre>
 	 * 
 	 * @param operation the {@link Operation} instance associated with this {@code ConstructiveSolidGeometry3D} instance
 	 * @param shapeL the {@link Shape3D} instance associated with the left-hand side of this {@code ConstructiveSolidGeometry3D} instance
-	 * @param shapeR the {@link Shape3D} instance associated with the right-hand side of this {@code ConstructiveSolidGeometry3D} instance
+	 * @param shapeR the {@code Shape3D} instance associated with the right-hand side of this {@code ConstructiveSolidGeometry3D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code operation}, {@code shapeL} or {@code shapeR} are {@code null}
 	 */
 	public ConstructiveSolidGeometry3D(final Operation operation, final Shape3D shapeL, final Shape3D shapeR) {
+		this(operation, shapeL, shapeR, new Matrix44D(), new Matrix44D());
+	}
+	
+	/**
+	 * Constructs a new {@code ConstructiveSolidGeometry3D} instance.
+	 * <p>
+	 * If either {@code operation}, {@code shapeL}, {@code shapeR}, {@code shapeLToObject} or {@code shapeRToObject} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code shapeLToObject} or {@code shapeRToObject} cannot be inverted, an {@code IllegalArgumentException} will be thrown
+	 * 
+	 * @param operation the {@link Operation} instance associated with this {@code ConstructiveSolidGeometry3D} instance
+	 * @param shapeL the {@link Shape3D} instance associated with the left-hand side of this {@code ConstructiveSolidGeometry3D} instance
+	 * @param shapeR the {@code Shape3D} instance associated with the right-hand side of this {@code ConstructiveSolidGeometry3D} instance
+	 * @param shapeLToObject the {@link Matrix44D} instance to transform from {@code shapeL} to object space
+	 * @param shapeRToObject the {@code Matrix44D} instance to transform from {@code shapeR} to object space
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code shapeLToObject} or {@code shapeRToObject} cannot be inverted
+	 * @throws NullPointerException thrown if, and only if, either {@code operation}, {@code shapeL}, {@code shapeR}, {@code shapeLToObject} or {@code shapeRToObject} are {@code null}
+	 */
+	public ConstructiveSolidGeometry3D(final Operation operation, final Shape3D shapeL, final Shape3D shapeR, final Matrix44D shapeLToObject, final Matrix44D shapeRToObject) {
 		this.operation = Objects.requireNonNull(operation, "operation == null");
 		this.shapeL = Objects.requireNonNull(shapeL, "shapeL == null");
 		this.shapeR = Objects.requireNonNull(shapeR, "shapeR == null");
-		this.boundingVolume = AxisAlignedBoundingBox3D.union(shapeL.getBoundingVolume(), shapeR.getBoundingVolume());
+		this.shapeLToObject = Objects.requireNonNull(shapeLToObject, "shapeLToObject == null");
+		this.shapeRToObject = Objects.requireNonNull(shapeRToObject, "shapeRToObject == null");
+		this.boundingVolume = AxisAlignedBoundingBox3D.union(shapeL.getBoundingVolume().transform(this.shapeLToObject), shapeR.getBoundingVolume().transform(this.shapeRToObject));
+		this.objectToShapeL = Matrix44D.inverse(this.shapeLToObject);
+		this.objectToShapeR = Matrix44D.inverse(this.shapeRToObject);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,72 +149,86 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
+		final Ray3D rayShapeSpaceL = Ray3D.transform(this.objectToShapeL, ray);
+		final Ray3D rayShapeSpaceR = Ray3D.transform(this.objectToShapeR, ray);
+		
+		final double tMinimumShapeSpaceL = doTransformT(this.objectToShapeL, ray, rayShapeSpaceL, tMinimum);
+		final double tMaximumShapeSpaceL = doTransformT(this.objectToShapeL, ray, rayShapeSpaceL, tMaximum);
+		
+		final double tMinimumShapeSpaceR = doTransformT(this.objectToShapeR, ray, rayShapeSpaceR, tMinimum);
+		final double tMaximumShapeSpaceR = doTransformT(this.objectToShapeR, ray, rayShapeSpaceR, tMaximum);
+		
 		switch(this.operation) {
 			case DIFFERENCE: {
-				if(this.shapeL.getBoundingVolume().contains(ray.getOrigin())) {
+				if(this.shapeL.getBoundingVolume().contains(rayShapeSpaceL.getOrigin())) {
 //					TODO: If the BoundingVolume3D contains the Ray3D, that should probably be handled in a different way.
 					return SurfaceIntersection3D.EMPTY;
 				}
 				
-				if(this.shapeR.getBoundingVolume().contains(ray.getOrigin())) {
+				if(this.shapeR.getBoundingVolume().contains(rayShapeSpaceR.getOrigin())) {
 //					TODO: If the BoundingVolume3D contains the Ray3D, that should probably be handled in a different way.
 					return SurfaceIntersection3D.EMPTY;
 				}
 				
-				final double[] tIntervalL = doFindTInterval(ray, tMinimum, tMaximum, this.shapeL);
-				final double[] tIntervalR = doFindTInterval(ray, tMinimum, tMaximum, this.shapeR);
+				final double[] tIntervalShapeSpaceL = doFindTInterval(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL, this.shapeL);
+				final double[] tIntervalShapeSpaceR = doFindTInterval(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR, this.shapeR);
 				
-				final double tL0 = tIntervalL[0];
-				final double tL1 = tIntervalL[1];
-				final double tR0 = tIntervalR[0];
-				final double tR1 = tIntervalR[1];
+				final double tShapeSpaceL0 = tIntervalShapeSpaceL[0];
+				final double tShapeSpaceL1 = tIntervalShapeSpaceL[1];
+				final double tShapeSpaceR0 = tIntervalShapeSpaceR[0];
+				final double tShapeSpaceR1 = tIntervalShapeSpaceR[1];
+				
+				final double tObjectSpaceL0 = doTransformT(this.shapeLToObject, rayShapeSpaceL, ray, tShapeSpaceL0);
+				final double tObjectSpaceL1 = doTransformT(this.shapeLToObject, rayShapeSpaceL, ray, tShapeSpaceL1);
+				final double tObjectSpaceR0 = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR0);
+				final double tObjectSpaceR1 = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR1);
 				
 //				No intersection with L and nothing to subtract from:
-				if(isNaN(tL0)) {
+				if(isNaN(tObjectSpaceL0)) {
 					return SurfaceIntersection3D.EMPTY;
 				}
 				
 //				No intersection with R and nothing to subtract:
-				if(isNaN(tR0)) {
-					return this.shapeL.intersection(ray, tMinimum, tMaximum);
+				if(isNaN(tObjectSpaceR0)) {
+					return this.shapeL.intersection(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL).map(surfaceIntersection -> SurfaceIntersection3D.transform(surfaceIntersection, this.shapeLToObject, this.objectToShapeL));
 				}
 				
 //				The closest intersection for L is closer than or equal to the closest intersection for R:
-				if(tL0 <= tR0) {
-					return this.shapeL.intersection(ray, tMinimum, tMaximum);
+				if(tObjectSpaceL0 <= tObjectSpaceR0) {
+					return this.shapeL.intersection(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL).map(surfaceIntersection -> SurfaceIntersection3D.transform(surfaceIntersection, this.shapeLToObject, this.objectToShapeL));
 				}
 				
 //				No secondary intersection for L and nothing to subtract from:
-				if(isNaN(tL1)) {
+				if(isNaN(tObjectSpaceL1)) {
 					return SurfaceIntersection3D.EMPTY;
 				}
 				
 //				No secondary intersection for R:
-				if(isNaN(tR1)) {
-					return this.shapeR.intersection(ray, tMinimum, tMaximum);
+				if(isNaN(tObjectSpaceR1)) {
+					return this.shapeR.intersection(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR).map(surfaceIntersection -> SurfaceIntersection3D.transform(surfaceIntersection, this.shapeRToObject, this.objectToShapeR));
 				}
 				
-				if(tR1 <= tL0) {
-					return this.shapeL.intersection(ray, tMinimum, tMaximum);
+				if(tObjectSpaceR1 <= tObjectSpaceL0) {
+					return this.shapeL.intersection(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL).map(surfaceIntersection -> SurfaceIntersection3D.transform(surfaceIntersection, this.shapeLToObject, this.objectToShapeL));
 				}
 				
 //				The secondary intersection for R is farther away than or equal to the secondary intersection for L:
-				if(tR1 >= tL1) {
+				if(tObjectSpaceR1 >= tObjectSpaceL1) {
 					return SurfaceIntersection3D.EMPTY;
 				}
 				
-				return this.shapeR.intersection(ray, tR0 + 0.001D, tMaximum);
+				return this.shapeR.intersection(rayShapeSpaceR, tShapeSpaceR0 + 0.001D, tMaximumShapeSpaceR).map(surfaceIntersection -> SurfaceIntersection3D.transform(surfaceIntersection, this.shapeRToObject, this.objectToShapeR));
 			}
 			case INTERSECTION: {
-				final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionL = this.shapeL.intersection(ray, tMinimum, tMaximum);
-				final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionR = this.shapeR.intersection(ray, tMinimum, tMaximum);
+				final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionL = this.shapeL.intersection(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL).map(surfaceIntersection -> SurfaceIntersection3D.transform(surfaceIntersection, this.shapeLToObject, this.objectToShapeL));
+				final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionR = this.shapeR.intersection(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR).map(surfaceIntersection -> SurfaceIntersection3D.transform(surfaceIntersection, this.shapeRToObject, this.objectToShapeR));
 				final Optional<SurfaceIntersection3D> optionalSurfaceIntersection = optionalSurfaceIntersectionL.isPresent() && optionalSurfaceIntersectionR.isPresent() ? SurfaceIntersection3D.closest(optionalSurfaceIntersectionL, optionalSurfaceIntersectionR) : SurfaceIntersection3D.EMPTY;
 				
 				return optionalSurfaceIntersection;
 			}
 			case UNION: {
-				final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionL = this.shapeL.intersection(ray, tMinimum, tMaximum);
-				final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionR = this.shapeR.intersection(ray, tMinimum, tMaximum);
+				final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionL = this.shapeL.intersection(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL).map(surfaceIntersection -> SurfaceIntersection3D.transform(surfaceIntersection, this.shapeLToObject, this.objectToShapeL));
+				final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionR = this.shapeR.intersection(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR).map(surfaceIntersection -> SurfaceIntersection3D.transform(surfaceIntersection, this.shapeRToObject, this.objectToShapeR));
 				final Optional<SurfaceIntersection3D> optionalSurfaceIntersection = SurfaceIntersection3D.closest(optionalSurfaceIntersectionL, optionalSurfaceIntersectionR);
 				
 				return optionalSurfaceIntersection;
@@ -203,7 +256,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ConstructiveSolidGeometry3D(%s, %s, %s)", this.operation, this.shapeL, this.shapeR);
+		return String.format("new ConstructiveSolidGeometry3D(%s, %s, %s, %s, %s)", this.operation, this.shapeL, this.shapeR, this.shapeLToObject, this.shapeRToObject);
 	}
 	
 	/**
@@ -237,6 +290,22 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
+				if(!this.objectToShapeL.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.objectToShapeR.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.shapeLToObject.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.shapeRToObject.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.shapeL.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -267,6 +336,14 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 		} else if(!(object instanceof ConstructiveSolidGeometry3D)) {
 			return false;
 		} else if(!Objects.equals(this.boundingVolume, ConstructiveSolidGeometry3D.class.cast(object).boundingVolume)) {
+			return false;
+		} else if(!Objects.equals(this.objectToShapeL, ConstructiveSolidGeometry3D.class.cast(object).objectToShapeL)) {
+			return false;
+		} else if(!Objects.equals(this.objectToShapeR, ConstructiveSolidGeometry3D.class.cast(object).objectToShapeR)) {
+			return false;
+		} else if(!Objects.equals(this.shapeLToObject, ConstructiveSolidGeometry3D.class.cast(object).shapeLToObject)) {
+			return false;
+		} else if(!Objects.equals(this.shapeRToObject, ConstructiveSolidGeometry3D.class.cast(object).shapeRToObject)) {
 			return false;
 		} else if(!Objects.equals(this.operation, ConstructiveSolidGeometry3D.class.cast(object).operation)) {
 			return false;
@@ -306,67 +383,85 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 */
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
+		final Ray3D rayShapeSpaceL = Ray3D.transform(this.objectToShapeL, ray);
+		final Ray3D rayShapeSpaceR = Ray3D.transform(this.objectToShapeR, ray);
+		
+		final double tMinimumShapeSpaceL = doTransformT(this.objectToShapeL, ray, rayShapeSpaceL, tMinimum);
+		final double tMaximumShapeSpaceL = doTransformT(this.objectToShapeL, ray, rayShapeSpaceL, tMaximum);
+		
+		final double tMinimumShapeSpaceR = doTransformT(this.objectToShapeR, ray, rayShapeSpaceR, tMinimum);
+		final double tMaximumShapeSpaceR = doTransformT(this.objectToShapeR, ray, rayShapeSpaceR, tMaximum);
+		
 		switch(this.operation) {
 			case DIFFERENCE: {
-				if(this.shapeL.getBoundingVolume().contains(ray.getOrigin())) {
+				if(this.shapeL.getBoundingVolume().contains(rayShapeSpaceL.getOrigin())) {
 //					TODO: If the BoundingVolume3D contains the Ray3D, that should probably be handled in a different way.
 					return Double.NaN;
 				}
 				
-				if(this.shapeR.getBoundingVolume().contains(ray.getOrigin())) {
+				if(this.shapeR.getBoundingVolume().contains(rayShapeSpaceR.getOrigin())) {
 //					TODO: If the BoundingVolume3D contains the Ray3D, that should probably be handled in a different way.
 					return Double.NaN;
 				}
 				
-				final double[] tIntervalL = doFindTInterval(ray, tMinimum, tMaximum, this.shapeL);
-				final double[] tIntervalR = doFindTInterval(ray, tMinimum, tMaximum, this.shapeR);
+				final double[] tIntervalShapeSpaceL = doFindTInterval(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL, this.shapeL);
+				final double[] tIntervalShapeSpaceR = doFindTInterval(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR, this.shapeR);
 				
-				final double tL0 = tIntervalL[0];
-				final double tL1 = tIntervalL[1];
-				final double tR0 = tIntervalR[0];
-				final double tR1 = tIntervalR[1];
+				final double tShapeSpaceL0 = tIntervalShapeSpaceL[0];
+				final double tShapeSpaceL1 = tIntervalShapeSpaceL[1];
+				final double tShapeSpaceR0 = tIntervalShapeSpaceR[0];
+				final double tShapeSpaceR1 = tIntervalShapeSpaceR[1];
 				
-				if(isNaN(tL0)) {
+				final double tObjectSpaceL0 = doTransformT(this.shapeLToObject, rayShapeSpaceL, ray, tShapeSpaceL0);
+				final double tObjectSpaceL1 = doTransformT(this.shapeLToObject, rayShapeSpaceL, ray, tShapeSpaceL1);
+				final double tObjectSpaceR0 = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR0);
+				final double tObjectSpaceR1 = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR1);
+				
+				if(isNaN(tShapeSpaceL0)) {
 					return Double.NaN;
 				}
 				
-				if(isNaN(tR0)) {
-					return tL0;
+				if(isNaN(tShapeSpaceR0)) {
+					return tObjectSpaceL0;
 				}
 				
-				if(tL0 <= tR0) {
-					return tL0;
+				if(tObjectSpaceL0 <= tObjectSpaceR0) {
+					return tObjectSpaceL0;
 				}
 				
-				if(isNaN(tL1)) {
+				if(isNaN(tObjectSpaceL1)) {
 					return Double.NaN;
 				}
 				
-				if(isNaN(tR1)) {
-					return tR0;
+				if(isNaN(tObjectSpaceR1)) {
+					return tObjectSpaceR0;
 				}
 				
-				if(tR1 <= tL0) {
-					return tL0;
+				if(tObjectSpaceR1 <= tObjectSpaceL0) {
+					return tObjectSpaceL0;
 				}
 				
-				if(tR1 >= tL1) {
+				if(tObjectSpaceR1 >= tObjectSpaceL1) {
 					return Double.NaN;
 				}
 				
-				return tR1;
+				return tObjectSpaceR1;
 			}
 			case INTERSECTION: {
-				final double tL = this.shapeL.intersectionT(ray, tMinimum, tMaximum);
-				final double tR = this.shapeR.intersectionT(ray, tMinimum, tMaximum);
-				final double t = !isNaN(tL) && !isNaN(tR) ? min(tL, tR) : Double.NaN;
+				final double tShapeSpaceL = this.shapeL.intersectionT(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL);
+				final double tShapeSpaceR = this.shapeR.intersectionT(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR);
+				final double tObjectSpaceL = doTransformT(this.shapeLToObject, rayShapeSpaceL, ray, tShapeSpaceL);
+				final double tObjectSpaceR = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR);
+				final double t = !isNaN(tObjectSpaceL) && !isNaN(tObjectSpaceR) ? min(tObjectSpaceL, tObjectSpaceR) : Double.NaN;
 				
 				return t;
 			}
 			case UNION: {
-				final double tL = this.shapeL.intersectionT(ray, tMinimum, tMaximum);
-				final double tR = this.shapeR.intersectionT(ray, tMinimum, tMaximum);
-				final double t = minOrNaN(tL, tR);
+				final double tShapeSpaceL = this.shapeL.intersectionT(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL);
+				final double tShapeSpaceR = this.shapeR.intersectionT(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR);
+				final double tObjectSpaceL = doTransformT(this.shapeLToObject, rayShapeSpaceL, ray, tShapeSpaceL);
+				final double tObjectSpaceR = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR);
+				final double t = minOrNaN(tObjectSpaceL, tObjectSpaceR);
 				
 				return t;
 			}
@@ -393,7 +488,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.boundingVolume, this.operation, this.shapeL, this.shapeR);
+		return Objects.hash(this.boundingVolume, this.objectToShapeL, this.objectToShapeR, this.shapeLToObject, this.shapeRToObject, this.operation, this.shapeL, this.shapeR);
 	}
 	
 	/**
@@ -415,6 +510,9 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 			
 			this.shapeL.write(dataOutput);
 			this.shapeR.write(dataOutput);
+			
+			this.shapeLToObject.write(dataOutput);
+			this.shapeRToObject.write(dataOutput);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -473,6 +571,10 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static double doTransformT(final Matrix44D matrix, final Ray3D rayOldSpace, final Ray3D rayNewSpace, final double t) {
+		return !isNaN(t) && !isZero(t) && t < MAX_VALUE ? abs(Point3D.distance(rayNewSpace.getOrigin(), Point3D.transformAndDivide(matrix, Point3D.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+	}
 	
 	private static double[] doFindTInterval(final Ray3D ray, final double tMinimum, final double tMaximum, final Shape3D shape) {
 		final double[] tInterval = new double[] {Double.NaN, Double.NaN};

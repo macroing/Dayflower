@@ -562,19 +562,19 @@ public final class CompiledTextureCache {
 	}
 	
 	/**
-	 * Updates {@code oldBlendTexture} to {@code newBlendTexture} in this {@code CompiledTextureCache} instance, if present.
+	 * Updates {@code oldBullseyeTexture} to {@code newBullseyeTexture} in this {@code CompiledTextureCache} instance, if present.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code oldBlendTexture} was updated, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code oldBullseyeTexture} was updated, {@code false} otherwise.
 	 * <p>
-	 * If either {@code oldBlendTexture} or {@code newBlendTexture} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code oldBullseyeTexture} or {@code newBullseyeTexture} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If either {@code oldBlendTexture.length} or {@code newBlendTexture.length} are not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * If either {@code oldBullseyeTexture.length} or {@code newBullseyeTexture.length} are not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param oldBlendTexture the old {@link BlendTexture} instance in compiled form
-	 * @param newBlendTexture the new {@code BlendTexture} instance in compiled form
-	 * @return {@code true} if, and only if, {@code oldBlendTexture} was updated, {@code false} otherwise
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code oldBlendTexture.length} or {@code newBlendTexture.length} are not equal to {@code CompiledTextureCache.BLEND_TEXTURE_LENGTH}
-	 * @throws NullPointerException thrown if, and only if, either {@code oldBlendTexture} or {@code newBlendTexture} are {@code null}
+	 * @param oldBullseyeTexture the old {@link BullseyeTexture} instance in compiled form
+	 * @param newBullseyeTexture the new {@code BullseyeTexture} instance in compiled form
+	 * @return {@code true} if, and only if, {@code oldBullseyeTexture} was updated, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code oldBullseyeTexture.length} or {@code newBullseyeTexture.length} are not equal to {@code CompiledTextureCache.BULLSEYE_TEXTURE_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, either {@code oldBullseyeTexture} or {@code newBullseyeTexture} are {@code null}
 	 */
 	public boolean updateBullseyeTexture(final float[] oldBullseyeTexture, final float[] newBullseyeTexture) {
 		Objects.requireNonNull(oldBullseyeTexture, "oldBullseyeTexture == null");

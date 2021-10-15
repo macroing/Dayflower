@@ -20,6 +20,7 @@ package org.dayflower.renderer.gpu;
 
 import org.dayflower.scene.compiler.CompiledModifierCache;
 import org.dayflower.scene.modifier.LDRImageNormalMapModifier;
+import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
 

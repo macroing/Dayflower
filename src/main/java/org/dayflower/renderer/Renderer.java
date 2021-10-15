@@ -75,7 +75,7 @@ public interface Renderer {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * <code>
-	 * for(int renderPass = 0; renderPass < renderPasses; renderPass++) {
+	 * for(int renderPass = 0; renderPass &lt; renderPasses; renderPass++) {
 	 *     if(!renderer.render()) {
 	 *         break;
 	 *     }

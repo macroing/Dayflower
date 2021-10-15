@@ -1,3 +1,7 @@
+2021-10-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Fix Javadoc errors in the Renderer, AbstractCPURenderer, AbstractGPURenderer, AbstractModifierKernel, CompiledTextureCache and Color.
+
 2021-10-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the constructor ConstructiveSolidGeometry3D(Operation, Shape3D, Shape3D, Matrix44D, Matrix44D) to the ConstructiveSolidGeometry3D class.

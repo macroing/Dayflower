@@ -803,7 +803,7 @@ public final class Color {
 	 * }
 	 * </pre>
 	 * 
-	 * @param color4D an {@code int[]} that contains a color with four components
+	 * @param color4I an {@code int[]} that contains a color with four components
 	 * @return the value of component 1 from the color contained in {@code color4I}
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code color4I.length < 1}
 	 * @throws NullPointerException thrown if, and only if, {@code color4I} is {@code null}
@@ -843,7 +843,7 @@ public final class Color {
 	 * }
 	 * </pre>
 	 * 
-	 * @param color4D an {@code int[]} that contains a color with four components
+	 * @param color4I an {@code int[]} that contains a color with four components
 	 * @return the value of component 2 from the color contained in {@code color4I}
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code color4I.length < 2}
 	 * @throws NullPointerException thrown if, and only if, {@code color4I} is {@code null}
@@ -883,7 +883,7 @@ public final class Color {
 	 * }
 	 * </pre>
 	 * 
-	 * @param color4D an {@code int[]} that contains a color with four components
+	 * @param color4I an {@code int[]} that contains a color with four components
 	 * @return the value of component 3 from the color contained in {@code color4I}
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code color4I.length < 3}
 	 * @throws NullPointerException thrown if, and only if, {@code color4I} is {@code null}
@@ -923,7 +923,7 @@ public final class Color {
 	 * }
 	 * </pre>
 	 * 
-	 * @param color4D an {@code int[]} that contains a color with four components
+	 * @param color4I an {@code int[]} that contains a color with four components
 	 * @return the value of component 4 from the color contained in {@code color4I}
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code color4I.length < 4}
 	 * @throws NullPointerException thrown if, and only if, {@code color4I} is {@code null}

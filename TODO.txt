@@ -70,3 +70,7 @@ Simplex API:
 
 	* ADD:		Add Javadocs.
 	* CHANGE:	Refactor the APIs.
+
+Test API:
+
+	* ADD:		Add Unit Tests using JUnit.

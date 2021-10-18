@@ -1,3 +1,8 @@
+2021-10-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the ChangeCombinerUnitTests, ChangeHistoryUnitTests and ChangeUnitTests classes.
+	* REMOVE:	Remove the ChangeAPIUnitTests class.
+
 2021-10-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add new tests to the ChangeAPIUnitTests class.

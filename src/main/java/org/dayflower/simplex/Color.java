@@ -317,27 +317,133 @@ public final class Color {
 		return new double[] {component1, component2, component3, component4};
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together.
+	 * <p>
+	 * If either {@code color4DLHS} or {@code color4DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code color4DLHS.length < 4} or {@code color4DRHS.length < 4}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color.color4DBlend(color4DLHS, color4DRHS, 0.5D);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color4DLHS a {@code double[]} that contains the color on the left-hand side of the expression
+	 * @param color4DRHS a {@code double[]} that contains the color on the right-hand side of the expression
+	 * @return a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code color4DLHS.length < 4} or {@code color4DRHS.length < 4}
+	 * @throws NullPointerException thrown if, and only if, either {@code color4DLHS} or {@code color4DRHS} are {@code null}
+	 */
 	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS) {
 		return color4DBlend(color4DLHS, color4DRHS, 0.5D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together.
+	 * <p>
+	 * If either {@code color4DLHS} or {@code color4DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code color4DLHS.length < 4} or {@code color4DRHS.length < 4}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color.color4DBlend(color4DLHS, color4DRHS, t, t, t, t);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color4DLHS a {@code double[]} that contains the color on the left-hand side of the expression
+	 * @param color4DRHS a {@code double[]} that contains the color on the right-hand side of the expression
+	 * @param t the blend factor for all components
+	 * @return a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code color4DLHS.length < 4} or {@code color4DRHS.length < 4}
+	 * @throws NullPointerException thrown if, and only if, either {@code color4DLHS} or {@code color4DRHS} are {@code null}
+	 */
 	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS, final double t) {
 		return color4DBlend(color4DLHS, color4DRHS, t, t, t, t);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together.
+	 * <p>
+	 * If either {@code color4DLHS} or {@code color4DRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code color4DLHS.length < 4} or {@code color4DRHS.length < 4}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color.color4DBlend(color4DLHS, color4DRHS, tComponent1, tComponent2, tComponent3, tComponent4, Color.color4D());
+	 * }
+	 * </pre>
+	 * 
+	 * @param color4DLHS a {@code double[]} that contains the color on the left-hand side of the expression
+	 * @param color4DRHS a {@code double[]} that contains the color on the right-hand side of the expression
+	 * @param tComponent1 the blend factor for component 1
+	 * @param tComponent2 the blend factor for component 2
+	 * @param tComponent3 the blend factor for component 3
+	 * @param tComponent4 the blend factor for component 4
+	 * @return a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code color4DLHS.length < 4} or {@code color4DRHS.length < 4}
+	 * @throws NullPointerException thrown if, and only if, either {@code color4DLHS} or {@code color4DRHS} are {@code null}
+	 */
 	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS, final double tComponent1, final double tComponent2, final double tComponent3, final double tComponent4) {
 		return color4DBlend(color4DLHS, color4DRHS, tComponent1, tComponent2, tComponent3, tComponent4, color4D());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together.
+	 * <p>
+	 * If either {@code color4DLHS}, {@code color4DRHS} or {@code color4DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code color4DLHS.length < 4}, {@code color4DRHS.length < 4} or {@code color4DResult.length < 4}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color.color4DBlend(color4DLHS, color4DRHS, tComponent1, tComponent2, tComponent3, tComponent4, color4DResult, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color4DLHS a {@code double[]} that contains the color on the left-hand side of the expression
+	 * @param color4DRHS a {@code double[]} that contains the color on the right-hand side of the expression
+	 * @param tComponent1 the blend factor for component 1
+	 * @param tComponent2 the blend factor for component 2
+	 * @param tComponent3 the blend factor for component 3
+	 * @param tComponent4 the blend factor for component 4
+	 * @param color4DResult a {@code double[]} that contains the color to return
+	 * @return a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code color4DLHS.length < 4}, {@code color4DRHS.length < 4} or {@code color4DResult.length < 4}
+	 * @throws NullPointerException thrown if, and only if, either {@code color4DLHS}, {@code color4DRHS} or {@code color4DResult} are {@code null}
+	 */
 	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS, final double tComponent1, final double tComponent2, final double tComponent3, final double tComponent4, final double[] color4DResult) {
 		return color4DBlend(color4DLHS, color4DRHS, tComponent1, tComponent2, tComponent3, tComponent4, color4DResult, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together.
+	 * <p>
+	 * If either {@code color4DLHS}, {@code color4DRHS} or {@code color4DResult} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code color4DLHS.length < color4DLHSOffset + 4}, {@code color4DLHSOffset < 0}, {@code color4DRHS.length < color4DRHSOffset + 4}, {@code color4DRHSOffset < 0}, {@code color4DResult.length < color4DResultOffset + 4} or {@code color4DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param color4DLHS a {@code double[]} that contains the color on the left-hand side of the expression
+	 * @param color4DRHS a {@code double[]} that contains the color on the right-hand side of the expression
+	 * @param tComponent1 the blend factor for component 1
+	 * @param tComponent2 the blend factor for component 2
+	 * @param tComponent3 the blend factor for component 3
+	 * @param tComponent4 the blend factor for component 4
+	 * @param color4DResult a {@code double[]} that contains the color to return
+	 * @param color4DLHSOffset the offset in {@code color4DLHS} to start at
+	 * @param color4DRHSOffset the offset in {@code color4DRHS} to start at
+	 * @param color4DResultOffset the offset in {@code color4DResult} to start at
+	 * @return a {@code double[]} that contains a color with four components and is set to the component values of the colors {@code color4DLHS} and {@code color4DRHS} blended together
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code color4DLHS.length < color4DLHSOffset + 4}, {@code color4DLHSOffset < 0}, {@code color4DRHS.length < color4DRHSOffset + 4}, {@code color4DRHSOffset < 0}, {@code color4DResult.length < color4DResultOffset + 4} or {@code color4DResultOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code color4DLHS}, {@code color4DRHS} or {@code color4DResult} are {@code null}
+	 */
 	public static double[] color4DBlend(final double[] color4DLHS, final double[] color4DRHS, final double tComponent1, final double tComponent2, final double tComponent3, final double tComponent4, final double[] color4DResult, final int color4DLHSOffset, final int color4DRHSOffset, final int color4DResultOffset) {
 		final double component1 = lerp(color4DGetComponent1(color4DLHS, color4DLHSOffset), color4DGetComponent1(color4DRHS, color4DRHSOffset), tComponent1);
 		final double component2 = lerp(color4DGetComponent2(color4DLHS, color4DLHSOffset), color4DGetComponent2(color4DRHS, color4DRHSOffset), tComponent2);

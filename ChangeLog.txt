@@ -1,3 +1,7 @@
+2021-10-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add Javadocs to the Color class in the Simplex API.
+
 2021-10-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the ChangeCombinerUnitTests, ChangeHistoryUnitTests and ChangeUnitTests classes.

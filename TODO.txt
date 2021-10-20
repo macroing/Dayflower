@@ -35,7 +35,8 @@ Renderer GPU API:
 
 Scene BSSRDF API:
 
-	* ADD:		Add implementations.
+	* CHANGE:	Implement the SeparableBSSRDF class.
+	* CHANGE:	Implement the TabulatedBSSRDF class.
 
 Scene Compiler API:
 

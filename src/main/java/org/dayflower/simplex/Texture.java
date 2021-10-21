@@ -45,7 +45,12 @@ import static org.dayflower.utility.Ints.toInt;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs and refactor!
 
-//TODO: Add Javadocs!
+/**
+ * A class that consists exclusively of static methods that returns or performs various operations on textures.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Texture {
 	private static final double[] IMAGE_4_D = image4DLoad("./resources/textures/bricks2.jpg");//image4DLoad("./generated/Test/Image-Original.jpg");//TODO: Refactor!
 	

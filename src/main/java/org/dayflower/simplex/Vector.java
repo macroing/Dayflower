@@ -1368,22 +1368,82 @@ public final class Vector {
 		return lengthSquared;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the spherical phi of the vector contained in {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DSphericalPhi(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return a {@code double} that contains the spherical phi of the vector contained in {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DSphericalPhi(final double[] vector3D) {
 		return vector3DSphericalPhi(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the spherical phi of the vector contained in {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return a {@code double} that contains the spherical phi of the vector contained in {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DSphericalPhi(final double[] vector3D, final int vector3DOffset) {
 		return getOrAdd(atan2(vector3DGetY(vector3D, vector3DOffset), vector3DGetX(vector3D, vector3DOffset)), 0.0D, PI_MULTIPLIED_BY_2);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the spherical theta of the vector contained in {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DSphericalTheta(vector3D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @return a {@code double} that contains the spherical theta of the vector contained in {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < 3}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DSphericalTheta(final double[] vector3D) {
 		return vector3DSphericalTheta(vector3D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the spherical theta of the vector contained in {@code vector3D}.
+	 * <p>
+	 * If {@code vector3D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param vector3D a {@code double[]} that contains a vector with three components
+	 * @param vector3DOffset the offset in {@code vector3D} to start at
+	 * @return a {@code double} that contains the spherical theta of the vector contained in {@code vector3D}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3D.length < vector3DOffset + 3} or {@code vector3DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code vector3D} is {@code null}
+	 */
 	public static double vector3DSphericalTheta(final double[] vector3D, final int vector3DOffset) {
 		return acos(saturate(vector3DGetZ(vector3D, vector3DOffset), -1.0D, 1.0D));
 	}

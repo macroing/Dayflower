@@ -46,8 +46,7 @@ public final class ChangeCombiner {
 	/**
 	 * Returns a {@link Change} instance that combines all {@code Change} instances that have been added.
 	 * <p>
-	 * The {@link RedoAction} and {@link UndoAction} instances of the returned {@code Change} instance will iterate the combined {@code Change} instances in different orders. The {@code RedoAction} instance will use the order they were added and the
-	 * {@code UndoAction} instance will use its reverse order.
+	 * The {@link RedoAction} and {@link UndoAction} instances of the returned {@code Change} instance will iterate the combined {@code Change} instances in different orders. The {@code RedoAction} instance will use the order they were added and the {@code UndoAction} instance will use its reverse order.
 	 * 
 	 * @return a {@code Change} instance that combines all {@code Change} instances that have been added
 	 */

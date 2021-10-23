@@ -511,8 +511,7 @@ public final class Vector {
 	 * <p>
 	 * If either {@code point2DEye}, {@code point2DTarget} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2}, {@code point2DTargetOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or
-	 * {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2}, {@code point2DTargetOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param point2DEye a {@code double[]} that contains the point to look from
 	 * @param point2DTarget a {@code double[]} that contains the point to look at
@@ -521,8 +520,7 @@ public final class Vector {
 	 * @param point2DTargetOffset the offset in {@code point2DTarget} to start at
 	 * @param vector2DResultOffset the offset in {@code vector2DResult} to start at
 	 * @return a {@code double[]} that contains a vector with two components and is set to the direction from {@code point2DEye} to {@code point2DTarget}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2}, {@code point2DTargetOffset < 0},
-	 *                                        {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2}, {@code point2DTargetOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code point2DEye}, {@code point2DTarget} or {@code vector2DResult} are {@code null}
 	 */
 	public static double[] vector2DDirection(final double[] point2DEye, final double[] point2DTarget, final double[] vector2DResult, final int point2DEyeOffset, final int point2DTargetOffset, final int vector2DResultOffset) {
@@ -844,8 +842,7 @@ public final class Vector {
 	 * <p>
 	 * If either {@code vector2DLHS}, {@code vector2DRHS} or {@code vector2DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code vector2DLHS.length < vector2DLHSOffset + 2}, {@code vector2DLHSOffset < 0}, {@code vector2DRHS.length < vector2DRHSOffset + 2}, {@code vector2DRHSOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or
-	 * {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code vector2DLHS.length < vector2DLHSOffset + 2}, {@code vector2DLHSOffset < 0}, {@code vector2DRHS.length < vector2DRHSOffset + 2}, {@code vector2DRHSOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param vector2DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
 	 * @param vector2DRHS a {@code double[]} that contains the vector on the right-hand side of the expression
@@ -854,8 +851,7 @@ public final class Vector {
 	 * @param vector2DRHSOffset the offset in {@code vector2DRHS} to start at
 	 * @param vector2DResultOffset the offset in {@code vector2DResult} to start at
 	 * @return a {@code double[]} that contains a vector with two components and is set to the result of {@code vector2DLHS - vector2DRHS}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2DLHS.length < vector2DLHSOffset + 2}, {@code vector2DLHSOffset < 0}, {@code vector2DRHS.length < vector2DRHSOffset + 2}, {@code vector2DRHSOffset < 0},
-	 *                                        {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector2DLHS.length < vector2DLHSOffset + 2}, {@code vector2DLHSOffset < 0}, {@code vector2DRHS.length < vector2DRHSOffset + 2}, {@code vector2DRHSOffset < 0}, {@code vector2DResult.length < vector2DResultOffset + 2} or {@code vector2DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code vector2DLHS}, {@code vector2DRHS} or {@code vector2DResult} are {@code null}
 	 */
 	public static double[] vector2DSubtract(final double[] vector2DLHS, final double[] vector2DRHS, final double[] vector2DResult, final int vector2DLHSOffset, final int vector2DRHSOffset, final int vector2DResultOffset) {
@@ -1448,12 +1444,55 @@ public final class Vector {
 		return acos(saturate(vector3DGetZ(vector3D, vector3DOffset), -1.0D, 1.0D));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the triple product of the vectors contained in {@code vector3DLHSDP}, {@code vector3DLHSCP} and {@code vector3DRHSCP}.
+	 * <p>
+	 * If either {@code vector3DLHSDP}, {@code vector3DLHSCP} or {@code vector3DRHSCP} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHSDP.length < 3}, {@code vector3DLHSCP.length < 3} or {@code vector3DRHSCP.length < 3}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DTripleProduct(vector3DLHSDP, vector3DLHSCP, vector3DRHSCP, 0, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHSDP a {@code double[]} that contains a vector with three components
+	 * @param vector3DLHSCP a {@code double[]} that contains a vector with three components
+	 * @param vector3DRHSCP a {@code double[]} that contains a vector with three components
+	 * @return a {@code double} that contains the triple product of the vectors contained in {@code vector3DLHSDP}, {@code vector3DLHSCP} and {@code vector3DRHSCP}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHSDP.length < 3}, {@code vector3DLHSCP.length < 3} or {@code vector3DRHSCP.length < 3}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHSDP}, {@code vector3DLHSCP} or {@code vector3DRHSCP} are {@code null}
+	 */
 	public static double vector3DTripleProduct(final double[] vector3DLHSDP, final double[] vector3DLHSCP, final double[] vector3DRHSCP) {
 		return vector3DTripleProduct(vector3DLHSDP, vector3DLHSCP, vector3DRHSCP, 0, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the triple product of the vectors contained in {@code vector3DLHSDP}, {@code vector3DLHSCP} and {@code vector3DRHSCP}.
+	 * <p>
+	 * If either {@code vector3DLHSDP}, {@code vector3DLHSCP} or {@code vector3DRHSCP} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code vector3DLHSDP.length < vector3DLHSDPOffset + 3}, {@code vector3DLHSDPOffset < 0}, {@code vector3DLHSCP.length < vector3DLHSCPOffset + 3}, {@code vector3DLHSCPOffset < 0}, {@code vector3DRHSCP.length < vector3DRHSCPOffset + 3} or {@code vector3DRHSCPOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector.vector3DDotProduct(vector3DLHSDP, Vector.vector3DCrossProduct(vector3DLHSCP, vector3DRHSCP, Vector.vector3D(), vector3DLHSCPOffset, vector3DRHSCPOffset, 0), vector3DLHSDPOffset, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector3DLHSDP a {@code double[]} that contains a vector with three components
+	 * @param vector3DLHSCP a {@code double[]} that contains a vector with three components
+	 * @param vector3DRHSCP a {@code double[]} that contains a vector with three components
+	 * @param vector3DLHSDPOffset the offset in {@code vector3DLHSDP} to start at
+	 * @param vector3DLHSCPOffset the offset in {@code vector3DLHSCP} to start at
+	 * @param vector3DRHSCPOffset the offset in {@code vector3DRHSCP} to start at
+	 * @return a {@code double} that contains the triple product of the vectors contained in {@code vector3DLHSDP}, {@code vector3DLHSCP} and {@code vector3DRHSCP}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHSDP.length < vector3DLHSDPOffset + 3}, {@code vector3DLHSDPOffset < 0}, {@code vector3DLHSCP.length < vector3DLHSCPOffset + 3}, {@code vector3DLHSCPOffset < 0}, {@code vector3DRHSCP.length < vector3DRHSCPOffset + 3} or {@code vector3DRHSCPOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHSDP}, {@code vector3DLHSCP} or {@code vector3DRHSCP} are {@code null}
+	 */
 	public static double vector3DTripleProduct(final double[] vector3DLHSDP, final double[] vector3DLHSCP, final double[] vector3DRHSCP, final int vector3DLHSDPOffset, final int vector3DLHSCPOffset, final int vector3DRHSCPOffset) {
 		return vector3DDotProduct(vector3DLHSDP, vector3DCrossProduct(vector3DLHSCP, vector3DRHSCP, vector3D(), vector3DLHSCPOffset, vector3DRHSCPOffset, 0), vector3DLHSDPOffset, 0);
 	}
@@ -1540,8 +1579,7 @@ public final class Vector {
 	 * <p>
 	 * If either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
-	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
 	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the expression
@@ -1550,8 +1588,7 @@ public final class Vector {
 	 * @param vector3DRHSOffset the offset in {@code vector3DRHS} to start at
 	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
 	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS + vector3DRHS}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0},
-	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DAdd(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
@@ -1616,8 +1653,7 @@ public final class Vector {
 	 * <p>
 	 * If either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
-	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the cross product
 	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the cross product
@@ -1626,8 +1662,7 @@ public final class Vector {
 	 * @param vector3DRHSOffset the offset in {@code vector3DRHS} to start at
 	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
 	 * @return a {@code double[]} that contains a vector with three components and is set to the cross product between {@code vector3DLHS} and {@code vector3DRHS}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0},
-	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DCrossProduct(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
@@ -1700,8 +1735,7 @@ public final class Vector {
 	 * <p>
 	 * If either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
-	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param point3DEye a {@code double[]} that contains the point to look from
 	 * @param point3DTarget a {@code double[]} that contains the point to look at
@@ -1710,8 +1744,7 @@ public final class Vector {
 	 * @param point3DTargetOffset the offset in {@code point3DTarget} to start at
 	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
 	 * @return a {@code double[]} that contains a vector with three components and is set to the direction from {@code point3DEye} to {@code point3DTarget}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0},
-	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DDirection(final double[] point3DEye, final double[] point3DTarget, final double[] vector3DResult, final int point3DEyeOffset, final int point3DTargetOffset, final int vector3DResultOffset) {
@@ -1776,8 +1809,7 @@ public final class Vector {
 	 * <p>
 	 * If either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
-	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param point3DEye a {@code double[]} that contains the point to look from
 	 * @param point3DTarget a {@code double[]} that contains the point to look at
@@ -1786,8 +1818,7 @@ public final class Vector {
 	 * @param point3DTargetOffset the offset in {@code point3DTarget} to start at
 	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
 	 * @return a {@code double[]} that contains a vector with three components and is set to the normalized direction from {@code point3DEye} to {@code point3DTarget}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0},
-	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3DEye.length < point3DEyeOffset + 3}, {@code point3DEyeOffset < 0}, {@code point3DTarget.length < point3DTargetOffset + 3}, {@code point3DTargetOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code point3DEye}, {@code point3DTarget} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DDirectionNormalized(final double[] point3DEye, final double[] point3DTarget, final double[] vector3DResult, final int point3DEyeOffset, final int point3DTargetOffset, final int vector3DResultOffset) {
@@ -2349,8 +2380,7 @@ public final class Vector {
 	 * <p>
 	 * If either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
-	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param vector3DLHS a {@code double[]} that contains the vector on the left-hand side of the expression
 	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the expression
@@ -2359,8 +2389,7 @@ public final class Vector {
 	 * @param vector3DRHSOffset the offset in {@code vector3DRHS} to start at
 	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
 	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DLHS - vector3DRHS}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0},
-	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DLHS.length < vector3DLHSOffset + 3}, {@code vector3DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DSubtract(final double[] vector3DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int vector3DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
@@ -2425,8 +2454,7 @@ public final class Vector {
 	 * <p>
 	 * If either {@code matrix44DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
-	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
 	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the transformation
@@ -2435,8 +2463,7 @@ public final class Vector {
 	 * @param vector3DRHSOffset the offset in {@code vector3DRHS} to start at
 	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
 	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DRHS} transformed by {@code matrix44DLHS}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0},
-	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DTransformMatrix44D(final double[] matrix44DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int matrix44DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {
@@ -2551,8 +2578,7 @@ public final class Vector {
 	 * <p>
 	 * If either {@code matrix44DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or
-	 * {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
 	 * @param vector3DRHS a {@code double[]} that contains the vector on the right-hand side of the transformation
@@ -2561,8 +2587,7 @@ public final class Vector {
 	 * @param vector3DRHSOffset the offset in {@code vector3DRHS} to start at
 	 * @param vector3DResultOffset the offset in {@code vector3DResult} to start at
 	 * @return a {@code double[]} that contains a vector with three components and is set to the result of {@code vector3DRHS} transformed by {@code matrix44DLHS} in transpose order
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0},
-	 *                                        {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code vector3DRHS.length < vector3DRHSOffset + 3}, {@code vector3DRHSOffset < 0}, {@code vector3DResult.length < vector3DResultOffset + 3} or {@code vector3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code vector3DRHS} or {@code vector3DResult} are {@code null}
 	 */
 	public static double[] vector3DTransformTransposeMatrix44D(final double[] matrix44DLHS, final double[] vector3DRHS, final double[] vector3DResult, final int matrix44DLHSOffset, final int vector3DRHSOffset, final int vector3DResultOffset) {

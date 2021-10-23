@@ -696,8 +696,7 @@ public final class Point {
 	 * <p>
 	 * If either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an
-	 * {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param point3D a {@code double[]} that contains a point with three components
 	 * @param vector3D a {@code double[]} that contains a vector with three components
@@ -706,8 +705,7 @@ public final class Point {
 	 * @param vector3DOffset the offset in {@code vector3D} to start at
 	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
 	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0},
-	 *                                        {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}
 	 */
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double[] point3DResult, final int point3DOffset, final int vector3DOffset, final int point3DResultOffset) {
@@ -774,8 +772,7 @@ public final class Point {
 	 * <p>
 	 * If either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an
-	 * {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param point3D a {@code double[]} that contains a point with three components
 	 * @param vector3D a {@code double[]} that contains a vector with three components
@@ -785,8 +782,7 @@ public final class Point {
 	 * @param vector3DOffset the offset in {@code vector3D} to start at
 	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
 	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3D + vector3D * scalar}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0},
-	 *                                        {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point3D.length < point3DOffset + 3}, {@code point3DOffset < 0}, {@code vector3D.length < vector3DOffset + 3}, {@code vector3DOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code point3D}, {@code vector3D} or {@code point3DResult} are {@code null}
 	 */
 	public static double[] point3DAdd(final double[] point3D, final double[] vector3D, final double scalar, final double[] point3DResult, final int point3DOffset, final int vector3DOffset, final int point3DResultOffset) {
@@ -1076,8 +1072,7 @@ public final class Point {
 	 * <p>
 	 * If either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or
-	 * {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
 	 * @param point3DRHS a {@code double[]} that contains the point on the right-hand side of the transformation
@@ -1086,8 +1081,7 @@ public final class Point {
 	 * @param point3DRHSOffset the offset in {@code point3DRHS} to start at
 	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
 	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed by {@code matrix44DLHS}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0},
-	 *                                        {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}
 	 */
 	public static double[] point3DTransformMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult, final int matrix44DLHSOffset, final int point3DRHSOffset, final int point3DResultOffset) {
@@ -1152,8 +1146,7 @@ public final class Point {
 	 * <p>
 	 * If either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or
-	 * {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param matrix44DLHS a {@code double[]} that contains the matrix on the left-hand side of the transformation
 	 * @param point3DRHS a {@code double[]} that contains the point on the right-hand side of the transformation
@@ -1162,8 +1155,7 @@ public final class Point {
 	 * @param point3DRHSOffset the offset in {@code point3DRHS} to start at
 	 * @param point3DResultOffset the offset in {@code point3DResult} to start at
 	 * @return a {@code double[]} that contains a point with three components and is set to the result of {@code point3DRHS} transformed and divided by {@code matrix44DLHS}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0},
-	 *                                        {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code point3DRHS.length < point3DRHSOffset + 3}, {@code point3DRHSOffset < 0}, {@code point3DResult.length < point3DResultOffset + 3} or {@code point3DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code point3DRHS} or {@code point3DResult} are {@code null}
 	 */
 	public static double[] point3DTransformAndDivideMatrix44D(final double[] matrix44DLHS, final double[] point3DRHS, final double[] point3DResult, final int matrix44DLHSOffset, final int point3DRHSOffset, final int point3DResultOffset) {

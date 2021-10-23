@@ -1,3 +1,10 @@
+2021-10-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add Javadocs to the Vector class in the Simplex API.
+	* CHANGE:	Update Javadocs for the ChangeCombiner class in the Change API.
+	* CHANGE:	Update Javadocs for the ArrayComponentOrder enum, the Color3D, Color3F, ColorSpace3D and ColorSpace3F classes in the Color API.
+	* CHANGE:	Update Javadocs for the Matrix, OrthonormalBasis, Point and Vector classes in the Simplex API.
+
 2021-10-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Vector class in the Simplex API.

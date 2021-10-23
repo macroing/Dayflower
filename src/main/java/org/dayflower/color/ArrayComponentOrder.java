@@ -25,9 +25,7 @@ import java.util.Objects;
  * <p>
  * This class has nothing to do with the way the components are stored in an {@code int}, in packed form.
  * <p>
- * The names of the constants in this class should not be confused with the names of similar things in other libraries. They only reflect the way the components are stored in an array. The order of the letters signify the order in which they
- * are stored in the array, starting from some offset. An example would be {@code ARGB}, where {@code A} denotes {@code offset + 0}, {@code R} denotes {@code offset + 1}, {@code G} denotes {@code offset + 2} and {@code B} denotes
- * {@code offset + 3}.
+ * The names of the constants in this class should not be confused with the names of similar things in other libraries. They only reflect the way the components are stored in an array. The order of the letters signify the order in which they are stored in the array, starting from some offset. An example would be {@code ARGB}, where {@code A} denotes {@code offset + 0}, {@code R} denotes {@code offset + 1}, {@code G} denotes {@code offset + 2} and {@code B} denotes {@code offset + 3}.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

@@ -23,8 +23,7 @@ import static org.dayflower.utility.Doubles.pow;
 /**
  * A {@code ColorSpaceD} represents a color space that performs conversions for the color types {@link Color3D} and {@link Color4D}.
  * <p>
- * An instance of this class can convert {@code Color3D} and {@code Color4D} instances from a specific RGB color space to a specific XYZ color space, as well as from a specific XYZ color space to a specific RGB color space. In addition to that, it can
- * also redo or undo gamma correction.
+ * An instance of this class can convert {@code Color3D} and {@code Color4D} instances from a specific RGB color space to a specific XYZ color space, as well as from a specific XYZ color space to a specific RGB color space. In addition to that, it can also redo or undo gamma correction.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

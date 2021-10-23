@@ -114,8 +114,7 @@ public final class OrthonormalBasis {
 	 * <p>
 	 * If either {@code vector3DU}, {@code vector3DV} or {@code vector3DW} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0}, {@code vector3DW.length < vector3DWOffset} or {@code vector3DWOffset < 0}, an
-	 * {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0}, {@code vector3DW.length < vector3DWOffset} or {@code vector3DWOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param vector3DU a {@code double[]} that contains the vector denoted by U
 	 * @param vector3DV a {@code double[]} that contains the vector denoted by V
@@ -124,8 +123,7 @@ public final class OrthonormalBasis {
 	 * @param vector3DVOffset the offset in {@code vector3DV} to start at
 	 * @param vector3DWOffset the offset in {@code vector3DW} to start at
 	 * @return a {@code double[]} that contains an orthonormal basis that consists of three vectors with three components each
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0},
-	 *                                        {@code vector3DW.length < vector3DWOffset} or {@code vector3DWOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0}, {@code vector3DW.length < vector3DWOffset} or {@code vector3DWOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DU}, {@code vector3DV} or {@code vector3DW} are {@code null}
 	 */
 	public static double[] orthonormalBasis33D(final double[] vector3DU, final double[] vector3DV, final double[] vector3DW, final int vector3DUOffset, final int vector3DVOffset, final int vector3DWOffset) {
@@ -241,16 +239,14 @@ public final class OrthonormalBasis {
 	 * <p>
 	 * If either {@code orthonormalBasis33D} or {@code vector3DUResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 3}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DUResult.length < vector3DUResultOffset + 3} or {@code vector3DUResultOffset < 0}, an
-	 * {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 3}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DUResult.length < vector3DUResultOffset + 3} or {@code vector3DUResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param orthonormalBasis33D a {@code double[]} that contains an orthonormal basis
 	 * @param vector3DUResult a {@code double[]} that contains the vector to return
 	 * @param orthonormalBasis33DOffset the offset in {@code orthonormalBasis33D} to start at
 	 * @param vector3DUResultOffset the offset in {@code vector3DUResult} to start at
 	 * @return a {@code double[]} that contains the vector denoted by U and is associated with the orthonormal basis contained in {@code orthonormalBasis33D}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 3}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DUResult.length < vector3DUResultOffset + 3} or
-	 *                                        {@code vector3DUResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 3}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DUResult.length < vector3DUResultOffset + 3} or {@code vector3DUResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code orthonormalBasis33D} or {@code vector3DUResult} are {@code null}
 	 */
 	public static double[] orthonormalBasis33DGetU(final double[] orthonormalBasis33D, final double[] vector3DUResult, final int orthonormalBasis33DOffset, final int vector3DUResultOffset) {
@@ -313,16 +309,14 @@ public final class OrthonormalBasis {
 	 * <p>
 	 * If either {@code orthonormalBasis33D} or {@code vector3DVResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 6}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DVResult.length < vector3DVResultOffset + 3} or {@code vector3DVResultOffset < 0}, an
-	 * {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 6}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DVResult.length < vector3DVResultOffset + 3} or {@code vector3DVResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param orthonormalBasis33D a {@code double[]} that contains an orthonormal basis
 	 * @param vector3DVResult a {@code double[]} that contains the vector to return
 	 * @param orthonormalBasis33DOffset the offset in {@code orthonormalBasis33D} to start at
 	 * @param vector3DVResultOffset the offset in {@code vector3DVResult} to start at
 	 * @return a {@code double[]} that contains the vector denoted by V and is associated with the orthonormal basis contained in {@code orthonormalBasis33D}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 6}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DVResult.length < vector3DVResultOffset + 3} or
-	 *                                        {@code vector3DVResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 6}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DVResult.length < vector3DVResultOffset + 3} or {@code vector3DVResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code orthonormalBasis33D} or {@code vector3DVResult} are {@code null}
 	 */
 	public static double[] orthonormalBasis33DGetV(final double[] orthonormalBasis33D, final double[] vector3DVResult, final int orthonormalBasis33DOffset, final int vector3DVResultOffset) {
@@ -385,16 +379,14 @@ public final class OrthonormalBasis {
 	 * <p>
 	 * If either {@code orthonormalBasis33D} or {@code vector3DWResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 9}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DWResult.length < vector3DWResultOffset + 3} or {@code vector3DWResultOffset < 0}, an
-	 * {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 9}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DWResult.length < vector3DWResultOffset + 3} or {@code vector3DWResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param orthonormalBasis33D a {@code double[]} that contains an orthonormal basis
 	 * @param vector3DWResult a {@code double[]} that contains the vector to return
 	 * @param orthonormalBasis33DOffset the offset in {@code orthonormalBasis33D} to start at
 	 * @param vector3DWResultOffset the offset in {@code vector3DWResult} to start at
 	 * @return a {@code double[]} that contains the vector denoted by W and is associated with the orthonormal basis contained in {@code orthonormalBasis33D}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 9}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DWResult.length < vector3DWResultOffset + 3} or
-	 *                                        {@code vector3DWResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code orthonormalBasis33D.length < orthonormalBasis33DOffset + 9}, {@code orthonormalBasis33DOffset < 0}, {@code vector3DWResult.length < vector3DWResultOffset + 3} or {@code vector3DWResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code orthonormalBasis33D} or {@code vector3DWResult} are {@code null}
 	 */
 	public static double[] orthonormalBasis33DGetW(final double[] orthonormalBasis33D, final double[] vector3DWResult, final int orthonormalBasis33DOffset, final int vector3DWResultOffset) {

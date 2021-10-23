@@ -1162,8 +1162,7 @@ public final class Color3F {
 	 * <p>
 	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * This method differs from {@link #add(Color3F, Color3F)} in that it assumes {@code colorLHS} to be an average color sample. It uses a stable moving average algorithm to compute a new average color sample as a result of adding {@code colorRHS}.
-	 * This method is suitable for Monte Carlo-method based algorithms.
+	 * This method differs from {@link #add(Color3F, Color3F)} in that it assumes {@code colorLHS} to be an average color sample. It uses a stable moving average algorithm to compute a new average color sample as a result of adding {@code colorRHS}. This method is suitable for Monte Carlo-method based algorithms.
 	 * 
 	 * @param colorLHS the {@code Color3F} instance on the left-hand side
 	 * @param colorRHS the {@code Color3F} instance on the right-hand side

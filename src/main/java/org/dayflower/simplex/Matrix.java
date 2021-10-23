@@ -365,8 +365,7 @@ public final class Matrix {
 	 * <p>
 	 * If either {@code matrix44DLHS}, {@code matrix44DRHS} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code matrix44DRHS.length < matrix44DRHSOffset + 16}, {@code matrix44DRHSOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or
-	 * {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code matrix44DRHS.length < matrix44DRHSOffset + 16}, {@code matrix44DRHSOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param matrix44DLHS a {@code double[]} that contains the matrix to multiply with on the left-hand side
 	 * @param matrix44DRHS a {@code double[]} that contains the matrix to multiply with on the right-hand side
@@ -375,8 +374,7 @@ public final class Matrix {
 	 * @param matrix44DRHSOffset the offset in {@code matrix44DRHS} to start at
 	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
 	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to the result of {@code matrix44DLHS} multiplied by {@code matrix44DRHS}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code matrix44DRHS.length < matrix44DRHSOffset + 16}, {@code matrix44DRHSOffset < 0},
-	 *                                        {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code matrix44DLHS.length < matrix44DLHSOffset + 16}, {@code matrix44DLHSOffset < 0}, {@code matrix44DRHS.length < matrix44DRHSOffset + 16}, {@code matrix44DRHSOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix44DLHS}, {@code matrix44DRHS} or {@code matrix44DResult} are {@code null}
 	 */
 	public static double[] matrix44DMultiply(final double[] matrix44DLHS, final double[] matrix44DRHS, final double[] matrix44DResult, final int matrix44DLHSOffset, final int matrix44DRHSOffset, final int matrix44DResultOffset) {
@@ -459,8 +457,7 @@ public final class Matrix {
 	 * <p>
 	 * If either {@code vector3DW}, {@code vector3DV}, {@code vector3DU} or {@code matrix44DResult} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code vector3DW.length < vector3DWOffset + 3}, {@code vector3DWOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0}, {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0},
-	 * {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code vector3DW.length < vector3DWOffset + 3}, {@code vector3DWOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0}, {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * 
 	 * @param vector3DW a {@code double[]} that contains the W-vector of the rotation
 	 * @param vector3DV a {@code double[]} that contains the V-vector of the rotation
@@ -471,8 +468,7 @@ public final class Matrix {
 	 * @param vector3DUOffset the offset in {@code vector3DU} to start at
 	 * @param matrix44DResultOffset the offset in {@code matrix44DResult} to start at
 	 * @return a {@code double[]} that contains a matrix with four rows and four columns and is set to rotate using {@code vector3DW}, {@code vector3DV} and {@code vector3DU}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DW.length < vector3DWOffset + 3}, {@code vector3DWOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0},
-	 *                                        {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code vector3DW.length < vector3DWOffset + 3}, {@code vector3DWOffset < 0}, {@code vector3DV.length < vector3DVOffset + 3}, {@code vector3DVOffset < 0}, {@code vector3DU.length < vector3DUOffset + 3}, {@code vector3DUOffset < 0}, {@code matrix44DResult.length < matrix44DResultOffset + 16} or {@code matrix44DResultOffset < 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code vector3DW}, {@code vector3DV}, {@code vector3DU} or {@code matrix44DResult} are {@code null}
 	 */
 	public static double[] matrix44DRotateWVU(final double[] vector3DW, final double[] vector3DV, final double[] vector3DU, final double[] matrix44DResult, final int vector3DWOffset, final int vector3DVOffset, final int vector3DUOffset, final int matrix44DResultOffset) {

@@ -69,12 +69,45 @@ public final class Point {
 	// Point2D /////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the points contained in {@code point2DA} and {@code point2DB} are equal, {@code false} otherwise.
+	 * <p>
+	 * If either {@code point2DA} or {@code point2DB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DA.length < 2} or {@code point2DB.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DEquals(point2DA, point2DB, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2DA a {@code double[]} that contains a point with two components
+	 * @param point2DB a {@code double[]} that contains a point with two components
+	 * @return {@code true} if, and only if, the points contained in {@code point2DA} and {@code point2DB} are equal, {@code false} otherwise
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DA.length < 2} or {@code point2DB.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DA} or {@code point2DB} are {@code null}
+	 */
 	public static boolean point2DEquals(final double[] point2DA, final double[] point2DB) {
 		return point2DEquals(point2DA, point2DB, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the points contained in {@code point2DA} and {@code point2DB} are equal, {@code false} otherwise.
+	 * <p>
+	 * If either {@code point2DA} or {@code point2DB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DA.length < point2DAOffset + 2}, {@code point2DAOffset < 0}, {@code point2DB.length < point2DBOffset + 2} or {@code point2DBOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2DA a {@code double[]} that contains a point with two components
+	 * @param point2DB a {@code double[]} that contains a point with two components
+	 * @param point2DAOffset the offset in {@code point2DA} to start at
+	 * @param point2DBOffset the offset in {@code point2DB} to start at
+	 * @return {@code true} if, and only if, the points contained in {@code point2DA} and {@code point2DB} are equal, {@code false} otherwise
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DA.length < point2DAOffset + 2}, {@code point2DAOffset < 0}, {@code point2DB.length < point2DBOffset + 2} or {@code point2DBOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DA} or {@code point2DB} are {@code null}
+	 */
 	public static boolean point2DEquals(final double[] point2DA, final double[] point2DB, final int point2DAOffset, final int point2DBOffset) {
 		final double component1A = point2DGetComponent1(point2DA, point2DAOffset);
 		final double component2A = point2DGetComponent2(point2DA, point2DAOffset);
@@ -87,82 +120,328 @@ public final class Point {
 		return equals;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the distance between the points contained in {@code point2DEye} and {@code point2DTarget}.
+	 * <p>
+	 * If either {@code point2DEye} or {@code point2DTarget} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DEye.length < 2} or {@code point2DTarget.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DDistance(point2DEye, point2DTarget, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2DEye a {@code double[]} that contains a point with two components
+	 * @param point2DTarget a {@code double[]} that contains a point with two components
+	 * @return a {@code double} that contains the distance between the points contained in {@code point2DEye} and {@code point2DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DEye.length < 2} or {@code point2DTarget.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DEye} or {@code point2DTarget} are {@code null}
+	 */
 	public static double point2DDistance(final double[] point2DEye, final double[] point2DTarget) {
 		return point2DDistance(point2DEye, point2DTarget, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the distance between the points contained in {@code point2DEye} and {@code point2DTarget}.
+	 * <p>
+	 * If either {@code point2DEye} or {@code point2DTarget} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2} or {@code point2DTargetOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2DEye a {@code double[]} that contains a point with two components
+	 * @param point2DTarget a {@code double[]} that contains a point with two components
+	 * @param point2DEyeOffset the offset in {@code point2DEye} to start at
+	 * @param point2DTargetOffset the offset in {@code point2DTarget} to start at
+	 * @return a {@code double} that contains the distance between the points contained in {@code point2DEye} and {@code point2DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2} or {@code point2DTargetOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DEye} or {@code point2DTarget} are {@code null}
+	 */
 	public static double point2DDistance(final double[] point2DEye, final double[] point2DTarget, final int point2DEyeOffset, final int point2DTargetOffset) {
 		return vector2DLength(vector2DDirection(point2DEye, point2DTarget, vector2D(), point2DEyeOffset, point2DTargetOffset, 0));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the squared distance between the points contained in {@code point2DEye} and {@code point2DTarget}.
+	 * <p>
+	 * If either {@code point2DEye} or {@code point2DTarget} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DEye.length < 2} or {@code point2DTarget.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DDistanceSquared(point2DEye, point2DTarget, 0, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2DEye a {@code double[]} that contains a point with two components
+	 * @param point2DTarget a {@code double[]} that contains a point with two components
+	 * @return a {@code double} that contains the squared distance between the points contained in {@code point2DEye} and {@code point2DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DEye.length < 2} or {@code point2DTarget.length < 2}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DEye} or {@code point2DTarget} are {@code null}
+	 */
 	public static double point2DDistanceSquared(final double[] point2DEye, final double[] point2DTarget) {
 		return point2DDistanceSquared(point2DEye, point2DTarget, 0, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} that contains the squared distance between the points contained in {@code point2DEye} and {@code point2DTarget}.
+	 * <p>
+	 * If either {@code point2DEye} or {@code point2DTarget} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2} or {@code point2DTargetOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2DEye a {@code double[]} that contains a point with two components
+	 * @param point2DTarget a {@code double[]} that contains a point with two components
+	 * @param point2DEyeOffset the offset in {@code point2DEye} to start at
+	 * @param point2DTargetOffset the offset in {@code point2DTarget} to start at
+	 * @return a {@code double} that contains the squared distance between the points contained in {@code point2DEye} and {@code point2DTarget}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2DEye.length < point2DEyeOffset + 2}, {@code point2DEyeOffset < 0}, {@code point2DTarget.length < point2DTargetOffset + 2} or {@code point2DTargetOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code point2DEye} or {@code point2DTarget} are {@code null}
+	 */
 	public static double point2DDistanceSquared(final double[] point2DEye, final double[] point2DTarget, final int point2DEyeOffset, final int point2DTargetOffset) {
 		return vector2DLengthSquared(vector2DDirection(point2DEye, point2DTarget, vector2D(), point2DEyeOffset, point2DTargetOffset, 0));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 from the point contained in {@code point2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DGetComponent1(point2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @return the value of component 1 from the point contained in {@code point2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < 1}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetComponent1(final double[] point2D) {
 		return point2DGetComponent1(point2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 from the point contained in {@code point2D} at offset {@code point2DOffset}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < point2DOffset + 1} or {@code point2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @param point2DOffset the offset in {@code point2D} to start at
+	 * @return the value of component 1 from the point contained in {@code point2D} at offset {@code point2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < point2DOffset + 1} or {@code point2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetComponent1(final double[] point2D, final int point2DOffset) {
 		return point2D[point2DOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 from the point contained in {@code point2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DGetComponent2(point2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @return the value of component 2 from the point contained in {@code point2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetComponent2(final double[] point2D) {
 		return point2DGetComponent2(point2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 from the point contained in {@code point2D} at offset {@code point2DOffset}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < point2DOffset + 2} or {@code point2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @param point2DOffset the offset in {@code point2D} to start at
+	 * @return the value of component 2 from the point contained in {@code point2D} at offset {@code point2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < point2DOffset + 2} or {@code point2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetComponent2(final double[] point2D, final int point2DOffset) {
 		return point2D[point2DOffset + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component from the point contained in {@code point2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DGetU(point2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @return the value of the U-component from the point contained in {@code point2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < 1}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetU(final double[] point2D) {
 		return point2DGetU(point2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component from the point contained in {@code point2D} at offset {@code point2DOffset}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < point2DOffset + 1} or {@code point2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @param point2DOffset the offset in {@code point2D} to start at
+	 * @return the value of the U-component from the point contained in {@code point2D} at offset {@code point2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < point2DOffset + 1} or {@code point2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetU(final double[] point2D, final int point2DOffset) {
 		return point2D[point2DOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the V-component from the point contained in {@code point2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DGetV(point2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @return the value of the V-component from the point contained in {@code point2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetV(final double[] point2D) {
 		return point2DGetV(point2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the V-component from the point contained in {@code point2D} at offset {@code point2DOffset}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < point2DOffset + 2} or {@code point2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @param point2DOffset the offset in {@code point2D} to start at
+	 * @return the value of the V-component from the point contained in {@code point2D} at offset {@code point2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < point2DOffset + 2} or {@code point2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetV(final double[] point2D, final int point2DOffset) {
 		return point2D[point2DOffset + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component from the point contained in {@code point2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DGetX(point2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @return the value of the X-component from the point contained in {@code point2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < 1}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetX(final double[] point2D) {
 		return point2DGetX(point2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component from the point contained in {@code point2D} at offset {@code point2DOffset}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < point2DOffset + 1} or {@code point2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @param point2DOffset the offset in {@code point2D} to start at
+	 * @return the value of the X-component from the point contained in {@code point2D} at offset {@code point2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < point2DOffset + 1} or {@code point2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetX(final double[] point2D, final int point2DOffset) {
 		return point2D[point2DOffset + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component from the point contained in {@code point2D} at offset {@code 0}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < 2}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point.point2DGetY(point2D, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @return the value of the Y-component from the point contained in {@code point2D} at offset {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < 2}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetY(final double[] point2D) {
 		return point2DGetY(point2D, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component from the point contained in {@code point2D} at offset {@code point2DOffset}.
+	 * <p>
+	 * If {@code point2D} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point2D.length < point2DOffset + 2} or {@code point2DOffset < 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param point2D a {@code double[]} that contains a point with two components
+	 * @param point2DOffset the offset in {@code point2D} to start at
+	 * @return the value of the Y-component from the point contained in {@code point2D} at offset {@code point2DOffset}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code point2D.length < point2DOffset + 2} or {@code point2DOffset < 0}
+	 * @throws NullPointerException thrown if, and only if, {@code point2D} is {@code null}
+	 */
 	public static double point2DGetY(final double[] point2D, final int point2DOffset) {
 		return point2D[point2DOffset + 1];
 	}

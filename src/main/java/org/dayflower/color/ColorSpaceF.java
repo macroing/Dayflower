@@ -32,51 +32,61 @@ public final class ColorSpaceF {
 	/**
 	 * A {@code ColorSpaceF} instance that represents the Adobe RGB (1998) color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF ADOBE_R_G_B_1998 = new ColorSpaceF(0.0F, 2.2F, 0.6400F, 0.3300F, 0.2100F, 0.7100F, 0.1500F, 0.0600F, 0.31271F, 0.32902F);
 	
 	/**
 	 * A {@code ColorSpaceF} instance that represents the Adobe Wide Gamut RGB color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF ADOBE_WIDE_GAMUT_R_G_B = new ColorSpaceF(0.0F, 563.0F / 256.0F, 0.7347F, 0.2653F, 0.1152F, 0.8264F, 0.1566F, 0.0177F, 0.3457F, 0.3585F);
 	
 	/**
 	 * A {@code ColorSpaceF} instance that represents the Apple color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF APPLE = new ColorSpaceF(0.0F, 1.8F, 0.6250F, 0.3400F, 0.2800F, 0.5950F, 0.1550F, 0.0700F, 0.31271F, 0.32902F);
 	
 	/**
 	 * A {@code ColorSpaceF} instance that represents the CIE color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF C_I_E = new ColorSpaceF(0.0F, 2.2F, 0.7350F, 0.2650F, 0.2740F, 0.7170F, 0.1670F, 0.0090F, 1.0F / 3.0F, 1.0F / 3.0F);
 	
 	/**
 	 * A {@code ColorSpaceF} instance that represents the EBU color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF E_B_U = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6400F, 0.3300F, 0.2900F, 0.6000F, 0.1500F, 0.0600F, 0.31271F, 0.32902F);
 	
 	/**
 	 * A {@code ColorSpaceF} instance that represents the HDTV color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF H_D_T_V = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6400F, 0.3300F, 0.3000F, 0.6000F, 0.1500F, 0.0600F, 0.31271F, 0.32902F);
 	
 	/**
 	 * A {@code ColorSpaceF} instance that represents the NTSC color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF N_T_S_C = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6700F, 0.3300F, 0.2100F, 0.7100F, 0.1400F, 0.0800F, 0.31010F, 0.31620F);
 	
 	/**
 	 * A {@code ColorSpaceF} instance that represents the SMPTE 240M color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF S_M_P_T_E_240_M = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6300F, 0.3400F, 0.3100F, 0.5950F, 0.1550F, 0.0700F, 0.31271F, 0.32902F);
 	
 	/**
 	 * A {@code ColorSpaceF} instance that represents the SMPTE C color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF S_M_P_T_E_C = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6300F, 0.3400F, 0.3100F, 0.5950F, 0.1550F, 0.0700F, 0.31271F, 0.32902F);
 	
 	/**
 	 * A {@code ColorSpaceF} instance that represents the sRGB color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceF S_R_G_B = new ColorSpaceF(0.00304F, 2.4F, 0.6400F, 0.3300F, 0.3000F, 0.6000F, 0.1500F, 0.0600F, 0.31271F, 0.32902F);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,6 +115,7 @@ public final class ColorSpaceF {
 	 * @param xW the XW element of the matrix
 	 * @param yW the YW element of the matrix
 	 */
+//	TODO: Add Unit Tests!
 	public ColorSpaceF(final float breakPoint, final float gamma, final float xR, final float yR, final float xG, final float yG, final float xB, final float yB, final float xW, final float yW) {
 		this.breakPoint = breakPoint;
 		this.gamma = gamma;
@@ -128,6 +139,7 @@ public final class ColorSpaceF {
 	 * @return a new {@code Color3F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3F convertRGBToXYZ(final Color3F colorRGB) {
 		final float r = colorRGB.getR();
 		final float g = colorRGB.getG();
@@ -151,6 +163,7 @@ public final class ColorSpaceF {
 	 * @return a new {@code Color3F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3F convertXYZToRGB(final Color3F colorXYZ) {
 		final float x = colorXYZ.getX();
 		final float y = colorXYZ.getY();
@@ -174,6 +187,7 @@ public final class ColorSpaceF {
 	 * @return a new {@code Color3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3F redoGammaCorrection(final Color3F color) {
 		final float component1 = doRedoGammaCorrection(color.getComponent1());
 		final float component2 = doRedoGammaCorrection(color.getComponent2());
@@ -193,6 +207,7 @@ public final class ColorSpaceF {
 	 * @return a new {@code Color3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3F undoGammaCorrection(final Color3F color) {
 		final float component1 = doUndoGammaCorrection(color.getComponent1());
 		final float component2 = doUndoGammaCorrection(color.getComponent2());
@@ -212,6 +227,7 @@ public final class ColorSpaceF {
 	 * @return a new {@code Color4F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F convertRGBAToXYZA(final Color4F colorRGBA) {
 		final float r = colorRGBA.getR();
 		final float g = colorRGBA.getG();
@@ -236,6 +252,7 @@ public final class ColorSpaceF {
 	 * @return a new {@code Color4F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F convertXYZAToRGBA(final Color4F colorXYZA) {
 		final float x = colorXYZA.getX();
 		final float y = colorXYZA.getY();
@@ -260,6 +277,7 @@ public final class ColorSpaceF {
 	 * @return a new {@code Color4F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F redoGammaCorrection(final Color4F color) {
 		final float component1 = doRedoGammaCorrection(color.getComponent1());
 		final float component2 = doRedoGammaCorrection(color.getComponent2());
@@ -280,6 +298,7 @@ public final class ColorSpaceF {
 	 * @return a new {@code Color4F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F undoGammaCorrection(final Color4F color) {
 		final float component1 = doUndoGammaCorrection(color.getComponent1());
 		final float component2 = doUndoGammaCorrection(color.getComponent2());

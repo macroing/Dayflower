@@ -66,6 +66,7 @@ public final class ChromaticSpectralCurveD extends SpectralCurveD {
 	 * @param x the X of the chromaticity pair
 	 * @param y the Y of the chromaticity pair
 	 */
+//	TODO: Add Unit Tests!
 	public ChromaticSpectralCurveD(final double x, final double y) {
 		this.m1 = (-1.3515D -  1.7703D * x +  5.9114D * y) / (0.0241D + 0.2562D * x - 0.7341D * y);
 		this.m2 = (+0.03D   - 31.4424D * x + 30.0717D * y) / (0.0241D + 0.2562D * x - 0.7341D * y);
@@ -79,6 +80,7 @@ public final class ChromaticSpectralCurveD extends SpectralCurveD {
 	 * @param lambda the wavelength in nanometers
 	 * @return a sample based on the wavelength {@code lambda} in nanometers
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double sample(final double lambda) {
 		return K_S0_SPECTRAL_CURVE.sample(lambda) + this.m1 * K_S1_SPECTRAL_CURVE.sample(lambda) + this.m2 * K_S2_SPECTRAL_CURVE.sample(lambda);
@@ -93,6 +95,7 @@ public final class ChromaticSpectralCurveD extends SpectralCurveD {
 	 * @param y the Y of the chromaticity pair
 	 * @return a {@code Color3D} given {@code x} and {@code y} in XYZ-color space
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D getColorXYZ(final double x, final double y) {
 		final double m1 = (-1.3515D - 1.7703D  * x +  5.9114D * y) / (0.0241D + 0.2562D * x - 0.7341D * y);
 		final double m2 = (+0.03D   - 31.4424D * x + 30.0717D * y) / (0.0241D + 0.2562D * x - 0.7341D * y);

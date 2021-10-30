@@ -52,51 +52,61 @@ public final class Color4F {
 	/**
 	 * A {@code Color4F} denoting the color black.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F BLACK = new Color4F();
 	
 	/**
 	 * A {@code Color4F} denoting the color blue.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F BLUE = new Color4F(0.0F, 0.0F, 1.0F);
 	
 	/**
 	 * A {@code Color4F} denoting the color cyan.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F CYAN = new Color4F(0.0F, 1.0F, 1.0F);
 	
 	/**
 	 * A {@code Color4F} denoting the color green.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F GREEN = new Color4F(0.0F, 1.0F, 0.0F);
 	
 	/**
 	 * A {@code Color4F} denoting the color magenta.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F MAGENTA = new Color4F(1.0F, 0.0F, 1.0F);
 	
 	/**
 	 * A {@code Color4F} denoting the color orange.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F ORANGE = new Color4F(1.0F, 0.5F, 0.0F);
 	
 	/**
 	 * A {@code Color4F} denoting the color red.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F RED = new Color4F(1.0F, 0.0F, 0.0F);
 	
 	/**
 	 * A {@code Color4F} denoting a transparent color.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F TRANSPARENT = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
 	
 	/**
 	 * A {@code Color4F} denoting the color white.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F WHITE = new Color4F(1.0F, 1.0F, 1.0F);
 	
 	/**
 	 * A {@code Color4F} denoting the color yellow.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color4F YELLOW = new Color4F(1.0F, 1.0F, 0.0F);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,6 +128,7 @@ public final class Color4F {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F() {
 		this(0.0F);
 	}
@@ -130,6 +141,7 @@ public final class Color4F {
 	 * @param color a {@link Color3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final Color3D color) {
 		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()));
 	}
@@ -143,6 +155,7 @@ public final class Color4F {
 	 * @param component4 the value of component 4
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final Color3D color, final float component4) {
 		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()), component4);
 	}
@@ -155,6 +168,7 @@ public final class Color4F {
 	 * @param color a {@link Color3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final Color3F color) {
 		this(color.getComponent1(), color.getComponent2(), color.getComponent3());
 	}
@@ -168,6 +182,7 @@ public final class Color4F {
 	 * @param component4 the value of component 4
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final Color3F color, final float component4) {
 		this(color.getComponent1(), color.getComponent2(), color.getComponent3(), component4);
 	}
@@ -184,6 +199,7 @@ public final class Color4F {
 	 * 
 	 * @param component the value of component 1, component 2 and component 3
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final float component) {
 		this(component, component, component);
 	}
@@ -201,6 +217,7 @@ public final class Color4F {
 	 * @param component the value of component 1, component 2 and component 3
 	 * @param component4 the value of component 4
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final float component, final float component4) {
 		this(component, component, component, component4);
 	}
@@ -219,6 +236,7 @@ public final class Color4F {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final float component1, final float component2, final float component3) {
 		this(component1, component2, component3, 1.0F);
 	}
@@ -231,6 +249,7 @@ public final class Color4F {
 	 * @param component3 the value of component 3
 	 * @param component4 the value of component 4
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final float component1, final float component2, final float component3, final float component4) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -250,6 +269,7 @@ public final class Color4F {
 	 * 
 	 * @param component the value of component 1, component 2 and component 3
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final int component) {
 		this(component, component, component);
 	}
@@ -268,6 +288,7 @@ public final class Color4F {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final int component1, final int component2, final int component3) {
 		this(component1, component2, component3, 255);
 	}
@@ -287,6 +308,7 @@ public final class Color4F {
 	 * @param component3 the value of component 3
 	 * @param component4 the value of component 4
 	 */
+//	TODO: Add Unit Tests!
 	public Color4F(final int component1, final int component2, final int component3, final int component4) {
 		this(Ints.saturate(component1) / 255.0F, Ints.saturate(component2) / 255.0F, Ints.saturate(component3) / 255.0F, Ints.saturate(component4) / 255.0F);
 	}
@@ -298,6 +320,7 @@ public final class Color4F {
 	 * 
 	 * @return a {@code String} representation of this {@code Color4F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Color4F(%+.10f, %+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3), Float.valueOf(this.component4));
@@ -311,6 +334,7 @@ public final class Color4F {
 	 * @param object the {@code Object} to compare to this {@code Color4F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Color4F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -335,6 +359,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color4F} instance is infinite, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasInfinites() {
 		return isInfinite(this.component1) || isInfinite(this.component2) || isInfinite(this.component3) || isInfinite(this.component4);
 	}
@@ -344,6 +369,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color4F} instance is equal to {@code Float.NaN}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasNaNs() {
 		return isNaN(this.component1) || isNaN(this.component2) || isNaN(this.component3) || isNaN(this.component4);
 	}
@@ -355,6 +381,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is black, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isBlack() {
 		return isGrayscale() && isZero(this.component1);
 	}
@@ -371,6 +398,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered blue, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isBlue() {
 		return isBlue(1.0F, 1.0F);
 	}
@@ -384,6 +412,7 @@ public final class Color4F {
 	 * @param thresholdG the threshold for the G-component
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered blue, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isBlue(final float thresholdR, final float thresholdG) {
 		return getB() - thresholdR >= getR() && getB() - thresholdG >= getG();
 	}
@@ -393,6 +422,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered cyan, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isCyan() {
 		return equal(this.component2, this.component3) && this.component1 < this.component2;
 	}
@@ -404,6 +434,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is a grayscale color, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isGrayscale() {
 		return equal(this.component1, this.component2, this.component3);
 	}
@@ -420,6 +451,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered green, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isGreen() {
 		return isGreen(1.0F, 1.0F);
 	}
@@ -433,6 +465,7 @@ public final class Color4F {
 	 * @param thresholdB the threshold for the B-component
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered green, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isGreen(final float thresholdR, final float thresholdB) {
 		return getG() - thresholdR >= getR() && getG() - thresholdB >= getB();
 	}
@@ -442,6 +475,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered magenta, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isMagenta() {
 		return equal(this.component1, this.component3) && this.component2 < this.component3;
 	}
@@ -458,6 +492,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered red, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isRed() {
 		return isRed(1.0F, 1.0F);
 	}
@@ -471,6 +506,7 @@ public final class Color4F {
 	 * @param thresholdB the threshold for the B-component
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered red, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isRed(final float thresholdG, final float thresholdB) {
 		return getR() - thresholdG >= getG() && getR() - thresholdB >= getB();
 	}
@@ -482,6 +518,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is white, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isWhite() {
 		return isGrayscale() && this.component1 >= 1.0F;
 	}
@@ -491,6 +528,7 @@ public final class Color4F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered yellow, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isYellow() {
 		return equal(this.component1, this.component2) && this.component3 < this.component1;
 	}
@@ -502,6 +540,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the A-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteA() {
 		return (byte)(getAsIntA() & 0xFF);
 	}
@@ -513,6 +552,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the B-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteB() {
 		return (byte)(getAsIntB() & 0xFF);
 	}
@@ -524,6 +564,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 1 as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteComponent1() {
 		return (byte)(getAsIntComponent1() & 0xFF);
 	}
@@ -535,6 +576,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 2 as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteComponent2() {
 		return (byte)(getAsIntComponent2() & 0xFF);
 	}
@@ -546,6 +588,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 3 as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteComponent3() {
 		return (byte)(getAsIntComponent3() & 0xFF);
 	}
@@ -557,6 +600,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 4 as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteComponent4() {
 		return (byte)(getAsIntComponent4() & 0xFF);
 	}
@@ -568,6 +612,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the G-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteG() {
 		return (byte)(getAsIntG() & 0xFF);
 	}
@@ -579,6 +624,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the R-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteR() {
 		return (byte)(getAsIntR() & 0xFF);
 	}
@@ -590,6 +636,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the W-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteW() {
 		return (byte)(getAsIntW() & 0xFF);
 	}
@@ -601,6 +648,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the X-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteX() {
 		return (byte)(getAsIntX() & 0xFF);
 	}
@@ -612,6 +660,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the Y-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteY() {
 		return (byte)(getAsIntY() & 0xFF);
 	}
@@ -623,6 +672,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the Z-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteZ() {
 		return (byte)(getAsIntZ() & 0xFF);
 	}
@@ -634,6 +684,7 @@ public final class Color4F {
 	 * 
 	 * @return the average component value of this {@code Color4F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float average() {
 		return (this.component1 + this.component2 + this.component3) / 3.0F;
 	}
@@ -643,6 +694,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the A-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getA() {
 		return this.component4;
 	}
@@ -652,6 +704,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the B-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getB() {
 		return this.component3;
 	}
@@ -661,6 +714,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 1
 	 */
+//	TODO: Add Unit Tests!
 	public float getComponent1() {
 		return this.component1;
 	}
@@ -670,6 +724,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 2
 	 */
+//	TODO: Add Unit Tests!
 	public float getComponent2() {
 		return this.component2;
 	}
@@ -679,6 +734,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public float getComponent3() {
 		return this.component3;
 	}
@@ -688,6 +744,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 4
 	 */
+//	TODO: Add Unit Tests!
 	public float getComponent4() {
 		return this.component4;
 	}
@@ -697,6 +754,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the G-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getG() {
 		return this.component2;
 	}
@@ -706,6 +764,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the R-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getR() {
 		return this.component1;
 	}
@@ -715,6 +774,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the W-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getW() {
 		return this.component4;
 	}
@@ -724,6 +784,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the X-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getX() {
 		return this.component1;
 	}
@@ -733,6 +794,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the Y-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getY() {
 		return this.component2;
 	}
@@ -742,6 +804,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the Z-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getZ() {
 		return this.component3;
 	}
@@ -753,6 +816,7 @@ public final class Color4F {
 	 * 
 	 * @return the lightness of this {@code Color4F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float lightness() {
 		return (maximum() + minimum()) / 2.0F;
 	}
@@ -766,6 +830,7 @@ public final class Color4F {
 	 * 
 	 * @return the relative luminance of this {@code Color4F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float luminance() {
 		return this.component1 * 0.212671F + this.component2 * 0.715160F + this.component3 * 0.072169F;
 	}
@@ -775,6 +840,7 @@ public final class Color4F {
 	 * 
 	 * @return the largest component value of component 1, component 2 and component 3
 	 */
+//	TODO: Add Unit Tests!
 	public float maximum() {
 		return max(this.component1, this.component2, this.component3);
 	}
@@ -784,6 +850,7 @@ public final class Color4F {
 	 * 
 	 * @return the smallest component value of component 1, component 2 and component 3
 	 */
+//	TODO: Add Unit Tests!
 	public float minimum() {
 		return min(this.component1, this.component2, this.component3);
 	}
@@ -795,6 +862,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the A-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntA() {
 		return toInt(Floats.saturate(getA()) * 255.0F + 0.5F);
 	}
@@ -806,6 +874,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the B-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntB() {
 		return toInt(Floats.saturate(getB()) * 255.0F + 0.5F);
 	}
@@ -817,6 +886,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 1 as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntComponent1() {
 		return toInt(Floats.saturate(getComponent1()) * 255.0F + 0.5F);
 	}
@@ -828,6 +898,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 2 as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntComponent2() {
 		return toInt(Floats.saturate(getComponent2()) * 255.0F + 0.5F);
 	}
@@ -839,6 +910,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 3 as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntComponent3() {
 		return toInt(Floats.saturate(getComponent3()) * 255.0F + 0.5F);
 	}
@@ -850,6 +922,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of component 4 as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntComponent4() {
 		return toInt(Floats.saturate(getComponent4()) * 255.0F + 0.5F);
 	}
@@ -861,6 +934,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the G-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntG() {
 		return toInt(Floats.saturate(getG()) * 255.0F + 0.5F);
 	}
@@ -872,6 +946,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the R-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntR() {
 		return toInt(Floats.saturate(getR()) * 255.0F + 0.5F);
 	}
@@ -883,6 +958,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the W-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntW() {
 		return toInt(Floats.saturate(getW()) * 255.0F + 0.5F);
 	}
@@ -894,6 +970,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the X-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntX() {
 		return toInt(Floats.saturate(getX()) * 255.0F + 0.5F);
 	}
@@ -905,6 +982,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the Y-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntY() {
 		return toInt(Floats.saturate(getY()) * 255.0F + 0.5F);
 	}
@@ -916,6 +994,7 @@ public final class Color4F {
 	 * 
 	 * @return the value of the Z-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntZ() {
 		return toInt(Floats.saturate(getZ()) * 255.0F + 0.5F);
 	}
@@ -925,6 +1004,7 @@ public final class Color4F {
 	 * 
 	 * @return a hash code for this {@code Color4F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3), Float.valueOf(this.component4));
@@ -944,6 +1024,7 @@ public final class Color4F {
 	 * 
 	 * @return an {@code int} with the component values in a packed form
 	 */
+//	TODO: Add Unit Tests!
 	public int pack() {
 		return pack(PackedIntComponentOrder.ARGB);
 	}
@@ -959,6 +1040,7 @@ public final class Color4F {
 	 * @return an {@code int} with the component values in a packed form
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = getAsIntR();
 		final int g = getAsIntG();
@@ -979,6 +1061,7 @@ public final class Color4F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeFloat(this.component1);
@@ -1011,6 +1094,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the blend
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F blend(final Color4F colorLHS, final Color4F colorRHS) {
 		return blend(colorLHS, colorRHS, 0.5F);
 	}
@@ -1035,6 +1119,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the blend
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F blend(final Color4F colorLHS, final Color4F colorRHS, final float t) {
 		return blend(colorLHS, colorRHS, t, t, t, t);
 	}
@@ -1055,6 +1140,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the blend
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F blend(final Color4F colorLHS, final Color4F colorRHS, final float tComponent1, final float tComponent2, final float tComponent3, final float tComponent4) {
 		final float component1 = lerp(colorLHS.component1, colorRHS.component1, tComponent1);
 		final float component2 = lerp(colorLHS.component2, colorRHS.component2, tComponent2);
@@ -1076,6 +1162,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the blend
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F blendOver(final Color4F colorA, final Color4F colorB) {
 		final float component4 = colorA.component4 + colorB.component4 * (1.0F - colorA.component4);
 		final float component1 = (colorA.component1 * colorA.component4 + colorB.component1 * colorB.component4 * (1.0F - colorA.component4)) / component4;
@@ -1096,6 +1183,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F convertRGBAToXYZAUsingPBRT(final Color4F color) {
 		final float x = color.getR() * 0.412453F + color.getG() * 0.357580F + color.getB() * 0.180423F;
 		final float y = color.getR() * 0.212671F + color.getG() * 0.715160F + color.getB() * 0.072169F;
@@ -1116,6 +1204,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F convertRGBAToXYZAUsingSRGB(final Color4F color) {
 		return ColorSpaceF.S_R_G_B.convertRGBAToXYZA(color);
 	}
@@ -1131,6 +1220,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F convertXYZAToRGBAUsingPBRT(final Color4F color) {
 		final float r = color.getX() * +3.240479F - color.getY() * 1.537150F - color.getZ() * 0.498535F;
 		final float g = color.getX() * -0.969256F + color.getY() * 1.875991F + color.getZ() * 0.041556F;
@@ -1151,6 +1241,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F convertXYZAToRGBAUsingSRGB(final Color4F color) {
 		return ColorSpaceF.S_R_G_B.convertXYZAToRGBA(color);
 	}
@@ -1164,6 +1255,7 @@ public final class Color4F {
 	 * @return a grayscale {@code Color4F} instance based on {@code color.average()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F grayscaleAverage(final Color4F color) {
 		return new Color4F(color.average(), color.component4);
 	}
@@ -1177,6 +1269,7 @@ public final class Color4F {
 	 * @return a grayscale {@code Color4F} instance based on {@code color.getComponent1()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F grayscaleComponent1(final Color4F color) {
 		return new Color4F(color.component1, color.component4);
 	}
@@ -1190,6 +1283,7 @@ public final class Color4F {
 	 * @return a grayscale {@code Color4F} instance based on {@code color.getComponent2()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F grayscaleComponent2(final Color4F color) {
 		return new Color4F(color.component2, color.component4);
 	}
@@ -1203,6 +1297,7 @@ public final class Color4F {
 	 * @return a grayscale {@code Color4F} instance based on {@code color.getComponent3()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F grayscaleComponent3(final Color4F color) {
 		return new Color4F(color.component3, color.component4);
 	}
@@ -1216,6 +1311,7 @@ public final class Color4F {
 	 * @return a grayscale {@code Color4F} instance based on {@code color.lightness()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F grayscaleLightness(final Color4F color) {
 		return new Color4F(color.lightness(), color.component4);
 	}
@@ -1229,6 +1325,7 @@ public final class Color4F {
 	 * @return a grayscale {@code Color4F} instance based on {@code color.luminance()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F grayscaleLuminance(final Color4F color) {
 		return new Color4F(color.luminance(), color.component4);
 	}
@@ -1242,6 +1339,7 @@ public final class Color4F {
 	 * @return a grayscale {@code Color4F} instance based on {@code color.maximum()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F grayscaleMaximum(final Color4F color) {
 		return new Color4F(color.maximum(), color.component4);
 	}
@@ -1255,6 +1353,7 @@ public final class Color4F {
 	 * @return a grayscale {@code Color4F} instance based on {@code color.minimum()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F grayscaleMinimum(final Color4F color) {
 		return new Color4F(color.minimum(), color.component4);
 	}
@@ -1270,6 +1369,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the inversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F invert(final Color4F color) {
 		final float component1 = 1.0F - color.component1;
 		final float component2 = 1.0F - color.component2;
@@ -1291,6 +1391,7 @@ public final class Color4F {
 	 * 
 	 * @return a {@code Color4F} instance with random component values
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F random() {
 		final float component1 = Floats.random();
 		final float component2 = Floats.random();
@@ -1311,6 +1412,7 @@ public final class Color4F {
 	 * 
 	 * @return a {@code Color4F} instance with a random component 1 value
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F randomComponent1() {
 		final float component1 = Floats.random();
 		final float component2 = 0.0F;
@@ -1331,6 +1433,7 @@ public final class Color4F {
 	 * 
 	 * @return a {@code Color4F} instance with a random component 2 value
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F randomComponent2() {
 		final float component1 = 0.0F;
 		final float component2 = Floats.random();
@@ -1351,6 +1454,7 @@ public final class Color4F {
 	 * 
 	 * @return a {@code Color4F} instance with a random component 3 value
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F randomComponent3() {
 		final float component1 = 0.0F;
 		final float component2 = 0.0F;
@@ -1371,6 +1475,7 @@ public final class Color4F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F read(final DataInput dataInput) {
 		try {
 			final float component1 = dataInput.readFloat();
@@ -1395,6 +1500,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F redoGammaCorrectionPBRT(final Color4F color) {
 		final float component1 = color.component1 <= 0.0031308F ? 12.92F * color.component1 : 1.055F * pow(color.component1, 1.0F / 2.4F) - 0.055F;
 		final float component2 = color.component2 <= 0.0031308F ? 12.92F * color.component2 : 1.055F * pow(color.component2, 1.0F / 2.4F) - 0.055F;
@@ -1415,6 +1521,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F redoGammaCorrectionSRGB(final Color4F color) {
 		return ColorSpaceF.S_R_G_B.redoGammaCorrection(color);
 	}
@@ -1430,6 +1537,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F sepia(final Color4F color) {
 		final float component1 = color.component1 * 0.393F + color.component2 * 0.769F + color.component3 * 0.189F;
 		final float component2 = color.component1 * 0.349F + color.component2 * 0.686F + color.component3 * 0.168F;
@@ -1450,6 +1558,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F undoGammaCorrectionPBRT(final Color4F color) {
 		final float component1 = color.component1 <= 0.04045F ? color.component1 * 1.0F / 12.92F : pow((color.component1 + 0.055F) * 1.0F / 1.055F, 2.4F);
 		final float component2 = color.component2 <= 0.04045F ? color.component2 * 1.0F / 12.92F : pow((color.component2 + 0.055F) * 1.0F / 1.055F, 2.4F);
@@ -1470,6 +1579,7 @@ public final class Color4F {
 	 * @return a new {@code Color4F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F undoGammaCorrectionSRGB(final Color4F color) {
 		return ColorSpaceF.S_R_G_B.undoGammaCorrection(color);
 	}
@@ -1487,6 +1597,7 @@ public final class Color4F {
 	 * @param color an {@code int} with the color in packed form
 	 * @return a {@code Color4F} instance by unpacking {@code color} using {@code PackedIntComponentOrder.ARGB}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F unpack(final int color) {
 		return unpack(color, PackedIntComponentOrder.ARGB);
 	}
@@ -1501,6 +1612,7 @@ public final class Color4F {
 	 * @return a {@code Color4F} instance by unpacking {@code color} using {@code packedIntComponentOrder}
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F unpack(final int color, final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = packedIntComponentOrder.unpackR(color);
 		final int g = packedIntComponentOrder.unpackG(color);
@@ -1526,6 +1638,7 @@ public final class Color4F {
 	 * @return a {@code Color4F[]} with a length of {@code length} and contains {@code Color4F.BLACK}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F[] array(final int length) {
 		return array(length, () -> BLACK);
 	}
@@ -1543,6 +1656,7 @@ public final class Color4F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code supplier} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F[] array(final int length, final Supplier<Color4F> supplier) {
 		final Color4F[] colors = new Color4F[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
@@ -1571,6 +1685,7 @@ public final class Color4F {
 	 * @return a {@code Color4F[]} with a length of {@code length} and contains random {@code Color4F} instances
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F[] arrayRandom(final int length) {
 		return array(length, () -> random());
 	}
@@ -1594,6 +1709,7 @@ public final class Color4F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % ArrayComponentOrder.RGBA.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F[] arrayRead(final byte[] array) {
 		return arrayRead(array, ArrayComponentOrder.RGBA);
 	}
@@ -1611,6 +1727,7 @@ public final class Color4F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F[] arrayRead(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
@@ -1650,6 +1767,7 @@ public final class Color4F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % ArrayComponentOrder.RGBA.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F[] arrayRead(final int[] array) {
 		return arrayRead(array, ArrayComponentOrder.RGBA);
 	}
@@ -1667,6 +1785,7 @@ public final class Color4F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F[] arrayRead(final int[] array, final ArrayComponentOrder arrayComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
@@ -1703,6 +1822,7 @@ public final class Color4F {
 	 * @return a {@code Color4F[]} with a length of {@code array.length} and contains {@code Color4F} instances unpacked from {@code array}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F[] arrayUnpack(final int[] array) {
 		return arrayUnpack(array, PackedIntComponentOrder.ARGB);
 	}
@@ -1717,6 +1837,7 @@ public final class Color4F {
 	 * @return a {@code Color4F[]} with a length of {@code array.length} and contains {@code Color4F} instances unpacked from {@code array}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code packedIntComponentOrder} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color4F[] arrayUnpack(final int[] array, final PackedIntComponentOrder packedIntComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");

@@ -66,6 +66,7 @@ public final class ChromaticSpectralCurveF extends SpectralCurveF {
 	 * @param x the X of the chromaticity pair
 	 * @param y the Y of the chromaticity pair
 	 */
+//	TODO: Add Unit Tests!
 	public ChromaticSpectralCurveF(final float x, final float y) {
 		this.m1 = (-1.3515F -  1.7703F * x +  5.9114F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
 		this.m2 = (+0.03F   - 31.4424F * x + 30.0717F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
@@ -79,6 +80,7 @@ public final class ChromaticSpectralCurveF extends SpectralCurveF {
 	 * @param lambda the wavelength in nanometers
 	 * @return a sample based on the wavelength {@code lambda} in nanometers
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float sample(final float lambda) {
 		return K_S0_SPECTRAL_CURVE.sample(lambda) + this.m1 * K_S1_SPECTRAL_CURVE.sample(lambda) + this.m2 * K_S2_SPECTRAL_CURVE.sample(lambda);
@@ -93,6 +95,7 @@ public final class ChromaticSpectralCurveF extends SpectralCurveF {
 	 * @param y the Y of the chromaticity pair
 	 * @return a {@code Color3F} given {@code x} and {@code y} in XYZ-color space
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3F getColorXYZ(final float x, final float y) {
 		final float m1 = (-1.3515F - 1.7703F  * x +  5.9114F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
 		final float m2 = (+0.03F   - 31.4424F * x + 30.0717F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);

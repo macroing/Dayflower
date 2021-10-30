@@ -41,71 +41,85 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for silver (Ag).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF AG_ETA = new IrregularSpectralCurveF(SPDF.AG_ETA, SPDF.AG_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for silver (Ag).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF AG_K = new IrregularSpectralCurveF(SPDF.AG_K, SPDF.AG_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for aluminum (Al).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF AL_ETA = new IrregularSpectralCurveF(SPDF.AL_ETA, SPDF.AL_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for aluminum (Al).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF AL_K = new IrregularSpectralCurveF(SPDF.AL_K, SPDF.AL_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for gold (Au).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF AU_ETA = new IrregularSpectralCurveF(SPDF.AU_ETA, SPDF.AU_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for gold (Au).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF AU_K = new IrregularSpectralCurveF(SPDF.AU_K, SPDF.AU_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for beryllium (Be).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF BE_ETA = new IrregularSpectralCurveF(SPDF.BE_ETA, SPDF.BE_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for beryllium (Be).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF BE_K = new IrregularSpectralCurveF(SPDF.BE_K, SPDF.BE_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for chromium (Cr).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF CR_ETA = new IrregularSpectralCurveF(SPDF.CR_ETA, SPDF.CR_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for chromium (Cr).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF CR_K = new IrregularSpectralCurveF(SPDF.CR_K, SPDF.CR_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for copper (Cu).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF CU_ETA = new IrregularSpectralCurveF(SPDF.CU_ETA, SPDF.CU_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for copper (Cu).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF CU_K = new IrregularSpectralCurveF(SPDF.CU_K, SPDF.CU_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for mercury (Hg).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF HG_ETA = new IrregularSpectralCurveF(SPDF.HG_ETA, SPDF.HG_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for mercury (Hg).
 	 */
+//	TODO: Add Unit Tests!
 	public static final IrregularSpectralCurveF HG_K = new IrregularSpectralCurveF(SPDF.HG_K, SPDF.HG_WAVELENGTH);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +140,7 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 	 * @param wavelengths an array with wavelengths in nanometers
 	 * @throws NullPointerException thrown if, and only if, either {@code amplitudes} or {@code wavelengths} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public IrregularSpectralCurveF(final float[] amplitudes, final float[] wavelengths) {
 		this.amplitudes = amplitudes.clone();
 		this.wavelengths = wavelengths.clone();
@@ -139,6 +154,7 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 	 * @param lambda the wavelength in nanometers
 	 * @return a sample based on the wavelength {@code lambda} in nanometers
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float sample(final float lambda) {
 		if(this.wavelengths.length == 0) {
@@ -168,6 +184,7 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 	 * 
 	 * @return a {@code float[]} with the amplitudes of this {@code IrregularSpectralCurveF} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float[] getAmplitudes() {
 		return this.amplitudes.clone();
 	}
@@ -179,6 +196,7 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 	 * 
 	 * @return a {@code float[]} with the wavelengths of this {@code IrregularSpectralCurveF} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float[] getWavelengths() {
 		return this.wavelengths.clone();
 	}
@@ -199,6 +217,7 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static IrregularSpectralCurveF parseSPD(final File file) {
 		try(final BufferedReader bufferedReader = new BufferedReader(new FileReader(Objects.requireNonNull(file, "file == null"))); final FloatArrayOutputStream floatArrayOutputStreamAmplitudes = new FloatArrayOutputStream(); final FloatArrayOutputStream floatArrayOutputStreamWavelengths = new FloatArrayOutputStream()) {
 			for(String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
@@ -229,6 +248,7 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 	 * @param fileK a {@code File} that represents the file to parse for K
 	 * @throws NullPointerException thrown if, and only if, either {@code fileEta} or {@code fileK} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static void printSPDToJava(final File fileEta, final File fileK) {
 		Objects.requireNonNull(fileEta, "fileEta == null");
 		Objects.requireNonNull(fileK, "fileK == null");

@@ -32,51 +32,61 @@ public final class ColorSpaceD {
 	/**
 	 * A {@code ColorSpaceD} instance that represents the Adobe RGB (1998) color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD ADOBE_R_G_B_1998 = new ColorSpaceD(0.0D, 2.2D, 0.6400D, 0.3300D, 0.2100D, 0.7100D, 0.1500D, 0.0600D, 0.31271D, 0.32902D);
 	
 	/**
 	 * A {@code ColorSpaceD} instance that represents the Adobe Wide Gamut RGB color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD ADOBE_WIDE_GAMUT_R_G_B = new ColorSpaceD(0.0D, 563.0D / 256.0D, 0.7347D, 0.2653D, 0.1152D, 0.8264D, 0.1566D, 0.0177D, 0.3457D, 0.3585D);
 	
 	/**
 	 * A {@code ColorSpaceD} instance that represents the Apple color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD APPLE = new ColorSpaceD(0.0D, 1.8D, 0.6250D, 0.3400D, 0.2800D, 0.5950D, 0.1550D, 0.0700D, 0.31271D, 0.32902D);
 	
 	/**
 	 * A {@code ColorSpaceD} instance that represents the CIE color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD C_I_E = new ColorSpaceD(0.0D, 2.2D, 0.7350D, 0.2650D, 0.2740D, 0.7170D, 0.1670D, 0.0090D, 1.0D / 3.0D, 1.0D / 3.0D);
 	
 	/**
 	 * A {@code ColorSpaceD} instance that represents the EBU color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD E_B_U = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6400D, 0.3300D, 0.2900D, 0.6000D, 0.1500D, 0.0600D, 0.31271D, 0.32902D);
 	
 	/**
 	 * A {@code ColorSpaceD} instance that represents the HDTV color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD H_D_T_V = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6400D, 0.3300D, 0.3000D, 0.6000D, 0.1500D, 0.0600D, 0.31271D, 0.32902D);
 	
 	/**
 	 * A {@code ColorSpaceD} instance that represents the NTSC color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD N_T_S_C = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6700D, 0.3300D, 0.2100D, 0.7100D, 0.1400D, 0.0800D, 0.31010D, 0.31620D);
 	
 	/**
 	 * A {@code ColorSpaceD} instance that represents the SMPTE 240M color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD S_M_P_T_E_240_M = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6300D, 0.3400D, 0.3100D, 0.5950D, 0.1550D, 0.0700D, 0.31271D, 0.32902D);
 	
 	/**
 	 * A {@code ColorSpaceD} instance that represents the SMPTE C color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD S_M_P_T_E_C = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6300D, 0.3400D, 0.3100D, 0.5950D, 0.1550D, 0.0700D, 0.31271D, 0.32902D);
 	
 	/**
 	 * A {@code ColorSpaceD} instance that represents the sRGB color space.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ColorSpaceD S_R_G_B = new ColorSpaceD(0.00304D, 2.4D, 0.6400D, 0.3300D, 0.3000D, 0.6000D, 0.1500D, 0.0600D, 0.31271D, 0.32902D);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,6 +115,7 @@ public final class ColorSpaceD {
 	 * @param xW the XW element of the matrix
 	 * @param yW the YW element of the matrix
 	 */
+//	TODO: Add Unit Tests!
 	public ColorSpaceD(final double breakPoint, final double gamma, final double xR, final double yR, final double xG, final double yG, final double xB, final double yB, final double xW, final double yW) {
 		this.breakPoint = breakPoint;
 		this.gamma = gamma;
@@ -128,6 +139,7 @@ public final class ColorSpaceD {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D convertRGBToXYZ(final Color3D colorRGB) {
 		final double r = colorRGB.getR();
 		final double g = colorRGB.getG();
@@ -151,6 +163,7 @@ public final class ColorSpaceD {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D convertXYZToRGB(final Color3D colorXYZ) {
 		final double x = colorXYZ.getX();
 		final double y = colorXYZ.getY();
@@ -174,6 +187,7 @@ public final class ColorSpaceD {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D redoGammaCorrection(final Color3D color) {
 		final double component1 = doRedoGammaCorrection(color.getComponent1());
 		final double component2 = doRedoGammaCorrection(color.getComponent2());
@@ -193,6 +207,7 @@ public final class ColorSpaceD {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D undoGammaCorrection(final Color3D color) {
 		final double component1 = doUndoGammaCorrection(color.getComponent1());
 		final double component2 = doUndoGammaCorrection(color.getComponent2());
@@ -212,6 +227,7 @@ public final class ColorSpaceD {
 	 * @return a new {@code Color4D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4D convertRGBAToXYZA(final Color4D colorRGBA) {
 		final double r = colorRGBA.getR();
 		final double g = colorRGBA.getG();
@@ -236,6 +252,7 @@ public final class ColorSpaceD {
 	 * @return a new {@code Color4D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4D convertXYZAToRGBA(final Color4D colorXYZA) {
 		final double x = colorXYZA.getX();
 		final double y = colorXYZA.getY();
@@ -260,6 +277,7 @@ public final class ColorSpaceD {
 	 * @return a new {@code Color4D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4D redoGammaCorrection(final Color4D color) {
 		final double component1 = doRedoGammaCorrection(color.getComponent1());
 		final double component2 = doRedoGammaCorrection(color.getComponent2());
@@ -280,6 +298,7 @@ public final class ColorSpaceD {
 	 * @return a new {@code Color4D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color4D undoGammaCorrection(final Color4D color) {
 		final double component1 = doUndoGammaCorrection(color.getComponent1());
 		final double component2 = doUndoGammaCorrection(color.getComponent2());

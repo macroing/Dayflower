@@ -53,6 +53,7 @@ public abstract class SpectralCurveD {
 	 * 
 	 * @return a {@code Color3D} instance in RGB-color space
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D toColorRGB() {
 		return Color3D.convertXYZToRGBUsingPBRT(doToColorXYZPBRT());
 //		return Color3D.convertXYZToRGBUsingSRGB(doToColorXYZSunflow());
@@ -63,6 +64,7 @@ public abstract class SpectralCurveD {
 	 * 
 	 * @return a {@code Color3D} instance in XYZ-color space
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D toColorXYZ() {
 		return doToColorXYZPBRT();
 //		return doToColorXYZSunflow();

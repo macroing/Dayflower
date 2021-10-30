@@ -42,6 +42,7 @@ public enum PackedIntComponentOrder {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	ABGR(0, 8, 16, 24),
 	
 	/**
@@ -57,6 +58,7 @@ public enum PackedIntComponentOrder {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	ARGB(16, 8, 0, 24),
 	
 	/**
@@ -71,6 +73,7 @@ public enum PackedIntComponentOrder {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	BGR(0, 8, 16, -1),
 	
 	/**
@@ -85,6 +88,7 @@ public enum PackedIntComponentOrder {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	RGB(16, 8, 0, -1);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,6 +114,7 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code PackedIntComponentOrder} has a shift for the A-component, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasShiftA() {
 		return this.shiftA != -1;
 	}
@@ -119,6 +124,7 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code PackedIntComponentOrder} has a shift for the B-component, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasShiftB() {
 		return this.shiftB != -1;
 	}
@@ -128,6 +134,7 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code PackedIntComponentOrder} has a shift for the G-component, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasShiftG() {
 		return this.shiftG != -1;
 	}
@@ -137,6 +144,7 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code PackedIntComponentOrder} has a shift for the R-component, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasShiftR() {
 		return this.shiftR != -1;
 	}
@@ -146,6 +154,7 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return the component count of this {@code PackedIntComponentOrder} instance
 	 */
+//	TODO: Add Unit Tests!
 	public int getComponentCount() {
 		return (hasShiftR() ? 1 : 0) + (hasShiftG() ? 1 : 0) + (hasShiftB() ? 1 : 0) + (hasShiftA() ? 1 : 0);
 	}
@@ -155,6 +164,7 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return the shift for the A-component, or {@code -1} if it does not have one
 	 */
+//	TODO: Add Unit Tests!
 	public int getShiftA() {
 		return this.shiftA;
 	}
@@ -164,6 +174,7 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return the shift for the B-component, or {@code -1} if it does not have one
 	 */
+//	TODO: Add Unit Tests!
 	public int getShiftB() {
 		return this.shiftB;
 	}
@@ -173,6 +184,7 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return the shift for the G-component, or {@code -1} if it does not have one
 	 */
+//	TODO: Add Unit Tests!
 	public int getShiftG() {
 		return this.shiftG;
 	}
@@ -182,6 +194,7 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return the shift for the R-component, or {@code -1} if it does not have one
 	 */
+//	TODO: Add Unit Tests!
 	public int getShiftR() {
 		return this.shiftR;
 	}
@@ -194,6 +207,7 @@ public enum PackedIntComponentOrder {
 	 * @param b the B-component
 	 * @return an {@code int} with {@code r}, {@code g} and {@code b} in a packed form
 	 */
+//	TODO: Add Unit Tests!
 	public int pack(final int r, final int g, final int b) {
 		return (hasShiftR() ? ((r & 0xFF) << getShiftR()) : 0) | (hasShiftG() ? ((g & 0xFF) << getShiftG()) : 0) | (hasShiftB() ? ((b & 0xFF) << getShiftB()) : 0);
 	}
@@ -207,6 +221,7 @@ public enum PackedIntComponentOrder {
 	 * @param a the A-component
 	 * @return an {@code int} with {@code r}, {@code g}, {@code b} and {@code a} in a packed form
 	 */
+//	TODO: Add Unit Tests!
 	public int pack(final int r, final int g, final int b, final int a) {
 		return (hasShiftR() ? ((r & 0xFF) << getShiftR()) : 0) | (hasShiftG() ? ((g & 0xFF) << getShiftG()) : 0) | (hasShiftB() ? ((b & 0xFF) << getShiftB()) : 0) | (hasShiftA() ? ((a & 0xFF) << getShiftA()) : 0);
 	}
@@ -217,6 +232,7 @@ public enum PackedIntComponentOrder {
 	 * @param color an {@code int} with the components in packed form
 	 * @return an {@code int} with the unpacked A-component, or {@code 255} if it could not unpack
 	 */
+//	TODO: Add Unit Tests!
 	public int unpackA(final int color) {
 		return hasShiftA() ? (color >> getShiftA()) & 0xFF : 255;
 	}
@@ -227,6 +243,7 @@ public enum PackedIntComponentOrder {
 	 * @param color an {@code int} with the components in packed form
 	 * @return an {@code int} with the unpacked B-component, or {@code 0} if it could not unpack
 	 */
+//	TODO: Add Unit Tests!
 	public int unpackB(final int color) {
 		return hasShiftB() ? (color >> getShiftB()) & 0xFF : 0;
 	}
@@ -237,6 +254,7 @@ public enum PackedIntComponentOrder {
 	 * @param color an {@code int} with the components in packed form
 	 * @return an {@code int} with the unpacked G-component, or {@code 0} if it could not unpack
 	 */
+//	TODO: Add Unit Tests!
 	public int unpackG(final int color) {
 		return hasShiftG() ? (color >> getShiftG()) & 0xFF : 0;
 	}
@@ -247,6 +265,7 @@ public enum PackedIntComponentOrder {
 	 * @param color an {@code int} with the components in packed form
 	 * @return an {@code int} with the unpacked R-component, or {@code 0} if it could not unpack
 	 */
+//	TODO: Add Unit Tests!
 	public int unpackR(final int color) {
 		return hasShiftR() ? (color >> getShiftR()) & 0xFF : 0;
 	}
@@ -266,6 +285,7 @@ public enum PackedIntComponentOrder {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount() != 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrder} or {@code array} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public int[] pack(final ArrayComponentOrder arrayComponentOrder, final byte[] array) {
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
 		Objects.requireNonNull(array, "array == null");
@@ -307,6 +327,7 @@ public enum PackedIntComponentOrder {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount() != 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrder} or {@code array} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public int[] pack(final ArrayComponentOrder arrayComponentOrder, final int[] array) {
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
 		Objects.requireNonNull(array, "array == null");
@@ -345,6 +366,7 @@ public enum PackedIntComponentOrder {
 	 * @return a new {@code int[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrder} or {@code array} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public int[] unpack(final ArrayComponentOrder arrayComponentOrder, final int[] array) {
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
 		Objects.requireNonNull(array, "array == null");
@@ -396,6 +418,7 @@ public enum PackedIntComponentOrder {
 	 * @return a new {@code int[]} with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, either {@code packedIntComponentOrderA}, {@code packedIntComponentOrderB} or {@code array} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static int[] convert(final PackedIntComponentOrder packedIntComponentOrderA, final PackedIntComponentOrder packedIntComponentOrderB, final int[] array) {
 		Objects.requireNonNull(packedIntComponentOrderA, "packedIntComponentOrderA == null");
 		Objects.requireNonNull(packedIntComponentOrderB, "packedIntComponentOrderB == null");

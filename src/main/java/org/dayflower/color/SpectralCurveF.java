@@ -53,6 +53,7 @@ public abstract class SpectralCurveF {
 	 * 
 	 * @return a {@code Color3F} instance in RGB-color space
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3F toColorRGB() {
 		return Color3F.convertXYZToRGBUsingPBRT(doToColorXYZPBRT());
 //		return Color3F.convertXYZToRGBUsingSRGB(doToColorXYZSunflow());
@@ -63,6 +64,7 @@ public abstract class SpectralCurveF {
 	 * 
 	 * @return a {@code Color3F} instance in XYZ-color space
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3F toColorXYZ() {
 		return doToColorXYZPBRT();
 //		return doToColorXYZSunflow();

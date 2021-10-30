@@ -56,176 +56,211 @@ public final class Color3D {
 	/**
 	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for silver (Ag).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D AG_ETA = IrregularSpectralCurveD.AG_ETA.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} that contains the absorption coefficient for silver (Ag).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D AG_K = IrregularSpectralCurveD.AG_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for aluminum (Al).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D AL_ETA = IrregularSpectralCurveD.AL_ETA.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} that contains the absorption coefficient for aluminum (Al).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D AL_K = IrregularSpectralCurveD.AL_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} denoting the color Aztek gold (Au).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D AU_AZTEK = new Color3D(0.76D, 0.6D, 0.33D);
 	
 	/**
 	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for gold (Au).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D AU_ETA = IrregularSpectralCurveD.AU_ETA.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} that contains the absorption coefficient for gold (Au).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D AU_K = IrregularSpectralCurveD.AU_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} denoting the color metallic gold (Au).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D AU_METALLIC = new Color3D(0.83D, 0.69D, 0.22D);
 	
 	/**
 	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for beryllium (Be).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D BE_ETA = IrregularSpectralCurveD.BE_ETA.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} that contains the absorption coefficient for beryllium (Be).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D BE_K = IrregularSpectralCurveD.BE_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} denoting the color black.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D BLACK = new Color3D();
 	
 	/**
 	 * A {@code Color3D} denoting the color blue.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D BLUE = new Color3D(0.0D, 0.0D, 1.0D);
 	
 	/**
 	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for chromium (Cr).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D CR_ETA = IrregularSpectralCurveD.CR_ETA.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} that contains the absorption coefficient for chromium (Cr).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D CR_K = IrregularSpectralCurveD.CR_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} denoting the color copper (Cu).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D CU = new Color3D(0.72D, 0.45D, 0.2D);
 	
 	/**
 	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for copper (Cu).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D CU_ETA = IrregularSpectralCurveD.CU_ETA.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} that contains the absorption coefficient for copper (Cu).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D CU_K = IrregularSpectralCurveD.CU_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} denoting the color cyan.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D CYAN = new Color3D(0.0D, 1.0D, 1.0D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.01D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GRAY_0_01 = new Color3D(0.01D, 0.01D, 0.01D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.1D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GRAY_0_10 = new Color3D(0.1D, 0.1D, 0.1D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.2D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GRAY_0_20 = new Color3D(0.2D, 0.2D, 0.2D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.25D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GRAY_0_25 = new Color3D(0.25D, 0.25D, 0.25D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.3D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GRAY_0_30 = new Color3D(0.3D, 0.3D, 0.3D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.5D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GRAY_0_50 = new Color3D(0.5D, 0.5D, 0.5D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 1.5D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GRAY_1_50 = new Color3D(1.5D, 1.5D, 1.5D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 1.55D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GRAY_1_55 = new Color3D(1.55D, 1.55D, 1.55D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 2.0D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GRAY_2_00 = new Color3D(2.0D, 2.0D, 2.0D);
 	
 	/**
 	 * A {@code Color3D} denoting the color green.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D GREEN = new Color3D(0.0D, 1.0D, 0.0D);
 	
 	/**
 	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for mercury (Hg).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D HG_ETA = IrregularSpectralCurveD.HG_ETA.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} that contains the absorption coefficient for mercury (Hg).
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D HG_K = IrregularSpectralCurveD.HG_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} denoting the color magenta.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D MAGENTA = new Color3D(1.0D, 0.0D, 1.0D);
 	
 	/**
 	 * A {@code Color3D} denoting the color orange.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D ORANGE = new Color3D(1.0D, 0.5D, 0.0D);
 	
 	/**
 	 * A {@code Color3D} denoting the color red.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D RED = new Color3D(1.0D, 0.0D, 0.0D);
 	
 	/**
 	 * A {@code Color3D} denoting the color white.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D WHITE = new Color3D(1.0D, 1.0D, 1.0D);
 	
 	/**
 	 * A {@code Color3D} denoting the color yellow.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Color3D YELLOW = new Color3D(1.0D, 1.0D, 0.0D);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,6 +285,7 @@ public final class Color3D {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D() {
 		this(0.0D);
 	}
@@ -262,6 +298,7 @@ public final class Color3D {
 	 * @param color a {@link Color3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D(final Color3F color) {
 		this(toDouble(color.getComponent1()), toDouble(color.getComponent2()), toDouble(color.getComponent3()));
 	}
@@ -274,6 +311,7 @@ public final class Color3D {
 	 * @param color a {@link Color4D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D(final Color4D color) {
 		this(color.getComponent1(), color.getComponent2(), color.getComponent3());
 	}
@@ -290,6 +328,7 @@ public final class Color3D {
 	 * 
 	 * @param component the value of all components
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D(final double component) {
 		this(component, component, component);
 	}
@@ -301,6 +340,7 @@ public final class Color3D {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D(final double component1, final double component2, final double component3) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -319,6 +359,7 @@ public final class Color3D {
 	 * 
 	 * @param component the value of all components
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D(final int component) {
 		this(component, component, component);
 	}
@@ -337,6 +378,7 @@ public final class Color3D {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D(final int component1, final int component2, final int component3) {
 		this(Ints.saturate(component1) / 255.0D, Ints.saturate(component2) / 255.0D, Ints.saturate(component3) / 255.0D);
 	}
@@ -348,6 +390,7 @@ public final class Color3D {
 	 * 
 	 * @return a {@code String} representation of this {@code Color3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Color3D(%sD, %sD, %sD)", toNonScientificNotation(this.component1), toNonScientificNotation(this.component2), toNonScientificNotation(this.component3));
@@ -361,6 +404,7 @@ public final class Color3D {
 	 * @param object the {@code Object} to compare to this {@code Color3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Color3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -383,6 +427,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color3D} instance is infinite, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasInfinites() {
 		return isInfinite(this.component1) || isInfinite(this.component2) || isInfinite(this.component3);
 	}
@@ -392,6 +437,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color3D} instance is equal to {@code Float.NaN}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasNaNs() {
 		return isNaN(this.component1) || isNaN(this.component2) || isNaN(this.component3);
 	}
@@ -403,6 +449,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is black, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isBlack() {
 		return isGrayscale() && isZero(this.component1);
 	}
@@ -419,6 +466,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered blue, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isBlue() {
 		return isBlue(1.0D, 1.0D);
 	}
@@ -432,6 +480,7 @@ public final class Color3D {
 	 * @param thresholdG the threshold for the G-component
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered blue, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isBlue(final double thresholdR, final double thresholdG) {
 		return getB() - thresholdR >= getR() && getB() - thresholdG >= getG();
 	}
@@ -441,6 +490,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered cyan, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isCyan() {
 		return equal(this.component2, this.component3) && this.component1 < this.component2;
 	}
@@ -452,6 +502,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is a grayscale color, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isGrayscale() {
 		return equal(this.component1, this.component2, this.component3);
 	}
@@ -468,6 +519,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered green, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isGreen() {
 		return isGreen(1.0D, 1.0D);
 	}
@@ -481,6 +533,7 @@ public final class Color3D {
 	 * @param thresholdB the threshold for the B-component
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered green, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isGreen(final double thresholdR, final double thresholdB) {
 		return getG() - thresholdR >= getR() && getG() - thresholdB >= getB();
 	}
@@ -490,6 +543,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered magenta, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isMagenta() {
 		return equal(this.component1, this.component3) && this.component2 < this.component3;
 	}
@@ -506,6 +560,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered red, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isRed() {
 		return isRed(1.0D, 1.0D);
 	}
@@ -519,6 +574,7 @@ public final class Color3D {
 	 * @param thresholdB the threshold for the B-component
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered red, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isRed(final double thresholdG, final double thresholdB) {
 		return getR() - thresholdG >= getG() && getR() - thresholdB >= getB();
 	}
@@ -530,6 +586,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is white, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isWhite() {
 		return isGrayscale() && this.component1 >= 1.0D;
 	}
@@ -539,6 +596,7 @@ public final class Color3D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered yellow, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isYellow() {
 		return equal(this.component1, this.component2) && this.component3 < this.component1;
 	}
@@ -550,6 +608,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the B-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteB() {
 		return (byte)(getAsIntB() & 0xFF);
 	}
@@ -561,6 +620,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of component 1 as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteComponent1() {
 		return (byte)(getAsIntComponent1() & 0xFF);
 	}
@@ -572,6 +632,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of component 2 as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteComponent2() {
 		return (byte)(getAsIntComponent2() & 0xFF);
 	}
@@ -583,6 +644,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of component 3 as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteComponent3() {
 		return (byte)(getAsIntComponent3() & 0xFF);
 	}
@@ -594,6 +656,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the G-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteG() {
 		return (byte)(getAsIntG() & 0xFF);
 	}
@@ -605,6 +668,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the R-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteR() {
 		return (byte)(getAsIntR() & 0xFF);
 	}
@@ -616,6 +680,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the X-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteX() {
 		return (byte)(getAsIntX() & 0xFF);
 	}
@@ -627,6 +692,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the Y-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteY() {
 		return (byte)(getAsIntY() & 0xFF);
 	}
@@ -638,6 +704,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the Z-component as a {@code byte}
 	 */
+//	TODO: Add Unit Tests!
 	public byte getAsByteZ() {
 		return (byte)(getAsIntZ() & 0xFF);
 	}
@@ -647,6 +714,7 @@ public final class Color3D {
 	 * 
 	 * @return the average component value of this {@code Color3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double average() {
 		return (this.component1 + this.component2 + this.component3) / 3.0D;
 	}
@@ -656,6 +724,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the B-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getB() {
 		return this.component3;
 	}
@@ -665,6 +734,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of component 1
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent1() {
 		return this.component1;
 	}
@@ -674,6 +744,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of component 2
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent2() {
 		return this.component2;
 	}
@@ -683,6 +754,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent3() {
 		return this.component3;
 	}
@@ -692,6 +764,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the G-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getG() {
 		return this.component2;
 	}
@@ -701,6 +774,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the R-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getR() {
 		return this.component1;
 	}
@@ -710,6 +784,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the X-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getX() {
 		return this.component1;
 	}
@@ -719,6 +794,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the Y-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getY() {
 		return this.component2;
 	}
@@ -728,6 +804,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the Z-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getZ() {
 		return this.component3;
 	}
@@ -737,6 +814,7 @@ public final class Color3D {
 	 * 
 	 * @return the lightness of this {@code Color3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double lightness() {
 		return (maximum() + minimum()) / 2.0D;
 	}
@@ -748,6 +826,7 @@ public final class Color3D {
 	 * 
 	 * @return the relative luminance of this {@code Color3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double luminance() {
 		return this.component1 * 0.212671D + this.component2 * 0.715160D + this.component3 * 0.072169D;
 	}
@@ -757,6 +836,7 @@ public final class Color3D {
 	 * 
 	 * @return the largest component value
 	 */
+//	TODO: Add Unit Tests!
 	public double maximum() {
 		return max(this.component1, this.component2, this.component3);
 	}
@@ -766,6 +846,7 @@ public final class Color3D {
 	 * 
 	 * @return the smallest component value
 	 */
+//	TODO: Add Unit Tests!
 	public double minimum() {
 		return min(this.component1, this.component2, this.component3);
 	}
@@ -777,6 +858,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the B-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntB() {
 		return toInt(Doubles.saturate(getB()) * 255.0D + 0.5D);
 	}
@@ -788,6 +870,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of component 1 as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntComponent1() {
 		return toInt(Doubles.saturate(getComponent1()) * 255.0D + 0.5D);
 	}
@@ -799,6 +882,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of component 2 as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntComponent2() {
 		return toInt(Doubles.saturate(getComponent2()) * 255.0D + 0.5D);
 	}
@@ -810,6 +894,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of component 3 as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntComponent3() {
 		return toInt(Doubles.saturate(getComponent3()) * 255.0D + 0.5D);
 	}
@@ -821,6 +906,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the G-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntG() {
 		return toInt(Doubles.saturate(getG()) * 255.0D + 0.5D);
 	}
@@ -832,6 +918,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the R-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntR() {
 		return toInt(Doubles.saturate(getR()) * 255.0D + 0.5D);
 	}
@@ -843,6 +930,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the X-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntX() {
 		return toInt(Doubles.saturate(getX()) * 255.0D + 0.5D);
 	}
@@ -854,6 +942,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the Y-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntY() {
 		return toInt(Doubles.saturate(getY()) * 255.0D + 0.5D);
 	}
@@ -865,6 +954,7 @@ public final class Color3D {
 	 * 
 	 * @return the value of the Z-component as an {@code int}
 	 */
+//	TODO: Add Unit Tests!
 	public int getAsIntZ() {
 		return toInt(Doubles.saturate(getZ()) * 255.0D + 0.5D);
 	}
@@ -874,6 +964,7 @@ public final class Color3D {
 	 * 
 	 * @return a hash code for this {@code Color3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3));
@@ -893,6 +984,7 @@ public final class Color3D {
 	 * 
 	 * @return an {@code int} with the component values in a packed form
 	 */
+//	TODO: Add Unit Tests!
 	public int pack() {
 		return pack(PackedIntComponentOrder.ARGB);
 	}
@@ -908,6 +1000,7 @@ public final class Color3D {
 	 * @return an {@code int} with the component values in a packed form
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = getAsIntR();
 		final int g = getAsIntG();
@@ -921,6 +1014,7 @@ public final class Color3D {
 	 * 
 	 * @return an {@code int} with the component values of this {@code Color3D} instance in RGBE-form
 	 */
+//	TODO: Add Unit Tests!
 	public int toRGBE() {
 		final double maximum = max(this.component1, this.component2, this.component3);
 		
@@ -971,6 +1065,7 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeDouble(this.component1);
@@ -995,6 +1090,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D add(final Color3D colorLHS, final Color3D colorRHS) {
 		final double component1 = colorLHS.component1 + colorRHS.component1;
 		final double component2 = colorLHS.component2 + colorRHS.component2;
@@ -1015,6 +1111,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D add(final Color3D colorLHS, final double scalarRHS) {
 		final double component1 = colorLHS.component1 + scalarRHS;
 		final double component2 = colorLHS.component2 + scalarRHS;
@@ -1036,6 +1133,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D addAndMultiply(final Color3D colorAdd, final Color3D colorMultiplyA, final Color3D colorMultiplyB) {
 		final double component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1;
 		final double component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2;
@@ -1058,6 +1156,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D addAndMultiply(final Color3D colorAdd, final Color3D colorMultiplyA, final Color3D colorMultiplyB, final double scalarMultiply) {
 		final double component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * scalarMultiply;
 		final double component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * scalarMultiply;
@@ -1089,6 +1188,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA}, {@code colorMultiplyB} or {@code colorMultiplyC} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D addMultiplyAndDivide(final Color3D colorAdd, final Color3D colorMultiplyA, final Color3D colorMultiplyB, final Color3D colorMultiplyC, final double scalarMultiply, final double scalarDivide) {
 		final double component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * colorMultiplyC.component1 * scalarMultiply / scalarDivide;
 		final double component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * colorMultiplyC.component2 * scalarMultiply / scalarDivide;
@@ -1118,6 +1218,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D addMultiplyAndDivide(final Color3D colorAdd, final Color3D colorMultiplyA, final Color3D colorMultiplyB, final double scalarDivide) {
 		final double component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 / scalarDivide;
 		final double component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 / scalarDivide;
@@ -1148,6 +1249,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D addMultiplyAndDivide(final Color3D colorAdd, final Color3D colorMultiplyA, final Color3D colorMultiplyB, final double scalarMultiply, final double scalarDivide) {
 		final double component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * scalarMultiply / scalarDivide;
 		final double component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * scalarMultiply / scalarDivide;
@@ -1171,6 +1273,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D addSample(final Color3D colorLHS, final Color3D colorRHS, final int sampleCount) {
 		final double component1 = colorLHS.component1 + ((colorRHS.component1 - colorLHS.component1) / sampleCount);
 		final double component2 = colorLHS.component2 + ((colorRHS.component2 - colorLHS.component2) / sampleCount);
@@ -1198,6 +1301,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the blend
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D blend(final Color3D colorLHS, final Color3D colorRHS) {
 		return blend(colorLHS, colorRHS, 0.5D);
 	}
@@ -1222,6 +1326,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the blend
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D blend(final Color3D colorLHS, final Color3D colorRHS, final double t) {
 		return blend(colorLHS, colorRHS, t, t, t);
 	}
@@ -1241,6 +1346,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the blend
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D blend(final Color3D colorLHS, final Color3D colorRHS, final double tComponent1, final double tComponent2, final double tComponent3) {
 		final double component1 = lerp(colorLHS.component1, colorRHS.component1, tComponent1);
 		final double component2 = lerp(colorLHS.component2, colorRHS.component2, tComponent2);
@@ -1260,6 +1366,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D convertRGBToXYZUsingPBRT(final Color3D color) {
 		final double x = 0.412453D * color.getR() + 0.357580D * color.getG() + 0.180423D * color.getB();
 		final double y = 0.212671D * color.getR() + 0.715160D * color.getG() + 0.072169D * color.getB();
@@ -1279,6 +1386,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D convertRGBToXYZUsingSRGB(final Color3D color) {
 		return ColorSpaceD.S_R_G_B.convertRGBToXYZ(color);
 	}
@@ -1294,6 +1402,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D convertXYZToRGBUsingPBRT(final Color3D color) {
 		final double r = +3.240479D * color.getX() - 1.537150D * color.getY() - 0.498535D * color.getZ();
 		final double g = -0.969256D * color.getX() + 1.875991D * color.getY() + 0.041556D * color.getZ();
@@ -1313,6 +1422,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D convertXYZToRGBUsingSRGB(final Color3D color) {
 		return ColorSpaceD.S_R_G_B.convertXYZToRGB(color);
 	}
@@ -1329,6 +1439,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D divide(final Color3D colorLHS, final Color3D colorRHS) {
 		final double component1 = finiteOrDefault(colorLHS.component1 / colorRHS.component1, 0.0D);
 		final double component2 = finiteOrDefault(colorLHS.component2 / colorRHS.component2, 0.0D);
@@ -1349,6 +1460,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D divide(final Color3D colorLHS, final double scalarRHS) {
 		final double component1 = finiteOrDefault(colorLHS.component1 / scalarRHS, 0.0D);
 		final double component2 = finiteOrDefault(colorLHS.component2 / scalarRHS, 0.0D);
@@ -1363,6 +1475,7 @@ public final class Color3D {
 	 * @param colorRGBE an {@code int} with a color in the RGBE format
 	 * @return a new {@code Color3D} instance with the result of the conversion from RGBE to RGB
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D fromRGBE(final int colorRGBE) {
 		final double exponent = R_G_B_EXPONENTS[colorRGBE & 0xFF];
 		
@@ -1382,6 +1495,7 @@ public final class Color3D {
 	 * @return a grayscale {@code Color3D} instance based on {@code color.average()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D grayscaleAverage(final Color3D color) {
 		return new Color3D(color.average());
 	}
@@ -1395,6 +1509,7 @@ public final class Color3D {
 	 * @return a grayscale {@code Color3D} instance based on {@code color.getComponent1()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D grayscaleComponent1(final Color3D color) {
 		return new Color3D(color.component1);
 	}
@@ -1408,6 +1523,7 @@ public final class Color3D {
 	 * @return a grayscale {@code Color3D} instance based on {@code color.getComponent2()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D grayscaleComponent2(final Color3D color) {
 		return new Color3D(color.component2);
 	}
@@ -1421,6 +1537,7 @@ public final class Color3D {
 	 * @return a grayscale {@code Color3D} instance based on {@code color.getComponent3()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D grayscaleComponent3(final Color3D color) {
 		return new Color3D(color.component3);
 	}
@@ -1434,6 +1551,7 @@ public final class Color3D {
 	 * @return a grayscale {@code Color3D} instance based on {@code color.lightness()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D grayscaleLightness(final Color3D color) {
 		return new Color3D(color.lightness());
 	}
@@ -1447,6 +1565,7 @@ public final class Color3D {
 	 * @return a grayscale {@code Color3D} instance based on {@code color.luminance()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D grayscaleLuminance(final Color3D color) {
 		return new Color3D(color.luminance());
 	}
@@ -1460,6 +1579,7 @@ public final class Color3D {
 	 * @return a grayscale {@code Color3D} instance based on {@code color.maximum()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D grayscaleMaximum(final Color3D color) {
 		return new Color3D(color.maximum());
 	}
@@ -1473,6 +1593,7 @@ public final class Color3D {
 	 * @return a grayscale {@code Color3D} instance based on {@code color.minimum()}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D grayscaleMinimum(final Color3D color) {
 		return new Color3D(color.minimum());
 	}
@@ -1488,6 +1609,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the inversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D invert(final Color3D color) {
 		final double component1 = 1.0D - color.component1;
 		final double component2 = 1.0D - color.component2;
@@ -1506,6 +1628,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the largest component values of {@code colorA} and {@code colorB}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D maximum(final Color3D colorA, final Color3D colorB) {
 		final double component1 = max(colorA.component1, colorB.component1);
 		final double component2 = max(colorA.component2, colorB.component2);
@@ -1540,6 +1663,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the division, or {@code color} if no division occurred
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D maximumTo1(final Color3D color) {
 		final double maximum = color.maximum();
 		
@@ -1564,6 +1688,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the smallest component values of {@code colorA} and {@code colorB}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D minimum(final Color3D colorA, final Color3D colorB) {
 		final double component1 = min(colorA.component1, colorB.component1);
 		final double component2 = min(colorA.component2, colorB.component2);
@@ -1598,6 +1723,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the addition, or {@code color} if no addition occurred
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D minimumTo0(final Color3D color) {
 		final double minimum = color.minimum();
 		
@@ -1624,6 +1750,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D multiply(final Color3D colorLHS, final Color3D colorRHS) {
 		final double component1 = colorLHS.component1 * colorRHS.component1;
 		final double component2 = colorLHS.component2 * colorRHS.component2;
@@ -1645,6 +1772,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D multiply(final Color3D colorA, final Color3D colorB, final Color3D colorC) {
 		final double component1 = colorA.component1 * colorB.component1 * colorC.component1;
 		final double component2 = colorA.component2 * colorB.component2 * colorC.component2;
@@ -1667,6 +1795,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB}, {@code colorC} or {@code colorD} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D multiply(final Color3D colorA, final Color3D colorB, final Color3D colorC, final Color3D colorD) {
 		final double component1 = colorA.component1 * colorB.component1 * colorC.component1 * colorD.component1;
 		final double component2 = colorA.component2 * colorB.component2 * colorC.component2 * colorD.component2;
@@ -1688,6 +1817,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D multiply(final Color3D colorA, final Color3D colorB, final double scalarC) {
 		final double component1 = colorA.component1 * colorB.component1 * scalarC;
 		final double component2 = colorA.component2 * colorB.component2 * scalarC;
@@ -1708,6 +1838,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D multiply(final Color3D colorLHS, final double scalarRHS) {
 		final double component1 = colorLHS.component1 * scalarRHS;
 		final double component2 = colorLHS.component2 * scalarRHS;
@@ -1728,6 +1859,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D multiplyAndSaturateNegative(final Color3D colorLHS, final double scalarRHS) {
 		final double component1 = max(colorLHS.component1 * scalarRHS, 0.0D);
 		final double component2 = max(colorLHS.component2 * scalarRHS, 0.0D);
@@ -1747,6 +1879,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D negate(final Color3D color) {
 		final double component1 = -color.component1;
 		final double component2 = -color.component2;
@@ -1766,6 +1899,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D normalize(final Color3D color) {
 		final double sum = color.component1 + color.component2 + color.component3;
 		
@@ -1793,6 +1927,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D normalizeLuminance(final Color3D color) {
 		final double luminance = color.luminance();
 		
@@ -1815,6 +1950,7 @@ public final class Color3D {
 	 * 
 	 * @return a {@code Color3D} instance with random component values
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D random() {
 		final double component1 = Doubles.random();
 		final double component2 = Doubles.random();
@@ -1835,6 +1971,7 @@ public final class Color3D {
 	 * 
 	 * @return a {@code Color3D} instance with a random component 1 value
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D randomComponent1() {
 		final double component1 = Doubles.random();
 		final double component2 = 0.0D;
@@ -1855,6 +1992,7 @@ public final class Color3D {
 	 * 
 	 * @return a {@code Color3D} instance with a random component 2 value
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D randomComponent2() {
 		final double component1 = 0.0D;
 		final double component2 = Doubles.random();
@@ -1875,6 +2013,7 @@ public final class Color3D {
 	 * 
 	 * @return a {@code Color3D} instance with a random component 3 value
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D randomComponent3() {
 		final double component1 = 0.0D;
 		final double component2 = 0.0D;
@@ -1895,6 +2034,7 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D read(final DataInput dataInput) {
 		try {
 			final double component1 = dataInput.readDouble();
@@ -1918,6 +2058,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D redoGammaCorrectionPBRT(final Color3D color) {
 		final double component1 = color.component1 <= 0.0031308D ? 12.92D * color.component1 : 1.055D * pow(color.component1, 1.0D / 2.4D) - 0.055D;
 		final double component2 = color.component2 <= 0.0031308D ? 12.92D * color.component2 : 1.055D * pow(color.component2, 1.0D / 2.4D) - 0.055D;
@@ -1937,6 +2078,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D redoGammaCorrectionSRGB(final Color3D color) {
 		return ColorSpaceD.S_R_G_B.redoGammaCorrection(color);
 	}
@@ -1959,6 +2101,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D saturate(final Color3D color) {
 		return saturate(color, 0.0D, 1.0D);
 	}
@@ -1976,6 +2119,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D saturate(final Color3D color, final double edgeA, final double edgeB) {
 		final double component1 = Doubles.saturate(color.component1, edgeA, edgeB);
 		final double component2 = Doubles.saturate(color.component2, edgeA, edgeB);
@@ -1995,6 +2139,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D sepia(final Color3D color) {
 		final double component1 = color.component1 * 0.393D + color.component2 * 0.769D + color.component3 * 0.189D;
 		final double component2 = color.component1 * 0.349D + color.component2 * 0.686D + color.component3 * 0.168D;
@@ -2012,6 +2157,7 @@ public final class Color3D {
 	 * @return a {@code Color3D} instance with its component values corresponding to the correctly rounded positive square root of the component values of {@code color}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D sqrt(final Color3D color) {
 		final double component1 = Doubles.sqrt(color.component1);
 		final double component2 = Doubles.sqrt(color.component2);
@@ -2032,6 +2178,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D subtract(final Color3D colorLHS, final Color3D colorRHS) {
 		final double component1 = colorLHS.component1 - colorRHS.component1;
 		final double component2 = colorLHS.component2 - colorRHS.component2;
@@ -2053,6 +2200,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D subtract(final Color3D a, final Color3D b, final Color3D c) {
 		final double component1 = a.component1 - b.component1 - c.component1;
 		final double component2 = a.component2 - b.component2 - c.component2;
@@ -2074,6 +2222,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D subtract(final Color3D a, final Color3D b, final double c) {
 		final double component1 = a.component1 - b.component1 - c;
 		final double component2 = a.component2 - b.component2 - c;
@@ -2094,6 +2243,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D subtract(final Color3D colorLHS, final double scalarRHS) {
 		final double component1 = colorLHS.component1 - scalarRHS;
 		final double component2 = colorLHS.component2 - scalarRHS;
@@ -2126,6 +2276,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D toneMapFilmicCurve(final Color3D color, final double exposure, final double a, final double b, final double c, final double d, final double e) {
 		return toneMapFilmicCurve(color, exposure, a, b, c, d, e, 0.0D, MIN_VALUE);
 	}
@@ -2157,6 +2308,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D toneMapFilmicCurve(final Color3D color, final double exposure, final double a, final double b, final double c, final double d, final double e, final double subtract, final double minimum) {
 		final double component11 = max(color.component1 * exposure - subtract, minimum);
 		final double component21 = max(color.component2 * exposure - subtract, minimum);
@@ -2188,6 +2340,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D toneMapFilmicCurveACESModifiedVersion1(final Color3D color, final double exposure) {
 //		Source: https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
 		return toneMapFilmicCurve(color, exposure, 2.51D, 0.03D, 2.43D, 0.59D, 0.14D);
@@ -2214,6 +2367,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D toneMapFilmicCurveGammaCorrection22(final Color3D color, final double exposure) {
 //		Source: http://filmicworlds.com/blog/why-a-filmic-curve-saturates-your-blacks/
 		return toneMapFilmicCurve(color, exposure, 6.2D, 0.5D, 6.2D, 1.7D, 0.06D, 0.004D, 0.0D);
@@ -2231,6 +2385,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D toneMapReinhard(final Color3D color, final double exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
@@ -2257,6 +2412,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D toneMapReinhardModifiedVersion1(final Color3D color, final double exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
@@ -2285,6 +2441,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D toneMapReinhardModifiedVersion2(final Color3D color, final double exposure) {
 		final double component11 = color.component1 * exposure;
 		final double component21 = color.component2 * exposure;
@@ -2309,6 +2466,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D toneMapUnreal3(final Color3D color, final double exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
@@ -2334,6 +2492,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D undoGammaCorrectionPBRT(final Color3D color) {
 		final double component1 = color.component1 <= 0.04045D ? color.component1 * 1.0D / 12.92D : pow((color.component1 + 0.055D) * 1.0D / 1.055D, 2.4D);
 		final double component2 = color.component2 <= 0.04045D ? color.component2 * 1.0D / 12.92D : pow((color.component2 + 0.055D) * 1.0D / 1.055D, 2.4D);
@@ -2353,6 +2512,7 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D undoGammaCorrectionSRGB(final Color3D color) {
 		return ColorSpaceD.S_R_G_B.undoGammaCorrection(color);
 	}
@@ -2370,6 +2530,7 @@ public final class Color3D {
 	 * @param color an {@code int} with the color in packed form
 	 * @return a {@code Color3D} instance by unpacking {@code color} using {@code PackedIntComponentOrder.ARGB}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D unpack(final int color) {
 		return unpack(color, PackedIntComponentOrder.ARGB);
 	}
@@ -2384,6 +2545,7 @@ public final class Color3D {
 	 * @return a {@code Color3D} instance by unpacking {@code color} using {@code packedIntComponentOrder}
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D unpack(final int color, final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = packedIntComponentOrder.unpackR(color);
 		final int g = packedIntComponentOrder.unpackG(color);
@@ -2408,6 +2570,7 @@ public final class Color3D {
 	 * @return a {@code Color3D[]} with a length of {@code length} and contains {@code Color3D.BLACK}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D[] array(final int length) {
 		return array(length, () -> BLACK);
 	}
@@ -2425,6 +2588,7 @@ public final class Color3D {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code supplier} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D[] array(final int length, final Supplier<Color3D> supplier) {
 		final Color3D[] colors = new Color3D[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
@@ -2453,6 +2617,7 @@ public final class Color3D {
 	 * @return a {@code Color3D[]} with a length of {@code length} and contains random {@code Color3D} instances
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D[] arrayRandom(final int length) {
 		return array(length, () -> random());
 	}
@@ -2476,6 +2641,7 @@ public final class Color3D {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % ArrayComponentOrder.RGB.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D[] arrayRead(final byte[] array) {
 		return arrayRead(array, ArrayComponentOrder.RGB);
 	}
@@ -2493,6 +2659,7 @@ public final class Color3D {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D[] arrayRead(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
@@ -2531,6 +2698,7 @@ public final class Color3D {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % ArrayComponentOrder.RGB.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D[] arrayRead(final int[] array) {
 		return arrayRead(array, ArrayComponentOrder.RGB);
 	}
@@ -2548,6 +2716,7 @@ public final class Color3D {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D[] arrayRead(final int[] array, final ArrayComponentOrder arrayComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
@@ -2583,6 +2752,7 @@ public final class Color3D {
 	 * @return a {@code Color3D[]} with a length of {@code array.length} and contains {@code Color3D} instances unpacked from {@code array}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D[] arrayUnpack(final int[] array) {
 		return arrayUnpack(array, PackedIntComponentOrder.ARGB);
 	}
@@ -2597,6 +2767,7 @@ public final class Color3D {
 	 * @return a {@code Color3D[]} with a length of {@code array.length} and contains {@code Color3D} instances unpacked from {@code array}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code packedIntComponentOrder} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Color3D[] arrayUnpack(final int[] array, final PackedIntComponentOrder packedIntComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");

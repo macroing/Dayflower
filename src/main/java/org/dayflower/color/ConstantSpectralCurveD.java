@@ -36,6 +36,7 @@ public final class ConstantSpectralCurveD extends SpectralCurveD {
 	 * 
 	 * @param amplitude the constant value to use
 	 */
+//	TODO: Add Unit Tests!
 	public ConstantSpectralCurveD(final double amplitude) {
 		this.amplitude = amplitude;
 	}
@@ -50,6 +51,7 @@ public final class ConstantSpectralCurveD extends SpectralCurveD {
 	 * @param lambda the wavelength in nanometers
 	 * @return a sample based on the wavelength {@code lambda} in nanometers
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double sample(final double lambda) {
 		return this.amplitude;

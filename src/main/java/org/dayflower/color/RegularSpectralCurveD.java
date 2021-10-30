@@ -49,6 +49,7 @@ public final class RegularSpectralCurveD extends SpectralCurveD {
 	 * @param spectrum an array with spectral data
 	 * @throws NullPointerException thrown if, and only if, {@code spectrum} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public RegularSpectralCurveD(final double lambdaMin, final double lambdaMax, final double[] spectrum) {
 		this.lambdaMin = lambdaMin;
 		this.lambdaMax = lambdaMax;
@@ -65,6 +66,7 @@ public final class RegularSpectralCurveD extends SpectralCurveD {
 	 * @param lambda the wavelength in nanometers
 	 * @return a sample based on the wavelength {@code lambda} in nanometers
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double sample(final double lambda) {
 		if(lambda < this.lambdaMin || lambda > this.lambdaMax) {

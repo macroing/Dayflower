@@ -1,7 +1,7 @@
 2021-10-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Color3FUnitTests class.
-	* CHANGE:	Fix bugs in the isCyan(), isMagenta() and isYellow() methods of the Color3D and Color3F classes.
+	* CHANGE:	Fix bugs in the isCyan(), isMagenta() and isYellow() methods of the Color3D, Color3F, Color4D and Color4F classes.
 	* CHANGE:	Update the toString() method of the Color3D and Color3F classes.
 	* CHANGE:	Update the ChangeCombinerUnitTests, ChangeHistoryUnitTests and ChangeUnitTests classes.
 

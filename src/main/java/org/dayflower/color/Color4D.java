@@ -394,7 +394,7 @@ public final class Color4D {
 	 * @return {@code true} if, and only if, this {@code Color4D} instance is considered cyan, {@code false} otherwise
 	 */
 	public boolean isCyan() {
-		return isGreen(1.0D, 0.5D) && isBlue(1.0D, 0.5D);
+		return equal(this.component2, this.component3) && this.component1 < this.component2;
 	}
 	
 	/**
@@ -443,7 +443,7 @@ public final class Color4D {
 	 * @return {@code true} if, and only if, this {@code Color4D} instance is considered magenta, {@code false} otherwise
 	 */
 	public boolean isMagenta() {
-		return isRed(1.0D, 0.5D) && isBlue(0.5D, 1.0D);
+		return equal(this.component1, this.component3) && this.component2 < this.component3;
 	}
 	
 	/**
@@ -492,7 +492,7 @@ public final class Color4D {
 	 * @return {@code true} if, and only if, this {@code Color4D} instance is considered yellow, {@code false} otherwise
 	 */
 	public boolean isYellow() {
-		return isRed(0.5D, 1.0D) && isGreen(0.5D, 1.0D);
+		return equal(this.component1, this.component2) && this.component3 < this.component1;
 	}
 	
 	/**

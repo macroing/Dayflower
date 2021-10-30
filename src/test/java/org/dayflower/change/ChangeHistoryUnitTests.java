@@ -63,19 +63,19 @@ public final class ChangeHistoryUnitTests {
 		changeHistory.push(new Change(() -> list.add("B"), () -> list.remove("B")), true);
 		
 //		Assert that list contains "A" and "B":
-		assertEquals(list, Arrays.asList("A", "B"));
+		assertEquals(Arrays.asList("A", "B"), list);
 		
 //		Assert that changeHistory.redo() has nothing to redo, because the operation was performed by ChangeHistory.push(Change, boolean):
 		assertFalse(changeHistory.redo());
 		
 //		Assert that list contains "A" and "B" and nothing has changed because of changeHistory.redo():
-		assertEquals(list, Arrays.asList("A", "B"));
+		assertEquals(Arrays.asList("A", "B"), list);
 		
 //		Assert that changeHistory.undo() has something to undo:
 		assertTrue(changeHistory.undo());
 		
 //		Assert that list contains "A":
-		assertEquals(list, Arrays.asList("A"));
+		assertEquals(Arrays.asList("A"), list);
 		
 //		Assert that changeHistory.undo() has something to undo:
 		assertTrue(changeHistory.undo());
@@ -87,25 +87,25 @@ public final class ChangeHistoryUnitTests {
 		assertTrue(changeHistory.redo());
 		
 //		Assert that list contains "A":
-		assertEquals(list, Arrays.asList("A"));
+		assertEquals(Arrays.asList("A"), list);
 		
 //		Assert that changeHistory.redo() has something to redo:
 		assertTrue(changeHistory.redo());
 		
 //		Assert that list contains "A" and "B":
-		assertEquals(list, Arrays.asList("A", "B"));
+		assertEquals(Arrays.asList("A", "B"), list);
 		
 //		Assert that changeHistory.redo() has nothing to redo:
 		assertFalse(changeHistory.redo());
 		
 //		Assert that list contains "A" and "B" and nothing has changed because of changeHistory.redo():
-		assertEquals(list, Arrays.asList("A", "B"));
+		assertEquals(Arrays.asList("A", "B"), list);
 		
 //		Assert that changeHistory.undo() has something to undo:
 		assertTrue(changeHistory.undo());
 		
 //		Assert that list contains "A":
-		assertEquals(list, Arrays.asList("A"));
+		assertEquals(Arrays.asList("A"), list);
 		
 //		Assert that changeHistory.undo() has something to undo:
 		assertTrue(changeHistory.undo());
@@ -129,13 +129,13 @@ public final class ChangeHistoryUnitTests {
 		changeHistory.push(new Change(() -> list.add("A"), () -> list.remove("A")));
 		
 //		Assert that list contains "A":
-		assertEquals(list, Arrays.asList("A"));
+		assertEquals(Arrays.asList("A"), list);
 		
 //		Assert that changeHistory.redo() has nothing to redo, because the operation was performed outside:
 		assertFalse(changeHistory.redo());
 		
 //		Assert that list contains "A" and nothing has changed because of changeHistory.redo():
-		assertEquals(list, Arrays.asList("A"));
+		assertEquals(Arrays.asList("A"), list);
 		
 //		Assert that changeHistory.undo() has something to undo:
 		assertTrue(changeHistory.undo());
@@ -150,7 +150,7 @@ public final class ChangeHistoryUnitTests {
 		assertFalse(changeHistory.redo());
 		
 //		Assert that list contains "A":
-		assertEquals(list, Arrays.asList("A"));
+		assertEquals(Arrays.asList("A"), list);
 		
 //		Assert that changeHistory.undo() has something to undo:
 		assertTrue(changeHistory.undo());

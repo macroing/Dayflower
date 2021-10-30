@@ -47,7 +47,7 @@ public final class ChangeCombinerUnitTests {
 		changeCombiner.add(new Change(() -> {}, () -> {}));
 		
 //		Assert that the List returned by changeCombiner.getChanges() contains two elements:
-		assertEquals(changeCombiner.getChanges().size(), 2);
+		assertEquals(2, changeCombiner.getChanges().size());
 		
 		changeCombiner.clear();
 		
@@ -82,7 +82,7 @@ public final class ChangeCombinerUnitTests {
 		change.redo();
 		
 //		Assert that list contains the String instances "A", "B" and "C":
-		assertEquals(list, Arrays.asList("A", "B", "C"));
+		assertEquals(Arrays.asList("A", "B", "C"), list);
 		
 		change.undo();
 		
@@ -90,6 +90,6 @@ public final class ChangeCombinerUnitTests {
 		assertTrue(list.isEmpty());
 		
 //		Assert that listReverseOrder contains the String instances "C", "B" and "A":
-		assertEquals(listReverseOrder, Arrays.asList("C", "B", "A"));
+		assertEquals(Arrays.asList("C", "B", "A"), listReverseOrder);
 	}
 }

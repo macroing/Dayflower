@@ -58,7 +58,7 @@ public final class ChangeUnitTests {
 		change.redo();
 		
 //		Assert that list contains Integer.valueOf(0) and Integer.valueOf(1):
-		assertEquals(list, Arrays.asList(Integer.valueOf(0), Integer.valueOf(1)));
+		assertEquals(Arrays.asList(Integer.valueOf(0), Integer.valueOf(1)), list);
 	}
 	
 	@Test

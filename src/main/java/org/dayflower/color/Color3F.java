@@ -18,6 +18,7 @@
  */
 package org.dayflower.color;
 
+import static org.dayflower.java.lang.Strings.toNonScientificNotation;
 import static org.dayflower.utility.Floats.MIN_VALUE;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.exp;
@@ -349,7 +350,7 @@ public final class Color3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Color3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
+		return String.format("new Color3F(%sF, %sF, %sF)", toNonScientificNotation(this.component1), toNonScientificNotation(this.component2), toNonScientificNotation(this.component3));
 	}
 	
 	/**
@@ -441,7 +442,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is considered cyan, {@code false} otherwise
 	 */
 	public boolean isCyan() {
-		return isGreen(1.0F, 0.5F) && isBlue(1.0F, 0.5F);
+		return equal(this.component2, this.component3) && this.component1 < this.component2;
 	}
 	
 	/**
@@ -490,7 +491,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is considered magenta, {@code false} otherwise
 	 */
 	public boolean isMagenta() {
-		return isRed(1.0F, 0.5F) && isBlue(0.5F, 1.0F);
+		return equal(this.component1, this.component3) && this.component2 < this.component3;
 	}
 	
 	/**
@@ -539,7 +540,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is considered yellow, {@code false} otherwise
 	 */
 	public boolean isYellow() {
-		return isRed(0.5F, 1.0F) && isGreen(0.5F, 1.0F);
+		return equal(this.component1, this.component2) && this.component3 < this.component1;
 	}
 	
 	/**

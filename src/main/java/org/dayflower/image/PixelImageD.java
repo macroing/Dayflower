@@ -47,7 +47,7 @@ import org.dayflower.color.Color3D;
 import org.dayflower.color.Color4D;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.filter.Filter2D;
-import org.dayflower.filter.MitchellFilter2D;
+import org.dayflower.filter.GaussianFilter2D;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.java.awt.image.BufferedImages;
@@ -98,7 +98,7 @@ public final class PixelImageD extends ImageD {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImageD(bufferedImage, new MitchellFilter2D());
+	 * new PixelImageD(bufferedImage, new GaussianFilter2D());
 	 * }
 	 * </pre>
 	 * 
@@ -107,7 +107,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
 	public PixelImageD(final BufferedImage bufferedImage) {
-		this(bufferedImage, new MitchellFilter2D());
+		this(bufferedImage, new GaussianFilter2D());
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public final class PixelImageD extends ImageD {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImageD(resolutionX, resolutionY, colorRGBA, new MitchellFilter2D());
+	 * new PixelImageD(resolutionX, resolutionY, colorRGBA, new GaussianFilter2D());
 	 * }
 	 * </pre>
 	 * 
@@ -187,7 +187,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
 	public PixelImageD(final int resolutionX, final int resolutionY, final Color4D colorRGBA) {
-		this(resolutionX, resolutionY, colorRGBA, new MitchellFilter2D());
+		this(resolutionX, resolutionY, colorRGBA, new GaussianFilter2D());
 	}
 	
 	/**
@@ -222,7 +222,7 @@ public final class PixelImageD extends ImageD {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImageD(resolutionX, resolutionY, colorRGBAs, new MitchellFilter2D());
+	 * new PixelImageD(resolutionX, resolutionY, colorRGBAs, new GaussianFilter2D());
 	 * }
 	 * </pre>
 	 * 
@@ -233,7 +233,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or at least one of its elements are {@code null}
 	 */
 	public PixelImageD(final int resolutionX, final int resolutionY, final Color4D[] colorRGBAs) {
-		this(resolutionX, resolutionY, colorRGBAs, new MitchellFilter2D());
+		this(resolutionX, resolutionY, colorRGBAs, new GaussianFilter2D());
 	}
 	
 	/**
@@ -885,7 +885,7 @@ public final class PixelImageD extends ImageD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImageD.load(file, new MitchellFilter2D());
+	 * PixelImageD.load(file, new GaussianFilter2D());
 	 * }
 	 * </pre>
 	 * 
@@ -895,7 +895,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static PixelImageD load(final File file) {
-		return load(file, new MitchellFilter2D());
+		return load(file, new GaussianFilter2D());
 	}
 	
 	/**
@@ -933,7 +933,7 @@ public final class PixelImageD extends ImageD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImageD.load(pathname, new MitchellFilter2D());
+	 * PixelImageD.load(pathname, new GaussianFilter2D());
 	 * }
 	 * </pre>
 	 * 
@@ -943,7 +943,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static PixelImageD load(final String pathname) {
-		return load(pathname, new MitchellFilter2D());
+		return load(pathname, new GaussianFilter2D());
 	}
 	
 	/**
@@ -984,7 +984,7 @@ public final class PixelImageD extends ImageD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImageD.load(uRL, new MitchellFilter2D());
+	 * PixelImageD.load(uRL, new GaussianFilter2D());
 	 * }
 	 * </pre>
 	 * 
@@ -994,7 +994,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static PixelImageD load(final URL uRL) {
-		return load(uRL, new MitchellFilter2D());
+		return load(uRL, new GaussianFilter2D());
 	}
 	
 	/**

@@ -173,6 +173,8 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 		final ImageF image = getImage();
 		
 		if(!(image instanceof PixelImageF)) {
+			this.isRendering.set(false);
+			
 			return false;
 		}
 		

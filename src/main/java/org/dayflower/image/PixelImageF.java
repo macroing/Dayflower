@@ -47,7 +47,7 @@ import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.filter.Filter2F;
-import org.dayflower.filter.MitchellFilter2F;
+import org.dayflower.filter.GaussianFilter2F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.java.awt.image.BufferedImages;
@@ -98,7 +98,7 @@ public final class PixelImageF extends ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImageF(bufferedImage, new MitchellFilter2F());
+	 * new PixelImageF(bufferedImage, new GaussianFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -107,7 +107,7 @@ public final class PixelImageF extends ImageF {
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
 	public PixelImageF(final BufferedImage bufferedImage) {
-		this(bufferedImage, new MitchellFilter2F());
+		this(bufferedImage, new GaussianFilter2F());
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public final class PixelImageF extends ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImageF(resolutionX, resolutionY, colorRGBA, new MitchellFilter2F());
+	 * new PixelImageF(resolutionX, resolutionY, colorRGBA, new GaussianFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -187,7 +187,7 @@ public final class PixelImageF extends ImageF {
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
 	public PixelImageF(final int resolutionX, final int resolutionY, final Color4F colorRGBA) {
-		this(resolutionX, resolutionY, colorRGBA, new MitchellFilter2F());
+		this(resolutionX, resolutionY, colorRGBA, new GaussianFilter2F());
 	}
 	
 	/**
@@ -222,7 +222,7 @@ public final class PixelImageF extends ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImageF(resolutionX, resolutionY, colorRGBAs, new MitchellFilter2F());
+	 * new PixelImageF(resolutionX, resolutionY, colorRGBAs, new GaussianFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -233,7 +233,7 @@ public final class PixelImageF extends ImageF {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or at least one of its elements are {@code null}
 	 */
 	public PixelImageF(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs) {
-		this(resolutionX, resolutionY, colorRGBAs, new MitchellFilter2F());
+		this(resolutionX, resolutionY, colorRGBAs, new GaussianFilter2F());
 	}
 	
 	/**
@@ -885,7 +885,7 @@ public final class PixelImageF extends ImageF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImageF.load(file, new MitchellFilter2F());
+	 * PixelImageF.load(file, new GaussianFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -895,7 +895,7 @@ public final class PixelImageF extends ImageF {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static PixelImageF load(final File file) {
-		return load(file, new MitchellFilter2F());
+		return load(file, new GaussianFilter2F());
 	}
 	
 	/**
@@ -933,7 +933,7 @@ public final class PixelImageF extends ImageF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImageF.load(pathname, new MitchellFilter2F());
+	 * PixelImageF.load(pathname, new GaussianFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -943,7 +943,7 @@ public final class PixelImageF extends ImageF {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static PixelImageF load(final String pathname) {
-		return load(pathname, new MitchellFilter2F());
+		return load(pathname, new GaussianFilter2F());
 	}
 	
 	/**
@@ -984,7 +984,7 @@ public final class PixelImageF extends ImageF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImageF.load(uRL, new MitchellFilter2F());
+	 * PixelImageF.load(uRL, new GaussianFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -994,7 +994,7 @@ public final class PixelImageF extends ImageF {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static PixelImageF load(final URL uRL) {
-		return load(uRL, new MitchellFilter2F());
+		return load(uRL, new GaussianFilter2F());
 	}
 	
 	/**

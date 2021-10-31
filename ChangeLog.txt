@@ -1,3 +1,9 @@
+2021-10-31  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the default Filter2D class used in PixelImageD from MitchellFilter2D to GaussianFilter2D. MitchellFilter2D creates negative filter weights whereas GaussianFilter2D does not.
+	* CHANGE:	Update the default Filter2F class used in PixelImageF from MitchellFilter2F to GaussianFilter2F. MitchellFilter2F creates negative filter weights whereas GaussianFilter2F does not.
+	* CHANGE:	Fix a bug in AbstractCPURenderer.
+
 2021-10-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Color3FUnitTests class.

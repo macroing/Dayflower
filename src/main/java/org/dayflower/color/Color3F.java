@@ -1649,7 +1649,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F multiply(final Color3F colorLHS, final Color3F colorRHS) {
 		final float component1 = colorLHS.component1 * colorRHS.component1;
 		final float component2 = colorLHS.component2 * colorRHS.component2;
@@ -1671,7 +1670,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F multiply(final Color3F colorA, final Color3F colorB, final Color3F colorC) {
 		final float component1 = colorA.component1 * colorB.component1 * colorC.component1;
 		final float component2 = colorA.component2 * colorB.component2 * colorC.component2;
@@ -1694,7 +1692,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB}, {@code colorC} or {@code colorD} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F multiply(final Color3F colorA, final Color3F colorB, final Color3F colorC, final Color3F colorD) {
 		final float component1 = colorA.component1 * colorB.component1 * colorC.component1 * colorD.component1;
 		final float component2 = colorA.component2 * colorB.component2 * colorC.component2 * colorD.component2;
@@ -1716,7 +1713,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F multiply(final Color3F colorA, final Color3F colorB, final float scalarC) {
 		final float component1 = colorA.component1 * colorB.component1 * scalarC;
 		final float component2 = colorA.component2 * colorB.component2 * scalarC;
@@ -1737,7 +1733,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F multiply(final Color3F colorLHS, final float scalarRHS) {
 		final float component1 = colorLHS.component1 * scalarRHS;
 		final float component2 = colorLHS.component2 * scalarRHS;

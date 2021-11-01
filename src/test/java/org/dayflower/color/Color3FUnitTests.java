@@ -962,6 +962,75 @@ public final class Color3FUnitTests {
 	}
 	
 	@Test
+	public void testMultiplyColor3FColor3F() {
+		final Color3F a = new Color3F(1.0F, 2.0F, 3.0F);
+		final Color3F b = new Color3F(2.0F, 2.0F, 2.0F);
+		final Color3F c = Color3F.multiply(a, b);
+		
+		assertEquals(2.0F, c.getComponent1());
+		assertEquals(4.0F, c.getComponent2());
+		assertEquals(6.0F, c.getComponent3());
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(a, null));
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(null, b));
+	}
+	
+	@Test
+	public void testMultiplyColor3FColor3FColor3F() {
+		final Color3F a = new Color3F(1.0F, 2.0F, 3.0F);
+		final Color3F b = new Color3F(2.0F, 2.0F, 2.0F);
+		final Color3F c = new Color3F(5.0F, 5.0F, 5.0F);
+		final Color3F d = Color3F.multiply(a, b, c);
+		
+		assertEquals(10.0F, d.getComponent1());
+		assertEquals(20.0F, d.getComponent2());
+		assertEquals(30.0F, d.getComponent3());
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(a, b, null));
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(a, null, c));
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(null, b, c));
+	}
+	
+	@Test
+	public void testMultiplyColor3FColor3FColor3FColor3F() {
+		final Color3F a = new Color3F(1.0F, 2.0F, 3.0F);
+		final Color3F b = new Color3F(2.0F, 2.0F, 2.0F);
+		final Color3F c = new Color3F(5.0F, 5.0F, 5.0F);
+		final Color3F d = new Color3F(2.0F, 2.0F, 2.0F);
+		final Color3F e = Color3F.multiply(a, b, c, d);
+		
+		assertEquals(20.0F, e.getComponent1());
+		assertEquals(40.0F, e.getComponent2());
+		assertEquals(60.0F, e.getComponent3());
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(a, b, c, null));
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(a, b, null, d));
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(a, null, c, d));
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(null, b, c, d));
+	}
+	
+	@Test
+	public void testMultiplyColor3FColor3FFloat() {
+		final Color3F a = new Color3F(1.0F, 2.0F, 3.0F);
+		final Color3F b = new Color3F(2.0F, 2.0F, 2.0F);
+		final Color3F c = Color3F.multiply(a, b, 5.0F);
+		
+		assertEquals(10.0F, c.getComponent1());
+		assertEquals(20.0F, c.getComponent2());
+		assertEquals(30.0F, c.getComponent3());
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(a, null, 5.0F));
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(null, b, 5.0F));
+	}
+	
+	@Test
+	public void testMultiplyColor3FFloat() {
+		final Color3F a = new Color3F(1.0F, 2.0F, 3.0F);
+		final Color3F b = Color3F.multiply(a, 2.0F);
+		
+		assertEquals(2.0F, b.getComponent1());
+		assertEquals(4.0F, b.getComponent2());
+		assertEquals(6.0F, b.getComponent3());
+		assertThrows(NullPointerException.class, () -> Color3F.multiply(null, 2.0F));
+	}
+	
+	@Test
 	public void testToString() {
 		final Color3F color = new Color3F(0.0F, 0.5F, 1.0F);
 		

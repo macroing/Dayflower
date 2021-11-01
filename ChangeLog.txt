@@ -1,3 +1,7 @@
+2021-11-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the Color3FUnitTests class.
+
 2021-10-31  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the default Filter2D class used in PixelImageD from MitchellFilter2D to GaussianFilter2D. MitchellFilter2D creates negative filter weights whereas GaussianFilter2D does not.

@@ -137,7 +137,6 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code ArrayComponentOrder} has an offset for the A-component, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean hasOffsetA() {
 		return this.offsetA != -1;
 	}
@@ -147,7 +146,6 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code ArrayComponentOrder} has an offset for the B-component, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean hasOffsetB() {
 		return this.offsetB != -1;
 	}
@@ -157,7 +155,6 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code ArrayComponentOrder} has an offset for the G-component, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean hasOffsetG() {
 		return this.offsetG != -1;
 	}
@@ -167,7 +164,6 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code ArrayComponentOrder} has an offset for the R-component, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean hasOffsetR() {
 		return this.offsetR != -1;
 	}
@@ -393,7 +389,6 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return the component count of this {@code ArrayComponentOrder} instance
 	 */
-//	TODO: Add Unit Tests!
 	public int getComponentCount() {
 		return (hasOffsetR() ? 1 : 0) + (hasOffsetG() ? 1 : 0) + (hasOffsetB() ? 1 : 0) + (hasOffsetA() ? 1 : 0);
 	}
@@ -403,7 +398,6 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return the offset for the A-component, or {@code -1} if it does not have one
 	 */
-//	TODO: Add Unit Tests!
 	public int getOffsetA() {
 		return this.offsetA;
 	}
@@ -413,7 +407,6 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return the offset for the B-component, or {@code -1} if it does not have one
 	 */
-//	TODO: Add Unit Tests!
 	public int getOffsetB() {
 		return this.offsetB;
 	}
@@ -423,7 +416,6 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return the offset for the G-component, or {@code -1} if it does not have one
 	 */
-//	TODO: Add Unit Tests!
 	public int getOffsetG() {
 		return this.offsetG;
 	}
@@ -433,7 +425,6 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return the offset for the R-component, or {@code -1} if it does not have one
 	 */
-//	TODO: Add Unit Tests!
 	public int getOffsetR() {
 		return this.offsetR;
 	}
@@ -578,8 +569,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public byte readRAsInt(final byte[] array, final int offset) {
-		return readR(array, offset);
+	public int readRAsInt(final byte[] array, final int offset) {
+		return readR(array, offset) & 0xFF;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

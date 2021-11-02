@@ -1753,7 +1753,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F multiplyAndSaturateNegative(final Color3F colorLHS, final float scalarRHS) {
 		final float component1 = max(colorLHS.component1 * scalarRHS, 0.0F);
 		final float component2 = max(colorLHS.component2 * scalarRHS, 0.0F);
@@ -1773,7 +1772,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F negate(final Color3F color) {
 		final float component1 = -color.component1;
 		final float component2 = -color.component2;
@@ -1844,7 +1842,6 @@ public final class Color3F {
 	 * 
 	 * @return a {@code Color3F} instance with random component values
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F random() {
 		final float component1 = Floats.random();
 		final float component2 = Floats.random();
@@ -1865,7 +1862,6 @@ public final class Color3F {
 	 * 
 	 * @return a {@code Color3F} instance with a random component 1 value
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F randomComponent1() {
 		final float component1 = Floats.random();
 		final float component2 = 0.0F;
@@ -1886,7 +1882,6 @@ public final class Color3F {
 	 * 
 	 * @return a {@code Color3F} instance with a random component 2 value
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F randomComponent2() {
 		final float component1 = 0.0F;
 		final float component2 = Floats.random();
@@ -1907,7 +1902,6 @@ public final class Color3F {
 	 * 
 	 * @return a {@code Color3F} instance with a random component 3 value
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F randomComponent3() {
 		final float component1 = 0.0F;
 		final float component2 = 0.0F;
@@ -1928,7 +1922,6 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F read(final DataInput dataInput) {
 		try {
 			final float component1 = dataInput.readFloat();
@@ -1995,7 +1988,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F saturate(final Color3F color) {
 		return saturate(color, 0.0F, 1.0F);
 	}
@@ -2013,7 +2005,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F saturate(final Color3F color, final float edgeA, final float edgeB) {
 		final float component1 = Floats.saturate(color.component1, edgeA, edgeB);
 		final float component2 = Floats.saturate(color.component2, edgeA, edgeB);
@@ -2033,7 +2024,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F sepia(final Color3F color) {
 		final float component1 = color.component1 * 0.393F + color.component2 * 0.769F + color.component3 * 0.189F;
 		final float component2 = color.component1 * 0.349F + color.component2 * 0.686F + color.component3 * 0.168F;
@@ -2051,7 +2041,6 @@ public final class Color3F {
 	 * @return a {@code Color3F} instance with its component values corresponding to the correctly rounded positive square root of the component values of {@code color}
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F sqrt(final Color3F color) {
 		final float component1 = Floats.sqrt(color.component1);
 		final float component2 = Floats.sqrt(color.component2);
@@ -2072,7 +2061,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F subtract(final Color3F colorLHS, final Color3F colorRHS) {
 		final float component1 = colorLHS.component1 - colorRHS.component1;
 		final float component2 = colorLHS.component2 - colorRHS.component2;
@@ -2094,7 +2082,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F subtract(final Color3F a, final Color3F b, final Color3F c) {
 		final float component1 = a.component1 - b.component1 - c.component1;
 		final float component2 = a.component2 - b.component2 - c.component2;
@@ -2116,7 +2103,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F subtract(final Color3F a, final Color3F b, final float c) {
 		final float component1 = a.component1 - b.component1 - c;
 		final float component2 = a.component2 - b.component2 - c;
@@ -2137,7 +2123,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F subtract(final Color3F colorLHS, final float scalarRHS) {
 		final float component1 = colorLHS.component1 - scalarRHS;
 		final float component2 = colorLHS.component2 - scalarRHS;
@@ -2424,7 +2409,6 @@ public final class Color3F {
 	 * @param color an {@code int} with the color in packed form
 	 * @return a {@code Color3F} instance by unpacking {@code color} using {@code PackedIntComponentOrder.ARGB}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F unpack(final int color) {
 		return unpack(color, PackedIntComponentOrder.ARGB);
 	}
@@ -2439,7 +2423,6 @@ public final class Color3F {
 	 * @return a {@code Color3F} instance by unpacking {@code color} using {@code packedIntComponentOrder}
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F unpack(final int color, final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = packedIntComponentOrder.unpackR(color);
 		final int g = packedIntComponentOrder.unpackG(color);
@@ -2464,7 +2447,6 @@ public final class Color3F {
 	 * @return a {@code Color3F[]} with a length of {@code length} and contains {@code Color3F.BLACK}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F[] array(final int length) {
 		return array(length, () -> BLACK);
 	}
@@ -2482,7 +2464,6 @@ public final class Color3F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code supplier} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F[] array(final int length, final Supplier<Color3F> supplier) {
 		final Color3F[] colors = new Color3F[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
@@ -2511,7 +2492,6 @@ public final class Color3F {
 	 * @return a {@code Color3F[]} with a length of {@code length} and contains random {@code Color3F} instances
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F[] arrayRandom(final int length) {
 		return array(length, () -> random());
 	}
@@ -2535,7 +2515,6 @@ public final class Color3F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % ArrayComponentOrder.RGB.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F[] arrayRead(final byte[] array) {
 		return arrayRead(array, ArrayComponentOrder.RGB);
 	}
@@ -2553,7 +2532,6 @@ public final class Color3F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F[] arrayRead(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
@@ -2592,7 +2570,6 @@ public final class Color3F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % ArrayComponentOrder.RGB.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F[] arrayRead(final int[] array) {
 		return arrayRead(array, ArrayComponentOrder.RGB);
 	}
@@ -2610,7 +2587,6 @@ public final class Color3F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F[] arrayRead(final int[] array, final ArrayComponentOrder arrayComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");

@@ -45,6 +45,7 @@ public final class XORShiftRandom extends Random {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public XORShiftRandom() {
 		this(System.nanoTime());
 	}
@@ -54,6 +55,7 @@ public final class XORShiftRandom extends Random {
 	 * 
 	 * @param seed the seed to use
 	 */
+//	TODO: Add Unit Tests!
 	public XORShiftRandom(final long seed) {
 		this.seed = seed;
 	}
@@ -66,6 +68,7 @@ public final class XORShiftRandom extends Random {
 	 * @param bits random bits
 	 * @return the next pseudorandom number
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	protected int next(final int bits) {
 		long seed = this.seed;
@@ -86,6 +89,7 @@ public final class XORShiftRandom extends Random {
 	 * 
 	 * @param seed the new seed
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public synchronized void setSeed(final long seed) {
 		this.seed = seed;

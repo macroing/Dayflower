@@ -52,6 +52,7 @@ public final class Rasterizer2I {
 	 * @return a {@code Point2I[]} that represents a scanline
 	 * @throws NullPointerException thrown if, and only if, either {@code lineSegment} or {@code rectangle} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2I[] rasterize(final LineSegment2I lineSegment, final Rectangle2I rectangle) {
 		final int lAX = lineSegment.getA().getX();
 		final int lAY = lineSegment.getA().getY();
@@ -120,6 +121,7 @@ public final class Rasterizer2I {
 	 * @return a {@code Point2I[][]} that represents scanlines
 	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code rectangle} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2I[][] rasterize(final Triangle2I triangle, final Rectangle2I rectangle) {
 		final Point2I[] vertices = new Point2I[] {triangle.getA(), triangle.getB(), triangle.getC()};
 		

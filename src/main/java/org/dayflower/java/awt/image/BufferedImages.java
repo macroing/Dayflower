@@ -59,6 +59,7 @@ public final class BufferedImages {
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
 	 */
+//	TODO: Add Unit Tests!
 	public static BufferedImage createScreenCapture(final Rectangle rectangle) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		
@@ -93,6 +94,7 @@ public final class BufferedImages {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code width} or {@code height} are less than or equal to {@code 0}
 	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
 	 */
+//	TODO: Add Unit Tests!
 	public static BufferedImage createScreenCapture(final int x, final int y, final int width, final int height) {
 		return createScreenCapture(new Rectangle(x, y, width, height));
 	}
@@ -113,6 +115,7 @@ public final class BufferedImages {
 	 * @return a {@code BufferedImage} instance that contains an image similar to {@code bufferedImage} and a type of {@code BufferedImage.TYPE_INT_ARGB}
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static BufferedImage getCompatibleBufferedImage(final BufferedImage bufferedImage) {
 		return getCompatibleBufferedImage(bufferedImage, BufferedImage.TYPE_INT_ARGB);
 	}
@@ -130,6 +133,7 @@ public final class BufferedImages {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code type} is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static BufferedImage getCompatibleBufferedImage(final BufferedImage bufferedImage, final int type) {
 		if(bufferedImage.getType() == type) {
 			return bufferedImage;

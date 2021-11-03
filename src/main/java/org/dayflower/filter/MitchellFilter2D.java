@@ -47,6 +47,7 @@ public final class MitchellFilter2D extends Filter2D {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public MitchellFilter2D() {
 		this(2.0D, 2.0D, 1.0D / 3.0D, 1.0D / 3.0D);
 	}
@@ -59,6 +60,7 @@ public final class MitchellFilter2D extends Filter2D {
 	 * @param b the B-coefficient to use
 	 * @param c the C-coefficient to use
 	 */
+//	TODO: Add Unit Tests!
 	public MitchellFilter2D(final double resolutionX, final double resolutionY, final double b, final double c) {
 		super(resolutionX, resolutionY);
 		
@@ -73,6 +75,7 @@ public final class MitchellFilter2D extends Filter2D {
 	 * 
 	 * @return a {@code String} representation of this {@code MitchellFilter2D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new MitchellFilter2D(%+.10f, %+.10f, %+.10f, %+.10f)", Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()), Double.valueOf(this.b), Double.valueOf(this.c));
@@ -86,6 +89,7 @@ public final class MitchellFilter2D extends Filter2D {
 	 * @param object the {@code Object} to compare to this {@code MitchellFilter2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MitchellFilter2D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -118,6 +122,7 @@ public final class MitchellFilter2D extends Filter2D {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double evaluate(final double x, final double y) {
 		return doMitchell(x * getResolutionXReciprocal(), this.b, this.c) * doMitchell(y * getResolutionYReciprocal(), this.b, this.c);
@@ -128,6 +133,7 @@ public final class MitchellFilter2D extends Filter2D {
 	 * 
 	 * @return the B-coefficient
 	 */
+//	TODO: Add Unit Tests!
 	public double getB() {
 		return this.b;
 	}
@@ -137,6 +143,7 @@ public final class MitchellFilter2D extends Filter2D {
 	 * 
 	 * @return the C-coefficient
 	 */
+//	TODO: Add Unit Tests!
 	public double getC() {
 		return this.c;
 	}
@@ -146,6 +153,7 @@ public final class MitchellFilter2D extends Filter2D {
 	 * 
 	 * @return a hash code for this {@code MitchellFilter2D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionXReciprocal()), Double.valueOf(getResolutionY()), Double.valueOf(getResolutionYReciprocal()), Double.valueOf(this.b), Double.valueOf(this.c));

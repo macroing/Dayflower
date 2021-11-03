@@ -63,6 +63,7 @@ public interface TriFunction<T, U, V, R> {
 	 * @return a composed function that first applies this function to its input, and then applies the {@code after} function to the result
 	 * @throws NullPointerException thrown if, and only if, {@code after} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	default <W> TriFunction<T, U, V, W> andThen(final Function<? super R, ? extends W> after) {
 		Objects.requireNonNull(after, "after == null");
 		

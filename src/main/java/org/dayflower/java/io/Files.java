@@ -48,6 +48,7 @@ public final class Files {
 	 * @return a {@code File} instance that represents the closest existing directory to {@code directory}, or {@code new File(".")} if no such directory exists
 	 * @throws NullPointerException thrown if, and only if, {@code directory} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static File findClosestExistingDirectoryTo(final File directory) {
 		Objects.requireNonNull(directory, "directory == null");
 		
@@ -72,6 +73,7 @@ public final class Files {
 	 * 
 	 * @return a {@code List} with {@code File} instances that represents files in the directory denoted by {@code directory} or any of its sub-directories
 	 */
+//	TODO: Add Unit Tests!
 	public static List<File> findFilesFromDirectory() {
 		return findFilesFromDirectory(new File("."));
 	}
@@ -92,6 +94,7 @@ public final class Files {
 	 * @return a {@code List} with {@code File} instances that represents files in the directory denoted by {@code directory} or any of its sub-directories
 	 * @throws NullPointerException thrown if, and only if, {@code directory} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static List<File> findFilesFromDirectory(final File directory) {
 		return findFilesFromDirectory(directory, currentFile -> true);
 	}
@@ -113,6 +116,7 @@ public final class Files {
 	 * @return a {@code List} with {@code File} instances that represents files in the directory denoted by {@code directory} or any of its sub-directories
 	 * @throws NullPointerException thrown if, and only if, either {@code directory} or {@code filePredicate} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static List<File> findFilesFromDirectory(final File directory, final Predicate<File> filePredicate) {
 		return findFilesFromDirectory(directory, filePredicate, currentDirectory -> true);
 	}
@@ -128,6 +132,7 @@ public final class Files {
 	 * @return a {@code List} with {@code File} instances that represents files in the directory denoted by {@code directory} or any of its sub-directories
 	 * @throws NullPointerException thrown if, and only if, either {@code directory}, {@code filePredicate} or {@code directoryPredicate} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static List<File> findFilesFromDirectory(final File directory, final Predicate<File> filePredicate, final Predicate<File> directoryPredicate) {
 		Objects.requireNonNull(directory, "directory == null");
 		Objects.requireNonNull(filePredicate, "filePredicate == null");
@@ -154,6 +159,7 @@ public final class Files {
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static String readAllBytesToString(final File file) {
 		try {
 			return new String(java.nio.file.Files.readAllBytes(file.toPath()));

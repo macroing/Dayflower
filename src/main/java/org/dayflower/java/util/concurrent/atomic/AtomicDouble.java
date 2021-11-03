@@ -43,6 +43,7 @@ public final class AtomicDouble extends Number {
 	/**
 	 * Constructs a new {@code AtomicDouble} with an initial value of {@code 0.0D}.
 	 */
+//	TODO: Add Unit Tests!
 	public AtomicDouble() {
 		this(0.0D);
 	}
@@ -52,6 +53,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @param initialValue the initial value
 	 */
+//	TODO: Add Unit Tests!
 	public AtomicDouble(final double initialValue) {
 		this.bits = new AtomicLong(Double.doubleToLongBits(initialValue));
 	}
@@ -63,6 +65,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return a {@code String} representation of the current value
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return Double.toString(get());
@@ -77,6 +80,7 @@ public final class AtomicDouble extends Number {
 	 * @param update the new value
 	 * @return {@code true} if, and only if, the current value was set to {@code update}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean compareAndSet(final double expect, final double update) {
 		return this.bits.compareAndSet(Double.doubleToLongBits(expect), Double.doubleToLongBits(update));
 	}
@@ -92,6 +96,7 @@ public final class AtomicDouble extends Number {
 	 * @param update the new value
 	 * @return {@code true} if, and only if, the current value was set to {@code update}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean weakCompareAndSet(final double expect, final double update) {
 		return this.bits.weakCompareAndSet(Double.doubleToLongBits(expect), Double.doubleToLongBits(update));
 	}
@@ -110,6 +115,7 @@ public final class AtomicDouble extends Number {
 	 * @return the updated value
 	 * @throws NullPointerException thrown if, and only if, {@code accumulatorFunction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public double accumulateAndGet(final double x, final DoubleBinaryOperator accumulatorFunction) {
 		double previous;
 		double next;
@@ -130,6 +136,7 @@ public final class AtomicDouble extends Number {
 	 * @param delta the value to add
 	 * @return the updated value
 	 */
+//	TODO: Add Unit Tests!
 	public double addAndGet(final double delta) {
 		return updateAndGet(currentValue -> currentValue + delta);
 	}
@@ -141,6 +148,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return the updated value
 	 */
+//	TODO: Add Unit Tests!
 	public double decrementAndGet() {
 		return updateAndGet(currentValue -> currentValue - 1.0D);
 	}
@@ -150,6 +158,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return the current value of this {@code AtomicDouble} instance as a {@code double}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double doubleValue() {
 		return get();
@@ -160,6 +169,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return the current value
 	 */
+//	TODO: Add Unit Tests!
 	public double get() {
 		return Double.longBitsToDouble(this.bits.get());
 	}
@@ -178,6 +188,7 @@ public final class AtomicDouble extends Number {
 	 * @return the previous value
 	 * @throws NullPointerException thrown if, and only if, {@code accumulatorFunction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public double getAndAccumulate(final double x, final DoubleBinaryOperator accumulatorFunction) {
 		double previous;
 		double next;
@@ -198,6 +209,7 @@ public final class AtomicDouble extends Number {
 	 * @param delta the value to add
 	 * @return the previous value
 	 */
+//	TODO: Add Unit Tests!
 	public double getAndAdd(final double delta) {
 		return getAndUpdate(currentValue -> currentValue + delta);
 	}
@@ -209,6 +221,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return the previous value
 	 */
+//	TODO: Add Unit Tests!
 	public double getAndDecrement() {
 		return getAndUpdate(currentValue -> currentValue - 1.0D);
 	}
@@ -220,6 +233,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return the previous value
 	 */
+//	TODO: Add Unit Tests!
 	public double getAndIncrement() {
 		return getAndUpdate(currentValue -> currentValue + 1.0D);
 	}
@@ -232,6 +246,7 @@ public final class AtomicDouble extends Number {
 	 * @param newValue the new value
 	 * @return the previous value
 	 */
+//	TODO: Add Unit Tests!
 	public double getAndSet(final double newValue) {
 		return Double.longBitsToDouble(this.bits.getAndSet(Double.doubleToLongBits(newValue)));
 	}
@@ -249,6 +264,7 @@ public final class AtomicDouble extends Number {
 	 * @return the previous value
 	 * @throws NullPointerException thrown if, and only if, {@code updateFunction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public double getAndUpdate(final DoubleUnaryOperator updateFunction) {
 		double previous;
 		double next;
@@ -268,6 +284,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return the updated value
 	 */
+//	TODO: Add Unit Tests!
 	public double incrementAndGet() {
 		return updateAndGet(currentValue -> currentValue + 1.0D);
 	}
@@ -285,6 +302,7 @@ public final class AtomicDouble extends Number {
 	 * @return the updated value
 	 * @throws NullPointerException thrown if, and only if, {@code updateFunction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public double updateAndGet(final DoubleUnaryOperator updateFunction) {
 		double previous;
 		double next;
@@ -302,6 +320,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return the current value of this {@code AtomicDouble} instance as a {@code float} after a widening primitive conversion
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float floatValue() {
 		return (float)(get());
@@ -312,6 +331,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return the current value of this {@code AtomicDouble} instance as an {@code int} after a widening primitive conversion
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int intValue() {
 		return (int)(get());
@@ -322,6 +342,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @return the current value of this {@code AtomicDouble} instance as a {@code long} after a widening primitive conversion
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public long longValue() {
 		return (long)(get());
@@ -332,6 +353,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @param newValue the new value
 	 */
+//	TODO: Add Unit Tests!
 	public void lazySet(final double newValue) {
 		this.bits.lazySet(Double.doubleToLongBits(newValue));
 	}
@@ -341,6 +363,7 @@ public final class AtomicDouble extends Number {
 	 * 
 	 * @param newValue the new value
 	 */
+//	TODO: Add Unit Tests!
 	public void set(final double newValue) {
 		this.bits.set(Double.doubleToLongBits(newValue));
 	}

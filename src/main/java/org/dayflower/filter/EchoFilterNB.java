@@ -40,6 +40,7 @@ public final class EchoFilterNB implements FilterNB {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public EchoFilterNB() {
 		this(0.6D, 11025);
 	}
@@ -50,6 +51,7 @@ public final class EchoFilterNB implements FilterNB {
 	 * @param decay the decay to use
 	 * @param delaySamples the delay samples to use
 	 */
+//	TODO: Add Unit Tests!
 	public EchoFilterNB(final double decay, final int delaySamples) {
 		this.decay = decay;
 		this.delaySamples = delaySamples;
@@ -68,6 +70,7 @@ public final class EchoFilterNB implements FilterNB {
 	 * @return the evaluated value
 	 * @throws NullPointerException thrown if, and only if, {@code bytes} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public byte[] evaluate(final byte[] bytes) {
 		final byte[] bytes0 = bytes.clone();

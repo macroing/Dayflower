@@ -70,6 +70,7 @@ public abstract class Filter2D {
 	 * 
 	 * @return the resolution of the X-axis
 	 */
+//	TODO: Add Unit Tests!
 	public final double getResolutionX() {
 		return this.resolutionX;
 	}
@@ -79,6 +80,7 @@ public abstract class Filter2D {
 	 * 
 	 * @return the reciprocal (or inverse) value of the resolution of the X-axis
 	 */
+//	TODO: Add Unit Tests!
 	public final double getResolutionXReciprocal() {
 		return this.resolutionXReciprocal;
 	}
@@ -88,6 +90,7 @@ public abstract class Filter2D {
 	 * 
 	 * @return the resolution of the Y-axis
 	 */
+//	TODO: Add Unit Tests!
 	public final double getResolutionY() {
 		return this.resolutionY;
 	}
@@ -97,6 +100,7 @@ public abstract class Filter2D {
 	 * 
 	 * @return the reciprocal (or inverse) value of the resolution of the Y-axis
 	 */
+//	TODO: Add Unit Tests!
 	public final double getResolutionYReciprocal() {
 		return this.resolutionYReciprocal;
 	}
@@ -106,6 +110,7 @@ public abstract class Filter2D {
 	 * 
 	 * @return a table with cached values
 	 */
+//	TODO: Add Unit Tests!
 	public final double[] createFilterTable() {
 		final double[] filterTable = new double[FILTER_TABLE_SIZE * FILTER_TABLE_SIZE];
 		

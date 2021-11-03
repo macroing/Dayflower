@@ -44,6 +44,7 @@ public final class AtomicFloat extends Number {
 	/**
 	 * Constructs a new {@code AtomicFloat} with an initial value of {@code 0.0F}.
 	 */
+//	TODO: Add Unit Tests!
 	public AtomicFloat() {
 		this(0.0F);
 	}
@@ -53,6 +54,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @param initialValue the initial value
 	 */
+//	TODO: Add Unit Tests!
 	public AtomicFloat(final float initialValue) {
 		this.bits = new AtomicInteger(Float.floatToRawIntBits(initialValue));
 	}
@@ -64,6 +66,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return a {@code String} representation of the current value
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return Float.toString(get());
@@ -78,6 +81,7 @@ public final class AtomicFloat extends Number {
 	 * @param update the new value
 	 * @return {@code true} if, and only if, the current value was set to {@code update}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean compareAndSet(final float expect, final float update) {
 		return this.bits.compareAndSet(Float.floatToRawIntBits(expect), Float.floatToRawIntBits(update));
 	}
@@ -93,6 +97,7 @@ public final class AtomicFloat extends Number {
 	 * @param update the new value
 	 * @return {@code true} if, and only if, the current value was set to {@code update}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean weakCompareAndSet(final float expect, final float update) {
 		return this.bits.weakCompareAndSet(Float.floatToRawIntBits(expect), Float.floatToRawIntBits(update));
 	}
@@ -102,6 +107,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return the current value of this {@code AtomicFloat} instance as a {@code double} after a widening primitive conversion
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double doubleValue() {
 		return get();
@@ -121,6 +127,7 @@ public final class AtomicFloat extends Number {
 	 * @return the updated value
 	 * @throws NullPointerException thrown if, and only if, {@code accumulatorFunction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public float accumulateAndGet(final float x, final FloatBinaryOperator accumulatorFunction) {
 		float previous;
 		float next;
@@ -141,6 +148,7 @@ public final class AtomicFloat extends Number {
 	 * @param delta the value to add
 	 * @return the updated value
 	 */
+//	TODO: Add Unit Tests!
 	public float addAndGet(final float delta) {
 		return updateAndGet(currentValue -> currentValue + delta);
 	}
@@ -152,6 +160,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return the updated value
 	 */
+//	TODO: Add Unit Tests!
 	public float decrementAndGet() {
 		return updateAndGet(currentValue -> currentValue - 1.0F);
 	}
@@ -161,6 +170,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return the current value of this {@code AtomicFloat} instance as a {@code float}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float floatValue() {
 		return get();
@@ -171,6 +181,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return the current value
 	 */
+//	TODO: Add Unit Tests!
 	public float get() {
 		return Float.intBitsToFloat(this.bits.get());
 	}
@@ -189,6 +200,7 @@ public final class AtomicFloat extends Number {
 	 * @return the previous value
 	 * @throws NullPointerException thrown if, and only if, {@code accumulatorFunction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public float getAndAccumulate(final float x, final FloatBinaryOperator accumulatorFunction) {
 		float previous;
 		float next;
@@ -209,6 +221,7 @@ public final class AtomicFloat extends Number {
 	 * @param delta the value to add
 	 * @return the previous value
 	 */
+//	TODO: Add Unit Tests!
 	public float getAndAdd(final float delta) {
 		return getAndUpdate(currentValue -> currentValue + delta);
 	}
@@ -220,6 +233,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return the previous value
 	 */
+//	TODO: Add Unit Tests!
 	public float getAndDecrement() {
 		return getAndUpdate(currentValue -> currentValue - 1.0F);
 	}
@@ -231,6 +245,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return the previous value
 	 */
+//	TODO: Add Unit Tests!
 	public float getAndIncrement() {
 		return getAndUpdate(currentValue -> currentValue + 1.0F);
 	}
@@ -243,6 +258,7 @@ public final class AtomicFloat extends Number {
 	 * @param newValue the new value
 	 * @return the previous value
 	 */
+//	TODO: Add Unit Tests!
 	public float getAndSet(final float newValue) {
 		return Float.intBitsToFloat(this.bits.getAndSet(Float.floatToRawIntBits(newValue)));
 	}
@@ -260,6 +276,7 @@ public final class AtomicFloat extends Number {
 	 * @return the previous value
 	 * @throws NullPointerException thrown if, and only if, {@code updateFunction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public float getAndUpdate(final FloatUnaryOperator updateFunction) {
 		float previous;
 		float next;
@@ -279,6 +296,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return the updated value
 	 */
+//	TODO: Add Unit Tests!
 	public float incrementAndGet() {
 		return updateAndGet(currentValue -> currentValue + 1.0F);
 	}
@@ -296,6 +314,7 @@ public final class AtomicFloat extends Number {
 	 * @return the updated value
 	 * @throws NullPointerException thrown if, and only if, {@code updateFunction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public float updateAndGet(final FloatUnaryOperator updateFunction) {
 		float previous;
 		float next;
@@ -313,6 +332,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return the current value of this {@code AtomicFloat} instance as an {@code int} after a widening primitive conversion
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int intValue() {
 		return (int)(get());
@@ -323,6 +343,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @return the current value of this {@code AtomicFloat} instance as a {@code long} after a widening primitive conversion
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public long longValue() {
 		return (long)(get());
@@ -333,6 +354,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @param newValue the new value
 	 */
+//	TODO: Add Unit Tests!
 	public void lazySet(final float newValue) {
 		this.bits.lazySet(Float.floatToRawIntBits(newValue));
 	}
@@ -342,6 +364,7 @@ public final class AtomicFloat extends Number {
 	 * 
 	 * @param newValue the new value
 	 */
+//	TODO: Add Unit Tests!
 	public void set(final float newValue) {
 		this.bits.set(Float.floatToRawIntBits(newValue));
 	}

@@ -48,6 +48,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public LanczosSincFilter2D() {
 		this(4.0D, 4.0D, 3.0D);
 	}
@@ -59,6 +60,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param tau the Tau to use
 	 */
+//	TODO: Add Unit Tests!
 	public LanczosSincFilter2D(final double resolutionX, final double resolutionY, final double tau) {
 		super(resolutionX, resolutionY);
 		
@@ -72,6 +74,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 	 * 
 	 * @return a {@code String} representation of this {@code LanczosSincFilter2D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new LanczosSincFilter2D(%+.10f, %+.10f, %+.10f)", Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()), Double.valueOf(this.tau));
@@ -85,6 +88,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 	 * @param object the {@code Object} to compare to this {@code LanczosSincFilter2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LanczosSincFilter2D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -115,6 +119,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double evaluate(final double x, final double y) {
 		return doLanczosSinc(x * getResolutionXReciprocal(), this.tau) * doLanczosSinc(y * getResolutionYReciprocal(), this.tau);
@@ -125,6 +130,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 	 * 
 	 * @return the Tau used by this {@code LanczosSincFilter2D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getTau() {
 		return this.tau;
 	}
@@ -134,6 +140,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 	 * 
 	 * @return a hash code for this {@code LanczosSincFilter2D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionXReciprocal()), Double.valueOf(getResolutionY()), Double.valueOf(getResolutionYReciprocal()), Double.valueOf(this.tau));

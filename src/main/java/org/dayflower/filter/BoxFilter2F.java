@@ -41,6 +41,7 @@ public final class BoxFilter2F extends Filter2F {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public BoxFilter2F() {
 		this(0.5F, 0.5F);
 	}
@@ -51,6 +52,7 @@ public final class BoxFilter2F extends Filter2F {
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 */
+//	TODO: Add Unit Tests!
 	public BoxFilter2F(final float resolutionX, final float resolutionY) {
 		super(resolutionX, resolutionY);
 	}
@@ -62,6 +64,7 @@ public final class BoxFilter2F extends Filter2F {
 	 * 
 	 * @return a {@code String} representation of this {@code BoxFilter2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new BoxFilter2F(%+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()));
@@ -75,6 +78,7 @@ public final class BoxFilter2F extends Filter2F {
 	 * @param object the {@code Object} to compare to this {@code BoxFilter2F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BoxFilter2F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -103,6 +107,7 @@ public final class BoxFilter2F extends Filter2F {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float evaluate(final float x, final float y) {
 		return 1.0F;
@@ -113,6 +118,7 @@ public final class BoxFilter2F extends Filter2F {
 	 * 
 	 * @return a hash code for this {@code BoxFilter2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionXReciprocal()), Float.valueOf(getResolutionY()), Float.valueOf(getResolutionYReciprocal()));

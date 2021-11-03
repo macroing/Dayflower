@@ -49,6 +49,7 @@ public final class GaussianFilter2F extends Filter2F {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public GaussianFilter2F() {
 		this(2.0F, 2.0F, 2.0F);
 	}
@@ -60,6 +61,7 @@ public final class GaussianFilter2F extends Filter2F {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param falloff the falloff to use
 	 */
+//	TODO: Add Unit Tests!
 	public GaussianFilter2F(final float resolutionX, final float resolutionY, final float falloff) {
 		super(resolutionX, resolutionY);
 		
@@ -75,6 +77,7 @@ public final class GaussianFilter2F extends Filter2F {
 	 * 
 	 * @return a {@code String} representation of this {@code GaussianFilter2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new GaussianFilter2F(%+.10f, %+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.falloff));
@@ -88,6 +91,7 @@ public final class GaussianFilter2F extends Filter2F {
 	 * @param object the {@code Object} to compare to this {@code GaussianFilter2F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code GaussianFilter2F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -122,6 +126,7 @@ public final class GaussianFilter2F extends Filter2F {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float evaluate(final float x, final float y) {
 		return doGaussian(x, this.x, this.falloff) * doGaussian(y, this.y, this.falloff);
@@ -132,6 +137,7 @@ public final class GaussianFilter2F extends Filter2F {
 	 * 
 	 * @return the falloff used by this {@code GaussianFilter2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getFalloff() {
 		return this.falloff;
 	}
@@ -141,6 +147,7 @@ public final class GaussianFilter2F extends Filter2F {
 	 * 
 	 * @return a hash code for this {@code GaussianFilter2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionXReciprocal()), Float.valueOf(getResolutionY()), Float.valueOf(getResolutionYReciprocal()), Float.valueOf(this.falloff), Float.valueOf(this.x), Float.valueOf(this.y));

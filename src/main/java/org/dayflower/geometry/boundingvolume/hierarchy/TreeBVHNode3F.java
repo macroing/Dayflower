@@ -65,6 +65,7 @@ public final class TreeBVHNode3F extends BVHNode3F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code depth} is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code bVHNodeL} or {@code bVHNodeR} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public TreeBVHNode3F(final Point3F a, final Point3F b, final int depth, final BVHNode3F bVHNodeL, final BVHNode3F bVHNodeR) {
 		super(a, b, depth);
 		
@@ -95,6 +96,7 @@ public final class TreeBVHNode3F extends BVHNode3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -128,6 +130,7 @@ public final class TreeBVHNode3F extends BVHNode3F {
 	 * @param object the {@code Object} to compare to this {@code TreeBVHNode3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TreeBVHNode3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -158,6 +161,7 @@ public final class TreeBVHNode3F extends BVHNode3F {
 	 * @return {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TreeBVHNode3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean intersection(final SurfaceIntersector3F surfaceIntersector) {
 		if(surfaceIntersector.isIntersecting(getBoundingVolume())) {
@@ -181,6 +185,7 @@ public final class TreeBVHNode3F extends BVHNode3F {
 	 * @return {@code true} if, and only if, {@code ray} intersects this {@code TreeBVHNode3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		return (getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) && (this.bVHNodeL.intersects(ray, tMinimum, tMaximum) || this.bVHNodeR.intersects(ray, tMinimum, tMaximum));
@@ -191,6 +196,7 @@ public final class TreeBVHNode3F extends BVHNode3F {
 	 * 
 	 * @return the surface area of this {@code TreeBVHNode3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		return this.bVHNodeL.getSurfaceArea() + this.bVHNodeR.getSurfaceArea();
@@ -201,6 +207,7 @@ public final class TreeBVHNode3F extends BVHNode3F {
 	 * 
 	 * @return a hash code for this {@code TreeBVHNode3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.bVHNodeL, this.bVHNodeR);
@@ -220,6 +227,7 @@ public final class TreeBVHNode3F extends BVHNode3F {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code tBounds} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	protected Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds) {
 		return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3F.closest(this.bVHNodeL.intersection(ray, tBounds), this.bVHNodeR.intersection(ray, tBounds)) : Optional.empty();
@@ -237,6 +245,7 @@ public final class TreeBVHNode3F extends BVHNode3F {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code tBounds} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	protected float intersectionT(final Ray3F ray, final float[] tBounds) {
 		return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.bVHNodeL.intersectionT(ray, tBounds), this.bVHNodeR.intersectionT(ray, tBounds)) : Float.NaN;

@@ -44,6 +44,7 @@ public final class BVHItem3D<T extends Shape3D> {
 	 * @param shape a {@link Shape3D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code boundingVolume} or {@code shape} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public BVHItem3D(final BoundingVolume3D boundingVolume, final T shape) {
 		this.boundingVolume = Objects.requireNonNull(boundingVolume, "boundingVolume == null");
 		this.shape = Objects.requireNonNull(shape, "shape == null");
@@ -56,6 +57,7 @@ public final class BVHItem3D<T extends Shape3D> {
 	 * 
 	 * @return the {@code BoundingVolume3D} instance associated with this {@code BVHItem3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public BoundingVolume3D getBoundingVolume() {
 		return this.boundingVolume;
 	}
@@ -65,6 +67,7 @@ public final class BVHItem3D<T extends Shape3D> {
 	 * 
 	 * @return the {@code Shape3D} instance associated with this {@code BVHItem3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public T getShape() {
 		return this.shape;
 	}
@@ -77,6 +80,7 @@ public final class BVHItem3D<T extends Shape3D> {
 	 * @param object the {@code Object} to compare to this {@code BVHItem3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BVHItem3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -97,6 +101,7 @@ public final class BVHItem3D<T extends Shape3D> {
 	 * 
 	 * @return a hash code for this {@code BVHItem3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.boundingVolume, this.shape);

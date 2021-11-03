@@ -38,6 +38,7 @@ public final class CatmullRomFilter2D extends Filter2D {
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 */
+//	TODO: Add Unit Tests!
 	public CatmullRomFilter2D(final double resolutionX, final double resolutionY) {
 		super(resolutionX, resolutionY);
 	}
@@ -49,6 +50,7 @@ public final class CatmullRomFilter2D extends Filter2D {
 	 * 
 	 * @return a {@code String} representation of this {@code CatmullRomFilter2D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new CatmullRomFilter2D(%+.10f, %+.10f)", Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()));
@@ -62,6 +64,7 @@ public final class CatmullRomFilter2D extends Filter2D {
 	 * @param object the {@code Object} to compare to this {@code CatmullRomFilter2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CatmullRomFilter2D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -90,6 +93,7 @@ public final class CatmullRomFilter2D extends Filter2D {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double evaluate(final double x, final double y) {
 		final double a = x * x + y * y;
@@ -104,6 +108,7 @@ public final class CatmullRomFilter2D extends Filter2D {
 	 * 
 	 * @return a hash code for this {@code CatmullRomFilter2D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionXReciprocal()), Double.valueOf(getResolutionY()), Double.valueOf(getResolutionYReciprocal()));

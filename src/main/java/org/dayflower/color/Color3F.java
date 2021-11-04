@@ -907,7 +907,6 @@ public final class Color3F {
 	 * 
 	 * @return an {@code int} with the component values in a packed form
 	 */
-//	TODO: Add Unit Tests!
 	public int pack() {
 		return pack(PackedIntComponentOrder.ARGB);
 	}
@@ -923,7 +922,6 @@ public final class Color3F {
 	 * @return an {@code int} with the component values in a packed form
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = getAsIntR();
 		final int g = getAsIntG();
@@ -2622,7 +2620,6 @@ public final class Color3F {
 	 * @return a {@code Color3F[]} with a length of {@code array.length} and contains {@code Color3F} instances unpacked from {@code array}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F[] arrayUnpack(final int[] array) {
 		return arrayUnpack(array, PackedIntComponentOrder.ARGB);
 	}
@@ -2637,7 +2634,6 @@ public final class Color3F {
 	 * @return a {@code Color3F[]} with a length of {@code array.length} and contains {@code Color3F} instances unpacked from {@code array}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code packedIntComponentOrder} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F[] arrayUnpack(final int[] array, final PackedIntComponentOrder packedIntComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");

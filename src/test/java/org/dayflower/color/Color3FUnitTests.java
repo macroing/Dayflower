@@ -377,6 +377,81 @@ public final class Color3FUnitTests {
 	}
 	
 	@Test
+	public void testArrayUnpackIntArray() {
+		final int[] array = {
+			PackedIntComponentOrder.ARGB.pack(255,   0,   0),
+			PackedIntComponentOrder.ARGB.pack(  0, 255,   0),
+			PackedIntComponentOrder.ARGB.pack(  0,   0, 255)
+		};
+		
+		final Color3F[] colors = Color3F.arrayUnpack(array);
+		
+		assertNotNull(colors);
+		assertEquals(3, colors.length);
+		
+		final Color3F a = colors[0];
+		final Color3F b = colors[1];
+		final Color3F c = colors[2];
+		
+		assertNotNull(a);
+		assertEquals(1.0F, a.getComponent1());
+		assertEquals(0.0F, a.getComponent2());
+		assertEquals(0.0F, a.getComponent3());
+		
+		assertNotNull(b);
+		assertEquals(0.0F, b.getComponent1());
+		assertEquals(1.0F, b.getComponent2());
+		assertEquals(0.0F, b.getComponent3());
+		
+		assertNotNull(c);
+		assertEquals(0.0F, c.getComponent1());
+		assertEquals(0.0F, c.getComponent2());
+		assertEquals(1.0F, c.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Color3F.arrayUnpack(null));
+	}
+	
+	@Test
+	public void testArrayUnpackIntArrayPackedIntComponentOrder() {
+		final PackedIntComponentOrder[] packedIntComponentOrders = PackedIntComponentOrder.values();
+		
+		for(final PackedIntComponentOrder packedIntComponentOrder : packedIntComponentOrders) {
+			final int[] array = {
+				packedIntComponentOrder.pack(255,   0,   0),
+				packedIntComponentOrder.pack(  0, 255,   0),
+				packedIntComponentOrder.pack(  0,   0, 255)
+			};
+			
+			final Color3F[] colors = Color3F.arrayUnpack(array, packedIntComponentOrder);
+			
+			assertNotNull(colors);
+			assertEquals(3, colors.length);
+			
+			final Color3F a = colors[0];
+			final Color3F b = colors[1];
+			final Color3F c = colors[2];
+			
+			assertNotNull(a);
+			assertEquals(1.0F, a.getComponent1());
+			assertEquals(0.0F, a.getComponent2());
+			assertEquals(0.0F, a.getComponent3());
+			
+			assertNotNull(b);
+			assertEquals(0.0F, b.getComponent1());
+			assertEquals(1.0F, b.getComponent2());
+			assertEquals(0.0F, b.getComponent3());
+			
+			assertNotNull(c);
+			assertEquals(0.0F, c.getComponent1());
+			assertEquals(0.0F, c.getComponent2());
+			assertEquals(1.0F, c.getComponent3());
+		}
+		
+		assertThrows(NullPointerException.class, () -> Color3F.arrayUnpack(null, PackedIntComponentOrder.ARGB));
+		assertThrows(NullPointerException.class, () -> Color3F.arrayUnpack(new int[] {}, null));
+	}
+	
+	@Test
 	public void testAverage() {
 		final Color3F color = new Color3F(0.0F, 0.5F, 1.0F);
 		
@@ -946,15 +1021,6 @@ public final class Color3FUnitTests {
 	}
 	
 	@Test
-	public void testHashCode() {
-		final Color3F a = new Color3F(0.0F, 0.5F, 1.0F);
-		final Color3F b = new Color3F(0.0F, 0.5F, 1.0F);
-		
-		assertEquals(a.hashCode(), a.hashCode());
-		assertEquals(a.hashCode(), b.hashCode());
-	}
-	
-	@Test
 	public void testHasNaNs() {
 		final Color3F a = new Color3F(Float.NaN, 0.0F, 0.0F);
 		final Color3F b = new Color3F(0.0F, Float.NaN, 0.0F);
@@ -965,6 +1031,15 @@ public final class Color3FUnitTests {
 		assertTrue(b.hasNaNs());
 		assertTrue(c.hasNaNs());
 		assertFalse(d.hasNaNs());
+	}
+	
+	@Test
+	public void testHashCode() {
+		final Color3F a = new Color3F(0.0F, 0.5F, 1.0F);
+		final Color3F b = new Color3F(0.0F, 0.5F, 1.0F);
+		
+		assertEquals(a.hashCode(), a.hashCode());
+		assertEquals(a.hashCode(), b.hashCode());
 	}
 	
 	@Test
@@ -1297,6 +1372,50 @@ public final class Color3FUnitTests {
 		assertEquals(+3.0F, c.getComponent3());
 		
 		assertThrows(NullPointerException.class, () -> Color3F.negate(null));
+	}
+	
+	@Test
+	public void testPack() {
+		final Color3F a = new Color3F(1.0F, 0.0F, 0.0F);
+		final Color3F b = new Color3F(0.0F, 1.0F, 0.0F);
+		final Color3F c = new Color3F(0.0F, 0.0F, 1.0F);
+		
+		final int packedA = a.pack();
+		final int packedB = b.pack();
+		final int packedC = c.pack();
+		
+		final Color3F d = Color3F.unpack(packedA);
+		final Color3F e = Color3F.unpack(packedB);
+		final Color3F f = Color3F.unpack(packedC);
+		
+		assertEquals(a, d);
+		assertEquals(b, e);
+		assertEquals(c, f);
+	}
+	
+	@Test
+	public void testPackPackedIntComponentOrder() {
+		final Color3F a = new Color3F(1.0F, 0.0F, 0.0F);
+		final Color3F b = new Color3F(0.0F, 1.0F, 0.0F);
+		final Color3F c = new Color3F(0.0F, 0.0F, 1.0F);
+		
+		final PackedIntComponentOrder[] packedIntComponentOrders = PackedIntComponentOrder.values();
+		
+		for(final PackedIntComponentOrder packedIntComponentOrder : packedIntComponentOrders) {
+			final int packedA = a.pack(packedIntComponentOrder);
+			final int packedB = b.pack(packedIntComponentOrder);
+			final int packedC = c.pack(packedIntComponentOrder);
+			
+			final Color3F d = Color3F.unpack(packedA, packedIntComponentOrder);
+			final Color3F e = Color3F.unpack(packedB, packedIntComponentOrder);
+			final Color3F f = Color3F.unpack(packedC, packedIntComponentOrder);
+			
+			assertEquals(a, d);
+			assertEquals(b, e);
+			assertEquals(c, f);
+		}
+		
+		assertThrows(NullPointerException.class, () -> a.pack(null));
 	}
 	
 	@Test

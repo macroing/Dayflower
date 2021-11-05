@@ -1370,7 +1370,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F divide(final Color3F colorLHS, final float scalarRHS) {
 		final float component1 = finiteOrDefault(colorLHS.component1 / scalarRHS, 0.0F);
 		final float component2 = finiteOrDefault(colorLHS.component2 / scalarRHS, 0.0F);

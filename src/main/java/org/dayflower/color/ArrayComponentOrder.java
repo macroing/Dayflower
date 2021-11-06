@@ -45,7 +45,6 @@ public enum ArrayComponentOrder {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	ARGB(1, 2, 3, 0),
 	
 	/**
@@ -61,7 +60,6 @@ public enum ArrayComponentOrder {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	BGR(2, 1, 0, -1),
 	
 	/**
@@ -78,7 +76,6 @@ public enum ArrayComponentOrder {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	BGRA(2, 1, 0, 3),
 	
 	/**
@@ -94,7 +91,6 @@ public enum ArrayComponentOrder {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	RGB(0, 1, 2, -1),
 	
 	/**
@@ -111,7 +107,6 @@ public enum ArrayComponentOrder {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	RGBA(0, 1, 2, 3);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

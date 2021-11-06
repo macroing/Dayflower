@@ -1,3 +1,9 @@
+2021-11-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the Color4FUnitTests class.
+	* ADD:		Add the PackedIntComponentOrderUnitTests class.
+	* CHANGE:	Update the toString() method of the Color4D and Color4F classes.
+
 2021-11-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Color3DUnitTests class.

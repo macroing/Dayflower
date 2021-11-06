@@ -18,6 +18,7 @@
  */
 package org.dayflower.color;
 
+import static org.dayflower.java.lang.Strings.toNonScientificNotation;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isInfinite;
 import static org.dayflower.utility.Doubles.isNaN;
@@ -323,7 +324,7 @@ public final class Color4D {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Color4D(%+.10f, %+.10f, %+.10f, %+.10f)", Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3), Double.valueOf(this.component4));
+		return String.format("new Color4D(%sD, %sD, %sD, %sD)", toNonScientificNotation(this.component1), toNonScientificNotation(this.component2), toNonScientificNotation(this.component3), toNonScientificNotation(this.component4));
 	}
 	
 	/**

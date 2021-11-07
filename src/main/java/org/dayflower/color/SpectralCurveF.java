@@ -18,6 +18,8 @@
  */
 package org.dayflower.color;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+
 /**
  * A {@code SpectralCurveF} is used for sampled or analytic spectral data.
  * 

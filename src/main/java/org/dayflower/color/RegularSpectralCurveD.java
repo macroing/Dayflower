@@ -20,6 +20,8 @@ package org.dayflower.color;
 
 import static org.dayflower.utility.Ints.min;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+
 /**
  * A {@code RegularSpectralCurveD} is an implementation of {@link SpectralCurveD} that contains regular spectral data.
  * <p>

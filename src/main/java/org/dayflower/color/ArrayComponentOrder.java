@@ -177,7 +177,6 @@ public enum ArrayComponentOrder {
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public byte readA(final byte[] array, final int offset) {
 		return hasOffsetA() ? array[offset + getOffsetA()] : (byte)(255);
 	}
@@ -195,7 +194,6 @@ public enum ArrayComponentOrder {
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetB()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public byte readB(final byte[] array, final int offset) {
 		return hasOffsetB() ? array[offset + getOffsetB()] : 0;
 	}
@@ -213,7 +211,6 @@ public enum ArrayComponentOrder {
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetG()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public byte readG(final byte[] array, final int offset) {
 		return hasOffsetG() ? array[offset + getOffsetG()] : 0;
 	}
@@ -231,7 +228,6 @@ public enum ArrayComponentOrder {
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetR()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public byte readR(final byte[] array, final int offset) {
 		return hasOffsetR() ? array[offset + getOffsetR()] : 0;
 	}
@@ -249,7 +245,6 @@ public enum ArrayComponentOrder {
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public double readA(final double[] array, final int offset) {
 		return hasOffsetA() ? array[offset + getOffsetA()] : 1.0D;
 	}
@@ -321,7 +316,6 @@ public enum ArrayComponentOrder {
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code offset + getOffsetA()} is less than {@code 0}, or greater than or equal to {@code array.length}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public float readA(final float[] array, final int offset) {
 		return hasOffsetA() ? array[offset + getOffsetA()] : 1.0F;
 	}

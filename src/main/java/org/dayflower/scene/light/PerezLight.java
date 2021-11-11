@@ -603,7 +603,7 @@ public final class PerezLight extends Light {
 		final float y0 = toFloat(relativeLuminance);
 		final float z0 = toFloat(colorXYZ.getZ() * relativeLuminance / colorXYZ.getY());
 		
-		return Color3F.convertXYZToRGBUsingPBRT(new Color3F(x0, y0, z0));
+		return Color3F.convertXYZToRGBUsingSRGB(new Color3F(x0, y0, z0));
 	}
 	
 	private Vector3F doTransformToObjectSpace(final Vector3F vector) {
@@ -640,7 +640,10 @@ public final class PerezLight extends Light {
 //				final Color3F colorRGB = doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV));
 				final Color3F colorRGB = Color3F.minimumTo0(doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV)));
 				
-				functions[u][v] = colorRGB.luminance() * sinTheta;
+//				final float luminance = colorRGB.luminance();
+				final float luminance = 0.2989F * colorRGB.getR() + 0.5866F * colorRGB.getG() + 0.1145F * colorRGB.getB();
+				
+				functions[u][v] = luminance * sinTheta;
 			}
 		}
 		
@@ -680,7 +683,7 @@ public final class PerezLight extends Light {
 	
 	private void doSetSunColor() {
 		if(this.sunDirectionObjectSpace.getZ() > 0.0F) {
-			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingPBRT(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(), 0.01F/*0.0001F*/)));
+			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingSRGB(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(true), 0.0001F)));
 		} else {
 			this.sunColor = Color3F.BLACK;
 		}
@@ -716,7 +719,7 @@ public final class PerezLight extends Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static SpectralCurveF doCalculateAttenuatedSunlight(final float theta, final float turbidity) {
-		final float[] spectrum = new float[471];//Originally 91.
+		final float[] spectrum = new float[91];
 		
 		final double alpha = 1.3D;
 		final double lozone = 0.35D;
@@ -724,9 +727,9 @@ public final class PerezLight extends Light {
 		final double beta = 0.04608365822050D * turbidity - 0.04586025928522D;
 		final double relativeOpticalMass = 1.0D / (cos(theta) + 0.000940D * pow(1.6386D - theta, -1.253D));
 		
-		final int wavelengthMin = 360;//Originally 350.
-		final int wavelengthMax = 830;//Originally 800.
-		final int wavelengthStep = 1;//Originally 5.
+		final int wavelengthMin = 350;
+		final int wavelengthMax = 800;
+		final int wavelengthStep = 5;
 		
 		for(int i = 0, lambda = wavelengthMin; lambda <= wavelengthMax; i++, lambda += wavelengthStep) {
 			final double tauRayleighScattering = exp(-relativeOpticalMass * 0.008735D * pow(lambda / 1000.0D, -4.08D));

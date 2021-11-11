@@ -1,3 +1,10 @@
+2021-11-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods toColorRGB(boolean) and toColorXYZ(boolean) to the SpectralCurveD and SpectralCurveF classes.
+	* ADD:		Add unit tests to the ArrayComponentOrderUnitTests class.
+	* CHANGE:	Update the PerezLight class to use the legacy version of SpectralCurveF.toColorXYZ(boolean).
+	* CHANGE:	Update the ChromaticSpectralCurveD and ChromaticSpectralCurveF classes to use the legacy versions of toColorXYZ(boolean).
+
 2021-11-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the ArrayComponentOrderUnitTests class.

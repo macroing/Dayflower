@@ -55,9 +55,9 @@ public final class ChromaticSpectralCurveD extends SpectralCurveD {
 		K_S1_SPECTRAL_CURVE = new RegularSpectralCurveD(300.0D, 830.0D, S1_AMPLITUDES);
 		K_S2_SPECTRAL_CURVE = new RegularSpectralCurveD(300.0D, 830.0D, S2_AMPLITUDES);
 		
-		S0_XYZ = K_S0_SPECTRAL_CURVE.toColorXYZ();
-		S1_XYZ = K_S1_SPECTRAL_CURVE.toColorXYZ();
-		S2_XYZ = K_S2_SPECTRAL_CURVE.toColorXYZ();
+		S0_XYZ = K_S0_SPECTRAL_CURVE.toColorXYZ(true);
+		S1_XYZ = K_S1_SPECTRAL_CURVE.toColorXYZ(true);
+		S2_XYZ = K_S2_SPECTRAL_CURVE.toColorXYZ(true);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

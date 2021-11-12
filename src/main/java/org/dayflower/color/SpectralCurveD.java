@@ -138,7 +138,6 @@ public abstract class SpectralCurveD {
 		return new Color3D(x, y, z);
 	}
 	
-	@SuppressWarnings("unused")
 	private Color3D doToColorXYZSunflow() {
 		double x = 0.0D;
 		double y = 0.0D;

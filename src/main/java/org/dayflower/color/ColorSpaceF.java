@@ -95,9 +95,12 @@ public final class ColorSpaceF {
 	
 	private final float breakPoint;
 	private final float gamma;
+	private final float gammaReciprocal;
 	private final float segmentOffset;
 	private final float slope;
 	private final float slopeMatch;
+	private final float slopeMatchReciprocal;
+	private final float slopeReciprocal;
 	private final float[] matrixRGBToXYZ;
 	private final float[] matrixXYZToRGB;
 	
@@ -121,8 +124,11 @@ public final class ColorSpaceF {
 	public ColorSpaceF(final float breakPoint, final float gamma, final float xR, final float yR, final float xG, final float yG, final float xB, final float yB, final float xW, final float yW) {
 		this.breakPoint = breakPoint;
 		this.gamma = gamma;
+		this.gammaReciprocal = 1.0F / gamma;
 		this.slope = breakPoint > 0.0F ? 1.0F / (gamma / pow(breakPoint, 1.0F / gamma - 1.0F) - gamma * breakPoint + breakPoint) : 1.0F;
 		this.slopeMatch = breakPoint > 0.0F ? gamma * this.slope / pow(breakPoint, 1.0F / gamma - 1.0F) : 1.0F;
+		this.slopeMatchReciprocal = 1.0F / this.slopeMatch;
+		this.slopeReciprocal = 1.0F / this.slope;
 		this.segmentOffset = breakPoint > 0.0F ? this.slopeMatch * pow(breakPoint, 1.0F / gamma) - this.slope * breakPoint : 0.0F;
 		this.matrixXYZToRGB = doCreateMatrixXYZToRGB(xR, yR, xG, yG, xB, yB, xW, yW);
 		this.matrixRGBToXYZ = doCreateMatrixRGBToXYZ(xW, yW, this.matrixXYZToRGB);
@@ -313,11 +319,11 @@ public final class ColorSpaceF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private float doRedoGammaCorrection(final float value) {
-		return value <= this.breakPoint ? value * this.slope : this.slopeMatch * pow(value, 1.0F / this.gamma) - this.segmentOffset;
+		return value <= this.breakPoint ? value * this.slope : this.slopeMatch * pow(value, this.gammaReciprocal) - this.segmentOffset;
 	}
 	
 	private float doUndoGammaCorrection(final float value) {
-		return value <= this.breakPoint * this.slope ? value / this.slope : pow((value + this.segmentOffset) / this.slopeMatch, this.gamma);
+		return value <= this.breakPoint * this.slope ? value * this.slopeReciprocal : pow((value + this.segmentOffset) * this.slopeMatchReciprocal, this.gamma);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

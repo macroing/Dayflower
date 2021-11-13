@@ -1939,9 +1939,15 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F redoGammaCorrectionPBRT(final Color3F color) {
-		final float component1 = color.component1 <= 0.0031308F ? 12.92F * color.component1 : 1.055F * pow(color.component1, 1.0F / 2.4F) - 0.055F;
-		final float component2 = color.component2 <= 0.0031308F ? 12.92F * color.component2 : 1.055F * pow(color.component2, 1.0F / 2.4F) - 0.055F;
-		final float component3 = color.component3 <= 0.0031308F ? 12.92F * color.component3 : 1.055F * pow(color.component3, 1.0F / 2.4F) - 0.055F;
+		final float breakPoint = 0.0031308F;
+		final float gamma = 2.4F;
+		final float segmentOffset = 0.055F;
+		final float slope = 12.92F;
+		final float slopeMatch = 1.055F;
+		
+		final float component1 = color.component1 <= breakPoint ? color.component1 * slope : slopeMatch * pow(color.component1, 1.0F / gamma) - segmentOffset;
+		final float component2 = color.component2 <= breakPoint ? color.component2 * slope : slopeMatch * pow(color.component2, 1.0F / gamma) - segmentOffset;
+		final float component3 = color.component3 <= breakPoint ? color.component3 * slope : slopeMatch * pow(color.component3, 1.0F / gamma) - segmentOffset;
 		
 		return new Color3F(component1, component2, component3);
 	}
@@ -2363,9 +2369,15 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F undoGammaCorrectionPBRT(final Color3F color) {
-		final float component1 = color.component1 <= 0.04045F ? color.component1 * 1.0F / 12.92F : pow((color.component1 + 0.055F) * 1.0F / 1.055F, 2.4F);
-		final float component2 = color.component2 <= 0.04045F ? color.component2 * 1.0F / 12.92F : pow((color.component2 + 0.055F) * 1.0F / 1.055F, 2.4F);
-		final float component3 = color.component3 <= 0.04045F ? color.component3 * 1.0F / 12.92F : pow((color.component3 + 0.055F) * 1.0F / 1.055F, 2.4F);
+		final float breakPoint = 0.0031308F;
+		final float gamma = 2.4F;
+		final float segmentOffset = 0.055F;
+		final float slope = 12.92F;
+		final float slopeMatch = 1.055F;
+		
+		final float component1 = color.component1 <= breakPoint * slope ? color.component1 / slope : pow((color.component1 + segmentOffset) / slopeMatch, gamma);
+		final float component2 = color.component2 <= breakPoint * slope ? color.component2 / slope : pow((color.component2 + segmentOffset) / slopeMatch, gamma);
+		final float component3 = color.component3 <= breakPoint * slope ? color.component3 / slope : pow((color.component3 + segmentOffset) / slopeMatch, gamma);
 		
 		return new Color3F(component1, component2, component3);
 	}

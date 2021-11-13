@@ -1504,9 +1504,15 @@ public final class Color4D {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4D redoGammaCorrectionPBRT(final Color4D color) {
-		final double component1 = color.component1 <= 0.0031308D ? 12.92D * color.component1 : 1.055D * pow(color.component1, 1.0D / 2.4D) - 0.055D;
-		final double component2 = color.component2 <= 0.0031308D ? 12.92D * color.component2 : 1.055D * pow(color.component2, 1.0D / 2.4D) - 0.055D;
-		final double component3 = color.component3 <= 0.0031308D ? 12.92D * color.component3 : 1.055D * pow(color.component3, 1.0D / 2.4D) - 0.055D;
+		final double breakPoint = 0.0031308D;
+		final double gamma = 2.4D;
+		final double segmentOffset = 0.055D;
+		final double slope = 12.92D;
+		final double slopeMatch = 1.055D;
+		
+		final double component1 = color.component1 <= breakPoint ? color.component1 * slope : slopeMatch * pow(color.component1, 1.0D / gamma) - segmentOffset;
+		final double component2 = color.component2 <= breakPoint ? color.component2 * slope : slopeMatch * pow(color.component2, 1.0D / gamma) - segmentOffset;
+		final double component3 = color.component3 <= breakPoint ? color.component3 * slope : slopeMatch * pow(color.component3, 1.0D / gamma) - segmentOffset;
 		final double component4 = color.component4;
 		
 		return new Color4D(component1, component2, component3, component4);
@@ -1562,9 +1568,15 @@ public final class Color4D {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4D undoGammaCorrectionPBRT(final Color4D color) {
-		final double component1 = color.component1 <= 0.04045D ? color.component1 * 1.0D / 12.92D : pow((color.component1 + 0.055D) * 1.0D / 1.055D, 2.4D);
-		final double component2 = color.component2 <= 0.04045D ? color.component2 * 1.0D / 12.92D : pow((color.component2 + 0.055D) * 1.0D / 1.055D, 2.4D);
-		final double component3 = color.component3 <= 0.04045D ? color.component3 * 1.0D / 12.92D : pow((color.component3 + 0.055D) * 1.0D / 1.055D, 2.4D);
+		final double breakPoint = 0.0031308D;
+		final double gamma = 2.4D;
+		final double segmentOffset = 0.055D;
+		final double slope = 12.92D;
+		final double slopeMatch = 1.055D;
+		
+		final double component1 = color.component1 <= breakPoint * slope ? color.component1 / slope : pow((color.component1 + segmentOffset) / slopeMatch, gamma);
+		final double component2 = color.component2 <= breakPoint * slope ? color.component2 / slope : pow((color.component2 + segmentOffset) / slopeMatch, gamma);
+		final double component3 = color.component3 <= breakPoint * slope ? color.component3 / slope : pow((color.component3 + segmentOffset) / slopeMatch, gamma);
 		final double component4 = color.component4;
 		
 		return new Color4D(component1, component2, component3, component4);

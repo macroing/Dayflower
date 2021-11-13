@@ -95,9 +95,12 @@ public final class ColorSpaceD {
 	
 	private final double breakPoint;
 	private final double gamma;
+//	private final double gammaReciprocal;
 	private final double segmentOffset;
 	private final double slope;
 	private final double slopeMatch;
+//	private final double slopeMatchReciprocal;
+//	private final double slopeReciprocal;
 	private final double[] matrixRGBToXYZ;
 	private final double[] matrixXYZToRGB;
 	
@@ -121,8 +124,11 @@ public final class ColorSpaceD {
 	public ColorSpaceD(final double breakPoint, final double gamma, final double xR, final double yR, final double xG, final double yG, final double xB, final double yB, final double xW, final double yW) {
 		this.breakPoint = breakPoint;
 		this.gamma = gamma;
+//		this.gammaReciprocal = 1.0D / gamma;
 		this.slope = breakPoint > 0.0D ? 1.0D / (gamma / pow(breakPoint, 1.0D / gamma - 1.0D) - gamma * breakPoint + breakPoint) : 1.0D;
 		this.slopeMatch = breakPoint > 0.0D ? gamma * this.slope / pow(breakPoint, 1.0D / gamma - 1.0D) : 1.0D;
+//		this.slopeMatchReciprocal = 1.0D / this.slopeMatch;
+//		this.slopeReciprocal = 1.0D / this.slope;
 		this.segmentOffset = breakPoint > 0.0D ? this.slopeMatch * pow(breakPoint, 1.0D / gamma) - this.slope * breakPoint : 0.0D;
 		this.matrixXYZToRGB = doCreateMatrixXYZToRGB(xR, yR, xG, yG, xB, yB, xW, yW);
 		this.matrixRGBToXYZ = doCreateMatrixRGBToXYZ(xW, yW, this.matrixXYZToRGB);

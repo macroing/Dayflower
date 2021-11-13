@@ -593,6 +593,50 @@ public final class Color3FUnitTests {
 	}
 	
 	@Test
+	public void testConvertRGBToXYZUsingPBRTAndConvertXYZToRGBUsingPBRT() {
+		final Color3F a = new Color3F(1.0F, 2.0F, 3.0F);
+		final Color3F b = Color3F.convertRGBToXYZUsingPBRT(a);
+		final Color3F c = Color3F.convertXYZToRGBUsingPBRT(b);
+		
+		assertEquals(1.0F, a.getComponent1());
+		assertEquals(2.0F, a.getComponent2());
+		assertEquals(3.0F, a.getComponent3());
+		
+		assertEquals(1.66888213F, b.getComponent1());
+		assertEquals(1.85949802F, b.getComponent2());
+		assertEquals(3.10840106F, b.getComponent3());
+		
+		assertEquals(1.00000346F, c.getComponent1());
+		assertEquals(2.00000048F, c.getComponent2());
+		assertEquals(2.99999905F, c.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Color3F.convertRGBToXYZUsingPBRT(null));
+		assertThrows(NullPointerException.class, () -> Color3F.convertXYZToRGBUsingPBRT(null));
+	}
+	
+	@Test
+	public void testConvertRGBToXYZUsingSRGBAndConvertXYZToRGBUsingSRGB() {
+		final Color3F a = new Color3F(1.0F, 2.0F, 3.0F);
+		final Color3F b = Color3F.convertRGBToXYZUsingSRGB(a);
+		final Color3F c = Color3F.convertXYZToRGBUsingSRGB(b);
+		
+		assertEquals(1.0F, a.getComponent1());
+		assertEquals(2.0F, a.getComponent2());
+		assertEquals(3.0F, a.getComponent3());
+		
+		assertEquals(1.66892123F, b.getComponent1());
+		assertEquals(1.85954356F, b.getComponent2());
+		assertEquals(3.10884380F, b.getComponent3());
+		
+		assertEquals(1.00000012F, c.getComponent1());
+		assertEquals(2.00000024F, c.getComponent2());
+		assertEquals(3.00000000F, c.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Color3F.convertRGBToXYZUsingSRGB(null));
+		assertThrows(NullPointerException.class, () -> Color3F.convertXYZToRGBUsingSRGB(null));
+	}
+	
+	@Test
 	public void testDivideColor3FFloat() {
 		final Color3F a = Color3F.divide(new Color3F(1.0F, 1.5F, 2.0F), 2.0F);
 		final Color3F b = Color3F.divide(new Color3F(1.0F, 1.5F, 2.0F), 0.0F);
@@ -1505,6 +1549,50 @@ public final class Color3FUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> Color3F.read(null));
 		assertThrows(UncheckedIOException.class, () -> Color3F.read(new DataInputStream(new ByteArrayInputStream(new byte[] {}))));
+	}
+	
+	@Test
+	public void testRedoGammaCorrectionPBRTAndUndoGammaCorrectionPBRT() {
+		final Color3F a = new Color3F(1.0F, 2.0F, 3.0F);
+		final Color3F b = Color3F.redoGammaCorrectionPBRT(a);
+		final Color3F c = Color3F.undoGammaCorrectionPBRT(b);
+		
+		assertEquals(1.0F, a.getComponent1());
+		assertEquals(2.0F, a.getComponent2());
+		assertEquals(3.0F, a.getComponent3());
+		
+		assertEquals(0.99999994F, b.getComponent1());
+		assertEquals(1.35325599F, b.getComponent2());
+		assertEquals(1.61245060F, b.getComponent3());
+		
+		assertEquals(1.00000000F, c.getComponent1());
+		assertEquals(1.99999988F, c.getComponent2());
+		assertEquals(3.00000024F, c.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Color3F.redoGammaCorrectionPBRT(null));
+		assertThrows(NullPointerException.class, () -> Color3F.undoGammaCorrectionPBRT(null));
+	}
+	
+	@Test
+	public void testRedoGammaCorrectionSRGBAndUndoGammaCorrectionSRGB() {
+		final Color3F a = new Color3F(1.0F, 2.0F, 3.0F);
+		final Color3F b = Color3F.redoGammaCorrectionSRGB(a);
+		final Color3F c = Color3F.undoGammaCorrectionSRGB(b);
+		
+		assertEquals(1.0F, a.getComponent1());
+		assertEquals(2.0F, a.getComponent2());
+		assertEquals(3.0F, a.getComponent3());
+		
+		assertEquals(1.00000000F, b.getComponent1());
+		assertEquals(1.35325623F, b.getComponent2());
+		assertEquals(1.61245096F, b.getComponent3());
+		
+		assertEquals(1.00000000F, c.getComponent1());
+		assertEquals(1.99999988F, c.getComponent2());
+		assertEquals(3.00000024F, c.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Color3F.redoGammaCorrectionSRGB(null));
+		assertThrows(NullPointerException.class, () -> Color3F.undoGammaCorrectionSRGB(null));
 	}
 	
 	@Test

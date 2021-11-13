@@ -28,7 +28,8 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class Strings {
-	private static final DecimalFormat DECIMAL_FORMAT = doCreateDecimalFormat();
+	private static final DecimalFormat DECIMAL_FORMAT_DOUBLE = doCreateDecimalFormat(16);
+	private static final DecimalFormat DECIMAL_FORMAT_FLOAT = doCreateDecimalFormat(8);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -76,7 +77,7 @@ public final class Strings {
 	 */
 //	TODO: Add Unit Tests!
 	public static String toNonScientificNotation(final double value) {
-		return DECIMAL_FORMAT.format(value).replace(',', '.');
+		return DECIMAL_FORMAT_DOUBLE.format(value).replace(',', '.');
 	}
 	
 	/**
@@ -87,16 +88,16 @@ public final class Strings {
 	 */
 //	TODO: Add Unit Tests!
 	public static String toNonScientificNotation(final float value) {
-		return DECIMAL_FORMAT.format(value).replace(',', '.');
+		return DECIMAL_FORMAT_FLOAT.format(value).replace(',', '.');
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static DecimalFormat doCreateDecimalFormat() {
+	private static DecimalFormat doCreateDecimalFormat(final int maximumFractionDigits) {
 		final
 		DecimalFormat decimalFormat = new DecimalFormat("#");
 		decimalFormat.setDecimalSeparatorAlwaysShown(true);
-		decimalFormat.setMaximumFractionDigits(8);
+		decimalFormat.setMaximumFractionDigits(maximumFractionDigits);
 		decimalFormat.setMinimumFractionDigits(1);
 		decimalFormat.setMinimumIntegerDigits(1);
 		

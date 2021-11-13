@@ -124,8 +124,8 @@ public final class ColorSpaceF {
 		this.slope = breakPoint > 0.0F ? 1.0F / (gamma / pow(breakPoint, 1.0F / gamma - 1.0F) - gamma * breakPoint + breakPoint) : 1.0F;
 		this.slopeMatch = breakPoint > 0.0F ? gamma * this.slope / pow(breakPoint, 1.0F / gamma - 1.0F) : 1.0F;
 		this.segmentOffset = breakPoint > 0.0F ? this.slopeMatch * pow(breakPoint, 1.0F / gamma) - this.slope * breakPoint : 0.0F;
-		this.matrixXYZToRGB = doCreateColorSpace3MatrixXYZToRGB(xR, yR, xG, yG, xB, yB, xW, yW);
-		this.matrixRGBToXYZ = doCreateColorSpace3MatrixRGBToXYZ(xW, yW, this.matrixXYZToRGB);
+		this.matrixXYZToRGB = doCreateMatrixXYZToRGB(xR, yR, xG, yG, xB, yB, xW, yW);
+		this.matrixRGBToXYZ = doCreateMatrixRGBToXYZ(xW, yW, this.matrixXYZToRGB);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -313,32 +313,16 @@ public final class ColorSpaceF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private float doRedoGammaCorrection(final float value) {
-		if(value <= 0.0F) {
-			return 0.0F;
-		} else if(value >= 1.0F) {
-			return 1.0F;
-		} else if(value <= this.breakPoint) {
-			return value * this.slope;
-		} else {
-			return this.slopeMatch * pow(value, 1.0F / this.gamma) - this.segmentOffset;
-		}
+		return value <= this.breakPoint ? value * this.slope : this.slopeMatch * pow(value, 1.0F / this.gamma) - this.segmentOffset;
 	}
 	
 	private float doUndoGammaCorrection(final float value) {
-		if(value <= 0.0F) {
-			return 0.0F;
-		} else if(value >= 1.0F) {
-			return 1.0F;
-		} else if(value <= this.breakPoint * this.slope) {
-			return value / this.slope;
-		} else {
-			return pow((value + this.segmentOffset) / this.slopeMatch, this.gamma);
-		}
+		return value <= this.breakPoint * this.slope ? value / this.slope : pow((value + this.segmentOffset) / this.slopeMatch, this.gamma);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static float[] doCreateColorSpace3MatrixRGBToXYZ(final float xW, final float yW, final float[] m) {
+	private static float[] doCreateMatrixRGBToXYZ(final float xW, final float yW, final float[] m) {
 		final float a = m[0] * (m[4] * m[8] - m[7] * m[5]);
 		final float b = m[1] * (m[3] * m[8] - m[6] * m[5]);
 		final float c = m[2] * (m[3] * m[7] - m[6] * m[4]);
@@ -365,7 +349,7 @@ public final class ColorSpaceF {
 		};
 	}
 	
-	private static float[] doCreateColorSpace3MatrixXYZToRGB(final float xR, final float yR, final float xG, final float yG, final float xB, final float yB, final float xW, final float yW) {
+	private static float[] doCreateMatrixXYZToRGB(final float xR, final float yR, final float xG, final float yG, final float xB, final float yB, final float xW, final float yW) {
 		final float zR = 1.0F - (xR + yR);
 		final float zG = 1.0F - (xG + yG);
 		final float zB = 1.0F - (xB + yB);

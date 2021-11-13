@@ -1276,7 +1276,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F convertRGBToXYZUsingPBRT(final Color3F color) {
 		final float x = 0.412453F * color.getR() + 0.357580F * color.getG() + 0.180423F * color.getB();
 		final float y = 0.212671F * color.getR() + 0.715160F * color.getG() + 0.072169F * color.getB();
@@ -1296,7 +1295,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F convertRGBToXYZUsingSRGB(final Color3F color) {
 		return ColorSpaceF.S_R_G_B.convertRGBToXYZ(color);
 	}
@@ -1312,7 +1310,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F convertXYZToRGBUsingPBRT(final Color3F color) {
 		final float r = +3.240479F * color.getX() - 1.537150F * color.getY() - 0.498535F * color.getZ();
 		final float g = -0.969256F * color.getX() + 1.875991F * color.getY() + 0.041556F * color.getZ();
@@ -1332,7 +1329,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F convertXYZToRGBUsingSRGB(final Color3F color) {
 		return ColorSpaceF.S_R_G_B.convertXYZToRGB(color);
 	}
@@ -1942,7 +1938,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F redoGammaCorrectionPBRT(final Color3F color) {
 		final float component1 = color.component1 <= 0.0031308F ? 12.92F * color.component1 : 1.055F * pow(color.component1, 1.0F / 2.4F) - 0.055F;
 		final float component2 = color.component2 <= 0.0031308F ? 12.92F * color.component2 : 1.055F * pow(color.component2, 1.0F / 2.4F) - 0.055F;
@@ -1962,7 +1957,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F redoGammaCorrectionSRGB(final Color3F color) {
 		return ColorSpaceF.S_R_G_B.redoGammaCorrection(color);
 	}
@@ -2368,7 +2362,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F undoGammaCorrectionPBRT(final Color3F color) {
 		final float component1 = color.component1 <= 0.04045F ? color.component1 * 1.0F / 12.92F : pow((color.component1 + 0.055F) * 1.0F / 1.055F, 2.4F);
 		final float component2 = color.component2 <= 0.04045F ? color.component2 * 1.0F / 12.92F : pow((color.component2 + 0.055F) * 1.0F / 1.055F, 2.4F);
@@ -2388,7 +2381,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F undoGammaCorrectionSRGB(final Color3F color) {
 		return ColorSpaceF.S_R_G_B.undoGammaCorrection(color);
 	}

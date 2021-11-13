@@ -124,8 +124,8 @@ public final class ColorSpaceD {
 		this.slope = breakPoint > 0.0D ? 1.0D / (gamma / pow(breakPoint, 1.0D / gamma - 1.0D) - gamma * breakPoint + breakPoint) : 1.0D;
 		this.slopeMatch = breakPoint > 0.0D ? gamma * this.slope / pow(breakPoint, 1.0D / gamma - 1.0D) : 1.0D;
 		this.segmentOffset = breakPoint > 0.0D ? this.slopeMatch * pow(breakPoint, 1.0D / gamma) - this.slope * breakPoint : 0.0D;
-		this.matrixXYZToRGB = doCreateColorSpace3MatrixXYZToRGB(xR, yR, xG, yG, xB, yB, xW, yW);
-		this.matrixRGBToXYZ = doCreateColorSpace3MatrixRGBToXYZ(xW, yW, this.matrixXYZToRGB);
+		this.matrixXYZToRGB = doCreateMatrixXYZToRGB(xR, yR, xG, yG, xB, yB, xW, yW);
+		this.matrixRGBToXYZ = doCreateMatrixRGBToXYZ(xW, yW, this.matrixXYZToRGB);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -313,32 +313,16 @@ public final class ColorSpaceD {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private double doRedoGammaCorrection(final double value) {
-		if(value <= 0.0D) {
-			return 0.0D;
-		} else if(value >= 1.0D) {
-			return 1.0D;
-		} else if(value <= this.breakPoint) {
-			return value * this.slope;
-		} else {
-			return this.slopeMatch * pow(value, 1.0D / this.gamma) - this.segmentOffset;
-		}
+		return value <= this.breakPoint ? value * this.slope : this.slopeMatch * pow(value, 1.0D / this.gamma) - this.segmentOffset;
 	}
 	
 	private double doUndoGammaCorrection(final double value) {
-		if(value <= 0.0D) {
-			return 0.0D;
-		} else if(value >= 1.0D) {
-			return 1.0D;
-		} else if(value <= this.breakPoint * this.slope) {
-			return value / this.slope;
-		} else {
-			return pow((value + this.segmentOffset) / this.slopeMatch, this.gamma);
-		}
+		return value <= this.breakPoint * this.slope ? value / this.slope : pow((value + this.segmentOffset) / this.slopeMatch, this.gamma);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static double[] doCreateColorSpace3MatrixRGBToXYZ(final double xW, final double yW, final double[] m) {
+	private static double[] doCreateMatrixRGBToXYZ(final double xW, final double yW, final double[] m) {
 		final double a = m[0] * (m[4] * m[8] - m[7] * m[5]);
 		final double b = m[1] * (m[3] * m[8] - m[6] * m[5]);
 		final double c = m[2] * (m[3] * m[7] - m[6] * m[4]);
@@ -365,7 +349,7 @@ public final class ColorSpaceD {
 		};
 	}
 	
-	private static double[] doCreateColorSpace3MatrixXYZToRGB(final double xR, final double yR, final double xG, final double yG, final double xB, final double yB, final double xW, final double yW) {
+	private static double[] doCreateMatrixXYZToRGB(final double xR, final double yR, final double xG, final double yG, final double xB, final double yB, final double xW, final double yW) {
 		final double zR = 1.0D - (xR + yR);
 		final double zG = 1.0D - (xG + yG);
 		final double zB = 1.0D - (xB + yB);

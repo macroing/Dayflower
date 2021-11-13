@@ -1,3 +1,10 @@
+2021-11-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the Color3DUnitTests class.
+	* ADD:		Add unit tests to the Color3FUnitTests class.
+	* CHANGE:	Update the gamma correction in ColorSpaceD and ColorSpaceF to account for values outside the range [0.0, 1.0]. The results will then be similar to the PBRT version.
+	* CHANGE:	Change the maximum decimal places for the method toNonScientificNotation(double) in the Strings class from 8 to 16. The method toNonScientificNotation(float) is still using 8 as before.
+
 2021-11-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods toColorRGB(boolean) and toColorXYZ(boolean) to the SpectralCurveD and SpectralCurveF classes.

@@ -1276,7 +1276,6 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3D convertRGBToXYZUsingPBRT(final Color3D color) {
 		final double x = 0.412453D * color.getR() + 0.357580D * color.getG() + 0.180423D * color.getB();
 		final double y = 0.212671D * color.getR() + 0.715160D * color.getG() + 0.072169D * color.getB();
@@ -1296,7 +1295,6 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3D convertRGBToXYZUsingSRGB(final Color3D color) {
 		return ColorSpaceD.S_R_G_B.convertRGBToXYZ(color);
 	}
@@ -1312,7 +1310,6 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3D convertXYZToRGBUsingPBRT(final Color3D color) {
 		final double r = +3.240479D * color.getX() - 1.537150D * color.getY() - 0.498535D * color.getZ();
 		final double g = -0.969256D * color.getX() + 1.875991D * color.getY() + 0.041556D * color.getZ();
@@ -1332,7 +1329,6 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3D convertXYZToRGBUsingSRGB(final Color3D color) {
 		return ColorSpaceD.S_R_G_B.convertXYZToRGB(color);
 	}
@@ -1942,7 +1938,6 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3D redoGammaCorrectionPBRT(final Color3D color) {
 		final double component1 = color.component1 <= 0.0031308D ? 12.92D * color.component1 : 1.055D * pow(color.component1, 1.0D / 2.4D) - 0.055D;
 		final double component2 = color.component2 <= 0.0031308D ? 12.92D * color.component2 : 1.055D * pow(color.component2, 1.0D / 2.4D) - 0.055D;
@@ -1962,7 +1957,6 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3D redoGammaCorrectionSRGB(final Color3D color) {
 		return ColorSpaceD.S_R_G_B.redoGammaCorrection(color);
 	}
@@ -2368,7 +2362,6 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3D undoGammaCorrectionPBRT(final Color3D color) {
 		final double component1 = color.component1 <= 0.04045D ? color.component1 * 1.0D / 12.92D : pow((color.component1 + 0.055D) * 1.0D / 1.055D, 2.4D);
 		final double component2 = color.component2 <= 0.04045D ? color.component2 * 1.0D / 12.92D : pow((color.component2 + 0.055D) * 1.0D / 1.055D, 2.4D);
@@ -2388,7 +2381,6 @@ public final class Color3D {
 	 * @return a new {@code Color3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3D undoGammaCorrectionSRGB(final Color3D color) {
 		return ColorSpaceD.S_R_G_B.undoGammaCorrection(color);
 	}

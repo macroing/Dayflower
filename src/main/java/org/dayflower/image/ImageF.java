@@ -41,6 +41,7 @@ import org.dayflower.change.ChangeCombiner;
 import org.dayflower.change.ChangeHistory;
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point2I;
@@ -2027,25 +2028,38 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Redoes gamma correction on this {@code ImageF} instance using PBRT.
+	 * Redoes gamma correction on this {@code ImageF} instance using {@link ColorSpaceF#getDefault()}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * imageF.redoGammaCorrection(ColorSpaceF.getDefault());
+	 * }
+	 * </pre>
 	 * 
 	 * @return this {@code ImageF} instance
 	 */
-	public final ImageF redoGammaCorrectionPBRT() {
-		return update((color, point) -> Color4F.redoGammaCorrectionPBRT(color));
+	public final ImageF redoGammaCorrection() {
+		return redoGammaCorrection(ColorSpaceF.getDefault());
 	}
 	
 	/**
-	 * Redoes gamma correction on this {@code ImageF} instance using sRGB.
+	 * Redoes gamma correction on this {@code ImageF} instance using {@code colorSpace}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If {@code colorSpace} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param colorSpace a {@link ColorSpaceF} instance
 	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code colorSpace} is {@code null}
 	 */
-	public final ImageF redoGammaCorrectionSRGB() {
-		return update((color, point) -> Color4F.redoGammaCorrectionSRGB(color));
+	public final ImageF redoGammaCorrection(final ColorSpaceF colorSpace) {
+		Objects.requireNonNull(colorSpace, "colorSpace == null");
+		
+		return update((color, point) -> colorSpace.redoGammaCorrection(color));
 	}
 	
 	/**
@@ -2384,25 +2398,38 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Undoes gamma correction on this {@code ImageF} instance using PBRT.
+	 * Undoes gamma correction on this {@code ImageF} instance using {@link ColorSpaceF#getDefault()}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * imageF.undoGammaCorrection(ColorSpaceF.getDefault());
+	 * }
+	 * </pre>
 	 * 
 	 * @return this {@code ImageF} instance
 	 */
-	public final ImageF undoGammaCorrectionPBRT() {
-		return update((color, point) -> Color4F.undoGammaCorrectionPBRT(color));
+	public final ImageF undoGammaCorrection() {
+		return redoGammaCorrection(ColorSpaceF.getDefault());
 	}
 	
 	/**
-	 * Undoes gamma correction on this {@code ImageF} instance using sRGB.
+	 * Undoes gamma correction on this {@code ImageF} instance using {@code colorSpace}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If {@code colorSpace} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param colorSpace a {@link ColorSpaceF} instance
 	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code colorSpace} is {@code null}
 	 */
-	public final ImageF undoGammaCorrectionSRGB() {
-		return update((color, point) -> Color4F.undoGammaCorrectionSRGB(color));
+	public final ImageF undoGammaCorrection(final ColorSpaceF colorSpace) {
+		Objects.requireNonNull(colorSpace, "colorSpace == null");
+		
+		return update((color, point) -> colorSpace.undoGammaCorrection(color));
 	}
 	
 	/**

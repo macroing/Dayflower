@@ -75,7 +75,7 @@ public abstract class SpectralCurveD {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color3D toColorRGB(final boolean isLegacy) {
-		return isLegacy ? Color3D.convertXYZToRGBUsingSRGB(doToColorXYZLegacy()) : Color3D.convertXYZToRGBUsingPBRT(doToColorXYZ());
+		return ColorSpaceD.getDefault().convertXYZToRGB(isLegacy ? doToColorXYZLegacy() : doToColorXYZ());
 	}
 	
 	/**

@@ -26,7 +26,6 @@ import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.lerp;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.pow;
 import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -1125,80 +1124,6 @@ public final class Color4F {
 	}
 	
 	/**
-	 * Converts {@code color} from the RGB-color space to the XYZ-color space using the algorithm provided by PBRT.
-	 * <p>
-	 * Returns a new {@code Color4F} instance with the result of the conversion.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color4F} instance in RGB-color space
-	 * @return a new {@code Color4F} instance with the result of the conversion
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Color4F convertRGBAToXYZAUsingPBRT(final Color4F color) {
-		final float x = color.getR() * 0.412453F + color.getG() * 0.357580F + color.getB() * 0.180423F;
-		final float y = color.getR() * 0.212671F + color.getG() * 0.715160F + color.getB() * 0.072169F;
-		final float z = color.getR() * 0.019334F + color.getG() * 0.119193F + color.getB() * 0.950227F;
-		final float a = color.getA();
-		
-		return new Color4F(x, y, z, a);
-	}
-	
-	/**
-	 * Converts {@code color} from the RGB-color space to the XYZ-color space using sRGB.
-	 * <p>
-	 * Returns a new {@code Color4F} instance with the result of the conversion.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color4F} instance in RGB-color space
-	 * @return a new {@code Color4F} instance with the result of the conversion
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Color4F convertRGBAToXYZAUsingSRGB(final Color4F color) {
-		return ColorSpaceF.S_R_G_B.convertRGBAToXYZA(color);
-	}
-	
-	/**
-	 * Converts {@code color} from the XYZ-color space to the RGB-color space using the algorithm provided by PBRT.
-	 * <p>
-	 * Returns a new {@code Color4F} instance with the result of the conversion.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color4F} instance in XYZ-color space
-	 * @return a new {@code Color4F} instance with the result of the conversion
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Color4F convertXYZAToRGBAUsingPBRT(final Color4F color) {
-		final float r = color.getX() * +3.240479F - color.getY() * 1.537150F - color.getZ() * 0.498535F;
-		final float g = color.getX() * -0.969256F + color.getY() * 1.875991F + color.getZ() * 0.041556F;
-		final float b = color.getX() * +0.055648F - color.getY() * 0.204043F + color.getZ() * 1.057311F;
-		final float a = color.getA();
-		
-		return new Color4F(r, g, b, a);
-	}
-	
-	/**
-	 * Converts {@code color} from the XYZ-color space to the RGB-color space using sRGB.
-	 * <p>
-	 * Returns a new {@code Color4F} instance with the result of the conversion.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color4F} instance in XYZ-color space
-	 * @return a new {@code Color4F} instance with the result of the conversion
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Color4F convertXYZAToRGBAUsingSRGB(final Color4F color) {
-		return ColorSpaceF.S_R_G_B.convertXYZAToRGBA(color);
-	}
-	
-	/**
 	 * Returns a grayscale {@code Color4F} instance based on {@code color.average()}.
 	 * <p>
 	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1442,49 +1367,6 @@ public final class Color4F {
 	}
 	
 	/**
-	 * Redoes gamma correction on the component values of {@code color} using the algorithm provided by PBRT.
-	 * <p>
-	 * Returns a new {@code Color4F} instance with the result of the operation.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color4F} instance
-	 * @return a new {@code Color4F} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Color4F redoGammaCorrectionPBRT(final Color4F color) {
-		final float breakPoint = 0.0031308F;
-		final float gamma = 2.4F;
-		final float segmentOffset = 0.055F;
-		final float slope = 12.92F;
-		final float slopeMatch = 1.055F;
-		
-		final float component1 = color.component1 <= breakPoint ? color.component1 * slope : slopeMatch * pow(color.component1, 1.0F / gamma) - segmentOffset;
-		final float component2 = color.component2 <= breakPoint ? color.component2 * slope : slopeMatch * pow(color.component2, 1.0F / gamma) - segmentOffset;
-		final float component3 = color.component3 <= breakPoint ? color.component3 * slope : slopeMatch * pow(color.component3, 1.0F / gamma) - segmentOffset;
-		final float component4 = color.component4;
-		
-		return new Color4F(component1, component2, component3, component4);
-	}
-	
-	/**
-	 * Redoes gamma correction on the component values of {@code color} using sRGB.
-	 * <p>
-	 * Returns a new {@code Color4F} instance with the result of the operation.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color4F} instance
-	 * @return a new {@code Color4F} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Color4F redoGammaCorrectionSRGB(final Color4F color) {
-		return ColorSpaceF.S_R_G_B.redoGammaCorrection(color);
-	}
-	
-	/**
 	 * Converts {@code color} to its sepia-representation.
 	 * <p>
 	 * Returns a new {@code Color4F} instance with the result of the operation.
@@ -1503,49 +1385,6 @@ public final class Color4F {
 		final float component4 = color.component4;
 		
 		return new Color4F(component1, component2, component3, component4);
-	}
-	
-	/**
-	 * Undoes gamma correction on the component values of {@code color} using the algorithm provided by PBRT.
-	 * <p>
-	 * Returns a new {@code Color4F} instance with the result of the operation.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color4F} instance
-	 * @return a new {@code Color4F} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Color4F undoGammaCorrectionPBRT(final Color4F color) {
-		final float breakPoint = 0.0031308F;
-		final float gamma = 2.4F;
-		final float segmentOffset = 0.055F;
-		final float slope = 12.92F;
-		final float slopeMatch = 1.055F;
-		
-		final float component1 = color.component1 <= breakPoint * slope ? color.component1 / slope : pow((color.component1 + segmentOffset) / slopeMatch, gamma);
-		final float component2 = color.component2 <= breakPoint * slope ? color.component2 / slope : pow((color.component2 + segmentOffset) / slopeMatch, gamma);
-		final float component3 = color.component3 <= breakPoint * slope ? color.component3 / slope : pow((color.component3 + segmentOffset) / slopeMatch, gamma);
-		final float component4 = color.component4;
-		
-		return new Color4F(component1, component2, component3, component4);
-	}
-	
-	/**
-	 * Undoes gamma correction on the component values of {@code color} using sRGB.
-	 * <p>
-	 * Returns a new {@code Color4F} instance with the result of the operation.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color4F} instance
-	 * @return a new {@code Color4F} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Color4F undoGammaCorrectionSRGB(final Color4F color) {
-		return ColorSpaceF.S_R_G_B.undoGammaCorrection(color);
 	}
 	
 	/**

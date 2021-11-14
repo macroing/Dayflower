@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
@@ -208,6 +209,8 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 		
 		final long currentTimeMillis = System.currentTimeMillis();
 		
+		final ColorSpaceF colorSpace = ColorSpaceF.getDefault();
+		
 		for(int y = 0; y < resolutionY; y++) {
 			for(int x = 0; x < resolutionX; x++) {
 				final Sample2F sample = sampler.sample2();
@@ -225,7 +228,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 					final Color3F colorRGB = radiance(ray);
 					
 					if(!colorRGB.hasInfinites() && !colorRGB.hasNaNs() && colorRGB.luminance() >= -1.0e-5F) {
-						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
+						final Color3F colorXYZ = colorSpace.convertRGBToXYZ(colorRGB);
 						
 						pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
 					}

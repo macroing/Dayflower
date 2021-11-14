@@ -593,50 +593,6 @@ public final class Color3DUnitTests {
 	}
 	
 	@Test
-	public void testConvertRGBToXYZUsingPBRTAndConvertXYZToRGBUsingPBRT() {
-		final Color3D a = new Color3D(1.0D, 2.0D, 3.0D);
-		final Color3D b = Color3D.convertRGBToXYZUsingPBRT(a);
-		final Color3D c = Color3D.convertXYZToRGBUsingPBRT(b);
-		
-		assertEquals(1.0D, a.getComponent1());
-		assertEquals(2.0D, a.getComponent2());
-		assertEquals(3.0D, a.getComponent3());
-		
-		assertEquals(1.668882D, b.getComponent1());
-		assertEquals(1.859498D, b.getComponent2());
-		assertEquals(3.108401D, b.getComponent3());
-		
-		assertEquals(1.0000030312430002D, c.getComponent1());
-		assertEquals(2.0000003326820000D, c.getComponent2());
-		assertEquals(2.9999989648330000D, c.getComponent3());
-		
-		assertThrows(NullPointerException.class, () -> Color3D.convertRGBToXYZUsingPBRT(null));
-		assertThrows(NullPointerException.class, () -> Color3D.convertXYZToRGBUsingPBRT(null));
-	}
-	
-	@Test
-	public void testConvertRGBToXYZUsingSRGBAndConvertXYZToRGBUsingSRGB() {
-		final Color3D a = new Color3D(1.0D, 2.0D, 3.0D);
-		final Color3D b = Color3D.convertRGBToXYZUsingSRGB(a);
-		final Color3D c = Color3D.convertXYZToRGBUsingSRGB(b);
-		
-		assertEquals(1.0D, a.getComponent1());
-		assertEquals(2.0D, a.getComponent2());
-		assertEquals(3.0D, a.getComponent3());
-		
-		assertEquals(1.6689210187049340D, b.getComponent1());
-		assertEquals(1.8595433748041021D, b.getComponent2());
-		assertEquals(3.1088427084492074D, b.getComponent3());
-		
-		assertEquals(1.0000000000000009D, c.getComponent1());
-		assertEquals(1.9999999999999996D, c.getComponent2());
-		assertEquals(2.9999999999999996D, c.getComponent3());
-		
-		assertThrows(NullPointerException.class, () -> Color3D.convertRGBToXYZUsingSRGB(null));
-		assertThrows(NullPointerException.class, () -> Color3D.convertXYZToRGBUsingSRGB(null));
-	}
-	
-	@Test
 	public void testDivideColor3DDouble() {
 		final Color3D a = Color3D.divide(new Color3D(1.0D, 1.5D, 2.0D), 2.0D);
 		final Color3D b = Color3D.divide(new Color3D(1.0D, 1.5D, 2.0D), 0.0D);
@@ -1549,50 +1505,6 @@ public final class Color3DUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> Color3D.read(null));
 		assertThrows(UncheckedIOException.class, () -> Color3D.read(new DataInputStream(new ByteArrayInputStream(new byte[] {}))));
-	}
-	
-	@Test
-	public void testRedoGammaCorrectionPBRTAndUndoGammaCorrectionPBRT() {
-		final Color3D a = new Color3D(1.0D, 2.0D, 3.0D);
-		final Color3D b = Color3D.redoGammaCorrectionPBRT(a);
-		final Color3D c = Color3D.undoGammaCorrectionPBRT(b);
-		
-		assertEquals(1.0D, a.getComponent1());
-		assertEquals(2.0D, a.getComponent2());
-		assertEquals(3.0D, a.getComponent3());
-		
-		assertEquals(0.9999999999999999D, b.getComponent1());
-		assertEquals(1.3532560461493863D, b.getComponent2());
-		assertEquals(1.6124506233860080D, b.getComponent3());
-		
-		assertEquals(1.0000000000000000D, c.getComponent1());
-		assertEquals(2.0000000000000000D, c.getComponent2());
-		assertEquals(3.0000000000000004D, c.getComponent3());
-		
-		assertThrows(NullPointerException.class, () -> Color3D.redoGammaCorrectionPBRT(null));
-		assertThrows(NullPointerException.class, () -> Color3D.undoGammaCorrectionPBRT(null));
-	}
-	
-	@Test
-	public void testRedoGammaCorrectionSRGBAndUndoGammaCorrectionSRGB() {
-		final Color3D a = new Color3D(1.0D, 2.0D, 3.0D);
-		final Color3D b = Color3D.redoGammaCorrectionSRGB(a);
-		final Color3D c = Color3D.undoGammaCorrectionSRGB(b);
-		
-		assertEquals(1.0D, a.getComponent1());
-		assertEquals(2.0D, a.getComponent2());
-		assertEquals(3.0D, a.getComponent3());
-		
-		assertEquals(1.0000000000000000D, b.getComponent1());
-		assertEquals(1.3532562202049105D, b.getComponent2());
-		assertEquals(1.6124509251513015D, b.getComponent3());
-		
-		assertEquals(1.0000000000000000D, c.getComponent1());
-		assertEquals(2.0000000000000000D, c.getComponent2());
-		assertEquals(3.0000000000000004D, c.getComponent3());
-		
-		assertThrows(NullPointerException.class, () -> Color3D.redoGammaCorrectionSRGB(null));
-		assertThrows(NullPointerException.class, () -> Color3D.undoGammaCorrectionSRGB(null));
 	}
 	
 	@Test

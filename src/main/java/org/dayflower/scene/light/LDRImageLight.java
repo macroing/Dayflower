@@ -40,6 +40,7 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
@@ -690,11 +691,10 @@ public final class LDRImageLight extends Light {
 	public static LDRImageLight redoGammaCorrectionSRGB(final LDRImageLight lDRImageLight) {
 		final int[] image = new int[lDRImageLight.image.length];
 		
+		final ColorSpaceF colorSpace = ColorSpaceF.getDefault();
+		
 		for(int i = 0; i < lDRImageLight.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(lDRImageLight.image[i]);
-			final Color3F colorB = Color3F.redoGammaCorrectionSRGB(colorA);
-			
-			image[i] = colorB.pack();
+			image[i] = colorSpace.redoGammaCorrection(Color3F.unpack(lDRImageLight.image[i])).pack();
 		}
 		
 		return new LDRImageLight(lDRImageLight.resolutionX, lDRImageLight.resolutionY, image, lDRImageLight.angle, lDRImageLight.scale);
@@ -714,11 +714,10 @@ public final class LDRImageLight extends Light {
 	public static LDRImageLight undoGammaCorrectionSRGB(final LDRImageLight lDRImageLight) {
 		final int[] image = new int[lDRImageLight.image.length];
 		
+		final ColorSpaceF colorSpace = ColorSpaceF.getDefault();
+		
 		for(int i = 0; i < lDRImageLight.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(lDRImageLight.image[i]);
-			final Color3F colorB = Color3F.undoGammaCorrectionSRGB(colorA);
-			
-			image[i] = colorB.pack();
+			image[i] = colorSpace.undoGammaCorrection(Color3F.unpack(lDRImageLight.image[i])).pack();
 		}
 		
 		return new LDRImageLight(lDRImageLight.resolutionX, lDRImageLight.resolutionY, image, lDRImageLight.angle, lDRImageLight.scale);

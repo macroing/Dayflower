@@ -318,6 +318,20 @@ public final class ColorSpaceD {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Returns the default {@code ColorSpaceD} instance.
+	 * <p>
+	 * The default {@code ColorSpaceD} instance is currently {@link ColorSpaceD#S_R_G_B}.
+	 * 
+	 * @return the default {@code ColorSpaceD} instance
+	 */
+//	TODO: Add Unit Tests!
+	public static ColorSpaceD getDefault() {
+		return S_R_G_B;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private double doRedoGammaCorrection(final double value) {
 		return value <= this.breakPoint ? value * this.slope : this.slopeMatch * pow(value, 1.0D / this.gamma) - this.segmentOffset;
 	}

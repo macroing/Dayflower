@@ -228,7 +228,7 @@ public final class SmallPTD {
 			pixelImage.setColorRGB(new Color3F(colors[i]), i);
 		}
 		
-		pixelImage.redoGammaCorrectionSRGB();
+		pixelImage.redoGammaCorrection();
 		pixelImage.save("./generated/SmallPT.png");
 	}
 	

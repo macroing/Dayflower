@@ -40,6 +40,7 @@ import java.util.Optional;
 
 import org.dayflower.color.ChromaticSpectralCurveF;
 import org.dayflower.color.Color3F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.color.IrregularSpectralCurveF;
 import org.dayflower.color.RegularSpectralCurveF;
 import org.dayflower.color.SpectralCurveF;
@@ -603,7 +604,7 @@ public final class PerezLight extends Light {
 		final float y0 = toFloat(relativeLuminance);
 		final float z0 = toFloat(colorXYZ.getZ() * relativeLuminance / colorXYZ.getY());
 		
-		return Color3F.convertXYZToRGBUsingSRGB(new Color3F(x0, y0, z0));
+		return ColorSpaceF.getDefault().convertXYZToRGB(new Color3F(x0, y0, z0));
 	}
 	
 	private Vector3F doTransformToObjectSpace(final Vector3F vector) {
@@ -683,7 +684,7 @@ public final class PerezLight extends Light {
 	
 	private void doSetSunColor() {
 		if(this.sunDirectionObjectSpace.getZ() > 0.0F) {
-			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingSRGB(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(true), 0.0001F)));
+			this.sunColor = Color3F.minimumTo0(ColorSpaceF.getDefault().convertXYZToRGB(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(true), 0.0001F)));
 		} else {
 			this.sunColor = Color3F.BLACK;
 		}

@@ -35,6 +35,7 @@ import java.util.Objects;
 import javax.imageio.ImageIO;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
@@ -567,11 +568,10 @@ public final class LDRImageTexture implements Texture {
 	public static LDRImageTexture redoGammaCorrectionSRGB(final LDRImageTexture lDRImageTexture) {
 		final int[] image = new int[lDRImageTexture.image.length];
 		
+		final ColorSpaceF colorSpace = ColorSpaceF.getDefault();
+		
 		for(int i = 0; i < lDRImageTexture.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(lDRImageTexture.image[i]);
-			final Color3F colorB = Color3F.redoGammaCorrectionSRGB(colorA);
-			
-			image[i] = colorB.pack();
+			image[i] = colorSpace.redoGammaCorrection(Color3F.unpack(lDRImageTexture.image[i])).pack();
 		}
 		
 		return new LDRImageTexture(lDRImageTexture.resolutionX, lDRImageTexture.resolutionY, image, lDRImageTexture.angle, lDRImageTexture.scale);
@@ -591,11 +591,10 @@ public final class LDRImageTexture implements Texture {
 	public static LDRImageTexture undoGammaCorrectionSRGB(final LDRImageTexture lDRImageTexture) {
 		final int[] image = new int[lDRImageTexture.image.length];
 		
+		final ColorSpaceF colorSpace = ColorSpaceF.getDefault();
+		
 		for(int i = 0; i < lDRImageTexture.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(lDRImageTexture.image[i]);
-			final Color3F colorB = Color3F.undoGammaCorrectionSRGB(colorA);
-			
-			image[i] = colorB.pack();
+			image[i] = colorSpace.undoGammaCorrection(Color3F.unpack(lDRImageTexture.image[i])).pack();
 		}
 		
 		return new LDRImageTexture(lDRImageTexture.resolutionX, lDRImageTexture.resolutionY, image, lDRImageTexture.angle, lDRImageTexture.scale);

@@ -45,6 +45,7 @@ import javax.imageio.ImageIO;
 
 import org.dayflower.color.Color3D;
 import org.dayflower.color.Color4D;
+import org.dayflower.color.ColorSpaceD;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.filter.Filter2D;
 import org.dayflower.filter.GaussianFilter2D;
@@ -700,17 +701,16 @@ public final class PixelImageD extends ImageD {
 	 * @param splatScale the splat scale to use
 	 */
 	public void filmRender(final double splatScale) {
+		final ColorSpaceD colorSpace = ColorSpaceD.getDefault();
+		
 		for(final PixelD pixel : this.pixels) {
-			Color3D colorRGB = Color3D.convertXYZToRGBUsingPBRT(pixel.getColorXYZ());
-			Color3D splatRGB = Color3D.convertXYZToRGBUsingPBRT(pixel.getSplatXYZ());
+			Color3D colorRGB = colorSpace.convertXYZToRGB(pixel.getColorXYZ());
 			
 			if(!isZero(pixel.getFilterWeightSum())) {
 				colorRGB = Color3D.multiplyAndSaturateNegative(colorRGB, 1.0D / pixel.getFilterWeightSum());
 			}
 			
-			splatRGB = Color3D.multiply(splatRGB, splatScale);
-			colorRGB = Color3D.add(colorRGB, splatRGB);
-			colorRGB = Color3D.redoGammaCorrectionPBRT(colorRGB);
+			colorRGB = colorSpace.redoGammaCorrection(Color3D.add(colorRGB, Color3D.multiply(colorSpace.convertXYZToRGB(pixel.getSplatXYZ()), splatScale)));
 			
 			pixel.setColorRGB(colorRGB);
 		}

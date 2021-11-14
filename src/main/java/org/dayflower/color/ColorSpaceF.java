@@ -318,6 +318,20 @@ public final class ColorSpaceF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Returns the default {@code ColorSpaceF} instance.
+	 * <p>
+	 * The default {@code ColorSpaceF} instance is currently {@link ColorSpaceF#S_R_G_B}.
+	 * 
+	 * @return the default {@code ColorSpaceF} instance
+	 */
+//	TODO: Add Unit Tests!
+	public static ColorSpaceF getDefault() {
+		return S_R_G_B;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private float doRedoGammaCorrection(final float value) {
 		return value <= this.breakPoint ? value * this.slope : this.slopeMatch * pow(value, this.gammaReciprocal) - this.segmentOffset;
 	}

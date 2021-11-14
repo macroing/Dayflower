@@ -1,3 +1,15 @@
+2021-11-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods redoGammaCorrection(), redoGammaCorrection(ColorSpaceD), undoGammaCorrection() and undoGammaCorrection(ColorSpaceD) to the ImageD class.
+	* ADD:		Add the methods redoGammaCorrection(), redoGammaCorrection(ColorSpaceF), undoGammaCorrection() and undoGammaCorrection(ColorSpaceF) to the ImageF class.
+	* ADD:		Add the method getDefault() to the ColorSpaceD and ColorSpaceF classes.
+	* REMOVE:	Remove the methods redoGammaCorrectionPBRT(), redoGammaCorrectionSRGB(), undoGammaCorrectionPBRT() and undoGammaCorrectionSRGB() from the ImageD class.
+	* REMOVE:	Remove the methods redoGammaCorrectionPBRT(), redoGammaCorrectionSRGB(), undoGammaCorrectionPBRT() and undoGammaCorrectionSRGB() from the ImageF class.
+	* REMOVE:	Remove the methods convertRGBToXYZUsingPBRT(Color3D), convertRGBToXYZUsingSRGB(Color3D), convertXYZToRGBUsingPBRT(Color3D), convertXYZToRGBUsingSRGB(Color3D), redoGammaCorrectionPBRT(Color3D), redoGammaCorrectionSRGB(Color3D), undoGammaCorrectionPBRT(Color3D) and undoGammaCorrectionSRGB(Color3D) from the Color3D class.
+	* REMOVE:	Remove the methods convertRGBToXYZUsingPBRT(Color3F), convertRGBToXYZUsingSRGB(Color3F), convertXYZToRGBUsingPBRT(Color3F), convertXYZToRGBUsingSRGB(Color3F), redoGammaCorrectionPBRT(Color3F), redoGammaCorrectionSRGB(Color3F), undoGammaCorrectionPBRT(Color3F) and undoGammaCorrectionSRGB(Color3F) from the Color3F class.
+	* REMOVE:	Remove the methods convertRGBAToXYZAUsingPBRT(Color4D), convertRGBAToXYZAUsingSRGB(Color4D), convertXYZAToRGBAUsingPBRT(Color4D), convertXYZAToRGBAUsingSRGB(Color4D), redoGammaCorrectionPBRT(Color4D), redoGammaCorrectionSRGB(Color4D), undoGammaCorrectionPBRT(Color4D) and undoGammaCorrectionSRGB(Color4D) from the Color4D class.
+	* REMOVE:	Remove the methods convertRGBAToXYZAUsingPBRT(Color4F), convertRGBAToXYZAUsingSRGB(Color4F), convertXYZAToRGBAUsingPBRT(Color4F), convertXYZAToRGBAUsingSRGB(Color4F), redoGammaCorrectionPBRT(Color4F), redoGammaCorrectionSRGB(Color4F), undoGammaCorrectionPBRT(Color4F) and undoGammaCorrectionSRGB(Color4F) from the Color4F class.
+
 2021-11-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Color3DUnitTests class.

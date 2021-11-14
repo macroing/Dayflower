@@ -75,7 +75,7 @@ public abstract class SpectralCurveF {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color3F toColorRGB(final boolean isLegacy) {
-		return isLegacy ? Color3F.convertXYZToRGBUsingSRGB(doToColorXYZLegacy()) : Color3F.convertXYZToRGBUsingPBRT(doToColorXYZ());
+		return ColorSpaceF.getDefault().convertXYZToRGB(isLegacy ? doToColorXYZLegacy() : doToColorXYZ());
 	}
 	
 	/**

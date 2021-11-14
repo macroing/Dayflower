@@ -41,6 +41,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
@@ -579,7 +580,7 @@ public final class HairBXDF extends BXDF {
 			sigmaA[i] = colorEumelanin * sigmaAEumelanin[i] + colorPheomelanin * sigmaAPheomelanin[i];
 		}
 		
-		return Color3F.convertRGBToXYZUsingPBRT(new Color3F(sigmaA[0], sigmaA[1], sigmaA[2]));
+		return ColorSpaceF.getDefault().convertRGBToXYZ(new Color3F(sigmaA[0], sigmaA[1], sigmaA[2]));
 	}
 	
 	/**

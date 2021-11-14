@@ -23,6 +23,7 @@ import java.util.function.Function;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.ConvolutionKernel33F;
@@ -222,13 +223,15 @@ public final class ScreenRendererApplication extends Application {
 						Color3F base = Color3F.random();
 				        
 						function.set(pixelImage -> {
+							final ColorSpaceF colorSpace = ColorSpaceF.getDefault();
+							
 							for(int index = 0; index < pixelImage.getResolution(); index++) {
 								final float x = (index % pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionX());
 								final float y = (index / pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionY());
 								
 								final float noise = SimplexNoiseF.fractionalBrownianMotionXY(x, y, 5.0F, 0.5F, 0.0F, 1.0F, 8);
 								
-								final Color3F color = Color3F.redoGammaCorrectionSRGB(Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(base, noise))));
+								final Color3F color = colorSpace.redoGammaCorrection(Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(base, noise))));
 								
 								pixelImage.setColorRGB(Color3F.blend(pixelImage.getColorRGB(index), color, 0.5F), index);
 							}

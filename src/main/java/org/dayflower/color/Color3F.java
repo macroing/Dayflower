@@ -29,7 +29,6 @@ import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.lerp;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.pow;
 import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -1266,74 +1265,6 @@ public final class Color3F {
 	}
 	
 	/**
-	 * Converts {@code color} from the RGB-color space to the XYZ-color space using the algorithm provided by PBRT.
-	 * <p>
-	 * Returns a new {@code Color3F} instance with the result of the conversion.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color3F} instance in RGB-color space
-	 * @return a new {@code Color3F} instance with the result of the conversion
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public static Color3F convertRGBToXYZUsingPBRT(final Color3F color) {
-		final float x = 0.412453F * color.getR() + 0.357580F * color.getG() + 0.180423F * color.getB();
-		final float y = 0.212671F * color.getR() + 0.715160F * color.getG() + 0.072169F * color.getB();
-		final float z = 0.019334F * color.getR() + 0.119193F * color.getG() + 0.950227F * color.getB();
-		
-		return new Color3F(x, y, z);
-	}
-	
-	/**
-	 * Converts {@code color} from the RGB-color space to the XYZ-color space using sRGB.
-	 * <p>
-	 * Returns a new {@code Color3F} instance with the result of the conversion.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color3F} instance in RGB-color space
-	 * @return a new {@code Color3F} instance with the result of the conversion
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public static Color3F convertRGBToXYZUsingSRGB(final Color3F color) {
-		return ColorSpaceF.S_R_G_B.convertRGBToXYZ(color);
-	}
-	
-	/**
-	 * Converts {@code color} from the XYZ-color space to the RGB-color space using the algorithm provided by PBRT.
-	 * <p>
-	 * Returns a new {@code Color3F} instance with the result of the conversion.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color3F} instance in XYZ-color space
-	 * @return a new {@code Color3F} instance with the result of the conversion
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public static Color3F convertXYZToRGBUsingPBRT(final Color3F color) {
-		final float r = +3.240479F * color.getX() - 1.537150F * color.getY() - 0.498535F * color.getZ();
-		final float g = -0.969256F * color.getX() + 1.875991F * color.getY() + 0.041556F * color.getZ();
-		final float b = +0.055648F * color.getX() - 0.204043F * color.getY() + 1.057311F * color.getZ();
-		
-		return new Color3F(r, g, b);
-	}
-	
-	/**
-	 * Converts {@code color} from the XYZ-color space to the RGB-color space using sRGB.
-	 * <p>
-	 * Returns a new {@code Color3F} instance with the result of the conversion.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color3F} instance in XYZ-color space
-	 * @return a new {@code Color3F} instance with the result of the conversion
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public static Color3F convertXYZToRGBUsingSRGB(final Color3F color) {
-		return ColorSpaceF.S_R_G_B.convertXYZToRGB(color);
-	}
-	
-	/**
 	 * Divides the component values of {@code colorLHS} with the component values of {@code colorRHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the division.
@@ -1928,46 +1859,6 @@ public final class Color3F {
 	}
 	
 	/**
-	 * Redoes gamma correction on the component values of {@code color} using the algorithm provided by PBRT.
-	 * <p>
-	 * Returns a new {@code Color3F} instance with the result of the operation.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color3F} instance
-	 * @return a new {@code Color3F} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public static Color3F redoGammaCorrectionPBRT(final Color3F color) {
-		final float breakPoint = 0.0031308F;
-		final float gamma = 2.4F;
-		final float segmentOffset = 0.055F;
-		final float slope = 12.92F;
-		final float slopeMatch = 1.055F;
-		
-		final float component1 = color.component1 <= breakPoint ? color.component1 * slope : slopeMatch * pow(color.component1, 1.0F / gamma) - segmentOffset;
-		final float component2 = color.component2 <= breakPoint ? color.component2 * slope : slopeMatch * pow(color.component2, 1.0F / gamma) - segmentOffset;
-		final float component3 = color.component3 <= breakPoint ? color.component3 * slope : slopeMatch * pow(color.component3, 1.0F / gamma) - segmentOffset;
-		
-		return new Color3F(component1, component2, component3);
-	}
-	
-	/**
-	 * Redoes gamma correction on the component values of {@code color} using sRGB.
-	 * <p>
-	 * Returns a new {@code Color3F} instance with the result of the operation.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color3F} instance
-	 * @return a new {@code Color3F} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public static Color3F redoGammaCorrectionSRGB(final Color3F color) {
-		return ColorSpaceF.S_R_G_B.redoGammaCorrection(color);
-	}
-	
-	/**
 	 * Saturates or clamps {@code color} to the range {@code [0.0F, 1.0F]}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the operation.
@@ -2355,46 +2246,6 @@ public final class Color3F {
 		final float component32 = component31 / (component31 + 0.155F) * 1.019F;
 		
 		return new Color3F(component12, component22, component32);
-	}
-	
-	/**
-	 * Undoes gamma correction on the component values of {@code color} using the algorithm provided by PBRT.
-	 * <p>
-	 * Returns a new {@code Color3F} instance with the result of the operation.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color3F} instance
-	 * @return a new {@code Color3F} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public static Color3F undoGammaCorrectionPBRT(final Color3F color) {
-		final float breakPoint = 0.0031308F;
-		final float gamma = 2.4F;
-		final float segmentOffset = 0.055F;
-		final float slope = 12.92F;
-		final float slopeMatch = 1.055F;
-		
-		final float component1 = color.component1 <= breakPoint * slope ? color.component1 / slope : pow((color.component1 + segmentOffset) / slopeMatch, gamma);
-		final float component2 = color.component2 <= breakPoint * slope ? color.component2 / slope : pow((color.component2 + segmentOffset) / slopeMatch, gamma);
-		final float component3 = color.component3 <= breakPoint * slope ? color.component3 / slope : pow((color.component3 + segmentOffset) / slopeMatch, gamma);
-		
-		return new Color3F(component1, component2, component3);
-	}
-	
-	/**
-	 * Undoes gamma correction on the component values of {@code color} using sRGB.
-	 * <p>
-	 * Returns a new {@code Color3F} instance with the result of the operation.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@code Color3F} instance
-	 * @return a new {@code Color3F} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public static Color3F undoGammaCorrectionSRGB(final Color3F color) {
-		return ColorSpaceF.S_R_G_B.undoGammaCorrection(color);
 	}
 	
 	/**

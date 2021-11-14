@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.image.ByteImageF;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
@@ -541,6 +542,8 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		final float[] imageColorFloatArray = getImageColorFloatArray();
 		final float[] pixelArray = getPixelArray();
 		
+		final ColorSpaceF colorSpace = ColorSpaceF.getDefault();
+		
 		for(int y = 0; y < resolutionY; y++) {
 			for(int x = 0; x < resolutionX; x++) {
 				final int index = y * resolutionX + x;
@@ -557,7 +560,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 				final float pixelY = pixelArray[indexPixelArray + 1];
 				
 				final Color3F colorRGB = new Color3F(r, g, b);
-				final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
+				final Color3F colorXYZ = colorSpace.convertRGBToXYZ(colorRGB);
 				
 				if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
 					pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);

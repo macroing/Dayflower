@@ -353,6 +353,23 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	/**
 	 * Sets a color in {@link #color3FLHSArray_$private$3}.
 	 * <p>
+	 * The color is constructed by converting the color represented by {@code component1}, {@code component2} and {@code component3} from the XYZ color space to the RGB color space sRGB.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
+	protected final void color3FLHSSetConvertXYZToRGB(final float component1, final float component2, final float component3) {
+		final float newComponent1 = +3.24100423F * component1 + -1.53739941F * component2 + -0.49861607F * component3;
+		final float newComponent2 = -0.96922410F * component1 + +1.87592983F * component2 + +0.04155424F * component3;
+		final float newComponent3 = +0.05563942F * component1 + -0.20401107F * component2 + +1.05714858F * component3;
+		
+		color3FLHSSet(newComponent1, newComponent2, newComponent3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FLHSArray_$private$3}.
+	 * <p>
 	 * The color is constructed by dividing the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} with the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS},
 	 * component-wize.
 	 * 
@@ -594,7 +611,24 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		final float component2 = lerp(colorLHSComponent2, colorRHSComponent2, tComponent2);
 		final float component3 = lerp(colorLHSComponent3, colorRHSComponent3, tComponent3);
 		
-		color3FLHSSet(component1, component2, component3);
+		color3FRHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FRHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by converting the color represented by {@code component1}, {@code component2} and {@code component3} from the XYZ color space to the RGB color space sRGB.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
+	protected final void color3FRHSSetConvertXYZToRGB(final float component1, final float component2, final float component3) {
+		final float newComponent1 = +3.24100423F * component1 + -1.53739941F * component2 + -0.49861607F * component3;
+		final float newComponent2 = -0.96922410F * component1 + +1.87592983F * component2 + +0.04155424F * component3;
+		final float newComponent3 = +0.05563942F * component1 + -0.20401107F * component2 + +1.05714858F * component3;
+		
+		color3FRHSSet(newComponent1, newComponent2, newComponent3);
 	}
 	
 	/**

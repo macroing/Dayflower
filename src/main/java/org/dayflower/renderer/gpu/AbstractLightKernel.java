@@ -1564,23 +1564,20 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float x = zenith1 * ((1.0F + perezX0 * exp(perezX1 / thetaACos)) * (1.0F + perezX2 * exp(perezX3 * gamma) + perezX4 * gammaCos * gammaCos)) / ((1.0F + perezX0 * exp(perezX1)) * (1.0F + perezX2 * exp(perezX3 * thetaB) + perezX4 * thetaBCos * thetaBCos));
 		final float y = zenith2 * ((1.0F + perezY0 * exp(perezY1 / thetaACos)) * (1.0F + perezY2 * exp(perezY3 * gamma) + perezY4 * gammaCos * gammaCos)) / ((1.0F + perezY0 * exp(perezY1)) * (1.0F + perezY2 * exp(perezY3 * thetaB) + perezY4 * thetaBCos * thetaBCos));
 		
-//		ChromaticSpectralCurveF.getColorXYZ(float, float):
-		final float m1 = (-1.3515F - 1.7703F  * x +  5.9114F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
-		final float m2 = (+0.03F   - 31.4424F * x + 30.0717F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
+		final float m1 = (-1.3515F -  1.7703F * x +  5.9114F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
+		final float m2 = (+0.0300F - 31.4424F * x + 30.0717F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
 		
 		final float colorX0 =  95.6824722290F + m1 *  1.7548348904F + m2 * +1.9917192459F;
 		final float colorY0 =  99.7036819458F + m1 *  1.8025954962F + m2 * +0.7136800885F;
 		final float colorZ0 = 115.5248031616F + m1 * 32.5218048096F + m2 * -2.1984319687F;
 		
-//		Multiply by the relative luminance and divide by Y:
 		final float colorX1 = colorX0 * relativeLuminance / colorY0;
 		final float colorY1 = relativeLuminance;
 		final float colorZ1 = colorZ0 * relativeLuminance / colorY0;
 		
-//		Color3F.convertXYZToRGBUsingPBRT(Color3F):
-		final float r = +3.240479F * colorX1 - 1.537150F * colorY1 - 0.498535F * colorZ1;
-		final float g = -0.969256F * colorX1 + 1.875991F * colorY1 + 0.041556F * colorZ1;
-		final float b = +0.055648F * colorX1 - 0.204043F * colorY1 + 1.057311F * colorZ1;
+		final float r = +3.24100423F * colorX1 + -1.53739941F * colorY1 + -0.49861607F * colorZ1;
+		final float g = -0.96922410F * colorX1 + +1.87592983F * colorY1 + +0.04155424F * colorZ1;
+		final float b = +0.05563942F * colorX1 + -0.20401107F * colorY1 + +1.05714858F * colorZ1;
 		
 		color3FLHSSet(r, g, b);
 	}

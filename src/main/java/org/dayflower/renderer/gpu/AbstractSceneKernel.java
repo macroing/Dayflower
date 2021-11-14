@@ -481,6 +481,27 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	}
 	
 	/**
+	 * Generates a ray for the current pixel using the current camera and a triangle filter.
+	 * <p>
+	 * Returns {@code true} if, and only if, a ray was generated, {@code false} otherwise.
+	 * <p>
+	 * If the current camera uses a thin lens, this method should always return {@code true}. If, on the other hand, the current camera uses a fisheye lens, this may not always be the case.
+	 * <p>
+	 * If this method returns {@code true}, the pixel coordinates will be set in {@link #pixelArray}.
+	 * 
+	 * @return {@code true} if, and only if, a ray was generated, {@code false} otherwise
+	 */
+	protected final boolean ray3FCameraGenerateTriangleFilter() {
+		final float pixelX = 2.0F * random();
+		final float pixelY = 2.0F * random();
+		
+		final float filteredPixelX = pixelX < 1.0F ? sqrt(pixelX) - 1.0F : 1.0F - sqrt(2.0F - pixelX);
+		final float filteredPixelY = pixelY < 1.0F ? sqrt(pixelY) - 1.0F : 1.0F - sqrt(2.0F - pixelY);
+		
+		return ray3FCameraGenerate(filteredPixelX, filteredPixelY);
+	}
+	
+	/**
 	 * Returns the parametric T value for the closest primitive in world space, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @return the parametric T value for the closest primitive in world space, or {@code 0.0F} if no intersection was found

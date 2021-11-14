@@ -1,8 +1,12 @@
 2021-11-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the method ray3FCameraGenerateTriangleFilter() to the AbstractSceneKernel class.
 	* ADD:		Add the methods redoGammaCorrection(), redoGammaCorrection(ColorSpaceD), undoGammaCorrection() and undoGammaCorrection(ColorSpaceD) to the ImageD class.
 	* ADD:		Add the methods redoGammaCorrection(), redoGammaCorrection(ColorSpaceF), undoGammaCorrection() and undoGammaCorrection(ColorSpaceF) to the ImageF class.
 	* ADD:		Add the method getDefault() to the ColorSpaceD and ColorSpaceF classes.
+	* CHANGE:	Update the Path Tracer in the GPURenderer class to use the method ray3FCameraGenerateTriangleFilter(). This produces less ringing.
+	* CHANGE:	Update the implementation of the PerezLight in the AbstractLightKernel class.
+	* CHANGE:	Rename the methods imageRedoGammaCorrectionPBRT() and imageUndoGammaCorrectionPBRT() to imageRedoGammaCorrection() and imageUndoGammaCorrection() in the AbstractImageKernel class and update their implementations.
 	* REMOVE:	Remove the methods redoGammaCorrectionPBRT(), redoGammaCorrectionSRGB(), undoGammaCorrectionPBRT() and undoGammaCorrectionSRGB() from the ImageD class.
 	* REMOVE:	Remove the methods redoGammaCorrectionPBRT(), redoGammaCorrectionSRGB(), undoGammaCorrectionPBRT() and undoGammaCorrectionSRGB() from the ImageF class.
 	* REMOVE:	Remove the methods convertRGBToXYZUsingPBRT(Color3D), convertRGBToXYZUsingSRGB(Color3D), convertXYZToRGBUsingPBRT(Color3D), convertXYZToRGBUsingSRGB(Color3D), redoGammaCorrectionPBRT(Color3D), redoGammaCorrectionSRGB(Color3D), undoGammaCorrectionPBRT(Color3D) and undoGammaCorrectionSRGB(Color3D) from the Color3D class.

@@ -105,7 +105,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		filmAddColor(radiance, radiance, radiance);
 		
 		imageBegin();
-		imageRedoGammaCorrectionPBRT();
+		imageRedoGammaCorrection();
 		imageEnd();
 	}
 	
@@ -118,12 +118,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		float throughputG = 1.0F;
 		float throughputB = 1.0F;
 		
-//		final float pixel0X = 2.0F * random();
-//		final float pixel1X = pixel0X < 1.0F ? sqrt(pixel0X) - 1.0F : 1.0F - sqrt(2.0F - pixel0X);
-//		final float pixel0Y = 2.0F * random();
-//		final float pixel1Y = pixel0Y < 1.0F ? sqrt(pixel0Y) - 1.0F : 1.0F - sqrt(2.0F - pixel0Y);
-		
-		if(ray3FCameraGenerate(random(), random())) {
+		if(ray3FCameraGenerateTriangleFilter()) {
 			int currentBounce = 0;
 			
 			boolean isSpecularBounce = false;
@@ -243,7 +238,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		filmAddColor(radianceR, radianceG, radianceB);
 		
 		imageBegin();
-		imageRedoGammaCorrectionPBRT();
+		imageRedoGammaCorrection();
 		imageEnd();
 	}
 	
@@ -274,7 +269,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		}
 		
 		imageBegin();
-		imageRedoGammaCorrectionPBRT();
+		imageRedoGammaCorrection();
 		imageEnd();
 	}
 	
@@ -282,7 +277,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		filmAddColor(0.0F, 0.0F, 0.0F);
 		
 		imageBegin();
-		imageRedoGammaCorrectionPBRT();
+		imageRedoGammaCorrection();
 		imageEnd();
 	}
 }

@@ -37,6 +37,15 @@ import org.dayflower.utility.IntArrays;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractImageKernel extends AbstractKernel {
+	private static final float S_R_G_B_BREAK_POINT = 0.00304F;
+	private static final float S_R_G_B_BREAK_POINT_MULTIPLIED_BY_SLOPE = 0.03928609F;
+	private static final float S_R_G_B_GAMMA = 2.4F;
+	private static final float S_R_G_B_GAMMA_RECIPROCAL = 0.41666666F;
+	private static final float S_R_G_B_SEGMENT_OFFSET = 0.05500052F;
+	private static final float S_R_G_B_SLOPE = 12.9230566F;
+	private static final float S_R_G_B_SLOPE_MATCH = 1.05500054F;
+	private static final float S_R_G_B_SLOPE_MATCH_RECIPROCAL = 0.9478668F;
+	private static final float S_R_G_B_SLOPE_RECIPROCAL = 0.07738107F;
 	private static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_1 = 0;
 	private static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_2 = 1;
 	private static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_3 = 2;
@@ -1059,20 +1068,20 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	/**
-	 * Redoes the gamma correction for the current pixel of the image using the algorithm provided by PBRT.
+	 * Redoes the gamma correction for the current pixel of the image using sRGB.
 	 * <p>
 	 * This method assumes the RGB color for the current pixel is linear.
 	 */
-	protected final void imageRedoGammaCorrectionPBRT() {
+	protected final void imageRedoGammaCorrection() {
 		final int imageColorFloatArrayOffset = getGlobalId() * 3;
 		
 		final float oldColorR = this.imageColorFloatArray[imageColorFloatArrayOffset + 0];
 		final float oldColorG = this.imageColorFloatArray[imageColorFloatArrayOffset + 1];
 		final float oldColorB = this.imageColorFloatArray[imageColorFloatArrayOffset + 2];
 		
-		final float newColorR = oldColorR <= 0.0031308F ? 12.92F * oldColorR : 1.055F * pow(oldColorR, 1.0F / 2.4F) - 0.055F;
-		final float newColorG = oldColorG <= 0.0031308F ? 12.92F * oldColorG : 1.055F * pow(oldColorG, 1.0F / 2.4F) - 0.055F;
-		final float newColorB = oldColorB <= 0.0031308F ? 12.92F * oldColorB : 1.055F * pow(oldColorB, 1.0F / 2.4F) - 0.055F;
+		final float newColorR = oldColorR <= S_R_G_B_BREAK_POINT ? oldColorR * S_R_G_B_SLOPE : S_R_G_B_SLOPE_MATCH * pow(oldColorR, S_R_G_B_GAMMA_RECIPROCAL) - S_R_G_B_SEGMENT_OFFSET;
+		final float newColorG = oldColorG <= S_R_G_B_BREAK_POINT ? oldColorG * S_R_G_B_SLOPE : S_R_G_B_SLOPE_MATCH * pow(oldColorG, S_R_G_B_GAMMA_RECIPROCAL) - S_R_G_B_SEGMENT_OFFSET;
+		final float newColorB = oldColorB <= S_R_G_B_BREAK_POINT ? oldColorB * S_R_G_B_SLOPE : S_R_G_B_SLOPE_MATCH * pow(oldColorB, S_R_G_B_GAMMA_RECIPROCAL) - S_R_G_B_SEGMENT_OFFSET;
 		
 		this.imageColorFloatArray[imageColorFloatArrayOffset + 0] = newColorR;
 		this.imageColorFloatArray[imageColorFloatArrayOffset + 1] = newColorG;
@@ -1095,20 +1104,20 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	/**
-	 * Undoes the gamma correction for the current pixel of the image using the algorithm provided by PBRT.
+	 * Undoes the gamma correction for the current pixel of the image using sRGB.
 	 * <p>
 	 * This method assumes the RGB color for the current pixel is non-linear.
 	 */
-	protected final void imageUndoGammaCorrectionPBRT() {
+	protected final void imageUndoGammaCorrection() {
 		final int imageColorFloatArrayOffset = getGlobalId() * 3;
 		
 		final float oldColorR = this.imageColorFloatArray[imageColorFloatArrayOffset + 0];
 		final float oldColorG = this.imageColorFloatArray[imageColorFloatArrayOffset + 1];
 		final float oldColorB = this.imageColorFloatArray[imageColorFloatArrayOffset + 2];
 		
-		final float newColorR = oldColorR <= 0.04045F ? oldColorR * 1.0F / 12.92F : pow((oldColorR + 0.055F) * 1.0F / 1.055F, 2.4F);
-		final float newColorG = oldColorG <= 0.04045F ? oldColorG * 1.0F / 12.92F : pow((oldColorG + 0.055F) * 1.0F / 1.055F, 2.4F);
-		final float newColorB = oldColorB <= 0.04045F ? oldColorB * 1.0F / 12.92F : pow((oldColorB + 0.055F) * 1.0F / 1.055F, 2.4F);
+		final float newColorR = oldColorR <= S_R_G_B_BREAK_POINT_MULTIPLIED_BY_SLOPE ? oldColorR * S_R_G_B_SLOPE_RECIPROCAL : pow((oldColorR + S_R_G_B_SEGMENT_OFFSET) * S_R_G_B_SLOPE_MATCH_RECIPROCAL, S_R_G_B_GAMMA);
+		final float newColorG = oldColorG <= S_R_G_B_BREAK_POINT_MULTIPLIED_BY_SLOPE ? oldColorG * S_R_G_B_SLOPE_RECIPROCAL : pow((oldColorG + S_R_G_B_SEGMENT_OFFSET) * S_R_G_B_SLOPE_MATCH_RECIPROCAL, S_R_G_B_GAMMA);
+		final float newColorB = oldColorB <= S_R_G_B_BREAK_POINT_MULTIPLIED_BY_SLOPE ? oldColorB * S_R_G_B_SLOPE_RECIPROCAL : pow((oldColorB + S_R_G_B_SEGMENT_OFFSET) * S_R_G_B_SLOPE_MATCH_RECIPROCAL, S_R_G_B_GAMMA);
 		
 		this.imageColorFloatArray[imageColorFloatArrayOffset + 0] = newColorR;
 		this.imageColorFloatArray[imageColorFloatArrayOffset + 1] = newColorG;

@@ -1,10 +1,12 @@
 2021-11-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the method getTurbidity() to the PerezLight class.
 	* ADD:		Add the methods color3FLHSSetConvertXYZToRGB(float, float, float) and color3FRHSSetConvertXYZToRGB(float, float, float) to the AbstractImageKernel class.
 	* ADD:		Add the method ray3FCameraGenerateTriangleFilter() to the AbstractSceneKernel class.
 	* ADD:		Add the methods redoGammaCorrection(), redoGammaCorrection(ColorSpaceD), undoGammaCorrection() and undoGammaCorrection(ColorSpaceD) to the ImageD class.
 	* ADD:		Add the methods redoGammaCorrection(), redoGammaCorrection(ColorSpaceF), undoGammaCorrection() and undoGammaCorrection(ColorSpaceF) to the ImageF class.
 	* ADD:		Add the method getDefault() to the ColorSpaceD and ColorSpaceF classes.
+	* CHANGE:	Optimize the memory requirement for the PerezLight in the GPU renderer.
 	* CHANGE:	Fix a bug in the method color3FRHSSetBlend(float, float, float) in the AbstractImageKernel class.
 	* CHANGE:	Update the Path Tracer in the GPURenderer class to use the method ray3FCameraGenerateTriangleFilter(). This produces less ringing.
 	* CHANGE:	Update the implementation of the PerezLight in the AbstractLightKernel class.

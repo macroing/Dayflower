@@ -170,7 +170,7 @@ public final class CompiledLightCache {
 	/**
 	 * The offset for the {@link Distribution2F} denoted by {@code Distribution} in a compiled {@link PerezLight} instance.
 	 */
-	public static final int PEREZ_LIGHT_OFFSET_DISTRIBUTION = 61;
+	public static final int PEREZ_LIGHT_OFFSET_DISTRIBUTION = 48;
 	
 	/**
 	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in a compiled {@link PerezLight} instance.
@@ -178,24 +178,9 @@ public final class CompiledLightCache {
 	public static final int PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD = 0;
 	
 	/**
-	 * The offset for the Perez relative luminance in a compiled {@link PerezLight} instance.
-	 */
-	public static final int PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE = 41;
-	
-	/**
-	 * The offset for the Perez X in a compiled {@link PerezLight} instance.
-	 */
-	public static final int PEREZ_LIGHT_OFFSET_PEREZ_X = 46;
-	
-	/**
-	 * The offset for the Perez Y in a compiled {@link PerezLight} instance.
-	 */
-	public static final int PEREZ_LIGHT_OFFSET_PEREZ_Y = 51;
-	
-	/**
 	 * The offset for the radius in a compiled {@link PerezLight} instance.
 	 */
-	public static final int PEREZ_LIGHT_OFFSET_RADIUS = 59;
+	public static final int PEREZ_LIGHT_OFFSET_RADIUS = 45;
 	
 	/**
 	 * The offset for the {@link Color3F} denoted by {@code Sun Color} in a compiled {@link PerezLight} instance.
@@ -215,7 +200,12 @@ public final class CompiledLightCache {
 	/**
 	 * The offset for the theta in a compiled {@link PerezLight} instance.
 	 */
-	public static final int PEREZ_LIGHT_OFFSET_THETA = 60;
+	public static final int PEREZ_LIGHT_OFFSET_THETA = 46;
+	
+	/**
+	 * The offset for the turbidity in a compiled {@link PerezLight} instance.
+	 */
+	public static final int PEREZ_LIGHT_OFFSET_TURBIDITY = 41;
 	
 	/**
 	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in a compiled {@link PerezLight} instance.
@@ -225,7 +215,7 @@ public final class CompiledLightCache {
 	/**
 	 * The offset for the zenith in a compiled {@link PerezLight} instance.
 	 */
-	public static final int PEREZ_LIGHT_OFFSET_ZENITH = 56;
+	public static final int PEREZ_LIGHT_OFFSET_ZENITH = 42;
 	
 	/**
 	 * The length of a compiled {@link PointLight} instance.
@@ -1511,11 +1501,9 @@ public final class CompiledLightCache {
 		final Vector3F sunDirectionObjectSpace = perezLight.getSunDirectionObjectSpace();
 		final Vector3F sunDirectionWorldSpace = perezLight.getSunDirectionWorldSpace();
 		
-		final double[] perezRelativeLuminance = perezLight.getPerezRelativeLuminance();
-		final double[] perezX = perezLight.getPerezX();
-		final double[] perezY = perezLight.getPerezY();
 		final double[] zenith = perezLight.getZenith();
 		
+		final float turbidity = perezLight.getTurbidity();
 		final float radius = perezLight.getRadius();
 		final float theta = perezLight.getTheta();
 		
@@ -1575,25 +1563,7 @@ public final class CompiledLightCache {
 		
 //		Block #6:
 		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2] = sunDirectionWorldSpace.getZ();
-		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 0] = toFloat(perezRelativeLuminance[0]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 1] = toFloat(perezRelativeLuminance[1]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 2] = toFloat(perezRelativeLuminance[2]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 3] = toFloat(perezRelativeLuminance[3]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 4] = toFloat(perezRelativeLuminance[4]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 0] = toFloat(perezX[0]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 1] = toFloat(perezX[1]);
-		
-//		Block #7:
-		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 2] = toFloat(perezX[2]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 3] = toFloat(perezX[3]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_X + 4] = toFloat(perezX[4]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 0] = toFloat(perezY[0]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 1] = toFloat(perezY[1]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 2] = toFloat(perezY[2]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 3] = toFloat(perezY[3]);
-		array[PEREZ_LIGHT_OFFSET_PEREZ_Y + 4] = toFloat(perezY[4]);
-		
-//		Block #8:
+		array[PEREZ_LIGHT_OFFSET_TURBIDITY] = turbidity;
 		array[PEREZ_LIGHT_OFFSET_ZENITH + 0] = toFloat(zenith[0]);
 		array[PEREZ_LIGHT_OFFSET_ZENITH + 1] = toFloat(zenith[1]);
 		array[PEREZ_LIGHT_OFFSET_ZENITH + 2] = toFloat(zenith[2]);
@@ -1753,7 +1723,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code perezLight} is {@code null}
 	 */
 	public static int getPerezLightLength(final PerezLight perezLight) {
-		final int a = 16 + 16 + 3 + 3 + 3 + 5 + 5 + 5 + 3 + 1 + 1;
+		final int a = 16 + 16 + 3 + 3 + 3 + 1 + 3 + 1 + 1 + 1;
 		final int b = perezLight.getDistribution().toArray().length;
 		
 		return a + b + padding(a + b);

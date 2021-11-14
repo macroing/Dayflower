@@ -1531,24 +1531,27 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float thetaA = acos(saturateF(directionSaturatedZ, -1.0F, 1.0F));
 		final float thetaACos = cos(thetaA);
+		final float thetaACosReciprocal = 1.0F / thetaACos;
 		
-		final float perezRelativeLuminance0 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 0];
-		final float perezRelativeLuminance1 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 1];
-		final float perezRelativeLuminance2 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 2];
-		final float perezRelativeLuminance3 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 3];
-		final float perezRelativeLuminance4 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_RELATIVE_LUMINANCE + 4];
+		final float turbidity = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_TURBIDITY + 0];
 		
-		final float perezX0 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 0];
-		final float perezX1 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 1];
-		final float perezX2 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 2];
-		final float perezX3 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 3];
-		final float perezX4 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_X + 4];
+		final float perezRelativeLuminance0 = +0.17872F * turbidity - 1.46303F;
+		final float perezRelativeLuminance1 = -0.35540F * turbidity + 0.42749F;
+		final float perezRelativeLuminance2 = -0.02266F * turbidity + 5.32505F;
+		final float perezRelativeLuminance3 = +0.12064F * turbidity - 2.57705F;
+		final float perezRelativeLuminance4 = -0.06696F * turbidity + 0.37027F;
 		
-		final float perezY0 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 0];
-		final float perezY1 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 1];
-		final float perezY2 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 2];
-		final float perezY3 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 3];
-		final float perezY4 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_PEREZ_Y + 4];
+		final float perezX0 = -0.01925F * turbidity - 0.25922F;
+		final float perezX1 = -0.06651F * turbidity + 0.00081F;
+		final float perezX2 = -0.00041F * turbidity + 0.21247F;
+		final float perezX3 = -0.06409F * turbidity - 0.89887F;
+		final float perezX4 = -0.00325F * turbidity + 0.04517F;
+		
+		final float perezY0 = -0.01669F * turbidity - 0.26078F;
+		final float perezY1 = -0.09495F * turbidity + 0.00921F;
+		final float perezY2 = -0.00792F * turbidity + 0.21023F;
+		final float perezY3 = -0.04405F * turbidity - 1.65369F;
+		final float perezY4 = -0.01092F * turbidity + 0.05291F;
 		
 		final float zenith0 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_ZENITH + 0];
 		final float zenith1 = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_ZENITH + 1];
@@ -1556,13 +1559,15 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float thetaB = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_THETA];
 		final float thetaBCos = cos(thetaB);
+		final float thetaBCosSquared = thetaBCos * thetaBCos;
 		
 		final float gamma = acos(saturateF(vector3FDotProduct(directionSaturatedX, directionSaturatedY, directionSaturatedZ, sunDirectionObjectSpaceX, sunDirectionObjectSpaceY, sunDirectionObjectSpaceZ), -1.0F, 1.0F));
 		final float gammaCos = cos(gamma);
+		final float gammaCosSquared = gammaCos * gammaCos;
 		
-		final float relativeLuminance = (zenith0 * ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1 / thetaACos)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * gamma) + perezRelativeLuminance4 * gammaCos * gammaCos)) / ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * thetaB) + perezRelativeLuminance4 * thetaBCos * thetaBCos))) * 0.0001F;
-		final float x = zenith1 * ((1.0F + perezX0 * exp(perezX1 / thetaACos)) * (1.0F + perezX2 * exp(perezX3 * gamma) + perezX4 * gammaCos * gammaCos)) / ((1.0F + perezX0 * exp(perezX1)) * (1.0F + perezX2 * exp(perezX3 * thetaB) + perezX4 * thetaBCos * thetaBCos));
-		final float y = zenith2 * ((1.0F + perezY0 * exp(perezY1 / thetaACos)) * (1.0F + perezY2 * exp(perezY3 * gamma) + perezY4 * gammaCos * gammaCos)) / ((1.0F + perezY0 * exp(perezY1)) * (1.0F + perezY2 * exp(perezY3 * thetaB) + perezY4 * thetaBCos * thetaBCos));
+		final float relativeLuminance = (zenith0 * ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1 * thetaACosReciprocal)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * gamma) + perezRelativeLuminance4 * gammaCosSquared)) / ((1.0F + perezRelativeLuminance0 * exp(perezRelativeLuminance1)) * (1.0F + perezRelativeLuminance2 * exp(perezRelativeLuminance3 * thetaB) + perezRelativeLuminance4 * thetaBCosSquared))) * 0.0001F;
+		final float x = zenith1 * ((1.0F + perezX0 * exp(perezX1 * thetaACosReciprocal)) * (1.0F + perezX2 * exp(perezX3 * gamma) + perezX4 * gammaCosSquared)) / ((1.0F + perezX0 * exp(perezX1)) * (1.0F + perezX2 * exp(perezX3 * thetaB) + perezX4 * thetaBCosSquared));
+		final float y = zenith2 * ((1.0F + perezY0 * exp(perezY1 * thetaACosReciprocal)) * (1.0F + perezY2 * exp(perezY3 * gamma) + perezY4 * gammaCosSquared)) / ((1.0F + perezY0 * exp(perezY1)) * (1.0F + perezY2 * exp(perezY3 * thetaB) + perezY4 * thetaBCosSquared));
 		
 		final float m1 = (-1.3515F -  1.7703F * x +  5.9114F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
 		final float m2 = (+0.0300F - 31.4424F * x + 30.0717F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);

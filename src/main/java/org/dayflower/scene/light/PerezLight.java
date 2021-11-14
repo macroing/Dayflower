@@ -508,6 +508,15 @@ public final class PerezLight extends Light {
 	}
 	
 	/**
+	 * Returns the turbidity associated with this {@code PerezLight} instance.
+	 * 
+	 * @return the turbidity associated with this {@code PerezLight} instance
+	 */
+	public float getTurbidity() {
+		return this.turbidity;
+	}
+	
+	/**
 	 * Returns an {@code int} with the ID of this {@code PerezLight} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code PerezLight} instance

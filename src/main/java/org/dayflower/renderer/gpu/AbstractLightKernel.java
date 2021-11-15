@@ -1533,7 +1533,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float thetaACos = cos(thetaA);
 		final float thetaACosReciprocal = 1.0F / thetaACos;
 		
-		final float turbidity = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_TURBIDITY + 0];
+		final float turbidity = this.lightPerezLightArray[offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_TURBIDITY];
 		
 		final float perezRelativeLuminance0 = +0.17872F * turbidity - 1.46303F;
 		final float perezRelativeLuminance1 = -0.35540F * turbidity + 0.42749F;
@@ -1584,6 +1584,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private void doLightPerezLightTransformToObjectSpace(final int offset, final float directionX, final float directionY, final float directionZ) {
+//		TODO: Find out if the Matrix44F instance should be stored with the PerezLight or not. If it should, may some of its elements be eliminated because they never change?
+		
 		final int offsetWorldToObject = offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT;
 		
 		final float element11 = this.lightPerezLightArray[offsetWorldToObject +  0];
@@ -1600,6 +1602,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private void doLightPerezLightTransformToWorldSpace(final int offset, final float directionX, final float directionY, final float directionZ) {
+//		TODO: Find out if the Matrix44F instance should be stored with the PerezLight or not. If it should, may some of its elements be eliminated because they never change?
+		
 		final int offsetObjectToWorld = offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD;
 		
 		final float element11 = this.lightPerezLightArray[offsetObjectToWorld +  0];

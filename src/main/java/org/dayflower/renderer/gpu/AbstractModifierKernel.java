@@ -74,8 +74,8 @@ public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 	 */
 	protected final void modifierModify(final int modifierID, final int modifierOffset) {
 		if(modifierID == LDRImageNormalMapModifier.ID) {
-			final float textureCoordinatesU = intersectionGetTextureCoordinatesComponent1();
-			final float textureCoordinatesV = intersectionGetTextureCoordinatesComponent2();
+			final float textureCoordinatesU = intersectionLHSGetTextureCoordinatesComponent1();
+			final float textureCoordinatesV = intersectionLHSGetTextureCoordinatesComponent2();
 			
 			final int currentModifierOffsetAbsolute = this.modifierLDRImageNormalMapModifierOffsetArray[modifierOffset];
 			
@@ -126,17 +126,17 @@ public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 			final float directionY = g * 2.0F - 1.0F;
 			final float directionZ = b * 2.0F - 1.0F;
 			
-			intersectionSetOrthonormalBasisSWTransform(directionX, directionY, directionZ);
+			intersectionLHSSetOrthonormalBasisSWTransform(directionX, directionY, directionZ);
 		} else if(modifierID == NoOpModifier.ID) {
 			return;
 		} else if(modifierID == SimplexNoiseNormalMapModifier.ID) {
-			final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-			final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-			final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+			final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+			final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+			final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 			
-			final float surfaceNormalSX = intersectionGetOrthonormalBasisSWComponent1();
-			final float surfaceNormalSY = intersectionGetOrthonormalBasisSWComponent2();
-			final float surfaceNormalSZ = intersectionGetOrthonormalBasisSWComponent3();
+			final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWComponent1();
+			final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWComponent2();
+			final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 			
 			final float frequency = this.modifierSimplexNoiseNormalMapModifierArray[modifierOffset + CompiledModifierCache.SIMPLEX_NOISE_NORMAL_MAP_MODIFIER_OFFSET_FREQUENCY];
 			final float frequencyReciprocal = 1.0F / frequency;
@@ -157,7 +157,7 @@ public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 			final float y2 = y1 * lengthReciprocal;
 			final float z2 = z1 * lengthReciprocal;
 			
-			intersectionSetOrthonormalBasisSW(x2, y2, z2);
+			intersectionLHSSetOrthonormalBasisSW(x2, y2, z2);
 		}
 	}
 }

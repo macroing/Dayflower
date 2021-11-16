@@ -194,16 +194,16 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 		float component2 = 0.0F;
 		float component3 = 0.0F;
 		
-		final float surfaceNormalX = intersectionGetOrthonormalBasisSWComponent1();
-		final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
-		final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
+		final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
+		final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 		
-		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 		
-		final float textureCoordinatesU = intersectionGetTextureCoordinatesComponent1();
-		final float textureCoordinatesV = intersectionGetTextureCoordinatesComponent2();
+		final float textureCoordinatesU = intersectionLHSGetTextureCoordinatesComponent1();
+		final float textureCoordinatesV = intersectionLHSGetTextureCoordinatesComponent2();
 		
 		while(currentTextureID != -1 && currentTextureOffset != -1) {
 			if(currentTextureID == BullseyeTexture.ID) {

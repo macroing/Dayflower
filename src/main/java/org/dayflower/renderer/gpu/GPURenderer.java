@@ -80,14 +80,14 @@ public final class GPURenderer extends AbstractGPURenderer {
 	void doRunAmbientOcclusion(final float maximumDistance, final int samples) {
 		float radiance = 0.0F;
 		
-		if(ray3FCameraGenerate(random(), random()) && primitiveIntersectionCompute()) {
-			orthonormalBasis33FSetIntersectionOrthonormalBasisG();
+		if(ray3FCameraGenerate(random(), random()) && primitiveIntersectionComputeLHS()) {
+			orthonormalBasis33FSetIntersectionOrthonormalBasisGLHS();
 			
 			for(int sample = 0; sample < samples; sample++) {
 				vector3FSetSampleHemisphereUniformDistribution(random(), random());
 				vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
 				
-				ray3FSetFromSurfaceIntersectionPointAndVector3F();
+				ray3FSetFromSurfaceIntersectionPointAndVector3FLHS();
 				
 				if(maximumDistance > 0.0F) {
 					final float t = primitiveIntersectionT();
@@ -126,16 +126,16 @@ public final class GPURenderer extends AbstractGPURenderer {
 			float etaScale = 1.0F;
 			
 			while(currentBounce < maximumBounce) {
-				if(primitiveIntersectionCompute()) {
+				if(primitiveIntersectionComputeLHS()) {
 					if(currentBounce == 0 || isSpecularBounce) {
-						materialEmittance(primitiveGetMaterialID(), primitiveGetMaterialOffset());
+						materialEmittance(primitiveGetMaterialIDLHS(), primitiveGetMaterialOffsetLHS());
 						
 						radianceR += throughputR * color3FLHSGetComponent1();
 						radianceG += throughputG * color3FLHSGetComponent2();
 						radianceB += throughputB * color3FLHSGetComponent3();
 					}
 					
-					if(materialBSDFCompute(primitiveGetMaterialID(), primitiveGetMaterialOffset())) {
+					if(materialBSDFCompute(primitiveGetMaterialIDLHS(), primitiveGetMaterialOffsetLHS())) {
 						if(materialBSDFCountBXDFsBySpecularType(false) > 0) {
 							lightSampleOneLightUniformDistribution();
 							
@@ -155,12 +155,12 @@ public final class GPURenderer extends AbstractGPURenderer {
 							final float resultG = materialBSDFResultGetResultG();
 							final float resultB = materialBSDFResultGetResultB();
 							
-							final float surfaceNormalGX = intersectionGetOrthonormalBasisGWComponent1();
-							final float surfaceNormalGY = intersectionGetOrthonormalBasisGWComponent2();
-							final float surfaceNormalGZ = intersectionGetOrthonormalBasisGWComponent3();
-							final float surfaceNormalSX = intersectionGetOrthonormalBasisSWComponent1();
-							final float surfaceNormalSY = intersectionGetOrthonormalBasisSWComponent2();
-							final float surfaceNormalSZ = intersectionGetOrthonormalBasisSWComponent3();
+							final float surfaceNormalGX = intersectionLHSGetOrthonormalBasisGWComponent1();
+							final float surfaceNormalGY = intersectionLHSGetOrthonormalBasisGWComponent2();
+							final float surfaceNormalGZ = intersectionLHSGetOrthonormalBasisGWComponent3();
+							final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWComponent1();
+							final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWComponent2();
+							final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 							
 							final float incomingDotSurfaceNormalS = vector3FDotProduct(incomingX, incomingY, incomingZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
 							final float incomingDotSurfaceNormalSAbs = abs(incomingDotSurfaceNormalS);
@@ -189,7 +189,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 							
 							vector3FSet(incomingX, incomingY, incomingZ);
 							
-							ray3FSetFromSurfaceIntersectionPointAndVector3F();
+							ray3FSetFromSurfaceIntersectionPointAndVector3FLHS();
 							
 							final float russianRouletteThroughputR = throughputR * etaScale;
 							final float russianRouletteThroughputG = throughputG * etaScale;
@@ -244,14 +244,14 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 	void doRunRayCasting() {
 		if(ray3FCameraGenerate(random(), random())) {
-			if(primitiveIntersectionCompute()) {
+			if(primitiveIntersectionComputeLHS()) {
 				final float rayDirectionX = ray3FGetDirectionComponent1();
 				final float rayDirectionY = ray3FGetDirectionComponent2();
 				final float rayDirectionZ = ray3FGetDirectionComponent3();
 				
-				final float surfaceNormalX = intersectionGetOrthonormalBasisSWComponent1();
-				final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
-				final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
+				final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
+				final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
+				final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 				
 				final float rayDirectionDotSurfaceNormal = vector3FDotProduct(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 				final float rayDirectionDotSurfaceNormalAbs = abs(rayDirectionDotSurfaceNormal);

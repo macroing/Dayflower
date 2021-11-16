@@ -107,7 +107,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * A {@code float[]} that contains the current intersection.
 	 */
-	protected float[] intersectionArray_$private$24;
+	protected float[] intersectionLHSArray_$private$24;
+	
+	/**
+	 * A {@code float[]} that contains the current intersection.
+	 */
+	protected float[] intersectionRHSArray_$private$24;
 	
 	/**
 	 * A {@code float[]} that contains an orthonormal basis that consists of three 3-dimensional vectors.
@@ -212,7 +217,8 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected AbstractGeometryKernel() {
 		this.boundingVolume3FAxisAlignedBoundingBox3FArray = new float[1];
 		this.boundingVolume3FBoundingSphere3FArray = new float[1];
-		this.intersectionArray_$private$24 = new float[INTERSECTION_ARRAY_SIZE];
+		this.intersectionLHSArray_$private$24 = new float[INTERSECTION_ARRAY_SIZE];
+		this.intersectionRHSArray_$private$24 = new float[INTERSECTION_ARRAY_SIZE];
 		this.orthonormalBasis33FArray_$private$9 = new float[ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE];
 		this.point2FArray_$private$2 = new float[POINT_2_F_ARRAY_SIZE];
 		this.point3FArray_$private$3 = new float[POINT_3_F_ARRAY_SIZE];
@@ -501,252 +507,227 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Intersection ////////////////////////////////////////////////////////////////////////////////////
+	// Intersection - LHS //////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 * @return the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisGUComponent1() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
+	protected final float intersectionLHSGetOrthonormalBasisGUComponent1() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 * @return the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisGUComponent2() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
+	protected final float intersectionLHSGetOrthonormalBasisGUComponent2() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 * @return the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisGUComponent3() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
+	protected final float intersectionLHSGetOrthonormalBasisGUComponent3() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 * @return the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisGVComponent1() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
+	protected final float intersectionLHSGetOrthonormalBasisGVComponent1() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 * @return the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisGVComponent2() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
+	protected final float intersectionLHSGetOrthonormalBasisGVComponent2() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 * @return the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisGVComponent3() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
+	protected final float intersectionLHSGetOrthonormalBasisGVComponent3() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 * @return the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisGWComponent1() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
+	protected final float intersectionLHSGetOrthonormalBasisGWComponent1() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 * @return the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisGWComponent2() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
+	protected final float intersectionLHSGetOrthonormalBasisGWComponent2() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 * @return the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisGWComponent3() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
+	protected final float intersectionLHSGetOrthonormalBasisGWComponent3() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 * @return the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisSUComponent1() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
+	protected final float intersectionLHSGetOrthonormalBasisSUComponent1() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 * @return the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisSUComponent2() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
+	protected final float intersectionLHSGetOrthonormalBasisSUComponent2() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 * @return the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisSUComponent3() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
+	protected final float intersectionLHSGetOrthonormalBasisSUComponent3() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 * @return the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisSVComponent1() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
+	protected final float intersectionLHSGetOrthonormalBasisSVComponent1() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 * @return the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisSVComponent2() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
+	protected final float intersectionLHSGetOrthonormalBasisSVComponent2() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 * @return the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisSVComponent3() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
+	protected final float intersectionLHSGetOrthonormalBasisSVComponent3() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 * @return the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisSWComponent1() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+	protected final float intersectionLHSGetOrthonormalBasisSWComponent1() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 * @return the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisSWComponent2() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+	protected final float intersectionLHSGetOrthonormalBasisSWComponent2() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 * @return the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetOrthonormalBasisSWComponent3() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+	protected final float intersectionLHSGetOrthonormalBasisSWComponent3() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the surface intersection point in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 1 of the surface intersection point in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the surface intersection point in {@link #intersectionArray_$private$24}
+	 * @return the value of component 1 of the surface intersection point in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetSurfaceIntersectionPointComponent1() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+	protected final float intersectionLHSGetSurfaceIntersectionPointComponent1() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the surface intersection point in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 2 of the surface intersection point in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the surface intersection point in {@link #intersectionArray_$private$24}
+	 * @return the value of component 2 of the surface intersection point in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetSurfaceIntersectionPointComponent2() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+	protected final float intersectionLHSGetSurfaceIntersectionPointComponent2() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the surface intersection point in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 3 of the surface intersection point in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the surface intersection point in {@link #intersectionArray_$private$24}
+	 * @return the value of component 3 of the surface intersection point in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetSurfaceIntersectionPointComponent3() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+	protected final float intersectionLHSGetSurfaceIntersectionPointComponent3() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the texture coordinates in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 1 of the texture coordinates in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the texture coordinates in {@link #intersectionArray_$private$24}
+	 * @return the value of component 1 of the texture coordinates in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetTextureCoordinatesComponent1() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
+	protected final float intersectionLHSGetTextureCoordinatesComponent1() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the texture coordinates in {@link #intersectionArray_$private$24}.
+	 * Returns the value of component 2 of the texture coordinates in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the texture coordinates in {@link #intersectionArray_$private$24}
+	 * @return the value of component 2 of the texture coordinates in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionGetTextureCoordinatesComponent2() {
-		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+	protected final float intersectionLHSGetTextureCoordinatesComponent2() {
+		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
 	}
 	
 	/**
-	 * Returns the primitive index in {@link #intersectionArray_$private$24}.
+	 * Returns the primitive index in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the primitive index in {@link #intersectionArray_$private$24}
+	 * @return the primitive index in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final int intersectionGetPrimitiveIndex() {
-		return (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+	protected final int intersectionLHSGetPrimitiveIndex() {
+		return (int)(this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
 	}
 	
 	/**
-	 * Sets the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
-	 * 
-	 * @param uComponent1 component 1 of the U-direction
-	 * @param uComponent2 component 2 of the U-direction
-	 * @param uComponent3 component 3 of the U-direction
-	 * @param vComponent1 component 1 of the V-direction
-	 * @param vComponent2 component 2 of the V-direction
-	 * @param vComponent3 component 3 of the V-direction
-	 * @param wComponent1 component 1 of the W-direction
-	 * @param wComponent2 component 2 of the W-direction
-	 * @param wComponent3 component 3 of the W-direction
-	 */
-	protected final void intersectionSetOrthonormalBasisG(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = uComponent1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1] = uComponent2;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2] = uComponent3;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0] = vComponent1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1] = vComponent2;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2] = vComponent3;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0] = wComponent1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1] = wComponent2;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2] = wComponent3;
-	}
-	
-	/**
-	 * Sets the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Sets the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
 	 * @param uComponent1 component 1 of the U-direction
 	 * @param uComponent2 component 2 of the U-direction
@@ -758,48 +739,73 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param wComponent2 component 2 of the W-direction
 	 * @param wComponent3 component 3 of the W-direction
 	 */
-	protected final void intersectionSetOrthonormalBasisS(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = uComponent1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = uComponent2;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = uComponent3;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = vComponent1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = vComponent2;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = vComponent3;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = wComponent1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = wComponent2;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = wComponent3;
+	protected final void intersectionLHSSetOrthonormalBasisG(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = uComponent1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1] = uComponent2;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2] = uComponent3;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0] = vComponent1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1] = vComponent2;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2] = vComponent3;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0] = wComponent1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1] = wComponent2;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2] = wComponent3;
 	}
 	
 	/**
-	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * Sets the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * 
+	 * @param uComponent1 component 1 of the U-direction
+	 * @param uComponent2 component 2 of the U-direction
+	 * @param uComponent3 component 3 of the U-direction
+	 * @param vComponent1 component 1 of the V-direction
+	 * @param vComponent2 component 2 of the V-direction
+	 * @param vComponent3 component 3 of the V-direction
+	 * @param wComponent1 component 1 of the W-direction
+	 * @param wComponent2 component 2 of the W-direction
+	 * @param wComponent3 component 3 of the W-direction
+	 */
+	protected final void intersectionLHSSetOrthonormalBasisS(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = uComponent1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = uComponent2;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = uComponent3;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = vComponent1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = vComponent2;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = vComponent3;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = wComponent1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = wComponent2;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = wComponent3;
+	}
+	
+	/**
+	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
 	 * @param component1 component 1 of the W-direction
 	 * @param component2 component 2 of the W-direction
 	 * @param component3 component 3 of the W-direction
 	 */
-	protected final void intersectionSetOrthonormalBasisSW(final float component1, final float component2, final float component3) {
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = component1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = component2;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = component3;
+	protected final void intersectionLHSSetOrthonormalBasisSW(final float component1, final float component2, final float component3) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = component1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = component2;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = component3;
 	}
 	
 	/**
-	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24} to a transformed representation.
+	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24} to a transformed representation.
 	 * 
 	 * @param component1 component 1 of the vector to transform with
 	 * @param component2 component 2 of the vector to transform with
 	 * @param component3 component 3 of the vector to transform with
 	 */
-	protected final void intersectionSetOrthonormalBasisSWTransform(final float component1, final float component2, final float component3) {
-		final float oldUComponent1 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
-		final float oldUComponent2 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
-		final float oldUComponent3 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
-		final float oldVComponent1 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
-		final float oldVComponent2 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
-		final float oldVComponent3 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
-		final float oldWComponent1 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
-		final float oldWComponent2 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
-		final float oldWComponent3 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+	protected final void intersectionLHSSetOrthonormalBasisSWTransform(final float component1, final float component2, final float component3) {
+		final float oldUComponent1 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
+		final float oldUComponent2 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
+		final float oldUComponent3 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
+		final float oldVComponent1 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
+		final float oldVComponent2 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
+		final float oldVComponent3 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
+		final float oldWComponent1 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float oldWComponent2 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float oldWComponent3 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
 		
 		final float newWComponent1 = component1 * oldUComponent1 + component2 * oldVComponent1 + component3 * oldWComponent1;
 		final float newWComponent2 = component1 * oldUComponent2 + component2 * oldVComponent2 + component3 * oldWComponent2;
@@ -809,42 +815,389 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float newWNormalizedComponent2 = newWComponent2 * newWLengthReciprocal;
 		final float newWNormalizedComponent3 = newWComponent3 * newWLengthReciprocal;
 		
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = newWNormalizedComponent1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = newWNormalizedComponent2;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = newWNormalizedComponent3;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = newWNormalizedComponent1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = newWNormalizedComponent2;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = newWNormalizedComponent3;
 	}
 	
 	/**
-	 * Sets the primitive index in {@link #intersectionArray_$private$24}.
+	 * Sets the primitive index in {@link #intersectionLHSArray_$private$24}.
 	 * 
 	 * @param primitiveIndex the primitive index
 	 */
-	protected final void intersectionSetPrimitiveIndex(final int primitiveIndex) {
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX] = primitiveIndex;
+	protected final void intersectionLHSSetPrimitiveIndex(final int primitiveIndex) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX] = primitiveIndex;
 	}
 	
 	/**
-	 * Sets the surface intersection point in {@link #intersectionArray_$private$24}.
+	 * Sets the surface intersection point in {@link #intersectionLHSArray_$private$24}.
 	 * 
 	 * @param component1 component 1 of the surface intersection point
 	 * @param component2 component 2 of the surface intersection point
 	 * @param component3 component 3 of the surface intersection point
 	 */
-	protected final void intersectionSetSurfaceIntersectionPoint(final float component1, final float component2, final float component3) {
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = component1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = component2;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = component3;
+	protected final void intersectionLHSSetSurfaceIntersectionPoint(final float component1, final float component2, final float component3) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = component1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = component2;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = component3;
 	}
 	
 	/**
-	 * Sets the texture coordinates in {@link #intersectionArray_$private$24}.
+	 * Sets the texture coordinates in {@link #intersectionLHSArray_$private$24}.
 	 * 
 	 * @param component1 component 1 of the texture coordinates
 	 * @param component2 component 2 of the texture coordinates
 	 */
-	protected final void intersectionSetTextureCoordinates(final float component1, final float component2) {
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = component1;
-		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = component2;
+	protected final void intersectionLHSSetTextureCoordinates(final float component1, final float component2) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = component1;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = component2;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Intersection - RHS //////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisGUComponent1() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
+	}
+	
+	/**
+	 * Returns the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisGUComponent2() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
+	}
+	
+	/**
+	 * Returns the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisGUComponent3() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
+	}
+	
+	/**
+	 * Returns the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisGVComponent1() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
+	}
+	
+	/**
+	 * Returns the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisGVComponent2() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
+	}
+	
+	/**
+	 * Returns the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisGVComponent3() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
+	}
+	
+	/**
+	 * Returns the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisGWComponent1() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
+	}
+	
+	/**
+	 * Returns the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisGWComponent2() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
+	}
+	
+	/**
+	 * Returns the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisGWComponent3() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
+	}
+	
+	/**
+	 * Returns the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisSUComponent1() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
+	}
+	
+	/**
+	 * Returns the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisSUComponent2() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
+	}
+	
+	/**
+	 * Returns the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisSUComponent3() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
+	}
+	
+	/**
+	 * Returns the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisSVComponent1() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
+	}
+	
+	/**
+	 * Returns the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisSVComponent2() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
+	}
+	
+	/**
+	 * Returns the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisSVComponent3() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
+	}
+	
+	/**
+	 * Returns the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisSWComponent1() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+	}
+	
+	/**
+	 * Returns the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisSWComponent2() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+	}
+	
+	/**
+	 * Returns the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetOrthonormalBasisSWComponent3() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+	}
+	
+	/**
+	 * Returns the value of component 1 of the surface intersection point in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the surface intersection point in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetSurfaceIntersectionPointComponent1() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+	}
+	
+	/**
+	 * Returns the value of component 2 of the surface intersection point in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the surface intersection point in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetSurfaceIntersectionPointComponent2() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+	}
+	
+	/**
+	 * Returns the value of component 3 of the surface intersection point in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the surface intersection point in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetSurfaceIntersectionPointComponent3() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+	}
+	
+	/**
+	 * Returns the value of component 1 of the texture coordinates in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the texture coordinates in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetTextureCoordinatesComponent1() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
+	}
+	
+	/**
+	 * Returns the value of component 2 of the texture coordinates in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the texture coordinates in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final float intersectionRHSGetTextureCoordinatesComponent2() {
+		return this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+	}
+	
+	/**
+	 * Returns the primitive index in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @return the primitive index in {@link #intersectionRHSArray_$private$24}
+	 */
+	protected final int intersectionRHSGetPrimitiveIndex() {
+		return (int)(this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+	}
+	
+	/**
+	 * Sets the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @param uComponent1 component 1 of the U-direction
+	 * @param uComponent2 component 2 of the U-direction
+	 * @param uComponent3 component 3 of the U-direction
+	 * @param vComponent1 component 1 of the V-direction
+	 * @param vComponent2 component 2 of the V-direction
+	 * @param vComponent3 component 3 of the V-direction
+	 * @param wComponent1 component 1 of the W-direction
+	 * @param wComponent2 component 2 of the W-direction
+	 * @param wComponent3 component 3 of the W-direction
+	 */
+	protected final void intersectionRHSSetOrthonormalBasisG(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = uComponent1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1] = uComponent2;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2] = uComponent3;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0] = vComponent1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1] = vComponent2;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2] = vComponent3;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0] = wComponent1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1] = wComponent2;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2] = wComponent3;
+	}
+	
+	/**
+	 * Sets the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @param uComponent1 component 1 of the U-direction
+	 * @param uComponent2 component 2 of the U-direction
+	 * @param uComponent3 component 3 of the U-direction
+	 * @param vComponent1 component 1 of the V-direction
+	 * @param vComponent2 component 2 of the V-direction
+	 * @param vComponent3 component 3 of the V-direction
+	 * @param wComponent1 component 1 of the W-direction
+	 * @param wComponent2 component 2 of the W-direction
+	 * @param wComponent3 component 3 of the W-direction
+	 */
+	protected final void intersectionRHSSetOrthonormalBasisS(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = uComponent1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = uComponent2;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = uComponent3;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = vComponent1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = vComponent2;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = vComponent3;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = wComponent1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = wComponent2;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = wComponent3;
+	}
+	
+	/**
+	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @param component1 component 1 of the W-direction
+	 * @param component2 component 2 of the W-direction
+	 * @param component3 component 3 of the W-direction
+	 */
+	protected final void intersectionRHSSetOrthonormalBasisSW(final float component1, final float component2, final float component3) {
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = component1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = component2;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = component3;
+	}
+	
+	/**
+	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionRHSArray_$private$24} to a transformed representation.
+	 * 
+	 * @param component1 component 1 of the vector to transform with
+	 * @param component2 component 2 of the vector to transform with
+	 * @param component3 component 3 of the vector to transform with
+	 */
+	protected final void intersectionRHSSetOrthonormalBasisSWTransform(final float component1, final float component2, final float component3) {
+		final float oldUComponent1 = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
+		final float oldUComponent2 = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
+		final float oldUComponent3 = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
+		final float oldVComponent1 = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
+		final float oldVComponent2 = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
+		final float oldVComponent3 = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
+		final float oldWComponent1 = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float oldWComponent2 = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float oldWComponent3 = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		final float newWComponent1 = component1 * oldUComponent1 + component2 * oldVComponent1 + component3 * oldWComponent1;
+		final float newWComponent2 = component1 * oldUComponent2 + component2 * oldVComponent2 + component3 * oldWComponent2;
+		final float newWComponent3 = component1 * oldUComponent3 + component2 * oldVComponent3 + component3 * oldWComponent3;
+		final float newWLengthReciprocal = vector3FLengthReciprocal(newWComponent1, newWComponent2, newWComponent3);
+		final float newWNormalizedComponent1 = newWComponent1 * newWLengthReciprocal;
+		final float newWNormalizedComponent2 = newWComponent2 * newWLengthReciprocal;
+		final float newWNormalizedComponent3 = newWComponent3 * newWLengthReciprocal;
+		
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = newWNormalizedComponent1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = newWNormalizedComponent2;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = newWNormalizedComponent3;
+	}
+	
+	/**
+	 * Sets the primitive index in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @param primitiveIndex the primitive index
+	 */
+	protected final void intersectionRHSSetPrimitiveIndex(final int primitiveIndex) {
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX] = primitiveIndex;
+	}
+	
+	/**
+	 * Sets the surface intersection point in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @param component1 component 1 of the surface intersection point
+	 * @param component2 component 2 of the surface intersection point
+	 * @param component3 component 3 of the surface intersection point
+	 */
+	protected final void intersectionRHSSetSurfaceIntersectionPoint(final float component1, final float component2, final float component3) {
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = component1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = component2;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = component3;
+	}
+	
+	/**
+	 * Sets the texture coordinates in {@link #intersectionRHSArray_$private$24}.
+	 * 
+	 * @param component1 component 1 of the texture coordinates
+	 * @param component2 component 2 of the texture coordinates
+	 */
+	protected final void intersectionRHSSetTextureCoordinates(final float component1, final float component2) {
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = component1;
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = component2;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1038,19 +1391,19 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets an orthonormal basis in {@link #orthonormalBasis33FArray_$private$9}.
 	 * <p>
-	 * The orthonormal basis is constructed from the orthonormal basis in {@link #intersectionArray_$private$24} that is used for geometry.
+	 * The orthonormal basis is constructed from the orthonormal basis in {@link #intersectionLHSArray_$private$24} that is used for geometry.
 	 */
-	protected final void orthonormalBasis33FSetIntersectionOrthonormalBasisG() {
+	protected final void orthonormalBasis33FSetIntersectionOrthonormalBasisGLHS() {
 //		Get the orthonormal basis:
-		final float orthonormalBasisGUX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
-		final float orthonormalBasisGUY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
-		final float orthonormalBasisGUZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
-		final float orthonormalBasisGVX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
-		final float orthonormalBasisGVY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
-		final float orthonormalBasisGVZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
-		final float orthonormalBasisGWX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
-		final float orthonormalBasisGWY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
-		final float orthonormalBasisGWZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
+		final float orthonormalBasisGUX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
+		final float orthonormalBasisGUY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
+		final float orthonormalBasisGUZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
+		final float orthonormalBasisGVX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
+		final float orthonormalBasisGVY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
+		final float orthonormalBasisGVZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
+		final float orthonormalBasisGWX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
+		final float orthonormalBasisGWY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
+		final float orthonormalBasisGWZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
 		
 //		Set the orthonormal basis:
 		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0] = orthonormalBasisGUX;
@@ -1067,19 +1420,77 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets an orthonormal basis in {@link #orthonormalBasis33FArray_$private$9}.
 	 * <p>
-	 * The orthonormal basis is constructed from the orthonormal basis in {@link #intersectionArray_$private$24} that is used for shading.
+	 * The orthonormal basis is constructed from the orthonormal basis in {@link #intersectionRHSArray_$private$24} that is used for geometry.
 	 */
-	protected final void orthonormalBasis33FSetIntersectionOrthonormalBasisS() {
+	protected final void orthonormalBasis33FSetIntersectionOrthonormalBasisGRHS() {
 //		Get the orthonormal basis:
-		final float orthonormalBasisSUX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
-		final float orthonormalBasisSUY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
-		final float orthonormalBasisSUZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
-		final float orthonormalBasisSVX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
-		final float orthonormalBasisSVY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
-		final float orthonormalBasisSVZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
-		final float orthonormalBasisSWX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
-		final float orthonormalBasisSWY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
-		final float orthonormalBasisSWZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		final float orthonormalBasisGUX = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
+		final float orthonormalBasisGUY = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
+		final float orthonormalBasisGUZ = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
+		final float orthonormalBasisGVX = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
+		final float orthonormalBasisGVY = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
+		final float orthonormalBasisGVZ = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
+		final float orthonormalBasisGWX = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
+		final float orthonormalBasisGWY = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
+		final float orthonormalBasisGWZ = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
+		
+//		Set the orthonormal basis:
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0] = orthonormalBasisGUX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1] = orthonormalBasisGUY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2] = orthonormalBasisGUZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0] = orthonormalBasisGVX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1] = orthonormalBasisGVY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2] = orthonormalBasisGVZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0] = orthonormalBasisGWX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1] = orthonormalBasisGWY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2] = orthonormalBasisGWZ;
+	}
+	
+	/**
+	 * Sets an orthonormal basis in {@link #orthonormalBasis33FArray_$private$9}.
+	 * <p>
+	 * The orthonormal basis is constructed from the orthonormal basis in {@link #intersectionLHSArray_$private$24} that is used for shading.
+	 */
+	protected final void orthonormalBasis33FSetIntersectionOrthonormalBasisSLHS() {
+//		Get the orthonormal basis:
+		final float orthonormalBasisSUX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
+		final float orthonormalBasisSUY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
+		final float orthonormalBasisSUZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
+		final float orthonormalBasisSVX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
+		final float orthonormalBasisSVY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
+		final float orthonormalBasisSVZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
+		final float orthonormalBasisSWX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float orthonormalBasisSWY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float orthonormalBasisSWZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+//		Set the orthonormal basis:
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0] = orthonormalBasisSUX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1] = orthonormalBasisSUY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2] = orthonormalBasisSUZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0] = orthonormalBasisSVX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1] = orthonormalBasisSVY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2] = orthonormalBasisSVZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0] = orthonormalBasisSWX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1] = orthonormalBasisSWY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2] = orthonormalBasisSWZ;
+	}
+	
+	/**
+	 * Sets an orthonormal basis in {@link #orthonormalBasis33FArray_$private$9}.
+	 * <p>
+	 * The orthonormal basis is constructed from the orthonormal basis in {@link #intersectionRHSArray_$private$24} that is used for shading.
+	 */
+	protected final void orthonormalBasis33FSetIntersectionOrthonormalBasisSRHS() {
+//		Get the orthonormal basis:
+		final float orthonormalBasisSUX = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
+		final float orthonormalBasisSUY = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
+		final float orthonormalBasisSUZ = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
+		final float orthonormalBasisSVX = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
+		final float orthonormalBasisSVY = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
+		final float orthonormalBasisSVZ = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
+		final float orthonormalBasisSWX = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float orthonormalBasisSWY = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float orthonormalBasisSWZ = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
 		
 //		Set the orthonormal basis:
 		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0] = orthonormalBasisSUX;
@@ -1419,13 +1830,42 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets a ray in {@link #ray3FArray_$private$8}.
 	 * <p>
-	 * The ray direction is constructed using a normalized representation of the current vector in {@link #vector3FArray_$private$3}. The origin is constructed by offsetting the surface intersection point in {@link #intersectionArray_$private$24}
+	 * The ray direction is constructed using a normalized representation of the current vector in {@link #vector3FArray_$private$3}. The origin is constructed by offsetting the surface intersection point in {@link #intersectionLHSArray_$private$24}
 	 * slightly, in the direction of the ray itself.
 	 */
-	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3F() {
-		final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
-		final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
-		final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FLHS() {
+		final float surfaceIntersectionPointX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+		final float surfaceIntersectionPointY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+		final float surfaceIntersectionPointZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+		
+		final float directionX = vector3FGetComponent1();
+		final float directionY = vector3FGetComponent2();
+		final float directionZ = vector3FGetComponent3();
+		final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
+		final float directionNormalizedX = directionX * directionLengthReciprocal;
+		final float directionNormalizedY = directionY * directionLengthReciprocal;
+		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
+		
+		final float originX = surfaceIntersectionPointX + directionNormalizedX * 0.001F;
+		final float originY = surfaceIntersectionPointY + directionNormalizedY * 0.001F;
+		final float originZ = surfaceIntersectionPointZ + directionNormalizedZ * 0.001F;
+		
+		ray3FSetOrigin(originX, originY, originZ);
+		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		ray3FSetTMinimum(DEFAULT_T_MINIMUM);
+		ray3FSetTMaximum(DEFAULT_T_MAXIMUM);
+	}
+	
+	/**
+	 * Sets a ray in {@link #ray3FArray_$private$8}.
+	 * <p>
+	 * The ray direction is constructed using a normalized representation of the current vector in {@link #vector3FArray_$private$3}. The origin is constructed by offsetting the surface intersection point in {@link #intersectionRHSArray_$private$24}
+	 * slightly, in the direction of the ray itself.
+	 */
+	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FRHS() {
+		final float surfaceIntersectionPointX = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+		final float surfaceIntersectionPointY = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+		final float surfaceIntersectionPointZ = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
 		
 		final float directionX = vector3FGetComponent1();
 		final float directionY = vector3FGetComponent2();
@@ -1606,7 +2046,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FCone3FArrayOffset the offset in {@link #shape3FCone3FArray}
 	 */
-	protected final void shape3FCone3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FCone3FArrayOffset) {
+	protected final void shape3FCone3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FCone3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -1649,11 +2089,68 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the cone at offset {@code shape3FCone3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the cone
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FCone3FArrayOffset the offset in {@link #shape3FCone3FArray}
+	 */
+	protected final void shape3FCone3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FCone3FArrayOffset) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the disk variables that will be referred to by 'conePhiMax' and 'coneZMax' in the comments:
+		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_PHI_MAX];
+		final float coneZMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_Z_MAX];
+		
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		final float textureCoordinatesU = phi / conePhiMax;
+		final float textureCoordinatesV = surfaceIntersectionPointZ / coneZMax;
+		
+		final float orthonormalBasisGUX = -conePhiMax * surfaceIntersectionPointY;
+		final float orthonormalBasisGUY = +conePhiMax * surfaceIntersectionPointX;
+		final float orthonormalBasisGUZ = 0.0F;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+		final float orthonormalBasisGVX = -surfaceIntersectionPointX / (1.0F - textureCoordinatesV);
+		final float orthonormalBasisGVY = -surfaceIntersectionPointY / (1.0F - textureCoordinatesV);
+		final float orthonormalBasisGVZ = coneZMax;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1754,7 +2251,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FCylinder3FArrayOffset the offset in {@link #shape3FCylinder3FArray}
 	 */
-	protected final void shape3FCylinder3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FCylinder3FArrayOffset) {
+	protected final void shape3FCylinder3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FCylinder3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -1805,11 +2302,76 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - cylinderZMin) / (cylinderZMax - cylinderZMin);
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the cylinder at offset {@code shape3FCylinder3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the cylinder
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FCylinder3FArrayOffset the offset in {@link #shape3FCylinder3FArray}
+	 */
+	protected final void shape3FCylinder3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FCylinder3FArrayOffset) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the cylinder variables that will be referred to by 'cylinderPhiMax', 'cylinderRadius', 'cylinderZMax' and 'cylinderZMin' in the comments:
+		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_PHI_MAX];
+		final float cylinderRadius = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_RADIUS];
+		final float cylinderZMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_Z_MAX];
+		final float cylinderZMin = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_Z_MIN];
+		
+		final float x = rayOriginX + rayDirectionX * t;
+		final float y = rayOriginY + rayDirectionY * t;
+		final float z = rayOriginZ + rayDirectionZ * t;
+		
+		final float radius = sqrt(x * x + y * y);
+		
+		final float surfaceIntersectionPointX = x * (cylinderRadius / radius);
+		final float surfaceIntersectionPointY = y * (cylinderRadius / radius);
+		final float surfaceIntersectionPointZ = z;
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		final float orthonormalBasisGUX = -cylinderPhiMax * surfaceIntersectionPointY;
+		final float orthonormalBasisGUY = +cylinderPhiMax * surfaceIntersectionPointX;
+		final float orthonormalBasisGUZ = 0.0F;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+		final float orthonormalBasisGVX = 0.0F;
+		final float orthonormalBasisGVY = 0.0F;
+		final float orthonormalBasisGVZ = cylinderZMax - cylinderZMin;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+		final float textureCoordinatesU = phi / cylinderPhiMax;
+		final float textureCoordinatesV = (surfaceIntersectionPointZ - cylinderZMin) / (cylinderZMax - cylinderZMin);
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1886,7 +2448,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FDisk3FArrayOffset the offset in {@link #shape3FDisk3FArray}
 	 */
-	protected final void shape3FDisk3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FDisk3FArrayOffset) {
+	protected final void shape3FDisk3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FDisk3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -1932,11 +2494,71 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = (diskRadiusOuter - distance) / (diskRadiusOuter - diskRadiusInner);
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the disk at offset {@code shape3FDisk3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the disk
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FDisk3FArrayOffset the offset in {@link #shape3FDisk3FArray}
+	 */
+	protected final void shape3FDisk3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FDisk3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		
+//		Retrieve the disk variables that will be referred to by 'diskPhiMax', 'diskRadiusInner', 'diskRadiusOuter' and 'diskZMax' in the comments:
+		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_PHI_MAX];
+		final float diskRadiusInner = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_RADIUS_INNER];
+		final float diskRadiusOuter = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_RADIUS_OUTER];
+		final float diskZMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_Z_MAX];
+		
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = diskZMax;
+		
+		final float distanceSquared = surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY;
+		final float distance = sqrt(distanceSquared);
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		final float orthonormalBasisGUX = -diskPhiMax * surfaceIntersectionPointY;
+		final float orthonormalBasisGUY = +diskPhiMax * surfaceIntersectionPointX;
+		final float orthonormalBasisGUZ = 0.0F;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+		final float orthonormalBasisGVX = surfaceIntersectionPointX * (diskRadiusInner - diskRadiusOuter) / distance;
+		final float orthonormalBasisGVY = surfaceIntersectionPointY * (diskRadiusInner - diskRadiusOuter) / distance;
+		final float orthonormalBasisGVZ = 0.0F;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+		final float textureCoordinatesU = phi / diskPhiMax;
+		final float textureCoordinatesV = (diskRadiusOuter - distance) / (diskRadiusOuter - diskRadiusInner);
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2038,7 +2660,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FHyperboloid3FArrayOffset the offset in {@link #shape3FHyperboloid3FArray}
 	 */
-	protected final void shape3FHyperboloid3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FHyperboloid3FArrayOffset) {
+	protected final void shape3FHyperboloid3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FHyperboloid3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -2089,11 +2711,76 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = ((rayOriginZ + rayDirectionZ * t) - hyperboloidAZ) / (hyperboloidBZ - hyperboloidAZ);
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the hyperboloid at offset {@code shape3FHyperboloid3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the hyperboloid
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FHyperboloid3FArrayOffset the offset in {@link #shape3FHyperboloid3FArray}
+	 */
+	protected final void shape3FHyperboloid3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FHyperboloid3FArrayOffset) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the hyperboloid variables that will be referred to by 'hyperboloidPhiMax', 'hyperboloidA' and 'hyperboloidB' in the comments:
+		final float hyperboloidPhiMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_PHI_MAX];
+		final float hyperboloidAX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 0];
+		final float hyperboloidAY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 1];
+		final float hyperboloidAZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_A + 2];
+		final float hyperboloidBX = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 0];
+		final float hyperboloidBY = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 1];
+		final float hyperboloidBZ = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_POINT_B + 2];
+		
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		final float cosPhi = cos(phi);
+		final float sinPhi = sin(phi);
+		
+		final float orthonormalBasisGUX = -hyperboloidPhiMax * surfaceIntersectionPointY;
+		final float orthonormalBasisGUY = +hyperboloidPhiMax * surfaceIntersectionPointX;
+		final float orthonormalBasisGUZ = 0.0F;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+		final float orthonormalBasisGVX = (hyperboloidBX - hyperboloidAX) * cosPhi - (hyperboloidBY - hyperboloidAY) * sinPhi;
+		final float orthonormalBasisGVY = (hyperboloidBX - hyperboloidAX) * sinPhi + (hyperboloidBY - hyperboloidAY) * cosPhi;
+		final float orthonormalBasisGVZ = hyperboloidBZ - hyperboloidAZ;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+		final float textureCoordinatesU = phi / hyperboloidPhiMax;
+		final float textureCoordinatesV = ((rayOriginZ + rayDirectionZ * t) - hyperboloidAZ) / (hyperboloidBZ - hyperboloidAZ);
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2184,7 +2871,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FParaboloid3FArrayOffset the offset in {@link #shape3FParaboloid3FArray}
 	 */
-	protected final void shape3FParaboloid3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FParaboloid3FArrayOffset) {
+	protected final void shape3FParaboloid3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FParaboloid3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -2228,11 +2915,69 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - paraboloidZMin) / (paraboloidZMax - paraboloidZMin);
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the paraboloid at offset {@code shape3FParaboloid3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the paraboloid
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FParaboloid3FArrayOffset the offset in {@link #shape3FParaboloid3FArray}
+	 */
+	protected final void shape3FParaboloid3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FParaboloid3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the paraboloid variables that will be referred to by 'paraboloidPhiMax', 'paraboloidZMax' and 'paraboloidZMin' in the comments:
+		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_PHI_MAX];
+		final float paraboloidZMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_Z_MAX];
+		final float paraboloidZMin = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_Z_MIN];
+		
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		final float orthonormalBasisGUX = -paraboloidPhiMax * surfaceIntersectionPointY;
+		final float orthonormalBasisGUY = +paraboloidPhiMax * surfaceIntersectionPointX;
+		final float orthonormalBasisGUZ = 0.0F;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+		final float orthonormalBasisGVX = (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointX / (2.0F * surfaceIntersectionPointZ));
+		final float orthonormalBasisGVY = (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointY / (2.0F * surfaceIntersectionPointZ));
+		final float orthonormalBasisGVZ = paraboloidZMax - paraboloidZMin;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+		final float textureCoordinatesU = phi / paraboloidPhiMax;
+		final float textureCoordinatesV = (surfaceIntersectionPointZ - paraboloidZMin) / (paraboloidZMax - paraboloidZMin);
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2306,7 +3051,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FPlane3FArrayOffset the offset in {@link #shape3FPlane3FArray}
 	 */
-	protected final void shape3FPlane3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FPlane3FArrayOffset) {
+	protected final void shape3FPlane3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FPlane3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -2387,11 +3132,106 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the plane at offset {@code shape3FPlane3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the plane
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FPlane3FArrayOffset the offset in {@link #shape3FPlane3FArray}
+	 */
+	protected final void shape3FPlane3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FPlane3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the plane variables:
+		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 0];
+		final float planeAY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 1];
+		final float planeAZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 2];
+		final float planeBX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 0];
+		final float planeBY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 1];
+		final float planeBZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 2];
+		final float planeCX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 0];
+		final float planeCY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 1];
+		final float planeCZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 2];
+		final float planeSurfaceNormalX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 0];
+		final float planeSurfaceNormalY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 1];
+		final float planeSurfaceNormalZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 2];
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Retrieve the W-direction (surface normal) of the geometric orthonormal basis:
+		final float orthonormalBasisGWNormalizedX = planeSurfaceNormalX;
+		final float orthonormalBasisGWNormalizedY = planeSurfaceNormalY;
+		final float orthonormalBasisGWNormalizedZ = planeSurfaceNormalZ;
+		
+//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis and other things:
+		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
+		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
+		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
+		
+//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
+		final boolean isXSmaller = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
+		final boolean isYSmaller = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGVX = isXSmaller ? +0.0F                          : isYSmaller ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGVY = isXSmaller ? +orthonormalBasisGWNormalizedZ : isYSmaller ? +0.0F                          : -orthonormalBasisGWNormalizedX;
+		final float orthonormalBasisGVZ = isXSmaller ? -orthonormalBasisGWNormalizedY : isYSmaller ? -orthonormalBasisGWNormalizedX : +0.0F;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+//		Compute the U-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final boolean isXLarger = orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedZAbs;
+		final boolean isYLarger = orthonormalBasisGWNormalizedYAbs > orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float aX = isXLarger ? planeAY      : isYLarger ? planeAZ      : planeAX;
+		final float aY = isXLarger ? planeAZ      : isYLarger ? planeAX      : planeAY;
+		final float bX = isXLarger ? planeCY - aX : isYLarger ? planeCZ - aX : planeCX - aX;
+		final float bY = isXLarger ? planeCZ - aY : isYLarger ? planeCX - aY : planeCY - aY;
+		final float cX = isXLarger ? planeBY - aX : isYLarger ? planeBZ - aX : planeBX - aX;
+		final float cY = isXLarger ? planeBZ - aY : isYLarger ? planeBX - aY : planeBY - aY;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float determinant = bX * cY - bY * cX;
+		final float determinantReciprocal = 1.0F / determinant;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
+		final float v = isXLarger ? surfaceIntersectionPointZ : isYLarger ? surfaceIntersectionPointX : surfaceIntersectionPointY;
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = u * (-bY * determinantReciprocal) + v * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
+		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2521,7 +3361,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FPolygon3FArrayOffset the offset in {@link #shape3FPolygon3FArray}
 	 */
-	protected final void shape3FPolygon3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FPolygon3FArrayOffset) {
+	protected final void shape3FPolygon3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FPolygon3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -2602,11 +3442,106 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the polygon at offset {@code shape3FPolygon3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the polygon
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FPolygon3FArrayOffset the offset in {@link #shape3FPolygon3FArray}
+	 */
+	protected final void shape3FPolygon3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FPolygon3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the polygon variables:
+		final float polygonAX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 0];
+		final float polygonAY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 1];
+		final float polygonAZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 2];
+		final float polygonBX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_1 + 0];
+		final float polygonBY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_1 + 1];
+		final float polygonBZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_1 + 2];
+		final float polygonCX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_N + 0];
+		final float polygonCY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_N + 1];
+		final float polygonCZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_N + 2];
+		final float polygonSurfaceNormalX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 0];
+		final float polygonSurfaceNormalY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1];
+		final float polygonSurfaceNormalZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2];
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Retrieve the W-direction (surface normal) of the geometric orthonormal basis:
+		final float orthonormalBasisGWNormalizedX = polygonSurfaceNormalX;
+		final float orthonormalBasisGWNormalizedY = polygonSurfaceNormalY;
+		final float orthonormalBasisGWNormalizedZ = polygonSurfaceNormalZ;
+		
+//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis and other things:
+		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
+		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
+		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
+		
+//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
+		final boolean isXSmaller = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
+		final boolean isYSmaller = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGVX = isXSmaller ? +0.0F                          : isYSmaller ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGVY = isXSmaller ? +orthonormalBasisGWNormalizedZ : isYSmaller ? +0.0F                          : -orthonormalBasisGWNormalizedX;
+		final float orthonormalBasisGVZ = isXSmaller ? -orthonormalBasisGWNormalizedY : isYSmaller ? -orthonormalBasisGWNormalizedX : +0.0F;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+//		Compute the U-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final boolean isXLarger = orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedZAbs;
+		final boolean isYLarger = orthonormalBasisGWNormalizedYAbs > orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float aX = isXLarger ? polygonAY      : isYLarger ? polygonAZ      : polygonAX;
+		final float aY = isXLarger ? polygonAZ      : isYLarger ? polygonAX      : polygonAY;
+		final float bX = isXLarger ? polygonCY - aX : isYLarger ? polygonCZ - aX : polygonCX - aX;
+		final float bY = isXLarger ? polygonCZ - aY : isYLarger ? polygonCX - aY : polygonCY - aY;
+		final float cX = isXLarger ? polygonBY - aX : isYLarger ? polygonBZ - aX : polygonBX - aX;
+		final float cY = isXLarger ? polygonBZ - aY : isYLarger ? polygonBX - aY : polygonBY - aY;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float determinant = bX * cY - bY * cX;
+		final float determinantReciprocal = 1.0F / determinant;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
+		final float v = isXLarger ? surfaceIntersectionPointZ : isYLarger ? surfaceIntersectionPointX : surfaceIntersectionPointY;
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = u * (-bY * determinantReciprocal) + v * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
+		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2720,7 +3655,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FRectangle3FArrayOffset the offset in {@link #shape3FRectangle3FArray}
 	 */
-	protected final void shape3FRectangle3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FRectangle3FArrayOffset) {
+	protected final void shape3FRectangle3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FRectangle3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -2812,11 +3747,117 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the rectangle at offset {@code shape3FRectangle3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the rectangle
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FRectangle3FArrayOffset the offset in {@link #shape3FRectangle3FArray}
+	 */
+	protected final void shape3FRectangle3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FRectangle3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the rectangle variables that will be referred to by 'rectanglePosition', 'rectangleSideA', 'rectangleSideB' and 'rectangleSurfaceNormal' in the comments:
+		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 0];
+		final float rectanglePositionY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 1];
+		final float rectanglePositionZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 2];
+		final float rectangleSideAX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 0];
+		final float rectangleSideAY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 1];
+		final float rectangleSideAZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_A + 2];
+		final float rectangleSideBX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 0];
+		final float rectangleSideBY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 1];
+		final float rectangleSideBZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SIDE_B + 2];
+		final float rectangleSurfaceNormalX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 0];
+		final float rectangleSurfaceNormalY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 1];
+		final float rectangleSurfaceNormalZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 2];
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Retrieve the W-direction (surface normal) of the geometric orthonormal basis:
+		final float orthonormalBasisGWNormalizedX = rectangleSurfaceNormalX;
+		final float orthonormalBasisGWNormalizedY = rectangleSurfaceNormalY;
+		final float orthonormalBasisGWNormalizedZ = rectangleSurfaceNormalZ;
+		
+//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis and other things:
+		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
+		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
+		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
+		
+//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
+		final boolean isXSmaller = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
+		final boolean isYSmaller = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGVX = isXSmaller ? +0.0F                          : isYSmaller ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGVY = isXSmaller ? +orthonormalBasisGWNormalizedZ : isYSmaller ? +0.0F                          : -orthonormalBasisGWNormalizedX;
+		final float orthonormalBasisGVZ = isXSmaller ? -orthonormalBasisGWNormalizedY : isYSmaller ? -orthonormalBasisGWNormalizedX : +0.0F;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+//		Compute the U-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final boolean isXLarger = orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedZAbs;
+		final boolean isYLarger = orthonormalBasisGWNormalizedYAbs > orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute three points:
+		final float rectangleAX = rectanglePositionX;
+		final float rectangleAY = rectanglePositionY;
+		final float rectangleAZ = rectanglePositionZ;
+		final float rectangleBX = rectangleAX + rectangleSideAX;
+		final float rectangleBY = rectangleAY + rectangleSideAY;
+		final float rectangleBZ = rectangleAZ + rectangleSideAZ;
+		final float rectangleCX = rectangleAX + rectangleSideBX;
+		final float rectangleCY = rectangleAY + rectangleSideBY;
+		final float rectangleCZ = rectangleAZ + rectangleSideBZ;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float aX = isXLarger ? rectangleAY      : isYLarger ? rectangleAZ      : rectangleAX;
+		final float aY = isXLarger ? rectangleAZ      : isYLarger ? rectangleAX      : rectangleAY;
+		final float bX = isXLarger ? rectangleCY - aX : isYLarger ? rectangleCZ - aX : rectangleCX - aX;
+		final float bY = isXLarger ? rectangleCZ - aY : isYLarger ? rectangleCX - aY : rectangleCY - aY;
+		final float cX = isXLarger ? rectangleBY - aX : isYLarger ? rectangleBZ - aX : rectangleBX - aX;
+		final float cY = isXLarger ? rectangleBZ - aY : isYLarger ? rectangleBX - aY : rectangleBY - aY;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float determinant = bX * cY - bY * cX;
+		final float determinantReciprocal = 1.0F / determinant;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
+		final float v = isXLarger ? surfaceIntersectionPointZ : isYLarger ? surfaceIntersectionPointX : surfaceIntersectionPointY;
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = u * (-bY * determinantReciprocal) + v * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
+		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2892,7 +3933,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FRectangularCuboid3FArrayOffset the offset in {@link #shape3FRectangularCuboid3FArray}
 	 */
-	protected final void shape3FRectangularCuboid3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FRectangularCuboid3FArrayOffset) {
+	protected final void shape3FRectangularCuboid3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FRectangularCuboid3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -2968,11 +4009,101 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = faceY != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointY, rectangularCuboidMinimumY, rectangularCuboidMaximumY);
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the rectangular cuboid at offset {@code shape3FRectangularCuboid3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the rectangular cuboid
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FRectangularCuboid3FArrayOffset the offset in {@link #shape3FRectangularCuboid3FArray}
+	 */
+	protected final void shape3FRectangularCuboid3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FRectangularCuboid3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the rectangular cuboid variables:
+		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 0];
+		final float rectangularCuboidMaximumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 1];
+		final float rectangularCuboidMaximumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 2];
+		final float rectangularCuboidMinimumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 0];
+		final float rectangularCuboidMinimumY = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 1];
+		final float rectangularCuboidMinimumZ = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 2];
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Compute the midpoint of the rectangular cuboid:
+		final float midpointX = (rectangularCuboidMaximumX + rectangularCuboidMinimumX) * 0.5F;
+		final float midpointY = (rectangularCuboidMaximumY + rectangularCuboidMinimumY) * 0.5F;
+		final float midpointZ = (rectangularCuboidMaximumZ + rectangularCuboidMinimumZ) * 0.5F;
+		
+//		Compute half of the dimensions of the rectangular cuboid:
+		final float halfDimensionX = (rectangularCuboidMaximumX - rectangularCuboidMinimumX) * 0.5F;
+		final float halfDimensionY = (rectangularCuboidMaximumY - rectangularCuboidMinimumY) * 0.5F;
+		final float halfDimensionZ = (rectangularCuboidMaximumZ - rectangularCuboidMinimumZ) * 0.5F;
+		
+//		Initialize an epsilon value:
+		final float epsilon = 0.0001F;
+		
+//		Compute the face for each axis:
+		final int faceX = surfaceIntersectionPointX < midpointX && surfaceIntersectionPointX + halfDimensionX - epsilon < midpointX ? -1 : surfaceIntersectionPointX > midpointX && surfaceIntersectionPointX - halfDimensionX + epsilon > midpointX ? 1 : 0;
+		final int faceY = surfaceIntersectionPointY < midpointY && surfaceIntersectionPointY + halfDimensionY - epsilon < midpointY ? -1 : surfaceIntersectionPointY > midpointY && surfaceIntersectionPointY - halfDimensionY + epsilon > midpointY ? 1 : 0;
+		final int faceZ = surfaceIntersectionPointZ < midpointZ && surfaceIntersectionPointZ + halfDimensionZ - epsilon < midpointZ ? -1 : surfaceIntersectionPointZ > midpointZ && surfaceIntersectionPointZ - halfDimensionZ + epsilon > midpointZ ? 1 : 0;
+		
+//		Compute the face to use:
+		final int face = faceX == -1 ? 1 : faceX == 1 ? 2 : faceY == -1 ? 3 : faceY == 1 ? 4 : faceZ == -1 ? 5 : faceZ == 1 ? 6 : 0;
+		
+//		Retrieve the W-direction (surface normal) of the geometric orthonormal basis:
+		final float orthonormalBasisGWNormalizedX = face == 1 ? -1.0F : face == 2 ? +1.0F : 0.0F;
+		final float orthonormalBasisGWNormalizedY = face == 3 ? -1.0F : face == 4 ? +1.0F : 0.0F;
+		final float orthonormalBasisGWNormalizedZ = face == 5 ? -1.0F : face == 6 ? +1.0F : 0.0F;
+		
+//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
+		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
+		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
+		
+//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
+		final boolean isX = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
+		final boolean isY = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGVX = isX ? +0.0F                          : isY ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGVY = isX ? +orthonormalBasisGWNormalizedZ : isY ? +0.0F                          : -orthonormalBasisGWNormalizedX;
+		final float orthonormalBasisGVZ = isX ? -orthonormalBasisGWNormalizedY : isY ? -orthonormalBasisGWNormalizedX : +0.0F;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+//		Compute the U-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = faceX != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointX, rectangularCuboidMinimumX, rectangularCuboidMaximumX);
+		final float textureCoordinatesV = faceY != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointY, rectangularCuboidMinimumY, rectangularCuboidMaximumY);
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3038,7 +4169,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FSphere3FArrayOffset the offset in {@link #shape3FSphere3FArray}
 	 */
-	protected final void shape3FSphere3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FSphere3FArrayOffset) {
+	protected final void shape3FSphere3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FSphere3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -3086,11 +4217,73 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = acos(saturateF(surfaceNormalGZ, -1.0F, 1.0F)) * PI_RECIPROCAL;
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the sphere at offset {@code shape3FSphere3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the sphere
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FSphere3FArrayOffset the offset in {@link #shape3FSphere3FArray}
+	 */
+	protected final void shape3FSphere3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FSphere3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the sphere variables:
+		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 0];
+		final float sphereCenterY = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 1];
+		final float sphereCenterZ = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 2];
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Compute the geometric surface normal:
+		final float surfaceNormalGX = surfaceIntersectionPointX - sphereCenterX;
+		final float surfaceNormalGY = surfaceIntersectionPointY - sphereCenterY;
+		final float surfaceNormalGZ = surfaceIntersectionPointZ - sphereCenterZ;
+		
+//		Compute the V-direction of the geometric orthonormal basis:
+		final float vGX = -PI_MULTIPLIED_BY_2 * surfaceNormalGY;
+		final float vGY = +PI_MULTIPLIED_BY_2 * surfaceNormalGX;
+		final float vGZ = 0.0F;
+		
+//		Compute the geometric orthonormal basis:
+		orthonormalBasis33FSetFromWV(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, vGX, vGY, vGZ);
+		
+//		Retrieve the geometric orthonormal basis:
+		final float orthonormalBasisGUNormalizedX = orthonormalBasis33FGetUComponent1();
+		final float orthonormalBasisGUNormalizedY = orthonormalBasis33FGetUComponent2();
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasis33FGetUComponent3();
+		final float orthonormalBasisGVNormalizedX = orthonormalBasis33FGetVComponent1();
+		final float orthonormalBasisGVNormalizedY = orthonormalBasis33FGetVComponent2();
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasis33FGetVComponent3();
+		final float orthonormalBasisGWNormalizedX = orthonormalBasis33FGetWComponent1();
+		final float orthonormalBasisGWNormalizedY = orthonormalBasis33FGetWComponent2();
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasis33FGetWComponent3();
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceNormalGY, surfaceNormalGX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = acos(saturateF(surfaceNormalGZ, -1.0F, 1.0F)) * PI_RECIPROCAL;
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3187,7 +4380,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FTorus3FArrayOffset the offset in {@link #shape3FTorus3FArray}
 	 */
-	protected final void shape3FTorus3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FTorus3FArrayOffset) {
+	protected final void shape3FTorus3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FTorus3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -3247,11 +4440,85 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = (asin(saturateF(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the torus at offset {@code shape3FTorus3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the torus
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FTorus3FArrayOffset the offset in {@link #shape3FTorus3FArray}
+	 */
+	protected final void shape3FTorus3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FTorus3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the torus variables:
+		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + CompiledShape3FCache.TORUS_3_F_OFFSET_RADIUS_INNER];
+		final float torusRadiusInnerSquared = torusRadiusInner * torusRadiusInner;
+		final float torusRadiusOuter = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + CompiledShape3FCache.TORUS_3_F_OFFSET_RADIUS_OUTER];
+		final float torusRadiusOuterSquared = torusRadiusOuter * torusRadiusOuter;
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Compute the derivative, which is used to create the W-direction (surface normal) of the geometric orthonormal basis:
+		final float derivative = (surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY + surfaceIntersectionPointZ * surfaceIntersectionPointZ) - torusRadiusInnerSquared - torusRadiusOuterSquared;
+		
+//		Compute the W-direction (surface normal) of the geometric orthonormal basis:
+		final float orthonormalBasisGWX = surfaceIntersectionPointX * derivative;
+		final float orthonormalBasisGWY = surfaceIntersectionPointY * derivative;
+		final float orthonormalBasisGWZ = surfaceIntersectionPointZ * derivative + 2.0F * torusRadiusOuterSquared * surfaceIntersectionPointZ;
+		final float orthonormalBasisGWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGWX, orthonormalBasisGWY, orthonormalBasisGWZ);
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGWX * orthonormalBasisGWLengthReciprocal;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGWY * orthonormalBasisGWLengthReciprocal;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGWZ * orthonormalBasisGWLengthReciprocal;
+		
+//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
+		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
+		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
+		
+//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
+		final boolean isX = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
+		final boolean isY = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGVX = isX ? +0.0F                          : isY ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGVY = isX ? +orthonormalBasisGWNormalizedZ : isY ? +0.0F                          : -orthonormalBasisGWNormalizedX;
+		final float orthonormalBasisGVZ = isX ? -orthonormalBasisGWNormalizedY : isY ? -orthonormalBasisGWNormalizedX : +0.0F;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+//		Compute the U-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = (asin(saturateF(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3360,7 +4627,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param primitiveIndex the index of the primitive
 	 * @param shape3FTriangle3FArrayOffset the offset in {@link #shape3FTriangle3FArray}
 	 */
-	protected final void shape3FTriangle3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FTriangle3FArrayOffset) {
+	protected final void shape3FTriangle3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FTriangle3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -3516,11 +4783,181 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float textureCoordinatesV = triangleATextureCoordinatesV * w + triangleBTextureCoordinatesV * u + triangleCTextureCoordinatesV * v;
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionSetOrthonormalBasisS(orthonormalBasisSUNormalizedX, orthonormalBasisSUNormalizedY, orthonormalBasisSUNormalizedZ, orthonormalBasisSVNormalizedX, orthonormalBasisSVNormalizedY, orthonormalBasisSVNormalizedZ, orthonormalBasisSWNormalizedX, orthonormalBasisSWNormalizedY, orthonormalBasisSWNormalizedZ);
-		intersectionSetPrimitiveIndex(primitiveIndex);
-		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisS(orthonormalBasisSUNormalizedX, orthonormalBasisSUNormalizedY, orthonormalBasisSUNormalizedZ, orthonormalBasisSVNormalizedX, orthonormalBasisSVNormalizedY, orthonormalBasisSVNormalizedZ, orthonormalBasisSWNormalizedX, orthonormalBasisSWNormalizedY, orthonormalBasisSWNormalizedZ);
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the triangle at offset {@code shape3FTriangle3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the triangle
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FTriangle3FArrayOffset the offset in {@link #shape3FTriangle3FArray}
+	 */
+	protected final void shape3FTriangle3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FTriangle3FArrayOffset) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
+		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 0];
+		final float triangleAPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 1];
+		final float triangleAPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 2];
+		final float triangleBPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_POSITION + 0];
+		final float triangleBPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_POSITION + 1];
+		final float triangleBPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_POSITION + 2];
+		final float triangleCPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 0];
+		final float triangleCPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 1];
+		final float triangleCPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 2];
+		
+//		Retrieve the triangle variables that will be used for texturing:
+		final float triangleATextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 0];
+		final float triangleATextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 1];
+		final float triangleBTextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 0];
+		final float triangleBTextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 1];
+		final float triangleCTextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 0];
+		final float triangleCTextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 1];
+		
+//		Retrieve the triangle variables that will be used when constructing the geometric and shading orthonormal bases:
+		final float triangleAOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 0];
+		final float triangleAOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 1];
+		final float triangleAOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 2];
+		final float triangleBOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 0];
+		final float triangleBOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 1];
+		final float triangleBOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 2];
+		final float triangleCOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 0];
+		final float triangleCOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 1];
+		final float triangleCOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 2];
+		
+//		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'edgeAB' in the comments:
+		final float edgeABX = triangleBPositionX - triangleAPositionX;
+		final float edgeABY = triangleBPositionY - triangleAPositionY;
+		final float edgeABZ = triangleBPositionZ - triangleAPositionZ;
+		
+//		Compute the direction from 'triangleAPosition' to 'triangleCPosition', denoted by 'edgeAC' in the comments:
+		final float edgeACX = triangleCPositionX - triangleAPositionX;
+		final float edgeACY = triangleCPositionY - triangleAPositionY;
+		final float edgeACZ = triangleCPositionZ - triangleAPositionZ;
+		
+//		Compute the direction from 'triangleCPosition' to 'triangleAPosition', denoted by 'edgeCA' in the comments:
+		final float edgeCAX = triangleAPositionX - triangleCPositionX;
+		final float edgeCAY = triangleAPositionY - triangleCPositionY;
+		final float edgeCAZ = triangleAPositionZ - triangleCPositionZ;
+		
+//		Compute the cross product between 'edgeAB' and 'edgeCA', denoted by 'direction0' in the comments:
+		final float direction0X = edgeABY * edgeCAZ - edgeABZ * edgeCAY;
+		final float direction0Y = edgeABZ * edgeCAX - edgeABX * edgeCAZ;
+		final float direction0Z = edgeABX * edgeCAY - edgeABY * edgeCAX;
+		
+//		Compute the determinant, which is the dot product between 'rayDirection' and 'direction0' and its reciprocal (or inverse):
+		final float determinant = rayDirectionX * direction0X + rayDirectionY * direction0Y + rayDirectionZ * direction0Z;
+		final float determinantReciprocal = 1.0F / determinant;
+		
+//		Compute the direction from 'rayOrigin' to 'triangleAPosition', denoted by 'direction1' in the comments:
+		final float direction1X = triangleAPositionX - rayOriginX;
+		final float direction1Y = triangleAPositionY - rayOriginY;
+		final float direction1Z = triangleAPositionZ - rayOriginZ;
+		
+//		Compute the cross product between 'direction1' and 'rayDirection', denoted by 'direction2' in the comments:
+		final float direction2X = direction1Y * rayDirectionZ - direction1Z * rayDirectionY;
+		final float direction2Y = direction1Z * rayDirectionX - direction1X * rayDirectionZ;
+		final float direction2Z = direction1X * rayDirectionY - direction1Y * rayDirectionX;
+		
+//		Compute the Barycentric U-coordinate:
+		final float uScaled = direction2X * edgeCAX + direction2Y * edgeCAY + direction2Z * edgeCAZ;
+		final float u = uScaled * determinantReciprocal;
+		
+//		Compute the Barycentric V-coordinate:
+		final float vScaled = direction2X * edgeABX + direction2Y * edgeABY + direction2Z * edgeABZ;
+		final float v = vScaled * determinantReciprocal;
+		
+//		Compute the Barycentric W-coordinate:
+		final float w = 1.0F - u - v;
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Compute the surface normal for the geometry:
+		final float surfaceNormalGX = edgeABY * edgeACZ - edgeABZ * edgeACY;
+		final float surfaceNormalGY = edgeABZ * edgeACX - edgeABX * edgeACZ;
+		final float surfaceNormalGZ = edgeABX * edgeACY - edgeABY * edgeACX;
+		
+//		Compute the surface normal for shading:
+		final float surfaceNormalSX = triangleAOrthonormalBasisWX * w + triangleBOrthonormalBasisWX * u + triangleCOrthonormalBasisWX * v;
+		final float surfaceNormalSY = triangleAOrthonormalBasisWY * w + triangleBOrthonormalBasisWY * u + triangleCOrthonormalBasisWY * v;
+		final float surfaceNormalSZ = triangleAOrthonormalBasisWZ * w + triangleBOrthonormalBasisWZ * u + triangleCOrthonormalBasisWZ * v;
+		
+		final float dU1 = triangleATextureCoordinatesU - triangleCTextureCoordinatesU;
+		final float dU2 = triangleBTextureCoordinatesU - triangleCTextureCoordinatesU;
+		final float dV1 = triangleATextureCoordinatesV - triangleCTextureCoordinatesV;
+		final float dV2 = triangleBTextureCoordinatesV - triangleCTextureCoordinatesV;
+		
+		final float determinantUV = dU1 * dV2 - dV1 * dU2;
+		
+//		Compute the orthonormal basis for the geometry:
+		orthonormalBasis33FSetFromW(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
+		
+//		Retrieve the orthonormal basis for the geometry:
+		final float orthonormalBasisGUNormalizedX = orthonormalBasis33FGetUComponent1();
+		final float orthonormalBasisGUNormalizedY = orthonormalBasis33FGetUComponent2();
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasis33FGetUComponent3();
+		final float orthonormalBasisGVNormalizedX = orthonormalBasis33FGetVComponent1();
+		final float orthonormalBasisGVNormalizedY = orthonormalBasis33FGetVComponent2();
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasis33FGetVComponent3();
+		final float orthonormalBasisGWNormalizedX = orthonormalBasis33FGetWComponent1();
+		final float orthonormalBasisGWNormalizedY = orthonormalBasis33FGetWComponent2();
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasis33FGetWComponent3();
+		
+//		Compute the orthonormal basis for shading:
+		if(!checkIsZero(determinantUV)) {
+			final float dPUX = triangleAPositionX - triangleCPositionX;
+			final float dPUY = triangleAPositionY - triangleCPositionY;
+			final float dPUZ = triangleAPositionZ - triangleCPositionZ;
+			final float dPVX = triangleBPositionX - triangleCPositionX;
+			final float dPVY = triangleBPositionY - triangleCPositionY;
+			final float dPVZ = triangleBPositionZ - triangleCPositionZ;
+			
+			final float determinantUVReciprocal = 1.0F / determinantUV;
+			
+			final float vSX = (-dU2 * dPUX + dU1 * dPVX) * determinantUVReciprocal;
+			final float vSY = (-dU2 * dPUY + dU1 * dPVY) * determinantUVReciprocal;
+			final float vSZ = (-dU2 * dPUZ + dU1 * dPVZ) * determinantUVReciprocal;
+			
+			orthonormalBasis33FSetFromWV(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, vSX, vSY, vSZ);
+		} else {
+			orthonormalBasis33FSetFromW(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
+		}
+		
+//		Retrieve the orthonormal basis for shading:
+		final float orthonormalBasisSUNormalizedX = orthonormalBasis33FGetUComponent1();
+		final float orthonormalBasisSUNormalizedY = orthonormalBasis33FGetUComponent2();
+		final float orthonormalBasisSUNormalizedZ = orthonormalBasis33FGetUComponent3();
+		final float orthonormalBasisSVNormalizedX = orthonormalBasis33FGetVComponent1();
+		final float orthonormalBasisSVNormalizedY = orthonormalBasis33FGetVComponent2();
+		final float orthonormalBasisSVNormalizedZ = orthonormalBasis33FGetVComponent3();
+		final float orthonormalBasisSWNormalizedX = orthonormalBasis33FGetWComponent1();
+		final float orthonormalBasisSWNormalizedY = orthonormalBasis33FGetWComponent2();
+		final float orthonormalBasisSWNormalizedZ = orthonormalBasis33FGetWComponent3();
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = triangleATextureCoordinatesU * w + triangleBTextureCoordinatesU * u + triangleCTextureCoordinatesU * v;
+		final float textureCoordinatesV = triangleATextureCoordinatesV * w + triangleBTextureCoordinatesV * u + triangleCTextureCoordinatesV * v;
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisS(orthonormalBasisSUNormalizedX, orthonormalBasisSUNormalizedY, orthonormalBasisSUNormalizedZ, orthonormalBasisSVNormalizedX, orthonormalBasisSVNormalizedY, orthonormalBasisSVNormalizedZ, orthonormalBasisSWNormalizedX, orthonormalBasisSWNormalizedY, orthonormalBasisSWNormalizedZ);
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3666,11 +5103,25 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param t the parametric distance to the triangle mesh
 	 * @param primitiveIndex the index of the primitive
 	 */
-	protected final void shape3FTriangleMesh3FIntersectionCompute(final float t, final int primitiveIndex) {
+	protected final void shape3FTriangleMesh3FIntersectionComputeLHS(final float t, final int primitiveIndex) {
 		final int shape3FTriangle3FArrayOffset = this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0];
 		
 		if(shape3FTriangle3FArrayOffset != -1) {
-			shape3FTriangle3FIntersectionCompute(t, primitiveIndex, shape3FTriangle3FArrayOffset);
+			shape3FTriangle3FIntersectionComputeLHS(t, primitiveIndex, shape3FTriangle3FArrayOffset);
+		}
+	}
+	
+	/**
+	 * Computes the intersection properties for the triangle at offset {@code shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0]} in the triangle mesh.
+	 * 
+	 * @param t the parametric distance to the triangle mesh
+	 * @param primitiveIndex the index of the primitive
+	 */
+	protected final void shape3FTriangleMesh3FIntersectionComputeRHS(final float t, final int primitiveIndex) {
+		final int shape3FTriangle3FArrayOffset = this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0];
+		
+		if(shape3FTriangle3FArrayOffset != -1) {
+			shape3FTriangle3FIntersectionComputeRHS(t, primitiveIndex, shape3FTriangle3FArrayOffset);
 		}
 	}
 	

@@ -166,11 +166,11 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * <p>
 	 * Returns {@code true} if, and only if, an intersection was found, {@code false} otherwise.
 	 * <p>
-	 * If an intersection was found, the computed information will be present in {@link #intersectionArray_$private$24} in world space.
+	 * If an intersection was found, the computed information will be present in {@link #intersectionLHSArray_$private$24} in world space.
 	 * 
 	 * @return {@code true} if, and only if, an intersection was found, {@code false} otherwise
 	 */
-	protected final boolean primitiveIntersectionCompute() {
+	protected final boolean primitiveIntersectionComputeLHS() {
 		int primitiveIndex = -1;
 		
 		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0] = -1;
@@ -260,36 +260,172 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final float tObjectSpace = ray3FGetTMaximum();
 			
 			if(shapeID == Cone3F.ID) {
-				shape3FCone3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FCone3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Cylinder3F.ID) {
-				shape3FCylinder3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FCylinder3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Disk3F.ID) {
-				shape3FDisk3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FDisk3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Hyperboloid3F.ID) {
-				shape3FHyperboloid3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FHyperboloid3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Paraboloid3F.ID) {
-				shape3FParaboloid3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FParaboloid3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Plane3F.ID) {
-				shape3FPlane3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FPlane3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Polygon3F.ID) {
-				shape3FPolygon3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FPolygon3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Rectangle3F.ID) {
-				shape3FRectangle3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FRectangle3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == RectangularCuboid3F.ID) {
-				shape3FRectangularCuboid3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FRectangularCuboid3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Sphere3F.ID) {
-				shape3FSphere3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FSphere3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Torus3F.ID) {
-				shape3FTorus3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FTorus3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Triangle3F.ID) {
-				shape3FTriangle3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FTriangle3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == TriangleMesh3F.ID) {
-				shape3FTriangleMesh3FIntersectionCompute(tObjectSpace, primitiveIndex);
+				shape3FTriangleMesh3FIntersectionComputeLHS(tObjectSpace, primitiveIndex);
 			}
 			
 			ray3FSetMatrix44FTransformObjectToWorld(primitiveIndex);
 			
-			doIntersectionTransformObjectToWorld(primitiveIndex);
+			doIntersectionTransformObjectToWorldLHS(primitiveIndex);
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Performs an intersection test against all primitives in the scene and computes intersection information for the closest.
+	 * <p>
+	 * Returns {@code true} if, and only if, an intersection was found, {@code false} otherwise.
+	 * <p>
+	 * If an intersection was found, the computed information will be present in {@link #intersectionRHSArray_$private$24} in world space.
+	 * 
+	 * @return {@code true} if, and only if, an intersection was found, {@code false} otherwise
+	 */
+	protected final boolean primitiveIntersectionComputeRHS() {
+		int primitiveIndex = -1;
+		
+		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0] = -1;
+		
+		for(int index = 0; index < this.primitiveCount; index++) {
+			final int primitiveArrayOffset = index * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
+			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID;
+			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET;
+			
+			final int boundingVolumeID = this.primitiveArray[primitiveArrayOffsetBoundingVolumeID];
+			final int boundingVolumeOffset = this.primitiveArray[primitiveArrayOffsetBoundingVolumeOffset];
+			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
+			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
+			
+			final float tMinimumWorldSpace = ray3FGetTMinimum();
+			final float tMaximumWorldSpace = ray3FGetTMaximum();
+			
+			boolean isIntersectingBoundingVolume = false;
+			
+//			Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
+			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
+				isIntersectingBoundingVolume = true;
+			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
+				isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+			} else if(boundingVolumeID == BoundingSphere3F.ID) {
+				isIntersectingBoundingVolume = boundingVolume3FBoundingSphere3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+			}
+			
+			if(isIntersectingBoundingVolume) {
+				ray3FSetMatrix44FTransformWorldToObject(index);
+				
+				float tObjectSpace = 0.0F;
+				
+				final float tMinimumObjectSpace = ray3FGetTMinimum();
+				final float tMaximumObjectSpace = ray3FGetTMaximum();
+				
+				if(shapeID == Cone3F.ID) {
+					tObjectSpace = shape3FCone3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Cylinder3F.ID) {
+					tObjectSpace = shape3FCylinder3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Disk3F.ID) {
+					tObjectSpace = shape3FDisk3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Hyperboloid3F.ID) {
+					tObjectSpace = shape3FHyperboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Paraboloid3F.ID) {
+					tObjectSpace = shape3FParaboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Plane3F.ID) {
+					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Polygon3F.ID) {
+					tObjectSpace = shape3FPolygon3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Rectangle3F.ID) {
+					tObjectSpace = shape3FRectangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == RectangularCuboid3F.ID) {
+					tObjectSpace = shape3FRectangularCuboid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Sphere3F.ID) {
+					tObjectSpace = shape3FSphere3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Torus3F.ID) {
+					tObjectSpace = shape3FTorus3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Triangle3F.ID) {
+					tObjectSpace = shape3FTriangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == TriangleMesh3F.ID) {
+					tObjectSpace = shape3FTriangleMesh3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				}
+				
+				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
+					ray3FSetTMaximum(tObjectSpace);
+					
+					primitiveIndex = index;
+				}
+				
+				ray3FSetMatrix44FTransformObjectToWorld(index);
+			}
+		}
+		
+		if(primitiveIndex != -1) {
+			final int primitiveArrayOffset = primitiveIndex * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET;
+			
+			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
+			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
+			
+			ray3FSetMatrix44FTransformWorldToObject(primitiveIndex);
+			
+			final float tObjectSpace = ray3FGetTMaximum();
+			
+			if(shapeID == Cone3F.ID) {
+				shape3FCone3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Cylinder3F.ID) {
+				shape3FCylinder3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Disk3F.ID) {
+				shape3FDisk3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Hyperboloid3F.ID) {
+				shape3FHyperboloid3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Paraboloid3F.ID) {
+				shape3FParaboloid3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Plane3F.ID) {
+				shape3FPlane3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Polygon3F.ID) {
+				shape3FPolygon3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Rectangle3F.ID) {
+				shape3FRectangle3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == RectangularCuboid3F.ID) {
+				shape3FRectangularCuboid3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Sphere3F.ID) {
+				shape3FSphere3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Torus3F.ID) {
+				shape3FTorus3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Triangle3F.ID) {
+				shape3FTriangle3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == TriangleMesh3F.ID) {
+				shape3FTriangleMesh3FIntersectionComputeRHS(tObjectSpace, primitiveIndex);
+			}
+			
+			ray3FSetMatrix44FTransformObjectToWorld(primitiveIndex);
+			
+			doIntersectionTransformObjectToWorldRHS(primitiveIndex);
 			
 			return true;
 		}
@@ -598,8 +734,17 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * 
 	 * @return the ID of the {@code Material} instance that is used by the intersected {@code Primitive} instance
 	 */
-	protected final int primitiveGetMaterialID() {
-		return this.primitiveArray[intersectionGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_ID];
+	protected final int primitiveGetMaterialIDLHS() {
+		return this.primitiveArray[intersectionLHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_ID];
+	}
+	
+	/**
+	 * Returns the ID of the {@link Material} instance that is used by the intersected {@link Primitive} instance.
+	 * 
+	 * @return the ID of the {@code Material} instance that is used by the intersected {@code Primitive} instance
+	 */
+	protected final int primitiveGetMaterialIDRHS() {
+		return this.primitiveArray[intersectionRHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_ID];
 	}
 	
 	/**
@@ -607,8 +752,17 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * 
 	 * @return the offset for the {@code Material} instance that is used by the intersected {@code Primitive} instance
 	 */
-	protected final int primitiveGetMaterialOffset() {
-		return this.primitiveArray[intersectionGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_OFFSET];
+	protected final int primitiveGetMaterialOffsetLHS() {
+		return this.primitiveArray[intersectionLHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_OFFSET];
+	}
+	
+	/**
+	 * Returns the offset for the {@link Material} instance that is used by the intersected {@link Primitive} instance.
+	 * 
+	 * @return the offset for the {@code Material} instance that is used by the intersected {@code Primitive} instance
+	 */
+	protected final int primitiveGetMaterialOffsetRHS() {
+		return this.primitiveArray[intersectionRHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_MATERIAL_OFFSET];
 	}
 	
 	/**
@@ -670,7 +824,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private void doIntersectionTransform(final int primitiveMatrix44FArrayOffsetMatrix, final int primitiveMatrix44FArrayOffsetMatrixInverse) {
+	private void doIntersectionTransformLHS(final int primitiveMatrix44FArrayOffsetMatrix, final int primitiveMatrix44FArrayOffsetMatrixInverse) {
 //		Retrieve the matrix elements:
 		final float matrixElement11 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
 		final float matrixElement12 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
@@ -701,27 +855,27 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float matrixInverseElement33 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
 		
 //		Retrieve the old variables from the intersection array:
-		final float oldOrthonormalBasisGUX = intersectionGetOrthonormalBasisGUComponent1();
-		final float oldOrthonormalBasisGUY = intersectionGetOrthonormalBasisGUComponent2();
-		final float oldOrthonormalBasisGUZ = intersectionGetOrthonormalBasisGUComponent3();
-		final float oldOrthonormalBasisGVX = intersectionGetOrthonormalBasisGVComponent1();
-		final float oldOrthonormalBasisGVY = intersectionGetOrthonormalBasisGVComponent2();
-		final float oldOrthonormalBasisGVZ = intersectionGetOrthonormalBasisGVComponent3();
-		final float oldOrthonormalBasisGWX = intersectionGetOrthonormalBasisGWComponent1();
-		final float oldOrthonormalBasisGWY = intersectionGetOrthonormalBasisGWComponent2();
-		final float oldOrthonormalBasisGWZ = intersectionGetOrthonormalBasisGWComponent3();
-		final float oldOrthonormalBasisSUX = intersectionGetOrthonormalBasisSUComponent1();
-		final float oldOrthonormalBasisSUY = intersectionGetOrthonormalBasisSUComponent2();
-		final float oldOrthonormalBasisSUZ = intersectionGetOrthonormalBasisSUComponent3();
-		final float oldOrthonormalBasisSVX = intersectionGetOrthonormalBasisSVComponent1();
-		final float oldOrthonormalBasisSVY = intersectionGetOrthonormalBasisSVComponent2();
-		final float oldOrthonormalBasisSVZ = intersectionGetOrthonormalBasisSVComponent3();
-		final float oldOrthonormalBasisSWX = intersectionGetOrthonormalBasisSWComponent1();
-		final float oldOrthonormalBasisSWY = intersectionGetOrthonormalBasisSWComponent2();
-		final float oldOrthonormalBasisSWZ = intersectionGetOrthonormalBasisSWComponent3();
-		final float oldSurfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-		final float oldSurfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-		final float oldSurfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		final float oldOrthonormalBasisGUX = intersectionLHSGetOrthonormalBasisGUComponent1();
+		final float oldOrthonormalBasisGUY = intersectionLHSGetOrthonormalBasisGUComponent2();
+		final float oldOrthonormalBasisGUZ = intersectionLHSGetOrthonormalBasisGUComponent3();
+		final float oldOrthonormalBasisGVX = intersectionLHSGetOrthonormalBasisGVComponent1();
+		final float oldOrthonormalBasisGVY = intersectionLHSGetOrthonormalBasisGVComponent2();
+		final float oldOrthonormalBasisGVZ = intersectionLHSGetOrthonormalBasisGVComponent3();
+		final float oldOrthonormalBasisGWX = intersectionLHSGetOrthonormalBasisGWComponent1();
+		final float oldOrthonormalBasisGWY = intersectionLHSGetOrthonormalBasisGWComponent2();
+		final float oldOrthonormalBasisGWZ = intersectionLHSGetOrthonormalBasisGWComponent3();
+		final float oldOrthonormalBasisSUX = intersectionLHSGetOrthonormalBasisSUComponent1();
+		final float oldOrthonormalBasisSUY = intersectionLHSGetOrthonormalBasisSUComponent2();
+		final float oldOrthonormalBasisSUZ = intersectionLHSGetOrthonormalBasisSUComponent3();
+		final float oldOrthonormalBasisSVX = intersectionLHSGetOrthonormalBasisSVComponent1();
+		final float oldOrthonormalBasisSVY = intersectionLHSGetOrthonormalBasisSVComponent2();
+		final float oldOrthonormalBasisSVZ = intersectionLHSGetOrthonormalBasisSVComponent3();
+		final float oldOrthonormalBasisSWX = intersectionLHSGetOrthonormalBasisSWComponent1();
+		final float oldOrthonormalBasisSWY = intersectionLHSGetOrthonormalBasisSWComponent2();
+		final float oldOrthonormalBasisSWZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+		final float oldSurfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+		final float oldSurfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+		final float oldSurfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 		
 //		Transform the U-direction of the geometric orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
@@ -780,18 +934,142 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float newSurfaceIntersectionPointZ = point3FGetComponent3();
 		
 //		Update the intersection array:
-		intersectionSetOrthonormalBasisG(newOrthonormalBasisGUX, newOrthonormalBasisGUY, newOrthonormalBasisGUZ, newOrthonormalBasisGVX, newOrthonormalBasisGVY, newOrthonormalBasisGVZ, newOrthonormalBasisGWX, newOrthonormalBasisGWY, newOrthonormalBasisGWZ);
-		intersectionSetOrthonormalBasisS(newOrthonormalBasisSUX, newOrthonormalBasisSUY, newOrthonormalBasisSUZ, newOrthonormalBasisSVX, newOrthonormalBasisSVY, newOrthonormalBasisSVZ, newOrthonormalBasisSWX, newOrthonormalBasisSWY, newOrthonormalBasisSWZ);
-		intersectionSetSurfaceIntersectionPoint(newSurfaceIntersectionPointX, newSurfaceIntersectionPointY, newSurfaceIntersectionPointZ);
+		intersectionLHSSetOrthonormalBasisG(newOrthonormalBasisGUX, newOrthonormalBasisGUY, newOrthonormalBasisGUZ, newOrthonormalBasisGVX, newOrthonormalBasisGVY, newOrthonormalBasisGVZ, newOrthonormalBasisGWX, newOrthonormalBasisGWY, newOrthonormalBasisGWZ);
+		intersectionLHSSetOrthonormalBasisS(newOrthonormalBasisSUX, newOrthonormalBasisSUY, newOrthonormalBasisSUZ, newOrthonormalBasisSVX, newOrthonormalBasisSVY, newOrthonormalBasisSVZ, newOrthonormalBasisSWX, newOrthonormalBasisSWY, newOrthonormalBasisSWZ);
+		intersectionLHSSetSurfaceIntersectionPoint(newSurfaceIntersectionPointX, newSurfaceIntersectionPointY, newSurfaceIntersectionPointZ);
 	}
 	
-	private void doIntersectionTransformObjectToWorld(final int primitiveIndex) {
-		doIntersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2, primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
+	private void doIntersectionTransformRHS(final int primitiveMatrix44FArrayOffsetMatrix, final int primitiveMatrix44FArrayOffsetMatrixInverse) {
+//		Retrieve the matrix elements:
+		final float matrixElement11 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
+		final float matrixElement12 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
+		final float matrixElement13 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_3];
+		final float matrixElement14 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_4];
+		final float matrixElement21 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_1];
+		final float matrixElement22 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_2];
+		final float matrixElement23 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_3];
+		final float matrixElement24 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_2_4];
+		final float matrixElement31 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_1];
+		final float matrixElement32 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_2];
+		final float matrixElement33 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
+		final float matrixElement34 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_3_4];
+		final float matrixElement41 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_1];
+		final float matrixElement42 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_2];
+		final float matrixElement43 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_3];
+		final float matrixElement44 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_4_4];
+		
+//		Retrieve the matrix inverse elements:
+		final float matrixInverseElement11 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
+		final float matrixInverseElement12 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
+		final float matrixInverseElement13 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_1_3];
+		final float matrixInverseElement21 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_2_1];
+		final float matrixInverseElement22 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_2_2];
+		final float matrixInverseElement23 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_2_3];
+		final float matrixInverseElement31 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_1];
+		final float matrixInverseElement32 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_2];
+		final float matrixInverseElement33 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
+		
+//		Retrieve the old variables from the intersection array:
+		final float oldOrthonormalBasisGUX = intersectionRHSGetOrthonormalBasisGUComponent1();
+		final float oldOrthonormalBasisGUY = intersectionRHSGetOrthonormalBasisGUComponent2();
+		final float oldOrthonormalBasisGUZ = intersectionRHSGetOrthonormalBasisGUComponent3();
+		final float oldOrthonormalBasisGVX = intersectionRHSGetOrthonormalBasisGVComponent1();
+		final float oldOrthonormalBasisGVY = intersectionRHSGetOrthonormalBasisGVComponent2();
+		final float oldOrthonormalBasisGVZ = intersectionRHSGetOrthonormalBasisGVComponent3();
+		final float oldOrthonormalBasisGWX = intersectionRHSGetOrthonormalBasisGWComponent1();
+		final float oldOrthonormalBasisGWY = intersectionRHSGetOrthonormalBasisGWComponent2();
+		final float oldOrthonormalBasisGWZ = intersectionRHSGetOrthonormalBasisGWComponent3();
+		final float oldOrthonormalBasisSUX = intersectionRHSGetOrthonormalBasisSUComponent1();
+		final float oldOrthonormalBasisSUY = intersectionRHSGetOrthonormalBasisSUComponent2();
+		final float oldOrthonormalBasisSUZ = intersectionRHSGetOrthonormalBasisSUComponent3();
+		final float oldOrthonormalBasisSVX = intersectionRHSGetOrthonormalBasisSVComponent1();
+		final float oldOrthonormalBasisSVY = intersectionRHSGetOrthonormalBasisSVComponent2();
+		final float oldOrthonormalBasisSVZ = intersectionRHSGetOrthonormalBasisSVComponent3();
+		final float oldOrthonormalBasisSWX = intersectionRHSGetOrthonormalBasisSWComponent1();
+		final float oldOrthonormalBasisSWY = intersectionRHSGetOrthonormalBasisSWComponent2();
+		final float oldOrthonormalBasisSWZ = intersectionRHSGetOrthonormalBasisSWComponent3();
+		final float oldSurfaceIntersectionPointX = intersectionRHSGetSurfaceIntersectionPointComponent1();
+		final float oldSurfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointComponent2();
+		final float oldSurfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointComponent3();
+		
+//		Transform the U-direction of the geometric orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
+		
+//		Retrieve the transformed U-direction of the geometric orthonormal basis:
+		final float newOrthonormalBasisGUX = vector3FGetComponent1();
+		final float newOrthonormalBasisGUY = vector3FGetComponent2();
+		final float newOrthonormalBasisGUZ = vector3FGetComponent3();
+		
+//		Transform the V-direction of the geometric orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGVX, oldOrthonormalBasisGVY, oldOrthonormalBasisGVZ);
+		
+//		Retrieve the transformed V-direction of the geometric orthonormal basis:
+		final float newOrthonormalBasisGVX = vector3FGetComponent1();
+		final float newOrthonormalBasisGVY = vector3FGetComponent2();
+		final float newOrthonormalBasisGVZ = vector3FGetComponent3();
+		
+//		Transform the W-direction of the geometric orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGWX, oldOrthonormalBasisGWY, oldOrthonormalBasisGWZ);
+		
+//		Retrieve the transformed W-direction of the geometric orthonormal basis:
+		final float newOrthonormalBasisGWX = vector3FGetComponent1();
+		final float newOrthonormalBasisGWY = vector3FGetComponent2();
+		final float newOrthonormalBasisGWZ = vector3FGetComponent3();
+		
+//		Transform the U-direction of the shading orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSUX, oldOrthonormalBasisSUY, oldOrthonormalBasisSUZ);
+		
+//		Retrieve the transformed U-direction of the shading orthonormal basis:
+		final float newOrthonormalBasisSUX = vector3FGetComponent1();
+		final float newOrthonormalBasisSUY = vector3FGetComponent2();
+		final float newOrthonormalBasisSUZ = vector3FGetComponent3();
+		
+//		Transform the V-direction of the shading orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSVX, oldOrthonormalBasisSVY, oldOrthonormalBasisSVZ);
+		
+//		Retrieve the transformed V-direction of the shading orthonormal basis:
+		final float newOrthonormalBasisSVX = vector3FGetComponent1();
+		final float newOrthonormalBasisSVY = vector3FGetComponent2();
+		final float newOrthonormalBasisSVZ = vector3FGetComponent3();
+		
+//		Transform the W-direction of the shading orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSWX, oldOrthonormalBasisSWY, oldOrthonormalBasisSWZ);
+		
+//		Retrieve the transformed W-direction of the shading orthonormal basis:
+		final float newOrthonormalBasisSWX = vector3FGetComponent1();
+		final float newOrthonormalBasisSWY = vector3FGetComponent2();
+		final float newOrthonormalBasisSWZ = vector3FGetComponent3();
+		
+//		Transform the surface intersection point:
+		point3FSetMatrix44FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
+		
+//		Retrieve the transformed surface intersection point:
+		final float newSurfaceIntersectionPointX = point3FGetComponent1();
+		final float newSurfaceIntersectionPointY = point3FGetComponent2();
+		final float newSurfaceIntersectionPointZ = point3FGetComponent3();
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(newOrthonormalBasisGUX, newOrthonormalBasisGUY, newOrthonormalBasisGUZ, newOrthonormalBasisGVX, newOrthonormalBasisGVY, newOrthonormalBasisGVZ, newOrthonormalBasisGWX, newOrthonormalBasisGWY, newOrthonormalBasisGWZ);
+		intersectionRHSSetOrthonormalBasisS(newOrthonormalBasisSUX, newOrthonormalBasisSUY, newOrthonormalBasisSUZ, newOrthonormalBasisSVX, newOrthonormalBasisSVY, newOrthonormalBasisSVZ, newOrthonormalBasisSWX, newOrthonormalBasisSWY, newOrthonormalBasisSWZ);
+		intersectionRHSSetSurfaceIntersectionPoint(newSurfaceIntersectionPointX, newSurfaceIntersectionPointY, newSurfaceIntersectionPointZ);
+	}
+	
+	private void doIntersectionTransformObjectToWorldLHS(final int primitiveIndex) {
+		doIntersectionTransformLHS(primitiveIndex * Matrix44F.ARRAY_SIZE * 2, primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
+	}
+	
+	private void doIntersectionTransformObjectToWorldRHS(final int primitiveIndex) {
+		doIntersectionTransformRHS(primitiveIndex * Matrix44F.ARRAY_SIZE * 2, primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
 	}
 	
 	@SuppressWarnings("unused")
-	private void doIntersectionTransformWorldToObject(final int primitiveIndex) {
-		doIntersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
+	private void doIntersectionTransformWorldToObjectLHS(final int primitiveIndex) {
+		doIntersectionTransformLHS(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
+	}
+	
+	@SuppressWarnings("unused")
+	private void doIntersectionTransformWorldToObjectRHS(final int primitiveIndex) {
+		doIntersectionTransformRHS(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
 	}
 	
 	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
@@ -828,13 +1106,13 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float materialBSDFResultG = materialBSDFResultGetResultG();
 				final float materialBSDFResultB = materialBSDFResultGetResultB();
 				
-				final float normalX = intersectionGetOrthonormalBasisSWComponent1();
-				final float normalY = intersectionGetOrthonormalBasisSWComponent2();
-				final float normalZ = intersectionGetOrthonormalBasisSWComponent3();
+				final float normalX = intersectionLHSGetOrthonormalBasisSWComponent1();
+				final float normalY = intersectionLHSGetOrthonormalBasisSWComponent2();
+				final float normalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 				
-				final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-				final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-				final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+				final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+				final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+				final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 				
 				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
 				
@@ -894,13 +1172,13 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float materialBSDFResultG = materialBSDFResultGetResultG();
 				final float materialBSDFResultB = materialBSDFResultGetResultB();
 				
-				final float normalX = intersectionGetOrthonormalBasisSWComponent1();
-				final float normalY = intersectionGetOrthonormalBasisSWComponent2();
-				final float normalZ = intersectionGetOrthonormalBasisSWComponent3();
+				final float normalX = intersectionLHSGetOrthonormalBasisSWComponent1();
+				final float normalY = intersectionLHSGetOrthonormalBasisSWComponent2();
+				final float normalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 				
-				final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-				final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-				final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+				final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+				final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+				final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 				
 				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
 				
@@ -943,13 +1221,13 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		}
 		
 		if(!isUsingDeltaDistribution && materialBSDFSampleDistributionFunction(bitFlags, sampleBU, sampleBV)) {
-			final float normalX = intersectionGetOrthonormalBasisSWComponent1();
-			final float normalY = intersectionGetOrthonormalBasisSWComponent2();
-			final float normalZ = intersectionGetOrthonormalBasisSWComponent3();
+			final float normalX = intersectionLHSGetOrthonormalBasisSWComponent1();
+			final float normalY = intersectionLHSGetOrthonormalBasisSWComponent2();
+			final float normalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 			
-			final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-			final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-			final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+			final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+			final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+			final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 			
 			final boolean hasSampledSpecular = materialBSDFResultBXDFIsSpecular();
 			

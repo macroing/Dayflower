@@ -504,7 +504,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * <p>
 	 * Returns {@code true} if, and only if, the {@code BSDF} was computed, {@code false} otherwise.
 	 * <p>
-	 * This method assumes the {@link AbstractGeometryKernel#intersectionArray_$private$24 intersectionArray_$private$24} array has been filled in with intersection data.
+	 * This method assumes the {@link AbstractGeometryKernel#intersectionLHSArray_$private$24 intersectionLHSArray_$private$24} array has been filled in with intersection data.
 	 * 
 	 * @param materialID the ID of the {@link Material} instance
 	 * @param materialOffset the offset for the {@code Material} instance
@@ -517,12 +517,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		boolean isFindingMaterial = currentMaterialID == BullseyeMaterial.ID || currentMaterialID == CheckerboardMaterial.ID || currentMaterialID == PolkaDotMaterial.ID;
 		
 		if(isFindingMaterial) {
-			final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-			final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-			final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+			final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+			final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+			final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 			
-			final float textureCoordinatesU = intersectionGetTextureCoordinatesComponent1();
-			final float textureCoordinatesV = intersectionGetTextureCoordinatesComponent2();
+			final float textureCoordinatesU = intersectionLHSGetTextureCoordinatesComponent1();
+			final float textureCoordinatesV = intersectionLHSGetTextureCoordinatesComponent2();
 			
 			while(isFindingMaterial) {
 				if(currentMaterialID == BullseyeMaterial.ID) {
@@ -707,9 +707,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 					final float outgoingY = doBSDFResultGetOutgoingY();
 					final float outgoingZ = doBSDFResultGetOutgoingZ();
 					
-					final float normalX = intersectionGetOrthonormalBasisGWComponent1();
-					final float normalY = intersectionGetOrthonormalBasisGWComponent2();
-					final float normalZ = intersectionGetOrthonormalBasisGWComponent3();
+					final float normalX = intersectionLHSGetOrthonormalBasisGWComponent1();
+					final float normalY = intersectionLHSGetOrthonormalBasisGWComponent2();
+					final float normalZ = intersectionLHSGetOrthonormalBasisGWComponent3();
 					
 					float probabilityDensityFunctionValue = doBXDFResultGetProbabilityDensityFunctionValue();
 					
@@ -889,9 +889,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float outgoingY = doBSDFResultGetOutgoingY();
 		final float outgoingZ = doBSDFResultGetOutgoingZ();
 		
-		final float normalX = intersectionGetOrthonormalBasisGWComponent1();
-		final float normalY = intersectionGetOrthonormalBasisGWComponent2();
-		final float normalZ = intersectionGetOrthonormalBasisGWComponent3();
+		final float normalX = intersectionLHSGetOrthonormalBasisGWComponent1();
+		final float normalY = intersectionLHSGetOrthonormalBasisGWComponent2();
+		final float normalZ = intersectionLHSGetOrthonormalBasisGWComponent3();
 		
 		final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalX, normalY, normalZ);
 		final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
@@ -979,12 +979,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		boolean isFindingMaterial = currentMaterialID == BullseyeMaterial.ID || currentMaterialID == CheckerboardMaterial.ID || currentMaterialID == PolkaDotMaterial.ID;
 		
 		if(isFindingMaterial) {
-			final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-			final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-			final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+			final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+			final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+			final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 			
-			final float textureCoordinatesU = intersectionGetTextureCoordinatesComponent1();
-			final float textureCoordinatesV = intersectionGetTextureCoordinatesComponent2();
+			final float textureCoordinatesU = intersectionLHSGetTextureCoordinatesComponent1();
+			final float textureCoordinatesV = intersectionLHSGetTextureCoordinatesComponent2();
 			
 			while(isFindingMaterial) {
 				if(currentMaterialID == BullseyeMaterial.ID) {
@@ -1145,9 +1145,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float rayDirectionY = ray3FGetDirectionComponent2();
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
-		final float surfaceNormalX = intersectionGetOrthonormalBasisSWComponent1();
-		final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
-		final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
+		final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
+		final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 		
 		final float surfaceNormalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
@@ -2214,7 +2214,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFResultSetNormalFromIntersection();
 		doBSDFResultSetOutgoingFromRay();
 		
-		orthonormalBasis33FSetIntersectionOrthonormalBasisS();
+		orthonormalBasis33FSetIntersectionOrthonormalBasisSLHS();
 		
 		doBXDFResultSetNormalTransformedFromBSDFResult();
 		doBXDFResultSetOutgoingTransformedFromBSDFResult();
@@ -2251,9 +2251,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private void doBSDFResultSetNormalFromIntersection() {
-		final float x = intersectionGetOrthonormalBasisSWComponent1();
-		final float y = intersectionGetOrthonormalBasisSWComponent2();
-		final float z = intersectionGetOrthonormalBasisSWComponent3();
+		final float x = intersectionLHSGetOrthonormalBasisSWComponent1();
+		final float y = intersectionLHSGetOrthonormalBasisSWComponent2();
+		final float z = intersectionLHSGetOrthonormalBasisSWComponent3();
 		
 		doBSDFResultSetNormal(x, y, z);
 	}

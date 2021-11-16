@@ -757,9 +757,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float radius = doLightDirectionalLightGetRadius();
 		
-		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 		
 		final float pointX = surfaceIntersectionPointX + directionX * 2.0F * radius;
 		final float pointY = surfaceIntersectionPointY + directionY * 2.0F * radius;
@@ -852,9 +852,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float radius = doLightLDRImageLightGetRadius(offset);
 		
-		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 		
 		final int offsetDistribution = offset + CompiledLightCache.L_D_R_IMAGE_LIGHT_OFFSET_DISTRIBUTION;
 		
@@ -1192,17 +1192,17 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float radius = doLightPerezLightGetRadius(offset);
 		
-		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 		
-		final float surfaceNormalGX = intersectionGetOrthonormalBasisGWComponent1();
-		final float surfaceNormalGY = intersectionGetOrthonormalBasisGWComponent2();
-		final float surfaceNormalGZ = intersectionGetOrthonormalBasisGWComponent3();
+		final float surfaceNormalGX = intersectionLHSGetOrthonormalBasisGWComponent1();
+		final float surfaceNormalGY = intersectionLHSGetOrthonormalBasisGWComponent2();
+		final float surfaceNormalGZ = intersectionLHSGetOrthonormalBasisGWComponent3();
 		
-		final float surfaceNormalSX = intersectionGetOrthonormalBasisSWComponent1();
-		final float surfaceNormalSY = intersectionGetOrthonormalBasisSWComponent2();
-		final float surfaceNormalSZ = intersectionGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWComponent1();
+		final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWComponent2();
+		final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 		
 		final float sunDirectionWorldSpaceDotSurfaceNormalG = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
 		final float sunDirectionWorldSpaceDotSurfaceNormalS = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
@@ -1643,9 +1643,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float positionY = doLightPointLightGetPositionY();
 		final float positionZ = doLightPointLightGetPositionZ();
 		
-		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 		
 		final float distanceSquared = point3FDistanceSquared(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ, positionX, positionY, positionZ);
 		
@@ -1745,9 +1745,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float positionY = doLightSpotLightGetPositionY();
 		final float positionZ = doLightSpotLightGetPositionZ();
 		
-		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 		
 		final float incomingX = positionX - surfaceIntersectionPointX;
 		final float incomingY = positionY - surfaceIntersectionPointY;

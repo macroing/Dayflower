@@ -2048,7 +2048,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final boolean hasKS = !checkIsZero(colorKSR) || !checkIsZero(colorKSG) || !checkIsZero(colorKSB);
 		
-		if(!hasKD || !hasKS) {
+		if(!hasKD && !hasKS) {
 			return false;
 		}
 		

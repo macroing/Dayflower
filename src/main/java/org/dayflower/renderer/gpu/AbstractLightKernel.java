@@ -920,11 +920,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float cumulativeDistributionFunction0 = doLightLDRImageLightDistribution1FCumulativeDistributionFunction(offset, index + 0);
 		final float cumulativeDistributionFunction1 = doLightLDRImageLightDistribution1FCumulativeDistributionFunction(offset, index + 1);
 		
-		if(cumulativeDistributionFunction1 - cumulativeDistributionFunction0 > 0.0F) {
-			return (index + ((value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0))) / count;
-		}
+		final float a = cumulativeDistributionFunction1 - cumulativeDistributionFunction0;
+		final float b = value - cumulativeDistributionFunction0;
+		final float c = a > 0.0F ? b / a : b;
 		
-		return (index + (value - cumulativeDistributionFunction0)) / count;
+		return (index + c) / count;
 	}
 	
 	private float doLightLDRImageLightDistribution1FCumulativeDistributionFunction(final int offset, final int index) {
@@ -1260,7 +1260,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 //			}
 		}
 		
-		doLightPerezLightDistribution2FContinuousRemap(offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_DISTRIBUTION, u, v);
+		doLightPerezLightDistribution2FContinuousRemap(offsetDistribution, u, v);
 		
 		final float sampleRemappedU = point2FGetComponent1();
 		final float sampleRemappedV = point2FGetComponent2();
@@ -1324,11 +1324,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float cumulativeDistributionFunction0 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 0);
 		final float cumulativeDistributionFunction1 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 1);
 		
-		if(cumulativeDistributionFunction1 - cumulativeDistributionFunction0 > 0.0F) {
-			return (index + ((value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0))) / count;
-		}
+		final float a = cumulativeDistributionFunction1 - cumulativeDistributionFunction0;
+		final float b = value - cumulativeDistributionFunction0;
+		final float c = a > 0.0F ? b / a : b;
 		
-		return (index + (value - cumulativeDistributionFunction0)) / count;
+		return (index + c) / count;
 	}
 	
 	private float doLightPerezLightDistribution1FCumulativeDistributionFunction(final int offset, final int index) {

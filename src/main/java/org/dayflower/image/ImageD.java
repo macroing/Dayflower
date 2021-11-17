@@ -2386,6 +2386,23 @@ public abstract class ImageD extends Image {
 	}
 	
 	/**
+	 * Performs tone mapping on this {@code ImageD} instance given {@code luminanceMaximum} as the maximum luminance.
+	 * <p>
+	 * Returns this {@code ImageD} instance.
+	 * 
+	 * @param luminanceMaximum the maximum luminance
+	 * @return this {@code ImageD} instance
+	 */
+	public final ImageD toneMap(final double luminanceMaximum) {
+		return update((color, point) -> {
+			final double luminance = color.luminance();
+			final double scale = (1.0D + luminance / (luminanceMaximum * luminanceMaximum)) / (1.0D + luminance);
+			
+			return new Color4D(Color3D.multiply(new Color3D(color), scale), color.getA());
+		});
+	}
+	
+	/**
 	 * Sets the transparency for this {@code ImageD} instance to {@code transparency}.
 	 * <p>
 	 * Returns this {@code ImageD} instance.

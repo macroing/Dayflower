@@ -1,3 +1,8 @@
+2021-11-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method toneMap(double) to the ImageD class.
+	* ADD:		Add the method toneMap(float) to the ImageF class.
+
 2021-11-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the intersection methods in the GPU renderer. Instead of one set of methods, two exists, such that information about intersected AreaLight instances can be stored.

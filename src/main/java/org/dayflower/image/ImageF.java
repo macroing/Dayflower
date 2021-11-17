@@ -2386,6 +2386,23 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
+	 * Performs tone mapping on this {@code ImageF} instance given {@code luminanceMaximum} as the maximum luminance.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * 
+	 * @param luminanceMaximum the maximum luminance
+	 * @return this {@code ImageF} instance
+	 */
+	public final ImageF toneMap(final float luminanceMaximum) {
+		return update((color, point) -> {
+			final float luminance = color.luminance();
+			final float scale = (1.0F + luminance / (luminanceMaximum * luminanceMaximum)) / (1.0F + luminance);
+			
+			return new Color4F(Color3F.multiply(new Color3F(color), scale), color.getA());
+		});
+	}
+	
+	/**
 	 * Sets the transparency for this {@code ImageF} instance to {@code transparency}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.

@@ -76,6 +76,59 @@ public final class LineSegment2I implements Shape2I {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code List} with {@link Point2I} instances contained in this {@code LineSegment2I} instance.
+	 * 
+	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code LineSegment2I} instance, {@code false} otherwise
+	 * @return a {@code List} with {@code Point2I} instances contained in this {@code LineSegment2I} instance
+	 */
+	@Override
+	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
+		final int aX = this.a.getX();
+		final int aY = this.a.getY();
+		final int bX = this.b.getX();
+		final int bY = this.b.getY();
+		
+		final int w = bX - aX;
+		final int h = bY - aY;
+		
+		final int wAbs = abs(w);
+		final int hAbs = abs(h);
+		
+		final int dAX = w < 0 ? -1 : w > 0 ? 1 : 0;
+		final int dAY = h < 0 ? -1 : h > 0 ? 1 : 0;
+		final int dBX = wAbs > hAbs ? dAX : 0;
+		final int dBY = wAbs > hAbs ? 0 : dAY;
+		
+		final int l = wAbs > hAbs ? wAbs : hAbs;
+		final int s = wAbs > hAbs ? hAbs : wAbs;
+		
+		final List<Point2I> points = new ArrayList<>(l + 1);
+		
+		int n = l >> 1;
+		
+		int x = aX;
+		int y = aY;
+		
+		for(int i = 0; i <= l; i++) {
+			points.add(new Point2I(x, y));
+			
+			n += s;
+			
+			if(n >= l) {
+				n -= l;
+				
+				x += dAX;
+				y += dAY;
+			} else {
+				x += dBX;
+				y += dBY;
+			}
+		}
+		
+		return points;
+	}
+	
+	/**
 	 * Returns the {@link Point2I} instance denoted by {@code A}.
 	 * 
 	 * @return the {@code Point2I} instance denoted by {@code A}
@@ -161,11 +214,12 @@ public final class LineSegment2I implements Shape2I {
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param point a {@link Point2I} instance
+	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code LineSegment2I} instance, {@code false} otherwise
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code LineSegment2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	@Override
-	public boolean contains(final Point2I point) {
+	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
 		final int aX = this.a.getX();
 		final int aY = this.a.getY();
 		final int bX = this.b.getX();

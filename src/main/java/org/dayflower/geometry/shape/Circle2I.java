@@ -135,154 +135,29 @@ public final class Circle2I implements Shape2I {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@code List} with {@link Point2I} instances that represents the complement of this {@code Circle2I} instance within {@code circle.getBounds()}.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * circle.findPointsOfComplement(new Rectangle2I(circle));
-	 * }
-	 * </pre>
+	 * Returns a {@code List} with {@link Point2I} instances contained in this {@code Circle2I} instance.
 	 * 
-	 * @return a {@code List} with {@code Point2I} instances that represents the complement of this {@code Circle2I} instance within {@code circle.getBounds()}
-	 */
-	public List<Point2I> findPointsOfComplement() {
-		return findPointsOfComplement(new Rectangle2I(this));
-	}
-	
-	/**
-	 * Returns a {@code List} with {@link Point2I} instances that represents the complement of this {@code Circle2I} instance within {@code rectangle}.
-	 * <p>
-	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * circle.findPointsOfComplement(rectangle, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param rectangle a {@link Rectangle2I} instance
-	 * @return a {@code List} with {@code Point2I} instances that represents the complement of this {@code Circle2I} instance within {@code rectangle}
-	 */
-	public List<Point2I> findPointsOfComplement(final Rectangle2I rectangle) {
-		return findPointsOfComplement(rectangle, false);
-	}
-	
-	/**
-	 * Returns a {@code List} with {@link Point2I} instances that represents the complement of this {@code Circle2I} instance within {@code rectangle}.
-	 * <p>
-	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param rectangle a {@link Rectangle2I} instance
-	 * @param isExcludingBorderOnly {@code true} if, and only if, this method should only exclude {@code Point2I} instances on the border of this {@code Circle2I} instance, {@code false} otherwise
-	 * @return a {@code List} with {@code Point2I} instances that represents the complement of this {@code Circle2I} instance within {@code rectangle}
-	 */
-	public List<Point2I> findPointsOfComplement(final Rectangle2I rectangle, final boolean isExcludingBorderOnly) {
-		Objects.requireNonNull(rectangle, "rectangle == null");
-		
-		final List<Point2I> points = new ArrayList<>();
-		
-		final int circleCenterX = this.center.getX();
-		final int circleCenterY = this.center.getY();
-		
-		final int circleRadius = this.radius;
-		
-		final int circleMinimumX = circleCenterX - circleRadius;
-		final int circleMaximumX = circleCenterX + circleRadius;
-		final int circleMinimumY = circleCenterY - circleRadius;
-		final int circleMaximumY = circleCenterY + circleRadius;
-		
-		final int rectangleWidth = rectangle.getWidth();
-		final int rectangleHeight = rectangle.getHeight();
-		
-		for(int y = 0; y < rectangleHeight; y++) {
-			for(int x = 0; x < rectangleWidth; x++) {
-				final int xTranslated = x - circleMinimumX - circleRadius;
-				final int yTranslated = y - circleMinimumY - circleRadius;
-				
-				final boolean isInsideCircleBounds = x >= circleMinimumX && x <= circleMaximumX && y >= circleMinimumY && y <= circleMaximumY;
-				final boolean isInsideCircle = isInsideCircleBounds && xTranslated * xTranslated + yTranslated * yTranslated <= circleRadius * circleRadius;
-				final boolean isInsideCircleBorder = isInsideCircle && xTranslated * xTranslated + yTranslated * yTranslated > (circleRadius - 1) * (circleRadius - 1);
-				
-				if(!isInsideCircle || isExcludingBorderOnly && isInsideCircle && !isInsideCircleBorder) {
-					points.add(new Point2I(x, y));
-				}
-			}
-		}
-		
-		return points;
-	}
-	
-	/**
-	 * Returns a {@code List} with {@link Point2I} instances that represents the intersection between this {@code Circle2I} instance and {@code circle.getBounds()}.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * circle.findPointsOfIntersection(new Rectangle2I(circle));
-	 * }
-	 * </pre>
-	 * 
-	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Circle2I} instance and {@code circle.getBounds()}
-	 */
-	public List<Point2I> findPointsOfIntersection() {
-		return findPointsOfIntersection(new Rectangle2I(this));
-	}
-	
-	/**
-	 * Returns a {@code List} with {@link Point2I} instances that represents the intersection between this {@code Circle2I} instance and {@code rectangle}.
-	 * <p>
-	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * circle.findPointsOfIntersection(rectangle, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param rectangle a {@link Rectangle2I} instance
-	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Circle2I} instance and {@code rectangle}
-	 */
-	public List<Point2I> findPointsOfIntersection(final Rectangle2I rectangle) {
-		return findPointsOfIntersection(rectangle, false);
-	}
-	
-	/**
-	 * Returns a {@code List} with {@link Point2I} instances that represents the intersection between this {@code Circle2I} instance and {@code rectangle}.
-	 * <p>
-	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param rectangle a {@link Rectangle2I} instance
 	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Circle2I} instance, {@code false} otherwise
-	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Circle2I} instance and {@code rectangle}
+	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Circle2I} instance
 	 */
-	public List<Point2I> findPointsOfIntersection(final Rectangle2I rectangle, final boolean isIncludingBorderOnly) {
-		Objects.requireNonNull(rectangle, "rectangle == null");
-		
+	@Override
+	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
 		final List<Point2I> points = new ArrayList<>();
 		
-		final int circleCenterX = this.center.getX();
-		final int circleCenterY = this.center.getY();
+		final Point2I maximum = new Point2I(this.center.getX() + this.radius, this.center.getY() + this.radius);
+		final Point2I minimum = new Point2I(this.center.getX() - this.radius, this.center.getY() - this.radius);
 		
-		final int circleRadius = this.radius;
+		final int maximumX = maximum.getX();
+		final int minimumX = minimum.getX();
+		final int maximumY = maximum.getY();
+		final int minimumY = minimum.getY();
 		
-		final int rectangleWidth = rectangle.getWidth();
-		final int rectangleHeight = rectangle.getHeight();
-		
-		for(int y = -circleRadius; y <= circleRadius; y++) {
-			for(int x = -circleRadius; x <= circleRadius; x++) {
-				final boolean isInsideCircle = x * x + y * y <= circleRadius * circleRadius;
-				final boolean isInsideCircleBorder = isInsideCircle && x * x + y * y > (circleRadius - 1) * (circleRadius - 1);
+		for(int y = minimumY; y <= maximumY; y++) {
+			for(int x = minimumX; x <= maximumX; x++) {
+				final Point2I point = new Point2I(x, y);
 				
-				if(!isIncludingBorderOnly && isInsideCircle || isIncludingBorderOnly && isInsideCircleBorder) {
-					final int circleX = x + circleCenterX;
-					final int circleY = y + circleCenterY;
-					
-					if(circleX >= 0 && circleX < rectangleWidth && circleY >= 0 && circleY < rectangleHeight) {
-						points.add(new Point2I(circleX, circleY));
-					}
+				if(contains(point, isIncludingBorderOnly)) {
+					points.add(point);
 				}
 			}
 		}
@@ -363,12 +238,18 @@ public final class Circle2I implements Shape2I {
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param point a {@link Point2I} instance
+	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Circle2I} instance, {@code false} otherwise
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Circle2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	@Override
-	public boolean contains(final Point2I point) {
-		return Vector2I.direction(this.center, point).lengthSquared() <= this.radius * this.radius;
+	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
+		final int lengthSquared = Vector2I.direction(this.center, point).lengthSquared();
+		
+		final boolean isInsideCircle = lengthSquared <= this.radius * this.radius;
+		final boolean isInsideCircleBorder = isInsideCircle && lengthSquared > (this.radius - 1) * (this.radius - 1);
+		
+		return isIncludingBorderOnly ? isInsideCircleBorder : isInsideCircle;
 	}
 	
 	/**

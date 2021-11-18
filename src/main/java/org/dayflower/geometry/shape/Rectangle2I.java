@@ -162,6 +162,37 @@ public final class Rectangle2I implements Shape2I {
 	}
 	
 	/**
+	 * Returns a {@code List} with {@link Point2I} instances contained in this {@code Rectangle2I} instance.
+	 * 
+	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Rectangle2I} instance, {@code false} otherwise
+	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Rectangle2I} instance
+	 */
+	@Override
+	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
+		final List<Point2I> points = new ArrayList<>();
+		
+		final Point2I maximum = Point2I.maximum(Point2I.maximum(this.a, this.b), Point2I.maximum(this.c, this.d));
+		final Point2I minimum = Point2I.minimum(Point2I.minimum(this.a, this.b), Point2I.minimum(this.c, this.d));
+		
+		final int maximumX = maximum.getX();
+		final int minimumX = minimum.getX();
+		final int maximumY = maximum.getY();
+		final int minimumY = minimum.getY();
+		
+		for(int y = minimumY; y <= maximumY; y++) {
+			for(int x = minimumX; x <= maximumX; x++) {
+				final Point2I point = new Point2I(x, y);
+				
+				if(contains(point, isIncludingBorderOnly)) {
+					points.add(point);
+				}
+			}
+		}
+		
+		return points;
+	}
+	
+	/**
 	 * Returns the {@link Point2I} instance denoted by A.
 	 * <p>
 	 * This {@code Point2I} instance usually contains the minimum X and minimum Y component values.
@@ -287,12 +318,13 @@ public final class Rectangle2I implements Shape2I {
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param point a {@link Point2I} instance
+	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Rectangle2I} instance, {@code false} otherwise
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	@Override
-	public boolean contains(final Point2I point) {
-		return doContains(point) || doContainsOnLineSegments(point);
+	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
+		return isIncludingBorderOnly ? doContainsOnLineSegments(point) : doContains(point) || doContainsOnLineSegments(point);
 	}
 	
 	/**

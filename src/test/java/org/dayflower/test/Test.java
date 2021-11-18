@@ -60,6 +60,7 @@ public final class Test {
 		doTestImageFDrawPolygon();
 		doTestImageFFillCircleComplement();
 		doTestImageFFillPolygon();
+		doTestImageFFillPolygonComplement();
 		doTestImageFFillRectangle();
 		doTestImageFFillShapes();
 		doTestImageFFillSimplexFractionalBrownianMotion();
@@ -218,14 +219,14 @@ public final class Test {
 		final
 		ImageF imageF = new IntImageF(800, 800);
 		imageF.clear(Color4F.WHITE);
-		imageF.drawPolygon(new Polygon2I(new Point2I(100, 100), new Point2I(200, 100), new Point2I(300, 200), new Point2I(200, 300), new Point2I(100, 200)), Color4F.BLACK);
+		imageF.drawShape(new Polygon2I(new Point2I(100, 100), new Point2I(200, 100), new Point2I(300, 200), new Point2I(200, 300), new Point2I(100, 200)), Color4F.BLACK);
 		imageF.save("./generated/Test/Image-Draw-Polygon.png");
 	}
 	
 	private static void doTestImageFFillCircleComplement() {
 		final
 		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
-		imageF.fillCircleComplement(doCreateCircle2I(imageF), (oldColor, point) -> doCreateColor4F(oldColor, point, imageF));
+		imageF.fillShapeComplement(doCreateCircle2I(imageF), (oldColor, point) -> doCreateColor4F(oldColor, point, imageF));
 		imageF.save("./generated/Test/Image-Fill-Circle-Complement.png");
 	}
 	
@@ -233,14 +234,21 @@ public final class Test {
 		final
 		ImageF imageF = new IntImageF(800, 800);
 		imageF.clear(Color4F.WHITE);
-		imageF.fillPolygon(new Polygon2I(new Point2I(100, 100), new Point2I(200, 100), new Point2I(300, 200), new Point2I(200, 300), new Point2I(100, 200)), Color4F.BLACK);
+		imageF.fillShape(new Polygon2I(new Point2I(100, 100), new Point2I(200, 100), new Point2I(300, 200), new Point2I(200, 300), new Point2I(100, 200)), Color4F.BLACK);
 		imageF.save("./generated/Test/Image-Fill-Polygon.png");
+	}
+	
+	private static void doTestImageFFillPolygonComplement() {
+		final
+		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
+		imageF.fillShapeComplement(new Polygon2I(new Point2I(100, 100), new Point2I(600, 100), new Point2I(700, 700), new Point2I(600, 800), new Point2I(100, 200)), (oldColor, point) -> doCreateColor4F(oldColor, point, imageF));
+		imageF.save("./generated/Test/Image-Fill-Polygon-Complement.png");
 	}
 	
 	private static void doTestImageFFillRectangle() {
 		final
 		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
-		imageF.fillRectangle(new Rectangle2I(new Point2I(100, 100), new Point2I(imageF.getResolutionX() - 1 - 100, imageF.getResolutionY() - 1 - 100)), (color, point) -> Color4F.blendOver(new Color4F(1.0F, 0.0F, 0.0F, 0.5F), color));
+		imageF.fillShape(new Rectangle2I(new Point2I(100, 100), new Point2I(imageF.getResolutionX() - 1 - 100, imageF.getResolutionY() - 1 - 100)), (color, point) -> Color4F.blendOver(new Color4F(1.0F, 0.0F, 0.0F, 0.5F), color));
 		imageF.save("./generated/Test/Image-Fill-Rectangle.png");
 	}
 	
@@ -252,10 +260,10 @@ public final class Test {
 		
 		final
 		ImageF imageF = new IntImageF(800, 800);
-		imageF.fillRectangle(new Rectangle2I(rectangleB), Color3F.RED);
-		imageF.fillCircle(new Circle2I(circleB), Color4F.GREEN);
-		imageF.fillRectangle(new Rectangle2I(rectangleA), Color3F.BLUE);
-		imageF.fillCircle(new Circle2I(circleA), Color4F.ORANGE);
+		imageF.fillShape(new Rectangle2I(rectangleB), Color4F.RED);
+		imageF.fillShape(new Circle2I(circleB), Color4F.GREEN);
+		imageF.fillShape(new Rectangle2I(rectangleA), Color4F.BLUE);
+		imageF.fillShape(new Circle2I(circleA), Color4F.ORANGE);
 		imageF.save("./generated/Test/Image-Fill-Shapes.png");
 	}
 	
@@ -385,9 +393,9 @@ public final class Test {
 		ImageF imageF = new IntImageF(800, 800);
 		imageF.setChangeHistoryEnabled(true);
 		imageF.save("./generated/Test/Image-Undo-And-Redo-1.png");
-		imageF.fillTriangle(new Triangle2I(new Point2I(400, 300), new Point2I(300, 500), new Point2I(500, 500)), Color4F.RED);
+		imageF.fillShape(new Triangle2I(new Point2I(400, 300), new Point2I(300, 500), new Point2I(500, 500)), Color4F.RED);
 		imageF.save("./generated/Test/Image-Undo-And-Redo-2.png");
-		imageF.fillCircle(new Circle2I(new Point2I(100, 100), 50), Color4F.GREEN);
+		imageF.fillShape(new Circle2I(new Point2I(100, 100), 50), Color4F.GREEN);
 		imageF.save("./generated/Test/Image-Undo-And-Redo-3.png");
 		imageF.undo();
 		imageF.save("./generated/Test/Image-Undo-And-Redo-4.png");

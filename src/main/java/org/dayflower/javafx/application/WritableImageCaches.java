@@ -115,7 +115,7 @@ final class WritableImageCaches {
 		
 		final
 		ImageF imageF = combinedProgressiveImageOrderRenderer.getImage();
-		imageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(imageF.getResolutionX() - 1, imageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
+		imageF.drawShape(new Rectangle2I(new Point2I(0, 0), new Point2I(imageF.getResolutionX() - 1, imageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
 		
 		return imageF.toWritableImage();
 	}
@@ -124,7 +124,7 @@ final class WritableImageCaches {
 	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
 		final
 		ImageF imageF = new PixelImageF(32, 32, Color4F.WHITE);
-		imageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(imageF.getResolutionX() - 1, imageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
+		imageF.drawShape(new Rectangle2I(new Point2I(0, 0), new Point2I(imageF.getResolutionX() - 1, imageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
 		
 		return imageF.toWritableImage();
 	}

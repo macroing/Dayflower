@@ -254,7 +254,7 @@ public final class ScreenRendererApplication extends Application {
 						break;
 					case OPERATION_THRESHOLD:
 						function.set(pixelImage -> {
-							pixelImage.fillRectangle(pixelImage.getBounds(), (color, point) -> {
+							pixelImage.fillShape(pixelImage.getBounds(), (color, point) -> {
 								if(color.isCyan()) {
 									return Color4F.CYAN;
 								} else if(color.isMagenta()) {
@@ -285,7 +285,7 @@ public final class ScreenRendererApplication extends Application {
 	
 	private static void doSetOperationBlend(final AtomicReference<Function<ImageF, ImageF>> function, final Color4F colorNew) {
 		function.set(pixelImage -> {
-			pixelImage.fillRectangle(pixelImage.getBounds(), (colorOld, point) -> Color4F.blend(colorOld, colorNew, 0.5F));
+			pixelImage.fillShape(pixelImage.getBounds(), (colorOld, point) -> Color4F.blend(colorOld, colorNew, 0.5F));
 			
 			return pixelImage;
 		});

@@ -1,3 +1,20 @@
+2021-11-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods drawShape(Shape2I), drawShape(Shape2I, BiFunction<Color4D, Point2I, Color4D>), drawShape(Shape2I, Color3D), drawShape(Shape2I, Color4D), drawShapeComplement(Shape2I), drawShapeComplement(Shape2I, BiFunction<Color4D, Point2I, Color4D>), drawShapeComplement(Shape2I, Color3D), drawShapeComplement(Shape2I, Color4D), fillShape(Shape2I), fillShape(Shape2I, BiFunction<Color4D, Point2I, Color4D>), fillShape(Shape2I, Color3D), fillShape(Shape2I, Color4D), fillShapeComplement(Shape2I), fillShapeComplement(Shape2I, BiFunction<Color4D, Point2I, Color4D>), fillShapeComplement(Shape2I, Color3D) and fillShapeComplement(Shape2I, Color4D) to the ImageD class.
+	* ADD:		Add the methods drawShape(Shape2I), drawShape(Shape2I, BiFunction<Color4F, Point2I, Color4F>), drawShape(Shape2I, Color3F), drawShape(Shape2I, Color4F), drawShapeComplement(Shape2I), drawShapeComplement(Shape2I, BiFunction<Color4F, Point2I, Color4F>), drawShapeComplement(Shape2I, Color3F), drawShapeComplement(Shape2I, Color4F), fillShape(Shape2I), fillShape(Shape2I, BiFunction<Color4F, Point2I, Color4F>), fillShape(Shape2I, Color3F), fillShape(Shape2I, Color4F), fillShapeComplement(Shape2I), fillShapeComplement(Shape2I, BiFunction<Color4F, Point2I, Color4F>), fillShapeComplement(Shape2I, Color3F) and fillShapeComplement(Shape2I, Color4F) to the ImageF class.
+	* ADD:		Add the methods contains(Point2I, boolean) and findPoints(boolean) to the Circle2I class.
+	* ADD:		Add the methods contains(Point2I, boolean) and findPoints(boolean) to the LineSegment2I class.
+	* ADD:		Add the methods contains(Point2I, boolean) and findPoints(boolean) to the Polygon2I class.
+	* ADD:		Add the methods contains(Point2I, boolean) and findPoints(boolean) to the Rectangle2I class.
+	* ADD:		Add the methods contains(Point2I, boolean), findPoints(), getLineSegments() and getRectangle() to the Triangle2I class.
+	* ADD:		Add the methods contains(Point2I, boolean), findPoints(), findPoints(boolean), findPointsOfComplement(Shape2I), findPointsOfComplement(Shape2I, boolean), findPointsOfIntersection(Shape2I) and findPointsOfIntersection(Shape2I, boolean) to the Shape2I interface.
+	* REMOVE:	Remove the methods drawCircle(...), drawCircleComplement(...), drawLineSegment(...), drawPolygon(...), drawRectangle(...), drawTriangle(...), fillCircle(...), fillCircleComplement(...), fillPolygon(...), fillRectangle(...) and fillTriangle(...) from the ImageD and ImageF classes.
+	* REMOVE:	Remove the methods contains(Point2I), findPointsOfComplement(), findPointsOfComplement(Rectangle2I), findPointsOfComplement(Rectangle2I, boolean), findPointsOfIntersection(), findPointsOfIntersection(Rectangle2I) and findPointsOfIntersection(Rectangle2I, boolean) from the Circle2I class.
+	* REMOVE:	Remove the method contains(Point2I) from the LineSegment2I class.
+	* REMOVE:	Remove the methods contains(Point2I), findPointsOfIntersection(Rectangle2I) and findPointsOfIntersection(Rectangle2I, boolean) from the Polygon2I class.
+	* REMOVE:	Remove the method contains(Point2I) from the Rectangle2I class.
+	* REMOVE:	Remove the method contains(Point2I) from the Triangle2I class.
+
 2021-11-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method toneMap(double) to the ImageD class.

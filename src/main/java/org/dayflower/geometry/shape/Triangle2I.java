@@ -21,6 +21,8 @@ package org.dayflower.geometry.shape;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2I;
@@ -49,9 +51,11 @@ public final class Triangle2I implements Shape2I {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final List<LineSegment2I> lineSegments;
 	private final Point2I a;
 	private final Point2I b;
 	private final Point2I c;
+	private final Rectangle2I rectangle;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -69,9 +73,31 @@ public final class Triangle2I implements Shape2I {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 		this.c = Objects.requireNonNull(c, "c == null");
+		this.lineSegments = LineSegment2I.fromPoints(a, b, c);
+		this.rectangle = Rectangle2I.fromPoints(a, b, c);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} that contains {@link LineSegment2I} instances that connects all {@link Point2I} instances in this {@code Triangle2I} instance.
+	 * 
+	 * @return a {@code List} that contains {@code LineSegment2I} instances that connects all {@link Point2I} instances in this {@code Triangle2I} instance
+	 */
+	public List<LineSegment2I> getLineSegments() {
+		return new ArrayList<>(this.lineSegments);
+	}
+	
+	/**
+	 * Returns a {@code List} with {@link Point2I} instances contained in this {@code Triangle2I} instance.
+	 * 
+	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Triangle2I} instance, {@code false} otherwise
+	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Triangle2I} instance
+	 */
+	@Override
+	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
+		return this.rectangle.findPoints().stream().filter(point -> contains(point, isIncludingBorderOnly)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
 	
 	/**
 	 * Returns the {@link Point2I} instance denoted by {@code A}.
@@ -98,6 +124,15 @@ public final class Triangle2I implements Shape2I {
 	 */
 	public Point2I getC() {
 		return this.c;
+	}
+	
+	/**
+	 * Returns the {@link Rectangle2I} instance that contains this {@code Triangle2I} instance.
+	 * 
+	 * @return the {@code Rectangle2I} instance that contains this {@code Triangle2I} instance
+	 */
+	public Rectangle2I getRectangle() {
+		return this.rectangle;
 	}
 	
 	/**
@@ -147,6 +182,12 @@ public final class Triangle2I implements Shape2I {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				for(final LineSegment2I lineSegment : this.lineSegments) {
+					if(!lineSegment.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
 				if(!this.a.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -156,6 +197,10 @@ public final class Triangle2I implements Shape2I {
 				}
 				
 				if(!this.c.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.rectangle.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -172,19 +217,13 @@ public final class Triangle2I implements Shape2I {
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param point a {@link Point2I} instance
+	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Triangle2I} instance, {@code false} otherwise
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Triangle2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	@Override
-	public boolean contains(final Point2I point) {
-		final int signA = (point.getX() - this.b.getX()) * (this.a.getY() - this.b.getY()) - (this.a.getX() - this.b.getX()) * (point.getY() - this.b.getY());
-		final int signB = (point.getX() - this.c.getX()) * (this.b.getY() - this.c.getY()) - (this.b.getX() - this.c.getX()) * (point.getY() - this.c.getY());
-		final int signC = (point.getX() - this.a.getX()) * (this.c.getY() - this.a.getY()) - (this.c.getX() - this.a.getX()) * (point.getY() - this.a.getY());
-		
-		final boolean hasNegativeSign = signA < 0 || signB < 0 || signC < 0;
-		final boolean hasPositiveSign = signA > 0 || signB > 0 || signC > 0;
-		
-		return !(hasNegativeSign && hasPositiveSign);
+	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
+		return isIncludingBorderOnly ? doContainsOnLineSegments(point) : doContains(point) || doContainsOnLineSegments(point);
 	}
 	
 	/**
@@ -201,11 +240,15 @@ public final class Triangle2I implements Shape2I {
 			return true;
 		} else if(!(object instanceof Triangle2I)) {
 			return false;
+		} else if(!Objects.equals(this.lineSegments, Triangle2I.class.cast(object).lineSegments)) {
+			return false;
 		} else if(!Objects.equals(this.a, Triangle2I.class.cast(object).a)) {
 			return false;
 		} else if(!Objects.equals(this.b, Triangle2I.class.cast(object).b)) {
 			return false;
 		} else if(!Objects.equals(this.c, Triangle2I.class.cast(object).c)) {
+			return false;
+		} else if(!Objects.equals(this.rectangle, Triangle2I.class.cast(object).rectangle)) {
 			return false;
 		} else {
 			return true;
@@ -229,7 +272,7 @@ public final class Triangle2I implements Shape2I {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.a, this.b, this.c);
+		return Objects.hash(this.lineSegments, this.a, this.b, this.c, this.rectangle);
 	}
 	
 	/**
@@ -254,5 +297,28 @@ public final class Triangle2I implements Shape2I {
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doContains(final Point2I point) {
+		final int signA = (point.getX() - this.b.getX()) * (this.a.getY() - this.b.getY()) - (this.a.getX() - this.b.getX()) * (point.getY() - this.b.getY());
+		final int signB = (point.getX() - this.c.getX()) * (this.b.getY() - this.c.getY()) - (this.b.getX() - this.c.getX()) * (point.getY() - this.c.getY());
+		final int signC = (point.getX() - this.a.getX()) * (this.c.getY() - this.a.getY()) - (this.c.getX() - this.a.getX()) * (point.getY() - this.a.getY());
+		
+		final boolean hasNegativeSign = signA < 0 || signB < 0 || signC < 0;
+		final boolean hasPositiveSign = signA > 0 || signB > 0 || signC > 0;
+		
+		return !(hasNegativeSign && hasPositiveSign);
+	}
+	
+	private boolean doContainsOnLineSegments(final Point2I point) {
+		for(final LineSegment2I lineSegment : this.lineSegments) {
+			if(lineSegment.contains(point)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

@@ -45,14 +45,10 @@ import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.Shape2I;
 import org.dayflower.geometry.Vector2F;
-import org.dayflower.geometry.rasterizer.Rasterizer2I;
-import org.dayflower.geometry.shape.Circle2I;
-import org.dayflower.geometry.shape.LineSegment2I;
-import org.dayflower.geometry.shape.Polygon2I;
 import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.java.util.function.TriFunction;
 import org.dayflower.noise.SimplexNoiseF;
 
@@ -713,512 +709,201 @@ public abstract class ImageF extends Image {
 	public abstract ImageF copy(final Rectangle2I bounds);
 	
 	/**
-	 * Draws {@code circle} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Draws {@code shape} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code shape} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawCircle(circle, Color4F.BLACK);
+	 * image.drawShape(shape, Color4F.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param circle the {@link Circle2I} to draw
+	 * @param shape the {@link Shape2I} to draw
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-	public final ImageF drawCircle(final Circle2I circle) {
-		return drawCircle(circle, Color4F.BLACK);
+	public final ImageF drawShape(final Shape2I shape) {
+		return drawShape(shape, Color4F.BLACK);
 	}
 	
 	/**
-	 * Draws {@code circle} to this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Draws {@code shape} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If either {@code circle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape the {@link Shape2I} to draw
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 */
+	public final ImageF drawShape(final Shape2I shape, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+		Objects.requireNonNull(shape, "shape == null");
+		Objects.requireNonNull(biFunction, "biFunction == null");
+		
+		doChangeBegin();
+		
+		shape.findPointsOfIntersection(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
+		
+		doChangeEnd();
+		
+		return this;
+	}
+	
+	/**
+	 * Draws {@code shape} to this {@code ImageF} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code shape} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawCircle(circle, (color, point) -> colorRGBA);
+	 * image.drawShape(shape, new Color4F(colorRGB));
 	 * }
 	 * </pre>
 	 * 
-	 * @param circle the {@link Circle2I} to draw
+	 * @param shape the {@link Shape2I} to draw
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGB} are {@code null}
+	 */
+	public final ImageF drawShape(final Shape2I shape, final Color3F colorRGB) {
+		Objects.requireNonNull(shape, "shape == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		return drawShape(shape, new Color4F(colorRGB));
+	}
+	
+	/**
+	 * Draws {@code shape} to this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code shape} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.drawShape(shape, (color, point) -> colorRGBA);
+	 * }
+	 * </pre>
+	 * 
+	 * @param shape the {@link Shape2I} to draw
 	 * @param colorRGBA the {@link Color4F} to use as its color
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code colorRGBA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGBA} are {@code null}
 	 */
-	public final ImageF drawCircle(final Circle2I circle, final Color4F colorRGBA) {
-		Objects.requireNonNull(circle, "circle == null");
+	public final ImageF drawShape(final Shape2I shape, final Color4F colorRGBA) {
+		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
-		return drawCircle(circle, (color, point) -> colorRGBA);
+		return drawShape(shape, (color, point) -> colorRGBA);
 	}
 	
 	/**
-	 * Draws {@code circle} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Draws everything except for {@code shape} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param circle the {@link Circle2I} to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
-	 */
-	public final ImageF drawCircle(final Circle2I circle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(circle, "circle == null");
-		Objects.requireNonNull(biFunction, "biFunction == null");
-		
-		doChangeBegin();
-		
-		circle.findPointsOfIntersection(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
-		
-		doChangeEnd();
-		
-		return this;
-	}
-	
-	/**
-	 * Draws everything except for {@code circle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param circle the {@link Circle2I} not to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
-	 */
-	public final ImageF drawCircleComplement(final Circle2I circle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(circle, "circle == null");
-		Objects.requireNonNull(biFunction, "biFunction == null");
-		
-		doChangeBegin();
-		
-		circle.findPointsOfComplement(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
-		
-		doChangeEnd();
-		
-		return this;
-	}
-	
-	/**
-	 * Draws {@code lineSegment} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If {@code lineSegment} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code shape} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawLineSegment(lineSegment, Color4F.BLACK);
+	 * image.drawShapeComplement(shape, Color4F.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param lineSegment the {@link LineSegment2I} to draw
+	 * @param shape the {@link Shape2I} not to draw
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code lineSegment} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-	public final ImageF drawLineSegment(final LineSegment2I lineSegment) {
-		return drawLineSegment(lineSegment, Color4F.BLACK);
+	public final ImageF drawShapeComplement(final Shape2I shape) {
+		return drawShapeComplement(shape, Color4F.BLACK);
 	}
 	
 	/**
-	 * Draws {@code lineSegment} to this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Draws everything except for {@code shape} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If either {@code lineSegment} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape the {@link Shape2I} not to draw
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 */
+	public final ImageF drawShapeComplement(final Shape2I shape, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+		Objects.requireNonNull(shape, "shape == null");
+		Objects.requireNonNull(biFunction, "biFunction == null");
+		
+		doChangeBegin();
+		
+		shape.findPointsOfComplement(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
+		
+		doChangeEnd();
+		
+		return this;
+	}
+	
+	/**
+	 * Draws everything except for {@code shape} in this {@code ImageF} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code shape} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawLineSegment(lineSegment, (color, point) -> colorRGBA);
+	 * image.drawShapeComplement(shape, new Color4F(colorRGB));
 	 * }
 	 * </pre>
 	 * 
-	 * @param lineSegment the {@link LineSegment2I} to draw
-	 * @param colorRGBA the {@link Color4F} to use as its color
+	 * @param shape the {@link Shape2I} not to draw
+	 * @param colorRGB the {@link Color3F} to use as its color
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code lineSegment} or {@code colorRGBA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGB} are {@code null}
 	 */
-	public final ImageF drawLineSegment(final LineSegment2I lineSegment, final Color4F colorRGBA) {
-		Objects.requireNonNull(lineSegment, "lineSegment == null");
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+	public final ImageF drawShapeComplement(final Shape2I shape, final Color3F colorRGB) {
+		Objects.requireNonNull(shape, "shape == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		
-		return drawLineSegment(lineSegment, (color, point) -> colorRGBA);
+		return drawShapeComplement(shape, new Color4F(colorRGB));
 	}
 	
 	/**
-	 * Draws {@code lineSegment} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Draws everything except for {@code shape} in this {@code ImageF} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If either {@code lineSegment} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param lineSegment the {@link LineSegment2I} to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code lineSegment} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
-	 */
-	public final ImageF drawLineSegment(final LineSegment2I lineSegment, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(lineSegment, "lineSegment == null");
-		Objects.requireNonNull(biFunction, "biFunction == null");
-		
-		doChangeBegin();
-		doDrawLineSegment(lineSegment, biFunction);
-		doChangeEnd();
-		
-		return this;
-	}
-	
-	/**
-	 * Draws {@code polygon} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If {@code polygon} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.drawPolygon(polygon, Color4F.BLACK);
-	 * }
-	 * </pre>
-	 * 
-	 * @param polygon the {@link Polygon2I} to draw
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code polygon} is {@code null}
-	 */
-	public final ImageF drawPolygon(final Polygon2I polygon) {
-		return drawPolygon(polygon, Color4F.BLACK);
-	}
-	
-	/**
-	 * Draws {@code polygon} to this {@code ImageF} instance with {@code colorRGBA} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code polygon} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code shape} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawPolygon(polygon, (color, point) -> colorRGBA);
+	 * image.drawShapeComplement(shape, (color, point) -> colorRGBA);
 	 * }
 	 * </pre>
 	 * 
-	 * @param polygon the {@link Polygon2I} to draw
+	 * @param shape the {@link Shape2I} not to draw
 	 * @param colorRGBA the {@link Color4F} to use as its color
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code polygon} or {@code colorRGBA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGBA} are {@code null}
 	 */
-	public final ImageF drawPolygon(final Polygon2I polygon, final Color4F colorRGBA) {
-		Objects.requireNonNull(polygon, "polygon == null");
+	public final ImageF drawShapeComplement(final Shape2I shape, final Color4F colorRGBA) {
+		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
-		return drawPolygon(polygon, (color, point) -> colorRGBA);
-	}
-	
-	/**
-	 * Draws {@code polygon} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code polygon} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param polygon the {@link Polygon2I} to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code polygon} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
-	 */
-	public final ImageF drawPolygon(final Polygon2I polygon, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(polygon, "polygon == null");
-		Objects.requireNonNull(biFunction, "biFunction == null");
-		
-		final List<LineSegment2I> lineSegments = polygon.getLineSegments();
-		
-		doChangeBegin();
-		
-		for(final LineSegment2I lineSegment : lineSegments) {
-			doDrawLineSegment(lineSegment, biFunction);
-		}
-		
-		doChangeEnd();
-		
-		return this;
-	}
-	
-	/**
-	 * Draws {@code rectangle} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.drawRectangle(rectangle, Color4F.BLACK);
-	 * }
-	 * </pre>
-	 * 
-	 * @param rectangle the {@link Rectangle2I} to draw
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
-	 */
-	public final ImageF drawRectangle(final Rectangle2I rectangle) {
-		return drawRectangle(rectangle, Color4F.BLACK);
-	}
-	
-	/**
-	 * Draws {@code rectangle} to this {@code ImageF} instance with {@code colorRGBA} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code rectangle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is essentially equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.drawRectangle(rectangle, (color, point) -> colorRGBA);
-	 * }
-	 * </pre>
-	 * 
-	 * @param rectangle the {@link Rectangle2I} to draw
-	 * @param colorRGBA the {@link Color4F} to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code colorRGBA} are {@code null}
-	 */
-	public final ImageF drawRectangle(final Rectangle2I rectangle, final Color4F colorRGBA) {
-		Objects.requireNonNull(rectangle, "rectangle == null");
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		
-		return drawRectangle(rectangle, (color, point) -> colorRGBA);
-	}
-	
-	/**
-	 * Draws {@code rectangle} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code rectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param rectangle the {@link Rectangle2I} to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
-	 */
-	public final ImageF drawRectangle(final Rectangle2I rectangle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(rectangle, "rectangle == null");
-		Objects.requireNonNull(biFunction, "biFunction == null");
-		
-		doChangeBegin();
-		
-		final int minimumX = rectangle.getA().getX();
-		final int minimumY = rectangle.getA().getY();
-		final int maximumX = rectangle.getC().getX();
-		final int maximumY = rectangle.getC().getY();
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(int y = minimumY; y <= maximumY; y++) {
-			for(int x = minimumX; x <= maximumX; x++) {
-				if((x == minimumX || x == maximumX || y == minimumY || y == maximumY) && x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
-					final Point2I point = new Point2I(x, y);
-					
-					final Color4F oldColorRGBA = getColorRGBA(x, y);
-					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-					
-					doSetColorRGBA(newColorRGBA, x, y);
-				}
-			}
-		}
-		
-		doChangeEnd();
-		
-		return this;
-	}
-	
-	/**
-	 * Draws {@code triangle} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If {@code triangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.drawTriangle(triangle, Color4F.BLACK);
-	 * }
-	 * </pre>
-	 * 
-	 * @param triangle the {@link Triangle2I} to draw
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code triangle} is {@code null}
-	 */
-	public final ImageF drawTriangle(final Triangle2I triangle) {
-		return drawTriangle(triangle, Color4F.BLACK);
-	}
-	
-	/**
-	 * Draws {@code triangle} to this {@code ImageF} instance with {@code colorRGBA} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code triangle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is essentially equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.drawTriangle(triangle, (color, point) -> colorRGBA);
-	 * }
-	 * </pre>
-	 * 
-	 * @param triangle the {@link Triangle2I} to draw
-	 * @param colorRGBA the {@link Color4F} to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code colorRGBA} are {@code null}
-	 */
-	public final ImageF drawTriangle(final Triangle2I triangle, final Color4F colorRGBA) {
-		Objects.requireNonNull(triangle, "triangle == null");
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		
-		return drawTriangle(triangle, (color, point) -> colorRGBA);
-	}
-	
-	/**
-	 * Draws {@code triangle} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code triangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param triangle the {@link Triangle2I} to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
-	 */
-	public final ImageF drawTriangle(final Triangle2I triangle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(triangle, "triangle == null");
-		Objects.requireNonNull(biFunction, "biFunction == null");
-		
-		doChangeBegin();
-		doDrawLineSegment(new LineSegment2I(triangle.getA(), triangle.getB()), biFunction);
-		doDrawLineSegment(new LineSegment2I(triangle.getB(), triangle.getC()), biFunction);
-		doDrawLineSegment(new LineSegment2I(triangle.getC(), triangle.getA()), biFunction);
-		doChangeEnd();
-		
-		return this;
-	}
-	
-	/**
-	 * Fills {@code circle} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.fillCircle(circle, Color4F.BLACK);
-	 * }
-	 * </pre>
-	 * 
-	 * @param circle the {@link Circle2I} to fill
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
-	 */
-	public final ImageF fillCircle(final Circle2I circle) {
-		return fillCircle(circle, Color4F.BLACK);
-	}
-	
-	/**
-	 * Fills {@code circle} in this {@code ImageF} instance with {@code colorRGBA} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code circle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is essentially equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.fillCircle(circle, (color, point) -> colorRGBA);
-	 * }
-	 * </pre>
-	 * 
-	 * @param circle the {@link Circle2I} to fill
-	 * @param colorRGBA the {@link Color4F} to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code colorRGBA} are {@code null}
-	 */
-	public final ImageF fillCircle(final Circle2I circle, final Color4F colorRGBA) {
-		Objects.requireNonNull(circle, "circle == null");
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		
-		return fillCircle(circle, (color, point) -> colorRGBA);
-	}
-	
-	/**
-	 * Fills {@code circle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param circle the {@link Circle2I} to fill
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
-	 */
-	public final ImageF fillCircle(final Circle2I circle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(circle, "circle == null");
-		Objects.requireNonNull(biFunction, "biFunction == null");
-		
-		doChangeBegin();
-		
-		circle.findPointsOfIntersection(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
-		
-		doChangeEnd();
-		
-		return this;
-	}
-	
-	/**
-	 * Fills everything except for {@code circle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param circle the {@link Circle2I} not to fill
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
-	 */
-	public final ImageF fillCircleComplement(final Circle2I circle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(circle, "circle == null");
-		Objects.requireNonNull(biFunction, "biFunction == null");
-		
-		doChangeBegin();
-		
-		circle.findPointsOfComplement(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
-		
-		doChangeEnd();
-		
-		return this;
+		return drawShapeComplement(shape, (color, point) -> colorRGBA);
 	}
 	
 	/**
@@ -1436,72 +1121,46 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Fills {@code polygon} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Fills {@code shape} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If {@code polygon} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code shape} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillPolygon(polygon, Color4F.BLACK);
+	 * image.fillShape(shape, Color4F.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param polygon the {@link Polygon2I} to fill
+	 * @param shape the {@link Shape2I} to fill
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code polygon} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-	public final ImageF fillPolygon(final Polygon2I polygon) {
-		return fillPolygon(polygon, Color4F.BLACK);
+	public final ImageF fillShape(final Shape2I shape) {
+		return fillShape(shape, Color4F.BLACK);
 	}
 	
 	/**
-	 * Fills {@code polygon} in this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Fills {@code shape} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If either {@code polygon} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is essentially equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.fillPolygon(polygon, (color, point) -> colorRGBA);
-	 * }
-	 * </pre>
+	 * If either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param polygon the {@link Polygon2I} to fill
-	 * @param colorRGBA the {@link Color4F} to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code polygon} or {@code colorRGBA} are {@code null}
-	 */
-	public final ImageF fillPolygon(final Polygon2I polygon, final Color4F colorRGBA) {
-		Objects.requireNonNull(polygon, "polygon == null");
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		
-		return fillPolygon(polygon, (color, point) -> colorRGBA);
-	}
-	
-	/**
-	 * Fills {@code polygon} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code polygon} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param polygon the {@link Polygon2I} to fill
+	 * @param shape the {@link Shape2I} to fill
 	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code polygon} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final ImageF fillPolygon(final Polygon2I polygon, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(polygon, "polygon == null");
+	public final ImageF fillShape(final Shape2I shape, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
 		doChangeBegin();
 		
-		polygon.findPointsOfIntersection(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
+		shape.findPointsOfIntersection(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
 		
 		doChangeEnd();
 		
@@ -1509,121 +1168,154 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Fills {@code shape} in this {@code ImageF} instance with {@code colorRGB} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.fillRectangle(rectangle, Color4F.BLACK);
-	 * }
-	 * </pre>
-	 * 
-	 * @param rectangle the {@link Rectangle2I} to fill
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
-	 */
-	public final ImageF fillRectangle(final Rectangle2I rectangle) {
-		return fillRectangle(rectangle, Color4F.BLACK);
-	}
-	
-	/**
-	 * Fills {@code rectangle} in this {@code ImageF} instance with {@code colorRGB} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code rectangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code shape} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillRectangle(rectangle, new Color4F(colorRGB));
+	 * image.fillShape(shape, new Color4F(colorRGB));
 	 * }
 	 * </pre>
 	 * 
-	 * @param rectangle the {@link Rectangle2I} to fill
+	 * @param shape the {@link Shape2I} to fill
 	 * @param colorRGB the {@link Color3F} to use as its color
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code colorRGB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGB} are {@code null}
 	 */
-	public final ImageF fillRectangle(final Rectangle2I rectangle, final Color3F colorRGB) {
-		Objects.requireNonNull(rectangle, "rectangle == null");
+	public final ImageF fillShape(final Shape2I shape, final Color3F colorRGB) {
+		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		
-		return fillRectangle(rectangle, new Color4F(colorRGB));
+		return fillShape(shape, new Color4F(colorRGB));
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Fills {@code shape} in this {@code ImageF} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If either {@code rectangle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code shape} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillRectangle(rectangle, (color, point) -> colorRGBA);
+	 * image.fillShape(shape, (color, point) -> colorRGBA);
 	 * }
 	 * </pre>
 	 * 
-	 * @param rectangle the {@link Rectangle2I} to fill
+	 * @param shape the {@link Shape2I} to fill
 	 * @param colorRGBA the {@link Color4F} to use as its color
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code colorRGBA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGBA} are {@code null}
 	 */
-	public final ImageF fillRectangle(final Rectangle2I rectangle, final Color4F colorRGBA) {
-		Objects.requireNonNull(rectangle, "rectangle == null");
+	public final ImageF fillShape(final Shape2I shape, final Color4F colorRGBA) {
+		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
-		return fillRectangle(rectangle, (color, point) -> colorRGBA);
+		return fillShape(shape, (color, point) -> colorRGBA);
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Fills everything except for {@code shape} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * <p>
-	 * If either {@code rectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code shape} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillShapeComplement(shape, Color4F.BLACK);
+	 * }
+	 * </pre>
 	 * 
-	 * @param rectangle the {@link Rectangle2I} to fill
+	 * @param shape the {@link Shape2I} not to fill
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
+	 */
+	public final ImageF fillShapeComplement(final Shape2I shape) {
+		return fillShapeComplement(shape, Color4F.BLACK);
+	}
+	
+	/**
+	 * Fills everything except for {@code shape} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape the {@link Shape2I} not to fill
 	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
 	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final ImageF fillRectangle(final Rectangle2I rectangle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(rectangle, "rectangle == null");
+	public final ImageF fillShapeComplement(final Shape2I shape, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
 		doChangeBegin();
 		
-		final int minimumX = rectangle.getA().getX();
-		final int minimumY = rectangle.getA().getY();
-		final int maximumX = rectangle.getC().getX();
-		final int maximumY = rectangle.getC().getY();
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(int y = minimumY; y <= maximumY; y++) {
-			for(int x = minimumX; x <= maximumX; x++) {
-				if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
-					final Point2I point = new Point2I(x, y);
-					
-					final Color4F oldColorRGBA = getColorRGBA(x, y);
-					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-					
-					doSetColorRGBA(newColorRGBA, x, y);
-				}
-			}
-		}
+		shape.findPointsOfComplement(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
 		
 		doChangeEnd();
 		
 		return this;
+	}
+	
+	/**
+	 * Fills everything except for {@code shape} in this {@code ImageF} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code shape} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillShapeComplement(shape, new Color4F(colorRGB));
+	 * }
+	 * </pre>
+	 * 
+	 * @param shape the {@link Shape2I} not to fill
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGB} are {@code null}
+	 */
+	public final ImageF fillShapeComplement(final Shape2I shape, final Color3F colorRGB) {
+		Objects.requireNonNull(shape, "shape == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		return fillShapeComplement(shape, new Color4F(colorRGB));
+	}
+	
+	/**
+	 * Fills everything except for {@code shape} in this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code shape} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillShapeComplement(shape, (color, point) -> colorRGBA);
+	 * }
+	 * </pre>
+	 * 
+	 * @param shape the {@link Shape2I} not to fill
+	 * @param colorRGBA the {@link Color4F} to use as its color
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGBA} are {@code null}
+	 */
+	public final ImageF fillShapeComplement(final Shape2I shape, final Color4F colorRGBA) {
+		Objects.requireNonNull(shape, "shape == null");
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
+		
+		return fillShapeComplement(shape, (color, point) -> colorRGBA);
 	}
 	
 	/**
@@ -1696,98 +1388,6 @@ public abstract class ImageF extends Image {
 			
 			return new Color4F(Color3F.multiply(baseColor, noise));
 		});
-	}
-	
-	/**
-	 * Fills {@code triangle} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If {@code triangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.fillTriangle(triangle, Color4F.BLACK);
-	 * }
-	 * </pre>
-	 * 
-	 * @param triangle the {@link Triangle2I} to fill
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code triangle} is {@code null}
-	 */
-	public final ImageF fillTriangle(final Triangle2I triangle) {
-		return fillTriangle(triangle, Color4F.BLACK);
-	}
-	
-	/**
-	 * Fills {@code triangle} in this {@code ImageF} instance with {@code colorRGBA} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code triangle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is essentially equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.fillTriangle(triangle, (color, point) -> colorRGBA);
-	 * }
-	 * </pre>
-	 * 
-	 * @param triangle the {@link Triangle2I} to fill
-	 * @param colorRGBA the {@link Color4F} to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code colorRGBA} are {@code null}
-	 */
-	public final ImageF fillTriangle(final Triangle2I triangle, final Color4F colorRGBA) {
-		Objects.requireNonNull(triangle, "triangle == null");
-		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
-		
-		return fillTriangle(triangle, (color, point) -> colorRGBA);
-	}
-	
-	/**
-	 * Fills {@code triangle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
-	 * <p>
-	 * Returns this {@code ImageF} instance.
-	 * <p>
-	 * If either {@code triangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param triangle the {@link Triangle2I} to fill
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
-	 * @return this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
-	 */
-	public final ImageF fillTriangle(final Triangle2I triangle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		Objects.requireNonNull(triangle, "triangle == null");
-		Objects.requireNonNull(biFunction, "biFunction == null");
-		
-		doChangeBegin();
-		
-		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(getResolutionX(), getResolutionY()));
-		
-		final Point2I[][] scanlines = Rasterizer2I.rasterize(triangle, rectangle);
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(final Point2I[] scanline : scanlines) {
-			for(final Point2I point : scanline) {
-				final int x = point.getX();
-				final int y = point.getY();
-				
-				if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
-					final Color4F oldColorRGBA = getColorRGBA(x, y);
-					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-					
-					doSetColorRGBA(newColorRGBA, point.getX(), point.getY());
-				}
-			}
-		}
-		
-		doChangeEnd();
-		
-		return this;
 	}
 	
 	/**
@@ -2682,27 +2282,6 @@ public abstract class ImageF extends Image {
 			changeHistory.push(change);
 			
 			changeCombiner.clear();
-		}
-	}
-	
-	private void doDrawLineSegment(final LineSegment2I lineSegment, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
-		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(getResolutionX(), getResolutionY()));
-		
-		final Point2I[] scanline = Rasterizer2I.rasterize(lineSegment, rectangle);
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(final Point2I point : scanline) {
-			final int x = point.getX();
-			final int y = point.getY();
-			
-			if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
-				final Color4F oldColorRGBA = getColorRGBA(x, y);
-				final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-				
-				doSetColorRGBA(newColorRGBA, point.getX(), point.getY());
-			}
 		}
 	}
 }

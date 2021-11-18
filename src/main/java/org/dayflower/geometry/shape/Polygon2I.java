@@ -88,61 +88,14 @@ public final class Polygon2I implements Shape2I {
 	}
 	
 	/**
-	 * Returns a {@code List} with {@link Point2I} instances that represents the intersection between this {@code Polygon2I} instance and {@code rectangle}.
-	 * <p>
-	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * polygon.findPointsOfIntersection(rectangle, false);
-	 * }
-	 * </pre>
+	 * Returns a {@code List} with {@link Point2I} instances contained in this {@code Polygon2I} instance.
 	 * 
-	 * @param rectangle a {@link Rectangle2I} instance
-	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Polygon2I} instance and {@code rectangle}
-	 */
-	public List<Point2I> findPointsOfIntersection(final Rectangle2I rectangle) {
-		return findPointsOfIntersection(rectangle, false);
-	}
-	
-	/**
-	 * Returns a {@code List} with {@link Point2I} instances that represents the intersection between this {@code Polygon2I} instance and {@code rectangle}.
-	 * <p>
-	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param rectangle a {@link Rectangle2I} instance
 	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Polygon2I} instance, {@code false} otherwise
-	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Polygon2I} instance and {@code rectangle}
+	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Polygon2I} instance
 	 */
-	public List<Point2I> findPointsOfIntersection(final Rectangle2I rectangle, final boolean isIncludingBorderOnly) {
-		Objects.requireNonNull(rectangle, "rectangle == null");
-		
-		final List<Point2I> points = new ArrayList<>();
-		
-		Rectangle2I.intersection(this.rectangle, rectangle).ifPresent(rectangleIntersection -> {
-			final Point2I minimum = rectangleIntersection.getA();
-			final Point2I maximum = rectangleIntersection.getC();
-			
-			final int minimumX = minimum.getX();
-			final int minimumY = minimum.getY();
-			final int maximumX = maximum.getX();
-			final int maximumY = maximum.getY();
-			
-			for(int y = minimumY; y <= maximumY; y++) {
-				for(int x = minimumX; x <= maximumX; x++) {
-					final Point2I point = new Point2I(x, y);
-					
-					if(isIncludingBorderOnly && doContainsOnLineSegments(point)) {
-						points.add(point);
-					} else if(!isIncludingBorderOnly && (doContains(point) || doContainsOnLineSegments(point))) {
-						points.add(point);
-					}
-				}
-			}
-		});
-		
-		return points;
+	@Override
+	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
+		return this.rectangle.findPoints().stream().filter(point -> contains(point, isIncludingBorderOnly)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	}
 	
 	/**
@@ -239,12 +192,13 @@ public final class Polygon2I implements Shape2I {
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param point a {@link Point2I} instance
+	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Polygon2I} instance, {@code false} otherwise
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Polygon2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	@Override
-	public boolean contains(final Point2I point) {
-		return this.rectangle.contains(point) ? doContains(point) || doContainsOnLineSegments(point) : false;
+	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
+		return isIncludingBorderOnly ? doContainsOnLineSegments(point) : doContains(point) || doContainsOnLineSegments(point);
 	}
 	
 	/**

@@ -20,6 +20,7 @@ package org.dayflower.test;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point2I;
@@ -83,6 +84,11 @@ public final class Test {
 		doTestImageFSepia();
 		doTestImageFUndoAndRedo();
 		doTestImageFUpdate();
+		doTestImageFUpdateToneMapFilmicCurveACESModifiedVersion1();
+		doTestImageFUpdateToneMapReinhard();
+		doTestImageFUpdateToneMapReinhardModifiedVersion1();
+		doTestImageFUpdateToneMapReinhardModifiedVersion2();
+		doTestImageFUpdateToneMapUnreal3();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,5 +421,50 @@ public final class Test {
 		ImageF imageF = new IntImageF(800, 800);
 		imageF.update((color, point) -> Shape2I.containsIntersection(point, shapeLHS, shapeRHS) ? Color4F.RED : Color4F.WHITE);
 		imageF.save("./generated/Test/Image-Update.png");
+	}
+	
+	private static void doTestImageFUpdateToneMapFilmicCurveACESModifiedVersion1() {
+		final
+		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
+		imageF.update((color, point) -> ColorSpaceF.getDefault().undoGammaCorrection(color));
+		imageF.update((color, point) -> new Color4F(Color3F.toneMapFilmicCurveACESModifiedVersion1(new Color3F(color), 1.0F)));
+		imageF.update((color, point) -> ColorSpaceF.getDefault().redoGammaCorrection(color));
+		imageF.save("./generated/Test/Image-Update-Tone-Map-Filmic-Curve-ACES-Modified-Version-1.png");
+	}
+	
+	private static void doTestImageFUpdateToneMapReinhard() {
+		final
+		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
+		imageF.update((color, point) -> ColorSpaceF.getDefault().undoGammaCorrection(color));
+		imageF.update((color, point) -> new Color4F(Color3F.toneMapReinhard(new Color3F(color), 1.0F)));
+		imageF.update((color, point) -> ColorSpaceF.getDefault().redoGammaCorrection(color));
+		imageF.save("./generated/Test/Image-Update-Tone-Map-Reinhard.png");
+	}
+	
+	private static void doTestImageFUpdateToneMapReinhardModifiedVersion1() {
+		final
+		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
+		imageF.update((color, point) -> ColorSpaceF.getDefault().undoGammaCorrection(color));
+		imageF.update((color, point) -> new Color4F(Color3F.toneMapReinhardModifiedVersion1(new Color3F(color), 1.0F)));
+		imageF.update((color, point) -> ColorSpaceF.getDefault().redoGammaCorrection(color));
+		imageF.save("./generated/Test/Image-Update-Tone-Map-Reinhard-Modified-Version-1.png");
+	}
+	
+	private static void doTestImageFUpdateToneMapReinhardModifiedVersion2() {
+		final
+		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
+		imageF.update((color, point) -> ColorSpaceF.getDefault().undoGammaCorrection(color));
+		imageF.update((color, point) -> new Color4F(Color3F.toneMapReinhardModifiedVersion2(new Color3F(color), 1.0F)));
+		imageF.update((color, point) -> ColorSpaceF.getDefault().redoGammaCorrection(color));
+		imageF.save("./generated/Test/Image-Update-Tone-Map-Reinhard-Modified-Version-2.png");
+	}
+	
+	private static void doTestImageFUpdateToneMapUnreal3() {
+		final
+		ImageF imageF = IntImageF.load("./generated/Test/Image-Original.jpg");
+		imageF.update((color, point) -> ColorSpaceF.getDefault().undoGammaCorrection(color));
+		imageF.update((color, point) -> new Color4F(Color3F.toneMapUnreal3(new Color3F(color), 1.0F)));
+		imageF.update((color, point) -> ColorSpaceF.getDefault().redoGammaCorrection(color));
+		imageF.save("./generated/Test/Image-Update-Tone-Map-Unreal-3.png");
 	}
 }

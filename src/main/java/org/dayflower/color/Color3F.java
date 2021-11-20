@@ -368,6 +368,31 @@ public final class Color3F {
 	}
 	
 	/**
+	 * Compares {@code color3F} to this {@code Color3F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code color3F} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param color3F the {@code Color3F} to compare to this {@code Color3F} instance for equality
+	 * @return {@code true} if, and only if, {@code color3F} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise
+	 */
+//	TODO: Add Unit Tests!
+	public boolean equals(final Color3F color3F) {
+		if(color3F == this) {
+			return true;
+		} else if(color3F == null) {
+			return false;
+		} else if(!equal(this.component1, color3F.component1)) {
+			return false;
+		} else if(!equal(this.component2, color3F.component2)) {
+			return false;
+		} else if(!equal(this.component3, color3F.component3)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Color3F} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise.
@@ -381,14 +406,8 @@ public final class Color3F {
 			return true;
 		} else if(!(object instanceof Color3F)) {
 			return false;
-		} else if(!equal(this.component1, Color3F.class.cast(object).component1)) {
-			return false;
-		} else if(!equal(this.component2, Color3F.class.cast(object).component2)) {
-			return false;
-		} else if(!equal(this.component3, Color3F.class.cast(object).component3)) {
-			return false;
 		} else {
-			return true;
+			return equals(Color3F.class.cast(object));
 		}
 	}
 	

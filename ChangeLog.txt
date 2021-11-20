@@ -1,3 +1,11 @@
+2021-11-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method equals(Color3D) to the Color3D class.
+	* ADD:		Add the method equals(Color3F) to the Color3F class.
+	* ADD:		Add the method equals(BSDF) to the BSDF class.
+	* ADD:		Add the field bXDFMatchArray_$private$8 to the AbstractMaterialKernel class. It stores the IDs for matching BXDFs, to simplify selection.
+	* CHANGE:	Optimize the BSDF class.
+
 2021-11-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods drawShape(Shape2I), drawShape(Shape2I, BiFunction<Color4D, Point2I, Color4D>), drawShape(Shape2I, Color3D), drawShape(Shape2I, Color4D), drawShapeComplement(Shape2I), drawShapeComplement(Shape2I, BiFunction<Color4D, Point2I, Color4D>), drawShapeComplement(Shape2I, Color3D), drawShapeComplement(Shape2I, Color4D), fillShape(Shape2I), fillShape(Shape2I, BiFunction<Color4D, Point2I, Color4D>), fillShape(Shape2I, Color3D), fillShape(Shape2I, Color4D), fillShapeComplement(Shape2I), fillShapeComplement(Shape2I, BiFunction<Color4D, Point2I, Color4D>), fillShapeComplement(Shape2I, Color3D) and fillShapeComplement(Shape2I, Color4D) to the ImageD class.

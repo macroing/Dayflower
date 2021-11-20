@@ -305,7 +305,16 @@ public final class BSDF {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final int matches = doComputeMatches(bXDFType);
+		final Vector3F outgoing = this.outgoingLocalSpace;
+		final Vector3F normal = this.normalLocalSpace;
+		
+		if(isZero(outgoing.getZ())) {
+			return Optional.empty();
+		}
+		
+		final BXDF[] matchingBXDFs = new BXDF[8];
+		
+		final int matches = doComputeMatches(bXDFType, matchingBXDFs);
 		
 		if(matches == 0) {
 			return Optional.empty();
@@ -313,20 +322,9 @@ public final class BSDF {
 		
 		final int match = min((int)(floor(sample.getU() * matches)), matches - 1);
 		
-		final BXDF matchingBXDF = doGetMatchingBXDF(bXDFType, match);
-		
-		if(matchingBXDF == null) {
-			return Optional.empty();
-		}
+		final BXDF matchingBXDF = matchingBXDFs[match];
 		
 		final Point2F sampleRemapped = new Point2F(min(sample.getU() * matches - match, 0.99999994F), sample.getV());
-		
-		final Vector3F outgoing = this.outgoingLocalSpace;
-		final Vector3F normal = this.normalLocalSpace;
-		
-		if(isZero(outgoing.getZ())) {
-			return Optional.empty();
-		}
 		
 		final Optional<BXDFResult> optionalBXDFResult = matchingBXDF.sampleDistributionFunction(outgoing, normal, sampleRemapped);
 		
@@ -345,18 +343,6 @@ public final class BSDF {
 		
 		float probabilityDensityFunctionValue = bXDFResult.getProbabilityDensityFunctionValue();
 		
-		if(matches > 1 && !matchingBXDF.getBXDFType().isSpecular()) {
-			for(final BXDF bXDF : this.bXDFs) {
-				if(matchingBXDF != bXDF && bXDF.getBXDFType().matches(bXDFType)) {
-					probabilityDensityFunctionValue += bXDF.evaluateProbabilityDensityFunction(outgoing, normal, incoming);
-				}
-			}
-		}
-		
-		if(matches > 1) {
-			probabilityDensityFunctionValue /= matches;
-		}
-		
 		if(!matchingBXDF.getBXDFType().isSpecular()) {
 			final float iDotN = Vector3F.dotProduct(incomingWorldSpaceCorrectlyOriented, surfaceNormalG);
 			final float oDotN = Vector3F.dotProduct(this.outgoingWorldSpace, surfaceNormalG);
@@ -365,11 +351,21 @@ public final class BSDF {
 			
 			result = Color3F.BLACK;
 			
-			for(final BXDF bXDF : this.bXDFs) {
-				if(bXDF.getBXDFType().matches(bXDFType) && (isReflecting && bXDF.getBXDFType().hasReflection() || !isReflecting && bXDF.getBXDFType().hasTransmission())) {
+			for(int i = 0; i < matches; i++) {
+				final BXDF bXDF = matchingBXDFs[i];
+				
+				if(matchingBXDF != bXDF) {
+					probabilityDensityFunctionValue += bXDF.evaluateProbabilityDensityFunction(outgoing, normal, incoming);
+				}
+				
+				if(isReflecting && bXDF.getBXDFType().hasReflection() || !isReflecting && bXDF.getBXDFType().hasTransmission()) {
 					result = Color3F.add(result, bXDF.evaluateDistributionFunction(outgoing, normal, incoming));
 				}
 			}
+		}
+		
+		if(matches > 1) {
+			probabilityDensityFunctionValue /= matches;
 		}
 		
 		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpaceCorrectlyOriented, this.outgoingWorldSpace, probabilityDensityFunctionValue));
@@ -386,6 +382,40 @@ public final class BSDF {
 	}
 	
 	/**
+	 * Compares {@code bSDF} to this {@code BSDF} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code bSDF} is an instance of {@code BSDF}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param bSDF the {@code BSDF} to compare to this {@code BSDF} instance for equality
+	 * @return {@code true} if, and only if, {@code bSDF} is an instance of {@code BSDF}, and their respective values are equal, {@code false} otherwise
+	 */
+	public boolean equals(final BSDF bSDF) {
+		if(bSDF == this) {
+			return true;
+		} else if(bSDF == null) {
+			return false;
+		} else if(!Objects.equals(this.intersection, bSDF.intersection)) {
+			return false;
+		} else if(!Objects.equals(this.bXDFs, bSDF.bXDFs)) {
+			return false;
+		} else if(!Objects.equals(this.normalLocalSpace, bSDF.normalLocalSpace)) {
+			return false;
+		} else if(!Objects.equals(this.normalWorldSpace, bSDF.normalWorldSpace)) {
+			return false;
+		} else if(!Objects.equals(this.outgoingLocalSpace, bSDF.outgoingLocalSpace)) {
+			return false;
+		} else if(!Objects.equals(this.outgoingWorldSpace, bSDF.outgoingWorldSpace)) {
+			return false;
+		} else if(this.isNegatingIncoming != bSDF.isNegatingIncoming) {
+			return false;
+		} else if(!equal(this.eta, bSDF.eta)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code BSDF} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BSDF}, and their respective values are equal, {@code false} otherwise.
@@ -399,24 +429,8 @@ public final class BSDF {
 			return true;
 		} else if(!(object instanceof BSDF)) {
 			return false;
-		} else if(!Objects.equals(this.intersection, BSDF.class.cast(object).intersection)) {
-			return false;
-		} else if(!Objects.equals(this.bXDFs, BSDF.class.cast(object).bXDFs)) {
-			return false;
-		} else if(!Objects.equals(this.normalLocalSpace, BSDF.class.cast(object).normalLocalSpace)) {
-			return false;
-		} else if(!Objects.equals(this.normalWorldSpace, BSDF.class.cast(object).normalWorldSpace)) {
-			return false;
-		} else if(!Objects.equals(this.outgoingLocalSpace, BSDF.class.cast(object).outgoingLocalSpace)) {
-			return false;
-		} else if(!Objects.equals(this.outgoingWorldSpace, BSDF.class.cast(object).outgoingWorldSpace)) {
-			return false;
-		} else if(this.isNegatingIncoming != BSDF.class.cast(object).isNegatingIncoming) {
-			return false;
-		} else if(!equal(this.eta, BSDF.class.cast(object).eta)) {
-			return false;
 		} else {
-			return true;
+			return equals(BSDF.class.cast(object));
 		}
 	}
 	
@@ -507,18 +521,6 @@ public final class BSDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private BXDF doGetMatchingBXDF(final BXDFType bXDFType, final int match) {
-		for(int i = 0, j = match; i < this.bXDFs.size(); i++) {
-			final BXDF bXDF = this.bXDFs.get(i);
-			
-			if(bXDF.getBXDFType().matches(bXDFType) && j-- == 0) {
-				return bXDF;
-			}
-		}
-		
-		return null;
-	}
-	
 	private Vector3F doTransformToLocalSpace(final Vector3F vector) {
 		return Vector3F.normalize(Vector3F.transformReverse(vector, this.intersection.getOrthonormalBasisS()));
 	}
@@ -527,11 +529,13 @@ public final class BSDF {
 		return Vector3F.normalize(Vector3F.transform(vector, this.intersection.getOrthonormalBasisS()));
 	}
 	
-	private int doComputeMatches(final BXDFType bXDFType) {
+	private int doComputeMatches(final BXDFType bXDFType, final BXDF[] matchingBXDFs) {
 		int matches = 0;
 		
 		for(final BXDF bXDF : this.bXDFs) {
 			if(bXDF.getBXDFType().matches(bXDFType)) {
+				matchingBXDFs[matches] = bXDF;
+				
 				matches++;
 			}
 		}

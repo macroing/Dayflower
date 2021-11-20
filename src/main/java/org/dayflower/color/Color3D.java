@@ -368,6 +368,31 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Compares {@code color3D} to this {@code Color3D} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code color3D} is an instance of {@code Color3D}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param color3D the {@code Color3D} to compare to this {@code Color3D} instance for equality
+	 * @return {@code true} if, and only if, {@code color3D} is an instance of {@code Color3D}, and their respective values are equal, {@code false} otherwise
+	 */
+//	TODO: Add Unit Tests!
+	public boolean equals(final Color3D color3D) {
+		if(color3D == this) {
+			return true;
+		} else if(color3D == null) {
+			return false;
+		} else if(!equal(this.component1, color3D.component1)) {
+			return false;
+		} else if(!equal(this.component2, color3D.component2)) {
+			return false;
+		} else if(!equal(this.component3, color3D.component3)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Color3D} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Color3D}, and their respective values are equal, {@code false} otherwise.
@@ -381,14 +406,8 @@ public final class Color3D {
 			return true;
 		} else if(!(object instanceof Color3D)) {
 			return false;
-		} else if(!equal(this.component1, Color3D.class.cast(object).component1)) {
-			return false;
-		} else if(!equal(this.component2, Color3D.class.cast(object).component2)) {
-			return false;
-		} else if(!equal(this.component3, Color3D.class.cast(object).component3)) {
-			return false;
 		} else {
-			return true;
+			return equals(Color3D.class.cast(object));
 		}
 	}
 	

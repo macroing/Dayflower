@@ -1229,20 +1229,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doMaterialDisneyMaterialComputeBSDF(final int materialDisneyMaterialArrayOffset) {
 		/*
-		 * Modify the surface using the Modifier instance:
+		 * Load data:
 		 */
 		
 		final int textureEmissionAndModifier = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
-		
-		final int modifierID     = (textureEmissionAndModifier >> 16) & 0xFF;
-		final int modifierOffset = (textureEmissionAndModifier >> 24) & 0xFF;
-		
-		modifierModify(modifierID, modifierOffset);
-		
-		/*
-		 * Evaluate the Texture instances:
-		 */
-		
 		final int textureAnisotropic = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_ANISOTROPIC];
 		final int textureClearCoatAndTextureClearCoatGloss = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS];
 		final int textureColorAndTextureDiffuseTransmission = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION];
@@ -1252,110 +1242,41 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final int textureSheenTintAndTextureSpecularTint = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT];
 		final int textureSpecularTransmissionAndIsThin = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + CompiledMaterialCache.DISNEY_MATERIAL_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN];
 		
-//		Retrieve the ID and offset for the Anisotropic Texture:
-		final int textureAnisotropicID     = (textureAnisotropic >> 0) & 0xFF;
-		final int textureAnisotropicOffset = (textureAnisotropic >> 8) & 0xFF;
+		/*
+		 * Modify the surface using the Modifier instance:
+		 */
 		
-//		Retrieve the ID and offset for the Clear Coat Texture:
-		final int textureClearCoatID     = (textureClearCoatAndTextureClearCoatGloss >> 0) & 0xFF;
-		final int textureClearCoatOffset = (textureClearCoatAndTextureClearCoatGloss >> 8) & 0xFF;
+		modifierModify((textureEmissionAndModifier >> 16) & 0xFF, (textureEmissionAndModifier >> 24) & 0xFF);
 		
-//		Retrieve the ID and offset for the Clear Coat Gloss Texture:
-		final int textureClearCoatGlossID     = (textureClearCoatAndTextureClearCoatGloss >> 16) & 0xFF;
-		final int textureClearCoatGlossOffset = (textureClearCoatAndTextureClearCoatGloss >> 24) & 0xFF;
-		
-//		Retrieve the ID and offset for the Color Texture:
-		final int textureColorID     = (textureColorAndTextureDiffuseTransmission >> 0) & 0xFF;
-		final int textureColorOffset = (textureColorAndTextureDiffuseTransmission >> 8) & 0xFF;
-		
-//		Retrieve the ID and offset for the Diffuse Transmission Texture:
-		final int textureDiffuseTransmissionID     = (textureColorAndTextureDiffuseTransmission >> 16) & 0xFF;
-		final int textureDiffuseTransmissionOffset = (textureColorAndTextureDiffuseTransmission >> 24) & 0xFF;
-		
-//		Retrieve the ID and offset for the Eta Texture:
-		final int textureEtaID     = (textureEtaAndTextureFlatness >> 0) & 0xFF;
-		final int textureEtaOffset = (textureEtaAndTextureFlatness >> 8) & 0xFF;
-		
-//		Retrieve the ID and offset for the Flatness Texture:
-		final int textureFlatnessID     = (textureEtaAndTextureFlatness >> 16) & 0xFF;
-		final int textureFlatnessOffset = (textureEtaAndTextureFlatness >> 24) & 0xFF;
-		
-//		Retrieve the ID and offset for the Metallic Texture:
-		final int textureMetallicID     = (textureMetallicAndTextureRoughness >> 0) & 0xFF;
-		final int textureMetallicOffset = (textureMetallicAndTextureRoughness >> 8) & 0xFF;
-		
-//		Retrieve the ID and offset for the Roughness Texture:
-		final int textureRoughnessID     = (textureMetallicAndTextureRoughness >> 16) & 0xFF;
-		final int textureRoughnessOffset = (textureMetallicAndTextureRoughness >> 24) & 0xFF;
-		
-//		Retrieve the ID and offset for the Scatter Distance Texture:
-		final int textureScatterDistanceID     = (textureScatterDistanceAndTextureSheen >> 0) & 0xFF;
-		final int textureScatterDistanceOffset = (textureScatterDistanceAndTextureSheen >> 8) & 0xFF;
-		
-//		Retrieve the ID and offset for the Sheen Texture:
-		final int textureSheenID     = (textureScatterDistanceAndTextureSheen >> 16) & 0xFF;
-		final int textureSheenOffset = (textureScatterDistanceAndTextureSheen >> 24) & 0xFF;
-		
-//		Retrieve the ID and offset for the Sheen Tint Texture:
-		final int textureSheenTintID     = (textureSheenTintAndTextureSpecularTint >> 0) & 0xFF;
-		final int textureSheenTintOffset = (textureSheenTintAndTextureSpecularTint >> 8) & 0xFF;
-		
-//		Retrieve the ID and offset for the Specular Tint Texture:
-		final int textureSpecularTintID     = (textureSheenTintAndTextureSpecularTint >> 16) & 0xFF;
-		final int textureSpecularTintOffset = (textureSheenTintAndTextureSpecularTint >> 24) & 0xFF;
-		
-//		Retrieve the ID and offset for the Specular Transmission Texture:
-		final int textureSpecularTransmissionID     = (textureSpecularTransmissionAndIsThin >> 0) & 0xFF;
-		final int textureSpecularTransmissionOffset = (textureSpecularTransmissionAndIsThin >> 8) & 0xFF;
+		/*
+		 * Evaluate the Texture instances:
+		 */
 		
 //		Retrieve the thin flag:
 		final boolean isThin = ((textureSpecularTransmissionAndIsThin >> 16) & 0xFF) != 0;
 		
-		final float floatAnisotropic = textureEvaluateFloat(textureAnisotropicID, textureAnisotropicOffset);
-		final float floatClearCoat = textureEvaluateFloat(textureClearCoatID, textureClearCoatOffset);
-		final float floatClearCoatGloss = textureEvaluateFloat(textureClearCoatGlossID, textureClearCoatGlossOffset);
-		final float floatDiffuseTransmission = textureEvaluateFloat(textureDiffuseTransmissionID, textureDiffuseTransmissionOffset) / 2.0F;
-		final float floatEta = textureEvaluateFloat(textureEtaID, textureEtaOffset);
-		final float floatMetallic = textureEvaluateFloat(textureMetallicID, textureMetallicOffset);
-		final float floatRoughness = textureEvaluateFloat(textureRoughnessID, textureRoughnessOffset);
-		final float floatSheen = textureEvaluateFloat(textureSheenID, textureSheenOffset);
-		final float floatSheenTint = textureEvaluateFloat(textureSheenTintID, textureSheenTintOffset);
-		final float floatSpecularTint = textureEvaluateFloat(textureSpecularTintID, textureSpecularTintOffset);
-		final float floatSpecularTransmission = textureEvaluateFloat(textureSpecularTransmissionID, textureSpecularTransmissionOffset);
+		final float floatAnisotropic = textureEvaluateFloat((textureAnisotropic >> 0) & 0xFF, (textureAnisotropic >> 8) & 0xFF);
+		final float floatClearCoat = textureEvaluateFloat((textureClearCoatAndTextureClearCoatGloss >> 0) & 0xFF, (textureClearCoatAndTextureClearCoatGloss >> 8) & 0xFF);
+		final float floatDiffuseTransmission = textureEvaluateFloat((textureColorAndTextureDiffuseTransmission >> 16) & 0xFF, (textureColorAndTextureDiffuseTransmission >> 24) & 0xFF) / 2.0F;
+		final float floatEta = textureEvaluateFloat((textureEtaAndTextureFlatness >> 0) & 0xFF, (textureEtaAndTextureFlatness >> 8) & 0xFF);
+		final float floatMetallic = textureEvaluateFloat((textureMetallicAndTextureRoughness >> 0) & 0xFF, (textureMetallicAndTextureRoughness >> 8) & 0xFF);
+		final float floatRoughness = textureEvaluateFloat((textureMetallicAndTextureRoughness >> 16) & 0xFF, (textureMetallicAndTextureRoughness >> 24) & 0xFF);
+		final float floatSpecularTint = textureEvaluateFloat((textureSheenTintAndTextureSpecularTint >> 16) & 0xFF, (textureSheenTintAndTextureSpecularTint >> 24) & 0xFF);
+		final float floatSpecularTransmission = textureEvaluateFloat((textureSpecularTransmissionAndIsThin >> 0) & 0xFF, (textureSpecularTransmissionAndIsThin >> 8) & 0xFF);
 		
-		final boolean hasClearCoat = floatClearCoat > 0.0F;
-		final boolean hasSheen = floatSheen > 0.0F;
-		final boolean hasSpecularTransmission = floatSpecularTransmission > 0.0F;
-		
-		textureEvaluate(textureColorID, textureColorOffset);
+		textureEvaluate((textureColorAndTextureDiffuseTransmission >> 0) & 0xFF, (textureColorAndTextureDiffuseTransmission >> 8) & 0xFF);
 		
 		final float colorColorR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
 		final float colorColorG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
 		final float colorColorB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
-		textureEvaluate(textureScatterDistanceID, textureScatterDistanceOffset);
-		
-		final float colorScatterDistanceR = color3FLHSGetComponent1();
-		final float colorScatterDistanceG = color3FLHSGetComponent2();
-		final float colorScatterDistanceB = color3FLHSGetComponent3();
-		
-		final boolean hasScatterDistance = !checkIsZero(colorScatterDistanceR) || !checkIsZero(colorScatterDistanceG) || !checkIsZero(colorScatterDistanceB);
-		
 		final float luminance = colorColorR * 0.212671F + colorColorG * 0.715160F + colorColorB * 0.072169F;
 		
-		final boolean hasLuminance = luminance > 0.0F;
-		
-		final float colorTintR = hasLuminance ? colorColorR / luminance : 1.0F;
-		final float colorTintG = hasLuminance ? colorColorG / luminance : 1.0F;
-		final float colorTintB = hasLuminance ? colorColorB / luminance : 1.0F;
-		
-		final float colorSheenR = hasSheen ? lerp(1.0F, colorTintR, floatSheenTint) : 0.0F;
-		final float colorSheenG = hasSheen ? lerp(1.0F, colorTintG, floatSheenTint) : 0.0F;
-		final float colorSheenB = hasSheen ? lerp(1.0F, colorTintB, floatSheenTint) : 0.0F;
+		final float colorTintR = luminance > 0.0F ? colorColorR / luminance : 1.0F;
+		final float colorTintG = luminance > 0.0F ? colorColorG / luminance : 1.0F;
+		final float colorTintB = luminance > 0.0F ? colorColorB / luminance : 1.0F;
 		
 		final float diffuseWeight = (1.0F - floatMetallic) * (1.0F - floatSpecularTransmission);
-		
-		final boolean hasDiffuseWeight = diffuseWeight > 0.0F;
 		
 		/*
 		 * Compute the BSDF:
@@ -1367,43 +1288,59 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		int index = 0;
 		
-		if(hasDiffuseWeight) {
-			final float floatFlatness = textureEvaluateFloat(textureFlatnessID, textureFlatnessOffset);
+		if(diffuseWeight > 0.0F) {
+			textureEvaluate((textureScatterDistanceAndTextureSheen >> 0) & 0xFF, (textureScatterDistanceAndTextureSheen >> 8) & 0xFF);
 			
-			final float currentDiffuseWeight = isThin ? diffuseWeight * (1.0F - floatFlatness) * (1.0F - floatDiffuseTransmission) : !hasScatterDistance ? diffuseWeight : 0.0F;
+			final float colorScatterDistanceR = color3FLHSGetComponent1();
+			final float colorScatterDistanceG = color3FLHSGetComponent2();
+			final float colorScatterDistanceB = color3FLHSGetComponent3();
 			
-			final float reflectance = isThin ? diffuseWeight * (0.0F + floatFlatness) * (1.0F - floatDiffuseTransmission) : 0.0F;
-			
-//			Set DisneyDiffuseBRDF:
-			doBSDFSetBXDFDisneyDiffuseBRDF(isThin || !hasScatterDistance ? index : 13);
-			doBXDFDisneyDiffuseBRDFSetReflectanceScale(colorColorR * currentDiffuseWeight, colorColorG * currentDiffuseWeight, colorColorB * currentDiffuseWeight);
-			
-			index += isThin || !hasScatterDistance ? 1 : 0;
-			
-//			Set DisneyFakeSSBRDF:
-			doBSDFSetBXDFDisneyFakeSSBRDF(isThin ? index : 13);
-			doBXDFDisneyFakeSSBRDFSetReflectanceScale(colorColorR * reflectance, colorColorG * reflectance, colorColorB * reflectance);
-			doBXDFDisneyFakeSSBRDFSetRoughness(floatRoughness);
-			
-			index += isThin ? 1 : 0;
-			
-//			Set SpecularBTDF:
-			doBSDFSetBXDFSpecularBTDFFresnelDielectric(!isThin && hasScatterDistance ? index : 13);
-			doBXDFSpecularBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
-			doBXDFSpecularBTDFFresnelDielectricSetTransmittanceScale(1.0F, 1.0F, 1.0F);
-			
-			index += !isThin && hasScatterDistance ? 1 : 0;
+			if(isThin) {
+				final float floatFlatness = textureEvaluateFloat((textureEtaAndTextureFlatness >> 16) & 0xFF, (textureEtaAndTextureFlatness >> 24) & 0xFF);
+				
+				final float currentDiffuseWeight = diffuseWeight * (1.0F - floatFlatness) * (1.0F - floatDiffuseTransmission);
+				
+				final float reflectance = diffuseWeight * floatFlatness * (1.0F - floatDiffuseTransmission);
+				
+//				Set DisneyDiffuseBRDF:
+				doBSDFSetBXDFDisneyDiffuseBRDF(index++);
+				doBXDFDisneyDiffuseBRDFSetReflectanceScale(colorColorR * currentDiffuseWeight, colorColorG * currentDiffuseWeight, colorColorB * currentDiffuseWeight);
+				
+//				Set DisneyFakeSSBRDF:
+				doBSDFSetBXDFDisneyFakeSSBRDF(index++);
+				doBXDFDisneyFakeSSBRDFSetReflectanceScale(colorColorR * reflectance, colorColorG * reflectance, colorColorB * reflectance);
+				doBXDFDisneyFakeSSBRDFSetRoughness(floatRoughness);
+			} else if(!checkIsZero(colorScatterDistanceR) || !checkIsZero(colorScatterDistanceG) || !checkIsZero(colorScatterDistanceB)) {
+//				Set SpecularBTDF:
+				doBSDFSetBXDFSpecularBTDFFresnelDielectric(index++);
+				doBXDFSpecularBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
+				doBXDFSpecularBTDFFresnelDielectricSetTransmittanceScale(1.0F, 1.0F, 1.0F);
+			} else {
+//				Set DisneyDiffuseBRDF:
+				doBSDFSetBXDFDisneyDiffuseBRDF(index++);
+				doBXDFDisneyDiffuseBRDFSetReflectanceScale(colorColorR * diffuseWeight, colorColorG * diffuseWeight, colorColorB * diffuseWeight);
+			}
 			
 //			Set DisneyRetroBRDF:
 			doBSDFSetBXDFDisneyRetroBRDF(index++);
 			doBXDFDisneyRetroBRDFSetReflectanceScale(colorColorR * diffuseWeight, colorColorG * diffuseWeight, colorColorB * diffuseWeight);
 			doBXDFDisneyRetroBRDFSetRoughness(floatRoughness);
 			
-//			Set DisneySheenBRDF:
-			doBSDFSetBXDFDisneySheenBRDF(hasSheen ? index : 13);
-			doBXDFDisneySheenBRDFSetReflectanceScale(colorSheenR * diffuseWeight * floatSheen, colorSheenG * diffuseWeight * floatSheen, colorSheenB * diffuseWeight * floatSheen);
+			final float floatSheen = textureEvaluateFloat((textureScatterDistanceAndTextureSheen >> 16) & 0xFF, (textureScatterDistanceAndTextureSheen >> 24) & 0xFF);
 			
-			index += hasSheen ? 1 : 0;
+			final boolean hasSheen = floatSheen > 0.0F;
+			
+			if(hasSheen) {
+				final float floatSheenTint = textureEvaluateFloat((textureSheenTintAndTextureSpecularTint >> 0) & 0xFF, (textureSheenTintAndTextureSpecularTint >> 8) & 0xFF);
+				
+				final float colorSheenR = hasSheen ? lerp(1.0F, colorTintR, floatSheenTint) : 0.0F;
+				final float colorSheenG = hasSheen ? lerp(1.0F, colorTintG, floatSheenTint) : 0.0F;
+				final float colorSheenB = hasSheen ? lerp(1.0F, colorTintB, floatSheenTint) : 0.0F;
+				
+//				Set DisneySheenBRDF:
+				doBSDFSetBXDFDisneySheenBRDF(index++);
+				doBXDFDisneySheenBRDFSetReflectanceScale(colorSheenR * diffuseWeight * floatSheen, colorSheenG * diffuseWeight * floatSheen, colorSheenB * diffuseWeight * floatSheen);
+			}
 		}
 		
 		final float aspect = sqrt(1.0F - floatAnisotropic * 0.9F);
@@ -1423,14 +1360,16 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFTorranceSparrowBRDFFresnelDisneySetMicrofacetDistributionTrowbridgeReitz(true, true, alphaX, alphaY);
 		doBXDFTorranceSparrowBRDFFresnelDisneySetReflectanceScale(1.0F, 1.0F, 1.0F);
 		
-		if(hasClearCoat) {
+		if(floatClearCoat > 0.0F) {
+			final float floatClearCoatGloss = textureEvaluateFloat((textureClearCoatAndTextureClearCoatGloss >> 16) & 0xFF, (textureClearCoatAndTextureClearCoatGloss >> 24) & 0xFF);
+			
 //			Set DisneyClearCoatBRDF:
 			doBSDFSetBXDFDisneyClearCoatBRDF(index++);
 			doBXDFDisneyClearCoatBRDFSetGloss(lerp(0.1F, 0.001F, floatClearCoatGloss));
 			doBXDFDisneyClearCoatBRDFSetWeight(floatClearCoat);
 		}
 		
-		if(hasSpecularTransmission) {
+		if(floatSpecularTransmission > 0.0F) {
 			final float floatRoughnessScaled = (0.65F * floatEta - 0.35F) * floatRoughness;
 			
 			final float currentAlphaX = isThin ? max(0.001F, floatRoughnessScaled * floatRoughnessScaled / aspect) : alphaX;
@@ -1950,19 +1889,15 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFSetBXDFCount(count);
 		doBSDFSetEta(1.0F);
 		
-		if(hasKD) {
-//			Set LambertianBRDF:
-			doBSDFSetBXDFLambertianBRDF(indexKD);
-			doBXDFLambertianBRDFSetReflectanceScale(colorKDR, colorKDG, colorKDB);
-		}
+//		Set LambertianBRDF:
+		doBSDFSetBXDFLambertianBRDF(hasKD ? indexKD : 13);
+		doBXDFLambertianBRDFSetReflectanceScale(colorKDR, colorKDG, colorKDB);
 		
-		if(hasKS) {
-//			Set TorranceSparrowBRDF:
-			doBSDFSetBXDFTorranceSparrowBRDFFresnelDielectric(indexKS);
-			doBXDFTorranceSparrowBRDFFresnelDielectricSetReflectanceScale(colorKSR, colorKSG, colorKSB);
-			doBXDFTorranceSparrowBRDFFresnelDielectricSetFresnelDielectric(1.5F, 1.0F);
-			doBXDFTorranceSparrowBRDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughnessRemapped, floatRoughnessRemapped);
-		}
+//		Set TorranceSparrowBRDF:
+		doBSDFSetBXDFTorranceSparrowBRDFFresnelDielectric(hasKS ? indexKS : 13);
+		doBXDFTorranceSparrowBRDFFresnelDielectricSetReflectanceScale(colorKSR, colorKSG, colorKSB);
+		doBXDFTorranceSparrowBRDFFresnelDielectricSetFresnelDielectric(1.5F, 1.0F);
+		doBXDFTorranceSparrowBRDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughnessRemapped, floatRoughnessRemapped);
 		
 //		Initialize the BSDFResult:
 		doBSDFResultInitialize();

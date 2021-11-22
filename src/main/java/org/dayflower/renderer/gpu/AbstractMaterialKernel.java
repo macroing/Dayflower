@@ -1328,14 +1328,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			
 			final float floatSheen = textureEvaluateFloat((textureScatterDistanceAndTextureSheen >> 16) & 0xFF, (textureScatterDistanceAndTextureSheen >> 24) & 0xFF);
 			
-			final boolean hasSheen = floatSheen > 0.0F;
-			
-			if(hasSheen) {
+			if(floatSheen > 0.0F) {
 				final float floatSheenTint = textureEvaluateFloat((textureSheenTintAndTextureSpecularTint >> 0) & 0xFF, (textureSheenTintAndTextureSpecularTint >> 8) & 0xFF);
 				
-				final float colorSheenR = hasSheen ? lerp(1.0F, colorTintR, floatSheenTint) : 0.0F;
-				final float colorSheenG = hasSheen ? lerp(1.0F, colorTintG, floatSheenTint) : 0.0F;
-				final float colorSheenB = hasSheen ? lerp(1.0F, colorTintB, floatSheenTint) : 0.0F;
+				final float colorSheenR = 1.0F - floatSheenTint + floatSheenTint * colorTintR;
+				final float colorSheenG = 1.0F - floatSheenTint + floatSheenTint * colorTintG;
+				final float colorSheenB = 1.0F - floatSheenTint + floatSheenTint * colorTintB;
 				
 //				Set DisneySheenBRDF:
 				doBSDFSetBXDFDisneySheenBRDF(index++);
@@ -1350,9 +1348,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float floatR0 = ((floatEta - 1.0F) * (floatEta - 1.0F)) / ((floatEta + 1.0F) * (floatEta + 1.0F));
 		
-		final float colorSpecularR0R = lerp(lerp(1.0F, colorTintR, floatSpecularTint) * floatR0, colorColorR, floatMetallic);
-		final float colorSpecularR0G = lerp(lerp(1.0F, colorTintG, floatSpecularTint) * floatR0, colorColorG, floatMetallic);
-		final float colorSpecularR0B = lerp(lerp(1.0F, colorTintB, floatSpecularTint) * floatR0, colorColorB, floatMetallic);
+		final float colorSpecularR0R = lerp((1.0F - floatSpecularTint + floatSpecularTint * colorTintR) * floatR0, colorColorR, floatMetallic);
+		final float colorSpecularR0G = lerp((1.0F - floatSpecularTint + floatSpecularTint * colorTintG) * floatR0, colorColorG, floatMetallic);
+		final float colorSpecularR0B = lerp((1.0F - floatSpecularTint + floatSpecularTint * colorTintB) * floatR0, colorColorB, floatMetallic);
 		
 //		Set TorranceSparrowBRDF:
 		doBSDFSetBXDFTorranceSparrowBRDFFresnelDisney(index++);

@@ -85,6 +85,11 @@ public abstract class AbstractKernel extends Kernel {
 	protected int resolutionY;
 	
 	/**
+	 * An {@code int} that indicates whether or not the PRNG should be setup.
+	 */
+	protected int setupPRNG;
+	
+	/**
 	 * An {@code int[]} that contains permutations for Perlin and Simplex noise.
 	 */
 	protected int[] permutationsBArray;
@@ -99,6 +104,11 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected long[] seedArray;
 	
+	/**
+	 * A {@code long[]} that contains seed values for the pseudorandom number generator (PRNG).
+	 */
+	protected long[] seedArray_$private$1;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -110,9 +120,11 @@ public abstract class AbstractKernel extends Kernel {
 		this.simplexGradient4Array = new float[0];
 		this.resolutionX = 0;
 		this.resolutionY = 0;
+		this.setupPRNG = 1;
 		this.permutationsBArray = new int[0];
 		this.permutationsBModulo12Array = new int[0];
 		this.seedArray = new long[0];
+		this.seedArray_$private$1 = new long[1];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,15 +228,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @return {@code true} if, and only if, {@code a} and {@code b} are nearly equal, {@code false} otherwise
 	 */
 	protected final boolean checkIsNearlyEqual(final float a, final float b) {
-		if(a == b) {
-			return true;
-		}
-		
-		final float epsilon = 128.0F * 0.00000006F;
-		final float difference = abs(a - b);
-		final float norm = min(abs(a) + abs(b), Float.MAX_VALUE);
-		
-		return difference < max(Float.MIN_VALUE, epsilon * norm);
+		return a == b || abs(a - b) < max(Float.MIN_VALUE, 128.0F * 0.00000006F * min(abs(a) + abs(b), Float.MAX_VALUE));
 	}
 	
 	/**
@@ -235,10 +239,7 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	@SuppressWarnings("static-method")
 	protected final boolean checkIsZero(final float value) {
-		final boolean isLTZero = value < -0.0F;
-		final boolean isGTZero = value > +0.0F;
-		
-		return !isLTZero && !isGTZero;
+		return value == -0.0F || value == +0.0F;
 	}
 	
 	/**
@@ -629,16 +630,15 @@ public abstract class AbstractKernel extends Kernel {
 	/**
 	 * Returns a saturated (or clamped) value based on {@code value}.
 	 * <p>
-	 * If {@code value} is less than {@code min(edgeA, edgeB)}, {@code min(edgeA, edgeB)} will be returned. If {@code value} is greater than {@code max(edgeA, edgeB)}, {@code max(edgeA, edgeB)} will be returned. Otherwise {@code value} will be
-	 * returned.
+	 * If {@code value} is less than {@code valueMinimum}, {@code valueMinimum} will be returned. If {@code value} is greater than {@code valueMaximum}, {@code valueMaximum} will be returned. Otherwise {@code value} will be returned.
 	 * 
 	 * @param value the value to saturate (or clamp)
-	 * @param edgeA the minimum or maximum value
-	 * @param edgeB the maximum or minimum value
+	 * @param valueMinimum the minimum value
+	 * @param valueMaximum the maximum value
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
-	protected final float saturateF(final float value, final float edgeA, final float edgeB) {
-		return max(min(value, max(edgeA, edgeB)), min(edgeA, edgeB));
+	protected final float saturateF(final float value, final float valueMinimum, final float valueMaximum) {
+		return max(min(value, valueMaximum), valueMinimum);
 	}
 	
 	/**
@@ -1719,16 +1719,15 @@ public abstract class AbstractKernel extends Kernel {
 	/**
 	 * Returns a saturated (or clamped) value based on {@code value}.
 	 * <p>
-	 * If {@code value} is less than {@code min(edgeA, edgeB)}, {@code min(edgeA, edgeB)} will be returned. If {@code value} is greater than {@code max(edgeA, edgeB)}, {@code max(edgeA, edgeB)} will be returned. Otherwise {@code value} will be
-	 * returned.
+	 * If {@code value} is less than {@code valueMinimum}, {@code valueMinimum} will be returned. If {@code value} is greater than {@code valueMaximum}, {@code valueMaximum} will be returned. Otherwise {@code value} will be returned.
 	 * 
 	 * @param value the value to saturate (or clamp)
-	 * @param edgeA the minimum or maximum value
-	 * @param edgeB the maximum or minimum value
+	 * @param valueMinimum the minimum value
+	 * @param valueMaximum the maximum value
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
-	protected final int saturateI(final int value, final int edgeA, final int edgeB) {
-		return max(min(value, max(edgeA, edgeB)), min(edgeA, edgeB));
+	protected final int saturateI(final int value, final int valueMinimum, final int valueMaximum) {
+		return max(min(value, valueMaximum), valueMinimum);
 	}
 	
 	/**
@@ -1741,6 +1740,15 @@ public abstract class AbstractKernel extends Kernel {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+	}
+	
+	/**
+	 * Attempts to setup the PRNG.
+	 */
+	protected final void setupPRNG() {
+		if(this.setupPRNG == 1) {
+			this.seedArray_$private$1[0] = this.seedArray[getGlobalId()];
+		}
 	}
 	
 	/**
@@ -1790,14 +1798,21 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	private int doNext(final int bits) {
-		final int index = getGlobalId();
-		
-		final long oldSeed = this.seedArray[index];
+		final long oldSeed = this.seedArray_$private$1[0];
 		final long newSeed = (oldSeed * PRNG_MULTIPLIER + PRNG_ADDEND) & PRNG_MASK;
 		
-		this.seedArray[index] = newSeed;
+		this.seedArray_$private$1[0] = newSeed;
 		
 		return (int)(newSeed >>> (48 - bits));
+		
+//		final int index = getGlobalId();
+		
+//		final long oldSeed = this.seedArray[index];
+//		final long newSeed = (oldSeed * PRNG_MULTIPLIER + PRNG_ADDEND) & PRNG_MASK;
+		
+//		this.seedArray[index] = newSeed;
+		
+//		return (int)(newSeed >>> (48 - bits));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

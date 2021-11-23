@@ -256,9 +256,8 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		
 		final float sinThetaIncoming = sqrt(max(0.0F, 1.0F - cosThetaIncoming * cosThetaIncoming));
 		final float tanThetaIncoming = sinThetaIncoming / cosThetaIncoming;
-		final float tanThetaIncomingReciprocal = 1.0F / tanThetaIncoming;
 		
-		final float a = 2.0F / (1.0F + sqrt(1.0F + 1.0F / (tanThetaIncomingReciprocal * tanThetaIncomingReciprocal)));
+		final float a = 2.0F / (1.0F + sqrt(1.0F + tanThetaIncoming * tanThetaIncoming));
 		final float b = 2.0F * u / a - 1.0F;
 		final float c = min(1.0F / (b * b - 1.0F), 1.0e10F);
 		final float d = tanThetaIncoming;
@@ -267,7 +266,7 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float g = d * c + e;
 		final float h = v > 0.5F ? 1.0F : -1.0F;
 		final float i = v > 0.5F ? 2.0F * (v - 0.5F) : 2.0F * (0.5F - v);
-		final float j = (i * (i * (i * 0.27385F - 0.73369F) + 0.46341F)) / (i * (i * (i * 0.093073F + 0.309420F) - 1.000000F) + 0.597999F);
+		final float j = (i * (i * (i * 0.27385F - 0.73369F) + 0.46341F)) / (i * (i * (i * 0.093073F + 0.309420F) - 1.0F) + 0.597999F);
 		
 		final float x = b < 0.0F || g > 1.0F / tanThetaIncoming ? f : g;
 		final float y = h * j * sqrt(1.0F + x * x);

@@ -64,6 +64,8 @@ public final class GPURenderer extends AbstractGPURenderer {
 	 */
 	@Override
 	public void run() {
+		setupPRNG();
+		
 		if(renderingAlgorithmIsAmbientOcclusion()) {
 			doRunAmbientOcclusion(getMaximumDistance(), getSamples());
 		} else if(renderingAlgorithmIsPathTracing()) {
@@ -274,7 +276,45 @@ public final class GPURenderer extends AbstractGPURenderer {
 	}
 	
 	void doRunRayTracing() {
-		filmAddColor(0.0F, 0.0F, 0.0F);
+		if(ray3FCameraGenerateTriangleFilter()) {
+			if(primitiveIntersectionComputeLHS() && materialBSDFCompute(primitiveGetMaterialIDLHS(), primitiveGetMaterialOffsetLHS()) && materialBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL, random(), random())) {
+				final float incomingX = materialBSDFResultGetIncomingX();
+				final float incomingY = materialBSDFResultGetIncomingY();
+				final float incomingZ = materialBSDFResultGetIncomingZ();
+				
+				final float probabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
+				
+				final float resultR = materialBSDFResultGetResultR();
+				final float resultG = materialBSDFResultGetResultG();
+				final float resultB = materialBSDFResultGetResultB();
+				
+				final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
+				final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
+				final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+				
+				final float incomingDotSurfaceNormal = vector3FDotProduct(incomingX, incomingY, incomingZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+				final float incomingDotSurfaceNormalAbs = abs(incomingDotSurfaceNormal);
+				
+				final float rayDirectionX = ray3FGetDirectionComponent1();
+				final float rayDirectionY = ray3FGetDirectionComponent2();
+				final float rayDirectionZ = ray3FGetDirectionComponent3();
+				
+				final float rayDirectionDotSurfaceNormal = vector3FDotProduct(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+				final float rayDirectionDotSurfaceNormalAbs = abs(rayDirectionDotSurfaceNormal);
+				
+				final boolean isProbabilityDensityFunctionValueValid = checkIsFinite(probabilityDensityFunctionValue) && probabilityDensityFunctionValue > 0.0F;
+				
+				final float r = isProbabilityDensityFunctionValueValid ? resultR * incomingDotSurfaceNormalAbs / probabilityDensityFunctionValue * rayDirectionDotSurfaceNormalAbs : 0.0F;
+				final float g = isProbabilityDensityFunctionValueValid ? resultG * incomingDotSurfaceNormalAbs / probabilityDensityFunctionValue * rayDirectionDotSurfaceNormalAbs : 0.0F;
+				final float b = isProbabilityDensityFunctionValueValid ? resultB * incomingDotSurfaceNormalAbs / probabilityDensityFunctionValue * rayDirectionDotSurfaceNormalAbs : 0.0F;
+				
+				filmAddColor(r, g, b);
+			} else {
+				filmAddColor(0.0F, 0.0F, 0.0F);
+			}
+		} else {
+			filmAddColor(1.0F, 1.0F, 1.0F);
+		}
 		
 		imageBegin();
 		imageRedoGammaCorrection();

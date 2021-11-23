@@ -367,10 +367,10 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 				final float cellResolution = this.texturePolkaDotTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_CELL_RESOLUTION];
 				final float polkaDotRadius = this.texturePolkaDotTextureArray[currentTextureOffsetAbsolute + CompiledTextureCache.POLKA_DOT_TEXTURE_OFFSET_POLKA_DOT_RADIUS];
 				
-				final float x = fractionalPart((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * cellResolution, false);
-				final float y = fractionalPart((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * cellResolution, false);
+				final float x = fractionalPart((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * cellResolution, false) - 0.5F;
+				final float y = fractionalPart((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * cellResolution, false) - 0.5F;
 				
-				final float distanceSquared = (x - 0.5F) * (x - 0.5F) + (y - 0.5F) * (y - 0.5F);
+				final float distanceSquared = x * x + y * y;
 				
 				final boolean isTextureA = distanceSquared < polkaDotRadius * polkaDotRadius;
 				

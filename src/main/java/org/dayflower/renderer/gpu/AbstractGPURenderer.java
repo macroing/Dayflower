@@ -236,6 +236,8 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		rendererObserver.onRenderDisplay(this, image);
 		rendererObserver.onRenderPassComplete(this, renderPass, elapsedTimeMillis);
 		
+		super.setupPRNG = 0;
+		
 		this.isRendering.set(false);
 		
 		return true;

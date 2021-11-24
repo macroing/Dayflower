@@ -1804,15 +1804,6 @@ public abstract class AbstractKernel extends Kernel {
 		this.seedArray_$private$1[0] = newSeed;
 		
 		return (int)(newSeed >>> (48 - bits));
-		
-//		final int index = getGlobalId();
-		
-//		final long oldSeed = this.seedArray[index];
-//		final long newSeed = (oldSeed * PRNG_MULTIPLIER + PRNG_ADDEND) & PRNG_MASK;
-		
-//		this.seedArray[index] = newSeed;
-		
-//		return (int)(newSeed >>> (48 - bits));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

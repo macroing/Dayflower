@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,6 +41,32 @@ public final class Point2DUnitTests {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Test
+	public void testClearCacheAndGetCacheSizeAndGetCached() {
+		assertEquals(0, Point2D.getCacheSize());
+		
+		final Point2D a = new Point2D(1.0D, 2.0D);
+		final Point2D b = new Point2D(1.0D, 2.0D);
+		final Point2D c = Point2D.getCached(a);
+		final Point2D d = Point2D.getCached(b);
+		
+		assertThrows(NullPointerException.class, () -> Point2D.getCached(null));
+		
+		assertEquals(1, Point2D.getCacheSize());
+		
+		Point2D.clearCache();
+		
+		assertEquals(0, Point2D.getCacheSize());
+		
+		assertTrue(a != b);
+		assertTrue(a == c);
+		assertTrue(a == d);
+		
+		assertTrue(b != a);
+		assertTrue(b != c);
+		assertTrue(b != d);
+	}
 	
 	@Test
 	public void testConstants() {

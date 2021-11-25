@@ -562,7 +562,6 @@ public final class Point2F implements Node {
 	 * @return a cached version of {@code point}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F getCached(final Point2F point) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
 	}
@@ -1019,7 +1018,6 @@ public final class Point2F implements Node {
 	 * 
 	 * @return the size of the cache
 	 */
-//	TODO: Add Unit Tests!
 	public static int getCacheSize() {
 		return CACHE.size();
 	}
@@ -1027,7 +1025,6 @@ public final class Point2F implements Node {
 	/**
 	 * Clears the cache.
 	 */
-//	TODO: Add Unit Tests!
 	public static void clearCache() {
 		CACHE.clear();
 	}

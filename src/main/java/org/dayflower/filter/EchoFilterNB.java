@@ -18,6 +18,8 @@
  */
 package org.dayflower.filter;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+
 /**
  * An {@code EchoFilterNB} is an implementation of {@link FilterNB} that performs an echo effect.
  * 

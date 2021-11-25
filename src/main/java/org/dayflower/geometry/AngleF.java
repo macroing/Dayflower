@@ -34,6 +34,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 /**
@@ -79,6 +80,7 @@ public final class AngleF {
 	 * 
 	 * @return a {@code String} representation of this {@code AngleF} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("AngleF.degrees(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.degrees), Float.valueOf(this.degreesMinimum), Float.valueOf(this.degreesMaximum));
@@ -92,6 +94,7 @@ public final class AngleF {
 	 * @param object the {@code Object} to compare to this {@code AngleF} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code AngleF}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -120,6 +123,7 @@ public final class AngleF {
 	 * 
 	 * @return the angle in degrees
 	 */
+//	TODO: Add Unit Tests!
 	public float getDegrees() {
 		return this.degrees;
 	}
@@ -129,6 +133,7 @@ public final class AngleF {
 	 * 
 	 * @return the maximum angle in degrees
 	 */
+//	TODO: Add Unit Tests!
 	public float getDegreesMaximum() {
 		return this.degreesMaximum;
 	}
@@ -138,6 +143,7 @@ public final class AngleF {
 	 * 
 	 * @return the minimum angle in degrees
 	 */
+//	TODO: Add Unit Tests!
 	public float getDegreesMinimum() {
 		return this.degreesMinimum;
 	}
@@ -147,6 +153,7 @@ public final class AngleF {
 	 * 
 	 * @return the angle in radians
 	 */
+//	TODO: Add Unit Tests!
 	public float getRadians() {
 		return this.radians;
 	}
@@ -156,6 +163,7 @@ public final class AngleF {
 	 * 
 	 * @return the maximum angle in radians
 	 */
+//	TODO: Add Unit Tests!
 	public float getRadiansMaximum() {
 		return this.radiansMaximum;
 	}
@@ -165,6 +173,7 @@ public final class AngleF {
 	 * 
 	 * @return the minimum angle in radians
 	 */
+//	TODO: Add Unit Tests!
 	public float getRadiansMinimum() {
 		return this.radiansMinimum;
 	}
@@ -174,6 +183,7 @@ public final class AngleF {
 	 * 
 	 * @return a hash code for this {@code AngleF} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.degrees), Float.valueOf(this.degreesMaximum), Float.valueOf(this.degreesMinimum), Float.valueOf(this.radians), Float.valueOf(this.radiansMaximum), Float.valueOf(this.radiansMinimum));
@@ -190,6 +200,7 @@ public final class AngleF {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeFloat(this.degrees);
@@ -217,6 +228,7 @@ public final class AngleF {
 	 * @return a new {@code AngleF} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code angleLHS} or {@code angleRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF add(final AngleF angleLHS, final AngleF angleRHS) {
 		final float degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
 		final float degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
@@ -238,6 +250,7 @@ public final class AngleF {
 	 * @param degrees the angle in degrees
 	 * @return a new {@code AngleF} instance based on an angle in degrees
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF degrees(final float degrees) {
 		return degrees(degrees, DEGREES_MINIMUM, DEGREES_MAXIMUM);
 	}
@@ -250,6 +263,7 @@ public final class AngleF {
 	 * @param degreesIntervalEndB the degrees that represents one of the ends of the interval of valid degrees
 	 * @return a new {@code AngleF} instance based on an angle in degrees and an interval of valid degrees
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF degrees(final float degrees, final float degreesIntervalEndA, final float degreesIntervalEndB) {
 		final float newDegreesMinimum = min(degreesIntervalEndA, degreesIntervalEndB);
 		final float newDegreesMaximum = max(degreesIntervalEndA, degreesIntervalEndB);
@@ -271,6 +285,7 @@ public final class AngleF {
 	 * @param resolution the resolution in X- or Y-direction (width or height)
 	 * @return a field of view (FOV) {@code AngleF} based on {@code focalDistance} and {@code resolution}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF fieldOfView(final float focalDistance, final float resolution) {
 		return radians(2.0F * atan(resolution * 0.5F / focalDistance));
 	}
@@ -286,6 +301,7 @@ public final class AngleF {
 	 * @return a horizontal field of view (FOV) {@code AngleF} based on {@code fieldOfViewY}, {@code resolutionX} and {@code resolutionY}
 	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewY} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF fieldOfViewX(final AngleF fieldOfViewY, final float resolutionX, final float resolutionY) {
 		return radians(2.0F * atan(tan(fieldOfViewY.radians * 0.5F) * (resolutionX / resolutionY)));
 	}
@@ -301,6 +317,7 @@ public final class AngleF {
 	 * @return a vertical field of view (FOV) {@code AngleF} based on {@code fieldOfViewX}, {@code resolutionX} and {@code resolutionY}
 	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewX} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF fieldOfViewY(final AngleF fieldOfViewX, final float resolutionX, final float resolutionY) {
 		return radians(2.0F * atan(tan(fieldOfViewX.radians * 0.5F) * (resolutionY / resolutionX)));
 	}
@@ -314,6 +331,7 @@ public final class AngleF {
 	 * @return a new {@code AngleF} instance that represents half of {@code angle}
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF half(final AngleF angle) {
 		final float degreesMinimum = angle.degreesMinimum;
 		final float degreesMaximum = angle.degreesMaximum;
@@ -331,6 +349,7 @@ public final class AngleF {
 	 * @return an {@code AngleF} instance that is a negated version of {@code angle}
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF negate(final AngleF angle) {
 		final float degreesMinimum = -angle.degreesMinimum;
 		final float degreesMaximum = -angle.degreesMaximum;
@@ -349,6 +368,7 @@ public final class AngleF {
 	 * @return a new pitch {@code AngleF} instance based on {@code eye} and {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF pitch(final Point3F eye, final Point3F lookAt) {
 		return pitch(Vector3F.directionNormalized(eye, lookAt));
 	}
@@ -362,6 +382,7 @@ public final class AngleF {
 	 * @return a new pitch {@code AngleF} instance based on {@code direction}
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF pitch(final Vector3F direction) {
 		return degrees(toDegrees(asin(direction.getY())), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
 	}
@@ -379,6 +400,7 @@ public final class AngleF {
 	 * @param radians the angle in radians
 	 * @return a new {@code AngleF} instance based on an angle in radians
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF radians(final float radians) {
 		return radians(radians, RADIANS_MINIMUM, RADIANS_MAXIMUM);
 	}
@@ -391,6 +413,7 @@ public final class AngleF {
 	 * @param radiansIntervalEndB the radians that represents one of the ends of the interval of valid radians
 	 * @return a new {@code AngleF} instance based on an angle in radians and an interval of valid radians
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF radians(final float radians, final float radiansIntervalEndA, final float radiansIntervalEndB) {
 		final float newRadiansMinimum = min(radiansIntervalEndA, radiansIntervalEndB);
 		final float newRadiansMaximum = max(radiansIntervalEndA, radiansIntervalEndB);
@@ -415,6 +438,7 @@ public final class AngleF {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF read(final DataInput dataInput) {
 		try {
 			final float degrees = dataInput.readFloat();
@@ -442,6 +466,7 @@ public final class AngleF {
 	 * @return a new {@code AngleF} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code angleLHS} or {@code angleRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF subtract(final AngleF angleLHS, final AngleF angleRHS) {
 		final float degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
 		final float degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
@@ -460,6 +485,7 @@ public final class AngleF {
 	 * @return a new yaw {@code AngleF} instance based on {@code eye} and {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF yaw(final Point3F eye, final Point3F lookAt) {
 		return yaw(Vector3F.directionNormalized(eye, lookAt));
 	}
@@ -473,6 +499,7 @@ public final class AngleF {
 	 * @return a new yaw {@code AngleF} instance based on {@code direction}
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleF yaw(final Vector3F direction) {
 		return degrees(toDegrees(atan2(direction.getX(), direction.getZ())));
 	}

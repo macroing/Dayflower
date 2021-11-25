@@ -24,6 +24,7 @@ import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -39,11 +40,13 @@ public final class SurfaceIntersector3F {
 	/**
 	 * The default minimum parametric {@code t} value.
 	 */
+//	TODO: Add Unit Tests!
 	public static final float T_MAXIMUM = MAX_VALUE;
 	
 	/**
 	 * The default maximum parametric {@code t} value.
 	 */
+//	TODO: Add Unit Tests!
 	public static final float T_MINIMUM = 0.001F;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,6 +74,7 @@ public final class SurfaceIntersector3F {
 	 * @param ray a {@link Ray3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public SurfaceIntersector3F(final Ray3F ray) {
 		this(ray, T_MINIMUM, T_MAXIMUM);
 	}
@@ -85,6 +89,7 @@ public final class SurfaceIntersector3F {
 	 * @param tMaximum the maximum parametric {@code t} value
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public SurfaceIntersector3F(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		this.ray = Objects.requireNonNull(ray, "ray == null");
 		this.shape = null;
@@ -100,6 +105,7 @@ public final class SurfaceIntersector3F {
 	 * 
 	 * @return the optional {@code Shape3F} of the current intersection
 	 */
+//	TODO: Add Unit Tests!
 	public Optional<Shape3F> getShape() {
 		return Optional.ofNullable(this.shape);
 	}
@@ -111,6 +117,7 @@ public final class SurfaceIntersector3F {
 	 * 
 	 * @return an optional {@code SurfaceIntersection3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Optional<SurfaceIntersection3F> computeSurfaceIntersection() {
 		return isIntersecting() ? this.shape.intersection(this.ray, this.tMinimum, T_MAXIMUM) : SurfaceIntersection3F.EMPTY;
 	}
@@ -120,6 +127,7 @@ public final class SurfaceIntersector3F {
 	 * 
 	 * @return the {@code Ray3F} instance associated with this {@code SurfaceIntersector3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Ray3F getRay() {
 		return this.ray;
 	}
@@ -129,6 +137,7 @@ public final class SurfaceIntersector3F {
 	 * 
 	 * @return a {@code String} representation of this {@code SurfaceIntersector3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new SurfaceIntersector3F(%s, %+.10f, %+.10f)", this.ray, Float.valueOf(this.tMinimum), Float.valueOf(this.tMaximum));
@@ -142,6 +151,7 @@ public final class SurfaceIntersector3F {
 	 * @param object the {@code Object} to compare to this {@code SurfaceIntersector3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SurfaceIntersector3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -176,6 +186,7 @@ public final class SurfaceIntersector3F {
 	 * @return {@code true} if, and only if, {@code shape} intersects this {@code SurfaceIntersector3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean intersection(final Shape3F shape) {
 		final float t = shape.intersectionT(this.ray, this.tMinimum, this.tMaximum);
 		
@@ -195,6 +206,7 @@ public final class SurfaceIntersector3F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code SurfaceIntersector3F} has intersected with a {@code Shape3F} instance, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isIntersecting() {
 		return this.shape != null && !isNaN(this.t);
 	}
@@ -208,6 +220,7 @@ public final class SurfaceIntersector3F {
 	 * @return {@code true} if, and only if, {@code boundingVolume} intersects this {@code SurfaceIntersector3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isIntersecting(final BoundingVolume3F boundingVolume) {
 		return boundingVolume.contains(this.ray.getOrigin()) || boundingVolume.intersects(this.ray, this.tMinimum, this.tMaximum);
 	}
@@ -217,6 +230,7 @@ public final class SurfaceIntersector3F {
 	 * 
 	 * @return the parametric {@code t} value that represents the distance to the intersection
 	 */
+//	TODO: Add Unit Tests!
 	public float getT() {
 		return this.t;
 	}
@@ -226,6 +240,7 @@ public final class SurfaceIntersector3F {
 	 * 
 	 * @return the maximum parametric {@code t} value
 	 */
+//	TODO: Add Unit Tests!
 	public float getTMaximum() {
 		return this.tMaximum;
 	}
@@ -235,6 +250,7 @@ public final class SurfaceIntersector3F {
 	 * 
 	 * @return the minimum parametric {@code t} value
 	 */
+//	TODO: Add Unit Tests!
 	public float getTMinimum() {
 		return this.tMinimum;
 	}
@@ -244,6 +260,7 @@ public final class SurfaceIntersector3F {
 	 * 
 	 * @return a hash code for this {@code SurfaceIntersector3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.ray, this.shape, Float.valueOf(this.t), Float.valueOf(this.tMaximum), Float.valueOf(this.tMinimum));
@@ -264,6 +281,7 @@ public final class SurfaceIntersector3F {
 	 * @param ray a {@link Ray3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void initialize(final Ray3F ray) {
 		initialize(ray, T_MINIMUM, T_MAXIMUM);
 	}
@@ -278,6 +296,7 @@ public final class SurfaceIntersector3F {
 	 * @param tMaximum the maximum parametric {@code t} value
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void initialize(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		this.ray = Objects.requireNonNull(ray, "ray == null");
 		this.t = Float.NaN;
@@ -293,6 +312,7 @@ public final class SurfaceIntersector3F {
 	 * @param matrix a {@link Matrix44F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void transform(final Matrix44F matrix) {
 		final Ray3F rayOldSpace = this.ray;
 		final Ray3F rayNewSpace = Ray3F.transform(matrix, rayOldSpace);

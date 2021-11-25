@@ -18,7 +18,6 @@
  */
 package org.dayflower.color;
 
-import static org.dayflower.java.lang.Strings.toNonScientificNotation;
 import static org.dayflower.utility.Floats.MIN_VALUE;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.exp;
@@ -40,6 +39,7 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
@@ -364,28 +364,28 @@ public final class Color3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Color3F(%sF, %sF, %sF)", toNonScientificNotation(this.component1), toNonScientificNotation(this.component2), toNonScientificNotation(this.component3));
+		return String.format("new Color3F(%sF, %sF, %sF)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
 	}
 	
 	/**
-	 * Compares {@code color3F} to this {@code Color3F} instance for equality.
+	 * Compares {@code color} to this {@code Color3F} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code color3F} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code color} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param color3F the {@code Color3F} to compare to this {@code Color3F} instance for equality
-	 * @return {@code true} if, and only if, {@code color3F} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise
+	 * @param color the {@code Color3F} to compare to this {@code Color3F} instance for equality
+	 * @return {@code true} if, and only if, {@code color} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise
 	 */
 //	TODO: Add Unit Tests!
-	public boolean equals(final Color3F color3F) {
-		if(color3F == this) {
+	public boolean equals(final Color3F color) {
+		if(color == this) {
 			return true;
-		} else if(color3F == null) {
+		} else if(color == null) {
 			return false;
-		} else if(!equal(this.component1, color3F.component1)) {
+		} else if(!equal(this.component1, color.component1)) {
 			return false;
-		} else if(!equal(this.component2, color3F.component2)) {
+		} else if(!equal(this.component2, color.component2)) {
 			return false;
-		} else if(!equal(this.component3, color3F.component3)) {
+		} else if(!equal(this.component3, color.component3)) {
 			return false;
 		} else {
 			return true;

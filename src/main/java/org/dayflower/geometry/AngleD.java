@@ -34,6 +34,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 /**
@@ -79,6 +80,7 @@ public final class AngleD {
 	 * 
 	 * @return a {@code String} representation of this {@code AngleD} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("AngleD.degrees(%+.10f, %+.10f, %+.10f)", Double.valueOf(this.degrees), Double.valueOf(this.degreesMinimum), Double.valueOf(this.degreesMaximum));
@@ -92,6 +94,7 @@ public final class AngleD {
 	 * @param object the {@code Object} to compare to this {@code AngleD} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code AngleD}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -120,6 +123,7 @@ public final class AngleD {
 	 * 
 	 * @return the angle in degrees
 	 */
+//	TODO: Add Unit Tests!
 	public double getDegrees() {
 		return this.degrees;
 	}
@@ -129,6 +133,7 @@ public final class AngleD {
 	 * 
 	 * @return the maximum angle in degrees
 	 */
+//	TODO: Add Unit Tests!
 	public double getDegreesMaximum() {
 		return this.degreesMaximum;
 	}
@@ -138,6 +143,7 @@ public final class AngleD {
 	 * 
 	 * @return the minimum angle in degrees
 	 */
+//	TODO: Add Unit Tests!
 	public double getDegreesMinimum() {
 		return this.degreesMinimum;
 	}
@@ -147,6 +153,7 @@ public final class AngleD {
 	 * 
 	 * @return the angle in radians
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadians() {
 		return this.radians;
 	}
@@ -156,6 +163,7 @@ public final class AngleD {
 	 * 
 	 * @return the maximum angle in radians
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadiansMaximum() {
 		return this.radiansMaximum;
 	}
@@ -165,6 +173,7 @@ public final class AngleD {
 	 * 
 	 * @return the minimum angle in radians
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadiansMinimum() {
 		return this.radiansMinimum;
 	}
@@ -174,6 +183,7 @@ public final class AngleD {
 	 * 
 	 * @return a hash code for this {@code AngleD} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.degrees), Double.valueOf(this.degreesMaximum), Double.valueOf(this.degreesMinimum), Double.valueOf(this.radians), Double.valueOf(this.radiansMaximum), Double.valueOf(this.radiansMinimum));
@@ -190,6 +200,7 @@ public final class AngleD {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeDouble(this.degrees);
@@ -217,6 +228,7 @@ public final class AngleD {
 	 * @return a new {@code AngleD} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code angleLHS} or {@code angleRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD add(final AngleD angleLHS, final AngleD angleRHS) {
 		final double degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
 		final double degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
@@ -238,6 +250,7 @@ public final class AngleD {
 	 * @param degrees the angle in degrees
 	 * @return a new {@code AngleD} instance based on an angle in degrees
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD degrees(final double degrees) {
 		return degrees(degrees, DEGREES_MINIMUM, DEGREES_MAXIMUM);
 	}
@@ -250,6 +263,7 @@ public final class AngleD {
 	 * @param degreesIntervalEndB the degrees that represents one of the ends of the interval of valid degrees
 	 * @return a new {@code AngleD} instance based on an angle in degrees and an interval of valid degrees
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD degrees(final double degrees, final double degreesIntervalEndA, final double degreesIntervalEndB) {
 		final double newDegreesMinimum = min(degreesIntervalEndA, degreesIntervalEndB);
 		final double newDegreesMaximum = max(degreesIntervalEndA, degreesIntervalEndB);
@@ -271,6 +285,7 @@ public final class AngleD {
 	 * @param resolution the resolution in X- or Y-direction (width or height)
 	 * @return a field of view (FOV) {@code AngleD} based on {@code focalDistance} and {@code resolution}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD fieldOfView(final double focalDistance, final double resolution) {
 		return radians(2.0D * atan(resolution * 0.5D / focalDistance));
 	}
@@ -286,6 +301,7 @@ public final class AngleD {
 	 * @return a horizontal field of view (FOV) {@code AngleD} based on {@code fieldOfViewY}, {@code resolutionX} and {@code resolutionY}
 	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewY} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD fieldOfViewX(final AngleD fieldOfViewY, final double resolutionX, final double resolutionY) {
 		return radians(2.0D * atan(tan(fieldOfViewY.radians * 0.5D) * (resolutionX / resolutionY)));
 	}
@@ -301,6 +317,7 @@ public final class AngleD {
 	 * @return a vertical field of view (FOV) {@code AngleD} based on {@code fieldOfViewX}, {@code resolutionX} and {@code resolutionY}
 	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewX} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD fieldOfViewY(final AngleD fieldOfViewX, final double resolutionX, final double resolutionY) {
 		return radians(2.0D * atan(tan(fieldOfViewX.radians * 0.5D) * (resolutionY / resolutionX)));
 	}
@@ -314,6 +331,7 @@ public final class AngleD {
 	 * @return a new {@code AngleD} instance that represents half of {@code angle}
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD half(final AngleD angle) {
 		final double degreesMinimum = angle.degreesMinimum;
 		final double degreesMaximum = angle.degreesMaximum;
@@ -331,6 +349,7 @@ public final class AngleD {
 	 * @return an {@code AngleD} instance that is a negated version of {@code angle}
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD negate(final AngleD angle) {
 		final double degreesMinimum = -angle.degreesMinimum;
 		final double degreesMaximum = -angle.degreesMaximum;
@@ -349,6 +368,7 @@ public final class AngleD {
 	 * @return a new pitch {@code AngleD} instance based on {@code eye} and {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD pitch(final Point3D eye, final Point3D lookAt) {
 		return pitch(Vector3D.directionNormalized(eye, lookAt));
 	}
@@ -362,6 +382,7 @@ public final class AngleD {
 	 * @return a new pitch {@code AngleD} instance based on {@code direction}
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD pitch(final Vector3D direction) {
 		return degrees(toDegrees(asin(direction.getY())), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
 	}
@@ -379,6 +400,7 @@ public final class AngleD {
 	 * @param radians the angle in radians
 	 * @return a new {@code AngleD} instance based on an angle in radians
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD radians(final double radians) {
 		return radians(radians, RADIANS_MINIMUM, RADIANS_MAXIMUM);
 	}
@@ -391,6 +413,7 @@ public final class AngleD {
 	 * @param radiansIntervalEndB the radians that represents one of the ends of the interval of valid radians
 	 * @return a new {@code AngleD} instance based on an angle in radians and an interval of valid radians
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD radians(final double radians, final double radiansIntervalEndA, final double radiansIntervalEndB) {
 		final double newRadiansMinimum = min(radiansIntervalEndA, radiansIntervalEndB);
 		final double newRadiansMaximum = max(radiansIntervalEndA, radiansIntervalEndB);
@@ -415,6 +438,7 @@ public final class AngleD {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD read(final DataInput dataInput) {
 		try {
 			final double degrees = dataInput.readDouble();
@@ -442,6 +466,7 @@ public final class AngleD {
 	 * @return a new {@code AngleD} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code angleLHS} or {@code angleRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD subtract(final AngleD angleLHS, final AngleD angleRHS) {
 		final double degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
 		final double degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
@@ -460,6 +485,7 @@ public final class AngleD {
 	 * @return a new yaw {@code AngleD} instance based on {@code eye} and {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD yaw(final Point3D eye, final Point3D lookAt) {
 		return yaw(Vector3D.directionNormalized(eye, lookAt));
 	}
@@ -473,6 +499,7 @@ public final class AngleD {
 	 * @return a new yaw {@code AngleD} instance based on {@code direction}
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AngleD yaw(final Vector3D direction) {
 		return degrees(toDegrees(atan2(direction.getX(), direction.getZ())));
 	}

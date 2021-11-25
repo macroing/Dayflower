@@ -28,6 +28,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -46,86 +47,103 @@ public final class Matrix44F implements Node {
 	/**
 	 * The offset for the element at index 0 or row 1 and column 1 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_1_1 = 0;
 	
 	/**
 	 * The offset for the element at index 1 or row 1 and column 2 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_1_2 = 1;
 	
 	/**
 	 * The offset for the element at index 2 or row 1 and column 3 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_1_3 = 2;
 	
 	/**
 	 * The offset for the element at index 3 or row 1 and column 4 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_1_4 = 3;
 	
 	/**
 	 * The offset for the element at index 4 or row 2 and column 1 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_2_1 = 4;
 	
 	/**
 	 * The offset for the element at index 5 or row 2 and column 2 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_2_2 = 5;
 	
 	/**
 	 * The offset for the element at index 6 or row 2 and column 3 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_2_3 = 6;
 	
 	/**
 	 * The offset for the element at index 7 or row 2 and column 4 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_2_4 = 7;
 	
 	/**
 	 * The offset for the element at index 8 or row 3 and column 1 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_3_1 = 8;
 	
 	/**
 	 * The offset for the element at index 9 or row 3 and column 2 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_3_2 = 9;
 	
 	/**
 	 * The offset for the element at index 10 or row 3 and column 3 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_3_3 = 10;
 	
 	/**
 	 * The offset for the element at index 11 or row 3 and column 4 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_3_4 = 11;
 	
 	/**
 	 * The offset for the element at index 12 or row 4 and column 1 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_4_1 = 12;
 	
 	/**
 	 * The offset for the element at index 13 or row 4 and column 2 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_4_2 = 13;
 	
 	/**
 	 * The offset for the element at index 14 or row 4 and column 3 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_4_3 = 14;
 	
 	/**
 	 * The offset for the element at index 15 or row 4 and column 4 in the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_4_4 = 15;
 	
 	/**
 	 * The size of the {@code float[]}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ARRAY_SIZE = 16;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,6 +177,7 @@ public final class Matrix44F implements Node {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Matrix44F() {
 		this(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -183,6 +202,7 @@ public final class Matrix44F implements Node {
 	 * @param element43 the value of the element at index 14 or row 4 and column 3
 	 * @param element44 the value of the element at index 15 or row 4 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public Matrix44F(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float element41, final float element42, final float element43, final float element44) {
 		this.element11 = element11;
 		this.element12 = element12;
@@ -209,6 +229,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Matrix44F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		final String row1 = String.format("%+.10f, %+.10f, %+.10f, %+.10f", Float.valueOf(this.element11), Float.valueOf(this.element12), Float.valueOf(this.element13), Float.valueOf(this.element14));
@@ -227,6 +248,7 @@ public final class Matrix44F implements Node {
 	 * @param object the {@code Object} to compare to this {@code Matrix44F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Matrix44F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -275,6 +297,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Matrix44F} instance is invertible, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isInvertible() {
 		return abs(determinant()) >= 1.0e-12F;
 	}
@@ -284,6 +307,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the determinant of this {@code Matrix44F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float determinant() {
 		final float a = this.element11 * this.element22 - this.element12 * this.element21;
 		final float b = this.element11 * this.element23 - this.element13 * this.element21;
@@ -310,6 +334,7 @@ public final class Matrix44F implements Node {
 	 * @return the value of the element at index {@code index}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code 15}
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement(final int index) {
 		switch(index) {
 			case 0:
@@ -361,6 +386,7 @@ public final class Matrix44F implements Node {
 	 * @return the value of the element at row {@code row} and column {@code column}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code row} or {@code column} are less than {@code 1} or greater than {@code 4}
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement(final int row, final int column) {
 		if(row < 1 || row > 4) {
 			throw new IllegalArgumentException(String.format("Illegal row: row=%d", Integer.valueOf(row)));
@@ -380,6 +406,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 0 or row 1 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement11() {
 		return this.element11;
 	}
@@ -389,6 +416,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 1 or row 1 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement12() {
 		return this.element12;
 	}
@@ -398,6 +426,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 2 or row 1 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement13() {
 		return this.element13;
 	}
@@ -407,6 +436,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 3 or row 1 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement14() {
 		return this.element14;
 	}
@@ -416,6 +446,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 4 or row 2 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement21() {
 		return this.element21;
 	}
@@ -425,6 +456,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 5 or row 2 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement22() {
 		return this.element22;
 	}
@@ -434,6 +466,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 6 or row 2 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement23() {
 		return this.element23;
 	}
@@ -443,6 +476,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 7 or row 2 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement24() {
 		return this.element24;
 	}
@@ -452,6 +486,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 8 or row 3 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement31() {
 		return this.element31;
 	}
@@ -461,6 +496,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 9 or row 3 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement32() {
 		return this.element32;
 	}
@@ -470,6 +506,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 10 or row 3 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement33() {
 		return this.element33;
 	}
@@ -479,6 +516,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 11 or row 3 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement34() {
 		return this.element34;
 	}
@@ -488,6 +526,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 12 or row 4 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement41() {
 		return this.element41;
 	}
@@ -497,6 +536,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 13 or row 4 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement42() {
 		return this.element42;
 	}
@@ -506,6 +546,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 14 or row 4 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement43() {
 		return this.element43;
 	}
@@ -515,6 +556,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the value of the element at index 15 or row 4 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement44() {
 		return this.element44;
 	}
@@ -524,6 +566,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return a {@code float[]} representation of this {@code Matrix44F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		
@@ -552,6 +595,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return a hash code for this {@code Matrix44F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(new Object[] {
@@ -573,6 +617,7 @@ public final class Matrix44F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeFloat(this.element11);
@@ -603,6 +648,7 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return a new {@code Matrix44F} instance denoting the identity matrix
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F identity() {
 		return new Matrix44F();
 	}
@@ -621,6 +667,7 @@ public final class Matrix44F implements Node {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F inverse(final Matrix44F matrix) {
 		final float a = matrix.element11 * matrix.element22 - matrix.element12 * matrix.element21;
 		final float b = matrix.element11 * matrix.element23 - matrix.element13 * matrix.element21;
@@ -673,6 +720,7 @@ public final class Matrix44F implements Node {
 	 * @return a new {@code Matrix44F} instance that looks in the direction of {@code eye} to {@code lookAt} and has an up-direction of {@code up}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye}, {@code lookAt} or {@code up} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F lookAt(final Point3F eye, final Point3F lookAt, final Vector3F up) {
 		final Vector3F w = Vector3F.directionNormalized(eye, lookAt);
 		final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(Vector3F.normalize(up), w));
@@ -710,6 +758,7 @@ public final class Matrix44F implements Node {
 	 * @return a new {@code Matrix44F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code matrixRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F multiply(final Matrix44F matrixLHS, final Matrix44F matrixRHS) {
 		final float element11 = matrixLHS.element11 * matrixRHS.element11 + matrixLHS.element12 * matrixRHS.element21 + matrixLHS.element13 * matrixRHS.element31 + matrixLHS.element14 * matrixRHS.element41;
 		final float element12 = matrixLHS.element11 * matrixRHS.element12 + matrixLHS.element12 * matrixRHS.element22 + matrixLHS.element13 * matrixRHS.element32 + matrixLHS.element14 * matrixRHS.element42;
@@ -743,6 +792,7 @@ public final class Matrix44F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F read(final DataInput dataInput) {
 		try {
 			final float element11 = dataInput.readFloat();
@@ -778,6 +828,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the axis represented by {@code vector}
 	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code vector} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final AngleF angle, final Vector3F vector) {
 		final Vector3F vectorNormalized = Vector3F.normalize(vector);
 		
@@ -824,6 +875,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the axis represented by {@code x}, {@code y} and {@code z}
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final AngleF angle, final float x, final float y, final float z) {
 		return rotate(angle, new Vector3F(x, y, z));
 	}
@@ -837,6 +889,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates using {@code orthonormalBasis}
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final OrthonormalBasis33F orthonormalBasis) {
 		final Vector3F u = Vector3F.transform(Vector3F.u(), orthonormalBasis);
 		final Vector3F v = Vector3F.transform(Vector3F.v(), orthonormalBasis);
@@ -854,6 +907,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates using {@code quaternion}
 	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final Quaternion4F quaternion) {
 		final float uX = 1.0F - 2.0F * (quaternion.getY() * quaternion.getY() + quaternion.getZ() * quaternion.getZ());
 		final float uY = 0.0F + 2.0F * (quaternion.getX() * quaternion.getY() - quaternion.getW() * quaternion.getZ());
@@ -882,6 +936,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates using {@code w} and {@code v}
 	 * @throws NullPointerException thrown if, and only if, either {@code w} or {@code v} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final Vector3F w, final Vector3F v) {
 		final Vector3F wNormalized = Vector3F.normalize(w);
 		final Vector3F uNormalized = Vector3F.crossProduct(Vector3F.normalize(v), wNormalized);
@@ -911,6 +966,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates using {@code w}, {@code v} and {@code u}
 	 * @throws NullPointerException thrown if, and only if, either {@code w}, {@code v} or {@code u} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final Vector3F w, final Vector3F v, final Vector3F u) {
 		final float element11 = u.getX();
 		final float element12 = v.getX();
@@ -951,6 +1007,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the X-axis
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotateX(final AngleF angle) {
 		final float cos = cos(angle.getRadians());
 		final float sin = sin(angle.getRadians());
@@ -980,6 +1037,7 @@ public final class Matrix44F implements Node {
 	 * @param angle an angle in degrees
 	 * @return a {@code Matrix44F} instance that rotates along the X-axis
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotateX(final float angle) {
 		return rotateX(angle, false);
 	}
@@ -1001,6 +1059,7 @@ public final class Matrix44F implements Node {
 	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
 	 * @return a {@code Matrix44F} instance that rotates along the X-axis
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotateX(final float angle, final boolean isRadians) {
 		final float angleRadians = isRadians ? angle : toRadians(angle);
 		
@@ -1029,6 +1088,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the Y-axis
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotateY(final AngleF angle) {
 		final float cos = cos(angle.getRadians());
 		final float sin = sin(angle.getRadians());
@@ -1058,6 +1118,7 @@ public final class Matrix44F implements Node {
 	 * @param angle an angle in degrees
 	 * @return a {@code Matrix44F} instance that rotates along the Y-axis
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotateY(final float angle) {
 		return rotateY(angle, false);
 	}
@@ -1079,6 +1140,7 @@ public final class Matrix44F implements Node {
 	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
 	 * @return a {@code Matrix44F} instance that rotates along the Y-axis
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotateY(final float angle, final boolean isRadians) {
 		final float angleRadians = isRadians ? angle : toRadians(angle);
 		
@@ -1107,6 +1169,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the Z-axis
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotateZ(final AngleF angle) {
 		final float cos = cos(angle.getRadians());
 		final float sin = sin(angle.getRadians());
@@ -1136,6 +1199,7 @@ public final class Matrix44F implements Node {
 	 * @param angle an angle in degrees
 	 * @return a {@code Matrix44F} instance that rotates along the Z-axis
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotateZ(final float angle) {
 		return rotateZ(angle, false);
 	}
@@ -1157,6 +1221,7 @@ public final class Matrix44F implements Node {
 	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
 	 * @return a {@code Matrix44F} instance that rotates along the Z-axis
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F rotateZ(final float angle, final boolean isRadians) {
 		final float angleRadians = isRadians ? angle : toRadians(angle);
 		
@@ -1182,6 +1247,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F scale(final Vector3F vector) {
 		return scale(vector.getX(), vector.getY(), vector.getZ());
 	}
@@ -1199,6 +1265,7 @@ public final class Matrix44F implements Node {
 	 * @param scalar the scale factor along the X-, Y- and Z-axes
 	 * @return a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F scale(final float scalar) {
 		return scale(scalar, scalar, scalar);
 	}
@@ -1221,6 +1288,7 @@ public final class Matrix44F implements Node {
 	 * @param z the scale factor along the Z-axis
 	 * @return a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F scale(final float x, final float y, final float z) {
 		return new Matrix44F(x, 0.0F, 0.0F, 0.0F, 0.0F, y, 0.0F, 0.0F, 0.0F, 0.0F, z, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -1241,6 +1309,7 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that translates along the X-, Y- and Z-axes
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F translate(final Point3F point) {
 		return translate(point.getX(), point.getY(), point.getZ());
 	}
@@ -1263,6 +1332,7 @@ public final class Matrix44F implements Node {
 	 * @param z the translation factor along the Z-axis
 	 * @return a {@code Matrix44F} instance that translates along the X-, Y- and Z-axes
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F translate(final float x, final float y, final float z) {
 		return new Matrix44F(1.0F, 0.0F, 0.0F, x, 0.0F, 1.0F, 0.0F, y, 0.0F, 0.0F, 1.0F, z, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -1276,6 +1346,7 @@ public final class Matrix44F implements Node {
 	 * @return a new {@code Matrix44F} instance that is the transpose of {@code matrix}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Matrix44F transpose(final Matrix44F matrix) {
 		final float element11 = matrix.element11;
 		final float element12 = matrix.element21;

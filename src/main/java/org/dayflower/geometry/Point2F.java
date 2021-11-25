@@ -39,10 +39,12 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
@@ -165,7 +167,7 @@ public final class Point2F implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Point2F(%+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2));
+		return String.format("new Point2F(%sF, %sF)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2));
 	}
 	
 	/**
@@ -343,6 +345,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F add(final Point2F pointLHS, final Vector2F vectorRHS) {
 		final float component1 = pointLHS.component1 + vectorRHS.getComponent1();
 		final float component2 = pointLHS.component2 + vectorRHS.getComponent2();
@@ -363,6 +366,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F add(final Point2F pointLHS, final Vector2F vectorRHS, final float scalar) {
 		final float component1 = pointLHS.component1 + vectorRHS.getComponent1() * scalar;
 		final float component2 = pointLHS.component2 + vectorRHS.getComponent2() * scalar;
@@ -382,6 +386,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F add(final Point2F pointLHS, final float scalarRHS) {
 		final float component1 = pointLHS.component1 + scalarRHS;
 		final float component2 = pointLHS.component2 + scalarRHS;
@@ -402,6 +407,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F addDistanceKm(final Point2F point, final float distanceKmLongitude, final float distanceKmLatitude) {
 		final float radius = 6371.0F;
 		
@@ -426,6 +432,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance that represents the centroid of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F centroid(final Point2F a, final Point2F b) {
 		final float component1 = (a.component1 + b.component1) / 2.0F;
 		final float component2 = (a.component2 + b.component2) / 2.0F;
@@ -444,6 +451,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance that represents the centroid of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F centroid(final Point2F a, final Point2F b, final Point2F c) {
 		final float component1 = (a.component1 + b.component1 + c.component1) / 3.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2) / 3.0F;
@@ -463,6 +471,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F centroid(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
 		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0F;
@@ -486,6 +495,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F centroid(final Point2F a, final Point2F b, final Point2F c, final Point2F d, final Point2F e, final Point2F f, final Point2F g, final Point2F h) {
 		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0F;
@@ -507,6 +517,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the interpolated texture coordinates
 	 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinatesA}, {@code textureCoordinatesB}, {@code textureCoordinatesC} or {@code barycentricCoordinates} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F createTextureCoordinates(final Point2F textureCoordinatesA, final Point2F textureCoordinatesB, final Point2F textureCoordinatesC, final Point3F barycentricCoordinates) {
 		final float u = textureCoordinatesA.getU() * barycentricCoordinates.getU() + textureCoordinatesB.getU() * barycentricCoordinates.getV() + textureCoordinatesC.getU() * barycentricCoordinates.getW();
 		final float v = textureCoordinatesA.getV() * barycentricCoordinates.getU() + textureCoordinatesB.getV() * barycentricCoordinates.getV() + textureCoordinatesC.getV() * barycentricCoordinates.getW();
@@ -520,6 +531,7 @@ public final class Point2F implements Node {
 	 * @param mortonCode the Morton code to decode
 	 * @return a new {@code Point2F} instance based on the decoded coordinates of the Morton code {@code mortonCode}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F decodeMortonCode1By1(final float mortonCode) {
 		return decodeMortonCode1By1((int)(mortonCode * (1L << 32L)));
 	}
@@ -530,6 +542,7 @@ public final class Point2F implements Node {
 	 * @param mortonCode the Morton code to decode
 	 * @return a new {@code Point2F} instance based on the decoded coordinates of the Morton code {@code mortonCode}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F decodeMortonCode1By1(final int mortonCode) {
 		final int mortonCodeX = MortonCodes.decode1By1X(mortonCode);
 		final int mortonCodeY = MortonCodes.decode1By1Y(mortonCode);
@@ -549,6 +562,7 @@ public final class Point2F implements Node {
 	 * @return a cached version of {@code point}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F getCached(final Point2F point) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
 	}
@@ -566,6 +580,7 @@ public final class Point2F implements Node {
 	 * @return a {@code Point2F} instance with the result of the linear interpolation operation
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F lerp(final Point2F a, final Point2F b, final float t) {
 		final float component1 = Floats.lerp(a.component1, b.component1, t);
 		final float component2 = Floats.lerp(a.component2, b.component2, t);
@@ -578,6 +593,7 @@ public final class Point2F implements Node {
 	 * 
 	 * @return a new {@code Point2F} instance with the largest component values
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F maximum() {
 		final float component1 = MAX_VALUE;
 		final float component2 = MAX_VALUE;
@@ -595,6 +611,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the largest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F maximum(final Point2F a, final Point2F b) {
 		final float component1 = max(a.component1, b.component1);
 		final float component2 = max(a.component2, b.component2);
@@ -613,6 +630,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the largest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F maximum(final Point2F a, final Point2F b, final Point2F c) {
 		final float component1 = max(a.component1, b.component1, c.component1);
 		final float component2 = max(a.component2, b.component2, c.component2);
@@ -632,6 +650,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F maximum(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
 		final float component1 = max(a.component1, b.component1, c.component1, d.component1);
 		final float component2 = max(a.component2, b.component2, c.component2, d.component2);
@@ -649,6 +668,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance that represents the midpoint of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F midpoint(final Point2F a, final Point2F b) {
 		final float component1 = (a.component1 + b.component1) * 0.5F;
 		final float component2 = (a.component2 + b.component2) * 0.5F;
@@ -661,6 +681,7 @@ public final class Point2F implements Node {
 	 * 
 	 * @return a new {@code Point2F} instance with the smallest component values
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F minimum() {
 		final float component1 = MIN_VALUE;
 		final float component2 = MIN_VALUE;
@@ -678,6 +699,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the smallest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F minimum(final Point2F a, final Point2F b) {
 		final float component1 = min(a.component1, b.component1);
 		final float component2 = min(a.component2, b.component2);
@@ -696,6 +718,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the smallest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F minimum(final Point2F a, final Point2F b, final Point2F c) {
 		final float component1 = min(a.component1, b.component1, c.component1);
 		final float component2 = min(a.component2, b.component2, c.component2);
@@ -715,6 +738,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F minimum(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
 		final float component1 = min(a.component1, b.component1, c.component1, d.component1);
 		final float component2 = min(a.component2, b.component2, c.component2, d.component2);
@@ -757,6 +781,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the rotation applied
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code angle} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F rotate(final Point2F point, final AngleF angle) {
 		final float angleRadians = angle.getRadians();
 		final float angleRadiansCos = cos(angleRadians);
@@ -780,6 +805,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the scale applied
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F scale(final Point2F point, final Vector2F scale) {
 		final float component1 = point.component1 * scale.getComponent1();
 		final float component2 = point.component2 * scale.getComponent2();
@@ -796,6 +822,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the spherical coordinates of {@code direction} as its component values
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F sphericalCoordinates(final Vector3F direction) {
 		return new Point2F(direction.sphericalPhi() * PI_MULTIPLIED_BY_2_RECIPROCAL, direction.sphericalTheta() * PI_RECIPROCAL);
 	}
@@ -812,6 +839,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F subtract(final Point2F pointLHS, final Vector2F vectorRHS) {
 		final float component1 = pointLHS.component1 - vectorRHS.getComponent1();
 		final float component2 = pointLHS.component2 - vectorRHS.getComponent2();
@@ -831,6 +859,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F subtract(final Point2F pointLHS, final float scalarRHS) {
 		final float component1 = pointLHS.component1 - scalarRHS;
 		final float component2 = pointLHS.component2 - scalarRHS;
@@ -849,6 +878,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with {@code point} inside the image represented by {@code resolutionX} and {@code resolutionY}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F toImage(final Point2F point, final float resolutionX, final float resolutionY) {
 		final float component1 = positiveModulo(point.component1 * resolutionX - 0.5F, resolutionX);
 		final float component2 = positiveModulo(point.component2 * resolutionY - 0.5F, resolutionY);
@@ -868,6 +898,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F transform(final Matrix33F matrixLHS, final Point2F pointRHS) {
 		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13();
 		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23();
@@ -887,6 +918,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F transformAndDivide(final Matrix33F matrixLHS, final Point2F pointRHS) {
 		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13();
 		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23();
@@ -904,6 +936,7 @@ public final class Point2F implements Node {
 	 * @return a {@code String} representation of {@code points}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static String toString(final Point2F... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		
@@ -931,6 +964,7 @@ public final class Point2F implements Node {
 	 * @return the distance from {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static float distance(final Point2F eye, final Point2F lookAt) {
 		return Vector2F.direction(eye, lookAt).length();
 	}
@@ -947,6 +981,7 @@ public final class Point2F implements Node {
 	 * @return the distance between {@code pointA} and {@code pointB} in Km
 	 * @throws NullPointerException thrown if, and only if, either {@code pointA} or {@code pointB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static float distanceKm(final Point2F pointA, final Point2F pointB) {
 		final float radius = 6371.0F;
 		
@@ -974,6 +1009,7 @@ public final class Point2F implements Node {
 	 * @return the squared distance from {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static float distanceSquared(final Point2F eye, final Point2F lookAt) {
 		return Vector2F.direction(eye, lookAt).lengthSquared();
 	}
@@ -983,6 +1019,7 @@ public final class Point2F implements Node {
 	 * 
 	 * @return the size of the cache
 	 */
+//	TODO: Add Unit Tests!
 	public static int getCacheSize() {
 		return CACHE.size();
 	}
@@ -990,6 +1027,7 @@ public final class Point2F implements Node {
 	/**
 	 * Clears the cache.
 	 */
+//	TODO: Add Unit Tests!
 	public static void clearCache() {
 		CACHE.clear();
 	}

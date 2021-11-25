@@ -21,6 +21,7 @@ package org.dayflower.geometry;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -50,6 +51,7 @@ public final class Ray3D implements Node {
 	 * @param direction a {@link Vector3D} instance to represent the direction
 	 * @throws NullPointerException thrown if, and only if, either {@code origin} or {@code direction} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Ray3D(final Point3D origin, final Vector3D direction) {
 		this.origin = Objects.requireNonNull(origin, "origin == null");
 		this.direction = Vector3D.normalize(Objects.requireNonNull(direction, "direction == null"));
@@ -62,6 +64,7 @@ public final class Ray3D implements Node {
 	 * 
 	 * @return the {@code Point3D} instance used by this {@code Ray3D} instance to represent its origin
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getOrigin() {
 		return this.origin;
 	}
@@ -72,6 +75,7 @@ public final class Ray3D implements Node {
 	 * @param t the parametric distance
 	 * @return a {@code Point3D} instance given the parametric distance {@code t}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getPointAt(final double t) {
 		return Point3D.add(this.origin, this.direction, t);
 	}
@@ -81,6 +85,7 @@ public final class Ray3D implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Ray3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Ray3D(%s, %s)", this.origin, this.direction);
@@ -91,6 +96,7 @@ public final class Ray3D implements Node {
 	 * 
 	 * @return the {@code Vector3D} instance used by this {@code Ray3D} instance to represent its direction
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D getDirection() {
 		return this.direction;
 	}
@@ -116,6 +122,7 @@ public final class Ray3D implements Node {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -145,6 +152,7 @@ public final class Ray3D implements Node {
 	 * @param object the {@code Object} to compare to this {@code Ray3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Ray3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -165,6 +173,7 @@ public final class Ray3D implements Node {
 	 * 
 	 * @return a hash code for this {@code Ray3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.origin, this.direction);
@@ -181,6 +190,7 @@ public final class Ray3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		this.origin.write(dataOutput);
 		this.direction.write(dataOutput);
@@ -200,6 +210,7 @@ public final class Ray3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static Ray3D read(final DataInput dataInput) {
 		return new Ray3D(Point3D.read(dataInput), Vector3D.read(dataInput));
 	}
@@ -216,6 +227,7 @@ public final class Ray3D implements Node {
 	 * @return a new {@code Ray3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code rayRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Ray3D transform(final Matrix44D matrixLHS, final Ray3D rayRHS) {
 		final Point3D originOld = rayRHS.origin;
 		final Point3D originNew = Point3D.transformAndDivide(matrixLHS, originOld);

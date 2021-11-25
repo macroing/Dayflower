@@ -29,6 +29,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -59,6 +60,7 @@ public final class Quaternion4D implements Node {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Quaternion4D() {
 		this(0.0D, 0.0D, 0.0D);
 	}
@@ -78,6 +80,7 @@ public final class Quaternion4D implements Node {
 	 * @param vector a {@link Vector3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Quaternion4D(final Vector3D vector) {
 		this(vector.getComponent1(), vector.getComponent2(), vector.getComponent3());
 	}
@@ -96,6 +99,7 @@ public final class Quaternion4D implements Node {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public Quaternion4D(final double component1, final double component2, final double component3) {
 		this(component1, component2, component3, 1.0F);
 	}
@@ -108,6 +112,7 @@ public final class Quaternion4D implements Node {
 	 * @param component3 the value of component 3
 	 * @param component4 the value of component 4
 	 */
+//	TODO: Add Unit Tests!
 	public Quaternion4D(final double component1, final double component2, final double component3, final double component4) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -122,6 +127,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Quaternion4D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Quaternion4D(%+.10f, %+.10f, %+.10f, %+.10f)", Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3), Double.valueOf(this.component4));
@@ -135,6 +141,7 @@ public final class Quaternion4D implements Node {
 	 * @param object the {@code Object} to compare to this {@code Quaternion4D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Quaternion4D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -159,6 +166,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the value of component 1
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent1() {
 		return this.component1;
 	}
@@ -168,6 +176,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the value of component 2
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent2() {
 		return this.component2;
 	}
@@ -177,6 +186,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent3() {
 		return this.component3;
 	}
@@ -186,6 +196,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the value of component 4
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent4() {
 		return this.component4;
 	}
@@ -195,6 +206,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the value of the W-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getW() {
 		return this.component4;
 	}
@@ -204,6 +216,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the value of the X-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getX() {
 		return this.component1;
 	}
@@ -213,6 +226,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the value of the Y-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getY() {
 		return this.component2;
 	}
@@ -222,6 +236,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the value of the Z-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getZ() {
 		return this.component3;
 	}
@@ -231,6 +246,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the length of this {@code Quaternion4D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double length() {
 		return sqrt(lengthSquared());
 	}
@@ -240,6 +256,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return the squared length of this {@code Quaternion4D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double lengthSquared() {
 		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3 + this.component4 * this.component4;
 	}
@@ -249,6 +266,7 @@ public final class Quaternion4D implements Node {
 	 * 
 	 * @return a hash code for this {@code Quaternion4D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3), Double.valueOf(this.component4));
@@ -265,6 +283,7 @@ public final class Quaternion4D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeDouble(this.component1);
@@ -292,6 +311,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D add(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
 		final double component1 = quaternionLHS.component1 + quaternionRHS.component1;
 		final double component2 = quaternionLHS.component2 + quaternionRHS.component2;
@@ -312,6 +332,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the conjugation
 	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D conjugate(final Quaternion4D quaternion) {
 		final double component1 = -quaternion.component1;
 		final double component2 = -quaternion.component2;
@@ -335,6 +356,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, {@code quaternionLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D divide(final Quaternion4D quaternionLHS, final double scalarRHS) {
 		final double component1 = quaternionLHS.component1 / scalarRHS;
 		final double component2 = quaternionLHS.component2 / scalarRHS;
@@ -354,6 +376,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance based on an {@code AngleD} instance and a {@code Vector3D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code vector} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D from(final AngleD angle, final Vector3D vector) {
 		final AngleD angleHalf = AngleD.half(angle);
 		
@@ -377,6 +400,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance based on a {@code Matrix44D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D from(final Matrix44D matrix) {
 		final double element11 = matrix.getElement11();
 		final double element12 = matrix.getElement12();
@@ -446,6 +470,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance based on the direction {@code direction}
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D from(final Vector3D direction) {
 		return from(Matrix44D.rotate(new OrthonormalBasis33D(direction)));
 	}
@@ -469,6 +494,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D linearInterpolationNormalized(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
 		return linearInterpolationNormalized(quaternionLHS, quaternionRHS, 0.5D);
 	}
@@ -493,6 +519,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D linearInterpolationNormalized(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS, final double t) {
 		return linearInterpolationNormalized(quaternionLHS, quaternionRHS, t, false);
 	}
@@ -511,6 +538,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D linearInterpolationNormalized(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS, final double t, final boolean isInterpolatingShortest) {
 		return normalize(add(multiply(subtract(isInterpolatingShortest && dotProduct(quaternionLHS, quaternionRHS) < 0.0D ? negate(quaternionRHS) : quaternionRHS, quaternionLHS), t), quaternionLHS));
 	}
@@ -534,6 +562,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D linearInterpolationSpherical(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
 		return linearInterpolationSpherical(quaternionLHS, quaternionRHS, 0.5D);
 	}
@@ -558,6 +587,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D linearInterpolationSpherical(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS, final double t) {
 		return linearInterpolationSpherical(quaternionLHS, quaternionRHS, t, false);
 	}
@@ -576,6 +606,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D linearInterpolationSpherical(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS, final double t, final boolean isInterpolatingShortest) {
 		final double cos = dotProduct(quaternionLHS, quaternionRHS);
 		
@@ -607,6 +638,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D multiply(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
 		final double component1 = quaternionLHS.component1 * quaternionRHS.component4 + quaternionLHS.component4 * quaternionRHS.component1 + quaternionLHS.component2 * quaternionRHS.component3 - quaternionLHS.component3 * quaternionRHS.component2;
 		final double component2 = quaternionLHS.component2 * quaternionRHS.component4 + quaternionLHS.component4 * quaternionRHS.component2 + quaternionLHS.component3 * quaternionRHS.component1 - quaternionLHS.component1 * quaternionRHS.component3;
@@ -630,6 +662,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D multiply(final Quaternion4D quaternionLHS, final Vector3D vectorRHS) {
 		final double component1 = +quaternionLHS.component4 * vectorRHS.getComponent1() + quaternionLHS.component2 * vectorRHS.getComponent3() - quaternionLHS.component3 * vectorRHS.getComponent2();
 		final double component2 = +quaternionLHS.component4 * vectorRHS.getComponent2() + quaternionLHS.component3 * vectorRHS.getComponent1() - quaternionLHS.component1 * vectorRHS.getComponent3();
@@ -653,6 +686,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code quaternionLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D multiply(final Quaternion4D quaternionLHS, final double scalarRHS) {
 		final double component1 = quaternionLHS.component1 * scalarRHS;
 		final double component2 = quaternionLHS.component2 * scalarRHS;
@@ -673,6 +707,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D negate(final Quaternion4D quaternion) {
 		final double component1 = -quaternion.component1;
 		final double component2 = -quaternion.component2;
@@ -693,6 +728,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D normalize(final Quaternion4D quaternion) {
 		return divide(quaternion, quaternion.length());
 	}
@@ -709,6 +745,7 @@ public final class Quaternion4D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D read(final DataInput dataInput) {
 		try {
 			final double component1 = dataInput.readDouble();
@@ -736,6 +773,7 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Quaternion4D subtract(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
 		final double component1 = quaternionLHS.component1 - quaternionRHS.component1;
 		final double component2 = quaternionLHS.component2 - quaternionRHS.component2;
@@ -755,6 +793,7 @@ public final class Quaternion4D implements Node {
 	 * @return the dot product of {@code quaternionLHS} and {@code quaternionRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static double dotProduct(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
 		return quaternionLHS.component1 * quaternionRHS.component1 + quaternionLHS.component2 * quaternionRHS.component2 + quaternionLHS.component3 * quaternionRHS.component3 + quaternionLHS.component4 * quaternionRHS.component4;
 	}

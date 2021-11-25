@@ -1,0 +1,249 @@
+/**
+ * Copyright 2014 - 2021 J&#246;rgen Lundgren
+ * 
+ * This file is part of Dayflower.
+ * 
+ * Dayflower is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Dayflower is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.dayflower.geometry;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
+import org.junit.jupiter.api.Test;
+
+@SuppressWarnings("static-method")
+public final class Point2FUnitTests {
+	public Point2FUnitTests() {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Test
+	public void testConstants() {
+		assertEquals(new Point2F(+Float.MAX_VALUE, +Float.MAX_VALUE), Point2F.MAXIMUM);
+		assertEquals(new Point2F(-Float.MAX_VALUE, -Float.MAX_VALUE), Point2F.MINIMUM);
+	}
+	
+	@Test
+	public void testConstructor() {
+		final Point2F point = new Point2F();
+		
+		assertEquals(0.0F, point.getComponent1());
+		assertEquals(0.0F, point.getComponent2());
+	}
+	
+	@Test
+	public void testConstructorFloat() {
+		final Point2F point = new Point2F(1.0F);
+		
+		assertEquals(1.0F, point.getComponent1());
+		assertEquals(1.0F, point.getComponent2());
+	}
+	
+	@Test
+	public void testConstructorFloatFloat() {
+		final Point2F point = new Point2F(1.0F, 2.0F);
+		
+		assertEquals(1.0F, point.getComponent1());
+		assertEquals(2.0F, point.getComponent2());
+	}
+	
+	@Test
+	public void testConstructorPoint2D() {
+		final Point2F point = new Point2F(new Point2D(1.0D, 1.0D));
+		
+		assertEquals(1.0F, point.getComponent1());
+		assertEquals(1.0F, point.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> new Point2F((Point2D)(null)));
+	}
+	
+	@Test
+	public void testConstructorVector2F() {
+		final Point2F point = new Point2F(new Vector2F(1.0F, 1.0F));
+		
+		assertEquals(1.0F, point.getComponent1());
+		assertEquals(1.0F, point.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> new Point2F((Vector2F)(null)));
+	}
+	
+	@Test
+	public void testEquals() {
+		final Point2F a = new Point2F(0.0F, 1.0F);
+		final Point2F b = new Point2F(0.0F, 1.0F);
+		final Point2F c = new Point2F(0.0F, 2.0F);
+		final Point2F d = new Point2F(2.0F, 1.0F);
+		final Point2F e = null;
+		
+		assertEquals(a, a);
+		assertEquals(a, b);
+		assertEquals(b, a);
+		assertNotEquals(a, c);
+		assertNotEquals(c, a);
+		assertNotEquals(a, d);
+		assertNotEquals(d, a);
+		assertNotEquals(a, e);
+		assertNotEquals(e, a);
+	}
+	
+	@Test
+	public void testGetComponent() {
+		final Point2F point = new Point2F(1.0F, 2.0F);
+		
+		assertEquals(1.0F, point.getComponent(0));
+		assertEquals(2.0F, point.getComponent(1));
+		
+		assertThrows(IllegalArgumentException.class, () -> point.getComponent(-1));
+		assertThrows(IllegalArgumentException.class, () -> point.getComponent(+2));
+	}
+	
+	@Test
+	public void testGetComponent1() {
+		final Point2F point = new Point2F(2.0F, 0.0F);
+		
+		assertEquals(2.0F, point.getComponent1());
+	}
+	
+	@Test
+	public void testGetComponent2() {
+		final Point2F point = new Point2F(0.0F, 2.0F);
+		
+		assertEquals(2.0F, point.getComponent2());
+	}
+	
+	@Test
+	public void testGetLatitude() {
+		final Point2F point = new Point2F(0.0F, 2.0F);
+		
+		assertEquals(2.0F, point.getLatitude());
+	}
+	
+	@Test
+	public void testGetLongitude() {
+		final Point2F point = new Point2F(2.0F, 0.0F);
+		
+		assertEquals(2.0F, point.getLongitude());
+	}
+	
+	@Test
+	public void testGetU() {
+		final Point2F point = new Point2F(2.0F, 0.0F);
+		
+		assertEquals(2.0F, point.getU());
+	}
+	
+	@Test
+	public void testGetV() {
+		final Point2F point = new Point2F(0.0F, 2.0F);
+		
+		assertEquals(2.0F, point.getV());
+	}
+	
+	@Test
+	public void testGetX() {
+		final Point2F point = new Point2F(2.0F, 0.0F);
+		
+		assertEquals(2.0F, point.getX());
+	}
+	
+	@Test
+	public void testGetY() {
+		final Point2F point = new Point2F(0.0F, 2.0F);
+		
+		assertEquals(2.0F, point.getY());
+	}
+	
+	@Test
+	public void testHashCode() {
+		final Point2F a = new Point2F(0.5F, 1.0F);
+		final Point2F b = new Point2F(0.5F, 1.0F);
+		
+		assertEquals(a.hashCode(), a.hashCode());
+		assertEquals(a.hashCode(), b.hashCode());
+	}
+	
+	@Test
+	public void testRead() throws IOException {
+		final Point2F a = new Point2F(1.0F, 0.5F);
+		
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		
+		final
+		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
+		dataOutput.writeFloat(a.getComponent1());
+		dataOutput.writeFloat(a.getComponent2());
+		
+		final byte[] bytes = byteArrayOutputStream.toByteArray();
+		
+		final Point2F b = Point2F.read(new DataInputStream(new ByteArrayInputStream(bytes)));
+		
+		assertEquals(a, b);
+		
+		assertThrows(NullPointerException.class, () -> Point2F.read(null));
+		assertThrows(UncheckedIOException.class, () -> Point2F.read(new DataInputStream(new ByteArrayInputStream(new byte[] {}))));
+	}
+	
+	@Test
+	public void testToArray() {
+		final Point2F point = new Point2F(1.0F, 2.0F);
+		
+		final float[] array = point.toArray();
+		
+		assertNotNull(array);
+		
+		assertEquals(2, array.length);
+		
+		assertEquals(1.0F, array[0]);
+		assertEquals(2.0F, array[1]);
+	}
+	
+	@Test
+	public void testToString() {
+		final Point2F point = new Point2F(0.5F, 1.0F);
+		
+		assertEquals("new Point2F(0.5F, 1.0F)", point.toString());
+	}
+	
+	@Test
+	public void testWrite() {
+		final Point2F a = new Point2F(1.0F, 0.5F);
+		
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		
+		final DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
+		
+		a.write(dataOutput);
+		
+		final byte[] bytes = byteArrayOutputStream.toByteArray();
+		
+		final Point2F b = Point2F.read(new DataInputStream(new ByteArrayInputStream(bytes)));
+		
+		assertEquals(a, b);
+		
+		assertThrows(NullPointerException.class, () -> a.write(null));
+	}
+}

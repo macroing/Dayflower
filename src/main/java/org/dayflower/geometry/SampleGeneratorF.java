@@ -33,6 +33,8 @@ import static org.dayflower.utility.Floats.random;
 import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Floats.sqrt;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+
 /**
  * The class {@code SampleGeneratorF} contains methods to generate {@code float}-based samples.
  * 
@@ -60,6 +62,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return a {@code Point2F} instance with the sampled point
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F sampleDiskUniformDistribution() {
 		return sampleDiskUniformDistribution(random(), random());
 	}
@@ -73,6 +76,7 @@ public final class SampleGeneratorF {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @return a {@code Point2F} instance with the sampled point
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F sampleDiskUniformDistribution(final float u, final float v) {
 		final float r = sqrt(u);
 		final float theta = PI_MULTIPLIED_BY_2 * v;
@@ -97,6 +101,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return a {@code Point2F} instance with the sampled point
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F sampleDiskUniformDistributionByConcentricMapping() {
 		return sampleDiskUniformDistributionByConcentricMapping(random(), random());
 	}
@@ -117,6 +122,7 @@ public final class SampleGeneratorF {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @return a {@code Point2F} instance with the sampled point
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F sampleDiskUniformDistributionByConcentricMapping(final float u, final float v) {
 		return sampleDiskUniformDistributionByConcentricMapping(u, v, 1.0F);
 	}
@@ -131,6 +137,7 @@ public final class SampleGeneratorF {
 	 * @param radius the radius of the disk
 	 * @return a {@code Point2F} instance with the sampled point
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F sampleDiskUniformDistributionByConcentricMapping(final float u, final float v, final float radius) {
 		if(isZero(u) && isZero(v)) {
 			return new Point2F();
@@ -172,6 +179,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return a {@code Point2F} instance with the sampled point
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F sampleExactInverseTentFilter() {
 		return sampleExactInverseTentFilter(random(), random());
 	}
@@ -185,6 +193,7 @@ public final class SampleGeneratorF {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @return a {@code Point2F} instance with the sampled point
 	 */
+//	TODO: Add Unit Tests!
 	public static Point2F sampleExactInverseTentFilter(final float u, final float v) {
 		final float x = u * 2.0F;
 		final float y = v * 2.0F;
@@ -209,6 +218,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return a {@code Point3F} instance with the sampled point
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F sampleTriangleUniformDistribution() {
 		return sampleTriangleUniformDistribution(random(), random());
 	}
@@ -222,6 +232,7 @@ public final class SampleGeneratorF {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @return a {@code Point3F} instance with the sampled point
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F sampleTriangleUniformDistribution(final float u, final float v) {
 		final float sqrtU = sqrt(u);
 		
@@ -242,6 +253,7 @@ public final class SampleGeneratorF {
 	 * @param cosThetaMax the maximum cos theta value
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleConeUniformDistribution(final float u, final float v, final float cosThetaMax) {
 		final float cosTheta = (1.0F - u) + u * cosThetaMax;
 		final float sinTheta = sqrt(1.0F - cosTheta * cosTheta);
@@ -268,6 +280,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereCosineDistribution() {
 		return sampleHemisphereCosineDistribution(random(), random());
 	}
@@ -281,6 +294,7 @@ public final class SampleGeneratorF {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereCosineDistribution(final float u, final float v) {
 		final Point2F point = sampleDiskUniformDistributionByConcentricMapping(u, v);
 		
@@ -305,6 +319,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereCosineDistribution2() {
 		return sampleHemisphereCosineDistribution2(random(), random());
 	}
@@ -318,6 +333,7 @@ public final class SampleGeneratorF {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereCosineDistribution2(final float u, final float v) {
 		final float sinTheta = sqrt(v);
 		final float cosTheta = sqrt(1.0F - v);
@@ -344,6 +360,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleHemispherePowerCosineDistribution() {
 		return sampleHemispherePowerCosineDistribution(random(), random());
 	}
@@ -364,6 +381,7 @@ public final class SampleGeneratorF {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleHemispherePowerCosineDistribution(final float u, final float v) {
 		return sampleHemispherePowerCosineDistribution(u, v, 20.0F);
 	}
@@ -378,6 +396,7 @@ public final class SampleGeneratorF {
 	 * @param exponent the exponent to use
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleHemispherePowerCosineDistribution(final float u, final float v, final float exponent) {
 		final float cosTheta = pow(1.0F - u, 1.0F / (exponent + 1.0F));
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
@@ -404,6 +423,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereUniformDistribution() {
 		return sampleHemisphereUniformDistribution(random(), random());
 	}
@@ -417,6 +437,7 @@ public final class SampleGeneratorF {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
@@ -443,6 +464,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleSphereUniformDistribution() {
 		return sampleSphereUniformDistribution(random(), random());
 	}
@@ -456,6 +478,7 @@ public final class SampleGeneratorF {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @return a {@code Vector3F} instance with the sampled direction
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3F sampleSphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = 1.0F - 2.0F * u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
@@ -476,6 +499,7 @@ public final class SampleGeneratorF {
 	 * @param cosThetaMax the maximum cos theta value
 	 * @return the probability density function (PDF) value for {@code cosThetaMax}
 	 */
+//	TODO: Add Unit Tests!
 	public static float coneUniformDistributionProbabilityDensityFunction(final float cosThetaMax) {
 		return 1.0F / (2.0F * PI * (1.0F - cosThetaMax));
 	}
@@ -488,6 +512,7 @@ public final class SampleGeneratorF {
 	 * @param cosTheta the cos theta value
 	 * @return the probability density function (PDF) value for {@code cosTheta}
 	 */
+//	TODO: Add Unit Tests!
 	public static float hemisphereCosineDistributionProbabilityDensityFunction(final float cosTheta) {
 		return cosTheta * PI_RECIPROCAL;
 	}
@@ -499,6 +524,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return the probability density function (PDF) value
 	 */
+//	TODO: Add Unit Tests!
 	public static float hemisphereUniformDistributionProbabilityDensityFunction() {
 		return PI_MULTIPLIED_BY_2_RECIPROCAL;
 	}
@@ -514,6 +540,7 @@ public final class SampleGeneratorF {
 	 * @param sampleCountB a sample count
 	 * @return the result of the computation
 	 */
+//	TODO: Add Unit Tests!
 	public static float multipleImportanceSamplingBalanceHeuristic(final float probabilityDensityFunctionValueA, final float probabilityDensityFunctionValueB, final int sampleCountA, final int sampleCountB) {
 		return sampleCountA * probabilityDensityFunctionValueA / (sampleCountA * probabilityDensityFunctionValueA + sampleCountB * probabilityDensityFunctionValueB);
 	}
@@ -529,6 +556,7 @@ public final class SampleGeneratorF {
 	 * @param sampleCountB a sample count
 	 * @return the result of the computation
 	 */
+//	TODO: Add Unit Tests!
 	public static float multipleImportanceSamplingPowerHeuristic(final float probabilityDensityFunctionValueA, final float probabilityDensityFunctionValueB, final int sampleCountA, final int sampleCountB) {
 		final float weightA = sampleCountA * probabilityDensityFunctionValueA;
 		final float weightB = sampleCountB * probabilityDensityFunctionValueB;
@@ -543,6 +571,7 @@ public final class SampleGeneratorF {
 	 * 
 	 * @return the probability density function (PDF) value
 	 */
+//	TODO: Add Unit Tests!
 	public static float sphereUniformDistributionProbabilityDensityFunction() {
 		return PI_MULTIPLIED_BY_4_RECIPROCAL;
 	}

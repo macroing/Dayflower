@@ -34,6 +34,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -54,11 +55,13 @@ public final class Point3F implements Node {
 	/**
 	 * A {@code Point3F} instance with the largest component values.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Point3F MAXIMUM = maximum();
 	
 	/**
 	 * A {@code Point3F} instance with the smallest component values.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Point3F MINIMUM = minimum();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +86,7 @@ public final class Point3F implements Node {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F() {
 		this(0.0F, 0.0F, 0.0F);
 	}
@@ -102,6 +106,7 @@ public final class Point3F implements Node {
 	 * @param point a {@link Point4F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F(final Point4F point) {
 		this(point.getComponent1(), point.getComponent2(), point.getComponent3());
 	}
@@ -121,6 +126,7 @@ public final class Point3F implements Node {
 	 * @param vector a {@link Vector3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F(final Vector3F vector) {
 		this(vector.getComponent1(), vector.getComponent2(), vector.getComponent3());
 	}
@@ -137,6 +143,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @param component the value for all components
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F(final float component) {
 		this(component, component, component);
 	}
@@ -148,6 +155,7 @@ public final class Point3F implements Node {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F(final float component1, final float component2, final float component3) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -161,6 +169,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Point3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Point3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
@@ -174,6 +183,7 @@ public final class Point3F implements Node {
 	 * @param object the {@code Object} to compare to this {@code Point3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Point3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -200,6 +210,7 @@ public final class Point3F implements Node {
 	 * @return the value of the component at index {@code index}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code 2}
 	 */
+//	TODO: Add Unit Tests!
 	public float getComponent(final int index) {
 		switch(index) {
 			case 0:
@@ -218,6 +229,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the value of component 1
 	 */
+//	TODO: Add Unit Tests!
 	public float getComponent1() {
 		return this.component1;
 	}
@@ -227,6 +239,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the value of component 2
 	 */
+//	TODO: Add Unit Tests!
 	public float getComponent2() {
 		return this.component2;
 	}
@@ -236,6 +249,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public float getComponent3() {
 		return this.component3;
 	}
@@ -245,6 +259,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the value of the U-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getU() {
 		return this.component1;
 	}
@@ -254,6 +269,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the value of the V-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getV() {
 		return this.component2;
 	}
@@ -263,6 +279,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the value of the W-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getW() {
 		return this.component3;
 	}
@@ -272,6 +289,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the value of the X-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getX() {
 		return this.component1;
 	}
@@ -281,6 +299,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the value of the Y-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getY() {
 		return this.component2;
 	}
@@ -290,6 +309,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the value of the Z-component
 	 */
+//	TODO: Add Unit Tests!
 	public float getZ() {
 		return this.component3;
 	}
@@ -299,6 +319,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the spherical phi angle
 	 */
+//	TODO: Add Unit Tests!
 	public float sphericalPhi() {
 		return getOrAdd(atan2(this.component2, this.component1), 0.0F, PI_MULTIPLIED_BY_2);
 	}
@@ -308,6 +329,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return a {@code float[]} representation of this {@code Point3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float[] toArray() {
 		return new float[] {
 			this.component1,
@@ -321,6 +343,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return a hash code for this {@code Point3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
@@ -337,6 +360,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeFloat(this.component1);
@@ -361,6 +385,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F add(final Point3F pointLHS, final Vector3F vectorRHS) {
 		final float component1 = pointLHS.component1 + vectorRHS.getComponent1();
 		final float component2 = pointLHS.component2 + vectorRHS.getComponent2();
@@ -382,6 +407,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F add(final Point3F pointLHS, final Vector3F vectorRHS, final float scalar) {
 		final float component1 = pointLHS.component1 + vectorRHS.getComponent1() * scalar;
 		final float component2 = pointLHS.component2 + vectorRHS.getComponent2() * scalar;
@@ -402,6 +428,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F add(final Point3F pointLHS, final float scalarRHS) {
 		final float component1 = pointLHS.component1 + scalarRHS;
 		final float component2 = pointLHS.component2 + scalarRHS;
@@ -422,6 +449,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance that represents the centroid of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F centroid(final Point3F a, final Point3F b) {
 		final float component1 = (a.component1 + b.component1) / 2.0F;
 		final float component2 = (a.component2 + b.component2) / 2.0F;
@@ -441,6 +469,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F centroid(final Point3F a, final Point3F b, final Point3F c) {
 		final float component1 = (a.component1 + b.component1 + c.component1) / 3.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2) / 3.0F;
@@ -461,6 +490,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F centroid(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
 		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0F;
@@ -485,6 +515,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F centroid(final Point3F a, final Point3F b, final Point3F c, final Point3F d, final Point3F e, final Point3F f, final Point3F g, final Point3F h) {
 		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0F;
@@ -502,6 +533,7 @@ public final class Point3F implements Node {
 	 * @return a cached version of {@code point}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F getCached(final Point3F point) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
 	}
@@ -519,6 +551,7 @@ public final class Point3F implements Node {
 	 * @return a {@code Point3F} instance with the result of the linear interpolation operation
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F lerp(final Point3F a, final Point3F b, final float t) {
 		final float component1 = Floats.lerp(a.component1, b.component1, t);
 		final float component2 = Floats.lerp(a.component2, b.component2, t);
@@ -532,6 +565,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return a new {@code Point3F} instance with the largest component values
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F maximum() {
 		final float component1 = MAX_VALUE;
 		final float component2 = MAX_VALUE;
@@ -550,6 +584,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the largest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F maximum(final Point3F a, final Point3F b) {
 		final float component1 = max(a.component1, b.component1);
 		final float component2 = max(a.component2, b.component2);
@@ -569,6 +604,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the largest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F maximum(final Point3F a, final Point3F b, final Point3F c) {
 		final float component1 = max(a.component1, b.component1, c.component1);
 		final float component2 = max(a.component2, b.component2, c.component2);
@@ -589,6 +625,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F maximum(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
 		final float component1 = max(a.component1, b.component1, c.component1, d.component1);
 		final float component2 = max(a.component2, b.component2, c.component2, d.component2);
@@ -607,6 +644,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance that represents the midpoint of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F midpoint(final Point3F a, final Point3F b) {
 		final float component1 = (a.component1 + b.component1) * 0.5F;
 		final float component2 = (a.component2 + b.component2) * 0.5F;
@@ -620,6 +658,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return a new {@code Point3F} instance with the smallest component values
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F minimum() {
 		final float component1 = MIN_VALUE;
 		final float component2 = MIN_VALUE;
@@ -638,6 +677,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the smallest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F minimum(final Point3F a, final Point3F b) {
 		final float component1 = min(a.component1, b.component1);
 		final float component2 = min(a.component2, b.component2);
@@ -657,6 +697,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the smallest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F minimum(final Point3F a, final Point3F b, final Point3F c) {
 		final float component1 = min(a.component1, b.component1, c.component1);
 		final float component2 = min(a.component2, b.component2, c.component2);
@@ -677,6 +718,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F minimum(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
 		final float component1 = min(a.component1, b.component1, c.component1, d.component1);
 		final float component2 = min(a.component2, b.component2, c.component2, d.component2);
@@ -697,6 +739,7 @@ public final class Point3F implements Node {
 	 * @return a {@code Point3F} offset from {@code point} based on {@code direction}, {@code normal} and {@code pointError}
 	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code direction}, {@code normal} or {@code pointError} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F offset(final Point3F point, final Vector3F direction, final Vector3F normal, final Vector3F pointError) {
 		final float dotProduct = Vector3F.dotProduct(Vector3F.absolute(normal), pointError);
 		
@@ -724,6 +767,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F read(final DataInput dataInput) {
 		try {
 			final float component1 = dataInput.readFloat();
@@ -748,6 +792,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the scale applied
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F scale(final Point3F point, final Vector2F scale) {
 		final float component1 = point.component1 * scale.getComponent1();
 		final float component2 = point.component2 * scale.getComponent2();
@@ -768,6 +813,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the scale applied
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F scale(final Point3F point, final Vector3F scale) {
 		final float component1 = point.component1 * scale.getComponent1();
 		final float component2 = point.component2 * scale.getComponent2();
@@ -788,6 +834,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F subtract(final Point3F pointLHS, final Vector3F vectorRHS) {
 		final float component1 = pointLHS.component1 - vectorRHS.getComponent1();
 		final float component2 = pointLHS.component2 - vectorRHS.getComponent2();
@@ -808,6 +855,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F subtract(final Point3F pointLHS, final float scalarRHS) {
 		final float component1 = pointLHS.component1 - scalarRHS;
 		final float component2 = pointLHS.component2 - scalarRHS;
@@ -828,6 +876,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F transform(final Matrix44F matrixLHS, final Point3F pointRHS) {
 		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
 		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
@@ -848,6 +897,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Point3F transformAndDivide(final Matrix44F matrixLHS, final Point3F pointRHS) {
 		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
 		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
@@ -866,6 +916,7 @@ public final class Point3F implements Node {
 	 * @return a {@code String} representation of {@code points}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static String toString(final Point3F... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		
@@ -895,6 +946,7 @@ public final class Point3F implements Node {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 3}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static boolean coplanar(final Point3F... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 3, Integer.MAX_VALUE, "points.length");
@@ -929,6 +981,7 @@ public final class Point3F implements Node {
 	 * @return the distance from {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static float distance(final Point3F eye, final Point3F lookAt) {
 		return Vector3F.direction(eye, lookAt).length();
 	}
@@ -943,6 +996,7 @@ public final class Point3F implements Node {
 	 * @return the squared distance from {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static float distanceSquared(final Point3F eye, final Point3F lookAt) {
 		return Vector3F.direction(eye, lookAt).lengthSquared();
 	}
@@ -952,6 +1006,7 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the size of the cache
 	 */
+//	TODO: Add Unit Tests!
 	public static int getCacheSize() {
 		return CACHE.size();
 	}
@@ -959,6 +1014,7 @@ public final class Point3F implements Node {
 	/**
 	 * Clears the cache.
 	 */
+//	TODO: Add Unit Tests!
 	public static void clearCache() {
 		CACHE.clear();
 	}

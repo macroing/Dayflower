@@ -18,7 +18,6 @@
  */
 package org.dayflower.color;
 
-import static org.dayflower.java.lang.Strings.toNonScientificNotation;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.isNaN;
@@ -37,6 +36,7 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
@@ -301,7 +301,34 @@ public final class Color4F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Color4F(%sF, %sF, %sF, %sF)", toNonScientificNotation(this.component1), toNonScientificNotation(this.component2), toNonScientificNotation(this.component3), toNonScientificNotation(this.component4));
+		return String.format("new Color4F(%sF, %sF, %sF, %sF)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3), Strings.toNonScientificNotation(this.component4));
+	}
+	
+	/**
+	 * Compares {@code color} to this {@code Color4F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code color} is an instance of {@code Color4F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param color the {@code Color4F} to compare to this {@code Color4F} instance for equality
+	 * @return {@code true} if, and only if, {@code color} is an instance of {@code Color4F}, and their respective values are equal, {@code false} otherwise
+	 */
+//	TODO: Add Unit Tests!
+	public boolean equals(final Color4F color) {
+		if(color == this) {
+			return true;
+		} else if(color == null) {
+			return false;
+		} else if(!equal(this.component1, color.component1)) {
+			return false;
+		} else if(!equal(this.component2, color.component2)) {
+			return false;
+		} else if(!equal(this.component3, color.component3)) {
+			return false;
+		} else if(!equal(this.component4, color.component4)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	/**
@@ -318,16 +345,8 @@ public final class Color4F {
 			return true;
 		} else if(!(object instanceof Color4F)) {
 			return false;
-		} else if(!equal(this.component1, Color4F.class.cast(object).component1)) {
-			return false;
-		} else if(!equal(this.component2, Color4F.class.cast(object).component2)) {
-			return false;
-		} else if(!equal(this.component3, Color4F.class.cast(object).component3)) {
-			return false;
-		} else if(!equal(this.component4, Color4F.class.cast(object).component4)) {
-			return false;
 		} else {
-			return true;
+			return equals(Color4F.class.cast(object));
 		}
 	}
 	

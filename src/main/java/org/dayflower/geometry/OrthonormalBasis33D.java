@@ -24,6 +24,7 @@ import static org.dayflower.utility.Doubles.sqrt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -63,6 +64,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D() {
 		this(Vector3D.w(), Vector3D.v(), Vector3D.u());
 	}
@@ -77,6 +79,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @param w a {@link Vector3D} pointing in the W-direction
 	 * @throws NullPointerException thrown if, and only if, {@code w} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D(final Vector3D w) {
 		this.w = Vector3D.normalize(w);
 		this.v = Vector3D.computeV(w);
@@ -99,6 +102,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @param v a {@code Vector3D} pointing in the V-direction to some degree
 	 * @throws NullPointerException thrown if, and only if, either {@code w} or {@code v} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D(final Vector3D w, final Vector3D v) {
 		this.w = Vector3D.normalize(w);
 		this.u = Vector3D.normalize(Vector3D.crossProduct(Vector3D.normalize(v), this.w));
@@ -117,6 +121,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @param u a {@code Vector3D} pointing in the U-direction
 	 * @throws NullPointerException thrown if, and only if, either {@code w}, {@code v} or {@code u} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D(final Vector3D w, final Vector3D v, final Vector3D u) {
 		this.w = Objects.requireNonNull(w, "w == null");
 		this.v = Objects.requireNonNull(v, "v == null");
@@ -130,6 +135,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code OrthonormalBasis33D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new OrthonormalBasis33D(%s, %s, %s)", this.w, this.v, this.u);
@@ -140,6 +146,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return the {@code Vector3D} pointing in the U-direction
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D getU() {
 		return this.u;
 	}
@@ -149,6 +156,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return the {@code Vector3D} pointing in the V-direction
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D getV() {
 		return this.v;
 	}
@@ -158,6 +166,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return the {@code Vector3D} pointing in the W-direction
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D getW() {
 		return this.w;
 	}
@@ -183,6 +192,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -216,6 +226,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @param object the {@code Object} to compare to this {@code OrthonormalBasis33D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code OrthonormalBasis33D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -238,6 +249,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, all {@code Vector3D} instances in this {@code OrthonormalBasis33D} instance are orthogonal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasOrthogonalVectors() {
 		final boolean orthogonalUV = Vector3D.orthogonal(this.u, this.v);
 		final boolean orthogonalVW = Vector3D.orthogonal(this.v, this.w);
@@ -251,6 +263,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, all {@code Vector3D} instances in this {@code OrthonormalBasis33D} instance are unit vectors, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasUnitVectors() {
 		final boolean isUnitVectorU = this.u.isUnitVector();
 		final boolean isUnitVectorV = this.v.isUnitVector();
@@ -264,6 +277,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, all {@code Vector3D} instances in this {@code OrthonormalBasis33D} instance are unit vectors and are orthogonal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isOrthonormal() {
 		return hasUnitVectors() && hasOrthogonalVectors();
 	}
@@ -273,6 +287,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return a hash code for this {@code OrthonormalBasis33D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.u, this.v, this.w);
@@ -289,6 +304,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		this.w.write(dataOutput);
 		this.v.write(dataOutput);
@@ -306,6 +322,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} instance that is based on PBRT
 	 * @throws NullPointerException thrown if, and only if, {@code w} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D coordinateSystem(final Vector3D w) {
 		final Vector3D u = abs(w.getX()) > abs(w.getY()) ? Vector3D.divide(new Vector3D(-w.getZ(), 0.0D, w.getX()), sqrt(w.getX() * w.getX() + w.getZ() * w.getZ())) : Vector3D.divide(new Vector3D(0.0D, w.getZ(), - w.getY()), sqrt(w.getY() * w.getY() + w.getZ() * w.getZ()));
 		final Vector3D v = Vector3D.crossProduct(w, u);
@@ -322,6 +339,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a orthonormalBasis version of {@code orthonormalBasis}
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D getCached(final OrthonormalBasis33D orthonormalBasis) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null"), key -> new OrthonormalBasis33D(Vector3D.getCached(orthonormalBasis.getW()), Vector3D.getCached(orthonormalBasis.getV()), Vector3D.getCached(orthonormalBasis.getU())));
 	}
@@ -337,6 +355,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} with the directions flipped
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D flip(final OrthonormalBasis33D orthonormalBasis) {
 		return new OrthonormalBasis33D(Vector3D.negate(orthonormalBasis.w), Vector3D.negate(orthonormalBasis.v), Vector3D.negate(orthonormalBasis.u));
 	}
@@ -352,6 +371,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} with the U-direction flipped
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D flipU(final OrthonormalBasis33D orthonormalBasis) {
 		return new OrthonormalBasis33D(orthonormalBasis.w, orthonormalBasis.v, Vector3D.negate(orthonormalBasis.u));
 	}
@@ -367,6 +387,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} with the V-direction flipped
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D flipV(final OrthonormalBasis33D orthonormalBasis) {
 		return new OrthonormalBasis33D(orthonormalBasis.w, Vector3D.negate(orthonormalBasis.v), orthonormalBasis.u);
 	}
@@ -382,6 +403,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} with the W-direction flipped
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D flipW(final OrthonormalBasis33D orthonormalBasis) {
 		return new OrthonormalBasis33D(Vector3D.negate(orthonormalBasis.w), orthonormalBasis.v, orthonormalBasis.u);
 	}
@@ -399,6 +421,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return an {@code OrthonormalBasis33D} instance with the result of the linear interpolation operation
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D lerp(final OrthonormalBasis33D a, final OrthonormalBasis33D b, final double t) {
 		final Vector3D u = Vector3D.lerp(a.u, b.u, t);
 		final Vector3D v = Vector3D.lerp(a.v, b.v, t);
@@ -419,6 +442,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D read(final DataInput dataInput) {
 		return new OrthonormalBasis33D(Vector3D.read(dataInput), Vector3D.read(dataInput), Vector3D.read(dataInput));
 	}
@@ -435,6 +459,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D transform(final Matrix44D matrixLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
 		final Vector3D u = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.u));
 		final Vector3D v = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.v));
@@ -455,6 +480,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D transformTranspose(final Matrix44D matrixLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
 		final Vector3D u = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.u));
 		final Vector3D v = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.v));
@@ -468,6 +494,7 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return the size of the cache
 	 */
+//	TODO: Add Unit Tests!
 	public static int getCacheSize() {
 		return CACHE.size();
 	}
@@ -475,6 +502,7 @@ public final class OrthonormalBasis33D implements Node {
 	/**
 	 * Clears the cache.
 	 */
+//	TODO: Add Unit Tests!
 	public static void clearCache() {
 		CACHE.clear();
 	}

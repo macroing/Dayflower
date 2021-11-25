@@ -18,7 +18,6 @@
  */
 package org.dayflower.color;
 
-import static org.dayflower.java.lang.Strings.toNonScientificNotation;
 import static org.dayflower.utility.Doubles.MIN_VALUE;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.exp;
@@ -40,6 +39,7 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.utility.Doubles;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
@@ -364,28 +364,28 @@ public final class Color3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Color3D(%sD, %sD, %sD)", toNonScientificNotation(this.component1), toNonScientificNotation(this.component2), toNonScientificNotation(this.component3));
+		return String.format("new Color3D(%sD, %sD, %sD)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
 	}
 	
 	/**
-	 * Compares {@code color3D} to this {@code Color3D} instance for equality.
+	 * Compares {@code color} to this {@code Color3D} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code color3D} is an instance of {@code Color3D}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code color} is an instance of {@code Color3D}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param color3D the {@code Color3D} to compare to this {@code Color3D} instance for equality
-	 * @return {@code true} if, and only if, {@code color3D} is an instance of {@code Color3D}, and their respective values are equal, {@code false} otherwise
+	 * @param color the {@code Color3D} to compare to this {@code Color3D} instance for equality
+	 * @return {@code true} if, and only if, {@code color} is an instance of {@code Color3D}, and their respective values are equal, {@code false} otherwise
 	 */
 //	TODO: Add Unit Tests!
-	public boolean equals(final Color3D color3D) {
-		if(color3D == this) {
+	public boolean equals(final Color3D color) {
+		if(color == this) {
 			return true;
-		} else if(color3D == null) {
+		} else if(color == null) {
 			return false;
-		} else if(!equal(this.component1, color3D.component1)) {
+		} else if(!equal(this.component1, color.component1)) {
 			return false;
-		} else if(!equal(this.component2, color3D.component2)) {
+		} else if(!equal(this.component2, color.component2)) {
 			return false;
-		} else if(!equal(this.component3, color3D.component3)) {
+		} else if(!equal(this.component3, color.component3)) {
 			return false;
 		} else {
 			return true;

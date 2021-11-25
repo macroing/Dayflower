@@ -18,6 +18,8 @@
  */
 package org.dayflower.filter;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+
 /**
  * A {@code Filter2D} represents a 2-dimensional filter that operates on and returns {@code double} values.
  * 

@@ -21,6 +21,7 @@ package org.dayflower.geometry;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.equal;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,6 +37,7 @@ public final class SurfaceIntersection3D {
 	/**
 	 * An empty {@code Optional} instance.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Optional<SurfaceIntersection3D> EMPTY = Optional.empty();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +70,7 @@ public final class SurfaceIntersection3D {
 	 * @throws NullPointerException thrown if, and only if, either {@code orthonormalBasisG}, {@code orthonormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape} or {@code surfaceIntersectionPointError}
 	 *                              are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public SurfaceIntersection3D(final OrthonormalBasis33D orthonormalBasisG, final OrthonormalBasis33D orthonormalBasisS, final Point2D textureCoordinates, final Point3D surfaceIntersectionPoint, final Ray3D ray, final Shape3D shape, final Vector3D surfaceIntersectionPointError, final double t) {
 		this.orthonormalBasisG = Objects.requireNonNull(orthonormalBasisG, "orthonormalBasisG == null");
 		this.orthonormalBasisS = Objects.requireNonNull(orthonormalBasisS, "orthonormalBasisS == null");
@@ -86,6 +89,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the {@code OrthonormalBasis33D} instance that is used as the orthonormal basis for the geometry
 	 */
+//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D getOrthonormalBasisG() {
 		return this.orthonormalBasisG;
 	}
@@ -95,6 +99,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the {@code OrthonormalBasis33D} instance that is used as the orthonormal basis for shading
 	 */
+//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D getOrthonormalBasisS() {
 		return this.orthonormalBasisS;
 	}
@@ -104,6 +109,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the {@code Point2D} instance that is used as the texture coordinates
 	 */
+//	TODO: Add Unit Tests!
 	public Point2D getTextureCoordinates() {
 		return this.textureCoordinates;
 	}
@@ -113,6 +119,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the {@code Point3D} instance that is used as the surface intersection point
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getSurfaceIntersectionPoint() {
 		return this.surfaceIntersectionPoint;
 	}
@@ -126,6 +133,7 @@ public final class SurfaceIntersection3D {
 	 * @return a new {@code Ray3D} in the direction towards {@code point}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Ray3D createRay(final Point3D point) {
 		return createRay(point, getSurfaceNormalS());
 	}
@@ -140,6 +148,7 @@ public final class SurfaceIntersection3D {
 	 * @return a new {@code Ray3D} in the direction towards {@code point} using the surface normal {@code surfaceNormal}
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code surfaceNormal} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Ray3D createRay(final Point3D point, final Vector3D surfaceNormal) {
 		return createRay(Vector3D.direction(this.surfaceIntersectionPoint, point), surfaceNormal);
 	}
@@ -153,6 +162,7 @@ public final class SurfaceIntersection3D {
 	 * @return a new {@code Ray3D} in the direction {@code direction}
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Ray3D createRay(final Vector3D direction) {
 		return createRay(direction, getSurfaceNormalS());
 	}
@@ -167,6 +177,7 @@ public final class SurfaceIntersection3D {
 	 * @return a new {@code Ray3D} in the direction {@code direction} using the surface normal {@code surfaceNormal}
 	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code surfaceNormal} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Ray3D createRay(final Vector3D direction, final Vector3D surfaceNormal) {
 		return new Ray3D(Point3D.offset(this.surfaceIntersectionPoint, direction, surfaceNormal, this.surfaceIntersectionPointError), direction);
 	}
@@ -176,6 +187,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the {@code Ray3D} instance that was used in the intersection operation
 	 */
+//	TODO: Add Unit Tests!
 	public Ray3D getRay() {
 		return this.ray;
 	}
@@ -185,6 +197,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the {@code Shape3D} instance that was intersected
 	 */
+//	TODO: Add Unit Tests!
 	public Shape3D getShape() {
 		return this.shape;
 	}
@@ -194,6 +207,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return a {@code String} representation of this {@code SurfaceIntersection3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new SurfaceIntersection3D(%s, %s, %s, %s, %s, %s, %s, %+.10f)", this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceIntersectionPointError, Double.valueOf(this.t));
@@ -204,6 +218,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the {@code Vector3D} instance that contains the floating-point precision error of the surface intersection point
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D getSurfaceIntersectionPointError() {
 		return this.surfaceIntersectionPointError;
 	}
@@ -220,6 +235,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the {@code Vector3D} instance that represents the surface normal for the geometry
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D getSurfaceNormalG() {
 		return this.orthonormalBasisG.getW();
 	}
@@ -236,6 +252,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the {@code Vector3D} instance that represents the surface normal for shading
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D getSurfaceNormalS() {
 		return this.orthonormalBasisS.getW();
 	}
@@ -248,6 +265,7 @@ public final class SurfaceIntersection3D {
 	 * @param object the {@code Object} to compare to this {@code SurfaceIntersection3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SurfaceIntersection3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -280,6 +298,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return the parametric {@code t} value that represents the distance to the intersection
 	 */
+//	TODO: Add Unit Tests!
 	public double getT() {
 		return this.t;
 	}
@@ -289,6 +308,7 @@ public final class SurfaceIntersection3D {
 	 * 
 	 * @return a hash code for this {@code SurfaceIntersection3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceIntersectionPointError, Double.valueOf(this.t));
@@ -306,6 +326,7 @@ public final class SurfaceIntersection3D {
 	 * @return the closest {@code SurfaceIntersection3D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code optionalSurfaceIntersectionA} or {@code optionalSurfaceIntersectionB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Optional<SurfaceIntersection3D> closest(final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionA, final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionB) {
 		final SurfaceIntersection3D surfaceIntersectionA = optionalSurfaceIntersectionA.orElse(null);
 		final SurfaceIntersection3D surfaceIntersectionB = optionalSurfaceIntersectionB.orElse(null);
@@ -333,6 +354,7 @@ public final class SurfaceIntersection3D {
 	 * @return {@code surfaceIntersection} or an oriented version of it
 	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code direction} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static SurfaceIntersection3D orient(final SurfaceIntersection3D surfaceIntersection, final Vector3D direction) {
 		if(Vector3D.dotProduct(direction, surfaceIntersection.getOrthonormalBasisG().getW()) >= 0.0D) {
 			final OrthonormalBasis33D orthonormalBasisG = OrthonormalBasis33D.flipW(surfaceIntersection.orthonormalBasisG);
@@ -378,6 +400,7 @@ public final class SurfaceIntersection3D {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code matrix} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static SurfaceIntersection3D transform(final SurfaceIntersection3D surfaceIntersection, final Matrix44D matrix) {
 		return transform(surfaceIntersection, matrix, Matrix44D.inverse(matrix));
 	}
@@ -395,6 +418,7 @@ public final class SurfaceIntersection3D {
 	 * @return a new {@code SurfaceIntersection3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection}, {@code matrix} or {@code matrixInverse} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static SurfaceIntersection3D transform(final SurfaceIntersection3D surfaceIntersection, final Matrix44D matrix, final Matrix44D matrixInverse) {
 		final OrthonormalBasis33D orthonormalBasisGOldSpace = surfaceIntersection.orthonormalBasisG;
 		final OrthonormalBasis33D orthonormalBasisSOldSpace = surfaceIntersection.orthonormalBasisS;

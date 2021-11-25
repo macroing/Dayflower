@@ -38,6 +38,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -58,11 +59,13 @@ public final class Vector3D implements Node {
 	/**
 	 * A {@code Vector3D} instance given the component values {@code Double.NaN}, {@code Double.NaN} and {@code Double.NaN}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Vector3D NaN = new Vector3D(Double.NaN, Double.NaN, Double.NaN);
 	
 	/**
 	 * A {@code Vector3D} instance given the component values {@code 0.0D}, {@code 0.0D} and {@code 0.0D}.
 	 */
+//	TODO: Add Unit Tests!
 	public static final Vector3D ZERO = new Vector3D(0.0D, 0.0D, 0.0D);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,6 +90,7 @@ public final class Vector3D implements Node {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D() {
 		this(0.0D, 0.0D, 0.0D);
 	}
@@ -106,6 +110,7 @@ public final class Vector3D implements Node {
 	 * @param point a {@link Point3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D(final Point3D point) {
 		this(point.getComponent1(), point.getComponent2(), point.getComponent3());
 	}
@@ -122,6 +127,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @param component the value of all components
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D(final double component) {
 		this(component, component, component);
 	}
@@ -133,6 +139,7 @@ public final class Vector3D implements Node {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D(final double component1, final double component2, final double component3) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -146,6 +153,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Vector3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Vector3D(%+.10f, %+.10f, %+.10f)", Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3));
@@ -159,6 +167,7 @@ public final class Vector3D implements Node {
 	 * @param object the {@code Object} to compare to this {@code Vector3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Vector3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -181,6 +190,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Vector3D} instance is a unit vector, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isUnitVector() {
 		final double length = length();
 		
@@ -195,6 +205,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle phi
 	 */
+//	TODO: Add Unit Tests!
 	public double cosPhi() {
 		final double sinTheta = sinTheta();
 		
@@ -210,6 +221,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle phi in squared form
 	 */
+//	TODO: Add Unit Tests!
 	public double cosPhiSquared() {
 		return cosPhi() * cosPhi();
 	}
@@ -219,6 +231,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle theta
 	 */
+//	TODO: Add Unit Tests!
 	public double cosTheta() {
 		return this.component3;
 	}
@@ -228,6 +241,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle theta in absolute form
 	 */
+//	TODO: Add Unit Tests!
 	public double cosThetaAbs() {
 		return abs(cosTheta());
 	}
@@ -237,6 +251,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle theta in quartic form
 	 */
+//	TODO: Add Unit Tests!
 	public double cosThetaQuartic() {
 		return cosThetaSquared() * cosThetaSquared();
 	}
@@ -246,6 +261,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle theta in squared form
 	 */
+//	TODO: Add Unit Tests!
 	public double cosThetaSquared() {
 		return cosTheta() * cosTheta();
 	}
@@ -255,6 +271,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of component 1
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent1() {
 		return this.component1;
 	}
@@ -264,6 +281,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of component 2
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent2() {
 		return this.component2;
 	}
@@ -273,6 +291,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of component 3
 	 */
+//	TODO: Add Unit Tests!
 	public double getComponent3() {
 		return this.component3;
 	}
@@ -282,6 +301,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the U-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getU() {
 		return this.component1;
 	}
@@ -291,6 +311,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the V-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getV() {
 		return this.component2;
 	}
@@ -300,6 +321,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the W-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getW() {
 		return this.component3;
 	}
@@ -309,6 +331,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the X-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getX() {
 		return this.component1;
 	}
@@ -318,6 +341,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the Y-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getY() {
 		return this.component2;
 	}
@@ -327,6 +351,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the Z-component
 	 */
+//	TODO: Add Unit Tests!
 	public double getZ() {
 		return this.component3;
 	}
@@ -336,6 +361,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the length of this {@code Vector3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double length() {
 		return sqrt(lengthSquared());
 	}
@@ -345,6 +371,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the squared length of this {@code Vector3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double lengthSquared() {
 		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3;
 	}
@@ -354,6 +381,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the sine of the angle phi
 	 */
+//	TODO: Add Unit Tests!
 	public double sinPhi() {
 		final double sinTheta = sinTheta();
 		
@@ -369,6 +397,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the sine of the angle phi in squared form
 	 */
+//	TODO: Add Unit Tests!
 	public double sinPhiSquared() {
 		return sinPhi() * sinPhi();
 	}
@@ -378,6 +407,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the sine of the angle theta
 	 */
+//	TODO: Add Unit Tests!
 	public double sinTheta() {
 		return sqrt(sinThetaSquared());
 	}
@@ -387,6 +417,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the sine of the angle theta in squared form
 	 */
+//	TODO: Add Unit Tests!
 	public double sinThetaSquared() {
 		return max(0.0D, 1.0D - cosThetaSquared());
 	}
@@ -396,6 +427,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the spherical phi angle
 	 */
+//	TODO: Add Unit Tests!
 	public double sphericalPhi() {
 		return getOrAdd(atan2(this.component2, this.component1), 0.0D, PI_MULTIPLIED_BY_2);
 	}
@@ -405,6 +437,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the spherical theta angle
 	 */
+//	TODO: Add Unit Tests!
 	public double sphericalTheta() {
 		return acos(saturate(this.component3, -1.0D, 1.0D));
 	}
@@ -414,6 +447,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the tangent of the angle theta
 	 */
+//	TODO: Add Unit Tests!
 	public double tanTheta() {
 		return sinTheta() / cosTheta();
 	}
@@ -423,6 +457,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the tangent of the angle theta in absolute form
 	 */
+//	TODO: Add Unit Tests!
 	public double tanThetaAbs() {
 		return abs(tanTheta());
 	}
@@ -432,6 +467,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the tangent of the angle theta in squared form
 	 */
+//	TODO: Add Unit Tests!
 	public double tanThetaSquared() {
 		return sinThetaSquared() / cosThetaSquared();
 	}
@@ -441,6 +477,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a {@code double[]} representation of this {@code Vector3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double[] toArray() {
 		return new double[] {
 			this.component1,
@@ -454,6 +491,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a hash code for this {@code Vector3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3));
@@ -470,6 +508,7 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeDouble(this.component1);
@@ -493,6 +532,7 @@ public final class Vector3D implements Node {
 	 * @return an optional {@code Vector3D} instance that represents the refraction of {@code direction} with regards to {@code normal}
 	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Optional<Vector3D> refraction(final Vector3D direction, final Vector3D normal, final double eta) {
 		final double cosThetaI = dotProduct(direction, normal);
 		final double sinThetaISquared = max(0.0D, 1.0D - cosThetaI * cosThetaI);
@@ -518,6 +558,7 @@ public final class Vector3D implements Node {
 	 * @return an optional {@code Vector3D} instance that represents the refraction of {@code direction} with regards to {@code normal}
 	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Optional<Vector3D> refraction2(final Vector3D direction, final Vector3D normal, final double eta) {
 		final double cosThetaI = dotProduct(direction, normal);
 		final double sinThetaISquared = 1.0D - cosThetaI * cosThetaI;
@@ -540,6 +581,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the absolute component values of {@code vector}
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D absolute(final Vector3D vector) {
 		final double component1 = abs(vector.component1);
 		final double component2 = abs(vector.component2);
@@ -562,6 +604,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D add(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		final double component1 = vectorLHS.component1 + vectorRHS.component1;
 		final double component2 = vectorLHS.component2 + vectorRHS.component2;
@@ -585,6 +628,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D add(final Vector3D vectorA, final Vector3D vectorB, final Vector3D vectorC) {
 		final double component1 = vectorA.component1 + vectorB.component1 + vectorC.component1;
 		final double component2 = vectorA.component2 + vectorB.component2 + vectorC.component2;
@@ -602,6 +646,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance denoting {@code V} in an orthonormal basis
 	 * @throws NullPointerException thrown if, and only if, {@code w} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D computeV(final Vector3D w) {
 		final Vector3D wNormalized = normalize(w);
 		
@@ -632,6 +677,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D crossProduct(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		final double component1 = vectorLHS.component2 * vectorRHS.component3 - vectorLHS.component3 * vectorRHS.component2;
 		final double component2 = vectorLHS.component3 * vectorRHS.component1 - vectorLHS.component1 * vectorRHS.component3;
@@ -650,6 +696,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D direction(final Point3D eye, final Point3D lookAt) {
 		final double component1 = lookAt.getComponent1() - eye.getComponent1();
 		final double component2 = lookAt.getComponent2() - eye.getComponent2();
@@ -668,6 +715,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D direction(final Point4D eye, final Point4D lookAt) {
 		final double component1 = lookAt.getComponent1() - eye.getComponent1();
 		final double component2 = lookAt.getComponent2() - eye.getComponent2();
@@ -686,6 +734,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D directionNormalized(final Point3D eye, final Point3D lookAt) {
 		return normalize(direction(eye, lookAt));
 	}
@@ -700,6 +749,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D directionNormalized(final Point4D eye, final Point4D lookAt) {
 		return normalize(direction(eye, lookAt));
 	}
@@ -711,6 +761,7 @@ public final class Vector3D implements Node {
 	 * @param v the spherical V-coordinate
 	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code u} and {@code v}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D directionSpherical(final double u, final double v) {
 		final double phi = u * PI_MULTIPLIED_BY_2;
 		final double theta = v * PI;
@@ -734,6 +785,7 @@ public final class Vector3D implements Node {
 	 * @param phi the angle phi
 	 * @return a new {@code Vector3D} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D directionSpherical(final double sinTheta, final double cosTheta, final double phi) {
 		final double component1 = sinTheta * cos(phi);
 		final double component2 = sinTheta * sin(phi);
@@ -758,6 +810,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}, as well as the coordinate system {@code x}, {@code y} and {@code z}
 	 * @throws NullPointerException thrown if, and only if, either {@code x}, {@code y} or {@code z} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D directionSpherical(final double sinTheta, final double cosTheta, final double phi, final Vector3D x, final Vector3D y, final Vector3D z) {
 		final Vector3D sphericalX = multiply(x, sinTheta * cos(phi));
 		final Vector3D sphericalY = multiply(y, sinTheta * sin(phi));
@@ -773,6 +826,7 @@ public final class Vector3D implements Node {
 	 * @param v the spherical V-coordinate
 	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code u} and {@code v} and is normalized
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D directionSphericalNormalized(final double u, final double v) {
 		return normalize(directionSpherical(u, v));
 	}
@@ -791,6 +845,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D divide(final Vector3D vectorLHS, final double scalarRHS) {
 		final double component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0D);
 		final double component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0D);
@@ -809,6 +864,7 @@ public final class Vector3D implements Node {
 	 * @return {@code Vector3D.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3D.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D faceForward(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return dotProduct(vectorLHS, vectorRHS) < 0.0D ? negate(vectorLHS) : vectorLHS;
 	}
@@ -824,6 +880,7 @@ public final class Vector3D implements Node {
 	 * @return {@code Vector3D.negate(direction)} or {@code direction} as {@code Vector3D.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS}, {@code vectorRHS} or {@code direction} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D faceForward(final Vector3D vectorLHS, final Vector3D vectorRHS, final Vector3D direction) {
 		return dotProduct(vectorLHS, vectorRHS) < 0.0D ? negate(direction) : Objects.requireNonNull(direction, "direction == null");
 	}
@@ -838,6 +895,7 @@ public final class Vector3D implements Node {
 	 * @return {@code Vector3D.negateComponent3(vectorRHS)} or {@code vectorRHS} as {@code vectorLHS.getComponent3()} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D faceForwardComponent3(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return vectorLHS.component3 < 0.0D ? negateComponent3(vectorRHS) : Objects.requireNonNull(vectorRHS, "vectorRHS == null");
 	}
@@ -852,6 +910,7 @@ public final class Vector3D implements Node {
 	 * @return {@code Vector3D.negateComponent3(vectorRHS)} or {@code vectorRHS} as {@code vectorLHS.getComponent3()} is greater than {@code 0.0D} or less than or equal to {@code 0.0D}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D faceForwardComponent3Negated(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return vectorLHS.component3 > 0.0D ? negateComponent3(vectorRHS) : Objects.requireNonNull(vectorRHS, "vectorRHS == null");
 	}
@@ -866,6 +925,7 @@ public final class Vector3D implements Node {
 	 * @return {@code Vector3D.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3D.dotProduct(vectorLHS, vectorRHS)} is greater than {@code 0.0D} or less than or equal to {@code 0.0D}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D faceForwardNegated(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return dotProduct(vectorLHS, vectorRHS) > 0.0D ? negate(vectorLHS) : vectorLHS;
 	}
@@ -879,6 +939,7 @@ public final class Vector3D implements Node {
 	 * @return a cached version of {@code vector}
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D getCached(final Vector3D vector) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(vector, "vector == null"), key -> vector);
 	}
@@ -893,6 +954,7 @@ public final class Vector3D implements Node {
 	 * @return a {@code Vector3D} instance that contains the Hadamard product of {@code vectorLHS} and {@code vectorRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D hadamardProduct(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		final double component1 = vectorLHS.component1 * vectorRHS.component1;
 		final double component2 = vectorLHS.component2 * vectorRHS.component2;
@@ -912,6 +974,7 @@ public final class Vector3D implements Node {
 	 * @return {@code n} or {@code Vector3D.normalize(Vector3D.subtract(o, i))} as {@code Vector3D.dotProduct(o, i)} is greater than {@code 0.999D} or less than or equal to {@code 0.999D}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D half(final Vector3D o, final Vector3D n, final Vector3D i) {
 		return dotProduct(o, i) > 0.999D ? n : normalize(subtract(o, i));
 	}
@@ -929,6 +992,7 @@ public final class Vector3D implements Node {
 	 * @return a {@code Vector3D} instance with the result of the linear interpolation operation
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D lerp(final Vector3D a, final Vector3D b, final double t) {
 		final double component1 = Doubles.lerp(a.component1, b.component1, t);
 		final double component2 = Doubles.lerp(a.component2, b.component2, t);
@@ -951,6 +1015,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D multiply(final Vector3D vectorLHS, final double scalarRHS) {
 		final double component1 = vectorLHS.component1 * scalarRHS;
 		final double component2 = vectorLHS.component2 * scalarRHS;
@@ -970,6 +1035,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D negate(final Vector3D vector) {
 		final double component1 = -vector.component1;
 		final double component2 = -vector.component2;
@@ -989,6 +1055,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D negateComponent1(final Vector3D vector) {
 		final double component1 = -vector.component1;
 		final double component2 = +vector.component2;
@@ -1008,6 +1075,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D negateComponent2(final Vector3D vector) {
 		final double component1 = +vector.component1;
 		final double component2 = -vector.component2;
@@ -1027,6 +1095,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D negateComponent3(final Vector3D vector) {
 		final double component1 = +vector.component1;
 		final double component2 = +vector.component2;
@@ -1046,6 +1115,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance denoting the normal of the plane defined by the {@code Point3D} instances {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D normal(final Point3D a, final Point3D b, final Point3D c) {
 		final Vector3D edgeAB = directionNormalized(a, b);
 		final Vector3D edgeAC = directionNormalized(a, c);
@@ -1069,6 +1139,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the interpolated normal
 	 * @throws NullPointerException thrown if, and only if, either {@code normalA}, {@code normalB}, {@code normalC} or {@code barycentricCoordinates} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D normal(final Vector3D normalA, final Vector3D normalB, final Vector3D normalC, final Point3D barycentricCoordinates) {
 		final double component1 = normalA.component1 * barycentricCoordinates.getU() + normalB.component1 * barycentricCoordinates.getV() + normalC.component1 * barycentricCoordinates.getW();
 		final double component2 = normalA.component2 * barycentricCoordinates.getU() + normalB.component2 * barycentricCoordinates.getV() + normalC.component2 * barycentricCoordinates.getW();
@@ -1088,6 +1159,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance denoting the normalized normal of the plane defined by the {@code Point3D} instances {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D normalNormalized(final Point3D a, final Point3D b, final Point3D c) {
 		return normalize(normal(a, b, c));
 	}
@@ -1108,6 +1180,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the interpolated and normalized normal
 	 * @throws NullPointerException thrown if, and only if, either {@code normalA}, {@code normalB}, {@code normalC} or {@code barycentricCoordinates} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D normalNormalized(final Vector3D normalA, final Vector3D normalB, final Vector3D normalC, final Point3D barycentricCoordinates) {
 		return normalize(normal(normalA, normalB, normalC, barycentricCoordinates));
 	}
@@ -1123,6 +1196,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D normalize(final Vector3D vector) {
 		return divide(vector, vector.length());
 	}
@@ -1132,6 +1206,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a random {@code Vector3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D random() {
 		final double component1 = Doubles.random();
 		final double component2 = Doubles.random();
@@ -1145,6 +1220,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a random and normalized {@code Vector3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D randomNormalized() {
 		return normalize(random());
 	}
@@ -1161,6 +1237,7 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D read(final DataInput dataInput) {
 		try {
 			final double component1 = dataInput.readDouble();
@@ -1182,6 +1259,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the reciprocal (or inverse) component values of {@code vector}
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D reciprocal(final Vector3D vector) {
 		final double component1 = finiteOrDefault(1.0D / vector.component1, 0.0D);
 		final double component2 = finiteOrDefault(1.0D / vector.component2, 0.0D);
@@ -1207,6 +1285,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that represents the reflection of {@code direction} with regards to {@code normal}
 	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D reflection(final Vector3D direction, final Vector3D normal) {
 		return reflection(direction, normal, false);
 	}
@@ -1225,6 +1304,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that represents the reflection of {@code direction} with regards to {@code normal}
 	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D reflection(final Vector3D direction, final Vector3D normal, final boolean isFacingSurface) {
 		return isFacingSurface ? subtract(direction, multiply(normal, dotProduct(direction, normal) * 2.0D)) : subtract(multiply(normal, dotProduct(direction, normal) * 2.0D), direction);
 	}
@@ -1246,6 +1326,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that represents the reflection of {@code direction} with regards to {@code normal} and is normalized
 	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D reflectionNormalized(final Vector3D direction, final Vector3D normal) {
 		return reflectionNormalized(direction, normal, false);
 	}
@@ -1264,6 +1345,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that represents the reflection of {@code direction} with regards to {@code normal} and is normalized
 	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D reflectionNormalized(final Vector3D direction, final Vector3D normal, final boolean isFacingSurface) {
 		return normalize(reflection(direction, normal, isFacingSurface));
 	}
@@ -1282,6 +1364,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D subtract(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		final double component1 = vectorLHS.component1 - vectorRHS.component1;
 		final double component2 = vectorLHS.component2 - vectorRHS.component2;
@@ -1302,6 +1385,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D transform(final Matrix44D matrixLHS, final Vector3D vectorRHS) {
 		final double component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement12() * vectorRHS.component2 + matrixLHS.getElement13() * vectorRHS.component3;
 		final double component2 = matrixLHS.getElement21() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2 + matrixLHS.getElement23() * vectorRHS.component3;
@@ -1322,6 +1406,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D transform(final Vector3D vectorLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
 		final double component1 = vectorLHS.component1 * orthonormalBasisRHS.getU().component1 + vectorLHS.component2 * orthonormalBasisRHS.getV().component1 + vectorLHS.component3 * orthonormalBasisRHS.getW().component1;
 		final double component2 = vectorLHS.component1 * orthonormalBasisRHS.getU().component2 + vectorLHS.component2 * orthonormalBasisRHS.getV().component2 + vectorLHS.component3 * orthonormalBasisRHS.getW().component2;
@@ -1342,6 +1427,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix} or {@code point} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D transformError(final Matrix44D matrix, final Point3D point) {
 		final double component1 = gamma(3) * (abs(matrix.getElement11() * point.getComponent1()) + abs(matrix.getElement12() * point.getY()) + abs(matrix.getElement13() * point.getZ()) + abs(matrix.getElement14()));
 		final double component2 = gamma(3) * (abs(matrix.getElement21() * point.getComponent1()) + abs(matrix.getElement22() * point.getY()) + abs(matrix.getElement23() * point.getZ()) + abs(matrix.getElement24()));
@@ -1363,6 +1449,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrix}, {@code point} or {@code vector} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D transformError(final Matrix44D matrix, final Point3D point, final Vector3D vector) {
 		final double component1 = (gamma(3) + 1.0D) * (abs(matrix.getElement11()) * vector.component1 + abs(matrix.getElement12()) * vector.component2 + abs(matrix.getElement13()) * vector.component3) + gamma(3) * (abs(matrix.getElement11() * point.getComponent1()) + abs(matrix.getElement12() * point.getComponent2()) + abs(matrix.getElement13() * point.getComponent3()) + abs(matrix.getElement14()));
 		final double component2 = (gamma(3) + 1.0D) * (abs(matrix.getElement21()) * vector.component1 + abs(matrix.getElement22()) * vector.component2 + abs(matrix.getElement23()) * vector.component3) + gamma(3) * (abs(matrix.getElement21() * point.getComponent1()) + abs(matrix.getElement22() * point.getComponent2()) + abs(matrix.getElement23() * point.getComponent3()) + abs(matrix.getElement24()));
@@ -1383,6 +1470,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D transformReverse(final Vector3D vectorLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
 		final double component1 = dotProduct(vectorLHS, orthonormalBasisRHS.getU());
 		final double component2 = dotProduct(vectorLHS, orthonormalBasisRHS.getV());
@@ -1403,6 +1491,7 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D transformTranspose(final Matrix44D matrixLHS, final Vector3D vectorRHS) {
 		final double component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement21() * vectorRHS.component2 + matrixLHS.getElement31() * vectorRHS.component3;
 		final double component2 = matrixLHS.getElement12() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2 + matrixLHS.getElement32() * vectorRHS.component3;
@@ -1416,6 +1505,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(1.0D, 0.0D, 0.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D u() {
 		return u(1.0D);
 	}
@@ -1426,6 +1516,7 @@ public final class Vector3D implements Node {
 	 * @param u the value of the U-component
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(u, 0.0D, 0.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D u(final double u) {
 		return new Vector3D(u, 0.0D, 0.0D);
 	}
@@ -1435,6 +1526,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(0.0D, 1.0D, 0.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D v() {
 		return v(1.0D);
 	}
@@ -1445,6 +1537,7 @@ public final class Vector3D implements Node {
 	 * @param v the value of the V-component
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(0.0D, v, 0.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D v(final double v) {
 		return new Vector3D(0.0D, v, 0.0D);
 	}
@@ -1454,6 +1547,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(0.0D, 0.0D, 1.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D w() {
 		return w(1.0D);
 	}
@@ -1464,6 +1558,7 @@ public final class Vector3D implements Node {
 	 * @param w the value of the W-component
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(0.0D, 0.0D, w)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D w(final double w) {
 		return new Vector3D(0.0D, 0.0D, w);
 	}
@@ -1473,6 +1568,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(1.0D, 0.0D, 0.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D x() {
 		return x(1.0D);
 	}
@@ -1483,6 +1579,7 @@ public final class Vector3D implements Node {
 	 * @param x the value of the X-component
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(x, 0.0D, 0.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D x(final double x) {
 		return new Vector3D(x, 0.0D, 0.0D);
 	}
@@ -1492,6 +1589,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(0.0D, 1.0D, 0.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D y() {
 		return y(1.0D);
 	}
@@ -1502,6 +1600,7 @@ public final class Vector3D implements Node {
 	 * @param y the value of the Y-component
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(0.0D, y, 0.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D y(final double y) {
 		return new Vector3D(0.0D, y, 0.0D);
 	}
@@ -1511,6 +1610,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(0.0D, 0.0D, 1.0D)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D z() {
 		return z(1.0D);
 	}
@@ -1521,6 +1621,7 @@ public final class Vector3D implements Node {
 	 * @param z the value of the Z-component
 	 * @return a new {@code Vector3D} instance equivalent to {@code new Vector3D(0.0D, 0.0D, z)}
 	 */
+//	TODO: Add Unit Tests!
 	public static Vector3D z(final double z) {
 		return new Vector3D(0.0D, 0.0D, z);
 	}
@@ -1535,6 +1636,7 @@ public final class Vector3D implements Node {
 	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are orthogonal, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static boolean orthogonal(final Vector3D vLHS, final Vector3D vRHS) {
 		final double dotProduct = dotProduct(vLHS, vRHS);
 		
@@ -1554,6 +1656,7 @@ public final class Vector3D implements Node {
 	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are in the same hemisphere, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static boolean sameHemisphere(final Vector3D vLHS, final Vector3D vRHS) {
 		return dotProduct(vLHS, vRHS) > 0.0D;
 	}
@@ -1570,6 +1673,7 @@ public final class Vector3D implements Node {
 	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are in the same hemisphere, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static boolean sameHemisphereZ(final Vector3D vLHS, final Vector3D vRHS) {
 		return vLHS.component3 * vRHS.component3 > 0.0D;
 	}
@@ -1584,6 +1688,7 @@ public final class Vector3D implements Node {
 	 * @return the dot product of {@code vectorLHS} and {@code vectorRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static double dotProduct(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3;
 	}
@@ -1598,6 +1703,7 @@ public final class Vector3D implements Node {
 	 * @return the absolute dot product of {@code vectorLHS} and {@code vectorRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static double dotProductAbs(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return abs(dotProduct(vectorLHS, vectorRHS));
 	}
@@ -1620,6 +1726,7 @@ public final class Vector3D implements Node {
 	 * @return the triple product of {@code vectorLHSDP}, {@code vectorLHSCP} and {@code vectorRHSCP}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHSDP}, {@code vectorLHSCP} or {@code vectorRHSCP} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static double tripleProduct(final Vector3D vectorLHSDP, final Vector3D vectorLHSCP, final Vector3D vectorRHSCP) {
 		return dotProduct(vectorLHSDP, crossProduct(vectorLHSCP, vectorRHSCP));
 	}
@@ -1629,6 +1736,7 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the size of the cache
 	 */
+//	TODO: Add Unit Tests!
 	public static int getCacheSize() {
 		return CACHE.size();
 	}
@@ -1636,6 +1744,7 @@ public final class Vector3D implements Node {
 	/**
 	 * Clears the cache.
 	 */
+//	TODO: Add Unit Tests!
 	public static void clearCache() {
 		CACHE.clear();
 	}

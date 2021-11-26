@@ -214,6 +214,16 @@ public final class Point2DUnitTests {
 	}
 	
 	@Test
+	public void testMaximum() {
+		assertEquals(new Point2D(+Double.MAX_VALUE, +Double.MAX_VALUE), Point2D.maximum());
+	}
+	
+	@Test
+	public void testMinimum() {
+		assertEquals(new Point2D(-Double.MAX_VALUE, -Double.MAX_VALUE), Point2D.minimum());
+	}
+	
+	@Test
 	public void testRead() throws IOException {
 		final Point2D a = new Point2D(1.0D, 0.5D);
 		

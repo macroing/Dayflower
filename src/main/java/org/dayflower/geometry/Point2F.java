@@ -592,7 +592,6 @@ public final class Point2F implements Node {
 	 * 
 	 * @return a new {@code Point2F} instance with the largest component values
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F maximum() {
 		final float component1 = MAX_VALUE;
 		final float component2 = MAX_VALUE;
@@ -680,7 +679,6 @@ public final class Point2F implements Node {
 	 * 
 	 * @return a new {@code Point2F} instance with the smallest component values
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F minimum() {
 		final float component1 = MIN_VALUE;
 		final float component2 = MIN_VALUE;

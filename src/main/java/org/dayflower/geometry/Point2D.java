@@ -591,7 +591,6 @@ public final class Point2D implements Node {
 	 * 
 	 * @return a new {@code Point2D} instance with the largest component values
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D maximum() {
 		final double component1 = MAX_VALUE;
 		final double component2 = MAX_VALUE;
@@ -679,7 +678,6 @@ public final class Point2D implements Node {
 	 * 
 	 * @return a new {@code Point2D} instance with the smallest component values
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D minimum() {
 		final double component1 = MIN_VALUE;
 		final double component2 = MIN_VALUE;

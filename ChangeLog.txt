@@ -1,3 +1,16 @@
+2021-11-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the Point2DUnitTests class.
+	* ADD:		Add unit tests to the Point2FUnitTests class.
+
+2021-11-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the Point2DUnitTests, Point2FUnitTests, Point2IUnitTests, Point3DUnitTests, Point3FUnitTests, Point4DUnitTests and Point4FUnitTests classes.
+	* ADD:		Add the ChromaticSpectralCurveDUnitTests, ChromaticSpectralCurveFUnitTests, Color4DUnitTests, ColorSpaceDUnitTests, ColorSpaceFUnitTests, ConstantSpectralCurveDUnitTests, ConstantSpectralCurveFUnitTests, IrregularSpectralCurveDUnitTests, IrregularSpectralCurveFUnitTests, RegularSpectralCurveDUnitTests and RegularSpectralCurveFUnitTests classes.
+	* ADD:		Add the method equals(Color4D) to the Color4D class.
+	* ADD:		Add the method equals(Color4F) to the Color4F class.
+	* CHANGE:	Update the toString() method of the Point2D and Point2F classes.
+
 2021-11-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a simple renderer implementation for the Ray Tracing option in the GPU-renderer.

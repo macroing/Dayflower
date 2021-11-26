@@ -214,6 +214,16 @@ public final class Point2FUnitTests {
 	}
 	
 	@Test
+	public void testMaximum() {
+		assertEquals(new Point2F(+Float.MAX_VALUE, +Float.MAX_VALUE), Point2F.maximum());
+	}
+	
+	@Test
+	public void testMinimum() {
+		assertEquals(new Point2F(-Float.MAX_VALUE, -Float.MAX_VALUE), Point2F.minimum());
+	}
+	
+	@Test
 	public void testRead() throws IOException {
 		final Point2F a = new Point2F(1.0F, 0.5F);
 		

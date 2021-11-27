@@ -43,6 +43,76 @@ public final class Point2DUnitTests {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Test
+	public void testCentroidPoint2DPoint2D() {
+		final Point2D a = new Point2D(2.0D, 4.0D);
+		final Point2D b = new Point2D(4.0D, 8.0D);
+		final Point2D c = Point2D.centroid(a, b);
+		
+		assertEquals(3.0D, c.getComponent1());
+		assertEquals(6.0D, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, null));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(null, b));
+	}
+	
+	@Test
+	public void testCentroidPoint2DPoint2DPoint2D() {
+		final Point2D a = new Point2D(2.0D,  4.0D);
+		final Point2D b = new Point2D(4.0D,  8.0D);
+		final Point2D c = new Point2D(6.0D, 12.0D);
+		final Point2D d = Point2D.centroid(a, b, c);
+		
+		assertEquals(4.0D, d.getComponent1());
+		assertEquals(8.0D, d.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, b, null));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, null, c));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(null, b, c));
+	}
+	
+	@Test
+	public void testCentroidPoint2DPoint2DPoint2DPoint2D() {
+		final Point2D a = new Point2D(2.0D,  4.0D);
+		final Point2D b = new Point2D(4.0D,  8.0D);
+		final Point2D c = new Point2D(6.0D, 12.0D);
+		final Point2D d = new Point2D(8.0D, 16.0D);
+		final Point2D e = Point2D.centroid(a, b, c, d);
+		
+		assertEquals( 5.0D, e.getComponent1());
+		assertEquals(10.0D, e.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, b, c, null));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, b, null, d));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, null, c, d));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(null, b, c, d));
+	}
+	
+	@Test
+	public void testCentroidPoint2DPoint2DPoint2DPoint2DPoint2DPoint2DPoint2DPoint2D() {
+		final Point2D a = new Point2D( 2.0D,  4.0D);
+		final Point2D b = new Point2D( 4.0D,  8.0D);
+		final Point2D c = new Point2D( 6.0D, 12.0D);
+		final Point2D d = new Point2D( 8.0D, 16.0D);
+		final Point2D e = new Point2D(10.0D, 20.0D);
+		final Point2D f = new Point2D(12.0D, 24.0D);
+		final Point2D g = new Point2D(14.0D, 28.0D);
+		final Point2D h = new Point2D(16.0D, 32.0D);
+		final Point2D i = Point2D.centroid(a, b, c, d, e, f, g, h);
+		
+		assertEquals( 9.0D, i.getComponent1());
+		assertEquals(18.0D, i.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, b, c, d, e, f, g, null));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, b, c, d, e, f, null, h));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, b, c, d, e, null, g, h));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, b, c, d, null, f, g, h));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, b, c, null, e, f, g, h));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, b, null, d, e, f, g, h));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(a, null, c, d, e, f, g, h));
+		assertThrows(NullPointerException.class, () -> Point2D.centroid(null, b, c, d, e, f, g, h));
+	}
+	
+	@Test
 	public void testClearCacheAndGetCacheSizeAndGetCached() {
 		assertEquals(0, Point2D.getCacheSize());
 		
@@ -219,8 +289,98 @@ public final class Point2DUnitTests {
 	}
 	
 	@Test
+	public void testMaximumPoint2DPoint2D() {
+		final Point2D a = new Point2D(1.0D, 2.0D);
+		final Point2D b = new Point2D(3.0D, 4.0D);
+		final Point2D c = Point2D.maximum(a, b);
+		
+		assertEquals(3.0D, c.getComponent1());
+		assertEquals(4.0D, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.maximum(a, null));
+		assertThrows(NullPointerException.class, () -> Point2D.maximum(null, b));
+	}
+	
+	@Test
+	public void testMaximumPoint2DPoint2DPoint2D() {
+		final Point2D a = new Point2D(1.0D, 2.0D);
+		final Point2D b = new Point2D(3.0D, 4.0D);
+		final Point2D c = new Point2D(5.0D, 6.0D);
+		final Point2D d = Point2D.maximum(a, b, c);
+		
+		assertEquals(5.0D, d.getComponent1());
+		assertEquals(6.0D, d.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.maximum(a, b, null));
+		assertThrows(NullPointerException.class, () -> Point2D.maximum(a, null, c));
+		assertThrows(NullPointerException.class, () -> Point2D.maximum(null, b, c));
+	}
+	
+	@Test
+	public void testMaximumPoint2DPoint2DPoint2DPoint2D() {
+		final Point2D a = new Point2D(1.0D, 2.0D);
+		final Point2D b = new Point2D(3.0D, 4.0D);
+		final Point2D c = new Point2D(5.0D, 6.0D);
+		final Point2D d = new Point2D(7.0D, 8.0D);
+		final Point2D e = Point2D.maximum(a, b, c, d);
+		
+		assertEquals(7.0D, e.getComponent1());
+		assertEquals(8.0D, e.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.maximum(a, b, c, null));
+		assertThrows(NullPointerException.class, () -> Point2D.maximum(a, b, null, d));
+		assertThrows(NullPointerException.class, () -> Point2D.maximum(a, null, c, d));
+		assertThrows(NullPointerException.class, () -> Point2D.maximum(null, b, c, d));
+	}
+	
+	@Test
 	public void testMinimum() {
 		assertEquals(new Point2D(-Double.MAX_VALUE, -Double.MAX_VALUE), Point2D.minimum());
+	}
+	
+	@Test
+	public void testMinimumPoint2DPoint2D() {
+		final Point2D a = new Point2D(1.0D, 2.0D);
+		final Point2D b = new Point2D(3.0D, 4.0D);
+		final Point2D c = Point2D.minimum(a, b);
+		
+		assertEquals(1.0D, c.getComponent1());
+		assertEquals(2.0D, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.minimum(a, null));
+		assertThrows(NullPointerException.class, () -> Point2D.minimum(null, b));
+	}
+	
+	@Test
+	public void testMinimumPoint2DPoint2DPoint2D() {
+		final Point2D a = new Point2D(1.0D, 2.0D);
+		final Point2D b = new Point2D(3.0D, 4.0D);
+		final Point2D c = new Point2D(5.0D, 6.0D);
+		final Point2D d = Point2D.minimum(a, b, c);
+		
+		assertEquals(1.0D, d.getComponent1());
+		assertEquals(2.0D, d.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.minimum(a, b, null));
+		assertThrows(NullPointerException.class, () -> Point2D.minimum(a, null, c));
+		assertThrows(NullPointerException.class, () -> Point2D.minimum(null, b, c));
+	}
+	
+	@Test
+	public void testMinimumPoint2DPoint2DPoint2DPoint2D() {
+		final Point2D a = new Point2D(1.0D, 2.0D);
+		final Point2D b = new Point2D(3.0D, 4.0D);
+		final Point2D c = new Point2D(5.0D, 6.0D);
+		final Point2D d = new Point2D(7.0D, 8.0D);
+		final Point2D e = Point2D.minimum(a, b, c, d);
+		
+		assertEquals(1.0D, e.getComponent1());
+		assertEquals(2.0D, e.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.minimum(a, b, c, null));
+		assertThrows(NullPointerException.class, () -> Point2D.minimum(a, b, null, d));
+		assertThrows(NullPointerException.class, () -> Point2D.minimum(a, null, c, d));
+		assertThrows(NullPointerException.class, () -> Point2D.minimum(null, b, c, d));
 	}
 	
 	@Test

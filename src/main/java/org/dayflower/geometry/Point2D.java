@@ -431,7 +431,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance that represents the centroid of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D centroid(final Point2D a, final Point2D b) {
 		final double component1 = (a.component1 + b.component1) / 2.0D;
 		final double component2 = (a.component2 + b.component2) / 2.0D;
@@ -450,7 +449,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance that represents the centroid of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c) {
 		final double component1 = (a.component1 + b.component1 + c.component1) / 3.0D;
 		final double component2 = (a.component2 + b.component2 + c.component2) / 3.0D;
@@ -470,7 +468,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
 		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0D;
 		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0D;
@@ -494,7 +491,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c, final Point2D d, final Point2D e, final Point2D f, final Point2D g, final Point2D h) {
 		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0D;
 		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0D;
@@ -608,7 +604,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the largest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D maximum(final Point2D a, final Point2D b) {
 		final double component1 = max(a.component1, b.component1);
 		final double component2 = max(a.component2, b.component2);
@@ -627,7 +622,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the largest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D maximum(final Point2D a, final Point2D b, final Point2D c) {
 		final double component1 = max(a.component1, b.component1, c.component1);
 		final double component2 = max(a.component2, b.component2, c.component2);
@@ -647,7 +641,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D maximum(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
 		final double component1 = max(a.component1, b.component1, c.component1, d.component1);
 		final double component2 = max(a.component2, b.component2, c.component2, d.component2);
@@ -695,7 +688,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the smallest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D minimum(final Point2D a, final Point2D b) {
 		final double component1 = min(a.component1, b.component1);
 		final double component2 = min(a.component2, b.component2);
@@ -714,7 +706,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the smallest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D minimum(final Point2D a, final Point2D b, final Point2D c) {
 		final double component1 = min(a.component1, b.component1, c.component1);
 		final double component2 = min(a.component2, b.component2, c.component2);
@@ -734,7 +725,6 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2D minimum(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
 		final double component1 = min(a.component1, b.component1, c.component1, d.component1);
 		final double component2 = min(a.component2, b.component2, c.component2, d.component2);

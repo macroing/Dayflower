@@ -432,7 +432,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance that represents the centroid of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F centroid(final Point2F a, final Point2F b) {
 		final float component1 = (a.component1 + b.component1) / 2.0F;
 		final float component2 = (a.component2 + b.component2) / 2.0F;
@@ -451,7 +450,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance that represents the centroid of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F centroid(final Point2F a, final Point2F b, final Point2F c) {
 		final float component1 = (a.component1 + b.component1 + c.component1) / 3.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2) / 3.0F;
@@ -471,7 +469,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F centroid(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
 		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0F;
@@ -495,7 +492,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F centroid(final Point2F a, final Point2F b, final Point2F c, final Point2F d, final Point2F e, final Point2F f, final Point2F g, final Point2F h) {
 		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0F;
@@ -609,7 +605,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the largest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F maximum(final Point2F a, final Point2F b) {
 		final float component1 = max(a.component1, b.component1);
 		final float component2 = max(a.component2, b.component2);
@@ -628,7 +623,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the largest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F maximum(final Point2F a, final Point2F b, final Point2F c) {
 		final float component1 = max(a.component1, b.component1, c.component1);
 		final float component2 = max(a.component2, b.component2, c.component2);
@@ -648,7 +642,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F maximum(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
 		final float component1 = max(a.component1, b.component1, c.component1, d.component1);
 		final float component2 = max(a.component2, b.component2, c.component2, d.component2);
@@ -696,7 +689,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the smallest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F minimum(final Point2F a, final Point2F b) {
 		final float component1 = min(a.component1, b.component1);
 		final float component2 = min(a.component2, b.component2);
@@ -715,7 +707,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the smallest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F minimum(final Point2F a, final Point2F b, final Point2F c) {
 		final float component1 = min(a.component1, b.component1, c.component1);
 		final float component2 = min(a.component2, b.component2, c.component2);
@@ -735,7 +726,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F minimum(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
 		final float component1 = min(a.component1, b.component1, c.component1, d.component1);
 		final float component2 = min(a.component2, b.component2, c.component2, d.component2);

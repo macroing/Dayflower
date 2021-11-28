@@ -3,6 +3,8 @@
 	* ADD:		Add unit tests to the Point2DUnitTests class.
 	* ADD:		Add unit tests to the Point2FUnitTests class.
 	* ADD:		Add unit tests to the Point2IUnitTests class.
+	* ADD:		Add unit tests to the Point3DUnitTests class.
+	* ADD:		Add unit tests to the Point3FUnitTests class.
 	* ADD:		Add unit tests to the Point4DUnitTests class.
 	* ADD:		Add unit tests to the Point4FUnitTests class.
 	* CHANGE:	Update the toString() method of the Point3D, Point3F, Point4D and Point4F classes.

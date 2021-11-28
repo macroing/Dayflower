@@ -47,6 +47,7 @@ public abstract class Filter2F {
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 */
+//	TODO: Add Unit Tests!
 	protected Filter2F(final float resolutionX, final float resolutionY) {
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
@@ -65,6 +66,7 @@ public abstract class Filter2F {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
+//	TODO: Add Unit Tests!
 	public abstract float evaluate(final float x, final float y);
 	
 	/**

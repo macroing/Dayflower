@@ -47,6 +47,7 @@ public abstract class Filter2D {
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 */
+//	TODO: Add Unit Tests!
 	protected Filter2D(final double resolutionX, final double resolutionY) {
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
@@ -65,6 +66,7 @@ public abstract class Filter2D {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
+//	TODO: Add Unit Tests!
 	public abstract double evaluate(final double x, final double y);
 	
 	/**

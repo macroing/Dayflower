@@ -878,7 +878,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F transform(final Matrix33F matrixLHS, final Point2F pointRHS) {
 		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13();
 		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23();
@@ -898,7 +897,6 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point2F transformAndDivide(final Matrix33F matrixLHS, final Point2F pointRHS) {
 		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13();
 		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23();

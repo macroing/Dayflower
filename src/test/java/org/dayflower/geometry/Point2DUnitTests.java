@@ -549,6 +549,38 @@ public final class Point2DUnitTests {
 	}
 	
 	@Test
+	public void testTransform() {
+		final Point2D a = new Point2D(1.0D, 2.0D);
+		final Point2D b = Point2D.transform(Matrix33D.scale(1.0D, 2.0D), a);
+		final Point2D c = Point2D.transform(Matrix33D.translate(1.0D, 2.0D), a);
+		
+		assertEquals(1.0D, b.getComponent1());
+		assertEquals(4.0D, b.getComponent2());
+		
+		assertEquals(2.0D, c.getComponent1());
+		assertEquals(4.0D, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.transform(Matrix33D.translate(1.0D, 2.0D), null));
+		assertThrows(NullPointerException.class, () -> Point2D.transform(null, a));
+	}
+	
+	@Test
+	public void testTransformAndDivide() {
+		final Point2D a = new Point2D(1.0D, 2.0D);
+		final Point2D b = Point2D.transformAndDivide(Matrix33D.scale(1.0D, 2.0D), a);
+		final Point2D c = Point2D.transformAndDivide(Matrix33D.translate(1.0D, 2.0D), a);
+		
+		assertEquals(1.0D, b.getComponent1());
+		assertEquals(4.0D, b.getComponent2());
+		
+		assertEquals(2.0D, c.getComponent1());
+		assertEquals(4.0D, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2D.transformAndDivide(Matrix33D.translate(1.0D, 2.0D), null));
+		assertThrows(NullPointerException.class, () -> Point2D.transformAndDivide(null, a));
+	}
+	
+	@Test
 	public void testWrite() {
 		final Point2D a = new Point2D(1.0D, 0.5D);
 		

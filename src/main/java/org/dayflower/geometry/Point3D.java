@@ -56,13 +56,11 @@ public final class Point3D implements Node {
 	/**
 	 * A {@code Point3D} instance with the largest component values.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Point3D MAXIMUM = maximum();
 	
 	/**
 	 * A {@code Point3D} instance with the smallest component values.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Point3D MINIMUM = minimum();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +85,6 @@ public final class Point3D implements Node {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Point3D() {
 		this(0.0D, 0.0D, 0.0D);
 	}
@@ -107,7 +104,6 @@ public final class Point3D implements Node {
 	 * @param point a {@link Point4D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Point3D(final Point4D point) {
 		this(point.getComponent1(), point.getComponent2(), point.getComponent3());
 	}
@@ -127,7 +123,6 @@ public final class Point3D implements Node {
 	 * @param vector a {@link Vector3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Point3D(final Vector3D vector) {
 		this(vector.getComponent1(), vector.getComponent2(), vector.getComponent3());
 	}
@@ -144,7 +139,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @param component the value for all components
 	 */
-//	TODO: Add Unit Tests!
 	public Point3D(final double component) {
 		this(component, component, component);
 	}
@@ -156,7 +150,6 @@ public final class Point3D implements Node {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public Point3D(final double component1, final double component2, final double component3) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -170,7 +163,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Point3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Point3D(%sD, %sD, %sD)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
@@ -184,7 +176,6 @@ public final class Point3D implements Node {
 	 * @param object the {@code Object} to compare to this {@code Point3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Point3D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -211,7 +202,6 @@ public final class Point3D implements Node {
 	 * @return the value of the component at index {@code index}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code 2}
 	 */
-//	TODO: Add Unit Tests!
 	public double getComponent(final int index) {
 		switch(index) {
 			case 0:
@@ -230,7 +220,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the value of component 1
 	 */
-//	TODO: Add Unit Tests!
 	public double getComponent1() {
 		return this.component1;
 	}
@@ -240,7 +229,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the value of component 2
 	 */
-//	TODO: Add Unit Tests!
 	public double getComponent2() {
 		return this.component2;
 	}
@@ -250,7 +238,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public double getComponent3() {
 		return this.component3;
 	}
@@ -260,7 +247,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the value of the U-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getU() {
 		return this.component1;
 	}
@@ -270,7 +256,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the value of the V-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getV() {
 		return this.component2;
 	}
@@ -280,7 +265,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the value of the W-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getW() {
 		return this.component3;
 	}
@@ -290,7 +274,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the value of the X-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getX() {
 		return this.component1;
 	}
@@ -300,7 +283,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the value of the Y-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getY() {
 		return this.component2;
 	}
@@ -310,7 +292,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the value of the Z-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getZ() {
 		return this.component3;
 	}
@@ -330,7 +311,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return a {@code double[]} representation of this {@code Point3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double[] toArray() {
 		return new double[] {
 			this.component1,
@@ -344,7 +324,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return a hash code for this {@code Point3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3));
@@ -361,7 +340,6 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeDouble(this.component1);
@@ -534,7 +512,6 @@ public final class Point3D implements Node {
 	 * @return a cached version of {@code point}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D getCached(final Point3D point) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
 	}
@@ -552,7 +529,6 @@ public final class Point3D implements Node {
 	 * @return a {@code Point3D} instance with the result of the linear interpolation operation
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D lerp(final Point3D a, final Point3D b, final double t) {
 		final double component1 = Doubles.lerp(a.component1, b.component1, t);
 		final double component2 = Doubles.lerp(a.component2, b.component2, t);
@@ -566,7 +542,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return a new {@code Point3D} instance with the largest component values
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D maximum() {
 		final double component1 = MAX_VALUE;
 		final double component2 = MAX_VALUE;
@@ -585,7 +560,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the largest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D maximum(final Point3D a, final Point3D b) {
 		final double component1 = max(a.component1, b.component1);
 		final double component2 = max(a.component2, b.component2);
@@ -605,7 +579,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the largest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D maximum(final Point3D a, final Point3D b, final Point3D c) {
 		final double component1 = max(a.component1, b.component1, c.component1);
 		final double component2 = max(a.component2, b.component2, c.component2);
@@ -626,7 +599,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D maximum(final Point3D a, final Point3D b, final Point3D c, final Point3D d) {
 		final double component1 = max(a.component1, b.component1, c.component1, d.component1);
 		final double component2 = max(a.component2, b.component2, c.component2, d.component2);
@@ -645,7 +617,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance that represents the midpoint of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D midpoint(final Point3D a, final Point3D b) {
 		final double component1 = (a.component1 + b.component1) * 0.5D;
 		final double component2 = (a.component2 + b.component2) * 0.5D;
@@ -659,7 +630,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return a new {@code Point3D} instance with the smallest component values
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D minimum() {
 		final double component1 = MIN_VALUE;
 		final double component2 = MIN_VALUE;
@@ -678,7 +648,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the smallest component values of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D minimum(final Point3D a, final Point3D b) {
 		final double component1 = min(a.component1, b.component1);
 		final double component2 = min(a.component2, b.component2);
@@ -698,7 +667,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the smallest component values of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D minimum(final Point3D a, final Point3D b, final Point3D c) {
 		final double component1 = min(a.component1, b.component1, c.component1);
 		final double component2 = min(a.component2, b.component2, c.component2);
@@ -719,7 +687,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D minimum(final Point3D a, final Point3D b, final Point3D c, final Point3D d) {
 		final double component1 = min(a.component1, b.component1, c.component1, d.component1);
 		final double component2 = min(a.component2, b.component2, c.component2, d.component2);
@@ -768,7 +735,6 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D read(final DataInput dataInput) {
 		try {
 			final double component1 = dataInput.readDouble();
@@ -877,7 +843,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D transform(final Matrix44D matrixLHS, final Point3D pointRHS) {
 		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
 		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
@@ -898,7 +863,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D transformAndDivide(final Matrix44D matrixLHS, final Point3D pointRHS) {
 		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
 		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
@@ -917,7 +881,6 @@ public final class Point3D implements Node {
 	 * @return a {@code String} representation of {@code points}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static String toString(final Point3D... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		
@@ -982,7 +945,6 @@ public final class Point3D implements Node {
 	 * @return the distance from {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static double distance(final Point3D eye, final Point3D lookAt) {
 		return Vector3D.direction(eye, lookAt).length();
 	}
@@ -997,7 +959,6 @@ public final class Point3D implements Node {
 	 * @return the squared distance from {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static double distanceSquared(final Point3D eye, final Point3D lookAt) {
 		return Vector3D.direction(eye, lookAt).lengthSquared();
 	}
@@ -1007,7 +968,6 @@ public final class Point3D implements Node {
 	 * 
 	 * @return the size of the cache
 	 */
-//	TODO: Add Unit Tests!
 	public static int getCacheSize() {
 		return CACHE.size();
 	}
@@ -1015,7 +975,6 @@ public final class Point3D implements Node {
 	/**
 	 * Clears the cache.
 	 */
-//	TODO: Add Unit Tests!
 	public static void clearCache() {
 		CACHE.clear();
 	}

@@ -18,6 +18,8 @@
  */
 package org.dayflower.filter;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+
 /**
  * A {@code FilterNB} represents an N-dimensional filter that operates on and returns {@code byte[]} values.
  * 
@@ -36,5 +38,6 @@ public interface FilterNB {
 	 * @return the evaluated value
 	 * @throws NullPointerException thrown if, and only if, {@code bytes} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	byte[] evaluate(final byte[] bytes);
 }

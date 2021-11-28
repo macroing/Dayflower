@@ -20,6 +20,7 @@ package org.dayflower.geometry;
 
 import java.io.DataInput;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 
 /**
  * A {@code ShapeReader} is used for reading {@link Shape} instances from a {@code DataInput} instance.
@@ -45,6 +46,7 @@ public interface ShapeReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	Shape read(final DataInput dataInput);
 	
 	/**
@@ -67,6 +69,7 @@ public interface ShapeReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	Shape read(final DataInput dataInput, final int id);
 	
 	/**
@@ -75,5 +78,6 @@ public interface ShapeReader {
 	 * @param id the ID of the {@code Shape} type to check
 	 * @return {@code true} if, and only if, this {@code ShapeReader} instance supports reading {@code Shape} instances with an ID of {@code id}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	boolean isSupported(final int id);
 }

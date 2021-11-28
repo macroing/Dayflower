@@ -38,6 +38,7 @@ public interface Shape2I extends Shape {
 	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Shape2I} instance, {@code false} otherwise
 	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Shape2I} instance
 	 */
+//	TODO: Add Unit Tests!
 	List<Point2I> findPoints(final boolean isIncludingBorderOnly);
 	
 	/**
@@ -50,6 +51,7 @@ public interface Shape2I extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Shape2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	boolean contains(final Point2I point, final boolean isIncludingBorderOnly);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

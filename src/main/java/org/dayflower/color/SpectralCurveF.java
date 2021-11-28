@@ -112,6 +112,7 @@ public abstract class SpectralCurveF {
 	 * @param lambda the wavelength in nanometers
 	 * @return a sample based on the wavelength {@code lambda} in nanometers
 	 */
+//	TODO: Add Unit Tests!
 	public abstract float sample(final float lambda);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

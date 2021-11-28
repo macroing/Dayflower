@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
@@ -172,7 +173,7 @@ public final class Point3F implements Node {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Point3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
+		return String.format("new Point3F(%sF, %sF, %sF)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
 	}
 	
 	/**

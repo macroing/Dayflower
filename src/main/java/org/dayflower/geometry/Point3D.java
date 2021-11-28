@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
 import org.dayflower.utility.ParameterArguments;
@@ -172,7 +173,7 @@ public final class Point3D implements Node {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Point3D(%+.10f, %+.10f, %+.10f)", Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3));
+		return String.format("new Point3D(%sD, %sD, %sD)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
 	}
 	
 	/**

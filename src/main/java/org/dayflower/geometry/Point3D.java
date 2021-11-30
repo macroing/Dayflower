@@ -364,7 +364,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D add(final Point3D pointLHS, final Vector3D vectorRHS) {
 		final double component1 = pointLHS.component1 + vectorRHS.getComponent1();
 		final double component2 = pointLHS.component2 + vectorRHS.getComponent2();
@@ -386,7 +385,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D add(final Point3D pointLHS, final Vector3D vectorRHS, final double scalar) {
 		final double component1 = pointLHS.component1 + vectorRHS.getComponent1() * scalar;
 		final double component2 = pointLHS.component2 + vectorRHS.getComponent2() * scalar;
@@ -407,7 +405,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D add(final Point3D pointLHS, final double scalarRHS) {
 		final double component1 = pointLHS.component1 + scalarRHS;
 		final double component2 = pointLHS.component2 + scalarRHS;
@@ -428,7 +425,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance that represents the centroid of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D centroid(final Point3D a, final Point3D b) {
 		final double component1 = (a.component1 + b.component1) / 2.0D;
 		final double component2 = (a.component2 + b.component2) / 2.0D;
@@ -448,7 +444,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance that represents the centroid of {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D centroid(final Point3D a, final Point3D b, final Point3D c) {
 		final double component1 = (a.component1 + b.component1 + c.component1) / 3.0D;
 		final double component2 = (a.component2 + b.component2 + c.component2) / 3.0D;
@@ -469,7 +464,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D centroid(final Point3D a, final Point3D b, final Point3D c, final Point3D d) {
 		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0D;
 		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0D;
@@ -494,11 +488,10 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D centroid(final Point3D a, final Point3D b, final Point3D c, final Point3D d, final Point3D e, final Point3D f, final Point3D g, final Point3D h) {
 		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0D;
 		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0D;
-		final double component3 = (a.component3 + b.component3 + c.component3 + d.component3 + e.component3 + f.component3 + g.component3 + g.component3) / 8.0D;
+		final double component3 = (a.component3 + b.component3 + c.component3 + d.component3 + e.component3 + f.component3 + g.component3 + h.component3) / 8.0D;
 		
 		return new Point3D(component1, component2, component3);
 	}
@@ -759,7 +752,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the scale applied
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D scale(final Point3D point, final Vector2D scale) {
 		final double component1 = point.component1 * scale.getComponent1();
 		final double component2 = point.component2 * scale.getComponent2();
@@ -780,7 +772,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the scale applied
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D scale(final Point3D point, final Vector3D scale) {
 		final double component1 = point.component1 * scale.getComponent1();
 		final double component2 = point.component2 * scale.getComponent2();
@@ -801,7 +792,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D subtract(final Point3D pointLHS, final Vector3D vectorRHS) {
 		final double component1 = pointLHS.component1 - vectorRHS.getComponent1();
 		final double component2 = pointLHS.component2 - vectorRHS.getComponent2();
@@ -822,7 +812,6 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3D subtract(final Point3D pointLHS, final double scalarRHS) {
 		final double component1 = pointLHS.component1 - scalarRHS;
 		final double component2 = pointLHS.component2 - scalarRHS;
@@ -910,7 +899,6 @@ public final class Point3D implements Node {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 3}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean coplanar(final Point3D... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 3, Integer.MAX_VALUE, "points.length");

@@ -19,6 +19,7 @@
 package org.dayflower.geometry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,6 +42,118 @@ public final class Point3FUnitTests {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Test
+	public void testAddPoint3FFloat() {
+		final Point3F a = new Point3F(1.0F, 2.0F, 3.0F);
+		final Point3F b = Point3F.add(a, 2.0F);
+		
+		assertEquals(3.0F, b.getComponent1());
+		assertEquals(4.0F, b.getComponent2());
+		assertEquals(5.0F, b.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.add(null, 2.0F));
+	}
+	
+	@Test
+	public void testAddPoint3FVector3F() {
+		final Point3F a = new Point3F(1.0F, 2.0F, 3.0F);
+		final Point3F b = Point3F.add(a, new Vector3F(1.0F, 2.0F, 3.0F));
+		
+		assertEquals(2.0F, b.getComponent1());
+		assertEquals(4.0F, b.getComponent2());
+		assertEquals(6.0F, b.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.add(a, null));
+		assertThrows(NullPointerException.class, () -> Point3F.add(null, new Vector3F(1.0F, 2.0F, 3.0F)));
+	}
+	
+	@Test
+	public void testAddPoint3FVector3FFloat() {
+		final Point3F a = new Point3F(1.0F, 2.0F, 3.0F);
+		final Point3F b = Point3F.add(a, new Vector3F(1.0F, 2.0F, 3.0F), 2.0F);
+		
+		assertEquals(3.0F, b.getComponent1());
+		assertEquals(6.0F, b.getComponent2());
+		assertEquals(9.0F, b.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.add(a, null, 2.0F));
+		assertThrows(NullPointerException.class, () -> Point3F.add(null, new Vector3F(1.0F, 2.0F, 3.0F), 2.0F));
+	}
+	
+	@Test
+	public void testCentroidPoint3FPoint3F() {
+		final Point3F a = new Point3F(2.0F, 4.0F,  6.0F);
+		final Point3F b = new Point3F(4.0F, 8.0F, 12.0F);
+		final Point3F c = Point3F.centroid(a, b);
+		
+		assertEquals(3.0F, c.getComponent1());
+		assertEquals(6.0F, c.getComponent2());
+		assertEquals(9.0F, c.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, null));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(null, b));
+	}
+	
+	@Test
+	public void testCentroidPoint3FPoint3FPoint3F() {
+		final Point3F a = new Point3F(2.0F,  4.0F,  6.0F);
+		final Point3F b = new Point3F(4.0F,  8.0F, 12.0F);
+		final Point3F c = new Point3F(6.0F, 12.0F, 18.0F);
+		final Point3F d = Point3F.centroid(a, b, c);
+		
+		assertEquals( 4.0F, d.getComponent1());
+		assertEquals( 8.0F, d.getComponent2());
+		assertEquals(12.0F, d.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, b, null));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, null, c));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(null, b, c));
+	}
+	
+	@Test
+	public void testCentroidPoint3FPoint3FPoint3FPoint3F() {
+		final Point3F a = new Point3F(2.0F,  4.0F,  6.0F);
+		final Point3F b = new Point3F(4.0F,  8.0F, 12.0F);
+		final Point3F c = new Point3F(6.0F, 12.0F, 18.0F);
+		final Point3F d = new Point3F(8.0F, 16.0F, 24.0F);
+		final Point3F e = Point3F.centroid(a, b, c, d);
+		
+		assertEquals( 5.0F, e.getComponent1());
+		assertEquals(10.0F, e.getComponent2());
+		assertEquals(15.0F, e.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, b, c, null));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, b, null, d));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, null, c, d));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(null, b, c, d));
+	}
+	
+	@Test
+	public void testCentroidPoint3FPoint3FPoint3FPoint3FPoint3FPoint3FPoint3FPoint3F() {
+		final Point3F a = new Point3F( 2.0F,  4.0F,  6.0F);
+		final Point3F b = new Point3F( 4.0F,  8.0F, 12.0F);
+		final Point3F c = new Point3F( 6.0F, 12.0F, 18.0F);
+		final Point3F d = new Point3F( 8.0F, 16.0F, 24.0F);
+		final Point3F e = new Point3F(10.0F, 20.0F, 30.0F);
+		final Point3F f = new Point3F(12.0F, 24.0F, 36.0F);
+		final Point3F g = new Point3F(14.0F, 28.0F, 42.0F);
+		final Point3F h = new Point3F(16.0F, 32.0F, 48.0F);
+		final Point3F i = Point3F.centroid(a, b, c, d, e, f, g, h);
+		
+		assertEquals( 9.0F, i.getComponent1());
+		assertEquals(18.0F, i.getComponent2());
+		assertEquals(27.0F, i.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, b, c, d, e, f, g, null));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, b, c, d, e, f, null, h));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, b, c, d, e, null, g, h));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, b, c, d, null, f, g, h));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, b, c, null, e, f, g, h));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, b, null, d, e, f, g, h));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(a, null, c, d, e, f, g, h));
+		assertThrows(NullPointerException.class, () -> Point3F.centroid(null, b, c, d, e, f, g, h));
+	}
 	
 	@Test
 	public void testClearCacheAndGetCacheSizeAndGetCached() {
@@ -121,6 +234,21 @@ public final class Point3FUnitTests {
 		assertEquals(3.0F, point.getComponent3());
 		
 		assertThrows(NullPointerException.class, () -> new Point3F((Vector3F)(null)));
+	}
+	
+	@Test
+	public void testCoplanar() {
+		assertTrue(Point3F.coplanar(new Point3F(1.0F, 1.0F, 1.0F), new Point3F(1.0F, 3.0F, 1.0F), new Point3F(3.0F, 1.0F, 1.0F)));
+		assertTrue(Point3F.coplanar(new Point3F(1.0F, 1.0F, 1.0F), new Point3F(1.0F, 3.0F, 1.0F), new Point3F(3.0F, 3.0F, 1.0F), new Point3F(3.0F, 1.0F, 1.0F)));
+		assertTrue(Point3F.coplanar(new Point3F(1.0F, 1.0F, 1.0F), new Point3F(1.0F, 2.0F, 1.0F), new Point3F(2.0F, 3.0F, 1.0F), new Point3F(3.0F, 2.0F, 1.0F), new Point3F(3.0F, 1.0F, 1.0F)));
+		
+		assertFalse(Point3F.coplanar(new Point3F(1.0F, 1.0F, 1.0F), new Point3F(1.0F, 3.0F, 2.0F), new Point3F(3.0F, 3.0F, 3.0F), new Point3F(3.0F, 1.0F, 4.0F)));
+		assertFalse(Point3F.coplanar(new Point3F(1.0F, 1.0F, 1.0F), new Point3F(1.0F, 2.0F, 2.0F), new Point3F(2.0F, 3.0F, 3.0F), new Point3F(3.0F, 2.0F, 4.0F), new Point3F(3.0F, 1.0F, 5.0F)));
+		
+		assertThrows(IllegalArgumentException.class, () -> Point3F.coplanar(new Point3F(), new Point3F()));
+		assertThrows(NullPointerException.class, () -> Point3F.coplanar((Point3F[])(null)));
+		assertThrows(NullPointerException.class, () -> Point3F.coplanar(new Point3F(), new Point3F(), new Point3F(), null));
+		assertThrows(NullPointerException.class, () -> Point3F.coplanar(new Point3F[] {new Point3F(), new Point3F(), new Point3F(), null}));
 	}
 	
 	@Test
@@ -413,6 +541,57 @@ public final class Point3FUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> Point3F.read(null));
 		assertThrows(UncheckedIOException.class, () -> Point3F.read(new DataInputStream(new ByteArrayInputStream(new byte[] {}))));
+	}
+	
+	@Test
+	public void testScalePoint3FVector2F() {
+		final Point3F a = new Point3F(1.0F, 2.0F, 3.0F);
+		final Point3F b = Point3F.scale(a, new Vector2F(2.0F, 3.0F));
+		
+		assertEquals(2.0F, b.getComponent1());
+		assertEquals(6.0F, b.getComponent2());
+		assertEquals(3.0F, b.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.scale(a, (Vector2F)(null)));
+		assertThrows(NullPointerException.class, () -> Point3F.scale(null, new Vector2F(1.0F, 1.0F)));
+	}
+	
+	@Test
+	public void testScalePoint3FVector3F() {
+		final Point3F a = new Point3F(1.0F, 2.0F, 3.0F);
+		final Point3F b = Point3F.scale(a, new Vector3F(2.0F, 3.0F, 4.0F));
+		
+		assertEquals( 2.0F, b.getComponent1());
+		assertEquals( 6.0F, b.getComponent2());
+		assertEquals(12.0F, b.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.scale(a, (Vector3F)(null)));
+		assertThrows(NullPointerException.class, () -> Point3F.scale(null, new Vector3F(1.0F, 1.0F, 1.0F)));
+	}
+	
+	@Test
+	public void testSubtractPoint3FFloat() {
+		final Point3F a = new Point3F(3.0F, 4.0F, 5.0F);
+		final Point3F b = Point3F.subtract(a, 3.0F);
+		
+		assertEquals(0.0F, b.getComponent1());
+		assertEquals(1.0F, b.getComponent2());
+		assertEquals(2.0F, b.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.subtract(null, 1.0F));
+	}
+	
+	@Test
+	public void testSubtractPoint3FVector3F() {
+		final Point3F a = new Point3F(3.0F, 4.0F, 5.0F);
+		final Point3F b = Point3F.subtract(a, new Vector3F(1.0F, 3.0F, 5.0F));
+		
+		assertEquals(2.0F, b.getComponent1());
+		assertEquals(1.0F, b.getComponent2());
+		assertEquals(0.0F, b.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3F.subtract(a, (Vector3F)(null)));
+		assertThrows(NullPointerException.class, () -> Point3F.subtract(null, new Vector3F(1.0F, 1.0F, 1.0F)));
 	}
 	
 	@Test

@@ -30,7 +30,9 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Matrix33F} represents a 3 x 3 matrix with 9 {@code float}-based elements.
@@ -65,7 +67,6 @@ public final class Matrix33F implements Node {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Matrix33F() {
 		this(1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -83,7 +84,6 @@ public final class Matrix33F implements Node {
 	 * @param element32 the value of the element at index 7 or row 3 and column 2
 	 * @param element33 the value of the element at index 8 or row 3 and column 3
 	 */
-//	TODO: Add Unit Tests!
 	public Matrix33F(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33) {
 		this.element11 = element11;
 		this.element12 = element12;
@@ -103,12 +103,11 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Matrix33F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		final String row1 = String.format("%+.10f, %+.10f, %+.10f", Float.valueOf(this.element11), Float.valueOf(this.element12), Float.valueOf(this.element13));
-		final String row2 = String.format("%+.10f, %+.10f, %+.10f", Float.valueOf(this.element21), Float.valueOf(this.element22), Float.valueOf(this.element23));
-		final String row3 = String.format("%+.10f, %+.10f, %+.10f", Float.valueOf(this.element31), Float.valueOf(this.element32), Float.valueOf(this.element33));
+		final String row1 = String.format("%sF, %sF, %sF", Strings.toNonScientificNotation(this.element11), Strings.toNonScientificNotation(this.element12), Strings.toNonScientificNotation(this.element13));
+		final String row2 = String.format("%sF, %sF, %sF", Strings.toNonScientificNotation(this.element21), Strings.toNonScientificNotation(this.element22), Strings.toNonScientificNotation(this.element23));
+		final String row3 = String.format("%sF, %sF, %sF", Strings.toNonScientificNotation(this.element31), Strings.toNonScientificNotation(this.element32), Strings.toNonScientificNotation(this.element33));
 		
 		return String.format("new Matrix33F(%s, %s, %s)", row1, row2, row3);
 	}
@@ -121,7 +120,6 @@ public final class Matrix33F implements Node {
 	 * @param object the {@code Object} to compare to this {@code Matrix33F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Matrix33F}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -187,7 +185,6 @@ public final class Matrix33F implements Node {
 	 * @return the value of the element at index {@code index}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code 8}
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement(final int index) {
 		switch(index) {
 			case 0:
@@ -225,15 +222,9 @@ public final class Matrix33F implements Node {
 	 * @return the value of the element at row {@code row} and column {@code column}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code row} or {@code column} are less than {@code 1} or greater than {@code 3}
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement(final int row, final int column) {
-		if(row < 1 || row > 3) {
-			throw new IllegalArgumentException(String.format("Illegal row: row=%d", Integer.valueOf(row)));
-		}
-		
-		if(column < 1 || column > 3) {
-			throw new IllegalArgumentException(String.format("Illegal column: column=%d", Integer.valueOf(column)));
-		}
+		ParameterArguments.requireRange(row, 1, 3, "row");
+		ParameterArguments.requireRange(column, 1, 3, "column");
 		
 		final int index = (row - 1) * 3 + (column - 1);
 		
@@ -245,7 +236,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return the value of the element at index 0 or row 1 and column 1
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement11() {
 		return this.element11;
 	}
@@ -255,7 +245,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return the value of the element at index 1 or row 1 and column 2
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement12() {
 		return this.element12;
 	}
@@ -265,7 +254,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return the value of the element at index 2 or row 1 and column 3
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement13() {
 		return this.element13;
 	}
@@ -275,7 +263,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return the value of the element at index 3 or row 2 and column 1
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement21() {
 		return this.element21;
 	}
@@ -285,7 +272,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return the value of the element at index 4 or row 2 and column 2
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement22() {
 		return this.element22;
 	}
@@ -295,7 +281,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return the value of the element at index 5 or row 2 and column 3
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement23() {
 		return this.element23;
 	}
@@ -305,7 +290,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return the value of the element at index 6 or row 3 and column 1
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement31() {
 		return this.element31;
 	}
@@ -315,7 +299,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return the value of the element at index 7 or row 3 and column 2
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement32() {
 		return this.element32;
 	}
@@ -325,7 +308,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return the value of the element at index 8 or row 3 and column 3
 	 */
-//	TODO: Add Unit Tests!
 	public float getElement33() {
 		return this.element33;
 	}
@@ -335,7 +317,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return a hash code for this {@code Matrix33F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(new Object[] {
@@ -356,7 +337,6 @@ public final class Matrix33F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeFloat(this.element11);
@@ -380,7 +360,6 @@ public final class Matrix33F implements Node {
 	 * 
 	 * @return a new {@code Matrix33F} instance denoting the identity matrix
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33F identity() {
 		return new Matrix33F();
 	}
@@ -460,7 +439,6 @@ public final class Matrix33F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33F read(final DataInput dataInput) {
 		try {
 			final float element11 = dataInput.readFloat();

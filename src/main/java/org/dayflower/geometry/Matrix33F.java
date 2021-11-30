@@ -499,7 +499,6 @@ public final class Matrix33F implements Node {
 	 * @return a {@code Matrix33F} instance that scales along the X- and Y-axes
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33F scale(final Vector2F vector) {
 		return scale(vector.getX(), vector.getY());
 	}
@@ -517,7 +516,6 @@ public final class Matrix33F implements Node {
 	 * @param scalar the scale factor along the X- and Y-axes
 	 * @return a {@code Matrix33F} instance that scales along the X- and Y-axes
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33F scale(final float scalar) {
 		return scale(scalar, scalar);
 	}
@@ -538,7 +536,6 @@ public final class Matrix33F implements Node {
 	 * @param y the scale factor along the Y-axis
 	 * @return a {@code Matrix33F} instance that scales along the X- and Y-axes
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33F scale(final float x, final float y) {
 		return new Matrix33F(x, 0.0F, 0.0F, 0.0F, y, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -559,7 +556,6 @@ public final class Matrix33F implements Node {
 	 * @return a {@code Matrix33F} instance that translates along the X- and Y-axes
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33F translate(final Point2F point) {
 		return translate(point.getX(), point.getY());
 	}
@@ -580,7 +576,6 @@ public final class Matrix33F implements Node {
 	 * @param y the translation factor along the Y-axis
 	 * @return a {@code Matrix33F} instance that translates along the X- and Y-axes
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33F translate(final float x, final float y) {
 		return new Matrix33F(1.0F, 0.0F, x, 0.0F, 1.0F, y, 0.0F, 0.0F, 1.0F);
 	}
@@ -594,7 +589,6 @@ public final class Matrix33F implements Node {
 	 * @return a new {@code Matrix33F} instance that is the transpose of {@code matrix}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33F transpose(final Matrix33F matrix) {
 		final float element11 = matrix.element11;
 		final float element12 = matrix.element21;

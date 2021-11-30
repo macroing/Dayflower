@@ -499,7 +499,6 @@ public final class Matrix33D implements Node {
 	 * @return a {@code Matrix33D} instance that scales along the X- and Y-axes
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33D scale(final Vector2D vector) {
 		return scale(vector.getX(), vector.getY());
 	}
@@ -517,7 +516,6 @@ public final class Matrix33D implements Node {
 	 * @param scalar the scale factor along the X- and Y-axes
 	 * @return a {@code Matrix33D} instance that scales along the X- and Y-axes
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33D scale(final double scalar) {
 		return scale(scalar, scalar);
 	}
@@ -538,7 +536,6 @@ public final class Matrix33D implements Node {
 	 * @param y the scale factor along the Y-axis
 	 * @return a {@code Matrix33D} instance that scales along the X- and Y-axes
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33D scale(final double x, final double y) {
 		return new Matrix33D(x, 0.0D, 0.0D, 0.0D, y, 0.0D, 0.0D, 0.0D, 1.0D);
 	}
@@ -559,7 +556,6 @@ public final class Matrix33D implements Node {
 	 * @return a {@code Matrix33D} instance that translates along the X- and Y-axes
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33D translate(final Point2D point) {
 		return translate(point.getX(), point.getY());
 	}
@@ -580,7 +576,6 @@ public final class Matrix33D implements Node {
 	 * @param y the translation factor along the Y-axis
 	 * @return a {@code Matrix33D} instance that translates along the X- and Y-axes
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33D translate(final double x, final double y) {
 		return new Matrix33D(1.0D, 0.0D, x, 0.0D, 1.0D, y, 0.0D, 0.0D, 1.0D);
 	}
@@ -594,7 +589,6 @@ public final class Matrix33D implements Node {
 	 * @return a new {@code Matrix33D} instance that is the transpose of {@code matrix}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33D transpose(final Matrix33D matrix) {
 		final double element11 = matrix.element11;
 		final double element12 = matrix.element21;

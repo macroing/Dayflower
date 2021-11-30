@@ -264,10 +264,107 @@ public final class Matrix33DUnitTests {
 	}
 	
 	@Test
+	public void testScaleDouble() {
+		final Matrix33D matrix = Matrix33D.scale(2.0D);
+		
+		assertEquals(2.0D, matrix.getElement11());
+		assertEquals(0.0D, matrix.getElement12());
+		assertEquals(0.0D, matrix.getElement13());
+		assertEquals(0.0D, matrix.getElement21());
+		assertEquals(2.0D, matrix.getElement22());
+		assertEquals(0.0D, matrix.getElement23());
+		assertEquals(0.0D, matrix.getElement31());
+		assertEquals(0.0D, matrix.getElement32());
+		assertEquals(1.0D, matrix.getElement33());
+	}
+	
+	@Test
+	public void testScaleDoubleDouble() {
+		final Matrix33D matrix = Matrix33D.scale(2.0D, 3.0D);
+		
+		assertEquals(2.0D, matrix.getElement11());
+		assertEquals(0.0D, matrix.getElement12());
+		assertEquals(0.0D, matrix.getElement13());
+		assertEquals(0.0D, matrix.getElement21());
+		assertEquals(3.0D, matrix.getElement22());
+		assertEquals(0.0D, matrix.getElement23());
+		assertEquals(0.0D, matrix.getElement31());
+		assertEquals(0.0D, matrix.getElement32());
+		assertEquals(1.0D, matrix.getElement33());
+	}
+	
+	@Test
+	public void testScaleVector2D() {
+		final Matrix33D matrix = Matrix33D.scale(new Vector2D(2.0D, 3.0D));
+		
+		assertEquals(2.0D, matrix.getElement11());
+		assertEquals(0.0D, matrix.getElement12());
+		assertEquals(0.0D, matrix.getElement13());
+		assertEquals(0.0D, matrix.getElement21());
+		assertEquals(3.0D, matrix.getElement22());
+		assertEquals(0.0D, matrix.getElement23());
+		assertEquals(0.0D, matrix.getElement31());
+		assertEquals(0.0D, matrix.getElement32());
+		assertEquals(1.0D, matrix.getElement33());
+		
+		assertThrows(NullPointerException.class, () -> Matrix33D.scale(null));
+	}
+	
+	@Test
 	public void testToString() {
 		final Matrix33D matrix = new Matrix33D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D);
 		
 		assertEquals("new Matrix33D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D)", matrix.toString());
+	}
+	
+	@Test
+	public void testTranslateDoubleDouble() {
+		final Matrix33D matrix = Matrix33D.translate(2.0D, 3.0D);
+		
+		assertEquals(1.0D, matrix.getElement11());
+		assertEquals(0.0D, matrix.getElement12());
+		assertEquals(2.0D, matrix.getElement13());
+		assertEquals(0.0D, matrix.getElement21());
+		assertEquals(1.0D, matrix.getElement22());
+		assertEquals(3.0D, matrix.getElement23());
+		assertEquals(0.0D, matrix.getElement31());
+		assertEquals(0.0D, matrix.getElement32());
+		assertEquals(1.0D, matrix.getElement33());
+	}
+	
+	@Test
+	public void testTranslatePoint2D() {
+		final Matrix33D matrix = Matrix33D.translate(new Point2D(2.0D, 3.0D));
+		
+		assertEquals(1.0D, matrix.getElement11());
+		assertEquals(0.0D, matrix.getElement12());
+		assertEquals(2.0D, matrix.getElement13());
+		assertEquals(0.0D, matrix.getElement21());
+		assertEquals(1.0D, matrix.getElement22());
+		assertEquals(3.0D, matrix.getElement23());
+		assertEquals(0.0D, matrix.getElement31());
+		assertEquals(0.0D, matrix.getElement32());
+		assertEquals(1.0D, matrix.getElement33());
+		
+		assertThrows(NullPointerException.class, () -> Matrix33D.translate(null));
+	}
+	
+	@Test
+	public void testTranspose() {
+		final Matrix33D a = new Matrix33D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D);
+		final Matrix33D b = Matrix33D.transpose(a);
+		
+		assertEquals(1.0D, b.getElement11());
+		assertEquals(4.0D, b.getElement12());
+		assertEquals(7.0D, b.getElement13());
+		assertEquals(2.0D, b.getElement21());
+		assertEquals(5.0D, b.getElement22());
+		assertEquals(8.0D, b.getElement23());
+		assertEquals(3.0D, b.getElement31());
+		assertEquals(6.0D, b.getElement32());
+		assertEquals(9.0D, b.getElement33());
+		
+		assertThrows(NullPointerException.class, () -> Matrix33D.transpose(null));
 	}
 	
 	@Test

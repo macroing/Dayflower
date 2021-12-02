@@ -27,7 +27,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.java.lang.Strings;
@@ -154,7 +153,6 @@ public final class Matrix33D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Matrix33D} instance is invertible, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean isInvertible() {
 		return abs(determinant()) >= 1.0e-12D;
 	}
@@ -164,13 +162,12 @@ public final class Matrix33D implements Node {
 	 * 
 	 * @return the determinant of this {@code Matrix33D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double determinant() {
 		final double a = this.element11;
 		final double b = this.element12;
 		final double c = this.element13;
 		final double d = this.element21 * this.element32 - this.element22 * this.element31;
-		final double e = this.element21 * this.element22 - this.element23 * this.element31;
+		final double e = this.element21 * this.element33 - this.element23 * this.element31;
 		final double f = this.element22 * this.element33 - this.element32 * this.element23;
 		
 		return a * f - b * e + c * d;
@@ -226,9 +223,7 @@ public final class Matrix33D implements Node {
 		ParameterArguments.requireRange(row, 1, 3, "row");
 		ParameterArguments.requireRange(column, 1, 3, "column");
 		
-		final int index = (row - 1) * 3 + (column - 1);
-		
-		return getElement(index);
+		return getElement((row - 1) * 3 + (column - 1));
 	}
 	
 	/**
@@ -378,7 +373,6 @@ public final class Matrix33D implements Node {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33D inverse(final Matrix33D matrix) {
 		if(!matrix.isInvertible()) {
 			throw new IllegalArgumentException("The Matrix33D 'matrix' cannot be inverted!");
@@ -412,7 +406,6 @@ public final class Matrix33D implements Node {
 	 * @return a new {@code Matrix33D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code matrixRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33D multiply(final Matrix33D matrixLHS, final Matrix33D matrixRHS) {
 		final double element11 = matrixLHS.element11 * matrixRHS.element11 + matrixLHS.element12 * matrixRHS.element21 + matrixLHS.element13 * matrixRHS.element31;
 		final double element12 = matrixLHS.element11 * matrixRHS.element12 + matrixLHS.element12 * matrixRHS.element22 + matrixLHS.element13 * matrixRHS.element32;
@@ -475,7 +468,6 @@ public final class Matrix33D implements Node {
 	 * @return a {@code Matrix33D} instance that rotates around the origin
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix33D rotate(final AngleD angle) {
 		final double cos = cos(angle.getRadians());
 		final double sin = sin(angle.getRadians());

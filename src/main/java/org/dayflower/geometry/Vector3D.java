@@ -1198,7 +1198,16 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D normalize(final Vector3D vector) {
-		return divide(vector, vector.length());
+		final double length = vector.length();
+		
+		final boolean isLengthGTEThreshold = length >= 1.0D - 0.000001D;
+		final boolean isLengthLTEThreshold = length <= 1.0D + 0.000001D;
+		
+		if(isLengthGTEThreshold && isLengthLTEThreshold) {
+			return vector;
+		}
+		
+		return divide(vector, length);
 	}
 	
 	/**

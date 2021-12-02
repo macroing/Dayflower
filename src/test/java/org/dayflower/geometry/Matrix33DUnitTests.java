@@ -19,8 +19,10 @@
 package org.dayflower.geometry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -68,6 +70,13 @@ public final class Matrix33DUnitTests {
 		assertEquals(7.0D, matrix.getElement31());
 		assertEquals(8.0D, matrix.getElement32());
 		assertEquals(9.0D, matrix.getElement33());
+	}
+	
+	@Test
+	public void testDeterminant() {
+		final Matrix33D matrix = new Matrix33D(6.0D, 1.0D, 1.0D, 4.0D, -2.0D, 5.0D, 2.0D, 8.0D, 7.0D);
+		
+		assertEquals(-306.0D, matrix.determinant());
 	}
 	
 	@Test
@@ -236,6 +245,50 @@ public final class Matrix33DUnitTests {
 	}
 	
 	@Test
+	public void testInverse() {
+		final Matrix33D a = new Matrix33D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 4.0D, 3.0D, 2.0D, 1.0D);
+		final Matrix33D b = Matrix33D.inverse(a);
+		final Matrix33D c = Matrix33D.inverse(b);
+		final Matrix33D d = Matrix33D.multiply(a, b);
+		final Matrix33D e = Matrix33D.identity();
+		
+		assertEquals(a, c);
+		assertEquals(d, e);
+		
+		assertThrows(IllegalArgumentException.class, () -> Matrix33D.inverse(new Matrix33D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D)));
+		assertThrows(NullPointerException.class, () -> Matrix33D.inverse(null));
+	}
+	
+	@Test
+	public void testIsInvertible() {
+		final Matrix33D a = new Matrix33D(1.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 1.0D);
+		final Matrix33D b = new Matrix33D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D);
+		
+		assertTrue(a.isInvertible());
+		assertFalse(b.isInvertible());
+	}
+	
+	@Test
+	public void testMultiply() {
+		final Matrix33D a = new Matrix33D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D);
+		final Matrix33D b = new Matrix33D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D);
+		final Matrix33D c = Matrix33D.multiply(a, b);
+		
+		assertEquals( 30.0D, c.getElement11());
+		assertEquals( 36.0D, c.getElement12());
+		assertEquals( 42.0D, c.getElement13());
+		assertEquals( 66.0D, c.getElement21());
+		assertEquals( 81.0D, c.getElement22());
+		assertEquals( 96.0D, c.getElement23());
+		assertEquals(102.0D, c.getElement31());
+		assertEquals(126.0D, c.getElement32());
+		assertEquals(150.0D, c.getElement33());
+		
+		assertThrows(NullPointerException.class, () -> Matrix33D.multiply(a, null));
+		assertThrows(NullPointerException.class, () -> Matrix33D.multiply(null, b));
+	}
+	
+	@Test
 	public void testRead() throws IOException {
 		final Matrix33D a = new Matrix33D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D);
 		
@@ -261,6 +314,23 @@ public final class Matrix33DUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> Matrix33D.read(null));
 		assertThrows(UncheckedIOException.class, () -> Matrix33D.read(new DataInputStream(new ByteArrayInputStream(new byte[] {}))));
+	}
+	
+	@Test
+	public void testRotate() {
+		final Matrix33D matrix = Matrix33D.rotate(AngleD.degrees(0.0D));
+		
+		assertEquals(+1.0D, matrix.getElement11());
+		assertEquals(+0.0D, matrix.getElement12());
+		assertEquals(+0.0D, matrix.getElement13());
+		assertEquals(-0.0D, matrix.getElement21());
+		assertEquals(+1.0D, matrix.getElement22());
+		assertEquals(+0.0D, matrix.getElement23());
+		assertEquals(+0.0D, matrix.getElement31());
+		assertEquals(+0.0D, matrix.getElement32());
+		assertEquals(+1.0D, matrix.getElement33());
+		
+		assertThrows(NullPointerException.class, () -> Matrix33D.rotate(null));
 	}
 	
 	@Test

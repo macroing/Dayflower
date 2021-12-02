@@ -1,3 +1,16 @@
+2021-12-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the Matrix44DUnitTests and Matrix44FUnitTests classes.
+	* ADD:		Add unit tests to the Matrix33DUnitTests class.
+	* ADD:		Add unit tests to the Matrix33FUnitTests class.
+	* CHANGE:	Update the method normalize(Vector3D) in the Vector3D class.
+	* CHANGE:	Update the method normalize(Vector3F) in the Vector3F class.
+	* CHANGE:	Update the method rotate(Vector3D, Vector3D) in the Matrix44D class.
+	* CHANGE:	Update the method rotate(Vector3F, Vector3F) in the Matrix44F class.
+	* CHANGE:	Update the toString() method of the Matrix44D and Matrix44F classes.
+	* CHANGE:	Fix a bug in the determinant() method of the Matrix33D class.
+	* CHANGE:	Fix a bug in the determinant() method of the Matrix33F class.
+
 2021-11-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Matrix33DUnitTests and Matrix33FUnitTests classes.

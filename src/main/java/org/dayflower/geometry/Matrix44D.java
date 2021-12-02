@@ -31,7 +31,9 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Matrix44D} represents a 4 x 4 matrix with 16 {@code double}-based elements.
@@ -47,103 +49,86 @@ public final class Matrix44D implements Node {
 	/**
 	 * The offset for the element at index 0 or row 1 and column 1 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_1_1 = 0;
 	
 	/**
 	 * The offset for the element at index 1 or row 1 and column 2 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_1_2 = 1;
 	
 	/**
 	 * The offset for the element at index 2 or row 1 and column 3 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_1_3 = 2;
 	
 	/**
 	 * The offset for the element at index 3 or row 1 and column 4 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_1_4 = 3;
 	
 	/**
 	 * The offset for the element at index 4 or row 2 and column 1 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_2_1 = 4;
 	
 	/**
 	 * The offset for the element at index 5 or row 2 and column 2 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_2_2 = 5;
 	
 	/**
 	 * The offset for the element at index 6 or row 2 and column 3 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_2_3 = 6;
 	
 	/**
 	 * The offset for the element at index 7 or row 2 and column 4 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_2_4 = 7;
 	
 	/**
 	 * The offset for the element at index 8 or row 3 and column 1 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_3_1 = 8;
 	
 	/**
 	 * The offset for the element at index 9 or row 3 and column 2 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_3_2 = 9;
 	
 	/**
 	 * The offset for the element at index 10 or row 3 and column 3 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_3_3 = 10;
 	
 	/**
 	 * The offset for the element at index 11 or row 3 and column 4 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_3_4 = 11;
 	
 	/**
 	 * The offset for the element at index 12 or row 4 and column 1 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_4_1 = 12;
 	
 	/**
 	 * The offset for the element at index 13 or row 4 and column 2 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_4_2 = 13;
 	
 	/**
 	 * The offset for the element at index 14 or row 4 and column 3 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_4_3 = 14;
 	
 	/**
 	 * The offset for the element at index 15 or row 4 and column 4 in the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_OFFSET_ELEMENT_4_4 = 15;
 	
 	/**
 	 * The size of the {@code double[]}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ARRAY_SIZE = 16;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,7 +162,6 @@ public final class Matrix44D implements Node {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Matrix44D() {
 		this(1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
 	}
@@ -202,7 +186,6 @@ public final class Matrix44D implements Node {
 	 * @param element43 the value of the element at index 14 or row 4 and column 3
 	 * @param element44 the value of the element at index 15 or row 4 and column 4
 	 */
-//	TODO: Add Unit Tests!
 	public Matrix44D(final double element11, final double element12, final double element13, final double element14, final double element21, final double element22, final double element23, final double element24, final double element31, final double element32, final double element33, final double element34, final double element41, final double element42, final double element43, final double element44) {
 		this.element11 = element11;
 		this.element12 = element12;
@@ -229,13 +212,12 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Matrix44D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		final String row1 = String.format("%+.10f, %+.10f, %+.10f, %+.10f", Double.valueOf(this.element11), Double.valueOf(this.element12), Double.valueOf(this.element13), Double.valueOf(this.element14));
-		final String row2 = String.format("%+.10f, %+.10f, %+.10f, %+.10f", Double.valueOf(this.element21), Double.valueOf(this.element22), Double.valueOf(this.element23), Double.valueOf(this.element24));
-		final String row3 = String.format("%+.10f, %+.10f, %+.10f, %+.10f", Double.valueOf(this.element31), Double.valueOf(this.element32), Double.valueOf(this.element33), Double.valueOf(this.element34));
-		final String row4 = String.format("%+.10f, %+.10f, %+.10f, %+.10f", Double.valueOf(this.element41), Double.valueOf(this.element42), Double.valueOf(this.element43), Double.valueOf(this.element44));
+		final String row1 = String.format("%sD, %sD, %sD, %sD", Strings.toNonScientificNotation(this.element11), Strings.toNonScientificNotation(this.element12), Strings.toNonScientificNotation(this.element13), Strings.toNonScientificNotation(this.element14));
+		final String row2 = String.format("%sD, %sD, %sD, %sD", Strings.toNonScientificNotation(this.element21), Strings.toNonScientificNotation(this.element22), Strings.toNonScientificNotation(this.element23), Strings.toNonScientificNotation(this.element24));
+		final String row3 = String.format("%sD, %sD, %sD, %sD", Strings.toNonScientificNotation(this.element31), Strings.toNonScientificNotation(this.element32), Strings.toNonScientificNotation(this.element33), Strings.toNonScientificNotation(this.element34));
+		final String row4 = String.format("%sD, %sD, %sD, %sD", Strings.toNonScientificNotation(this.element41), Strings.toNonScientificNotation(this.element42), Strings.toNonScientificNotation(this.element43), Strings.toNonScientificNotation(this.element44));
 		
 		return String.format("new Matrix44D(%s, %s, %s, %s)", row1, row2, row3, row4);
 	}
@@ -248,7 +230,6 @@ public final class Matrix44D implements Node {
 	 * @param object the {@code Object} to compare to this {@code Matrix44D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Matrix44D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -297,7 +278,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Matrix44D} instance is invertible, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean isInvertible() {
 		return abs(determinant()) >= 1.0e-12D;
 	}
@@ -334,7 +314,6 @@ public final class Matrix44D implements Node {
 	 * @return the value of the element at index {@code index}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code 15}
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement(final int index) {
 		switch(index) {
 			case 0:
@@ -386,19 +365,11 @@ public final class Matrix44D implements Node {
 	 * @return the value of the element at row {@code row} and column {@code column}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code row} or {@code column} are less than {@code 1} or greater than {@code 4}
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement(final int row, final int column) {
-		if(row < 1 || row > 4) {
-			throw new IllegalArgumentException(String.format("Illegal row: row=%d", Integer.valueOf(row)));
-		}
+		ParameterArguments.requireRange(row, 1, 4, "row");
+		ParameterArguments.requireRange(column, 1, 4, "column");
 		
-		if(column < 1 || column > 4) {
-			throw new IllegalArgumentException(String.format("Illegal column: column=%d", Integer.valueOf(column)));
-		}
-		
-		final int index = (row - 1) * 4 + (column - 1);
-		
-		return getElement(index);
+		return getElement((row - 1) * 4 + (column - 1));
 	}
 	
 	/**
@@ -406,7 +377,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 0 or row 1 and column 1
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement11() {
 		return this.element11;
 	}
@@ -416,7 +386,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 1 or row 1 and column 2
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement12() {
 		return this.element12;
 	}
@@ -426,7 +395,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 2 or row 1 and column 3
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement13() {
 		return this.element13;
 	}
@@ -436,7 +404,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 3 or row 1 and column 4
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement14() {
 		return this.element14;
 	}
@@ -446,7 +413,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 4 or row 2 and column 1
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement21() {
 		return this.element21;
 	}
@@ -456,7 +422,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 5 or row 2 and column 2
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement22() {
 		return this.element22;
 	}
@@ -466,7 +431,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 6 or row 2 and column 3
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement23() {
 		return this.element23;
 	}
@@ -476,7 +440,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 7 or row 2 and column 4
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement24() {
 		return this.element24;
 	}
@@ -486,7 +449,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 8 or row 3 and column 1
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement31() {
 		return this.element31;
 	}
@@ -496,7 +458,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 9 or row 3 and column 2
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement32() {
 		return this.element32;
 	}
@@ -506,7 +467,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 10 or row 3 and column 3
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement33() {
 		return this.element33;
 	}
@@ -516,7 +476,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 11 or row 3 and column 4
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement34() {
 		return this.element34;
 	}
@@ -526,7 +485,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 12 or row 4 and column 1
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement41() {
 		return this.element41;
 	}
@@ -536,7 +494,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 13 or row 4 and column 2
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement42() {
 		return this.element42;
 	}
@@ -546,7 +503,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 14 or row 4 and column 3
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement43() {
 		return this.element43;
 	}
@@ -556,7 +512,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the value of the element at index 15 or row 4 and column 4
 	 */
-//	TODO: Add Unit Tests!
 	public double getElement44() {
 		return this.element44;
 	}
@@ -566,7 +521,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return a {@code double[]} representation of this {@code Matrix44D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double[] toArray() {
 		final double[] array = new double[ARRAY_SIZE];
 		
@@ -595,7 +549,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return a hash code for this {@code Matrix44D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(new Object[] {
@@ -617,7 +570,6 @@ public final class Matrix44D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeDouble(this.element11);
@@ -648,7 +600,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return a new {@code Matrix44D} instance denoting the identity matrix
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D identity() {
 		return new Matrix44D();
 	}
@@ -667,7 +618,6 @@ public final class Matrix44D implements Node {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D inverse(final Matrix44D matrix) {
 		final double a = matrix.element11 * matrix.element22 - matrix.element12 * matrix.element21;
 		final double b = matrix.element11 * matrix.element23 - matrix.element13 * matrix.element21;
@@ -792,7 +742,6 @@ public final class Matrix44D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D read(final DataInput dataInput) {
 		try {
 			final double element11 = dataInput.readDouble();
@@ -936,10 +885,9 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that rotates using {@code w} and {@code v}
 	 * @throws NullPointerException thrown if, and only if, either {@code w} or {@code v} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotate(final Vector3D w, final Vector3D v) {
 		final Vector3D wNormalized = Vector3D.normalize(w);
-		final Vector3D uNormalized = Vector3D.crossProduct(Vector3D.normalize(v), wNormalized);
+		final Vector3D uNormalized = Vector3D.normalize(Vector3D.crossProduct(Vector3D.normalize(v), wNormalized));
 		final Vector3D vNormalized = Vector3D.crossProduct(wNormalized, uNormalized);
 		
 		return rotate(wNormalized, vNormalized, uNormalized);
@@ -966,7 +914,6 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that rotates using {@code w}, {@code v} and {@code u}
 	 * @throws NullPointerException thrown if, and only if, either {@code w}, {@code v} or {@code u} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotate(final Vector3D w, final Vector3D v, final Vector3D u) {
 		final double element11 = u.getX();
 		final double element12 = v.getX();
@@ -1247,7 +1194,6 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that scales along the X-, Y- and Z-axes
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D scale(final Vector3D vector) {
 		return scale(vector.getX(), vector.getY(), vector.getZ());
 	}
@@ -1265,7 +1211,6 @@ public final class Matrix44D implements Node {
 	 * @param scalar the scale factor along the X-, Y- and Z-axes
 	 * @return a {@code Matrix44D} instance that scales along the X-, Y- and Z-axes
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D scale(final double scalar) {
 		return scale(scalar, scalar, scalar);
 	}
@@ -1288,7 +1233,6 @@ public final class Matrix44D implements Node {
 	 * @param z the scale factor along the Z-axis
 	 * @return a {@code Matrix44D} instance that scales along the X-, Y- and Z-axes
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D scale(final double x, final double y, final double z) {
 		return new Matrix44D(x, 0.0D, 0.0D, 0.0D, 0.0D, y, 0.0D, 0.0D, 0.0D, 0.0D, z, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
 	}
@@ -1309,7 +1253,6 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that translates along the X-, Y- and Z-axes
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D translate(final Point3D point) {
 		return translate(point.getX(), point.getY(), point.getZ());
 	}
@@ -1332,7 +1275,6 @@ public final class Matrix44D implements Node {
 	 * @param z the translation factor along the Z-axis
 	 * @return a {@code Matrix44D} instance that translates along the X-, Y- and Z-axes
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D translate(final double x, final double y, final double z) {
 		return new Matrix44D(1.0D, 0.0D, 0.0D, x, 0.0D, 1.0D, 0.0D, y, 0.0D, 0.0D, 1.0D, z, 0.0D, 0.0D, 0.0D, 1.0D);
 	}
@@ -1346,7 +1288,6 @@ public final class Matrix44D implements Node {
 	 * @return a new {@code Matrix44D} instance that is the transpose of {@code matrix}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D transpose(final Matrix44D matrix) {
 		final double element11 = matrix.element11;
 		final double element12 = matrix.element21;

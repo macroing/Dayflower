@@ -1198,7 +1198,16 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F normalize(final Vector3F vector) {
-		return divide(vector, vector.length());
+		final float length = vector.length();
+		
+		final boolean isLengthGTEThreshold = length >= 1.0F - 0.000001F;
+		final boolean isLengthLTEThreshold = length <= 1.0F + 0.000001F;
+		
+		if(isLengthGTEThreshold && isLengthLTEThreshold) {
+			return vector;
+		}
+		
+		return divide(vector, length);
 	}
 	
 	/**

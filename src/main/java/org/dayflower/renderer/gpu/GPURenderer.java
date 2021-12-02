@@ -64,8 +64,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 	 */
 	@Override
 	public void run() {
-		setupPRNG();
-		
 		if(renderingAlgorithmIsAmbientOcclusion()) {
 			doRunAmbientOcclusion(getMaximumDistance(), getSamples());
 		} else if(renderingAlgorithmIsPathTracing()) {

@@ -10,6 +10,7 @@
 	* CHANGE:	Update the toString() method of the Matrix44D and Matrix44F classes.
 	* CHANGE:	Fix a bug in the determinant() method of the Matrix33D class.
 	* CHANGE:	Fix a bug in the determinant() method of the Matrix33F class.
+	* REMOVE:	Remove the method setupPRNG() and the fields seedArray_$private$1 and setupPRNG from the AbstractKernel class. The PRNG that used private memory was slightly faster in some cases, but it did not work out as expected. Some artifacts were introduced.
 
 2021-11-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

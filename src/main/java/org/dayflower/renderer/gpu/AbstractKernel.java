@@ -85,11 +85,6 @@ public abstract class AbstractKernel extends Kernel {
 	protected int resolutionY;
 	
 	/**
-	 * An {@code int} that indicates whether or not the PRNG should be setup.
-	 */
-	protected int setupPRNG;
-	
-	/**
 	 * An {@code int[]} that contains permutations for Perlin and Simplex noise.
 	 */
 	protected int[] permutationsBArray;
@@ -104,11 +99,6 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected long[] seedArray;
 	
-	/**
-	 * A {@code long[]} that contains seed values for the pseudorandom number generator (PRNG).
-	 */
-	protected long[] seedArray_$private$1;
-	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -120,11 +110,9 @@ public abstract class AbstractKernel extends Kernel {
 		this.simplexGradient4Array = new float[0];
 		this.resolutionX = 0;
 		this.resolutionY = 0;
-		this.setupPRNG = 1;
 		this.permutationsBArray = new int[0];
 		this.permutationsBModulo12Array = new int[0];
 		this.seedArray = new long[0];
-		this.seedArray_$private$1 = new long[1];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1743,15 +1731,6 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
-	 * Attempts to setup the PRNG.
-	 */
-	protected final void setupPRNG() {
-		if(this.setupPRNG == 1) {
-			this.seedArray_$private$1[0] = this.seedArray[getGlobalId()];
-		}
-	}
-	
-	/**
 	 * Attempts to solve the quadratic system based on the values {@code a}, {@code b} and {@code c}.
 	 * 
 	 * @param a a value
@@ -1798,10 +1777,10 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	private int doNext(final int bits) {
-		final long oldSeed = this.seedArray_$private$1[0];
+		final long oldSeed = this.seedArray[getGlobalId()];
 		final long newSeed = (oldSeed * PRNG_MULTIPLIER + PRNG_ADDEND) & PRNG_MASK;
 		
-		this.seedArray_$private$1[0] = newSeed;
+		this.seedArray[getGlobalId()] = newSeed;
 		
 		return (int)(newSeed >>> (48 - bits));
 	}

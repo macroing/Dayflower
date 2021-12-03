@@ -1,3 +1,7 @@
+2021-12-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the AngleDUnitTests and AngleFUnitTests classes.
+
 2021-12-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Matrix44DUnitTests and Matrix44FUnitTests classes.

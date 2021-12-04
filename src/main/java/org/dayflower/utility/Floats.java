@@ -53,6 +53,36 @@ public final class Floats {
 	public static final float MIN_VALUE = -Float.MAX_VALUE;
 	
 	/**
+	 * The value of {@code Floats.nextDown(1.0F)}.
+	 */
+	public static final float NEXT_DOWN_1_1 = nextDown(1.0F);
+	
+	/**
+	 * The value of {@code Floats.nextDown(Floats.NEXT_DOWN_1_1)}.
+	 */
+	public static final float NEXT_DOWN_1_2 = nextDown(NEXT_DOWN_1_1);
+	
+	/**
+	 * The value of {@code Floats.nextDown(Floats.NEXT_DOWN_1_2)}.
+	 */
+	public static final float NEXT_DOWN_1_3 = nextDown(NEXT_DOWN_1_2);
+	
+	/**
+	 * The value of {@code Floats.nextUp(1.0F)}.
+	 */
+	public static final float NEXT_UP_1_1 = nextUp(1.0F);
+	
+	/**
+	 * The value of {@code Floats.nextUp(Floats.NEXT_UP_1_1)}.
+	 */
+	public static final float NEXT_UP_1_2 = nextUp(NEXT_UP_1_1);
+	
+	/**
+	 * The value of {@code Floats.nextUp(Floats.NEXT_UP_1_2)}.
+	 */
+	public static final float NEXT_UP_1_3 = nextUp(NEXT_UP_1_2);
+	
+	/**
 	 * The {@code float} value that represents Not-a-Number (NaN).
 	 */
 	public static final float NaN = Float.NaN;
@@ -742,45 +772,23 @@ public final class Floats {
 	}
 	
 	/**
-	 * Returns the {@code float} value next down after {@code value}.
-	 * <p>
-	 * This method is based on the function {@code NextFloatDown(float v)} in PBRT.
+	 * Returns the floating-point value adjacent to {@code value} in the direction of negative infinity.
 	 * 
-	 * @param value a {@code float} value
-	 * @return the {@code float} value next down after {@code value}
+	 * @param value starting floating-point value
+	 * @return the floating-point value adjacent to {@code value} in the direction of negative infinity
 	 */
-	public static float nextDownPBRT(final float value) {
-		if(isInfinite(value) && value < 0.0F) {
-			return value;
-		}
-		
-		final float currentValue = equal(value, +0.0F) ? -0.0F : value;
-		
-		final int oldCurrentValueToIntBits = Float.floatToIntBits(currentValue);
-		final int newCurrentValueToIntBits = currentValue > 0.0F ? oldCurrentValueToIntBits - 1 : oldCurrentValueToIntBits + 1;
-		
-		return Float.intBitsToFloat(newCurrentValueToIntBits);
+	public static float nextDown(final float value) {
+		return Math.nextDown(value);
 	}
 	
 	/**
-	 * Returns the {@code float} value next up after {@code value}.
-	 * <p>
-	 * This method is based on the function {@code NextFloatUp(float v)} in PBRT.
+	 * Returns the floating-point value adjacent to {@code value} in the direction of positive infinity.
 	 * 
-	 * @param value a {@code float} value
-	 * @return the {@code float} value next up after {@code value}
+	 * @param value starting floating-point value
+	 * @return the floating-point value adjacent to {@code value} in the direction of positive infinity
 	 */
-	public static float nextUpPBRT(final float value) {
-		if(isInfinite(value) && value > 0.0F) {
-			return value;
-		}
-		
-		final float currentValue = equal(value, -0.0F) ? +0.0F : value;
-		
-		final int oldCurrentValueToIntBits = Float.floatToIntBits(currentValue);
-		final int newCurrentValueToIntBits = currentValue < 0.0F ? oldCurrentValueToIntBits - 1 : oldCurrentValueToIntBits + 1;
-		
-		return Float.intBitsToFloat(newCurrentValueToIntBits);
+	public static float nextUp(final float value) {
+		return Math.nextUp(value);
 	}
 	
 	/**

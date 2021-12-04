@@ -27,8 +27,8 @@ import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
-import static org.dayflower.utility.Doubles.nextDownPBRT;
-import static org.dayflower.utility.Doubles.nextUpPBRT;
+import static org.dayflower.utility.Doubles.nextDown;
+import static org.dayflower.utility.Doubles.nextUp;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -709,9 +709,9 @@ public final class Point3D implements Node {
 		
 		final Point3D pointOffset = add(point, offsetCorrectlyOriented);
 		
-		final double component1 = offset.getComponent1() > 0.0D ? nextUpPBRT(pointOffset.component1) : nextDownPBRT(pointOffset.component1);
-		final double component2 = offset.getComponent2() > 0.0D ? nextUpPBRT(pointOffset.component2) : nextDownPBRT(pointOffset.component2);
-		final double component3 = offset.getComponent3() > 0.0D ? nextUpPBRT(pointOffset.component3) : nextDownPBRT(pointOffset.component3);
+		final double component1 = offset.getComponent1() > 0.0D ? nextUp(pointOffset.component1) : nextDown(pointOffset.component1);
+		final double component2 = offset.getComponent2() > 0.0D ? nextUp(pointOffset.component2) : nextDown(pointOffset.component2);
+		final double component3 = offset.getComponent3() > 0.0D ? nextUp(pointOffset.component3) : nextDown(pointOffset.component3);
 		
 		return new Point3D(component1, component2, component3);
 	}

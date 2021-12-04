@@ -53,6 +53,36 @@ public class Doubles {
 	public static final double MIN_VALUE = -Double.MAX_VALUE;
 	
 	/**
+	 * The value of {@code Doubles.nextDown(1.0D)}.
+	 */
+	public static final double NEXT_DOWN_1_1 = nextDown(1.0D);
+	
+	/**
+	 * The value of {@code Doubles.nextDown(Doubles.NEXT_DOWN_1_1)}.
+	 */
+	public static final double NEXT_DOWN_1_2 = nextDown(NEXT_DOWN_1_1);
+	
+	/**
+	 * The value of {@code Doubles.nextDown(Doubles.NEXT_DOWN_1_2)}.
+	 */
+	public static final double NEXT_DOWN_1_3 = nextDown(NEXT_DOWN_1_2);
+	
+	/**
+	 * The value of {@code Doubles.nextUp(1.0D)}.
+	 */
+	public static final double NEXT_UP_1_1 = nextUp(1.0D);
+	
+	/**
+	 * The value of {@code Doubles.nextUp(Doubles.NEXT_UP_1_1)}.
+	 */
+	public static final double NEXT_UP_1_2 = nextUp(NEXT_UP_1_1);
+	
+	/**
+	 * The value of {@code Doubles.nextUp(Doubles.NEXT_UP_1_2)}.
+	 */
+	public static final double NEXT_UP_1_3 = nextUp(NEXT_UP_1_2);
+	
+	/**
 	 * The {@code double} value that represents Not-a-Number (NaN).
 	 */
 	public static final double NaN = Double.NaN;
@@ -741,45 +771,23 @@ public class Doubles {
 	}
 	
 	/**
-	 * Returns the {@code double} value next down after {@code value}.
-	 * <p>
-	 * This method is based on the function {@code NextFloatDown(float v)} in PBRT.
+	 * Returns the floating-point value adjacent to {@code value} in the direction of negative infinity.
 	 * 
-	 * @param value a {@code double} value
-	 * @return the {@code double} value next down after {@code value}
+	 * @param value starting floating-point value
+	 * @return the floating-point value adjacent to {@code value} in the direction of negative infinity
 	 */
-	public static double nextDownPBRT(final double value) {
-		if(isInfinite(value) && value < 0.0D) {
-			return value;
-		}
-		
-		final double currentValue = equal(value, +0.0D) ? -0.0D : value;
-		
-		final long oldCurrentValueToLongBits = Double.doubleToLongBits(currentValue);
-		final long newCurrentValueToLongBits = currentValue > 0.0D ? oldCurrentValueToLongBits - 1L : oldCurrentValueToLongBits + 1L;
-		
-		return Double.longBitsToDouble(newCurrentValueToLongBits);
+	public static double nextDown(final double value) {
+		return Math.nextDown(value);
 	}
 	
 	/**
-	 * Returns the {@code double} value next up after {@code value}.
-	 * <p>
-	 * This method is based on the function {@code NextFloatUp(float v)} in PBRT.
+	 * Returns the floating-point value adjacent to {@code value} in the direction of positive infinity.
 	 * 
-	 * @param value a {@code double} value
-	 * @return the {@code double} value next up after {@code value}
+	 * @param value starting floating-point value
+	 * @return the floating-point value adjacent to {@code value} in the direction of positive infinity
 	 */
-	public static double nextUpPBRT(final double value) {
-		if(isInfinite(value) && value > 0.0D) {
-			return value;
-		}
-		
-		final double currentValue = equal(value, -0.0D) ? +0.0D : value;
-		
-		final long oldCurrentValueToLongBits = Double.doubleToLongBits(currentValue);
-		final long newCurrentValueToLongBits = currentValue < 0.0D ? oldCurrentValueToLongBits - 1L : oldCurrentValueToLongBits + 1L;
-		
-		return Double.longBitsToDouble(newCurrentValueToLongBits);
+	public static double nextUp(final double value) {
+		return Math.nextUp(value);
 	}
 	
 	/**

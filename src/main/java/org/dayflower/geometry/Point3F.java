@@ -27,8 +27,8 @@ import static org.dayflower.utility.Floats.getOrAdd;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.nextDownPBRT;
-import static org.dayflower.utility.Floats.nextUpPBRT;
+import static org.dayflower.utility.Floats.nextDown;
+import static org.dayflower.utility.Floats.nextUp;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -709,9 +709,9 @@ public final class Point3F implements Node {
 		
 		final Point3F pointOffset = add(point, offsetCorrectlyOriented);
 		
-		final float component1 = offset.getComponent1() > 0.0F ? nextUpPBRT(pointOffset.component1) : nextDownPBRT(pointOffset.component1);
-		final float component2 = offset.getComponent2() > 0.0F ? nextUpPBRT(pointOffset.component2) : nextDownPBRT(pointOffset.component2);
-		final float component3 = offset.getComponent3() > 0.0F ? nextUpPBRT(pointOffset.component3) : nextDownPBRT(pointOffset.component3);
+		final float component1 = offset.getComponent1() > 0.0F ? nextUp(pointOffset.component1) : nextDown(pointOffset.component1);
+		final float component2 = offset.getComponent2() > 0.0F ? nextUp(pointOffset.component2) : nextDown(pointOffset.component2);
+		final float component3 = offset.getComponent3() > 0.0F ? nextUp(pointOffset.component3) : nextDown(pointOffset.component3);
 		
 		return new Point3F(component1, component2, component3);
 	}

@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.NEXT_DOWN_1_3;
+import static org.dayflower.utility.Doubles.NEXT_UP_1_1;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.finiteOrDefault;
@@ -32,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
 
@@ -47,13 +50,11 @@ public final class Vector2D implements Node {
 	/**
 	 * A {@code Vector2D} instance given the component values {@code Double.NaN} and {@code Double.NaN}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Vector2D NaN = new Vector2D(Double.NaN, Double.NaN);
 	
 	/**
 	 * A {@code Vector2D} instance given the component values {@code 0.0D} and {@code 0.0D}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Vector2D ZERO = new Vector2D(0.0D, 0.0D);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +78,6 @@ public final class Vector2D implements Node {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Vector2D() {
 		this(0.0D, 0.0D);
 	}
@@ -97,7 +97,6 @@ public final class Vector2D implements Node {
 	 * @param point a {@link Point2D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Vector2D(final Point2D point) {
 		this(point.getComponent1(), point.getComponent2());
 	}
@@ -117,7 +116,6 @@ public final class Vector2D implements Node {
 	 * @param point a {@link Point3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Vector2D(final Point3D point) {
 		this(point.getComponent1(), point.getComponent2());
 	}
@@ -134,7 +132,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @param component the value of both components
 	 */
-//	TODO: Add Unit Tests!
 	public Vector2D(final double component) {
 		this(component, component);
 	}
@@ -145,7 +142,6 @@ public final class Vector2D implements Node {
 	 * @param component1 the value of component 1
 	 * @param component2 the value of component 2
 	 */
-//	TODO: Add Unit Tests!
 	public Vector2D(final double component1, final double component2) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -158,10 +154,9 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Vector2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Vector2D(%+.10f, %+.10f)", Double.valueOf(this.component1), Double.valueOf(this.component2));
+		return String.format("new Vector2D(%sD, %sD)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2));
 	}
 	
 	/**
@@ -172,7 +167,6 @@ public final class Vector2D implements Node {
 	 * @param object the {@code Object} to compare to this {@code Vector2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Vector2D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -193,12 +187,11 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Vector2D} instance is a unit vector, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean isUnitVector() {
 		final double length = length();
 		
-		final boolean isLengthGTEThreshold = length >= 1.0D - 0.000001D;
-		final boolean isLengthLTEThreshold = length <= 1.0D + 0.000001D;
+		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
 		
 		return isLengthGTEThreshold && isLengthLTEThreshold;
 	}
@@ -208,7 +201,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return the value of component 1
 	 */
-//	TODO: Add Unit Tests!
 	public double getComponent1() {
 		return this.component1;
 	}
@@ -218,7 +210,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return the value of component 2
 	 */
-//	TODO: Add Unit Tests!
 	public double getComponent2() {
 		return this.component2;
 	}
@@ -228,7 +219,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return the value of the U-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getU() {
 		return this.component1;
 	}
@@ -238,7 +228,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return the value of the V-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getV() {
 		return this.component2;
 	}
@@ -248,7 +237,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return the value of the X-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getX() {
 		return this.component1;
 	}
@@ -258,7 +246,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return the value of the Y-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getY() {
 		return this.component2;
 	}
@@ -268,7 +255,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return the length of this {@code Vector2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double length() {
 		return sqrt(lengthSquared());
 	}
@@ -278,7 +264,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return the squared length of this {@code Vector2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double lengthSquared() {
 		return this.component1 * this.component1 + this.component2 * this.component2;
 	}
@@ -288,7 +273,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return a {@code double[]} representation of this {@code Vector2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double[] toArray() {
 		return new double[] {
 			this.component1,
@@ -301,7 +285,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return a hash code for this {@code Vector2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2));
@@ -318,7 +301,6 @@ public final class Vector2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeDouble(this.component1);
@@ -339,7 +321,6 @@ public final class Vector2D implements Node {
 	 * @return a new {@code Vector2D} instance with the absolute component values of {@code vector}
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D absolute(final Vector2D vector) {
 		final double component1 = abs(vector.component1);
 		final double component2 = abs(vector.component2);
@@ -361,7 +342,6 @@ public final class Vector2D implements Node {
 	 * @return a new {@code Vector2D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D add(final Vector2D vectorLHS, final Vector2D vectorRHS) {
 		final double component1 = vectorLHS.component1 + vectorRHS.component1;
 		final double component2 = vectorLHS.component2 + vectorRHS.component2;
@@ -384,7 +364,6 @@ public final class Vector2D implements Node {
 	 * @return a new {@code Vector2D} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D add(final Vector2D vectorA, final Vector2D vectorB, final Vector2D vectorC) {
 		final double component1 = vectorA.component1 + vectorB.component1 + vectorC.component1;
 		final double component2 = vectorA.component2 + vectorB.component2 + vectorC.component2;
@@ -402,7 +381,6 @@ public final class Vector2D implements Node {
 	 * @return a new {@code Vector2D} instance that is pointing in the direction of {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D direction(final Point2D eye, final Point2D lookAt) {
 		final double component1 = lookAt.getComponent1() - eye.getComponent1();
 		final double component2 = lookAt.getComponent2() - eye.getComponent2();
@@ -498,7 +476,6 @@ public final class Vector2D implements Node {
 	 * @return a cached version of {@code vector}
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D getCached(final Vector2D vector) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(vector, "vector == null"), key -> vector);
 	}
@@ -614,9 +591,17 @@ public final class Vector2D implements Node {
 	 * @return a new {@code Vector2D} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D normalize(final Vector2D vector) {
-		return divide(vector, vector.length());
+		final double length = vector.length();
+		
+		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		
+		if(isLengthGTEThreshold && isLengthLTEThreshold) {
+			return vector;
+		}
+		
+		return divide(vector, length);
 	}
 	
 	/**
@@ -626,8 +611,8 @@ public final class Vector2D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector2D random() {
-		final double component1 = Doubles.random();
-		final double component2 = Doubles.random();
+		final double component1 = Doubles.random() * 2.0D - 1.0D;
+		final double component2 = Doubles.random() * 2.0D - 1.0D;
 		
 		return new Vector2D(component1, component2);
 	}
@@ -671,7 +656,6 @@ public final class Vector2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D read(final DataInput dataInput) {
 		try {
 			final double component1 = dataInput.readDouble();
@@ -750,7 +734,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(1.0D, 0.0D)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D u() {
 		return u(1.0D);
 	}
@@ -761,7 +744,6 @@ public final class Vector2D implements Node {
 	 * @param u the value of the U-component
 	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(u, 0.0D)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D u(final double u) {
 		return new Vector2D(u, 0.0D);
 	}
@@ -771,7 +753,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, 1.0D)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D v() {
 		return v(1.0D);
 	}
@@ -782,7 +763,6 @@ public final class Vector2D implements Node {
 	 * @param v the value of the V-component
 	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, v)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D v(final double v) {
 		return new Vector2D(0.0D, v);
 	}
@@ -792,7 +772,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(1.0D, 0.0D)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D x() {
 		return x(1.0D);
 	}
@@ -803,7 +782,6 @@ public final class Vector2D implements Node {
 	 * @param x the value of the X-component
 	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(x, 0.0D)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D x(final double x) {
 		return new Vector2D(x, 0.0D);
 	}
@@ -813,7 +791,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, 1.0D)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D y() {
 		return y(1.0D);
 	}
@@ -824,7 +801,6 @@ public final class Vector2D implements Node {
 	 * @param y the value of the Y-component
 	 * @return a new {@code Vector2D} instance equivalent to {@code new Vector2D(0.0D, y)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2D y(final double y) {
 		return new Vector2D(0.0D, y);
 	}
@@ -884,7 +860,6 @@ public final class Vector2D implements Node {
 	 * 
 	 * @return the size of the cache
 	 */
-//	TODO: Add Unit Tests!
 	public static int getCacheSize() {
 		return CACHE.size();
 	}
@@ -892,7 +867,6 @@ public final class Vector2D implements Node {
 	/**
 	 * Clears the cache.
 	 */
-//	TODO: Add Unit Tests!
 	public static void clearCache() {
 		CACHE.clear();
 	}

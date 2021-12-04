@@ -28,6 +28,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 
 /**
@@ -126,7 +127,7 @@ public final class Vector4F implements Node {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Vector4F(%+.10f, %+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3), Float.valueOf(this.component4));
+		return String.format("new Vector4F(%sF, %sF, %sF, %sF)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3), Strings.toNonScientificNotation(this.component4));
 	}
 	
 	/**

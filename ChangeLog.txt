@@ -1,3 +1,18 @@
+2021-12-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the constants NEXT_DOWN_1_1, NEXT_DOWN_1_2, NEXT_DOWN_1_3, NEXT_UP_1_1, NEXT_UP_1_2 and NEXT_UP_1_3 to the Doubles and Floats classes.
+	* ADD:		Add the methods nextDown(double) and nextUp(double) to the Doubles class.
+	* ADD:		Add the methods nextDown(float) and nextUp(float) to the Floats class.
+	* ADD:		Add the Vector2DUnitTests, Vector2FUnitTests, Vector2IUnitTests, Vector3DUnitTests, Vector3FUnitTests, Vector4DUnitTests and Vector4FUnitTests classes.
+	* CHANGE:	Update the methods random() and randomNormalized() in the Vector2D, Vector2F, Vector3D and Vector3F classes. They now produce random component values between -1.0 and 1.0, instead of between 0.0 and 1.0.
+	* CHANGE:	Update the methods isUnitVector() and normalize(Vector2D) in the Vector2D class.
+	* CHANGE:	Update the methods isUnitVector() and normalize(Vector2F) in the Vector2F class.
+	* CHANGE:	Update the methods isUnitVector() and normalize(Vector3D) in the Vector3D class.
+	* CHANGE:	Update the methods isUnitVector() and normalize(Vector3F) in the Vector3F class.
+	* CHANGE:	Update the toString() method of the Vector2D, Vector2F, Vector3D, Vector3F, Vector4D and Vector4F classes.
+	* REMOVE:	Remove the methods nextDownPBRT(double) and nextUpPBRT(double) from the Doubles class. They are replaced with the methods nextDown(double) and nextUp(double).
+	* REMOVE:	Remove the methods nextDownPBRT(float) and nextUpPBRT(float) from the Floats class. They are replaced with the methods nextDown(float) and nextUp(float).
+
 2021-12-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the AngleDUnitTests and AngleFUnitTests classes.

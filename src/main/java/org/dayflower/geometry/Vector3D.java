@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.NEXT_DOWN_1_3;
+import static org.dayflower.utility.Doubles.NEXT_UP_1_1;
 import static org.dayflower.utility.Doubles.PI;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.abs;
@@ -44,6 +46,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
 
@@ -156,7 +159,7 @@ public final class Vector3D implements Node {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Vector3D(%+.10f, %+.10f, %+.10f)", Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3));
+		return String.format("new Vector3D(%sD, %sD, %sD)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
 	}
 	
 	/**
@@ -194,8 +197,8 @@ public final class Vector3D implements Node {
 	public boolean isUnitVector() {
 		final double length = length();
 		
-		final boolean isLengthGTEThreshold = length >= 1.0D - 0.000001D;
-		final boolean isLengthLTEThreshold = length <= 1.0D + 0.000001D;
+		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
 		
 		return isLengthGTEThreshold && isLengthLTEThreshold;
 	}
@@ -1200,8 +1203,8 @@ public final class Vector3D implements Node {
 	public static Vector3D normalize(final Vector3D vector) {
 		final double length = vector.length();
 		
-		final boolean isLengthGTEThreshold = length >= 1.0D - 0.000001D;
-		final boolean isLengthLTEThreshold = length <= 1.0D + 0.000001D;
+		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return vector;
@@ -1217,9 +1220,9 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D random() {
-		final double component1 = Doubles.random();
-		final double component2 = Doubles.random();
-		final double component3 = Doubles.random();
+		final double component1 = Doubles.random() * 2.0D - 1.0D;
+		final double component2 = Doubles.random() * 2.0D - 1.0D;
+		final double component3 = Doubles.random() * 2.0D - 1.0D;
 		
 		return new Vector3D(component1, component2, component3);
 	}

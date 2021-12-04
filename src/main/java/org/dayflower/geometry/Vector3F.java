@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Floats.NEXT_DOWN_1_3;
+import static org.dayflower.utility.Floats.NEXT_UP_1_1;
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.abs;
@@ -44,6 +46,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
 
@@ -156,7 +159,7 @@ public final class Vector3F implements Node {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Vector3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
+		return String.format("new Vector3F(%sF, %sF, %sF)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
 	}
 	
 	/**
@@ -194,8 +197,8 @@ public final class Vector3F implements Node {
 	public boolean isUnitVector() {
 		final float length = length();
 		
-		final boolean isLengthGTEThreshold = length >= 1.0F - 0.000001F;
-		final boolean isLengthLTEThreshold = length <= 1.0F + 0.000001F;
+		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
 		
 		return isLengthGTEThreshold && isLengthLTEThreshold;
 	}
@@ -1200,8 +1203,8 @@ public final class Vector3F implements Node {
 	public static Vector3F normalize(final Vector3F vector) {
 		final float length = vector.length();
 		
-		final boolean isLengthGTEThreshold = length >= 1.0F - 0.000001F;
-		final boolean isLengthLTEThreshold = length <= 1.0F + 0.000001F;
+		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return vector;
@@ -1217,9 +1220,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F random() {
-		final float component1 = Floats.random();
-		final float component2 = Floats.random();
-		final float component3 = Floats.random();
+		final float component1 = Floats.random() * 2.0F - 1.0F;
+		final float component2 = Floats.random() * 2.0F - 1.0F;
+		final float component3 = Floats.random() * 2.0F - 1.0F;
 		
 		return new Vector3F(component1, component2, component3);
 	}

@@ -357,6 +357,23 @@ public final class Vector2I {
 	}
 	
 	/**
+	 * Returns a {@code Vector2I} instance that is perpendicular to {@code vector}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector2I} instance
+	 * @return a {@code Vector2I} instance that is perpendicular to {@code vector}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Vector2I perpendicular(final Vector2I vector) {
+		final int component1 = +vector.component2;
+		final int component2 = -vector.component1;
+		
+		return new Vector2I(component1, component2);
+	}
+	
+	/**
 	 * Returns a new {@code Vector2I} instance by reading it from {@code dataInput}.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.

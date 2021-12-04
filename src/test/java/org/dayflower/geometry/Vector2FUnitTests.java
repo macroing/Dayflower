@@ -173,6 +173,21 @@ public final class Vector2FUnitTests {
 	}
 	
 	@Test
+	public void testDivide() {
+		final Vector2F a = new Vector2F(2.0F, 4.0F);
+		final Vector2F b = Vector2F.divide(a, 2.0F);
+		final Vector2F c = Vector2F.divide(a, Float.NaN);
+		
+		assertEquals(1.0F, b.getComponent1());
+		assertEquals(2.0F, b.getComponent2());
+		
+		assertEquals(0.0F, c.getComponent1());
+		assertEquals(0.0F, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.divide(null, 2.0F));
+	}
+	
+	@Test
 	public void testEquals() {
 		final Vector2F a = new Vector2F(0.0F, 1.0F);
 		final Vector2F b = new Vector2F(0.0F, 1.0F);
@@ -270,6 +285,75 @@ public final class Vector2FUnitTests {
 	}
 	
 	@Test
+	public void testLerp() {
+		final Vector2F a = new Vector2F(1.0F, 1.0F);
+		final Vector2F b = new Vector2F(5.0F, 5.0F);
+		final Vector2F c = Vector2F.lerp(a, b, 0.25F);
+		
+		assertEquals(2.0F, c.getComponent1());
+		assertEquals(2.0F, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.lerp(a, null, 0.25F));
+		assertThrows(NullPointerException.class, () -> Vector2F.lerp(null, b, 0.25F));
+	}
+	
+	@Test
+	public void testMultiply() {
+		final Vector2F a = new Vector2F(1.0F, 2.0F);
+		final Vector2F b = Vector2F.multiply(a, 2.0F);
+		
+		assertEquals(2.0F, b.getComponent1());
+		assertEquals(4.0F, b.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.multiply(null, 2.0F));
+	}
+	
+	@Test
+	public void testNegate() {
+		final Vector2F a = new Vector2F(1.0F, 2.0F);
+		final Vector2F b = Vector2F.negate(a);
+		final Vector2F c = Vector2F.negate(b);
+		
+		assertEquals(-1.0F, b.getComponent1());
+		assertEquals(-2.0F, b.getComponent2());
+		
+		assertEquals(+1.0F, c.getComponent1());
+		assertEquals(+2.0F, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.negate(null));
+	}
+	
+	@Test
+	public void testNegateComponent1() {
+		final Vector2F a = new Vector2F(1.0F, 2.0F);
+		final Vector2F b = Vector2F.negateComponent1(a);
+		final Vector2F c = Vector2F.negateComponent1(b);
+		
+		assertEquals(-1.0F, b.getComponent1());
+		assertEquals(+2.0F, b.getComponent2());
+		
+		assertEquals(+1.0F, c.getComponent1());
+		assertEquals(+2.0F, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.negateComponent1(null));
+	}
+	
+	@Test
+	public void testNegateComponent2() {
+		final Vector2F a = new Vector2F(1.0F, 2.0F);
+		final Vector2F b = Vector2F.negateComponent2(a);
+		final Vector2F c = Vector2F.negateComponent2(b);
+		
+		assertEquals(+1.0F, b.getComponent1());
+		assertEquals(-2.0F, b.getComponent2());
+		
+		assertEquals(+1.0F, c.getComponent1());
+		assertEquals(+2.0F, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.negateComponent2(null));
+	}
+	
+	@Test
 	public void testNormalize() {
 		final Vector2F a = new Vector2F(1.0F, 0.0F);
 		final Vector2F b = Vector2F.normalize(a);
@@ -297,6 +381,35 @@ public final class Vector2FUnitTests {
 	}
 	
 	@Test
+	public void testPerpendicular() {
+		final Vector2F a = new Vector2F(1.0F, 2.0F);
+		final Vector2F b = Vector2F.perpendicular(a);
+		
+		assertEquals(+2.0F, b.getComponent1());
+		assertEquals(-1.0F, b.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.perpendicular(null));
+	}
+	
+	@Test
+	public void testRandom() {
+		final Vector2F vector = Vector2F.random();
+		
+		assertTrue(vector.getComponent1() >= -1.0F && vector.getComponent1() <= 1.0F);
+		assertTrue(vector.getComponent2() >= -1.0F && vector.getComponent2() <= 1.0F);
+	}
+	
+	@Test
+	public void testRandomNormalized() {
+		final Vector2F vector = Vector2F.randomNormalized();
+		
+		assertTrue(vector.getComponent1() >= -1.0F && vector.getComponent1() <= 1.0F);
+		assertTrue(vector.getComponent2() >= -1.0F && vector.getComponent2() <= 1.0F);
+		
+		assertTrue(vector.isUnitVector());
+	}
+	
+	@Test
 	public void testRead() throws IOException {
 		final Vector2F a = new Vector2F(1.0F, 0.5F);
 		
@@ -315,6 +428,33 @@ public final class Vector2FUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.read(null));
 		assertThrows(UncheckedIOException.class, () -> Vector2F.read(new DataInputStream(new ByteArrayInputStream(new byte[] {}))));
+	}
+	
+	@Test
+	public void testReciprocal() {
+		final Vector2F a = Vector2F.reciprocal(new Vector2F(Float.NaN, Float.NaN));
+		final Vector2F b = Vector2F.reciprocal(new Vector2F(2.0F, 4.0F));
+		
+		assertEquals(0.0F, a.getComponent1());
+		assertEquals(0.0F, a.getComponent2());
+		
+		assertEquals(0.50F, b.getComponent1());
+		assertEquals(0.25F, b.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.reciprocal(null));
+	}
+	
+	@Test
+	public void testSubtract() {
+		final Vector2F a = new Vector2F(3.0F, 5.0F);
+		final Vector2F b = new Vector2F(2.0F, 3.0F);
+		final Vector2F c = Vector2F.subtract(a, b);
+		
+		assertEquals(1.0F, c.getComponent1());
+		assertEquals(2.0F, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.subtract(a, null));
+		assertThrows(NullPointerException.class, () -> Vector2F.subtract(null, b));
 	}
 	
 	@Test

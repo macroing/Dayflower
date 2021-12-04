@@ -23,6 +23,7 @@ import static org.dayflower.utility.Floats.NEXT_UP_1_1;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.finiteOrDefault;
+import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.sqrt;
 
 import java.io.DataInput;
@@ -460,7 +461,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F divide(final Vector2F vectorLHS, final float scalarRHS) {
 		final float component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0F);
 		final float component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0F);
@@ -494,7 +494,6 @@ public final class Vector2F implements Node {
 	 * @return a {@code Vector2F} instance with the result of the linear interpolation operation
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F lerp(final Vector2F a, final Vector2F b, final float t) {
 		final float component1 = Floats.lerp(a.component1, b.component1, t);
 		final float component2 = Floats.lerp(a.component2, b.component2, t);
@@ -516,7 +515,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F multiply(final Vector2F vectorLHS, final float scalarRHS) {
 		final float component1 = vectorLHS.component1 * scalarRHS;
 		final float component2 = vectorLHS.component2 * scalarRHS;
@@ -535,7 +533,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F negate(final Vector2F vector) {
 		final float component1 = -vector.component1;
 		final float component2 = -vector.component2;
@@ -554,7 +551,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F negateComponent1(final Vector2F vector) {
 		final float component1 = -vector.component1;
 		final float component2 = +vector.component2;
@@ -573,7 +569,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F negateComponent2(final Vector2F vector) {
 		final float component1 = +vector.component1;
 		final float component2 = -vector.component2;
@@ -606,11 +601,26 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Vector2F} instance that is perpendicular to {@code vector}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector2F} instance
+	 * @return a {@code Vector2F} instance that is perpendicular to {@code vector}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector2F perpendicular(final Vector2F vector) {
+		final float component1 = +vector.component2;
+		final float component2 = -vector.component1;
+		
+		return new Vector2F(component1, component2);
+	}
+	
+	/**
 	 * Returns a random {@code Vector2F} instance.
 	 * 
 	 * @return a random {@code Vector2F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F random() {
 		final float component1 = Floats.random() * 2.0F - 1.0F;
 		final float component2 = Floats.random() * 2.0F - 1.0F;
@@ -623,7 +633,6 @@ public final class Vector2F implements Node {
 	 * 
 	 * @return a random and normalized {@code Vector2F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F randomNormalized() {
 		return normalize(random());
 	}
@@ -660,7 +669,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance with the reciprocal (or inverse) component values of {@code vector}
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F reciprocal(final Vector2F vector) {
 		final float component1 = finiteOrDefault(1.0F / vector.component1, 0.0F);
 		final float component2 = finiteOrDefault(1.0F / vector.component2, 0.0F);
@@ -682,7 +690,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F subtract(final Vector2F vectorLHS, final Vector2F vectorRHS) {
 		final float component1 = vectorLHS.component1 - vectorRHS.component1;
 		final float component2 = vectorLHS.component2 - vectorRHS.component2;
@@ -818,12 +825,7 @@ public final class Vector2F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static boolean orthogonal(final Vector2F vLHS, final Vector2F vRHS) {
-		final float dotProduct = dotProduct(vLHS, vRHS);
-		
-		final boolean isDotProductGTEThreshold = dotProduct >= 0.0F - 0.000001F;
-		final boolean isDotProductLTEThreshold = dotProduct <= 0.0F + 0.000001F;
-		
-		return isDotProductGTEThreshold && isDotProductLTEThreshold;
+		return isZero(dotProduct(vLHS, vRHS));
 	}
 	
 	/**

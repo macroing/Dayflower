@@ -62,13 +62,11 @@ public final class Vector3D implements Node {
 	/**
 	 * A {@code Vector3D} instance given the component values {@code Double.NaN}, {@code Double.NaN} and {@code Double.NaN}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Vector3D NaN = new Vector3D(Double.NaN, Double.NaN, Double.NaN);
 	
 	/**
 	 * A {@code Vector3D} instance given the component values {@code 0.0D}, {@code 0.0D} and {@code 0.0D}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Vector3D ZERO = new Vector3D(0.0D, 0.0D, 0.0D);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +91,6 @@ public final class Vector3D implements Node {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Vector3D() {
 		this(0.0D, 0.0D, 0.0D);
 	}
@@ -113,7 +110,6 @@ public final class Vector3D implements Node {
 	 * @param point a {@link Point3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Vector3D(final Point3D point) {
 		this(point.getComponent1(), point.getComponent2(), point.getComponent3());
 	}
@@ -130,7 +126,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @param component the value of all components
 	 */
-//	TODO: Add Unit Tests!
 	public Vector3D(final double component) {
 		this(component, component, component);
 	}
@@ -142,7 +137,6 @@ public final class Vector3D implements Node {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public Vector3D(final double component1, final double component2, final double component3) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -156,7 +150,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Vector3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Vector3D(%sD, %sD, %sD)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
@@ -170,7 +163,6 @@ public final class Vector3D implements Node {
 	 * @param object the {@code Object} to compare to this {@code Vector3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Vector3D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -193,7 +185,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Vector3D} instance is a unit vector, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean isUnitVector() {
 		final double length = length();
 		
@@ -208,7 +199,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle phi
 	 */
-//	TODO: Add Unit Tests!
 	public double cosPhi() {
 		final double sinTheta = sinTheta();
 		
@@ -224,7 +214,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle phi in squared form
 	 */
-//	TODO: Add Unit Tests!
 	public double cosPhiSquared() {
 		return cosPhi() * cosPhi();
 	}
@@ -234,7 +223,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle theta
 	 */
-//	TODO: Add Unit Tests!
 	public double cosTheta() {
 		return this.component3;
 	}
@@ -244,7 +232,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle theta in absolute form
 	 */
-//	TODO: Add Unit Tests!
 	public double cosThetaAbs() {
 		return abs(cosTheta());
 	}
@@ -254,7 +241,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle theta in quartic form
 	 */
-//	TODO: Add Unit Tests!
 	public double cosThetaQuartic() {
 		return cosThetaSquared() * cosThetaSquared();
 	}
@@ -264,7 +250,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the cosine of the angle theta in squared form
 	 */
-//	TODO: Add Unit Tests!
 	public double cosThetaSquared() {
 		return cosTheta() * cosTheta();
 	}
@@ -274,7 +259,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of component 1
 	 */
-//	TODO: Add Unit Tests!
 	public double getComponent1() {
 		return this.component1;
 	}
@@ -284,7 +268,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of component 2
 	 */
-//	TODO: Add Unit Tests!
 	public double getComponent2() {
 		return this.component2;
 	}
@@ -294,7 +277,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public double getComponent3() {
 		return this.component3;
 	}
@@ -304,7 +286,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the U-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getU() {
 		return this.component1;
 	}
@@ -314,7 +295,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the V-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getV() {
 		return this.component2;
 	}
@@ -324,7 +304,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the W-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getW() {
 		return this.component3;
 	}
@@ -334,7 +313,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the X-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getX() {
 		return this.component1;
 	}
@@ -344,7 +322,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the Y-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getY() {
 		return this.component2;
 	}
@@ -354,7 +331,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the value of the Z-component
 	 */
-//	TODO: Add Unit Tests!
 	public double getZ() {
 		return this.component3;
 	}
@@ -364,7 +340,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the length of this {@code Vector3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double length() {
 		return sqrt(lengthSquared());
 	}
@@ -374,7 +349,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the squared length of this {@code Vector3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double lengthSquared() {
 		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3;
 	}
@@ -384,7 +358,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the sine of the angle phi
 	 */
-//	TODO: Add Unit Tests!
 	public double sinPhi() {
 		final double sinTheta = sinTheta();
 		
@@ -400,7 +373,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the sine of the angle phi in squared form
 	 */
-//	TODO: Add Unit Tests!
 	public double sinPhiSquared() {
 		return sinPhi() * sinPhi();
 	}
@@ -410,7 +382,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the sine of the angle theta
 	 */
-//	TODO: Add Unit Tests!
 	public double sinTheta() {
 		return sqrt(sinThetaSquared());
 	}
@@ -420,7 +391,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the sine of the angle theta in squared form
 	 */
-//	TODO: Add Unit Tests!
 	public double sinThetaSquared() {
 		return max(0.0D, 1.0D - cosThetaSquared());
 	}
@@ -450,7 +420,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the tangent of the angle theta
 	 */
-//	TODO: Add Unit Tests!
 	public double tanTheta() {
 		return sinTheta() / cosTheta();
 	}
@@ -460,7 +429,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the tangent of the angle theta in absolute form
 	 */
-//	TODO: Add Unit Tests!
 	public double tanThetaAbs() {
 		return abs(tanTheta());
 	}
@@ -470,7 +438,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the tangent of the angle theta in squared form
 	 */
-//	TODO: Add Unit Tests!
 	public double tanThetaSquared() {
 		return sinThetaSquared() / cosThetaSquared();
 	}
@@ -480,7 +447,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a {@code double[]} representation of this {@code Vector3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double[] toArray() {
 		return new double[] {
 			this.component1,
@@ -494,7 +460,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return a hash code for this {@code Vector3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3));
@@ -511,7 +476,6 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeDouble(this.component1);
@@ -584,7 +548,6 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance with the absolute component values of {@code vector}
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3D absolute(final Vector3D vector) {
 		final double component1 = abs(vector.component1);
 		final double component2 = abs(vector.component2);
@@ -942,7 +905,6 @@ public final class Vector3D implements Node {
 	 * @return a cached version of {@code vector}
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3D getCached(final Vector3D vector) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(vector, "vector == null"), key -> vector);
 	}
@@ -1249,7 +1211,6 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3D read(final DataInput dataInput) {
 		try {
 			final double component1 = dataInput.readDouble();
@@ -1748,7 +1709,6 @@ public final class Vector3D implements Node {
 	 * 
 	 * @return the size of the cache
 	 */
-//	TODO: Add Unit Tests!
 	public static int getCacheSize() {
 		return CACHE.size();
 	}
@@ -1756,7 +1716,6 @@ public final class Vector3D implements Node {
 	/**
 	 * Clears the cache.
 	 */
-//	TODO: Add Unit Tests!
 	public static void clearCache() {
 		CACHE.clear();
 	}

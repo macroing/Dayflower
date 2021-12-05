@@ -1,5 +1,9 @@
 2021-12-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the WritableImageCacheUnitTests class.
+	* ADD:		Add the method size() to the WritableImageCache class.
+	* ADD:		Add unit tests to the Vector3DUnitTests class.
+	* ADD:		Add unit tests to the Vector3FUnitTests class.
 	* ADD:		Add the FloatUnaryOperatorUnitTests and TriFunctionUnitTests classes.
 	* ADD:		Add the StringsUnitTests class.
 	* ADD:		Add unit tests to the Vector2DUnitTests class.

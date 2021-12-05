@@ -75,6 +75,15 @@ public final class WritableImageCache<T> {
 	}
 	
 	/**
+	 * Returns the size of this {@code WritableImageCache} instance.
+	 * 
+	 * @return the size of this {@code WritableImageCache} instance
+	 */
+	public int size() {
+		return this.writableImageCache.size();
+	}
+	
+	/**
 	 * Clears this {@code WritableImageCache} instance.
 	 */
 	public void clear() {

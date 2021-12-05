@@ -89,7 +89,6 @@ Test API:
 	* ADD:		Add Unit Tests using JUnit to the JavaFX Concurrent API.
 	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Canvas API.
 	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Control API.
-	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Image API.
 	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Layout API.
 	* ADD:		Add Unit Tests using JUnit to the Node API.
 	* ADD:		Add Unit Tests using JUnit to the Noise API.

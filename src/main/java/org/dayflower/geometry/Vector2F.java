@@ -30,7 +30,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -400,7 +399,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F directionNormalized(final Point2F eye, final Point2F lookAt) {
 		return normalize(direction(eye, lookAt));
 	}
@@ -414,7 +412,6 @@ public final class Vector2F implements Node {
 	 * @return a {@code Vector2F} instance that points in the direction of {@code point.getX()} and {@code point.getY()}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F directionXY(final Point3F point) {
 		return new Vector2F(point.getX(), point.getY());
 	}
@@ -428,7 +425,6 @@ public final class Vector2F implements Node {
 	 * @return a {@code Vector2F} instance that points in the direction of {@code point.getY()} and {@code point.getZ()}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F directionYZ(final Point3F point) {
 		return new Vector2F(point.getY(), point.getZ());
 	}
@@ -442,7 +438,6 @@ public final class Vector2F implements Node {
 	 * @return a {@code Vector2F} instance that points in the direction of {@code point.getZ()} and {@code point.getX()}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F directionZX(final Point3F point) {
 		return new Vector2F(point.getZ(), point.getX());
 	}
@@ -709,7 +704,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F transform(final Matrix33F matrixLHS, final Vector2F vectorRHS) {
 		final float component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement12() * vectorRHS.component2;
 		final float component2 = matrixLHS.getElement21() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2;
@@ -729,7 +723,6 @@ public final class Vector2F implements Node {
 	 * @return a new {@code Vector2F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector2F transformTranspose(final Matrix33F matrixLHS, final Vector2F vectorRHS) {
 		final float component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement21() * vectorRHS.component2;
 		final float component2 = matrixLHS.getElement12() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2;
@@ -823,7 +816,6 @@ public final class Vector2F implements Node {
 	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are orthogonal, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean orthogonal(final Vector2F vLHS, final Vector2F vRHS) {
 		return isZero(dotProduct(vLHS, vRHS));
 	}
@@ -838,7 +830,6 @@ public final class Vector2F implements Node {
 	 * @return the cross product of {@code vectorLHS} and {@code vectorRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static float crossProduct(final Vector2F vectorLHS, final Vector2F vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component2 - vectorLHS.component2 * vectorRHS.component1;
 	}
@@ -853,7 +844,6 @@ public final class Vector2F implements Node {
 	 * @return the dot product of {@code vectorLHS} and {@code vectorRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static float dotProduct(final Vector2F vectorLHS, final Vector2F vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2;
 	}

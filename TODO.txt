@@ -84,10 +84,8 @@ Test API:
 	* ADD:		Add Unit Tests using JUnit to the Image API.
 	* ADD:		Add Unit Tests using JUnit to the Java AWT Image API.
 	* ADD:		Add Unit Tests using JUnit to the Java I/O API.
-	* ADD:		Add Unit Tests using JUnit to the Java Lang API.
 	* ADD:		Add Unit Tests using JUnit to the Java Util API.
 	* ADD:		Add Unit Tests using JUnit to the Java Util Concurrent Atomic API.
-	* ADD:		Add Unit Tests using JUnit to the Java Util Function API.
 	* ADD:		Add Unit Tests using JUnit to the JavaFX Concurrent API.
 	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Canvas API.
 	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Control API.

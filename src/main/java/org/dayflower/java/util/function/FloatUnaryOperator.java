@@ -55,7 +55,6 @@ public interface FloatUnaryOperator {
 	 * @return a composed operator that first applies this operator to its input, and then applies the {@code after} operator to the result
 	 * @throws NullPointerException thrown if, and only if, {@code after} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default FloatUnaryOperator andThen(final FloatUnaryOperator after) {
 		Objects.requireNonNull(after, "after == null");
 		
@@ -73,20 +72,20 @@ public interface FloatUnaryOperator {
 	 * @return a composed operator that first applies the {@code before} operator to its input, and then applies this operator to the result
 	 * @throws NullPointerException thrown if, and only if, {@code before} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default FloatUnaryOperator compose(final FloatUnaryOperator before) {
 		Objects.requireNonNull(before, "before == null");
 		
 		return (float v) -> applyAsFloat(before.applyAsFloat(v));
 	}
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Returns a unary operator that always returns its input argument.
 	 * 
 	 * @return a unary operator that always returns its input argument
 	 */
-//	TODO: Add Unit Tests!
-	default FloatUnaryOperator identity() {
+	static FloatUnaryOperator identity() {
 		return t -> t;
 	}
 }

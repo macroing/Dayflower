@@ -52,7 +52,6 @@ public final class Strings {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code count} is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code string} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static String repeat(final String string, final int count) {
 		Objects.requireNonNull(string, "string == null");
 		
@@ -75,7 +74,6 @@ public final class Strings {
 	 * @param value a {@code double} value
 	 * @return a {@code String} representation of {@code value} without scientific notation
 	 */
-//	TODO: Add Unit Tests!
 	public static String toNonScientificNotation(final double value) {
 		return DECIMAL_FORMAT_DOUBLE.format(value).replace(',', '.');
 	}
@@ -86,7 +84,6 @@ public final class Strings {
 	 * @param value a {@code float} value
 	 * @return a {@code String} representation of {@code value} without scientific notation
 	 */
-//	TODO: Add Unit Tests!
 	public static String toNonScientificNotation(final float value) {
 		return DECIMAL_FORMAT_FLOAT.format(value).replace(',', '.');
 	}

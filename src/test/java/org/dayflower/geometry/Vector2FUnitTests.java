@@ -33,6 +33,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
+import org.dayflower.mock.DataOutputMock;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("static-method")
@@ -162,6 +163,17 @@ public final class Vector2FUnitTests {
 	}
 	
 	@Test
+	public void testCrossProduct() {
+		final Vector2F a = new Vector2F(+1.0F, +0.0F);
+		final Vector2F b = new Vector2F(+0.0F, +1.0F);
+		
+		assertEquals(1.0F, Vector2F.crossProduct(a, b));
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.crossProduct(a, null));
+		assertThrows(NullPointerException.class, () -> Vector2F.crossProduct(null, b));
+	}
+	
+	@Test
 	public void testDirection() {
 		final Vector2F vector = Vector2F.direction(new Point2F(1.0F, 2.0F), new Point2F(2.0F, 3.0F));
 		
@@ -170,6 +182,49 @@ public final class Vector2FUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.direction(new Point2F(1.0F, 2.0F), null));
 		assertThrows(NullPointerException.class, () -> Vector2F.direction(null, new Point2F(2.0F, 3.0F)));
+	}
+	
+	@Test
+	public void testDirectionNormalized() {
+		final Vector2F vector = Vector2F.directionNormalized(new Point2F(1.0F, 2.0F), new Point2F(2.0F, 2.0F));
+		
+		assertEquals(1.0F, vector.getComponent1());
+		assertEquals(0.0F, vector.getComponent2());
+		
+		assertTrue(vector.isUnitVector());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.directionNormalized(new Point2F(1.0F, 2.0F), null));
+		assertThrows(NullPointerException.class, () -> Vector2F.directionNormalized(null, new Point2F(2.0F, 2.0F)));
+	}
+	
+	@Test
+	public void testDirectionXY() {
+		final Vector2F vector = Vector2F.directionXY(new Point3F(1.0F, 2.0F, 3.0F));
+		
+		assertEquals(1.0F, vector.getComponent1());
+		assertEquals(2.0F, vector.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.directionXY(null));
+	}
+	
+	@Test
+	public void testDirectionYZ() {
+		final Vector2F vector = Vector2F.directionYZ(new Point3F(1.0F, 2.0F, 3.0F));
+		
+		assertEquals(2.0F, vector.getComponent1());
+		assertEquals(3.0F, vector.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.directionYZ(null));
+	}
+	
+	@Test
+	public void testDirectionZX() {
+		final Vector2F vector = Vector2F.directionZX(new Point3F(1.0F, 2.0F, 3.0F));
+		
+		assertEquals(3.0F, vector.getComponent1());
+		assertEquals(1.0F, vector.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.directionZX(null));
 	}
 	
 	@Test
@@ -185,6 +240,21 @@ public final class Vector2FUnitTests {
 		assertEquals(0.0F, c.getComponent2());
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.divide(null, 2.0F));
+	}
+	
+	@Test
+	public void testDotProduct() {
+		final Vector2F a = new Vector2F(+1.0F, +0.0F);
+		final Vector2F b = new Vector2F(+1.0F, +0.0F);
+		final Vector2F c = new Vector2F(+0.0F, -1.0F);
+		final Vector2F d = new Vector2F(-1.0F, +0.0F);
+		
+		assertEquals(+1.0F, Vector2F.dotProduct(a, b));
+		assertEquals(+0.0F, Vector2F.dotProduct(a, c));
+		assertEquals(-1.0F, Vector2F.dotProduct(a, d));
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.dotProduct(a, null));
+		assertThrows(NullPointerException.class, () -> Vector2F.dotProduct(null, b));
 	}
 	
 	@Test
@@ -265,7 +335,10 @@ public final class Vector2FUnitTests {
 		assertTrue(new Vector2F(-0.0F, -1.0F).isUnitVector());
 		assertTrue(Vector2F.normalize(new Vector2F(1.0F, 1.0F)).isUnitVector());
 		
-		assertFalse(new Vector2F(1.0F, 1.0F).isUnitVector());
+		assertFalse(new Vector2F(+1.0F, +1.0F).isUnitVector());
+		assertFalse(new Vector2F(+0.5F, +0.5F).isUnitVector());
+		assertFalse(new Vector2F(-1.0F, -1.0F).isUnitVector());
+		assertFalse(new Vector2F(-0.5F, -0.5F).isUnitVector());
 	}
 	
 	@Test
@@ -381,6 +454,20 @@ public final class Vector2FUnitTests {
 	}
 	
 	@Test
+	public void testOrthogonal() {
+		final Vector2F a = new Vector2F(1.0F, 0.0F);
+		final Vector2F b = new Vector2F(0.0F, 1.0F);
+		final Vector2F c = new Vector2F(1.0F, 1.0F);
+		
+		assertTrue(Vector2F.orthogonal(a, b));
+		
+		assertFalse(Vector2F.orthogonal(a, c));
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.orthogonal(a, null));
+		assertThrows(NullPointerException.class, () -> Vector2F.orthogonal(null, b));
+	}
+	
+	@Test
 	public void testPerpendicular() {
 		final Vector2F a = new Vector2F(1.0F, 2.0F);
 		final Vector2F b = Vector2F.perpendicular(a);
@@ -479,6 +566,34 @@ public final class Vector2FUnitTests {
 	}
 	
 	@Test
+	public void testTransform() {
+		final Matrix33F matrix = Matrix33F.scale(2.0F, 4.0F);
+		
+		final Vector2F a = new Vector2F(1.0F, 1.0F);
+		final Vector2F b = Vector2F.transform(matrix, a);
+		
+		assertEquals(2.0F, b.getComponent1());
+		assertEquals(4.0F, b.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.transform(matrix, null));
+		assertThrows(NullPointerException.class, () -> Vector2F.transform(null, a));
+	}
+	
+	@Test
+	public void testTransformTranspose() {
+		final Matrix33F matrix = Matrix33F.transpose(Matrix33F.rotate(AngleF.degrees(180.0F)));
+		
+		final Vector2F a = new Vector2F(1.0F, 0.0F);
+		final Vector2F b = Vector2F.transformTranspose(matrix, a);
+		
+		assertEquals(-1.0000000000000000F, b.getComponent1());
+		assertEquals(+0.0000000874227766F, b.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Vector2F.transformTranspose(matrix, null));
+		assertThrows(NullPointerException.class, () -> Vector2F.transformTranspose(null, a));
+	}
+	
+	@Test
 	public void testU() {
 		final Vector2F vector = Vector2F.u();
 		
@@ -527,6 +642,7 @@ public final class Vector2FUnitTests {
 		assertEquals(a, b);
 		
 		assertThrows(NullPointerException.class, () -> a.write(null));
+		assertThrows(UncheckedIOException.class, () -> a.write(new DataOutputMock()));
 	}
 	
 	@Test

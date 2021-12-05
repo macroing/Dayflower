@@ -33,6 +33,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
+import org.dayflower.mock.DataOutputMock;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("static-method")
@@ -665,5 +666,6 @@ public final class Matrix44DUnitTests {
 		assertEquals(a, b);
 		
 		assertThrows(NullPointerException.class, () -> a.write(null));
+		assertThrows(UncheckedIOException.class, () -> a.write(new DataOutputMock()));
 	}
 }

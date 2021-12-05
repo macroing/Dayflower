@@ -141,8 +141,10 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code ArrayComponentOrder} has an offset for the B-component, {@code false} otherwise
 	 */
+	@SuppressWarnings("static-method")
 	public boolean hasOffsetB() {
-		return this.offsetB != -1;
+//		return this.offsetB != -1;
+		return true;
 	}
 	
 	/**
@@ -150,8 +152,10 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code ArrayComponentOrder} has an offset for the G-component, {@code false} otherwise
 	 */
+	@SuppressWarnings("static-method")
 	public boolean hasOffsetG() {
-		return this.offsetG != -1;
+//		return this.offsetG != -1;
+		return true;
 	}
 	
 	/**
@@ -159,8 +163,10 @@ public enum ArrayComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code ArrayComponentOrder} has an offset for the R-component, {@code false} otherwise
 	 */
+	@SuppressWarnings("static-method")
 	public boolean hasOffsetR() {
-		return this.offsetR != -1;
+//		return this.offsetR != -1;
+		return true;
 	}
 	
 	/**
@@ -194,7 +200,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public byte readB(final byte[] array, final int offset) {
-		return hasOffsetB() ? array[offset + getOffsetB()] : 0;
+//		return hasOffsetB() ? array[offset + getOffsetB()] : 0;
+		return array[offset + getOffsetB()];
 	}
 	
 	/**
@@ -211,7 +218,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public byte readG(final byte[] array, final int offset) {
-		return hasOffsetG() ? array[offset + getOffsetG()] : 0;
+//		return hasOffsetG() ? array[offset + getOffsetG()] : 0;
+		return array[offset + getOffsetG()];
 	}
 	
 	/**
@@ -228,7 +236,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public byte readR(final byte[] array, final int offset) {
-		return hasOffsetR() ? array[offset + getOffsetR()] : 0;
+//		return hasOffsetR() ? array[offset + getOffsetR()] : 0;
+		return array[offset + getOffsetR()];
 	}
 	
 	/**
@@ -262,7 +271,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public double readB(final double[] array, final int offset) {
-		return hasOffsetB() ? array[offset + getOffsetB()] : 0.0D;
+//		return hasOffsetB() ? array[offset + getOffsetB()] : 0.0D;
+		return array[offset + getOffsetB()];
 	}
 	
 	/**
@@ -279,7 +289,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public double readG(final double[] array, final int offset) {
-		return hasOffsetG() ? array[offset + getOffsetG()] : 0.0D;
+//		return hasOffsetG() ? array[offset + getOffsetG()] : 0.0D;
+		return array[offset + getOffsetG()];
 	}
 	
 	/**
@@ -296,7 +307,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public double readR(final double[] array, final int offset) {
-		return hasOffsetR() ? array[offset + getOffsetR()] : 0.0D;
+//		return hasOffsetR() ? array[offset + getOffsetR()] : 0.0D;
+		return array[offset + getOffsetR()];
 	}
 	
 	/**
@@ -330,7 +342,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public float readB(final float[] array, final int offset) {
-		return hasOffsetB() ? array[offset + getOffsetB()] : 0.0F;
+//		return hasOffsetB() ? array[offset + getOffsetB()] : 0.0F;
+		return array[offset + getOffsetB()];
 	}
 	
 	/**
@@ -347,7 +360,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public float readG(final float[] array, final int offset) {
-		return hasOffsetG() ? array[offset + getOffsetG()] : 0.0F;
+//		return hasOffsetG() ? array[offset + getOffsetG()] : 0.0F;
+		return array[offset + getOffsetG()];
 	}
 	
 	/**
@@ -364,7 +378,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public float readR(final float[] array, final int offset) {
-		return hasOffsetR() ? array[offset + getOffsetR()] : 0.0F;
+//		return hasOffsetR() ? array[offset + getOffsetR()] : 0.0F;
+		return array[offset + getOffsetR()];
 	}
 	
 	/**
@@ -373,7 +388,8 @@ public enum ArrayComponentOrder {
 	 * @return the component count of this {@code ArrayComponentOrder} instance
 	 */
 	public int getComponentCount() {
-		return (hasOffsetR() ? 1 : 0) + (hasOffsetG() ? 1 : 0) + (hasOffsetB() ? 1 : 0) + (hasOffsetA() ? 1 : 0);
+//		return (hasOffsetR() ? 1 : 0) + (hasOffsetG() ? 1 : 0) + (hasOffsetB() ? 1 : 0) + (hasOffsetA() ? 1 : 0);
+		return 3 + (hasOffsetA() ? 1 : 0);
 	}
 	
 	/**
@@ -460,7 +476,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public int readB(final int[] array, final int offset) {
-		return hasOffsetB() ? array[offset + getOffsetB()] & 0xFF : 0;
+//		return hasOffsetB() ? array[offset + getOffsetB()] & 0xFF : 0;
+		return array[offset + getOffsetB()] & 0xFF;
 	}
 	
 	/**
@@ -494,7 +511,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public int readG(final int[] array, final int offset) {
-		return hasOffsetG() ? array[offset + getOffsetG()] & 0xFF : 0;
+//		return hasOffsetG() ? array[offset + getOffsetG()] & 0xFF : 0;
+		return array[offset + getOffsetG()];
 	}
 	
 	/**
@@ -528,7 +546,8 @@ public enum ArrayComponentOrder {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public int readR(final int[] array, final int offset) {
-		return hasOffsetR() ? array[offset + getOffsetR()] & 0xFF : 0;
+//		return hasOffsetR() ? array[offset + getOffsetR()] & 0xFF : 0;
+		return array[offset + getOffsetR()] & 0xFF;
 	}
 	
 	/**
@@ -588,17 +607,17 @@ public enum ArrayComponentOrder {
 			final byte b = arrayComponentOrderA.readB(array, offsetA);
 			final byte a = arrayComponentOrderA.readA(array, offsetA);
 			
-			if(arrayComponentOrderB.hasOffsetR()) {
+//			if(arrayComponentOrderB.hasOffsetR()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
-			}
+//			}
 			
-			if(arrayComponentOrderB.hasOffsetG()) {
+//			if(arrayComponentOrderB.hasOffsetG()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
-			}
+//			}
 			
-			if(arrayComponentOrderB.hasOffsetB()) {
+//			if(arrayComponentOrderB.hasOffsetB()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
-			}
+//			}
 			
 			if(arrayComponentOrderB.hasOffsetA()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;
@@ -646,17 +665,17 @@ public enum ArrayComponentOrder {
 			final double b = arrayComponentOrderA.readB(array, offsetA);
 			final double a = arrayComponentOrderA.readA(array, offsetA);
 			
-			if(arrayComponentOrderB.hasOffsetR()) {
+//			if(arrayComponentOrderB.hasOffsetR()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
-			}
+//			}
 			
-			if(arrayComponentOrderB.hasOffsetG()) {
+//			if(arrayComponentOrderB.hasOffsetG()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
-			}
+//			}
 			
-			if(arrayComponentOrderB.hasOffsetB()) {
+//			if(arrayComponentOrderB.hasOffsetB()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
-			}
+//			}
 			
 			if(arrayComponentOrderB.hasOffsetA()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;
@@ -704,17 +723,17 @@ public enum ArrayComponentOrder {
 			final float b = arrayComponentOrderA.readB(array, offsetA);
 			final float a = arrayComponentOrderA.readA(array, offsetA);
 			
-			if(arrayComponentOrderB.hasOffsetR()) {
+//			if(arrayComponentOrderB.hasOffsetR()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
-			}
+//			}
 			
-			if(arrayComponentOrderB.hasOffsetG()) {
+//			if(arrayComponentOrderB.hasOffsetG()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
-			}
+//			}
 			
-			if(arrayComponentOrderB.hasOffsetB()) {
+//			if(arrayComponentOrderB.hasOffsetB()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
-			}
+//			}
 			
 			if(arrayComponentOrderB.hasOffsetA()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;
@@ -762,17 +781,17 @@ public enum ArrayComponentOrder {
 			final int b = arrayComponentOrderA.readB(array, offsetA);
 			final int a = arrayComponentOrderA.readA(array, offsetA);
 			
-			if(arrayComponentOrderB.hasOffsetR()) {
+//			if(arrayComponentOrderB.hasOffsetR()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
-			}
+//			}
 			
-			if(arrayComponentOrderB.hasOffsetG()) {
+//			if(arrayComponentOrderB.hasOffsetG()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
-			}
+//			}
 			
-			if(arrayComponentOrderB.hasOffsetB()) {
+//			if(arrayComponentOrderB.hasOffsetB()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
-			}
+//			}
 			
 			if(arrayComponentOrderB.hasOffsetA()) {
 				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;

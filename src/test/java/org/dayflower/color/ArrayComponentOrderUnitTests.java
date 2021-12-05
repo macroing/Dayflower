@@ -37,11 +37,16 @@ public final class ArrayComponentOrderUnitTests {
 	public void testConvertArrayComponentOrderArrayComponentOrderByteArray() {
 		final byte[] arrayA = {(byte)(10), (byte)(20), (byte)(30)};
 		final byte[] arrayB = ArrayComponentOrder.convert(ArrayComponentOrder.BGR, ArrayComponentOrder.ARGB, arrayA);
+		final byte[] arrayC = ArrayComponentOrder.convert(ArrayComponentOrder.ARGB, ArrayComponentOrder.BGR, arrayB);
 		
 		assertEquals((byte)(255), arrayB[0]);
 		assertEquals((byte)( 30), arrayB[1]);
 		assertEquals((byte)( 20), arrayB[2]);
 		assertEquals((byte)( 10), arrayB[3]);
+		
+		assertEquals((byte)(10), arrayC[0]);
+		assertEquals((byte)(20), arrayC[1]);
+		assertEquals((byte)(30), arrayC[2]);
 		
 		assertThrows(IllegalArgumentException.class, () -> ArrayComponentOrder.convert(ArrayComponentOrder.BGR, ArrayComponentOrder.ARGB, new byte[] {(byte)(255)}));
 		assertThrows(NullPointerException.class, () -> ArrayComponentOrder.convert(null, ArrayComponentOrder.ARGB, arrayA));
@@ -53,11 +58,16 @@ public final class ArrayComponentOrderUnitTests {
 	public void testConvertArrayComponentOrderArrayComponentOrderDoubleArray() {
 		final double[] arrayA = {10.0D, 20.0D, 30.0D};
 		final double[] arrayB = ArrayComponentOrder.convert(ArrayComponentOrder.BGR, ArrayComponentOrder.ARGB, arrayA);
+		final double[] arrayC = ArrayComponentOrder.convert(ArrayComponentOrder.ARGB, ArrayComponentOrder.BGR, arrayB);
 		
 		assertEquals( 1.0D, arrayB[0]);
 		assertEquals(30.0D, arrayB[1]);
 		assertEquals(20.0D, arrayB[2]);
 		assertEquals(10.0D, arrayB[3]);
+		
+		assertEquals(10.0D, arrayC[0]);
+		assertEquals(20.0D, arrayC[1]);
+		assertEquals(30.0D, arrayC[2]);
 		
 		assertThrows(IllegalArgumentException.class, () -> ArrayComponentOrder.convert(ArrayComponentOrder.BGR, ArrayComponentOrder.ARGB, new double[] {1.0D}));
 		assertThrows(NullPointerException.class, () -> ArrayComponentOrder.convert(null, ArrayComponentOrder.ARGB, arrayA));
@@ -69,11 +79,16 @@ public final class ArrayComponentOrderUnitTests {
 	public void testConvertArrayComponentOrderArrayComponentOrderFloatArray() {
 		final float[] arrayA = {10.0F, 20.0F, 30.0F};
 		final float[] arrayB = ArrayComponentOrder.convert(ArrayComponentOrder.BGR, ArrayComponentOrder.ARGB, arrayA);
+		final float[] arrayC = ArrayComponentOrder.convert(ArrayComponentOrder.ARGB, ArrayComponentOrder.BGR, arrayB);
 		
 		assertEquals( 1.0F, arrayB[0]);
 		assertEquals(30.0F, arrayB[1]);
 		assertEquals(20.0F, arrayB[2]);
 		assertEquals(10.0F, arrayB[3]);
+		
+		assertEquals(10.0F, arrayC[0]);
+		assertEquals(20.0F, arrayC[1]);
+		assertEquals(30.0F, arrayC[2]);
 		
 		assertThrows(IllegalArgumentException.class, () -> ArrayComponentOrder.convert(ArrayComponentOrder.BGR, ArrayComponentOrder.ARGB, new float[] {1.0F}));
 		assertThrows(NullPointerException.class, () -> ArrayComponentOrder.convert(null, ArrayComponentOrder.ARGB, arrayA));
@@ -85,11 +100,16 @@ public final class ArrayComponentOrderUnitTests {
 	public void testConvertArrayComponentOrderArrayComponentOrderIntArray() {
 		final int[] arrayA = {10, 20, 30};
 		final int[] arrayB = ArrayComponentOrder.convert(ArrayComponentOrder.BGR, ArrayComponentOrder.ARGB, arrayA);
+		final int[] arrayC = ArrayComponentOrder.convert(ArrayComponentOrder.ARGB, ArrayComponentOrder.BGR, arrayB);
 		
 		assertEquals(255, arrayB[0]);
 		assertEquals( 30, arrayB[1]);
 		assertEquals( 20, arrayB[2]);
 		assertEquals( 10, arrayB[3]);
+		
+		assertEquals(10, arrayC[0]);
+		assertEquals(20, arrayC[1]);
+		assertEquals(30, arrayC[2]);
 		
 		assertThrows(IllegalArgumentException.class, () -> ArrayComponentOrder.convert(ArrayComponentOrder.BGR, ArrayComponentOrder.ARGB, new int[] {255}));
 		assertThrows(NullPointerException.class, () -> ArrayComponentOrder.convert(null, ArrayComponentOrder.ARGB, arrayA));

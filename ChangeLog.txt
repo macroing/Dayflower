@@ -9,6 +9,7 @@
 	* ADD:		Add unit tests to the Vector2DUnitTests class.
 	* ADD:		Add unit tests to the Vector2FUnitTests class.
 	* ADD:		Add a DataOutputMock class that implements DataOutput to throw an IOException.
+	* CHANGE:	Update ArrayComponentOrder and ArrayComponentOrderUnitTests for full unit test coverage.
 	* CHANGE:	Fix a bug in FloatUnaryOperator. The method identity() was not static, which it should be.
 	* CHANGE:	Update the testWrite() method in the Color3DUnitTests, Color3FUnitTests, Matrix33DUnitTests, Matrix33FUnitTests, Matrix44DUnitTests, Matrix44FUnitTests, Point2DUnitTests, Point2FUnitTests, Point2IUnitTests, Point3DUnitTests, Point3FUnitTests, Point4DUnitTests, Point4FUnitTests, Vector2DUnitTests and Vector2FUnitTests classes to use the DataOutputMock class.
 

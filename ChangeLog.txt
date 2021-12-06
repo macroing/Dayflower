@@ -1,3 +1,8 @@
+2021-12-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update Point4DUnitTests and Point4FUnitTests for full unit test coverage.
+	* CHANGE:	Update Vector2DUnitTests and Vector2FUnitTests for full unit test coverage.
+
 2021-12-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the WritableImageCacheUnitTests class.

@@ -428,27 +428,34 @@ public final class Vector2FUnitTests {
 	
 	@Test
 	public void testNormalize() {
-		final Vector2F a = new Vector2F(1.0F, 0.0F);
+		final Vector2F a = new Vector2F(+1.0F, +0.0F);
 		final Vector2F b = Vector2F.normalize(a);
-		final Vector2F c = new Vector2F(0.0F, 1.0F);
+		final Vector2F c = new Vector2F(+0.0F, +1.0F);
 		final Vector2F d = Vector2F.normalize(c);
-		final Vector2F e = new Vector2F(1.0F, 1.0F);
+		final Vector2F e = new Vector2F(+1.0F, +1.0F);
 		final Vector2F f = Vector2F.normalize(e);
 		final Vector2F g = Vector2F.normalize(f);
+		final Vector2F h = new Vector2F(-1.0F, -1.0F);
+		final Vector2F i = Vector2F.normalize(h);
+		final Vector2F j = Vector2F.normalize(i);
 		
 		assertEquals(a, b);
 		assertEquals(c, d);
 		assertEquals(f, g);
+		assertEquals(i, j);
 		
 		assertTrue(a == b);
 		assertTrue(c == d);
 		assertTrue(f == g);
+		assertTrue(i == j);
 		
 		assertTrue(a.isUnitVector());
 		assertTrue(c.isUnitVector());
 		assertTrue(f.isUnitVector());
+		assertTrue(i.isUnitVector());
 		
 		assertFalse(e.isUnitVector());
+		assertFalse(h.isUnitVector());
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.normalize(null));
 	}

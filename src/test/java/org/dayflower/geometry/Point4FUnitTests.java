@@ -334,6 +334,10 @@ public final class Point4FUnitTests {
 		final Point4F a = new Point4F(1.0F, 2.0F, 3.0F, 1.0F);
 		final Point4F b = Point4F.transformAndDivide(Matrix44F.scale(1.0F, 2.0F, 3.0F), a);
 		final Point4F c = Point4F.transformAndDivide(Matrix44F.translate(1.0F, 2.0F, 3.0F), a);
+		final Point4F d = new Point4F(1.0F, 2.0F, 3.0F, 2.0F);
+		final Point4F e = Point4F.transformAndDivide(Matrix44F.translate(1.0F, 2.0F, 3.0F), d);
+		final Point4F f = new Point4F(1.0F, 2.0F, 3.0F, 0.0F);
+		final Point4F g = Point4F.transformAndDivide(Matrix44F.scale(1.0F, 2.0F, 3.0F), f);
 		
 		assertEquals(1.0F, b.getComponent1());
 		assertEquals(4.0F, b.getComponent2());
@@ -344,6 +348,16 @@ public final class Point4FUnitTests {
 		assertEquals(4.0F, c.getComponent2());
 		assertEquals(6.0F, c.getComponent3());
 		assertEquals(1.0F, c.getComponent4());
+		
+		assertEquals(1.5F, e.getComponent1());
+		assertEquals(3.0F, e.getComponent2());
+		assertEquals(4.5F, e.getComponent3());
+		assertEquals(2.0F, e.getComponent4());
+		
+		assertEquals(1.0F, g.getComponent1());
+		assertEquals(4.0F, g.getComponent2());
+		assertEquals(9.0F, g.getComponent3());
+		assertEquals(0.0F, g.getComponent4());
 		
 		assertThrows(NullPointerException.class, () -> Point4F.transformAndDivide(Matrix44F.translate(1.0F, 2.0F, 3.0F), null));
 		assertThrows(NullPointerException.class, () -> Point4F.transformAndDivide(null, a));

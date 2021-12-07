@@ -1,3 +1,12 @@
+2021-12-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a NodeHierarchicalVisitorMock class that implements NodeHierarchicalVisitor to traverse Nodes in different paths or throw a RuntimeException.
+	* ADD:		Add a NodeVisitorMock class that implements NodeVisitor to throw a RuntimeException.
+	* ADD:		Add the Ray2DUnitTests, Ray2FUnitTests, Ray3DUnitTests and Ray3FUnitTests classes.
+	* ADD:		Add unit tests to the Vector2IUnitTests class.
+	* ADD:		Add unit tests to the Vector3DUnitTests class.
+	* ADD:		Add unit tests to the Vector3FUnitTests class.
+
 2021-12-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update Point4DUnitTests and Point4FUnitTests for full unit test coverage.

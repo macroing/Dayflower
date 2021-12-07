@@ -570,7 +570,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F add(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		final float component1 = vectorLHS.component1 + vectorRHS.component1;
 		final float component2 = vectorLHS.component2 + vectorRHS.component2;
@@ -594,7 +593,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F add(final Vector3F vectorA, final Vector3F vectorB, final Vector3F vectorC) {
 		final float component1 = vectorA.component1 + vectorB.component1 + vectorC.component1;
 		final float component2 = vectorA.component2 + vectorB.component2 + vectorC.component2;
@@ -612,7 +610,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance denoting {@code V} in an orthonormal basis
 	 * @throws NullPointerException thrown if, and only if, {@code w} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F computeV(final Vector3F w) {
 		final Vector3F wNormalized = normalize(w);
 		
@@ -643,7 +640,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F crossProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		final float component1 = vectorLHS.component2 * vectorRHS.component3 - vectorLHS.component3 * vectorRHS.component2;
 		final float component2 = vectorLHS.component3 * vectorRHS.component1 - vectorLHS.component1 * vectorRHS.component3;
@@ -662,7 +658,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F direction(final Point3F eye, final Point3F lookAt) {
 		final float component1 = lookAt.getComponent1() - eye.getComponent1();
 		final float component2 = lookAt.getComponent2() - eye.getComponent2();
@@ -681,7 +676,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code eye} to {@code lookAt}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F direction(final Point4F eye, final Point4F lookAt) {
 		final float component1 = lookAt.getComponent1() - eye.getComponent1();
 		final float component2 = lookAt.getComponent2() - eye.getComponent2();
@@ -700,7 +694,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F directionNormalized(final Point3F eye, final Point3F lookAt) {
 		return normalize(direction(eye, lookAt));
 	}
@@ -715,7 +708,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F directionNormalized(final Point4F eye, final Point4F lookAt) {
 		return normalize(direction(eye, lookAt));
 	}
@@ -811,7 +803,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F divide(final Vector3F vectorLHS, final float scalarRHS) {
 		final float component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0F);
 		final float component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0F);
@@ -830,7 +821,6 @@ public final class Vector3F implements Node {
 	 * @return {@code Vector3F.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3F.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F faceForward(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		return dotProduct(vectorLHS, vectorRHS) < 0.0F ? negate(vectorLHS) : vectorLHS;
 	}
@@ -846,7 +836,6 @@ public final class Vector3F implements Node {
 	 * @return {@code Vector3F.negate(direction)} or {@code direction} as {@code Vector3F.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS}, {@code vectorRHS} or {@code direction} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F faceForward(final Vector3F vectorLHS, final Vector3F vectorRHS, final Vector3F direction) {
 		return dotProduct(vectorLHS, vectorRHS) < 0.0F ? negate(direction) : Objects.requireNonNull(direction, "direction == null");
 	}
@@ -861,7 +850,6 @@ public final class Vector3F implements Node {
 	 * @return {@code Vector3F.negateComponent3(vectorRHS)} or {@code vectorRHS} as {@code vectorLHS.getComponent3()} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F faceForwardComponent3(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		return vectorLHS.component3 < 0.0F ? negateComponent3(vectorRHS) : Objects.requireNonNull(vectorRHS, "vectorRHS == null");
 	}
@@ -919,7 +907,6 @@ public final class Vector3F implements Node {
 	 * @return a {@code Vector3F} instance that contains the Hadamard product of {@code vectorLHS} and {@code vectorRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F hadamardProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		final float component1 = vectorLHS.component1 * vectorRHS.component1;
 		final float component2 = vectorLHS.component2 * vectorRHS.component2;
@@ -957,7 +944,6 @@ public final class Vector3F implements Node {
 	 * @return a {@code Vector3F} instance with the result of the linear interpolation operation
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F lerp(final Vector3F a, final Vector3F b, final float t) {
 		final float component1 = Floats.lerp(a.component1, b.component1, t);
 		final float component2 = Floats.lerp(a.component2, b.component2, t);
@@ -980,7 +966,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F multiply(final Vector3F vectorLHS, final float scalarRHS) {
 		final float component1 = vectorLHS.component1 * scalarRHS;
 		final float component2 = vectorLHS.component2 * scalarRHS;
@@ -1000,7 +985,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F negate(final Vector3F vector) {
 		final float component1 = -vector.component1;
 		final float component2 = -vector.component2;
@@ -1020,7 +1004,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F negateComponent1(final Vector3F vector) {
 		final float component1 = -vector.component1;
 		final float component2 = +vector.component2;
@@ -1040,7 +1023,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F negateComponent2(final Vector3F vector) {
 		final float component1 = +vector.component1;
 		final float component2 = -vector.component2;
@@ -1060,7 +1042,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F negateComponent3(final Vector3F vector) {
 		final float component1 = +vector.component1;
 		final float component2 = +vector.component2;
@@ -1080,7 +1061,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance denoting the normal of the plane defined by the {@code Point3F} instances {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F normal(final Point3F a, final Point3F b, final Point3F c) {
 		final Vector3F edgeAB = directionNormalized(a, b);
 		final Vector3F edgeAC = directionNormalized(a, c);
@@ -1124,7 +1104,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance denoting the normalized normal of the plane defined by the {@code Point3F} instances {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F normalNormalized(final Point3F a, final Point3F b, final Point3F c) {
 		return normalize(normal(a, b, c));
 	}
@@ -1161,7 +1140,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F normalize(final Vector3F vector) {
 		final float length = vector.length();
 		
@@ -1180,7 +1158,6 @@ public final class Vector3F implements Node {
 	 * 
 	 * @return a random {@code Vector3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F random() {
 		final float component1 = Floats.random() * 2.0F - 1.0F;
 		final float component2 = Floats.random() * 2.0F - 1.0F;
@@ -1194,7 +1171,6 @@ public final class Vector3F implements Node {
 	 * 
 	 * @return a random and normalized {@code Vector3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F randomNormalized() {
 		return normalize(random());
 	}
@@ -1232,7 +1208,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the reciprocal (or inverse) component values of {@code vector}
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F reciprocal(final Vector3F vector) {
 		final float component1 = finiteOrDefault(1.0F / vector.component1, 0.0F);
 		final float component2 = finiteOrDefault(1.0F / vector.component2, 0.0F);
@@ -1337,7 +1312,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F subtract(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		final float component1 = vectorLHS.component1 - vectorRHS.component1;
 		final float component2 = vectorLHS.component2 - vectorRHS.component2;
@@ -1478,7 +1452,6 @@ public final class Vector3F implements Node {
 	 * 
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(1.0F, 0.0F, 0.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F u() {
 		return u(1.0F);
 	}
@@ -1489,7 +1462,6 @@ public final class Vector3F implements Node {
 	 * @param u the value of the U-component
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(u, 0.0F, 0.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F u(final float u) {
 		return new Vector3F(u, 0.0F, 0.0F);
 	}
@@ -1499,7 +1471,6 @@ public final class Vector3F implements Node {
 	 * 
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 1.0F, 0.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F v() {
 		return v(1.0F);
 	}
@@ -1510,7 +1481,6 @@ public final class Vector3F implements Node {
 	 * @param v the value of the V-component
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, v, 0.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F v(final float v) {
 		return new Vector3F(0.0F, v, 0.0F);
 	}
@@ -1520,7 +1490,6 @@ public final class Vector3F implements Node {
 	 * 
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, 1.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F w() {
 		return w(1.0F);
 	}
@@ -1531,7 +1500,6 @@ public final class Vector3F implements Node {
 	 * @param w the value of the W-component
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, w)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F w(final float w) {
 		return new Vector3F(0.0F, 0.0F, w);
 	}
@@ -1541,7 +1509,6 @@ public final class Vector3F implements Node {
 	 * 
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(1.0F, 0.0F, 0.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F x() {
 		return x(1.0F);
 	}
@@ -1552,7 +1519,6 @@ public final class Vector3F implements Node {
 	 * @param x the value of the X-component
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(x, 0.0F, 0.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F x(final float x) {
 		return new Vector3F(x, 0.0F, 0.0F);
 	}
@@ -1562,7 +1528,6 @@ public final class Vector3F implements Node {
 	 * 
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 1.0F, 0.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F y() {
 		return y(1.0F);
 	}
@@ -1573,7 +1538,6 @@ public final class Vector3F implements Node {
 	 * @param y the value of the Y-component
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, y, 0.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F y(final float y) {
 		return new Vector3F(0.0F, y, 0.0F);
 	}
@@ -1583,7 +1547,6 @@ public final class Vector3F implements Node {
 	 * 
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, 1.0F)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F z() {
 		return z(1.0F);
 	}
@@ -1594,7 +1557,6 @@ public final class Vector3F implements Node {
 	 * @param z the value of the Z-component
 	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, z)}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F z(final float z) {
 		return new Vector3F(0.0F, 0.0F, z);
 	}
@@ -1609,7 +1571,6 @@ public final class Vector3F implements Node {
 	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are orthogonal, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean orthogonal(final Vector3F vLHS, final Vector3F vRHS) {
 		final float dotProduct = dotProduct(vLHS, vRHS);
 		
@@ -1629,7 +1590,6 @@ public final class Vector3F implements Node {
 	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are in the same hemisphere, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean sameHemisphere(final Vector3F vLHS, final Vector3F vRHS) {
 		return dotProduct(vLHS, vRHS) > 0.0F;
 	}
@@ -1646,7 +1606,6 @@ public final class Vector3F implements Node {
 	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are in the same hemisphere, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean sameHemisphereZ(final Vector3F vLHS, final Vector3F vRHS) {
 		return vLHS.component3 * vRHS.component3 > 0.0F;
 	}
@@ -1661,7 +1620,6 @@ public final class Vector3F implements Node {
 	 * @return the dot product of {@code vectorLHS} and {@code vectorRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static float dotProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3;
 	}
@@ -1676,7 +1634,6 @@ public final class Vector3F implements Node {
 	 * @return the absolute dot product of {@code vectorLHS} and {@code vectorRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static float dotProductAbs(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		return abs(dotProduct(vectorLHS, vectorRHS));
 	}

@@ -74,44 +74,44 @@ Simplex API:
 
 Test API:
 
-	* ADD:		Add Unit Tests using JUnit to the Color API.
-	* ADD:		Add Unit Tests using JUnit to the Filter API.
-	* ADD:		Add Unit Tests using JUnit to the Geometry API.
-	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume API.
-	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume Hierarchy API.
-	* ADD:		Add Unit Tests using JUnit to the Geometry Rasterizer API.
-	* ADD:		Add Unit Tests using JUnit to the Geometry Shape API.
-	* ADD:		Add Unit Tests using JUnit to the Image API.
-	* ADD:		Add Unit Tests using JUnit to the Java AWT Image API.
-	* ADD:		Add Unit Tests using JUnit to the Java I/O API.
-	* ADD:		Add Unit Tests using JUnit to the Java Util API.
-	* ADD:		Add Unit Tests using JUnit to the Java Util Concurrent Atomic API.
-	* ADD:		Add Unit Tests using JUnit to the JavaFX Concurrent API.
-	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Canvas API.
-	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Control API.
-	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Layout API.
-	* ADD:		Add Unit Tests using JUnit to the Node API.
-	* ADD:		Add Unit Tests using JUnit to the Noise API.
-	* ADD:		Add Unit Tests using JUnit to the Parameter API.
-	* ADD:		Add Unit Tests using JUnit to the Renderer API.
-	* ADD:		Add Unit Tests using JUnit to the Renderer CPU API.
-	* ADD:		Add Unit Tests using JUnit to the Renderer GPU API.
-	* ADD:		Add Unit Tests using JUnit to the Renderer Observer API.
-	* ADD:		Add Unit Tests using JUnit to the Sampler API.
-	* ADD:		Add Unit Tests using JUnit to the Scene API.
-	* ADD:		Add Unit Tests using JUnit to the Scene BSSRDF API.
-	* ADD:		Add Unit Tests using JUnit to the Scene BXDF API.
-	* ADD:		Add Unit Tests using JUnit to the Scene Compiler API.
-	* ADD:		Add Unit Tests using JUnit to the Scene Demo API.
-	* ADD:		Add Unit Tests using JUnit to the Scene Fresnel API.
-	* ADD:		Add Unit Tests using JUnit to the Scene Light API.
-	* ADD:		Add Unit Tests using JUnit to the Scene Loader API.
-	* ADD:		Add Unit Tests using JUnit to the Scene Material API.
-	* ADD:		Add Unit Tests using JUnit to the Scene Microfacet API.
-	* ADD:		Add Unit Tests using JUnit to the Scene Modifier API.
-	* ADD:		Add Unit Tests using JUnit to the Scene Texture API.
-	* ADD:		Add Unit Tests using JUnit to the Simplex API.
-	* ADD:		Add Unit Tests using JUnit to the Sound API.
-	* ADD:		Add Unit Tests using JUnit to the Utility API.
-	* ADD:		Add Unit Tests using JUnit to the Wavefront Material API.
-	* ADD:		Add Unit Tests using JUnit to the Wavefront Object API.
+	* ADD:		Add Unit Tests using JUnit to the Color API.								82.9%
+	* ADD:		Add Unit Tests using JUnit to the Filter API.								 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Geometry API.								58.3%
+	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume API.				 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume Hierarchy API.	 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Geometry Rasterizer API.					 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Geometry Shape API.						 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Image API.								 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Java AWT Image API.						 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Java I/O API.								 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Java Util API.							 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Java Util Concurrent Atomic API.			 0.0%
+	* ADD:		Add Unit Tests using JUnit to the JavaFX Concurrent API.					 0.0%
+	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Canvas API.					 0.0%
+	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Control API.					 0.0%
+	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Layout API.					 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Node API.									 3.9%
+	* ADD:		Add Unit Tests using JUnit to the Noise API.								 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Parameter API.							 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Renderer API.								 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Renderer CPU API.							 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Renderer GPU API.							 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Renderer Observer API.					 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Sampler API.								 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene API.								 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene BSSRDF API.							 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene BXDF API.							 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene Compiler API.						 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene Demo API.							 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene Fresnel API.						 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene Light API.							 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene Loader API.							 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene Material API.						 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene Microfacet API.						 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene Modifier API.						 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Scene Texture API.						 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Simplex API.								 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Sound API.								 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Utility API.								42.2%
+	* ADD:		Add Unit Tests using JUnit to the Wavefront Material API.					 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Wavefront Object API.						 0.0%

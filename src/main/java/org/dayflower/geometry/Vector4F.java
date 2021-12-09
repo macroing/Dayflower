@@ -18,14 +18,16 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Floats.NEXT_DOWN_1_3;
+import static org.dayflower.utility.Floats.NEXT_UP_1_1;
 import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.finiteOrDefault;
 import static org.dayflower.utility.Floats.sqrt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.java.lang.Strings;
@@ -57,7 +59,6 @@ public final class Vector4F implements Node {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Vector4F() {
 		this(0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -77,7 +78,6 @@ public final class Vector4F implements Node {
 	 * @param point a {@link Point4F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Vector4F(final Point4F point) {
 		this(point.getComponent1(), point.getComponent2(), point.getComponent3(), point.getComponent4());
 	}
@@ -96,7 +96,6 @@ public final class Vector4F implements Node {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public Vector4F(final float component1, final float component2, final float component3) {
 		this(component1, component2, component3, 1.0F);
 	}
@@ -109,7 +108,6 @@ public final class Vector4F implements Node {
 	 * @param component3 the value of component 3
 	 * @param component4 the value of component 4
 	 */
-//	TODO: Add Unit Tests!
 	public Vector4F(final float component1, final float component2, final float component3, final float component4) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -124,7 +122,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Vector4F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Vector4F(%sF, %sF, %sF, %sF)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3), Strings.toNonScientificNotation(this.component4));
@@ -138,7 +135,6 @@ public final class Vector4F implements Node {
 	 * @param object the {@code Object} to compare to this {@code Vector4F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Vector4F}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -163,7 +159,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the value of component 1
 	 */
-//	TODO: Add Unit Tests!
 	public float getComponent1() {
 		return this.component1;
 	}
@@ -173,7 +168,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the value of component 2
 	 */
-//	TODO: Add Unit Tests!
 	public float getComponent2() {
 		return this.component2;
 	}
@@ -183,7 +177,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public float getComponent3() {
 		return this.component3;
 	}
@@ -193,7 +186,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the value of component 4
 	 */
-//	TODO: Add Unit Tests!
 	public float getComponent4() {
 		return this.component4;
 	}
@@ -203,7 +195,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the value of the W-component
 	 */
-//	TODO: Add Unit Tests!
 	public float getW() {
 		return this.component4;
 	}
@@ -213,7 +204,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the value of the X-component
 	 */
-//	TODO: Add Unit Tests!
 	public float getX() {
 		return this.component1;
 	}
@@ -223,7 +213,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the value of the Y-component
 	 */
-//	TODO: Add Unit Tests!
 	public float getY() {
 		return this.component2;
 	}
@@ -233,7 +222,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the value of the Z-component
 	 */
-//	TODO: Add Unit Tests!
 	public float getZ() {
 		return this.component3;
 	}
@@ -243,7 +231,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the length of this {@code Vector4F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public float length() {
 		return sqrt(lengthSquared());
 	}
@@ -253,7 +240,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return the squared length of this {@code Vector4F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public float lengthSquared() {
 		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3 + this.component4 * this.component4;
 	}
@@ -263,7 +249,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return a {@code float[]} representation of this {@code Vector4F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public float[] toArray() {
 		return new float[] {
 			this.component1,
@@ -278,7 +263,6 @@ public final class Vector4F implements Node {
 	 * 
 	 * @return a hash code for this {@code Vector4F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3), Float.valueOf(this.component4));
@@ -295,7 +279,6 @@ public final class Vector4F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeFloat(this.component1);
@@ -323,7 +306,6 @@ public final class Vector4F implements Node {
 	 * @return a new {@code Vector4F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector4F add(final Vector4F vectorLHS, final Vector4F vectorRHS) {
 		final float component1 = vectorLHS.component1 + vectorRHS.component1;
 		final float component2 = vectorLHS.component2 + vectorRHS.component2;
@@ -347,12 +329,11 @@ public final class Vector4F implements Node {
 	 * @return a new {@code Vector4F} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector4F divide(final Vector4F vectorLHS, final float scalarRHS) {
-		final float component1 = vectorLHS.component1 / scalarRHS;
-		final float component2 = vectorLHS.component2 / scalarRHS;
-		final float component3 = vectorLHS.component3 / scalarRHS;
-		final float component4 = vectorLHS.component4 / scalarRHS;
+		final float component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0F);
+		final float component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0F);
+		final float component3 = finiteOrDefault(vectorLHS.component3 / scalarRHS, 0.0F);
+		final float component4 = finiteOrDefault(vectorLHS.component4 / scalarRHS, 0.0F);
 		
 		return new Vector4F(component1, component2, component3, component4);
 	}
@@ -371,7 +352,6 @@ public final class Vector4F implements Node {
 	 * @return a new {@code Vector4F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector4F multiply(final Vector4F vectorLHS, final float scalarRHS) {
 		final float component1 = vectorLHS.component1 * scalarRHS;
 		final float component2 = vectorLHS.component2 * scalarRHS;
@@ -392,7 +372,6 @@ public final class Vector4F implements Node {
 	 * @return a new {@code Vector4F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector4F negate(final Vector4F vector) {
 		final float component1 = -vector.component1;
 		final float component2 = -vector.component2;
@@ -413,9 +392,17 @@ public final class Vector4F implements Node {
 	 * @return a new {@code Vector4F} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector4F normalize(final Vector4F vector) {
-		return divide(vector, vector.length());
+		final float length = vector.length();
+		
+		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		
+		if(isLengthGTEThreshold && isLengthLTEThreshold) {
+			return vector;
+		}
+		
+		return divide(vector, length);
 	}
 	
 	/**
@@ -430,7 +417,6 @@ public final class Vector4F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector4F read(final DataInput dataInput) {
 		try {
 			final float component1 = dataInput.readFloat();
@@ -458,7 +444,6 @@ public final class Vector4F implements Node {
 	 * @return a new {@code Vector4F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector4F subtract(final Vector4F vectorLHS, final Vector4F vectorRHS) {
 		final float component1 = vectorLHS.component1 - vectorRHS.component1;
 		final float component2 = vectorLHS.component2 - vectorRHS.component2;
@@ -478,7 +463,6 @@ public final class Vector4F implements Node {
 	 * @return the dot product of {@code vectorLHS} and {@code vectorRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static float dotProduct(final Vector4F vectorLHS, final Vector4F vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3 + vectorLHS.component4 * vectorRHS.component4;
 	}

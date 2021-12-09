@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.modifier;
 
-import static org.dayflower.utility.Floats.positiveModulo;
 import static org.dayflower.utility.Ints.positiveModulo;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -35,7 +34,9 @@ import javax.imageio.ImageIO;
 import org.dayflower.color.Color3F;
 import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ImageF;
@@ -46,21 +47,21 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * An {@code LDRImageNormalMapModifier} is a {@link Modifier} implementation that modifies the surface normal using a {@link Color3F} instance from a low-dynamic-range (LDR) image.
+ * An {@code LDRImageSteepParallaxMapModifier} is a {@link Modifier} implementation that modifies the texture coordinates using a {@link Color3F} instance from a low-dynamic-range (LDR) image.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@code LDRImageNormalMapModifier} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code LDRImageNormalMapModifier} instance from an {@link ImageF} instance.
- * This is useful if the requirement is to generate an image procedurally.
+ * This {@code LDRImageSteepParallaxMapModifier} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code LDRImageSteepParallaxMapModifier} instance from an
+ * {@link ImageF} instance. This is useful if the requirement is to generate an image procedurally.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LDRImageNormalMapModifier implements Modifier {
+public final class LDRImageSteepParallaxMapModifier implements Modifier {
 	/**
-	 * The ID of this {@code LDRImageNormalMapModifier} class.
+	 * The ID of this {@code LDRImageSteepParallaxMapModifier} class.
 	 */
-	public static final int ID = 2;
+	public static final int ID = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -74,33 +75,33 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
+	 * Constructs a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageNormalMapModifier(image, AngleF.degrees(0.0F));
+	 * new LDRImageSteepParallaxMapModifier(image, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param image an {@link ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public LDRImageNormalMapModifier(final ImageF image) {
+	public LDRImageSteepParallaxMapModifier(final ImageF image) {
 		this(image, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
+	 * Constructs a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If either {@code image} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageNormalMapModifier(image, angle, new Vector2F(1.0F, 1.0F));
+	 * new LDRImageSteepParallaxMapModifier(image, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -108,19 +109,19 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * @param angle the {@link AngleF} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public LDRImageNormalMapModifier(final ImageF image, final AngleF angle) {
+	public LDRImageSteepParallaxMapModifier(final ImageF image, final AngleF angle) {
 		this(image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
+	 * Constructs a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageNormalMapModifier(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
+	 * new LDRImageSteepParallaxMapModifier(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	 * }
 	 * </pre>
 	 * 
@@ -129,12 +130,12 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public LDRImageNormalMapModifier(final ImageF image, final AngleF angle, final Vector2F scale) {
+	public LDRImageSteepParallaxMapModifier(final ImageF image, final AngleF angle, final Vector2F scale) {
 		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
+	 * Constructs a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -143,7 +144,7 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageNormalMapModifier(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
+	 * new LDRImageSteepParallaxMapModifier(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -153,12 +154,12 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public LDRImageNormalMapModifier(final int resolutionX, final int resolutionY, final int[] image) {
+	public LDRImageSteepParallaxMapModifier(final int resolutionX, final int resolutionY, final int[] image) {
 		this(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
+	 * Constructs a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If either {@code image} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -167,7 +168,7 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageNormalMapModifier(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
+	 * new LDRImageSteepParallaxMapModifier(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -178,12 +179,12 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public LDRImageNormalMapModifier(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle) {
+	public LDRImageSteepParallaxMapModifier(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle) {
 		this(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
+	 * Constructs a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -197,7 +198,7 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public LDRImageNormalMapModifier(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
+	public LDRImageSteepParallaxMapModifier(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -218,13 +219,13 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code LDRImageNormalMapModifier} instance.
+	 * Returns a {@code String} representation of this {@code LDRImageSteepParallaxMapModifier} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code LDRImageNormalMapModifier} instance
+	 * @return a {@code String} representation of this {@code LDRImageSteepParallaxMapModifier} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LDRImageNormalMapModifier(%d, %d, %s, %s, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), "new int[] {...}", this.angle, this.scale);
+		return String.format("new LDRImageSteepParallaxMapModifier(%d, %d, %s, %s, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), "new int[] {...}", this.angle, this.scale);
 	}
 	
 	/**
@@ -275,30 +276,30 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LDRImageNormalMapModifier} instance for equality.
+	 * Compares {@code object} to this {@code LDRImageSteepParallaxMapModifier} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LDRImageNormalMapModifier}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LDRImageSteepParallaxMapModifier}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LDRImageNormalMapModifier} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LDRImageNormalMapModifier}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LDRImageSteepParallaxMapModifier} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LDRImageSteepParallaxMapModifier}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LDRImageNormalMapModifier)) {
+		} else if(!(object instanceof LDRImageSteepParallaxMapModifier)) {
 			return false;
-		} else if(!Objects.equals(this.angle, LDRImageNormalMapModifier.class.cast(object).angle)) {
+		} else if(!Objects.equals(this.angle, LDRImageSteepParallaxMapModifier.class.cast(object).angle)) {
 			return false;
-		} else if(!Objects.equals(this.scale, LDRImageNormalMapModifier.class.cast(object).scale)) {
+		} else if(!Objects.equals(this.scale, LDRImageSteepParallaxMapModifier.class.cast(object).scale)) {
 			return false;
-		} else if(this.resolution != LDRImageNormalMapModifier.class.cast(object).resolution) {
+		} else if(this.resolution != LDRImageSteepParallaxMapModifier.class.cast(object).resolution) {
 			return false;
-		} else if(this.resolutionX != LDRImageNormalMapModifier.class.cast(object).resolutionX) {
+		} else if(this.resolutionX != LDRImageSteepParallaxMapModifier.class.cast(object).resolutionX) {
 			return false;
-		} else if(this.resolutionY != LDRImageNormalMapModifier.class.cast(object).resolutionY) {
+		} else if(this.resolutionY != LDRImageSteepParallaxMapModifier.class.cast(object).resolutionY) {
 			return false;
-		} else if(!Arrays.equals(this.image, LDRImageNormalMapModifier.class.cast(object).image)) {
+		} else if(!Arrays.equals(this.image, LDRImageSteepParallaxMapModifier.class.cast(object).image)) {
 			return false;
 		} else {
 			return true;
@@ -306,9 +307,9 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code LDRImageNormalMapModifier} instance.
+	 * Returns an {@code int} with the ID of this {@code LDRImageSteepParallaxMapModifier} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code LDRImageNormalMapModifier} instance
+	 * @return an {@code int} with the ID of this {@code LDRImageSteepParallaxMapModifier} instance
 	 */
 	@Override
 	public int getID() {
@@ -343,9 +344,9 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LDRImageNormalMapModifier} instance.
+	 * Returns a hash code for this {@code LDRImageSteepParallaxMapModifier} instance.
 	 * 
-	 * @return a hash code for this {@code LDRImageNormalMapModifier} instance
+	 * @return a hash code for this {@code LDRImageSteepParallaxMapModifier} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -355,7 +356,7 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	/**
 	 * Returns an {@code int[]} containing the image with its colors in packed form using the order ARGB.
 	 * <p>
-	 * Modifying the returned {@code int[]} will not affect this {@code LDRImageNormalMapModifier} instance.
+	 * Modifying the returned {@code int[]} will not affect this {@code LDRImageSteepParallaxMapModifier} instance.
 	 * 
 	 * @return an {@code int[]} containing the image with its colors in packed form using the order ARGB
 	 */
@@ -375,28 +376,49 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	public void modify(final Intersection intersection) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		
-		final Color3F colorRGB = doGetColorRGB(intersection);
+		final float layers = 10.0F;
+		final float layersReciprocal = 1.0F / layers;
 		
-		final float r = colorRGB.getR();
-		final float g = colorRGB.getG();
-		final float b = colorRGB.getB();
+		final float heightScale = 0.1F;
 		
-		final float x = r * 2.0F - 1.0F;
-		final float y = g * 2.0F - 1.0F;
-		final float z = b * 2.0F - 1.0F;
+		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionObjectSpace();
 		
-		final Vector3F surfaceNormalSLocalSpace = new Vector3F(x, y, z);
-		final Vector3F surfaceNormalSWorldSpace = Vector3F.normalize(Vector3F.transform(surfaceNormalSLocalSpace, intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS()));
+		final OrthonormalBasis33F orthonormalBasisS = surfaceIntersection.getOrthonormalBasisS();
 		
-		intersection.setSurfaceNormalS(surfaceNormalSWorldSpace);
+		final Point2F textureCoordinates = surfaceIntersection.getTextureCoordinates();
+		
+		final Vector3F direction = surfaceIntersection.getRay().getDirection();
+		final Vector3F directionNegated = Vector3F.negate(direction);
+		final Vector3F directionTransformed = Vector3F.transformReverse(directionNegated, orthonormalBasisS);
+		final Vector3F directionNormalized = Vector3F.normalize(directionTransformed);
+		final Vector3F directionScaled = Vector3F.multiply(directionNormalized, heightScale);
+		
+		final float deltaU = directionScaled.getU() * layersReciprocal;
+		final float deltaV = directionScaled.getV() * layersReciprocal;
+		
+		float u = textureCoordinates.getU();
+		float v = textureCoordinates.getV();
+		
+		float currentHeight = doGetColorR(u, v);
+		float currentLayerDepth = 0.0F;
+		
+		while(currentLayerDepth < currentHeight) {
+			u -= deltaU;
+			v -= deltaV;
+			
+			currentHeight = doGetColorR(u, v);
+			currentLayerDepth += layersReciprocal;
+		}
+		
+		intersection.setTextureCoordinates(new Point2F(u, v));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageSteepParallaxMapModifier} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code LDRImageNormalMapModifier} instance.
+	 * Returns a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -405,23 +427,23 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * LDRImageNormalMapModifier.load(file, AngleF.degrees(0.0F));
+	 * LDRImageSteepParallaxMapModifier.load(file, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
-	 * @return a new {@code LDRImageNormalMapModifier} instance
+	 * @return a new {@code LDRImageSteepParallaxMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageNormalMapModifier load(final File file) {
+	public static LDRImageSteepParallaxMapModifier load(final File file) {
 		return load(file, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageSteepParallaxMapModifier} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code LDRImageNormalMapModifier} instance.
+	 * Returns a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If either {@code file} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -430,24 +452,24 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * LDRImageNormalMapModifier.load(file, angle, new Vector2F(1.0F, 1.0F));
+	 * LDRImageSteepParallaxMapModifier.load(file, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
-	 * @return a new {@code LDRImageNormalMapModifier} instance
+	 * @return a new {@code LDRImageSteepParallaxMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code angle} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageNormalMapModifier load(final File file, final AngleF angle) {
+	public static LDRImageSteepParallaxMapModifier load(final File file, final AngleF angle) {
 		return load(file, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageSteepParallaxMapModifier} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code LDRImageNormalMapModifier} instance.
+	 * Returns a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If either {@code file}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -456,11 +478,11 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @return a new {@code LDRImageNormalMapModifier} instance
+	 * @return a new {@code LDRImageSteepParallaxMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file}, {@code angle} or {@code scale} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageNormalMapModifier load(final File file, final AngleF angle, final Vector2F scale) {
+	public static LDRImageSteepParallaxMapModifier load(final File file, final AngleF angle, final Vector2F scale) {
 		try {
 			final BufferedImage bufferedImage = BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 			
@@ -469,16 +491,16 @@ public final class LDRImageNormalMapModifier implements Modifier {
 			
 			final int[] image = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
 			
-			return new LDRImageNormalMapModifier(resolutionX, resolutionY, image, angle, scale);
+			return new LDRImageSteepParallaxMapModifier(resolutionX, resolutionY, image, angle, scale);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageSteepParallaxMapModifier} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code LDRImageNormalMapModifier} instance.
+	 * Returns a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -487,23 +509,23 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * LDRImageNormalMapModifier.load(pathname, AngleF.degrees(0.0F));
+	 * LDRImageSteepParallaxMapModifier.load(pathname, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
-	 * @return a new {@code LDRImageNormalMapModifier} instance
+	 * @return a new {@code LDRImageSteepParallaxMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageNormalMapModifier load(final String pathname) {
+	public static LDRImageSteepParallaxMapModifier load(final String pathname) {
 		return load(pathname, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageSteepParallaxMapModifier} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code LDRImageNormalMapModifier} instance.
+	 * Returns a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If either {@code pathname} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -512,24 +534,24 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * LDRImageNormalMapModifier.load(pathname, angle, new Vector2F(1.0F, 1.0F));
+	 * LDRImageSteepParallaxMapModifier.load(pathname, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
-	 * @return a new {@code LDRImageNormalMapModifier} instance
+	 * @return a new {@code LDRImageSteepParallaxMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code angle} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageNormalMapModifier load(final String pathname, final AngleF angle) {
+	public static LDRImageSteepParallaxMapModifier load(final String pathname, final AngleF angle) {
 		return load(pathname, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageSteepParallaxMapModifier} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code LDRImageNormalMapModifier} instance.
+	 * Returns a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
 	 * If either {@code pathname}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -538,72 +560,72 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @return a new {@code LDRImageNormalMapModifier} instance
+	 * @return a new {@code LDRImageSteepParallaxMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname}, {@code angle} or {@code scale} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageNormalMapModifier load(final String pathname, final AngleF angle, final Vector2F scale) {
+	public static LDRImageSteepParallaxMapModifier load(final String pathname, final AngleF angle, final Vector2F scale) {
 		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale);
 	}
 	
 	/**
-	 * Redoes gamma correction on {@code lDRImageNormalMapModifier} using sRGB.
+	 * Redoes gamma correction on {@code lDRImageSteepParallaxMapModifier} using sRGB.
 	 * <p>
-	 * Returns a new {@code LDRImageNormalMapModifier} instance.
+	 * Returns a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageSteepParallaxMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifier an {@code LDRImageNormalMapModifier} instance
-	 * @return a new {@code LDRImageNormalMapModifier} instance
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
+	 * @param lDRImageSteepParallaxMapModifier an {@code LDRImageSteepParallaxMapModifier} instance
+	 * @return a new {@code LDRImageSteepParallaxMapModifier} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageSteepParallaxMapModifier} is {@code null}
 	 */
-	public static LDRImageNormalMapModifier redoGammaCorrectionSRGB(final LDRImageNormalMapModifier lDRImageNormalMapModifier) {
-		final int[] image = new int[lDRImageNormalMapModifier.image.length];
+	public static LDRImageSteepParallaxMapModifier redoGammaCorrectionSRGB(final LDRImageSteepParallaxMapModifier lDRImageSteepParallaxMapModifier) {
+		final int[] image = new int[lDRImageSteepParallaxMapModifier.image.length];
 		
 		final ColorSpaceF colorSpace = ColorSpaceF.getDefault();
 		
-		for(int i = 0; i < lDRImageNormalMapModifier.image.length; i++) {
-			image[i] = colorSpace.redoGammaCorrection(Color3F.unpack(lDRImageNormalMapModifier.image[i])).pack();
+		for(int i = 0; i < lDRImageSteepParallaxMapModifier.image.length; i++) {
+			image[i] = colorSpace.redoGammaCorrection(Color3F.unpack(lDRImageSteepParallaxMapModifier.image[i])).pack();
 		}
 		
-		return new LDRImageNormalMapModifier(lDRImageNormalMapModifier.resolutionX, lDRImageNormalMapModifier.resolutionY, image, lDRImageNormalMapModifier.angle, lDRImageNormalMapModifier.scale);
+		return new LDRImageSteepParallaxMapModifier(lDRImageSteepParallaxMapModifier.resolutionX, lDRImageSteepParallaxMapModifier.resolutionY, image, lDRImageSteepParallaxMapModifier.angle, lDRImageSteepParallaxMapModifier.scale);
 	}
 	
 	/**
-	 * Undoes gamma correction on {@code lDRImageNormalMapModifier} using sRGB.
+	 * Undoes gamma correction on {@code lDRImageSteepParallaxMapModifier} using sRGB.
 	 * <p>
-	 * Returns a new {@code LDRImageNormalMapModifier} instance.
+	 * Returns a new {@code LDRImageSteepParallaxMapModifier} instance.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageSteepParallaxMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifier an {@code LDRImageNormalMapModifier} instance
-	 * @return a new {@code LDRImageNormalMapModifier} instance
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
+	 * @param lDRImageSteepParallaxMapModifier an {@code LDRImageSteepParallaxMapModifier} instance
+	 * @return a new {@code LDRImageSteepParallaxMapModifier} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageSteepParallaxMapModifier} is {@code null}
 	 */
-	public static LDRImageNormalMapModifier undoGammaCorrectionSRGB(final LDRImageNormalMapModifier lDRImageNormalMapModifier) {
-		final int[] image = new int[lDRImageNormalMapModifier.image.length];
+	public static LDRImageSteepParallaxMapModifier undoGammaCorrectionSRGB(final LDRImageSteepParallaxMapModifier lDRImageSteepParallaxMapModifier) {
+		final int[] image = new int[lDRImageSteepParallaxMapModifier.image.length];
 		
 		final ColorSpaceF colorSpace = ColorSpaceF.getDefault();
 		
-		for(int i = 0; i < lDRImageNormalMapModifier.image.length; i++) {
-			image[i] = colorSpace.undoGammaCorrection(Color3F.unpack(lDRImageNormalMapModifier.image[i])).pack();
+		for(int i = 0; i < lDRImageSteepParallaxMapModifier.image.length; i++) {
+			image[i] = colorSpace.undoGammaCorrection(Color3F.unpack(lDRImageSteepParallaxMapModifier.image[i])).pack();
 		}
 		
-		return new LDRImageNormalMapModifier(lDRImageNormalMapModifier.resolutionX, lDRImageNormalMapModifier.resolutionY, image, lDRImageNormalMapModifier.angle, lDRImageNormalMapModifier.scale);
+		return new LDRImageSteepParallaxMapModifier(lDRImageSteepParallaxMapModifier.resolutionX, lDRImageSteepParallaxMapModifier.resolutionY, image, lDRImageSteepParallaxMapModifier.angle, lDRImageSteepParallaxMapModifier.scale);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Color3F doGetColorRGB(final Intersection intersection) {
-		final Point2F textureCoordinates = intersection.getTextureCoordinates();
+	private float doGetColorR(final float u, final float v) {
+		final Point2F textureCoordinates = new Point2F(u, v);
 		final Point2F textureCoordinatesRotated = Point2F.rotate(textureCoordinates, this.angle);
 		final Point2F textureCoordinatesScaled = Point2F.scale(textureCoordinatesRotated, this.scale);
 		final Point2F textureCoordinatesImage = Point2F.toImage(textureCoordinatesScaled, this.resolutionX, this.resolutionY);
 		
-		return doGetColorRGB(toInt(textureCoordinatesImage.getX()), toInt(textureCoordinatesImage.getY()));
+		return doGetColorR(toInt(textureCoordinatesImage.getX()), toInt(textureCoordinatesImage.getY()));
 	}
 	
-	private Color3F doGetColorRGB(final int x, final int y) {
-		return Color3F.unpack(this.image[positiveModulo(y, this.resolutionY) * this.resolutionX + positiveModulo(x, this.resolutionX)]);
+	private float doGetColorR(final int x, final int y) {
+		return Color3F.unpack(this.image[positiveModulo(y, this.resolutionY) * this.resolutionX + positiveModulo(x, this.resolutionX)]).getR();
 	}
 }

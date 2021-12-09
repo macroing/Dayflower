@@ -34,7 +34,7 @@ public final class NoOpModifier implements Modifier {
 	/**
 	 * The ID of this {@code NoOpModifier} class.
 	 */
-	public static final int ID = 3;
+	public static final int ID = 4;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

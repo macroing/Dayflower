@@ -61,7 +61,6 @@ Scene Material API:
 Scene Modifier API:
 
 	* ADD:		Add an LDRImageParallaxMapModifier class.
-	* ADD:		Add an LDRImageSteepParallaxMapModifier class.
 
 Scene Texture API:
 
@@ -76,7 +75,7 @@ Test API:
 
 	* ADD:		Add Unit Tests using JUnit to the Color API.								82.9%
 	* ADD:		Add Unit Tests using JUnit to the Filter API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Geometry API.								58.3%
+	* ADD:		Add Unit Tests using JUnit to the Geometry API.								61.3%
 	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume API.				 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume Hierarchy API.	 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Geometry Rasterizer API.					 0.0%

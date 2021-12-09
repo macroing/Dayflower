@@ -595,6 +595,12 @@ public final class Scene implements Node {
 		if(optionalIntersection.isPresent()) {
 			final Intersection intersection = optionalIntersection.get();
 			
+			final Primitive primitive = intersection.getPrimitive();
+			
+			final
+			Material material = primitive.getMaterial();
+			material.computeBSDF(intersection, TransportMode.RADIANCE, true);
+			
 			final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
 			
 			radiance = Color3F.multiply(Color3F.GRAY_0_50, abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));

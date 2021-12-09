@@ -1,3 +1,14 @@
+2021-12-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for Modifiers to the Ray Caster in the CPU renderer.
+	* ADD:		Add the LDRImageSteepParallaxMapModifier class.
+	* ADD:		Add the method setTextureCoordinates(Point2F) to the Intersection class.
+	* ADD:		Add unit tests to the Vector4DUnitTests class.
+	* ADD:		Add unit tests to the Vector4FUnitTests class.
+	* CHANGE:	Update the IDs for the NoOpModifier and SimplexNoiseNormalMapModifier classes.
+	* CHANGE:	Update the methods divide(Vector4D, double) and normalize(Vector4D) in the Vector4D class.
+	* CHANGE:	Update the methods divide(Vector4F, float) and normalize(Vector4F) in the Vector4F class.
+
 2021-12-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a NodeHierarchicalVisitorMock class that implements NodeHierarchicalVisitor to traverse Nodes in different paths or throw a RuntimeException.

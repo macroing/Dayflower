@@ -48,6 +48,7 @@ public final class Intersection {
 	
 	private OrthonormalBasis33F orthonormalBasisG;
 	private OrthonormalBasis33F orthonormalBasisS;
+	private Point2F textureCoordinates;
 	private final Primitive primitive;
 	private final SurfaceIntersection3F surfaceIntersectionObjectSpace;
 	private final SurfaceIntersection3F surfaceIntersectionWorldSpace;
@@ -69,6 +70,7 @@ public final class Intersection {
 		this.surfaceIntersectionWorldSpace = SurfaceIntersection3F.transform(surfaceIntersectionObjectSpace, primitive.getTransform().getObjectToWorld(), primitive.getTransform().getWorldToObject());
 		this.orthonormalBasisG = this.surfaceIntersectionWorldSpace.getOrthonormalBasisG();
 		this.orthonormalBasisS = this.surfaceIntersectionWorldSpace.getOrthonormalBasisS();
+		this.textureCoordinates = this.surfaceIntersectionWorldSpace.getTextureCoordinates();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +124,7 @@ public final class Intersection {
 	 * @return the {@code Point2F} instance that is used as the texture coordinates in world space
 	 */
 	public Point2F getTextureCoordinates() {
-		return this.surfaceIntersectionWorldSpace.getTextureCoordinates();
+		return this.textureCoordinates;
 	}
 	
 	/**
@@ -251,6 +253,8 @@ public final class Intersection {
 			return false;
 		} else if(!Objects.equals(this.orthonormalBasisS, Intersection.class.cast(object).orthonormalBasisS)) {
 			return false;
+		} else if(!Objects.equals(this.textureCoordinates, Intersection.class.cast(object).textureCoordinates)) {
+			return false;
 		} else if(!Objects.equals(this.primitive, Intersection.class.cast(object).primitive)) {
 			return false;
 		} else if(!Objects.equals(this.surfaceIntersectionObjectSpace, Intersection.class.cast(object).surfaceIntersectionObjectSpace)) {
@@ -278,7 +282,7 @@ public final class Intersection {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.orthonormalBasisG, this.orthonormalBasisS, this.primitive, this.surfaceIntersectionObjectSpace, this.surfaceIntersectionWorldSpace);
+		return Objects.hash(this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.primitive, this.surfaceIntersectionObjectSpace, this.surfaceIntersectionWorldSpace);
 	}
 	
 	/**
@@ -327,6 +331,18 @@ public final class Intersection {
 	 */
 	public void setSurfaceNormalS(final Vector3F surfaceNormalS) {
 		this.orthonormalBasisS = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalS, "surfaceNormalS == null"));
+	}
+	
+	/**
+	 * Sets the {@link Point2F} instance that is used as the texture coordinates in world space to {@code textureCoordinates}.
+	 * <p>
+	 * If {@code textureCoordinates} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureCoordinates the {@code Point2F} instance that is used as the texture coordinates in world space
+	 * @throws NullPointerException thrown if, and only if, {@code textureCoordinates} is {@code null}
+	 */
+	public void setTextureCoordinates(final Point2F textureCoordinates) {
+		this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

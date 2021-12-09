@@ -91,7 +91,7 @@ The lists below show the main features of the renderer.
 * Function Material (CPU)
 * Glass Material (CPU & GPU)
 * Glossy Material (CPU & GPU)
-* Hair Material (CPU)
+* Hair Material (CPU) (WIP)
 * Matte Material (CPU & GPU)
 * Metal Material (CPU & GPU)
 * Mirror Material (CPU & GPU)
@@ -102,15 +102,16 @@ The lists below show the main features of the renderer.
 
 #### Supported Modifiers
 * Bi Modifier (CPU)
-* Low-Dynamic-Range (LDR) Image Normal Map Modifier (CPU & GPU)
+* Low-Dynamic-Range (LDR) Image Normal Map Modifier (CPU & GPU) (WIP)
+* Low-Dynamic Range (LDR) Image Steep Parallax Map Modifier (CPU) (WIP)
 * No-Op Modifier (CPU & GPU)
-* Simplex Noise Normal Map Modifier (CPU & GPU)
+* Simplex Noise Normal Map Modifier (CPU & GPU) (WIP)
 
 #### Supported Shapes
 * Compound Shape (CPU)
 * Cone (CPU & GPU)
 * Constructive Solid Geometry (CSG) (CPU)
-* Curve (CPU)
+* Curve (CPU) (WIP)
 * Cylinder (CPU & GPU)
 * Disk (CPU & GPU)
 * Hyperboloid (CPU & GPU)

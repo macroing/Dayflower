@@ -1015,7 +1015,7 @@ public final class TriangleMesh3D implements Shape3D {
 					indexedObjectModel1.addNormal(normal);
 					indexedObjectModel1.addObjectName(objectName);
 					indexedObjectModel1.addPosition(position);
-					indexedObjectModel1.addTangent(new Vector3D());
+//					indexedObjectModel1.addTangent(new Vector3D());
 					indexedObjectModel1.addTextureCoordinates(textureCoordinates);
 					
 					return Integer.valueOf(indexedObjectModel1.getPositionCount() - 1);
@@ -1035,11 +1035,11 @@ public final class TriangleMesh3D implements Shape3D {
 				}
 			}
 			
-			indexedObjectModel1.calculateTangents();
+//			indexedObjectModel1.calculateTangents();
 			
-			for(int i = 0; i < indexedObjectModel0.getPositionCount(); i++) {
-				indexedObjectModel0.addTangent(indexedObjectModel1.getTangent(normalModelIndices1.get(Integer.valueOf(i)).intValue()));
-			}
+//			for(int i = 0; i < indexedObjectModel0.getPositionCount(); i++) {
+//				indexedObjectModel0.addTangent(indexedObjectModel1.getTangent(normalModelIndices1.get(Integer.valueOf(i)).intValue()));
+//			}
 			
 			return indexedObjectModel0;
 		}
@@ -1151,7 +1151,7 @@ public final class TriangleMesh3D implements Shape3D {
 		private final List<String> materialNames;
 		private final List<String> objectNames;
 		private final List<Vector3D> normals;
-		private final List<Vector3D> tangents;
+//		private final List<Vector3D> tangents;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -1163,7 +1163,7 @@ public final class TriangleMesh3D implements Shape3D {
 			this.materialNames = new ArrayList<>();
 			this.objectNames = new ArrayList<>();
 			this.normals = new ArrayList<>();
-			this.tangents = new ArrayList<>();
+//			this.tangents = new ArrayList<>();
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1204,9 +1204,9 @@ public final class TriangleMesh3D implements Shape3D {
 			return this.normals.get(index);
 		}
 		
-		public Vector3D getTangent(final int index) {
-			return this.tangents.get(index);
-		}
+//		public Vector3D getTangent(final int index) {
+//			return this.tangents.get(index);
+//		}
 		
 		public int getPositionCount() {
 			return this.positions.size();
@@ -1236,9 +1236,9 @@ public final class TriangleMesh3D implements Shape3D {
 			this.positions.add(Objects.requireNonNull(position, "position == null"));
 		}
 		
-		public void addTangent(final Vector3D tangent) {
-			this.tangents.add(Objects.requireNonNull(tangent, "tangent == null"));
-		}
+//		public void addTangent(final Vector3D tangent) {
+//			this.tangents.add(Objects.requireNonNull(tangent, "tangent == null"));
+//		}
 		
 		public void addTextureCoordinates(final Point2D textureCoordinates) {
 			this.textureCoordinates.add(Objects.requireNonNull(textureCoordinates, "textureCoordinates == null"));
@@ -1264,6 +1264,7 @@ public final class TriangleMesh3D implements Shape3D {
 			}
 		}
 		
+		/*
 		public void calculateTangents() {
 			for(int i = 0; i < this.indices.size(); i += 3) {
 				final int indexA = this.indices.get(i + 0).intValue();
@@ -1283,7 +1284,7 @@ public final class TriangleMesh3D implements Shape3D {
 				
 				final double x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
 				final double y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
-				final double z = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
+				final double z = fraction * (deltaACV * edgeAB.getZ() - deltaABV * edgeAC.getZ());
 				
 				final Vector3D tangent = new Vector3D(x, y, z);
 				
@@ -1296,6 +1297,7 @@ public final class TriangleMesh3D implements Shape3D {
 				this.tangents.set(i, Vector3D.normalize(this.tangents.get(i)));
 			}
 		}
+		*/
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

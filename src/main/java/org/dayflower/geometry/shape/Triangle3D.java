@@ -224,6 +224,70 @@ public final class Triangle3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns the bitangent of this {@code Triangle3D} instance.
+	 * 
+	 * @return the bitangent of this {@code Triangle3D} instance
+	 */
+	public Vector3D calculateBitangent() {
+		final Point2D textureCoordinatesA = this.a.getTextureCoordinates();
+		final Point2D textureCoordinatesB = this.b.getTextureCoordinates();
+		final Point2D textureCoordinatesC = this.c.getTextureCoordinates();
+		
+		final Point4D positionA = this.a.getPosition();
+		final Point4D positionB = this.b.getPosition();
+		final Point4D positionC = this.c.getPosition();
+		
+		final Vector3D edgeAB = Vector3D.direction(positionA, positionB);
+		final Vector3D edgeAC = Vector3D.direction(positionA, positionC);
+		
+		final double deltaABU = textureCoordinatesB.getU() - textureCoordinatesA.getU();
+		final double deltaABV = textureCoordinatesB.getV() - textureCoordinatesA.getV();
+		final double deltaACU = textureCoordinatesC.getU() - textureCoordinatesA.getU();
+		final double deltaACV = textureCoordinatesC.getV() - textureCoordinatesA.getV();
+		
+		final double dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
+		final double fraction = dividend < -0.0D || dividend > +0.0D ? 1.0D / dividend : 0.0D;
+		
+		final double x = fraction * (-deltaACU * edgeAB.getX() + deltaABU * edgeAC.getX());
+		final double y = fraction * (-deltaACU * edgeAB.getY() + deltaABU * edgeAC.getY());
+		final double z = fraction * (-deltaACU * edgeAB.getZ() + deltaABU * edgeAC.getZ());
+		
+		return Vector3D.normalize(new Vector3D(x, y, z));
+	}
+	
+	/**
+	 * Returns the tangent of this {@code Triangle3D} instance.
+	 * 
+	 * @return the tangent of this {@code Triangle3D} instance
+	 */
+	public Vector3D calculateTangent() {
+		final Point2D textureCoordinatesA = this.a.getTextureCoordinates();
+		final Point2D textureCoordinatesB = this.b.getTextureCoordinates();
+		final Point2D textureCoordinatesC = this.c.getTextureCoordinates();
+		
+		final Point4D positionA = this.a.getPosition();
+		final Point4D positionB = this.b.getPosition();
+		final Point4D positionC = this.c.getPosition();
+		
+		final Vector3D edgeAB = Vector3D.direction(positionA, positionB);
+		final Vector3D edgeAC = Vector3D.direction(positionA, positionC);
+		
+		final double deltaABU = textureCoordinatesB.getU() - textureCoordinatesA.getU();
+		final double deltaABV = textureCoordinatesB.getV() - textureCoordinatesA.getV();
+		final double deltaACU = textureCoordinatesC.getU() - textureCoordinatesA.getU();
+		final double deltaACV = textureCoordinatesC.getV() - textureCoordinatesA.getV();
+		
+		final double dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
+		final double fraction = dividend < -0.0D || dividend > +0.0D ? 1.0D / dividend : 0.0D;
+		
+		final double x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
+		final double y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
+		final double z = fraction * (deltaACV * edgeAB.getZ() - deltaABV * edgeAC.getZ());
+		
+		return Vector3D.normalize(new Vector3D(x, y, z));
+	}
+	
+	/**
 	 * Returns the surface normal associated with this {@code Triangle3D} instance.
 	 * 
 	 * @return the surface normal associated with this {@code Triangle3D} instance

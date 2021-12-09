@@ -224,6 +224,70 @@ public final class Triangle3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns the bitangent of this {@code Triangle3F} instance.
+	 * 
+	 * @return the bitangent of this {@code Triangle3F} instance
+	 */
+	public Vector3F calculateBitangent() {
+		final Point2F textureCoordinatesA = this.a.getTextureCoordinates();
+		final Point2F textureCoordinatesB = this.b.getTextureCoordinates();
+		final Point2F textureCoordinatesC = this.c.getTextureCoordinates();
+		
+		final Point4F positionA = this.a.getPosition();
+		final Point4F positionB = this.b.getPosition();
+		final Point4F positionC = this.c.getPosition();
+		
+		final Vector3F edgeAB = Vector3F.direction(positionA, positionB);
+		final Vector3F edgeAC = Vector3F.direction(positionA, positionC);
+		
+		final float deltaABU = textureCoordinatesB.getU() - textureCoordinatesA.getU();
+		final float deltaABV = textureCoordinatesB.getV() - textureCoordinatesA.getV();
+		final float deltaACU = textureCoordinatesC.getU() - textureCoordinatesA.getU();
+		final float deltaACV = textureCoordinatesC.getV() - textureCoordinatesA.getV();
+		
+		final float dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
+		final float fraction = dividend < -0.0F || dividend > +0.0F ? 1.0F / dividend : 0.0F;
+		
+		final float x = fraction * (-deltaACU * edgeAB.getX() + deltaABU * edgeAC.getX());
+		final float y = fraction * (-deltaACU * edgeAB.getY() + deltaABU * edgeAC.getY());
+		final float z = fraction * (-deltaACU * edgeAB.getZ() + deltaABU * edgeAC.getZ());
+		
+		return Vector3F.normalize(new Vector3F(x, y, z));
+	}
+	
+	/**
+	 * Returns the tangent of this {@code Triangle3F} instance.
+	 * 
+	 * @return the tangent of this {@code Triangle3F} instance
+	 */
+	public Vector3F calculateTangent() {
+		final Point2F textureCoordinatesA = this.a.getTextureCoordinates();
+		final Point2F textureCoordinatesB = this.b.getTextureCoordinates();
+		final Point2F textureCoordinatesC = this.c.getTextureCoordinates();
+		
+		final Point4F positionA = this.a.getPosition();
+		final Point4F positionB = this.b.getPosition();
+		final Point4F positionC = this.c.getPosition();
+		
+		final Vector3F edgeAB = Vector3F.direction(positionA, positionB);
+		final Vector3F edgeAC = Vector3F.direction(positionA, positionC);
+		
+		final float deltaABU = textureCoordinatesB.getU() - textureCoordinatesA.getU();
+		final float deltaABV = textureCoordinatesB.getV() - textureCoordinatesA.getV();
+		final float deltaACU = textureCoordinatesC.getU() - textureCoordinatesA.getU();
+		final float deltaACV = textureCoordinatesC.getV() - textureCoordinatesA.getV();
+		
+		final float dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
+		final float fraction = dividend < -0.0F || dividend > +0.0F ? 1.0F / dividend : 0.0F;
+		
+		final float x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
+		final float y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
+		final float z = fraction * (deltaACV * edgeAB.getZ() - deltaABV * edgeAC.getZ());
+		
+		return Vector3F.normalize(new Vector3F(x, y, z));
+	}
+	
+	/**
 	 * Returns the surface normal associated with this {@code Triangle3F} instance.
 	 * 
 	 * @return the surface normal associated with this {@code Triangle3F} instance

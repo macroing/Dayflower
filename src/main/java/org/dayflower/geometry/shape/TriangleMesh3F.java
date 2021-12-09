@@ -1015,7 +1015,7 @@ public final class TriangleMesh3F implements Shape3F {
 					indexedObjectModel1.addNormal(normal);
 					indexedObjectModel1.addObjectName(objectName);
 					indexedObjectModel1.addPosition(position);
-					indexedObjectModel1.addTangent(new Vector3F());
+//					indexedObjectModel1.addTangent(new Vector3F());
 					indexedObjectModel1.addTextureCoordinates(textureCoordinates);
 					
 					return Integer.valueOf(indexedObjectModel1.getPositionCount() - 1);
@@ -1035,11 +1035,11 @@ public final class TriangleMesh3F implements Shape3F {
 				}
 			}
 			
-			indexedObjectModel1.calculateTangents();
+//			indexedObjectModel1.calculateTangents();
 			
-			for(int i = 0; i < indexedObjectModel0.getPositionCount(); i++) {
-				indexedObjectModel0.addTangent(indexedObjectModel1.getTangent(normalModelIndices1.get(Integer.valueOf(i)).intValue()));
-			}
+//			for(int i = 0; i < indexedObjectModel0.getPositionCount(); i++) {
+//				indexedObjectModel0.addTangent(indexedObjectModel1.getTangent(normalModelIndices1.get(Integer.valueOf(i)).intValue()));
+//			}
 			
 			return indexedObjectModel0;
 		}
@@ -1151,7 +1151,7 @@ public final class TriangleMesh3F implements Shape3F {
 		private final List<String> materialNames;
 		private final List<String> objectNames;
 		private final List<Vector3F> normals;
-		private final List<Vector3F> tangents;
+//		private final List<Vector3F> tangents;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -1163,7 +1163,7 @@ public final class TriangleMesh3F implements Shape3F {
 			this.materialNames = new ArrayList<>();
 			this.objectNames = new ArrayList<>();
 			this.normals = new ArrayList<>();
-			this.tangents = new ArrayList<>();
+//			this.tangents = new ArrayList<>();
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1204,9 +1204,9 @@ public final class TriangleMesh3F implements Shape3F {
 			return this.normals.get(index);
 		}
 		
-		public Vector3F getTangent(final int index) {
-			return this.tangents.get(index);
-		}
+//		public Vector3F getTangent(final int index) {
+//			return this.tangents.get(index);
+//		}
 		
 		public int getPositionCount() {
 			return this.positions.size();
@@ -1236,9 +1236,9 @@ public final class TriangleMesh3F implements Shape3F {
 			this.positions.add(Objects.requireNonNull(position, "position == null"));
 		}
 		
-		public void addTangent(final Vector3F tangent) {
-			this.tangents.add(Objects.requireNonNull(tangent, "tangent == null"));
-		}
+//		public void addTangent(final Vector3F tangent) {
+//			this.tangents.add(Objects.requireNonNull(tangent, "tangent == null"));
+//		}
 		
 		public void addTextureCoordinates(final Point2F textureCoordinates) {
 			this.textureCoordinates.add(Objects.requireNonNull(textureCoordinates, "textureCoordinates == null"));
@@ -1264,6 +1264,7 @@ public final class TriangleMesh3F implements Shape3F {
 			}
 		}
 		
+		/*
 		public void calculateTangents() {
 			for(int i = 0; i < this.indices.size(); i += 3) {
 				final int indexA = this.indices.get(i + 0).intValue();
@@ -1283,7 +1284,7 @@ public final class TriangleMesh3F implements Shape3F {
 				
 				final float x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
 				final float y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
-				final float z = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
+				final float z = fraction * (deltaACV * edgeAB.getZ() - deltaABV * edgeAC.getZ());
 				
 				final Vector3F tangent = new Vector3F(x, y, z);
 				
@@ -1296,6 +1297,7 @@ public final class TriangleMesh3F implements Shape3F {
 				this.tangents.set(i, Vector3F.normalize(this.tangents.get(i)));
 			}
 		}
+		*/
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

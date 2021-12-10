@@ -30,6 +30,7 @@ import static org.dayflower.utility.Floats.sqrt;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
@@ -52,6 +53,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	/**
 	 * The ID of this {@code BoundingSphere3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,6 +73,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public BoundingSphere3F() {
 		this(1.0F);
 	}
@@ -87,6 +90,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @param radius the radius of this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public BoundingSphere3F(final float radius) {
 		this(radius, new Point3F());
 	}
@@ -100,6 +104,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * @param center the center of this {@code BoundingSphere3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public BoundingSphere3F(final float radius, final Point3F center) {
 		this.radius = radius;
 		this.center = Point3F.getCached(Objects.requireNonNull(center, "center == null"));
@@ -118,6 +123,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * @return a new {@code BoundingSphere3F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingSphere3F transform(final Matrix44F matrix) {
 		final Point3F center = Point3F.transformAndDivide(matrix, this.center);
@@ -140,6 +146,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @return the center of this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F getCenter() {
 		return this.center;
 	}
@@ -153,6 +160,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * @return a {@code Point3F} instance that represents the closest point to {@code point} and is contained in this {@code BoundingSphere3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Point3F getClosestPointTo(final Point3F point) {
 		final Point3F surfaceIntersectionPoint = Point3F.add(this.center, Vector3F.directionNormalized(this.center, point), this.radius);
@@ -164,10 +172,11 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	}
 	
 	/**
-	 * Returns a {@link Point3F} with the largest component values that are contained in this {@code BoundingSphere3F} instance.
+	 * Returns a {@link Point3F} with the largest component values needed to contain this {@code BoundingSphere3F} instance.
 	 * 
-	 * @return a {@code Point3F} with the largest component values that are contained in this {@code BoundingSphere3F} instance
+	 * @return a {@code Point3F} with the largest component values needed to contain this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Point3F getMaximum() {
 		return Point3F.add(this.center, this.radius);
@@ -178,6 +187,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @return a {@code Point3F} with the smallest component values that are contained in this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Point3F getMinimum() {
 		return Point3F.subtract(this.center, this.radius);
@@ -188,6 +198,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @return a {@code String} representation of this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new BoundingSphere3F(%+.10f, %s)", Float.valueOf(this.radius), this.center);
@@ -214,6 +225,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -240,6 +252,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code BoundingSphere3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
 		return Point3F.distanceSquared(this.center, point) <= this.radius * this.radius;
@@ -253,6 +266,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * @param object the {@code Object} to compare to this {@code BoundingSphere3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BoundingSphere3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -273,6 +287,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @return the radius of this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getRadius() {
 		return this.radius;
 	}
@@ -282,6 +297,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @return the squared radius of this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getRadiusSquared() {
 		return this.radius * this.radius;
 	}
@@ -291,6 +307,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @return the surface area of this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		return PI_MULTIPLIED_BY_4 * getRadiusSquared();
@@ -301,6 +318,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @return the volume of this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getVolume() {
 		return 4.0F / 3.0F * PI * pow(this.radius, 3.0F);
@@ -319,6 +337,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * @return {@code t}, the parametric distance from {@code ray} to this {@code BoundingSphere3F} instance, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F origin = ray.getOrigin();
@@ -348,6 +367,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -358,6 +378,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * 
 	 * @return a hash code for this {@code BoundingSphere3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Float.valueOf(this.radius));
@@ -374,6 +395,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

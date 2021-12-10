@@ -20,8 +20,6 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Doubles.isNaN;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
-
 /**
  * A {@code BoundingVolume3D} is a 3-dimensional extension of {@link BoundingVolume} that adds additional methods that operates on {@code double}-based data types.
  * <p>
@@ -42,7 +40,6 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * @return a new {@code BoundingVolume3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	BoundingVolume3D transform(final Matrix44D matrix);
 	
 	/**
@@ -54,23 +51,20 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * @return a {@code Point3D} instance that represents the closest point to {@code point} and is contained in this {@code BoundingVolume3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	Point3D getClosestPointTo(final Point3D point);
 	
 	/**
-	 * Returns a {@link Point3D} with the largest component values that are contained in this {@code BoundingVolume3D} instance.
+	 * Returns a {@link Point3D} with the largest component values needed to contain this {@code BoundingVolume3D} instance.
 	 * 
-	 * @return a {@code Point3D} with the largest component values that are contained in this {@code BoundingVolume3D} instance
+	 * @return a {@code Point3D} with the largest component values needed to contain this {@code BoundingVolume3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	Point3D getMaximum();
 	
 	/**
-	 * Returns a {@link Point3D} with the smallest component values that are contained in this {@code BoundingVolume3D} instance.
+	 * Returns a {@link Point3D} with the smallest component values needed to contain this {@code BoundingVolume3D} instance.
 	 * 
-	 * @return a {@code Point3D} with the smallest component values that are contained in this {@code BoundingVolume3D} instance
+	 * @return a {@code Point3D} with the smallest component values needed to contain this {@code BoundingVolume3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	Point3D getMinimum();
 	
 	/**
@@ -82,7 +76,6 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code BoundingVolume3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	boolean contains(final Point3D point);
 	
 	/**
@@ -90,7 +83,6 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * 
 	 * @return the surface area of this {@code BoundingVolume3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	double getSurfaceArea();
 	
 	/**
@@ -98,7 +90,6 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * 
 	 * @return the volume of this {@code BoundingVolume3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	double getVolume();
 	
 	/**
@@ -114,7 +105,6 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * @return {@code t}, the parametric distance from {@code ray} to this {@code BoundingVolume3D} instance, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	double intersection(final Ray3D ray, final double tMinimum, final double tMaximum);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +114,6 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * 
 	 * @return a {@code Point3D} with the component values in the middle of this {@code BoundingVolume3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	default Point3D getMidpoint() {
 		return Point3D.midpoint(getMaximum(), getMinimum());
 	}
@@ -140,7 +129,6 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * @return {@code true} if, and only if, {@code boundingVolume} intersects this {@code BoundingVolume3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default boolean intersects(final BoundingVolume3D boundingVolume) {
 		return contains(boundingVolume.getClosestPointTo(getMidpoint()));
 	}
@@ -158,7 +146,6 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * @return {@code true} if, and only if, {@code ray} intersects this {@code BoundingVolume3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		return !isNaN(intersection(ray, tMinimum, tMaximum));
 	}

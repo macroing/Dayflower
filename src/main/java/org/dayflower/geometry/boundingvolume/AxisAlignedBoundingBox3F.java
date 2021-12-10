@@ -24,6 +24,7 @@ import static org.dayflower.utility.Floats.min;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
@@ -47,6 +48,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	/**
 	 * The ID of this {@code AxisAlignedBoundingBox3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +68,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public AxisAlignedBoundingBox3F() {
 		this(new Point3F(-0.5F, -0.5F, -0.5F), new Point3F(0.5F, 0.5F, 0.5F));
 	}
@@ -79,6 +82,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @param b a reference {@code Point3F}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public AxisAlignedBoundingBox3F(final Point3F a, final Point3F b) {
 		this.maximum = Point3F.getCached(Point3F.maximum(a, b));
 		this.minimum = Point3F.getCached(Point3F.minimum(a, b));
@@ -97,6 +101,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return a new {@code AxisAlignedBoundingBox3F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public AxisAlignedBoundingBox3F transform(final Matrix44F matrix) {
 		final float maximumX = this.maximum.getX();
@@ -137,6 +142,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return a {@code Point3F} instance that represents the closest point to {@code point} and is contained in this {@code AxisAlignedBoundingBox3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Point3F getClosestPointTo(final Point3F point) {
 		final float maximumX = this.maximum.getX();
@@ -155,20 +161,22 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	}
 	
 	/**
-	 * Returns a {@link Point3F} with the largest component values that are contained in this {@code AxisAlignedBoundingBox3F} instance.
+	 * Returns a {@link Point3F} with the largest component values needed to contain this {@code AxisAlignedBoundingBox3F} instance.
 	 * 
-	 * @return a {@code Point3F} with the largest component values that are contained in this {@code AxisAlignedBoundingBox3F} instance
+	 * @return a {@code Point3F} with the largest component values needed to contain this {@code AxisAlignedBoundingBox3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Point3F getMaximum() {
 		return this.maximum;
 	}
 	
 	/**
-	 * Returns a {@link Point3F} with the smallest component values that are contained in this {@code AxisAlignedBoundingBox3F} instance.
+	 * Returns a {@link Point3F} with the smallest component values needed to contain this {@code AxisAlignedBoundingBox3F} instance.
 	 * 
-	 * @return a {@code Point3F} with the smallest component values that are contained in this {@code AxisAlignedBoundingBox3F} instance
+	 * @return a {@code Point3F} with the smallest component values needed to contain this {@code AxisAlignedBoundingBox3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Point3F getMinimum() {
 		return this.minimum;
@@ -179,6 +187,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return a {@code String} representation of this {@code AxisAlignedBoundingBox3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new AxisAlignedBoundingBox3F(%s, %s)", this.maximum, this.minimum);
@@ -205,6 +214,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -235,6 +245,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code AxisAlignedBoundingBox3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
 		return point.getX() >= this.minimum.getX() && point.getX() <= this.maximum.getX() && point.getY() >= this.minimum.getY() && point.getY() <= this.maximum.getY() && point.getZ() >= this.minimum.getZ() && point.getZ() <= this.maximum.getZ();
@@ -248,6 +259,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @param object the {@code Object} to compare to this {@code AxisAlignedBoundingBox3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code AxisAlignedBoundingBox3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -268,6 +280,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return the surface area of this {@code AxisAlignedBoundingBox3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		final float x = this.maximum.getX() - this.minimum.getX();
@@ -283,6 +296,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return the volume of this {@code AxisAlignedBoundingBox3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getVolume() {
 		final float x = this.maximum.getX() - this.minimum.getX();
@@ -306,6 +320,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return {@code t}, the parametric distance from {@code ray} to this {@code AxisAlignedBoundingBox3F} instance, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		/*
@@ -377,6 +392,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code AxisAlignedBoundingBox3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -387,6 +403,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return a hash code for this {@code AxisAlignedBoundingBox3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.maximum, this.minimum);
@@ -403,6 +420,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -427,6 +445,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return an {@code AxisAlignedBoundingBox3F} instance that is an expanded version of {@code axisAlignedBoundingBox}
 	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AxisAlignedBoundingBox3F expand(final AxisAlignedBoundingBox3F axisAlignedBoundingBox, final float delta) {
 		final Point3F maximum = Point3F.add(axisAlignedBoundingBox.maximum, delta);
 		final Point3F minimum = Point3F.subtract(axisAlignedBoundingBox.minimum, delta);
@@ -446,6 +465,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 1}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AxisAlignedBoundingBox3F fromPoints(final Point3F... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 1, Integer.MAX_VALUE, "points.length");
@@ -471,6 +491,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code boundingVolumeLHS} and {@code boundingVolumeRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code boundingVolumeLHS} or {@code boundingVolumeRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AxisAlignedBoundingBox3F union(final BoundingVolume3F boundingVolumeLHS, final BoundingVolume3F boundingVolumeRHS) {
 		final Point3F maximum = Point3F.maximum(boundingVolumeLHS.getMaximum(), boundingVolumeRHS.getMaximum());
 		final Point3F minimum = Point3F.minimum(boundingVolumeLHS.getMinimum(), boundingVolumeRHS.getMinimum());
@@ -488,6 +509,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code pointRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code axisAlignedBoundingBoxLHS} or {@code pointRHS} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static AxisAlignedBoundingBox3F union(final AxisAlignedBoundingBox3F axisAlignedBoundingBoxLHS, final Point3F pointRHS) {
 		final Point3F maximum = Point3F.maximum(axisAlignedBoundingBoxLHS.maximum, pointRHS);
 		final Point3F minimum = Point3F.minimum(axisAlignedBoundingBoxLHS.minimum, pointRHS);

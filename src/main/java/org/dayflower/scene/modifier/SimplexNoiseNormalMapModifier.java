@@ -39,7 +39,7 @@ public final class SimplexNoiseNormalMapModifier implements Modifier {
 	/**
 	 * The ID of this {@code SimplexNoiseNormalMapModifier} class.
 	 */
-	public static final int ID = 5;
+	public static final int ID = 4;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

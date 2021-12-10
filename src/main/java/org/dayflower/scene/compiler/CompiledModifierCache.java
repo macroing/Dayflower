@@ -25,9 +25,9 @@ import java.util.Objects;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Vector2F;
-import org.dayflower.scene.modifier.LDRImageNormalMapModifier;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
+import org.dayflower.scene.modifier.NormalMapLDRImageModifier;
 import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
@@ -39,8 +39,8 @@ import org.dayflower.utility.ParameterArguments;
  * <p>
  * The {@code Modifier} implementations that are supported are the following:
  * <ul>
- * <li>{@link LDRImageNormalMapModifier}</li>
  * <li>{@link NoOpModifier}</li>
+ * <li>{@link NormalMapLDRImageModifier}</li>
  * <li>{@link SimplexNoiseNormalMapModifier}</li>
  * </ul>
  * <p>
@@ -51,29 +51,29 @@ import org.dayflower.utility.ParameterArguments;
  */
 public final class CompiledModifierCache {
 	/**
-	 * The offset for the angle in radians in a compiled {@link LDRImageNormalMapModifier} instance.
+	 * The offset for the angle in radians in a compiled {@link NormalMapLDRImageModifier} instance.
 	 */
-	public static final int L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_ANGLE_RADIANS = 0;
+	public static final int NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_ANGLE_RADIANS = 0;
 	
 	/**
-	 * The offset for the image in a compiled {@link LDRImageNormalMapModifier} instance.
+	 * The offset for the image in a compiled {@link NormalMapLDRImageModifier} instance.
 	 */
-	public static final int L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_IMAGE = 5;
+	public static final int NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_IMAGE = 5;
 	
 	/**
-	 * The offset for the resolution of the X-axis in a compiled {@link LDRImageNormalMapModifier} instance.
+	 * The offset for the resolution of the X-axis in a compiled {@link NormalMapLDRImageModifier} instance.
 	 */
-	public static final int L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_RESOLUTION_X = 3;
+	public static final int NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_RESOLUTION_X = 3;
 	
 	/**
-	 * The offset for the resolution of the Y-axis in a compiled {@link LDRImageNormalMapModifier} instance.
+	 * The offset for the resolution of the Y-axis in a compiled {@link NormalMapLDRImageModifier} instance.
 	 */
-	public static final int L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_RESOLUTION_Y = 4;
+	public static final int NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_RESOLUTION_Y = 4;
 	
 	/**
-	 * The offset for the {@link Vector2F} instance that represents the scale in a compiled {@link LDRImageNormalMapModifier} instance.
+	 * The offset for the {@link Vector2F} instance that represents the scale in a compiled {@link NormalMapLDRImageModifier} instance.
 	 */
-	public static final int L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_SCALE = 1;
+	public static final int NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_SCALE = 1;
 	
 	/**
 	 * The length of a compiled {@link SimplexNoiseNormalMapModifier} instance.
@@ -92,9 +92,9 @@ public final class CompiledModifierCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private float[] lDRImageNormalMapModifiers;
+	private float[] normalMapLDRImageModifiers;
 	private float[] simplexNoiseNormalMapModifiers;
-	private int[] lDRImageNormalMapModifierOffsets;
+	private int[] normalMapLDRImageModifierOffsets;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -102,33 +102,33 @@ public final class CompiledModifierCache {
 	 * Constructs a new {@code CompiledModifierCache} instance.
 	 */
 	public CompiledModifierCache() {
-		setLDRImageNormalMapModifierOffsets(new int[0]);
-		setLDRImageNormalMapModifiers(new float[0]);
+		setNormalMapLDRImageModifierOffsets(new int[0]);
+		setNormalMapLDRImageModifiers(new float[0]);
 		setSimplexNoiseNormalMapModifiers(new float[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Removes {@code lDRImageNormalMapModifier} from this {@code CompiledModifierCache} instance, if present.
+	 * Removes {@code normalMapLDRImageModifier} from this {@code CompiledModifierCache} instance, if present.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code lDRImageNormalMapModifier} was removed, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code normalMapLDRImageModifier} was removed, {@code false} otherwise.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code normalMapLDRImageModifier.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifier an {@link LDRImageNormalMapModifier} instance in compiled form
-	 * @return {@code true} if, and only if, {@code lDRImageNormalMapModifier} was removed, {@code false} otherwise
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageNormalMapModifier.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
+	 * @param normalMapLDRImageModifier a {@link NormalMapLDRImageModifier} instance in compiled form
+	 * @return {@code true} if, and only if, {@code normalMapLDRImageModifier} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code normalMapLDRImageModifier.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifier} is {@code null}
 	 */
-	public boolean removeLDRImageNormalMapModifier(final float[] lDRImageNormalMapModifier) {
-		final int absoluteOffset = getLDRImageNormalMapModifierOffsetAbsolute(lDRImageNormalMapModifier);
+	public boolean removeNormalMapLDRImageModifier(final float[] normalMapLDRImageModifier) {
+		final int absoluteOffset = getNormalMapLDRImageModifierOffsetAbsolute(normalMapLDRImageModifier);
 		
 		if(absoluteOffset != -1) {
-			setLDRImageNormalMapModifierOffsets(Structures.removeStructureOffset(getLDRImageNormalMapModifierOffsets(), absoluteOffset, lDRImageNormalMapModifier.length));
-			setLDRImageNormalMapModifiers(FloatArrays.splice(getLDRImageNormalMapModifiers(), absoluteOffset, lDRImageNormalMapModifier.length));
+			setNormalMapLDRImageModifierOffsets(Structures.removeStructureOffset(getNormalMapLDRImageModifierOffsets(), absoluteOffset, normalMapLDRImageModifier.length));
+			setNormalMapLDRImageModifiers(FloatArrays.splice(getNormalMapLDRImageModifiers(), absoluteOffset, normalMapLDRImageModifier.length));
 			
 			return true;
 		}
@@ -163,12 +163,12 @@ public final class CompiledModifierCache {
 	}
 	
 	/**
-	 * Returns a {@code float[]} that contains all {@link LDRImageNormalMapModifier} instances in compiled form that are associated with this {@code CompiledModifierCache} instance.
+	 * Returns a {@code float[]} that contains all {@link NormalMapLDRImageModifier} instances in compiled form that are associated with this {@code CompiledModifierCache} instance.
 	 * 
-	 * @return a {@code float[]} that contains all {@code LDRImageNormalMapModifier} instances in compiled form that are associated with this {@code CompiledModifierCache} instance
+	 * @return a {@code float[]} that contains all {@code NormalMapLDRImageModifier} instances in compiled form that are associated with this {@code CompiledModifierCache} instance
 	 */
-	public float[] getLDRImageNormalMapModifiers() {
-		return this.lDRImageNormalMapModifiers;
+	public float[] getNormalMapLDRImageModifiers() {
+		return this.normalMapLDRImageModifiers;
 	}
 	
 	/**
@@ -181,30 +181,30 @@ public final class CompiledModifierCache {
 	}
 	
 	/**
-	 * Adds {@code lDRImageNormalMapModifier} to this {@code CompiledModifierCache} instance, if absent.
+	 * Adds {@code normalMapLDRImageModifier} to this {@code CompiledModifierCache} instance, if absent.
 	 * <p>
-	 * Returns the relative offset to {@code lDRImageNormalMapModifier}.
+	 * Returns the relative offset to {@code normalMapLDRImageModifier}.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code normalMapLDRImageModifier.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifier an {@link LDRImageNormalMapModifier} instance in compiled form
-	 * @return the relative offset to {@code lDRImageNormalMapModifier}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageNormalMapModifier.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
+	 * @param normalMapLDRImageModifier a {@link NormalMapLDRImageModifier} instance in compiled form
+	 * @return the relative offset to {@code normalMapLDRImageModifier}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code normalMapLDRImageModifier.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifier} is {@code null}
 	 */
-	public int addLDRImageNormalMapModifier(final float[] lDRImageNormalMapModifier) {
-		final int absoluteOffsetNew = this.lDRImageNormalMapModifiers.length;
-		final int relativeOffsetOld = getLDRImageNormalMapModifierOffsetRelative(lDRImageNormalMapModifier);
-		final int relativeOffsetNew = getLDRImageNormalMapModifierCount();
+	public int addNormalMapLDRImageModifier(final float[] normalMapLDRImageModifier) {
+		final int absoluteOffsetNew = this.normalMapLDRImageModifiers.length;
+		final int relativeOffsetOld = getNormalMapLDRImageModifierOffsetRelative(normalMapLDRImageModifier);
+		final int relativeOffsetNew = getNormalMapLDRImageModifierCount();
 		
 		if(relativeOffsetOld != -1) {
 			return relativeOffsetOld;
 		}
 		
-		setLDRImageNormalMapModifierOffsets(IntArrays.merge(getLDRImageNormalMapModifierOffsets(), absoluteOffsetNew));
-		setLDRImageNormalMapModifiers(FloatArrays.merge(getLDRImageNormalMapModifiers(), lDRImageNormalMapModifier));
+		setNormalMapLDRImageModifierOffsets(IntArrays.merge(getNormalMapLDRImageModifierOffsets(), absoluteOffsetNew));
+		setNormalMapLDRImageModifiers(FloatArrays.merge(getNormalMapLDRImageModifiers(), normalMapLDRImageModifier));
 		
 		return relativeOffsetNew;
 	}
@@ -237,52 +237,52 @@ public final class CompiledModifierCache {
 	}
 	
 	/**
-	 * Returns the {@link LDRImageNormalMapModifier} count in this {@code CompiledModifierCache} instance.
+	 * Returns the {@link NormalMapLDRImageModifier} count in this {@code CompiledModifierCache} instance.
 	 * 
-	 * @return the {@code LDRImageNormalMapModifier} count in this {@code CompiledModifierCache} instance
+	 * @return the {@code NormalMapLDRImageModifier} count in this {@code CompiledModifierCache} instance
 	 */
-	public int getLDRImageNormalMapModifierCount() {
-		return this.lDRImageNormalMapModifierOffsets.length;
+	public int getNormalMapLDRImageModifierCount() {
+		return this.normalMapLDRImageModifierOffsets.length;
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code lDRImageNormalMapModifier} in this {@code CompiledModifierCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code normalMapLDRImageModifier} in this {@code CompiledModifierCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code normalMapLDRImageModifier.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifier an {@link LDRImageNormalMapModifier} instance in compiled form
-	 * @return the absolute offset of {@code lDRImageNormalMapModifier} in this {@code CompiledModifierCache} instance, or {@code -1} if it cannot be found
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageNormalMapModifier.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
+	 * @param normalMapLDRImageModifier a {@link NormalMapLDRImageModifier} instance in compiled form
+	 * @return the absolute offset of {@code normalMapLDRImageModifier} in this {@code CompiledModifierCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code normalMapLDRImageModifier.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifier} is {@code null}
 	 */
-	public int getLDRImageNormalMapModifierOffsetAbsolute(final float[] lDRImageNormalMapModifier) {
-		Objects.requireNonNull(lDRImageNormalMapModifier, "lDRImageNormalMapModifier == null");
+	public int getNormalMapLDRImageModifierOffsetAbsolute(final float[] normalMapLDRImageModifier) {
+		Objects.requireNonNull(normalMapLDRImageModifier, "normalMapLDRImageModifier == null");
 		
-		ParameterArguments.requireExact(lDRImageNormalMapModifier.length % 8, 0, "lDRImageNormalMapModifier.length % 8");
+		ParameterArguments.requireExact(normalMapLDRImageModifier.length % 8, 0, "normalMapLDRImageModifier.length % 8");
 		
-		return Structures.getStructureOffsetAbsolute(this.lDRImageNormalMapModifiers, lDRImageNormalMapModifier, this.lDRImageNormalMapModifierOffsets);
+		return Structures.getStructureOffsetAbsolute(this.normalMapLDRImageModifiers, normalMapLDRImageModifier, this.normalMapLDRImageModifierOffsets);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code lDRImageNormalMapModifier} in this {@code CompiledModifierCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code normalMapLDRImageModifier} in this {@code CompiledModifierCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code normalMapLDRImageModifier.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifier an {@link LDRImageNormalMapModifier} instance in compiled form
-	 * @return the relative offset of {@code lDRImageNormalMapModifier} in this {@code CompiledModifierCache} instance, or {@code -1} if it cannot be found
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageNormalMapModifier.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
+	 * @param normalMapLDRImageModifier a {@link NormalMapLDRImageModifier} instance in compiled form
+	 * @return the relative offset of {@code normalMapLDRImageModifier} in this {@code CompiledModifierCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code normalMapLDRImageModifier.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifier} is {@code null}
 	 */
-	public int getLDRImageNormalMapModifierOffsetRelative(final float[] lDRImageNormalMapModifier) {
-		Objects.requireNonNull(lDRImageNormalMapModifier, "lDRImageNormalMapModifier == null");
+	public int getNormalMapLDRImageModifierOffsetRelative(final float[] normalMapLDRImageModifier) {
+		Objects.requireNonNull(normalMapLDRImageModifier, "normalMapLDRImageModifier == null");
 		
-		ParameterArguments.requireExact(lDRImageNormalMapModifier.length % 8, 0, "lDRImageNormalMapModifier.length % 8");
+		ParameterArguments.requireExact(normalMapLDRImageModifier.length % 8, 0, "normalMapLDRImageModifier.length % 8");
 		
-		return Structures.getStructureOffsetRelative(this.lDRImageNormalMapModifiers, lDRImageNormalMapModifier, this.lDRImageNormalMapModifierOffsets);
+		return Structures.getStructureOffsetRelative(this.normalMapLDRImageModifiers, normalMapLDRImageModifier, this.normalMapLDRImageModifierOffsets);
 	}
 	
 	/**
@@ -335,50 +335,50 @@ public final class CompiledModifierCache {
 	}
 	
 	/**
-	 * Returns an {@code int[]} that contains the offsets for all {@link LDRImageNormalMapModifier} instances in this {@code CompiledModifierCache} instance.
+	 * Returns an {@code int[]} that contains the offsets for all {@link NormalMapLDRImageModifier} instances in this {@code CompiledModifierCache} instance.
 	 * 
-	 * @return an {@code int[]} that contains the offsets for all {@code LDRImageNormalMapModifier} instances in this {@code CompiledModifierCache} instance
+	 * @return an {@code int[]} that contains the offsets for all {@code NormalMapLDRImageModifier} instances in this {@code CompiledModifierCache} instance
 	 */
-	public int[] getLDRImageNormalMapModifierOffsets() {
-		return this.lDRImageNormalMapModifierOffsets;
+	public int[] getNormalMapLDRImageModifierOffsets() {
+		return this.normalMapLDRImageModifierOffsets;
 	}
 	
 	/**
-	 * Sets the {@code int[]} that contains the offsets for all {@link LDRImageNormalMapModifier} instances to {@code lDRImageNormalMapModifierOffsets}.
+	 * Sets the {@code int[]} that contains the offsets for all {@link NormalMapLDRImageModifier} instances to {@code normalMapLDRImageModifierOffsets}.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifierOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifierOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If at least one offset in {@code lDRImageNormalMapModifierOffsets} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If at least one offset in {@code normalMapLDRImageModifierOffsets} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifierOffsets the {@code int[]} that contains the offsets for all {@code LDRImageNormalMapModifier} instances
-	 * @throws IllegalArgumentException thrown if, and only if, at least one offset in {@code lDRImageNormalMapModifierOffsets} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifierOffsets} is {@code null}
+	 * @param normalMapLDRImageModifierOffsets the {@code int[]} that contains the offsets for all {@code NormalMapLDRImageModifier} instances
+	 * @throws IllegalArgumentException thrown if, and only if, at least one offset in {@code normalMapLDRImageModifierOffsets} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifierOffsets} is {@code null}
 	 */
-	public void setLDRImageNormalMapModifierOffsets(final int[] lDRImageNormalMapModifierOffsets) {
-		Objects.requireNonNull(lDRImageNormalMapModifierOffsets, "lDRImageNormalMapModifierOffsets == null");
+	public void setNormalMapLDRImageModifierOffsets(final int[] normalMapLDRImageModifierOffsets) {
+		Objects.requireNonNull(normalMapLDRImageModifierOffsets, "normalMapLDRImageModifierOffsets == null");
 		
-		ParameterArguments.requireRange(lDRImageNormalMapModifierOffsets, 0, Integer.MAX_VALUE, "lDRImageNormalMapModifierOffsets");
+		ParameterArguments.requireRange(normalMapLDRImageModifierOffsets, 0, Integer.MAX_VALUE, "normalMapLDRImageModifierOffsets");
 		
-		this.lDRImageNormalMapModifierOffsets = lDRImageNormalMapModifierOffsets;
+		this.normalMapLDRImageModifierOffsets = normalMapLDRImageModifierOffsets;
 	}
 	
 	/**
-	 * Sets all {@link LDRImageNormalMapModifier} instances in compiled form to {@code lDRImageNormalMapModifiers}.
+	 * Sets all {@link NormalMapLDRImageModifier} instances in compiled form to {@code normalMapLDRImageModifiers}.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifiers} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifiers} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifiers.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code normalMapLDRImageModifiers.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifiers the {@code LDRImageNormalMapModifier} instances in compiled form
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageNormalMapModifiers.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifiers} is {@code null}
+	 * @param normalMapLDRImageModifiers the {@code NormalMapLDRImageModifier} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code normalMapLDRImageModifiers.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifiers} is {@code null}
 	 */
-	public void setLDRImageNormalMapModifiers(final float[] lDRImageNormalMapModifiers) {
-		Objects.requireNonNull(lDRImageNormalMapModifiers, "lDRImageNormalMapModifiers == null");
+	public void setNormalMapLDRImageModifiers(final float[] normalMapLDRImageModifiers) {
+		Objects.requireNonNull(normalMapLDRImageModifiers, "normalMapLDRImageModifiers == null");
 		
-		ParameterArguments.requireExact(lDRImageNormalMapModifiers.length % 8, 0, "lDRImageNormalMapModifiers.length % 8");
+		ParameterArguments.requireExact(normalMapLDRImageModifiers.length % 8, 0, "normalMapLDRImageModifiers.length % 8");
 		
-		this.lDRImageNormalMapModifiers = lDRImageNormalMapModifiers;
+		this.normalMapLDRImageModifiers = normalMapLDRImageModifiers;
 	}
 	
 	/**
@@ -411,7 +411,7 @@ public final class CompiledModifierCache {
 	public void write(final Document document) {
 		document.line("CompiledModifierCache {");
 		document.indent();
-		document.linef("lDRImageNormalMapModifiers[%d]", Integer.valueOf(getLDRImageNormalMapModifierCount()));
+		document.linef("normalMapLDRImageModifiers[%d]", Integer.valueOf(getNormalMapLDRImageModifierCount()));
 		document.linef("simplexNoiseNormalMapModifiers[%d]", Integer.valueOf(getSimplexNoiseNormalMapModifierCount()));
 		document.outdent();
 		document.line("}");
@@ -431,7 +431,7 @@ public final class CompiledModifierCache {
 	public static boolean isSupported(final Modifier modifier) {
 		Objects.requireNonNull(modifier, "modifier == null");
 		
-		if(modifier instanceof LDRImageNormalMapModifier) {
+		if(modifier instanceof NormalMapLDRImageModifier) {
 			return true;
 		} else if(modifier instanceof NoOpModifier) {
 			return true;
@@ -443,37 +443,37 @@ public final class CompiledModifierCache {
 	}
 	
 	/**
-	 * Returns a {@code float[]} with {@code lDRImageNormalMapModifier} in compiled form.
+	 * Returns a {@code float[]} with {@code normalMapLDRImageModifier} in compiled form.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifier an {@link LDRImageNormalMapModifier} instance
-	 * @return a {@code float[]} with {@code lDRImageNormalMapModifier} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
+	 * @param normalMapLDRImageModifier a {@link NormalMapLDRImageModifier} instance
+	 * @return a {@code float[]} with {@code normalMapLDRImageModifier} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifier} is {@code null}
 	 */
-	public static float[] toLDRImageNormalMapModifier(final LDRImageNormalMapModifier lDRImageNormalMapModifier) {
-		final AngleF angle = lDRImageNormalMapModifier.getAngle();
+	public static float[] toNormalMapLDRImageModifier(final NormalMapLDRImageModifier normalMapLDRImageModifier) {
+		final AngleF angle = normalMapLDRImageModifier.getAngle();
 		
-		final Vector2F scale = lDRImageNormalMapModifier.getScale();
+		final Vector2F scale = normalMapLDRImageModifier.getScale();
 		
-		final int resolutionX = lDRImageNormalMapModifier.getResolutionX();
-		final int resolutionY = lDRImageNormalMapModifier.getResolutionY();
+		final int resolutionX = normalMapLDRImageModifier.getResolutionX();
+		final int resolutionY = normalMapLDRImageModifier.getResolutionY();
 		
-		final int[] image = lDRImageNormalMapModifier.getImage();
+		final int[] image = normalMapLDRImageModifier.getImage();
 		
-		final float[] array = new float[getLDRImageNormalMapModifierLength(lDRImageNormalMapModifier)];
+		final float[] array = new float[getNormalMapLDRImageModifierLength(normalMapLDRImageModifier)];
 		
-		array[L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_ANGLE_RADIANS] = angle.getRadians();
-		array[L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_SCALE + 0] = scale.getU();
-		array[L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_SCALE + 1] = scale.getV();
-		array[L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_RESOLUTION_X] = resolutionX;
-		array[L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_RESOLUTION_Y] = resolutionY;
+		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_ANGLE_RADIANS] = angle.getRadians();
+		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_SCALE + 0] = scale.getU();
+		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_SCALE + 1] = scale.getV();
+		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_RESOLUTION_X] = resolutionX;
+		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_RESOLUTION_Y] = resolutionY;
 		
 		for(int i = 0; i < image.length; i++) {
-			array[L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_IMAGE + i] = image[i];
+			array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_IMAGE + i] = image[i];
 		}
 		
-		for(int i = L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_IMAGE + image.length; i < array.length; i++) {
+		for(int i = NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_IMAGE + image.length; i < array.length; i++) {
 			array[i] = 0.0F;
 		}
 		
@@ -481,16 +481,16 @@ public final class CompiledModifierCache {
 	}
 	
 	/**
-	 * Returns a {@code float[]} with all {@link LDRImageNormalMapModifier} instances in {@code lDRImageNormalMapModifiers} in compiled form.
+	 * Returns a {@code float[]} with all {@link NormalMapLDRImageModifier} instances in {@code normalMapLDRImageModifiers} in compiled form.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifiers} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifiers} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifiers a {@code List} of {@code LDRImageNormalMapModifier} instances
-	 * @return a {@code float[]} with all {@code LDRImageNormalMapModifier} instances in {@code lDRImageNormalMapModifiers} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifiers} or at least one of its elements are {@code null}
+	 * @param normalMapLDRImageModifiers a {@code List} of {@code NormalMapLDRImageModifier} instances
+	 * @return a {@code float[]} with all {@code NormalMapLDRImageModifier} instances in {@code normalMapLDRImageModifiers} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifiers} or at least one of its elements are {@code null}
 	 */
-	public static float[] toLDRImageNormalMapModifiers(final List<LDRImageNormalMapModifier> lDRImageNormalMapModifiers) {
-		return FloatArrays.convert(lDRImageNormalMapModifiers, lDRImageNormalMapModifier -> toLDRImageNormalMapModifier(lDRImageNormalMapModifier));
+	public static float[] toNormalMapLDRImageModifiers(final List<NormalMapLDRImageModifier> normalMapLDRImageModifiers) {
+		return FloatArrays.convert(normalMapLDRImageModifiers, normalMapLDRImageModifier -> toNormalMapLDRImageModifier(normalMapLDRImageModifier));
 	}
 	
 	/**
@@ -529,40 +529,40 @@ public final class CompiledModifierCache {
 	}
 	
 	/**
-	 * Returns the length of {@code lDRImageNormalMapModifier} in compiled form.
+	 * Returns the length of {@code normalMapLDRImageModifier} in compiled form.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifier an {@link LDRImageNormalMapModifier} instance
-	 * @return the length of {@code lDRImageNormalMapModifier} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
+	 * @param normalMapLDRImageModifier a {@link NormalMapLDRImageModifier} instance
+	 * @return the length of {@code normalMapLDRImageModifier} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifier} is {@code null}
 	 */
-	public static int getLDRImageNormalMapModifierLength(final LDRImageNormalMapModifier lDRImageNormalMapModifier) {
+	public static int getNormalMapLDRImageModifierLength(final NormalMapLDRImageModifier normalMapLDRImageModifier) {
 		final int a = 5;
-		final int b = lDRImageNormalMapModifier.getResolution();
+		final int b = normalMapLDRImageModifier.getResolution();
 		final int c = padding(a + b);
 		
 		return a + b + c;
 	}
 	
 	/**
-	 * Returns an {@code int[]} with the offsets for all {@link LDRImageNormalMapModifier} instances in {@code lDRImageNormalMapModifiers} in compiled form.
+	 * Returns an {@code int[]} with the offsets for all {@link NormalMapLDRImageModifier} instances in {@code normalMapLDRImageModifiers} in compiled form.
 	 * <p>
-	 * If {@code lDRImageNormalMapModifiers} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code normalMapLDRImageModifiers} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageNormalMapModifiers a {@code List} of {@code LDRImageNormalMapModifier} instances
-	 * @return an {@code int[]} with the offsets for all {@code LDRImageNormalMapModifier} instances in {@code lDRImageNormalMapModifiers} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifiers} or at least one of its elements are {@code null}
+	 * @param normalMapLDRImageModifiers a {@code List} of {@code NormalMapLDRImageModifier} instances
+	 * @return an {@code int[]} with the offsets for all {@code NormalMapLDRImageModifier} instances in {@code normalMapLDRImageModifiers} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifiers} or at least one of its elements are {@code null}
 	 */
-	public static int[] toLDRImageNormalMapModifierOffsets(final List<LDRImageNormalMapModifier> lDRImageNormalMapModifiers) {
-		ParameterArguments.requireNonNullList(lDRImageNormalMapModifiers, "lDRImageNormalMapModifiers");
+	public static int[] toNormalMapLDRImageModifierOffsets(final List<NormalMapLDRImageModifier> normalMapLDRImageModifiers) {
+		ParameterArguments.requireNonNullList(normalMapLDRImageModifiers, "normalMapLDRImageModifiers");
 		
-		final int[] lDRImageNormalMapModifierOffsets = new int[lDRImageNormalMapModifiers.size()];
+		final int[] normalMapLDRImageModifierOffsets = new int[normalMapLDRImageModifiers.size()];
 		
-		for(int i = 0, j = 0; i < lDRImageNormalMapModifiers.size(); j += getLDRImageNormalMapModifierLength(lDRImageNormalMapModifiers.get(i)), i++) {
-			lDRImageNormalMapModifierOffsets[i] = j;
+		for(int i = 0, j = 0; i < normalMapLDRImageModifiers.size(); j += getNormalMapLDRImageModifierLength(normalMapLDRImageModifiers.get(i)), i++) {
+			normalMapLDRImageModifierOffsets[i] = j;
 		}
 		
-		return lDRImageNormalMapModifierOffsets;
+		return normalMapLDRImageModifierOffsets;
 	}
 }

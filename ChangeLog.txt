@@ -1,3 +1,17 @@
+2021-12-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method getMidpoint() to the InfiniteBoundingVolume3D and InfiniteBoundingVolume3F classes.
+	* ADD:		Add the BoundingSphere3DUnitTests, BoundingSphere3FUnitTests, InfiniteBoundingVolume3DUnitTests and InfiniteBoundingVolume3FUnitTests classes.
+	* ADD:		Add the AbstractLDRImageModifier class.
+	* CHANGE:	Update the return type of the method transform(Matrix44D) in the InfiniteBoundingVolume3D class from BoundingVolume3D to InfiniteBoundingVolume3D.
+	* CHANGE:	Update the return type of the method transform(Matrix44F) in the InfiniteBoundingVolume3F class from BoundingVolume3F to InfiniteBoundingVolume3F.
+	* CHANGE:	Update the CompiledModifierCache, CompiledSceneModifier, AbstractModifierKernel and AbstractSceneKernel classes to reflect the new name of NormalMapLDRImageModifier.
+	* CHANGE:	Update the IDs for the NoOpModifier, NormalMapLDRImageModifier, SimplexNoiseNormalMapModifier and SteepParallaxMapLDRImageModifier classes.
+	* CHANGE:	Rename the class LDRImageNormalMapModifier to NormalMapLDRImageModifier and change it such that it extends AbstractLDRImageModifier rather than implements Modifier.
+	* CHANGE:	Rename the class LDRImageSteepParallaxMapModifier to SteepParallaxMapLDRImageModifier and change it such that it extends AbstractLDRImageModifier rather than implements Modifier.
+	* REMOVE:	Remove the methods load(File), load(File, AngleF), load(File, AngleF, Vector2F), load(String), load(String, AngleF), load(String, AngleF, Vector2F), redoGammaCorrectionSRGB(LDRImageNormalMapModifier) and undoGammaCorrectionSRGB(LDRImageNormalMapModifier) from the LDRImageNormalMapModifier class. These operations can be performed by the Image API.
+	* REMOVE:	Remove the methods load(File), load(File, AngleF), load(File, AngleF, Vector2F), load(String), load(String, AngleF), load(String, AngleF, Vector2F), redoGammaCorrectionSRGB(LDRImageSteepParallaxMapModifier) and undoGammaCorrectionSRGB(LDRImageSteepParallaxMapModifier) from the LDRImageSteepParallaxMapModifier class. These operations can be performed by the Image API.
+
 2021-12-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods calculateBitangent() and calculateTangent() to the Triangle3D and Triangle3F classes.

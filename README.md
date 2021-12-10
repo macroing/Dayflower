@@ -102,10 +102,10 @@ The lists below show the main features of the renderer.
 
 #### Supported Modifiers
 * Bi Modifier (CPU)
-* Low-Dynamic-Range (LDR) Image Normal Map Modifier (CPU & GPU) (WIP)
-* Low-Dynamic Range (LDR) Image Steep Parallax Map Modifier (CPU) (WIP)
 * No-Op Modifier (CPU & GPU)
+* Normal Map Low-Dynamic-Range (LDR) Image Modifier (CPU & GPU) (WIP)
 * Simplex Noise Normal Map Modifier (CPU & GPU) (WIP)
+* Steep Parallax Map Low-Dynamic Range (LDR) Image Modifier (CPU) (WIP)
 
 #### Supported Shapes
 * Compound Shape (CPU)

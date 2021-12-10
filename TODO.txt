@@ -60,7 +60,9 @@ Scene Material API:
 
 Scene Modifier API:
 
-	* ADD:		Add an LDRImageParallaxMapModifier class.
+	* ADD:		Add a ParallaxOcclusionMapLDRImageModifier class.
+	* ADD:		Add a ParallaxMapLDRImageModifier class.
+	* ADD:		Add a ReliefParallaxMapLDRImageModifier class.
 
 Scene Texture API:
 
@@ -75,8 +77,8 @@ Test API:
 
 	* ADD:		Add Unit Tests using JUnit to the Color API.								82.9%
 	* ADD:		Add Unit Tests using JUnit to the Filter API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Geometry API.								61.3%
-	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume API.				 0.0%
+	* ADD:		Add Unit Tests using JUnit to the Geometry API.								61.5%
+	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume API.				13.0%
 	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume Hierarchy API.	 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Geometry Rasterizer API.					 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Geometry Shape API.						 0.0%
@@ -111,6 +113,6 @@ Test API:
 	* ADD:		Add Unit Tests using JUnit to the Scene Texture API.						 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Simplex API.								 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Sound API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Utility API.								42.2%
+	* ADD:		Add Unit Tests using JUnit to the Utility API.								43.3%
 	* ADD:		Add Unit Tests using JUnit to the Wavefront Material API.					 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Wavefront Object API.						 0.0%

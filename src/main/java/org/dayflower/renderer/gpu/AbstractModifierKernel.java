@@ -19,7 +19,7 @@
 package org.dayflower.renderer.gpu;
 
 import org.dayflower.scene.compiler.CompiledModifierCache;
-import org.dayflower.scene.modifier.LDRImageNormalMapModifier;
+import org.dayflower.scene.modifier.NormalMapLDRImageModifier;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
@@ -29,8 +29,8 @@ import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
  * <p>
  * The features added are the following:
  * <ul>
- * <li>{@link LDRImageNormalMapModifier}</li>
  * <li>{@link NoOpModifier}</li>
+ * <li>{@link NormalMapLDRImageModifier}</li>
  * <li>{@link SimplexNoiseNormalMapModifier}</li>
  * </ul>
  * 
@@ -39,9 +39,9 @@ import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
  */
 public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 	/**
-	 * A {@code float[]} that contains {@link LDRImageNormalMapModifier} instances.
+	 * A {@code float[]} that contains {@link NormalMapLDRImageModifier} instances.
 	 */
-	protected float[] modifierLDRImageNormalMapModifierArray;
+	protected float[] modifierNormalMapLDRImageModifierArray;
 	
 	/**
 	 * A {@code float[]} that contains {@link SimplexNoiseNormalMapModifier} instances.
@@ -49,9 +49,9 @@ public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 	protected float[] modifierSimplexNoiseNormalMapModifierArray;
 	
 	/**
-	 * An {@code int[]} that contains an offset lookup table for {@link LDRImageNormalMapModifier} instances in {@link #modifierLDRImageNormalMapModifierArray}.
+	 * An {@code int[]} that contains an offset lookup table for {@link NormalMapLDRImageModifier} instances in {@link #modifierNormalMapLDRImageModifierArray}.
 	 */
-	protected int[] modifierLDRImageNormalMapModifierOffsetArray;
+	protected int[] modifierNormalMapLDRImageModifierOffsetArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -59,8 +59,8 @@ public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 	 * Constructs a new {@code AbstractModifierKernel} instance.
 	 */
 	protected AbstractModifierKernel() {
-		this.modifierLDRImageNormalMapModifierArray = new float[1];
-		this.modifierLDRImageNormalMapModifierOffsetArray = new int[1];
+		this.modifierNormalMapLDRImageModifierArray = new float[1];
+		this.modifierNormalMapLDRImageModifierOffsetArray = new int[1];
 		this.modifierSimplexNoiseNormalMapModifierArray = new float[1];
 	}
 	
@@ -73,21 +73,23 @@ public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 	 * @param modifierOffset the offset of the {@code Modifier} instance
 	 */
 	protected final void modifierModify(final int modifierID, final int modifierOffset) {
-		if(modifierID == LDRImageNormalMapModifier.ID) {
+		if(modifierID == NoOpModifier.ID) {
+			return;
+		} else if(modifierID == NormalMapLDRImageModifier.ID) {
 			final float textureCoordinatesU = intersectionLHSGetTextureCoordinatesComponent1();
 			final float textureCoordinatesV = intersectionLHSGetTextureCoordinatesComponent2();
 			
-			final int currentModifierOffsetAbsolute = this.modifierLDRImageNormalMapModifierOffsetArray[modifierOffset];
+			final int currentModifierOffsetAbsolute = this.modifierNormalMapLDRImageModifierOffsetArray[modifierOffset];
 			
-			final float angleRadians = this.modifierLDRImageNormalMapModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_ANGLE_RADIANS];
+			final float angleRadians = this.modifierNormalMapLDRImageModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_ANGLE_RADIANS];
 			final float angleRadiansCos = cos(angleRadians);
 			final float angleRadiansSin = sin(angleRadians);
 			
-			final float scaleU = this.modifierLDRImageNormalMapModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_SCALE + 0];
-			final float scaleV = this.modifierLDRImageNormalMapModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_SCALE + 1];
+			final float scaleU = this.modifierNormalMapLDRImageModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_SCALE + 0];
+			final float scaleV = this.modifierNormalMapLDRImageModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_SCALE + 1];
 			
-			final int resolutionX = (int)(this.modifierLDRImageNormalMapModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_RESOLUTION_X]);
-			final int resolutionY = (int)(this.modifierLDRImageNormalMapModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_RESOLUTION_Y]);
+			final int resolutionX = (int)(this.modifierNormalMapLDRImageModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_RESOLUTION_X]);
+			final int resolutionY = (int)(this.modifierNormalMapLDRImageModifierArray[currentModifierOffsetAbsolute + CompiledModifierCache.NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_RESOLUTION_Y]);
 			
 			final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
 			final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
@@ -104,16 +106,16 @@ public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 			final int minimumY = (int)(floor(y));
 			final int maximumY = (int)(ceil(y));
 			
-			final int offsetImage = currentModifierOffsetAbsolute + CompiledModifierCache.L_D_R_IMAGE_NORMAL_MAP_MODIFIER_OFFSET_IMAGE;
+			final int offsetImage = currentModifierOffsetAbsolute + CompiledModifierCache.NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_IMAGE;
 			final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
 			final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
 			final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
 			final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
 			
-			final int color00RGB = (int)(this.modifierLDRImageNormalMapModifierArray[offsetColor00RGB]);
-			final int color01RGB = (int)(this.modifierLDRImageNormalMapModifierArray[offsetColor01RGB]);
-			final int color10RGB = (int)(this.modifierLDRImageNormalMapModifierArray[offsetColor10RGB]);
-			final int color11RGB = (int)(this.modifierLDRImageNormalMapModifierArray[offsetColor11RGB]);
+			final int color00RGB = (int)(this.modifierNormalMapLDRImageModifierArray[offsetColor00RGB]);
+			final int color01RGB = (int)(this.modifierNormalMapLDRImageModifierArray[offsetColor01RGB]);
+			final int color10RGB = (int)(this.modifierNormalMapLDRImageModifierArray[offsetColor10RGB]);
+			final int color11RGB = (int)(this.modifierNormalMapLDRImageModifierArray[offsetColor11RGB]);
 			
 			final float tX = x - minimumX;
 			final float tY = y - minimumY;
@@ -127,8 +129,6 @@ public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 			final float directionZ = b * 2.0F - 1.0F;
 			
 			intersectionLHSSetOrthonormalBasisSWTransform(directionX, directionY, directionZ);
-		} else if(modifierID == NoOpModifier.ID) {
-			return;
 		} else if(modifierID == SimplexNoiseNormalMapModifier.ID) {
 			final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
 			final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();

@@ -27,16 +27,16 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeCache;
 import org.dayflower.node.NodeFilter;
-import org.dayflower.scene.modifier.LDRImageNormalMapModifier;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
+import org.dayflower.scene.modifier.NormalMapLDRImageModifier;
 import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
 
 final class ModifierCache {
-	private final List<LDRImageNormalMapModifier> distinctLDRImageNormalMapModifiers;
 	private final List<NoOpModifier> distinctNoOpModifiers;
+	private final List<NormalMapLDRImageModifier> distinctNormalMapLDRImageModifiers;
 	private final List<SimplexNoiseNormalMapModifier> distinctSimplexNoiseNormalMapModifiers;
-	private final Map<LDRImageNormalMapModifier, Integer> distinctToOffsetsLDRImageNormalMapModifiers;
+	private final Map<NormalMapLDRImageModifier, Integer> distinctToOffsetsNormalMapLDRImageModifiers;
 	private final Map<SimplexNoiseNormalMapModifier, Integer> distinctToOffsetsSimplexNoiseNormalMapModifiers;
 	private final NodeCache nodeCache;
 	
@@ -44,10 +44,10 @@ final class ModifierCache {
 	
 	public ModifierCache(final NodeCache nodeCache) {
 		this.nodeCache = Objects.requireNonNull(nodeCache, "nodeCache == null");
-		this.distinctLDRImageNormalMapModifiers = new ArrayList<>();
 		this.distinctNoOpModifiers = new ArrayList<>();
+		this.distinctNormalMapLDRImageModifiers = new ArrayList<>();
 		this.distinctSimplexNoiseNormalMapModifiers = new ArrayList<>();
-		this.distinctToOffsetsLDRImageNormalMapModifiers = new LinkedHashMap<>();
+		this.distinctToOffsetsNormalMapLDRImageModifiers = new LinkedHashMap<>();
 		this.distinctToOffsetsSimplexNoiseNormalMapModifiers = new LinkedHashMap<>();
 	}
 	
@@ -56,8 +56,8 @@ final class ModifierCache {
 	public int findOffsetFor(final Modifier modifier) {
 		Objects.requireNonNull(modifier, "modifier == null");
 		
-		if(modifier instanceof LDRImageNormalMapModifier) {
-			return this.distinctToOffsetsLDRImageNormalMapModifiers.get(modifier).intValue();
+		if(modifier instanceof NormalMapLDRImageModifier) {
+			return this.distinctToOffsetsNormalMapLDRImageModifiers.get(modifier).intValue();
 		} else if(modifier instanceof NoOpModifier) {
 			return 0;
 		} else if(modifier instanceof SimplexNoiseNormalMapModifier) {
@@ -67,21 +67,21 @@ final class ModifierCache {
 		}
 	}
 	
-	public float[] toLDRImageNormalMapModifiers() {
-		return CompiledModifierCache.toLDRImageNormalMapModifiers(this.distinctLDRImageNormalMapModifiers);
+	public float[] toNormalMapLDRImageModifiers() {
+		return CompiledModifierCache.toNormalMapLDRImageModifiers(this.distinctNormalMapLDRImageModifiers);
 	}
 	
 	public float[] toSimplexNoiseNormalMapModifiers() {
 		return CompiledModifierCache.toSimplexNoiseNormalMapModifiers(this.distinctSimplexNoiseNormalMapModifiers);
 	}
 	
-	public int[] toLDRImageNormalMapModifierOffsets() {
-		return CompiledModifierCache.toLDRImageNormalMapModifierOffsets(this.distinctLDRImageNormalMapModifiers);
+	public int[] toNormalMapLDRImageModifierOffsets() {
+		return CompiledModifierCache.toNormalMapLDRImageModifierOffsets(this.distinctNormalMapLDRImageModifiers);
 	}
 	
 	public void build(final CompiledModifierCache compiledModifierCache) {
-		compiledModifierCache.setLDRImageNormalMapModifierOffsets(toLDRImageNormalMapModifierOffsets());
-		compiledModifierCache.setLDRImageNormalMapModifiers(toLDRImageNormalMapModifiers());
+		compiledModifierCache.setNormalMapLDRImageModifierOffsets(toNormalMapLDRImageModifierOffsets());
+		compiledModifierCache.setNormalMapLDRImageModifiers(toNormalMapLDRImageModifiers());
 		compiledModifierCache.setSimplexNoiseNormalMapModifiers(toSimplexNoiseNormalMapModifiers());
 	}
 	
@@ -90,29 +90,29 @@ final class ModifierCache {
 	}
 	
 	public void clear() {
-		this.distinctLDRImageNormalMapModifiers.clear();
 		this.distinctNoOpModifiers.clear();
+		this.distinctNormalMapLDRImageModifiers.clear();
 		this.distinctSimplexNoiseNormalMapModifiers.clear();
-		this.distinctToOffsetsLDRImageNormalMapModifiers.clear();
+		this.distinctToOffsetsNormalMapLDRImageModifiers.clear();
 		this.distinctToOffsetsSimplexNoiseNormalMapModifiers.clear();
 	}
 	
 	public void setup() {
-//		Add all distinct LDRImageNormalMapModifier instances:
-		this.distinctLDRImageNormalMapModifiers.clear();
-		this.distinctLDRImageNormalMapModifiers.addAll(this.nodeCache.getAllDistinct(LDRImageNormalMapModifier.class));
-		
 //		Add all distinct NoOpModifier instances:
 		this.distinctNoOpModifiers.clear();
 		this.distinctNoOpModifiers.addAll(this.nodeCache.getAllDistinct(NoOpModifier.class));
+		
+//		Add all distinct NormalMapLDRImageModifier instances:
+		this.distinctNormalMapLDRImageModifiers.clear();
+		this.distinctNormalMapLDRImageModifiers.addAll(this.nodeCache.getAllDistinct(NormalMapLDRImageModifier.class));
 		
 //		Add all distinct SimplexNoiseNormalMapModifier instances:
 		this.distinctSimplexNoiseNormalMapModifiers.clear();
 		this.distinctSimplexNoiseNormalMapModifiers.addAll(this.nodeCache.getAllDistinct(SimplexNoiseNormalMapModifier.class));
 		
-//		Create offset mappings for all distinct LDRImageNormalMapModifier instances:
-		this.distinctToOffsetsLDRImageNormalMapModifiers.clear();
-		this.distinctToOffsetsLDRImageNormalMapModifiers.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageNormalMapModifiers));
+//		Create offset mappings for all distinct NormalMapLDRImageModifier instances:
+		this.distinctToOffsetsNormalMapLDRImageModifiers.clear();
+		this.distinctToOffsetsNormalMapLDRImageModifiers.putAll(NodeFilter.mapDistinctToOffsets(this.distinctNormalMapLDRImageModifiers));
 		
 //		Create offset mappings for all distinct SimplexNoiseNormalMapModifier instances:
 		this.distinctToOffsetsSimplexNoiseNormalMapModifiers.clear();

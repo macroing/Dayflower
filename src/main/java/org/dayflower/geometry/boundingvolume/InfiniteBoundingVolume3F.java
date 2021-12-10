@@ -65,7 +65,7 @@ public final class InfiniteBoundingVolume3F implements BoundingVolume3F {
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
 	@Override
-	public BoundingVolume3F transform(final Matrix44F matrix) {
+	public InfiniteBoundingVolume3F transform(final Matrix44F matrix) {
 		Objects.requireNonNull(matrix, "matrix == null");
 		
 		return this;
@@ -88,11 +88,11 @@ public final class InfiniteBoundingVolume3F implements BoundingVolume3F {
 	}
 	
 	/**
-	 * Returns a {@link Point3F} with the largest component values that are contained in this {@code InfiniteBoundingVolume3F} instance.
+	 * Returns a {@link Point3F} with the largest component values needed to contain this {@code InfiniteBoundingVolume3F} instance.
 	 * <p>
 	 * This implementation will return {@code new Point3F(Float.POSITIVE_INFINITY)}.
 	 * 
-	 * @return a {@code Point3F} with the largest component values that are contained in this {@code InfiniteBoundingVolume3F} instance
+	 * @return a {@code Point3F} with the largest component values needed to contain this {@code InfiniteBoundingVolume3F} instance
 	 */
 	@Override
 	public Point3F getMaximum() {
@@ -100,11 +100,23 @@ public final class InfiniteBoundingVolume3F implements BoundingVolume3F {
 	}
 	
 	/**
-	 * Returns a {@link Point3F} with the smallest component values that are contained in this {@code InfiniteBoundingVolume3F} instance.
+	 * Returns a {@link Point3F} with the component values in the middle of this {@code InfiniteBoundingVolume3F} instance.
+	 * <p>
+	 * This implementation will return {@code new Point3F()}.
+	 * 
+	 * @return a {@code Point3F} with the component values in the middle of this {@code InfiniteBoundingVolume3F} instance
+	 */
+	@Override
+	public Point3F getMidpoint() {
+		return new Point3F();
+	}
+	
+	/**
+	 * Returns a {@link Point3F} with the smallest component values needed to contain this {@code InfiniteBoundingVolume3F} instance.
 	 * <p>
 	 * This implementation will return {@code new Point3F(Float.NEGATIVE_INFINITY)}.
 	 * 
-	 * @return a {@code Point3F} with the smallest component values that are contained in this {@code InfiniteBoundingVolume3F} instance
+	 * @return a {@code Point3F} with the smallest component values needed to contain this {@code InfiniteBoundingVolume3F} instance
 	 */
 	@Override
 	public Point3F getMinimum() {

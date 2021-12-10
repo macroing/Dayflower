@@ -1457,8 +1457,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.materialPolkaDotMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPolkaDotMaterials()));
 		put(super.materialSubstrateMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getSubstrateMaterials()));
 		
-		put(super.modifierLDRImageNormalMapModifierArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getLDRImageNormalMapModifiers()));
-		put(super.modifierLDRImageNormalMapModifierOffsetArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getLDRImageNormalMapModifierOffsets()));
+		put(super.modifierNormalMapLDRImageModifierArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getNormalMapLDRImageModifiers()));
+		put(super.modifierNormalMapLDRImageModifierOffsetArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getNormalMapLDRImageModifierOffsets()));
 		put(super.modifierSimplexNoiseNormalMapModifierArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getSimplexNoiseNormalMapModifiers()));
 		
 		put(super.lightIDAndOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightIDsAndOffsets()));

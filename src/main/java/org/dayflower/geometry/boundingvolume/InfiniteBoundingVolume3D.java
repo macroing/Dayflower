@@ -65,7 +65,7 @@ public final class InfiniteBoundingVolume3D implements BoundingVolume3D {
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
 	@Override
-	public BoundingVolume3D transform(final Matrix44D matrix) {
+	public InfiniteBoundingVolume3D transform(final Matrix44D matrix) {
 		Objects.requireNonNull(matrix, "matrix == null");
 		
 		return this;
@@ -88,11 +88,11 @@ public final class InfiniteBoundingVolume3D implements BoundingVolume3D {
 	}
 	
 	/**
-	 * Returns a {@link Point3D} with the largest component values that are contained in this {@code InfiniteBoundingVolume3D} instance.
+	 * Returns a {@link Point3D} with the largest component values needed to contain this {@code InfiniteBoundingVolume3D} instance.
 	 * <p>
 	 * This implementation will return {@code new Point3D(Double.POSITIVE_INFINITY)}.
 	 * 
-	 * @return a {@code Point3D} with the largest component values that are contained in this {@code InfiniteBoundingVolume3D} instance
+	 * @return a {@code Point3D} with the largest component values needed to contain this {@code InfiniteBoundingVolume3D} instance
 	 */
 	@Override
 	public Point3D getMaximum() {
@@ -100,11 +100,23 @@ public final class InfiniteBoundingVolume3D implements BoundingVolume3D {
 	}
 	
 	/**
-	 * Returns a {@link Point3D} with the smallest component values that are contained in this {@code InfiniteBoundingVolume3D} instance.
+	 * Returns a {@link Point3D} with the component values in the middle of this {@code InfiniteBoundingVolume3D} instance.
+	 * <p>
+	 * This implementation will return {@code new Point3D()}.
+	 * 
+	 * @return a {@code Point3D} with the component values in the middle of this {@code InfiniteBoundingVolume3D} instance
+	 */
+	@Override
+	public Point3D getMidpoint() {
+		return new Point3D();
+	}
+	
+	/**
+	 * Returns a {@link Point3D} with the smallest component values needed to contain this {@code InfiniteBoundingVolume3D} instance.
 	 * <p>
 	 * This implementation will return {@code new Point3D(Double.NEGATIVE_INFINITY)}.
 	 * 
-	 * @return a {@code Point3D} with the smallest component values that are contained in this {@code InfiniteBoundingVolume3D} instance
+	 * @return a {@code Point3D} with the smallest component values needed to contain this {@code InfiniteBoundingVolume3D} instance
 	 */
 	@Override
 	public Point3D getMinimum() {

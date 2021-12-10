@@ -60,9 +60,9 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
-import org.dayflower.scene.modifier.LDRImageNormalMapModifier;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
+import org.dayflower.scene.modifier.NormalMapLDRImageModifier;
 import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
@@ -374,10 +374,10 @@ public final class CompiledSceneModifier {
 	private int doAddModifier(final Modifier modifier) {
 		final CompiledModifierCache compiledModifierCache = this.compiledScene.getCompiledModifierCache();
 		
-		if(modifier instanceof LDRImageNormalMapModifier) {
-			final LDRImageNormalMapModifier lDRImageNormalMapModifier = LDRImageNormalMapModifier.class.cast(modifier);
+		if(modifier instanceof NormalMapLDRImageModifier) {
+			final NormalMapLDRImageModifier normalMapLDRImageModifier = NormalMapLDRImageModifier.class.cast(modifier);
 			
-			final int offsetRelative = compiledModifierCache.addLDRImageNormalMapModifier(CompiledModifierCache.toLDRImageNormalMapModifier(lDRImageNormalMapModifier));
+			final int offsetRelative = compiledModifierCache.addNormalMapLDRImageModifier(CompiledModifierCache.toNormalMapLDRImageModifier(normalMapLDRImageModifier));
 			
 			return offsetRelative;
 		} else if(modifier instanceof NoOpModifier) {

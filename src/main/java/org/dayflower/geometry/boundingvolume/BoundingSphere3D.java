@@ -30,7 +30,6 @@ import static org.dayflower.utility.Doubles.sqrt;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3D;
@@ -38,6 +37,7 @@ import org.dayflower.geometry.Matrix44D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Vector3D;
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
@@ -53,7 +53,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	/**
 	 * The ID of this {@code BoundingSphere3D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +72,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public BoundingSphere3D() {
 		this(1.0D);
 	}
@@ -90,7 +88,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @param radius the radius of this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public BoundingSphere3D(final double radius) {
 		this(radius, new Point3D());
 	}
@@ -104,7 +101,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * @param center the center of this {@code BoundingSphere3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public BoundingSphere3D(final double radius, final Point3D center) {
 		this.radius = radius;
 		this.center = Point3D.getCached(Objects.requireNonNull(center, "center == null"));
@@ -123,7 +119,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * @return a new {@code BoundingSphere3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public BoundingSphere3D transform(final Matrix44D matrix) {
 		final Point3D center = Point3D.transformAndDivide(matrix, this.center);
@@ -146,7 +141,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return the center of this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public Point3D getCenter() {
 		return this.center;
 	}
@@ -160,15 +154,14 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * @return a {@code Point3D} instance that represents the closest point to {@code point} and is contained in this {@code BoundingSphere3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Point3D getClosestPointTo(final Point3D point) {
 		final Point3D surfaceIntersectionPoint = Point3D.add(this.center, Vector3D.directionNormalized(this.center, point), this.radius);
 		
 		final double distanceToSurfaceIntersectionPointSquared = Point3D.distanceSquared(this.center, surfaceIntersectionPoint);
-		final double distanceToPSquared = Point3D.distanceSquared(this.center, point);
+		final double distanceToPointSquared = Point3D.distanceSquared(this.center, point);
 		
-		return distanceToSurfaceIntersectionPointSquared <= distanceToPSquared ? surfaceIntersectionPoint : point;
+		return distanceToSurfaceIntersectionPointSquared < distanceToPointSquared ? surfaceIntersectionPoint : point;
 	}
 	
 	/**
@@ -176,7 +169,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return a {@code Point3D} with the largest component values needed to contain this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Point3D getMaximum() {
 		return Point3D.add(this.center, this.radius);
@@ -187,7 +179,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return a {@code Point3D} with the smallest component values needed to contain this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Point3D getMinimum() {
 		return Point3D.subtract(this.center, this.radius);
@@ -198,10 +189,9 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return a {@code String} representation of this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new BoundingSphere3D(%+.10f, %s)", Double.valueOf(this.radius), this.center);
+		return String.format("new BoundingSphere3D(%sD, %s)", Strings.toNonScientificNotation(this.radius), this.center);
 	}
 	
 	/**
@@ -225,7 +215,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -252,7 +241,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code BoundingSphere3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3D point) {
 		return Point3D.distanceSquared(this.center, point) <= this.radius * this.radius;
@@ -266,7 +254,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * @param object the {@code Object} to compare to this {@code BoundingSphere3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BoundingSphere3D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -287,7 +274,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return the radius of this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double getRadius() {
 		return this.radius;
 	}
@@ -297,7 +283,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return the squared radius of this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double getRadiusSquared() {
 		return this.radius * this.radius;
 	}
@@ -307,7 +292,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return the surface area of this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		return PI_MULTIPLIED_BY_4 * getRadiusSquared();
@@ -318,7 +302,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return the volume of this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public double getVolume() {
 		return 4.0D / 3.0D * PI * pow(this.radius, 3.0D);
@@ -337,7 +320,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * @return {@code t}, the parametric distance from {@code ray} to this {@code BoundingSphere3D} instance, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public double intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Point3D origin = ray.getOrigin();
@@ -357,9 +339,15 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 		final double t0 = ts[0];
 		final double t1 = ts[1];
 		
-		final double t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
+		if(!isNaN(t0) && t0 > tMinimum && t0 < tMaximum) {
+			return t0;
+		}
 		
-		return t;
+		if(!isNaN(t1) && t1 > tMinimum && t1 < tMaximum) {
+			return t1;
+		}
+		
+		return Double.NaN;
 	}
 	
 	/**
@@ -367,7 +355,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -378,7 +365,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * 
 	 * @return a hash code for this {@code BoundingSphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Double.valueOf(this.radius));
@@ -395,7 +381,6 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

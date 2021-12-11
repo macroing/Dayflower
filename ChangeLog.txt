@@ -1,3 +1,11 @@
+2021-12-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the BoundingSphere3DUnitTests class.
+	* ADD:		Add unit tests to the BoundingSphere3FUnitTests class.
+	* CHANGE:	Fix a bug in the method getClosestPointTo(Point3D) in the BoundingSphere3D class. It should return the Point3D supplied as a parameter if it is the closest point.
+	* CHANGE:	Fix a bug in the method getClosestPointTo(Point3F) in the BoundingSphere3F class. It should return the Point3F supplied as a parameter if it is the closest point.
+	* CHANGE:	Update the toString() method of the BoundingSphere3D and BoundingSphere3F classes.
+
 2021-12-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method getMidpoint() to the InfiniteBoundingVolume3D and InfiniteBoundingVolume3F classes.

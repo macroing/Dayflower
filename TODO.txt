@@ -78,7 +78,7 @@ Test API:
 	* ADD:		Add Unit Tests using JUnit to the Color API.								82.9%
 	* ADD:		Add Unit Tests using JUnit to the Filter API.								 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Geometry API.								61.5%
-	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume API.				13.0%
+	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume API.				33.4%
 	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume Hierarchy API.	 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Geometry Rasterizer API.					 0.0%
 	* ADD:		Add Unit Tests using JUnit to the Geometry Shape API.						 0.0%

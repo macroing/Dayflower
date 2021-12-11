@@ -22,14 +22,24 @@ import org.dayflower.node.Node;
 import org.dayflower.node.NodeVisitor;
 
 public final class NodeVisitorMock implements NodeVisitor {
+	private final boolean isThrowingRuntimeException;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	public NodeVisitorMock() {
-		
+		this(false);
+	}
+	
+	public NodeVisitorMock(final boolean isThrowingRuntimeException) {
+		this.isThrowingRuntimeException = isThrowingRuntimeException;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
 	public void visit(final Node node) {
-		throw new RuntimeException();
+		if(this.isThrowingRuntimeException) {
+			throw new RuntimeException();
+		}
 	}
 }

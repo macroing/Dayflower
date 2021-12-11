@@ -69,7 +69,7 @@ public final class BoundingSphere3FUnitTests {
 	public void testAcceptNodeVisitor() {
 		final BoundingSphere3F boundingSphere = new BoundingSphere3F();
 		
-		assertThrows(NodeTraversalException.class, () -> boundingSphere.accept(new NodeVisitorMock()));
+		assertThrows(NodeTraversalException.class, () -> boundingSphere.accept(new NodeVisitorMock(true)));
 		assertThrows(NullPointerException.class, () -> boundingSphere.accept((NodeVisitor)(null)));
 	}
 	

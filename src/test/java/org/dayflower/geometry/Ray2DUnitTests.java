@@ -72,7 +72,7 @@ public final class Ray2DUnitTests {
 		
 		final Ray2D ray = new Ray2D(origin, direction);
 		
-		assertThrows(NodeTraversalException.class, () -> ray.accept(new NodeVisitorMock()));
+		assertThrows(NodeTraversalException.class, () -> ray.accept(new NodeVisitorMock(true)));
 		assertThrows(NullPointerException.class, () -> ray.accept((NodeVisitor)(null)));
 	}
 	

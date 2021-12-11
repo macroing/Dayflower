@@ -35,6 +35,11 @@ import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.mock.DataOutputMock;
+import org.dayflower.mock.NodeHierarchicalVisitorMock;
+import org.dayflower.mock.NodeVisitorMock;
+import org.dayflower.node.NodeHierarchicalVisitor;
+import org.dayflower.node.NodeTraversalException;
+import org.dayflower.node.NodeVisitor;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("static-method")
@@ -44,6 +49,27 @@ public final class InfiniteBoundingVolume3DUnitTests {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Test
+	public void testAcceptNodeHierarchicalVisitor() {
+		final InfiniteBoundingVolume3D infiniteBoundingVolume = new InfiniteBoundingVolume3D();
+		
+		assertTrue(infiniteBoundingVolume.accept(new NodeHierarchicalVisitorMock(node -> false,                               node -> node.equals(infiniteBoundingVolume))));
+		assertTrue(infiniteBoundingVolume.accept(new NodeHierarchicalVisitorMock(node -> node.equals(infiniteBoundingVolume), node -> node.equals(infiniteBoundingVolume))));
+		
+		assertThrows(NodeTraversalException.class, () -> infiniteBoundingVolume.accept(new NodeHierarchicalVisitorMock(null, null)));
+		assertThrows(NullPointerException.class, () -> infiniteBoundingVolume.accept((NodeHierarchicalVisitor)(null)));
+	}
+	
+	@Test
+	public void testAcceptNodeVisitor() {
+		final InfiniteBoundingVolume3D infiniteBoundingVolume = new InfiniteBoundingVolume3D();
+		
+		infiniteBoundingVolume.accept(new NodeVisitorMock());
+		
+		assertThrows(NodeTraversalException.class, () -> infiniteBoundingVolume.accept(new NodeVisitorMock(true)));
+		assertThrows(NullPointerException.class, () -> infiniteBoundingVolume.accept((NodeVisitor)(null)));
+	}
 	
 	@Test
 	public void testConstants() {

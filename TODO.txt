@@ -73,46 +73,66 @@ Simplex API:
 	* ADD:		Add Javadocs.
 	* CHANGE:	Refactor the APIs.
 
-Test API:
+Test API - Unit Testing:
 
-	* ADD:		Add Unit Tests using JUnit to the Color API.								82.9%
-	* ADD:		Add Unit Tests using JUnit to the Filter API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Geometry API.								61.5%
-	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume API.				45.2%
-	* ADD:		Add Unit Tests using JUnit to the Geometry Bounding Volume Hierarchy API.	 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Geometry Rasterizer API.					 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Geometry Shape API.						 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Image API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Java AWT Image API.						 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Java I/O API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Java Util API.							 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Java Util Concurrent Atomic API.			 0.0%
-	* ADD:		Add Unit Tests using JUnit to the JavaFX Concurrent API.					 0.0%
-	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Canvas API.					 0.0%
-	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Control API.					 0.0%
-	* ADD:		Add Unit Tests using JUnit to the JavaFX Scene Layout API.					 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Node API.									 3.9%
-	* ADD:		Add Unit Tests using JUnit to the Noise API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Parameter API.							 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Renderer API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Renderer CPU API.							 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Renderer GPU API.							 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Renderer Observer API.					 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Sampler API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene BSSRDF API.							 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene BXDF API.							 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene Compiler API.						 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene Demo API.							 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene Fresnel API.						 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene Light API.							 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene Loader API.							 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene Material API.						 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene Microfacet API.						 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene Modifier API.						 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Scene Texture API.						 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Simplex API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Sound API.								 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Utility API.								43.3%
-	* ADD:		Add Unit Tests using JUnit to the Wavefront Material API.					 0.0%
-	* ADD:		Add Unit Tests using JUnit to the Wavefront Object API.						 0.0%
+	* 100.0% - Change API
+
+	*  82.9% - Color API
+
+	*   0.0% - Filter API
+
+	*  61.5% - Geometry API
+	*  45.2% - Geometry Bounding Volume API
+	*   0.0% - Geometry Bounding Volume Hierarchy API
+	*   0.0% - Geometry Rasterizer API
+	*   0.0% - Geometry Shape API
+
+	*   0.0% - Image API
+
+	*   0.0% - Java AWT Image API
+	*   0.0% - Java I/O API
+	* 100.0% - Java Lang API
+	*   0.0% - Java Util API
+	*   0.0% - Java Util Concurrent Atomic API
+	* 100.0% - Java Util Function API
+
+	*   0.0% - JavaFX Concurrent API
+	*   0.0% - JavaFX Scene Canvas API
+	*   0.0% - JavaFX Scene Control API
+	* 100.0% - JavaFX Scene Image API
+	*   0.0% - JavaFX Scene Layout API
+
+	*   5.5% - Node API
+
+	*   0.0% - Noise API
+
+	*   0.0% - Parameter API
+
+	*   0.0% - Renderer API
+	*   0.0% - Renderer CPU API
+	*   0.0% - Renderer GPU API
+	*   0.0% - Renderer Observer API
+
+	*   0.0% - Sampler API
+
+	*   0.0% - Scene API
+	*   0.0% - Scene BSSRDF API
+	*   0.0% - Scene BXDF API
+	*   0.0% - Scene Compiler API
+	*   0.0% - Scene Demo API
+	*   0.0% - Scene Fresnel API
+	*   0.0% - Scene Light API
+	*   0.0% - Scene Loader API
+	*   0.0% - Scene Material API
+	*   0.0% - Scene Microfacet API
+	*   0.0% - Scene Modifier API
+	*   0.0% - Scene Texture API
+
+	*   0.0% - Simplex API
+
+	*   0.0% - Sound API
+
+	*  43.3% - Utility API
+
+	*   0.0% - Wavefront Material API
+	*   0.0% - Wavefront Object API

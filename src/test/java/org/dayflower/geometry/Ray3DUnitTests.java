@@ -72,7 +72,7 @@ public final class Ray3DUnitTests {
 		
 		final Ray3D ray = new Ray3D(origin, direction);
 		
-		assertThrows(NodeTraversalException.class, () -> ray.accept(new NodeVisitorMock()));
+		assertThrows(NodeTraversalException.class, () -> ray.accept(new NodeVisitorMock(true)));
 		assertThrows(NullPointerException.class, () -> ray.accept((NodeVisitor)(null)));
 	}
 	

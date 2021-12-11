@@ -1,5 +1,7 @@
 2021-12-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the AxisAlignedBoundingBox3DUnitTests and AxisAlignedBoundingBox3FUnitTests classes.
+	* ADD:		Add the BoundingSphere3DReaderUnitTests, BoundingSphere3FReaderUnitTests, InfiniteBoundingVolume3DReaderUnitTests and InfiniteBoundingVolume3FReaderUnitTests classes.
 	* ADD:		Update the StringsUnitTests class.
 	* ADD:		Add the methods toNonScientificNotationJava(double) and toNonScientificNotationJava(float) to the Strings class.
 	* ADD:		Add a null check to the method read(DataInput, int) in the AxisAlignedBoundingBox3DReader, AxisAlignedBoundingBox3FReader, BoundingSphere3DReader, BoundingSphere3FReader, DefaultBoundingVolume3DReader, DefaultBoundingVolume3FReader, InfiniteBoundingVolume3DReader and InfiniteBoundingVolume3FReader classes.

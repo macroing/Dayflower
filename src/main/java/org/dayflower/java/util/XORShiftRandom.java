@@ -64,6 +64,19 @@ public final class XORShiftRandom extends Random {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Sets the seed for this {@code XORShiftRandom} instance.
+	 * 
+	 * @param seed the new seed
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public synchronized void setSeed(final long seed) {
+		this.seed = seed;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * Returns the next pseudorandom number.
 	 * 
 	 * @param bits random bits
@@ -83,16 +96,5 @@ public final class XORShiftRandom extends Random {
 		seed &= (1L << bits) - 1L;
 		
 		return (int)(seed);
-	}
-	
-	/**
-	 * Sets the seed for this {@code XORShiftRandom} instance.
-	 * 
-	 * @param seed the new seed
-	 */
-//	TODO: Add Unit Tests!
-	@Override
-	public synchronized void setSeed(final long seed) {
-		this.seed = seed;
 	}
 }

@@ -48,7 +48,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	/**
 	 * The ID of this {@code AxisAlignedBoundingBox3F} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +67,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public AxisAlignedBoundingBox3F() {
 		this(new Point3F(-0.5F, -0.5F, -0.5F), new Point3F(0.5F, 0.5F, 0.5F));
 	}
@@ -82,7 +80,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @param b a reference {@code Point3F}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public AxisAlignedBoundingBox3F(final Point3F a, final Point3F b) {
 		this.maximum = Point3F.getCached(Point3F.maximum(a, b));
 		this.minimum = Point3F.getCached(Point3F.minimum(a, b));
@@ -165,7 +162,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return a {@code Point3F} with the largest component values needed to contain this {@code AxisAlignedBoundingBox3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Point3F getMaximum() {
 		return this.maximum;
@@ -176,7 +172,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return a {@code Point3F} with the smallest component values needed to contain this {@code AxisAlignedBoundingBox3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Point3F getMinimum() {
 		return this.minimum;
@@ -187,7 +182,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return a {@code String} representation of this {@code AxisAlignedBoundingBox3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new AxisAlignedBoundingBox3F(%s, %s)", this.maximum, this.minimum);
@@ -280,7 +274,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return the surface area of this {@code AxisAlignedBoundingBox3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		final float x = this.maximum.getX() - this.minimum.getX();
@@ -296,7 +289,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return the volume of this {@code AxisAlignedBoundingBox3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public float getVolume() {
 		final float x = this.maximum.getX() - this.minimum.getX();
@@ -392,7 +384,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code AxisAlignedBoundingBox3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -403,7 +394,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return a hash code for this {@code AxisAlignedBoundingBox3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.maximum, this.minimum);

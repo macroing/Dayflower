@@ -75,6 +75,32 @@ public final class MersenneTwisterRandom extends Random {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Sets the seed for this {@code MersenneTwisterRandom} instance.
+	 * 
+	 * @param seed the new seed
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public synchronized void setSeed(final long seed) {
+		super.setSeed(seed);
+		
+		this.mt = new int[N];
+		
+		this.mag01 = new int[2];
+		this.mag01[0] = 0x0;
+		this.mag01[1] = MATRIX_A;
+		
+		this.mt[0] = (int)(seed & 0xFFFFFFFF);
+		
+		for(this.mti = 1; this.mti < N; this.mti++) {
+			this.mt[this.mti] = (1812433253 * (this.mt[this.mti - 1] ^ (this.mt[this.mti - 1] >>> 30)) + this.mti);
+			this.mt[this.mti] &= 0xFFFFFFFF;
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * Returns the next pseudorandom number.
 	 * 
 	 * @param bits random bits
@@ -118,28 +144,4 @@ public final class MersenneTwisterRandom extends Random {
 		
 		return y >>> (32 - bits);
     }
-	
-	/**
-	 * Sets the seed for this {@code MersenneTwisterRandom} instance.
-	 * 
-	 * @param seed the new seed
-	 */
-//	TODO: Add Unit Tests!
-	@Override
-	public synchronized void setSeed(final long seed) {
-		super.setSeed(seed);
-		
-		this.mt = new int[N];
-		
-		this.mag01 = new int[2];
-		this.mag01[0] = 0x0;
-		this.mag01[1] = MATRIX_A;
-		
-		this.mt[0] = (int)(seed & 0xFFFFFFFF);
-		
-		for(this.mti = 1; this.mti < N; this.mti++) {
-			this.mt[this.mti] = (1812433253 * (this.mt[this.mti - 1] ^ (this.mt[this.mti - 1] >>> 30)) + this.mti);
-			this.mt[this.mti] &= 0xFFFFFFFF;
-		}
-	}
 }

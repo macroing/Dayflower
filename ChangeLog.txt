@@ -1,10 +1,13 @@
 2021-12-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Update the StringsUnitTests class.
+	* ADD:		Add the methods toNonScientificNotationJava(double) and toNonScientificNotationJava(float) to the Strings class.
+	* ADD:		Add a null check to the method read(DataInput, int) in the AxisAlignedBoundingBox3DReader, AxisAlignedBoundingBox3FReader, BoundingSphere3DReader, BoundingSphere3FReader, DefaultBoundingVolume3DReader, DefaultBoundingVolume3FReader, InfiniteBoundingVolume3DReader and InfiniteBoundingVolume3FReader classes.
 	* ADD:		Add unit tests to the BoundingSphere3DUnitTests class.
 	* ADD:		Add unit tests to the BoundingSphere3FUnitTests class.
 	* CHANGE:	Fix a bug in the method getClosestPointTo(Point3D) in the BoundingSphere3D class. It should return the Point3D supplied as a parameter if it is the closest point.
 	* CHANGE:	Fix a bug in the method getClosestPointTo(Point3F) in the BoundingSphere3F class. It should return the Point3F supplied as a parameter if it is the closest point.
-	* CHANGE:	Update the toString() method of the BoundingSphere3D and BoundingSphere3F classes.
+	* CHANGE:	Update the toString() method of the BoundingSphere3D, BoundingSphere3F, Color3D, Color3F, Color4D, Color4F, Matrix33D, Matrix33F, Matrix44D, Matrix44F, Point2D, Point2F, Point3D, Point3F, Point4D, Point4F, Vector2D, Vector2F, Vector3D, Vector3F, Vector4D and Vector4F classes.
 
 2021-12-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

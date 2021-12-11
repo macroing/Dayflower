@@ -22,6 +22,7 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.BoundingVolume3FReader;
@@ -93,6 +94,8 @@ public final class BoundingSphere3FReader implements BoundingVolume3FReader {
 //	TODO: Add Unit Tests!
 	@Override
 	public BoundingSphere3F read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, BoundingSphere3F.ID, "id");
 		
 		try {

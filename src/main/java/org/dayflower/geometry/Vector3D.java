@@ -152,7 +152,7 @@ public final class Vector3D implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Vector3D(%sD, %sD, %sD)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
+		return String.format("new Vector3D(%s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3));
 	}
 	
 	/**

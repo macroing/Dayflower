@@ -88,6 +88,42 @@ public final class Strings {
 		return DECIMAL_FORMAT_FLOAT.format(value).replace(',', '.');
 	}
 	
+	/**
+	 * Returns a {@code String} representation of {@code value} without scientific notation and as a Java {@code double} literal.
+	 * 
+	 * @param value a {@code double} value
+	 * @return a {@code String} representation of {@code value} without scientific notation and as a Java {@code double} literal
+	 */
+	public static String toNonScientificNotationJava(final double value) {
+		if(Double.isNaN(value)) {
+			return "Double.NaN";
+		} else if(value == Double.NEGATIVE_INFINITY) {
+			return "Double.NEGATIVE_INFINITY";
+		} else if(value == Double.POSITIVE_INFINITY) {
+			return "Double.POSITIVE_INFINITY";
+		} else {
+			return DECIMAL_FORMAT_DOUBLE.format(value).replace(',', '.') + "D";
+		}
+	}
+	
+	/**
+	 * Returns a {@code String} representation of {@code value} without scientific notation and as a Java {@code float} literal.
+	 * 
+	 * @param value a {@code float} value
+	 * @return a {@code String} representation of {@code value} without scientific notation and as a Java {@code float} literal
+	 */
+	public static String toNonScientificNotationJava(final float value) {
+		if(Float.isNaN(value)) {
+			return "Float.NaN";
+		} else if(value == Float.NEGATIVE_INFINITY) {
+			return "Float.NEGATIVE_INFINITY";
+		} else if(value == Float.POSITIVE_INFINITY) {
+			return "Float.POSITIVE_INFINITY";
+		} else {
+			return DECIMAL_FORMAT_FLOAT.format(value).replace(',', '.') + "F";
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static DecimalFormat doCreateDecimalFormat(final int maximumFractionDigits) {

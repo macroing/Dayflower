@@ -167,7 +167,7 @@ public final class Point2F implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Point2F(%sF, %sF)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2));
+		return String.format("new Point2F(%s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2));
 	}
 	
 	/**

@@ -214,10 +214,10 @@ public final class Matrix44D implements Node {
 	 */
 	@Override
 	public String toString() {
-		final String row1 = String.format("%sD, %sD, %sD, %sD", Strings.toNonScientificNotation(this.element11), Strings.toNonScientificNotation(this.element12), Strings.toNonScientificNotation(this.element13), Strings.toNonScientificNotation(this.element14));
-		final String row2 = String.format("%sD, %sD, %sD, %sD", Strings.toNonScientificNotation(this.element21), Strings.toNonScientificNotation(this.element22), Strings.toNonScientificNotation(this.element23), Strings.toNonScientificNotation(this.element24));
-		final String row3 = String.format("%sD, %sD, %sD, %sD", Strings.toNonScientificNotation(this.element31), Strings.toNonScientificNotation(this.element32), Strings.toNonScientificNotation(this.element33), Strings.toNonScientificNotation(this.element34));
-		final String row4 = String.format("%sD, %sD, %sD, %sD", Strings.toNonScientificNotation(this.element41), Strings.toNonScientificNotation(this.element42), Strings.toNonScientificNotation(this.element43), Strings.toNonScientificNotation(this.element44));
+		final String row1 = String.format("%s, %s, %s, %s", Strings.toNonScientificNotationJava(this.element11), Strings.toNonScientificNotationJava(this.element12), Strings.toNonScientificNotationJava(this.element13), Strings.toNonScientificNotationJava(this.element14));
+		final String row2 = String.format("%s, %s, %s, %s", Strings.toNonScientificNotationJava(this.element21), Strings.toNonScientificNotationJava(this.element22), Strings.toNonScientificNotationJava(this.element23), Strings.toNonScientificNotationJava(this.element24));
+		final String row3 = String.format("%s, %s, %s, %s", Strings.toNonScientificNotationJava(this.element31), Strings.toNonScientificNotationJava(this.element32), Strings.toNonScientificNotationJava(this.element33), Strings.toNonScientificNotationJava(this.element34));
+		final String row4 = String.format("%s, %s, %s, %s", Strings.toNonScientificNotationJava(this.element41), Strings.toNonScientificNotationJava(this.element42), Strings.toNonScientificNotationJava(this.element43), Strings.toNonScientificNotationJava(this.element44));
 		
 		return String.format("new Matrix44D(%s, %s, %s, %s)", row1, row2, row3, row4);
 	}

@@ -104,9 +104,9 @@ public final class Matrix33D implements Node {
 	 */
 	@Override
 	public String toString() {
-		final String row1 = String.format("%sD, %sD, %sD", Strings.toNonScientificNotation(this.element11), Strings.toNonScientificNotation(this.element12), Strings.toNonScientificNotation(this.element13));
-		final String row2 = String.format("%sD, %sD, %sD", Strings.toNonScientificNotation(this.element21), Strings.toNonScientificNotation(this.element22), Strings.toNonScientificNotation(this.element23));
-		final String row3 = String.format("%sD, %sD, %sD", Strings.toNonScientificNotation(this.element31), Strings.toNonScientificNotation(this.element32), Strings.toNonScientificNotation(this.element33));
+		final String row1 = String.format("%s, %s, %s", Strings.toNonScientificNotationJava(this.element11), Strings.toNonScientificNotationJava(this.element12), Strings.toNonScientificNotationJava(this.element13));
+		final String row2 = String.format("%s, %s, %s", Strings.toNonScientificNotationJava(this.element21), Strings.toNonScientificNotationJava(this.element22), Strings.toNonScientificNotationJava(this.element23));
+		final String row3 = String.format("%s, %s, %s", Strings.toNonScientificNotationJava(this.element31), Strings.toNonScientificNotationJava(this.element32), Strings.toNonScientificNotationJava(this.element33));
 		
 		return String.format("new Matrix33D(%s, %s, %s)", row1, row2, row3);
 	}

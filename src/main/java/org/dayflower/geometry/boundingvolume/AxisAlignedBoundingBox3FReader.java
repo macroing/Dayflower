@@ -22,6 +22,7 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.BoundingVolume3FReader;
@@ -93,6 +94,8 @@ public final class AxisAlignedBoundingBox3FReader implements BoundingVolume3FRea
 //	TODO: Add Unit Tests!
 	@Override
 	public AxisAlignedBoundingBox3F read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, AxisAlignedBoundingBox3F.ID, "id");
 		
 		return new AxisAlignedBoundingBox3F(Point3F.read(dataInput), Point3F.read(dataInput));

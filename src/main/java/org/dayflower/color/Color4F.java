@@ -301,7 +301,7 @@ public final class Color4F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Color4F(%sF, %sF, %sF, %sF)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3), Strings.toNonScientificNotation(this.component4));
+		return String.format("new Color4F(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3), Strings.toNonScientificNotationJava(this.component4));
 	}
 	
 	/**

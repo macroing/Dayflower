@@ -364,7 +364,7 @@ public final class Color3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Color3D(%sD, %sD, %sD)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3));
+		return String.format("new Color3D(%s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3));
 	}
 	
 	/**

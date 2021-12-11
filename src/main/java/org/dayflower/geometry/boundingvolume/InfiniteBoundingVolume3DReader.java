@@ -22,6 +22,7 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3DReader;
 import org.dayflower.utility.ParameterArguments;
@@ -92,6 +93,8 @@ public final class InfiniteBoundingVolume3DReader implements BoundingVolume3DRea
 //	TODO: Add Unit Tests!
 	@Override
 	public InfiniteBoundingVolume3D read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, InfiniteBoundingVolume3D.ID, "id");
 		
 		return new InfiniteBoundingVolume3D();

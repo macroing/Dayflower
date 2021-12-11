@@ -324,7 +324,7 @@ public final class Color4D {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Color4D(%sD, %sD, %sD, %sD)", Strings.toNonScientificNotation(this.component1), Strings.toNonScientificNotation(this.component2), Strings.toNonScientificNotation(this.component3), Strings.toNonScientificNotation(this.component4));
+		return String.format("new Color4D(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3), Strings.toNonScientificNotationJava(this.component4));
 	}
 	
 	/**

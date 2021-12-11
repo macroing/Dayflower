@@ -191,7 +191,7 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new BoundingSphere3D(%sD, %s)", Strings.toNonScientificNotation(this.radius), this.center);
+		return String.format("new BoundingSphere3D(%s, %s)", Strings.toNonScientificNotationJava(this.radius), this.center);
 	}
 	
 	/**

@@ -54,4 +54,34 @@ public final class StringsUnitTests {
 		
 		assertEquals("100.0", string);
 	}
+	
+	@Test
+	public void testToNonScientificNotationJavaDouble() {
+		final String a = Strings.toNonScientificNotationJava(100.0D);
+		final String b = Strings.toNonScientificNotationJava(-100.0D);
+		final String c = Strings.toNonScientificNotationJava(Double.NaN);
+		final String d = Strings.toNonScientificNotationJava(Double.NEGATIVE_INFINITY);
+		final String e = Strings.toNonScientificNotationJava(Double.POSITIVE_INFINITY);
+		
+		assertEquals("100.0D", a);
+		assertEquals("-100.0D", b);
+		assertEquals("Double.NaN", c);
+		assertEquals("Double.NEGATIVE_INFINITY", d);
+		assertEquals("Double.POSITIVE_INFINITY", e);
+	}
+	
+	@Test
+	public void testToNonScientificNotationJavaFloat() {
+		final String a = Strings.toNonScientificNotationJava(100.0F);
+		final String b = Strings.toNonScientificNotationJava(-100.0F);
+		final String c = Strings.toNonScientificNotationJava(Float.NaN);
+		final String d = Strings.toNonScientificNotationJava(Float.NEGATIVE_INFINITY);
+		final String e = Strings.toNonScientificNotationJava(Float.POSITIVE_INFINITY);
+		
+		assertEquals("100.0F", a);
+		assertEquals("-100.0F", b);
+		assertEquals("Float.NaN", c);
+		assertEquals("Float.NEGATIVE_INFINITY", d);
+		assertEquals("Float.POSITIVE_INFINITY", e);
+	}
 }

@@ -24,6 +24,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3D;
 import org.dayflower.geometry.BoundingVolume3DReader;
@@ -101,6 +102,8 @@ public final class DefaultBoundingVolume3DReader implements BoundingVolume3DRead
 //	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		switch(id) {
 			case AxisAlignedBoundingBox3D.ID:
 			case BoundingSphere3D.ID:

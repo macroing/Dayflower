@@ -1209,9 +1209,9 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3F reciprocal(final Vector3F vector) {
-		final float component1 = finiteOrDefault(1.0F / vector.component1, 0.0F);
-		final float component2 = finiteOrDefault(1.0F / vector.component2, 0.0F);
-		final float component3 = finiteOrDefault(1.0F / vector.component3, 0.0F);
+		final float component1 = 1.0F / vector.component1;
+		final float component2 = 1.0F / vector.component2;
+		final float component3 = 1.0F / vector.component3;
 		
 		return new Vector3F(component1, component2, component3);
 	}

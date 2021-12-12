@@ -5881,15 +5881,20 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param component3 the value of component 3 of the vector
 	 */
 	protected final void vector3FSetNormalize(final float component1, final float component2, final float component3) {
-		final float oldLengthReciprocal = vector3FLengthReciprocal(component1, component2, component3);
+		final float length = vector3FLength(component1, component2, component3);
 		
-		final float newComponent1 = component1 * oldLengthReciprocal;
-		final float newComponent2 = component2 * oldLengthReciprocal;
-		final float newComponent3 = component3 * oldLengthReciprocal;
+		final boolean isLengthGTEThreshold = length >= 0.99999982F;
+		final boolean isLengthLTEThreshold = length <= 1.00000012F;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+		if(isLengthGTEThreshold && isLengthLTEThreshold) {
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+		} else {
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1 / length;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2 / length;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3 / length;
+		}
 	}
 	
 	/**

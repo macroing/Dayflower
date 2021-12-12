@@ -1,3 +1,14 @@
+2021-12-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the AxisAlignedBoundingBox3DReaderUnitTests, AxisAlignedBoundingBox3FReaderUnitTests, DefaultBoundingVolume3DReaderUnitTests and DefaultBoundingVolume3FReaderUnitTests classes.
+	* ADD:		Add unit tests to the AxisAlignedBoundingBox3DUnitTests and AxisAlignedBoundingBox3FUnitTests classes.
+	* CHANGE:	Change the signature of the method union(AxisAlignedBoundingBox3D, Point3D) in the class AxisAlignedBoundingBox3D to union(BoundingVolume3D, Point3D).
+	* CHANGE:	Change the signature of the method union(AxisAlignedBoundingBox3F, Point3F) in the class AxisAlignedBoundingBox3F to union(BoundingVolume3F, Point3F).
+	* CHANGE:	Update the Vector3DUnitTests and Vector3FUnitTests classes.
+	* CHANGE:	Update the method reciprocal(Vector3D) in the Vector3D class. It would return 0.0D for non-finite numbers, but that caused a bug in the AxisAlignedBoundingBox3D class, which relied on division by 0 to return infinity.
+	* CHANGE:	Update the method reciprocal(Vector3F) in the Vector3F class. It would return 0.0F for non-finite numbers, but that caused a bug in the AxisAlignedBoundingBox3F class, which relied on division by 0 to return infinity.
+	* CHANGE:	Update the method vector3FSetNormalize(float, float, float) in the AbstractGeometryKernel class to check if the vector is already normalized.
+
 2021-12-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the AxisAlignedBoundingBox3DUnitTests and AxisAlignedBoundingBox3FUnitTests classes.

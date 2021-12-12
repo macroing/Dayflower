@@ -764,9 +764,9 @@ public final class Vector3DUnitTests {
 		final Vector3D a = Vector3D.reciprocal(new Vector3D(Double.NaN, Double.NaN, Double.NaN));
 		final Vector3D b = Vector3D.reciprocal(new Vector3D(2.0D, 4.0D, 8.0D));
 		
-		assertEquals(0.0D, a.getComponent1());
-		assertEquals(0.0D, a.getComponent2());
-		assertEquals(0.0D, a.getComponent3());
+		assertEquals(Double.NaN, a.getComponent1());
+		assertEquals(Double.NaN, a.getComponent2());
+		assertEquals(Double.NaN, a.getComponent3());
 		
 		assertEquals(0.500D, b.getComponent1());
 		assertEquals(0.250D, b.getComponent2());

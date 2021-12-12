@@ -764,9 +764,9 @@ public final class Vector3FUnitTests {
 		final Vector3F a = Vector3F.reciprocal(new Vector3F(Float.NaN, Float.NaN, Float.NaN));
 		final Vector3F b = Vector3F.reciprocal(new Vector3F(2.0F, 4.0F, 8.0F));
 		
-		assertEquals(0.0F, a.getComponent1());
-		assertEquals(0.0F, a.getComponent2());
-		assertEquals(0.0F, a.getComponent3());
+		assertEquals(Float.NaN, a.getComponent1());
+		assertEquals(Float.NaN, a.getComponent2());
+		assertEquals(Float.NaN, a.getComponent3());
 		
 		assertEquals(0.500F, b.getComponent1());
 		assertEquals(0.250F, b.getComponent2());

@@ -24,7 +24,6 @@ import static org.dayflower.utility.Floats.min;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.geometry.BoundingVolume3F;
@@ -98,7 +97,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return a new {@code AxisAlignedBoundingBox3F} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public AxisAlignedBoundingBox3F transform(final Matrix44F matrix) {
 		final float maximumX = this.maximum.getX();
@@ -139,7 +137,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return a {@code Point3F} instance that represents the closest point to {@code point} and is contained in this {@code AxisAlignedBoundingBox3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Point3F getClosestPointTo(final Point3F point) {
 		final float maximumX = this.maximum.getX();
@@ -208,7 +205,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -239,7 +235,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code AxisAlignedBoundingBox3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
 		return point.getX() >= this.minimum.getX() && point.getX() <= this.maximum.getX() && point.getY() >= this.minimum.getY() && point.getY() <= this.maximum.getY() && point.getZ() >= this.minimum.getZ() && point.getZ() <= this.maximum.getZ();
@@ -253,7 +248,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @param object the {@code Object} to compare to this {@code AxisAlignedBoundingBox3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code AxisAlignedBoundingBox3F}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -312,71 +306,21 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return {@code t}, the parametric distance from {@code ray} to this {@code AxisAlignedBoundingBox3F} instance, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public float intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		/*
 		final Point3F maximum = getMaximum();
 		final Point3F minimum = getMinimum();
 		final Point3F origin = ray.getOrigin();
 		
 		final Vector3F direction = ray.getDirection();
 		final Vector3F directionReciprocal = Vector3F.reciprocal(direction);
+		final Vector3F directionA = Vector3F.hadamardProduct(Vector3F.direction(origin, maximum), directionReciprocal);
+		final Vector3F directionB = Vector3F.hadamardProduct(Vector3F.direction(origin, minimum), directionReciprocal);
 		
-		final float t0X = (minimum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float t0Y = (minimum.getY() - origin.getY()) * directionReciprocal.getY();
-		final float t0Z = (minimum.getZ() - origin.getZ()) * directionReciprocal.getZ();
-		final float t1X = (maximum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float t1Y = (maximum.getY() - origin.getY()) * directionReciprocal.getY();
-		final float t1Z = (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ();
+		final float t0 = max(min(directionA.getX(), directionB.getX()), min(directionA.getY(), directionB.getY()), min(directionA.getZ(), directionB.getZ()));
+		final float t1 = min(max(directionA.getX(), directionB.getX()), max(directionA.getY(), directionB.getY()), max(directionA.getZ(), directionB.getZ()));
 		
-		final float t0 = max(min(t0X, t1X), min(t0Y, t1Y), min(t0Z, t1Z));
-		final float t1 = min(max(t0X, t1X), max(t0Y, t1Y), max(t0Z, t1Z));
-		
-		final float t = t0 > t1 ? Float.NaN : t0 >= tMinimum && t0 <= tMaximum ? t0 : t1 >= tMinimum && t1 <= tMaximum ? t1 : Float.NaN;
-		
-		return t;
-		*/
-		
-		final Point3F maximum = getMaximum();
-		final Point3F minimum = getMinimum();
-		final Point3F origin = ray.getOrigin();
-		
-		final Vector3F direction = ray.getDirection();
-		final Vector3F directionReciprocal = Vector3F.reciprocal(direction);
-		
-		final boolean isSwappingX = directionReciprocal.getX() < 0.0F;
-		final boolean isSwappingY = directionReciprocal.getY() < 0.0F;
-		final boolean isSwappingZ = directionReciprocal.getZ() < 0.0F;
-		
-		final float xTMinimum = isSwappingX ? (maximum.getX() - origin.getX()) * directionReciprocal.getX() : (minimum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float xTMaximum = isSwappingX ? (minimum.getX() - origin.getX()) * directionReciprocal.getX() : (maximum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float yTMinimum = isSwappingY ? (maximum.getY() - origin.getY()) * directionReciprocal.getY() : (minimum.getY() - origin.getY()) * directionReciprocal.getY();
-		final float yTMaximum = isSwappingY ? (minimum.getY() - origin.getY()) * directionReciprocal.getY() : (maximum.getY() - origin.getY()) * directionReciprocal.getY();
-		
-		float currentTMinimum = xTMinimum;
-		float currentTMaximum = xTMaximum;
-		
-		if(currentTMinimum > yTMaximum || currentTMaximum <= yTMinimum) {
-			return Float.NaN;
-		}
-		
-		currentTMinimum = max(currentTMinimum, yTMinimum);
-		currentTMaximum = min(currentTMaximum, yTMaximum);
-		
-		final float zTMinimum = isSwappingZ ? (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ() : (minimum.getZ() - origin.getZ()) * directionReciprocal.getZ();
-		final float zTMaximum = isSwappingZ ? (minimum.getZ() - origin.getZ()) * directionReciprocal.getZ() : (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ();
-		
-		if(currentTMinimum > zTMaximum || currentTMaximum <= zTMinimum) {
-			return Float.NaN;
-		}
-		
-		currentTMinimum = max(currentTMinimum, zTMinimum);
-		currentTMaximum = min(currentTMaximum, zTMaximum);
-		
-		final float t = currentTMinimum > tMinimum && currentTMinimum < tMaximum ? currentTMinimum : currentTMaximum > tMinimum && currentTMaximum < tMaximum ? currentTMaximum : Float.NaN;
-		
-		return t;
+		return t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
 	}
 	
 	/**
@@ -410,7 +354,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -435,7 +378,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return an {@code AxisAlignedBoundingBox3F} instance that is an expanded version of {@code axisAlignedBoundingBox}
 	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static AxisAlignedBoundingBox3F expand(final AxisAlignedBoundingBox3F axisAlignedBoundingBox, final float delta) {
 		final Point3F maximum = Point3F.add(axisAlignedBoundingBox.maximum, delta);
 		final Point3F minimum = Point3F.subtract(axisAlignedBoundingBox.minimum, delta);
@@ -455,7 +397,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 1}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static AxisAlignedBoundingBox3F fromPoints(final Point3F... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 1, Integer.MAX_VALUE, "points.length");
@@ -481,7 +422,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @return an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code boundingVolumeLHS} and {@code boundingVolumeRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code boundingVolumeLHS} or {@code boundingVolumeRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static AxisAlignedBoundingBox3F union(final BoundingVolume3F boundingVolumeLHS, final BoundingVolume3F boundingVolumeRHS) {
 		final Point3F maximum = Point3F.maximum(boundingVolumeLHS.getMaximum(), boundingVolumeRHS.getMaximum());
 		final Point3F minimum = Point3F.minimum(boundingVolumeLHS.getMinimum(), boundingVolumeRHS.getMinimum());
@@ -490,19 +430,18 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	}
 	
 	/**
-	 * Returns an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code pointRHS}.
+	 * Returns an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code boundingVolumeLHS} and {@code pointRHS}.
 	 * <p>
-	 * If either {@code axisAlignedBoundingBoxLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code boundingVolumeLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param axisAlignedBoundingBoxLHS an {@code AxisAlignedBoundingBox3F} instance
+	 * @param boundingVolumeLHS a {@link BoundingVolume3F} instance
 	 * @param pointRHS a {@code Point3F} instance
-	 * @return an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code pointRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code axisAlignedBoundingBoxLHS} or {@code pointRHS} are {@code null}
+	 * @return an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code boundingVolumeLHS} and {@code pointRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code boundingVolumeLHS} or {@code pointRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
-	public static AxisAlignedBoundingBox3F union(final AxisAlignedBoundingBox3F axisAlignedBoundingBoxLHS, final Point3F pointRHS) {
-		final Point3F maximum = Point3F.maximum(axisAlignedBoundingBoxLHS.maximum, pointRHS);
-		final Point3F minimum = Point3F.minimum(axisAlignedBoundingBoxLHS.minimum, pointRHS);
+	public static AxisAlignedBoundingBox3F union(final BoundingVolume3F boundingVolumeLHS, final Point3F pointRHS) {
+		final Point3F maximum = Point3F.maximum(boundingVolumeLHS.getMaximum(), pointRHS);
+		final Point3F minimum = Point3F.minimum(boundingVolumeLHS.getMinimum(), pointRHS);
 		
 		return new AxisAlignedBoundingBox3F(maximum, minimum);
 	}

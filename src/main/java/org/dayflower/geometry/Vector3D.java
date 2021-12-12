@@ -1209,9 +1209,9 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3D reciprocal(final Vector3D vector) {
-		final double component1 = finiteOrDefault(1.0D / vector.component1, 0.0D);
-		final double component2 = finiteOrDefault(1.0D / vector.component2, 0.0D);
-		final double component3 = finiteOrDefault(1.0D / vector.component3, 0.0D);
+		final double component1 = 1.0D / vector.component1;
+		final double component2 = 1.0D / vector.component2;
+		final double component3 = 1.0D / vector.component3;
 		
 		return new Vector3D(component1, component2, component3);
 	}

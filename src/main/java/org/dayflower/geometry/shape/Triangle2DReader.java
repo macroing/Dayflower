@@ -21,6 +21,8 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.Objects;
 
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Shape2DReader;
@@ -90,6 +92,8 @@ public final class Triangle2DReader implements Shape2DReader {
 	 */
 	@Override
 	public Triangle2D read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, Triangle2D.ID, "id");
 		
 		return new Triangle2D(Point2D.read(dataInput), Point2D.read(dataInput), Point2D.read(dataInput));

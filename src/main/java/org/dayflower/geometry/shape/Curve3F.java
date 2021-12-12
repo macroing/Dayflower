@@ -35,6 +35,7 @@ import static org.dayflower.utility.Ints.saturate;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,11 +73,13 @@ public final class Curve3F implements Shape3F {
 	/**
 	 * The name of this {@code Curve3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Curve";
 	
 	/**
 	 * The ID of this {@code Curve3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 4;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,6 +100,7 @@ public final class Curve3F implements Shape3F {
 	 * @param uMaximum the maximum U-value
 	 * @throws NullPointerException thrown if, and only if, {@code data} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Curve3F(final Data data, final float uMinimum, final float uMaximum) {
 		this.data = Objects.requireNonNull(data, "data == null");
 		this.uMinimum = uMinimum;
@@ -110,6 +114,7 @@ public final class Curve3F implements Shape3F {
 	 * 
 	 * @return a {@code BoundingVolume3F} instance that contains this {@code Curve3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		final Data data = this.data;
@@ -154,6 +159,7 @@ public final class Curve3F implements Shape3F {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Data data = this.data;
@@ -222,6 +228,7 @@ public final class Curve3F implements Shape3F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Curve3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -232,6 +239,7 @@ public final class Curve3F implements Shape3F {
 	 * 
 	 * @return a {@code String} representation of this {@code Curve3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Curve3F(%s, %+.10f, %+.10f)", this.data, Float.valueOf(this.uMinimum), Float.valueOf(this.uMaximum));
@@ -258,6 +266,7 @@ public final class Curve3F implements Shape3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -283,6 +292,7 @@ public final class Curve3F implements Shape3F {
 	 * @param object the {@code Object} to compare to this {@code Curve3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Curve3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -305,6 +315,7 @@ public final class Curve3F implements Shape3F {
 	 * 
 	 * @return the surface area of this {@code Curve3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		final Data data = this.data;
@@ -346,6 +357,7 @@ public final class Curve3F implements Shape3F {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Data data = this.data;
@@ -414,6 +426,7 @@ public final class Curve3F implements Shape3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Curve3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -424,6 +437,7 @@ public final class Curve3F implements Shape3F {
 	 * 
 	 * @return a hash code for this {@code Curve3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.data, Float.valueOf(this.uMaximum), Float.valueOf(this.uMinimum));
@@ -440,6 +454,7 @@ public final class Curve3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -474,6 +489,7 @@ public final class Curve3F implements Shape3F {
 	 * @return a {@code List} of {@code Curve3F} instances
 	 * @throws NullPointerException thrown if, and only if, either {@code pointA}, {@code pointB}, {@code pointC}, {@code pointD}, {@code type}, {@code normalA} or {@code normalB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static List<Curve3F> createCurves(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final Type type, final Vector3F normalA, final Vector3F normalB, final float widthA, final float widthB, final int splitDepth) {
 		Objects.requireNonNull(pointA, "pointA == null");
 		Objects.requireNonNull(pointB, "pointB == null");
@@ -504,6 +520,7 @@ public final class Curve3F implements Shape3F {
 	 * 
 	 * @return a {@code List} of {@code Curve3F} instances
 	 */
+//	TODO: Add Unit Tests!
 	public static List<Curve3F> createCurvesByBSpline() {
 		return createCurvesByBSpline(Arrays.asList(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)), new ArrayList<>(), Type.CYLINDER, 0.1F, 0.2F, 2, 2);
 	}
@@ -534,6 +551,7 @@ public final class Curve3F implements Shape3F {
 	 *                                  of {@code Vector3F} instances
 	 * @throws NullPointerException thrown if, and only if, either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static List<Curve3F> createCurvesByBSpline(final List<Point3F> points, final List<Vector3F> normals, final Type type, final float widthA, final float widthB, final int degree, final int splitDepth) {
 		ParameterArguments.requireNonNullList(points, "points");
 		ParameterArguments.requireNonNullList(normals, "normals");
@@ -629,6 +647,7 @@ public final class Curve3F implements Shape3F {
 	 * 
 	 * @return a {@code List} of {@code Curve3F} instances
 	 */
+//	TODO: Add Unit Tests!
 	public static List<Curve3F> createCurvesByBezier() {
 		return createCurvesByBezier(Arrays.asList(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)), new ArrayList<>(), Type.CYLINDER, 0.1F, 0.2F, 2, 2);
 	}
@@ -659,6 +678,7 @@ public final class Curve3F implements Shape3F {
 	 *                                  of {@code Vector3F} instances
 	 * @throws NullPointerException thrown if, and only if, either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static List<Curve3F> createCurvesByBezier(final List<Point3F> points, final List<Vector3F> normals, final Type type, final float widthA, final float widthB, final int degree, final int splitDepth) {
 		ParameterArguments.requireNonNullList(points, "points");
 		ParameterArguments.requireNonNullList(normals, "normals");
@@ -770,6 +790,7 @@ public final class Curve3F implements Shape3F {
 		 * @param widthB the width denoted by B
 		 * @throws NullPointerException thrown if, and only if, either {@code pointA}, {@code pointB}, {@code pointC}, {@code pointD}, {@code type}, {@code normalA} or {@code normalB} are {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public Data(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final Type type, final Vector3F normalA, final Vector3F normalB, final float widthA, final float widthB) {
 			this.pointA = Point3F.getCached(Objects.requireNonNull(pointA, "pointA == null"));
 			this.pointB = Point3F.getCached(Objects.requireNonNull(pointB, "pointB == null"));
@@ -791,6 +812,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return a {@code Point3F} instance with the control point denoted by A
 		 */
+//		TODO: Add Unit Tests!
 		public Point3F getPointA() {
 			return this.pointA;
 		}
@@ -800,6 +822,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return a {@code Point3F} instance with the control point denoted by B
 		 */
+//		TODO: Add Unit Tests!
 		public Point3F getPointB() {
 			return this.pointB;
 		}
@@ -809,6 +832,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return a {@code Point3F} instance with the control point denoted by C
 		 */
+//		TODO: Add Unit Tests!
 		public Point3F getPointC() {
 			return this.pointC;
 		}
@@ -818,6 +842,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return a {@code Point3F} instance with the control point denoted by D
 		 */
+//		TODO: Add Unit Tests!
 		public Point3F getPointD() {
 			return this.pointD;
 		}
@@ -827,6 +852,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return a {@code String} representation of this {@code Data} instance
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public String toString() {
 			return String.format("new Data(%s, %s, %s, %s, %s, %s, %s, %+.10f, %+.10f)", this.pointA, this.pointB, this.pointC, this.pointD, this.type, this.normalA, this.normalB, Float.valueOf(this.widthA), Float.valueOf(this.widthB));
@@ -837,6 +863,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return the {@code Type} instance associated with this {@code Data} instance
 		 */
+//		TODO: Add Unit Tests!
 		public Type getType() {
 			return this.type;
 		}
@@ -846,6 +873,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return a {@code Vector3F} instance with the normal denoted by A
 		 */
+//		TODO: Add Unit Tests!
 		public Vector3F getNormalA() {
 			return this.normalA;
 		}
@@ -855,6 +883,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return a {@code Vector3F} instance with the normal denoted by B
 		 */
+//		TODO: Add Unit Tests!
 		public Vector3F getNormalB() {
 			return this.normalB;
 		}
@@ -880,6 +909,7 @@ public final class Curve3F implements Shape3F {
 		 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 		 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 			Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -925,6 +955,7 @@ public final class Curve3F implements Shape3F {
 		 * @param object the {@code Object} to compare to this {@code Data} instance for equality
 		 * @return {@code true} if, and only if, {@code object} is an instance of {@code Data}, and their respective values are equal, {@code false} otherwise
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public boolean equals(final Object object) {
 			if(object == this) {
@@ -963,6 +994,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return the angle of the normal
 		 */
+//		TODO: Add Unit Tests!
 		public float getNormalAngle() {
 			return this.normalAngle;
 		}
@@ -972,6 +1004,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return the reciprocal (or inverse) sine of the angle of the normal
 		 */
+//		TODO: Add Unit Tests!
 		public float getNormalAngleSinReciprocal() {
 			return this.normalAngleSinReciprocal;
 		}
@@ -981,6 +1014,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return the width denoted by A
 		 */
+//		TODO: Add Unit Tests!
 		public float getWidthA() {
 			return this.widthA;
 		}
@@ -990,6 +1024,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return the width denoted by B
 		 */
+//		TODO: Add Unit Tests!
 		public float getWidthB() {
 			return this.widthB;
 		}
@@ -999,6 +1034,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return a hash code for this {@code Data} instance
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public int hashCode() {
 			return Objects.hash(this.pointA, this.pointB, this.pointC, this.pointD, this.type, this.normalA, this.normalB, Float.valueOf(this.normalAngle), Float.valueOf(this.normalAngleSinReciprocal), Float.valueOf(this.widthA), Float.valueOf(this.widthB));
@@ -1015,6 +1051,7 @@ public final class Curve3F implements Shape3F {
 		 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 		 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 		 */
+//		TODO: Add Unit Tests!
 		public void write(final DataOutput dataOutput) {
 			try {
 				this.pointA.write(dataOutput);
@@ -1072,6 +1109,7 @@ public final class Curve3F implements Shape3F {
 		 * 
 		 * @return a {@code String} representation of this {@code Type} instance
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public String toString() {
 			switch(this) {

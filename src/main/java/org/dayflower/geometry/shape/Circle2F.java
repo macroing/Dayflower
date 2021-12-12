@@ -23,6 +23,7 @@ import static org.dayflower.utility.Floats.equal;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
@@ -43,11 +44,13 @@ public final class Circle2F implements Shape2F {
 	/**
 	 * The name of this {@code Circle2F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Circle";
 	
 	/**
 	 * The ID of this {@code Circle2F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,6 +70,7 @@ public final class Circle2F implements Shape2F {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Circle2F() {
 		this(new Point2F());
 	}
@@ -86,6 +90,7 @@ public final class Circle2F implements Shape2F {
 	 * @param center the center of this {@code Circle2F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Circle2F(final Point2F center) {
 		this(center, 10.0F);
 	}
@@ -99,6 +104,7 @@ public final class Circle2F implements Shape2F {
 	 * @param radius the radius of this {@code Circle2F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Circle2F(final Point2F center, final float radius) {
 		this.center = Objects.requireNonNull(center, "center == null");
 		this.radius = radius;
@@ -112,6 +118,7 @@ public final class Circle2F implements Shape2F {
 	 * @param rectangle a {@link Rectangle2F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Circle2F(final Rectangle2F rectangle) {
 		this.center = Point2F.midpoint(rectangle.getA(), rectangle.getC());
 		this.radius = Point2F.distance(rectangle.getA(), rectangle.getC()) / 2.0F;
@@ -124,6 +131,7 @@ public final class Circle2F implements Shape2F {
 	 * 
 	 * @return the center of this {@code Circle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Point2F getCenter() {
 		return this.center;
 	}
@@ -133,6 +141,7 @@ public final class Circle2F implements Shape2F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Circle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -143,6 +152,7 @@ public final class Circle2F implements Shape2F {
 	 * 
 	 * @return a {@code String} representation of this {@code Circle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Circle2F(%s, %+.10f)", this.center, Float.valueOf(this.radius));
@@ -169,6 +179,7 @@ public final class Circle2F implements Shape2F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -195,6 +206,7 @@ public final class Circle2F implements Shape2F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Circle2F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2F point) {
 		return Vector2F.direction(this.center, point).lengthSquared() <= this.radius * this.radius;
@@ -208,6 +220,7 @@ public final class Circle2F implements Shape2F {
 	 * @param object the {@code Object} to compare to this {@code Circle2F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Circle2F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -228,6 +241,7 @@ public final class Circle2F implements Shape2F {
 	 * 
 	 * @return the radius of this {@code Circle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getRadius() {
 		return this.radius;
 	}
@@ -237,6 +251,7 @@ public final class Circle2F implements Shape2F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Circle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -247,6 +262,7 @@ public final class Circle2F implements Shape2F {
 	 * 
 	 * @return a hash code for this {@code Circle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Float.valueOf(this.radius));
@@ -263,6 +279,7 @@ public final class Circle2F implements Shape2F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

@@ -25,6 +25,7 @@ import static org.dayflower.utility.Floats.isZero;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -54,11 +55,13 @@ public final class Disk3F implements Shape3F {
 	/**
 	 * The name of this {@code Disk3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Disk";
 	
 	/**
 	 * The ID of this {@code Disk3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 6;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,6 +83,7 @@ public final class Disk3F implements Shape3F {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3F() {
 		this(AngleF.degrees(360.0F));
 	}
@@ -99,6 +103,7 @@ public final class Disk3F implements Shape3F {
 	 * @param phiMax the maximum phi
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3F(final AngleF phiMax) {
 		this(phiMax, 0.0F);
 	}
@@ -119,6 +124,7 @@ public final class Disk3F implements Shape3F {
 	 * @param radiusInner the inner radius
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3F(final AngleF phiMax, final float radiusInner) {
 		this(phiMax, radiusInner, 1.0F);
 	}
@@ -140,6 +146,7 @@ public final class Disk3F implements Shape3F {
 	 * @param radiusOuter the outer radius
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3F(final AngleF phiMax, final float radiusInner, final float radiusOuter) {
 		this(phiMax, radiusInner, radiusOuter, 0.0F);
 	}
@@ -155,6 +162,7 @@ public final class Disk3F implements Shape3F {
 	 * @param zMax the maximum Z
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3F(final AngleF phiMax, final float radiusInner, final float radiusOuter, final float zMax) {
 		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
 		this.radiusInner = radiusInner;
@@ -169,6 +177,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return the maximum phi of this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public AngleF getPhiMax() {
 		return this.phiMax;
 	}
@@ -178,6 +187,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return a {@code BoundingVolume3F} instance that contains this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		return new AxisAlignedBoundingBox3F(new Point3F(-this.radiusOuter, -this.radiusOuter, this.zMax), new Point3F(this.radiusOuter, this.radiusOuter, this.zMax));
@@ -196,6 +206,7 @@ public final class Disk3F implements Shape3F {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
@@ -212,6 +223,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -222,6 +234,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return a {@code String} representation of this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Disk3F(%s, %+.10f, %+.10f, %+.10f)", this.phiMax, Float.valueOf(this.radiusInner), Float.valueOf(this.radiusOuter), Float.valueOf(this.zMax));
@@ -235,6 +248,7 @@ public final class Disk3F implements Shape3F {
 	 * @param object the {@code Object} to compare to this {@code Disk3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Disk3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -259,6 +273,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return the inner radius of this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getRadiusInner() {
 		return this.radiusInner;
 	}
@@ -268,6 +283,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return the outer radius of this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getRadiusOuter() {
 		return this.radiusOuter;
 	}
@@ -277,6 +293,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return the surface area of this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		return this.phiMax.getRadians() * 0.5F * (this.radiusOuter * this.radiusOuter - this.radiusInner * this.radiusInner);
@@ -287,6 +304,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return the maximum Z of this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getZMax() {
 		return this.zMax;
 	}
@@ -304,6 +322,7 @@ public final class Disk3F implements Shape3F {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F origin = ray.getOrigin();
@@ -336,6 +355,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -346,6 +366,7 @@ public final class Disk3F implements Shape3F {
 	 * 
 	 * @return a hash code for this {@code Disk3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.phiMax, Float.valueOf(this.radiusInner), Float.valueOf(this.radiusOuter), Float.valueOf(this.zMax));
@@ -362,6 +383,7 @@ public final class Disk3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

@@ -21,6 +21,8 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point4F;
@@ -93,6 +95,8 @@ public final class Triangle3FReader implements Shape3FReader {
 	 */
 	@Override
 	public Triangle3F read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, Triangle3F.ID, "id");
 		
 		final Vertex3F a = new Vertex3F(Point2F.read(dataInput), Point4F.read(dataInput), Vector3F.read(dataInput));

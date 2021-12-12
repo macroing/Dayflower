@@ -21,6 +21,8 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.Objects;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Shape2IReader;
@@ -59,6 +61,7 @@ public final class Circle2IReader implements Shape2IReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Circle2I read(final DataInput dataInput) {
 		try {
@@ -88,8 +91,11 @@ public final class Circle2IReader implements Shape2IReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Circle2I read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, Circle2I.ID, "id");
 		
 		try {
@@ -105,6 +111,7 @@ public final class Circle2IReader implements Shape2IReader {
 	 * @param id the ID to check
 	 * @return {@code true} if, and only if, {@code id == Circle2I.ID}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean isSupported(final int id) {
 		return id == Circle2I.ID;

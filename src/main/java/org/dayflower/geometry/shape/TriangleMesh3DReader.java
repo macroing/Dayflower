@@ -21,8 +21,10 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.dayflower.geometry.Shape3DReader;
 import org.dayflower.utility.ParameterArguments;
@@ -95,6 +97,8 @@ public final class TriangleMesh3DReader implements Shape3DReader {
 	 */
 	@Override
 	public TriangleMesh3D read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, TriangleMesh3D.ID, "id");
 		
 		try {

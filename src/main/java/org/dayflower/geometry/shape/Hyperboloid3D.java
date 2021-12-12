@@ -32,6 +32,7 @@ import static org.dayflower.utility.Doubles.sqrt;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -60,11 +61,13 @@ public final class Hyperboloid3D implements Shape3D {
 	/**
 	 * The name of this {@code Hyperboloid3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Hyperboloid";
 	
 	/**
 	 * The ID of this {@code Hyperboloid3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 7;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,6 +93,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Hyperboloid3D() {
 		this(AngleD.degrees(360.0D));
 	}
@@ -109,6 +113,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * @param phiMax the maximum phi
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Hyperboloid3D(final AngleD phiMax) {
 		this(phiMax, new Point3D(0.0001D, 0.0001D, 0.0D));
 	}
@@ -129,6 +134,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * @param a the {@link Point3D} instance denoted by {@code A}
 	 * @throws NullPointerException thrown if, and only if, either {@code phiMax} or {@code a} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Hyperboloid3D(final AngleD phiMax, final Point3D a) {
 		this(phiMax, a, new Point3D(1.0D, 1.0D, 1.0D));
 	}
@@ -143,6 +149,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * @param b the {@code Point3D} instance denoted by {@code B}
 	 * @throws NullPointerException thrown if, and only if, either {@code phiMax}, {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Hyperboloid3D(final AngleD phiMax, final Point3D a, final Point3D b) {
 		Objects.requireNonNull(phiMax, "phiMax == null");
 		Objects.requireNonNull(a, "a == null");
@@ -194,6 +201,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * @param zMin the minimum Z value
 	 * @throws NullPointerException thrown if, and only if, either {@code phiMax}, {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Hyperboloid3D(final AngleD phiMax, final Point3D a, final Point3D b, final double aH, final double cH, final double rMax, final double zMax, final double zMin) {
 		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
 		this.a = Objects.requireNonNull(a, "a == null");
@@ -212,6 +220,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return the maximum phi of this {@code Hyperboloid3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public AngleD getPhiMax() {
 		return this.phiMax;
 	}
@@ -221,6 +230,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code Hyperboloid3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return new AxisAlignedBoundingBox3D(new Point3D(-this.rMax, -this.rMax, this.zMin), new Point3D(this.rMax, this.rMax, this.zMax));
@@ -239,6 +249,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
@@ -255,6 +266,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return the {@code Point3D} instance denoted by {@code A}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getA() {
 		return this.a;
 	}
@@ -264,6 +276,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return the {@code Point3D} instance denoted by {@code B}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getB() {
 		return this.b;
 	}
@@ -273,6 +286,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Hyperboloid3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -283,6 +297,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code Hyperboloid3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Paraboloid3D(%s, %s, %s)", this.phiMax, this.a, this.b);
@@ -296,6 +311,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code Hyperboloid3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Hyperboloid3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -328,6 +344,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return the value of the variable {@code AH}
 	 */
+//	TODO: Add Unit Tests!
 	public double getAH() {
 		return this.aH;
 	}
@@ -337,6 +354,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return the value of the variable {@code CH}
 	 */
+//	TODO: Add Unit Tests!
 	public double getCH() {
 		return this.cH;
 	}
@@ -346,6 +364,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return the maximum radius
 	 */
+//	TODO: Add Unit Tests!
 	public double getRMax() {
 		return this.rMax;
 	}
@@ -355,6 +374,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code Hyperboloid3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		final double aX11 = this.a.getX();
@@ -413,6 +433,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return the maximum Z value
 	 */
+//	TODO: Add Unit Tests!
 	public double getZMax() {
 		return this.zMax;
 	}
@@ -422,6 +443,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return the minimum Z value
 	 */
+//	TODO: Add Unit Tests!
 	public double getZMin() {
 		return this.zMin;
 	}
@@ -439,6 +461,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Point3D origin = ray.getOrigin();
@@ -475,6 +498,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Hyperboloid3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -485,6 +509,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code Hyperboloid3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.phiMax, this.a, this.b, Double.valueOf(this.aH), Double.valueOf(this.cH), Double.valueOf(this.rMax), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
@@ -501,6 +526,7 @@ public final class Hyperboloid3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

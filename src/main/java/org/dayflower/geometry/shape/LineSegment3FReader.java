@@ -21,6 +21,8 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3FReader;
@@ -59,6 +61,7 @@ public final class LineSegment3FReader implements Shape3FReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public LineSegment3F read(final DataInput dataInput) {
 		try {
@@ -88,8 +91,11 @@ public final class LineSegment3FReader implements Shape3FReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public LineSegment3F read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, LineSegment3F.ID, "id");
 		
 		return new LineSegment3F(Point3F.read(dataInput), Point3F.read(dataInput));
@@ -101,6 +107,7 @@ public final class LineSegment3FReader implements Shape3FReader {
 	 * @param id the ID to check
 	 * @return {@code true} if, and only if, {@code id == LineSegment3F.ID}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean isSupported(final int id) {
 		return id == LineSegment3F.ID;

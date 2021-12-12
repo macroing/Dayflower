@@ -24,6 +24,7 @@ import static org.dayflower.utility.Floats.minOrNaN;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,11 +55,13 @@ public final class CompoundShape3F implements Shape3F {
 	/**
 	 * The name of this {@code CompoundShape3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Compound Shape";
 	
 	/**
 	 * The ID of this {@code CompoundShape3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +80,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * @param shapes a {@code List} of {@link Shape3F} instances
 	 * @throws NullPointerException thrown if, and only if, either {@code shapes} or at least one of its elements are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public CompoundShape3F(final List<? extends Shape3F> shapes) {
 		this.shapes = new ArrayList<>(ParameterArguments.requireNonNullList(shapes, "shapes"));
 	}
@@ -88,6 +92,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * 
 	 * @return a {@code BoundingVolume3F} instance that contains this {@code CompoundShape3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		return doGetAxisAlignedBoundingBoxes().stream().reduce((a, b) -> AxisAlignedBoundingBox3F.union(a, b)).orElse(new AxisAlignedBoundingBox3F(new Point3F(), new Point3F()));
@@ -106,6 +111,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final SurfaceIntersector3F surfaceIntersector = new SurfaceIntersector3F(ray, tMinimum, tMaximum);
@@ -122,6 +128,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * 
 	 * @return a {@code String} with the name of this {@code CompoundShape3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -132,6 +139,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * 
 	 * @return a {@code String} representation of this {@code CompoundShape3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return "new CompoundShape3F(...)";
@@ -158,6 +166,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -185,6 +194,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * @param object the {@code Object} to compare to this {@code CompoundShape3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CompoundShape3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -203,6 +213,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * 
 	 * @return the surface area of this {@code CompoundShape3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		float surfaceArea = 0.0F;
@@ -227,6 +238,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		float t = Float.NaN;
@@ -249,6 +261,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code CompoundShape3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -259,6 +272,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * 
 	 * @return a hash code for this {@code CompoundShape3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.shapes);
@@ -275,6 +289,7 @@ public final class CompoundShape3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

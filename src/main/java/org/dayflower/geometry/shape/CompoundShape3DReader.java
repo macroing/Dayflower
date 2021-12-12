@@ -21,6 +21,7 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +49,7 @@ public final class CompoundShape3DReader implements Shape3DReader {
 	 * @param shape3DReader a {@link Shape3DReader} instance
 	 * @throws NullPointerException thrown if, and only if, {@code shape3DReader} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public CompoundShape3DReader(final Shape3DReader shape3DReader) {
 		this.shape3DReader = Objects.requireNonNull(shape3DReader, "shape3DReader == null");
 	}
@@ -71,6 +73,7 @@ public final class CompoundShape3DReader implements Shape3DReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public CompoundShape3D read(final DataInput dataInput) {
 		try {
@@ -100,8 +103,11 @@ public final class CompoundShape3DReader implements Shape3DReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public CompoundShape3D read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, CompoundShape3D.ID, "id");
 		
 		try {
@@ -125,6 +131,7 @@ public final class CompoundShape3DReader implements Shape3DReader {
 	 * @param id the ID to check
 	 * @return {@code true} if, and only if, {@code id == CompoundShape3D.ID}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean isSupported(final int id) {
 		return id == CompoundShape3D.ID;

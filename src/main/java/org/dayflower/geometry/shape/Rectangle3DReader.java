@@ -21,6 +21,8 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.Objects;
 
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Shape3DReader;
@@ -90,6 +92,8 @@ public final class Rectangle3DReader implements Shape3DReader {
 	 */
 	@Override
 	public Rectangle3D read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, Rectangle3D.ID, "id");
 		
 		return new Rectangle3D(Point3D.read(dataInput), Point3D.read(dataInput), Point3D.read(dataInput), Point3D.read(dataInput));

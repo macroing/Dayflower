@@ -24,6 +24,7 @@ import static org.dayflower.utility.Doubles.minOrNaN;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,11 +55,13 @@ public final class CompoundShape3D implements Shape3D {
 	/**
 	 * The name of this {@code CompoundShape3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Compound Shape";
 	
 	/**
 	 * The ID of this {@code CompoundShape3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +80,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * @param shapes a {@code List} of {@link Shape3D} instances
 	 * @throws NullPointerException thrown if, and only if, either {@code shapes} or at least one of its elements are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public CompoundShape3D(final List<? extends Shape3D> shapes) {
 		this.shapes = new ArrayList<>(ParameterArguments.requireNonNullList(shapes, "shapes"));
 	}
@@ -88,6 +92,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code CompoundShape3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return doGetAxisAlignedBoundingBoxes().stream().reduce((a, b) -> AxisAlignedBoundingBox3D.union(a, b)).orElse(new AxisAlignedBoundingBox3D(new Point3D(), new Point3D()));
@@ -106,6 +111,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final SurfaceIntersector3D surfaceIntersector = new SurfaceIntersector3D(ray, tMinimum, tMaximum);
@@ -122,6 +128,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code CompoundShape3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -132,6 +139,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code CompoundShape3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return "new CompoundShape3D(...)";
@@ -158,6 +166,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -185,6 +194,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code CompoundShape3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CompoundShape3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -203,6 +213,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code CompoundShape3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		double surfaceArea = 0.0D;
@@ -227,6 +238,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		double t = Double.NaN;
@@ -249,6 +261,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code CompoundShape3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -259,6 +272,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code CompoundShape3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.shapes);
@@ -275,6 +289,7 @@ public final class CompoundShape3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

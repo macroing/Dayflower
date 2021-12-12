@@ -28,6 +28,7 @@ import static org.dayflower.utility.Doubles.minOrNaN;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -55,11 +56,13 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	/**
 	 * The name of this {@code ConstructiveSolidGeometry3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Constructive Solid Geometry";
 	
 	/**
 	 * The ID of this {@code ConstructiveSolidGeometry3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +95,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * @param shapeR the {@code Shape3D} instance associated with the right-hand side of this {@code ConstructiveSolidGeometry3D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code operation}, {@code shapeL} or {@code shapeR} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public ConstructiveSolidGeometry3D(final Operation operation, final Shape3D shapeL, final Shape3D shapeR) {
 		this(operation, shapeL, shapeR, new Matrix44D(), new Matrix44D());
 	}
@@ -111,6 +115,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code shapeLToObject} or {@code shapeRToObject} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, either {@code operation}, {@code shapeL}, {@code shapeR}, {@code shapeLToObject} or {@code shapeRToObject} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public ConstructiveSolidGeometry3D(final Operation operation, final Shape3D shapeL, final Shape3D shapeR, final Matrix44D shapeLToObject, final Matrix44D shapeRToObject) {
 		this.operation = Objects.requireNonNull(operation, "operation == null");
 		this.shapeL = Objects.requireNonNull(shapeL, "shapeL == null");
@@ -129,6 +134,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code ConstructiveSolidGeometry3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return this.boundingVolume;
@@ -147,6 +153,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Ray3D rayShapeSpaceL = Ray3D.transform(this.objectToShapeL, ray);
@@ -244,6 +251,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code ConstructiveSolidGeometry3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -254,6 +262,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code ConstructiveSolidGeometry3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new ConstructiveSolidGeometry3D(%s, %s, %s, %s, %s)", this.operation, this.shapeL, this.shapeR, this.shapeLToObject, this.shapeRToObject);
@@ -280,6 +289,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -329,6 +339,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code ConstructiveSolidGeometry3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ConstructiveSolidGeometry3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -363,6 +374,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code ConstructiveSolidGeometry3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		return 0.0D;//TODO: Implement!
@@ -381,6 +393,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Ray3D rayShapeSpaceL = Ray3D.transform(this.objectToShapeL, ray);
@@ -476,6 +489,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code ConstructiveSolidGeometry3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -486,6 +500,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code ConstructiveSolidGeometry3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.boundingVolume, this.objectToShapeL, this.objectToShapeR, this.shapeLToObject, this.shapeRToObject, this.operation, this.shapeL, this.shapeR);
@@ -502,6 +517,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -555,6 +571,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 		 * 
 		 * @return a {@code String} representation of this {@code Operation} instance
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public String toString() {
 			switch(this) {

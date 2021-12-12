@@ -21,6 +21,8 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.Objects;
 
 import org.dayflower.geometry.Shape3DReader;
 import org.dayflower.utility.ParameterArguments;
@@ -89,6 +91,8 @@ public final class ProceduralTerrain3DReader implements Shape3DReader {
 	 */
 	@Override
 	public ProceduralTerrain3D read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		ParameterArguments.requireExact(id, ProceduralTerrain3D.ID, "id");
 		
 		return ProceduralTerrain3D.sin();

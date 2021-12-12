@@ -25,6 +25,7 @@ import static org.dayflower.utility.Doubles.isZero;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -54,11 +55,13 @@ public final class Disk3D implements Shape3D {
 	/**
 	 * The name of this {@code Disk3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Disk";
 	
 	/**
 	 * The ID of this {@code Disk3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 6;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,6 +83,7 @@ public final class Disk3D implements Shape3D {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3D() {
 		this(AngleD.degrees(360.0D));
 	}
@@ -99,6 +103,7 @@ public final class Disk3D implements Shape3D {
 	 * @param phiMax the maximum phi
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3D(final AngleD phiMax) {
 		this(phiMax, 0.0D);
 	}
@@ -119,6 +124,7 @@ public final class Disk3D implements Shape3D {
 	 * @param radiusInner the inner radius
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3D(final AngleD phiMax, final double radiusInner) {
 		this(phiMax, radiusInner, 1.0D);
 	}
@@ -140,6 +146,7 @@ public final class Disk3D implements Shape3D {
 	 * @param radiusOuter the outer radius
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3D(final AngleD phiMax, final double radiusInner, final double radiusOuter) {
 		this(phiMax, radiusInner, radiusOuter, 0.0D);
 	}
@@ -155,6 +162,7 @@ public final class Disk3D implements Shape3D {
 	 * @param zMax the maximum Z
 	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Disk3D(final AngleD phiMax, final double radiusInner, final double radiusOuter, final double zMax) {
 		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
 		this.radiusInner = radiusInner;
@@ -169,6 +177,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return the maximum phi of this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public AngleD getPhiMax() {
 		return this.phiMax;
 	}
@@ -178,6 +187,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return new AxisAlignedBoundingBox3D(new Point3D(-this.radiusOuter, -this.radiusOuter, this.zMax), new Point3D(this.radiusOuter, this.radiusOuter, this.zMax));
@@ -196,6 +206,7 @@ public final class Disk3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
@@ -212,6 +223,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -222,6 +234,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Disk3D(%s, %+.10f, %+.10f, %+.10f)", this.phiMax, Double.valueOf(this.radiusInner), Double.valueOf(this.radiusOuter), Double.valueOf(this.zMax));
@@ -235,6 +248,7 @@ public final class Disk3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code Disk3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Disk3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -259,6 +273,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return the inner radius of this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadiusInner() {
 		return this.radiusInner;
 	}
@@ -268,6 +283,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return the outer radius of this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadiusOuter() {
 		return this.radiusOuter;
 	}
@@ -277,6 +293,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		return this.phiMax.getRadians() * 0.5D * (this.radiusOuter * this.radiusOuter - this.radiusInner * this.radiusInner);
@@ -287,6 +304,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return the maximum Z of this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getZMax() {
 		return this.zMax;
 	}
@@ -304,6 +322,7 @@ public final class Disk3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Point3D origin = ray.getOrigin();
@@ -336,6 +355,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -346,6 +366,7 @@ public final class Disk3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code Disk3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.phiMax, Double.valueOf(this.radiusInner), Double.valueOf(this.radiusOuter), Double.valueOf(this.zMax));
@@ -362,6 +383,7 @@ public final class Disk3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

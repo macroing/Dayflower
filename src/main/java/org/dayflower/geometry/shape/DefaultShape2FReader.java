@@ -21,8 +21,10 @@ package org.dayflower.geometry.shape;
 import java.io.DataInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.dayflower.geometry.Shape2F;
 import org.dayflower.geometry.Shape2FReader;
@@ -69,6 +71,7 @@ public final class DefaultShape2FReader implements Shape2FReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Shape2F read(final DataInput dataInput) {
 		try {
@@ -98,8 +101,11 @@ public final class DefaultShape2FReader implements Shape2FReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Shape2F read(final DataInput dataInput, final int id) {
+		Objects.requireNonNull(dataInput, "dataInput == null");
+		
 		switch(id) {
 			case Circle2F.ID:
 			case LineSegment2F.ID:
@@ -118,6 +124,7 @@ public final class DefaultShape2FReader implements Shape2FReader {
 	 * @param id the ID of the {@code Shape2F} type to check
 	 * @return {@code true} if, and only if, this {@code DefaultShape2FReader} instance supports reading {@code Shape2F} instances with an ID of {@code id}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean isSupported(final int id) {
 		return this.shape2FReaders.containsKey(Integer.valueOf(id));

@@ -23,12 +23,12 @@ import static org.dayflower.utility.Doubles.equal;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Shape2D;
 import org.dayflower.geometry.Vector2D;
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
@@ -44,13 +44,11 @@ public final class Circle2D implements Shape2D {
 	/**
 	 * The name of this {@code Circle2D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final String NAME = "Circle";
 	
 	/**
 	 * The ID of this {@code Circle2D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +68,6 @@ public final class Circle2D implements Shape2D {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Circle2D() {
 		this(new Point2D());
 	}
@@ -90,7 +87,6 @@ public final class Circle2D implements Shape2D {
 	 * @param center the center of this {@code Circle2D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Circle2D(final Point2D center) {
 		this(center, 10.0D);
 	}
@@ -104,7 +100,6 @@ public final class Circle2D implements Shape2D {
 	 * @param radius the radius of this {@code Circle2D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Circle2D(final Point2D center, final double radius) {
 		this.center = Objects.requireNonNull(center, "center == null");
 		this.radius = radius;
@@ -118,7 +113,6 @@ public final class Circle2D implements Shape2D {
 	 * @param rectangle a {@link Rectangle2D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Circle2D(final Rectangle2D rectangle) {
 		this.center = Point2D.midpoint(rectangle.getA(), rectangle.getC());
 		this.radius = Point2D.distance(rectangle.getA(), rectangle.getC()) / 2.0D;
@@ -131,7 +125,6 @@ public final class Circle2D implements Shape2D {
 	 * 
 	 * @return the center of this {@code Circle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public Point2D getCenter() {
 		return this.center;
 	}
@@ -141,7 +134,6 @@ public final class Circle2D implements Shape2D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Circle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -152,10 +144,9 @@ public final class Circle2D implements Shape2D {
 	 * 
 	 * @return a {@code String} representation of this {@code Circle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Circle2D(%s, %+.10f)", this.center, Double.valueOf(this.radius));
+		return String.format("new Circle2D(%s, %s)", this.center, Strings.toNonScientificNotationJava(this.radius));
 	}
 	
 	/**
@@ -179,7 +170,6 @@ public final class Circle2D implements Shape2D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -206,7 +196,6 @@ public final class Circle2D implements Shape2D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Circle2D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2D point) {
 		return Vector2D.direction(this.center, point).lengthSquared() <= this.radius * this.radius;
@@ -220,7 +209,6 @@ public final class Circle2D implements Shape2D {
 	 * @param object the {@code Object} to compare to this {@code Circle2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Circle2D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -241,7 +229,6 @@ public final class Circle2D implements Shape2D {
 	 * 
 	 * @return the radius of this {@code Circle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double getRadius() {
 		return this.radius;
 	}
@@ -251,7 +238,6 @@ public final class Circle2D implements Shape2D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Circle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -262,7 +248,6 @@ public final class Circle2D implements Shape2D {
 	 * 
 	 * @return a hash code for this {@code Circle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Double.valueOf(this.radius));
@@ -279,7 +264,6 @@ public final class Circle2D implements Shape2D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

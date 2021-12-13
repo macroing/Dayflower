@@ -81,11 +81,11 @@ Test API - Unit Testing:
 
 	*   0.0% - Filter API
 
-	*  61.5% - Geometry API
+	*  62.6% - Geometry API
 	* 100.0% - Geometry Bounding Volume API
 	*   0.0% - Geometry Bounding Volume Hierarchy API
 	*   0.0% - Geometry Rasterizer API
-	*   1.8% - Geometry Shape API
+	*   2.5% - Geometry Shape API
 
 	*   0.0% - Image API
 

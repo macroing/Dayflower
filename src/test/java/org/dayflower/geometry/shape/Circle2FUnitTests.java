@@ -32,6 +32,7 @@ import java.io.DataOutputStream;
 import java.io.UncheckedIOException;
 
 import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Shape2F;
 import org.dayflower.mock.DataOutputMock;
 import org.dayflower.mock.NodeHierarchicalVisitorMock;
 import org.dayflower.mock.NodeVisitorMock;
@@ -134,6 +135,54 @@ public final class Circle2FUnitTests {
 		assertFalse(circle.contains(new Point2F(10.0F, 10.0F)));
 		
 		assertThrows(NullPointerException.class, () -> circle.contains(null));
+	}
+	
+	@Test
+	public void testContainsDifference() {
+		final Circle2F a = new Circle2F(new Point2F(10.0F, 10.0F), 10.0F);
+		final Circle2F b = new Circle2F(new Point2F(30.0F, 10.0F), 10.0F);
+		
+		assertTrue(Shape2F.containsDifference(new Point2F(10.0F, 10.0F), a, b));
+		
+		assertFalse(Shape2F.containsDifference(new Point2F(20.0F, 10.0F), a, b));
+		assertFalse(Shape2F.containsDifference(new Point2F(30.0F, 10.0F), a, b));
+		assertFalse(Shape2F.containsDifference(new Point2F(50.0F, 10.0F), a, b));
+		
+		assertThrows(NullPointerException.class, () -> Shape2F.containsDifference(new Point2F(), a, null));
+		assertThrows(NullPointerException.class, () -> Shape2F.containsDifference(new Point2F(), null, b));
+		assertThrows(NullPointerException.class, () -> Shape2F.containsDifference(null, a, b));
+	}
+	
+	@Test
+	public void testContainsIntersection() {
+		final Circle2F a = new Circle2F(new Point2F(10.0F, 10.0F), 10.0F);
+		final Circle2F b = new Circle2F(new Point2F(20.0F, 10.0F), 10.0F);
+		
+		assertTrue(Shape2F.containsIntersection(new Point2F(15.0F, 10.0F), a, b));
+		
+		assertFalse(Shape2F.containsIntersection(new Point2F( 0.0F, 10.0F), a, b));
+		assertFalse(Shape2F.containsIntersection(new Point2F(30.0F, 10.0F), a, b));
+		assertFalse(Shape2F.containsIntersection(new Point2F(50.0F, 10.0F), a, b));
+		
+		assertThrows(NullPointerException.class, () -> Shape2F.containsIntersection(new Point2F(), a, null));
+		assertThrows(NullPointerException.class, () -> Shape2F.containsIntersection(new Point2F(), null, b));
+		assertThrows(NullPointerException.class, () -> Shape2F.containsIntersection(null, a, b));
+	}
+	
+	@Test
+	public void testContainsUnion() {
+		final Circle2F a = new Circle2F(new Point2F(10.0F, 10.0F), 10.0F);
+		final Circle2F b = new Circle2F(new Point2F(20.0F, 10.0F), 10.0F);
+		
+		assertTrue(Shape2F.containsUnion(new Point2F( 0.0F, 10.0F), a, b));
+		assertTrue(Shape2F.containsUnion(new Point2F(15.0F, 10.0F), a, b));
+		assertTrue(Shape2F.containsUnion(new Point2F(30.0F, 10.0F), a, b));
+		
+		assertFalse(Shape2F.containsUnion(new Point2F(50.0F, 10.0F), a, b));
+		
+		assertThrows(NullPointerException.class, () -> Shape2F.containsUnion(new Point2F(), a, null));
+		assertThrows(NullPointerException.class, () -> Shape2F.containsUnion(new Point2F(), null, b));
+		assertThrows(NullPointerException.class, () -> Shape2F.containsUnion(null, a, b));
 	}
 	
 	@Test

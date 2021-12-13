@@ -23,7 +23,6 @@ import static org.dayflower.utility.Ints.toInt;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -46,13 +45,11 @@ public final class Circle2I implements Shape2I {
 	/**
 	 * The name of this {@code Circle2I} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final String NAME = "Circle";
 	
 	/**
 	 * The ID of this {@code Circle2F} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +69,6 @@ public final class Circle2I implements Shape2I {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Circle2I() {
 		this(new Point2I());
 	}
@@ -85,7 +81,6 @@ public final class Circle2I implements Shape2I {
 	 * @param circle a {@link Circle2D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Circle2I(final Circle2D circle) {
 		this.center = new Point2I(circle.getCenter());
 		this.radius = toInt(circle.getRadius());
@@ -99,7 +94,6 @@ public final class Circle2I implements Shape2I {
 	 * @param circle a {@link Circle2F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Circle2I(final Circle2F circle) {
 		this.center = new Point2I(circle.getCenter());
 		this.radius = toInt(circle.getRadius());
@@ -120,7 +114,6 @@ public final class Circle2I implements Shape2I {
 	 * @param center the center of this {@code Circle2I} instance
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Circle2I(final Point2I center) {
 		this(center, 10);
 	}
@@ -134,7 +127,6 @@ public final class Circle2I implements Shape2I {
 	 * @param radius the radius of this {@code Circle2I} instance
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Circle2I(final Point2I center, final int radius) {
 		this.center = Objects.requireNonNull(center, "center == null");
 		this.radius = radius;
@@ -148,7 +140,6 @@ public final class Circle2I implements Shape2I {
 	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Circle2I} instance, {@code false} otherwise
 	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Circle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
 		final List<Point2I> points = new ArrayList<>();
@@ -179,7 +170,6 @@ public final class Circle2I implements Shape2I {
 	 * 
 	 * @return the center of this {@code Circle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	public Point2I getCenter() {
 		return this.center;
 	}
@@ -189,7 +179,6 @@ public final class Circle2I implements Shape2I {
 	 * 
 	 * @return a {@code String} with the name of this {@code Circle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -200,7 +189,6 @@ public final class Circle2I implements Shape2I {
 	 * 
 	 * @return a {@code String} representation of this {@code Circle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Circle2I(%s, %d)", this.center, Integer.valueOf(this.radius));
@@ -227,7 +215,6 @@ public final class Circle2I implements Shape2I {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -255,7 +242,6 @@ public final class Circle2I implements Shape2I {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Circle2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
 		final int lengthSquared = Vector2I.direction(this.center, point).lengthSquared();
@@ -274,7 +260,6 @@ public final class Circle2I implements Shape2I {
 	 * @param object the {@code Object} to compare to this {@code Circle2I} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Circle2I}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -295,7 +280,6 @@ public final class Circle2I implements Shape2I {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Circle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -306,7 +290,6 @@ public final class Circle2I implements Shape2I {
 	 * 
 	 * @return the radius of this {@code Circle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	public int getRadius() {
 		return this.radius;
 	}
@@ -316,7 +299,6 @@ public final class Circle2I implements Shape2I {
 	 * 
 	 * @return a hash code for this {@code Circle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Integer.valueOf(this.radius));
@@ -333,7 +315,6 @@ public final class Circle2I implements Shape2I {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

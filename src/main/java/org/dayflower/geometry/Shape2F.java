@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 /**
@@ -39,7 +38,6 @@ public interface Shape2F extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Shape2F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	boolean contains(final Point2F point);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +53,6 @@ public interface Shape2F extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in {@code shapeLHS} but not in {@code shapeRHS}, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	static boolean containsDifference(final Point2F point, final Shape2F shapeLHS, final Shape2F shapeRHS) {
 		Objects.requireNonNull(point, "point == null");
 		Objects.requireNonNull(shapeLHS, "shapeLHS == null");
@@ -79,7 +76,6 @@ public interface Shape2F extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in both {@code shapeLHS} and {@code shapeRHS}, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	static boolean containsIntersection(final Point2F point, final Shape2F shapeLHS, final Shape2F shapeRHS) {
 		Objects.requireNonNull(point, "point == null");
 		Objects.requireNonNull(shapeLHS, "shapeLHS == null");
@@ -103,7 +99,6 @@ public interface Shape2F extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in either {@code shapeLHS} or {@code shapeRHS}, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	static boolean containsUnion(final Point2F point, final Shape2F shapeLHS, final Shape2F shapeRHS) {
 		Objects.requireNonNull(point, "point == null");
 		Objects.requireNonNull(shapeLHS, "shapeLHS == null");

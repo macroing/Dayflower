@@ -38,7 +38,6 @@ public interface Shape2I extends Shape {
 	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Shape2I} instance, {@code false} otherwise
 	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Shape2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	List<Point2I> findPoints(final boolean isIncludingBorderOnly);
 	
 	/**
@@ -51,7 +50,6 @@ public interface Shape2I extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Shape2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	boolean contains(final Point2I point, final boolean isIncludingBorderOnly);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +66,6 @@ public interface Shape2I extends Shape {
 	 * 
 	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Shape2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	default List<Point2I> findPoints() {
 		return findPoints(false);
 	}
@@ -89,7 +86,6 @@ public interface Shape2I extends Shape {
 	 * @return a {@code List} with {@code Point2I} instances that represents the complement of this {@code Shape2I} instance within {@code shape}
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default List<Point2I> findPointsOfComplement(final Shape2I shape) {
 		return findPointsOfComplement(shape, false);
 	}
@@ -106,7 +102,7 @@ public interface Shape2I extends Shape {
 	 */
 //	TODO: Add Unit Tests!
 	default List<Point2I> findPointsOfComplement(final Shape2I shape, final boolean isExcludingBorderOnly) {
-		return shape.findPoints().stream().filter(point -> !contains(point) || isExcludingBorderOnly && contains(point) && !contains(point, true)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+		return shape.findPoints().stream().filter(point -> !contains(point) || isExcludingBorderOnly && !contains(point, true)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	}
 	
 	/**
@@ -125,7 +121,6 @@ public interface Shape2I extends Shape {
 	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Shape2I} instance and {@code shape}
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default List<Point2I> findPointsOfIntersection(final Shape2I shape) {
 		return findPointsOfIntersection(shape, false);
 	}
@@ -140,7 +135,6 @@ public interface Shape2I extends Shape {
 	 * @return a {@code List} with {@code Point2I} instances that represents the intersection between this {@code Shape2I} instance and {@code shape}
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default List<Point2I> findPointsOfIntersection(final Shape2I shape, final boolean isIncludingBorderOnly) {
 		return shape.findPoints().stream().filter(point -> contains(point, isIncludingBorderOnly)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	}
@@ -161,7 +155,6 @@ public interface Shape2I extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Shape2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default boolean contains(final Point2I point) {
 		return contains(point, false);
 	}
@@ -179,7 +172,6 @@ public interface Shape2I extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in {@code shapeLHS} but not in {@code shapeRHS}, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	static boolean containsDifference(final Point2I point, final Shape2I shapeLHS, final Shape2I shapeRHS) {
 		Objects.requireNonNull(point, "point == null");
 		Objects.requireNonNull(shapeLHS, "shapeLHS == null");
@@ -203,7 +195,6 @@ public interface Shape2I extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in both {@code shapeLHS} and {@code shapeRHS}, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	static boolean containsIntersection(final Point2I point, final Shape2I shapeLHS, final Shape2I shapeRHS) {
 		Objects.requireNonNull(point, "point == null");
 		Objects.requireNonNull(shapeLHS, "shapeLHS == null");
@@ -227,7 +218,6 @@ public interface Shape2I extends Shape {
 	 * @return {@code true} if, and only if, {@code point} is contained in either {@code shapeLHS} or {@code shapeRHS}, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code shapeLHS} or {@code shapeRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	static boolean containsUnion(final Point2I point, final Shape2I shapeLHS, final Shape2I shapeRHS) {
 		Objects.requireNonNull(point, "point == null");
 		Objects.requireNonNull(shapeLHS, "shapeLHS == null");

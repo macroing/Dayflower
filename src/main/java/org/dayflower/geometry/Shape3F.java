@@ -42,7 +42,6 @@ public interface Shape3F extends Shape {
 	 * 
 	 * @return a {@code BoundingVolume3F} instance that contains this {@code Shape3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	BoundingVolume3F getBoundingVolume();
 	
 	/**
@@ -58,7 +57,6 @@ public interface Shape3F extends Shape {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
 	/**
@@ -66,7 +64,6 @@ public interface Shape3F extends Shape {
 	 * 
 	 * @return the surface area of this {@code Shape3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	float getSurfaceArea();
 	
 	/**
@@ -82,7 +79,6 @@ public interface Shape3F extends Shape {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

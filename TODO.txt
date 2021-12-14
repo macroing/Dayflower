@@ -85,7 +85,7 @@ Test API - Unit Testing:
 	* 100.0% - Geometry Bounding Volume API
 	*   0.0% - Geometry Bounding Volume Hierarchy API
 	*   0.0% - Geometry Rasterizer API
-	*   2.5% - Geometry Shape API
+	*   2.6% - Geometry Shape API
 
 	*   0.0% - Image API
 

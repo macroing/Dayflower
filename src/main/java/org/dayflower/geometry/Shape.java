@@ -43,7 +43,6 @@ public interface Shape extends Node {
 	 * 
 	 * @return a {@code String} with the name of this {@code Shape} instance
 	 */
-//	TODO: Add Unit Tests!
 	String getName();
 	
 	/**
@@ -51,7 +50,6 @@ public interface Shape extends Node {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Shape} instance
 	 */
-//	TODO: Add Unit Tests!
 	int getID();
 	
 	/**
@@ -65,7 +63,6 @@ public interface Shape extends Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	void write(final DataOutput dataOutput);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

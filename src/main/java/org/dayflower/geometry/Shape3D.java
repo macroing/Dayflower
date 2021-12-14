@@ -42,7 +42,6 @@ public interface Shape3D extends Shape {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code Shape3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	BoundingVolume3D getBoundingVolume();
 	
 	/**
@@ -58,7 +57,6 @@ public interface Shape3D extends Shape {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum);
 	
 	/**
@@ -66,7 +64,6 @@ public interface Shape3D extends Shape {
 	 * 
 	 * @return the surface area of this {@code Shape3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	double getSurfaceArea();
 	
 	/**
@@ -82,7 +79,6 @@ public interface Shape3D extends Shape {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

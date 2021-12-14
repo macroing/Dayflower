@@ -41,11 +41,13 @@ public final class Triangle2F implements Shape2F {
 	/**
 	 * The name of this {@code Triangle2F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Triangle";
 	
 	/**
 	 * The ID of this {@code Triangle2F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 5;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +68,7 @@ public final class Triangle2F implements Shape2F {
 	 * @param c a {@code Point2F} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Triangle2F(final Point2F a, final Point2F b, final Point2F c) {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
@@ -79,6 +82,7 @@ public final class Triangle2F implements Shape2F {
 	 * 
 	 * @return the {@code Point2F} instance denoted by {@code A}
 	 */
+//	TODO: Add Unit Tests!
 	public Point2F getA() {
 		return this.a;
 	}
@@ -88,6 +92,7 @@ public final class Triangle2F implements Shape2F {
 	 * 
 	 * @return the {@code Point2F} instance denoted by {@code B}
 	 */
+//	TODO: Add Unit Tests!
 	public Point2F getB() {
 		return this.b;
 	}
@@ -97,6 +102,7 @@ public final class Triangle2F implements Shape2F {
 	 * 
 	 * @return the {@code Point2F} instance denoted by {@code C}
 	 */
+//	TODO: Add Unit Tests!
 	public Point2F getC() {
 		return this.c;
 	}
@@ -106,6 +112,7 @@ public final class Triangle2F implements Shape2F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Triangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -116,6 +123,7 @@ public final class Triangle2F implements Shape2F {
 	 * 
 	 * @return a {@code String} representation of this {@code Triangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Triangle2F(%s, %s, %s)", this.a, this.b, this.c);
@@ -142,6 +150,7 @@ public final class Triangle2F implements Shape2F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -176,6 +185,7 @@ public final class Triangle2F implements Shape2F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Triangle2F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2F point) {
 		final float signA = (point.getX() - this.b.getX()) * (this.a.getY() - this.b.getY()) - (this.a.getX() - this.b.getX()) * (point.getY() - this.b.getY());
@@ -196,6 +206,7 @@ public final class Triangle2F implements Shape2F {
 	 * @param object the {@code Object} to compare to this {@code Triangle2F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Triangle2F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -218,6 +229,7 @@ public final class Triangle2F implements Shape2F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Triangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -228,6 +240,7 @@ public final class Triangle2F implements Shape2F {
 	 * 
 	 * @return a hash code for this {@code Triangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.a, this.b, this.c);
@@ -244,6 +257,7 @@ public final class Triangle2F implements Shape2F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

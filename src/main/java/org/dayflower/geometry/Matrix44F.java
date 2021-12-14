@@ -663,6 +663,13 @@ public final class Matrix44F implements Node {
 	 * Returns a new {@code Matrix44F} instance that looks in the direction of {@code eye} to {@code lookAt} and has an up-direction of {@code up}.
 	 * <p>
 	 * If either {@code eye}, {@code lookAt} or {@code up} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix44F.multiply(Matrix44F.translate(eye), Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.direction(eye, lookAt), up)));
+	 * }
+	 * </pre>
 	 * 
 	 * @param eye a {@link Point3F} instance that represents the eye to look from
 	 * @param lookAt a {@code Point3F} instance that represents the point to look at
@@ -840,9 +847,9 @@ public final class Matrix44F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final OrthonormalBasis33F orthonormalBasis) {
-		final Vector3F u = Vector3F.transform(Vector3F.u(), orthonormalBasis);
-		final Vector3F v = Vector3F.transform(Vector3F.v(), orthonormalBasis);
-		final Vector3F w = Vector3F.transform(Vector3F.w(), orthonormalBasis);
+		final Vector3F u = orthonormalBasis.getU();
+		final Vector3F v = orthonormalBasis.getV();
+		final Vector3F w = orthonormalBasis.getW();
 		
 		return rotate(w, v, u);
 	}

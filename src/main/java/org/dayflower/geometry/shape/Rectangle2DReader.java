@@ -61,6 +61,7 @@ public final class Rectangle2DReader implements Shape2DReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Rectangle2D read(final DataInput dataInput) {
 		try {
@@ -90,6 +91,7 @@ public final class Rectangle2DReader implements Shape2DReader {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Rectangle2D read(final DataInput dataInput, final int id) {
 		Objects.requireNonNull(dataInput, "dataInput == null");
@@ -105,6 +107,7 @@ public final class Rectangle2DReader implements Shape2DReader {
 	 * @param id the ID to check
 	 * @return {@code true} if, and only if, {@code id == Rectangle2D.ID}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean isSupported(final int id) {
 		return id == Rectangle2D.ID;

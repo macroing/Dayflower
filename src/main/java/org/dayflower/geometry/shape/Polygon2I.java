@@ -45,11 +45,13 @@ public final class Polygon2I implements Shape2I {
 	/**
 	 * The name of this {@code Polygon2I} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Polygon";
 	
 	/**
 	 * The ID of this {@code Polygon2I} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,6 +73,7 @@ public final class Polygon2I implements Shape2I {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 3}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Polygon2I(final Point2I... points) {
 		this.points = doRequireValidPoints(points);
 		this.lineSegments = LineSegment2I.fromPoints(this.points);
@@ -84,6 +87,7 @@ public final class Polygon2I implements Shape2I {
 	 * 
 	 * @return a {@code List} that contains {@code LineSegment2I} instances that connects all {@link Point2I} instances in this {@code Polygon2I} instance
 	 */
+//	TODO: Add Unit Tests!
 	public List<LineSegment2I> getLineSegments() {
 		return new ArrayList<>(this.lineSegments);
 	}
@@ -94,6 +98,7 @@ public final class Polygon2I implements Shape2I {
 	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Polygon2I} instance, {@code false} otherwise
 	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Polygon2I} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
 		return this.rectangle.findPoints().stream().filter(point -> contains(point, isIncludingBorderOnly)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
@@ -104,6 +109,7 @@ public final class Polygon2I implements Shape2I {
 	 * 
 	 * @return a {@code List} that contains all {@code Point2I} instances in this {@code Polygon2I} instance
 	 */
+//	TODO: Add Unit Tests!
 	public List<Point2I> getPoints() {
 		return new ArrayList<>(Arrays.asList(this.points));
 	}
@@ -113,6 +119,7 @@ public final class Polygon2I implements Shape2I {
 	 * 
 	 * @return the {@code Rectangle2I} instance that contains this {@code Polygon2I} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Rectangle2I getRectangle() {
 		return this.rectangle;
 	}
@@ -122,6 +129,7 @@ public final class Polygon2I implements Shape2I {
 	 * 
 	 * @return a {@code String} with the name of this {@code Polygon2I} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -132,6 +140,7 @@ public final class Polygon2I implements Shape2I {
 	 * 
 	 * @return a {@code String} representation of this {@code Polygon2I} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Polygon2I(%s)", Point2I.toString(this.points));
@@ -158,6 +167,7 @@ public final class Polygon2I implements Shape2I {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -197,6 +207,7 @@ public final class Polygon2I implements Shape2I {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Polygon2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
 		return isIncludingBorderOnly ? doContainsOnLineSegments(point) : doContains(point) || doContainsOnLineSegments(point);
@@ -210,6 +221,7 @@ public final class Polygon2I implements Shape2I {
 	 * @param object the {@code Object} to compare to this {@code Polygon2I} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Polygon2I}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -232,6 +244,7 @@ public final class Polygon2I implements Shape2I {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Polygon2I} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -242,6 +255,7 @@ public final class Polygon2I implements Shape2I {
 	 * 
 	 * @return a hash code for this {@code Polygon2I} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.lineSegments, Integer.valueOf(Arrays.hashCode(this.points)), this.rectangle);
@@ -258,6 +272,7 @@ public final class Polygon2I implements Shape2I {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

@@ -45,11 +45,13 @@ public final class Polygon2F implements Shape2F {
 	/**
 	 * The name of this {@code Polygon2F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Polygon";
 	
 	/**
 	 * The ID of this {@code Polygon2F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,6 +73,7 @@ public final class Polygon2F implements Shape2F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 3}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Polygon2F(final Point2F... points) {
 		this.points = doRequireValidPoints(points);
 		this.lineSegments = LineSegment2F.fromPoints(this.points);
@@ -84,6 +87,7 @@ public final class Polygon2F implements Shape2F {
 	 * 
 	 * @return a {@code List} that contains {@code LineSegment2F} instances that connects all {@link Point2F} instances in this {@code Polygon2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public List<LineSegment2F> getLineSegments() {
 		return new ArrayList<>(this.lineSegments);
 	}
@@ -97,6 +101,7 @@ public final class Polygon2F implements Shape2F {
 	 * @return the {@code Point2F} instance at index {@code index} in this {@code Polygon2F} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}
 	 */
+//	TODO: Add Unit Tests!
 	public Point2F getPoint(final int index) {
 		ParameterArguments.requireRange(index, 0, getPointCount() - 1, "index");
 		
@@ -108,6 +113,7 @@ public final class Polygon2F implements Shape2F {
 	 * 
 	 * @return the {@code Rectangle2F} instance that contains this {@code Polygon2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Rectangle2F getRectangle() {
 		return this.rectangle;
 	}
@@ -117,6 +123,7 @@ public final class Polygon2F implements Shape2F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Polygon2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -127,6 +134,7 @@ public final class Polygon2F implements Shape2F {
 	 * 
 	 * @return a {@code String} representation of this {@code Polygon2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Polygon2F(%s)", Point2F.toString(this.points));
@@ -153,6 +161,7 @@ public final class Polygon2F implements Shape2F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -191,6 +200,7 @@ public final class Polygon2F implements Shape2F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Polygon2F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2F point) {
 		return this.rectangle.contains(point) ? doContains(point) || doContainsOnLineSegments(point) : false;
@@ -204,6 +214,7 @@ public final class Polygon2F implements Shape2F {
 	 * @param object the {@code Object} to compare to this {@code Polygon2F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Polygon2F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -226,6 +237,7 @@ public final class Polygon2F implements Shape2F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Polygon2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -236,6 +248,7 @@ public final class Polygon2F implements Shape2F {
 	 * 
 	 * @return the {@code Point2F} count of this {@code Polygon2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public int getPointCount() {
 		return this.points.length;
 	}
@@ -245,6 +258,7 @@ public final class Polygon2F implements Shape2F {
 	 * 
 	 * @return a hash code for this {@code Polygon2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.lineSegments, Integer.valueOf(Arrays.hashCode(this.points)), this.rectangle);
@@ -261,6 +275,7 @@ public final class Polygon2F implements Shape2F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

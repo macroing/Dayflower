@@ -1,6 +1,8 @@
 2021-12-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Circle2DReaderUnitTests, Circle2FReaderUnitTests and Circle2IReaderUnitTests classes.
+	* CHANGE:	Update the method rotate(OrthonormalBasis33D) in the Matrix44D class. It may be slightly faster now.
+	* CHANGE:	Update the method rotate(OrthonormalBasis33F) in the Matrix44F class. It may be slightly faster now.
 
 2021-12-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

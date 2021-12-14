@@ -54,11 +54,13 @@ public final class ProceduralTerrain3D implements Shape3D {
 	/**
 	 * The name of this {@code ProceduralTerrain3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Procedural Terrain";
 	
 	/**
 	 * The ID of this {@code ProceduralTerrain3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 12;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +77,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * @param doubleBinaryOperator a {@code DoubleBinaryOperator} instance
 	 * @throws NullPointerException thrown if, and only if, {@code doubleBinaryOperator} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public ProceduralTerrain3D(final DoubleBinaryOperator doubleBinaryOperator) {
 		this.doubleBinaryOperator = Objects.requireNonNull(doubleBinaryOperator, "doubleBinaryOperator == null");
 	}
@@ -86,6 +89,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains parts of this {@code ProceduralTerrain3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return new AxisAlignedBoundingBox3D(Point3D.minimum(), Point3D.maximum());
@@ -104,6 +108,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
@@ -120,6 +125,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code ProceduralTerrain3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -130,6 +136,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code ProceduralTerrain3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return "new ProceduralTerrain3D(...)";
@@ -144,6 +151,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code ProceduralTerrain3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean contains(final Point3D point) {
 		return point.getY() < doApplyAsDouble(point.getX(), point.getZ());
 	}
@@ -156,6 +164,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code ProceduralTerrain3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ProceduralTerrain3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -176,6 +185,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code ProceduralTerrain3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		return Double.POSITIVE_INFINITY;
@@ -194,6 +204,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Point3D origin = ray.getOrigin();
@@ -230,6 +241,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code ProceduralTerrain3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -240,6 +252,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code ProceduralTerrain3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.doubleBinaryOperator);
@@ -256,6 +269,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -279,6 +293,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * 
 	 * @return a {@code ProceduralTerrain3D} instance that uses a Simplex-based fractal algorithm
 	 */
+//	TODO: Add Unit Tests!
 	public static ProceduralTerrain3D simplexFractalXY() {
 		return simplexFractalXY(0.8D, 0.2D, 1.0D / 2.0D, 2.0D, 2);
 	}
@@ -293,6 +308,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * @param octaves the octaves to use
 	 * @return a {@code ProceduralTerrain3D} instance that uses a Simplex-based fractal algorithm
 	 */
+//	TODO: Add Unit Tests!
 	public static ProceduralTerrain3D simplexFractalXY(final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
 		return new ProceduralTerrain3D((x, y) -> SimplexNoiseD.fractalXY(x, y, amplitude, frequency, gain, lacunarity, octaves));
 	}
@@ -302,6 +318,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * 
 	 * @return a {@code ProceduralTerrain3D} instance that uses a sine algorithm
 	 */
+//	TODO: Add Unit Tests!
 	public static ProceduralTerrain3D sin() {
 		return new ProceduralTerrain3D((x, y) -> Doubles.sin(x) * Doubles.sin(y));
 	}

@@ -67,11 +67,13 @@ public final class Sphere3D implements Shape3D {
 	/**
 	 * The name of this {@code Sphere3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Sphere";
 	
 	/**
 	 * The ID of this {@code Sphere3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 15;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +93,7 @@ public final class Sphere3D implements Shape3D {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Sphere3D() {
 		this(1.0D);
 	}
@@ -107,6 +110,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @param radius the radius of this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Sphere3D(final double radius) {
 		this(radius, new Point3D());
 	}
@@ -120,6 +124,7 @@ public final class Sphere3D implements Shape3D {
 	 * @param center the center of this {@code Sphere3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Sphere3D(final double radius, final Point3D center) {
 		this.center = Point3D.getCached(Objects.requireNonNull(center, "center == null"));
 		this.radius = radius;
@@ -132,6 +137,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return new BoundingSphere3D(this.radius, this.center);
@@ -148,6 +154,7 @@ public final class Sphere3D implements Shape3D {
 	 * @return an optional {@code SurfaceSample3D} with the surface sample
 	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceSample3D> sample(final Point2D sample) {
 		Objects.requireNonNull(sample, "sample == null");
@@ -179,6 +186,7 @@ public final class Sphere3D implements Shape3D {
 	 * @return an optional {@code SurfaceSample3D} with the surface sample
 	 * @throws NullPointerException thrown if, and only if, either {@code sample} or {@code surfaceIntersection} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceSample3D> sample(final Point2D sample, final SurfaceIntersection3D surfaceIntersection) {
 		Objects.requireNonNull(sample, "sample == null");
@@ -271,6 +279,7 @@ public final class Sphere3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
@@ -287,6 +296,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return the center of this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getCenter() {
 		return this.center;
 	}
@@ -296,6 +306,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -306,6 +317,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Sphere3D(%+.10f, %s)", Double.valueOf(this.radius), this.center);
@@ -332,6 +344,7 @@ public final class Sphere3D implements Shape3D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -358,6 +371,7 @@ public final class Sphere3D implements Shape3D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Sphere3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean contains(final Point3D point) {
 		return Point3D.distanceSquared(this.center, point) <= this.radius * this.radius;
 	}
@@ -370,6 +384,7 @@ public final class Sphere3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code Sphere3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Sphere3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -397,6 +412,7 @@ public final class Sphere3D implements Shape3D {
 	 * @return the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code incoming} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double evaluateProbabilityDensityFunction(final SurfaceIntersection3D surfaceIntersection, final Vector3D incoming) {
 		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
@@ -424,6 +440,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return the radius of this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadius() {
 		return this.radius;
 	}
@@ -433,6 +450,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return the squared radius of this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadiusSquared() {
 		return this.radius * this.radius;
 	}
@@ -442,6 +460,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		return PI_MULTIPLIED_BY_4 * getRadiusSquared();
@@ -452,6 +471,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return the volume of this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getVolume() {
 		return 4.0D / 3.0D * PI * pow(this.radius, 3.0D);
 	}
@@ -469,6 +489,7 @@ public final class Sphere3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Vector3D direction = ray.getDirection();
@@ -500,6 +521,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -510,6 +532,7 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code Sphere3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Double.valueOf(this.radius));
@@ -526,6 +549,7 @@ public final class Sphere3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

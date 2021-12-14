@@ -52,11 +52,13 @@ public final class Rectangle2F implements Shape2F {
 	/**
 	 * The name of this {@code Rectangle2F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Rectangle";
 	
 	/**
 	 * The ID of this {@code Rectangle2F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 4;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +79,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @param circle a {@link Circle2F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Rectangle2F(final Circle2F circle) {
 		this(new Point2F(circle.getCenter().getX() - circle.getRadius(), circle.getCenter().getY() - circle.getRadius()), new Point2F(circle.getCenter().getX() + circle.getRadius(), circle.getCenter().getY() + circle.getRadius()));
 	}
@@ -90,6 +93,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @param y a {@code Point2F} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code x} or {@code y} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Rectangle2F(final Point2F x, final Point2F y) {
 		this.a = new Point2F(min(x.getX(), y.getX()), min(x.getY(), y.getY()));
 		this.b = new Point2F(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
@@ -112,6 +116,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code a}, {@code b}, {@code c} and {@code d} does not form a rectangle
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Rectangle2F(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
 		doCheckPointValidity(a, b, c, d);
 		
@@ -129,6 +134,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return a {@code List} that contains {@code LineSegment2F} instances that connects all {@link Point2F} instances in this {@code Rectangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public List<LineSegment2F> getLineSegments() {
 		return new ArrayList<>(this.lineSegments);
 	}
@@ -140,6 +146,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return the {@code Point2F} instance denoted by A
 	 */
+//	TODO: Add Unit Tests!
 	public Point2F getA() {
 		return this.a;
 	}
@@ -151,6 +158,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return the {@code Point2F} instance denoted by B
 	 */
+//	TODO: Add Unit Tests!
 	public Point2F getB() {
 		return this.b;
 	}
@@ -162,6 +170,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return the {@code Point2F} instance denoted by C
 	 */
+//	TODO: Add Unit Tests!
 	public Point2F getC() {
 		return this.c;
 	}
@@ -173,6 +182,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return the {@code Point2F} instance denoted by D
 	 */
+//	TODO: Add Unit Tests!
 	public Point2F getD() {
 		return this.d;
 	}
@@ -182,6 +192,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Rectangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -192,6 +203,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return a {@code String} representation of this {@code Rectangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Rectangle2F(%s, %s)", this.a, this.c);
@@ -218,6 +230,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -262,6 +275,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle2F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2F point) {
 		return doContains(point) || doContainsOnLineSegments(point);
@@ -275,6 +289,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @param object the {@code Object} to compare to this {@code Rectangle2F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Rectangle2F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -301,6 +316,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Rectangle2F} instance is axis-aligned, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isAxisAligned() {
 		final boolean isAxisAlignedAB = equal(this.a.getY(), this.b.getY());
 		final boolean isAxisAlignedBC = equal(this.b.getX(), this.c.getX());
@@ -316,6 +332,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Rectangle2F} instance is rotated, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isRotated() {
 		return !isAxisAligned();
 	}
@@ -325,6 +342,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return the height of this {@code Rectangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getHeight() {
 		final float maximumY = max(max(this.a.getY(), this.b.getY()), max(this.c.getY(), this.d.getY()));
 		final float minimumY = min(min(this.a.getY(), this.b.getY()), min(this.c.getY(), this.d.getY()));
@@ -337,6 +355,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return the width of this {@code Rectangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getWidth() {
 		final float maximumX = max(max(this.a.getX(), this.b.getX()), max(this.c.getX(), this.d.getX()));
 		final float minimumX = min(min(this.a.getX(), this.b.getX()), min(this.c.getX(), this.d.getX()));
@@ -349,6 +368,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Rectangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -359,6 +379,7 @@ public final class Rectangle2F implements Shape2F {
 	 * 
 	 * @return a hash code for this {@code Rectangle2F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.lineSegments, this.a, this.b, this.c, this.d);
@@ -375,6 +396,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -403,6 +425,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @return an {@code Optional} with an optional {@code Rectangle2F} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Optional<Rectangle2F> intersection(final Rectangle2F a, final Rectangle2F b) {
 		final Point2F minimumA = a.getA();
 		final Point2F minimumB = b.getA();
@@ -430,6 +453,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 1}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Rectangle2F fromPoints(final Point2F... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 1, Integer.MAX_VALUE, "points.length");
@@ -460,6 +484,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @throws IllegalArgumentException thrown if, and only if, the rotated {@code Point2F} instances do not form a rectangle
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code angle} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Rectangle2F rotate(final Rectangle2F rectangle, final AngleF angle) {
 		final Point2F a = Point2F.rotate(rectangle.a, angle);
 		final Point2F b = Point2F.rotate(rectangle.b, angle);
@@ -481,6 +506,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @return a new {@code Rectangle2F} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code direction} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Rectangle2F translate(final Rectangle2F rectangle, final Vector2F direction) {
 		final Point2F a = Point2F.add(rectangle.a, direction);
 		final Point2F b = Point2F.add(rectangle.b, direction);
@@ -500,6 +526,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @return a {@code Rectangle2F} instance that is the union of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static Rectangle2F union(final Rectangle2F a, final Rectangle2F b) {
 		final Point2F minimum = Point2F.minimum(a.getA(), b.getA());
 		final Point2F maximum = Point2F.maximum(a.getC(), b.getC());

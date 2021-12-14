@@ -57,11 +57,13 @@ public final class Polygon3F implements Shape3F {
 	/**
 	 * The name of this {@code Polygon3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Polygon";
 	
 	/**
 	 * The ID of this {@code Polygon3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 11;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +85,7 @@ public final class Polygon3F implements Shape3F {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 3} or the provided {@code Point3F} instances are not coplanar
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or at least one of its elements are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Polygon3F(final Point3F... points) {
 		this.points = doRequireValidPoints(points);
 		this.surfaceNormal = Vector3F.normalNormalized(this.points[0], this.points[1], this.points[2]);
@@ -96,6 +99,7 @@ public final class Polygon3F implements Shape3F {
 	 * 
 	 * @return a {@code BoundingVolume3F} instance that contains this {@code Polygon3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		return AxisAlignedBoundingBox3F.fromPoints(this.points);
@@ -114,6 +118,7 @@ public final class Polygon3F implements Shape3F {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
@@ -134,6 +139,7 @@ public final class Polygon3F implements Shape3F {
 	 * @return the {@code Point3F} instance at index {@code index} in this {@code Polygon3F} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F getPoint(final int index) {
 		ParameterArguments.requireRange(index, 0, getPointCount() - 1, "index");
 		
@@ -145,6 +151,7 @@ public final class Polygon3F implements Shape3F {
 	 * 
 	 * @return a {@code Polygon2F} instance that contains the projected polygon
 	 */
+//	TODO: Add Unit Tests!
 	public Polygon2F getProjectedPolygon() {
 		return this.projectedPolygon;
 	}
@@ -154,6 +161,7 @@ public final class Polygon3F implements Shape3F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Polygon3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -164,6 +172,7 @@ public final class Polygon3F implements Shape3F {
 	 * 
 	 * @return a {@code String} representation of this {@code Polygon3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Polygon3F(%s)", Point3F.toString(this.points));
@@ -174,6 +183,7 @@ public final class Polygon3F implements Shape3F {
 	 * 
 	 * @return a {@code Vector3F} instance with the surface normal associated with this {@code Polygon3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3F getSurfaceNormal() {
 		return this.surfaceNormal;
 	}
@@ -199,6 +209,7 @@ public final class Polygon3F implements Shape3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -235,6 +246,7 @@ public final class Polygon3F implements Shape3F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Polygon3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean contains(final Point3F point) {
 		final Point3F a = this.points[0];
 		final Point3F b = this.points[1];
@@ -256,6 +268,7 @@ public final class Polygon3F implements Shape3F {
 	 * @param object the {@code Object} to compare to this {@code Polygon3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Polygon3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -278,6 +291,7 @@ public final class Polygon3F implements Shape3F {
 	 * 
 	 * @return the surface area of this {@code Polygon3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		Vector3F surfaceArea = Vector3F.ZERO;
@@ -302,6 +316,7 @@ public final class Polygon3F implements Shape3F {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float dotProduct = Vector3F.dotProduct(this.surfaceNormal, ray.getDirection());
@@ -324,6 +339,7 @@ public final class Polygon3F implements Shape3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Polygon3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -334,6 +350,7 @@ public final class Polygon3F implements Shape3F {
 	 * 
 	 * @return the {@code Point3F} count of this {@code Polygon3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public int getPointCount() {
 		return this.points.length;
 	}
@@ -343,6 +360,7 @@ public final class Polygon3F implements Shape3F {
 	 * 
 	 * @return a hash code for this {@code Polygon3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)), this.projectedPolygon, this.surfaceNormal);
@@ -359,6 +377,7 @@ public final class Polygon3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

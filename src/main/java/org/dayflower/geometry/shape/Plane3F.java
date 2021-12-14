@@ -55,11 +55,13 @@ public final class Plane3F implements Shape3F {
 	/**
 	 * The name of this {@code Plane3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Plane";
 	
 	/**
 	 * The ID of this {@code Plane3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 10;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +83,7 @@ public final class Plane3F implements Shape3F {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Plane3F() {
 		this(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 0.0F, 0.0F));
 	}
@@ -95,6 +98,7 @@ public final class Plane3F implements Shape3F {
 	 * @param c the {@code Point3F} instance denoted by {@code C}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Plane3F(final Point3F a, final Point3F b, final Point3F c) {
 		this.a = Point3F.getCached(Objects.requireNonNull(a, "a == null"));
 		this.b = Point3F.getCached(Objects.requireNonNull(b, "b == null"));
@@ -109,6 +113,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return a {@code BoundingVolume3F} instance that contains this {@code Plane3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		return new InfiniteBoundingVolume3F();
@@ -127,6 +132,7 @@ public final class Plane3F implements Shape3F {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
@@ -143,6 +149,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return the {@code Point3F} instance denoted by {@code A}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F getA() {
 		return this.a;
 	}
@@ -152,6 +159,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return the {@code Point3F} instance denoted by {@code B}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F getB() {
 		return this.b;
 	}
@@ -161,6 +169,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return the {@code Point3F} instance denoted by {@code C}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3F getC() {
 		return this.c;
 	}
@@ -170,6 +179,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Plane3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -180,6 +190,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return a {@code String} representation of this {@code Plane3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Plane3F(%s, %s, %s)", this.a, this.b, this.c);
@@ -190,6 +201,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return the {@code Vector3F} instance used as surface normal
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3F getSurfaceNormal() {
 		return this.surfaceNormal;
 	}
@@ -215,6 +227,7 @@ public final class Plane3F implements Shape3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -253,6 +266,7 @@ public final class Plane3F implements Shape3F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Plane3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean contains(final Point3F point) {
 		return Point3F.coplanar(this.a, this.b, this.c, point);
 	}
@@ -265,6 +279,7 @@ public final class Plane3F implements Shape3F {
 	 * @param object the {@code Object} to compare to this {@code Plane3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Plane3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -291,6 +306,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return the surface area of this {@code Plane3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		return Float.POSITIVE_INFINITY;
@@ -309,6 +325,7 @@ public final class Plane3F implements Shape3F {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float dotProduct = Vector3F.dotProduct(this.surfaceNormal, ray.getDirection());
@@ -331,6 +348,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Plane3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -341,6 +359,7 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return a hash code for this {@code Plane3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.a, this.b, this.c, this.surfaceNormal);
@@ -357,6 +376,7 @@ public final class Plane3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

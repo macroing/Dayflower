@@ -76,11 +76,13 @@ public final class TriangleMesh3D implements Shape3D {
 	/**
 	 * The name of this {@code TriangleMesh3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Triangle Mesh";
 	
 	/**
 	 * The ID of this {@code TriangleMesh3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 18;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +116,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @param objectName the object name of this {@code TriangleMesh3D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public TriangleMesh3D(final List<Triangle3D> triangles, final String groupName, final String materialName, final String objectName) {
 		this(triangles, groupName, materialName, objectName, true);
 	}
@@ -130,6 +133,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @param isUsingAccelerationStructure {@code true} if, and only if, an acceleration structure should be used, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public TriangleMesh3D(final List<Triangle3D> triangles, final String groupName, final String materialName, final String objectName, final boolean isUsingAccelerationStructure) {
 		this.triangles = new ArrayList<>(ParameterArguments.requireNonNullList(triangles, "triangles"));
 		this.bVHNode = isUsingAccelerationStructure ? doCreateBVHNode(this.triangles) : null;
@@ -148,6 +152,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return this.boundingVolume;
@@ -158,6 +163,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return a {@code List} that contains all {@code BoundingVolume3D} instances used by the bounding volume hierarchy
 	 */
+//	TODO: Add Unit Tests!
 	public List<BoundingVolume3D> getBoundingVolumes() {
 		return this.isUsingAccelerationStructure ? NodeFilter.filterAll(this.bVHNode, BVHNode3D.class).stream().map(bVHNode -> bVHNode.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll) : new ArrayList<>();
 	}
@@ -167,6 +173,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return a {@code List} that contains all {@code Triangle3D} instances
 	 */
+//	TODO: Add Unit Tests!
 	public List<Triangle3D> getTriangles() {
 		return new ArrayList<>(this.triangles);
 	}
@@ -176,6 +183,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return the optional {@code BVHNode3D} instance that is used by this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Optional<BVHNode3D> getRootBVHNode() {
 		return this.isUsingAccelerationStructure ? Optional.of(this.bVHNode) : Optional.empty();
 	}
@@ -193,6 +201,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		if(this.isUsingAccelerationStructure) {
@@ -213,6 +222,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return the group name of this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public String getGroupName() {
 		return this.groupName;
 	}
@@ -222,6 +232,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return the material name of this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public String getMaterialName() {
 		return this.materialName;
 	}
@@ -231,6 +242,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -241,6 +253,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return the object name of this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public String getObjectName() {
 		return this.objectName;
 	}
@@ -250,6 +263,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new TriangleMesh3D(..., \"%s\", \"%s\", \"%s\", %s)", this.groupName, this.materialName, this.objectName, Boolean.toString(this.isUsingAccelerationStructure));
@@ -276,6 +290,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -311,6 +326,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code TriangleMesh3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TriangleMesh3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -349,6 +365,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @return {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TriangleMesh3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersector} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean intersection(final SurfaceIntersector3D surfaceIntersector) {
 		return this.isUsingAccelerationStructure ? this.bVHNode.intersection(surfaceIntersector) : surfaceIntersector.intersection(this);
@@ -365,6 +382,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @return {@code true} if, and only if, {@code ray} intersects this {@code TriangleMesh3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		return this.isUsingAccelerationStructure ? this.bVHNode.intersects(ray, tMinimum, tMaximum) : !isNaN(intersectionT(ray, tMinimum, tMaximum));
@@ -375,6 +393,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		return this.surfaceArea;
@@ -393,6 +412,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		if(this.isUsingAccelerationStructure) {
@@ -419,6 +439,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -429,6 +450,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code TriangleMesh3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.bVHNode, this.boundingVolume, this.triangles, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure), Double.valueOf(this.surfaceArea));
@@ -445,6 +467,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -487,6 +510,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static List<TriangleMesh3D> readWavefrontObject(final File file) {
 		return readWavefrontObject(file, false);
 	}
@@ -513,6 +537,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static List<TriangleMesh3D> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY) {
 		return readWavefrontObject(file, isFlippingTextureCoordinateY, 1.0D);
 	}
@@ -540,6 +565,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static List<TriangleMesh3D> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY, final double scale) {
 		return readWavefrontObject(file, isFlippingTextureCoordinateY, scale, true);
 	}
@@ -561,6 +587,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static List<TriangleMesh3D> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY, final double scale, final boolean isUsingAccelerationStructure) {
 		try {
 			System.out.printf("Loading triangle meshes from file '%s'...%n", file.getName());
@@ -691,6 +718,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static List<TriangleMesh3D> readWavefrontObject(final String pathname) {
 		return readWavefrontObject(pathname, false);
 	}
@@ -717,6 +745,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static List<TriangleMesh3D> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY) {
 		return readWavefrontObject(pathname, isFlippingTextureCoordinateY, 1.0D);
 	}
@@ -744,6 +773,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static List<TriangleMesh3D> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final double scale) {
 		return readWavefrontObject(pathname, isFlippingTextureCoordinateY, scale, true);
 	}
@@ -765,6 +795,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static List<TriangleMesh3D> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final double scale, final boolean isUsingAccelerationStructure) {
 		return readWavefrontObject(new File(Objects.requireNonNull(pathname, "pathname == null")), isFlippingTextureCoordinateY, scale, isUsingAccelerationStructure);
 	}
@@ -786,6 +817,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NumberFormatException thrown if, and only if, the {@code double} values cannot be parsed
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static TriangleMesh3D readGeo(final File file) {
 		try(final Scanner scanner = new Scanner(Objects.requireNonNull(file, "file == null"))) {
 			final int[] faceIndices = new int[scanner.nextInt()];
@@ -881,6 +913,7 @@ public final class TriangleMesh3D implements Shape3D {
 	 * @throws NumberFormatException thrown if, and only if, the {@code double} values cannot be parsed
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static TriangleMesh3D readGeo(final String pathname) {
 		return readGeo(new File(Objects.requireNonNull(pathname, "pathname == null")));
 	}

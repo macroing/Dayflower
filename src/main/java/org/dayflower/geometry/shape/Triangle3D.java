@@ -64,11 +64,13 @@ public final class Triangle3D implements Shape3D {
 	/**
 	 * The name of this {@code Triangle3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Triangle";
 	
 	/**
 	 * The ID of this {@code Triangle3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 17;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +85,7 @@ public final class Triangle3D implements Shape3D {
 	/**
 	 * Constructs a new {@code Triangle3D} instance.
 	 */
+//	TODO: Add Unit Tests!
 	public Triangle3D() {
 		this(new Point3D(0.0D, 1.0D, 0.0D), new Point3D(1.0D, -1.0D, 0.0D), new Point3D(-1.0D, -1.0D, 0.0D));
 	}
@@ -97,6 +100,7 @@ public final class Triangle3D implements Shape3D {
 	 * @param c a {@code Point3D} instance used as part of the position for the {@code Vertex3D} instance denoted by {@code C}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Triangle3D(final Point3D a, final Point3D b, final Point3D c) {
 		this.surfaceNormal = Vector3D.getCached(Vector3D.normalNormalized(a, b, c));
 		this.a = Vertex3D.getCached(new Vertex3D(new Point2D(0.5D, 0.0D), new Point4D(a), this.surfaceNormal));
@@ -114,6 +118,7 @@ public final class Triangle3D implements Shape3D {
 	 * @param c a {@code Vertex3D} instance denoted by {@code C}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Triangle3D(final Vertex3D a, final Vertex3D b, final Vertex3D c) {
 		this.a = Vertex3D.getCached(Objects.requireNonNull(a, "a == null"));
 		this.b = Vertex3D.getCached(Objects.requireNonNull(b, "b == null"));
@@ -128,6 +133,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		final Point3D a = Point3D.minimum(new Point3D(this.a.getPosition()), new Point3D(this.b.getPosition()), new Point3D(this.c.getPosition()));
@@ -147,6 +153,7 @@ public final class Triangle3D implements Shape3D {
 	 * @return an optional {@code SurfaceSample3D} with the surface sample
 	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceSample3D> sample(final Point2D sample) {
 		Objects.requireNonNull(sample, "sample == null");
@@ -193,6 +200,7 @@ public final class Triangle3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
@@ -209,6 +217,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -219,6 +228,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Triangle3D(%s, %s, %s)", this.a, this.b, this.c);
@@ -229,6 +239,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return the bitangent of this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D calculateBitangent() {
 		final Point2D textureCoordinatesA = this.a.getTextureCoordinates();
 		final Point2D textureCoordinatesB = this.b.getTextureCoordinates();
@@ -261,6 +272,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return the tangent of this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D calculateTangent() {
 		final Point2D textureCoordinatesA = this.a.getTextureCoordinates();
 		final Point2D textureCoordinatesB = this.b.getTextureCoordinates();
@@ -293,6 +305,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return the surface normal associated with this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D getSurfaceNormal() {
 		return this.surfaceNormal;
 	}
@@ -302,6 +315,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return the vertex denoted by {@code A} and is associated with this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vertex3D getA() {
 		return this.a;
 	}
@@ -311,6 +325,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return the vertex denoted by {@code B} and is associated with this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vertex3D getB() {
 		return this.b;
 	}
@@ -320,6 +335,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return the vertex denoted by {@code C} and is associated with this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vertex3D getC() {
 		return this.c;
 	}
@@ -345,6 +361,7 @@ public final class Triangle3D implements Shape3D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -383,6 +400,7 @@ public final class Triangle3D implements Shape3D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Triangle3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean contains(final Point3D point) {
 		final Point3D a = new Point3D(this.a.getPosition());
 		final Point3D b = new Point3D(this.b.getPosition());
@@ -419,6 +437,7 @@ public final class Triangle3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code Triangle3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Triangle3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -443,6 +462,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		final Point4D a = this.a.getPosition();
@@ -469,6 +489,7 @@ public final class Triangle3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Point4D a = this.a.getPosition();
@@ -521,6 +542,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -531,6 +553,7 @@ public final class Triangle3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code Triangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.surfaceNormal, this.a, this.b, this.c);
@@ -547,6 +570,7 @@ public final class Triangle3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -591,6 +615,7 @@ public final class Triangle3D implements Shape3D {
 		 * @param normal the normal associated with this {@code Vertex3D} instance
 		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public Vertex3D(final Point2D textureCoordinates, final Point4D position, final Vector3D normal) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
 			this.position = Point4D.getCached(Objects.requireNonNull(position, "position == null"));
@@ -604,6 +629,7 @@ public final class Triangle3D implements Shape3D {
 		 * 
 		 * @return the texture coordinates associated with this {@code Vertex3D} instance
 		 */
+//		TODO: Add Unit Tests!
 		public Point2D getTextureCoordinates() {
 			return this.textureCoordinates;
 		}
@@ -613,6 +639,7 @@ public final class Triangle3D implements Shape3D {
 		 * 
 		 * @return the position associated with this {@code Vertex3D} instance
 		 */
+//		TODO: Add Unit Tests!
 		public Point4D getPosition() {
 			return this.position;
 		}
@@ -622,6 +649,7 @@ public final class Triangle3D implements Shape3D {
 		 * 
 		 * @return a {@code String} representation of this {@code Vertex3D} instance
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public String toString() {
 			return String.format("new Vertex3D(%s, %s, %s)", this.textureCoordinates, this.position, this.normal);
@@ -632,6 +660,7 @@ public final class Triangle3D implements Shape3D {
 		 * 
 		 * @return the normal associated with this {@code Vertex3D} instance
 		 */
+//		TODO: Add Unit Tests!
 		public Vector3D getNormal() {
 			return this.normal;
 		}
@@ -657,6 +686,7 @@ public final class Triangle3D implements Shape3D {
 		 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 		 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 			Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -690,6 +720,7 @@ public final class Triangle3D implements Shape3D {
 		 * @param object the {@code Object} to compare to this {@code Vertex3D} instance for equality
 		 * @return {@code true} if, and only if, {@code object} is an instance of {@code Vertex3D}, and their respective values are equal, {@code false} otherwise
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public boolean equals(final Object object) {
 			if(object == this) {
@@ -712,6 +743,7 @@ public final class Triangle3D implements Shape3D {
 		 * 
 		 * @return a hash code for this {@code Vertex3D} instance
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public int hashCode() {
 			return Objects.hash(this.textureCoordinates, this.position, this.normal);
@@ -728,6 +760,7 @@ public final class Triangle3D implements Shape3D {
 		 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 		 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 		 */
+//		TODO: Add Unit Tests!
 		public void write(final DataOutput dataOutput) {
 			this.textureCoordinates.write(dataOutput);
 			this.position.write(dataOutput);
@@ -745,6 +778,7 @@ public final class Triangle3D implements Shape3D {
 		 * @return a cached version of {@code vertex}
 		 * @throws NullPointerException thrown if, and only if, {@code vertex} is {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public static Vertex3D getCached(final Vertex3D vertex) {
 			return CACHE.computeIfAbsent(Objects.requireNonNull(vertex, "vertex == null"), key -> vertex);
 		}
@@ -762,6 +796,7 @@ public final class Triangle3D implements Shape3D {
 		 * @return a {@code Vertex3D} instance with the result of the linear interpolation operation
 		 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public static Vertex3D lerp(final Vertex3D a, final Vertex3D b, final double t) {
 			final Point2D textureCoordinates = Point2D.lerp(a.textureCoordinates, b.textureCoordinates, t);
 			
@@ -785,6 +820,7 @@ public final class Triangle3D implements Shape3D {
 		 * @return a new {@code Vertex3D} instance with the result of the transformation
 		 * @throws NullPointerException thrown if, and only if, either {@code vertex}, {@code matrix} or {@code matrixInverse} are {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public static Vertex3D transform(final Vertex3D vertex, final Matrix44D matrix, final Matrix44D matrixInverse) {
 			final Point2D textureCoordinates = vertex.textureCoordinates;
 			
@@ -808,6 +844,7 @@ public final class Triangle3D implements Shape3D {
 		 * @return a new {@code Vertex3D} instance with the result of the transformation
 		 * @throws NullPointerException thrown if, and only if, either {@code vertex}, {@code matrix} or {@code matrixInverse} are {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public static Vertex3D transformAndDivide(final Vertex3D vertex, final Matrix44D matrix, final Matrix44D matrixInverse) {
 			final Point2D textureCoordinates = vertex.textureCoordinates;
 			
@@ -823,6 +860,7 @@ public final class Triangle3D implements Shape3D {
 		 * 
 		 * @return the size of the cache
 		 */
+//		TODO: Add Unit Tests!
 		public static int getCacheSize() {
 			return CACHE.size();
 		}
@@ -830,6 +868,7 @@ public final class Triangle3D implements Shape3D {
 		/**
 		 * Clears the cache.
 		 */
+//		TODO: Add Unit Tests!
 		public static void clearCache() {
 			CACHE.clear();
 		}

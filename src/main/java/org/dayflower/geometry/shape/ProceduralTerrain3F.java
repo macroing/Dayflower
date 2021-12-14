@@ -54,11 +54,13 @@ public final class ProceduralTerrain3F implements Shape3F {
 	/**
 	 * The name of this {@code ProceduralTerrain3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Procedural Terrain";
 	
 	/**
 	 * The ID of this {@code ProceduralTerrain3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 12;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +77,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * @param floatBinaryOperator a {@link FloatBinaryOperator} instance
 	 * @throws NullPointerException thrown if, and only if, {@code floatBinaryOperator} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public ProceduralTerrain3F(final FloatBinaryOperator floatBinaryOperator) {
 		this.floatBinaryOperator = Objects.requireNonNull(floatBinaryOperator, "floatBinaryOperator == null");
 	}
@@ -86,6 +89,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * 
 	 * @return a {@code BoundingVolume3F} instance that contains parts of this {@code ProceduralTerrain3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		return new AxisAlignedBoundingBox3F(Point3F.minimum(), Point3F.maximum());
@@ -104,6 +108,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
@@ -120,6 +125,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * 
 	 * @return a {@code String} with the name of this {@code ProceduralTerrain3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -130,6 +136,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * 
 	 * @return a {@code String} representation of this {@code ProceduralTerrain3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return "new ProceduralTerrain3F(...)";
@@ -144,6 +151,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code ProceduralTerrain3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean contains(final Point3F point) {
 		return point.getY() < doApplyAsFloat(point.getX(), point.getZ());
 	}
@@ -156,6 +164,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * @param object the {@code Object} to compare to this {@code ProceduralTerrain3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ProceduralTerrain3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -176,6 +185,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * 
 	 * @return the surface area of this {@code ProceduralTerrain3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		return Float.POSITIVE_INFINITY;
@@ -194,6 +204,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F origin = ray.getOrigin();
@@ -230,6 +241,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code ProceduralTerrain3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -240,6 +252,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * 
 	 * @return a hash code for this {@code ProceduralTerrain3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.floatBinaryOperator);
@@ -256,6 +269,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -279,6 +293,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * 
 	 * @return a {@code ProceduralTerrain3F} instance that uses a Simplex-based fractal algorithm
 	 */
+//	TODO: Add Unit Tests!
 	public static ProceduralTerrain3F simplexFractalXY() {
 		return simplexFractalXY(0.8F, 0.2F, 1.0F / 2.0F, 2.0F, 2);
 	}
@@ -293,6 +308,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * @param octaves the octaves to use
 	 * @return a {@code ProceduralTerrain3F} instance that uses a Simplex-based fractal algorithm
 	 */
+//	TODO: Add Unit Tests!
 	public static ProceduralTerrain3F simplexFractalXY(final float amplitude, final float frequency, final float gain, final float lacunarity, final int octaves) {
 		return new ProceduralTerrain3F((x, y) -> SimplexNoiseF.fractalXY(x, y, amplitude, frequency, gain, lacunarity, octaves));
 	}
@@ -302,6 +318,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * 
 	 * @return a {@code ProceduralTerrain3F} instance that uses a sine algorithm
 	 */
+//	TODO: Add Unit Tests!
 	public static ProceduralTerrain3F sin() {
 		return new ProceduralTerrain3F((x, y) -> Floats.sin(x) * Floats.sin(y));
 	}

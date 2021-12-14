@@ -64,11 +64,13 @@ public final class Triangle3F implements Shape3F {
 	/**
 	 * The name of this {@code Triangle3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Triangle";
 	
 	/**
 	 * The ID of this {@code Triangle3F} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 17;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +85,7 @@ public final class Triangle3F implements Shape3F {
 	/**
 	 * Constructs a new {@code Triangle3F} instance.
 	 */
+//	TODO: Add Unit Tests!
 	public Triangle3F() {
 		this(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F));
 	}
@@ -97,6 +100,7 @@ public final class Triangle3F implements Shape3F {
 	 * @param c a {@code Point3F} instance used as part of the position for the {@code Vertex3F} instance denoted by {@code C}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Triangle3F(final Point3F a, final Point3F b, final Point3F c) {
 		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(a, b, c));
 		this.a = Vertex3F.getCached(new Vertex3F(new Point2F(0.5F, 0.0F), new Point4F(a), this.surfaceNormal));
@@ -114,6 +118,7 @@ public final class Triangle3F implements Shape3F {
 	 * @param c a {@code Vertex3F} instance denoted by {@code C}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Triangle3F(final Vertex3F a, final Vertex3F b, final Vertex3F c) {
 		this.a = Vertex3F.getCached(Objects.requireNonNull(a, "a == null"));
 		this.b = Vertex3F.getCached(Objects.requireNonNull(b, "b == null"));
@@ -128,6 +133,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return a {@code BoundingVolume3F} instance that contains this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		final Point3F a = Point3F.minimum(new Point3F(this.a.getPosition()), new Point3F(this.b.getPosition()), new Point3F(this.c.getPosition()));
@@ -147,6 +153,7 @@ public final class Triangle3F implements Shape3F {
 	 * @return an optional {@code SurfaceSample3F} with the surface sample
 	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceSample3F> sample(final Point2F sample) {
 		Objects.requireNonNull(sample, "sample == null");
@@ -193,6 +200,7 @@ public final class Triangle3F implements Shape3F {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
@@ -209,6 +217,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -219,6 +228,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return a {@code String} representation of this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Triangle3F(%s, %s, %s)", this.a, this.b, this.c);
@@ -229,6 +239,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return the bitangent of this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3F calculateBitangent() {
 		final Point2F textureCoordinatesA = this.a.getTextureCoordinates();
 		final Point2F textureCoordinatesB = this.b.getTextureCoordinates();
@@ -261,6 +272,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return the tangent of this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3F calculateTangent() {
 		final Point2F textureCoordinatesA = this.a.getTextureCoordinates();
 		final Point2F textureCoordinatesB = this.b.getTextureCoordinates();
@@ -293,6 +305,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return the surface normal associated with this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3F getSurfaceNormal() {
 		return this.surfaceNormal;
 	}
@@ -302,6 +315,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return the vertex denoted by {@code A} and is associated with this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vertex3F getA() {
 		return this.a;
 	}
@@ -311,6 +325,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return the vertex denoted by {@code B} and is associated with this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vertex3F getB() {
 		return this.b;
 	}
@@ -320,6 +335,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return the vertex denoted by {@code C} and is associated with this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vertex3F getC() {
 		return this.c;
 	}
@@ -345,6 +361,7 @@ public final class Triangle3F implements Shape3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -383,6 +400,7 @@ public final class Triangle3F implements Shape3F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Triangle3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean contains(final Point3F point) {
 		final Point3F a = new Point3F(this.a.getPosition());
 		final Point3F b = new Point3F(this.b.getPosition());
@@ -419,6 +437,7 @@ public final class Triangle3F implements Shape3F {
 	 * @param object the {@code Object} to compare to this {@code Triangle3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Triangle3F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -443,6 +462,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return the surface area of this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		final Point4F a = this.a.getPosition();
@@ -469,6 +489,7 @@ public final class Triangle3F implements Shape3F {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point4F a = this.a.getPosition();
@@ -521,6 +542,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -531,6 +553,7 @@ public final class Triangle3F implements Shape3F {
 	 * 
 	 * @return a hash code for this {@code Triangle3F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.surfaceNormal, this.a, this.b, this.c);
@@ -547,6 +570,7 @@ public final class Triangle3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -591,6 +615,7 @@ public final class Triangle3F implements Shape3F {
 		 * @param normal the normal associated with this {@code Vertex3F} instance
 		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public Vertex3F(final Point2F textureCoordinates, final Point4F position, final Vector3F normal) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
 			this.position = Point4F.getCached(Objects.requireNonNull(position, "position == null"));
@@ -604,6 +629,7 @@ public final class Triangle3F implements Shape3F {
 		 * 
 		 * @return the texture coordinates associated with this {@code Vertex3F} instance
 		 */
+//		TODO: Add Unit Tests!
 		public Point2F getTextureCoordinates() {
 			return this.textureCoordinates;
 		}
@@ -613,6 +639,7 @@ public final class Triangle3F implements Shape3F {
 		 * 
 		 * @return the position associated with this {@code Vertex3F} instance
 		 */
+//		TODO: Add Unit Tests!
 		public Point4F getPosition() {
 			return this.position;
 		}
@@ -622,6 +649,7 @@ public final class Triangle3F implements Shape3F {
 		 * 
 		 * @return a {@code String} representation of this {@code Vertex3F} instance
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public String toString() {
 			return String.format("new Vertex3F(%s, %s, %s)", this.textureCoordinates, this.position, this.normal);
@@ -632,6 +660,7 @@ public final class Triangle3F implements Shape3F {
 		 * 
 		 * @return the normal associated with this {@code Vertex3F} instance
 		 */
+//		TODO: Add Unit Tests!
 		public Vector3F getNormal() {
 			return this.normal;
 		}
@@ -657,6 +686,7 @@ public final class Triangle3F implements Shape3F {
 		 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 		 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 			Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -690,6 +720,7 @@ public final class Triangle3F implements Shape3F {
 		 * @param object the {@code Object} to compare to this {@code Vertex3F} instance for equality
 		 * @return {@code true} if, and only if, {@code object} is an instance of {@code Vertex3F}, and their respective values are equal, {@code false} otherwise
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public boolean equals(final Object object) {
 			if(object == this) {
@@ -712,6 +743,7 @@ public final class Triangle3F implements Shape3F {
 		 * 
 		 * @return a hash code for this {@code Vertex3F} instance
 		 */
+//		TODO: Add Unit Tests!
 		@Override
 		public int hashCode() {
 			return Objects.hash(this.textureCoordinates, this.position, this.normal);
@@ -728,6 +760,7 @@ public final class Triangle3F implements Shape3F {
 		 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 		 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 		 */
+//		TODO: Add Unit Tests!
 		public void write(final DataOutput dataOutput) {
 			this.textureCoordinates.write(dataOutput);
 			this.position.write(dataOutput);
@@ -745,6 +778,7 @@ public final class Triangle3F implements Shape3F {
 		 * @return a cached version of {@code vertex}
 		 * @throws NullPointerException thrown if, and only if, {@code vertex} is {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public static Vertex3F getCached(final Vertex3F vertex) {
 			return CACHE.computeIfAbsent(Objects.requireNonNull(vertex, "vertex == null"), key -> vertex);
 		}
@@ -762,6 +796,7 @@ public final class Triangle3F implements Shape3F {
 		 * @return a {@code Vertex3F} instance with the result of the linear interpolation operation
 		 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public static Vertex3F lerp(final Vertex3F a, final Vertex3F b, final float t) {
 			final Point2F textureCoordinates = Point2F.lerp(a.textureCoordinates, b.textureCoordinates, t);
 			
@@ -785,6 +820,7 @@ public final class Triangle3F implements Shape3F {
 		 * @return a new {@code Vertex3F} instance with the result of the transformation
 		 * @throws NullPointerException thrown if, and only if, either {@code vertex}, {@code matrix} or {@code matrixInverse} are {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public static Vertex3F transform(final Vertex3F vertex, final Matrix44F matrix, final Matrix44F matrixInverse) {
 			final Point2F textureCoordinates = vertex.textureCoordinates;
 			
@@ -808,6 +844,7 @@ public final class Triangle3F implements Shape3F {
 		 * @return a new {@code Vertex3F} instance with the result of the transformation
 		 * @throws NullPointerException thrown if, and only if, either {@code vertex}, {@code matrix} or {@code matrixInverse} are {@code null}
 		 */
+//		TODO: Add Unit Tests!
 		public static Vertex3F transformAndDivide(final Vertex3F vertex, final Matrix44F matrix, final Matrix44F matrixInverse) {
 			final Point2F textureCoordinates = vertex.textureCoordinates;
 			
@@ -823,6 +860,7 @@ public final class Triangle3F implements Shape3F {
 		 * 
 		 * @return the size of the cache
 		 */
+//		TODO: Add Unit Tests!
 		public static int getCacheSize() {
 			return CACHE.size();
 		}
@@ -830,6 +868,7 @@ public final class Triangle3F implements Shape3F {
 		/**
 		 * Clears the cache.
 		 */
+//		TODO: Add Unit Tests!
 		public static void clearCache() {
 			CACHE.clear();
 		}

@@ -56,11 +56,13 @@ public final class Rectangle3D implements Shape3D {
 	/**
 	 * The name of this {@code Rectangle3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Rectangle";
 	
 	/**
 	 * The ID of this {@code Rectangle3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 13;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +85,7 @@ public final class Rectangle3D implements Shape3D {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Rectangle3D() {
 		this(new Point3D(-2.0D, +2.0D, 0.0D), new Point3D(+2.0D, +2.0D, 0.0D), new Point3D(+2.0D, -2.0D, 0.0D), new Point3D(-2.0D, -2.0D, 0.0D));
 	}
@@ -101,6 +104,7 @@ public final class Rectangle3D implements Shape3D {
 	 * @throws IllegalArgumentException thrown if, and only if, the provided {@code Point3D} instances are not coplanar or they do not represent a rectangle
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Rectangle3D(final Point3D a, final Point3D b, final Point3D c, final Point3D d) {
 		doCheckPointValidity(a, b, c, d);
 		
@@ -118,6 +122,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code Rectangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return AxisAlignedBoundingBox3D.fromPoints(this.a, this.b, this.c, this.d);
@@ -136,6 +141,7 @@ public final class Rectangle3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
@@ -152,6 +158,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return the {@code Point3D} instance denoted by {@code A}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getA() {
 		return this.a;
 	}
@@ -161,6 +168,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return the {@code Point3D} instance denoted by {@code B}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getB() {
 		return this.b;
 	}
@@ -170,6 +178,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return the {@code Point3D} instance denoted by {@code C}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getC() {
 		return this.c;
 	}
@@ -179,6 +188,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return the {@code Point3D} instance denoted by {@code D}
 	 */
+//	TODO: Add Unit Tests!
 	public Point3D getD() {
 		return this.d;
 	}
@@ -188,6 +198,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Rectangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -198,6 +209,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code Rectangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Rectangle3D(%s, %s, %s, %s)", this.a, this.b, this.c, this.d);
@@ -208,6 +220,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return the surface normal of this {@code Rectangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Vector3D getSurfaceNormal() {
 		return this.surfaceNormal;
 	}
@@ -233,6 +246,7 @@ public final class Rectangle3D implements Shape3D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -275,6 +289,7 @@ public final class Rectangle3D implements Shape3D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public boolean contains(final Point3D point) {
 		final Point3D a = this.a;
 		final Point3D b = this.b;
@@ -303,6 +318,7 @@ public final class Rectangle3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code Rectangle3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Rectangle3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -329,6 +345,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code Rectangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		return Vector3D.crossProduct(Vector3D.direction(this.a, this.b), Vector3D.direction(this.b, this.c)).length();
@@ -347,6 +364,7 @@ public final class Rectangle3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double dotProduct = Vector3D.dotProduct(this.surfaceNormal, ray.getDirection());
@@ -380,6 +398,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Rectangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -390,6 +409,7 @@ public final class Rectangle3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code Rectangle3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.a, this.b, this.c, this.d, this.surfaceNormal);
@@ -406,6 +426,7 @@ public final class Rectangle3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

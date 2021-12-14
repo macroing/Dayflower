@@ -64,11 +64,13 @@ public final class Torus3D implements Shape3D {
 	/**
 	 * The name of this {@code Torus3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final String NAME = "Torus";
 	
 	/**
 	 * The ID of this {@code Torus3D} class.
 	 */
+//	TODO: Add Unit Tests!
 	public static final int ID = 16;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +93,7 @@ public final class Torus3D implements Shape3D {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public Torus3D() {
 		this(0.25D, 1.0D);
 	}
@@ -101,6 +104,7 @@ public final class Torus3D implements Shape3D {
 	 * @param radiusInner the inner radius of this {@code Torus3D} instance
 	 * @param radiusOuter the outer radius of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Torus3D(final double radiusInner, final double radiusOuter) {
 		this.boundingVolume = new BoundingSphere3D(radiusInner + radiusOuter, new Point3D());
 		this.radiusInner = radiusInner;
@@ -116,6 +120,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return this.boundingVolume;
@@ -134,6 +139,7 @@ public final class Torus3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
@@ -150,6 +156,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -160,6 +167,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Torus3D(%+.10f, %+.10f)", Double.valueOf(this.radiusInner), Double.valueOf(this.radiusOuter));
@@ -186,6 +194,7 @@ public final class Torus3D implements Shape3D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -211,6 +220,7 @@ public final class Torus3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code Torus3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Torus3D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -237,6 +247,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return the inner radius of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadiusInner() {
 		return this.radiusInner;
 	}
@@ -246,6 +257,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return the squared inner radius of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadiusInnerSquared() {
 		return this.radiusInnerSquared;
 	}
@@ -255,6 +267,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return the outer radius of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadiusOuter() {
 		return this.radiusOuter;
 	}
@@ -264,6 +277,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return the squared outer radius of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getRadiusOuterSquared() {
 		return this.radiusOuterSquared;
 	}
@@ -273,6 +287,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		return 4.0D * PI * PI * this.radiusOuter * this.radiusInner;
@@ -283,6 +298,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return the volume of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getVolume() {
 		return 2.0D * PI * PI * this.radiusOuter * this.radiusInnerSquared;
 	}
@@ -300,6 +316,7 @@ public final class Torus3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Point3D origin = ray.getOrigin();
@@ -345,6 +362,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -355,6 +373,7 @@ public final class Torus3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code Torus3D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.boundingVolume, Double.valueOf(this.radiusInner), Double.valueOf(this.radiusInnerSquared), Double.valueOf(this.radiusOuter), Double.valueOf(this.radiusOuterSquared));
@@ -371,6 +390,7 @@ public final class Torus3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

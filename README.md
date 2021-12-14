@@ -66,80 +66,97 @@ public class GPURendererExample {
 
 Supported Features
 ------------------
-The lists below show the main features of the renderer.
+The tables below show the main features of the renderer.
 
 #### Supported Rendering Algorithms
-* Ambient Occlusion (CPU & GPU)
-* Path Tracing (CPU & GPU)
-* Ray Casting (CPU & GPU)
-* Ray Tracing (CPU)
+
+| Name              | CPU | GPU |
+| ----------------- | --- | --- |
+| Ambient Occlusion | Yes | Yes |
+| Path Tracing      | Yes | Yes |
+| Ray Casting       | Yes | Yes |
+| Ray Tracing       | Yes | Yes |
 
 #### Supported Lights
-* Diffuse Area Light (CPU)
-* Directional Light (CPU & GPU)
-* Low-Dynamic-Range (LDR) Image Light (CPU & GPU)
-* Perez Light (CPU & GPU)
-* Point Light (CPU & GPU)
-* Primitive Area Light (CPU)
-* Spot Light (CPU & GPU)
+
+| Name                                | CPU | GPU |
+| ----------------------------------- | --- | --- |
+| Diffuse Area Light                  | Yes | No  |
+| Directional Light                   | Yes | Yes |
+| Low-Dynamic-Range (LDR) Image Light | Yes | Yes |
+| Perez Light (Sun & Sky)             | Yes | Yes |
+| Point Light                         | Yes | Yes |
+| Primitive Area Light                | Yes | No  |
+| Spot Light                          | Yes | Yes |
 
 #### Supported Materials
-* Bullseye Material (CPU & GPU)
-* Checkerboard Material (CPU & GPU)
-* Clear Coat Material (CPU & GPU)
-* Disney Material (CPU & GPU)
-* Function Material (CPU)
-* Glass Material (CPU & GPU)
-* Glossy Material (CPU & GPU)
-* Hair Material (CPU) (WIP)
-* Matte Material (CPU & GPU)
-* Metal Material (CPU & GPU)
-* Mirror Material (CPU & GPU)
-* Plastic Material (CPU & GPU)
-* Polka Dot Material (CPU & GPU)
-* Substrate Material (CPU & GPU)
-* Uber Material (CPU)
+
+| Name                  | CPU | GPU |
+| --------------------- | --- | --- |
+| Bullseye Material     | Yes | Yes |
+| Checkerboard Material | Yes | Yes |
+| Clear Coat Material   | Yes | Yes |
+| Disney Material       | Yes | Yes |
+| Function Material     | Yes | No  |
+| Glass Material        | Yes | Yes |
+| Glossy Material       | Yes | Yes |
+| Hair Material         | Yes | No  |
+| Matte Material        | Yes | Yes |
+| Metal Material        | Yes | Yes |
+| Mirror Material       | Yes | Yes |
+| Plastic Material      | Yes | Yes |
+| Polka Dot Material    | Yes | Yes |
+| Substrate Material    | Yes | Yes |
+| Uber Material         | Yes | No  |
 
 #### Supported Modifiers
-* Bi Modifier (CPU)
-* No-Op Modifier (CPU & GPU)
-* Normal Map Low-Dynamic-Range (LDR) Image Modifier (CPU & GPU) (WIP)
-* Simplex Noise Normal Map Modifier (CPU & GPU) (WIP)
-* Steep Parallax Map Low-Dynamic Range (LDR) Image Modifier (CPU) (WIP)
+
+| Name                                                      | CPU | GPU |
+| --------------------------------------------------------- | --- | --- |
+| Bi Modifier                                               | Yes | No  |
+| No-Op Modifier                                            | Yes | Yes |
+| Normal Map Low-Dynamic-Range (LDR) Image Modifier         | Yes | Yes |
+| Simplex Noise Normal Map Modifier                         | Yes | Yes |
+| Steep Parallax Map Low-Dynamic-Range (LDR) Image Modifier | Yes | No  |
 
 #### Supported Shapes
-* Compound Shape (CPU)
-* Cone (CPU & GPU)
-* Constructive Solid Geometry (CSG) (CPU)
-* Curve (CPU) (WIP)
-* Cylinder (CPU & GPU)
-* Disk (CPU & GPU)
-* Hyperboloid (CPU & GPU)
-* Paraboloid (CPU & GPU)
-* Plane (CPU & GPU)
-* Polygon (CPU & GPU)
-* Procedural Terrain (CPU)
-* Rectangle (CPU & GPU)
-* Rectangular Cuboid (CPU & GPU)
-* Sphere (CPU & GPU)
-* Torus (CPU & GPU)
-* Triangle (CPU & GPU)
-* Triangle Mesh (CPU & GPU)
+
+| Name                              | CPU | GPU |
+| --------------------------------- | --- | --- |
+| Compound Shape                    | Yes | No  |
+| Cone                              | Yes | Yes |
+| Constructive Solid Geometry (CSG) | Yes | No  |
+| Curve                             | Yes | No  |
+| Cylinder                          | Yes | Yes |
+| Disk                              | Yes | Yes |
+| Hyperboloid                       | Yes | Yes |
+| Paraboloid                        | Yes | Yes |
+| Plane                             | Yes | Yes |
+| Polygon                           | Yes | Yes |
+| Procedural Terrain                | Yes | No  |
+| Rectangle                         | Yes | Yes |
+| Rectangular Cuboid                | Yes | Yes |
+| Sphere                            | Yes | Yes |
+| Torus                             | Yes | Yes |
+| Triangle                          | Yes | Yes |
+| Triangle Mesh                     | Yes | Yes |
 
 #### Supported Textures
-* Blend Texture (CPU & GPU)
-* Bullseye Texture (CPU & GPU)
-* Checkerboard Texture (CPU & GPU)
-* Constant Texture (CPU & GPU)
-* Dot Product Texture (CPU & GPU)
-* Function Texture (CPU)
-* Low-Dynamic-Range (LDR) Image Texture (CPU & GPU)
-* Marble Texture (CPU & GPU)
-* Polka Dot Texture (CPU & GPU)
-* Simplex Fractional Brownian Motion Texture (CPU & GPU)
-* Surface Normal Texture (CPU & GPU)
-* UV Texture (CPU & GPU)
 
+| Name                                       | CPU | GPU |
+| ------------------------------------------ | --- | --- |
+| Blend Texture                              | Yes | Yes |
+| Bullseye Texture                           | Yes | Yes |
+| Checkerboard Texture                       | Yes | Yes |
+| Constant Texture                           | Yes | Yes |
+| Dot Product Texture                        | Yes | Yes |
+| Function Texture                           | Yes | No  |
+| Low-Dynamic-Range (LDR) Image Texture      | Yes | Yes |
+| Marble Texture                             | Yes | Yes |
+| Polka Dot Texture                          | Yes | Yes |
+| Simplex Fractional Brownian Motion Texture | Yes | Yes |
+| Surface Normal Texture                     | Yes | Yes |
+| UV Texture                                 | Yes | Yes |
 
 Documentation
 -------------

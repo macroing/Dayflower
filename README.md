@@ -162,6 +162,58 @@ Documentation
 -------------
 The documentation for this library can be found in the Javadocs that are generated when building it.
 
+Library
+-------
+The following table describes the different APIs and their current status in the library.
+
+| Name                                   | Javadoc | Unit Test |
+| -------------------------------------- | ------- | --------- |
+| Change API                             | 100.0%  | 100.0%    |
+| Color API                              | 100.0%  |  82.9%    |
+| Filter API                             | 100.0%  |   0.0%    |
+| Geometry API                           | 100.0%  |  62.7%    |
+| Geometry Bounding Volume API           | 100.0%  | 100.0%    |
+| Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
+| Geometry Rasterizer API                | 100.0%  |   0.0%    |
+| Geometry Shape API                     | 100.0%  |   4.9%    |
+| Image API                              | 100.0%  |   0.0%    |
+| Java AWT Image API                     | 100.0%  |   0.0%    |
+| Java I/O API                           | 100.0%  |   0.0%    |
+| Java Lang API                          | 100.0%  | 100.0%    |
+| Java Util API                          | 100.0%  |   0.0%    |
+| Java Util Concurrent Atomic API        | 100.0%  |   0.0%    |
+| Java Util Function API                 | 100.0%  | 100.0%    |
+| JavaFX Concurrent API                  | 100.0%  |   0.0%    |
+| JavaFX Scene Canvas API                | 100.0%  |   0.0%    |
+| JavaFX Scene Control API               | 100.0%  |   0.0%    |
+| JavaFX Scene Image API                 | 100.0%  | 100.0%    |
+| JavaFX Scene Layout API                | 100.0%  |   0.0%    |
+| Node API                               | 100.0%  |   5.5%    |
+| Noise API                              | 100.0%  |   0.0%    |
+| Parameter API                          | 100.0%  |   0.0%    |
+| Renderer API                           | 100.0%  |   0.0%    |
+| Renderer CPU API                       | 100.0%  |   0.0%    |
+| Renderer GPU API                       | 100.0%  |   0.0%    |
+| Renderer Observer API                  | 100.0%  |   0.0%    |
+| Sampler API                            | 100.0%  |   0.0%    |
+| Scene API                              | 100.0%  |   0.0%    |
+| Scene BSSRDF API                       | 100.0%  |   0.0%    |
+| Scene BXDF API                         | 100.0%  |   0.0%    |
+| Scene Compiler API                     | 100.0%  |   0.0%    |
+| Scene Demo API                         | 100.0%  |   0.0%    |
+| Scene Fresnel API                      | 100.0%  |   0.0%    |
+| Scene Light API                        | 100.0%  |   0.0%    |
+| Scene Loader API                       | 100.0%  |   0.0%    |
+| Scene Material API                     | 100.0%  |   0.0%    |
+| Scene Microfacet API                   | 100.0%  |   0.0%    |
+| Scene Modifier API                     | 100.0%  |   0.0%    |
+| Scene Texture API                      | 100.0%  |   0.0%    |
+| Simplex API                            | N/A     |   0.0%    |
+| Sound API                              | 100.0%  |   0.0%    |
+| Utility API                            | 100.0%  |  43.3%    |
+| Wavefront Material API                 | 100.0%  |   0.0%    |
+| Wavefront Object API                   | 100.0%  |   0.0%    |
+
 Dependencies
 ------------
  - [Java 8](http://www.java.com)

@@ -23,7 +23,6 @@ import static org.dayflower.utility.Ints.abs;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -46,13 +45,11 @@ public final class LineSegment2I implements Shape2I {
 	/**
 	 * The name of this {@code LineSegment2I} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final String NAME = "Line Segment";
 	
 	/**
 	 * The ID of this {@code LineSegment2I} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +68,6 @@ public final class LineSegment2I implements Shape2I {
 	 * @param b a {@code Point2I} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public LineSegment2I(final Point2I a, final Point2I b) {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
@@ -85,7 +81,6 @@ public final class LineSegment2I implements Shape2I {
 	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code LineSegment2I} instance, {@code false} otherwise
 	 * @return a {@code List} with {@code Point2I} instances contained in this {@code LineSegment2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
 		final int aX = this.a.getX();
@@ -138,7 +133,6 @@ public final class LineSegment2I implements Shape2I {
 	 * 
 	 * @return the {@code Point2I} instance denoted by {@code A}
 	 */
-//	TODO: Add Unit Tests!
 	public Point2I getA() {
 		return this.a;
 	}
@@ -148,7 +142,6 @@ public final class LineSegment2I implements Shape2I {
 	 * 
 	 * @return the {@code Point2I} instance denoted by {@code B}
 	 */
-//	TODO: Add Unit Tests!
 	public Point2I getB() {
 		return this.b;
 	}
@@ -158,7 +151,6 @@ public final class LineSegment2I implements Shape2I {
 	 * 
 	 * @return a {@code String} with the name of this {@code LineSegment2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -169,7 +161,6 @@ public final class LineSegment2I implements Shape2I {
 	 * 
 	 * @return a {@code String} representation of this {@code LineSegment2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new LineSegment2I(%s, %s)", this.a, this.b);
@@ -196,7 +187,6 @@ public final class LineSegment2I implements Shape2I {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -228,7 +218,6 @@ public final class LineSegment2I implements Shape2I {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code LineSegment2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
 		final int aX = this.a.getX();
@@ -262,7 +251,6 @@ public final class LineSegment2I implements Shape2I {
 	 * @param object the {@code Object} to compare to this {@code LineSegment2I} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LineSegment2I}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -283,7 +271,6 @@ public final class LineSegment2I implements Shape2I {
 	 * 
 	 * @return an {@code int} with the ID of this {@code LineSegment2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -294,7 +281,6 @@ public final class LineSegment2I implements Shape2I {
 	 * 
 	 * @return a hash code for this {@code LineSegment2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.a, this.b);
@@ -311,7 +297,6 @@ public final class LineSegment2I implements Shape2I {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -338,7 +323,6 @@ public final class LineSegment2I implements Shape2I {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 2}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static List<LineSegment2I> fromPoints(final Point2I... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 2, Integer.MAX_VALUE, "points.length");

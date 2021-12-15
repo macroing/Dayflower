@@ -1,3 +1,9 @@
+2021-12-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a unit test for Point2I.midpoint(Point2I, Point2I) to the Point2IUnitTests class.
+	* ADD:		Add the method midpoint(Point2I, Point2I) to the Point2I class.
+	* ADD:		Add the LineSegment2DUnitTests, LineSegment2FUnitTests and LineSegment2IUnitTests classes.
+
 2021-12-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Circle2DReaderUnitTests, Circle2FReaderUnitTests and Circle2IReaderUnitTests classes.

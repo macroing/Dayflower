@@ -224,6 +224,19 @@ public final class Point2IUnitTests {
 	}
 	
 	@Test
+	public void testMidpoint() {
+		final Point2I a = new Point2I(2, 4);
+		final Point2I b = new Point2I(4, 8);
+		final Point2I c = Point2I.midpoint(a, b);
+		
+		assertEquals(3, c.getComponent1());
+		assertEquals(6, c.getComponent2());
+		
+		assertThrows(NullPointerException.class, () -> Point2I.midpoint(a, null));
+		assertThrows(NullPointerException.class, () -> Point2I.midpoint(null, b));
+	}
+	
+	@Test
 	public void testMinimum() {
 		assertEquals(new Point2I(Integer.MIN_VALUE, Integer.MIN_VALUE), Point2I.minimum());
 	}

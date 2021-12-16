@@ -34,7 +34,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -301,7 +300,6 @@ public final class Point3F implements Node {
 	 * 
 	 * @return the spherical phi angle
 	 */
-//	TODO: Add Unit Tests!
 	public float sphericalPhi() {
 		return getOrAdd(atan2(this.component2, this.component1), 0.0F, PI_MULTIPLIED_BY_2);
 	}
@@ -700,7 +698,6 @@ public final class Point3F implements Node {
 	 * @return a {@code Point3F} offset from {@code point} based on {@code direction}, {@code normal} and {@code pointError}
 	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code direction}, {@code normal} or {@code pointError} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Point3F offset(final Point3F point, final Vector3F direction, final Vector3F normal, final Vector3F pointError) {
 		final float dotProduct = Vector3F.dotProduct(Vector3F.absolute(normal), pointError);
 		

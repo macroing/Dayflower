@@ -1,3 +1,10 @@
+2021-12-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the Point3DUnitTests and Point3FUnitTests classes.
+	* CHANGE:	Update the method testReciprocal() in the Vector2DUnitTests and Vector2FUnitTests classes.
+	* CHANGE:	Update the method reciprocal(Vector2D) in the Vector2D class.
+	* CHANGE:	Update the method reciprocal(Vector2F) in the Vector2F class.
+
 2021-12-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a unit test for Point2I.midpoint(Point2I, Point2I) to the Point2IUnitTests class.

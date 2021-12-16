@@ -529,8 +529,8 @@ public final class Vector2FUnitTests {
 		final Vector2F a = Vector2F.reciprocal(new Vector2F(Float.NaN, Float.NaN));
 		final Vector2F b = Vector2F.reciprocal(new Vector2F(2.0F, 4.0F));
 		
-		assertEquals(0.0F, a.getComponent1());
-		assertEquals(0.0F, a.getComponent2());
+		assertEquals(Float.NaN, a.getComponent1());
+		assertEquals(Float.NaN, a.getComponent2());
 		
 		assertEquals(0.50F, b.getComponent1());
 		assertEquals(0.25F, b.getComponent2());

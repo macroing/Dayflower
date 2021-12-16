@@ -523,6 +523,40 @@ public final class Point3DUnitTests {
 	}
 	
 	@Test
+	public void testOffset() {
+		final Point3D a = Point3D.offset(new Point3D(1.0D, 1.0D, 1.0D), Vector3D.z(+1.0D), Vector3D.z(+1.0D), new Vector3D(0.0D, 0.0D, 0.0D));
+		final Point3D b = Point3D.offset(new Point3D(1.0D, 1.0D, 1.0D), Vector3D.z(+1.0D), Vector3D.z(-1.0D), new Vector3D(0.0D, 0.0D, 0.0D));
+		final Point3D c = Point3D.offset(new Point3D(1.0D, 1.0D, 1.0D), Vector3D.x(), Vector3D.x(), Vector3D.x());
+		final Point3D d = Point3D.offset(new Point3D(1.0D, 1.0D, 1.0D), Vector3D.y(), Vector3D.y(), Vector3D.y());
+		final Point3D e = Point3D.offset(new Point3D(1.0D, 1.0D, 1.0D), Vector3D.z(), Vector3D.z(), Vector3D.z());
+		
+		assertEquals(Math.nextDown(1.0D), a.getComponent1());
+		assertEquals(Math.nextDown(1.0D), a.getComponent2());
+		assertEquals(Math.nextDown(1.0D), a.getComponent3());
+		
+		assertEquals(Math.nextDown(1.0D), b.getComponent1());
+		assertEquals(Math.nextDown(1.0D), b.getComponent2());
+		assertEquals(Math.nextDown(1.0D), b.getComponent3());
+		
+		assertEquals(Math.nextUp(2.0D),   c.getComponent1());
+		assertEquals(Math.nextDown(1.0D), c.getComponent2());
+		assertEquals(Math.nextDown(1.0D), c.getComponent3());
+		
+		assertEquals(Math.nextDown(1.0D), d.getComponent1());
+		assertEquals(Math.nextUp(2.0D),   d.getComponent2());
+		assertEquals(Math.nextDown(1.0D), d.getComponent3());
+		
+		assertEquals(Math.nextDown(1.0D), e.getComponent1());
+		assertEquals(Math.nextDown(1.0D), e.getComponent2());
+		assertEquals(Math.nextUp(2.0D),   e.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Point3D.offset(new Point3D(), new Vector3D(), new Vector3D(), null));
+		assertThrows(NullPointerException.class, () -> Point3D.offset(new Point3D(), new Vector3D(), null, new Vector3D()));
+		assertThrows(NullPointerException.class, () -> Point3D.offset(new Point3D(), null, new Vector3D(), new Vector3D()));
+		assertThrows(NullPointerException.class, () -> Point3D.offset(null, new Vector3D(), new Vector3D(), new Vector3D()));
+	}
+	
+	@Test
 	public void testRead() throws IOException {
 		final Point3D a = new Point3D(1.0D, 2.0D, 3.0D);
 		
@@ -568,6 +602,17 @@ public final class Point3DUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> Point3D.scale(a, (Vector3D)(null)));
 		assertThrows(NullPointerException.class, () -> Point3D.scale(null, new Vector3D(1.0D, 1.0D, 1.0D)));
+	}
+	
+	@Test
+	public void testSphericalPhi() {
+		final Point3D x = new Point3D(1.0D, 0.0D, 0.0D);
+		final Point3D y = new Point3D(0.0D, 1.0D, 0.0D);
+		final Point3D z = new Point3D(0.0D, 0.0D, 1.0D);
+		
+		assertEquals(0.0D,           x.sphericalPhi());
+		assertEquals(Math.PI / 2.0D, y.sphericalPhi());
+		assertEquals(0.0D,           z.sphericalPhi());
 	}
 	
 	@Test
@@ -653,6 +698,8 @@ public final class Point3DUnitTests {
 		final Point3D a = new Point3D(1.0D, 2.0D, 3.0D);
 		final Point3D b = Point3D.transformAndDivide(Matrix44D.scale(1.0D, 2.0D, 3.0D), a);
 		final Point3D c = Point3D.transformAndDivide(Matrix44D.translate(1.0D, 2.0D, 3.0D), a);
+		final Point3D d = Point3D.transformAndDivide(new Matrix44D(1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 2.0D), a);
+		final Point3D e = Point3D.transformAndDivide(new Matrix44D(1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D), a);
 		
 		assertEquals(1.0D, b.getComponent1());
 		assertEquals(4.0D, b.getComponent2());
@@ -661,6 +708,14 @@ public final class Point3DUnitTests {
 		assertEquals(2.0D, c.getComponent1());
 		assertEquals(4.0D, c.getComponent2());
 		assertEquals(6.0D, c.getComponent3());
+		
+		assertEquals(0.5D, d.getComponent1());
+		assertEquals(1.0D, d.getComponent2());
+		assertEquals(1.5D, d.getComponent3());
+		
+		assertEquals(1.0D, e.getComponent1());
+		assertEquals(2.0D, e.getComponent2());
+		assertEquals(3.0D, e.getComponent3());
 		
 		assertThrows(NullPointerException.class, () -> Point3D.transformAndDivide(Matrix44D.translate(1.0D, 2.0D, 3.0D), null));
 		assertThrows(NullPointerException.class, () -> Point3D.transformAndDivide(null, a));

@@ -665,8 +665,8 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector2F reciprocal(final Vector2F vector) {
-		final float component1 = finiteOrDefault(1.0F / vector.component1, 0.0F);
-		final float component2 = finiteOrDefault(1.0F / vector.component2, 0.0F);
+		final float component1 = 1.0F / vector.component1;
+		final float component2 = 1.0F / vector.component2;
 		
 		return new Vector2F(component1, component2);
 	}

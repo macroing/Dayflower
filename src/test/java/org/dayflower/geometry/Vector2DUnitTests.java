@@ -529,8 +529,8 @@ public final class Vector2DUnitTests {
 		final Vector2D a = Vector2D.reciprocal(new Vector2D(Double.NaN, Double.NaN));
 		final Vector2D b = Vector2D.reciprocal(new Vector2D(2.0D, 4.0D));
 		
-		assertEquals(0.0D, a.getComponent1());
-		assertEquals(0.0D, a.getComponent2());
+		assertEquals(Double.NaN, a.getComponent1());
+		assertEquals(Double.NaN, a.getComponent2());
 		
 		assertEquals(0.50D, b.getComponent1());
 		assertEquals(0.25D, b.getComponent2());

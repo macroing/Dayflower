@@ -287,7 +287,6 @@ public final class Matrix44F implements Node {
 	 * 
 	 * @return the determinant of this {@code Matrix44F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public float determinant() {
 		final float a = this.element11 * this.element22 - this.element12 * this.element21;
 		final float b = this.element11 * this.element23 - this.element13 * this.element21;
@@ -677,7 +676,6 @@ public final class Matrix44F implements Node {
 	 * @return a new {@code Matrix44F} instance that looks in the direction of {@code eye} to {@code lookAt} and has an up-direction of {@code up}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye}, {@code lookAt} or {@code up} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F lookAt(final Point3F eye, final Point3F lookAt, final Vector3F up) {
 		final Vector3F w = Vector3F.directionNormalized(eye, lookAt);
 		final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(Vector3F.normalize(up), w));
@@ -715,7 +713,6 @@ public final class Matrix44F implements Node {
 	 * @return a new {@code Matrix44F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code matrixRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F multiply(final Matrix44F matrixLHS, final Matrix44F matrixRHS) {
 		final float element11 = matrixLHS.element11 * matrixRHS.element11 + matrixLHS.element12 * matrixRHS.element21 + matrixLHS.element13 * matrixRHS.element31 + matrixLHS.element14 * matrixRHS.element41;
 		final float element12 = matrixLHS.element11 * matrixRHS.element12 + matrixLHS.element12 * matrixRHS.element22 + matrixLHS.element13 * matrixRHS.element32 + matrixLHS.element14 * matrixRHS.element42;
@@ -845,7 +842,6 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates using {@code orthonormalBasis}
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final OrthonormalBasis33F orthonormalBasis) {
 		final Vector3F u = orthonormalBasis.getU();
 		final Vector3F v = orthonormalBasis.getV();
@@ -961,7 +957,6 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the X-axis
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotateX(final AngleF angle) {
 		final float cos = cos(angle.getRadians());
 		final float sin = sin(angle.getRadians());
@@ -991,7 +986,6 @@ public final class Matrix44F implements Node {
 	 * @param angle an angle in degrees
 	 * @return a {@code Matrix44F} instance that rotates along the X-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotateX(final float angle) {
 		return rotateX(angle, false);
 	}
@@ -1013,7 +1007,6 @@ public final class Matrix44F implements Node {
 	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
 	 * @return a {@code Matrix44F} instance that rotates along the X-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotateX(final float angle, final boolean isRadians) {
 		final float angleRadians = isRadians ? angle : toRadians(angle);
 		
@@ -1042,7 +1035,6 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the Y-axis
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotateY(final AngleF angle) {
 		final float cos = cos(angle.getRadians());
 		final float sin = sin(angle.getRadians());
@@ -1072,7 +1064,6 @@ public final class Matrix44F implements Node {
 	 * @param angle an angle in degrees
 	 * @return a {@code Matrix44F} instance that rotates along the Y-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotateY(final float angle) {
 		return rotateY(angle, false);
 	}
@@ -1094,7 +1085,6 @@ public final class Matrix44F implements Node {
 	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
 	 * @return a {@code Matrix44F} instance that rotates along the Y-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotateY(final float angle, final boolean isRadians) {
 		final float angleRadians = isRadians ? angle : toRadians(angle);
 		
@@ -1123,7 +1113,6 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the Z-axis
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotateZ(final AngleF angle) {
 		final float cos = cos(angle.getRadians());
 		final float sin = sin(angle.getRadians());
@@ -1153,7 +1142,6 @@ public final class Matrix44F implements Node {
 	 * @param angle an angle in degrees
 	 * @return a {@code Matrix44F} instance that rotates along the Z-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotateZ(final float angle) {
 		return rotateZ(angle, false);
 	}
@@ -1175,7 +1163,6 @@ public final class Matrix44F implements Node {
 	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
 	 * @return a {@code Matrix44F} instance that rotates along the Z-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotateZ(final float angle, final boolean isRadians) {
 		final float angleRadians = isRadians ? angle : toRadians(angle);
 		

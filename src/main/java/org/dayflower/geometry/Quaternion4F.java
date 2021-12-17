@@ -32,6 +32,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 
 /**
@@ -60,7 +61,6 @@ public final class Quaternion4F implements Node {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Quaternion4F() {
 		this(0.0F, 0.0F, 0.0F);
 	}
@@ -80,7 +80,6 @@ public final class Quaternion4F implements Node {
 	 * @param vector a {@link Vector3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Quaternion4F(final Vector3F vector) {
 		this(vector.getComponent1(), vector.getComponent2(), vector.getComponent3());
 	}
@@ -99,7 +98,6 @@ public final class Quaternion4F implements Node {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public Quaternion4F(final float component1, final float component2, final float component3) {
 		this(component1, component2, component3, 1.0F);
 	}
@@ -112,7 +110,6 @@ public final class Quaternion4F implements Node {
 	 * @param component3 the value of component 3
 	 * @param component4 the value of component 4
 	 */
-//	TODO: Add Unit Tests!
 	public Quaternion4F(final float component1, final float component2, final float component3, final float component4) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -127,10 +124,9 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code Quaternion4F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Quaternion4F(%+.10f, %+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3), Float.valueOf(this.component4));
+		return String.format("new Quaternion4F(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3), Strings.toNonScientificNotationJava(this.component4));
 	}
 	
 	/**
@@ -141,7 +137,6 @@ public final class Quaternion4F implements Node {
 	 * @param object the {@code Object} to compare to this {@code Quaternion4F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Quaternion4F}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -166,7 +161,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the value of component 1
 	 */
-//	TODO: Add Unit Tests!
 	public float getComponent1() {
 		return this.component1;
 	}
@@ -176,7 +170,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the value of component 2
 	 */
-//	TODO: Add Unit Tests!
 	public float getComponent2() {
 		return this.component2;
 	}
@@ -186,7 +179,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public float getComponent3() {
 		return this.component3;
 	}
@@ -196,7 +188,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the value of component 4
 	 */
-//	TODO: Add Unit Tests!
 	public float getComponent4() {
 		return this.component4;
 	}
@@ -206,7 +197,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the value of the W-component
 	 */
-//	TODO: Add Unit Tests!
 	public float getW() {
 		return this.component4;
 	}
@@ -216,7 +206,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the value of the X-component
 	 */
-//	TODO: Add Unit Tests!
 	public float getX() {
 		return this.component1;
 	}
@@ -226,7 +215,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the value of the Y-component
 	 */
-//	TODO: Add Unit Tests!
 	public float getY() {
 		return this.component2;
 	}
@@ -236,7 +224,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the value of the Z-component
 	 */
-//	TODO: Add Unit Tests!
 	public float getZ() {
 		return this.component3;
 	}
@@ -246,7 +233,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the length of this {@code Quaternion4F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public float length() {
 		return sqrt(lengthSquared());
 	}
@@ -256,7 +242,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return the squared length of this {@code Quaternion4F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public float lengthSquared() {
 		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3 + this.component4 * this.component4;
 	}
@@ -266,7 +251,6 @@ public final class Quaternion4F implements Node {
 	 * 
 	 * @return a hash code for this {@code Quaternion4F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3), Float.valueOf(this.component4));
@@ -283,7 +267,6 @@ public final class Quaternion4F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeFloat(this.component1);
@@ -311,7 +294,6 @@ public final class Quaternion4F implements Node {
 	 * @return a new {@code Quaternion4F} instance with the result of the addition
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4F add(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS) {
 		final float component1 = quaternionLHS.component1 + quaternionRHS.component1;
 		final float component2 = quaternionLHS.component2 + quaternionRHS.component2;
@@ -332,7 +314,6 @@ public final class Quaternion4F implements Node {
 	 * @return a new {@code Quaternion4F} instance with the result of the conjugation
 	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4F conjugate(final Quaternion4F quaternion) {
 		final float component1 = -quaternion.component1;
 		final float component2 = -quaternion.component2;
@@ -356,7 +337,6 @@ public final class Quaternion4F implements Node {
 	 * @return a new {@code Quaternion4F} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, {@code quaternionLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4F divide(final Quaternion4F quaternionLHS, final float scalarRHS) {
 		final float component1 = quaternionLHS.component1 / scalarRHS;
 		final float component2 = quaternionLHS.component2 / scalarRHS;
@@ -686,7 +666,6 @@ public final class Quaternion4F implements Node {
 	 * @return a new {@code Quaternion4F} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, {@code quaternionLHS} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4F multiply(final Quaternion4F quaternionLHS, final float scalarRHS) {
 		final float component1 = quaternionLHS.component1 * scalarRHS;
 		final float component2 = quaternionLHS.component2 * scalarRHS;
@@ -707,7 +686,6 @@ public final class Quaternion4F implements Node {
 	 * @return a new {@code Quaternion4F} instance with the result of the negation
 	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4F negate(final Quaternion4F quaternion) {
 		final float component1 = -quaternion.component1;
 		final float component2 = -quaternion.component2;
@@ -745,7 +723,6 @@ public final class Quaternion4F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4F read(final DataInput dataInput) {
 		try {
 			final float component1 = dataInput.readFloat();
@@ -773,7 +750,6 @@ public final class Quaternion4F implements Node {
 	 * @return a new {@code Quaternion4F} instance with the result of the subtraction
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4F subtract(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS) {
 		final float component1 = quaternionLHS.component1 - quaternionRHS.component1;
 		final float component2 = quaternionLHS.component2 - quaternionRHS.component2;
@@ -793,7 +769,6 @@ public final class Quaternion4F implements Node {
 	 * @return the dot product of {@code quaternionLHS} and {@code quaternionRHS}
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static float dotProduct(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS) {
 		return quaternionLHS.component1 * quaternionRHS.component1 + quaternionLHS.component2 * quaternionRHS.component2 + quaternionLHS.component3 * quaternionRHS.component3 + quaternionLHS.component4 * quaternionRHS.component4;
 	}

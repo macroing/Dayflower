@@ -287,7 +287,6 @@ public final class Matrix44D implements Node {
 	 * 
 	 * @return the determinant of this {@code Matrix44D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double determinant() {
 		final double a = this.element11 * this.element22 - this.element12 * this.element21;
 		final double b = this.element11 * this.element23 - this.element13 * this.element21;
@@ -677,7 +676,6 @@ public final class Matrix44D implements Node {
 	 * @return a new {@code Matrix44D} instance that looks in the direction of {@code eye} to {@code lookAt} and has an up-direction of {@code up}
 	 * @throws NullPointerException thrown if, and only if, either {@code eye}, {@code lookAt} or {@code up} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D lookAt(final Point3D eye, final Point3D lookAt, final Vector3D up) {
 		final Vector3D w = Vector3D.directionNormalized(eye, lookAt);
 		final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(Vector3D.normalize(up), w));
@@ -715,7 +713,6 @@ public final class Matrix44D implements Node {
 	 * @return a new {@code Matrix44D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code matrixRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D multiply(final Matrix44D matrixLHS, final Matrix44D matrixRHS) {
 		final double element11 = matrixLHS.element11 * matrixRHS.element11 + matrixLHS.element12 * matrixRHS.element21 + matrixLHS.element13 * matrixRHS.element31 + matrixLHS.element14 * matrixRHS.element41;
 		final double element12 = matrixLHS.element11 * matrixRHS.element12 + matrixLHS.element12 * matrixRHS.element22 + matrixLHS.element13 * matrixRHS.element32 + matrixLHS.element14 * matrixRHS.element42;
@@ -845,7 +842,6 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that rotates using {@code orthonormalBasis}
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotate(final OrthonormalBasis33D orthonormalBasis) {
 		final Vector3D u = orthonormalBasis.getU();
 		final Vector3D v = orthonormalBasis.getV();
@@ -961,7 +957,6 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that rotates along the X-axis
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotateX(final AngleD angle) {
 		final double cos = cos(angle.getRadians());
 		final double sin = sin(angle.getRadians());
@@ -991,7 +986,6 @@ public final class Matrix44D implements Node {
 	 * @param angle an angle in degrees
 	 * @return a {@code Matrix44D} instance that rotates along the X-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotateX(final double angle) {
 		return rotateX(angle, false);
 	}
@@ -1013,7 +1007,6 @@ public final class Matrix44D implements Node {
 	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
 	 * @return a {@code Matrix44D} instance that rotates along the X-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotateX(final double angle, final boolean isRadians) {
 		final double angleRadians = isRadians ? angle : toRadians(angle);
 		
@@ -1042,7 +1035,6 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that rotates along the Y-axis
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotateY(final AngleD angle) {
 		final double cos = cos(angle.getRadians());
 		final double sin = sin(angle.getRadians());
@@ -1072,7 +1064,6 @@ public final class Matrix44D implements Node {
 	 * @param angle an angle in degrees
 	 * @return a {@code Matrix44D} instance that rotates along the Y-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotateY(final double angle) {
 		return rotateY(angle, false);
 	}
@@ -1094,7 +1085,6 @@ public final class Matrix44D implements Node {
 	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
 	 * @return a {@code Matrix44D} instance that rotates along the Y-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotateY(final double angle, final boolean isRadians) {
 		final double angleRadians = isRadians ? angle : toRadians(angle);
 		
@@ -1123,7 +1113,6 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that rotates along the Z-axis
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotateZ(final AngleD angle) {
 		final double cos = cos(angle.getRadians());
 		final double sin = sin(angle.getRadians());
@@ -1153,7 +1142,6 @@ public final class Matrix44D implements Node {
 	 * @param angle an angle in degrees
 	 * @return a {@code Matrix44D} instance that rotates along the Z-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotateZ(final double angle) {
 		return rotateZ(angle, false);
 	}
@@ -1175,7 +1163,6 @@ public final class Matrix44D implements Node {
 	 * @param isRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
 	 * @return a {@code Matrix44D} instance that rotates along the Z-axis
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotateZ(final double angle, final boolean isRadians) {
 		final double angleRadians = isRadians ? angle : toRadians(angle);
 		

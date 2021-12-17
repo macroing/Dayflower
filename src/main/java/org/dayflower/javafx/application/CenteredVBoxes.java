@@ -83,7 +83,7 @@ final class CenteredVBoxes {
 		centeredVBox.addButton("Update Lens", actionEvent -> camera.setLens(comboBoxLens.getValue()));
 		centeredVBox.addLabel("Aperture Radius", 12.0D);
 		
-		final Slider sliderApertureRadius = centeredVBox.addSlider(0.0D, 25.0D, camera.getApertureRadius(), 1.0D, 5.0D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraApertureRadiusChange(camera, newValue.floatValue()));
+		final Slider sliderApertureRadius = centeredVBox.addSlider(0.0D, 1.0D, camera.getApertureRadius(), 0.1D, 0.5D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraApertureRadiusChange(camera, newValue.floatValue()));
 		
 		centeredVBox.addLabel("Focal Distance", 12.0D);
 		

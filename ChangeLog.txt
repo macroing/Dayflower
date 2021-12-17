@@ -2,6 +2,7 @@
 
 	* ADD:		Add the Quaternion4DUnitTests and Quaternion4FUnitTests classes.
 	* ADD:		Add unit tests to the Matrix44DUnitTests and Matrix44FUnitTests classes.
+	* CHANGE:	Change the aperture radius interval in the application.
 	* CHANGE:	Update the toString() method of the Quaternion4D and Quaternion4F classes.
 
 2021-12-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>

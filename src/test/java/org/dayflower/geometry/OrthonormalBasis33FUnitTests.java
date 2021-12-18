@@ -19,8 +19,25 @@
 package org.dayflower.geometry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
+import org.dayflower.mock.DataOutputMock;
+import org.dayflower.mock.NodeHierarchicalVisitorMock;
+import org.dayflower.mock.NodeVisitorMock;
+import org.dayflower.node.NodeHierarchicalVisitor;
+import org.dayflower.node.NodeTraversalException;
+import org.dayflower.node.NodeVisitor;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("static-method")
@@ -30,6 +47,70 @@ public final class OrthonormalBasis33FUnitTests {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Test
+	public void testAcceptNodeHierarchicalVisitor() {
+		final Vector3F u = new Vector3F(1.0F, 0.0F, 0.0F);
+		final Vector3F v = new Vector3F(0.0F, 1.0F, 0.0F);
+		final Vector3F w = new Vector3F(0.0F, 0.0F, 1.0F);
+		
+		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(w, v, u);
+		
+		assertTrue(orthonormalBasis.accept(new NodeHierarchicalVisitorMock(node -> false,                                                                               node -> node.equals(orthonormalBasis))));
+		assertTrue(orthonormalBasis.accept(new NodeHierarchicalVisitorMock(node -> node.equals(orthonormalBasis),                                                       node -> node.equals(orthonormalBasis))));
+		assertTrue(orthonormalBasis.accept(new NodeHierarchicalVisitorMock(node -> node.equals(orthonormalBasis) || node.equals(u),                                     node -> node.equals(orthonormalBasis) || node.equals(u))));
+		assertTrue(orthonormalBasis.accept(new NodeHierarchicalVisitorMock(node -> node.equals(orthonormalBasis) || node.equals(u) || node.equals(v),                   node -> node.equals(orthonormalBasis) || node.equals(u) || node.equals(v))));
+		assertTrue(orthonormalBasis.accept(new NodeHierarchicalVisitorMock(node -> node.equals(orthonormalBasis) || node.equals(u) || node.equals(v) || node.equals(w), node -> node.equals(orthonormalBasis) || node.equals(u) || node.equals(v) || node.equals(w))));
+		
+		assertThrows(NodeTraversalException.class, () -> orthonormalBasis.accept(new NodeHierarchicalVisitorMock(null, null)));
+		assertThrows(NullPointerException.class, () -> orthonormalBasis.accept((NodeHierarchicalVisitor)(null)));
+	}
+	
+	@Test
+	public void testAcceptNodeVisitor() {
+		final Vector3F u = new Vector3F(1.0F, 0.0F, 0.0F);
+		final Vector3F v = new Vector3F(0.0F, 1.0F, 0.0F);
+		final Vector3F w = new Vector3F(0.0F, 0.0F, 1.0F);
+		
+		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(w, v, u);
+		
+		assertThrows(NodeTraversalException.class, () -> orthonormalBasis.accept(new NodeVisitorMock(true)));
+		assertThrows(NullPointerException.class, () -> orthonormalBasis.accept((NodeVisitor)(null)));
+	}
+	
+	@Test
+	public void testClearCacheAndGetCacheSizeAndGetCached() {
+		assertEquals(0, OrthonormalBasis33F.getCacheSize());
+		
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F c = OrthonormalBasis33F.getCached(a);
+		final OrthonormalBasis33F d = OrthonormalBasis33F.getCached(b);
+		final OrthonormalBasis33F e = OrthonormalBasis33F.getCached(c);
+		final OrthonormalBasis33F f = OrthonormalBasis33F.getCached(d);
+		
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33F.getCached(null));
+		
+		assertEquals(1, OrthonormalBasis33F.getCacheSize());
+		
+		OrthonormalBasis33F.clearCache();
+		
+		assertEquals(0, OrthonormalBasis33F.getCacheSize());
+		
+		assertTrue(a != b);
+		assertTrue(a != c);
+		assertTrue(a != d);
+		
+		assertTrue(b != a);
+		assertTrue(b != c);
+		assertTrue(b != d);
+		
+		assertTrue(c == e);
+		assertTrue(c == f);
+		
+		assertTrue(d == e);
+		assertTrue(d == f);
+	}
 	
 	@Test
 	public void testConstructor() {
@@ -78,6 +159,76 @@ public final class OrthonormalBasis33FUnitTests {
 	}
 	
 	@Test
+	public void testEquals() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F c = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(2.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F d = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 2.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F e = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 2.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F f = null;
+		
+		assertEquals(a, a);
+		assertEquals(a, b);
+		assertEquals(b, a);
+		assertNotEquals(a, c);
+		assertNotEquals(c, a);
+		assertNotEquals(a, d);
+		assertNotEquals(d, a);
+		assertNotEquals(a, e);
+		assertNotEquals(e, a);
+		assertNotEquals(a, f);
+		assertNotEquals(f, a);
+	}
+	
+	@Test
+	public void testFlip() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = OrthonormalBasis33F.flip(a);
+		
+		assertEquals(new Vector3F(-1.0F, -0.0F, -0.0F), b.getU());
+		assertEquals(new Vector3F(-0.0F, -1.0F, -0.0F), b.getV());
+		assertEquals(new Vector3F(-0.0F, -0.0F, -1.0F), b.getW());
+		
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33F.flip(null));
+	}
+	
+	@Test
+	public void testFlipU() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = OrthonormalBasis33F.flipU(a);
+		
+		assertEquals(new Vector3F(-1.0F, -0.0F, -0.0F), b.getU());
+		assertEquals(new Vector3F(+0.0F, +1.0F, +0.0F), b.getV());
+		assertEquals(new Vector3F(+0.0F, +0.0F, +1.0F), b.getW());
+		
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33F.flipU(null));
+	}
+	
+	@Test
+	public void testFlipV() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = OrthonormalBasis33F.flipV(a);
+		
+		assertEquals(new Vector3F(+1.0F, +0.0F, +0.0F), b.getU());
+		assertEquals(new Vector3F(-0.0F, -1.0F, -0.0F), b.getV());
+		assertEquals(new Vector3F(+0.0F, +0.0F, +1.0F), b.getW());
+		
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33F.flipV(null));
+	}
+	
+	@Test
+	public void testFlipW() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = OrthonormalBasis33F.flipW(a);
+		
+		assertEquals(new Vector3F(+1.0F, +0.0F, +0.0F), b.getU());
+		assertEquals(new Vector3F(+0.0F, +1.0F, +0.0F), b.getV());
+		assertEquals(new Vector3F(-0.0F, -0.0F, -1.0F), b.getW());
+		
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33F.flipW(null));
+	}
+	
+	@Test
 	public void testGetU() {
 		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
 		
@@ -99,9 +250,112 @@ public final class OrthonormalBasis33FUnitTests {
 	}
 	
 	@Test
+	public void testHasOrthogonalVectors() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 1.0F, 1.0F));
+		final OrthonormalBasis33F c = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(1.0F, 1.0F, 1.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F d = new OrthonormalBasis33F(new Vector3F(1.0F, 1.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F e = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F f = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(0.0F, 1.0F, 0.0F));
+		final OrthonormalBasis33F g = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(0.0F, 0.0F, 1.0F));
+		
+		assertTrue(a.hasOrthogonalVectors());
+		
+		assertFalse(b.hasOrthogonalVectors());
+		assertFalse(c.hasOrthogonalVectors());
+		assertFalse(d.hasOrthogonalVectors());
+		assertFalse(e.hasOrthogonalVectors());
+		assertFalse(f.hasOrthogonalVectors());
+		assertFalse(g.hasOrthogonalVectors());
+	}
+	
+	@Test
+	public void testHasUnitVectors() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 1.0F, 1.0F));
+		final OrthonormalBasis33F c = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(1.0F, 1.0F, 1.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F d = new OrthonormalBasis33F(new Vector3F(1.0F, 1.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		
+		assertTrue(a.hasUnitVectors());
+		
+		assertFalse(b.hasUnitVectors());
+		assertFalse(c.hasUnitVectors());
+		assertFalse(d.hasUnitVectors());
+	}
+	
+	@Test
+	public void testHashCode() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		
+		assertEquals(a.hashCode(), a.hashCode());
+		assertEquals(a.hashCode(), b.hashCode());
+	}
+	
+	@Test
+	public void testIsOrthonormal() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		final OrthonormalBasis33F b = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 5.0F), new Vector3F(0.0F, 5.0F, 0.0F), new Vector3F(5.0F, 0.0F, 1.0F));
+		final OrthonormalBasis33F c = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 0.0F, 1.0F));
+		
+		assertTrue(a.isOrthonormal());
+		
+		assertFalse(b.isOrthonormal());
+		assertFalse(c.isOrthonormal());
+	}
+	
+	@Test
+	public void testRead() throws IOException {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		
+		final
+		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
+		dataOutput.writeFloat(a.getW().getX());
+		dataOutput.writeFloat(a.getW().getY());
+		dataOutput.writeFloat(a.getW().getZ());
+		dataOutput.writeFloat(a.getV().getX());
+		dataOutput.writeFloat(a.getV().getY());
+		dataOutput.writeFloat(a.getV().getZ());
+		dataOutput.writeFloat(a.getU().getX());
+		dataOutput.writeFloat(a.getU().getY());
+		dataOutput.writeFloat(a.getU().getZ());
+		
+		final byte[] bytes = byteArrayOutputStream.toByteArray();
+		
+		final OrthonormalBasis33F b = OrthonormalBasis33F.read(new DataInputStream(new ByteArrayInputStream(bytes)));
+		
+		assertEquals(a, b);
+		
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33F.read(null));
+		assertThrows(UncheckedIOException.class, () -> OrthonormalBasis33F.read(new DataInputStream(new ByteArrayInputStream(new byte[] {}))));
+	}
+	
+	@Test
 	public void testToString() {
 		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
 		
 		assertEquals("new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F))", orthonormalBasis.toString());
+	}
+	
+	@Test
+	public void testWrite() {
+		final OrthonormalBasis33F a = new OrthonormalBasis33F(new Vector3F(0.0F, 0.0F, 1.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F));
+		
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		
+		final DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
+		
+		a.write(dataOutput);
+		
+		final byte[] bytes = byteArrayOutputStream.toByteArray();
+		
+		final OrthonormalBasis33F b = OrthonormalBasis33F.read(new DataInputStream(new ByteArrayInputStream(bytes)));
+		
+		assertEquals(a, b);
+		
+		assertThrows(NullPointerException.class, () -> a.write(null));
+		assertThrows(UncheckedIOException.class, () -> a.write(new DataOutputMock()));
 	}
 }

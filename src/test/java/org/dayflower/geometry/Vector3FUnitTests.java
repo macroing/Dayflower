@@ -92,6 +92,8 @@ public final class Vector3FUnitTests {
 	
 	@Test
 	public void testClearCacheAndGetCacheSizeAndGetCached() {
+		Vector3F.clearCache();
+		
 		assertEquals(0, Vector3F.getCacheSize());
 		
 		final Vector3F a = new Vector3F(1.0F, 2.0F, 3.0F);

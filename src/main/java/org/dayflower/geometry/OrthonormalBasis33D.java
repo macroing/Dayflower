@@ -184,7 +184,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -218,7 +217,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @param object the {@code Object} to compare to this {@code OrthonormalBasis33D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code OrthonormalBasis33D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -241,7 +239,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, all {@code Vector3D} instances in this {@code OrthonormalBasis33D} instance are orthogonal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean hasOrthogonalVectors() {
 		final boolean orthogonalUV = Vector3D.orthogonal(this.u, this.v);
 		final boolean orthogonalVW = Vector3D.orthogonal(this.v, this.w);
@@ -255,7 +252,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, all {@code Vector3D} instances in this {@code OrthonormalBasis33D} instance are unit vectors, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean hasUnitVectors() {
 		final boolean isUnitVectorU = this.u.isUnitVector();
 		final boolean isUnitVectorV = this.v.isUnitVector();
@@ -269,7 +265,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return {@code true} if, and only if, all {@code Vector3D} instances in this {@code OrthonormalBasis33D} instance are unit vectors and are orthogonal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean isOrthonormal() {
 		return hasUnitVectors() && hasOrthogonalVectors();
 	}
@@ -279,7 +274,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return a hash code for this {@code OrthonormalBasis33D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.u, this.v, this.w);
@@ -296,7 +290,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		this.w.write(dataOutput);
 		this.v.write(dataOutput);
@@ -331,7 +324,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a orthonormalBasis version of {@code orthonormalBasis}
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D getCached(final OrthonormalBasis33D orthonormalBasis) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null"), key -> new OrthonormalBasis33D(Vector3D.getCached(orthonormalBasis.getW()), Vector3D.getCached(orthonormalBasis.getV()), Vector3D.getCached(orthonormalBasis.getU())));
 	}
@@ -347,7 +339,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} with the directions flipped
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D flip(final OrthonormalBasis33D orthonormalBasis) {
 		return new OrthonormalBasis33D(Vector3D.negate(orthonormalBasis.w), Vector3D.negate(orthonormalBasis.v), Vector3D.negate(orthonormalBasis.u));
 	}
@@ -363,7 +354,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} with the U-direction flipped
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D flipU(final OrthonormalBasis33D orthonormalBasis) {
 		return new OrthonormalBasis33D(orthonormalBasis.w, orthonormalBasis.v, Vector3D.negate(orthonormalBasis.u));
 	}
@@ -379,7 +369,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} with the V-direction flipped
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D flipV(final OrthonormalBasis33D orthonormalBasis) {
 		return new OrthonormalBasis33D(orthonormalBasis.w, Vector3D.negate(orthonormalBasis.v), orthonormalBasis.u);
 	}
@@ -395,7 +384,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} with the W-direction flipped
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D flipW(final OrthonormalBasis33D orthonormalBasis) {
 		return new OrthonormalBasis33D(Vector3D.negate(orthonormalBasis.w), orthonormalBasis.v, orthonormalBasis.u);
 	}
@@ -434,7 +422,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code dataInput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D read(final DataInput dataInput) {
 		return new OrthonormalBasis33D(Vector3D.read(dataInput), Vector3D.read(dataInput), Vector3D.read(dataInput));
 	}
@@ -486,7 +473,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return the size of the cache
 	 */
-//	TODO: Add Unit Tests!
 	public static int getCacheSize() {
 		return CACHE.size();
 	}
@@ -494,7 +480,6 @@ public final class OrthonormalBasis33D implements Node {
 	/**
 	 * Clears the cache.
 	 */
-//	TODO: Add Unit Tests!
 	public static void clearCache() {
 		CACHE.clear();
 	}

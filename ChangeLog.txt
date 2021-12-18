@@ -1,6 +1,7 @@
 2021-12-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the OrthonormalBasis33DUnitTests and OrthonormalBasis33FUnitTests classes.
+	* CHANGE:	Fix a cache issue in the Vector3DUnitTests and Vector3FUnitTests classes.
 
 2021-12-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

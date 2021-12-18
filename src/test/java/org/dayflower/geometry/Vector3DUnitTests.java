@@ -92,6 +92,8 @@ public final class Vector3DUnitTests {
 	
 	@Test
 	public void testClearCacheAndGetCacheSizeAndGetCached() {
+		Vector3D.clearCache();
+		
 		assertEquals(0, Vector3D.getCacheSize());
 		
 		final Vector3D a = new Vector3D(1.0D, 2.0D, 3.0D);

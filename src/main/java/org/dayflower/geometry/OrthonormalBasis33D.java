@@ -64,7 +64,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D() {
 		this(Vector3D.w(), Vector3D.v(), Vector3D.u());
 	}
@@ -79,7 +78,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @param w a {@link Vector3D} pointing in the W-direction
 	 * @throws NullPointerException thrown if, and only if, {@code w} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D(final Vector3D w) {
 		this.w = Vector3D.normalize(w);
 		this.v = Vector3D.computeV(w);
@@ -102,7 +100,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @param v a {@code Vector3D} pointing in the V-direction to some degree
 	 * @throws NullPointerException thrown if, and only if, either {@code w} or {@code v} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D(final Vector3D w, final Vector3D v) {
 		this.w = Vector3D.normalize(w);
 		this.u = Vector3D.normalize(Vector3D.crossProduct(Vector3D.normalize(v), this.w));
@@ -121,7 +118,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @param u a {@code Vector3D} pointing in the U-direction
 	 * @throws NullPointerException thrown if, and only if, either {@code w}, {@code v} or {@code u} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public OrthonormalBasis33D(final Vector3D w, final Vector3D v, final Vector3D u) {
 		this.w = Objects.requireNonNull(w, "w == null");
 		this.v = Objects.requireNonNull(v, "v == null");
@@ -135,7 +131,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return a {@code String} representation of this {@code OrthonormalBasis33D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new OrthonormalBasis33D(%s, %s, %s)", this.w, this.v, this.u);
@@ -146,7 +141,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return the {@code Vector3D} pointing in the U-direction
 	 */
-//	TODO: Add Unit Tests!
 	public Vector3D getU() {
 		return this.u;
 	}
@@ -156,7 +150,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return the {@code Vector3D} pointing in the V-direction
 	 */
-//	TODO: Add Unit Tests!
 	public Vector3D getV() {
 		return this.v;
 	}
@@ -166,7 +159,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * 
 	 * @return the {@code Vector3D} pointing in the W-direction
 	 */
-//	TODO: Add Unit Tests!
 	public Vector3D getW() {
 		return this.w;
 	}
@@ -324,7 +316,7 @@ public final class OrthonormalBasis33D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D coordinateSystem(final Vector3D w) {
-		final Vector3D u = abs(w.getX()) > abs(w.getY()) ? Vector3D.divide(new Vector3D(-w.getZ(), 0.0D, w.getX()), sqrt(w.getX() * w.getX() + w.getZ() * w.getZ())) : Vector3D.divide(new Vector3D(0.0D, w.getZ(), - w.getY()), sqrt(w.getY() * w.getY() + w.getZ() * w.getZ()));
+		final Vector3D u = abs(w.getX()) > abs(w.getY()) ? Vector3D.divide(new Vector3D(-w.getZ(), 0.0D, w.getX()), sqrt(w.getX() * w.getX() + w.getZ() * w.getZ())) : Vector3D.divide(new Vector3D(0.0D, w.getZ(), -w.getY()), sqrt(w.getY() * w.getY() + w.getZ() * w.getZ()));
 		final Vector3D v = Vector3D.crossProduct(w, u);
 		
 		return new OrthonormalBasis33D(w, v, u);

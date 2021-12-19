@@ -238,7 +238,7 @@ public final class Sphere3D implements Shape3D {
 		
 		final Vector3D directionToCenter = Vector3D.multiply(Vector3D.direction(surfaceIntersectionPoint, center), distanceReciprocal);
 		
-		final OrthonormalBasis33D orthonormalBasis = OrthonormalBasis33D.coordinateSystem(directionToCenter);
+		final OrthonormalBasis33D orthonormalBasis = new OrthonormalBasis33D(directionToCenter);
 		
 		final Vector3D x = Vector3D.negate(orthonormalBasis.getU());
 		final Vector3D y = Vector3D.negate(orthonormalBasis.getV());

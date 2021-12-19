@@ -238,7 +238,7 @@ public final class Sphere3F implements Shape3F {
 		
 		final Vector3F directionToCenter = Vector3F.multiply(Vector3F.direction(surfaceIntersectionPoint, center), distanceReciprocal);
 		
-		final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.coordinateSystem(directionToCenter);
+		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(directionToCenter);
 		
 		final Vector3F x = Vector3F.negate(orthonormalBasis.getU());
 		final Vector3F y = Vector3F.negate(orthonormalBasis.getV());

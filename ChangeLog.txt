@@ -1,3 +1,11 @@
+2021-12-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the OrthonormalBasis33DUnitTests and OrthonormalBasis33FUnitTests classes.
+	* CHANGE:	Update the method sample(Point2D, SurfaceIntersection3D) in the Sphere3D class. The method coordinateSystem(Vector3D) in the OrthonormalBasis33D class was removed. The constructor OrthonormalBasis33D(Vector3D) is essentially the same.
+	* CHANGE:	Update the method sample(Point2F, SurfaceIntersection3F) in the Sphere3F class. The method coordinateSystem(Vector3F) in the OrthonormalBasis33F class was removed. The constructor OrthonormalBasis33F(Vector3F) is essentially the same.
+	* REMOVE:	Remove the methods coordinateSystem(Vector3D) and lerp(OrthonormalBasis33D, OrthonormalBasis33D, double) from the OrthonormalBasis33D class.
+	* REMOVE:	Remove the methods coordinateSystem(Vector3F) and lerp(OrthonormalBasis33F, OrthonormalBasis33F, float) from the OrthonormalBasis33F class.
+
 2021-12-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the OrthonormalBasis33DUnitTests and OrthonormalBasis33FUnitTests classes.

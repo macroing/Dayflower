@@ -340,6 +340,58 @@ public final class OrthonormalBasis33DUnitTests {
 	}
 	
 	@Test
+	public void testTransform() {
+		final OrthonormalBasis33D a = new OrthonormalBasis33D(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(0.0D, 1.0D, 0.0D), new Vector3D(1.0D, 0.0D, 0.0D));
+		final OrthonormalBasis33D b = OrthonormalBasis33D.transform(Matrix44D.rotateX(+180.0D), a);
+		final OrthonormalBasis33D c = OrthonormalBasis33D.transform(Matrix44D.rotateX(-180.0D), b);
+		final OrthonormalBasis33D d = OrthonormalBasis33D.transform(Matrix44D.rotateY(+180.0D), a);
+		final OrthonormalBasis33D e = OrthonormalBasis33D.transform(Matrix44D.rotateY(-180.0D), d);
+		final OrthonormalBasis33D f = OrthonormalBasis33D.transform(Matrix44D.rotateZ(+180.0D), a);
+		final OrthonormalBasis33D g = OrthonormalBasis33D.transform(Matrix44D.rotateZ(-180.0D), f);
+		
+		assertEquals(a, c);
+		assertEquals(a, e);
+		assertEquals(a, g);
+		
+		assertTrue(b.isOrthonormal());
+		assertTrue(d.isOrthonormal());
+		assertTrue(f.isOrthonormal());
+		
+		assertEquals(new OrthonormalBasis33D(new Vector3D(0.0D, -0.00000000000000012246467991473532D, -1.0D), new Vector3D(0.0D, -1.0D, 0.00000000000000012246467991473532D), new Vector3D(1.0D, 0.0D, 0.0D)), b);
+		assertEquals(new OrthonormalBasis33D(new Vector3D(0.00000000000000012246467991473532D, 0.0D, -1.0D), new Vector3D(0.0D, 1.0D, 0.0D), new Vector3D(-1.0D, 0.0D, -0.00000000000000012246467991473532D)), d);
+		assertEquals(new OrthonormalBasis33D(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(-0.00000000000000012246467991473532D, -1.0D, 0.0D), new Vector3D(-1.0D, 0.00000000000000012246467991473532D, 0.0D)), f);
+		
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33D.transform(Matrix44D.rotateX(+180.0D), null));
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33D.transform(null, a));
+	}
+	
+	@Test
+	public void testTransformTranspose() {
+		final OrthonormalBasis33D a = new OrthonormalBasis33D(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(0.0D, 1.0D, 0.0D), new Vector3D(1.0D, 0.0D, 0.0D));
+		final OrthonormalBasis33D b = OrthonormalBasis33D.transformTranspose(Matrix44D.transpose(Matrix44D.rotateX(+180.0D)), a);
+		final OrthonormalBasis33D c = OrthonormalBasis33D.transformTranspose(Matrix44D.transpose(Matrix44D.rotateX(-180.0D)), b);
+		final OrthonormalBasis33D d = OrthonormalBasis33D.transformTranspose(Matrix44D.transpose(Matrix44D.rotateY(+180.0D)), a);
+		final OrthonormalBasis33D e = OrthonormalBasis33D.transformTranspose(Matrix44D.transpose(Matrix44D.rotateY(-180.0D)), d);
+		final OrthonormalBasis33D f = OrthonormalBasis33D.transformTranspose(Matrix44D.transpose(Matrix44D.rotateZ(+180.0D)), a);
+		final OrthonormalBasis33D g = OrthonormalBasis33D.transformTranspose(Matrix44D.transpose(Matrix44D.rotateZ(-180.0D)), f);
+		
+		assertEquals(a, c);
+		assertEquals(a, e);
+		assertEquals(a, g);
+		
+		assertTrue(b.isOrthonormal());
+		assertTrue(d.isOrthonormal());
+		assertTrue(f.isOrthonormal());
+		
+		assertEquals(new OrthonormalBasis33D(new Vector3D(0.0D, -0.00000000000000012246467991473532D, -1.0D), new Vector3D(0.0D, -1.0D, 0.00000000000000012246467991473532D), new Vector3D(1.0D, 0.0D, 0.0D)), b);
+		assertEquals(new OrthonormalBasis33D(new Vector3D(0.00000000000000012246467991473532D, 0.0D, -1.0D), new Vector3D(0.0D, 1.0D, 0.0D), new Vector3D(-1.0D, 0.0D, -0.00000000000000012246467991473532D)), d);
+		assertEquals(new OrthonormalBasis33D(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(-0.00000000000000012246467991473532D, -1.0D, 0.0D), new Vector3D(-1.0D, 0.00000000000000012246467991473532D, 0.0D)), f);
+		
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33D.transformTranspose(Matrix44D.rotateX(+180.0D), null));
+		assertThrows(NullPointerException.class, () -> OrthonormalBasis33D.transformTranspose(null, a));
+	}
+	
+	@Test
 	public void testWrite() {
 		final OrthonormalBasis33D a = new OrthonormalBasis33D(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(0.0D, 1.0D, 0.0D), new Vector3D(1.0D, 0.0D, 0.0D));
 		

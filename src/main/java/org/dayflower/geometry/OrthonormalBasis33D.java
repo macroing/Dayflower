@@ -18,13 +18,9 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -299,23 +295,6 @@ public final class OrthonormalBasis33D implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a new {@code OrthonormalBasis33D} instance that is based on PBRT.
-	 * <p>
-	 * If {@code w} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param w the W-direction
-	 * @return a new {@code OrthonormalBasis33D} instance that is based on PBRT
-	 * @throws NullPointerException thrown if, and only if, {@code w} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static OrthonormalBasis33D coordinateSystem(final Vector3D w) {
-		final Vector3D u = abs(w.getX()) > abs(w.getY()) ? Vector3D.divide(new Vector3D(-w.getZ(), 0.0D, w.getX()), sqrt(w.getX() * w.getX() + w.getZ() * w.getZ())) : Vector3D.divide(new Vector3D(0.0D, w.getZ(), -w.getY()), sqrt(w.getY() * w.getY() + w.getZ() * w.getZ()));
-		final Vector3D v = Vector3D.crossProduct(w, u);
-		
-		return new OrthonormalBasis33D(w, v, u);
-	}
-	
-	/**
 	 * Returns a cached version of {@code orthonormalBasis}.
 	 * <p>
 	 * If {@code orthonormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -389,28 +368,6 @@ public final class OrthonormalBasis33D implements Node {
 	}
 	
 	/**
-	 * Performs a linear interpolation operation on the supplied values.
-	 * <p>
-	 * Returns an {@code OrthonormalBasis33D} instance with the result of the linear interpolation operation.
-	 * <p>
-	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param a an {@code OrthonormalBasis33D} instance
-	 * @param b an {@code OrthonormalBasis33D} instance
-	 * @param t the factor
-	 * @return an {@code OrthonormalBasis33D} instance with the result of the linear interpolation operation
-	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static OrthonormalBasis33D lerp(final OrthonormalBasis33D a, final OrthonormalBasis33D b, final double t) {
-		final Vector3D u = Vector3D.lerp(a.u, b.u, t);
-		final Vector3D v = Vector3D.lerp(a.v, b.v, t);
-		final Vector3D w = Vector3D.lerp(a.w, b.w, t);
-		
-		return new OrthonormalBasis33D(w, v, u);
-	}
-	
-	/**
 	 * Returns a new {@code OrthonormalBasis33D} instance by reading it from {@code dataInput}.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -438,7 +395,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D transform(final Matrix44D matrixLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
 		final Vector3D u = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.u));
 		final Vector3D v = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.v));
@@ -459,7 +415,6 @@ public final class OrthonormalBasis33D implements Node {
 	 * @return a new {@code OrthonormalBasis33D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static OrthonormalBasis33D transformTranspose(final Matrix44D matrixLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
 		final Vector3D u = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.u));
 		final Vector3D v = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.v));

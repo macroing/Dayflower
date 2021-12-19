@@ -318,7 +318,7 @@ public final class Intersection {
 	 * @throws NullPointerException thrown if, and only if, {@code surfaceNormalG} is {@code null}
 	 */
 	public void setSurfaceNormalG(final Vector3F surfaceNormalG) {
-		this.orthonormalBasisG = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalG, "surfaceNormalG == null"));
+		this.orthonormalBasisG = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalG, "surfaceNormalG == null"), this.orthonormalBasisG.getV());
 	}
 	
 	/**
@@ -330,7 +330,7 @@ public final class Intersection {
 	 * @throws NullPointerException thrown if, and only if, {@code surfaceNormalS} is {@code null}
 	 */
 	public void setSurfaceNormalS(final Vector3F surfaceNormalS) {
-		this.orthonormalBasisS = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalS, "surfaceNormalS == null"));
+		this.orthonormalBasisS = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalS, "surfaceNormalS == null"), this.orthonormalBasisS.getV());
 	}
 	
 	/**

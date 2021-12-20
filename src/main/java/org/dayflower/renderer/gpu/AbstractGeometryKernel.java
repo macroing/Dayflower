@@ -1384,6 +1384,51 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets an orthonormal basis in {@link #orthonormalBasis33FArray_$private$9}.
 	 * <p>
+	 * The orthonormal basis is constructed from the U-direction vector represented by {@code orthonormalBasisUX}, {@code orthonormalBasisUY} and {@code orthonormalBasisUZ} and the V-direction vector represented by {@code orthonormalBasisVX},
+	 * {@code orthonormalBasisVY} and {@code orthonormalBasisVZ}.
+	 * <p>
+	 * This method will normalize the U-direction and V-direction vectors.
+	 * 
+	 * @param orthonormalBasisUX the X-component of the U-direction
+	 * @param orthonormalBasisUY the Y-component of the U-direction
+	 * @param orthonormalBasisUZ the Z-component of the U-direction
+	 * @param orthonormalBasisVX the X-component of the V-direction
+	 * @param orthonormalBasisVY the Y-component of the V-direction
+	 * @param orthonormalBasisVZ the Z-component of the V-direction
+	 */
+	protected final void orthonormalBasis33FSetFromUV(final float orthonormalBasisUX, final float orthonormalBasisUY, final float orthonormalBasisUZ, final float orthonormalBasisVX, final float orthonormalBasisVY, final float orthonormalBasisVZ) {
+//		Compute the normalized U-direction of the orthonormal basis:
+		final float orthonormalBasisULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisUX, orthonormalBasisUY, orthonormalBasisUZ);
+		final float orthonormalBasisUNormalizedX = orthonormalBasisUX * orthonormalBasisULengthReciprocal;
+		final float orthonormalBasisUNormalizedY = orthonormalBasisUY * orthonormalBasisULengthReciprocal;
+		final float orthonormalBasisUNormalizedZ = orthonormalBasisUZ * orthonormalBasisULengthReciprocal;
+		
+//		Compute the normalized V-direction of the orthonormal basis:
+		final float orthonormalBasisVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisVX, orthonormalBasisVY, orthonormalBasisVZ);
+		final float orthonormalBasisVNormalizedX = orthonormalBasisVX * orthonormalBasisVLengthReciprocal;
+		final float orthonormalBasisVNormalizedY = orthonormalBasisVY * orthonormalBasisVLengthReciprocal;
+		final float orthonormalBasisVNormalizedZ = orthonormalBasisVZ * orthonormalBasisVLengthReciprocal;
+		
+//		Compute the normalized W-direction of the orthonormal basis:
+		final float orthonormalBasisWNormalizedX = orthonormalBasisUNormalizedY * orthonormalBasisVNormalizedZ - orthonormalBasisUNormalizedZ * orthonormalBasisVNormalizedY;
+		final float orthonormalBasisWNormalizedY = orthonormalBasisUNormalizedZ * orthonormalBasisVNormalizedX - orthonormalBasisUNormalizedX * orthonormalBasisVNormalizedZ;
+		final float orthonormalBasisWNormalizedZ = orthonormalBasisUNormalizedX * orthonormalBasisVNormalizedY - orthonormalBasisUNormalizedY * orthonormalBasisVNormalizedX;
+		
+//		Set the orthonormal basis:
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0] = orthonormalBasisUNormalizedX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1] = orthonormalBasisUNormalizedY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2] = orthonormalBasisUNormalizedZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0] = orthonormalBasisVNormalizedX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1] = orthonormalBasisVNormalizedY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2] = orthonormalBasisVNormalizedZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0] = orthonormalBasisWNormalizedX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1] = orthonormalBasisWNormalizedY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2] = orthonormalBasisWNormalizedZ;
+	}
+	
+	/**
+	 * Sets an orthonormal basis in {@link #orthonormalBasis33FArray_$private$9}.
+	 * <p>
 	 * The orthonormal basis is constructed from the W-direction vector represented by {@code orthonormalBasisWX}, {@code orthonormalBasisWY} and {@code orthonormalBasisWZ}.
 	 * <p>
 	 * This method will normalize the W-direction vector.
@@ -2163,34 +2208,15 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		final float textureCoordinatesU = phi / conePhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / conePhiMax;
 		final float textureCoordinatesV = surfaceIntersectionPointZ / coneZMax;
 		
-		final float orthonormalBasisGUX = -conePhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +conePhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = -surfaceIntersectionPointX / (1.0F - textureCoordinatesV);
-		final float orthonormalBasisGVY = -surfaceIntersectionPointY / (1.0F - textureCoordinatesV);
-		final float orthonormalBasisGVZ = coneZMax;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-conePhiMax * surfaceIntersectionPointY, +conePhiMax * surfaceIntersectionPointX, 0.0F, -surfaceIntersectionPointX / (1.0F - textureCoordinatesV), -surfaceIntersectionPointY / (1.0F - textureCoordinatesV), coneZMax);
 		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -2220,34 +2246,15 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		final float textureCoordinatesU = phi / conePhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / conePhiMax;
 		final float textureCoordinatesV = surfaceIntersectionPointZ / coneZMax;
 		
-		final float orthonormalBasisGUX = -conePhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +conePhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = -surfaceIntersectionPointX / (1.0F - textureCoordinatesV);
-		final float orthonormalBasisGVY = -surfaceIntersectionPointY / (1.0F - textureCoordinatesV);
-		final float orthonormalBasisGVZ = coneZMax;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-conePhiMax * surfaceIntersectionPointY, +conePhiMax * surfaceIntersectionPointX, 0.0F, -surfaceIntersectionPointX / (1.0F - textureCoordinatesV), -surfaceIntersectionPointY / (1.0F - textureCoordinatesV), coneZMax);
 		
 //		Update the intersection array:
-		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -2376,34 +2383,15 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = y * (cylinderRadius / radius);
 		final float surfaceIntersectionPointZ = z;
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		final float orthonormalBasisGUX = -cylinderPhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +cylinderPhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = 0.0F;
-		final float orthonormalBasisGVY = 0.0F;
-		final float orthonormalBasisGVZ = cylinderZMax - cylinderZMin;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
-		
-		final float textureCoordinatesU = phi / cylinderPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / cylinderPhiMax;
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - cylinderZMin) / (cylinderZMax - cylinderZMin);
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-cylinderPhiMax * surfaceIntersectionPointY, +cylinderPhiMax * surfaceIntersectionPointX, 0.0F, 0.0F, 0.0F, cylinderZMax - cylinderZMin);
+		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -2441,34 +2429,15 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = y * (cylinderRadius / radius);
 		final float surfaceIntersectionPointZ = z;
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		final float orthonormalBasisGUX = -cylinderPhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +cylinderPhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = 0.0F;
-		final float orthonormalBasisGVY = 0.0F;
-		final float orthonormalBasisGVZ = cylinderZMax - cylinderZMin;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
-		
-		final float textureCoordinatesU = phi / cylinderPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / cylinderPhiMax;
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - cylinderZMin) / (cylinderZMax - cylinderZMin);
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-cylinderPhiMax * surfaceIntersectionPointY, +cylinderPhiMax * surfaceIntersectionPointX, 0.0F, 0.0F, 0.0F, cylinderZMax - cylinderZMin);
+		
 //		Update the intersection array:
-		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -2565,37 +2534,17 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = diskZMax;
 		
-		final float distanceSquared = surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY;
-		final float distance = sqrt(distanceSquared);
+		final float distance = sqrt(surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY);
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		final float orthonormalBasisGUX = -diskPhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +diskPhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = surfaceIntersectionPointX * (diskRadiusInner - diskRadiusOuter) / distance;
-		final float orthonormalBasisGVY = surfaceIntersectionPointY * (diskRadiusInner - diskRadiusOuter) / distance;
-		final float orthonormalBasisGVZ = 0.0F;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
-		
-		final float textureCoordinatesU = phi / diskPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / diskPhiMax;
 		final float textureCoordinatesV = (diskRadiusOuter - distance) / (diskRadiusOuter - diskRadiusInner);
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-diskPhiMax * surfaceIntersectionPointY, +diskPhiMax * surfaceIntersectionPointX, 0.0F, surfaceIntersectionPointX * (diskRadiusInner - diskRadiusOuter) / distance, surfaceIntersectionPointY * (diskRadiusInner - diskRadiusOuter) / distance, 0.0F);
+		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -2625,37 +2574,17 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = diskZMax;
 		
-		final float distanceSquared = surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY;
-		final float distance = sqrt(distanceSquared);
+		final float distance = sqrt(surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY);
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		final float orthonormalBasisGUX = -diskPhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +diskPhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = surfaceIntersectionPointX * (diskRadiusInner - diskRadiusOuter) / distance;
-		final float orthonormalBasisGVY = surfaceIntersectionPointY * (diskRadiusInner - diskRadiusOuter) / distance;
-		final float orthonormalBasisGVZ = 0.0F;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
-		
-		final float textureCoordinatesU = phi / diskPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / diskPhiMax;
 		final float textureCoordinatesV = (diskRadiusOuter - distance) / (diskRadiusOuter - diskRadiusInner);
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-diskPhiMax * surfaceIntersectionPointY, +diskPhiMax * surfaceIntersectionPointX, 0.0F, surfaceIntersectionPointX * (diskRadiusInner - diskRadiusOuter) / distance, surfaceIntersectionPointY * (diskRadiusInner - diskRadiusOuter) / distance, 0.0F);
+		
 //		Update the intersection array:
-		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -2787,32 +2716,15 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float cosPhi = cos(phi);
 		final float sinPhi = sin(phi);
 		
-		final float orthonormalBasisGUX = -hyperboloidPhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +hyperboloidPhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = (hyperboloidBX - hyperboloidAX) * cosPhi - (hyperboloidBY - hyperboloidAY) * sinPhi;
-		final float orthonormalBasisGVY = (hyperboloidBX - hyperboloidAX) * sinPhi + (hyperboloidBY - hyperboloidAY) * cosPhi;
-		final float orthonormalBasisGVZ = hyperboloidBZ - hyperboloidAZ;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
-		
 		final float textureCoordinatesU = phi / hyperboloidPhiMax;
 		final float textureCoordinatesV = ((rayOriginZ + rayDirectionZ * t) - hyperboloidAZ) / (hyperboloidBZ - hyperboloidAZ);
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-hyperboloidPhiMax * surfaceIntersectionPointY, +hyperboloidPhiMax * surfaceIntersectionPointX, 0.0F, (hyperboloidBX - hyperboloidAX) * cosPhi - (hyperboloidBY - hyperboloidAY) * sinPhi, (hyperboloidBX - hyperboloidAX) * sinPhi + (hyperboloidBY - hyperboloidAY) * cosPhi, hyperboloidBZ - hyperboloidAZ);
+		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -2852,32 +2764,15 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float cosPhi = cos(phi);
 		final float sinPhi = sin(phi);
 		
-		final float orthonormalBasisGUX = -hyperboloidPhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +hyperboloidPhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = (hyperboloidBX - hyperboloidAX) * cosPhi - (hyperboloidBY - hyperboloidAY) * sinPhi;
-		final float orthonormalBasisGVY = (hyperboloidBX - hyperboloidAX) * sinPhi + (hyperboloidBY - hyperboloidAY) * cosPhi;
-		final float orthonormalBasisGVZ = hyperboloidBZ - hyperboloidAZ;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
-		
 		final float textureCoordinatesU = phi / hyperboloidPhiMax;
 		final float textureCoordinatesV = ((rayOriginZ + rayDirectionZ * t) - hyperboloidAZ) / (hyperboloidBZ - hyperboloidAZ);
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-hyperboloidPhiMax * surfaceIntersectionPointY, +hyperboloidPhiMax * surfaceIntersectionPointX, 0.0F, (hyperboloidBX - hyperboloidAX) * cosPhi - (hyperboloidBY - hyperboloidAY) * sinPhi, (hyperboloidBX - hyperboloidAX) * sinPhi + (hyperboloidBY - hyperboloidAY) * cosPhi, hyperboloidBZ - hyperboloidAZ);
+		
 //		Update the intersection array:
-		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -2989,34 +2884,15 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		final float orthonormalBasisGUX = -paraboloidPhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +paraboloidPhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointX / (2.0F * surfaceIntersectionPointZ));
-		final float orthonormalBasisGVY = (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointY / (2.0F * surfaceIntersectionPointZ));
-		final float orthonormalBasisGVZ = paraboloidZMax - paraboloidZMin;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
-		
-		final float textureCoordinatesU = phi / paraboloidPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / paraboloidPhiMax;
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - paraboloidZMin) / (paraboloidZMax - paraboloidZMin);
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-paraboloidPhiMax * surfaceIntersectionPointY, +paraboloidPhiMax * surfaceIntersectionPointX, 0.0F, (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointX / (2.0F * surfaceIntersectionPointZ)), (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointY / (2.0F * surfaceIntersectionPointZ)), paraboloidZMax - paraboloidZMin);
+		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -3047,34 +2923,15 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		final float orthonormalBasisGUX = -paraboloidPhiMax * surfaceIntersectionPointY;
-		final float orthonormalBasisGUY = +paraboloidPhiMax * surfaceIntersectionPointX;
-		final float orthonormalBasisGUZ = 0.0F;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
-		
-		final float orthonormalBasisGVX = (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointX / (2.0F * surfaceIntersectionPointZ));
-		final float orthonormalBasisGVY = (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointY / (2.0F * surfaceIntersectionPointZ));
-		final float orthonormalBasisGVZ = paraboloidZMax - paraboloidZMin;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
-		
-		final float textureCoordinatesU = phi / paraboloidPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / paraboloidPhiMax;
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - paraboloidZMin) / (paraboloidZMax - paraboloidZMin);
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromUV(-paraboloidPhiMax * surfaceIntersectionPointY, +paraboloidPhiMax * surfaceIntersectionPointX, 0.0F, (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointX / (2.0F * surfaceIntersectionPointZ)), (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointY / (2.0F * surfaceIntersectionPointZ)), paraboloidZMax - paraboloidZMin);
+		
 //		Update the intersection array:
-		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -3192,8 +3049,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float cY = isXLarger ? planeBZ - aY : isYLarger ? planeBX - aY : planeBY - aY;
 		
 //		Compute variables necessary for computing the texture coordinates:
-		final float determinant = bX * cY - bY * cX;
-		final float determinantReciprocal = 1.0F / determinant;
+		final float determinantReciprocal = 1.0F / (bX * cY - bY * cX);
 		
 //		Compute variables necessary for computing the texture coordinates:
 		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
@@ -3262,8 +3118,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float cY = isXLarger ? planeBZ - aY : isYLarger ? planeBX - aY : planeBY - aY;
 		
 //		Compute variables necessary for computing the texture coordinates:
-		final float determinant = bX * cY - bY * cX;
-		final float determinantReciprocal = 1.0F / determinant;
+		final float determinantReciprocal = 1.0F / (bX * cY - bY * cX);
 		
 //		Compute variables necessary for computing the texture coordinates:
 		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
@@ -3926,17 +3781,17 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 //		Compute the face to use:
 		final int face = faceX == -1 ? 1 : faceX == 1 ? 2 : faceY == -1 ? 3 : faceY == 1 ? 4 : faceZ == -1 ? 5 : faceZ == 1 ? 6 : 0;
 		
-//		Retrieve the W-direction (surface normal) of the geometric orthonormal basis:
-		final float orthonormalBasisGWNormalizedX = face == 1 ? -1.0F : face == 2 ? +1.0F : 0.0F;
-		final float orthonormalBasisGWNormalizedY = face == 3 ? -1.0F : face == 4 ? +1.0F : 0.0F;
-		final float orthonormalBasisGWNormalizedZ = face == 5 ? -1.0F : face == 6 ? +1.0F : 0.0F;
+//		Compute the surface normal:
+		final float surfaceNormalX = face == 1 ? -1.0F : face == 2 ? +1.0F : 0.0F;
+		final float surfaceNormalY = face == 3 ? -1.0F : face == 4 ? +1.0F : 0.0F;
+		final float surfaceNormalZ = face == 5 ? -1.0F : face == 6 ? +1.0F : 0.0F;
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = faceX != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointX, rectangularCuboidMinimumX, rectangularCuboidMaximumX);
 		final float textureCoordinatesV = faceY != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointY, rectangularCuboidMinimumY, rectangularCuboidMaximumY);
 		
 //		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		orthonormalBasis33FSetFromW(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 		
 //		Update the intersection array:
 		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -3996,17 +3851,17 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 //		Compute the face to use:
 		final int face = faceX == -1 ? 1 : faceX == 1 ? 2 : faceY == -1 ? 3 : faceY == 1 ? 4 : faceZ == -1 ? 5 : faceZ == 1 ? 6 : 0;
 		
-//		Retrieve the W-direction (surface normal) of the geometric orthonormal basis:
-		final float orthonormalBasisGWNormalizedX = face == 1 ? -1.0F : face == 2 ? +1.0F : 0.0F;
-		final float orthonormalBasisGWNormalizedY = face == 3 ? -1.0F : face == 4 ? +1.0F : 0.0F;
-		final float orthonormalBasisGWNormalizedZ = face == 5 ? -1.0F : face == 6 ? +1.0F : 0.0F;
+//		Compute the surface normal:
+		final float surfaceNormalX = face == 1 ? -1.0F : face == 2 ? +1.0F : 0.0F;
+		final float surfaceNormalY = face == 3 ? -1.0F : face == 4 ? +1.0F : 0.0F;
+		final float surfaceNormalZ = face == 5 ? -1.0F : face == 6 ? +1.0F : 0.0F;
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = faceX != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointX, rectangularCuboidMinimumX, rectangularCuboidMaximumX);
 		final float textureCoordinatesV = faceY != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointY, rectangularCuboidMinimumY, rectangularCuboidMaximumY);
 		
 //		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		orthonormalBasis33FSetFromW(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 		
 //		Update the intersection array:
 		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -4288,48 +4143,24 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-//		Compute the derivative, which is used to create the W-direction (surface normal) of the geometric orthonormal basis:
+//		Compute the derivative, which is used to create the surface normal:
 		final float derivative = (surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY + surfaceIntersectionPointZ * surfaceIntersectionPointZ) - torusRadiusInnerSquared - torusRadiusOuterSquared;
 		
-//		Compute the W-direction (surface normal) of the geometric orthonormal basis:
-		final float orthonormalBasisGWX = surfaceIntersectionPointX * derivative;
-		final float orthonormalBasisGWY = surfaceIntersectionPointY * derivative;
-		final float orthonormalBasisGWZ = surfaceIntersectionPointZ * derivative + 2.0F * torusRadiusOuterSquared * surfaceIntersectionPointZ;
-		final float orthonormalBasisGWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGWX, orthonormalBasisGWY, orthonormalBasisGWZ);
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGWX * orthonormalBasisGWLengthReciprocal;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGWY * orthonormalBasisGWLengthReciprocal;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGWZ * orthonormalBasisGWLengthReciprocal;
-		
-//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
-		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
-		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
-		
-//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
-		final boolean isX = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
-		final boolean isY = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
-		
-//		Compute the V-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGVX = isX ? +0.0F                          : isY ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
-		final float orthonormalBasisGVY = isX ? +orthonormalBasisGWNormalizedZ : isY ? +0.0F                          : -orthonormalBasisGWNormalizedX;
-		final float orthonormalBasisGVZ = isX ? -orthonormalBasisGWNormalizedY : isY ? -orthonormalBasisGWNormalizedX : +0.0F;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-//		Compute the U-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+//		Compute the surface normal:
+		final float surfaceNormalX = surfaceIntersectionPointX * derivative;
+		final float surfaceNormalY = surfaceIntersectionPointY * derivative;
+		final float surfaceNormalZ = surfaceIntersectionPointZ * derivative + 2.0F * torusRadiusOuterSquared * surfaceIntersectionPointZ;
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float textureCoordinatesV = (asin(saturateF(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromW(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionLHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -4362,48 +4193,24 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-//		Compute the derivative, which is used to create the W-direction (surface normal) of the geometric orthonormal basis:
+//		Compute the derivative, which is used to create the surface normal:
 		final float derivative = (surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY + surfaceIntersectionPointZ * surfaceIntersectionPointZ) - torusRadiusInnerSquared - torusRadiusOuterSquared;
 		
-//		Compute the W-direction (surface normal) of the geometric orthonormal basis:
-		final float orthonormalBasisGWX = surfaceIntersectionPointX * derivative;
-		final float orthonormalBasisGWY = surfaceIntersectionPointY * derivative;
-		final float orthonormalBasisGWZ = surfaceIntersectionPointZ * derivative + 2.0F * torusRadiusOuterSquared * surfaceIntersectionPointZ;
-		final float orthonormalBasisGWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGWX, orthonormalBasisGWY, orthonormalBasisGWZ);
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGWX * orthonormalBasisGWLengthReciprocal;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGWY * orthonormalBasisGWLengthReciprocal;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGWZ * orthonormalBasisGWLengthReciprocal;
-		
-//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
-		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
-		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
-		
-//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
-		final boolean isX = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
-		final boolean isY = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
-		
-//		Compute the V-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGVX = isX ? +0.0F                          : isY ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
-		final float orthonormalBasisGVY = isX ? +orthonormalBasisGWNormalizedZ : isY ? +0.0F                          : -orthonormalBasisGWNormalizedX;
-		final float orthonormalBasisGVZ = isX ? -orthonormalBasisGWNormalizedY : isY ? -orthonormalBasisGWNormalizedX : +0.0F;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
-		
-//		Compute the U-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+//		Compute surface normal:
+		final float surfaceNormalX = surfaceIntersectionPointX * derivative;
+		final float surfaceNormalY = surfaceIntersectionPointY * derivative;
+		final float surfaceNormalZ = surfaceIntersectionPointZ * derivative + 2.0F * torusRadiusOuterSquared * surfaceIntersectionPointZ;
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float textureCoordinatesV = (asin(saturateF(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
 		
+//		Compute the orthonormal basis:
+		orthonormalBasis33FSetFromW(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+		
 //		Update the intersection array:
-		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionRHSSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -4624,55 +4431,28 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 //		Compute the orthonormal basis for the geometry:
 		orthonormalBasis33FSetFromW(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
 		
-//		Retrieve the orthonormal basis for the geometry:
-		final float orthonormalBasisGUNormalizedX = orthonormalBasis33FGetUComponent1();
-		final float orthonormalBasisGUNormalizedY = orthonormalBasis33FGetUComponent2();
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasis33FGetUComponent3();
-		final float orthonormalBasisGVNormalizedX = orthonormalBasis33FGetVComponent1();
-		final float orthonormalBasisGVNormalizedY = orthonormalBasis33FGetVComponent2();
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasis33FGetVComponent3();
-		final float orthonormalBasisGWNormalizedX = orthonormalBasis33FGetWComponent1();
-		final float orthonormalBasisGWNormalizedY = orthonormalBasis33FGetWComponent2();
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasis33FGetWComponent3();
+//		Update the intersection array:
+		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
 		
 //		Compute the orthonormal basis for shading:
 		if(!checkIsZero(determinantUV)) {
-			final float dPUX = triangleAPositionX - triangleCPositionX;
-			final float dPUY = triangleAPositionY - triangleCPositionY;
-			final float dPUZ = triangleAPositionZ - triangleCPositionZ;
-			final float dPVX = triangleBPositionX - triangleCPositionX;
-			final float dPVY = triangleBPositionY - triangleCPositionY;
-			final float dPVZ = triangleBPositionZ - triangleCPositionZ;
-			
 			final float determinantUVReciprocal = 1.0F / determinantUV;
 			
-			final float vSX = (-dU2 * dPUX + dU1 * dPVX) * determinantUVReciprocal;
-			final float vSY = (-dU2 * dPUY + dU1 * dPVY) * determinantUVReciprocal;
-			final float vSZ = (-dU2 * dPUZ + dU1 * dPVZ) * determinantUVReciprocal;
+			final float vSX = (-dU2 * (triangleAPositionX - triangleCPositionX) + dU1 * (triangleBPositionX - triangleCPositionX)) * determinantUVReciprocal;
+			final float vSY = (-dU2 * (triangleAPositionY - triangleCPositionY) + dU1 * (triangleBPositionY - triangleCPositionY)) * determinantUVReciprocal;
+			final float vSZ = (-dU2 * (triangleAPositionZ - triangleCPositionZ) + dU1 * (triangleBPositionZ - triangleCPositionZ)) * determinantUVReciprocal;
 			
 			orthonormalBasis33FSetFromWV(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, vSX, vSY, vSZ);
 		} else {
 			orthonormalBasis33FSetFromW(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
 		}
 		
-//		Retrieve the orthonormal basis for shading:
-		final float orthonormalBasisSUNormalizedX = orthonormalBasis33FGetUComponent1();
-		final float orthonormalBasisSUNormalizedY = orthonormalBasis33FGetUComponent2();
-		final float orthonormalBasisSUNormalizedZ = orthonormalBasis33FGetUComponent3();
-		final float orthonormalBasisSVNormalizedX = orthonormalBasis33FGetVComponent1();
-		final float orthonormalBasisSVNormalizedY = orthonormalBasis33FGetVComponent2();
-		final float orthonormalBasisSVNormalizedZ = orthonormalBasis33FGetVComponent3();
-		final float orthonormalBasisSWNormalizedX = orthonormalBasis33FGetWComponent1();
-		final float orthonormalBasisSWNormalizedY = orthonormalBasis33FGetWComponent2();
-		final float orthonormalBasisSWNormalizedZ = orthonormalBasis33FGetWComponent3();
-		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = triangleATextureCoordinatesU * w + triangleBTextureCoordinatesU * u + triangleCTextureCoordinatesU * v;
 		final float textureCoordinatesV = triangleATextureCoordinatesV * w + triangleBTextureCoordinatesV * u + triangleCTextureCoordinatesV * v;
 		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionLHSSetOrthonormalBasisS(orthonormalBasisSUNormalizedX, orthonormalBasisSUNormalizedY, orthonormalBasisSUNormalizedZ, orthonormalBasisSVNormalizedX, orthonormalBasisSVNormalizedY, orthonormalBasisSVNormalizedZ, orthonormalBasisSWNormalizedX, orthonormalBasisSWNormalizedY, orthonormalBasisSWNormalizedZ);
+		intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -4794,55 +4574,28 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 //		Compute the orthonormal basis for the geometry:
 		orthonormalBasis33FSetFromW(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
 		
-//		Retrieve the orthonormal basis for the geometry:
-		final float orthonormalBasisGUNormalizedX = orthonormalBasis33FGetUComponent1();
-		final float orthonormalBasisGUNormalizedY = orthonormalBasis33FGetUComponent2();
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasis33FGetUComponent3();
-		final float orthonormalBasisGVNormalizedX = orthonormalBasis33FGetVComponent1();
-		final float orthonormalBasisGVNormalizedY = orthonormalBasis33FGetVComponent2();
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasis33FGetVComponent3();
-		final float orthonormalBasisGWNormalizedX = orthonormalBasis33FGetWComponent1();
-		final float orthonormalBasisGWNormalizedY = orthonormalBasis33FGetWComponent2();
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasis33FGetWComponent3();
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
 		
 //		Compute the orthonormal basis for shading:
 		if(!checkIsZero(determinantUV)) {
-			final float dPUX = triangleAPositionX - triangleCPositionX;
-			final float dPUY = triangleAPositionY - triangleCPositionY;
-			final float dPUZ = triangleAPositionZ - triangleCPositionZ;
-			final float dPVX = triangleBPositionX - triangleCPositionX;
-			final float dPVY = triangleBPositionY - triangleCPositionY;
-			final float dPVZ = triangleBPositionZ - triangleCPositionZ;
-			
 			final float determinantUVReciprocal = 1.0F / determinantUV;
 			
-			final float vSX = (-dU2 * dPUX + dU1 * dPVX) * determinantUVReciprocal;
-			final float vSY = (-dU2 * dPUY + dU1 * dPVY) * determinantUVReciprocal;
-			final float vSZ = (-dU2 * dPUZ + dU1 * dPVZ) * determinantUVReciprocal;
+			final float vSX = (-dU2 * (triangleAPositionX - triangleCPositionX) + dU1 * (triangleBPositionX - triangleCPositionX)) * determinantUVReciprocal;
+			final float vSY = (-dU2 * (triangleAPositionY - triangleCPositionY) + dU1 * (triangleBPositionY - triangleCPositionY)) * determinantUVReciprocal;
+			final float vSZ = (-dU2 * (triangleAPositionZ - triangleCPositionZ) + dU1 * (triangleBPositionZ - triangleCPositionZ)) * determinantUVReciprocal;
 			
 			orthonormalBasis33FSetFromWV(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, vSX, vSY, vSZ);
 		} else {
 			orthonormalBasis33FSetFromW(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
 		}
 		
-//		Retrieve the orthonormal basis for shading:
-		final float orthonormalBasisSUNormalizedX = orthonormalBasis33FGetUComponent1();
-		final float orthonormalBasisSUNormalizedY = orthonormalBasis33FGetUComponent2();
-		final float orthonormalBasisSUNormalizedZ = orthonormalBasis33FGetUComponent3();
-		final float orthonormalBasisSVNormalizedX = orthonormalBasis33FGetVComponent1();
-		final float orthonormalBasisSVNormalizedY = orthonormalBasis33FGetVComponent2();
-		final float orthonormalBasisSVNormalizedZ = orthonormalBasis33FGetVComponent3();
-		final float orthonormalBasisSWNormalizedX = orthonormalBasis33FGetWComponent1();
-		final float orthonormalBasisSWNormalizedY = orthonormalBasis33FGetWComponent2();
-		final float orthonormalBasisSWNormalizedZ = orthonormalBasis33FGetWComponent3();
-		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = triangleATextureCoordinatesU * w + triangleBTextureCoordinatesU * u + triangleCTextureCoordinatesU * v;
 		final float textureCoordinatesV = triangleATextureCoordinatesV * w + triangleBTextureCoordinatesV * u + triangleCTextureCoordinatesV * v;
 		
 //		Update the intersection array:
-		intersectionRHSSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
-		intersectionRHSSetOrthonormalBasisS(orthonormalBasisSUNormalizedX, orthonormalBasisSUNormalizedY, orthonormalBasisSUNormalizedZ, orthonormalBasisSVNormalizedX, orthonormalBasisSVNormalizedY, orthonormalBasisSVNormalizedZ, orthonormalBasisSWNormalizedX, orthonormalBasisSWNormalizedY, orthonormalBasisSWNormalizedZ);
+		intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F();
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);

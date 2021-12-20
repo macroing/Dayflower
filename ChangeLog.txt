@@ -1,3 +1,7 @@
+2021-12-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method orthonormalBasis33FSetFromUV(float, float, float, float, float, float) to the AbstractGeometryKernel class.
+
 2021-12-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F(), intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F(), intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F() and intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F() to the AbstractGeometryKernel class.

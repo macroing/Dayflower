@@ -73,6 +73,7 @@ public abstract class ImageD extends Image {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	protected ImageD(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
@@ -99,6 +100,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color3D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final Point2D point) {
 		return getColorRGB(point, PixelOperation.NO_CHANGE);
 	}
@@ -124,6 +126,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color3D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code pixelOperation} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final Point2D point, final PixelOperation pixelOperation) {
 		return getColorRGB(point.getX(), point.getY(), pixelOperation);
 	}
@@ -144,6 +147,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color3D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final Point2I point) {
 		return getColorRGB(point, PixelOperation.NO_CHANGE);
 	}
@@ -167,6 +171,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color3D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code pixelOperation} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final Point2I point, final PixelOperation pixelOperation) {
 		return getColorRGB(point.getX(), point.getY(), pixelOperation);
 	}
@@ -187,6 +192,7 @@ public abstract class ImageD extends Image {
 	 * @param y the Y-coordinate of the pixel
 	 * @return the {@code Color3D} of the pixel represented by {@code x} and {@code y}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final double x, final double y) {
 		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
 	}
@@ -206,6 +212,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color3D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final double x, final double y, final PixelOperation pixelOperation) {
 		final int minimumX = toInt(floor(x));
 		final int maximumX = toInt(ceil(x));
@@ -243,6 +250,7 @@ public abstract class ImageD extends Image {
 	 * @param index the index of the pixel
 	 * @return the {@code Color3D} of the pixel represented by {@code index}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final int index) {
 		return getColorRGB(index, PixelOperation.NO_CHANGE);
 	}
@@ -259,6 +267,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color3D} of the pixel represented by {@code index}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final int index, final PixelOperation pixelOperation) {
 		return new Color3D(getColorRGBA(index, pixelOperation));
 	}
@@ -277,6 +286,7 @@ public abstract class ImageD extends Image {
 	 * @param y the Y-coordinate of the pixel
 	 * @return the {@code Color3D} of the pixel represented by {@code x} and {@code y}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final int x, final int y) {
 		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
 	}
@@ -294,6 +304,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color3D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
 		return new Color3D(getColorRGBA(x, y, pixelOperation));
 	}
@@ -316,6 +327,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color4D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final Point2D point) {
 		return getColorRGBA(point, PixelOperation.NO_CHANGE);
 	}
@@ -339,6 +351,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color4D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code function} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final Point2D point, final Function<Point2I, Color4D> function) {
 		return getColorRGBA(point.getX(), point.getY(), function);
 	}
@@ -364,6 +377,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color4D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code pixelOperation} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final Point2D point, final PixelOperation pixelOperation) {
 		return getColorRGBA(point.getX(), point.getY(), pixelOperation);
 	}
@@ -384,6 +398,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color4D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final Point2I point) {
 		return getColorRGBA(point, PixelOperation.NO_CHANGE);
 	}
@@ -405,6 +420,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color4D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code function} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final Point2I point, final Function<Point2I, Color4D> function) {
 		return getColorRGBA(point.getX(), point.getY(), function);
 	}
@@ -428,6 +444,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color4D} of the pixel represented by {@code point}
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code pixelOperation} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final Point2I point, final PixelOperation pixelOperation) {
 		return getColorRGBA(point.getX(), point.getY(), pixelOperation);
 	}
@@ -448,6 +465,7 @@ public abstract class ImageD extends Image {
 	 * @param y the Y-coordinate of the pixel
 	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final double x, final double y) {
 		return getColorRGBA(x, y, PixelOperation.NO_CHANGE);
 	}
@@ -465,6 +483,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final double x, final double y, final Function<Point2I, Color4D> function) {
 		Objects.requireNonNull(function, "function == null");
 		
@@ -506,6 +525,7 @@ public abstract class ImageD extends Image {
 	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final double x, final double y, final PixelOperation pixelOperation) {
 		final int minimumX = toInt(floor(x));
 		final int maximumX = toInt(ceil(x));
@@ -543,6 +563,7 @@ public abstract class ImageD extends Image {
 	 * @param index the index of the pixel
 	 * @return the {@code Color4D} of the pixel represented by {@code index}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final int index) {
 		return getColorRGBA(index, PixelOperation.NO_CHANGE);
 	}
@@ -575,6 +596,7 @@ public abstract class ImageD extends Image {
 	 * @param y the Y-coordinate of the pixel
 	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 */
+//	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final int x, final int y) {
 		return getColorRGBA(x, y, PixelOperation.NO_CHANGE);
 	}
@@ -618,6 +640,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD blendOver(final ImageD image) {
 		return fillImage(image, image.getBounds(), getBounds(), (sourceColorRGBA, targetColorRGBA, targetPoint) -> Color4D.blendOver(targetColorRGBA, sourceColorRGBA));
 	}
@@ -636,6 +659,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD clear() {
 		return clear(Color4D.BLACK);
 	}
@@ -658,6 +682,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD clear(final Color3D colorRGB) {
 		return clear(new Color4D(colorRGB));
 	}
@@ -673,6 +698,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD clear(final Color4D colorRGBA) {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
@@ -727,6 +753,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD drawShape(final Shape2I shape) {
 		return drawShape(shape, Color4D.BLACK);
 	}
@@ -743,6 +770,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD drawShape(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
@@ -775,6 +803,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD drawShape(final Shape2I shape, final Color3D colorRGB) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -801,6 +830,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGBA} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD drawShape(final Shape2I shape, final Color4D colorRGBA) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
@@ -826,6 +856,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD drawShapeComplement(final Shape2I shape) {
 		return drawShapeComplement(shape, Color4D.BLACK);
 	}
@@ -842,6 +873,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD drawShapeComplement(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
@@ -874,6 +906,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD drawShapeComplement(final Shape2I shape, final Color3D colorRGB) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -900,6 +933,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGBA} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD drawShapeComplement(final Shape2I shape, final Color4D colorRGBA) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
@@ -921,6 +955,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillGradient() {
 		return fillGradient(Color3D.BLACK, Color3D.RED, Color3D.GREEN, Color3D.YELLOW);
 	}
@@ -939,6 +974,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillGradient(final Color3D a, final Color3D b, final Color3D c, final Color3D d) {
 		Objects.requireNonNull(a, "a == null");
 		Objects.requireNonNull(b, "b == null");
@@ -974,6 +1010,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code sourceImage} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillImage(final ImageD sourceImage) {
 		return fillImage(sourceImage, sourceImage.getBounds());
 	}
@@ -997,6 +1034,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage} or {@code targetPosition} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillImage(final ImageD sourceImage, final Point2I targetPosition) {
 		return fillImage(sourceImage, targetPosition, (sourceColorRGBA, targetColorRGBA, targetPoint) -> Color4D.blendOver(sourceColorRGBA, targetColorRGBA));
 	}
@@ -1014,6 +1052,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage}, {@code targetPosition} or {@code triFunction} are {@code null} or {@code triFunction} returns {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillImage(final ImageD sourceImage, final Point2I targetPosition, final TriFunction<Color4D, Color4D, Point2I, Color4D> triFunction) {
 		final Rectangle2I sourceBounds = sourceImage.getBounds();
 		final Rectangle2I targetBounds = new Rectangle2I(targetPosition, new Point2I(targetPosition.getX() + (sourceBounds.getC().getX() - sourceBounds.getA().getX()), targetPosition.getY() + (sourceBounds.getC().getY() - sourceBounds.getA().getY())));
@@ -1040,6 +1079,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage} or {@code sourceBounds} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillImage(final ImageD sourceImage, final Rectangle2I sourceBounds) {
 		return fillImage(sourceImage, sourceBounds, getBounds());
 	}
@@ -1064,6 +1104,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage}, {@code sourceBounds} or {@code targetBounds} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillImage(final ImageD sourceImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds) {
 		return fillImage(sourceImage, sourceBounds, targetBounds, (sourceColorRGBA, targetColorRGBA, targetPoint) -> Color4D.blendOver(sourceColorRGBA, targetColorRGBA));
 	}
@@ -1082,6 +1123,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage}, {@code sourceBounds}, {@code targetBounds} or {@code triFunction} are {@code null} or {@code triFunction} returns {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillImage(final ImageD sourceImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds, final TriFunction<Color4D, Color4D, Point2I, Color4D> triFunction) {
 		Objects.requireNonNull(sourceImage, "sourceImage == null");
 		Objects.requireNonNull(sourceBounds, "sourceBounds == null");
@@ -1139,6 +1181,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillShape(final Shape2I shape) {
 		return fillShape(shape, Color4D.BLACK);
 	}
@@ -1155,6 +1198,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillShape(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
@@ -1187,6 +1231,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillShape(final Shape2I shape, final Color3D colorRGB) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -1213,6 +1258,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGBA} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillShape(final Shape2I shape, final Color4D colorRGBA) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
@@ -1238,6 +1284,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillShapeComplement(final Shape2I shape) {
 		return fillShapeComplement(shape, Color4D.BLACK);
 	}
@@ -1254,6 +1301,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillShapeComplement(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
@@ -1286,6 +1334,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillShapeComplement(final Shape2I shape, final Color3D colorRGB) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -1312,6 +1361,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code colorRGBA} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillShapeComplement(final Shape2I shape, final Color4D colorRGBA) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
@@ -1333,6 +1383,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillSimplexFractionalBrownianMotion() {
 		return fillSimplexFractionalBrownianMotion(new Color3D(0.75D, 0.5D, 0.75D));
 	}
@@ -1355,6 +1406,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code baseColor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillSimplexFractionalBrownianMotion(final Color3D baseColor) {
 		return fillSimplexFractionalBrownianMotion(baseColor, 5.0D, 0.5D, 16);
 	}
@@ -1373,6 +1425,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code baseColor} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD fillSimplexFractionalBrownianMotion(final Color3D baseColor, final double frequency, final double gain, final int octaves) {
 		Objects.requireNonNull(baseColor, "baseColor == null");
 		
@@ -1398,6 +1451,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD grayscaleAverage() {
 		return update((color, point) -> Color4D.grayscaleAverage(color));
 	}
@@ -1409,6 +1463,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD grayscaleComponent1() {
 		return update((color, point) -> Color4D.grayscaleComponent1(color));
 	}
@@ -1420,6 +1475,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD grayscaleComponent2() {
 		return update((color, point) -> Color4D.grayscaleComponent2(color));
 	}
@@ -1431,6 +1487,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD grayscaleComponent3() {
 		return update((color, point) -> Color4D.grayscaleComponent3(color));
 	}
@@ -1442,6 +1499,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD grayscaleLightness() {
 		return update((color, point) -> Color4D.grayscaleLightness(color));
 	}
@@ -1453,6 +1511,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD grayscaleLuminance() {
 		return update((color, point) -> Color4D.grayscaleLuminance(color));
 	}
@@ -1464,6 +1523,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD grayscaleMaximum() {
 		return update((color, point) -> Color4D.grayscaleMaximum(color));
 	}
@@ -1475,6 +1535,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD grayscaleMinimum() {
 		return update((color, point) -> Color4D.grayscaleMinimum(color));
 	}
@@ -1486,6 +1547,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD invert() {
 		return update((color, point) -> Color4D.invert(color));
 	}
@@ -1501,6 +1563,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code convolutionKernel} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD multiply(final ConvolutionKernel33D convolutionKernel) {
 		final Color3D factor = new Color3D(convolutionKernel.getFactor());
 		final Color3D bias = new Color3D(convolutionKernel.getBias());
@@ -1560,6 +1623,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code convolutionKernel} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD multiply(final ConvolutionKernel55D convolutionKernel) {
 		final Color3D factor = new Color3D(convolutionKernel.getFactor());
 		final Color3D bias = new Color3D(convolutionKernel.getBias());
@@ -1642,6 +1706,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD redoGammaCorrection() {
 		return redoGammaCorrection(ColorSpaceD.getDefault());
 	}
@@ -1657,6 +1722,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorSpace} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD redoGammaCorrection(final ColorSpaceD colorSpace) {
 		Objects.requireNonNull(colorSpace, "colorSpace == null");
 		
@@ -1681,6 +1747,7 @@ public abstract class ImageD extends Image {
 	 * @return a new rotated version of this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD rotate(final AngleD angle) {
 		return rotate(angle, false);
 	}
@@ -1697,6 +1764,7 @@ public abstract class ImageD extends Image {
 	 * @return a new rotated version of this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD rotate(final AngleD angle, final boolean isWrappingAround) {
 		Objects.requireNonNull(angle, "angle == null");
 		
@@ -1763,6 +1831,7 @@ public abstract class ImageD extends Image {
 	 * @throws IllegalArgumentException thrown if, and only if, the scaled resolution is invalid
 	 * @throws NullPointerException thrown if, and only if, {@code scale} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD scale(final Vector2D scale) {
 		return scale(toInt(ceil(getResolutionX() * scale.getX())), toInt(ceil(getResolutionY() * scale.getY())));
 	}
@@ -1779,6 +1848,7 @@ public abstract class ImageD extends Image {
 	 * @return a new scaled version of this {@code ImageD} instance
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD scale(final int resolutionX, final int resolutionY) {
 		final ImageD oldImage = this;
 		final ImageD newImage = oldImage.newImage(resolutionX, resolutionY);
@@ -1802,6 +1872,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD sepia() {
 		return update((color, point) -> Color4D.sepia(color));
 	}
@@ -1825,6 +1896,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD setColorRGB(final Color3D colorRGB, final int index) {
 		return setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
 	}
@@ -1844,6 +1916,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD setColorRGB(final Color3D colorRGB, final int index, final PixelOperation pixelOperation) {
 		return setColorRGBA(new Color4D(colorRGB), index, pixelOperation);
 	}
@@ -1868,6 +1941,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD setColorRGB(final Color3D colorRGB, final int x, final int y) {
 		return setColorRGB(colorRGB, x, y, PixelOperation.NO_CHANGE);
 	}
@@ -1888,6 +1962,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD setColorRGB(final Color3D colorRGB, final int x, final int y, final PixelOperation pixelOperation) {
 		return setColorRGBA(new Color4D(colorRGB), x, y, pixelOperation);
 	}
@@ -1911,6 +1986,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD setColorRGBA(final Color4D colorRGBA, final int index) {
 		return setColorRGBA(colorRGBA, index, PixelOperation.NO_CHANGE);
 	}
@@ -1930,6 +2006,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD setColorRGBA(final Color4D colorRGBA, final int index, final PixelOperation pixelOperation) {
 		doChangeBegin();
 		doSetColorRGBA(colorRGBA, index, pixelOperation);
@@ -1958,6 +2035,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD setColorRGBA(final Color4D colorRGBA, final int x, final int y) {
 		return setColorRGBA(colorRGBA, x, y, PixelOperation.NO_CHANGE);
 	}
@@ -1978,6 +2056,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD setColorRGBA(final Color4D colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
 		doChangeBegin();
 		doSetColorRGBA(colorRGBA, x, y, pixelOperation);
@@ -1994,6 +2073,7 @@ public abstract class ImageD extends Image {
 	 * @param luminanceMaximum the maximum luminance
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD toneMap(final double luminanceMaximum) {
 		return update((color, point) -> {
 			final double luminance = color.luminance();
@@ -2011,6 +2091,7 @@ public abstract class ImageD extends Image {
 	 * @param transparency the transparency
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD transparency(final double transparency) {
 		return update((color, point) -> new Color4D(color.getComponent1(), color.getComponent2(), color.getComponent3(), transparency));
 	}
@@ -2029,6 +2110,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD undoGammaCorrection() {
 		return redoGammaCorrection(ColorSpaceD.getDefault());
 	}
@@ -2044,6 +2126,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorSpace} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD undoGammaCorrection(final ColorSpaceD colorSpace) {
 		Objects.requireNonNull(colorSpace, "colorSpace == null");
 		
@@ -2068,6 +2151,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code biFunction} or the result returned by {@code biFunction} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD update(final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		return update(biFunction, getBounds());
 	}
@@ -2084,6 +2168,7 @@ public abstract class ImageD extends Image {
 	 * @return this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code biFunction}, the result returned by {@code biFunction} or {@code bounds} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final ImageD update(final BiFunction<Color4D, Point2I, Color4D> biFunction, final Rectangle2I bounds) {
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		Objects.requireNonNull(bounds, "bounds == null");
@@ -2120,6 +2205,7 @@ public abstract class ImageD extends Image {
 	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public final List<Rectangle2I> findBoundsFor(final ImageD image) {
 		Objects.requireNonNull(image, "image == null");
 		
@@ -2154,6 +2240,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return the maximum luminance in this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final double luminanceMaximum() {
 		double luminanceMaximum = NaN;
 		
@@ -2169,6 +2256,7 @@ public abstract class ImageD extends Image {
 	 * 
 	 * @return the minimum luminance in this {@code ImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public final double luminanceMinimum() {
 		double luminanceMinimum = NaN;
 		

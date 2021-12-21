@@ -66,11 +66,13 @@ public enum PixelOperation {
 	/**
 	 * The no-change operation.
 	 */
+//	TODO: Add Unit Tests!
 	NO_CHANGE,
 	
 	/**
 	 * The wrap-around operation.
 	 */
+//	TODO: Add Unit Tests!
 	WRAP_AROUND;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,6 +92,7 @@ public enum PixelOperation {
 	 * @param resolution the resolution
 	 * @return the index that results from applying this operation to {@code index}
 	 */
+//	TODO: Add Unit Tests!
 	public int getIndex(final int index, final int resolution) {
 		switch(this) {
 			case NO_CHANGE:
@@ -110,6 +113,7 @@ public enum PixelOperation {
 	 * @param resolutionX the resolution of the X-axis
 	 * @return the X-coordinate that results from applying this operation to {@code x}
 	 */
+//	TODO: Add Unit Tests!
 	public int getX(final int x, final int resolutionX) {
 		switch(this) {
 			case NO_CHANGE:
@@ -130,6 +134,7 @@ public enum PixelOperation {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @return the Y-coordinate that results from applying this operation to {@code y}
 	 */
+//	TODO: Add Unit Tests!
 	public int getY(final int y, final int resolutionY) {
 		switch(this) {
 			case NO_CHANGE:

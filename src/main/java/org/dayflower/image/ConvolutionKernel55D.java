@@ -37,11 +37,13 @@ public final class ConvolutionKernel55D {
 	/**
 	 * A {@code ConvolutionKernel55D} instance that performs a Gaussian blur effect.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ConvolutionKernel55D GAUSSIAN_BLUR = new ConvolutionKernel55D(1.0D, 4.0D, 6.0D, 4.0D, 1.0D, 4.0D, 16.0D, 24.0D, 16.0D, 4.0D, 6.0D, 24.0D, 36.0D, 24.0D, 6.0D, 4.0D, 16.0D, 24.0D, 16.0D, 4.0D, 1.0D, 4.0D, 6.0D, 4.0D, 1.0D, 1.0D / 256.0D, 0.0D);
 	
 	/**
 	 * A {@code ConvolutionKernel55D} instance that performs an unsharp masking effect.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ConvolutionKernel55D UNSHARP_MASKING = new ConvolutionKernel55D(1.0D, 4.0D, 6.0D, 4.0D, 1.0D, 4.0D, 16.0D, 24.0D, 16.0D, 4.0D, 6.0D, 24.0D, -476.0D, 24.0D, 6.0D, 4.0D, 16.0D, 24.0D, 16.0D, 4.0D, 1.0D, 4.0D, 6.0D, 4.0D, 1.0D, -1.0D / 256.0D, 0.0D);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +88,7 @@ public final class ConvolutionKernel55D {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public ConvolutionKernel55D() {
 		this(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
 	}
@@ -126,6 +129,7 @@ public final class ConvolutionKernel55D {
 	 * @param element54 the element at index 23 or row 5 and column 4
 	 * @param element55 the element at index 24 or row 5 and column 5
 	 */
+//	TODO: Add Unit Tests!
 	public ConvolutionKernel55D(final double element11, final double element12, final double element13, final double element14, final double element15, final double element21, final double element22, final double element23, final double element24, final double element25, final double element31, final double element32, final double element33, final double element34, final double element35, final double element41, final double element42, final double element43, final double element44, final double element45, final double element51, final double element52, final double element53, final double element54, final double element55) {
 		this(element11, element12, element13, element14, element15, element21, element22, element23, element24, element25, element31, element32, element33, element34, element35, element41, element42, element43, element44, element45, element51, element52, element53, element54, element55, 1.0D, 0.0D);
 	}
@@ -161,6 +165,7 @@ public final class ConvolutionKernel55D {
 	 * @param factor the factor to use
 	 * @param bias the bias to use
 	 */
+//	TODO: Add Unit Tests!
 	public ConvolutionKernel55D(final double element11, final double element12, final double element13, final double element14, final double element15, final double element21, final double element22, final double element23, final double element24, final double element25, final double element31, final double element32, final double element33, final double element34, final double element35, final double element41, final double element42, final double element43, final double element44, final double element45, final double element51, final double element52, final double element53, final double element54, final double element55, final double factor, final double bias) {
 		this.element11 = element11;
 		this.element12 = element12;
@@ -198,6 +203,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return a {@code String} representation of this {@code ConvolutionKernel55D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		final String row1 = String.format("%+.10f, %+.10f, %+.10f, %+.10f, %+.10f", Double.valueOf(this.element11), Double.valueOf(this.element12), Double.valueOf(this.element13), Double.valueOf(this.element14), Double.valueOf(this.element15));
@@ -217,6 +223,7 @@ public final class ConvolutionKernel55D {
 	 * @param object the {@code Object} to compare to this {@code ConvolutionKernel55D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ConvolutionKernel55D}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -289,6 +296,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the bias associated with this {@code ConvolutionKernel55D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getBias() {
 		return this.bias;
 	}
@@ -298,6 +306,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 0 or row 1 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement11() {
 		return this.element11;
 	}
@@ -307,6 +316,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 1 or row 1 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement12() {
 		return this.element12;
 	}
@@ -316,6 +326,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 2 or row 1 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement13() {
 		return this.element13;
 	}
@@ -325,6 +336,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 3 or row 1 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement14() {
 		return this.element14;
 	}
@@ -334,6 +346,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 4 or row 1 and column 5
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement15() {
 		return this.element15;
 	}
@@ -343,6 +356,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 5 or row 2 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement21() {
 		return this.element21;
 	}
@@ -352,6 +366,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 6 or row 2 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement22() {
 		return this.element22;
 	}
@@ -361,6 +376,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 7 or row 2 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement23() {
 		return this.element23;
 	}
@@ -370,6 +386,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 8 or row 2 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement24() {
 		return this.element24;
 	}
@@ -379,6 +396,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 9 or row 2 and column 5
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement25() {
 		return this.element25;
 	}
@@ -388,6 +406,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 10 or row 3 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement31() {
 		return this.element31;
 	}
@@ -397,6 +416,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 11 or row 3 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement32() {
 		return this.element32;
 	}
@@ -406,6 +426,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 12 or row 3 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement33() {
 		return this.element33;
 	}
@@ -415,6 +436,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 13 or row 3 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement34() {
 		return this.element34;
 	}
@@ -424,6 +446,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 14 or row 3 and column 5
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement35() {
 		return this.element35;
 	}
@@ -433,6 +456,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 15 or row 4 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement41() {
 		return this.element41;
 	}
@@ -442,6 +466,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 16 or row 4 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement42() {
 		return this.element42;
 	}
@@ -451,6 +476,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 17 or row 4 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement43() {
 		return this.element43;
 	}
@@ -460,6 +486,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 18 or row 4 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement44() {
 		return this.element44;
 	}
@@ -469,6 +496,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 19 or row 4 and column 5
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement45() {
 		return this.element45;
 	}
@@ -478,6 +506,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 20 or row 5 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement51() {
 		return this.element51;
 	}
@@ -487,6 +516,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 21 or row 5 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement52() {
 		return this.element52;
 	}
@@ -496,6 +526,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 22 or row 5 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement53() {
 		return this.element53;
 	}
@@ -505,6 +536,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 23 or row 5 and column 4
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement54() {
 		return this.element54;
 	}
@@ -514,6 +546,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the element at index 24 or row 5 and column 5
 	 */
+//	TODO: Add Unit Tests!
 	public double getElement55() {
 		return this.element55;
 	}
@@ -525,6 +558,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return the factor associated with this {@code ConvolutionKernel55D} instance
 	 */
+//	TODO: Add Unit Tests!
 	public double getFactor() {
 		return this.factor;
 	}
@@ -534,6 +568,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return a hash code for this {@code ConvolutionKernel55D} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		final Double bias = Double.valueOf(this.bias);
@@ -580,6 +615,7 @@ public final class ConvolutionKernel55D {
 	 * 
 	 * @return a {@code ConvolutionKernel55D} instance that performs a random effect
 	 */
+//	TODO: Add Unit Tests!
 	public static ConvolutionKernel55D random() {
 		final double element11 = doNextDouble() * 2.0D - 1.0D;
 		final double element12 = doNextDouble() * 2.0D - 1.0D;

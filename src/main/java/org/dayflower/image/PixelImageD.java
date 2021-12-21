@@ -86,6 +86,7 @@ public final class PixelImageD extends ImageD {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public PixelImageD() {
 		this(800, 800);
 	}
@@ -108,6 +109,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public PixelImageD(final BufferedImage bufferedImage) {
 		this(bufferedImage, new GaussianFilter2D());
 	}
@@ -124,6 +126,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code bufferedImage} or {@code filter} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public PixelImageD(final BufferedImage bufferedImage, final Filter2D filter) {
 		super(bufferedImage.getWidth(), bufferedImage.getHeight());
 		
@@ -140,6 +143,7 @@ public final class PixelImageD extends ImageD {
 	 * @param pixelImage a {@code PixelImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code pixelImage} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public PixelImageD(final PixelImageD pixelImage) {
 		super(pixelImage.getResolutionX(), pixelImage.getResolutionY());
 		
@@ -164,6 +168,7 @@ public final class PixelImageD extends ImageD {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public PixelImageD(final int resolutionX, final int resolutionY) {
 		this(resolutionX, resolutionY, Color4D.BLACK);
 	}
@@ -188,6 +193,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public PixelImageD(final int resolutionX, final int resolutionY, final Color4D colorRGBA) {
 		this(resolutionX, resolutionY, colorRGBA, new GaussianFilter2D());
 	}
@@ -206,6 +212,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code filter} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public PixelImageD(final int resolutionX, final int resolutionY, final Color4D colorRGBA, final Filter2D filter) {
 		super(resolutionX, resolutionY);
 		
@@ -234,6 +241,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or at least one of its elements are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public PixelImageD(final int resolutionX, final int resolutionY, final Color4D[] colorRGBAs) {
 		this(resolutionX, resolutionY, colorRGBAs, new GaussianFilter2D());
 	}
@@ -252,6 +260,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, at least one of its elements or {@code filter} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public PixelImageD(final int resolutionX, final int resolutionY, final Color4D[] colorRGBAs, final Filter2D filter) {
 		super(resolutionX, resolutionY);
 		
@@ -274,6 +283,7 @@ public final class PixelImageD extends ImageD {
 	 * @return the {@code Color4D} of the pixel represented by {@code index}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Color4D getColorRGBA(final int index, final PixelOperation pixelOperation) {
 		return getPixel(index, pixelOperation).map(pixel -> pixel.getColorRGBA()).orElse(Color4D.BLACK);
@@ -290,6 +300,7 @@ public final class PixelImageD extends ImageD {
 	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Color4D getColorRGBA(final int x, final int y, final Function<Point2I, Color4D> function) {
 		Objects.requireNonNull(function, "function == null");
@@ -310,6 +321,7 @@ public final class PixelImageD extends ImageD {
 	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public Color4D getColorRGBA(final int x, final int y, final PixelOperation pixelOperation) {
 		return getPixel(x, y, pixelOperation).map(pixel -> pixel.getColorRGBA()).orElse(Color4D.BLACK);
@@ -322,6 +334,7 @@ public final class PixelImageD extends ImageD {
 	 * 
 	 * @return a {@code List} with all {@code PixelD} instances associated with this {@code PixelImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public List<PixelD> getPixels() {
 		return new ArrayList<>(Arrays.asList(this.pixels));
 	}
@@ -339,6 +352,7 @@ public final class PixelImageD extends ImageD {
 	 * @param index the index of the {@code PixelD}
 	 * @return the optional {@code PixelD} located at {@code index}
 	 */
+//	TODO: Add Unit Tests!
 	public Optional<PixelD> getPixel(final int index) {
 		return getPixel(index, PixelOperation.NO_CHANGE);
 	}
@@ -355,6 +369,7 @@ public final class PixelImageD extends ImageD {
 	 * @return the optional {@code PixelD} located at {@code index}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Optional<PixelD> getPixel(final int index, final PixelOperation pixelOperation) {
 		final int resolution = getResolution();
 		
@@ -381,6 +396,7 @@ public final class PixelImageD extends ImageD {
 	 * @param y the Y-coordinate of the {@code PixelD}
 	 * @return the optional {@code PixelD} located at {@code x} and {@code y}
 	 */
+//	TODO: Add Unit Tests!
 	public Optional<PixelD> getPixel(final int x, final int y) {
 		return getPixel(x, y, PixelOperation.NO_CHANGE);
 	}
@@ -398,6 +414,7 @@ public final class PixelImageD extends ImageD {
 	 * @return the optional {@code PixelD} located at {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public Optional<PixelD> getPixel(final int x, final int y, final PixelOperation pixelOperation) {
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
@@ -417,6 +434,7 @@ public final class PixelImageD extends ImageD {
 	 * 
 	 * @return a copy of this {@code PixelImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public PixelImageD copy() {
 		return new PixelImageD(this);
@@ -431,6 +449,7 @@ public final class PixelImageD extends ImageD {
 	 * @return a copy of this {@code PixelImageD} instance within {@code bounds}
 	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public PixelImageD copy(final Rectangle2I bounds) {
 		Objects.requireNonNull(bounds, "bounds == null");
@@ -482,6 +501,7 @@ public final class PixelImageD extends ImageD {
 	 * 
 	 * @return a {@code String} representation of this {@code PixelImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new PixelImageD(%d, %d, new Color3F[] {...}, %s)", Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), this.filter);
@@ -495,6 +515,7 @@ public final class PixelImageD extends ImageD {
 	 * @param object the {@code Object} to compare to this {@code PixelImageD} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PixelImageD}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -523,6 +544,7 @@ public final class PixelImageD extends ImageD {
 	 * 
 	 * @return a hash code for this {@code PixelImageD} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Integer.valueOf(getResolution()), Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), this.filter, Integer.valueOf(Arrays.hashCode(this.pixels)), Integer.valueOf(Arrays.hashCode(this.filterTable)));
@@ -537,6 +559,7 @@ public final class PixelImageD extends ImageD {
 	 * @return an {@code int[]} representation of this {@code PixelImageD} instance in a packed form
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder) {
 		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");
@@ -569,6 +592,7 @@ public final class PixelImageD extends ImageD {
 	 * @param colorXYZ the color to add
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void filmAddColorXYZ(final double x, final double y, final Color3D colorXYZ) {
 		filmAddColorXYZ(x, y, colorXYZ, 1.0D);
 	}
@@ -584,6 +608,7 @@ public final class PixelImageD extends ImageD {
 	 * @param sampleWeight the sample weight to use
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void filmAddColorXYZ(final double x, final double y, final Color3D colorXYZ, final double sampleWeight) {
 		final Filter2D filter = this.filter;
 		
@@ -651,6 +676,7 @@ public final class PixelImageD extends ImageD {
 	 * @param splatXYZ the splat to add
 	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void filmAddSplatXYZ(final double x, final double y, final Color3D splatXYZ) {
 		filmAddSplatXYZ(toInt(floor(x)), toInt(floor(y)), splatXYZ);
 	}
@@ -665,6 +691,7 @@ public final class PixelImageD extends ImageD {
 	 * @param splatXYZ the splat to add
 	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void filmAddSplatXYZ(final int x, final int y, final Color3D splatXYZ) {
 		Objects.requireNonNull(splatXYZ, "splatXYZ == null");
 		
@@ -674,6 +701,7 @@ public final class PixelImageD extends ImageD {
 	/**
 	 * Clears the film.
 	 */
+//	TODO: Add Unit Tests!
 	public void filmClear() {
 		for(final PixelD pixel : this.pixels) {
 			pixel.setColorXYZ(new Color3D());
@@ -692,6 +720,7 @@ public final class PixelImageD extends ImageD {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public void filmRender() {
 		filmRender(1.0D);
 	}
@@ -701,6 +730,7 @@ public final class PixelImageD extends ImageD {
 	 * 
 	 * @param splatScale the splat scale to use
 	 */
+//	TODO: Add Unit Tests!
 	public void filmRender(final double splatScale) {
 		final ColorSpaceD colorSpace = ColorSpaceD.getDefault();
 		
@@ -726,6 +756,7 @@ public final class PixelImageD extends ImageD {
 	 * @param indexB one of the pixel indices
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code indexA} or {@code indexB} are less than {@code 0} or greater than or equal to {@code getResolution()}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public void swap(final int indexA, final int indexB) {
 		ParameterArguments.requireRange(indexA, 0, getResolution() - 1, "indexA");
@@ -755,6 +786,7 @@ public final class PixelImageD extends ImageD {
 	 * @return a new {@code PixelImageD} instance with the result of the blend operation
 	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD blend(final ImageD imageA, final ImageD imageB) {
 		return blend(imageA, imageB, 0.5D);
 	}
@@ -779,6 +811,7 @@ public final class PixelImageD extends ImageD {
 	 * @return a new {@code PixelImageD} instance with the result of the blend operation
 	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD blend(final ImageD imageA, final ImageD imageB, final double t) {
 		return blend(imageA, imageB, t, t, t, t);
 	}
@@ -799,6 +832,7 @@ public final class PixelImageD extends ImageD {
 	 * @return a new {@code PixelImageD} instance with the result of the blend operation
 	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD blend(final ImageD imageA, final ImageD imageB, final double tComponent1, final double tComponent2, final double tComponent3, final double tComponent4) {
 		final int imageAResolutionX = imageA.getResolutionX();
 		final int imageAResolutionY = imageA.getResolutionY();
@@ -841,6 +875,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD createScreenCapture(final Rectangle2I rectangle) {
 		return new PixelImageD(BufferedImages.createScreenCapture(rectangle.getA().getX(), rectangle.getA().getY(), rectangle.getC().getX() - rectangle.getA().getX(), rectangle.getC().getY() - rectangle.getA().getY()));
 	}
@@ -855,6 +890,7 @@ public final class PixelImageD extends ImageD {
 	 * @return a {@code PixelImageD} that shows the difference between {@code imageA} and {@code imageB} with {@code Color4D.BLACK}
 	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD difference(final ImageD imageA, final ImageD imageB) {
 		final int resolutionX = max(imageA.getResolutionX(), imageB.getResolutionX());
 		final int resolutionY = max(imageA.getResolutionY(), imageB.getResolutionY());
@@ -895,6 +931,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD load(final File file) {
 		return load(file, new GaussianFilter2D());
 	}
@@ -914,6 +951,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code filter} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD load(final File file, final Filter2D filter) {
 		try {
 			return new PixelImageD(ImageIO.read(Objects.requireNonNull(file, "file == null")), filter);
@@ -943,6 +981,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD load(final String pathname) {
 		return load(pathname, new GaussianFilter2D());
 	}
@@ -969,6 +1008,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code filter} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD load(final String pathname, final Filter2D filter) {
 		return load(new File(pathname), filter);
 	}
@@ -994,6 +1034,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, {@code uRL} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD load(final URL uRL) {
 		return load(uRL, new GaussianFilter2D());
 	}
@@ -1013,6 +1054,7 @@ public final class PixelImageD extends ImageD {
 	 * @throws NullPointerException thrown if, and only if, either {@code uRL} or {@code filter} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD load(final URL uRL, final Filter2D filter) {
 		try {
 			return new PixelImageD(ImageIO.read(Objects.requireNonNull(uRL, "uRL == null")), filter);
@@ -1033,6 +1075,7 @@ public final class PixelImageD extends ImageD {
 	 * 
 	 * @return a new {@code PixelImageD} instance filled with random {@code Color4D} instances
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD random() {
 		return random(800, 800);
 	}
@@ -1047,6 +1090,7 @@ public final class PixelImageD extends ImageD {
 	 * @return a new {@code PixelImageD} instance filled with random {@code Color4D} instances
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelImageD random(final int resolutionX, final int resolutionY) {
 		return new PixelImageD(resolutionX, resolutionY, Color4D.arrayRandom(resolutionX * resolutionY));
 	}
@@ -1063,6 +1107,7 @@ public final class PixelImageD extends ImageD {
 	 * @return a new {@code PixelImageD} instance
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	protected PixelImageD newImage(final int resolutionX, final int resolutionY) {
 		return new PixelImageD(resolutionX, resolutionY, Color4D.BLACK, this.filter);
@@ -1077,6 +1122,7 @@ public final class PixelImageD extends ImageD {
 	 * @param index the index of the pixel
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	protected void putColorRGBA(final Color4D colorRGBA, final int index) {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");

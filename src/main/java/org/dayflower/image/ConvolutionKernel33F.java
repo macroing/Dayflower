@@ -37,36 +37,43 @@ public final class ConvolutionKernel33F {
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a box blur effect.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ConvolutionKernel33F BOX_BLUR = new ConvolutionKernel33F(1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F / 9.0F, 0.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs an edge detection effect.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ConvolutionKernel33F EDGE_DETECTION = new ConvolutionKernel33F(-1.0F, -1.0F, -1.0F, -1.0F, 8.0F, -1.0F, -1.0F, -1.0F, -1.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs an emboss effect.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ConvolutionKernel33F EMBOSS = new ConvolutionKernel33F(-1.0F, -1.0F, 0.0F, -1.0F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.5F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a Gaussian blur effect.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ConvolutionKernel33F GAUSSIAN_BLUR = new ConvolutionKernel33F(1.0F, 2.0F, 1.0F, 2.0F, 4.0F, 2.0F, 1.0F, 2.0F, 1.0F, 1.0F / 16.0F, 0.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a gradient effect in the horizontal direction.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ConvolutionKernel33F GRADIENT_HORIZONTAL = new ConvolutionKernel33F(-1.0F, -1.0F, -1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a gradient effect in the vertical direction.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ConvolutionKernel33F GRADIENT_VERTICAL = new ConvolutionKernel33F(-1.0F, 0.0F, 1.0F, -1.0F, 0.0F, 1.0F, -1.0F, 0.0F, 1.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a sharpen effect.
 	 */
+//	TODO: Add Unit Tests!
 	public static final ConvolutionKernel33F SHARPEN = new ConvolutionKernel33F(-1.0F, -1.0F, -1.0F, -1.0F, 9.0F, -1.0F, -1.0F, -1.0F, -1.0F);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +102,7 @@ public final class ConvolutionKernel33F {
 	 * }
 	 * </pre>
 	 */
+//	TODO: Add Unit Tests!
 	public ConvolutionKernel33F() {
 		this(0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F);
 	}
@@ -119,6 +127,7 @@ public final class ConvolutionKernel33F {
 	 * @param element32 the element at index 7 or row 3 and column 2
 	 * @param element33 the element at index 8 or row 3 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public ConvolutionKernel33F(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33) {
 		this(element11, element12, element13, element21, element22, element23, element31, element32, element33, 1.0F, 0.0F);
 	}
@@ -138,6 +147,7 @@ public final class ConvolutionKernel33F {
 	 * @param factor the factor to use
 	 * @param bias the bias to use
 	 */
+//	TODO: Add Unit Tests!
 	public ConvolutionKernel33F(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float factor, final float bias) {
 		this.element11 = element11;
 		this.element12 = element12;
@@ -159,6 +169,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return a {@code String} representation of this {@code ConvolutionKernel33F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		final String row1 = String.format("%+.10f, %+.10f, %+.10f", Float.valueOf(this.element11), Float.valueOf(this.element12), Float.valueOf(this.element13));
@@ -176,6 +187,7 @@ public final class ConvolutionKernel33F {
 	 * @param object the {@code Object} to compare to this {@code ConvolutionKernel33F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ConvolutionKernel33F}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -216,6 +228,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the bias associated with this {@code ConvolutionKernel33F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getBias() {
 		return this.bias;
 	}
@@ -225,6 +238,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the element at index 0 or row 1 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement11() {
 		return this.element11;
 	}
@@ -234,6 +248,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the element at index 1 or row 1 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement12() {
 		return this.element12;
 	}
@@ -243,6 +258,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the element at index 2 or row 1 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement13() {
 		return this.element13;
 	}
@@ -252,6 +268,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the element at index 3 or row 2 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement21() {
 		return this.element21;
 	}
@@ -261,6 +278,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the element at index 4 or row 2 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement22() {
 		return this.element22;
 	}
@@ -270,6 +288,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the element at index 5 or row 2 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement23() {
 		return this.element23;
 	}
@@ -279,6 +298,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the element at index 6 or row 3 and column 1
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement31() {
 		return this.element31;
 	}
@@ -288,6 +308,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the element at index 7 or row 3 and column 2
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement32() {
 		return this.element32;
 	}
@@ -297,6 +318,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the element at index 8 or row 3 and column 3
 	 */
+//	TODO: Add Unit Tests!
 	public float getElement33() {
 		return this.element33;
 	}
@@ -308,6 +330,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return the factor associated with this {@code ConvolutionKernel33F} instance
 	 */
+//	TODO: Add Unit Tests!
 	public float getFactor() {
 		return this.factor;
 	}
@@ -317,6 +340,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return a hash code for this {@code ConvolutionKernel33F} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		final Float bias = Float.valueOf(this.bias);
@@ -345,6 +369,7 @@ public final class ConvolutionKernel33F {
 	 * 
 	 * @return a {@code ConvolutionKernel33F} instance that performs a random effect
 	 */
+//	TODO: Add Unit Tests!
 	public static ConvolutionKernel33F random() {
 		final float element11 = doNextFloat() * 2.0F - 1.0F;
 		final float element12 = doNextFloat() * 2.0F - 1.0F;

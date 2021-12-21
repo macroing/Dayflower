@@ -63,6 +63,7 @@ public final class PixelD {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code index}, {@code x} or {@code y} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA}, {@code colorXYZ} or {@code splatXYZ} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public PixelD(final Color4D colorRGBA, final Color3D colorXYZ, final Color3D splatXYZ, final double filterWeightSum, final int index, final int x, final int y) {
 		this.colorRGBA = Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
@@ -80,6 +81,7 @@ public final class PixelD {
 	 * 
 	 * @return the current color of this {@code PixelD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D getColorRGB() {
 		return new Color3D(this.colorRGBA);
 	}
@@ -89,6 +91,7 @@ public final class PixelD {
 	 * 
 	 * @return the current color of this {@code PixelD} instance that is used by the film
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D getColorXYZ() {
 		return this.colorXYZ;
 	}
@@ -98,6 +101,7 @@ public final class PixelD {
 	 * 
 	 * @return the current splat of this {@code PixelD} instance that is used by the film
 	 */
+//	TODO: Add Unit Tests!
 	public Color3D getSplatXYZ() {
 		return this.splatXYZ;
 	}
@@ -107,6 +111,7 @@ public final class PixelD {
 	 * 
 	 * @return the current color of this {@code PixelD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public Color4D getColorRGBA() {
 		return this.colorRGBA;
 	}
@@ -116,6 +121,7 @@ public final class PixelD {
 	 * 
 	 * @return a copy of this {@code PixelD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public PixelD copy() {
 		return new PixelD(this.colorRGBA, this.colorXYZ, this.splatXYZ, this.filterWeightSum, this.index, this.x, this.y);
 	}
@@ -125,6 +131,7 @@ public final class PixelD {
 	 * 
 	 * @return a {@code String} representation of this {@code PixelD} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new PixelD(%s, %s, %s, %+.10f, %d, %d, %d)", this.colorRGBA, this.colorXYZ, this.splatXYZ, Double.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
@@ -138,6 +145,7 @@ public final class PixelD {
 	 * @param object the {@code Object} to compare to this {@code PixelD} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PixelD}, and their respective values are equal, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -168,6 +176,7 @@ public final class PixelD {
 	 * 
 	 * @return the filter weight sum of this {@code PixelD} instance that is used by the film
 	 */
+//	TODO: Add Unit Tests!
 	public double getFilterWeightSum() {
 		return this.filterWeightSum;
 	}
@@ -177,6 +186,7 @@ public final class PixelD {
 	 * 
 	 * @return the index of this {@code PixelD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public int getIndex() {
 		return this.index;
 	}
@@ -186,6 +196,7 @@ public final class PixelD {
 	 * 
 	 * @return the X-coordinate of this {@code PixelD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public int getX() {
 		return this.x;
 	}
@@ -195,6 +206,7 @@ public final class PixelD {
 	 * 
 	 * @return the Y-coordinate of this {@code PixelD} instance
 	 */
+//	TODO: Add Unit Tests!
 	public int getY() {
 		return this.y;
 	}
@@ -204,6 +216,7 @@ public final class PixelD {
 	 * 
 	 * @return a hash code for this {@code PixelD} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.colorXYZ, this.splatXYZ, this.colorRGBA, Double.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
@@ -219,6 +232,7 @@ public final class PixelD {
 	 * @param filterWeight the filter weight to use
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void addColorXYZ(final Color3D colorXYZ, final double sampleWeight, final double filterWeight) {
 		setColorXYZ(Color3D.add(getColorXYZ(), Color3D.multiply(Objects.requireNonNull(colorXYZ, "colorXYZ == null"), sampleWeight * filterWeight)));
 		setFilterWeightSum(getFilterWeightSum() + filterWeight);
@@ -232,6 +246,7 @@ public final class PixelD {
 	 * @param splatXYZ the splat to add to this {@code PixelD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void addSplatXYZ(final Color3D splatXYZ) {
 		setSplatXYZ(Color3D.add(getSplatXYZ(), Objects.requireNonNull(splatXYZ, "splatXYZ == null")));
 	}
@@ -244,6 +259,7 @@ public final class PixelD {
 	 * @param colorRGB the color of this {@code PixelD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void setColorRGB(final Color3D colorRGB) {
 		this.colorRGBA = new Color4D(colorRGB);
 	}
@@ -256,6 +272,7 @@ public final class PixelD {
 	 * @param colorRGBA the color of this {@code PixelD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void setColorRGBA(final Color4D colorRGBA) {
 		this.colorRGBA = Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 	}
@@ -268,6 +285,7 @@ public final class PixelD {
 	 * @param colorXYZ the color of this {@code PixelD} instance that is used by the film
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void setColorXYZ(final Color3D colorXYZ) {
 		this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
 	}
@@ -277,6 +295,7 @@ public final class PixelD {
 	 * 
 	 * @param filterWeightSum the filter weight sum of this {@code PixelD} instance that is used by the film
 	 */
+//	TODO: Add Unit Tests!
 	public void setFilterWeightSum(final double filterWeightSum) {
 		this.filterWeightSum = filterWeightSum;
 	}
@@ -289,6 +308,7 @@ public final class PixelD {
 	 * @param index the index of this {@code PixelD} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public void setIndex(final int index) {
 		this.index = ParameterArguments.requireRange(index, 0, Integer.MAX_VALUE, "index");
 	}
@@ -301,6 +321,7 @@ public final class PixelD {
 	 * @param splatXYZ the splat of this {@code PixelD} instance that is used by the film
 	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void setSplatXYZ(final Color3D splatXYZ) {
 		this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
 	}
@@ -313,6 +334,7 @@ public final class PixelD {
 	 * @param x the X-coordinate of this {@code PixelD} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code x} is less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public void setX(final int x) {
 		this.x = ParameterArguments.requireRange(x, 0, Integer.MAX_VALUE, "x");
 	}
@@ -325,6 +347,7 @@ public final class PixelD {
 	 * @param y the Y-coordinate of this {@code PixelD} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code y} is less than {@code 0}
 	 */
+//	TODO: Add Unit Tests!
 	public void setY(final int y) {
 		this.y = ParameterArguments.requireRange(y, 0, Integer.MAX_VALUE, "y");
 	}
@@ -340,6 +363,7 @@ public final class PixelD {
 	 * @return an array with {@code PixelD} instances filled with the {@code Color4D} instances in {@code bufferedImage}
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelD[] createPixels(final BufferedImage bufferedImage) {
 		final BufferedImage compatibleBufferedImage = BufferedImages.getCompatibleBufferedImage(bufferedImage);
 		
@@ -375,6 +399,7 @@ public final class PixelD {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelD[] createPixels(final int resolutionX, final int resolutionY, final Color4D colorRGBA) {
 		ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
@@ -409,6 +434,7 @@ public final class PixelD {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or at least one of its elements are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static PixelD[] createPixels(final int resolutionX, final int resolutionY, final Color4D[] colorRGBAs) {
 		ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
@@ -440,6 +466,7 @@ public final class PixelD {
 	 * @param pixelB one of the {@code PixelD} instances to swap
 	 * @throws NullPointerException thrown if, and only if, either {@code pixelA} or {@code pixelB} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public static void swap(final PixelD pixelA, final PixelD pixelB) {
 		final Color3D colorXYZA = pixelA.getColorXYZ();
 		final Color3D colorXYZB = pixelB.getColorXYZ();

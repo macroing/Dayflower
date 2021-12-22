@@ -21,6 +21,7 @@ package org.dayflower.geometry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -262,7 +263,7 @@ public final class Quaternion4DUnitTests {
 	}
 	
 	@Test
-	public void testMultiply() {
+	public void testMultiplyQuaternion4DDouble() {
 		final Quaternion4D a = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
 		final Quaternion4D b = Quaternion4D.multiply(a, 2.0D);
 		
@@ -272,6 +273,35 @@ public final class Quaternion4DUnitTests {
 		assertEquals(8.0D, b.getComponent4());
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(null, 2.0D));
+	}
+	
+	@Test
+	public void testMultiplyQuaternion4DQuaternion4D() {
+		final Quaternion4D a = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
+		final Quaternion4D b = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
+		final Quaternion4D c = Quaternion4D.multiply(a, b);
+		
+		assertEquals( 8.0D, c.getComponent1());
+		assertEquals(16.0D, c.getComponent2());
+		assertEquals(24.0D, c.getComponent3());
+		assertEquals( 2.0D, c.getComponent4());
+		
+		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(a, (Quaternion4D)(null)));
+		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(null, b));
+	}
+	
+	@Test
+	public void testMultiplyQuaternion4DVector3D() {
+		final Quaternion4D a = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
+		final Quaternion4D b = Quaternion4D.multiply(a, new Vector3D(1.0D, 2.0D, 3.0D));
+		
+		assertEquals(+ 4.0D, b.getComponent1());
+		assertEquals(+ 8.0D, b.getComponent2());
+		assertEquals(+12.0D, b.getComponent3());
+		assertEquals(-14.0D, b.getComponent4());
+		
+		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(a, (Vector3D)(null)));
+		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(null, new Vector3D(1.0D, 2.0D, 3.0D)));
 	}
 	
 	@Test
@@ -291,6 +321,39 @@ public final class Quaternion4DUnitTests {
 		assertEquals(+4.0D, c.getComponent4());
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.negate(null));
+	}
+	
+	@Test
+	public void testNormalize() {
+		final Quaternion4D a = new Quaternion4D(+1.0D, +0.0D, +0.0D, +0.0D);
+		final Quaternion4D b = Quaternion4D.normalize(a);
+		final Quaternion4D c = new Quaternion4D(+0.0D, +1.0D, +0.0D, +0.0D);
+		final Quaternion4D d = Quaternion4D.normalize(c);
+		final Quaternion4D e = new Quaternion4D(+0.0D, +0.0D, +1.0D, +0.0D);
+		final Quaternion4D f = Quaternion4D.normalize(e);
+		final Quaternion4D g = new Quaternion4D(+0.0D, +0.0D, +0.0D, +1.0D);
+		final Quaternion4D h = Quaternion4D.normalize(g);
+		final Quaternion4D i = new Quaternion4D(+1.0D, +1.0D, +1.0D, +1.0D);
+		final Quaternion4D j = Quaternion4D.normalize(i);
+		final Quaternion4D k = Quaternion4D.normalize(j);
+		final Quaternion4D l = new Quaternion4D(+0.4D, +0.4D, +0.4D, +0.4D);
+		final Quaternion4D m = Quaternion4D.normalize(l);
+		final Quaternion4D n = Quaternion4D.normalize(m);
+		
+		assertEquals(a, b);
+		assertEquals(c, d);
+		assertEquals(e, f);
+		assertEquals(g, h);
+		assertEquals(j, k);
+		assertEquals(m, n);
+		
+		assertTrue(a == b);
+		assertTrue(c == d);
+		assertTrue(e == f);
+		assertTrue(j == k);
+		assertTrue(m == n);
+		
+		assertThrows(NullPointerException.class, () -> Quaternion4D.normalize(null));
 	}
 	
 	@Test

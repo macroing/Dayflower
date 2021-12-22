@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.NEXT_DOWN_1_3;
+import static org.dayflower.utility.Doubles.NEXT_UP_1_1;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.cos;
@@ -618,7 +620,6 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4D multiply(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
 		final double component1 = quaternionLHS.component1 * quaternionRHS.component4 + quaternionLHS.component4 * quaternionRHS.component1 + quaternionLHS.component2 * quaternionRHS.component3 - quaternionLHS.component3 * quaternionRHS.component2;
 		final double component2 = quaternionLHS.component2 * quaternionRHS.component4 + quaternionLHS.component4 * quaternionRHS.component2 + quaternionLHS.component3 * quaternionRHS.component1 - quaternionLHS.component1 * quaternionRHS.component3;
@@ -642,7 +643,6 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the multiplication
 	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4D multiply(final Quaternion4D quaternionLHS, final Vector3D vectorRHS) {
 		final double component1 = +quaternionLHS.component4 * vectorRHS.getComponent1() + quaternionLHS.component2 * vectorRHS.getComponent3() - quaternionLHS.component3 * vectorRHS.getComponent2();
 		final double component2 = +quaternionLHS.component4 * vectorRHS.getComponent2() + quaternionLHS.component3 * vectorRHS.getComponent1() - quaternionLHS.component1 * vectorRHS.getComponent3();
@@ -706,9 +706,17 @@ public final class Quaternion4D implements Node {
 	 * @return a new {@code Quaternion4D} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Quaternion4D normalize(final Quaternion4D quaternion) {
-		return divide(quaternion, quaternion.length());
+		final double length = quaternion.length();
+		
+		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		
+		if(isLengthGTEThreshold && isLengthLTEThreshold) {
+			return quaternion;
+		}
+		
+		return divide(quaternion, length);
 	}
 	
 	/**

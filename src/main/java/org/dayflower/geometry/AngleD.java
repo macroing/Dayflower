@@ -37,6 +37,8 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.dayflower.utility.Doubles;
+
 /**
  * An {@code AngleD} represents an angle and contains {@code double}-based values for both degrees and radians.
  * <p>
@@ -119,6 +121,16 @@ public final class AngleD {
 	}
 	
 	/**
+	 * Returns the trigonometric cosine of this {@code AngleD} instance.
+	 * 
+	 * @return the trigonometric cosine of this {@code AngleD} instance
+	 */
+//	TODO: Add Unit Tests!
+	public double cos() {
+		return Doubles.cos(this.radians);
+	}
+	
+	/**
 	 * Returns the angle in degrees.
 	 * 
 	 * @return the angle in degrees
@@ -176,6 +188,16 @@ public final class AngleD {
 //	TODO: Add Unit Tests!
 	public double getRadiansMinimum() {
 		return this.radiansMinimum;
+	}
+	
+	/**
+	 * Returns the trigonometric sine of this {@code AngleD} instance.
+	 * 
+	 * @return the trigonometric sine of this {@code AngleD} instance
+	 */
+//	TODO: Add Unit Tests!
+	public double sin() {
+		return Doubles.sin(this.radians);
 	}
 	
 	/**

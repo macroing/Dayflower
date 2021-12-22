@@ -1,3 +1,14 @@
+2021-12-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods cos() and sin() to the AngleD and AngleF classes.
+	* ADD:		Add unit tests to the Matrix44DUnitTests and Matrix44FUnitTests classes.
+	* ADD:		Add unit tests to the Quaternion4DUnitTests and Quaternion4FUnitTests classes.
+	* CHANGE:	Update unit tests in Matrix44FUnitTests to account for the precision changes in the Matrix44F class.
+	* CHANGE:	Update the methods rotate(AngleD, Vector3D), rotate(AngleD, double, double, double), rotateX(AngleD), rotateY(AngleD) and rotateZ(AngleD) in the Matrix44D class to use the cos() and sin() methods provided by the AngleD class.
+	* CHANGE:	Update the methods rotate(AngleF, Vector3F), rotate(AngleF, float, float, float), rotateX(AngleF), rotateY(AngleF) and rotateZ(AngleF) in the Matrix44F class to use the cos() and sin() methods provided by the AngleF class. This results in better precision. The methods rotateX(float), rotateX(float, boolean), rotateY(float), rotateY(float, boolean), rotateZ(float) and rotateZ(float, boolean) do not have this precision yet.
+	* CHANGE:	Update the normalize(Quaternion4D) method in the Quaternion4D class. It now checks if it is normalized or not.
+	* CHANGE:	Update the normalize(Quaternion4F) method in the Quaternion4F class. It now checks if it is normalized or not.
+
 2021-12-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method orthonormalBasis33FSetFromUV(float, float, float, float, float, float) to the AbstractGeometryKernel class.

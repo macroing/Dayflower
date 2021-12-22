@@ -781,12 +781,11 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the axis represented by {@code vector}
 	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code vector} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final AngleF angle, final Vector3F vector) {
 		final Vector3F vectorNormalized = Vector3F.normalize(vector);
 		
-		final float cos = cos(angle.getRadians());
-		final float sin = sin(angle.getRadians());
+		final float cos = angle.cos();
+		final float sin = angle.sin();
 		final float oneMinusCos = 1.0F - cos;
 		
 		final float element11 = oneMinusCos * vectorNormalized.getX() * vectorNormalized.getX() + cos;
@@ -828,7 +827,6 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the axis represented by {@code x}, {@code y} and {@code z}
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44F rotate(final AngleF angle, final float x, final float y, final float z) {
 		return rotate(angle, new Vector3F(x, y, z));
 	}
@@ -958,8 +956,8 @@ public final class Matrix44F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public static Matrix44F rotateX(final AngleF angle) {
-		final float cos = cos(angle.getRadians());
-		final float sin = sin(angle.getRadians());
+		final float cos = angle.cos();
+		final float sin = angle.sin();
 		
 		return new Matrix44F(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -1036,8 +1034,8 @@ public final class Matrix44F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public static Matrix44F rotateY(final AngleF angle) {
-		final float cos = cos(angle.getRadians());
-		final float sin = sin(angle.getRadians());
+		final float cos = angle.cos();
+		final float sin = angle.sin();
 		
 		return new Matrix44F(cos, 0.0F, sin, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, -sin, 0.0F, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -1114,8 +1112,8 @@ public final class Matrix44F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public static Matrix44F rotateZ(final AngleF angle) {
-		final float cos = cos(angle.getRadians());
-		final float sin = sin(angle.getRadians());
+		final float cos = angle.cos();
+		final float sin = angle.sin();
 		
 		return new Matrix44F(cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}

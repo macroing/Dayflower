@@ -781,12 +781,11 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that rotates along the axis represented by {@code vector}
 	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code vector} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotate(final AngleD angle, final Vector3D vector) {
 		final Vector3D vectorNormalized = Vector3D.normalize(vector);
 		
-		final double cos = cos(angle.getRadians());
-		final double sin = sin(angle.getRadians());
+		final double cos = angle.cos();
+		final double sin = angle.sin();
 		final double oneMinusCos = 1.0D - cos;
 		
 		final double element11 = oneMinusCos * vectorNormalized.getX() * vectorNormalized.getX() + cos;
@@ -828,7 +827,6 @@ public final class Matrix44D implements Node {
 	 * @return a {@code Matrix44D} instance that rotates along the axis represented by {@code x}, {@code y} and {@code z}
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Matrix44D rotate(final AngleD angle, final double x, final double y, final double z) {
 		return rotate(angle, new Vector3D(x, y, z));
 	}
@@ -958,8 +956,8 @@ public final class Matrix44D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public static Matrix44D rotateX(final AngleD angle) {
-		final double cos = cos(angle.getRadians());
-		final double sin = sin(angle.getRadians());
+		final double cos = angle.cos();
+		final double sin = angle.sin();
 		
 		return new Matrix44D(1.0D, 0.0D, 0.0D, 0.0D, 0.0D, cos, -sin, 0.0D, 0.0D, sin, cos, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
 	}
@@ -1036,8 +1034,8 @@ public final class Matrix44D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public static Matrix44D rotateY(final AngleD angle) {
-		final double cos = cos(angle.getRadians());
-		final double sin = sin(angle.getRadians());
+		final double cos = angle.cos();
+		final double sin = angle.sin();
 		
 		return new Matrix44D(cos, 0.0D, sin, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, -sin, 0.0D, cos, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
 	}
@@ -1114,8 +1112,8 @@ public final class Matrix44D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public static Matrix44D rotateZ(final AngleD angle) {
-		final double cos = cos(angle.getRadians());
-		final double sin = sin(angle.getRadians());
+		final double cos = angle.cos();
+		final double sin = angle.sin();
 		
 		return new Matrix44D(cos, -sin, 0.0D, 0.0D, sin, cos, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
 	}

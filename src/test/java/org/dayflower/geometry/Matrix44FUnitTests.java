@@ -485,6 +485,41 @@ public final class Matrix44FUnitTests {
 	}
 	
 	@Test
+	public void testRotateAngleFFloatFloatFloat() {
+		final Matrix44F a = Matrix44F.rotate(AngleF.degrees( 90.0F), 1.0F, 0.0F, 0.0F);
+		final Matrix44F b = Matrix44F.rotate(AngleF.degrees(180.0F), 0.0F, 1.0F, 0.0F);
+		final Matrix44F c = Matrix44F.rotate(AngleF.degrees(270.0F), 0.0F, 0.0F, 1.0F);
+		
+		final Matrix44F d = Matrix44F.rotateX(AngleF.degrees( 90.0F));
+		final Matrix44F e = Matrix44F.rotateY(AngleF.degrees(180.0F));
+		final Matrix44F f = Matrix44F.rotateZ(AngleF.degrees(270.0F));
+		
+		assertEquals(d, a);
+		assertEquals(e, b);
+		assertEquals(f, c);
+		
+		assertThrows(NullPointerException.class, () -> Matrix44F.rotate(null, 1.0F, 0.0F, 0.0F));
+	}
+	
+	@Test
+	public void testRotateAngleFVector3F() {
+		final Matrix44F a = Matrix44F.rotate(AngleF.degrees( 90.0F), Vector3F.x());
+		final Matrix44F b = Matrix44F.rotate(AngleF.degrees(180.0F), Vector3F.y());
+		final Matrix44F c = Matrix44F.rotate(AngleF.degrees(270.0F), Vector3F.z());
+		
+		final Matrix44F d = Matrix44F.rotateX(AngleF.degrees( 90.0F));
+		final Matrix44F e = Matrix44F.rotateY(AngleF.degrees(180.0F));
+		final Matrix44F f = Matrix44F.rotateZ(AngleF.degrees(270.0F));
+		
+		assertEquals(d, a);
+		assertEquals(e, b);
+		assertEquals(f, c);
+		
+		assertThrows(NullPointerException.class, () -> Matrix44F.rotate(AngleF.degrees(0.0F), null));
+		assertThrows(NullPointerException.class, () -> Matrix44F.rotate((AngleF)(null), Vector3F.x()));
+	}
+	
+	@Test
 	public void testRotateOrthonormalBasis33F() {
 		final Matrix44F matrix = Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.z(), Vector3F.y(), Vector3F.x()));
 		
@@ -562,9 +597,8 @@ public final class Matrix44FUnitTests {
 	@Test
 	public void testRotateXAngleF() {
 		final float angleDegrees = 90.0F;
-		final float angleRadians = (float)(Math.toRadians(angleDegrees));
-		final float angleRadiansCos = (float)(Math.cos(angleRadians));
-		final float angleRadiansSin = (float)(Math.sin(angleRadians));
+		final float angleRadiansCos = (float)(Math.cos(Math.toRadians(angleDegrees)));
+		final float angleRadiansSin = (float)(Math.sin(Math.toRadians(angleDegrees)));
 		
 		final Matrix44F matrix = Matrix44F.rotateX(AngleF.degrees(angleDegrees));
 		
@@ -663,9 +697,8 @@ public final class Matrix44FUnitTests {
 	@Test
 	public void testRotateYAngleF() {
 		final float angleDegrees = 90.0F;
-		final float angleRadians = (float)(Math.toRadians(angleDegrees));
-		final float angleRadiansCos = (float)(Math.cos(angleRadians));
-		final float angleRadiansSin = (float)(Math.sin(angleRadians));
+		final float angleRadiansCos = (float)(Math.cos(Math.toRadians(angleDegrees)));
+		final float angleRadiansSin = (float)(Math.sin(Math.toRadians(angleDegrees)));
 		
 		final Matrix44F matrix = Matrix44F.rotateY(AngleF.degrees(angleDegrees));
 		
@@ -764,9 +797,8 @@ public final class Matrix44FUnitTests {
 	@Test
 	public void testRotateZAngleF() {
 		final float angleDegrees = 90.0F;
-		final float angleRadians = (float)(Math.toRadians(angleDegrees));
-		final float angleRadiansCos = (float)(Math.cos(angleRadians));
-		final float angleRadiansSin = (float)(Math.sin(angleRadians));
+		final float angleRadiansCos = (float)(Math.cos(Math.toRadians(angleDegrees)));
+		final float angleRadiansSin = (float)(Math.sin(Math.toRadians(angleDegrees)));
 		
 		final Matrix44F matrix = Matrix44F.rotateZ(AngleF.degrees(angleDegrees));
 		

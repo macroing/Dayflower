@@ -21,6 +21,7 @@ package org.dayflower.geometry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -262,7 +263,7 @@ public final class Quaternion4FUnitTests {
 	}
 	
 	@Test
-	public void testMultiply() {
+	public void testMultiplyQuaternion4FFloat() {
 		final Quaternion4F a = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
 		final Quaternion4F b = Quaternion4F.multiply(a, 2.0F);
 		
@@ -272,6 +273,35 @@ public final class Quaternion4FUnitTests {
 		assertEquals(8.0F, b.getComponent4());
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(null, 2.0F));
+	}
+	
+	@Test
+	public void testMultiplyQuaternion4FQuaternion4F() {
+		final Quaternion4F a = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
+		final Quaternion4F b = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
+		final Quaternion4F c = Quaternion4F.multiply(a, b);
+		
+		assertEquals( 8.0F, c.getComponent1());
+		assertEquals(16.0F, c.getComponent2());
+		assertEquals(24.0F, c.getComponent3());
+		assertEquals( 2.0F, c.getComponent4());
+		
+		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(a, (Quaternion4F)(null)));
+		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(null, b));
+	}
+	
+	@Test
+	public void testMultiplyQuaternion4FVector3F() {
+		final Quaternion4F a = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
+		final Quaternion4F b = Quaternion4F.multiply(a, new Vector3F(1.0F, 2.0F, 3.0F));
+		
+		assertEquals(+ 4.0F, b.getComponent1());
+		assertEquals(+ 8.0F, b.getComponent2());
+		assertEquals(+12.0F, b.getComponent3());
+		assertEquals(-14.0F, b.getComponent4());
+		
+		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(a, (Vector3F)(null)));
+		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(null, new Vector3F(1.0F, 2.0F, 3.0F)));
 	}
 	
 	@Test
@@ -291,6 +321,39 @@ public final class Quaternion4FUnitTests {
 		assertEquals(+4.0F, c.getComponent4());
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.negate(null));
+	}
+	
+	@Test
+	public void testNormalize() {
+		final Quaternion4F a = new Quaternion4F(+1.0F, +0.0F, +0.0F, +0.0F);
+		final Quaternion4F b = Quaternion4F.normalize(a);
+		final Quaternion4F c = new Quaternion4F(+0.0F, +1.0F, +0.0F, +0.0F);
+		final Quaternion4F d = Quaternion4F.normalize(c);
+		final Quaternion4F e = new Quaternion4F(+0.0F, +0.0F, +1.0F, +0.0F);
+		final Quaternion4F f = Quaternion4F.normalize(e);
+		final Quaternion4F g = new Quaternion4F(+0.0F, +0.0F, +0.0F, +1.0F);
+		final Quaternion4F h = Quaternion4F.normalize(g);
+		final Quaternion4F i = new Quaternion4F(+1.0F, +1.0F, +1.0F, +1.0F);
+		final Quaternion4F j = Quaternion4F.normalize(i);
+		final Quaternion4F k = Quaternion4F.normalize(j);
+		final Quaternion4F l = new Quaternion4F(+0.4F, +0.4F, +0.4F, +0.4F);
+		final Quaternion4F m = Quaternion4F.normalize(l);
+		final Quaternion4F n = Quaternion4F.normalize(m);
+		
+		assertEquals(a, b);
+		assertEquals(c, d);
+		assertEquals(e, f);
+		assertEquals(g, h);
+		assertEquals(j, k);
+		assertEquals(m, n);
+		
+		assertTrue(a == b);
+		assertTrue(c == d);
+		assertTrue(e == f);
+		assertTrue(j == k);
+		assertTrue(m == n);
+		
+		assertThrows(NullPointerException.class, () -> Quaternion4F.normalize(null));
 	}
 	
 	@Test

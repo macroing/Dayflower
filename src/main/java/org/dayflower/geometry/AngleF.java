@@ -27,7 +27,6 @@ import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.tan;
 import static org.dayflower.utility.Floats.toDegrees;
-import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Floats.toRadians;
 import static org.dayflower.utility.Floats.wrapAround;
 
@@ -38,7 +37,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
-import org.dayflower.utility.Doubles;
+import org.dayflower.utility.Floats;
 
 /**
  * An {@code AngleF} represents an angle and contains {@code float}-based values for both degrees and radians.
@@ -128,7 +127,7 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public float cos() {
-		return toFloat(Doubles.cos(Doubles.toRadians(this.degrees)));
+		return Floats.cos(this.radians);
 	}
 	
 	/**
@@ -198,7 +197,7 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public float sin() {
-		return toFloat(Doubles.sin(Doubles.toRadians(this.degrees)));
+		return Floats.sin(this.radians);
 	}
 	
 	/**

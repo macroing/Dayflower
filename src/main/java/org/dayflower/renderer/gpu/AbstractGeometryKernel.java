@@ -1979,9 +1979,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * slightly, in the direction of the ray itself.
 	 */
 	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FLHS() {
-		final float surfaceIntersectionPointX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
-		final float surfaceIntersectionPointY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
-		final float surfaceIntersectionPointZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
+		
+		final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWComponent1();
+		final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWComponent2();
+		final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWComponent3();
 		
 		final float directionX = vector3FGetComponent1();
 		final float directionY = vector3FGetComponent2();
@@ -1991,9 +1995,22 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
 		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
 		
-		final float originX = surfaceIntersectionPointX + directionNormalizedX * 0.001F;
-		final float originY = surfaceIntersectionPointY + directionNormalizedY * 0.001F;
-		final float originZ = surfaceIntersectionPointZ + directionNormalizedZ * 0.001F;
+		final float nDotD = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		final float nDotE = 0.0F;
+		
+		final float offsetX = surfaceNormalSX * nDotE;
+		final float offsetY = surfaceNormalSY * nDotE;
+		final float offsetZ = surfaceNormalSZ * nDotE;
+		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
+		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
+		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
+		
+		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
+		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
+		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
+		final float originX = nextAfter(originOffsetX, originOffsetX > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originY = nextAfter(originOffsetY, originOffsetY > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originZ = nextAfter(originOffsetZ, originOffsetZ > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
 		
 		ray3FSetOrigin(originX, originY, originZ);
 		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
@@ -2008,9 +2025,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * slightly, in the direction of the ray itself.
 	 */
 	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FRHS() {
-		final float surfaceIntersectionPointX = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
-		final float surfaceIntersectionPointY = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
-		final float surfaceIntersectionPointZ = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+		final float surfaceIntersectionPointX = intersectionRHSGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointComponent3();
+		
+		final float surfaceNormalSX = intersectionRHSGetOrthonormalBasisSWComponent1();
+		final float surfaceNormalSY = intersectionRHSGetOrthonormalBasisSWComponent2();
+		final float surfaceNormalSZ = intersectionRHSGetOrthonormalBasisSWComponent3();
 		
 		final float directionX = vector3FGetComponent1();
 		final float directionY = vector3FGetComponent2();
@@ -2020,9 +2041,22 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
 		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
 		
-		final float originX = surfaceIntersectionPointX + directionNormalizedX * 0.001F;
-		final float originY = surfaceIntersectionPointY + directionNormalizedY * 0.001F;
-		final float originZ = surfaceIntersectionPointZ + directionNormalizedZ * 0.001F;
+		final float nDotD = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		final float nDotE = 0.0F;
+		
+		final float offsetX = surfaceNormalSX * nDotE;
+		final float offsetY = surfaceNormalSY * nDotE;
+		final float offsetZ = surfaceNormalSZ * nDotE;
+		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
+		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
+		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
+		
+		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
+		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
+		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
+		final float originX = nextAfter(originOffsetX, originOffsetX > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originY = nextAfter(originOffsetY, originOffsetY > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originZ = nextAfter(originOffsetZ, originOffsetZ > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
 		
 		ray3FSetOrigin(originX, originY, originZ);
 		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);

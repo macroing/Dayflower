@@ -1,3 +1,9 @@
+2021-12-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the methods ray3FSetFromSurfaceIntersectionPointAndVector3FLHS() and ray3FSetFromSurfaceIntersectionPointAndVector3FRHS() in the AbstractGeometryKernel class to work more like the CPU renderer.
+	* CHANGE:	Change back the precision of the cos() and sin() methods in the AngleF class. It did not work out in the end.
+	* CHANGE:	Update unit tests in the Matrix44FUnitTests class.
+
 2021-12-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods cos() and sin() to the AngleD and AngleF classes.

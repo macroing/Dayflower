@@ -294,7 +294,7 @@ public final class ClearCoatMaterial implements Material {
 		final Vector3F direction = intersection.getRay().getDirection();
 		
 		final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
-		final Vector3F surfaceNormalCorrectlyOriented = Vector3F.faceForwardNegated(surfaceNormal, direction);
+		final Vector3F surfaceNormalCorrectlyOriented = intersection.getSurfaceNormalSCorrectlyOriented();
 		
 		final boolean isEntering = Vector3F.dotProduct(surfaceNormal, surfaceNormalCorrectlyOriented) > 0.0F;
 		

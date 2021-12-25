@@ -469,8 +469,8 @@ public final class Scene implements Node {
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, sampleOneLightUniformDistribution(bSDF, intersection)));
 				}
 				
-				final Vector3F surfaceNormalG = intersection.getSurfaceNormalG();
-				final Vector3F surfaceNormalS = intersection.getSurfaceNormalS();
+				final Vector3F surfaceNormalG = intersection.getSurfaceNormalGCorrectlyOriented();
+				final Vector3F surfaceNormalS = intersection.getSurfaceNormalSCorrectlyOriented();
 				
 				final Sample2F sample = sampler.sample2();
 				
@@ -1394,7 +1394,7 @@ public final class Scene implements Node {
 			
 			final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
 			
-			final Vector3F normal = intersection.getSurfaceNormalS();
+			final Vector3F normal = intersection.getSurfaceNormalSCorrectlyOriented();
 			
 			if(optionalLightSample.isPresent()) {
 				final LightSample lightSample = optionalLightSample.get();
@@ -1418,7 +1418,7 @@ public final class Scene implements Node {
 			
 			final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
 			
-			final Vector3F normal = intersection.getSurfaceNormalS();
+			final Vector3F normal = intersection.getSurfaceNormalSCorrectlyOriented();
 			
 			if(optionalLightSample.isPresent()) {
 				final LightSample lightSample = optionalLightSample.get();

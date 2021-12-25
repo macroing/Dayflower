@@ -125,10 +125,13 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 	 * 
 	 * @param textureID the ID of the {@code Texture} instance
 	 * @param textureOffset the offset of the {@code Texture} instance
+	 * @param rayDirectionX the X-component of the ray direction
+	 * @param rayDirectionY the Y-component of the ray direction
+	 * @param rayDirectionZ the Z-component of the ray direction
 	 * @return a {@code float} with the average value of the color
 	 */
-	protected final float textureEvaluateFloat(final int textureID, final int textureOffset) {
-		textureEvaluate(textureID, textureOffset);
+	protected final float textureEvaluateFloat(final int textureID, final int textureOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
+		textureEvaluate(textureID, textureOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return color3FAverage(color3FLHSGetComponent1(), color3FLHSGetComponent2(), color3FLHSGetComponent3());
 	}
@@ -142,8 +145,11 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 	 * 
 	 * @param textureID the ID of the {@code Texture} instance
 	 * @param textureOffset the offset of the {@code Texture} instance
+	 * @param rayDirectionX the X-component of the ray direction
+	 * @param rayDirectionY the Y-component of the ray direction
+	 * @param rayDirectionZ the Z-component of the ray direction
 	 */
-	protected final void textureEvaluate(final int textureID, final int textureOffset) {
+	protected final void textureEvaluate(final int textureID, final int textureOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		if(textureID == BlendTexture.ID) {
 			final int textureOffsetAbsolute = textureOffset * CompiledTextureCache.BLEND_TEXTURE_LENGTH;
 			
@@ -158,13 +164,13 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 			final float tComponent2 = this.textureBlendTextureArray[textureOffsetAbsolute + CompiledTextureCache.BLEND_TEXTURE_OFFSET_T_COMPONENT_2];
 			final float tComponent3 = this.textureBlendTextureArray[textureOffsetAbsolute + CompiledTextureCache.BLEND_TEXTURE_OFFSET_T_COMPONENT_3];
 			
-			textureEvaluateExcludingBlendTexture(textureAID, textureAOffset);
+			textureEvaluateExcludingBlendTexture(textureAID, textureAOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 			final float textureAComponent1 = color3FLHSGetComponent1();
 			final float textureAComponent2 = color3FLHSGetComponent2();
 			final float textureAComponent3 = color3FLHSGetComponent3();
 			
-			textureEvaluateExcludingBlendTexture(textureBID, textureBOffset);
+			textureEvaluateExcludingBlendTexture(textureBID, textureBOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 			final float textureBComponent1 = color3FLHSGetComponent1();
 			final float textureBComponent2 = color3FLHSGetComponent2();
@@ -176,7 +182,7 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 			
 			color3FLHSSet(component1, component2, component3);
 		} else {
-			textureEvaluateExcludingBlendTexture(textureID, textureOffset);
+			textureEvaluateExcludingBlendTexture(textureID, textureOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		}
 	}
 	
@@ -185,8 +191,11 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 	 * 
 	 * @param textureID the ID of the {@code Texture} instance
 	 * @param textureOffset the offset of the {@code Texture} instance
+	 * @param rayDirectionX the X-component of the ray direction
+	 * @param rayDirectionY the Y-component of the ray direction
+	 * @param rayDirectionZ the Z-component of the ray direction
 	 */
-	protected final void textureEvaluateExcludingBlendTexture(final int textureID, final int textureOffset) {
+	protected final void textureEvaluateExcludingBlendTexture(final int textureID, final int textureOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		int currentTextureID = textureID;
 		int currentTextureOffset = textureOffset;
 		
@@ -197,6 +206,10 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 		final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
 		final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
 		final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float surfaceNormalCorrectlyOrientedX = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
+		final float surfaceNormalCorrectlyOrientedY = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
+		final float surfaceNormalCorrectlyOrientedZ = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
 		
 		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
 		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
@@ -264,11 +277,7 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else if(currentTextureID == DotProductTexture.ID) {
-				final float directionX = ray3FGetDirectionComponent1();
-				final float directionY = ray3FGetDirectionComponent2();
-				final float directionZ = ray3FGetDirectionComponent3();
-				
-				final float dotProduct = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
+				final float dotProduct = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 				final float dotProductAbs = abs(dotProduct);
 				
 				component1 = dotProductAbs;
@@ -399,9 +408,9 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else if(currentTextureID == SurfaceNormalTexture.ID) {
-				component1 = (surfaceNormalX + 1.0F) * 0.5F;
-				component2 = (surfaceNormalY + 1.0F) * 0.5F;
-				component3 = (surfaceNormalZ + 1.0F) * 0.5F;
+				component1 = (surfaceNormalCorrectlyOrientedX + 1.0F) * 0.5F;
+				component2 = (surfaceNormalCorrectlyOrientedY + 1.0F) * 0.5F;
+				component3 = (surfaceNormalCorrectlyOrientedZ + 1.0F) * 0.5F;
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;

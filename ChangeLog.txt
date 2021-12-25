@@ -1,5 +1,8 @@
 2021-12-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods getSurfaceNormalGCorrectlyOriented() and getSurfaceNormalSCorrectlyOriented() to the Intersection class.
+	* CHANGE:	Update the GPU-renderer to use correctly oriented surface normals.
+	* CHANGE:	Update the BSDF, Scene, PerezLight, ClearCoatMaterial and SurfaceNormalTexture classes to use the new getSurfaceNormalGCorrectlyOriented() and getSurfaceNormalSCorrectlyOriented() methods.
 	* CHANGE:	Update the NormalMapLDRImageModifier class. It now uses the surface normal of the geometry in the calculations, rather than the one for shading.
 	* CHANGE:	Update the NormalMapLDRImageModifier implementation in the AbstractGeometryKernel and AbstractModifierKernel classes. The bilinear interpolation is removed and the methods intersectionLHSSetOrthonormalBasisSWTransform(float, float, float) and intersectionRHSSetOrthonormalBasisSWTransform(float, float, float) now use the surface normal of the geometry in the calculations, rather than the one for shading.
 

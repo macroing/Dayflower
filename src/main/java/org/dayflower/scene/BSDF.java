@@ -108,7 +108,7 @@ public final class BSDF {
 	public BSDF(final Intersection intersection, final BXDF bXDF, final boolean isNegatingIncoming, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.bXDFs = Arrays.asList(Objects.requireNonNull(bXDF, "bXDF == null"));
-		this.normalWorldSpace = intersection.getSurfaceNormalS();
+		this.normalWorldSpace = intersection.getSurfaceNormalSCorrectlyOriented();
 		this.normalLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.normalWorldSpace, intersection.getOrthonormalBasisS()));
 		this.outgoingWorldSpace = Vector3F.negate(intersection.getRay().getDirection());
 		this.outgoingLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.outgoingWorldSpace, intersection.getOrthonormalBasisS()));
@@ -177,7 +177,7 @@ public final class BSDF {
 	public BSDF(final Intersection intersection, final List<BXDF> bXDFs, final boolean isNegatingIncoming, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.bXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(bXDFs, "bXDFs"));
-		this.normalWorldSpace = intersection.getSurfaceNormalS();
+		this.normalWorldSpace = intersection.getSurfaceNormalSCorrectlyOriented();
 		this.normalLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.normalWorldSpace, intersection.getOrthonormalBasisS()));
 		this.outgoingWorldSpace = Vector3F.negate(intersection.getRay().getDirection());
 		this.outgoingLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.outgoingWorldSpace, intersection.getOrthonormalBasisS()));
@@ -271,7 +271,7 @@ public final class BSDF {
 		final Vector3F normal = this.normalLocalSpace;
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpaceCorrectlyOriented);
 		
-		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalG();
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalGCorrectlyOriented();
 		
 		final float iDotN = Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG);
 		final float oDotN = Vector3F.dotProduct(this.outgoingWorldSpace, surfaceNormalG);
@@ -337,7 +337,7 @@ public final class BSDF {
 		final Vector3F incoming = bXDFResult.getIncoming();
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
 		final Vector3F incomingWorldSpaceCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace;
-		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalG();
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalGCorrectlyOriented();
 		
 		Color3F result = bXDFResult.getResult();
 		

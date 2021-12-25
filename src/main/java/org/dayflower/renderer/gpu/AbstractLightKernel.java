@@ -228,9 +228,12 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	 * 
 	 * @param u the U-component of the sample
 	 * @param v the V-component of the sample
+	 * @param rayDirectionX the X-coordinate of the ray direction
+	 * @param rayDirectionY the Y-coordinate of the ray direction
+	 * @param rayDirectionZ the Z-coordinate of the ray direction
 	 * @return {@code true} if, and only if, a sample was created, {@code false} otherwise
 	 */
-	protected final boolean lightSampleRadianceIncoming(final float u, final float v) {
+	protected final boolean lightSampleRadianceIncoming(final float u, final float v, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final int id = lightGetID();
 		
 		if(doLightDiffuseAreaLightIsMatchingID(id)) {
@@ -240,7 +243,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		} else if(doLightLDRImageLightIsMatchingID(id)) {
 			return doLightLDRImageLightSampleRadianceIncoming(u, v);
 		} else if(doLightPerezLightIsMatchingID(id)) {
-			return doLightPerezLightSampleRadianceIncoming(u, v);
+			return doLightPerezLightSampleRadianceIncoming(u, v, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(doLightPointLightIsMatchingID(id)) {
 			return doLightPointLightSampleRadianceIncoming(u, v);
 		} else if(doLightSpotLightIsMatchingID(id)) {
@@ -337,8 +340,12 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	 * The result will be set using {@link #color3FLHSSet(float, float, float)}.
 	 * <p>
 	 * To retrieve the color components of the result, the methods {@link #color3FLHSGetComponent1()}, {@link #color3FLHSGetComponent2()} or {@link #color3FLHSGetComponent3()} may be used.
+	 * 
+	 * @param rayDirectionX the X-coordinate of the ray direction
+	 * @param rayDirectionY the Y-coordinate of the ray direction
+	 * @param rayDirectionZ the Z-coordinate of the ray direction
 	 */
-	protected final void lightEvaluateRadianceEmitted() {
+	protected final void lightEvaluateRadianceEmitted(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final int id = lightGetID();
 		
 		if(doLightDiffuseAreaLightIsMatchingID(id)) {
@@ -346,9 +353,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		} else if(doLightDirectionalLightIsMatchingID(id)) {
 			doLightDirectionalLightEvaluateRadianceEmitted();
 		} else if(doLightLDRImageLightIsMatchingID(id)) {
-			doLightLDRImageLightEvaluateRadianceEmitted();
+			doLightLDRImageLightEvaluateRadianceEmitted(rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(doLightPerezLightIsMatchingID(id)) {
-			doLightPerezLightEvaluateRadianceEmitted();
+			doLightPerezLightEvaluateRadianceEmitted(rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(doLightPointLightIsMatchingID(id)) {
 			doLightPointLightEvaluateRadianceEmitted();
 		} else if(doLightSpotLightIsMatchingID(id)) {
@@ -358,8 +365,12 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	
 	/**
 	 * Evaluates the radiance emitted along the current ray using all {@link Light} instances for which this is supported.
+	 * 
+	 * @param rayDirectionX the X-coordinate of the ray direction
+	 * @param rayDirectionY the Y-coordinate of the ray direction
+	 * @param rayDirectionZ the Z-coordinate of the ray direction
 	 */
-	protected final void lightEvaluateRadianceEmittedAll() {
+	protected final void lightEvaluateRadianceEmittedAll(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final int lightLDRImageLightCount = this.lightLDRImageLightCount;
 		final int lightPerezLightCount = this.lightPerezLightCount;
 		
@@ -371,7 +382,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 			final int lightLDRImageLightArrayOffset = this.lightLDRImageLightOffsetArray[i];
 			
 			lightSet(LDRImageLight.ID, lightLDRImageLightArrayOffset);
-			lightEvaluateRadianceEmitted();
+			lightEvaluateRadianceEmitted(rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 			radianceR += color3FLHSGetR();
 			radianceG += color3FLHSGetG();
@@ -382,7 +393,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 			final int lightPerezLightArrayOffset = this.lightPerezLightOffsetArray[i];
 			
 			lightSet(PerezLight.ID, lightPerezLightArrayOffset);
-			lightEvaluateRadianceEmitted();
+			lightEvaluateRadianceEmitted(rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 			radianceR += color3FLHSGetR();
 			radianceG += color3FLHSGetG();
@@ -1072,10 +1083,10 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		point2FSet(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
 	}
 	
-	private void doLightLDRImageLightEvaluateRadianceEmitted() {
+	private void doLightLDRImageLightEvaluateRadianceEmitted(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final int offset = lightGetOffset();
 		
-		doLightLDRImageLightTransformToObjectSpace(offset, ray3FGetDirectionComponent1(), ray3FGetDirectionComponent2(), ray3FGetDirectionComponent3());
+		doLightLDRImageLightTransformToObjectSpace(offset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		doLightLDRImageLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
 	}
 	
@@ -1179,7 +1190,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		return false;
 	}
 	
-	private boolean doLightPerezLightSampleRadianceIncoming(final float u, final float v) {
+	private boolean doLightPerezLightSampleRadianceIncoming(final float u, final float v, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final int offset = lightGetOffset();
 		
 		final float sunDirectionObjectSpaceX = doLightPerezLightGetSunDirectionObjectSpaceX(offset);
@@ -1199,13 +1210,21 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float surfaceNormalGX = intersectionLHSGetOrthonormalBasisGWComponent1();
 		final float surfaceNormalGY = intersectionLHSGetOrthonormalBasisGWComponent2();
 		final float surfaceNormalGZ = intersectionLHSGetOrthonormalBasisGWComponent3();
+		final float surfaceNormalGDotRayDirection = vector3FDotProduct(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float surfaceNormalGCorrectlyOrientedX = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGX : surfaceNormalGX;
+		final float surfaceNormalGCorrectlyOrientedY = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGY : surfaceNormalGY;
+		final float surfaceNormalGCorrectlyOrientedZ = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGZ : surfaceNormalGZ;
 		
 		final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWComponent1();
 		final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWComponent2();
 		final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalSDotRayDirection = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float surfaceNormalSCorrectlyOrientedX = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSX : surfaceNormalSX;
+		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
+		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
 		
-		final float sunDirectionWorldSpaceDotSurfaceNormalG = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
-		final float sunDirectionWorldSpaceDotSurfaceNormalS = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
+		final float sunDirectionWorldSpaceDotSurfaceNormalG = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalGCorrectlyOrientedX, surfaceNormalGCorrectlyOrientedY, surfaceNormalGCorrectlyOrientedZ);
+		final float sunDirectionWorldSpaceDotSurfaceNormalS = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalSCorrectlyOrientedX, surfaceNormalSCorrectlyOrientedY, surfaceNormalSCorrectlyOrientedZ);
 		
 		final float random = random();
 		
@@ -1492,10 +1511,10 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		point2FSet(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
 	}
 	
-	private void doLightPerezLightEvaluateRadianceEmitted() {
+	private void doLightPerezLightEvaluateRadianceEmitted(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final int offset = lightGetOffset();
 		
-		doLightPerezLightTransformToObjectSpace(offset, ray3FGetDirectionComponent1(), ray3FGetDirectionComponent2(), ray3FGetDirectionComponent3());
+		doLightPerezLightTransformToObjectSpace(offset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionObjectSpaceX(offset), doLightPerezLightGetSunDirectionObjectSpaceY(offset), doLightPerezLightGetSunDirectionObjectSpaceZ(offset));
 		
 		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());

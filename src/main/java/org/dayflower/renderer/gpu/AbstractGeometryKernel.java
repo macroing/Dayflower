@@ -1977,8 +1977,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * <p>
 	 * The ray direction is constructed using a normalized representation of the current vector in {@link #vector3FArray_$private$3}. The origin is constructed by offsetting the surface intersection point in {@link #intersectionLHSArray_$private$24}
 	 * slightly, in the direction of the ray itself.
+	 * 
+	 * @param rayDirectionX the X-coordinate of the ray direction
+	 * @param rayDirectionY the Y-coordinate of the ray direction
+	 * @param rayDirectionZ the Z-coordinate of the ray direction
 	 */
-	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FLHS() {
+	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FLHS(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
 		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
 		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
@@ -1986,6 +1990,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWComponent1();
 		final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWComponent2();
 		final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalSDotRayDirection = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float surfaceNormalSCorrectlyOrientedX = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSX : surfaceNormalSX;
+		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
+		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
 		
 		final float directionX = vector3FGetComponent1();
 		final float directionY = vector3FGetComponent2();
@@ -1995,12 +2003,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
 		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
 		
-		final float nDotD = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		final float nDotD = vector3FDotProduct(surfaceNormalSCorrectlyOrientedX, surfaceNormalSCorrectlyOrientedY, surfaceNormalSCorrectlyOrientedZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
 		final float nDotE = 0.0F;
 		
-		final float offsetX = surfaceNormalSX * nDotE;
-		final float offsetY = surfaceNormalSY * nDotE;
-		final float offsetZ = surfaceNormalSZ * nDotE;
+		final float offsetX = surfaceNormalSCorrectlyOrientedX * nDotE;
+		final float offsetY = surfaceNormalSCorrectlyOrientedY * nDotE;
+		final float offsetZ = surfaceNormalSCorrectlyOrientedZ * nDotE;
 		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
 		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
 		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
@@ -2023,8 +2031,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * <p>
 	 * The ray direction is constructed using a normalized representation of the current vector in {@link #vector3FArray_$private$3}. The origin is constructed by offsetting the surface intersection point in {@link #intersectionRHSArray_$private$24}
 	 * slightly, in the direction of the ray itself.
+	 * 
+	 * @param rayDirectionX the X-coordinate of the ray direction
+	 * @param rayDirectionY the Y-coordinate of the ray direction
+	 * @param rayDirectionZ the Z-coordinate of the ray direction
 	 */
-	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FRHS() {
+	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FRHS(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final float surfaceIntersectionPointX = intersectionRHSGetSurfaceIntersectionPointComponent1();
 		final float surfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointComponent2();
 		final float surfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointComponent3();
@@ -2032,6 +2044,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceNormalSX = intersectionRHSGetOrthonormalBasisSWComponent1();
 		final float surfaceNormalSY = intersectionRHSGetOrthonormalBasisSWComponent2();
 		final float surfaceNormalSZ = intersectionRHSGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalSDotRayDirection = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float surfaceNormalSCorrectlyOrientedX = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSX : surfaceNormalSX;
+		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
+		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
 		
 		final float directionX = vector3FGetComponent1();
 		final float directionY = vector3FGetComponent2();
@@ -2041,12 +2057,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
 		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
 		
-		final float nDotD = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		final float nDotD = vector3FDotProduct(surfaceNormalSCorrectlyOrientedX, surfaceNormalSCorrectlyOrientedY, surfaceNormalSCorrectlyOrientedZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
 		final float nDotE = 0.0F;
 		
-		final float offsetX = surfaceNormalSX * nDotE;
-		final float offsetY = surfaceNormalSY * nDotE;
-		final float offsetZ = surfaceNormalSZ * nDotE;
+		final float offsetX = surfaceNormalSCorrectlyOrientedX * nDotE;
+		final float offsetY = surfaceNormalSCorrectlyOrientedY * nDotE;
+		final float offsetZ = surfaceNormalSCorrectlyOrientedZ * nDotE;
 		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
 		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
 		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;

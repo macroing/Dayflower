@@ -771,8 +771,12 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * The result will be set using {@link #color3FLHSSet(float, float, float)}.
 	 * <p>
 	 * To retrieve the color components of the result, the methods {@link #color3FLHSGetComponent1()}, {@link #color3FLHSGetComponent2()} or {@link #color3FLHSGetComponent3()} may be used.
+	 * 
+	 * @param rayDirectionX the X-component of the ray direction
+	 * @param rayDirectionY the Y-component of the ray direction
+	 * @param rayDirectionZ the Z-component of the ray direction
 	 */
-	protected final void lightSampleOneLightUniformDistribution() {
+	protected final void lightSampleOneLightUniformDistribution(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final int lightCount = super.lightCount;
 		
 		if(lightCount == 0) {
@@ -791,7 +795,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		lightSet(lightID, lightOffset);
 		
-		doLightEstimateDirectLight(random(), random(), random(), random(), false);
+		doLightEstimateDirectLight(random(), random(), random(), random(), false, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		final float lightR = finiteOrZero(color3FLHSGetComponent1() / probabilityDensityFunctionValue);
 		final float lightG = finiteOrZero(color3FLHSGetComponent2() / probabilityDensityFunctionValue);
@@ -1072,11 +1076,23 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		doIntersectionTransformRHS(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
 	}
 	
-	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
+	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		final int bitFlags = isSpecular ? B_X_D_F_TYPE_BIT_FLAG_ALL : B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR;
 		
 		final boolean isUsingDeltaDistribution = lightIsUsingDeltaDistribution();
-		final boolean isSampling = lightSampleRadianceIncoming(sampleAU, sampleAV);
+		final boolean isSampling = lightSampleRadianceIncoming(sampleAU, sampleAV, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float normalX = intersectionLHSGetOrthonormalBasisSWComponent1();
+		final float normalY = intersectionLHSGetOrthonormalBasisSWComponent2();
+		final float normalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+		final float normalDotRayDirection = vector3FDotProduct(normalX, normalY, normalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float normalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -normalX : normalX;
+		final float normalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -normalY : normalY;
+		final float normalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -normalZ : normalZ;
+		
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
 		
 		float lightDirectR = 0.0F;
 		float lightDirectG = 0.0F;
@@ -1100,21 +1116,13 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
 			
 			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
-				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
+				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 				
 				final float materialBSDFResultR = materialBSDFResultGetResultR();
 				final float materialBSDFResultG = materialBSDFResultGetResultG();
 				final float materialBSDFResultB = materialBSDFResultGetResultB();
 				
-				final float normalX = intersectionLHSGetOrthonormalBasisSWComponent1();
-				final float normalY = intersectionLHSGetOrthonormalBasisSWComponent2();
-				final float normalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
-				
-				final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
-				final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
-				final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
-				
-				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
+				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ));
 				
 				final float scatteringResultR = materialBSDFResultR * lightIncomingDotNormalAbs;
 				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
@@ -1166,21 +1174,13 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
 			
 			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
-				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
+				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 				
 				final float materialBSDFResultR = materialBSDFResultGetResultR();
 				final float materialBSDFResultG = materialBSDFResultGetResultG();
 				final float materialBSDFResultB = materialBSDFResultGetResultB();
 				
-				final float normalX = intersectionLHSGetOrthonormalBasisSWComponent1();
-				final float normalY = intersectionLHSGetOrthonormalBasisSWComponent2();
-				final float normalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
-				
-				final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
-				final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
-				final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
-				
-				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
+				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ));
 				
 				final float scatteringResultR = materialBSDFResultR * lightIncomingDotNormalAbs;
 				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
@@ -1220,15 +1220,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			}
 		}
 		
-		if(!isUsingDeltaDistribution && materialBSDFSampleDistributionFunction(bitFlags, sampleBU, sampleBV)) {
-			final float normalX = intersectionLHSGetOrthonormalBasisSWComponent1();
-			final float normalY = intersectionLHSGetOrthonormalBasisSWComponent2();
-			final float normalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
-			
-			final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
-			final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
-			final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
-			
+		if(!isUsingDeltaDistribution && materialBSDFSampleDistributionFunction(bitFlags, sampleBU, sampleBV, rayDirectionX, rayDirectionY, rayDirectionZ)) {
 			final boolean hasSampledSpecular = materialBSDFResultBXDFIsSpecular();
 			
 			final float incomingX = materialBSDFResultGetIncomingX();
@@ -1242,7 +1234,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final float resultG = materialBSDFResultGetResultG();
 			final float resultB = materialBSDFResultGetResultB();
 			
-			final float incomingDotNormalAbs = abs(vector3FDotProduct(incomingX, incomingY, incomingZ, normalX, normalY, normalZ));
+			final float incomingDotNormalAbs = abs(vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ));
 			
 			final float scatteringResultR = resultR * incomingDotNormalAbs;
 			final float scatteringResultG = resultG * incomingDotNormalAbs;
@@ -1284,7 +1276,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				ray3FSetTMinimum(tMinimum);
 				
 				if(!primitiveIntersects()) {
-					lightEvaluateRadianceEmitted();
+					lightEvaluateRadianceEmitted(ray3FGetDirectionComponent1(), ray3FGetDirectionComponent2(), ray3FGetDirectionComponent3());
 					
 					final float lightIncomingR = color3FLHSGetR();
 					final float lightIncomingG = color3FLHSGetG();

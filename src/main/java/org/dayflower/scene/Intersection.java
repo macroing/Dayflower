@@ -155,7 +155,7 @@ public final class Intersection {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	public Ray3F createRay(final Point3F point) {
-		return this.surfaceIntersectionWorldSpace.createRay(point, getSurfaceNormalS());
+		return this.surfaceIntersectionWorldSpace.createRay(point, getSurfaceNormalSCorrectlyOriented());
 	}
 	
 	/**
@@ -168,7 +168,7 @@ public final class Intersection {
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
 	public Ray3F createRay(final Vector3F direction) {
-		return this.surfaceIntersectionWorldSpace.createRay(direction, getSurfaceNormalS());
+		return this.surfaceIntersectionWorldSpace.createRay(direction, getSurfaceNormalSCorrectlyOriented());
 	}
 	
 	/**
@@ -222,8 +222,17 @@ public final class Intersection {
 	 * 
 	 * @return the {@code Vector3F} instance that represents the surface normal for the geometry in world space
 	 */
-	public Vector3F getSurfaceNormalG() {
+	private Vector3F getSurfaceNormalG() {
 		return this.orthonormalBasisG.getW();
+	}
+	
+	/**
+	 * Returns the {@link Vector3F} instance that represents the surface normal for the geometry in world space and is correctly oriented.
+	 * 
+	 * @return the {@code Vector3F} instance that represents the surface normal for the geometry in world space and is correctly oriented
+	 */
+	public Vector3F getSurfaceNormalGCorrectlyOriented() {
+		return Vector3F.faceForwardNegated(getSurfaceNormalG(), getRay().getDirection());
 	}
 	
 	/**
@@ -233,6 +242,15 @@ public final class Intersection {
 	 */
 	public Vector3F getSurfaceNormalS() {
 		return this.orthonormalBasisS.getW();
+	}
+	
+	/**
+	 * Returns the {@link Vector3F} instance that represents the surface normal for shading in world space and is correctly oriented.
+	 * 
+	 * @return the {@code Vector3F} instance that represents the surface normal for shading in world space and is correctly oriented
+	 */
+	public Vector3F getSurfaceNormalSCorrectlyOriented() {
+		return Vector3F.faceForwardNegated(getSurfaceNormalS(), getRay().getDirection());
 	}
 	
 	/**

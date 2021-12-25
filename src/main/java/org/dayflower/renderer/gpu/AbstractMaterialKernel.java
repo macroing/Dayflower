@@ -509,9 +509,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * 
 	 * @param materialID the ID of the {@link Material} instance
 	 * @param materialOffset the offset for the {@code Material} instance
+	 * @param rayDirectionX the X-component of the ray direction
+	 * @param rayDirectionY the Y-component of the ray direction
+	 * @param rayDirectionZ the Z-component of the ray direction
 	 * @return {@code true} if, and only if, the {@code BSDF} was computed, {@code false} otherwise
 	 */
-	protected final boolean materialBSDFCompute(final int materialID, final int materialOffset) {
+	protected final boolean materialBSDFCompute(final int materialID, final int materialOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		int currentMaterialID = materialID;
 		int currentMaterialOffset = materialOffset;
 		
@@ -601,23 +604,23 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 		if(currentMaterialID == ClearCoatMaterial.ID) {
-			return doMaterialClearCoatMaterialComputeBSDF(currentMaterialOffset);
+			return doMaterialClearCoatMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == DisneyMaterial.ID) {
-			return doMaterialDisneyMaterialComputeBSDF(currentMaterialOffset);
+			return doMaterialDisneyMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == GlassMaterial.ID) {
-			return doMaterialGlassMaterialComputeBSDF(currentMaterialOffset);
+			return doMaterialGlassMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == GlossyMaterial.ID) {
-			return doMaterialGlossyMaterialComputeBSDF(currentMaterialOffset);
+			return doMaterialGlossyMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == MatteMaterial.ID) {
-			return doMaterialMatteMaterialComputeBSDF(currentMaterialOffset);
+			return doMaterialMatteMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == MetalMaterial.ID) {
-			return doMaterialMetalMaterialComputeBSDF(currentMaterialOffset);
+			return doMaterialMetalMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == MirrorMaterial.ID) {
-			return doMaterialMirrorMaterialComputeBSDF(currentMaterialOffset);
+			return doMaterialMirrorMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == PlasticMaterial.ID) {
-			return doMaterialPlasticMaterialComputeBSDF(currentMaterialOffset);
+			return doMaterialPlasticMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == SubstrateMaterial.ID) {
-			return doMaterialSubstrateMaterialComputeBSDF(currentMaterialOffset);
+			return doMaterialSubstrateMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else {
 			return false;
 		}
@@ -659,9 +662,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * @param bitFlags the {@link BXDFType} bit flags to match against
 	 * @param u the U-component of the sample
 	 * @param v the V-component of the sample
+	 * @param rayDirectionX the X-component of the ray direction
+	 * @param rayDirectionY the Y-component of the ray direction
+	 * @param rayDirectionZ the Z-component of the ray direction
 	 * @return {@code true} if, and only if, a sample was created, {@code false} otherwise
 	 */
-	protected final boolean materialBSDFSampleDistributionFunction(final int bitFlags, final float u, final float v) {
+	protected final boolean materialBSDFSampleDistributionFunction(final int bitFlags, final float u, final float v, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		if(checkIsZero(doBXDFResultGetOutgoingZ())) {
 			return false;
 		}
@@ -702,6 +708,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 				final float normalX = intersectionLHSGetOrthonormalBasisGWComponent1();
 				final float normalY = intersectionLHSGetOrthonormalBasisGWComponent2();
 				final float normalZ = intersectionLHSGetOrthonormalBasisGWComponent3();
+				final float normalDotRayDirection = vector3FDotProduct(normalX, normalY, normalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+				final float normalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -normalX : normalX;
+				final float normalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -normalY : normalY;
+				final float normalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -normalZ : normalZ;
 				
 				float probabilityDensityFunctionValue = doBXDFResultGetProbabilityDensityFunctionValue();
 				
@@ -710,8 +720,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 				float resultB = doBXDFResultGetResultB();
 				
 				if(!doBXDFIsSpecular(matchingId)) {
-					final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalX, normalY, normalZ);
-					final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
+					final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+					final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
 					
 					final boolean isReflecting = iDotN * oDotN > 0.0F;
 					
@@ -865,8 +875,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * @param incomingX the X-component of the incoming direction in world space
 	 * @param incomingY the Y-component of the incoming direction in world space
 	 * @param incomingZ the Z-component of the incoming direction in world space
+	 * @param rayDirectionX the X-component of the ray direction
+	 * @param rayDirectionY the Y-component of the ray direction
+	 * @param rayDirectionZ the Z-component of the ray direction
 	 */
-	protected final void materialBSDFEvaluateDistributionFunction(final int bitFlags, final float incomingX, final float incomingY, final float incomingZ) {
+	protected final void materialBSDFEvaluateDistributionFunction(final int bitFlags, final float incomingX, final float incomingY, final float incomingZ, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		doBSDFResultSetIncoming(incomingX, incomingY, incomingZ);
 		doBXDFResultSetIncomingTransformedFromBSDFResult();
 		
@@ -877,9 +890,13 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalX = intersectionLHSGetOrthonormalBasisGWComponent1();
 		final float normalY = intersectionLHSGetOrthonormalBasisGWComponent2();
 		final float normalZ = intersectionLHSGetOrthonormalBasisGWComponent3();
+		final float normalDotRayDirection = vector3FDotProduct(normalX, normalY, normalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float normalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -normalX : normalX;
+		final float normalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -normalY : normalY;
+		final float normalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -normalZ : normalZ;
 		
-		final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalX, normalY, normalZ);
-		final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
+		final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+		final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
 		
 		final boolean isReflecting = iDotN * oDotN > 0.0F;
 		
@@ -956,8 +973,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * 
 	 * @param materialID the ID of the current {@code Material}
 	 * @param materialOffset the offset for the current {@code Material}
+	 * @param rayDirectionX the X-component of the ray direction
+	 * @param rayDirectionY the Y-component of the ray direction
+	 * @param rayDirectionZ the Z-component of the ray direction
 	 */
-	protected final void materialEmittance(final int materialID, final int materialOffset) {
+	protected final void materialEmittance(final int materialID, final int materialOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		int currentMaterialID = materialID;
 		int currentMaterialOffset = materialOffset;
 		
@@ -1073,14 +1093,14 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final int textureEmissionID     = (textureEmission >> 0) & 0xFF;
 		final int textureEmissionOffset = (textureEmission >> 8) & 0xFF;
 		
-		textureEvaluate(textureEmissionID, textureEmissionOffset);
+		textureEvaluate(textureEmissionID, textureEmissionOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Materials ///////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private boolean doMaterialClearCoatMaterialComputeBSDF(final int materialClearCoatMaterialArrayOffset) {
+	private boolean doMaterialClearCoatMaterialComputeBSDF(final int materialClearCoatMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		/*
 		 * Load data:
 		 */
@@ -1099,7 +1119,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Evaluate the KD Texture:
-		textureEvaluate((textureKDAndTextureKS >> 0) & 0xFF, (textureKDAndTextureKS >> 8) & 0xFF);
+		textureEvaluate((textureKDAndTextureKS >> 0) & 0xFF, (textureKDAndTextureKS >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KD Texture:
 		final float colorKDR = color3FLHSGetComponent1();
@@ -1107,7 +1127,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKDB = color3FLHSGetComponent3();
 		
 //		Evaluate the KS Texture:
-		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF);
+		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KS Texture:
 		final float colorKSR = color3FLHSGetComponent1();
@@ -1118,16 +1138,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 * Compute the BSDF:
 		 */
 		
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
-		
 		final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
 		final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
 		final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
-		
 		final float surfaceNormalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
-		
 		final float surfaceNormalCorrectlyOrientedX = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
 		final float surfaceNormalCorrectlyOrientedY = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
 		final float surfaceNormalCorrectlyOrientedZ = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
@@ -1169,7 +1183,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 				doBXDFSpecularBRDFFresnelConstantSetReflectanceScale(colorKSR * probabilityRussianRouletteReflection, colorKSG * probabilityRussianRouletteReflection, colorKSB * probabilityRussianRouletteReflection);
 				
 //				Initialize the BSDFResult:
-				doBSDFResultInitialize();
+				doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 				
 				return true;
 			}
@@ -1179,7 +1193,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBXDFLambertianBRDFSetReflectanceScale(colorKDR * probabilityRussianRouletteTransmission, colorKDG * probabilityRussianRouletteTransmission, colorKDB * probabilityRussianRouletteTransmission);
 			
 //			Initialize the BSDFResult:
-			doBSDFResultInitialize();
+			doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 			return true;
 		}
@@ -1190,7 +1204,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFSpecularBRDFFresnelConstantSetReflectanceScale(colorKSR, colorKSG, colorKSB);
 		
 //		Initialize the BSDFResult:
-		doBSDFResultInitialize();
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
 		
@@ -1209,12 +1223,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		doBXDFSpecularBRDFFresnelDielectricSetReflectanceScale(colorKSR, colorKSG, colorKSB);
 		
 //		Initialize the BSDFResult:
-//		doBSDFResultInitialize();
+//		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		return true;
 	}
 	
-	private boolean doMaterialDisneyMaterialComputeBSDF(final int materialDisneyMaterialArrayOffset) {
+	private boolean doMaterialDisneyMaterialComputeBSDF(final int materialDisneyMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		/*
 		 * Load data:
 		 */
@@ -1241,16 +1255,16 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final boolean isThin = ((textureSpecularTransmissionAndIsThin >> 16) & 0xFF) != 0;
 		
-		final float floatAnisotropic = textureEvaluateFloat((textureAnisotropic >> 0) & 0xFF, (textureAnisotropic >> 8) & 0xFF);
-		final float floatClearCoat = textureEvaluateFloat((textureClearCoatAndTextureClearCoatGloss >> 0) & 0xFF, (textureClearCoatAndTextureClearCoatGloss >> 8) & 0xFF);
-		final float floatDiffuseTransmission = textureEvaluateFloat((textureColorAndTextureDiffuseTransmission >> 16) & 0xFF, (textureColorAndTextureDiffuseTransmission >> 24) & 0xFF) / 2.0F;
-		final float floatEta = textureEvaluateFloat((textureEtaAndTextureFlatness >> 0) & 0xFF, (textureEtaAndTextureFlatness >> 8) & 0xFF);
-		final float floatMetallic = textureEvaluateFloat((textureMetallicAndTextureRoughness >> 0) & 0xFF, (textureMetallicAndTextureRoughness >> 8) & 0xFF);
-		final float floatRoughness = textureEvaluateFloat((textureMetallicAndTextureRoughness >> 16) & 0xFF, (textureMetallicAndTextureRoughness >> 24) & 0xFF);
-		final float floatSpecularTint = textureEvaluateFloat((textureSheenTintAndTextureSpecularTint >> 16) & 0xFF, (textureSheenTintAndTextureSpecularTint >> 24) & 0xFF);
-		final float floatSpecularTransmission = textureEvaluateFloat((textureSpecularTransmissionAndIsThin >> 0) & 0xFF, (textureSpecularTransmissionAndIsThin >> 8) & 0xFF);
+		final float floatAnisotropic = textureEvaluateFloat((textureAnisotropic >> 0) & 0xFF, (textureAnisotropic >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float floatClearCoat = textureEvaluateFloat((textureClearCoatAndTextureClearCoatGloss >> 0) & 0xFF, (textureClearCoatAndTextureClearCoatGloss >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float floatDiffuseTransmission = textureEvaluateFloat((textureColorAndTextureDiffuseTransmission >> 16) & 0xFF, (textureColorAndTextureDiffuseTransmission >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ) / 2.0F;
+		final float floatEta = textureEvaluateFloat((textureEtaAndTextureFlatness >> 0) & 0xFF, (textureEtaAndTextureFlatness >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float floatMetallic = textureEvaluateFloat((textureMetallicAndTextureRoughness >> 0) & 0xFF, (textureMetallicAndTextureRoughness >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float floatRoughness = textureEvaluateFloat((textureMetallicAndTextureRoughness >> 16) & 0xFF, (textureMetallicAndTextureRoughness >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float floatSpecularTint = textureEvaluateFloat((textureSheenTintAndTextureSpecularTint >> 16) & 0xFF, (textureSheenTintAndTextureSpecularTint >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float floatSpecularTransmission = textureEvaluateFloat((textureSpecularTransmissionAndIsThin >> 0) & 0xFF, (textureSpecularTransmissionAndIsThin >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		textureEvaluate((textureColorAndTextureDiffuseTransmission >> 0) & 0xFF, (textureColorAndTextureDiffuseTransmission >> 8) & 0xFF);
+		textureEvaluate((textureColorAndTextureDiffuseTransmission >> 0) & 0xFF, (textureColorAndTextureDiffuseTransmission >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		final float colorColorR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
 		final float colorColorG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
@@ -1275,14 +1289,14 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		int index = 0;
 		
 		if(diffuseWeight > 0.0F) {
-			textureEvaluate((textureScatterDistanceAndTextureSheen >> 0) & 0xFF, (textureScatterDistanceAndTextureSheen >> 8) & 0xFF);
+			textureEvaluate((textureScatterDistanceAndTextureSheen >> 0) & 0xFF, (textureScatterDistanceAndTextureSheen >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 			final float colorScatterDistanceR = color3FLHSGetComponent1();
 			final float colorScatterDistanceG = color3FLHSGetComponent2();
 			final float colorScatterDistanceB = color3FLHSGetComponent3();
 			
 			if(isThin) {
-				final float floatFlatness = textureEvaluateFloat((textureEtaAndTextureFlatness >> 16) & 0xFF, (textureEtaAndTextureFlatness >> 24) & 0xFF);
+				final float floatFlatness = textureEvaluateFloat((textureEtaAndTextureFlatness >> 16) & 0xFF, (textureEtaAndTextureFlatness >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 				
 				final float currentDiffuseWeight = diffuseWeight * (1.0F - floatFlatness) * (1.0F - floatDiffuseTransmission);
 				
@@ -1312,10 +1326,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBXDFDisneyRetroBRDFSetReflectanceScale(colorColorR * diffuseWeight, colorColorG * diffuseWeight, colorColorB * diffuseWeight);
 			doBXDFDisneyRetroBRDFSetRoughness(floatRoughness);
 			
-			final float floatSheen = textureEvaluateFloat((textureScatterDistanceAndTextureSheen >> 16) & 0xFF, (textureScatterDistanceAndTextureSheen >> 24) & 0xFF);
+			final float floatSheen = textureEvaluateFloat((textureScatterDistanceAndTextureSheen >> 16) & 0xFF, (textureScatterDistanceAndTextureSheen >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 			if(floatSheen > 0.0F) {
-				final float floatSheenTint = textureEvaluateFloat((textureSheenTintAndTextureSpecularTint >> 0) & 0xFF, (textureSheenTintAndTextureSpecularTint >> 8) & 0xFF);
+				final float floatSheenTint = textureEvaluateFloat((textureSheenTintAndTextureSpecularTint >> 0) & 0xFF, (textureSheenTintAndTextureSpecularTint >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 				
 				final float colorSheenR = 1.0F - floatSheenTint + floatSheenTint * colorTintR;
 				final float colorSheenG = 1.0F - floatSheenTint + floatSheenTint * colorTintG;
@@ -1345,7 +1359,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFTorranceSparrowBRDFFresnelDisneySetReflectanceScale(1.0F, 1.0F, 1.0F);
 		
 		if(floatClearCoat > 0.0F) {
-			final float floatClearCoatGloss = textureEvaluateFloat((textureClearCoatAndTextureClearCoatGloss >> 16) & 0xFF, (textureClearCoatAndTextureClearCoatGloss >> 24) & 0xFF);
+			final float floatClearCoatGloss = textureEvaluateFloat((textureClearCoatAndTextureClearCoatGloss >> 16) & 0xFF, (textureClearCoatAndTextureClearCoatGloss >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 //			Set DisneyClearCoatBRDF:
 			doBSDFSetBXDFDisneyClearCoatBRDF(index++);
@@ -1376,12 +1390,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFSetBXDFCount(index);
 		
 //		Initialize the BSDFResult:
-		doBSDFResultInitialize();
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
 	}
 	
-	private boolean doMaterialGlassMaterialComputeBSDF(final int materialGlassMaterialArrayOffset) {
+	private boolean doMaterialGlassMaterialComputeBSDF(final int materialGlassMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		/*
 		 * Load data:
 		 */
@@ -1404,7 +1418,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Evaluate the KR Texture:
-		textureEvaluate((textureKRAndTextureKT >> 0) & 0xFF, (textureKRAndTextureKT >> 8) & 0xFF);
+		textureEvaluate((textureKRAndTextureKT >> 0) & 0xFF, (textureKRAndTextureKT >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KR Texture:
 		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
@@ -1414,7 +1428,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final boolean hasKR = !checkIsZero(colorKRR) || !checkIsZero(colorKRG) || !checkIsZero(colorKRB);
 		
 //		Evaluate the KT Texture:
-		textureEvaluate((textureKRAndTextureKT >> 16) & 0xFF, (textureKRAndTextureKT >> 24) & 0xFF);
+		textureEvaluate((textureKRAndTextureKT >> 16) & 0xFF, (textureKRAndTextureKT >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KT Texture:
 		final float colorKTR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
@@ -1424,14 +1438,14 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final boolean hasKT = !checkIsZero(colorKTR) || !checkIsZero(colorKTG) || !checkIsZero(colorKTB);
 		
 //		Evaluate the Eta Texture:
-		final float floatEta = textureEvaluateFloat((textureEta >> 0) & 0xFF, (textureEta >> 8) & 0xFF);
+		final float floatEta = textureEvaluateFloat((textureEta >> 0) & 0xFF, (textureEta >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Evaluate the Roughness U Texture:
-		final float floatRoughnessU = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 0) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 8) & 0xFF);
+		final float floatRoughnessU = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 0) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float floatRoughnessURemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessU) : floatRoughnessU;
 		
 //		Evaluate the Roughness V Texture:
-		final float floatRoughnessV = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 16) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 24) & 0xFF);
+		final float floatRoughnessV = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 16) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float floatRoughnessVRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessV) : floatRoughnessV;
 		
 //		final boolean isAllowingMultipleLobes = true;
@@ -1471,7 +1485,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBXDFSpecularBTDFFresnelDielectricSetTransmittanceScale(colorKTR, colorKTG, colorKTB);
 			
 //			Initialize the BSDFResult:
-			doBSDFResultInitialize();
+			doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 			return true;
 		}
@@ -1499,12 +1513,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFTorranceSparrowBTDFFresnelDielectricSetTransmittanceScale(colorKTR, colorKTG, colorKTB);
 		
 //		Initialize the BSDFResult:
-		doBSDFResultInitialize();
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
 	}
 	
-	private boolean doMaterialGlossyMaterialComputeBSDF(final int materialGlossyMaterialArrayOffset) {
+	private boolean doMaterialGlossyMaterialComputeBSDF(final int materialGlossyMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		/*
 		 * Load data:
 		 */
@@ -1523,7 +1537,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Evaluate the KR Texture:
-		textureEvaluate((textureKRAndTextureRoughness >> 0) & 0xFF, (textureKRAndTextureRoughness >> 8) & 0xFF);
+		textureEvaluate((textureKRAndTextureRoughness >> 0) & 0xFF, (textureKRAndTextureRoughness >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KR Texture:
 		final float colorKRR = color3FLHSGetComponent1();
@@ -1531,7 +1545,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKRB = color3FLHSGetComponent3();
 		
 //		Evaluate the Roughness Texture:
-		final float floatRoughness = textureEvaluateFloat((textureKRAndTextureRoughness >> 16) & 0xFF, (textureKRAndTextureRoughness >> 24) & 0xFF);
+		final float floatRoughness = textureEvaluateFloat((textureKRAndTextureRoughness >> 16) & 0xFF, (textureKRAndTextureRoughness >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		/*
 		 * Compute the BSDF:
@@ -1549,12 +1563,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFTorranceSparrowBRDFFresnelConductorSetMicrofacetDistributionTrowbridgeReitz(false, floatRoughness, floatRoughness);
 		
 //		Initialize the BSDFResult:
-		doBSDFResultInitialize();
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
 	}
 	
-	private boolean doMaterialMatteMaterialComputeBSDF(final int materialMatteMaterialArrayOffset) {
+	private boolean doMaterialMatteMaterialComputeBSDF(final int materialMatteMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		/*
 		 * Load data:
 		 */
@@ -1573,7 +1587,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Evaluate the KD Texture:
-		textureEvaluate((textureAngleAndTextureKD >> 16) & 0xFF, (textureAngleAndTextureKD >> 24) & 0xFF);
+		textureEvaluate((textureAngleAndTextureKD >> 16) & 0xFF, (textureAngleAndTextureKD >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KD Texture:
 		final float colorKDR = color3FLHSGetComponent1();
@@ -1581,7 +1595,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKDB = color3FLHSGetComponent3();
 		
 //		Evaluate the Angle Texture:
-		final float floatAngle = textureEvaluateFloat((textureAngleAndTextureKD >> 0) & 0xFF, (textureAngleAndTextureKD >> 8) & 0xFF);
+		final float floatAngle = textureEvaluateFloat((textureAngleAndTextureKD >> 0) & 0xFF, (textureAngleAndTextureKD >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		if(checkIsZero(colorKDR) && checkIsZero(colorKDG) && checkIsZero(colorKDB)) {
 			return false;
@@ -1602,7 +1616,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBXDFLambertianBRDFSetReflectanceScale(colorKDR, colorKDG, colorKDB);
 			
 //			Initialize the BSDFResult:
-			doBSDFResultInitialize();
+			doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 			
 			return true;
 		}
@@ -1618,12 +1632,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFOrenNayarBRDFSetReflectanceScale(colorKDR, colorKDG, colorKDB);
 		
 //		Initialize the BSDFResult:
-		doBSDFResultInitialize();
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
 	}
 	
-	private boolean doMaterialMetalMaterialComputeBSDF(final int materialMetalMaterialArrayOffset) {
+	private boolean doMaterialMetalMaterialComputeBSDF(final int materialMetalMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		/*
 		 * Load data:
 		 */
@@ -1645,7 +1659,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Evaluate the Eta Texture:
-		textureEvaluate((textureEtaAndTextureK >> 0) & 0xFF, (textureEtaAndTextureK >> 8) & 0xFF);
+		textureEvaluate((textureEtaAndTextureK >> 0) & 0xFF, (textureEtaAndTextureK >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the Eta Texture:
 		final float colorEtaR = color3FLHSGetComponent1();
@@ -1653,7 +1667,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorEtaB = color3FLHSGetComponent3();
 		
 //		Evaluate the K Texture:
-		textureEvaluate((textureEtaAndTextureK >> 16) & 0xFF, (textureEtaAndTextureK >> 24) & 0xFF);
+		textureEvaluate((textureEtaAndTextureK >> 16) & 0xFF, (textureEtaAndTextureK >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the K Texture:
 		final float colorKR = color3FLHSGetComponent1();
@@ -1661,11 +1675,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKB = color3FLHSGetComponent3();
 		
 //		Evaluate the Roughness U Texture:
-		final float floatRoughnessU = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 0) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 8) & 0xFF);
+		final float floatRoughnessU = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 0) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float floatRoughnessURemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessU) : floatRoughnessU;
 		
 //		Evaluate the Roughness V Texture:
-		final float floatRoughnessV = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 16) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 24) & 0xFF);
+		final float floatRoughnessV = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 16) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float floatRoughnessVRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessV) : floatRoughnessV;
 		
 		/*
@@ -1684,12 +1698,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFTorranceSparrowBRDFFresnelConductorSetMicrofacetDistributionTrowbridgeReitz(false, floatRoughnessURemapped, floatRoughnessVRemapped);
 		
 //		Initialize the BSDFResult:
-		doBSDFResultInitialize();
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
 	}
 	
-	private boolean doMaterialMirrorMaterialComputeBSDF(final int materialMirrorMaterialArrayOffset) {
+	private boolean doMaterialMirrorMaterialComputeBSDF(final int materialMirrorMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		/*
 		 * Load data:
 		 */
@@ -1708,7 +1722,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Evaluate the KR Texture:
-		textureEvaluate((textureKR >> 0) & 0xFF, (textureKR >> 8) & 0xFF);
+		textureEvaluate((textureKR >> 0) & 0xFF, (textureKR >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KR Texture:
 		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
@@ -1734,12 +1748,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFSpecularBRDFFresnelConstantSetReflectanceScale(colorKRR, colorKRG, colorKRB);
 		
 //		Initialize the BSDFResult:
-		doBSDFResultInitialize();
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
 	}
 	
-	private boolean doMaterialPlasticMaterialComputeBSDF(final int materialPlasticMaterialArrayOffset) {
+	private boolean doMaterialPlasticMaterialComputeBSDF(final int materialPlasticMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		/*
 		 * Load data:
 		 */
@@ -1761,7 +1775,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Evaluate the KD Texture:
-		textureEvaluate((textureKDAndTextureKS >> 0) & 0xFF, (textureKDAndTextureKS >> 8) & 0xFF);
+		textureEvaluate((textureKDAndTextureKS >> 0) & 0xFF, (textureKDAndTextureKS >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KD Texture:
 		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
@@ -1771,7 +1785,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final boolean hasKD = !checkIsZero(colorKDR) || !checkIsZero(colorKDG) || !checkIsZero(colorKDB);
 		
 //		Evaluate the KS Texture:
-		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF);
+		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KS Texture:
 		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
@@ -1785,7 +1799,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 //		Evaluate the Roughness Texture:
-		final float floatRoughness = textureEvaluateFloat((textureRoughness >> 0) & 0xFF, (textureRoughness >> 8) & 0xFF);
+		final float floatRoughness = textureEvaluateFloat((textureRoughness >> 0) & 0xFF, (textureRoughness >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float floatRoughnessRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughness) : floatRoughness;
 		
 		/*
@@ -1813,12 +1827,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFTorranceSparrowBRDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(false, floatRoughnessRemapped, floatRoughnessRemapped);
 		
 //		Initialize the BSDFResult:
-		doBSDFResultInitialize();
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
 	}
 	
-	private boolean doMaterialSubstrateMaterialComputeBSDF(final int materialSubstrateMaterialArrayOffset) {
+	private boolean doMaterialSubstrateMaterialComputeBSDF(final int materialSubstrateMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
 		/*
 		 * Load data:
 		 */
@@ -1840,7 +1854,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Evaluate the KD Texture:
-		textureEvaluate((textureKDAndTextureKS >> 0) & 0xFF, (textureKDAndTextureKS >> 8) & 0xFF);
+		textureEvaluate((textureKDAndTextureKS >> 0) & 0xFF, (textureKDAndTextureKS >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KD Texture:
 		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
@@ -1850,7 +1864,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final boolean hasKD = !checkIsZero(colorKDR) || !checkIsZero(colorKDG) || !checkIsZero(colorKDB);
 		
 //		Evaluate the KS Texture:
-		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF);
+		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KS Texture:
 		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
@@ -1864,11 +1878,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 //		Evaluate the Roughness U Texture:
-		final float floatRoughnessU = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 0) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 8) & 0xFF);
+		final float floatRoughnessU = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 0) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float floatRoughnessURemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessU) : floatRoughnessU;
 		
 //		Evaluate the Roughness V Texture:
-		final float floatRoughnessV = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 16) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 24) & 0xFF);
+		final float floatRoughnessV = textureEvaluateFloat((textureRoughnessUAndTextureRoughnessV >> 16) & 0xFF, (textureRoughnessUAndTextureRoughnessV >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float floatRoughnessVRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessV) : floatRoughnessV;
 		
 		/*
@@ -1887,7 +1901,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFFresnelBlendBRDFSetReflectanceScaleSpecular(colorKSR, colorKSG, colorKSB);
 		
 //		Initialize the BSDFResult:
-		doBSDFResultInitialize();
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
 	}
@@ -2021,9 +2035,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return this.bSDFResultArray_$private$16[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2];
 	}
 	
-	private void doBSDFResultInitialize() {
-		doBSDFResultSetNormalFromIntersection();
-		doBSDFResultSetOutgoingFromRay();
+	private void doBSDFResultInitialize(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
+		doBSDFResultSetNormalFromIntersection(rayDirectionX, rayDirectionY, rayDirectionZ);
+		doBSDFResultSetOutgoing(-rayDirectionX, -rayDirectionY, -rayDirectionZ);
 		
 		orthonormalBasis33FSetIntersectionOrthonormalBasisSLHS();
 		
@@ -2061,26 +2075,22 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bSDFResultArray_$private$16[B_S_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2] = z;
 	}
 	
-	private void doBSDFResultSetNormalFromIntersection() {
-		final float x = intersectionLHSGetOrthonormalBasisSWComponent1();
-		final float y = intersectionLHSGetOrthonormalBasisSWComponent2();
-		final float z = intersectionLHSGetOrthonormalBasisSWComponent3();
+	private void doBSDFResultSetNormalFromIntersection(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
+		final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
+		final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
+		final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float surfaceNormalCorrectlyOrientedX = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
+		final float surfaceNormalCorrectlyOrientedY = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
+		final float surfaceNormalCorrectlyOrientedZ = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
 		
-		doBSDFResultSetNormal(x, y, z);
+		doBSDFResultSetNormal(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 	}
 	
 	private void doBSDFResultSetOutgoing(final float x, final float y, final float z) {
 		this.bSDFResultArray_$private$16[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0] = x;
 		this.bSDFResultArray_$private$16[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1] = y;
 		this.bSDFResultArray_$private$16[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2] = z;
-	}
-	
-	private void doBSDFResultSetOutgoingFromRay() {
-		final float x = -ray3FGetDirectionComponent1();
-		final float y = -ray3FGetDirectionComponent2();
-		final float z = -ray3FGetDirectionComponent3();
-		
-		doBSDFResultSetOutgoing(x, y, z);
 	}
 	
 	private void doBSDFResultSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {

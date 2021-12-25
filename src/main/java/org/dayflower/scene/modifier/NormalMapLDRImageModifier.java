@@ -289,15 +289,6 @@ public final class NormalMapLDRImageModifier extends AbstractLDRImageModifier {
 		
 		final Color3F colorRGB = getColorRGB(intersection.getTextureCoordinates());
 		
-//		TODO: Find out if something like the following is needed. The RGB-component value 128 should be mapped to 0, but it is not in the current approach.
-//		final int r = colorRGB.getAsIntR();
-//		final int g = colorRGB.getAsIntG();
-//		final int b = colorRGB.getAsIntB();
-		
-//		final float x = r * 2 / 255 - 1;
-//		final float y = g * 2 / 255 - 1;
-//		final float z = b * 2 / 255 - 1;
-		
 		final float r = colorRGB.getR();
 		final float g = colorRGB.getG();
 		final float b = colorRGB.getB();
@@ -307,7 +298,7 @@ public final class NormalMapLDRImageModifier extends AbstractLDRImageModifier {
 		final float z = b * 2.0F - 1.0F;
 		
 		final Vector3F surfaceNormalSLocalSpace = new Vector3F(x, y, z);
-		final Vector3F surfaceNormalSWorldSpace = Vector3F.normalize(Vector3F.transform(surfaceNormalSLocalSpace, intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS()));
+		final Vector3F surfaceNormalSWorldSpace = Vector3F.normalize(Vector3F.transform(surfaceNormalSLocalSpace, intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG()));
 		
 		intersection.setSurfaceNormalS(surfaceNormalSWorldSpace);
 	}

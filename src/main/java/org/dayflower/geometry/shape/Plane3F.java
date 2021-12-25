@@ -403,19 +403,19 @@ public final class Plane3F implements Shape3F {
 		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
 		
 		final Vector2F vA = isX ? Vector2F.directionYZ(this.a) : isY ? Vector2F.directionZX(this.a) : Vector2F.directionXY(this.a);
-		final Vector2F vB = isX ? Vector2F.directionYZ(this.c) : isY ? Vector2F.directionZX(this.c) : Vector2F.directionXY(this.c);
-		final Vector2F vC = isX ? Vector2F.directionYZ(this.b) : isY ? Vector2F.directionZX(this.b) : Vector2F.directionXY(this.b);
+		final Vector2F vB = isX ? Vector2F.directionYZ(this.b) : isY ? Vector2F.directionZX(this.b) : Vector2F.directionXY(this.b);
+		final Vector2F vC = isX ? Vector2F.directionYZ(this.c) : isY ? Vector2F.directionZX(this.c) : Vector2F.directionXY(this.c);
 		final Vector2F vAB = Vector2F.subtract(vB, vA);
 		final Vector2F vAC = Vector2F.subtract(vC, vA);
 		
-		final float determinant = Vector2F.crossProduct(vAB, vAC);
+		final float determinant = Vector2F.crossProduct(vAC, vAB);
 		final float determinantReciprocal = 1.0F / determinant;
 		
 		final float hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
 		final float hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
 		
-		final float u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2F.crossProduct(vA, vAB) * determinantReciprocal;
-		final float v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2F.crossProduct(vAC, vA) * determinantReciprocal;
+		final float u = hU * (-vAC.getY() * determinantReciprocal) + hV * (+vAC.getX() * determinantReciprocal) + Vector2F.crossProduct(vAC, vA) * determinantReciprocal;
+		final float v = hU * (+vAB.getY() * determinantReciprocal) + hV * (-vAB.getX() * determinantReciprocal) + Vector2F.crossProduct(vAB, vA) * determinantReciprocal;
 		
 		return new Point2F(u, v);
 	}

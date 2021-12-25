@@ -97,32 +97,17 @@ public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
 			final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
 			final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
 			
-			final float x = positiveModuloF(textureCoordinatesScaledU, resolutionX);
-			final float y = positiveModuloF(textureCoordinatesScaledV, resolutionY);
-			
-			final int minimumX = (int)(floor(x));
-			final int maximumX = (int)(ceil(x));
-			
-			final int minimumY = (int)(floor(y));
-			final int maximumY = (int)(ceil(y));
+			final int x = positiveModuloI((int)(textureCoordinatesScaledU), resolutionX);
+			final int y = positiveModuloI((int)(textureCoordinatesScaledV), resolutionY);
 			
 			final int offsetImage = currentModifierOffsetAbsolute + CompiledModifierCache.NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_IMAGE;
-			final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-			final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-			final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-			final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
+			final int offsetColorRGB = offsetImage + (y * resolutionX + x);
 			
-			final int color00RGB = (int)(this.modifierNormalMapLDRImageModifierArray[offsetColor00RGB]);
-			final int color01RGB = (int)(this.modifierNormalMapLDRImageModifierArray[offsetColor01RGB]);
-			final int color10RGB = (int)(this.modifierNormalMapLDRImageModifierArray[offsetColor10RGB]);
-			final int color11RGB = (int)(this.modifierNormalMapLDRImageModifierArray[offsetColor11RGB]);
+			final int colorRGB = (int)(this.modifierNormalMapLDRImageModifierArray[offsetColorRGB]);
 			
-			final float tX = x - minimumX;
-			final float tY = y - minimumY;
-			
-			final float r = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
-			final float g = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
-			final float b = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
+			final float r = colorRGBIntToRFloat(colorRGB);
+			final float g = colorRGBIntToGFloat(colorRGB);
+			final float b = colorRGBIntToBFloat(colorRGB);
 			
 			final float directionX = r * 2.0F - 1.0F;
 			final float directionY = g * 2.0F - 1.0F;

@@ -403,19 +403,19 @@ public final class Plane3D implements Shape3D {
 		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
 		
 		final Vector2D vA = isX ? Vector2D.directionYZ(this.a) : isY ? Vector2D.directionZX(this.a) : Vector2D.directionXY(this.a);
-		final Vector2D vB = isX ? Vector2D.directionYZ(this.c) : isY ? Vector2D.directionZX(this.c) : Vector2D.directionXY(this.c);
-		final Vector2D vC = isX ? Vector2D.directionYZ(this.b) : isY ? Vector2D.directionZX(this.b) : Vector2D.directionXY(this.b);
+		final Vector2D vB = isX ? Vector2D.directionYZ(this.b) : isY ? Vector2D.directionZX(this.b) : Vector2D.directionXY(this.b);
+		final Vector2D vC = isX ? Vector2D.directionYZ(this.c) : isY ? Vector2D.directionZX(this.c) : Vector2D.directionXY(this.c);
 		final Vector2D vAB = Vector2D.subtract(vB, vA);
 		final Vector2D vAC = Vector2D.subtract(vC, vA);
 		
-		final double determinant = Vector2D.crossProduct(vAB, vAC);
+		final double determinant = Vector2D.crossProduct(vAC, vAB);
 		final double determinantReciprocal = 1.0D / determinant;
 		
 		final double hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
 		final double hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
 		
-		final double u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2D.crossProduct(vA, vAB) * determinantReciprocal;
-		final double v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2D.crossProduct(vAC, vA) * determinantReciprocal;
+		final double u = hU * (-vAC.getY() * determinantReciprocal) + hV * (+vAC.getX() * determinantReciprocal) + Vector2D.crossProduct(vAC, vA) * determinantReciprocal;
+		final double v = hU * (+vAB.getY() * determinantReciprocal) + hV * (-vAB.getX() * determinantReciprocal) + Vector2D.crossProduct(vAB, vA) * determinantReciprocal;
 		
 		return new Point2D(u, v);
 	}

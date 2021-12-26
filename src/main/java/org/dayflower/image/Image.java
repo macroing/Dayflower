@@ -33,6 +33,7 @@ import org.dayflower.change.ChangeHistory;
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.Shape2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.ByteArrays;
 import org.dayflower.utility.ParameterArguments;
@@ -97,21 +98,25 @@ public abstract class Image {
 	
 	/**
 	 * Returns a copy of this {@code Image} instance.
+	 * <p>
+	 * This method may or may not copy everything stored in an {@code Image} instance.
 	 * 
 	 * @return a copy of this {@code Image} instance
 	 */
 	public abstract Image copy();
 	
 	/**
-	 * Returns a copy of this {@code Image} instance within {@code bounds}.
+	 * Returns a copy of this {@code Image} instance within {@code shape}.
 	 * <p>
-	 * If {@code bounds} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code shape} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method may or may not copy everything stored in an {@code Image} instance.
 	 * 
-	 * @param bounds a {@link Rectangle2I} instance that represents the bounds within this {@code Image} instance to copy
-	 * @return a copy of this {@code Image} instance within {@code bounds}
-	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
+	 * @param shape a {@link Shape2I} instance that represents the shape within this {@code Image} instance to copy
+	 * @return a copy of this {@code Image} instance within {@code shape}
+	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-	public abstract Image copy(final Rectangle2I bounds);
+	public abstract Image copy(final Shape2I shape);
 	
 	/**
 	 * Returns a {@link Rectangle2I} with the bounds of this {@code Image} instance.
@@ -120,7 +125,7 @@ public abstract class Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Rectangle2I getBounds() {
-		return new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
+		return new Rectangle2I(new Point2I(), new Point2I(this.resolutionX - 1, this.resolutionY - 1));
 	}
 	
 	/**

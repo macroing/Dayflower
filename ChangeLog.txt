@@ -1,12 +1,20 @@
 2021-12-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add unit tests to the Circle2IUnitTests and LineSegment2IUnitTests classes.
+	* ADD:		Add the methods getMaximum() and getMinimum() to the Circle2I, LineSegment2I, Polygon2I, Rectangle2I and Triangle2I classes.
+	* ADD:		Add the methods getMaximum() and getMinimum() to the Shape2I interface.
 	* ADD:		Add unit tests to the Point2IUnitTests class.
 	* ADD:		Add the methods maximum(Point2I, Point2I, Point2I, Point2I) and minimum(Point2I, Point2I, Point2I, Point2I) to the Point2I class.
 	* ADD:		Add the methods max(int, int, int, int) and min(int, int, int, int) to the Ints class.
 	* ADD:		Add the LineSegment2DReaderUnitTests, LineSegment2FReaderUnitTests and LineSegment2IReaderUnitTests classes.
+	* CHANGE:	Update the method getBounds() of the Image class.
+	* CHANGE:	Change the copy() method of the ImageD and ImageF classes from abstract to final and call copy(Shape2I) with getBounds() as parameter.
+	* CHANGE:	Change the abstract copy(Rectangle2I) methods of the ImageD and ImageF classes to final copy(Shape2I) methods and add implementations.
+	* CHANGE:	Change the copy(Rectangle2I) method of the Image class to copy(Shape2I).
 	* CHANGE:	Update the union(Rectangle2D, Rectangle2D) method in the Rectangle2D class to handle rotated Rectangle2D instances correctly.
 	* CHANGE:	Update the union(Rectangle2F, Rectangle2F) method in the Rectangle2F class to handle rotated Rectangle2F instances correctly.
 	* CHANGE:	Update the union(Rectangle2I, Rectangle2I) method in the Rectangle2I class to handle rotated Rectangle2I instances correctly.
+	* REMOVE:	Remove the copy() and copy(Rectangle2I) methods from the ByteImageD, ByteImageF, DoubleImageD, FloatImageF, IntImageD, IntImageF, PixelImageD and PixelImageF classes.
 
 2021-12-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

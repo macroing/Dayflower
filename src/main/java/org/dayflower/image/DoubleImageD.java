@@ -29,7 +29,6 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 
 import javax.imageio.ImageIO;
@@ -269,70 +268,6 @@ public final class DoubleImageD extends ImageD {
 		}
 		
 		return Color4D.BLACK;
-	}
-	
-	/**
-	 * Returns a copy of this {@code DoubleImageD} instance.
-	 * 
-	 * @return a copy of this {@code DoubleImageD} instance
-	 */
-//	TODO: Add Unit Tests!
-	@Override
-	public DoubleImageD copy() {
-		return new DoubleImageD(this);
-	}
-	
-	/**
-	 * Returns a copy of this {@code DoubleImageD} instance within {@code bounds}.
-	 * <p>
-	 * If {@code bounds} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param bounds a {@link Rectangle2I} instance that represents the bounds within this {@code DoubleImageD} instance to copy
-	 * @return a copy of this {@code DoubleImageD} instance within {@code bounds}
-	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	@Override
-	public DoubleImageD copy(final Rectangle2I bounds) {
-		Objects.requireNonNull(bounds, "bounds == null");
-		
-		final DoubleImageD doubleImageSource = this;
-		
-		final Rectangle2I boundsSource = doubleImageSource.getBounds();
-		
-		final Optional<Rectangle2I> optionalBoundsTarget = Rectangle2I.intersection(boundsSource, bounds);
-		
-		if(optionalBoundsTarget.isPresent()) {
-			final Rectangle2I boundsTarget = optionalBoundsTarget.get();
-			
-			final Point2I originTarget = boundsTarget.getA();
-			
-			final int originTargetX = originTarget.getX();
-			final int originTargetY = originTarget.getY();
-			
-			final int sourceResolutionX = boundsSource.getWidth();
-			
-			final int targetResolutionX = boundsTarget.getWidth();
-			final int targetResolutionY = boundsTarget.getHeight();
-			
-			final DoubleImageD doubleImageTarget = new DoubleImageD(targetResolutionX, targetResolutionY);
-			
-			for(int y = 0; y < targetResolutionY; y++) {
-				for(int x = 0; x < targetResolutionX; x++) {
-					final int sourceIndex = ((y + originTargetY) * sourceResolutionX + (x + originTargetX)) * 4;
-					final int targetIndex = (y * targetResolutionX + x) * 4;
-					
-					doubleImageTarget.data[targetIndex + 0] = doubleImageSource.data[sourceIndex + 0];
-					doubleImageTarget.data[targetIndex + 1] = doubleImageSource.data[sourceIndex + 1];
-					doubleImageTarget.data[targetIndex + 2] = doubleImageSource.data[sourceIndex + 2];
-					doubleImageTarget.data[targetIndex + 3] = doubleImageSource.data[sourceIndex + 3];
-				}
-			}
-			
-			return doubleImageTarget;
-		}
-		
-		return new DoubleImageD(0, 0);
 	}
 	
 	/**

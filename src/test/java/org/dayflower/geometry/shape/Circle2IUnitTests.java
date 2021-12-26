@@ -357,6 +357,20 @@ public final class Circle2IUnitTests {
 	}
 	
 	@Test
+	public void testGetMaximum() {
+		final Circle2I circle = new Circle2I(new Point2I(20, 20), 10);
+		
+		assertEquals(new Point2I(30, 30), circle.getMaximum());
+	}
+	
+	@Test
+	public void testGetMinimum() {
+		final Circle2I circle = new Circle2I(new Point2I(20, 20), 10);
+		
+		assertEquals(new Point2I(10, 10), circle.getMinimum());
+	}
+	
+	@Test
 	public void testGetName() {
 		final Circle2I circle = new Circle2I();
 		

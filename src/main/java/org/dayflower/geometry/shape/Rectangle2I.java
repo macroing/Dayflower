@@ -251,6 +251,28 @@ public final class Rectangle2I implements Shape2I {
 	}
 	
 	/**
+	 * Returns a {@link Point2I} with the largest component values needed to contain this {@code Rectangle2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the largest component values needed to contain this {@code Rectangle2I} instance
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public Point2I getMaximum() {
+		return Point2I.maximum(this.a, this.b, this.c, this.d);
+	}
+	
+	/**
+	 * Returns a {@link Point2I} with the smallest component values needed to contain this {@code Rectangle2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the smallest component values needed to contain this {@code Rectangle2I} instance
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public Point2I getMinimum() {
+		return Point2I.minimum(this.a, this.b, this.c, this.d);
+	}
+	
+	/**
 	 * Returns a {@code String} with the name of this {@code Rectangle2I} instance.
 	 * 
 	 * @return a {@code String} with the name of this {@code Rectangle2I} instance
@@ -545,8 +567,8 @@ public final class Rectangle2I implements Shape2I {
 	 */
 //	TODO: Add Unit Tests!
 	public static Rectangle2I union(final Rectangle2I a, final Rectangle2I b) {
-		final Point2I minimum = Point2I.minimum(Point2I.minimum(a.getA(), a.getB(), a.getC(), a.getD()), Point2I.minimum(b.getA(), b.getB(), b.getC(), b.getD()));
-		final Point2I maximum = Point2I.maximum(Point2I.maximum(a.getA(), a.getB(), a.getC(), a.getD()), Point2I.maximum(b.getA(), b.getB(), b.getC(), b.getD()));
+		final Point2I minimum = Point2I.minimum(a.getMinimum(), b.getMinimum());
+		final Point2I maximum = Point2I.maximum(a.getMaximum(), b.getMaximum());
 		
 		return new Rectangle2I(minimum, maximum);
 	}

@@ -30,7 +30,6 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 
 import javax.imageio.ImageIO;
@@ -170,70 +169,6 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a copy of this {@code ByteImageF} instance.
-	 * 
-	 * @return a copy of this {@code ByteImageF} instance
-	 */
-//	TODO: Add Unit Tests!
-	@Override
-	public ByteImageF copy() {
-		return new ByteImageF(this);
-	}
-	
-	/**
-	 * Returns a copy of this {@code ByteImageF} instance within {@code bounds}.
-	 * <p>
-	 * If {@code bounds} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param bounds a {@link Rectangle2I} instance that represents the bounds within this {@code ByteImageF} instance to copy
-	 * @return a copy of this {@code ByteImageF} instance within {@code bounds}
-	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	@Override
-	public ByteImageF copy(final Rectangle2I bounds) {
-		Objects.requireNonNull(bounds, "bounds == null");
-		
-		final ByteImageF byteImageSource = this;
-		
-		final Rectangle2I boundsSource = byteImageSource.getBounds();
-		
-		final Optional<Rectangle2I> optionalBoundsTarget = Rectangle2I.intersection(boundsSource, bounds);
-		
-		if(optionalBoundsTarget.isPresent()) {
-			final Rectangle2I boundsTarget = optionalBoundsTarget.get();
-			
-			final Point2I originTarget = boundsTarget.getA();
-			
-			final int originTargetX = originTarget.getX();
-			final int originTargetY = originTarget.getY();
-			
-			final int sourceResolutionX = boundsSource.getWidth();
-			
-			final int targetResolutionX = boundsTarget.getWidth();
-			final int targetResolutionY = boundsTarget.getHeight();
-			
-			final ByteImageF byteImageTarget = new ByteImageF(targetResolutionX, targetResolutionY);
-			
-			for(int y = 0; y < targetResolutionY; y++) {
-				for(int x = 0; x < targetResolutionX; x++) {
-					final int sourceIndex = ((y + originTargetY) * sourceResolutionX + (x + originTargetX)) * 4;
-					final int targetIndex = (y * targetResolutionX + x) * 4;
-					
-					byteImageTarget.data[targetIndex + 0] = byteImageSource.data[sourceIndex + 0];
-					byteImageTarget.data[targetIndex + 1] = byteImageSource.data[sourceIndex + 1];
-					byteImageTarget.data[targetIndex + 2] = byteImageSource.data[sourceIndex + 2];
-					byteImageTarget.data[targetIndex + 3] = byteImageSource.data[sourceIndex + 3];
-				}
-			}
-			
-			return byteImageTarget;
-		}
-		
-		return new ByteImageF(0, 0);
-	}
 	
 	/**
 	 * Returns the {@link Color4F} of the pixel represented by {@code index}.

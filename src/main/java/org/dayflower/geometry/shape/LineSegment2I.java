@@ -147,6 +147,26 @@ public final class LineSegment2I implements Shape2I {
 	}
 	
 	/**
+	 * Returns a {@link Point2I} with the largest component values needed to contain this {@code LineSegment2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the largest component values needed to contain this {@code LineSegment2I} instance
+	 */
+	@Override
+	public Point2I getMaximum() {
+		return Point2I.maximum(this.a, this.b);
+	}
+	
+	/**
+	 * Returns a {@link Point2I} with the smallest component values needed to contain this {@code LineSegment2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the smallest component values needed to contain this {@code LineSegment2I} instance
+	 */
+	@Override
+	public Point2I getMinimum() {
+		return Point2I.minimum(this.a, this.b);
+	}
+	
+	/**
 	 * Returns a {@code String} with the name of this {@code LineSegment2I} instance.
 	 * 
 	 * @return a {@code String} with the name of this {@code LineSegment2I} instance

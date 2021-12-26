@@ -40,6 +40,20 @@ public interface Shape2I extends Shape {
 	List<Point2I> findPoints(final boolean isIncludingBorderOnly);
 	
 	/**
+	 * Returns a {@link Point2I} with the largest component values needed to contain this {@code Shape2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the largest component values needed to contain this {@code Shape2I} instance
+	 */
+	Point2I getMaximum();
+	
+	/**
+	 * Returns a {@link Point2I} with the smallest component values needed to contain this {@code Shape2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the smallest component values needed to contain this {@code Shape2I} instance
+	 */
+	Point2I getMinimum();
+	
+	/**
 	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Shape2I} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.

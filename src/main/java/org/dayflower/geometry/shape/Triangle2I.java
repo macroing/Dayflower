@@ -136,6 +136,28 @@ public final class Triangle2I implements Shape2I {
 	}
 	
 	/**
+	 * Returns a {@link Point2I} with the largest component values needed to contain this {@code Triangle2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the largest component values needed to contain this {@code Triangle2I} instance
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public Point2I getMaximum() {
+		return Point2I.maximum(this.a, this.b, this.c);
+	}
+	
+	/**
+	 * Returns a {@link Point2I} with the smallest component values needed to contain this {@code Triangle2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the smallest component values needed to contain this {@code Triangle2I} instance
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public Point2I getMinimum() {
+		return Point2I.minimum(this.a, this.b, this.c);
+	}
+	
+	/**
 	 * Returns the {@link Rectangle2I} instance that contains this {@code Triangle2I} instance.
 	 * 
 	 * @return the {@code Rectangle2I} instance that contains this {@code Triangle2I} instance

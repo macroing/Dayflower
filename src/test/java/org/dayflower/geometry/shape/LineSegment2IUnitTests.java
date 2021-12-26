@@ -267,6 +267,20 @@ public final class LineSegment2IUnitTests {
 	}
 	
 	@Test
+	public void testGetMaximum() {
+		final LineSegment2I lineSegment = new LineSegment2I(new Point2I(10, 10), new Point2I(20, 10));
+		
+		assertEquals(new Point2I(20, 10), lineSegment.getMaximum());
+	}
+	
+	@Test
+	public void testGetMinimum() {
+		final LineSegment2I lineSegment = new LineSegment2I(new Point2I(10, 10), new Point2I(20, 10));
+		
+		assertEquals(new Point2I(10, 10), lineSegment.getMinimum());
+	}
+	
+	@Test
 	public void testGetName() {
 		final LineSegment2I lineSegment = new LineSegment2I(new Point2I(10, 10), new Point2I(20, 10));
 		

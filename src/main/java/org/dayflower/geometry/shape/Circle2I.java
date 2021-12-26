@@ -144,8 +144,8 @@ public final class Circle2I implements Shape2I {
 	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
 		final List<Point2I> points = new ArrayList<>();
 		
-		final Point2I maximum = new Point2I(this.center.getX() + this.radius, this.center.getY() + this.radius);
-		final Point2I minimum = new Point2I(this.center.getX() - this.radius, this.center.getY() - this.radius);
+		final Point2I maximum = getMaximum();
+		final Point2I minimum = getMinimum();
 		
 		final int maximumX = maximum.getX();
 		final int minimumX = minimum.getX();
@@ -172,6 +172,26 @@ public final class Circle2I implements Shape2I {
 	 */
 	public Point2I getCenter() {
 		return this.center;
+	}
+	
+	/**
+	 * Returns a {@link Point2I} with the largest component values needed to contain this {@code Circle2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the largest component values needed to contain this {@code Circle2I} instance
+	 */
+	@Override
+	public Point2I getMaximum() {
+		return new Point2I(this.center.getX() + this.radius, this.center.getY() + this.radius);
+	}
+	
+	/**
+	 * Returns a {@link Point2I} with the smallest component values needed to contain this {@code Circle2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the smallest component values needed to contain this {@code Circle2I} instance
+	 */
+	@Override
+	public Point2I getMinimum() {
+		return new Point2I(this.center.getX() - this.radius, this.center.getY() - this.radius);
 	}
 	
 	/**

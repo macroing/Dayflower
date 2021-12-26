@@ -115,6 +115,28 @@ public final class Polygon2I implements Shape2I {
 	}
 	
 	/**
+	 * Returns a {@link Point2I} with the largest component values needed to contain this {@code Polygon2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the largest component values needed to contain this {@code Polygon2I} instance
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public Point2I getMaximum() {
+		return this.rectangle.getMaximum();
+	}
+	
+	/**
+	 * Returns a {@link Point2I} with the smallest component values needed to contain this {@code Polygon2I} instance.
+	 * 
+	 * @return a {@code Point2I} with the smallest component values needed to contain this {@code Polygon2I} instance
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public Point2I getMinimum() {
+		return this.rectangle.getMinimum();
+	}
+	
+	/**
 	 * Returns the {@link Rectangle2I} instance that contains this {@code Polygon2I} instance.
 	 * 
 	 * @return the {@code Rectangle2I} instance that contains this {@code Polygon2I} instance

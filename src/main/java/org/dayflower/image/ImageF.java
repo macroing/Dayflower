@@ -717,23 +717,66 @@ public abstract class ImageF extends Image {
 	
 	/**
 	 * Returns a copy of this {@code ImageF} instance.
+	 * <p>
+	 * This method may or may not copy everything stored in an {@code ImageF} instance.
+	 * <p>
+	 * The data being copied is that which can be obtained by a call to {@link #getColorRGBA(int, int)}. This means that the change history and additional data stored per pixel is not copied.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * imageF.copy(imageF.getBounds());
+	 * }
+	 * </pre>
 	 * 
 	 * @return a copy of this {@code ImageF} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
-	public abstract ImageF copy();
+	public final ImageF copy() {
+		return copy(getBounds());
+	}
 	
 	/**
-	 * Returns a copy of this {@code ImageF} instance within {@code bounds}.
+	 * Returns a copy of this {@code ImageF} instance within {@code shape}.
 	 * <p>
-	 * If {@code bounds} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code shape} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method may or may not copy everything stored in an {@code ImageF} instance.
+	 * <p>
+	 * The data being copied is that which can be obtained by a call to {@link #getColorRGBA(int, int)}. This means that the change history and additional data stored per pixel is not copied.
 	 * 
-	 * @param bounds a {@link Rectangle2I} instance that represents the bounds within this {@code ImageF} instance to copy
-	 * @return a copy of this {@code ImageF} instance within {@code bounds}
-	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
+	 * @param shape a {@link Shape2I} instance that represents the shape within this {@code ImageF} instance to copy
+	 * @return a copy of this {@code ImageF} instance within {@code shape}
+	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	@Override
-	public abstract ImageF copy(final Rectangle2I bounds);
+	public final ImageF copy(final Shape2I shape) {
+		final Point2I maximum = shape.getMaximum();
+		final Point2I minimum = shape.getMinimum();
+		
+		final int resolutionX = maximum.getX() - minimum.getX() + 1;
+		final int resolutionY = maximum.getY() - minimum.getY() + 1;
+		
+		final ImageF image = newImage(resolutionX, resolutionY);
+		
+		final List<Point2I> points = shape.findPoints();
+		
+		for(final Point2I point : points) {
+			final int sourceX = point.getX();
+			final int sourceY = point.getY();
+			
+			final int targetX = sourceX - minimum.getX();
+			final int targetY = sourceY - minimum.getY();
+			
+			final Color4F colorRGBA = getColorRGBA(sourceX, sourceY);
+			
+			image.setColorRGBA(colorRGBA, targetX, targetY);
+		}
+		
+		return image;
+	}
 	
 	/**
 	 * Draws {@code shape} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.

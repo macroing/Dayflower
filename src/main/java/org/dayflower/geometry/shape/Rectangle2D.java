@@ -528,8 +528,8 @@ public final class Rectangle2D implements Shape2D {
 	 */
 //	TODO: Add Unit Tests!
 	public static Rectangle2D union(final Rectangle2D a, final Rectangle2D b) {
-		final Point2D minimum = Point2D.minimum(a.getA(), b.getA());
-		final Point2D maximum = Point2D.maximum(a.getC(), b.getC());
+		final Point2D minimum = Point2D.minimum(Point2D.minimum(a.getA(), a.getB(), a.getC(), a.getD()), Point2D.minimum(b.getA(), b.getB(), b.getC(), b.getD()));
+		final Point2D maximum = Point2D.maximum(Point2D.maximum(a.getA(), a.getB(), a.getC(), a.getD()), Point2D.maximum(b.getA(), b.getB(), b.getC(), b.getD()));
 		
 		return new Rectangle2D(minimum, maximum);
 	}

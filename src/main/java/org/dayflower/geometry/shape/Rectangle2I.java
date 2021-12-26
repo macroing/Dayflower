@@ -545,8 +545,8 @@ public final class Rectangle2I implements Shape2I {
 	 */
 //	TODO: Add Unit Tests!
 	public static Rectangle2I union(final Rectangle2I a, final Rectangle2I b) {
-		final Point2I minimum = Point2I.minimum(a.getA(), b.getA());
-		final Point2I maximum = Point2I.maximum(a.getC(), b.getC());
+		final Point2I minimum = Point2I.minimum(Point2I.minimum(a.getA(), a.getB(), a.getC(), a.getD()), Point2I.minimum(b.getA(), b.getB(), b.getC(), b.getD()));
+		final Point2I maximum = Point2I.maximum(Point2I.maximum(a.getA(), a.getB(), a.getC(), a.getD()), Point2I.maximum(b.getA(), b.getB(), b.getC(), b.getD()));
 		
 		return new Rectangle2I(minimum, maximum);
 	}

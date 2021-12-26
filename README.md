@@ -175,7 +175,7 @@ The following table describes the different APIs and their current status in the
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |
-| Geometry Shape API                     | 100.0%  |   4.9%    |
+| Geometry Shape API                     | 100.0%  |   5.0%    |
 | Image API                              | 100.0%  |   0.0%    |
 | Java AWT Image API                     | 100.0%  |   0.0%    |
 | Java I/O API                           | 100.0%  |   0.0%    |

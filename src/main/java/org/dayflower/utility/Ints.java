@@ -166,6 +166,23 @@ public final class Ints {
 	}
 	
 	/**
+	 * Returns the greater value of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * The result is the argument closer to the value of {@code Integer.MAX_VALUE}.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @param c a value
+	 * @param d a value
+	 * @return the greater value of {@code a}, {@code b}, {@code c} and {@code d}
+	 */
+	public static int max(final int a, final int b, final int c, final int d) {
+		return max(max(a, b), max(c, d));
+	}
+	
+	/**
 	 * Returns the smaller value of {@code a} and {@code b}.
 	 * <p>
 	 * The result the argument closer to the value of {@code Integer.MIN_VALUE}.
@@ -196,6 +213,24 @@ public final class Ints {
 	 */
 	public static int min(final int a, final int b, final int c) {
 		return min(min(a, b), c);
+	}
+	
+	/**
+	 * Returns the smaller value of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * The result the argument closer to the value of {@code Integer.MIN_VALUE}.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @param c a value
+	 * @param d a value
+	 * @return the smaller value of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @see Math#min(int, int)
+	 */
+	public static int min(final int a, final int b, final int c, final int d) {
+		return min(min(a, b), min(c, d));
 	}
 	
 	/**

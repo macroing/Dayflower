@@ -528,8 +528,8 @@ public final class Rectangle2F implements Shape2F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Rectangle2F union(final Rectangle2F a, final Rectangle2F b) {
-		final Point2F minimum = Point2F.minimum(a.getA(), b.getA());
-		final Point2F maximum = Point2F.maximum(a.getC(), b.getC());
+		final Point2F minimum = Point2F.minimum(Point2F.minimum(a.getA(), a.getB(), a.getC(), a.getD()), Point2F.minimum(b.getA(), b.getB(), b.getC(), b.getD()));
+		final Point2F maximum = Point2F.maximum(Point2F.maximum(a.getA(), a.getB(), a.getC(), a.getD()), Point2F.maximum(b.getA(), b.getB(), b.getC(), b.getD()));
 		
 		return new Rectangle2F(minimum, maximum);
 	}

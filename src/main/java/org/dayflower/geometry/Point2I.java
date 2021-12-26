@@ -322,6 +322,25 @@ public final class Point2I implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Point2I} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2I} instance
+	 * @param b a {@code Point2I} instance
+	 * @param c a {@code Point2I} instance
+	 * @param d a {@code Point2I} instance
+	 * @return a new {@code Point2I} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public static Point2I maximum(final Point2I a, final Point2I b, final Point2I c, final Point2I d) {
+		final int component1 = max(a.component1, b.component1, c.component1, d.component1);
+		final int component2 = max(a.component2, b.component2, c.component2, d.component2);
+		
+		return new Point2I(component1, component2);
+	}
+	
+	/**
 	 * Returns a new {@code Point2I} instance that represents the midpoint of {@code a} and {@code b}.
 	 * <p>
 	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -381,6 +400,25 @@ public final class Point2I implements Node {
 	public static Point2I minimum(final Point2I a, final Point2I b, final Point2I c) {
 		final int component1 = min(a.component1, b.component1, c.component1);
 		final int component2 = min(a.component2, b.component2, c.component2);
+		
+		return new Point2I(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2I} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2I} instance
+	 * @param b a {@code Point2I} instance
+	 * @param c a {@code Point2I} instance
+	 * @param d a {@code Point2I} instance
+	 * @return a new {@code Point2I} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public static Point2I minimum(final Point2I a, final Point2I b, final Point2I c, final Point2I d) {
+		final int component1 = min(a.component1, b.component1, c.component1, d.component1);
+		final int component2 = min(a.component2, b.component2, c.component2, d.component2);
 		
 		return new Point2I(component1, component2);
 	}

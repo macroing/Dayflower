@@ -534,10 +534,10 @@ public final class PolkaDotMaterial implements Material {
 		final float u = intersection.getTextureCoordinates().getU();
 		final float v = intersection.getTextureCoordinates().getV();
 		
-		final float x = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.cellResolution);
-		final float y = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.cellResolution);
+		final float x = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.cellResolution) - 0.5F;
+		final float y = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.cellResolution) - 0.5F;
 		
-		final float distanceSquared = (x - 0.5F) * (x - 0.5F) + (y - 0.5F) * (y - 0.5F);
+		final float distanceSquared = x * x + y * y;
 		
 		if(distanceSquared < this.polkaDotRadius * this.polkaDotRadius) {
 			return this.materialA;

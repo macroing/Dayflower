@@ -25,7 +25,7 @@ import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
 
 /**
- * An {@code AbstractModifierKernel} is an abstract extension of the {@link AbstractGeometryKernel} class that adds additional features.
+ * An {@code AbstractModifierKernel} is an abstract extension of the {@link AbstractShape3FKernel} class that adds additional features.
  * <p>
  * The features added are the following:
  * <ul>
@@ -37,7 +37,7 @@ import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractModifierKernel extends AbstractGeometryKernel {
+public abstract class AbstractModifierKernel extends AbstractShape3FKernel {
 	/**
 	 * A {@code float[]} that contains {@link NormalMapLDRImageModifier} instances.
 	 */

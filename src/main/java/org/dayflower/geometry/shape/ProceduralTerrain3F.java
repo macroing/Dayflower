@@ -211,6 +211,14 @@ public final class ProceduralTerrain3F implements Shape3F {
 		
 		final Vector3F direction = ray.getDirection();
 		
+		final float originX = origin.getX();
+		final float originY = origin.getY();
+		final float originZ = origin.getZ();
+		
+		final float directionX = direction.getX();
+		final float directionY = direction.getY();
+		final float directionZ = direction.getZ();
+		
 		float t = 0.0F;
 		float tDelta = 0.01F;
 		
@@ -218,19 +226,21 @@ public final class ProceduralTerrain3F implements Shape3F {
 		float lastY = 0.0F;
 		
 		for(float tCurrent = tMinimum; tCurrent < tMaximum; tCurrent += tDelta) {
-			final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, tCurrent);
+			final float surfaceIntersectionPointX = originX + directionX * tCurrent;
+			final float surfaceIntersectionPointY = originY + directionY * tCurrent;
+			final float surfaceIntersectionPointZ = originZ + directionZ * tCurrent;
 			
-			final float h = doApplyAsFloat(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getZ());
+			final float h = doApplyAsFloat(surfaceIntersectionPointX, surfaceIntersectionPointZ);
 			
-			if(surfaceIntersectionPoint.getY() < h) {
-				t = tCurrent - tDelta + tDelta * (lastH - lastY) / (surfaceIntersectionPoint.getY() - lastY - h + lastH);
+			if(surfaceIntersectionPointY < h) {
+				t = tCurrent - tDelta + tDelta * (lastH - lastY) / (surfaceIntersectionPointY - lastY - h + lastH);
 				tCurrent = tMaximum;
 			}
 			
 			tDelta = 0.01F * tCurrent;
 			
 			lastH = h;
-			lastY = surfaceIntersectionPoint.getY();
+			lastY = surfaceIntersectionPointY;
 		}
 		
 		return t > 0.0F ? t : Float.NaN;

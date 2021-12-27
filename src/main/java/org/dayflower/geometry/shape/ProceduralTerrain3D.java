@@ -211,6 +211,14 @@ public final class ProceduralTerrain3D implements Shape3D {
 		
 		final Vector3D direction = ray.getDirection();
 		
+		final double originX = origin.getX();
+		final double originY = origin.getY();
+		final double originZ = origin.getZ();
+		
+		final double directionX = direction.getX();
+		final double directionY = direction.getY();
+		final double directionZ = direction.getZ();
+		
 		double t = 0.0D;
 		double tDelta = 0.01D;
 		
@@ -218,19 +226,21 @@ public final class ProceduralTerrain3D implements Shape3D {
 		double lastY = 0.0D;
 		
 		for(double tCurrent = tMinimum; tCurrent < tMaximum; tCurrent += tDelta) {
-			final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, tCurrent);
+			final double surfaceIntersectionPointX = originX + directionX * tCurrent;
+			final double surfaceIntersectionPointY = originY + directionY * tCurrent;
+			final double surfaceIntersectionPointZ = originZ + directionZ * tCurrent;
 			
-			final double h = doApplyAsDouble(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getZ());
+			final double h = doApplyAsDouble(surfaceIntersectionPointX, surfaceIntersectionPointZ);
 			
-			if(surfaceIntersectionPoint.getY() < h) {
-				t = tCurrent - tDelta + tDelta * (lastH - lastY) / (surfaceIntersectionPoint.getY() - lastY - h + lastH);
+			if(surfaceIntersectionPointY < h) {
+				t = tCurrent - tDelta + tDelta * (lastH - lastY) / (surfaceIntersectionPointY - lastY - h + lastH);
 				tCurrent = tMaximum;
 			}
 			
 			tDelta = 0.01D * tCurrent;
 			
 			lastH = h;
-			lastY = surfaceIntersectionPoint.getY();
+			lastY = surfaceIntersectionPointY;
 		}
 		
 		return t > 0.0D ? t : Double.NaN;

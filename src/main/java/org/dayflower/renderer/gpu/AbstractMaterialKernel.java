@@ -521,6 +521,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		boolean isFindingMaterial = currentMaterialID == BullseyeMaterial.ID || currentMaterialID == CheckerboardMaterial.ID || currentMaterialID == PolkaDotMaterial.ID;
 		
 		if(isFindingMaterial) {
+//			TODO: The surface intersection point should be in object space and not world space.
 			final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
 			final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
 			final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();

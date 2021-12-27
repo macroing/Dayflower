@@ -120,11 +120,11 @@ final class BoundingVolume3FCache {
 		
 //		Create offset mappings for all distinct AxisAlignedBoundingBox3F instances:
 		this.distinctToOffsetsAxisAlignedBoundingBox3Fs.clear();
-		this.distinctToOffsetsAxisAlignedBoundingBox3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctAxisAlignedBoundingBox3Fs, CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH));
+		this.distinctToOffsetsAxisAlignedBoundingBox3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctAxisAlignedBoundingBox3Fs));
 		
 //		Create offset mappings for all distinct BoundingSphere3F instances:
 		this.distinctToOffsetsBoundingSphere3Fs.clear();
-		this.distinctToOffsetsBoundingSphere3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBoundingSphere3Fs, CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH));
+		this.distinctToOffsetsBoundingSphere3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBoundingSphere3Fs));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

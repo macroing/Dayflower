@@ -1,3 +1,10 @@
+2021-12-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the AbstractBoundingVolume3FKernel and AbstractShape3FKernel classes.
+	* CHANGE:	Change the compiled representations of the AxisAlignedBoundingBox3F and BoundingSphere3F classes to be referenced using relative instead of absolute offsets.
+	* CHANGE:	Update the super class of the AbstractModifierKernel class from AbstractGeometryKernel to AbstractShape3FKernel.
+	* REMOVE:	Remove all methods related to BoundingVolume3F and Shape3F types from the AbstractGeometryKernel class.
+
 2021-12-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Circle2IUnitTests and LineSegment2IUnitTests classes.

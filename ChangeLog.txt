@@ -1,3 +1,7 @@
+2021-12-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for creating a more compact form of the BVH in the GPU-renderer. It is a little bit faster in some cases.
+
 2021-12-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the AbstractBoundingVolume3FKernel and AbstractShape3FKernel classes.

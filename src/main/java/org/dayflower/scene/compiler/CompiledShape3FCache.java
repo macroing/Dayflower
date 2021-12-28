@@ -20,6 +20,8 @@ package org.dayflower.scene.compiler;
 
 import static org.dayflower.utility.Ints.padding;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -440,6 +442,10 @@ public final class CompiledShape3FCache {
 	 * This offset is used for {@code TreeBVHNode3F} only.
 	 */
 	public static final int TRIANGLE_MESH_3_F_TREE_B_V_H_NODE_3_F_OFFSET_LEFT_OFFSET = 3;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final boolean IS_COMPACT_TRIANGLE_MESH_3_F = true;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -2871,7 +2877,10 @@ public final class CompiledShape3FCache {
 		final Optional<BVHNode3F> optionalRootBVHNode = triangleMesh3F.getRootBVHNode();
 		
 		if(optionalRootBVHNode.isPresent()) {
-			return NodeFilter.filterAll(optionalRootBVHNode.get(), BVHNode3F.class).stream().mapToInt(bVHNode -> doGetBVHNode3FLength(bVHNode)).sum();
+			final int lengthA = NodeFilter.filterAll(optionalRootBVHNode.get(), BVHNode3F.class).stream().mapToInt(bVHNode -> doGetBVHNode3FLength(bVHNode, IS_COMPACT_TRIANGLE_MESH_3_F)).sum();
+			final int lengthB = IS_COMPACT_TRIANGLE_MESH_3_F && lengthA % 8 != 0 ? lengthA + 4 : lengthA;
+			
+			return lengthB;
 		}
 		
 		return 0;
@@ -3017,15 +3026,15 @@ public final class CompiledShape3FCache {
 		return -1;
 	}
 	
-	private static int doGetBVHNode3FLength(final BVHNode3F bVHNode3F) {
+	private static int doGetBVHNode3FLength(final BVHNode3F bVHNode3F, final boolean isCompact) {
 		if(bVHNode3F instanceof LeafBVHNode3F) {
 			final int a = 4;
 			final int b = LeafBVHNode3F.class.cast(bVHNode3F).getShapeCount();
 			final int c = padding(a + b);
 			
-			return a + b + c;
+			return IS_COMPACT_TRIANGLE_MESH_3_F && isCompact ? 8 : a + b + c;
 		} else if(bVHNode3F instanceof TreeBVHNode3F) {
-			return 8;
+			return IS_COMPACT_TRIANGLE_MESH_3_F && isCompact ? 4 : 8;
 		} else {
 			return 0;
 		}
@@ -3038,56 +3047,260 @@ public final class CompiledShape3FCache {
 		
 		final int[] offsets = new int[bVHNode3Fs.size()];
 		
-		for(int i = 0, j = 0; i < offsets.length; j += doGetBVHNode3FLength(bVHNode3Fs.get(i)), i++) {
+		for(int i = 0, j = 0; i < offsets.length; j += doGetBVHNode3FLength(bVHNode3Fs.get(i), false), i++) {
 			offsets[i] = j;
 		}
 		
-		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
-			for(int i = 0; i < bVHNode3Fs.size(); i++) {
-				final BVHNode3F bVHNode3F = bVHNode3Fs.get(i);
+		/*
+		 * TODO: Try out if reordering the BVHNode3F instances will improve performance.
+		 * 
+		 * 1. TreeBVHNode3F instances will come first. Currently one requires 8 ints, by which 4 is padding. Two of these could share one block.
+		 * 2. LeafBVHNode3F instances will come second.
+		 */
+		
+		final List<CompiledBVHNode3F> compiledBVHNode3Fs = new ArrayList<>();
+		
+		for(int i = 0; i < bVHNode3Fs.size(); i++) {
+			final BVHNode3F bVHNode3F = bVHNode3Fs.get(i);
+			
+			if(bVHNode3F instanceof LeafBVHNode3F) {
+				final LeafBVHNode3F<?> leafBVHNode3F = LeafBVHNode3F.class.cast(bVHNode3F);
 				
-				if(bVHNode3F instanceof LeafBVHNode3F) {
-					final LeafBVHNode3F<?> leafBVHNode3F = LeafBVHNode3F.class.cast(bVHNode3F);
-					
-					final int id = LeafBVHNode3F.ID;
-					final int boundingVolumeOffset = boundingVolume3FOffsetFunction.applyAsInt(leafBVHNode3F.getBoundingVolume());
-					final int nextOffset = doFindNextOffset(bVHNode3Fs, leafBVHNode3F.getDepth(), i + 1, offsets);
-					final int shapeCount = leafBVHNode3F.getShapeCount();
-					
-					intArrayOutputStream.writeInt(id);
-					intArrayOutputStream.writeInt(boundingVolumeOffset);
-					intArrayOutputStream.writeInt(nextOffset);
-					intArrayOutputStream.writeInt(shapeCount);
-					
-					for(final Shape3F shape3F : leafBVHNode3F.getShapes()) {
-						intArrayOutputStream.writeInt(triangle3FOffsetFunction.applyAsInt(Triangle3F.class.cast(shape3F)));
-					}
-					
-					final int padding = padding(4 + shapeCount);
-					
-					for(int j = 0; j < padding; j++) {
-						intArrayOutputStream.writeInt(0);
-					}
-				} else if(bVHNode3F instanceof TreeBVHNode3F) {
-					final TreeBVHNode3F treeBVHNode3F = TreeBVHNode3F.class.cast(bVHNode3F);
-					
-					final int id = TreeBVHNode3F.ID;
-					final int boundingVolumeOffset = boundingVolume3FOffsetFunction.applyAsInt(treeBVHNode3F.getBoundingVolume());
-					final int nextOffset = doFindNextOffset(bVHNode3Fs, treeBVHNode3F.getDepth(), i + 1, offsets);
-					final int leftOffset = doFindLeftOffset(bVHNode3Fs, treeBVHNode3F.getDepth(), i + 1, offsets);
-					
-					intArrayOutputStream.writeInt(id);
-					intArrayOutputStream.writeInt(boundingVolumeOffset);
-					intArrayOutputStream.writeInt(nextOffset);
-					intArrayOutputStream.writeInt(leftOffset);
-					intArrayOutputStream.writeInt(0);
-					intArrayOutputStream.writeInt(0);
-					intArrayOutputStream.writeInt(0);
-					intArrayOutputStream.writeInt(0);
+				final int offset = i * 8;
+				final int id = LeafBVHNode3F.ID;
+				final int boundingVolumeOffset = boundingVolume3FOffsetFunction.applyAsInt(leafBVHNode3F.getBoundingVolume());
+				final int nextOffset = doFindNextOffset(bVHNode3Fs, leafBVHNode3F.getDepth(), i + 1, offsets);
+				final int shapeCount = leafBVHNode3F.getShapeCount();
+				
+				final List<?> shapes = leafBVHNode3F.getShapes();
+				
+				final
+				CompiledBVHNode3F compiledBVHNode3F = new CompiledBVHNode3F(8);
+				compiledBVHNode3F.setOffset(offset);
+				compiledBVHNode3F.setID(id);
+				compiledBVHNode3F.setBoundingVolumeOffset(boundingVolumeOffset);
+				compiledBVHNode3F.setNextOffset(nextOffset);
+				compiledBVHNode3F.setShapeCount(shapeCount);
+				
+				for(int j = 0; j < shapes.size(); j++) {
+					compiledBVHNode3F.setShapeOffset(triangle3FOffsetFunction.applyAsInt(Triangle3F.class.cast(shapes.get(j))), j);
 				}
+				
+				compiledBVHNode3Fs.add(compiledBVHNode3F);
+			} else if(bVHNode3F instanceof TreeBVHNode3F) {
+				final TreeBVHNode3F treeBVHNode3F = TreeBVHNode3F.class.cast(bVHNode3F);
+				
+				final int offset = i * 8;
+				final int id = TreeBVHNode3F.ID;
+				final int boundingVolumeOffset = boundingVolume3FOffsetFunction.applyAsInt(treeBVHNode3F.getBoundingVolume());
+				final int nextOffset = doFindNextOffset(bVHNode3Fs, treeBVHNode3F.getDepth(), i + 1, offsets);
+				final int leftOffset = doFindLeftOffset(bVHNode3Fs, treeBVHNode3F.getDepth(), i + 1, offsets);
+				
+				final
+				CompiledBVHNode3F compiledBVHNode3F = new CompiledBVHNode3F(IS_COMPACT_TRIANGLE_MESH_3_F ? 4 : 8);
+				compiledBVHNode3F.setOffset(offset);
+				compiledBVHNode3F.setID(id);
+				compiledBVHNode3F.setBoundingVolumeOffset(boundingVolumeOffset);
+				compiledBVHNode3F.setNextOffset(nextOffset);
+				compiledBVHNode3F.setLeftOffset(leftOffset);
+				
+				compiledBVHNode3Fs.add(compiledBVHNode3F);
+			}
+		}
+		
+		if(IS_COMPACT_TRIANGLE_MESH_3_F) {
+			CompiledBVHNode3F.update(compiledBVHNode3Fs);
+		}
+		
+		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
+			for(final CompiledBVHNode3F compiledBVHNode3F : compiledBVHNode3Fs) {
+				intArrayOutputStream.write(compiledBVHNode3F.getData());
 			}
 			
 			return intArrayOutputStream.toIntArray();
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class CompiledBVHNode3F {
+		private CompiledBVHNode3F left;
+		private CompiledBVHNode3F next;
+		private final int[] data;
+		private int offset;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public CompiledBVHNode3F(final int size) {
+			this.data = new int[size];
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public CompiledBVHNode3F getLeft() {
+			return this.left;
+		}
+		
+		public CompiledBVHNode3F getNext() {
+			return this.next;
+		}
+		
+		public boolean hasNext() {
+			return this.next != null;
+		}
+		
+		public boolean hasNextOffset() {
+			return getNextOffset() != -1;
+		}
+		
+		public boolean hasLeft() {
+			return this.left != null;
+		}
+		
+		public boolean hasLeftOffset() {
+			return getLeftOffset() != -1;
+		}
+		
+		public boolean isLeaf() {
+			return getID() == LeafBVHNode3F.ID;
+		}
+		
+		public boolean isTree() {
+			return getID() == TreeBVHNode3F.ID;
+		}
+		
+		public int getID() {
+			return this.data[0];
+		}
+		
+		public int getLeftOffset() {
+			return this.data[3];
+		}
+		
+		public int getNextOffset() {
+			return this.data[2];
+		}
+		
+		public int getOffset() {
+			return this.offset;
+		}
+		
+		public int[] getData() {
+			return this.data;
+		}
+		
+		public void setBoundingVolumeOffset(final int boundingVolumeOffset) {
+			this.data[1] = boundingVolumeOffset;
+		}
+		
+		public void setID(final int id) {
+			this.data[0] = id;
+		}
+		
+		public void setLeft(final CompiledBVHNode3F left) {
+			this.left = left;
+		}
+		
+		public void setLeftOffset(final int leftOffset) {
+			this.data[3] = leftOffset;
+		}
+		
+		public void setNext(final CompiledBVHNode3F next) {
+			this.next = next;
+		}
+		
+		public void setNextOffset(final int nextOffset) {
+			this.data[2] = nextOffset;
+		}
+		
+		public void setOffset(final int offset) {
+			this.offset = offset;
+		}
+		
+		public void setShapeCount(final int shapeCount) {
+			this.data[3] = shapeCount;
+		}
+		
+		public void setShapeOffset(final int shapeOffset, final int offset) {
+			this.data[4 + offset] = shapeOffset;
+		}
+		
+		public void updateLeft(final List<CompiledBVHNode3F> compiledBVHNode3Fs) {
+			if(isTree()) {
+				setLeft(hasLeftOffset() ? compiledBVHNode3Fs.get(getLeftOffset() / 8) : null);
+			}
+		}
+		
+		public void updateLeftOffset() {
+			if(hasLeft()) {
+				setLeftOffset(getLeft().getOffset());
+			}
+		}
+		
+		public void updateNext(final List<CompiledBVHNode3F> compiledBVHNode3Fs) {
+			if(isLeaf() || isTree()) {
+				setNext(hasNextOffset() ? compiledBVHNode3Fs.get(getNextOffset() / 8) : null);
+			}
+		}
+		
+		public void updateNextOffset() {
+			if(hasNext()) {
+				setNextOffset(getNext().getOffset());
+			}
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public static void update(final List<CompiledBVHNode3F> compiledBVHNode3Fs) {
+			for(final CompiledBVHNode3F compiledBVHNode3F : compiledBVHNode3Fs) {
+				compiledBVHNode3F.updateNext(compiledBVHNode3Fs);
+				compiledBVHNode3F.updateLeft(compiledBVHNode3Fs);
+			}
+			
+			Collections.sort(compiledBVHNode3Fs, CompiledBVHNode3F::doCompare);
+			
+			for(int i = 0, j = 0; i < compiledBVHNode3Fs.size(); i++) {
+				final CompiledBVHNode3F compiledBVHNode3F = compiledBVHNode3Fs.get(i);
+				
+				if(compiledBVHNode3F.isLeaf()) {
+					if(j % 8 != 0) {
+						compiledBVHNode3Fs.add(i, new CompiledBVHNode3F(4));
+					}
+					
+					break;
+				}
+				
+				if(compiledBVHNode3F.isTree()) {
+					j += 4;
+				}
+			}
+			
+			for(int i = 0, j = 0; i < compiledBVHNode3Fs.size(); i++) {
+				final
+				CompiledBVHNode3F compiledBVHNode3F = compiledBVHNode3Fs.get(i);
+				compiledBVHNode3F.setOffset(j);
+				
+				j += compiledBVHNode3F.isLeaf() ? 8 : 4;
+			}
+			
+			for(final CompiledBVHNode3F compiledBVHNode3F : compiledBVHNode3Fs) {
+				compiledBVHNode3F.updateNextOffset();
+				compiledBVHNode3F.updateLeftOffset();
+			}
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private static int doCompare(final CompiledBVHNode3F a, final CompiledBVHNode3F b) {
+			if(a.isLeaf() && b.isTree()) {
+				return +1;
+			}
+			
+			if(a.isTree() && b.isLeaf()) {
+				return -1;
+			}
+			
+			return 0;
 		}
 	}
 }

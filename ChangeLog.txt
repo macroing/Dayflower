@@ -1,3 +1,7 @@
+2022-01-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the copyright notice for the Geometry Bounding Volume API, Geometry Bounding Volume Hierarchy API, Geometry Rasterizer API, Geometry Shape API, Image API, Java AWT Image API, Java I/O API, Java Lang API, Java Util API, Java Util Concurrent Atomic API and Java Util Function API.
+
 2022-01-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the copyright notice for the Change API, Color API, Filter API and Geometry API.

@@ -37,6 +37,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.utility.Floats;
 
 /**
@@ -82,10 +83,9 @@ public final class AngleF {
 	 * 
 	 * @return a {@code String} representation of this {@code AngleF} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("AngleF.degrees(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.degrees), Float.valueOf(this.degreesMinimum), Float.valueOf(this.degreesMaximum));
+		return String.format("AngleF.degrees(%s, %s, %s)", Strings.toNonScientificNotationJava(this.degrees), Strings.toNonScientificNotationJava(this.degreesMinimum), Strings.toNonScientificNotationJava(this.degreesMaximum));
 	}
 	
 	/**
@@ -96,7 +96,6 @@ public final class AngleF {
 	 * @param object the {@code Object} to compare to this {@code AngleF} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code AngleF}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -109,12 +108,6 @@ public final class AngleF {
 			return false;
 		} else if(!equal(this.degreesMinimum, AngleF.class.cast(object).degreesMinimum)) {
 			return false;
-		} else if(!equal(this.radians, AngleF.class.cast(object).radians)) {
-			return false;
-		} else if(!equal(this.radiansMaximum, AngleF.class.cast(object).radiansMaximum)) {
-			return false;
-		} else if(!equal(this.radiansMinimum, AngleF.class.cast(object).radiansMinimum)) {
-			return false;
 		} else {
 			return true;
 		}
@@ -125,7 +118,6 @@ public final class AngleF {
 	 * 
 	 * @return the trigonometric cosine of this {@code AngleF} instance
 	 */
-//	TODO: Add Unit Tests!
 	public float cos() {
 		return Floats.cos(this.radians);
 	}
@@ -135,7 +127,6 @@ public final class AngleF {
 	 * 
 	 * @return the angle in degrees
 	 */
-//	TODO: Add Unit Tests!
 	public float getDegrees() {
 		return this.degrees;
 	}
@@ -145,7 +136,6 @@ public final class AngleF {
 	 * 
 	 * @return the maximum angle in degrees
 	 */
-//	TODO: Add Unit Tests!
 	public float getDegreesMaximum() {
 		return this.degreesMaximum;
 	}
@@ -155,7 +145,6 @@ public final class AngleF {
 	 * 
 	 * @return the minimum angle in degrees
 	 */
-//	TODO: Add Unit Tests!
 	public float getDegreesMinimum() {
 		return this.degreesMinimum;
 	}
@@ -165,7 +154,6 @@ public final class AngleF {
 	 * 
 	 * @return the angle in radians
 	 */
-//	TODO: Add Unit Tests!
 	public float getRadians() {
 		return this.radians;
 	}
@@ -175,7 +163,6 @@ public final class AngleF {
 	 * 
 	 * @return the maximum angle in radians
 	 */
-//	TODO: Add Unit Tests!
 	public float getRadiansMaximum() {
 		return this.radiansMaximum;
 	}
@@ -185,7 +172,6 @@ public final class AngleF {
 	 * 
 	 * @return the minimum angle in radians
 	 */
-//	TODO: Add Unit Tests!
 	public float getRadiansMinimum() {
 		return this.radiansMinimum;
 	}
@@ -195,7 +181,6 @@ public final class AngleF {
 	 * 
 	 * @return the trigonometric sine of this {@code AngleF} instance
 	 */
-//	TODO: Add Unit Tests!
 	public float sin() {
 		return Floats.sin(this.radians);
 	}
@@ -205,10 +190,9 @@ public final class AngleF {
 	 * 
 	 * @return a hash code for this {@code AngleF} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.degrees), Float.valueOf(this.degreesMaximum), Float.valueOf(this.degreesMinimum), Float.valueOf(this.radians), Float.valueOf(this.radiansMaximum), Float.valueOf(this.radiansMinimum));
+		return Objects.hash(Float.valueOf(this.degrees), Float.valueOf(this.degreesMaximum), Float.valueOf(this.degreesMinimum));
 	}
 	
 	/**
@@ -222,7 +206,6 @@ public final class AngleF {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeFloat(this.degrees);
@@ -272,7 +255,6 @@ public final class AngleF {
 	 * @param degrees the angle in degrees
 	 * @return a new {@code AngleF} instance based on an angle in degrees
 	 */
-//	TODO: Add Unit Tests!
 	public static AngleF degrees(final float degrees) {
 		return degrees(degrees, DEGREES_MINIMUM, DEGREES_MAXIMUM);
 	}

@@ -37,6 +37,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.dayflower.java.lang.Strings;
 import org.dayflower.utility.Doubles;
 
 /**
@@ -82,10 +83,9 @@ public final class AngleD {
 	 * 
 	 * @return a {@code String} representation of this {@code AngleD} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("AngleD.degrees(%+.10f, %+.10f, %+.10f)", Double.valueOf(this.degrees), Double.valueOf(this.degreesMinimum), Double.valueOf(this.degreesMaximum));
+		return String.format("AngleD.degrees(%s, %s, %s)", Strings.toNonScientificNotationJava(this.degrees), Strings.toNonScientificNotationJava(this.degreesMinimum), Strings.toNonScientificNotationJava(this.degreesMaximum));
 	}
 	
 	/**
@@ -96,7 +96,6 @@ public final class AngleD {
 	 * @param object the {@code Object} to compare to this {@code AngleD} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code AngleD}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -109,12 +108,6 @@ public final class AngleD {
 			return false;
 		} else if(!equal(this.degreesMinimum, AngleD.class.cast(object).degreesMinimum)) {
 			return false;
-		} else if(!equal(this.radians, AngleD.class.cast(object).radians)) {
-			return false;
-		} else if(!equal(this.radiansMaximum, AngleD.class.cast(object).radiansMaximum)) {
-			return false;
-		} else if(!equal(this.radiansMinimum, AngleD.class.cast(object).radiansMinimum)) {
-			return false;
 		} else {
 			return true;
 		}
@@ -125,7 +118,6 @@ public final class AngleD {
 	 * 
 	 * @return the trigonometric cosine of this {@code AngleD} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double cos() {
 		return Doubles.cos(this.radians);
 	}
@@ -135,7 +127,6 @@ public final class AngleD {
 	 * 
 	 * @return the angle in degrees
 	 */
-//	TODO: Add Unit Tests!
 	public double getDegrees() {
 		return this.degrees;
 	}
@@ -145,7 +136,6 @@ public final class AngleD {
 	 * 
 	 * @return the maximum angle in degrees
 	 */
-//	TODO: Add Unit Tests!
 	public double getDegreesMaximum() {
 		return this.degreesMaximum;
 	}
@@ -155,7 +145,6 @@ public final class AngleD {
 	 * 
 	 * @return the minimum angle in degrees
 	 */
-//	TODO: Add Unit Tests!
 	public double getDegreesMinimum() {
 		return this.degreesMinimum;
 	}
@@ -165,7 +154,6 @@ public final class AngleD {
 	 * 
 	 * @return the angle in radians
 	 */
-//	TODO: Add Unit Tests!
 	public double getRadians() {
 		return this.radians;
 	}
@@ -175,7 +163,6 @@ public final class AngleD {
 	 * 
 	 * @return the maximum angle in radians
 	 */
-//	TODO: Add Unit Tests!
 	public double getRadiansMaximum() {
 		return this.radiansMaximum;
 	}
@@ -185,7 +172,6 @@ public final class AngleD {
 	 * 
 	 * @return the minimum angle in radians
 	 */
-//	TODO: Add Unit Tests!
 	public double getRadiansMinimum() {
 		return this.radiansMinimum;
 	}
@@ -195,7 +181,6 @@ public final class AngleD {
 	 * 
 	 * @return the trigonometric sine of this {@code AngleD} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double sin() {
 		return Doubles.sin(this.radians);
 	}
@@ -205,10 +190,9 @@ public final class AngleD {
 	 * 
 	 * @return a hash code for this {@code AngleD} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(this.degrees), Double.valueOf(this.degreesMaximum), Double.valueOf(this.degreesMinimum), Double.valueOf(this.radians), Double.valueOf(this.radiansMaximum), Double.valueOf(this.radiansMinimum));
+		return Objects.hash(Double.valueOf(this.degrees), Double.valueOf(this.degreesMaximum), Double.valueOf(this.degreesMinimum));
 	}
 	
 	/**
@@ -222,7 +206,6 @@ public final class AngleD {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeDouble(this.degrees);
@@ -272,7 +255,6 @@ public final class AngleD {
 	 * @param degrees the angle in degrees
 	 * @return a new {@code AngleD} instance based on an angle in degrees
 	 */
-//	TODO: Add Unit Tests!
 	public static AngleD degrees(final double degrees) {
 		return degrees(degrees, DEGREES_MINIMUM, DEGREES_MAXIMUM);
 	}

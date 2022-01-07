@@ -267,7 +267,6 @@ public final class AngleD {
 	 * @param degreesIntervalEndB the degrees that represents one of the ends of the interval of valid degrees
 	 * @return a new {@code AngleD} instance based on an angle in degrees and an interval of valid degrees
 	 */
-//	TODO: Add Unit Tests!
 	public static AngleD degrees(final double degrees, final double degreesIntervalEndA, final double degreesIntervalEndB) {
 		final double newDegreesMinimum = min(degreesIntervalEndA, degreesIntervalEndB);
 		final double newDegreesMaximum = max(degreesIntervalEndA, degreesIntervalEndB);

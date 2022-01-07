@@ -267,7 +267,6 @@ public final class AngleF {
 	 * @param degreesIntervalEndB the degrees that represents one of the ends of the interval of valid degrees
 	 * @return a new {@code AngleF} instance based on an angle in degrees and an interval of valid degrees
 	 */
-//	TODO: Add Unit Tests!
 	public static AngleF degrees(final float degrees, final float degreesIntervalEndA, final float degreesIntervalEndB) {
 		final float newDegreesMinimum = min(degreesIntervalEndA, degreesIntervalEndB);
 		final float newDegreesMaximum = max(degreesIntervalEndA, degreesIntervalEndB);

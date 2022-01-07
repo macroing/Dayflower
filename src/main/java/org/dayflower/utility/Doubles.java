@@ -1178,7 +1178,18 @@ public class Doubles {
 		final double minimumValue = min(a, b);
 		final double maximumValue = max(a, b);
 		
-		return positiveModulo(value - minimumValue, maximumValue - minimumValue + 1) + minimumValue;
+		if(value >= minimumValue && value <= maximumValue) {
+			return value;
+		} else if(value < minimumValue) {
+			return maximumValue - ((minimumValue - value) % nextUp(maximumValue - minimumValue));
+		} else {
+			return minimumValue + ((value - maximumValue) % nextUp(maximumValue - minimumValue));
+		}
+		
+//		final double minimumValue = min(a, b);
+//		final double maximumValue = max(a, b);
+		
+//		return positiveModulo(value - minimumValue, maximumValue - minimumValue + 1) + minimumValue;
 		
 //		double currentValue = value;
 		

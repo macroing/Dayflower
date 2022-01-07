@@ -50,7 +50,7 @@ public final class AngleDUnitTests {
 	@Test
 	public void testDegreesDouble() {
 		final AngleD a = AngleD.degrees(+360.0D);
-		final AngleD b = AngleD.degrees(-361.0D);
+		final AngleD b = AngleD.degrees(-360.0D);
 		
 		assertEquals(360.0D, a.getDegrees());
 		assertEquals(360.0D, a.getDegreesMaximum());
@@ -67,6 +67,28 @@ public final class AngleDUnitTests {
 		assertEquals(Math.toRadians(  0.0D), b.getRadians());
 		assertEquals(Math.toRadians(360.0D), b.getRadiansMaximum());
 		assertEquals(Math.toRadians(  0.0D), b.getRadiansMinimum());
+	}
+	
+	@Test
+	public void testDegreesDoubleDoubleDouble() {
+		final AngleD a = AngleD.degrees(200.0D, 100.0D, 300.0D);
+		final AngleD b = AngleD.degrees( 99.0D, 300.0D, 100.0D);
+		
+		assertEquals(200.0D, a.getDegrees());
+		assertEquals(300.0D, a.getDegreesMaximum());
+		assertEquals(100.0D, a.getDegreesMinimum());
+		
+		assertEquals(Math.toRadians(200.0D), a.getRadians());
+		assertEquals(Math.toRadians(300.0D), a.getRadiansMaximum());
+		assertEquals(Math.toRadians(100.0D), a.getRadiansMinimum());
+		
+		assertEquals(299.0D, b.getDegrees());
+		assertEquals(300.0D, b.getDegreesMaximum());
+		assertEquals(100.0D, b.getDegreesMinimum());
+		
+		assertEquals(Math.toRadians(299.0D), b.getRadians());
+		assertEquals(Math.toRadians(300.0D), b.getRadiansMaximum());
+		assertEquals(Math.toRadians(100.0D), b.getRadiansMinimum());
 	}
 	
 	@Test
@@ -98,8 +120,8 @@ public final class AngleDUnitTests {
 		final AngleD c = AngleD.degrees(199.0D, 200.0D, 300.0D);
 		
 		assertEquals(250.0D, a.getDegrees());
-		assertEquals(200.0D, b.getDegrees());
-		assertEquals(300.0D, c.getDegrees());
+		assertEquals(201.0D, b.getDegrees());
+		assertEquals(299.0D, c.getDegrees());
 	}
 	
 	@Test
@@ -127,8 +149,8 @@ public final class AngleDUnitTests {
 		final AngleD c = AngleD.radians(199.0D, 200.0D, 300.0D);
 		
 		assertEquals(250.0D, a.getRadians());
-		assertEquals(200.0D, b.getRadians());
-		assertEquals(300.0D, c.getRadians());
+		assertEquals(201.0D, b.getRadians());
+		assertEquals(299.0D, c.getRadians());
 	}
 	
 	@Test

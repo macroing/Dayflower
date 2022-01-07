@@ -50,7 +50,7 @@ public final class AngleFUnitTests {
 	@Test
 	public void testDegreesFloat() {
 		final AngleF a = AngleF.degrees(+360.0F);
-		final AngleF b = AngleF.degrees(-361.0F);
+		final AngleF b = AngleF.degrees(-360.0F);
 		
 		assertEquals(360.0F, a.getDegrees());
 		assertEquals(360.0F, a.getDegreesMaximum());
@@ -67,6 +67,28 @@ public final class AngleFUnitTests {
 		assertEquals((float)(Math.toRadians(  0.0F)), b.getRadians());
 		assertEquals((float)(Math.toRadians(360.0F)), b.getRadiansMaximum());
 		assertEquals((float)(Math.toRadians(  0.0F)), b.getRadiansMinimum());
+	}
+	
+	@Test
+	public void testDegreesFloatFloatFloat() {
+		final AngleF a = AngleF.degrees(200.0F, 100.0F, 300.0F);
+		final AngleF b = AngleF.degrees( 99.0F, 300.0F, 100.0F);
+		
+		assertEquals(200.0F, a.getDegrees());
+		assertEquals(300.0F, a.getDegreesMaximum());
+		assertEquals(100.0F, a.getDegreesMinimum());
+		
+		assertEquals((float)(Math.toRadians(200.0F)), a.getRadians());
+		assertEquals((float)(Math.toRadians(300.0F)), a.getRadiansMaximum());
+		assertEquals((float)(Math.toRadians(100.0F)), a.getRadiansMinimum());
+		
+		assertEquals(299.0F, b.getDegrees());
+		assertEquals(300.0F, b.getDegreesMaximum());
+		assertEquals(100.0F, b.getDegreesMinimum());
+		
+		assertEquals((float)(Math.toRadians(299.0F)), b.getRadians());
+		assertEquals((float)(Math.toRadians(300.0F)), b.getRadiansMaximum());
+		assertEquals((float)(Math.toRadians(100.0F)), b.getRadiansMinimum());
 	}
 	
 	@Test
@@ -98,8 +120,8 @@ public final class AngleFUnitTests {
 		final AngleF c = AngleF.degrees(199.0F, 200.0F, 300.0F);
 		
 		assertEquals(250.0F, a.getDegrees());
-		assertEquals(200.0F, b.getDegrees());
-		assertEquals(300.0F, c.getDegrees());
+		assertEquals(201.0F, b.getDegrees());
+		assertEquals(299.0F, c.getDegrees());
 	}
 	
 	@Test
@@ -127,8 +149,8 @@ public final class AngleFUnitTests {
 		final AngleF c = AngleF.radians(199.0F, 200.0F, 300.0F);
 		
 		assertEquals(250.0F, a.getRadians());
-		assertEquals(200.0F, b.getRadians());
-		assertEquals(300.0F, c.getRadians());
+		assertEquals(201.0F, b.getRadians());
+		assertEquals(299.0F, c.getRadians());
 	}
 	
 	@Test

@@ -1179,7 +1179,18 @@ public final class Floats {
 		final float minimumValue = min(a, b);
 		final float maximumValue = max(a, b);
 		
-		return positiveModulo(value - minimumValue, maximumValue - minimumValue + 1) + minimumValue;
+		if(value >= minimumValue && value <= maximumValue) {
+			return value;
+		} else if(value < minimumValue) {
+			return maximumValue - ((minimumValue - value) % nextUp(maximumValue - minimumValue));
+		} else {
+			return minimumValue + ((value - maximumValue) % nextUp(maximumValue - minimumValue));
+		}
+		
+//		final float minimumValue = min(a, b);
+//		final float maximumValue = max(a, b);
+		
+//		return positiveModulo(value - minimumValue, maximumValue - minimumValue + 1) + minimumValue;
 		
 //		float currentValue = value;
 		

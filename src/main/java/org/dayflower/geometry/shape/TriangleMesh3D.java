@@ -319,6 +319,29 @@ public final class TriangleMesh3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code TriangleMesh3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code TriangleMesh3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public boolean contains(final Point3D point) {
+		Objects.requireNonNull(point, "point == null");
+		
+		for(final Triangle3D triangle : this.triangles) {
+			if(triangle.contains(point)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code TriangleMesh3D} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code TriangleMesh3D}, and their respective values are equal, {@code false} otherwise.

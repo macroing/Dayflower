@@ -216,6 +216,21 @@ public final class Cone3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Cone3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Cone3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public boolean contains(final Point3D point) {
+		return point.getZ() >= 0.0D && point.getZ() <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Cone3D} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Cone3D}, and their respective values are equal, {@code false} otherwise.

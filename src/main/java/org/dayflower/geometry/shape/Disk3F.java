@@ -241,6 +241,23 @@ public final class Disk3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Disk3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Disk3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public boolean contains(final Point3F point) {
+		final float lengthSquared = new Vector2F(point).lengthSquared();
+		
+		return lengthSquared <= this.radiusOuter * this.radiusOuter && lengthSquared >= this.radiusInner * this.radiusInner && point.sphericalPhi() <= this.phiMax.getRadians();
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Disk3F} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Disk3F}, and their respective values are equal, {@code false} otherwise.

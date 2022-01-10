@@ -247,6 +247,7 @@ public final class Polygon3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3D point) {
 		final Point3D a = this.points[0];
 		final Point3D b = this.points[1];

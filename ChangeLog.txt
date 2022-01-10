@@ -1,3 +1,10 @@
+2022-01-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method contains(Point3D) to the CompoundShape3D, Cone3D, ConstructiveSolidGeometry3D, Curve3D, Cylinder3D, Disk3D, Hyperboloid3D, Paraboloid3D, Torus3D and TriangleMesh3D classes.
+	* ADD:		Add the method contains(Point3F) to the CompoundShape3F, Cone3F, ConstructiveSolidGeometry3F, Curve3F, Cylinder3F, Disk3F, Hyperboloid3F, Paraboloid3F, Torus3F and TriangleMesh3F classes.
+	* ADD:		Add the method contains(Point3D) to the Shape3D interface.
+	* ADD:		Add the method contains(Point3F) to the Shape3F interface.
+
 2022-01-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the AngleDUnitTests and AngleFUnitTests classes.

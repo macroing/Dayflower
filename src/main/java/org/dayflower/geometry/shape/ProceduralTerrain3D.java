@@ -152,6 +152,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3D point) {
 		return point.getY() < doApplyAsDouble(point.getX(), point.getZ());
 	}

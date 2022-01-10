@@ -29,7 +29,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
@@ -214,11 +213,12 @@ public final class LineSegment3F implements Shape3F {
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@link Point2F} instance
+	 * @param point a {@link Point3F} instance
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code LineSegment3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3F point) {
 		final Point3F p = Objects.requireNonNull(point, "point == null");
 		final Point3F a = this.a;

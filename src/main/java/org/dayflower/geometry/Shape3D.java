@@ -60,6 +60,17 @@ public interface Shape3D extends Shape {
 	Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum);
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Shape3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Shape3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	boolean contains(final Point3D point);
+	
+	/**
 	 * Returns the surface area of this {@code Shape3D} instance.
 	 * 
 	 * @return the surface area of this {@code Shape3D} instance

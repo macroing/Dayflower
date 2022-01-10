@@ -235,6 +235,7 @@ public final class RectangularCuboid3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3F point) {
 		return point.getX() >= this.minimum.getX() && point.getX() <= this.maximum.getX() && point.getY() >= this.minimum.getY() && point.getY() <= this.maximum.getY() && point.getZ() >= this.minimum.getZ() && point.getZ() <= this.maximum.getZ();
 	}

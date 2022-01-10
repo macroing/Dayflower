@@ -60,6 +60,17 @@ public interface Shape3F extends Shape {
 	Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Shape3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Shape3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	boolean contains(final Point3F point);
+	
+	/**
 	 * Returns the surface area of this {@code Shape3F} instance.
 	 * 
 	 * @return the surface area of this {@code Shape3F} instance

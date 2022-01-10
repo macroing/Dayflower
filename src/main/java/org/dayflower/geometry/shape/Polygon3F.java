@@ -247,6 +247,7 @@ public final class Polygon3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3F point) {
 		final Point3F a = this.points[0];
 		final Point3F b = this.points[1];

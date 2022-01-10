@@ -267,6 +267,7 @@ public final class Plane3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3D point) {
 		return Point3D.coplanar(this.a, this.b, this.c, point);
 	}

@@ -401,6 +401,7 @@ public final class Triangle3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3F point) {
 		final Point3F a = new Point3F(this.a.getPosition());
 		final Point3F b = new Point3F(this.b.getPosition());

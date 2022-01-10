@@ -241,6 +241,21 @@ public final class Paraboloid3D implements Shape3D {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Paraboloid3D} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3D} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Paraboloid3D} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public boolean contains(final Point3D point) {
+		return point.getZ() >= this.zMin && point.getZ() <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Paraboloid3D} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Paraboloid3D}, and their respective values are equal, {@code false} otherwise.

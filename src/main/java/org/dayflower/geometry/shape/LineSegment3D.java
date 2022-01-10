@@ -29,7 +29,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3D;
-import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Shape3D;
@@ -214,11 +213,12 @@ public final class LineSegment3D implements Shape3D {
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@link Point2D} instance
+	 * @param point a {@link Point3D} instance
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code LineSegment3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3D point) {
 		final Point3D p = Objects.requireNonNull(point, "point == null");
 		final Point3D a = this.a;

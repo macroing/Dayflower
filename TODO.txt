@@ -1,8 +1,3 @@
-Geometry API:
-
-	* ADD:		Add method contains(Point3D) to Shape3D.
-	* ADD:		Add method contains(Point3F) to Shape3F.
-
 Geometry Shape API:
 
 	* ADD:		Add a method to Rectangle2D that returns the intersection of two Rectangle2D instances using a Polygon2D instance.
@@ -13,6 +8,8 @@ Geometry Shape API:
 	* CHANGE:	The method intersection(Rectangle2D, Rectangle2D) of the Rectangle2D class might require updating. It does not support rotations.
 	* CHANGE:	The method intersection(Rectangle2F, Rectangle2F) of the Rectangle2F class might require updating. It does not support rotations.
 	* CHANGE:	The method intersection(Rectangle2I, Rectangle2I) of the Rectangle2I class might require updating. It does not support rotations.
+	* FIX:		Fix the ProceduralTerrain3D class.
+	* FIX:		Fix the ProceduralTerrain3F class.
 
 JavaFX Application API:
 

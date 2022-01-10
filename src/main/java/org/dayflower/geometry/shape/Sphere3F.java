@@ -372,6 +372,7 @@ public final class Sphere3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3F point) {
 		return Point3F.distanceSquared(this.center, point) <= this.radius * this.radius;
 	}

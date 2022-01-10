@@ -401,6 +401,7 @@ public final class Triangle3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3D point) {
 		final Point3D a = new Point3D(this.a.getPosition());
 		final Point3D b = new Point3D(this.b.getPosition());

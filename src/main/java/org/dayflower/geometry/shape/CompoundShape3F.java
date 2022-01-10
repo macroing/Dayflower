@@ -187,6 +187,29 @@ public final class CompoundShape3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code CompoundShape3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code CompoundShape3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	@Override
+	public boolean contains(final Point3F point) {
+		Objects.requireNonNull(point, "point == null");
+		
+		for(final Shape3F shape : this.shapes) {
+			if(shape.contains(point)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code CompoundShape3F} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code CompoundShape3F}, and their respective values are equal, {@code false} otherwise.

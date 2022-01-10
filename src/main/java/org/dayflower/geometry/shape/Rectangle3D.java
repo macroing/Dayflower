@@ -290,6 +290,7 @@ public final class Rectangle3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
+	@Override
 	public boolean contains(final Point3D point) {
 		final Point3D a = this.a;
 		final Point3D b = this.b;

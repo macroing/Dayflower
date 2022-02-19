@@ -83,10 +83,12 @@ public final class Test {
 		doTestImageFGrayscaleMinimum();
 		doTestImageFInvert();
 		doTestImageFRotate();
+		doTestImageFSaveJPEG();
 		doTestImageFScaleBoth();
 		doTestImageFScaleDown();
 		doTestImageFScaleUp();
 		doTestImageFSepia();
+		doTestImageFSobel();
 		doTestImageFUndoAndRedo();
 		doTestImageFUpdate();
 		doTestImageFUpdateToneMapFilmicCurveACESModifiedVersion1();
@@ -374,6 +376,12 @@ public final class Test {
 		imageF.save("./generated/Test/Image-Rotate.png");
 	}
 	
+	private static void doTestImageFSaveJPEG() {
+		final
+		ImageF imageF = IMAGE_ORIGINAL.copy();
+		imageF.save("./generated/test/Image-Save-JPEG.jpg", "jpg");
+	}
+	
 	private static void doTestImageFScaleBoth() {
 		final
 		ImageF imageF = IMAGE_ORIGINAL.scale(new Vector2F(0.5F, 2.0F));
@@ -397,6 +405,13 @@ public final class Test {
 		ImageF imageF = IMAGE_ORIGINAL.copy();
 		imageF.sepia();
 		imageF.save("./generated/Test/Image-Sepia.png");
+	}
+	
+	private static void doTestImageFSobel() {
+		final
+		ImageF imageF = IMAGE_ORIGINAL.copy();
+		imageF.sobel();
+		imageF.save("./generated/Test/Image-Sobel.png");
 	}
 	
 	private static void doTestImageFUndoAndRedo() {

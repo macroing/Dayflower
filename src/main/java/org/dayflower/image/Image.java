@@ -80,13 +80,34 @@ public abstract class Image {
 	 * Returns a {@code BufferedImage} representation of this {@code Image} instance.
 	 * <p>
 	 * If either {@code image.getResolutionX()} or {@code image.getResolutionY()} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.toBufferedImage(false);
+	 * }
+	 * </pre>
 	 * 
 	 * @return a {@code BufferedImage} representation of this {@code Image} instance
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code image.getResolutionX()} or {@code image.getResolutionY()} are less than or equal to {@code 0}
 	 */
 //	TODO: Add Unit Tests!
 	public final BufferedImage toBufferedImage() {
-		final BufferedImage bufferedImage = new BufferedImage(this.resolutionX, this.resolutionY, BufferedImage.TYPE_INT_ARGB);
+		return toBufferedImage(false);
+	}
+	
+	/**
+	 * Returns a {@code BufferedImage} representation of this {@code Image} instance.
+	 * <p>
+	 * If either {@code image.getResolutionX()} or {@code image.getResolutionY()} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param isRGB {@code true} if, and only if, {@code BufferedImage.TYPE_INT_RGB} should be used instead of {@code BufferedImage.TYPE_INT_ARGB}, {@code false} otherwise
+	 * @return a {@code BufferedImage} representation of this {@code Image} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code image.getResolutionX()} or {@code image.getResolutionY()} are less than or equal to {@code 0}
+	 */
+//	TODO: Add Unit Tests!
+	public final BufferedImage toBufferedImage(final boolean isRGB) {
+		final BufferedImage bufferedImage = new BufferedImage(this.resolutionX, this.resolutionY, isRGB ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB);
 		
 		final int[] dataSource = toIntArrayPackedForm();
 		final int[] dataTarget = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
@@ -436,7 +457,9 @@ public abstract class Image {
 				parentFile.mkdirs();
 			}
 			
-			ImageIO.write(toBufferedImage(), formatName, file);
+			final boolean isRGB = formatName.matches("^\\.?[Jj][Pp][Ee]?[Gg]$");
+			
+			ImageIO.write(toBufferedImage(isRGB), formatName, file);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}

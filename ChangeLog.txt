@@ -1,3 +1,9 @@
+2022-02-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method sobel() to the ImageD and ImageF classes.
+	* ADD:		Add the method toBufferedImage(boolean) to the Image class. If the boolean parameter is true, the BufferedImage will use BufferedImage.TYPE_INT_RGB instead of BufferedImage.TYPE_INT_ARGB.
+	* CHANGE:	Fix the save(...) methods in the Image class to work with JPEG images. Previously images saved as JPEG would be somewhat pink. This was caused by the alpha-channel.
+
 2022-01-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method contains(Point3D) to the CompoundShape3D, Cone3D, ConstructiveSolidGeometry3D, Curve3D, Cylinder3D, Disk3D, Hyperboloid3D, Paraboloid3D, Torus3D and TriangleMesh3D classes.

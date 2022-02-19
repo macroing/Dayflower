@@ -25,6 +25,7 @@ import static org.dayflower.utility.Floats.floor;
 import static org.dayflower.utility.Floats.maxOrNaN;
 import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.minOrNaN;
+import static org.dayflower.utility.Floats.sqrt;
 import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
@@ -2103,6 +2104,54 @@ public abstract class ImageF extends Image {
 	public final ImageF setColorRGBA(final Color4F colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
 		doChangeBegin();
 		doSetColorRGBA(colorRGBA, x, y, pixelOperation);
+		doChangeEnd();
+		
+		return this;
+	}
+	
+	/**
+	 * Applies a Sobel operator to this {@code ImageF} instance.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * 
+	 * @return this {@code ImageF} instance
+	 */
+//	TODO: Add Unit Tests!
+	public final ImageF sobel() {
+		doChangeBegin();
+		
+		final ImageF image = copy();
+		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		final float[][] kernel = {{-1.0F, 0.0F, 1.0F}, {-2.0F, 0.0F, 2.0F}, {-1.0F, 0.0F, 1.0F}};
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				float magnitudeX = 0.0F;
+				float magnitudeY = 0.0F;
+				
+				for(int kernelY = 0; kernelY < 3; kernelY++) {
+					for(int kernelX = 0; kernelX < 3; kernelX++) {
+						final int currentX = x + kernelX - 1;
+						final int currentY = y + kernelY - 1;
+						
+						if(currentX >= 0 && currentX < resolutionX && currentY >= 0 && currentY < resolutionY) {
+							final int index = currentY * resolutionX + currentX;
+							
+							final float intensity = image.getColorRGB(index).average();
+							
+							magnitudeX += intensity * kernel[kernelY][kernelX];
+							magnitudeY += intensity * kernel[kernelX][kernelY];
+						}
+					}
+				}
+				
+				doSetColorRGBA(new Color4F(sqrt(magnitudeX * magnitudeX + magnitudeY * magnitudeY)), x, y);
+			}
+		}
+		
 		doChangeEnd();
 		
 		return this;

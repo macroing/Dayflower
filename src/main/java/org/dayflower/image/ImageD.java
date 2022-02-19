@@ -25,6 +25,7 @@ import static org.dayflower.utility.Doubles.floor;
 import static org.dayflower.utility.Doubles.maxOrNaN;
 import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.minOrNaN;
+import static org.dayflower.utility.Doubles.sqrt;
 import static org.dayflower.utility.Doubles.toDouble;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
@@ -2103,6 +2104,54 @@ public abstract class ImageD extends Image {
 	public final ImageD setColorRGBA(final Color4D colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
 		doChangeBegin();
 		doSetColorRGBA(colorRGBA, x, y, pixelOperation);
+		doChangeEnd();
+		
+		return this;
+	}
+	
+	/**
+	 * Applies a Sobel operator to this {@code ImageD} instance.
+	 * <p>
+	 * Returns this {@code ImageD} instance.
+	 * 
+	 * @return this {@code ImageD} instance
+	 */
+//	TODO: Add Unit Tests!
+	public final ImageD sobel() {
+		doChangeBegin();
+		
+		final ImageD image = copy();
+		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		final double[][] kernel = {{-1.0D, 0.0D, 1.0D}, {-2.0D, 0.0D, 2.0D}, {-1.0D, 0.0D, 1.0D}};
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				double magnitudeX = 0.0D;
+				double magnitudeY = 0.0D;
+				
+				for(int kernelY = 0; kernelY < 3; kernelY++) {
+					for(int kernelX = 0; kernelX < 3; kernelX++) {
+						final int currentX = x + kernelX - 1;
+						final int currentY = y + kernelY - 1;
+						
+						if(currentX >= 0 && currentX < resolutionX && currentY >= 0 && currentY < resolutionY) {
+							final int index = currentY * resolutionX + currentX;
+							
+							final double intensity = image.getColorRGB(index).average();
+							
+							magnitudeX += intensity * kernel[kernelY][kernelX];
+							magnitudeY += intensity * kernel[kernelX][kernelY];
+						}
+					}
+				}
+				
+				doSetColorRGBA(new Color4D(sqrt(magnitudeX * magnitudeX + magnitudeY * magnitudeY)), x, y);
+			}
+		}
+		
 		doChangeEnd();
 		
 		return this;

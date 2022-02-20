@@ -177,7 +177,31 @@ public final class Color4FUnitTests {
 	}
 	
 	@Test
-	public void testEquals() {
+	public void testEqualsColor4F() {
+		final Color4F a = new Color4F(0.0F, 0.5F, 1.0F, 1.0F);
+		final Color4F b = new Color4F(0.0F, 0.5F, 1.0F, 1.0F);
+		final Color4F c = new Color4F(0.0F, 0.5F, 1.0F, 2.0F);
+		final Color4F d = new Color4F(0.0F, 0.5F, 2.0F, 1.0F);
+		final Color4F e = new Color4F(0.0F, 2.0F, 1.0F, 1.0F);
+		final Color4F f = new Color4F(2.0F, 0.5F, 1.0F, 1.0F);
+		final Color4F g = null;
+		
+		assertTrue(a.equals(a));
+		assertTrue(a.equals(b));
+		assertTrue(b.equals(a));
+		assertFalse(a.equals(c));
+		assertFalse(c.equals(a));
+		assertFalse(a.equals(d));
+		assertFalse(d.equals(a));
+		assertFalse(a.equals(e));
+		assertFalse(e.equals(a));
+		assertFalse(a.equals(f));
+		assertFalse(f.equals(a));
+		assertFalse(a.equals(g));
+	}
+	
+	@Test
+	public void testEqualsObject() {
 		final Color4F a = new Color4F(0.0F, 0.5F, 1.0F, 1.0F);
 		final Color4F b = new Color4F(0.0F, 0.5F, 1.0F, 1.0F);
 		final Color4F c = new Color4F(0.0F, 0.5F, 1.0F, 2.0F);

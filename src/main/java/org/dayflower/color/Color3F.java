@@ -375,7 +375,6 @@ public final class Color3F {
 	 * @param color the {@code Color3F} to compare to this {@code Color3F} instance for equality
 	 * @return {@code true} if, and only if, {@code color} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean equals(final Color3F color) {
 		if(color == this) {
 			return true;
@@ -1295,7 +1294,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the division
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F divide(final Color3F colorLHS, final Color3F colorRHS) {
 		final float component1 = finiteOrDefault(colorLHS.component1 / colorRHS.component1, 0.0F);
 		final float component2 = finiteOrDefault(colorLHS.component2 / colorRHS.component2, 0.0F);
@@ -1734,11 +1732,10 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F normalize(final Color3F color) {
 		final float sum = color.component1 + color.component2 + color.component3;
 		
-		if(sum < 1.0e-6F) {
+		if(sum < 0.000001F) {
 			return color;
 		}
 		
@@ -1762,7 +1759,6 @@ public final class Color3F {
 	 * @return a new {@code Color3F} instance with the result of the normalization
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Color3F normalizeLuminance(final Color3F color) {
 		final float luminance = color.luminance();
 		

@@ -53,61 +53,51 @@ public final class Color4D {
 	/**
 	 * A {@code Color4D} denoting the color black.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D BLACK = new Color4D();
 	
 	/**
 	 * A {@code Color4D} denoting the color blue.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D BLUE = new Color4D(0.0D, 0.0D, 1.0D);
 	
 	/**
 	 * A {@code Color4D} denoting the color cyan.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D CYAN = new Color4D(0.0D, 1.0D, 1.0D);
 	
 	/**
 	 * A {@code Color4D} denoting the color green.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D GREEN = new Color4D(0.0D, 1.0D, 0.0D);
 	
 	/**
 	 * A {@code Color4D} denoting the color magenta.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D MAGENTA = new Color4D(1.0D, 0.0D, 1.0D);
 	
 	/**
 	 * A {@code Color4D} denoting the color orange.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D ORANGE = new Color4D(1.0D, 0.5D, 0.0D);
 	
 	/**
 	 * A {@code Color4D} denoting the color red.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D RED = new Color4D(1.0D, 0.0D, 0.0D);
 	
 	/**
 	 * A {@code Color4D} denoting a transparent color.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D TRANSPARENT = new Color4D(0.0D, 0.0D, 0.0D, 0.0D);
 	
 	/**
 	 * A {@code Color4D} denoting the color white.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D WHITE = new Color4D(1.0D, 1.0D, 1.0D);
 	
 	/**
 	 * A {@code Color4D} denoting the color yellow.
 	 */
-//	TODO: Add Unit Tests!
 	public static final Color4D YELLOW = new Color4D(1.0D, 1.0D, 0.0D);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +119,6 @@ public final class Color4D {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D() {
 		this(0.0D);
 	}
@@ -142,7 +131,6 @@ public final class Color4D {
 	 * @param color a {@link Color3D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final Color3D color) {
 		this(color.getComponent1(), color.getComponent2(), color.getComponent3());
 	}
@@ -156,7 +144,6 @@ public final class Color4D {
 	 * @param component4 the value of component 4
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final Color3D color, final double component4) {
 		this(color.getComponent1(), color.getComponent2(), color.getComponent3(), component4);
 	}
@@ -169,7 +156,6 @@ public final class Color4D {
 	 * @param color a {@link Color3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final Color3F color) {
 		this(toDouble(color.getComponent1()), toDouble(color.getComponent2()), toDouble(color.getComponent3()));
 	}
@@ -183,7 +169,6 @@ public final class Color4D {
 	 * @param component4 the value of component 4
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final Color3F color, final double component4) {
 		this(toDouble(color.getComponent1()), toDouble(color.getComponent2()), toDouble(color.getComponent3()), component4);
 	}
@@ -200,7 +185,6 @@ public final class Color4D {
 	 * 
 	 * @param component the value of component 1, component 2 and component 3
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final double component) {
 		this(component, component, component);
 	}
@@ -218,7 +202,6 @@ public final class Color4D {
 	 * @param component the value of component 1, component 2 and component 3
 	 * @param component4 the value of component 4
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final double component, final double component4) {
 		this(component, component, component, component4);
 	}
@@ -237,7 +220,6 @@ public final class Color4D {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final double component1, final double component2, final double component3) {
 		this(component1, component2, component3, 1.0D);
 	}
@@ -250,7 +232,6 @@ public final class Color4D {
 	 * @param component3 the value of component 3
 	 * @param component4 the value of component 4
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final double component1, final double component2, final double component3, final double component4) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -270,7 +251,6 @@ public final class Color4D {
 	 * 
 	 * @param component the value of component 1, component 2 and component 3
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final int component) {
 		this(component, component, component);
 	}
@@ -289,7 +269,6 @@ public final class Color4D {
 	 * @param component2 the value of component 2
 	 * @param component3 the value of component 3
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final int component1, final int component2, final int component3) {
 		this(component1, component2, component3, 255);
 	}
@@ -309,7 +288,6 @@ public final class Color4D {
 	 * @param component3 the value of component 3
 	 * @param component4 the value of component 4
 	 */
-//	TODO: Add Unit Tests!
 	public Color4D(final int component1, final int component2, final int component3, final int component4) {
 		this(Ints.saturate(component1) / 255.0D, Ints.saturate(component2) / 255.0D, Ints.saturate(component3) / 255.0D, Ints.saturate(component4) / 255.0D);
 	}
@@ -321,7 +299,6 @@ public final class Color4D {
 	 * 
 	 * @return a {@code String} representation of this {@code Color4D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Color4D(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3), Strings.toNonScientificNotationJava(this.component4));
@@ -335,7 +312,6 @@ public final class Color4D {
 	 * @param color the {@code Color4D} to compare to this {@code Color4D} instance for equality
 	 * @return {@code true} if, and only if, {@code color} is an instance of {@code Color4D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean equals(final Color4D color) {
 		if(color == this) {
 			return true;
@@ -362,7 +338,6 @@ public final class Color4D {
 	 * @param object the {@code Object} to compare to this {@code Color4D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Color4D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {

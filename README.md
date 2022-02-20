@@ -170,7 +170,7 @@ The following table describes the different APIs and their current status in the
 | Name                                   | Javadoc | Unit Test |
 | -------------------------------------- | ------- | --------- |
 | Change API                             | 100.0%  | 100.0%    |
-| Color API                              | 100.0%  |  82.9%    |
+| Color API                              | 100.0%  |  83.8%    |
 | Filter API                             | 100.0%  |   0.0%    |
 | Geometry API                           | 100.0%  |  76.5%    |
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |

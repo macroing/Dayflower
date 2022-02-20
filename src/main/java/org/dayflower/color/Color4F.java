@@ -312,7 +312,6 @@ public final class Color4F {
 	 * @param color the {@code Color4F} to compare to this {@code Color4F} instance for equality
 	 * @return {@code true} if, and only if, {@code color} is an instance of {@code Color4F}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean equals(final Color4F color) {
 		if(color == this) {
 			return true;

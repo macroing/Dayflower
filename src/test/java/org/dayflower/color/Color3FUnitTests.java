@@ -594,6 +594,38 @@ public final class Color3FUnitTests {
 	}
 	
 	@Test
+	public void testDivideColor3FColor3F() {
+		final Color3F a = Color3F.divide(new Color3F(1.0F, 1.5F, 2.0F), new Color3F(2.0F, 2.0F, 2.0F));
+		final Color3F b = Color3F.divide(new Color3F(1.0F, 1.5F, 2.0F), new Color3F(0.0F, 0.0F, 0.0F));
+		final Color3F c = Color3F.divide(new Color3F(1.0F, 1.5F, 2.0F), new Color3F(Float.NaN));
+		final Color3F d = Color3F.divide(new Color3F(1.0F, 1.5F, 2.0F), new Color3F(Float.NEGATIVE_INFINITY));
+		final Color3F e = Color3F.divide(new Color3F(1.0F, 1.5F, 2.0F), new Color3F(Float.POSITIVE_INFINITY));
+		
+		assertEquals(0.50F, a.getComponent1());
+		assertEquals(0.75F, a.getComponent2());
+		assertEquals(1.00F, a.getComponent3());
+		
+		assertEquals(0.0F, b.getComponent1());
+		assertEquals(0.0F, b.getComponent2());
+		assertEquals(0.0F, b.getComponent3());
+		
+		assertEquals(0.0F, c.getComponent1());
+		assertEquals(0.0F, c.getComponent2());
+		assertEquals(0.0F, c.getComponent3());
+		
+		assertEquals(-0.0F, d.getComponent1());
+		assertEquals(-0.0F, d.getComponent2());
+		assertEquals(-0.0F, d.getComponent3());
+		
+		assertEquals(0.0F, e.getComponent1());
+		assertEquals(0.0F, e.getComponent2());
+		assertEquals(0.0F, e.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Color3F.divide(a, null));
+		assertThrows(NullPointerException.class, () -> Color3F.divide(null, a));
+	}
+	
+	@Test
 	public void testDivideColor3FFloat() {
 		final Color3F a = Color3F.divide(new Color3F(1.0F, 1.5F, 2.0F), 2.0F);
 		final Color3F b = Color3F.divide(new Color3F(1.0F, 1.5F, 2.0F), 0.0F);
@@ -625,7 +657,28 @@ public final class Color3FUnitTests {
 	}
 	
 	@Test
-	public void testEquals() {
+	public void testEqualsColor3F() {
+		final Color3F a = new Color3F(0.0F, 0.5F, 1.0F);
+		final Color3F b = new Color3F(0.0F, 0.5F, 1.0F);
+		final Color3F c = new Color3F(0.0F, 0.5F, 2.0F);
+		final Color3F d = new Color3F(0.0F, 2.0F, 1.0F);
+		final Color3F e = new Color3F(2.0F, 0.5F, 1.0F);
+		final Color3F f = null;
+		
+		assertTrue(a.equals(a));
+		assertTrue(a.equals(b));
+		assertTrue(b.equals(a));
+		assertFalse(a.equals(c));
+		assertFalse(c.equals(a));
+		assertFalse(a.equals(d));
+		assertFalse(d.equals(a));
+		assertFalse(a.equals(e));
+		assertFalse(e.equals(a));
+		assertFalse(a.equals(f));
+	}
+	
+	@Test
+	public void testEqualsObject() {
 		final Color3F a = new Color3F(0.0F, 0.5F, 1.0F);
 		final Color3F b = new Color3F(0.0F, 0.5F, 1.0F);
 		final Color3F c = new Color3F(0.0F, 0.5F, 2.0F);
@@ -1090,9 +1143,11 @@ public final class Color3FUnitTests {
 	public void testIsBlack() {
 		final Color3F a = new Color3F(0.0F, 0.0F, 0.0F);
 		final Color3F b = new Color3F(0.0F, 0.0F, 1.0F);
+		final Color3F c = new Color3F(1.0F, 1.0F, 1.0F);
 		
 		assertTrue(a.isBlack());
 		assertFalse(b.isBlack());
+		assertFalse(c.isBlack());
 	}
 	
 	@Test
@@ -1120,10 +1175,12 @@ public final class Color3FUnitTests {
 		final Color3F a = new Color3F(0.0F, 1.0F, 1.0F);
 		final Color3F b = new Color3F(0.0F, 0.5F, 0.5F);
 		final Color3F c = new Color3F(1.0F, 1.0F, 1.0F);
+		final Color3F d = new Color3F(0.0F, 0.5F, 1.0F);
 		
 		assertTrue(a.isCyan());
 		assertTrue(b.isCyan());
 		assertFalse(c.isCyan());
+		assertFalse(d.isCyan());
 	}
 	
 	@Test
@@ -1170,10 +1227,12 @@ public final class Color3FUnitTests {
 		final Color3F a = new Color3F(1.0F, 0.0F, 1.0F);
 		final Color3F b = new Color3F(0.5F, 0.0F, 0.5F);
 		final Color3F c = new Color3F(1.0F, 1.0F, 1.0F);
+		final Color3F d = new Color3F(0.0F, 0.5F, 1.0F);
 		
 		assertTrue(a.isMagenta());
 		assertTrue(b.isMagenta());
 		assertFalse(c.isMagenta());
+		assertFalse(d.isMagenta());
 	}
 	
 	@Test
@@ -1201,10 +1260,12 @@ public final class Color3FUnitTests {
 		final Color3F a = new Color3F(1.0F, 1.0F, 1.0F);
 		final Color3F b = new Color3F(2.0F, 2.0F, 2.0F);
 		final Color3F c = new Color3F(1.0F, 1.5F, 2.0F);
+		final Color3F d = new Color3F(0.0F, 0.0F, 0.0F);
 		
 		assertTrue(a.isWhite());
 		assertTrue(b.isWhite());
 		assertFalse(c.isWhite());
+		assertFalse(d.isWhite());
 	}
 	
 	@Test
@@ -1212,10 +1273,12 @@ public final class Color3FUnitTests {
 		final Color3F a = new Color3F(1.0F, 1.0F, 0.0F);
 		final Color3F b = new Color3F(0.5F, 0.5F, 0.0F);
 		final Color3F c = new Color3F(1.0F, 1.0F, 1.0F);
+		final Color3F d = new Color3F(0.0F, 0.5F, 1.0F);
 		
 		assertTrue(a.isYellow());
 		assertTrue(b.isYellow());
 		assertFalse(c.isYellow());
+		assertFalse(d.isYellow());
 	}
 	
 	@Test
@@ -1404,6 +1467,38 @@ public final class Color3FUnitTests {
 		assertEquals(+3.0F, c.getComponent3());
 		
 		assertThrows(NullPointerException.class, () -> Color3F.negate(null));
+	}
+	
+	@Test
+	public void testNormalize() {
+		final Color3F a = Color3F.normalize(new Color3F(0.0F, 0.0F, 0.0F));
+		final Color3F b = Color3F.normalize(new Color3F(1.0F, 1.0F, 1.0F));
+		
+		assertEquals(0.0F, a.getComponent1());
+		assertEquals(0.0F, a.getComponent2());
+		assertEquals(0.0F, a.getComponent3());
+		
+		assertEquals(0.3333333333333333F, b.getComponent1());
+		assertEquals(0.3333333333333333F, b.getComponent2());
+		assertEquals(0.3333333333333333F, b.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Color3F.normalize(null));
+	}
+	
+	@Test
+	public void testNormalizeLuminance() {
+		final Color3F a = Color3F.normalizeLuminance(new Color3F(0.0F, 0.0F, 0.0F));
+		final Color3F b = Color3F.normalizeLuminance(new Color3F(1.0F, 1.0F, 1.0F));
+		
+		assertEquals(1.0F, a.getComponent1());
+		assertEquals(1.0F, a.getComponent2());
+		assertEquals(1.0F, a.getComponent3());
+		
+		assertEquals(1.0F, b.getComponent1());
+		assertEquals(1.0F, b.getComponent2());
+		assertEquals(1.0F, b.getComponent3());
+		
+		assertThrows(NullPointerException.class, () -> Color3F.normalizeLuminance(null));
 	}
 	
 	@Test

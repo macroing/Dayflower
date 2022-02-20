@@ -1,3 +1,7 @@
+Color API:
+
+	* CHANGE:	Rename the method luminance() (and those with similar names that are referencing it) to relativeLuminance() in the Color* classes.
+
 Geometry Shape API:
 
 	* ADD:		Add a method to Rectangle2D that returns the intersection of two Rectangle2D instances using a Polygon2D instance.

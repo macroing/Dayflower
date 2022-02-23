@@ -75,19 +75,19 @@ public final class SmallPTD {
 		
 		switch(sphere.getMaterial()) {
 			case GLASS:
-				return radianceGlass(ray, scene, currentDepth, albedo, emission, intersection);
+				return Color3D.addAndMultiply(emission, albedo, radianceGlass(ray, scene, currentDepth, intersection));
 			case MATTE:
-				return radianceMatte(ray, scene, currentDepth, albedo, emission, intersection);
+				return Color3D.addAndMultiply(emission, albedo, radianceMatte(ray, scene, currentDepth, intersection));
 			case METAL:
-				return radianceMetal(ray, scene, currentDepth, albedo, emission, intersection);
+				return Color3D.addAndMultiply(emission, albedo, radianceMetal(ray, scene, currentDepth, intersection));
 			case MIRROR:
-				return radianceMirror(ray, scene, currentDepth, albedo, emission, intersection);
+				return Color3D.addAndMultiply(emission, albedo, radianceMirror(ray, scene, currentDepth, intersection));
 			default:
-				return Color3D.BLACK;
+				return Color3D.addAndMultiply(emission, albedo, Color3D.BLACK);
 		}
 	}
 	
-	public static Color3D radianceGlass(final Ray3D ray, final Scene scene, final int depth, final Color3D albedo, final Color3D emission, final Intersection intersection) {
+	public static Color3D radianceGlass(final Ray3D ray, final Scene scene, final int depth, final Intersection intersection) {
 		final Vector3D direction = ray.getDirection();
 		
 		final Vector3D surfaceNormal = intersection.getSurfaceNormal();
@@ -131,16 +131,16 @@ public final class SmallPTD {
 			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
-				return Color3D.addAndMultiply(emission, albedo, radiance(reflectionRay, scene, depth), probabilityRussianRouletteReflection);
+				return Color3D.multiply(radiance(reflectionRay, scene, depth), probabilityRussianRouletteReflection);
 			}
 			
-			return Color3D.addAndMultiply(emission, albedo, radiance(transmissionRay, scene, depth), probabilityRussianRouletteTransmission);
+			return Color3D.multiply(radiance(transmissionRay, scene, depth), probabilityRussianRouletteTransmission);
 		}
 		
-		return Color3D.addAndMultiply(emission, albedo, radiance(reflectionRay, scene, depth));
+		return radiance(reflectionRay, scene, depth);
 	}
 	
-	public static Color3D radianceMatte(final Ray3D ray, final Scene scene, final int depth, final Color3D albedo, final Color3D emission, final Intersection intersection) {
+	public static Color3D radianceMatte(final Ray3D ray, final Scene scene, final int depth, final Intersection intersection) {
 		final Vector3D surfaceNormal = intersection.getSurfaceNormal();
 		final Vector3D surfaceNormalCorrectlyOriented = Vector3D.dotProduct(surfaceNormal, ray.getDirection()) < 0.0D ? surfaceNormal : Vector3D.negate(surfaceNormal);
 		
@@ -158,10 +158,10 @@ public final class SmallPTD {
 		
 		final Color3D radiance = radiance(newRay, scene, depth);
 		
-		return Color3D.addAndMultiply(emission, albedo, radiance);
+		return radiance;
 	}
 	
-	public static Color3D radianceMetal(final Ray3D ray, final Scene scene, final int depth, final Color3D albedo, final Color3D emission, final Intersection intersection) {
+	public static Color3D radianceMetal(final Ray3D ray, final Scene scene, final int depth, final Intersection intersection) {
 		final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(random(), random(), 20.0D);
 		
 		final Vector3D w = Vector3D.normalize(Vector3D.reflection(ray.getDirection(), intersection.getSurfaceNormal(), true));
@@ -176,10 +176,10 @@ public final class SmallPTD {
 		
 		final Color3D radiance = radiance(newRay, scene, depth);
 		
-		return Color3D.addAndMultiply(emission, albedo, radiance);
+		return radiance;
 	}
 	
-	public static Color3D radianceMirror(final Ray3D ray, final Scene scene, final int depth, final Color3D albedo, final Color3D emission, final Intersection intersection) {
+	public static Color3D radianceMirror(final Ray3D ray, final Scene scene, final int depth, final Intersection intersection) {
 		final Point3D newOrigin = intersection.getSurfaceIntersectionPoint();
 		
 		final Vector3D newDirection = Vector3D.reflection(ray.getDirection(), intersection.getSurfaceNormal(), true);
@@ -188,7 +188,7 @@ public final class SmallPTD {
 		
 		final Color3D radiance = radiance(newRay, scene, depth);
 		
-		return Color3D.addAndMultiply(emission, albedo, radiance);
+		return radiance;
 	}
 	
 	public static void main(final String[] args) {

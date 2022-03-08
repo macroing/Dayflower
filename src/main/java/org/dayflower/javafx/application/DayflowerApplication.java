@@ -138,6 +138,7 @@ public final class DayflowerApplication extends Application {
 		Stage stage = doGetStage();
 		stage.setMinHeight(MINIMUM_RESOLUTION_Y);
 		stage.setMinWidth(MINIMUM_RESOLUTION_X);
+		stage.setOnCloseRequest(e -> doExit());
 		stage.setResizable(true);
 		stage.setScene(new javafx.scene.Scene(this.borderPane));
 		stage.setTitle(TITLE);

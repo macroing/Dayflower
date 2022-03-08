@@ -1,3 +1,7 @@
+2022-03-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	When DayflowerApplication was rendering and was closed, the program would not terminate. This has been fixed. The bug was described in issue #3.
+
 2022-02-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Color3DUnitTests, Color3FUnitTests, Color4DUnitTests and Color4FUnitTests classes.

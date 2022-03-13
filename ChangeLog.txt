@@ -1,13 +1,18 @@
 2022-03-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods fillRegion(int, int, BiFunction<Color4D, Point2I, Color4D>) and fillRegion(int, int, BiFunction<Color4D, Point2I, Color4D>, BiPredicate<Color4D, Point2I>) to the ImageD class.
+	* ADD:		Add the methods fillRegion(int, int, BiFunction<Color4F, Point2I, Color4F>) and fillRegion(int, int, BiFunction<Color4F, Point2I, Color4F>, BiPredicate<Color4F, Point2I>) to the ImageF class.
+	* ADD:		Add the constant IDENTITY to the ConvolutionKernel33D, ConvolutionKernel33F, ConvolutionKernel55D and ConvolutionKernel55F classes.
 	* ADD:		Add the method pow2(double) to the Doubles class.
 	* ADD:		Add the method pow2(float) to the Floats class.
 	* CHANGE:	Refactor the name of the method sampleNormal(Vector3F, Point2F) in the MicrofacetDistribution, BeckmannMicrofacetDistribution and TrowbridgeReitzMicrofacetDistribution classes to sampleHalfway(Vector3F, Point2F).
 	* CHANGE:	Refactor the name of the parameter normal in the method computeDifferentialArea(Vector3F) in the MicrofacetDistribution, BeckmannMicrofacetDistribution and TrowbridgeReitzMicrofacetDistribution classes to halfway.
 	* CHANGE:	Refactor the name of the parameter normal in the method computeProbabilityDensityFunctionValue(Vector3F, Vector3F) in the MicrofacetDistribution class to halfway.
 	* CHANGE:	Update the random() method in the Doubles and Floats classes to use ThreadLocalRandom instead of a Random class.
-	* CHANGE:	Refactor the method addButton(String, EventHandler<ActionEvent>) in the CenteredVBox to addButton(String, EventHandler<ActionEvent>, boolean). The boolean parameter is used for the disabled state.
+	* CHANGE:	Refactor the method addButton(String, EventHandler<ActionEvent>) in the CenteredVBox class to addButton(String, EventHandler<ActionEvent>, boolean). The boolean parameter is used for the disabled state.
 	* CHANGE:	Update the GUI to disable certain buttons when running the GPU renderer. The functionality of these buttons are not supported by it yet.
+	* CHANGE:	Rename the constant EDGE_DETECTION in the ConvolutionKernel33D and ConvolutionKernel33F classes to RIDGE_DETECTION.
+	* CHANGE:	Change the Edge Detection operation in the ScreenRendererApplication to Ridge Detection.
 	* REMOVE:	Remove the method image4DTextureGetColor4D(double[], double) from the Texture class in the Simplex API.
 
 2022-03-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>

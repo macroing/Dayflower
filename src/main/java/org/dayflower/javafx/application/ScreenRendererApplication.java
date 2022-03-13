@@ -58,11 +58,11 @@ public final class ScreenRendererApplication extends Application {
 	private static final String OPERATION_BLEND_GREEN = "Blend Green";
 	private static final String OPERATION_BLEND_RED = "Blend Red";
 	private static final String OPERATION_BOX_BLUR = "Box Blur";
-	private static final String OPERATION_EDGE_DETECTION = "Edge Detection";
 	private static final String OPERATION_EMBOSS = "Emboss";
 	private static final String OPERATION_FRACTIONAL_BROWNIAN_MOTION = "Fractional Brownian Motion";
 	private static final String OPERATION_NONE = "None";
 	private static final String OPERATION_RANDOM = "Random";
+	private static final String OPERATION_RIDGE_DETECTION = "Ridge Detection";
 	private static final String OPERATION_SHARPEN = "Sharpen";
 	private static final String OPERATION_THRESHOLD = "Threshold";
 	
@@ -177,11 +177,11 @@ public final class ScreenRendererApplication extends Application {
 		comboBox.getItems().add(OPERATION_BLEND_GREEN);
 		comboBox.getItems().add(OPERATION_BLEND_RED);
 		comboBox.getItems().add(OPERATION_BOX_BLUR);
-		comboBox.getItems().add(OPERATION_EDGE_DETECTION);
 		comboBox.getItems().add(OPERATION_EMBOSS);
 		comboBox.getItems().add(OPERATION_FRACTIONAL_BROWNIAN_MOTION);
 		comboBox.getItems().add(OPERATION_NONE);
 		comboBox.getItems().add(OPERATION_RANDOM);
+		comboBox.getItems().add(OPERATION_RIDGE_DETECTION);
 		comboBox.getItems().add(OPERATION_SHARPEN);
 		comboBox.getItems().add(OPERATION_THRESHOLD);
 		comboBox.getSelectionModel().select(OPERATION_NONE);
@@ -209,10 +209,6 @@ public final class ScreenRendererApplication extends Application {
 						break;
 					case OPERATION_BOX_BLUR:
 						doSetOperationConvolutionKernel(function, ConvolutionKernel33F.BOX_BLUR);
-						
-						break;
-					case OPERATION_EDGE_DETECTION:
-						doSetOperationConvolutionKernel(function, ConvolutionKernel33F.EDGE_DETECTION);
 						
 						break;
 					case OPERATION_EMBOSS:
@@ -246,6 +242,10 @@ public final class ScreenRendererApplication extends Application {
 						break;
 					case OPERATION_RANDOM:
 						doSetOperationConvolutionKernel(function, ConvolutionKernel33F.random());
+						
+						break;
+					case OPERATION_RIDGE_DETECTION:
+						doSetOperationConvolutionKernel(function, ConvolutionKernel33F.RIDGE_DETECTION);
 						
 						break;
 					case OPERATION_SHARPEN:

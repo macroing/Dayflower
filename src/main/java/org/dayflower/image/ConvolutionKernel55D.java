@@ -41,6 +41,12 @@ public final class ConvolutionKernel55D {
 	public static final ConvolutionKernel55D GAUSSIAN_BLUR = new ConvolutionKernel55D(1.0D, 4.0D, 6.0D, 4.0D, 1.0D, 4.0D, 16.0D, 24.0D, 16.0D, 4.0D, 6.0D, 24.0D, 36.0D, 24.0D, 6.0D, 4.0D, 16.0D, 24.0D, 16.0D, 4.0D, 1.0D, 4.0D, 6.0D, 4.0D, 1.0D, 1.0D / 256.0D, 0.0D);
 	
 	/**
+	 * A {@code ConvolutionKernel55D} instance that performs no effect.
+	 */
+//	TODO: Add Unit Tests!
+	public static final ConvolutionKernel55D IDENTITY = new ConvolutionKernel55D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+	
+	/**
 	 * A {@code ConvolutionKernel55D} instance that performs an unsharp masking effect.
 	 */
 //	TODO: Add Unit Tests!

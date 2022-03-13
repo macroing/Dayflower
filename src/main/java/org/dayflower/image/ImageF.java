@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 import org.dayflower.change.Change;
@@ -1202,6 +1203,61 @@ public abstract class ImageF extends Image {
 			}
 		}
 		
+		doChangeEnd();
+		
+		return this;
+	}
+	
+	/**
+	 * Fills the region of pixels that are color-connected to the pixel at {@code x} and {@code y} with {@link Color4F} instances provided by {@code biFunction}.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If {@code biFunction} is {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This operation works in a similar way to the Bucket Fill tool in Microsoft Paint.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillRegion(x, y, biFunction, (colorRGBA, point) -> true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-component of the pixel to start at
+	 * @param y the Y-component of the pixel to start at
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances for each pixel in the region
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code biFunction} is {@code null} or {@code biFunction} returns {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public final ImageF fillRegion(final int x, final int y, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+		return fillRegion(x, y, biFunction, (colorRGBA, point) -> true);
+	}
+	
+	/**
+	 * Fills the region of pixels that are color-connected to the pixel at {@code x} and {@code y} and accepted by {@code biPredicate} with {@link Color4F} instances provided by {@code biFunction}.
+	 * <p>
+	 * Returns this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code biFunction} or {@code biPredicate} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This operation works in a similar way to the Bucket Fill tool in Microsoft Paint.
+	 * 
+	 * @param x the X-component of the pixel to start at
+	 * @param y the Y-component of the pixel to start at
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances for each pixel in the region
+	 * @param biPredicate a {@code BiPredicate} that accepts or rejects pixels
+	 * @return this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code biFunction} or {@code biPredicate} are {@code null} or {@code biFunction} returns {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public final ImageF fillRegion(final int x, final int y, final BiFunction<Color4F, Point2I, Color4F> biFunction, final BiPredicate<Color4F, Point2I> biPredicate) {
+		Objects.requireNonNull(biFunction, "biFunction == null");
+		Objects.requireNonNull(biPredicate, "biPredicate == null");
+		
+		doChangeBegin();
+		doFillRegion(x, y, biFunction, biPredicate, getColorRGBA(x, y));
 		doChangeEnd();
 		
 		return this;
@@ -2463,6 +2519,74 @@ public abstract class ImageF extends Image {
 			changeHistory.push(change);
 			
 			changeCombiner.clear();
+		}
+	}
+	
+	private void doFillRegion(final int x, final int y, final BiFunction<Color4F, Point2I, Color4F> biFunction, final BiPredicate<Color4F, Point2I> biPredicate, final Color4F oldColorRGBA) {
+		final int resolution = getResolution();
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		final int minimumX = 0;
+		final int maximumX = resolutionX - 1;
+		final int minimumY = 0;
+		final int maximumY = resolutionY - 1;
+		
+		if(x >= minimumX && x <= maximumX && y >= minimumY && y <= maximumY) {
+			final boolean[] isFilled = new boolean[resolution];
+			
+			final int[] stackX = new int[resolution];
+			final int[] stackY = new int[resolution];
+			
+			stackX[0] = x;
+			stackY[0] = y;
+			
+			int stackLength = 1;
+			
+			while(stackLength > 0) {
+				final int currentX = stackX[stackLength - 1];
+				final int currentY = stackY[stackLength - 1];
+				
+				stackLength--;
+				
+				final Color4F colorARGB = getColorRGBA(currentX, currentY);
+				
+				final Point2I point = new Point2I(currentX, currentY);
+				
+				if(biPredicate.test(colorARGB, point)) {
+					doSetColorRGBA(biFunction.apply(colorARGB, point), currentX, currentY);
+				}
+				
+				isFilled[currentY * resolutionX + currentX] = true;
+				
+				if(currentX + 1 <= maximumX && !isFilled[currentY * resolutionX + currentX + 1] && getColorRGBA(currentX + 1, currentY).equals(oldColorRGBA)) {
+					stackX[stackLength] = currentX + 1;
+					stackY[stackLength] = currentY;
+					
+					stackLength++;
+				}
+				
+				if(currentX - 1 >= minimumX && !isFilled[currentY * resolutionX + currentX - 1] && getColorRGBA(currentX - 1, currentY).equals(oldColorRGBA)) {
+					stackX[stackLength] = currentX - 1;
+					stackY[stackLength] = currentY;
+					
+					stackLength++;
+				}
+				
+				if(currentY + 1 <= maximumY && !isFilled[(currentY + 1) * resolutionX + currentX] && getColorRGBA(currentX, currentY + 1).equals(oldColorRGBA)) {
+					stackX[stackLength] = currentX;
+					stackY[stackLength] = currentY + 1;
+					
+					stackLength++;
+				}
+				
+				if(currentY - 1 >= minimumY && !isFilled[(currentY - 1) * resolutionX + currentX] && getColorRGBA(currentX, currentY - 1).equals(oldColorRGBA)) {
+					stackX[stackLength] = currentX;
+					stackY[stackLength] = currentY - 1;
+					
+					stackLength++;
+				}
+			}
 		}
 	}
 }

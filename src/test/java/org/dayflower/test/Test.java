@@ -55,11 +55,11 @@ public final class Test {
 		doTestImageF();
 		doTestImageFBlendOver();
 		doTestImageFConvolutionKernelBoxBlur();
-		doTestImageFConvolutionKernelEdgeDetection();
 		doTestImageFConvolutionKernelEmboss();
 		doTestImageFConvolutionKernelGaussianBlur();
 		doTestImageFConvolutionKernelGradientHorizontal();
 		doTestImageFConvolutionKernelGradientVertical();
+		doTestImageFConvolutionKernelRidgeDetection();
 		doTestImageFConvolutionKernelSharpen();
 		doTestImageFConvolutionKernelUnsharpMasking();
 		doTestImageFCopy();
@@ -68,6 +68,7 @@ public final class Test {
 		doTestImageFFillPolygon();
 		doTestImageFFillPolygonComplement();
 		doTestImageFFillRectangle();
+		doTestImageFFillRegion();
 		doTestImageFFillShapes();
 		doTestImageFFillSimplexFractionalBrownianMotion();
 		doTestImageFFlipX();
@@ -173,13 +174,6 @@ public final class Test {
 		imageF.save("./generated/Test/Image-Convolution-Kernel-Box-Blur.png");
 	}
 	
-	private static void doTestImageFConvolutionKernelEdgeDetection() {
-		final
-		ImageF imageF = IMAGE_ORIGINAL.copy();
-		imageF.multiply(ConvolutionKernel33F.EDGE_DETECTION);
-		imageF.save("./generated/Test/Image-Convolution-Kernel-Edge-Detection.png");
-	}
-	
 	private static void doTestImageFConvolutionKernelEmboss() {
 		final
 		ImageF imageF = IMAGE_ORIGINAL.copy();
@@ -206,6 +200,13 @@ public final class Test {
 		ImageF imageF = IMAGE_ORIGINAL.copy();
 		imageF.multiply(ConvolutionKernel33F.GRADIENT_VERTICAL);
 		imageF.save("./generated/Test/Image-Convolution-Kernel-Gradient-Vertical.png");
+	}
+	
+	private static void doTestImageFConvolutionKernelRidgeDetection() {
+		final
+		ImageF imageF = IMAGE_ORIGINAL.copy();
+		imageF.multiply(ConvolutionKernel33F.RIDGE_DETECTION);
+		imageF.save("./generated/Test/Image-Convolution-Kernel-Ridge-Detection.png");
 	}
 	
 	private static void doTestImageFConvolutionKernelSharpen() {
@@ -263,6 +264,16 @@ public final class Test {
 		ImageF imageF = IMAGE_ORIGINAL.copy();
 		imageF.fillShape(new Rectangle2I(new Point2I(100, 100), new Point2I(imageF.getResolutionX() - 1 - 100, imageF.getResolutionY() - 1 - 100)), (color, point) -> Color4F.blendOver(new Color4F(1.0F, 0.0F, 0.0F, 0.5F), color));
 		imageF.save("./generated/Test/Image-Fill-Rectangle.png");
+	}
+	
+	private static void doTestImageFFillRegion() {
+		final
+		ImageF imageF = new IntImageF(800, 800);
+		imageF.clear(Color4F.WHITE);
+		imageF.drawShape(new Polygon2I(new Point2I(100, 100), new Point2I(200, 100), new Point2I(300, 200), new Point2I(200, 300), new Point2I(100, 200)), Color4F.BLACK);
+		imageF.fillRegion(500, 500, (colorRGBA, point) -> new Color4F(point.getX() % 255, point.getY() % 255, 100));
+		imageF.fillRegion(150, 150, (colorARGB, point) -> Color4F.random());
+		imageF.save("./generated/Test/Image-Fill-Region.png");
 	}
 	
 	private static void doTestImageFFillShapes() {

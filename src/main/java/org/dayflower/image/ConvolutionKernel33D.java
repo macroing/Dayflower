@@ -41,12 +41,6 @@ public final class ConvolutionKernel33D {
 	public static final ConvolutionKernel33D BOX_BLUR = new ConvolutionKernel33D(1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D / 9.0D, 0.0D);
 	
 	/**
-	 * A {@code ConvolutionKernel33D} instance that performs an edge detection effect.
-	 */
-//	TODO: Add Unit Tests!
-	public static final ConvolutionKernel33D EDGE_DETECTION = new ConvolutionKernel33D(-1.0D, -1.0D, -1.0D, -1.0D, 8.0D, -1.0D, -1.0D, -1.0D, -1.0D);
-	
-	/**
 	 * A {@code ConvolutionKernel33D} instance that performs an emboss effect.
 	 */
 //	TODO: Add Unit Tests!
@@ -69,6 +63,18 @@ public final class ConvolutionKernel33D {
 	 */
 //	TODO: Add Unit Tests!
 	public static final ConvolutionKernel33D GRADIENT_VERTICAL = new ConvolutionKernel33D(-1.0D, 0.0D, 1.0D, -1.0D, 0.0D, 1.0D, -1.0D, 0.0D, 1.0D);
+	
+	/**
+	 * A {@code ConvolutionKernel33D} instance that performs no effect.
+	 */
+//	TODO: Add Unit Tests!
+	public static final ConvolutionKernel33D IDENTITY = new ConvolutionKernel33D(0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+	
+	/**
+	 * A {@code ConvolutionKernel33D} instance that performs a ridge detection effect.
+	 */
+//	TODO: Add Unit Tests!
+	public static final ConvolutionKernel33D RIDGE_DETECTION = new ConvolutionKernel33D(-1.0D, -1.0D, -1.0D, -1.0D, 8.0D, -1.0D, -1.0D, -1.0D, -1.0D);
 	
 	/**
 	 * A {@code ConvolutionKernel33D} instance that performs a sharpen effect.

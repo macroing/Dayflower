@@ -185,16 +185,16 @@ public final class DisneyClearCoatBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Vector3F n = Vector3F.add(incoming, outgoing);
+		final Vector3F halfway = Vector3F.add(incoming, outgoing);
 		
-		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+		if(isZero(halfway.getX()) && isZero(halfway.getY()) && isZero(halfway.getZ())) {
 			return Color3F.BLACK;
 		}
 		
-		final Vector3F nNormalized = Vector3F.normalize(n);
+		final Vector3F halfwayNormalized = Vector3F.normalize(halfway);
 		
-		final float d = doGTR1(nNormalized.cosThetaAbs(), this.gloss);
-		final float f = Schlick.fresnelWeightLerp(Vector3F.dotProduct(outgoing, nNormalized), 0.04F);
+		final float d = doGTR1(halfwayNormalized.cosThetaAbs(), this.gloss);
+		final float f = Schlick.fresnelWeightLerp(Vector3F.dotProduct(outgoing, halfwayNormalized), 0.04F);
 		final float g = doSmithGGGX(outgoing.cosThetaAbs(), 0.25F) * doSmithGGGX(incoming.cosThetaAbs(), 0.25F);
 		
 		return new Color3F(this.weight * g * f * d / 4.0F);
@@ -228,9 +228,9 @@ public final class DisneyClearCoatBRDF extends BXDF {
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = 2.0F * PI * sample.getV();
 		
-		final Vector3F nSample = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-		final Vector3F n = Vector3F.sameHemisphereZ(outgoing, nSample) ? nSample : Vector3F.negate(nSample);
-		final Vector3F incoming = Vector3F.reflection(outgoing, n);
+		final Vector3F halfwaySample = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
+		final Vector3F halfway = Vector3F.sameHemisphereZ(outgoing, halfwaySample) ? halfwaySample : Vector3F.negate(halfwaySample);
+		final Vector3F incoming = Vector3F.reflection(outgoing, halfway);
 		
 		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return Optional.empty();
@@ -301,16 +301,16 @@ public final class DisneyClearCoatBRDF extends BXDF {
 			return 0.0F;
 		}
 		
-		final Vector3F n = Vector3F.add(incoming, outgoing);
+		final Vector3F halfway = Vector3F.add(incoming, outgoing);
 		
-		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+		if(isZero(halfway.getX()) && isZero(halfway.getY()) && isZero(halfway.getZ())) {
 			return 0.0F;
 		}
 		
-		final Vector3F nNormalized = Vector3F.normalize(n);
+		final Vector3F halfwayNormalized = Vector3F.normalize(halfway);
 		
-		final float cosThetaAbsNNormalized = nNormalized.cosThetaAbs();
-		final float probabilityDensityFunctionValue = doGTR1(cosThetaAbsNNormalized, this.gloss) * cosThetaAbsNNormalized / (4.0F * Vector3F.dotProduct(outgoing, nNormalized));
+		final float cosThetaAbsH = halfwayNormalized.cosThetaAbs();
+		final float probabilityDensityFunctionValue = doGTR1(cosThetaAbsH, this.gloss) * cosThetaAbsH / (4.0F * Vector3F.dotProduct(outgoing, halfwayNormalized));
 		
 		return probabilityDensityFunctionValue;
 	}

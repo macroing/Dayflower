@@ -136,15 +136,15 @@ public final class DisneyFakeSSBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Vector3F n = Vector3F.add(incoming, outgoing);
+		final Vector3F halfway = Vector3F.add(incoming, outgoing);
 		
-		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+		if(isZero(halfway.getX()) && isZero(halfway.getY()) && isZero(halfway.getZ())) {
 			return Color3F.BLACK;
 		}
 		
-		final Vector3F nNormalized = Vector3F.normalize(n);
+		final Vector3F halfwayNormalized = Vector3F.normalize(halfway);
 		
-		final float cosThetaD = Vector3F.dotProduct(incoming, nNormalized);
+		final float cosThetaD = Vector3F.dotProduct(incoming, halfwayNormalized);
 		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
 		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
 		

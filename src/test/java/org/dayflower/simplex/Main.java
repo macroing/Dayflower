@@ -25,6 +25,7 @@ import static org.dayflower.simplex.Color.color4DGetComponent1;
 import static org.dayflower.simplex.Color.color4DGetComponent2;
 import static org.dayflower.simplex.Color.color4DGetComponent3;
 import static org.dayflower.simplex.Image.image4D;
+import static org.dayflower.simplex.Image.image4DLoad;
 import static org.dayflower.simplex.Image.image4DSave;
 import static org.dayflower.simplex.Image.image4DSetColor4D;
 import static org.dayflower.simplex.Intersection.intersectionOrthonormalBasisShape3D;
@@ -76,7 +77,7 @@ import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.toRadians;
 
 public final class Main {
-//	private static final double[] IMAGE_4_D_ALBEDO_MAP = Image.image4DLoad("./resources/textures/bricks2.jpg");
+	private static final double[] IMAGE_4_D_ALBEDO_MAP = Image.image4DLoad("./resources/textures/bricks2.jpg");
 	private static final double[] IMAGE_4_D_DISPLACEMENT_MAP = Image.image4DLoad("./resources/textures/bricks2_disp.jpg");
 	private static final double[] IMAGE_4_D_NORMAL_MAP = Image.image4DLoad("./resources/textures/bricks2_normal.jpg");
 	
@@ -254,7 +255,7 @@ public final class Main {
 					
 					final double[] vector3DSurfaceNormalWS = doComputeSurfaceNormal(orthonormalBasis33DWS, point2DTextureCoordinates, scale);
 					
-					final double[] color4D = doColor4D(image4DTextureGetColor4D(point2DTextureCoordinates, scale), matrix44DWorldToObject, orthonormalBasis33DWS, point3DSurfaceIntersectionPointWS, shape3D, vector3DSurfaceNormalWS);
+					final double[] color4D = doColor4D(image4DTextureGetColor4D(point2DTextureCoordinates, scale, IMAGE_4_D_ALBEDO_MAP, true), matrix44DWorldToObject, orthonormalBasis33DWS, point3DSurfaceIntersectionPointWS, shape3D, vector3DSurfaceNormalWS);
 					
 					image4DSetColor4D(image4D, color4D, x, y);
 				}

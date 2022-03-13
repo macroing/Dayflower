@@ -18,7 +18,7 @@
  */
 package org.dayflower.utility;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The class {@code Doubles} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.
@@ -131,10 +131,6 @@ public class Doubles {
 	 * The reciprocal (or inverse) of {@link #PI}.
 	 */
 	public static final double PI_RECIPROCAL = 1.0D / PI;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final Random RANDOM = new Random();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -851,6 +847,18 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns {@code base} raised to the power of {@code 2.0D}.
+	 * <p>
+	 * This method should be faster than {@link #pow(double, double)}.
+	 * 
+	 * @param base the base
+	 * @return {@code base} raised to the power of {@code 2.0D}
+	 */
+	public static double pow2(final double base) {
+		return base * base;
+	}
+	
+	/**
 	 * Returns {@code base} raised to the power of {@code 5.0D}.
 	 * <p>
 	 * This method should be faster than {@link #pow(double, double)}.
@@ -859,7 +867,7 @@ public class Doubles {
 	 * @return {@code base} raised to the power of {@code 5.0D}
 	 */
 	public static double pow5(final double base) {
-		return (base * base) * (base * base) * base;
+		return base * base * base * base * base;
 	}
 	
 	/**
@@ -928,7 +936,7 @@ public class Doubles {
 	 * @return a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code 1.0D} (exclusive)
 	 */
 	public static double random() {
-		return RANDOM.nextDouble();
+		return ThreadLocalRandom.current().nextDouble();
 	}
 	
 	/**

@@ -196,24 +196,24 @@ public final class FresnelBlendBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Vector3F n = Vector3F.add(outgoing, incoming);
+		final Vector3F halfway = Vector3F.add(outgoing, incoming);
 		
-		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+		if(isZero(halfway.getX()) && isZero(halfway.getY()) && isZero(halfway.getZ())) {
 			return Color3F.BLACK;
 		}
 		
-		final Vector3F nNormalized = Vector3F.normalize(n);
+		final Vector3F halfwayNormalized = Vector3F.normalize(halfway);
 		
 		final float a = 28.0F / (23.0F * PI);
 		final float b = 1.0F - pow5(1.0F - 0.5F * incoming.cosThetaAbs());
 		final float c = 1.0F - pow5(1.0F - 0.5F * outgoing.cosThetaAbs());
-		final float d = this.microfacetDistribution.computeDifferentialArea(nNormalized);
-		final float e = 4.0F * abs(Vector3F.dotProduct(incoming, nNormalized)) * max(incoming.cosThetaAbs(), outgoing.cosThetaAbs());
+		final float d = this.microfacetDistribution.computeDifferentialArea(halfwayNormalized);
+		final float e = 4.0F * abs(Vector3F.dotProduct(incoming, halfwayNormalized)) * max(incoming.cosThetaAbs(), outgoing.cosThetaAbs());
 		final float f = d / e;
 		
 		final Color3F reflectanceScaleDiffuse = this.reflectanceScaleDiffuse;
 		final Color3F reflectanceScaleSpecular = this.reflectanceScaleSpecular;
-		final Color3F fresnel = Schlick.fresnelDielectric(Vector3F.dotProduct(incoming, nNormalized), reflectanceScaleSpecular);
+		final Color3F fresnel = Schlick.fresnelDielectric(Vector3F.dotProduct(incoming, halfwayNormalized), reflectanceScaleSpecular);
 		final Color3F colorDiffuse = Color3F.multiply(Color3F.multiply(Color3F.multiply(Color3F.multiply(reflectanceScaleDiffuse, a), Color3F.subtract(Color3F.WHITE, reflectanceScaleSpecular)), b), c);
 		final Color3F colorSpecular = Color3F.multiply(fresnel, f);
 		
@@ -258,9 +258,9 @@ public final class FresnelBlendBRDF extends BXDF {
 		final float u = min(2.0F * (sample.getU() - 0.5F), ONE_MINUS_EPSILON);
 		final float v = sample.getV();
 		
-		final Vector3F n = this.microfacetDistribution.sampleNormal(outgoing, new Point2F(u, v));
+		final Vector3F halfway = this.microfacetDistribution.sampleHalfway(outgoing, new Point2F(u, v));
 		
-		final Vector3F incoming = Vector3F.reflection(outgoing, n);
+		final Vector3F incoming = Vector3F.reflection(outgoing, halfway);
 		
 		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return Optional.empty();
@@ -333,9 +333,9 @@ public final class FresnelBlendBRDF extends BXDF {
 			return 0.0F;
 		}
 		
-		final Vector3F n = Vector3F.normalize(Vector3F.add(outgoing, incoming));
+		final Vector3F halfway = Vector3F.normalize(Vector3F.add(outgoing, incoming));
 		
-		return 0.5F * (incoming.cosThetaAbs() * PI_RECIPROCAL + this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n)));
+		return 0.5F * (incoming.cosThetaAbs() * PI_RECIPROCAL + this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, halfway) / (4.0F * Vector3F.dotProduct(outgoing, halfway)));
 	}
 	
 	/**

@@ -25,6 +25,7 @@ import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.pow2;
 import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Floats.sqrt;
 import static org.dayflower.utility.Floats.tan;
@@ -77,9 +78,9 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	}
 	
 	/**
-	 * Samples a normal given {@code outgoing} and {@code sample}.
+	 * Samples a halfway vector given {@code outgoing} and {@code sample}.
 	 * <p>
-	 * Returns a {@link Vector3F} instance with the sampled normal.
+	 * Returns a {@link Vector3F} instance with the sampled halfway vector.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -87,11 +88,11 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point, called {@code u} in PBRT
-	 * @return a {@code Vector3F} instance with the sampled normal
+	 * @return a {@code Vector3F} instance with the sampled halfway vector
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Vector3F sampleNormal(final Vector3F outgoing, final Point2F sample) {
+	public Vector3F sampleHalfway(final Vector3F outgoing, final Point2F sample) {
 		final float alphaX = this.alphaX;
 		final float alphaY = this.alphaY;
 		
@@ -102,29 +103,22 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 			return outgoing.getZ() >= 0.0F ? doSample(outgoing, alphaX, alphaY, u, v) : Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
 		} else if(equal(alphaX, alphaY)) {
 			final float phi = v * 2.0F * PI;
-			final float tanThetaSquared = alphaX * alphaX * u / (1.0F - u);
-			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
+			final float cosTheta = 1.0F / sqrt(1.0F + alphaX * alphaX * u / (1.0F - u));
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
-			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, normal) ? normal : Vector3F.negate(normal);
+			final Vector3F halfway = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
+			final Vector3F halfwayCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, halfway) ? halfway : Vector3F.negate(halfway);
 			
-			return normalCorrectlyOriented;
+			return halfwayCorrectlyOriented;
 		} else {
 			final float phi = atan(alphaY / alphaX * tan(2.0F * PI * v + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
-			final float cosPhi = cos(phi);
-			final float sinPhi = sin(phi);
-			final float alphaXSquared = alphaX * alphaX;
-			final float alphaYSquared = alphaY * alphaY;
-			final float alphaSquared = 1.0F / (cosPhi * cosPhi / alphaXSquared + sinPhi * sinPhi / alphaYSquared);
-			final float tanThetaSquared = alphaSquared * u / (1.0F - u);
-			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
+			final float cosTheta = 1.0F / sqrt(1.0F + (1.0F / (pow2(cos(phi)) / (alphaX * alphaX) + pow2(sin(phi)) / (alphaY * alphaY))) * u / (1.0F - u));
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
-			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, normal) ? normal : Vector3F.negate(normal);
+			final Vector3F halfway = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
+			final Vector3F halfwayCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, halfway) ? halfway : Vector3F.negate(halfway);
 			
-			return normalCorrectlyOriented;
+			return halfwayCorrectlyOriented;
 		}
 	}
 	
@@ -169,10 +163,10 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	 * @throws NullPointerException thrown if, and only if, {@code normal} is {@code null}
 	 */
 	@Override
-	public float computeDifferentialArea(final Vector3F normal) {
-		final float tanThetaSquaredNormal = normal.tanThetaSquared();
+	public float computeDifferentialArea(final Vector3F halfway) {
+		final float tanThetaSquared = halfway.tanThetaSquared();
 		
-		if(isInfinite(tanThetaSquaredNormal)) {
+		if(isInfinite(tanThetaSquared)) {
 			return 0.0F;
 		}
 		
@@ -181,14 +175,14 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float alphaY = this.alphaY;
 		final float alphaYSquared = alphaY * alphaY;
 		
-		final float cosPhiSquaredNormal = normal.cosPhiSquared();
-		final float sinPhiSquaredNormal = normal.sinPhiSquared();
+		final float cosPhiSquared = halfway.cosPhiSquared();
+		final float sinPhiSquared = halfway.sinPhiSquared();
 		
-		final float cosThetaQuarticNormal = normal.cosThetaQuartic();
+		final float cosThetaQuartic = halfway.cosThetaQuartic();
 		
-		final float exponent = (cosPhiSquaredNormal / alphaXSquared + sinPhiSquaredNormal / alphaYSquared) * tanThetaSquaredNormal;
+		final float exponent = (cosPhiSquared / alphaXSquared + sinPhiSquared / alphaYSquared) * tanThetaSquared;
 		
-		final float differentialArea = 1.0F / (PI * alphaX * alphaY * cosThetaQuarticNormal * (1.0F + exponent) * (1.0F + exponent));
+		final float differentialArea = 1.0F / (PI * alphaX * alphaY * cosThetaQuartic * (1.0F + exponent) * (1.0F + exponent));
 		
 		return differentialArea;
 	}
@@ -208,22 +202,22 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	 */
 	@Override
 	public float computeLambda(final Vector3F outgoing) {
-		final float tanThetaAbsOutgoing = outgoing.tanThetaAbs();
+		final float tanThetaAbs = outgoing.tanThetaAbs();
 		
-		if(isInfinite(tanThetaAbsOutgoing)) {
+		if(isInfinite(tanThetaAbs)) {
 			return 0.0F;
 		}
 		
 		final float alphaX = this.alphaX;
 		final float alphaY = this.alphaY;
 		
-		final float cosPhiSquaredOutgoing = outgoing.cosPhiSquared();
-		final float sinPhiSquaredOutgoing = outgoing.sinPhiSquared();
+		final float cosPhiSquared = outgoing.cosPhiSquared();
+		final float sinPhiSquared = outgoing.sinPhiSquared();
 		
-		final float alpha = sqrt(cosPhiSquaredOutgoing * alphaX * alphaX + sinPhiSquaredOutgoing * alphaY * alphaY);
-		final float alphaTanThetaAbsOutgoingSquared = (alpha * tanThetaAbsOutgoing) * (alpha * tanThetaAbsOutgoing);
+		final float alpha = sqrt(cosPhiSquared * alphaX * alphaX + sinPhiSquared * alphaY * alphaY);
+		final float alphaTanThetaAbsSquared = (alpha * tanThetaAbs) * (alpha * tanThetaAbs);
 		
-		final float lambda = (-1.0F + sqrt(1.0F + alphaTanThetaAbsOutgoingSquared)) / 2.0F;
+		final float lambda = (-1.0F + sqrt(1.0F + alphaTanThetaAbsSquared)) / 2.0F;
 		
 		return lambda;
 	}
@@ -240,27 +234,24 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Vector2F doComputeSlope(final float cosThetaIncoming, final float u, final float v) {
-		if(cosThetaIncoming > 0.9999F) {
+	private static Vector2F doComputeSlope(final float cosTheta, final float u, final float v) {
+		if(cosTheta > 0.9999F) {
 			final float r = sqrt(u / (1.0F - u));
 			final float phi = 2.0F * PI * v;
 			
-			final float cosPhi = cos(phi);
-			final float sinPhi = sin(phi);
-			
-			final float x = r * cosPhi;
-			final float y = r * sinPhi;
+			final float x = r * cos(phi);
+			final float y = r * sin(phi);
 			
 			return new Vector2F(x, y);
 		}
 		
-		final float sinThetaIncoming = sqrt(max(0.0F, 1.0F - cosThetaIncoming * cosThetaIncoming));
-		final float tanThetaIncoming = sinThetaIncoming / cosThetaIncoming;
+		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float tanTheta = sinTheta / cosTheta;
 		
-		final float a = 2.0F / (1.0F + sqrt(1.0F + tanThetaIncoming * tanThetaIncoming));
+		final float a = 2.0F / (1.0F + sqrt(1.0F + tanTheta * tanTheta));
 		final float b = 2.0F * u / a - 1.0F;
 		final float c = min(1.0F / (b * b - 1.0F), 1.0e10F);
-		final float d = tanThetaIncoming;
+		final float d = tanTheta;
 		final float e = sqrt(max(d * d * c * c - (b * b - d * d) * c, 0.0F));
 		final float f = d * c - e;
 		final float g = d * c + e;
@@ -268,7 +259,7 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float i = v > 0.5F ? 2.0F * (v - 0.5F) : 2.0F * (0.5F - v);
 		final float j = (i * (i * (i * 0.27385F - 0.73369F) + 0.46341F)) / (i * (i * (i * 0.093073F + 0.309420F) - 1.0F) + 0.597999F);
 		
-		final float x = b < 0.0F || g > 1.0F / tanThetaIncoming ? f : g;
+		final float x = b < 0.0F || g > 1.0F / tanTheta ? f : g;
 		final float y = h * j * sqrt(1.0F + x * x);
 		
 		return new Vector2F(x, y);

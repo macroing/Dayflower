@@ -18,7 +18,7 @@
  */
 package org.dayflower.utility;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The class {@code Floats} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.
@@ -132,10 +132,6 @@ public final class Floats {
 	 * The reciprocal (or inverse) of {@link #PI}.
 	 */
 	public static final float PI_RECIPROCAL = 1.0F / PI;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final Random RANDOM = new Random();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -852,6 +848,18 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns {@code base} raised to the power of {@code 2.0F}.
+	 * <p>
+	 * This method should be faster than {@link #pow(float, float)}.
+	 * 
+	 * @param base the base
+	 * @return {@code base} raised to the power of {@code 2.0F}
+	 */
+	public static float pow2(final float base) {
+		return base * base;
+	}
+	
+	/**
 	 * Returns {@code base} raised to the power of {@code 5.0F}.
 	 * <p>
 	 * This method should be faster than {@link #pow(float, float)}.
@@ -860,7 +868,7 @@ public final class Floats {
 	 * @return {@code base} raised to the power of {@code 5.0F}
 	 */
 	public static float pow5(final float base) {
-		return (base * base) * (base * base) * base;
+		return base * base * base * base * base;
 	}
 	
 	/**
@@ -929,7 +937,7 @@ public final class Floats {
 	 * @return a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive)
 	 */
 	public static float random() {
-		return RANDOM.nextFloat();
+		return ThreadLocalRandom.current().nextFloat();
 	}
 	
 	/**

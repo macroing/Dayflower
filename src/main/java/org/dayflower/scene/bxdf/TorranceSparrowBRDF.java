@@ -194,19 +194,19 @@ public final class TorranceSparrowBRDF extends BXDF {
 			return Color3F.BLACK;
 		}
 		
-		final Vector3F n = Vector3F.add(incoming, outgoing);
+		final Vector3F halfway = Vector3F.add(incoming, outgoing);
 		
-		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+		if(isZero(halfway.getX()) && isZero(halfway.getY()) && isZero(halfway.getZ())) {
 			return Color3F.BLACK;
 		}
 		
-		final Vector3F nNormalized = Vector3F.normalize(n);
+		final Vector3F halfwayNormalized = Vector3F.normalize(halfway);
 		
-		final float d = this.microfacetDistribution.computeDifferentialArea(nNormalized);
+		final float d = this.microfacetDistribution.computeDifferentialArea(halfwayNormalized);
 		final float g = this.microfacetDistribution.computeShadowingAndMasking(outgoing, incoming);
 		
 		final Color3F r = this.reflectanceScale;
-		final Color3F f = this.fresnel.evaluate(Vector3F.dotProduct(incoming, Vector3F.faceForward(nNormalized, Vector3F.z())));
+		final Color3F f = this.fresnel.evaluate(Vector3F.dotProduct(incoming, Vector3F.faceForward(halfwayNormalized, Vector3F.z())));
 		
 		return Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(r, d), g), f), 4.0F * cosThetaAbsIncoming * cosThetaAbsOutgoing);
 	}
@@ -234,13 +234,13 @@ public final class TorranceSparrowBRDF extends BXDF {
 			return Optional.empty();
 		}
 		
-		final Vector3F n = this.microfacetDistribution.sampleNormal(outgoing, sample);
+		final Vector3F halfway = this.microfacetDistribution.sampleHalfway(outgoing, sample);
 		
-		if(Vector3F.dotProduct(outgoing, n) < 0.0F) {
+		if(Vector3F.dotProduct(outgoing, halfway) < 0.0F) {
 			return Optional.empty();
 		}
 		
-		final Vector3F incoming = Vector3F.reflection(outgoing, n);
+		final Vector3F incoming = Vector3F.reflection(outgoing, halfway);
 		
 		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return Optional.empty();
@@ -250,7 +250,7 @@ public final class TorranceSparrowBRDF extends BXDF {
 		
 		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 		
-		final float probabilityDensityFunctionValue = this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n));
+		final float probabilityDensityFunctionValue = this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, halfway) / (4.0F * Vector3F.dotProduct(outgoing, halfway));
 		
 		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
@@ -313,9 +313,9 @@ public final class TorranceSparrowBRDF extends BXDF {
 			return 0.0F;
 		}
 		
-		final Vector3F n = Vector3F.normalize(Vector3F.add(outgoing, incoming));
+		final Vector3F halfway = Vector3F.normalize(Vector3F.add(outgoing, incoming));
 		
-		return this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n));
+		return this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, halfway) / (4.0F * Vector3F.dotProduct(outgoing, halfway));
 	}
 	
 	/**

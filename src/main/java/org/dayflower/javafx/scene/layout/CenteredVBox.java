@@ -64,11 +64,13 @@ public final class CenteredVBox extends VBox {
 	 * 
 	 * @param text a {@code String} with the text to use
 	 * @param eventHandler an {@code EventHandler} with the action to handle
+	 * @param disable {@code true} if, and only if, the {@code Button} should be disabled, {@code false} otherwise
 	 * @return the {@code Button} instance
 	 */
-	public Button addButton(final String text, final EventHandler<ActionEvent> eventHandler) {
+	public Button addButton(final String text, final EventHandler<ActionEvent> eventHandler, final boolean disable) {
 		final
 		Button button = new Button();
+		button.setDisable(disable);
 		button.setMaxWidth(MAX_VALUE);
 		button.setOnAction(eventHandler);
 		button.setText(text);

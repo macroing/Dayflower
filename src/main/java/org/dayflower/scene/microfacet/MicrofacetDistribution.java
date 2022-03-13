@@ -53,9 +53,9 @@ public abstract class MicrofacetDistribution {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Samples a normal given {@code outgoing} and {@code sample}.
+	 * Samples a halfway vector given {@code outgoing} and {@code sample}.
 	 * <p>
-	 * Returns a {@link Vector3F} instance with the sampled normal.
+	 * Returns a {@link Vector3F} instance with the sampled halfway vector.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -63,10 +63,10 @@ public abstract class MicrofacetDistribution {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point, called {@code u} in PBRT
-	 * @return a {@code Vector3F} instance with the sampled normal
+	 * @return a {@code Vector3F} instance with the sampled halfway vector
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
-	public abstract Vector3F sampleNormal(final Vector3F outgoing, final Point2F sample);
+	public abstract Vector3F sampleHalfway(final Vector3F outgoing, final Point2F sample);
 	
 	/**
 	 * Returns {@code true} if, and only if, this {@code MicrofacetDistribution} instance is sampling the visible area, {@code false} otherwise.
@@ -87,19 +87,19 @@ public abstract class MicrofacetDistribution {
 	}
 	
 	/**
-	 * Computes the differential area term for {@code normal}.
+	 * Computes the differential area term for {@code halfway}.
 	 * <p>
 	 * Returns a {@code float} value with the computed differential area term.
 	 * <p>
-	 * If {@code normal} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code halfway} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code MicrofacetDistribution} method {@code D(const Vector3f &wh)} that returns a {@code Float} in PBRT.
 	 * 
-	 * @param normal the normal, called {@code wh} in PBRT
+	 * @param halfway the halfway vector, called {@code wh} in PBRT
 	 * @return a {@code float} value with the computed differential area term
-	 * @throws NullPointerException thrown if, and only if, {@code normal} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code halfway} is {@code null}
 	 */
-	public abstract float computeDifferentialArea(final Vector3F normal);
+	public abstract float computeDifferentialArea(final Vector3F halfway);
 	
 	/**
 	 * Computes the Lambda term for {@code outgoing}.
@@ -117,21 +117,21 @@ public abstract class MicrofacetDistribution {
 	public abstract float computeLambda(final Vector3F outgoing);
 	
 	/**
-	 * Computes the probability density function (PDF) value for {@code outgoing} and {@code normal}.
+	 * Computes the probability density function (PDF) value for {@code outgoing} and {@code halfway}.
 	 * <p>
 	 * Returns a {@code float} value with the computed probability density function (PDF) value.
 	 * <p>
-	 * If either {@code outgoing} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code outgoing} or {@code halfway} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code MicrofacetDistribution} method {@code Pdf(const Vector3f &wo, const Vector3f &wh)} that returns a {@code Float} in PBRT.
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @param normal the normal, called {@code wh} in PBRT
+	 * @param halfway the halfway vector, called {@code wh} in PBRT
 	 * @return a {@code float} value with the computed probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code normal} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code halfway} are {@code null}
 	 */
-	public final float computeProbabilityDensityFunctionValue(final Vector3F outgoing, final Vector3F normal) {
-		return this.isSamplingVisibleArea ? computeDifferentialArea(normal) * computeShadowingAndMasking(outgoing) * abs(Vector3F.dotProduct(outgoing, normal)) / outgoing.cosThetaAbs() : computeDifferentialArea(normal) * normal.cosThetaAbs();
+	public final float computeProbabilityDensityFunctionValue(final Vector3F outgoing, final Vector3F halfway) {
+		return this.isSamplingVisibleArea ? computeDifferentialArea(halfway) * computeShadowingAndMasking(outgoing) * abs(Vector3F.dotProduct(outgoing, halfway)) / outgoing.cosThetaAbs() : computeDifferentialArea(halfway) * halfway.cosThetaAbs();
 	}
 	
 	/**

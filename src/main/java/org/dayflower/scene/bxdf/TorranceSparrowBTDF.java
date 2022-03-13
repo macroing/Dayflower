@@ -214,26 +214,26 @@ public final class TorranceSparrowBTDF extends BXDF {
 		final float etaB = this.etaB;
 		final float eta = cosThetaOutgoing > 0.0F ? etaB / etaA : etaA / etaB;
 		
-		final Vector3F nTemporary = Vector3F.normalize(Vector3F.add(Vector3F.multiply(incoming, eta), outgoing));
-		final Vector3F n = nTemporary.getZ() < 0.0F ? Vector3F.negate(nTemporary) : nTemporary;
+		final Vector3F halfwayTemporary = Vector3F.normalize(Vector3F.add(Vector3F.multiply(incoming, eta), outgoing));
+		final Vector3F halfway = halfwayTemporary.getZ() < 0.0F ? Vector3F.negate(halfwayTemporary) : halfwayTemporary;
 		
-		final float outgoingDotN = Vector3F.dotProduct(outgoing, n);
-		final float incomingDotN = Vector3F.dotProduct(incoming, n);
+		final float outgoingDotH = Vector3F.dotProduct(outgoing, halfway);
+		final float incomingDotH = Vector3F.dotProduct(incoming, halfway);
 		
-		if(outgoingDotN * incomingDotN > 0.0F) {
+		if(outgoingDotH * incomingDotH > 0.0F) {
 			return Color3F.BLACK;
 		}
 		
-		final Color3F f = this.fresnel.evaluate(outgoingDotN);
+		final Color3F f = this.fresnel.evaluate(outgoingDotH);
 		final Color3F t = this.transmittanceScale;
 		
-		final float a = outgoingDotN + eta * incomingDotN;
+		final float a = outgoingDotH + eta * incomingDotH;
 		final float b = this.transportMode == TransportMode.RADIANCE ? 1.0F / eta : 1.0F;
 		
-		final float d = this.microfacetDistribution.computeDifferentialArea(n);
+		final float d = this.microfacetDistribution.computeDifferentialArea(halfway);
 		final float g = this.microfacetDistribution.computeShadowingAndMasking(outgoing, incoming);
 		
-		return Color3F.multiply(Color3F.multiply(Color3F.subtract(Color3F.WHITE, f), t), abs(d * g * eta * eta * abs(incomingDotN) * abs(outgoingDotN) * b * b / (cosThetaIncoming * cosThetaOutgoing * a * a)));
+		return Color3F.multiply(Color3F.multiply(Color3F.subtract(Color3F.WHITE, f), t), abs(d * g * eta * eta * abs(incomingDotH) * abs(outgoingDotH) * b * b / (cosThetaIncoming * cosThetaOutgoing * a * a)));
 	}
 	
 	/**
@@ -259,9 +259,9 @@ public final class TorranceSparrowBTDF extends BXDF {
 			return Optional.empty();
 		}
 		
-		final Vector3F n = this.microfacetDistribution.sampleNormal(outgoing, sample);
+		final Vector3F halfway = this.microfacetDistribution.sampleHalfway(outgoing, sample);
 		
-		if(Vector3F.dotProduct(outgoing, n) < 0.0F) {
+		if(Vector3F.dotProduct(outgoing, halfway) < 0.0F) {
 			return Optional.empty();
 		}
 		
@@ -269,7 +269,7 @@ public final class TorranceSparrowBTDF extends BXDF {
 		final float etaB = this.etaB;
 		final float eta = outgoing.cosTheta() > 0.0F ? etaA / etaB : etaB / etaA;
 		
-		final Optional<Vector3F> optionalIncoming = Vector3F.refraction(outgoing, n, eta);
+		final Optional<Vector3F> optionalIncoming = Vector3F.refraction(outgoing, halfway, eta);
 		
 		if(!optionalIncoming.isPresent()) {
 			return Optional.empty();
@@ -354,19 +354,19 @@ public final class TorranceSparrowBTDF extends BXDF {
 		final float etaB = this.etaB;
 		final float eta = outgoing.cosTheta() > 0.0F ? etaB / etaA : etaA / etaB;
 		
-		final Vector3F n = Vector3F.normalize(Vector3F.add(Vector3F.multiply(incoming, eta), outgoing));
+		final Vector3F halfway = Vector3F.normalize(Vector3F.add(Vector3F.multiply(incoming, eta), outgoing));
 		
-		final float outgoingDotN = Vector3F.dotProduct(outgoing, n);
-		final float incomingDotN = Vector3F.dotProduct(incoming, n);
+		final float outgoingDotH = Vector3F.dotProduct(outgoing, halfway);
+		final float incomingDotH = Vector3F.dotProduct(incoming, halfway);
 		
-		if(outgoingDotN * incomingDotN > 0.0F) {
+		if(outgoingDotH * incomingDotH > 0.0F) {
 			return 0.0F;
 		}
 		
-		final float a = outgoingDotN + eta * incomingDotN;
-		final float b = abs((eta * eta * incomingDotN) / (a * a));
+		final float a = outgoingDotH + eta * incomingDotH;
+		final float b = abs((eta * eta * incomingDotH) / (a * a));
 		
-		return this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) * b;
+		return this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, halfway) * b;
 	}
 	
 	/**

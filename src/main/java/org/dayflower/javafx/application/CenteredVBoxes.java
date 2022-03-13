@@ -40,6 +40,7 @@ import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RenderingAlgorithm;
+import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.scene.AbstractCameraObserver;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Lens;
@@ -80,7 +81,7 @@ final class CenteredVBoxes {
 		
 		final ComboBox<Lens> comboBoxLens = centeredVBox.addComboBox(Arrays.asList(Lens.FISHEYE, Lens.THIN), camera.getLens());
 		
-		centeredVBox.addButton("Update Lens", actionEvent -> camera.setLens(comboBoxLens.getValue()));
+		centeredVBox.addButton("Update Lens", actionEvent -> camera.setLens(comboBoxLens.getValue()), false);
 		centeredVBox.addLabel("Aperture Radius", 12.0D);
 		
 		final Slider sliderApertureRadius = centeredVBox.addSlider(0.0D, 1.0D, camera.getApertureRadius(), 0.1D, 0.5D, true, true, false, (observableValue, oldValue, newValue) -> doHandleCameraApertureRadiusChange(camera, newValue.floatValue()));
@@ -118,7 +119,7 @@ final class CenteredVBoxes {
 					combinedProgressiveImageOrderRenderer.renderShutdown();
 					combinedProgressiveImageOrderRenderer.clear();
 				}
-			});
+			}, false);
 		}
 		
 		return centeredVBox;
@@ -140,7 +141,7 @@ final class CenteredVBoxes {
 				Scene scene = renderer.getScene();
 				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(renderer, shape))));
 			}
-		});
+		}, renderer instanceof GPURenderer);
 		centeredVBox.addSeparator();
 		centeredVBox.addButton("Build Acceleration Structure", actionEvent -> {
 			renderer.getScene().buildAccelerationStructure();
@@ -149,7 +150,7 @@ final class CenteredVBoxes {
 			if(renderer instanceof ProgressiveImageOrderRenderer) {
 				ProgressiveImageOrderRenderer.class.cast(renderer).clear();
 			}
-		});
+		}, renderer instanceof GPURenderer);
 		centeredVBox.addButton("Clear Acceleration Structure", actionEvent -> {
 			renderer.getScene().clearAccelerationStructure();
 			renderer.renderShutdown();
@@ -157,7 +158,7 @@ final class CenteredVBoxes {
 			if(renderer instanceof ProgressiveImageOrderRenderer) {
 				ProgressiveImageOrderRenderer.class.cast(renderer).clear();
 			}
-		});
+		}, renderer instanceof GPURenderer);
 		
 		return centeredVBox;
 	}

@@ -22,7 +22,6 @@ import static org.dayflower.simplex.Color.color4D;
 import static org.dayflower.simplex.Image.image4DGetColor4D;
 import static org.dayflower.simplex.Image.image4DGetResolutionX;
 import static org.dayflower.simplex.Image.image4DGetResolutionY;
-import static org.dayflower.simplex.Image.image4DLoad;
 import static org.dayflower.simplex.Point.point2DGetU;
 import static org.dayflower.simplex.Point.point2DGetV;
 import static org.dayflower.simplex.Point.point2DGetX;
@@ -52,10 +51,6 @@ import java.lang.reflect.Field;//TODO: Add Javadocs and refactor!
  * @author J&#246;rgen Lundgren
  */
 public final class Texture {
-	private static final double[] IMAGE_4_D = image4DLoad("./resources/textures/bricks2.jpg");//image4DLoad("./generated/Test/Image-Original.jpg");//TODO: Refactor!
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private Texture() {
 		
 	}
@@ -109,11 +104,6 @@ public final class Texture {
 		final double component = saturate(directionDotSurfaceNormal);
 		
 		return color4D(component);
-	}
-	
-//	TODO: Refactor!
-	public static double[] image4DTextureGetColor4D(final double[] point2DTextureCoordinates, final double scale) {
-		return image4DTextureGetColor4D(point2DTextureCoordinates, scale, IMAGE_4_D, true);
 	}
 	
 //	TODO: Refactor!

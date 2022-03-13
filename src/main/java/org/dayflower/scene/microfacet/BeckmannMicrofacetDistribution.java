@@ -31,6 +31,7 @@ import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.log;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.pow;
+import static org.dayflower.utility.Floats.pow2;
 import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Floats.sqrt;
 import static org.dayflower.utility.Floats.tan;
@@ -83,9 +84,9 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	}
 	
 	/**
-	 * Samples a normal given {@code outgoing} and {@code sample}.
+	 * Samples a halfway vector given {@code outgoing} and {@code sample}.
 	 * <p>
-	 * Returns a {@link Vector3F} instance with the sampled normal.
+	 * Returns a {@link Vector3F} instance with the sampled halfway vector.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -93,11 +94,11 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point, called {@code u} in PBRT
-	 * @return a {@code Vector3F} instance with the sampled normal
+	 * @return a {@code Vector3F} instance with the sampled halfway vector
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Vector3F sampleNormal(final Vector3F outgoing, final Point2F sample) {
+	public Vector3F sampleHalfway(final Vector3F outgoing, final Point2F sample) {
 		final float alphaX = this.alphaX;
 		final float alphaY = this.alphaY;
 		
@@ -105,37 +106,25 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 		final float v = sample.getV();
 		
 		if(isSamplingVisibleArea()) {
-			if(outgoing.getZ() >= 0.0F) {
-				return doSample(outgoing, alphaX, alphaY, u, v);
-			}
-			
-			return Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
+			return outgoing.getZ() >= 0.0F ? doSample(outgoing, alphaX, alphaY, u, v) : Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
 		} else if(equal(alphaX, alphaY)) {
-			final float logSample = log(1.0F - u);
 			final float phi = v * 2.0F * PI;
-			final float tanThetaSquared = -alphaX * alphaX * logSample;
-			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
+			final float cosTheta = 1.0F / sqrt(1.0F + -alphaX * alphaX * log(1.0F - u));
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
-			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, normal) ? normal : Vector3F.negate(normal);
+			final Vector3F halfway = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
+			final Vector3F halfwayCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, halfway) ? halfway : Vector3F.negate(halfway);
 			
-			return normalCorrectlyOriented;
+			return halfwayCorrectlyOriented;
 		} else {
-			final float logSample = log(1.0F - u);
 			final float phi = atan(alphaY / alphaX * tan(2.0F * PI * v + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
-			final float cosPhi = cos(phi);
-			final float sinPhi = sin(phi);
-			final float alphaXSquared = alphaX * alphaX;
-			final float alphaYSquared = alphaY * alphaY;
-			final float tanThetaSquared = -logSample / (cosPhi * cosPhi / alphaXSquared + sinPhi * sinPhi / alphaYSquared);
-			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
+			final float cosTheta = 1.0F / sqrt(1.0F + (-log(1.0F - u) / (pow2(cos(phi)) / (alphaX * alphaX) + pow2(sin(phi)) / (alphaY * alphaY))));
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
-			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, normal) ? normal : Vector3F.negate(normal);
+			final Vector3F halfway = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
+			final Vector3F halfwayCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, halfway) ? halfway : Vector3F.negate(halfway);
 			
-			return normalCorrectlyOriented;
+			return halfwayCorrectlyOriented;
 		}
 	}
 	
@@ -167,21 +156,21 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	}
 	
 	/**
-	 * Computes the differential area term for {@code normal}.
+	 * Computes the differential area term for {@code halfway}.
 	 * <p>
 	 * Returns a {@code float} value with the computed differential area term.
 	 * <p>
-	 * If {@code normal} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code halfway} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code MicrofacetDistribution} method {@code D(const Vector3f &wh)} that returns a {@code Float} in PBRT.
 	 * 
-	 * @param normal the normal, called {@code wh} in PBRT
+	 * @param halfway the halfway vector, called {@code wh} in PBRT
 	 * @return a {@code float} value with the computed differential area term
-	 * @throws NullPointerException thrown if, and only if, {@code normal} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code halfway} is {@code null}
 	 */
 	@Override
-	public float computeDifferentialArea(final Vector3F normal) {
-		final float tanThetaSquared = normal.tanThetaSquared();
+	public float computeDifferentialArea(final Vector3F halfway) {
+		final float tanThetaSquared = halfway.tanThetaSquared();
 		
 		if(isInfinite(tanThetaSquared)) {
 			return 0.0F;
@@ -192,10 +181,10 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 		final float alphaY = this.alphaY;
 		final float alphaYSquared = alphaY * alphaY;
 		
-		final float cosPhiSquared = normal.cosPhiSquared();
-		final float sinPhiSquared = normal.sinPhiSquared();
+		final float cosPhiSquared = halfway.cosPhiSquared();
+		final float sinPhiSquared = halfway.sinPhiSquared();
 		
-		final float cosThetaQuartic = normal.cosThetaQuartic();
+		final float cosThetaQuartic = halfway.cosThetaQuartic();
 		
 		final float differentialArea = exp(-tanThetaSquared * (cosPhiSquared / alphaXSquared + sinPhiSquared / alphaYSquared)) / (PI * alphaX * alphaY * cosThetaQuartic);
 		
@@ -255,32 +244,30 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Vector2F doComputeSlope(final float cosThetaI, final float u, final float v) {
-		if(cosThetaI > 0.9999F) {
+	private static Vector2F doComputeSlope(final float cosTheta, final float u, final float v) {
+		if(cosTheta > 0.9999F) {
 			final float r = sqrt(-log(1.0F - u));
 			final float phi = 2.0F * PI * v;
-			final float cosPhi = cos(phi);
-			final float sinPhi = sin(phi);
-			final float x = r * cosPhi;
-			final float y = r * sinPhi;
+			final float x = r * cos(phi);
+			final float y = r * sin(phi);
 			
 			return new Vector2F(x, y);
 		}
 		
-		final float sinThetaI = sqrt(max(0.0F, 1.0F - cosThetaI * cosThetaI));
-		final float tanThetaI = sinThetaI / cosThetaI;
-		final float cotThetaI = 1.0F / tanThetaI;
+		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float tanTheta = sinTheta / cosTheta;
+		final float cotTheta = 1.0F / tanTheta;
 		
 		final float sampleX = max(u, 1.0e-6F);
-		final float thetaI = acos(cosThetaI);
-		final float fit = 1.0F + thetaI * (-0.876F + thetaI * (0.4265F - 0.0594F * thetaI));
+		final float theta = acos(cosTheta);
+		final float fit = 1.0F + theta * (-0.876F + theta * (0.4265F - 0.0594F * theta));
 		final float sqrtPiReciprocal = 1.0F / sqrt(PI);
 		
 		float a = -1.0F;
-		float b = error(cotThetaI);
+		float b = error(cotTheta);
 		float c = b - (1.0F + b) * pow(1.0F - sampleX, fit);
 		
-		final float normalization = 1.0F / (1.0F + c + sqrtPiReciprocal * tanThetaI * exp(-cotThetaI * cotThetaI));
+		final float normalization = 1.0F / (1.0F + c + sqrtPiReciprocal * tanTheta * exp(-cotTheta * cotTheta));
 		
 		for(int i = 1; i < 10; i++) {
 			if(!(c >= a && c <= b)) {
@@ -288,8 +275,8 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 			}
 			
 			final float errorReciprocal = errorReciprocal(c);
-			final float value = normalization * (1.0F + b + sqrtPiReciprocal * tanThetaI * exp(-errorReciprocal * errorReciprocal)) - sampleX;
-			final float derivative = normalization * (1.0F - errorReciprocal * tanThetaI);
+			final float value = normalization * (1.0F + b + sqrtPiReciprocal * tanTheta * exp(-errorReciprocal * errorReciprocal)) - sampleX;
+			final float derivative = normalization * (1.0F - errorReciprocal * tanTheta);
 			
 			if(abs(value) < 1.0e-5F) {
 				break;

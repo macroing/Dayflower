@@ -338,32 +338,6 @@ public final class Rectangle2F implements Shape2F {
 	}
 	
 	/**
-	 * Returns the height of this {@code Rectangle2F} instance.
-	 * 
-	 * @return the height of this {@code Rectangle2F} instance
-	 */
-//	TODO: Add Unit Tests!
-	public float getHeight() {
-		final float maximumY = max(max(this.a.getY(), this.b.getY()), max(this.c.getY(), this.d.getY()));
-		final float minimumY = min(min(this.a.getY(), this.b.getY()), min(this.c.getY(), this.d.getY()));
-		
-		return maximumY - minimumY;
-	}
-	
-	/**
-	 * Returns the width of this {@code Rectangle2F} instance.
-	 * 
-	 * @return the width of this {@code Rectangle2F} instance
-	 */
-//	TODO: Add Unit Tests!
-	public float getWidth() {
-		final float maximumX = max(max(this.a.getX(), this.b.getX()), max(this.c.getX(), this.d.getX()));
-		final float minimumX = min(min(this.a.getX(), this.b.getX()), min(this.c.getX(), this.d.getX()));
-		
-		return maximumX - minimumX;
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code Rectangle2F} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code Rectangle2F} instance

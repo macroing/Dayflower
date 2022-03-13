@@ -338,32 +338,6 @@ public final class Rectangle2D implements Shape2D {
 	}
 	
 	/**
-	 * Returns the height of this {@code Rectangle2D} instance.
-	 * 
-	 * @return the height of this {@code Rectangle2D} instance
-	 */
-//	TODO: Add Unit Tests!
-	public double getHeight() {
-		final double maximumY = max(max(this.a.getY(), this.b.getY()), max(this.c.getY(), this.d.getY()));
-		final double minimumY = min(min(this.a.getY(), this.b.getY()), min(this.c.getY(), this.d.getY()));
-		
-		return maximumY - minimumY;
-	}
-	
-	/**
-	 * Returns the width of this {@code Rectangle2D} instance.
-	 * 
-	 * @return the width of this {@code Rectangle2D} instance
-	 */
-//	TODO: Add Unit Tests!
-	public double getWidth() {
-		final double maximumX = max(max(this.a.getX(), this.b.getX()), max(this.c.getX(), this.d.getX()));
-		final double minimumX = min(min(this.a.getX(), this.b.getX()), min(this.c.getX(), this.d.getX()));
-		
-		return maximumX - minimumX;
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code Rectangle2D} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code Rectangle2D} instance

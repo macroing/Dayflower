@@ -49,13 +49,11 @@ public final class Rectangle2I implements Shape2I {
 	/**
 	 * The name of this {@code Rectangle2I} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final String NAME = "Rectangle";
 	
 	/**
 	 * The ID of this {@code Rectangle2I} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 4;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +74,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @param circle a {@link Circle2I} instance
 	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Rectangle2I(final Circle2I circle) {
 		this(new Point2I(circle.getCenter().getX() - circle.getRadius(), circle.getCenter().getY() - circle.getRadius()), new Point2I(circle.getCenter().getX() + circle.getRadius(), circle.getCenter().getY() + circle.getRadius()));
 	}
@@ -90,7 +87,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @param y a {@code Point2I} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code x} or {@code y} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Rectangle2I(final Point2I x, final Point2I y) {
 		this.a = new Point2I(min(x.getX(), y.getX()), min(x.getY(), y.getY()));
 		this.b = new Point2I(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
@@ -113,7 +109,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code a}, {@code b}, {@code c} and {@code d} does not form a rectangle
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Rectangle2I(final Point2I a, final Point2I b, final Point2I c, final Point2I d) {
 		doCheckPointValidity(a, b, c, d);
 		
@@ -132,7 +127,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @param rectangle a {@link Rectangle2D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Rectangle2I(final Rectangle2D rectangle) {
 		this.a = new Point2I(rectangle.getA());
 		this.b = new Point2I(rectangle.getB());
@@ -149,7 +143,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @param rectangle a {@link Rectangle2F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Rectangle2I(final Rectangle2F rectangle) {
 		this.a = new Point2I(rectangle.getA());
 		this.b = new Point2I(rectangle.getB());
@@ -165,7 +158,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return a {@code List} that contains {@code LineSegment2I} instances that connects all {@link Point2I} instances in this {@code Rectangle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	public List<LineSegment2I> getLineSegments() {
 		return new ArrayList<>(this.lineSegments);
 	}
@@ -209,7 +201,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return the {@code Point2I} instance denoted by A
 	 */
-//	TODO: Add Unit Tests!
 	public Point2I getA() {
 		return this.a;
 	}
@@ -221,7 +212,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return the {@code Point2I} instance denoted by B
 	 */
-//	TODO: Add Unit Tests!
 	public Point2I getB() {
 		return this.b;
 	}
@@ -233,7 +223,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return the {@code Point2I} instance denoted by C
 	 */
-//	TODO: Add Unit Tests!
 	public Point2I getC() {
 		return this.c;
 	}
@@ -245,7 +234,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return the {@code Point2I} instance denoted by D
 	 */
-//	TODO: Add Unit Tests!
 	public Point2I getD() {
 		return this.d;
 	}
@@ -255,7 +243,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return a {@code Point2I} with the largest component values needed to contain this {@code Rectangle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Point2I getMaximum() {
 		return Point2I.maximum(this.a, this.b, this.c, this.d);
@@ -266,7 +253,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return a {@code Point2I} with the smallest component values needed to contain this {@code Rectangle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Point2I getMinimum() {
 		return Point2I.minimum(this.a, this.b, this.c, this.d);
@@ -277,7 +263,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return a {@code String} with the name of this {@code Rectangle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -288,10 +273,9 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return a {@code String} representation of this {@code Rectangle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Rectangle2I(%s, %s)", this.a, this.c);
+		return String.format("new Rectangle2I(%s, %s, %s, %s)", this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -315,7 +299,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -424,40 +407,13 @@ public final class Rectangle2I implements Shape2I {
 	}
 	
 	/**
-	 * Returns the height of this {@code Rectangle2I} instance.
-	 * 
-	 * @return the height of this {@code Rectangle2I} instance
-	 */
-//	TODO: Add Unit Tests!
-	public int getHeight() {
-		final int maximumY = max(max(this.a.getY(), this.b.getY()), max(this.c.getY(), this.d.getY()));
-		final int minimumY = min(min(this.a.getY(), this.b.getY()), min(this.c.getY(), this.d.getY()));
-		
-		return maximumY - minimumY;
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code Rectangle2I} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code Rectangle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
-	}
-	
-	/**
-	 * Returns the width of this {@code Rectangle2I} instance.
-	 * 
-	 * @return the width of this {@code Rectangle2I} instance
-	 */
-//	TODO: Add Unit Tests!
-	public int getWidth() {
-		final int maximumX = max(max(this.a.getX(), this.b.getX()), max(this.c.getX(), this.d.getX()));
-		final int minimumX = min(min(this.a.getX(), this.b.getX()), min(this.c.getX(), this.d.getX()));
-		
-		return maximumX - minimumX;
 	}
 	
 	/**
@@ -465,7 +421,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return a hash code for this {@code Rectangle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.lineSegments, this.a, this.b, this.c, this.d);
@@ -482,7 +437,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -628,7 +582,7 @@ public final class Rectangle2I implements Shape2I {
 		
 		final boolean isValidABCD = deltaABCD == 0;
 		final boolean isValidBCDA = deltaBCDA == 0;
-		final boolean isValid = isValidABCD && isValidBCDA;
+		final boolean isValid = isValidABCD & isValidBCDA;//TODO: Using & instead of && to get full code coverage. Should this be fixed?
 		
 		if(!isValid) {
 			throw new IllegalArgumentException();

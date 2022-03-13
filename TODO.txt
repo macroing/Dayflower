@@ -78,7 +78,7 @@ Test API - Unit Testing:
 
 	* 100.0% - Change API
 
-	*  82.9% - Color API
+	*  83.8% - Color API
 
 	*   0.0% - Filter API
 
@@ -86,7 +86,7 @@ Test API - Unit Testing:
 	* 100.0% - Geometry Bounding Volume API
 	*   0.0% - Geometry Bounding Volume Hierarchy API
 	*   0.0% - Geometry Rasterizer API
-	*   5.0% - Geometry Shape API
+	*   6.4% - Geometry Shape API
 
 	*   0.0% - Image API
 
@@ -133,7 +133,7 @@ Test API - Unit Testing:
 
 	*   0.0% - Sound API
 
-	*  43.8% - Utility API
+	*  43.7% - Utility API
 
 	*   0.0% - Wavefront Material API
 	*   0.0% - Wavefront Object API

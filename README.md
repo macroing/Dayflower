@@ -176,7 +176,7 @@ The following table describes the different APIs and their current status in the
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |
-| Geometry Shape API                     | 100.0%  |   5.0%    |
+| Geometry Shape API                     | 100.0%  |   6.4%    |
 | Image API                              | 100.0%  |   0.0%    |
 | Java AWT Image API                     | 100.0%  |   0.0%    |
 | Java I/O API                           | 100.0%  |   0.0%    |
@@ -211,7 +211,7 @@ The following table describes the different APIs and their current status in the
 | Scene Texture API                      | 100.0%  |   0.0%    |
 | Simplex API                            | N/A     |   0.0%    |
 | Sound API                              | 100.0%  |   0.0%    |
-| Utility API                            | 100.0%  |  43.8%    |
+| Utility API                            | 100.0%  |  43.7%    |
 | Wavefront Material API                 | 100.0%  |   0.0%    |
 | Wavefront Object API                   | 100.0%  |   0.0%    |
 

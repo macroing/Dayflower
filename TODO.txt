@@ -51,6 +51,10 @@ Scene Light API:
 
 	* ADD:		Add an HDRImageLight class.
 
+Scene Loader API:
+
+	* CHANGE:	Change the dynamic class-path functionality to an extended URLClassLoader. The current approach does not work in Java 11.
+
 Scene Material API:
 
 	* ADD:		Add a Builder to the HairMaterial class.

@@ -231,6 +231,13 @@ The following list shows the renderer implementations that have been referenced 
  - [SmallPT](https://www.kevinbeason.com/smallpt/)
  - [Sunflow](http://sunflow.sourceforge.net/)
 
+Java 9 and Above
+----------------
+Dayflower is built for Java 8. When it's being used in Java 9 and above, certain problems are likely to occur. Some of them are presented below.
+
+ - JavaFX was removed from the JDK and the JRE when Java 11 was released. In Java 11 it has to be added manually.
+ - The `JavaSceneLoader` class will not work in Java 11 (and possibly also in Java 9) due to `ClassLoader` changes and deprecated APIs.
+
 Note
 ----
 This library has not reached version 1.0.0 and been released to the public yet. Therefore, you can expect that backward incompatible changes are likely to occur between commits. When this library reaches version 1.0.0, it will be tagged and available on the "releases" page. At that point, backward incompatible changes should only occur when a new major release is made.

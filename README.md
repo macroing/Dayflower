@@ -39,7 +39,7 @@ public class CPURendererExample {
         cPURenderer.setMinimumBounceRussianRoulette(5);
         cPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
         cPURenderer.setup();
-        cPURenderer.render();
+        cPURenderer.render(10);
         cPURenderer.dispose();
     }
 }
@@ -59,7 +59,7 @@ public class GPURendererExample {
         gPURenderer.setMinimumBounceRussianRoulette(5);
         gPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
         gPURenderer.setup();
-        gPURenderer.render();
+        gPURenderer.render(10);
         gPURenderer.dispose();
     }
 }

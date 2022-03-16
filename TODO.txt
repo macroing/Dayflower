@@ -53,7 +53,7 @@ Scene Light API:
 
 Scene Loader API:
 
-	* CHANGE:	Change the dynamic class-path functionality to an extended URLClassLoader. The current approach does not work in Java 11.
+	* CHANGE:	Change the dynamic class-path functionality to an extended URLClassLoader. The current approach does not work in Java 11. Perhaps the field ucp in the standard ClassLoader could be used?
 
 Scene Material API:
 

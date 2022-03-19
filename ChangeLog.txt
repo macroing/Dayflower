@@ -2,6 +2,7 @@
 
 	* CHANGE:	Change the default values passed to the constructors of the PlasticMaterial class.
 	* CHANGE:	Update the GPURenderer and PlasticMaterial scenes to use the default PlasticMaterial configuration.
+	* CHANGE:	Update the native files for Aparapi. So Dayflower may work on other operating systems or architectures now. But it has not been tested yet.
 
 2022-03-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

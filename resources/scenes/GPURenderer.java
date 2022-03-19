@@ -9,7 +9,7 @@ Material materialSphereD = new GlossyMaterial(Color3F.GRAY_0_50, Color3F.BLACK, 
 Material materialSphereE = new MatteMaterial(new Color3F(0.1F, 1.0F, 0.1F));
 Material materialSphereF = new MetalMaterial();
 Material materialSphereG = new MirrorMaterial(Color3F.GRAY_0_50);
-Material materialSphereH = new PlasticMaterial(new Color3F(0.05F, 0.05F, 1.0F), Color3F.GRAY_0_50);
+Material materialSphereH = new PlasticMaterial();
 Material materialSphereI = new SubstrateMaterial(new Color3F(1.0F, 0.2F, 0.2F));
 
 Shape3F shapePlane = new Plane3F();

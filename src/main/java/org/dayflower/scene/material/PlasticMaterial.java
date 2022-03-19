@@ -83,12 +83,12 @@ public final class PlasticMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PlasticMaterial(Color3F.GRAY_0_25);
+	 * new PlasticMaterial(new Color3F(0.2F, 0.2F, 0.5F));
 	 * }
 	 * </pre>
 	 */
 	public PlasticMaterial() {
-		this(Color3F.GRAY_0_25);
+		this(new Color3F(0.2F, 0.2F, 0.5F));
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public final class PlasticMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PlasticMaterial(colorKD, Color3F.GRAY_0_25);
+	 * new PlasticMaterial(colorKD, Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 * 
@@ -107,7 +107,7 @@ public final class PlasticMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
 	public PlasticMaterial(final Color3F colorKD) {
-		this(colorKD, Color3F.GRAY_0_25);
+		this(colorKD, Color3F.GRAY_0_50);
 	}
 	
 	/**
@@ -138,7 +138,7 @@ public final class PlasticMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PlasticMaterial(colorKD, colorKS, colorEmission, 0.1F);
+	 * new PlasticMaterial(colorKD, colorKS, colorEmission, 0.025F);
 	 * }
 	 * </pre>
 	 * 
@@ -148,7 +148,7 @@ public final class PlasticMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}
 	 */
 	public PlasticMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission) {
-		this(colorKD, colorKS, colorEmission, 0.1F);
+		this(colorKD, colorKS, colorEmission, 0.025F);
 	}
 	
 	/**
@@ -226,7 +226,7 @@ public final class PlasticMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PlasticMaterial(textureKD, ConstantTexture.GRAY_0_25);
+	 * new PlasticMaterial(textureKD, ConstantTexture.GRAY_0_50);
 	 * }
 	 * </pre>
 	 * 
@@ -234,7 +234,7 @@ public final class PlasticMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
 	 */
 	public PlasticMaterial(final Texture textureKD) {
-		this(textureKD, ConstantTexture.GRAY_0_25);
+		this(textureKD, ConstantTexture.GRAY_0_50);
 	}
 	
 	/**
@@ -265,7 +265,7 @@ public final class PlasticMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PlasticMaterial(textureKD, textureKS, textureEmission, ConstantTexture.GRAY_0_10);
+	 * new PlasticMaterial(textureKD, textureKS, textureEmission, new ConstantTexture(new Color3F(0.025F)));
 	 * }
 	 * </pre>
 	 * 
@@ -275,7 +275,7 @@ public final class PlasticMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS} or {@code textureEmission} are {@code null}
 	 */
 	public PlasticMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission) {
-		this(textureKD, textureKS, textureEmission, ConstantTexture.GRAY_0_10);
+		this(textureKD, textureKS, textureEmission, new ConstantTexture(new Color3F(0.025F)));
 	}
 	
 	/**

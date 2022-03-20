@@ -150,17 +150,17 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	}
 	
 	/**
-	 * Computes the differential area term for {@code normal}.
+	 * Computes the differential area term for {@code halfway}.
 	 * <p>
 	 * Returns a {@code float} value with the computed differential area term.
 	 * <p>
-	 * If {@code normal} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code halfway} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code MicrofacetDistribution} method {@code D(const Vector3f &wh)} that returns a {@code Float} in PBRT.
 	 * 
-	 * @param normal the normal, called {@code wh} in PBRT
+	 * @param halfway the halfway vector, called {@code wh} in PBRT
 	 * @return a {@code float} value with the computed differential area term
-	 * @throws NullPointerException thrown if, and only if, {@code normal} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code halfway} is {@code null}
 	 */
 	@Override
 	public float computeDifferentialArea(final Vector3F halfway) {

@@ -650,9 +650,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * <p>
 	 * Returns {@code true} if, and only if, a sample was created, {@code false} otherwise.
 	 * <p>
-	 * This method assumes the {@link #materialBSDFCompute(int, int)} method was called with a return value of {@code true}.
+	 * This method assumes the {@link #materialBSDFCompute(int, int, float, float, float)} method was called with a return value of {@code true}.
 	 * <p>
-	 * The result of the sampling will be set in {@link #bSDFResultArray_$private$14}.
+	 * The result of the sampling will be set in {@link #bSDFResultArray_$private$16}.
 	 * <p>
 	 * To retrieve the incoming direction in world space, the methods {@link #materialBSDFResultGetIncomingX()}, {@link #materialBSDFResultGetIncomingY()} and {@link #materialBSDFResultGetIncomingZ()} may be used.
 	 * <p>
@@ -866,9 +866,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	/**
 	 * Evaluates the distribution function using the current {@link BSDF} instance.
 	 * <p>
-	 * This method assumes the {@link #materialBSDFCompute(int, int)} method was called with a return value of {@code true}.
+	 * This method assumes the {@link #materialBSDFCompute(int, int, float, float, float)} method was called with a return value of {@code true}.
 	 * <p>
-	 * The result of the evaluation will be set in {@link #bSDFResultArray_$private$14}.
+	 * The result of the evaluation will be set in {@link #bSDFResultArray_$private$16}.
 	 * <p>
 	 * To retrieve the color components of the result, the methods {@link #materialBSDFResultGetResultR()}, {@link #materialBSDFResultGetResultG()} and {@link #materialBSDFResultGetResultB()} may be used.
 	 * 
@@ -925,9 +925,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	/**
 	 * Evaluates the probability density function (PDF) using the current {@link BSDF} instance.
 	 * <p>
-	 * This method assumes the {@link #materialBSDFCompute(int, int)} method was called with a return value of {@code true}.
+	 * This method assumes the {@link #materialBSDFCompute(int, int, float, float, float)} method was called with a return value of {@code true}.
 	 * <p>
-	 * The result of the evaluation will be set in {@link #bSDFResultArray_$private$14}.
+	 * The result of the evaluation will be set in {@link #bSDFResultArray_$private$16}.
 	 * <p>
 	 * To retrieve the probability density function (PDF) value, the method {@link #materialBSDFResultGetProbabilityDensityFunctionValue()} may be used.
 	 * 

@@ -84,6 +84,7 @@
 			<fileset dir="." includes="COPYING"/>
 			<fileset dir="." includes="COPYING.LESSER"/>
 			<fileset dir="." includes="README.md"/>
+			<fileset dir="." includes="run.bat"/>
 		</copy>
 		
 		<!--Copy the libraries.-->

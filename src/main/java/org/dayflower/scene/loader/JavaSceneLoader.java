@@ -61,6 +61,7 @@ public final class JavaSceneLoader implements SceneLoader {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final DynamicURLClassLoader dynamicURLClassLoader;
 	private final Map<String, Object> objects;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +70,8 @@ public final class JavaSceneLoader implements SceneLoader {
 	 * Constructs a new {@code JavaSceneLoader} instance.
 	 */
 	public JavaSceneLoader() {
+		this.dynamicURLClassLoader = new DynamicURLClassLoader();
+		this.dynamicURLClassLoader.addURLsFromClassPath();
 		this.objects = new HashMap<>();
 	}
 	
@@ -232,6 +235,52 @@ public final class JavaSceneLoader implements SceneLoader {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private Object doCompileSourceCode(final String sourceCode) {
+		final String className = "JavaSceneLoaderProgram" + IDENTIFIER.incrementAndGet();
+		final String packageName = "org.dayflower.scene.loader";
+		final String directory = packageName.replace(".", "/");
+		
+		final File binaryDirectory = doGetBinaryDirectory();
+		final File sourceDirectory = doGetSourceDirectory();
+		final File sourceFile = doGetSourceFile(directory, className);
+		
+		doAddToClassPath(binaryDirectory);
+		
+		doGenerateSourceCode(className, sourceCode, sourceFile);
+		
+		try {
+			final JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
+			
+			if(javaCompiler != null) {
+				final List<File> files = doGetFiles(this.dynamicURLClassLoader.getURLs());
+				
+				try(final StandardJavaFileManager standardJavaFileManager = javaCompiler.getStandardFileManager(null, null, null)) {
+					standardJavaFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(binaryDirectory));
+					standardJavaFileManager.setLocation(StandardLocation.CLASS_PATH, files);
+					standardJavaFileManager.setLocation(StandardLocation.SOURCE_PATH, Arrays.asList(sourceDirectory));
+					
+					final CompilationTask compilationTask = javaCompiler.getTask(null, standardJavaFileManager, null, null, null, standardJavaFileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile)));
+					
+					final boolean hasCompiled = compilationTask.call().booleanValue();
+					
+					if(!hasCompiled) {
+						return null;
+					}
+				}
+			} else {
+				return null;
+			}
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+		
+		try {
+			return Class.forName("org.dayflower.scene.loader." + className, true, this.dynamicURLClassLoader).getConstructor().newInstance();
+		} catch(final Exception e) {
+			return null;
+		}
+	}
+	
 	private Object doLoadObject(final File file) {
 		final String sourceCode = doReadFrom(file);
 		
@@ -248,6 +297,14 @@ public final class JavaSceneLoader implements SceneLoader {
 		}
 		
 		return null;
+	}
+	
+	private void doAddToClassPath(final File file) {
+		try {
+			this.dynamicURLClassLoader.addURL(file.toURI().toURL());
+		} catch(final MalformedURLException e) {
+			throw new UnsupportedOperationException(e);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,51 +345,6 @@ public final class JavaSceneLoader implements SceneLoader {
 		}
 		
 		return files;
-	}
-	
-	private static Object doCompileSourceCode(final String sourceCode) {
-		final String className = "JavaSceneLoaderProgram" + IDENTIFIER.incrementAndGet();
-		final String packageName = "org.dayflower.scene.loader";
-		final String directory = packageName.replace(".", "/");
-		
-		final File binaryDirectory = doGetBinaryDirectory();
-		final File sourceDirectory = doGetSourceDirectory();
-		final File sourceFile = doGetSourceFile(directory, className);
-		
-		doAddToClassPath(binaryDirectory);
-		doGenerateSourceCode(className, sourceCode, sourceFile);
-		
-		try {
-			final JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-			
-			if(javaCompiler != null) {
-				final List<File> files = doGetFiles(URLClassLoader.class.cast(ClassLoader.getSystemClassLoader()).getURLs());
-				
-				try(final StandardJavaFileManager standardJavaFileManager = javaCompiler.getStandardFileManager(null, null, null)) {
-					standardJavaFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(binaryDirectory));
-					standardJavaFileManager.setLocation(StandardLocation.CLASS_PATH, files);
-					standardJavaFileManager.setLocation(StandardLocation.SOURCE_PATH, Arrays.asList(sourceDirectory));
-					
-					final CompilationTask compilationTask = javaCompiler.getTask(null, standardJavaFileManager, null, null, null, standardJavaFileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile)));
-					
-					final boolean hasCompiled = compilationTask.call().booleanValue();
-					
-					if(!hasCompiled) {
-						return null;
-					}
-				}
-			} else {
-				return null;
-			}
-		} catch(final IOException e) {
-			throw new UncheckedIOException(e);
-		}
-		
-		try {
-			return Class.forName("org.dayflower.scene.loader." + className).getConstructor().newInstance();
-		} catch(final Exception e) {
-			return null;
-		}
 	}
 	
 	private static String doFormatSourceCode(final String sourceCode) {
@@ -414,20 +426,6 @@ public final class JavaSceneLoader implements SceneLoader {
 		}
 	}
 	
-	private static void doAddToClassPath(final File file) {
-		try {
-			final Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class<?>[]{URL.class});
-			
-			final boolean isAccessible = method.isAccessible();
-			
-			method.setAccessible(true);
-			method.invoke(URLClassLoader.class.cast(ClassLoader.getSystemClassLoader()), new Object[]{file.toURI().toURL()});
-			method.setAccessible(isAccessible);
-		} catch(final IllegalAccessException | InvocationTargetException | MalformedURLException | NoSuchMethodException e) {
-			throw new UnsupportedOperationException(e);
-		}
-	}
-	
 	private static void doAppendLinef(final StringBuilder stringBuilder, final String lineFormat, final Object... lineArguments) {
 		stringBuilder.append(String.format(lineFormat, lineArguments) + LINE_SEPARATOR);
 	}
@@ -450,6 +448,38 @@ public final class JavaSceneLoader implements SceneLoader {
 				method.invoke(object, directory, scene, parameterList);
 			} catch(final IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 //				Do nothing for now!
+			}
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class DynamicURLClassLoader extends URLClassLoader {
+		private static final String JAVA_CLASS_PATH = System.getProperty("java.class.path");
+		private static final String PATH_SEPARATOR = System.getProperty("path.separator");
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public DynamicURLClassLoader() {
+			super(new URL[0], ClassLoader.getSystemClassLoader());
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void addURL(final URL uRL) {
+			super.addURL(uRL);
+		}
+		
+		public void addURLsFromClassPath() {
+			final String[] javaClassPathElements = JAVA_CLASS_PATH.split(PATH_SEPARATOR);
+			
+			for(final String javaClassPathElement : javaClassPathElements) {
+				try {
+					addURL(new File(javaClassPathElement).toURI().toURL());
+				} catch(final MalformedURLException e) {
+//					Do nothing for now!
+				}
 			}
 		}
 	}

@@ -1,3 +1,8 @@
+2022-03-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a run.bat file that is copied to the distribution when building the project using Apache Ant.
+	* CHANGE:	Update the JavaSceneLoader class. The changes had to be made in order to support Java 11. In Java 9, Field.isAccessible() is deprecated. Calling Field.setAccessible(boolean) resulted in an illegal access in Java 11 (and possibly Java 9). In Java 9, ClassLoader.getSystemClassLoader() does not return a URLClassLoader anymore, which also had to be fixed. This change has only been partially tested in Java 11 at this point.
+
 2022-03-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix Javadoc issues in the TrowbridgeReitzMicrofacetDistribution class.

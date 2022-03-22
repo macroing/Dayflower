@@ -26,6 +26,7 @@ Parameter API:
 Renderer GPU API:
 
 	* ADD:		Add support for DiffuseAreaLight.
+	* ADD:		Add support for ImageLight.
 	* ADD:		Add support for PrimitiveAreaLight.
 	* ADD:		Add support for UberMaterial.
 	* ADD:		Add support for ConstructiveSolidGeometry3F.
@@ -33,6 +34,7 @@ Renderer GPU API:
 	* ADD:		Add support for the Ray Tracer algorithm.
 	* ADD:		Add support for the Scene-based BVH structure.
 	* FIX:		Fix the bug that resets the image occasionally using the Ambient Occlusion and Path Tracer algorithms.
+	* REMOVE:	Remove support for LDRImageLight.
 
 Scene BSSRDF API:
 
@@ -41,15 +43,18 @@ Scene BSSRDF API:
 
 Scene Compiler API:
 
+	* ADD:		Add support for ImageLight.
 	* ADD:		Add support for PrimitiveAreaLight.
 	* ADD:		Add support for UberMaterial.
 	* ADD:		Add support for ConstructiveSolidGeometry3F.
 	* ADD:		Add support for BiModifier.
 	* ADD:		Add support for updating a CompiledScene instance on-the-fly.
+	* REMOVE:	Remove support for LDRImageLight.
 
-Scene Loader API:
+Scene Light API:
 
-	* CHANGE:	Change the dynamic class-path functionality to an extended URLClassLoader. This has been done but needs to be tested in Java 11.
+	* REMOVE:	Remove the HDRImageLight class.
+	* REMOVE:	Remove the LDRImageLight class.
 
 Scene Material API:
 
@@ -68,6 +73,7 @@ Scene Modifier API:
 Scene Texture API:
 
 	* ADD:		Add an HDRImageTexture class.
+	* ADD:		Add an ImageTexture that could be used instead of the HDRImageTexture and the LDRImageTexture.
 
 Simplex API:
 

@@ -55,7 +55,6 @@ import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.java.util.function.TriFunction;
 import org.dayflower.noise.SimplexNoiseF;
-import org.dayflower.utility.ByteArrays;
 
 /**
  * An {@code ImageF} is an extension of {@link Image} that adds additional methods that operates on {@code float}-based data types.
@@ -2262,7 +2261,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageF undoGammaCorrection() {
-		return redoGammaCorrection(ColorSpaceF.getDefault());
+		return undoGammaCorrection(ColorSpaceF.getDefault());
 	}
 	
 	/**
@@ -2330,11 +2329,11 @@ public abstract class ImageF extends Image {
 		
 		final int minimumX = max(minimum.getX(), 0);
 		final int minimumY = max(minimum.getY(), 0);
-		final int maximumX = min(maximum.getX(), getResolutionX());
-		final int maximumY = min(maximum.getY(), getResolutionY());
+		final int maximumX = min(maximum.getX(), getResolutionX() - 1);
+		final int maximumY = min(maximum.getY(), getResolutionY() - 1);
 		
-		for(int y = minimumY; y < maximumY; y++) {
-			for(int x = minimumX; x < maximumX; x++) {
+		for(int y = minimumY; y <= maximumY; y++) {
+			for(int x = minimumX; x <= maximumX; x++) {
 				doSetColorRGBA(biFunction.apply(getColorRGBA(x, y), new Point2I(x, y)), x, y);
 			}
 		}

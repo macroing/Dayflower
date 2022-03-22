@@ -2261,7 +2261,7 @@ public abstract class ImageD extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageD undoGammaCorrection() {
-		return redoGammaCorrection(ColorSpaceD.getDefault());
+		return undoGammaCorrection(ColorSpaceD.getDefault());
 	}
 	
 	/**
@@ -2329,11 +2329,11 @@ public abstract class ImageD extends Image {
 		
 		final int minimumX = max(minimum.getX(), 0);
 		final int minimumY = max(minimum.getY(), 0);
-		final int maximumX = min(maximum.getX(), getResolutionX());
-		final int maximumY = min(maximum.getY(), getResolutionY());
+		final int maximumX = min(maximum.getX(), getResolutionX() - 1);
+		final int maximumY = min(maximum.getY(), getResolutionY() - 1);
 		
-		for(int y = minimumY; y < maximumY; y++) {
-			for(int x = minimumX; x < maximumX; x++) {
+		for(int y = minimumY; y <= maximumY; y++) {
+			for(int x = minimumX; x <= maximumX; x++) {
 				doSetColorRGBA(biFunction.apply(getColorRGBA(x, y), new Point2I(x, y)), x, y);
 			}
 		}

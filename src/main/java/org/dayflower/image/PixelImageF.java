@@ -423,7 +423,7 @@ public final class PixelImageF extends ImageF {
 		final int yTransformed = pixelOperation.getY(y, resolutionY);
 		
 		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
-			return Optional.of(this.pixels[y * resolutionX + x]);
+			return Optional.of(this.pixels[yTransformed * resolutionX + xTransformed]);
 		}
 		
 		return Optional.empty();

@@ -1,8 +1,12 @@
 2022-03-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the ImageLight class. This one will soon replace the new HDRImageLight class and the old LDRImageLight class. Support for it on the GPU is required first.
 	* ADD:		Add the HDRImageLight class.
 	* ADD:		Add the methods toDoubleArray() and toDoubleArray(ArrayComponentOrder) to the ImageD class.
 	* ADD:		Add the methods toFloatArray() and toFloatArray(ArrayComponentOrder) to the ImageF class.
+	* CHANGE:	Fix a bug in the method getPixel(int, int, PixelOperation) in the classes PixelImageD and PixelImageF.
+	* CHANGE:	Fix a bug in the methods undoGammaCorrection() and update(BiFunction<Color4D, Point2I, Color4D>, Rectangle2I) in the ImageD class.
+	* CHANGE:	Fix a bug in the methods undoGammaCorrection() and update(BiFunction<Color4F, Point2I, Color4F>, Rectangle2I) in the ImageF class.
 
 2022-03-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

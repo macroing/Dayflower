@@ -42,6 +42,7 @@ import java.util.function.Function;
 import org.dayflower.change.Change;
 import org.dayflower.change.ChangeCombiner;
 import org.dayflower.change.ChangeHistory;
+import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.ColorSpaceF;
@@ -54,6 +55,7 @@ import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.java.util.function.TriFunction;
 import org.dayflower.noise.SimplexNoiseF;
+import org.dayflower.utility.ByteArrays;
 
 /**
  * An {@code ImageF} is an extension of {@link Image} that adds additional methods that operates on {@code float}-based data types.
@@ -2413,6 +2415,68 @@ public abstract class ImageF extends Image {
 		}
 		
 		return luminanceMinimum;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code ImageF} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * imageF.toFloatArray(ArrayComponentOrder.RGBA);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code float[]} representation of this {@code ImageF} instance
+	 */
+//	TODO: Add Unit Tests!
+	public final float[] toFloatArray() {
+		return toFloatArray(ArrayComponentOrder.RGBA);
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code ImageF} instance.
+	 * <p>
+	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
+	 * @return a {@code float[]} representation of this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public final float[] toFloatArray(final ArrayComponentOrder arrayComponentOrder) {
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		final int componentCount = arrayComponentOrder.getComponentCount();
+		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		final float[] array = new float[resolutionX * resolutionY * componentCount];
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0, index = (y * resolutionX + x) * componentCount; x < resolutionX; x++, index += componentCount) {
+				final Color4F colorRGBA = getColorRGBA(x, y);
+				
+				if(arrayComponentOrder.hasOffsetR()) {
+					array[index + arrayComponentOrder.getOffsetR()] = colorRGBA.getR();
+				}
+				
+				if(arrayComponentOrder.hasOffsetG()) {
+					array[index + arrayComponentOrder.getOffsetG()] = colorRGBA.getG();
+				}
+				
+				if(arrayComponentOrder.hasOffsetB()) {
+					array[index + arrayComponentOrder.getOffsetB()] = colorRGBA.getB();
+				}
+				
+				if(arrayComponentOrder.hasOffsetA()) {
+					array[index + arrayComponentOrder.getOffsetA()] = colorRGBA.getA();
+				}
+			}
+		}
+		
+		return array;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

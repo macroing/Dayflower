@@ -1,3 +1,9 @@
+2022-03-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the HDRImageLight class.
+	* ADD:		Add the methods toDoubleArray() and toDoubleArray(ArrayComponentOrder) to the ImageD class.
+	* ADD:		Add the methods toFloatArray() and toFloatArray(ArrayComponentOrder) to the ImageF class.
+
 2022-03-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a run.bat file that is copied to the distribution when building the project using Apache Ant.

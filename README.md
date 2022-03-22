@@ -82,15 +82,16 @@ The tables below show the main features of the renderer.
 
 #### Supported Lights
 
-| Name                                | CPU | GPU |
-| ----------------------------------- | --- | --- |
-| Diffuse Area Light                  | Yes | No  |
-| Directional Light                   | Yes | Yes |
-| Low-Dynamic-Range (LDR) Image Light | Yes | Yes |
-| Perez Light (Sun & Sky)             | Yes | Yes |
-| Point Light                         | Yes | Yes |
-| Primitive Area Light                | Yes | No  |
-| Spot Light                          | Yes | Yes |
+| Name                                 | CPU | GPU |
+| ------------------------------------ | --- | --- |
+| Diffuse Area Light                   | Yes | No  |
+| Directional Light                    | Yes | Yes |
+| High-Dynamic-Range (HDR) Image Light | Yes | No  |
+| Low-Dynamic-Range (LDR) Image Light  | Yes | Yes |
+| Perez Light (Sun & Sky)              | Yes | Yes |
+| Point Light                          | Yes | Yes |
+| Primitive Area Light                 | Yes | No  |
+| Spot Light                           | Yes | Yes |
 
 #### Supported Materials
 

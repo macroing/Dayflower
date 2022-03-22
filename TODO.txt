@@ -47,13 +47,9 @@ Scene Compiler API:
 	* ADD:		Add support for BiModifier.
 	* ADD:		Add support for updating a CompiledScene instance on-the-fly.
 
-Scene Light API:
-
-	* ADD:		Add an HDRImageLight class.
-
 Scene Loader API:
 
-	* CHANGE:	Change the dynamic class-path functionality to an extended URLClassLoader. The current approach does not work in Java 11. Perhaps the field ucp in the standard ClassLoader could be used?
+	* CHANGE:	Change the dynamic class-path functionality to an extended URLClassLoader. This has been done but needs to be tested in Java 11.
 
 Scene Material API:
 

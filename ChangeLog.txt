@@ -7,6 +7,7 @@
 	* CHANGE:	Fix a bug in the method getPixel(int, int, PixelOperation) in the classes PixelImageD and PixelImageF.
 	* CHANGE:	Fix a bug in the methods undoGammaCorrection() and update(BiFunction<Color4D, Point2I, Color4D>, Rectangle2I) in the ImageD class.
 	* CHANGE:	Fix a bug in the methods undoGammaCorrection() and update(BiFunction<Color4F, Point2I, Color4F>, Rectangle2I) in the ImageF class.
+	* TEST:		The updated JavaSceneLoader class has been tested using Java 11.
 
 2022-03-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

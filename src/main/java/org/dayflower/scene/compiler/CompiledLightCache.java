@@ -37,7 +37,7 @@ import org.dayflower.sampler.Distribution2F;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
-import org.dayflower.scene.light.LDRImageLight;
+import org.dayflower.scene.light.ImageLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
@@ -52,7 +52,7 @@ import org.dayflower.utility.ParameterArguments;
  * <ul>
  * <li>{@link DiffuseAreaLight}</li>
  * <li>{@link DirectionalLight}</li>
- * <li>{@link LDRImageLight}</li>
+ * <li>{@link ImageLight}</li>
  * <li>{@link PerezLight}</li>
  * <li>{@link PointLight}</li>
  * <li>{@link SpotLight}</li>
@@ -123,49 +123,49 @@ public final class CompiledLightCache {
 	public static final int DIRECTIONAL_LIGHT_OFFSET_RADIUS = 6;
 	
 	/**
-	 * The offset for the angle in radians in a compiled {@link LDRImageLight} instance.
+	 * The offset for the angle in radians in a compiled {@link ImageLight} instance.
 	 */
-	public static final int L_D_R_IMAGE_LIGHT_OFFSET_ANGLE_RADIANS = 32;
+	public static final int IMAGE_LIGHT_OFFSET_ANGLE_RADIANS = 32;
 	
 	/**
-	 * The offset for the {@link Distribution2F} denoted by {@code Distribution} in a compiled {@link LDRImageLight} instance.
+	 * The offset for the {@link Distribution2F} denoted by {@code Distribution} in a compiled {@link ImageLight} instance.
 	 */
-	public static final int L_D_R_IMAGE_LIGHT_OFFSET_DISTRIBUTION = 40;
+	public static final int IMAGE_LIGHT_OFFSET_DISTRIBUTION = 40;
 	
 	/**
-	 * The offset for the image in a compiled {@link LDRImageLight} instance.
+	 * The offset for the image in a compiled {@link ImageLight} instance.
 	 */
-	public static final int L_D_R_IMAGE_LIGHT_OFFSET_IMAGE = 2352;
+	public static final int IMAGE_LIGHT_OFFSET_IMAGE = 2352;
 	
 	/**
-	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in a compiled {@link LDRImageLight} instance.
+	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in a compiled {@link ImageLight} instance.
 	 */
-	public static final int L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD = 0;
+	public static final int IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD = 0;
 	
 	/**
-	 * The offset for the radius in a compiled {@link LDRImageLight} instance.
+	 * The offset for the radius in a compiled {@link ImageLight} instance.
 	 */
-	public static final int L_D_R_IMAGE_LIGHT_OFFSET_RADIUS = 35;
+	public static final int IMAGE_LIGHT_OFFSET_RADIUS = 35;
 	
 	/**
-	 * The offset for the resolution of the X-axis in a compiled {@link LDRImageLight} instance.
+	 * The offset for the resolution of the X-axis in a compiled {@link ImageLight} instance.
 	 */
-	public static final int L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_X = 36;
+	public static final int IMAGE_LIGHT_OFFSET_RESOLUTION_X = 36;
 	
 	/**
-	 * The offset for the resolution of the Y-axis in a compiled {@link LDRImageLight} instance.
+	 * The offset for the resolution of the Y-axis in a compiled {@link ImageLight} instance.
 	 */
-	public static final int L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_Y = 37;
+	public static final int IMAGE_LIGHT_OFFSET_RESOLUTION_Y = 37;
 	
 	/**
-	 * The offset for the {@link Vector2F} instance that represents the scale in a compiled {@link LDRImageLight} instance.
+	 * The offset for the {@link Vector2F} instance that represents the scale in a compiled {@link ImageLight} instance.
 	 */
-	public static final int L_D_R_IMAGE_LIGHT_OFFSET_SCALE = 33;
+	public static final int IMAGE_LIGHT_OFFSET_SCALE = 33;
 	
 	/**
-	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in a compiled {@link LDRImageLight} instance.
+	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in a compiled {@link ImageLight} instance.
 	 */
-	public static final int L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT = 16;
+	public static final int IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT = 16;
 	
 	/**
 	 * The offset for the {@link Distribution2F} denoted by {@code Distribution} in a compiled {@link PerezLight} instance.
@@ -266,11 +266,11 @@ public final class CompiledLightCache {
 	
 	private float[] diffuseAreaLights;
 	private float[] directionalLights;
-	private float[] lDRImageLights;
+	private float[] imageLights;
 	private float[] perezLights;
 	private float[] pointLights;
 	private float[] spotLights;
-	private int[] lDRImageLightOffsets;
+	private int[] imageLightOffsets;
 	private int[] lightIDsAndOffsets;
 	private int[] perezLightOffsets;
 	
@@ -282,8 +282,8 @@ public final class CompiledLightCache {
 	public CompiledLightCache() {
 		setDiffuseAreaLights(new float[0]);
 		setDirectionalLights(new float[0]);
-		setLDRImageLightOffsets(new int[0]);
-		setLDRImageLights(new float[0]);
+		setImageLightOffsets(new int[0]);
+		setImageLights(new float[0]);
 		setLightIDsAndOffsets(new int[0]);
 		setPerezLightOffsets(new int[0]);
 		setPerezLights(new float[0]);
@@ -350,27 +350,27 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Removes {@code lDRImageLight} from this {@code CompiledLightCache} instance, if present.
+	 * Removes {@code imageLight} from this {@code CompiledLightCache} instance, if present.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code lDRImageLight} was removed, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code imageLight} was removed, {@code false} otherwise.
 	 * <p>
-	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code imageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageLight an {@link LDRImageLight} instance in compiled form
-	 * @return {@code true} if, and only if, {@code lDRImageLight} was removed, {@code false} otherwise
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageLight.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 * @param imageLight an {@link ImageLight} instance in compiled form
+	 * @return {@code true} if, and only if, {@code imageLight} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code imageLight.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code imageLight} is {@code null}
 	 */
-	public boolean removeLDRImageLight(final float[] lDRImageLight) {
-		final int absoluteOffset = getLDRImageLightOffsetAbsolute(lDRImageLight);
-		final int relativeOffset = getLDRImageLightOffsetRelative(lDRImageLight);
+	public boolean removeImageLight(final float[] imageLight) {
+		final int absoluteOffset = getImageLightOffsetAbsolute(imageLight);
+		final int relativeOffset = getImageLightOffsetRelative(imageLight);
 		
 		if(absoluteOffset != -1 && relativeOffset != -1) {
-			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, relativeOffset));
-			setLDRImageLightOffsets(Structures.removeStructureOffset(getLDRImageLightOffsets(), absoluteOffset, lDRImageLight.length));
-			setLDRImageLights(FloatArrays.splice(getLDRImageLights(), absoluteOffset, lDRImageLight.length));
+			setLightIDsAndOffsets(Structures.removeStructureIDAndOffset(getLightIDsAndOffsets(), ImageLight.ID, relativeOffset));
+			setImageLightOffsets(Structures.removeStructureOffset(getImageLightOffsets(), absoluteOffset, imageLight.length));
+			setImageLights(FloatArrays.splice(getImageLights(), absoluteOffset, imageLight.length));
 			
 			return true;
 		}
@@ -482,12 +482,12 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Returns a {@code float[]} that contains all {@link LDRImageLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance.
+	 * Returns a {@code float[]} that contains all {@link ImageLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance.
 	 * 
-	 * @return a {@code float[]} that contains all {@code LDRImageLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance
+	 * @return a {@code float[]} that contains all {@code ImageLight} instances in compiled form that are associated with this {@code CompiledLightCache} instance
 	 */
-	public float[] getLDRImageLights() {
-		return this.lDRImageLights;
+	public float[] getImageLights() {
+		return this.imageLights;
 	}
 	
 	/**
@@ -574,31 +574,31 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Adds {@code lDRImageLight} to this {@code CompiledLightCache} instance, if absent.
+	 * Adds {@code imageLight} to this {@code CompiledLightCache} instance, if absent.
 	 * <p>
-	 * Returns the relative offset to {@code lDRImageLight}.
+	 * Returns the relative offset to {@code imageLight}.
 	 * <p>
-	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code imageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageLight an {@link LDRImageLight} instance in compiled form
-	 * @return the relative offset to {@code lDRImageLight}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageLight.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 * @param imageLight an {@link ImageLight} instance in compiled form
+	 * @return the relative offset to {@code imageLight}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code imageLight.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code imageLight} is {@code null}
 	 */
-	public int addLDRImageLight(final float[] lDRImageLight) {
-		final int absoluteOffsetNew = this.lDRImageLights.length;
-		final int relativeOffsetOld = getLDRImageLightOffsetRelative(lDRImageLight);
-		final int relativeOffsetNew = getLDRImageLightCount();
+	public int addImageLight(final float[] imageLight) {
+		final int absoluteOffsetNew = this.imageLights.length;
+		final int relativeOffsetOld = getImageLightOffsetRelative(imageLight);
+		final int relativeOffsetNew = getImageLightCount();
 		
 		if(relativeOffsetOld != -1) {
 			return relativeOffsetOld;
 		}
 		
-		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), LDRImageLight.ID, relativeOffsetNew));
-		setLDRImageLightOffsets(IntArrays.merge(getLDRImageLightOffsets(), absoluteOffsetNew));
-		setLDRImageLights(FloatArrays.merge(getLDRImageLights(), lDRImageLight));
+		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), ImageLight.ID, relativeOffsetNew));
+		setImageLightOffsets(IntArrays.merge(getImageLightOffsets(), absoluteOffsetNew));
+		setImageLights(FloatArrays.merge(getImageLights(), imageLight));
 		
 		return relativeOffsetNew;
 	}
@@ -788,52 +788,52 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Returns the {@link LDRImageLight} count in this {@code CompiledLightCache} instance.
+	 * Returns the {@link ImageLight} count in this {@code CompiledLightCache} instance.
 	 * 
-	 * @return the {@code LDRImageLight} count in this {@code CompiledLightCache} instance
+	 * @return the {@code ImageLight} count in this {@code CompiledLightCache} instance
 	 */
-	public int getLDRImageLightCount() {
-		return this.lDRImageLightOffsets.length;
+	public int getImageLightCount() {
+		return this.imageLightOffsets.length;
 	}
 	
 	/**
-	 * Returns the absolute offset of {@code lDRImageLight} in this {@code CompiledLightCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the absolute offset of {@code imageLight} in this {@code CompiledLightCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code imageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageLight an {@link LDRImageLight} instance in compiled form
-	 * @return the absolute offset of {@code lDRImageLight} in this {@code CompiledLightCache} instance, or {@code -1} if it cannot be found
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageLight.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 * @param imageLight an {@link ImageLight} instance in compiled form
+	 * @return the absolute offset of {@code imageLight} in this {@code CompiledLightCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code imageLight.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code imageLight} is {@code null}
 	 */
-	public int getLDRImageLightOffsetAbsolute(final float[] lDRImageLight) {
-		Objects.requireNonNull(lDRImageLight, "lDRImageLight == null");
+	public int getImageLightOffsetAbsolute(final float[] imageLight) {
+		Objects.requireNonNull(imageLight, "imageLight == null");
 		
-		ParameterArguments.requireExact(lDRImageLight.length % 8, 0, "lDRImageLight.length % 8");
+		ParameterArguments.requireExact(imageLight.length % 8, 0, "imageLight.length % 8");
 		
-		return Structures.getStructureOffsetAbsolute(this.lDRImageLights, lDRImageLight, this.lDRImageLightOffsets);
+		return Structures.getStructureOffsetAbsolute(this.imageLights, imageLight, this.imageLightOffsets);
 	}
 	
 	/**
-	 * Returns the relative offset of {@code lDRImageLight} in this {@code CompiledLightCache} instance, or {@code -1} if it cannot be found.
+	 * Returns the relative offset of {@code imageLight} in this {@code CompiledLightCache} instance, or {@code -1} if it cannot be found.
 	 * <p>
-	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code imageLight.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageLight an {@link LDRImageLight} instance in compiled form
-	 * @return the relative offset of {@code lDRImageLight} in this {@code CompiledLightCache} instance, or {@code -1} if it cannot be found
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageLight.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 * @param imageLight an {@link ImageLight} instance in compiled form
+	 * @return the relative offset of {@code imageLight} in this {@code CompiledLightCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code imageLight.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code imageLight} is {@code null}
 	 */
-	public int getLDRImageLightOffsetRelative(final float[] lDRImageLight) {
-		Objects.requireNonNull(lDRImageLight, "lDRImageLight == null");
+	public int getImageLightOffsetRelative(final float[] imageLight) {
+		Objects.requireNonNull(imageLight, "imageLight == null");
 		
-		ParameterArguments.requireExact(lDRImageLight.length % 8, 0, "lDRImageLight.length % 8");
+		ParameterArguments.requireExact(imageLight.length % 8, 0, "imageLight.length % 8");
 		
-		return Structures.getStructureOffsetRelative(this.lDRImageLights, lDRImageLight, this.lDRImageLightOffsets);
+		return Structures.getStructureOffsetRelative(this.imageLights, imageLight, this.imageLightOffsets);
 	}
 	
 	/**
@@ -842,7 +842,7 @@ public final class CompiledLightCache {
 	 * @return the {@code Light} count in this {@code CompiledLightCache} instance
 	 */
 	public int getLightCount() {
-		return getDiffuseAreaLightCount() + getDirectionalLightCount() + getLDRImageLightCount() + getPerezLightCount() + getPointLightCount() + getSpotLightCount();
+		return getDiffuseAreaLightCount() + getDirectionalLightCount() + getImageLightCount() + getPerezLightCount() + getPointLightCount() + getSpotLightCount();
 	}
 	
 	/**
@@ -993,12 +993,12 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Returns an {@code int[]} that contains the offsets for all {@link LDRImageLight} instances in this {@code CompiledLightCache} instance.
+	 * Returns an {@code int[]} that contains the offsets for all {@link ImageLight} instances in this {@code CompiledLightCache} instance.
 	 * 
-	 * @return an {@code int[]} that contains the offsets for all {@code LDRImageLight} instances in this {@code CompiledLightCache} instance
+	 * @return an {@code int[]} that contains the offsets for all {@code ImageLight} instances in this {@code CompiledLightCache} instance
 	 */
-	public int[] getLDRImageLightOffsets() {
-		return this.lDRImageLightOffsets;
+	public int[] getImageLightOffsets() {
+		return this.imageLightOffsets;
 	}
 	
 	/**
@@ -1058,41 +1058,41 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Sets the {@code int[]} that contains the offsets for all {@link LDRImageLight} instances to {@code lDRImageLightOffsets}.
+	 * Sets the {@code int[]} that contains the offsets for all {@link ImageLight} instances to {@code imageLightOffsets}.
 	 * <p>
-	 * If {@code lDRImageLightOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLightOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If at least one offset in {@code lDRImageLightOffsets} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If at least one offset in {@code imageLightOffsets} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageLightOffsets the {@code int[]} that contains the offsets for all {@code LDRImageLight} instances
-	 * @throws IllegalArgumentException thrown if, and only if, at least one offset in {@code lDRImageLightOffsets} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLightOffsets} is {@code null}
+	 * @param imageLightOffsets the {@code int[]} that contains the offsets for all {@code ImageLight} instances
+	 * @throws IllegalArgumentException thrown if, and only if, at least one offset in {@code imageLightOffsets} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code imageLightOffsets} is {@code null}
 	 */
-	public void setLDRImageLightOffsets(final int[] lDRImageLightOffsets) {
-		Objects.requireNonNull(lDRImageLightOffsets, "lDRImageLightOffsets == null");
+	public void setImageLightOffsets(final int[] imageLightOffsets) {
+		Objects.requireNonNull(imageLightOffsets, "imageLightOffsets == null");
 		
-		ParameterArguments.requireRange(lDRImageLightOffsets, 0, Integer.MAX_VALUE, "lDRImageLightOffsets");
+		ParameterArguments.requireRange(imageLightOffsets, 0, Integer.MAX_VALUE, "imageLightOffsets");
 		
-		this.lDRImageLightOffsets = lDRImageLightOffsets;
+		this.imageLightOffsets = imageLightOffsets;
 	}
 	
 	/**
-	 * Sets all {@link LDRImageLight} instances in compiled form to {@code lDRImageLights}.
+	 * Sets all {@link ImageLight} instances in compiled form to {@code imageLights}.
 	 * <p>
-	 * If {@code lDRImageLights} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLights} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code lDRImageLights.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code imageLights.length % 8} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lDRImageLights the {@code LDRImageLight} instances in compiled form
-	 * @throws IllegalArgumentException thrown if, and only if, {@code lDRImageLights.length % 8} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLights} is {@code null}
+	 * @param imageLights the {@code ImageLight} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code imageLights.length % 8} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code imageLights} is {@code null}
 	 */
-	public void setLDRImageLights(final float[] lDRImageLights) {
-		Objects.requireNonNull(lDRImageLights, "lDRImageLights == null");
+	public void setImageLights(final float[] imageLights) {
+		Objects.requireNonNull(imageLights, "imageLights == null");
 		
-		ParameterArguments.requireExact(lDRImageLights.length % 8, 0, "lDRImageLights.length % 8");
+		ParameterArguments.requireExact(imageLights.length % 8, 0, "imageLights.length % 8");
 		
-		this.lDRImageLights = lDRImageLights;
+		this.imageLights = imageLights;
 	}
 	
 	/**
@@ -1203,7 +1203,7 @@ public final class CompiledLightCache {
 			return true;
 		} else if(light instanceof DirectionalLight) {
 			return true;
-		} else if(light instanceof LDRImageLight) {
+		} else if(light instanceof ImageLight) {
 			return true;
 		} else if(light instanceof PerezLight) {
 			return true;
@@ -1382,105 +1382,105 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Returns a {@code float[]} with {@code lDRImageLight} in compiled form.
+	 * Returns a {@code float[]} with {@code imageLight} in compiled form.
 	 * <p>
-	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageLight an {@link LDRImageLight} instance
-	 * @return a {@code float[]} with {@code lDRImageLight} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 * @param imageLight an {@link ImageLight} instance
+	 * @return a {@code float[]} with {@code imageLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code imageLight} is {@code null}
 	 */
-	public static float[] toLDRImageLight(final LDRImageLight lDRImageLight) {
-		final AngleF angle = lDRImageLight.getAngle();
+	public static float[] toImageLight(final ImageLight imageLight) {
+		final AngleF angle = imageLight.getAngle();
 		
-		final Matrix44F objectToWorld = lDRImageLight.getTransform().getObjectToWorld();
-		final Matrix44F worldToObject = lDRImageLight.getTransform().getWorldToObject();
+		final Matrix44F objectToWorld = imageLight.getTransform().getObjectToWorld();
+		final Matrix44F worldToObject = imageLight.getTransform().getWorldToObject();
 		
-		final Vector2F scale = lDRImageLight.getScale();
+		final Vector2F scale = imageLight.getScale();
 		
-		final float radius = lDRImageLight.getRadius();
+		final float radius = imageLight.getRadius();
 		
-		final float[] distribution = lDRImageLight.getDistribution().toArray();
+		final float[] distribution = imageLight.getDistribution().toArray();
 		
-		final int resolutionX = lDRImageLight.getResolutionX();
-		final int resolutionY = lDRImageLight.getResolutionY();
+		final int resolutionX = imageLight.getImage().getResolutionX();
+		final int resolutionY = imageLight.getImage().getResolutionY();
 		
-		final int[] image = lDRImageLight.getImage();
+		final int[] image = imageLight.getImage().toIntArrayPackedForm();
 		
-		final float[] array = new float[getLDRImageLightLength(lDRImageLight)];
+		final float[] array = new float[getImageLightLength(imageLight)];
 		
 //		Block #1:
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();
 		
 //		Block #2:
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();
 		
 //		Block #3:
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();
 		
 //		Block #4:
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();
 		
 //		Block #5:
-		array[L_D_R_IMAGE_LIGHT_OFFSET_ANGLE_RADIANS] = angle.getRadians();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_SCALE + 0] = scale.getU();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_SCALE + 1] = scale.getV();
-		array[L_D_R_IMAGE_LIGHT_OFFSET_RADIUS] = radius;
-		array[L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_X] = resolutionX;
-		array[L_D_R_IMAGE_LIGHT_OFFSET_RESOLUTION_Y] = resolutionY;
+		array[IMAGE_LIGHT_OFFSET_ANGLE_RADIANS] = angle.getRadians();
+		array[IMAGE_LIGHT_OFFSET_SCALE + 0] = scale.getU();
+		array[IMAGE_LIGHT_OFFSET_SCALE + 1] = scale.getV();
+		array[IMAGE_LIGHT_OFFSET_RADIUS] = radius;
+		array[IMAGE_LIGHT_OFFSET_RESOLUTION_X] = resolutionX;
+		array[IMAGE_LIGHT_OFFSET_RESOLUTION_Y] = resolutionY;
 		array[38] = 0.0F;
 		array[39] = 0.0F;
 		
 		for(int i = 0; i < distribution.length; i++) {
-			array[L_D_R_IMAGE_LIGHT_OFFSET_DISTRIBUTION + i] = distribution[i];
+			array[IMAGE_LIGHT_OFFSET_DISTRIBUTION + i] = distribution[i];
 		}
 		
 		for(int i = 0; i < image.length; i++) {
-			array[L_D_R_IMAGE_LIGHT_OFFSET_IMAGE + i] = image[i];
+			array[IMAGE_LIGHT_OFFSET_IMAGE + i] = image[i];
 		}
 		
 		return array;
 	}
 	
 	/**
-	 * Returns a {@code float[]} with all {@link LDRImageLight} instances in {@code lDRImageLights} in compiled form.
+	 * Returns a {@code float[]} with all {@link ImageLight} instances in {@code imageLights} in compiled form.
 	 * <p>
-	 * If {@code lDRImageLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageLights a {@code List} of {@code LDRImageLight} instances
-	 * @return a {@code float[]} with all {@code LDRImageLight} instances in {@code lDRImageLights} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLights} or at least one of its elements are {@code null}
+	 * @param imageLights a {@code List} of {@code ImageLight} instances
+	 * @return a {@code float[]} with all {@code ImageLight} instances in {@code imageLights} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code imageLights} or at least one of its elements are {@code null}
 	 */
-	public static float[] toLDRImageLights(final List<LDRImageLight> lDRImageLights) {
-		return FloatArrays.convert(lDRImageLights, lDRImageLight -> toLDRImageLight(lDRImageLight));
+	public static float[] toImageLights(final List<ImageLight> imageLights) {
+		return FloatArrays.convert(imageLights, imageLight -> toImageLight(imageLight));
 	}
 	
 	/**
@@ -1697,18 +1697,18 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Returns the length of {@code lDRImageLight} in compiled form.
+	 * Returns the length of {@code imageLight} in compiled form.
 	 * <p>
-	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageLight an {@link LDRImageLight} instance
-	 * @return the length of {@code lDRImageLight} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
+	 * @param imageLight an {@link ImageLight} instance
+	 * @return the length of {@code imageLight} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code imageLight} is {@code null}
 	 */
-	public static int getLDRImageLightLength(final LDRImageLight lDRImageLight) {
+	public static int getImageLightLength(final ImageLight imageLight) {
 		final int a = 16 + 16 + 1 + 2 + 1 + 1 + 1;
-		final int b = lDRImageLight.getDistribution().toArray().length;
-		final int c = lDRImageLight.getResolution();
+		final int b = imageLight.getDistribution().toArray().length;
+		final int c = imageLight.getImage().getResolution();
 		
 		return a + b + c + padding(a + b + c);
 	}
@@ -1730,24 +1730,24 @@ public final class CompiledLightCache {
 	}
 	
 	/**
-	 * Returns an {@code int[]} with the offsets for all {@link LDRImageLight} instances in {@code lDRImageLights} in compiled form.
+	 * Returns an {@code int[]} with the offsets for all {@link ImageLight} instances in {@code imageLights} in compiled form.
 	 * <p>
-	 * If {@code lDRImageLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code imageLights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageLights a {@code List} of {@code LDRImageLight} instances
-	 * @return an {@code int[]} with the offsets for all {@code LDRImageLight} instances in {@code lDRImageLights} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLights} or at least one of its elements are {@code null}
+	 * @param imageLights a {@code List} of {@code ImageLight} instances
+	 * @return an {@code int[]} with the offsets for all {@code ImageLight} instances in {@code imageLights} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code imageLights} or at least one of its elements are {@code null}
 	 */
-	public static int[] toLDRImageLightOffsets(final List<LDRImageLight> lDRImageLights) {
-		ParameterArguments.requireNonNullList(lDRImageLights, "lDRImageLights");
+	public static int[] toImageLightOffsets(final List<ImageLight> imageLights) {
+		ParameterArguments.requireNonNullList(imageLights, "imageLights");
 		
-		final int[] lDRImageLightOffsets = new int[lDRImageLights.size()];
+		final int[] imageLightOffsets = new int[imageLights.size()];
 		
-		for(int i = 0, j = 0; i < lDRImageLights.size(); j += getLDRImageLightLength(lDRImageLights.get(i)), i++) {
-			lDRImageLightOffsets[i] = j;
+		for(int i = 0, j = 0; i < imageLights.size(); j += getImageLightLength(imageLights.get(i)), i++) {
+			imageLightOffsets[i] = j;
 		}
 		
-		return lDRImageLightOffsets;
+		return imageLightOffsets;
 	}
 	
 	/**

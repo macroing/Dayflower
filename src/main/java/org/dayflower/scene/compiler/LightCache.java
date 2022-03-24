@@ -33,7 +33,7 @@ import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
-import org.dayflower.scene.light.LDRImageLight;
+import org.dayflower.scene.light.ImageLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
@@ -41,14 +41,14 @@ import org.dayflower.scene.light.SpotLight;
 final class LightCache {
 	private final List<DiffuseAreaLight> distinctDiffuseAreaLights;
 	private final List<DirectionalLight> distinctDirectionalLights;
-	private final List<LDRImageLight> distinctLDRImageLights;
+	private final List<ImageLight> distinctImageLights;
 	private final List<Light> distinctLights;
 	private final List<PerezLight> distinctPerezLights;
 	private final List<PointLight> distinctPointLights;
 	private final List<SpotLight> distinctSpotLights;
 	private final Map<DiffuseAreaLight, Integer> distinctToOffsetsDiffuseAreaLights;
 	private final Map<DirectionalLight, Integer> distinctToOffsetsDirectionalLights;
-	private final Map<LDRImageLight, Integer> distinctToOffsetsLDRImageLights;
+	private final Map<ImageLight, Integer> distinctToOffsetsImageLights;
 	private final Map<PerezLight, Integer> distinctToOffsetsPerezLights;
 	private final Map<PointLight, Integer> distinctToOffsetsPointLights;
 	private final Map<SpotLight, Integer> distinctToOffsetsSpotLights;
@@ -62,14 +62,14 @@ final class LightCache {
 		this.shape3FCache = Objects.requireNonNull(shape3FCache, "shape3FCache == null");
 		this.distinctDiffuseAreaLights = new ArrayList<>();
 		this.distinctDirectionalLights = new ArrayList<>();
-		this.distinctLDRImageLights = new ArrayList<>();
+		this.distinctImageLights = new ArrayList<>();
 		this.distinctLights = new ArrayList<>();
 		this.distinctPerezLights = new ArrayList<>();
 		this.distinctPointLights = new ArrayList<>();
 		this.distinctSpotLights = new ArrayList<>();
 		this.distinctToOffsetsDiffuseAreaLights = new LinkedHashMap<>();
 		this.distinctToOffsetsDirectionalLights = new LinkedHashMap<>();
-		this.distinctToOffsetsLDRImageLights = new LinkedHashMap<>();
+		this.distinctToOffsetsImageLights = new LinkedHashMap<>();
 		this.distinctToOffsetsPerezLights = new LinkedHashMap<>();
 		this.distinctToOffsetsPointLights = new LinkedHashMap<>();
 		this.distinctToOffsetsSpotLights = new LinkedHashMap<>();
@@ -89,8 +89,8 @@ final class LightCache {
 		return CompiledLightCache.toDirectionalLights(this.distinctDirectionalLights);
 	}
 	
-	public float[] toLDRImageLights() {
-		return CompiledLightCache.toLDRImageLights(this.distinctLDRImageLights);
+	public float[] toImageLights() {
+		return CompiledLightCache.toImageLights(this.distinctImageLights);
 	}
 	
 	public float[] toPerezLights() {
@@ -112,8 +112,8 @@ final class LightCache {
 			return this.distinctToOffsetsDiffuseAreaLights.get(light).intValue();
 		} else if(light instanceof DirectionalLight) {
 			return this.distinctToOffsetsDirectionalLights.get(light).intValue();
-		} else if(light instanceof LDRImageLight) {
-			return this.distinctToOffsetsLDRImageLights.get(light).intValue();
+		} else if(light instanceof ImageLight) {
+			return this.distinctToOffsetsImageLights.get(light).intValue();
 		} else if(light instanceof PerezLight) {
 			return this.distinctToOffsetsPerezLights.get(light).intValue();
 		} else if(light instanceof PointLight) {
@@ -125,8 +125,8 @@ final class LightCache {
 		}
 	}
 	
-	public int[] toLDRImageLightOffsets() {
-		return CompiledLightCache.toLDRImageLightOffsets(this.distinctLDRImageLights);
+	public int[] toImageLightOffsets() {
+		return CompiledLightCache.toImageLightOffsets(this.distinctImageLights);
 	}
 	
 	public int[] toLightIDsAndOffsets() {
@@ -140,8 +140,8 @@ final class LightCache {
 	public void build(final CompiledLightCache compiledLightCache) {
 		compiledLightCache.setDiffuseAreaLights(toDiffuseAreaLights());
 		compiledLightCache.setDirectionalLights(toDirectionalLights());
-		compiledLightCache.setLDRImageLightOffsets(toLDRImageLightOffsets());
-		compiledLightCache.setLDRImageLights(toLDRImageLights());
+		compiledLightCache.setImageLightOffsets(toImageLightOffsets());
+		compiledLightCache.setImageLights(toImageLights());
 		compiledLightCache.setLightIDsAndOffsets(toLightIDsAndOffsets());
 		compiledLightCache.setPerezLightOffsets(toPerezLightOffsets());
 		compiledLightCache.setPerezLights(toPerezLights());
@@ -156,14 +156,14 @@ final class LightCache {
 	public void clear() {
 		this.distinctDiffuseAreaLights.clear();
 		this.distinctDirectionalLights.clear();
-		this.distinctLDRImageLights.clear();
+		this.distinctImageLights.clear();
 		this.distinctLights.clear();
 		this.distinctPerezLights.clear();
 		this.distinctPointLights.clear();
 		this.distinctSpotLights.clear();
 		this.distinctToOffsetsDiffuseAreaLights.clear();
 		this.distinctToOffsetsDirectionalLights.clear();
-		this.distinctToOffsetsLDRImageLights.clear();
+		this.distinctToOffsetsImageLights.clear();
 		this.distinctToOffsetsPerezLights.clear();
 		this.distinctToOffsetsPointLights.clear();
 		this.distinctToOffsetsSpotLights.clear();
@@ -178,9 +178,9 @@ final class LightCache {
 		this.distinctDirectionalLights.clear();
 		this.distinctDirectionalLights.addAll(this.nodeCache.getAllDistinct(DirectionalLight.class));
 		
-//		Add all distinct LDRImageLight instances:
-		this.distinctLDRImageLights.clear();
-		this.distinctLDRImageLights.addAll(this.nodeCache.getAllDistinct(LDRImageLight.class));
+//		Add all distinct ImageLight instances:
+		this.distinctImageLights.clear();
+		this.distinctImageLights.addAll(this.nodeCache.getAllDistinct(ImageLight.class));
 		
 //		Add all distinct PerezLight instances:
 		this.distinctPerezLights.clear();
@@ -198,7 +198,7 @@ final class LightCache {
 		this.distinctLights.clear();
 		this.distinctLights.addAll(this.distinctDiffuseAreaLights);
 		this.distinctLights.addAll(this.distinctDirectionalLights);
-		this.distinctLights.addAll(this.distinctLDRImageLights);
+		this.distinctLights.addAll(this.distinctImageLights);
 		this.distinctLights.addAll(this.distinctPerezLights);
 		this.distinctLights.addAll(this.distinctPointLights);
 		this.distinctLights.addAll(this.distinctSpotLights);
@@ -215,9 +215,9 @@ final class LightCache {
 		this.distinctToOffsetsDirectionalLights.clear();
 		this.distinctToOffsetsDirectionalLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDirectionalLights));
 		
-//		Create offset mappings for all distinct LDRImageLight instances:
-		this.distinctToOffsetsLDRImageLights.clear();
-		this.distinctToOffsetsLDRImageLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageLights));
+//		Create offset mappings for all distinct ImageLight instances:
+		this.distinctToOffsetsImageLights.clear();
+		this.distinctToOffsetsImageLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctImageLights));
 		
 //		Create offset mappings for all distinct PerezLight instances:
 		this.distinctToOffsetsPerezLights.clear();

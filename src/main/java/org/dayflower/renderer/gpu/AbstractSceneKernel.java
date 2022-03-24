@@ -1456,8 +1456,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.lightIDAndOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightIDsAndOffsets()));
 		put(super.lightDiffuseAreaLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDiffuseAreaLights()));
 		put(super.lightDirectionalLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDirectionalLights()));
-		put(super.lightLDRImageLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLDRImageLights()));
-		put(super.lightLDRImageLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLDRImageLightOffsets()));
+		put(super.lightImageLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getImageLights()));
+		put(super.lightImageLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getImageLightOffsets()));
 		put(super.lightPerezLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLights()));
 		put(super.lightPerezLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLightOffsets()));
 		put(super.lightPointLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPointLights()));
@@ -1471,7 +1471,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		super.lightCount = compiledScene.getCompiledLightCache().getLightCount();
 		super.lightDiffuseAreaLightCount = compiledScene.getCompiledLightCache().getDiffuseAreaLightCount();
 		super.lightDirectionalLightCount = compiledScene.getCompiledLightCache().getDirectionalLightCount();
-		super.lightLDRImageLightCount = compiledScene.getCompiledLightCache().getLDRImageLightCount();
+		super.lightImageLightCount = compiledScene.getCompiledLightCache().getImageLightCount();
 		super.lightPerezLightCount = compiledScene.getCompiledLightCache().getPerezLightCount();
 		super.lightPointLightCount = compiledScene.getCompiledLightCache().getPointLightCount();
 		super.lightSpotLightCount = compiledScene.getCompiledLightCache().getSpotLightCount();

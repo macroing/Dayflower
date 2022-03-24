@@ -1,3 +1,9 @@
+2022-03-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for ImageLight to the GPU renderer.
+	* CHANGE:	Refactor the classes AbstractLightKernel, AbstractSceneKernel, CompiledLightCache and CompiledSceneModifier in order to remove support for the LDRImageLight class and add support for the ImageLight class.
+	* REMOVE:	Remove the HDRImageLight and LDRImageLight classes.
+
 2022-03-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the ImageLight class. This one will soon replace the new HDRImageLight class and the old LDRImageLight class. Support for it on the GPU is required first.

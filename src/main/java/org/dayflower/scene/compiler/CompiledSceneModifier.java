@@ -44,7 +44,7 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
-import org.dayflower.scene.light.LDRImageLight;
+import org.dayflower.scene.light.ImageLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
@@ -250,10 +250,10 @@ public final class CompiledSceneModifier {
 			final int offsetRelative = compiledLightCache.addDirectionalLight(CompiledLightCache.toDirectionalLight(directionalLight));
 			
 			return offsetRelative;
-		} else if(light instanceof LDRImageLight) {
-			final LDRImageLight lDRImageLight = LDRImageLight.class.cast(light);
+		} else if(light instanceof ImageLight) {
+			final ImageLight imageLight = ImageLight.class.cast(light);
 			
-			final int offsetRelative = compiledLightCache.addLDRImageLight(CompiledLightCache.toLDRImageLight(lDRImageLight));
+			final int offsetRelative = compiledLightCache.addImageLight(CompiledLightCache.toImageLight(imageLight));
 			
 			return offsetRelative;
 		} else if(light instanceof PerezLight) {

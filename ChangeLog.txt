@@ -1,3 +1,7 @@
+2022-03-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the BytesUnitTests, LongsUnitTests and ParameterArgumentsUnitTests classes.
+
 2022-03-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for ImageLight to the GPU renderer.

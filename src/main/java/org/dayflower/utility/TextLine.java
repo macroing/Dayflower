@@ -18,6 +18,7 @@
  */
 package org.dayflower.utility;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +48,7 @@ public final class TextLine {
 	 * @param string a {@code String} that will be split on matches of whitespace ({@code "\\s"})
 	 * @throws NullPointerException thrown if, and only if, {@code string} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public TextLine(final String string) {
 		this(string, "\\s");
 	}
@@ -60,6 +62,7 @@ public final class TextLine {
 	 * @param regex the Regex pattern to split {@code string} with
 	 * @throws NullPointerException thrown if, and only if, either {@code string} or {@code regex} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public TextLine(final String string, final String regex) {
 		this.tokens = doSplitAndDiscardEmptySubstrings(string, regex);
 	}
@@ -73,6 +76,7 @@ public final class TextLine {
 	 * 
 	 * @return a {@code List} of {@code String} with all tokens in this {@code TextLine} instance
 	 */
+//	TODO: Add Unit Tests!
 	public List<String> getTokens() {
 		return new ArrayList<>(Arrays.asList(this.tokens));
 	}
@@ -84,6 +88,7 @@ public final class TextLine {
 	 * @param defaultValue a default {@code String} value
 	 * @return the token at index {@code index} as a {@code String} if it exists, {@code defaultValue} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public String getString(final int index, final String defaultValue) {
 		return hasString(index) ? this.tokens[index] : defaultValue;
 	}
@@ -93,6 +98,7 @@ public final class TextLine {
 	 * 
 	 * @return a {@code String} representation of this {@code TextLine} instance
 	 */
+//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return Arrays.toString(this.tokens);
@@ -104,6 +110,7 @@ public final class TextLine {
 	 * @param index an index
 	 * @return {@code true} if, and only if, a token at index {@code index} exists and it can be converted to a {@code float}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasFloat(final int index) {
 		try {
 			return index >= 0 && index < this.tokens.length && Float.parseFloat(this.tokens[index]) != Float.NaN;
@@ -121,6 +128,7 @@ public final class TextLine {
 	 * @param value a {@code float} value
 	 * @return {@code true} if, and only if, a token at index {@code index} exists and it can be converted to a {@code float} that is considered equal to {@code value}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasFloat(final int index, final float value) {
 		try {
 			return index >= 0 && index < this.tokens.length && Float.compare(Float.parseFloat(this.tokens[index]), value) == 0;
@@ -135,6 +143,7 @@ public final class TextLine {
 	 * @param index an index
 	 * @return {@code true} if, and only if, a token at index {@code index} exists and it can be converted to an {@code int}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasInt(final int index) {
 		try {
 			return index >= 0 && index < this.tokens.length && Integer.parseInt(this.tokens[index]) >= Integer.MIN_VALUE;
@@ -152,6 +161,7 @@ public final class TextLine {
 	 * @param value an {@code int} value
 	 * @return {@code true} if, and only if, a token at index {@code index} exists and it can be converted to an {@code int} that is considered equal to {@code value}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasInt(final int index, final int value) {
 		try {
 			return index >= 0 && index < this.tokens.length && Integer.parseInt(this.tokens[index]) == value;
@@ -166,6 +176,7 @@ public final class TextLine {
 	 * @param index an index
 	 * @return {@code true} if, and only if, a token at index {@code index} exists, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasString(final int index) {
 		return index >= 0 && index < this.tokens.length;
 	}
@@ -179,6 +190,7 @@ public final class TextLine {
 	 * @param value a {@code String} value
 	 * @return {@code true} if, and only if, a token at index {@code index} exists and it is considered equal to {@code value}, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean hasString(final int index, final String value) {
 		return index >= 0 && index < this.tokens.length && value.equals(this.tokens[index]);
 	}
@@ -188,6 +200,7 @@ public final class TextLine {
 	 * 
 	 * @return {@code true} if, and only if, this {@code TextLine} is empty, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isEmpty() {
 		return this.tokens.length == 0;
 	}
@@ -199,6 +212,7 @@ public final class TextLine {
 	 * @param defaultValue a default {@code float} value
 	 * @return the token at index {@code index} as a {@code float} if it exists and is convertible, {@code defaultValue} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public float getFloat(final int index, final float defaultValue) {
 		return hasFloat(index) ? Float.parseFloat(this.tokens[index]) : defaultValue;
 	}
@@ -210,6 +224,7 @@ public final class TextLine {
 	 * @param defaultValue a default {@code int} value
 	 * @return the token at index {@code index} as an {@code int} if it exists and is convertible, {@code defaultValue} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public int getInt(final int index, final int defaultValue) {
 		return hasInt(index) ? Integer.parseInt(this.tokens[index]) : defaultValue;
 	}
@@ -222,6 +237,7 @@ public final class TextLine {
 	 * 
 	 * @return the length of this {@code TextLine}
 	 */
+//	TODO: Add Unit Tests!
 	public int length() {
 		return this.tokens.length;
 	}

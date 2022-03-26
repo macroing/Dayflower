@@ -18,6 +18,8 @@
  */
 package org.dayflower.utility;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
+
 /**
  * A {@code CircularBuffer} is an implementation of a data structure called a circular buffer.
  * <p>
@@ -42,6 +44,7 @@ public final class CircularBuffer {
 	 * @param capacity the capacity of this {@code CircularBuffer} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code capacity} is less than {@code 1}
 	 */
+//	TODO: Add Unit Tests!
 	public CircularBuffer(final int capacity) {
 		this.buffer = new double[ParameterArguments.requireRange(capacity, 1, Integer.MAX_VALUE, "capacity")];
 	}
@@ -62,6 +65,7 @@ public final class CircularBuffer {
 	 * 
 	 * @return {@code true} if, and only if, this {@code CircularBuffer} instance is empty, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isEmpty() {
 		return this.size == 0;
 	}
@@ -71,6 +75,7 @@ public final class CircularBuffer {
 	 * 
 	 * @return {@code true} if, and only if, this {@code CircularBuffer} instance is full, {@code false} otherwise
 	 */
+//	TODO: Add Unit Tests!
 	public boolean isFull() {
 		return this.size == this.buffer.length;
 	}
@@ -80,6 +85,7 @@ public final class CircularBuffer {
 	 * 
 	 * @return a copy of this {@code CircularBuffer} instance
 	 */
+//	TODO: Add Unit Tests!
 	public CircularBuffer copy() {
 		return new CircularBuffer(this.buffer.clone(), this.readOffset, this.size, this.writeOffset);
 	}
@@ -94,6 +100,7 @@ public final class CircularBuffer {
 	 * @return the peeked value
 	 * @throws CircularBufferException thrown if, and only if, {@code isEmpty()} returns {@code true}
 	 */
+//	TODO: Add Unit Tests!
 	public double peek() {
 		if(isEmpty()) {
 			throw new CircularBufferException("peek() cannot be called while isEmpty() returns true");
@@ -116,6 +123,7 @@ public final class CircularBuffer {
 	 * @return the popped value
 	 * @throws CircularBufferException thrown if, and only if, {@code isEmpty()} returns {@code true}
 	 */
+//	TODO: Add Unit Tests!
 	public double pop() {
 		if(isEmpty()) {
 			throw new CircularBufferException("pop() cannot be called while isEmpty() returns true");
@@ -137,6 +145,7 @@ public final class CircularBuffer {
 	 * 
 	 * @return the size of this {@code CircularBuffer} instance
 	 */
+//	TODO: Add Unit Tests!
 	public int size() {
 		return this.size;
 	}
@@ -149,6 +158,7 @@ public final class CircularBuffer {
 	 * @param value the value to push
 	 * @throws CircularBufferException thrown if, and only if, {@code isFull()} returns {@code true}
 	 */
+//	TODO: Add Unit Tests!
 	public void push(final double value) {
 		if(isFull()) {
 			throw new CircularBufferException("push(double) cannot be called while isFull() returns true");

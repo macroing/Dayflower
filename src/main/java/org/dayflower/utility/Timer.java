@@ -18,6 +18,7 @@
  */
 package org.dayflower.utility;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -41,6 +42,7 @@ public final class Timer {
 	 * <p>
 	 * Calling this constructor is equivalent to {@code new Timer(System.currentTimeMillis())}.
 	 */
+//	TODO: Add Unit Tests!
 	public Timer() {
 		this(System.currentTimeMillis());
 	}
@@ -50,6 +52,7 @@ public final class Timer {
 	 * 
 	 * @param milliseconds the milliseconds to measure from
 	 */
+//	TODO: Add Unit Tests!
 	public Timer(final long milliseconds) {
 		this.milliseconds = new AtomicLong(milliseconds);
 	}
@@ -63,6 +66,7 @@ public final class Timer {
 	 * 
 	 * @return a {@code String} with the hours, minutes and seconds that have passed between the time at which this {@code Timer} instance was started or restarted and now
 	 */
+//	TODO: Add Unit Tests!
 	public String getTime() {
 		return getTime(System.currentTimeMillis());
 	}
@@ -75,6 +79,7 @@ public final class Timer {
 	 * @param milliseconds the milliseconds to measure to
 	 * @return a {@code String} with the hours, minutes and seconds that have passed between the time at which this {@code Timer} instance was started or restarted and {@code milliseconds}
 	 */
+//	TODO: Add Unit Tests!
 	public String getTime(final long milliseconds) {
 		final long hours = getHours(milliseconds);
 		final long minutes = getMinutesRemaining(milliseconds);
@@ -90,6 +95,7 @@ public final class Timer {
 	 * 
 	 * @return the hours that have passed between the time at which this {@code Timer} instance was started or restarted and now
 	 */
+//	TODO: Add Unit Tests!
 	public long getHours() {
 		return getHours(System.currentTimeMillis());
 	}
@@ -100,6 +106,7 @@ public final class Timer {
 	 * @param milliseconds the milliseconds to measure to
 	 * @return the hours that have passed between the time at which this {@code Timer} instance was started or restarted and {@code milliseconds}
 	 */
+//	TODO: Add Unit Tests!
 	public long getHours(final long milliseconds) {
 		return (milliseconds - this.milliseconds.get()) / (60L * 60L * 1000L);
 	}
@@ -111,6 +118,7 @@ public final class Timer {
 	 * 
 	 * @return the milliseconds that have passed between the time at which this {@code Timer} instance was started or restarted and now
 	 */
+//	TODO: Add Unit Tests!
 	public long getMilliseconds() {
 		return getMilliseconds(System.currentTimeMillis());
 	}
@@ -121,6 +129,7 @@ public final class Timer {
 	 * @param milliseconds the milliseconds to measure to
 	 * @return the milliseconds that have passed between the time at which this {@code Timer} instance was started or restarted and {@code milliseconds}
 	 */
+//	TODO: Add Unit Tests!
 	public long getMilliseconds(final long milliseconds) {
 		return milliseconds - this.milliseconds.get();
 	}
@@ -132,6 +141,7 @@ public final class Timer {
 	 * 
 	 * @return the milliseconds that have passed between the time at which this {@code Timer} instance was started or restarted and now, excluding the milliseconds that are represented by full hours, minutes and seconds
 	 */
+//	TODO: Add Unit Tests!
 	public long getMillisecondsRemaining() {
 		return getMillisecondsRemaining(System.currentTimeMillis());
 	}
@@ -142,6 +152,7 @@ public final class Timer {
 	 * @param milliseconds the milliseconds to measure to
 	 * @return the milliseconds that have passed between the time at which this {@code Timer} instance was started or restarted and {@code milliseconds}, excluding the milliseconds that are represented by full hours, minutes and seconds
 	 */
+//	TODO: Add Unit Tests!
 	public long getMillisecondsRemaining(final long milliseconds) {
 		return getMilliseconds(milliseconds) - getHours(milliseconds) * 60L * 60L * 1000L - getMinutesRemaining(milliseconds) * 60L * 1000L - getSeconds(milliseconds) * 1000L;
 	}
@@ -153,6 +164,7 @@ public final class Timer {
 	 * 
 	 * @return the minutes that have passed between the time at which this {@code Timer} instance was started or restarted and now
 	 */
+//	TODO: Add Unit Tests!
 	public long getMinutes() {
 		return getMinutes(System.currentTimeMillis());
 	}
@@ -163,6 +175,7 @@ public final class Timer {
 	 * @param milliseconds the milliseconds to measure to
 	 * @return the minutes that have passed between the time at which this {@code Timer} instance was started or restarted and {@code milliseconds}
 	 */
+//	TODO: Add Unit Tests!
 	public long getMinutes(final long milliseconds) {
 		return (milliseconds - this.milliseconds.get()) / (60L * 1000L);
 	}
@@ -174,6 +187,7 @@ public final class Timer {
 	 * 
 	 * @return the minutes that have passed between the time at which this {@code Timer} instance was started or restarted and now, excluding the minutes that are represented by full hours
 	 */
+//	TODO: Add Unit Tests!
 	public long getMinutesRemaining() {
 		return getMinutesRemaining(System.currentTimeMillis());
 	}
@@ -184,6 +198,7 @@ public final class Timer {
 	 * @param milliseconds the milliseconds to measure to
 	 * @return the minutes that have passed between the time at which this {@code Timer} instance was started or restarted and {@code milliseconds}, excluding the minutes that are represented by full hours
 	 */
+//	TODO: Add Unit Tests!
 	public long getMinutesRemaining(final long milliseconds) {
 		return getMinutes(milliseconds) - getHours(milliseconds) * 60L;
 	}
@@ -195,6 +210,7 @@ public final class Timer {
 	 * 
 	 * @return the seconds that have passed between the time at which this {@code Timer} instance was started or restarted and now
 	 */
+//	TODO: Add Unit Tests!
 	public long getSeconds() {
 		return getSeconds(System.currentTimeMillis());
 	}
@@ -205,6 +221,7 @@ public final class Timer {
 	 * @param milliseconds the milliseconds to measure to
 	 * @return the seconds that have passed between the time at which this {@code Timer} instance was started or restarted and {@code milliseconds}
 	 */
+//	TODO: Add Unit Tests!
 	public long getSeconds(final long milliseconds) {
 		return (milliseconds - this.milliseconds.get()) / 1000L;
 	}
@@ -216,6 +233,7 @@ public final class Timer {
 	 * 
 	 * @return the seconds that have passed between the time at which this {@code Timer} instance was started or restarted and now, excluding the seconds that are represented by full hours and minutes
 	 */
+//	TODO: Add Unit Tests!
 	public long getSecondsRemaining() {
 		return getSecondsRemaining(System.currentTimeMillis());
 	}
@@ -226,6 +244,7 @@ public final class Timer {
 	 * @param milliseconds the milliseconds to measure to
 	 * @return the seconds that have passed between the time at which this {@code Timer} instance was started or restarted and {@code milliseconds}, excluding the seconds that are represented by full hours and minutes
 	 */
+//	TODO: Add Unit Tests!
 	public long getSecondsRemaining(final long milliseconds) {
 		return getSeconds(milliseconds) - getHours(milliseconds) * 60L * 60L - getMinutesRemaining(milliseconds) * 60L;
 	}
@@ -235,6 +254,7 @@ public final class Timer {
 	 * <p>
 	 * Calling this method is equivalent to {@code restart(System.currentTimeMillis())}.
 	 */
+//	TODO: Add Unit Tests!
 	public void restart() {
 		restart(System.currentTimeMillis());
 	}
@@ -244,6 +264,7 @@ public final class Timer {
 	 * 
 	 * @param milliseconds the milliseconds to measure from
 	 */
+//	TODO: Add Unit Tests!
 	public void restart(final long milliseconds) {
 		this.milliseconds.set(milliseconds);
 	}

@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene.compiler;
 
+import static org.dayflower.utility.Floats.tan;
+
 import java.util.Objects;
 
 import org.dayflower.geometry.AngleF;
@@ -47,11 +49,15 @@ public final class CompiledCameraCache {
 	
 	/**
 	 * The offset for the {@link AngleF} instance representing the field of view on the X-axis in a compiled {@link Camera} instance.
+	 * <p>
+	 * The value stored will be {@code Floats.tan(+fieldOfViewX * 0.5F)}.
 	 */
 	public static final int CAMERA_OFFSET_FIELD_OF_VIEW_X = 0;
 	
 	/**
 	 * The offset for the {@link AngleF} instance representing the field of view on the Y-axis in a compiled {@link Camera} instance.
+	 * <p>
+	 * The value stored will be {@code Floats.tan(-fieldOfViewY * 0.5F)}.
 	 */
 	public static final int CAMERA_OFFSET_FIELD_OF_VIEW_Y = 1;
 	
@@ -167,8 +173,8 @@ public final class CompiledCameraCache {
 		
 		final float[] array = new float[CAMERA_LENGTH];
 		
-		array[CAMERA_OFFSET_FIELD_OF_VIEW_X] = fieldOfViewX.getRadians();
-		array[CAMERA_OFFSET_FIELD_OF_VIEW_Y] = fieldOfViewY.getRadians();
+		array[CAMERA_OFFSET_FIELD_OF_VIEW_X] = tan(+fieldOfViewX.getRadians() * 0.5F);
+		array[CAMERA_OFFSET_FIELD_OF_VIEW_Y] = tan(-fieldOfViewY.getRadians() * 0.5F);
 		array[CAMERA_OFFSET_LENS] = lens.ordinal();
 		array[CAMERA_OFFSET_ORTHONORMAL_BASIS_U + 0] = orthonormalBasis.getU().getX();
 		array[CAMERA_OFFSET_ORTHONORMAL_BASIS_U + 1] = orthonormalBasis.getU().getY();

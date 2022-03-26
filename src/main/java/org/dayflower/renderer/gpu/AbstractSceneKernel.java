@@ -531,8 +531,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float imageY = getGlobalId() / this.resolutionX;
 		
 //		Retrieve all values from the 'cameraArray' in the correct order:
-		final float fieldOfViewX = tan(+this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_FIELD_OF_VIEW_X] * 0.5F);
-		final float fieldOfViewY = tan(-this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_FIELD_OF_VIEW_Y] * 0.5F);
+		final float fieldOfViewX = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_FIELD_OF_VIEW_X];
+		final float fieldOfViewY = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_FIELD_OF_VIEW_Y];
 		final float lens = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_LENS];
 		final float uX = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_U + 0];
 		final float uY = this.cameraArray[CompiledCameraCache.CAMERA_OFFSET_ORTHONORMAL_BASIS_U + 1];

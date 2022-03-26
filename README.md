@@ -238,7 +238,6 @@ Java 9 and Above
 Dayflower is built for Java 8. When it's being used in Java 9 and above, certain problems are likely to occur. Some of them are presented below.
 
  - JavaFX was removed from the JDK and the JRE when Java 11 was released. In Java 11 it has to be added manually.
- - The `JavaSceneLoader` class will not work in Java 11 (and possibly also in Java 9) due to `ClassLoader` changes and deprecated APIs.
 
 Note
 ----

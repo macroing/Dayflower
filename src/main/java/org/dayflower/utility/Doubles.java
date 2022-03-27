@@ -1004,18 +1004,6 @@ public class Doubles {
 	}
 	
 	/**
-	 * Returns the remainder of {@code x} and {@code y}.
-	 * 
-	 * @param x the left hand side of the remainder operation
-	 * @param y the right hand side of the remainder operation
-	 * @return the remainder of {@code x} and {@code y}
-	 */
-//	TODO: Add Unit Tests!
-	public static double remainder(final double x, final double y) {
-		return x - (int)(x / y) * y;
-	}
-	
-	/**
 	 * Returns a saturated (or clamped) value based on {@code value}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
@@ -1101,12 +1089,10 @@ public class Doubles {
 	 */
 //	TODO: Add Unit Tests!
 	public static double smoothstep(final double value, final double edgeA, final double edgeB) {
-		final double minimumValue = min(edgeA, edgeB);
-		final double maximumValue = max(edgeA, edgeB);
+		final double x = saturate(normalize(value, edgeA, edgeB));
+		final double y = x * x * (3.0D - 2.0D * x);
 		
-		final double x = saturate((value - minimumValue) / (maximumValue - minimumValue), 0.0D, 1.0D);
-		
-		return x * x * (3.0D - 2.0D * x);
+		return y;
 	}
 	
 	/**
@@ -1271,23 +1257,6 @@ public class Doubles {
 		} else {
 			return minimumValue + ((value - maximumValue) % nextUp(maximumValue - minimumValue));
 		}
-		
-//		final double minimumValue = min(a, b);
-//		final double maximumValue = max(a, b);
-		
-//		return positiveModulo(value - minimumValue, maximumValue - minimumValue + 1) + minimumValue;
-		
-//		double currentValue = value;
-		
-//		while(currentValue < minimumValue || currentValue > maximumValue) {
-//			if(currentValue < minimumValue) {
-//				currentValue = maximumValue - (minimumValue - currentValue);
-//			} else if(currentValue > maximumValue) {
-//				currentValue = minimumValue + (currentValue - maximumValue);
-//			}
-//		}
-		
-//		return currentValue;
 	}
 	
 	/**

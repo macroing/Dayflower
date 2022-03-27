@@ -19,7 +19,6 @@
 package org.dayflower.scene.material;
 
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.remainder;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -483,7 +482,7 @@ public final class BullseyeMaterial implements Material {
 		
 		final float directionLength = direction.length();
 		final float directionLengthScaled = directionLength * this.scale;
-		final float directionLengthScaledRemainder = remainder(directionLengthScaled, 1.0F);
+		final float directionLengthScaledRemainder = directionLengthScaled % 1.0F;
 		
 		return directionLengthScaledRemainder > 0.5F ? this.materialA : this.materialB;
 	}

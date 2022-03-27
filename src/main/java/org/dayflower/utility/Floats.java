@@ -41,116 +41,97 @@ public final class Floats {
 	/**
 	 * The {@code float} value that represents a machine epsilon.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float MACHINE_EPSILON = Math.ulp(1.0F) * 0.5F;
 	
 	/**
 	 * The maximum {@code float} value that is equal to {@code +Float.MAX_VALUE}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float MAX_VALUE = +Float.MAX_VALUE;
 	
 	/**
 	 * The minimum {@code float} value that is equal to {@code -Float.MAX_VALUE}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float MIN_VALUE = -Float.MAX_VALUE;
 	
 	/**
 	 * The value of {@code Floats.nextDown(1.0F)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float NEXT_DOWN_1_1 = nextDown(1.0F);
 	
 	/**
 	 * The value of {@code Floats.nextDown(Floats.NEXT_DOWN_1_1)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float NEXT_DOWN_1_2 = nextDown(NEXT_DOWN_1_1);
 	
 	/**
 	 * The value of {@code Floats.nextDown(Floats.NEXT_DOWN_1_2)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float NEXT_DOWN_1_3 = nextDown(NEXT_DOWN_1_2);
 	
 	/**
 	 * The value of {@code Floats.nextUp(1.0F)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float NEXT_UP_1_1 = nextUp(1.0F);
 	
 	/**
 	 * The value of {@code Floats.nextUp(Floats.NEXT_UP_1_1)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float NEXT_UP_1_2 = nextUp(NEXT_UP_1_1);
 	
 	/**
 	 * The value of {@code Floats.nextUp(Floats.NEXT_UP_1_2)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float NEXT_UP_1_3 = nextUp(NEXT_UP_1_2);
 	
 	/**
 	 * The {@code float} value that represents Not-a-Number (NaN).
 	 */
-//	TODO: Add Unit Tests!
 	public static final float NaN = Float.NaN;
 	
 	/**
 	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float PI = (float)(Math.PI);
 //	public static final float PI = toFloat(Math.PI); This will cause Aparapi (a GPU-acceleration library for Java) to crash. So do not use methods when declaring constants, unless it is necessary. This comment should be used as a reminder.
 	
 	/**
 	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, divided by 180.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float PI_DIVIDED_BY_180 = PI / 180.0F;
 	
 	/**
 	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, divided by 2.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float PI_DIVIDED_BY_2 = PI / 2.0F;
 	
 	/**
 	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, divided by 4.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float PI_DIVIDED_BY_4 = PI / 4.0F;
 	
 	/**
 	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, multiplied by 2.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float PI_MULTIPLIED_BY_2 = PI * 2.0F;
 	
 	/**
 	 * The reciprocal (or inverse) of {@link #PI_MULTIPLIED_BY_2}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float PI_MULTIPLIED_BY_2_RECIPROCAL = 1.0F / PI_MULTIPLIED_BY_2;
 	
 	/**
 	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, multiplied by 4.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float PI_MULTIPLIED_BY_4 = PI * 4.0F;
 	
 	/**
 	 * The reciprocal (or inverse) of {@link #PI_MULTIPLIED_BY_4}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float PI_MULTIPLIED_BY_4_RECIPROCAL = 1.0F / PI_MULTIPLIED_BY_4;
 	
 	/**
 	 * The reciprocal (or inverse) of {@link #PI}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final float PI_RECIPROCAL = 1.0F / PI;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +149,6 @@ public final class Floats {
 	 * @param b a {@code float} value
 	 * @return {@code true} if, and only if, {@code a} is equal to {@code b}, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean equal(final float a, final float b) {
 		return Float.compare(a, b) == 0;
 	}
@@ -181,7 +161,6 @@ public final class Floats {
 	 * @param c a {@code float} value
 	 * @return {@code true} if, and only if, {@code a} is equal to {@code b} and {@code b} is equal to {@code c}, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean equal(final float a, final float b, final float c) {
 		return equal(a, b) && equal(b, c);
 	}
@@ -192,7 +171,6 @@ public final class Floats {
 	 * @param value a {@code float} value
 	 * @return {@code true} if, and only if, {@code value} is infinitely large in magnitude, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean isInfinite(final float value) {
 		return Float.isInfinite(value);
 	}
@@ -203,7 +181,6 @@ public final class Floats {
 	 * @param value a {@code float} value
 	 * @return {@code true} if, and only if, {@code value} is {@code Float.NaN}, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean isNaN(final float value) {
 		return Float.isNaN(value);
 	}
@@ -214,7 +191,6 @@ public final class Floats {
 	 * @param value a {@code float} value
 	 * @return {@code true} if, and only if, either {@code Floats.equal(value, +0.0F)} or {@code Floats.equal(value, -0.0F)} are {@code true}, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean isZero(final float value) {
 		return equal(value, +0.0F) || equal(value, -0.0F);
 	}
@@ -242,7 +218,6 @@ public final class Floats {
 	 * @return the absolute version of {@code value}
 	 * @see Math#abs(float)
 	 */
-//	TODO: Add Unit Tests!
 	public static float abs(final float value) {
 		return Math.abs(value);
 	}
@@ -263,7 +238,6 @@ public final class Floats {
 	 * @return the arc cosine of {@code value}
 	 * @see Math#acos(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float acos(final float value) {
 		return toFloat(Math.acos(value));
 	}
@@ -285,7 +259,6 @@ public final class Floats {
 	 * @return the arc sine of {@code value}
 	 * @see Math#asin(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float asin(final float value) {
 		return toFloat(Math.asin(value));
 	}
@@ -297,7 +270,6 @@ public final class Floats {
 	 * @return the result of {@code asin(value)} divided by pi
 	 * @see #asin(float)
 	 */
-//	TODO: Add Unit Tests!
 	public static float asinpi(final float value) {
 		return asin(value) / PI;
 	}
@@ -319,7 +291,6 @@ public final class Floats {
 	 * @return the arc tangent of {@code value}
 	 * @see Math#atan(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float atan(final float value) {
 		return toFloat(Math.atan(value));
 	}
@@ -351,7 +322,6 @@ public final class Floats {
 	 * @return the angle <i>theta</i> from the conversion of rectangular coordinates (x, y) to polar coordinates (r, <i>theta</i>)
 	 * @see Math#atan2(double, double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float atan2(final float y, final float x) {
 		return toFloat(Math.atan2(y, x));
 	}
@@ -364,7 +334,6 @@ public final class Floats {
 	 * @return the result of {@code atan2(y, x)} divided by (pi * 2)
 	 * @see #atan2(float, float)
 	 */
-//	TODO: Add Unit Tests!
 	public static float atan2pi2(final float y, final float x) {
 		return atan2(y, x) / PI_MULTIPLIED_BY_2;
 	}
@@ -390,7 +359,6 @@ public final class Floats {
 	 * @return the result of the bilinear interpolation operation
 	 * @see #lerp(float, float, float)
 	 */
-//	TODO: Add Unit Tests!
 	public static float blerp(final float value00, final float value01, final float value10, final float value11, final float tX, final float tY) {
 		return lerp(lerp(value00, value01, tX), lerp(value10, value11, tX), tY);
 	}
@@ -411,7 +379,6 @@ public final class Floats {
 	 * @return the smallest (closest to negative infinity) {@code float} value that is greater than or equal to {@code value} and is equal to a mathematical integer
 	 * @see Math#ceil(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float ceil(final float value) {
 		return toFloat(Math.ceil(value));
 	}
@@ -430,7 +397,6 @@ public final class Floats {
 	 * @return the trigonometric cosine of {@code angleRadians}
 	 * @see Math#cos(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float cos(final float angleRadians) {
 		return toFloat(Math.cos(angleRadians));
 	}
@@ -517,7 +483,6 @@ public final class Floats {
 	 * @return Euler's number {@code e} raised to the power of {@code exponent}
 	 * @see Math#exp(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float exp(final float exponent) {
 		return toFloat(Math.exp(exponent));
 	}
@@ -529,7 +494,6 @@ public final class Floats {
 	 * @param defaultValue a {@code float} value
 	 * @return {@code value} if it is finite and {@code defaultValue} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static float finiteOrDefault(final float value, final float defaultValue) {
 		if(isInfinite(value)) {
 			return defaultValue;
@@ -553,7 +517,6 @@ public final class Floats {
 	 * @return the largest (closest to positive infinity) {@code float} value that is less than or equal to {@code value} and is equal to a mathematical integer
 	 * @see Math#floor(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float floor(final float value) {
 		return toFloat(Math.floor(value));
 	}
@@ -614,7 +577,6 @@ public final class Floats {
 	 * @param valueAdd the value that might be added to {@code value}
 	 * @return {@code value} if, and only if, {@code value >= threshold}, {@code value + valueAdd} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static float getOrAdd(final float value, final float threshold, final float valueAdd) {
 		return value < threshold ? value + valueAdd : value;
 	}
@@ -629,7 +591,6 @@ public final class Floats {
 	 * @param t the factor
 	 * @return the result of the linear interpolation operation
 	 */
-//	TODO: Add Unit Tests!
 	public static float lerp(final float value1, final float value2, final float t) {
 		return (1.0F - t) * value1 + t * value2;
 	}
@@ -650,7 +611,6 @@ public final class Floats {
 	 * @return the natural logarithm (base {@code e}) of the {@code float} value {@code value}
 	 * @see Math#log(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float log(final float value) {
 		return toFloat(Math.log(value));
 	}
@@ -668,7 +628,6 @@ public final class Floats {
 	 * @return the greater value of {@code a} and {@code b}
 	 * @see Math#max(float, float)
 	 */
-//	TODO: Add Unit Tests!
 	public static float max(final float a, final float b) {
 		return Math.max(a, b);
 	}
@@ -686,7 +645,6 @@ public final class Floats {
 	 * @param c a value
 	 * @return the greater value of {@code a}, {@code b} and {@code c}
 	 */
-//	TODO: Add Unit Tests!
 	public static float max(final float a, final float b, final float c) {
 		return max(max(a, b), c);
 	}
@@ -705,7 +663,6 @@ public final class Floats {
 	 * @param d a value
 	 * @return the greater value of {@code a}, {@code b}, {@code c} and {@code d}
 	 */
-//	TODO: Add Unit Tests!
 	public static float max(final float a, final float b, final float c, final float d) {
 		return max(max(a, b), max(c, d));
 	}
@@ -722,7 +679,6 @@ public final class Floats {
 	 * @param b a value
 	 * @return the greater value of {@code a} and {@code b}
 	 */
-//	TODO: Add Unit Tests!
 	public static float maxOrNaN(final float a, final float b) {
 		final boolean isNaNA = isNaN(a);
 		final boolean isNaNB = isNaN(b);
@@ -751,7 +707,6 @@ public final class Floats {
 	 * @return the smaller value of {@code a} and {@code b}
 	 * @see Math#min(float, float)
 	 */
-//	TODO: Add Unit Tests!
 	public static float min(final float a, final float b) {
 		return Math.min(a, b);
 	}
@@ -769,7 +724,6 @@ public final class Floats {
 	 * @param c a value
 	 * @return the smaller value of {@code a}, {@code b} and {@code c}
 	 */
-//	TODO: Add Unit Tests!
 	public static float min(final float a, final float b, final float c) {
 		return min(min(a, b), c);
 	}
@@ -788,7 +742,6 @@ public final class Floats {
 	 * @param d a value
 	 * @return the smaller value of {@code a}, {@code b}, {@code c} and {@code d}
 	 */
-//	TODO: Add Unit Tests!
 	public static float min(final float a, final float b, final float c, final float d) {
 		return min(min(a, b), min(c, d));
 	}
@@ -805,7 +758,6 @@ public final class Floats {
 	 * @param b a value
 	 * @return the smaller value of {@code a} and {@code b}
 	 */
-//	TODO: Add Unit Tests!
 	public static float minOrNaN(final float a, final float b) {
 		final boolean isNaNA = isNaN(a);
 		final boolean isNaNB = isNaN(b);
@@ -827,7 +779,6 @@ public final class Floats {
 	 * @param value starting floating-point value
 	 * @return the floating-point value adjacent to {@code value} in the direction of negative infinity
 	 */
-//	TODO: Add Unit Tests!
 	public static float nextDown(final float value) {
 		return Math.nextDown(value);
 	}
@@ -838,7 +789,6 @@ public final class Floats {
 	 * @param value starting floating-point value
 	 * @return the floating-point value adjacent to {@code value} in the direction of positive infinity
 	 */
-//	TODO: Add Unit Tests!
 	public static float nextUp(final float value) {
 		return Math.nextUp(value);
 	}
@@ -853,7 +803,6 @@ public final class Floats {
 	 * @param b the {@code float} value that represents the maximum or minimum boundary
 	 * @return the normalized representation of {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static float normalize(final float value, final float a, final float b) {
 		final float maximum = max(a, b);
 		final float minimum = min(a, b);
@@ -901,7 +850,6 @@ public final class Floats {
 	 * @return {@code base} raised to the power of {@code exponent}
 	 * @see Math#pow(double, double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float pow(final float base, final float exponent) {
 		return toFloat(Math.pow(base, exponent));
 	}
@@ -914,7 +862,6 @@ public final class Floats {
 	 * @param base the base
 	 * @return {@code base} raised to the power of {@code 2.0F}
 	 */
-//	TODO: Add Unit Tests!
 	public static float pow2(final float base) {
 		return base * base;
 	}
@@ -927,7 +874,6 @@ public final class Floats {
 	 * @param base the base
 	 * @return {@code base} raised to the power of {@code 5.0F}
 	 */
-//	TODO: Add Unit Tests!
 	public static float pow5(final float base) {
 		return base * base * base * base * base;
 	}
@@ -999,21 +945,8 @@ public final class Floats {
 	 * 
 	 * @return a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive)
 	 */
-//	TODO: Add Unit Tests!
 	public static float random() {
 		return ThreadLocalRandom.current().nextFloat();
-	}
-	
-	/**
-	 * Returns the remainder of {@code x} and {@code y}.
-	 * 
-	 * @param x the left hand side of the remainder operation
-	 * @param y the right hand side of the remainder operation
-	 * @return the remainder of {@code x} and {@code y}
-	 */
-//	TODO: Add Unit Tests!
-	public static float remainder(final float x, final float y) {
-		return x - (int)(x / y) * y;
 	}
 	
 	/**
@@ -1029,7 +962,6 @@ public final class Floats {
 	 * @param value the value to saturate (or clamp)
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static float saturate(final float value) {
 		return saturate(value, 0.0F, 1.0F);
 	}
@@ -1045,7 +977,6 @@ public final class Floats {
 	 * @param edgeB the maximum or minimum value
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static float saturate(final float value, final float edgeA, final float edgeB) {
 		final float minimum = min(edgeA, edgeB);
 		final float maximum = max(edgeA, edgeB);
@@ -1074,7 +1005,6 @@ public final class Floats {
 	 * @return the trigonometric sine of {@code angleRadians}
 	 * @see Math#sin(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float sin(final float angleRadians) {
 		return toFloat(Math.sin(angleRadians));
 	}
@@ -1085,7 +1015,6 @@ public final class Floats {
 	 * @param value a {@code float} value
 	 * @return the hyperbolic sine of a {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static float sinh(final float value) {
 		return toFloat(Math.sinh(value));
 	}
@@ -1100,14 +1029,11 @@ public final class Floats {
 	 * @param edgeB one of the edges
 	 * @return a {@code float} value
 	 */
-//	TODO: Add Unit Tests!
 	public static float smoothstep(final float value, final float edgeA, final float edgeB) {
-		final float minimumValue = min(edgeA, edgeB);
-		final float maximumValue = max(edgeA, edgeB);
+		final float x = saturate(normalize(value, edgeA, edgeB));
+		final float y = x * x * (3.0F - 2.0F * x);
 		
-		final float x = saturate((value - minimumValue) / (maximumValue - minimumValue), 0.0F, 1.0F);
-		
-		return x * x * (3.0F - 2.0F * x);
+		return y;
 	}
 	
 	/**
@@ -1161,7 +1087,6 @@ public final class Floats {
 	 * @return the correctly rounded positive square root of {@code value}
 	 * @see Math#sqrt(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float sqrt(final float value) {
 		/*
 		 * float x = value;
@@ -1194,7 +1119,6 @@ public final class Floats {
 	 * @return the trigonometric tangent of {@code angleRadians}
 	 * @see Math#tan(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float tan(final float angleRadians) {
 		return toFloat(Math.tan(angleRadians));
 	}
@@ -1208,7 +1132,6 @@ public final class Floats {
 	 * @return an approximately equivalent angle measured in degrees from an angle measured in radians
 	 * @see Math#toDegrees(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float toDegrees(final float angleRadians) {
 		return toFloat(Math.toDegrees(angleRadians));
 	}
@@ -1219,7 +1142,6 @@ public final class Floats {
 	 * @param value a {@code double} value
 	 * @return a {@code float} representation of a {@code double} value
 	 */
-//	TODO: Add Unit Tests!
 	public static float toFloat(final double value) {
 		return (float)(value);
 	}
@@ -1230,7 +1152,6 @@ public final class Floats {
 	 * @param value an {@code int} value
 	 * @return a {@code float} representation of an {@code int} value
 	 */
-//	TODO: Add Unit Tests!
 	public static float toFloat(final int value) {
 		return value;
 	}
@@ -1244,7 +1165,6 @@ public final class Floats {
 	 * @return an approximately equivalent angle measured in radians from an angle measured in degrees
 	 * @see Math#toRadians(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static float toRadians(final float angleDegrees) {
 		return toFloat(Math.toRadians(angleDegrees));
 	}
@@ -1272,23 +1192,6 @@ public final class Floats {
 		} else {
 			return minimumValue + ((value - maximumValue) % nextUp(maximumValue - minimumValue));
 		}
-		
-//		final float minimumValue = min(a, b);
-//		final float maximumValue = max(a, b);
-		
-//		return positiveModulo(value - minimumValue, maximumValue - minimumValue + 1) + minimumValue;
-		
-//		float currentValue = value;
-		
-//		while(currentValue < minimumValue || currentValue > maximumValue) {
-//			if(currentValue < minimumValue) {
-//				currentValue = maximumValue - (minimumValue - currentValue);
-//			} else if(currentValue > maximumValue) {
-//				currentValue = minimumValue + (currentValue - maximumValue);
-//			}
-//		}
-		
-//		return currentValue;
 	}
 	
 	/**

@@ -213,7 +213,7 @@ The following table describes the different APIs and their current status in the
 | Scene Texture API                      | 100.0%  |   0.0%    |
 | Simplex API                            | N/A     |   0.0%    |
 | Sound API                              | 100.0%  |   0.0%    |
-| Utility API                            | 100.0%  |  49.9%    |
+| Utility API                            | 100.0%  |  51.6%    |
 | Wavefront Material API                 | 100.0%  |   0.0%    |
 | Wavefront Object API                   | 100.0%  |   0.0%    |
 

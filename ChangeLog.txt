@@ -1,3 +1,9 @@
+2022-03-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the FloatsUnitTests class.
+	* REMOVE:	Remove the method remainder(double, double) from the Doubles class. Use the % operator instead. It worked almost like %, with some differences for the sign.
+	* REMOVE:	Remove the method remainder(float, float) from the Floats class. Use the % operator instead. It worked almost like %, with some differences for the sign.
+
 2022-03-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the BytesUnitTests, LongsUnitTests and ParameterArgumentsUnitTests classes.

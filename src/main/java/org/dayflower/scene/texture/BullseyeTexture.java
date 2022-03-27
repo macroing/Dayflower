@@ -19,7 +19,6 @@
 package org.dayflower.scene.texture;
 
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.remainder;
 
 import java.util.Objects;
 
@@ -208,7 +207,7 @@ public final class BullseyeTexture implements Texture {
 		
 		final float directionLength = direction.length();
 		final float directionLengthScaled = directionLength * this.scale;
-		final float directionLengthScaledRemainder = remainder(directionLengthScaled, 1.0F);
+		final float directionLengthScaledRemainder = directionLengthScaled % 1.0F;
 		
 		return directionLengthScaledRemainder > 0.5F ? this.textureA.getColor(intersection) : this.textureB.getColor(intersection);
 	}

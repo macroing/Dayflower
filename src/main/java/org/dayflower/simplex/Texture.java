@@ -36,7 +36,6 @@ import static org.dayflower.simplex.Vector.vector3DDotProduct;
 import static org.dayflower.simplex.Vector.vector3DLength;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.fractionalPart;
-import static org.dayflower.utility.Doubles.remainder;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.toRadians;
@@ -63,7 +62,7 @@ public final class Texture {
 		
 		final double directionLength = vector3DLength(vector3DDirection);
 		final double directionLengthScaled = directionLength * 4.0D;
-		final double directionLengthScaledRemainder = remainder(directionLengthScaled, 1.0D);
+		final double directionLengthScaledRemainder = directionLengthScaled % 1.0D;
 		
 		final boolean is = directionLengthScaledRemainder > 0.5D;
 		

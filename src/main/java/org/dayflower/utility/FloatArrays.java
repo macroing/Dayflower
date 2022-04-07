@@ -238,58 +238,6 @@ public final class FloatArrays {
 	}
 	
 	/**
-	 * Performs a merge operation on the {@code float[]} instance {@code array} and the {@code float} {@code value}.
-	 * <p>
-	 * Returns a new {@code float[]} with {@code array} and {@code value} merged.
-	 * <p>
-	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * FloatArrays.merge(array, new float[] {value});
-	 * }
-	 * </pre>
-	 * 
-	 * @param array the {@code float[]} that comes first
-	 * @param value the {@code float} that comes second
-	 * @return a new {@code float[]} with {@code array} and {@code value} merged
-	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static float[] merge(final float[] array, final float value) {
-		return merge(array, new float[] {value});
-	}
-	
-	/**
-	 * Performs a merge operation on the {@code float[]} instances {@code arrayA} and {@code arrayB}.
-	 * <p>
-	 * Returns a new {@code float[]} with {@code arrayA} and {@code arrayB} merged.
-	 * <p>
-	 * If either {@code arrayA} or {@code arrayB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param arrayA the {@code float[]} that comes first
-	 * @param arrayB the {@code float[]} that comes second
-	 * @return a new {@code float[]} with {@code arrayA} and {@code arrayB} merged
-	 * @throws NullPointerException thrown if, and only if, either {@code arrayA} or {@code arrayB} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static float[] merge(final float[] arrayA, final float[] arrayB) {
-		Objects.requireNonNull(arrayA, "arrayA == null");
-		Objects.requireNonNull(arrayB, "arrayB == null");
-		
-		final float[] arrayC = new float[arrayA.length + arrayB.length];
-		
-		final int offsetArrayA = 0;
-		final int offsetArrayB = arrayA.length;
-		
-		System.arraycopy(arrayA, 0, arrayC, offsetArrayA, arrayA.length);
-		System.arraycopy(arrayB, 0, arrayC, offsetArrayB, arrayB.length);
-		
-		return arrayC;
-	}
-	
-	/**
 	 * Performs a merge operation on the {@code float[]} instances in {@code arrays}.
 	 * <p>
 	 * Returns a new {@code float[]} with {@code arrays} merged.
@@ -441,29 +389,6 @@ public final class FloatArrays {
 		System.arraycopy(arrayC, arrayCSrcPos, arrayD, arrayDSrcPos2, arrayCLength);
 		
 		return arrayD;
-	}
-	
-	/**
-	 * Returns the index of {@code value} in {@code array}, or {@code -1} if it cannot be found.
-	 * <p>
-	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param value the {@code float} value to find the index for
-	 * @param array the {@code float[]} to search for {@code value} in
-	 * @return the index of {@code value} in {@code array}, or {@code -1} if it cannot be found
-	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static int indexOf(final float value, final float[] array) {
-		Objects.requireNonNull(array, "array == null");
-		
-		for(int i = 0; i < array.length; i++) {
-			if(Floats.equal(array[i], value)) {
-				return i;
-			}
-		}
-		
-		return -1;
 	}
 	
 	/**

@@ -130,7 +130,7 @@ Test API - Unit Testing:
 
 	*   0.0% - Sound API
 
-	*  60.2% - Utility API
+	*  63.6% - Utility API
 
 	*   0.0% - Wavefront Material API
 	*   0.0% - Wavefront Object API

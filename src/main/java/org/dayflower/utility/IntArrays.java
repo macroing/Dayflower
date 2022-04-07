@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.IntSupplier;
 
 import org.dayflower.java.io.IntArrayOutputStream;
 
@@ -208,50 +207,6 @@ public final class IntArrays {
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of {@code byteArray}.
-	 * <p>
-	 * If {@code byteArray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * IntArrays.convert(byteArray, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param byteArray a {@code byte[]}
-	 * @return an {@code int[]} representation of {@code byteArray}
-	 * @throws NullPointerException thrown if, and only if, {@code byteArray} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static int[] convert(final byte[] byteArray) {
-		return convert(byteArray, false);
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of {@code byteArray}.
-	 * <p>
-	 * If {@code byteArray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param byteArray a {@code byte[]}
-	 * @param isUnsigned {@code true} if, and only if, unsigned values should be used, {@code false} otherwise
-	 * @return an {@code int[]} representation of {@code byteArray}
-	 * @throws NullPointerException thrown if, and only if, {@code byteArray} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static int[] convert(final byte[] byteArray, final boolean isUnsigned) {
-		Objects.requireNonNull(byteArray, "byteArray == null");
-		
-		final int[] intArray = new int[byteArray.length];
-		
-		for(int i = 0; i < byteArray.length; i++) {
-			intArray[i] = isUnsigned ? byteArray[i] & 0xFF : byteArray[i];
-		}
-		
-		return intArray;
-	}
-	
-	/**
 	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code 0}.
 	 * <p>
 	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
@@ -270,32 +225,6 @@ public final class IntArrays {
 //	TODO: Add Unit Tests!
 	public static int[] create(final int length) {
 		return create(length, 0);
-	}
-	
-	/**
-	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code int} values from {@code intSupplier}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * If {@code intSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param length the length of the {@code int[]}
-	 * @param intSupplier the {@code IntSupplier} to fill the {@code int[]} with
-	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code int} values from {@code intSupplier}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code intSupplier} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static int[] create(final int length, final IntSupplier intSupplier) {
-		final int[] array = new int[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		Objects.requireNonNull(intSupplier, "intSupplier == null");
-		
-		for(int i = 0; i < array.length; i++) {
-			array[i] = intSupplier.getAsInt();
-		}
-		
-		return array;
 	}
 	
 	/**

@@ -61,6 +61,16 @@ public final class CircularBuffer {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a copy of this {@code CircularBuffer} instance.
+	 * 
+	 * @return a copy of this {@code CircularBuffer} instance
+	 */
+//	TODO: Add Unit Tests!
+	public CircularBuffer copy() {
+		return new CircularBuffer(this.buffer.clone(), this.readOffset, this.size, this.writeOffset);
+	}
+	
+	/**
 	 * Returns {@code true} if, and only if, this {@code CircularBuffer} instance is empty, {@code false} otherwise.
 	 * 
 	 * @return {@code true} if, and only if, this {@code CircularBuffer} instance is empty, {@code false} otherwise
@@ -78,16 +88,6 @@ public final class CircularBuffer {
 //	TODO: Add Unit Tests!
 	public boolean isFull() {
 		return this.size == this.buffer.length;
-	}
-	
-	/**
-	 * Returns a copy of this {@code CircularBuffer} instance.
-	 * 
-	 * @return a copy of this {@code CircularBuffer} instance
-	 */
-//	TODO: Add Unit Tests!
-	public CircularBuffer copy() {
-		return new CircularBuffer(this.buffer.clone(), this.readOffset, this.size, this.writeOffset);
 	}
 	
 	/**

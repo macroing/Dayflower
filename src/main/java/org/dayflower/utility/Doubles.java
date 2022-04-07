@@ -41,115 +41,96 @@ public class Doubles {
 	/**
 	 * The {@code double} value that represents a machine epsilon.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double MACHINE_EPSILON = Math.ulp(1.0D) * 0.5D;
 	
 	/**
 	 * The maximum {@code double} value that is equal to {@code +Double.MAX_VALUE}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double MAX_VALUE = +Double.MAX_VALUE;
 	
 	/**
 	 * The minimum {@code double} value that is equal to {@code -Double.MAX_VALUE}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double MIN_VALUE = -Double.MAX_VALUE;
 	
 	/**
 	 * The value of {@code Doubles.nextDown(1.0D)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double NEXT_DOWN_1_1 = nextDown(1.0D);
 	
 	/**
 	 * The value of {@code Doubles.nextDown(Doubles.NEXT_DOWN_1_1)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double NEXT_DOWN_1_2 = nextDown(NEXT_DOWN_1_1);
 	
 	/**
 	 * The value of {@code Doubles.nextDown(Doubles.NEXT_DOWN_1_2)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double NEXT_DOWN_1_3 = nextDown(NEXT_DOWN_1_2);
 	
 	/**
 	 * The value of {@code Doubles.nextUp(1.0D)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double NEXT_UP_1_1 = nextUp(1.0D);
 	
 	/**
 	 * The value of {@code Doubles.nextUp(Doubles.NEXT_UP_1_1)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double NEXT_UP_1_2 = nextUp(NEXT_UP_1_1);
 	
 	/**
 	 * The value of {@code Doubles.nextUp(Doubles.NEXT_UP_1_2)}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double NEXT_UP_1_3 = nextUp(NEXT_UP_1_2);
 	
 	/**
 	 * The {@code double} value that represents Not-a-Number (NaN).
 	 */
-//	TODO: Add Unit Tests!
 	public static final double NaN = Double.NaN;
 	
 	/**
 	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double PI = Math.PI;
 	
 	/**
 	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, divided by 180.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double PI_DIVIDED_BY_180 = PI / 180.0D;
 	
 	/**
 	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, divided by 2.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double PI_DIVIDED_BY_2 = PI / 2.0D;
 	
 	/**
 	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, divided by 4.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double PI_DIVIDED_BY_4 = PI / 4.0D;
 	
 	/**
 	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, multiplied by 2.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double PI_MULTIPLIED_BY_2 = PI * 2.0D;
 	
 	/**
 	 * The reciprocal (or inverse) of {@link #PI_MULTIPLIED_BY_2}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double PI_MULTIPLIED_BY_2_RECIPROCAL = 1.0D / PI_MULTIPLIED_BY_2;
 	
 	/**
 	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, multiplied by 4.0.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double PI_MULTIPLIED_BY_4 = PI * 4.0D;
 	
 	/**
 	 * The reciprocal (or inverse) of {@link #PI_MULTIPLIED_BY_4}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double PI_MULTIPLIED_BY_4_RECIPROCAL = 1.0D / PI_MULTIPLIED_BY_4;
 	
 	/**
 	 * The reciprocal (or inverse) of {@link #PI}.
 	 */
-//	TODO: Add Unit Tests!
 	public static final double PI_RECIPROCAL = 1.0D / PI;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +148,6 @@ public class Doubles {
 	 * @param b a {@code double} value
 	 * @return {@code true} if, and only if, {@code a} is equal to {@code b}, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean equal(final double a, final double b) {
 		return Double.compare(a, b) == 0;
 	}
@@ -180,7 +160,6 @@ public class Doubles {
 	 * @param c a {@code double} value
 	 * @return {@code true} if, and only if, {@code a} is equal to {@code b} and {@code b} is equal to {@code c}, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean equal(final double a, final double b, final double c) {
 		return equal(a, b) && equal(b, c);
 	}
@@ -191,7 +170,6 @@ public class Doubles {
 	 * @param value a {@code double} value
 	 * @return {@code true} if, and only if, {@code value} is infinitely large in magnitude, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean isInfinite(final double value) {
 		return Double.isInfinite(value);
 	}
@@ -202,7 +180,6 @@ public class Doubles {
 	 * @param value a {@code double} value
 	 * @return {@code true} if, and only if, {@code value} is {@code Double.NaN}, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean isNaN(final double value) {
 		return Double.isNaN(value);
 	}
@@ -213,7 +190,6 @@ public class Doubles {
 	 * @param value a {@code double} value
 	 * @return {@code true} if, and only if, either {@code Doubles.equal(value, +0.0D)} or {@code Doubles.equal(value, -0.0D)} are {@code true}, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static boolean isZero(final double value) {
 		return equal(value, +0.0D) || equal(value, -0.0D);
 	}
@@ -241,7 +217,6 @@ public class Doubles {
 	 * @return the absolute version of {@code value}
 	 * @see Math#abs(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double abs(final double value) {
 		return Math.abs(value);
 	}
@@ -262,7 +237,6 @@ public class Doubles {
 	 * @return the arc cosine of {@code value}
 	 * @see Math#acos(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double acos(final double value) {
 		return Math.acos(value);
 	}
@@ -284,7 +258,6 @@ public class Doubles {
 	 * @return the arc sine of {@code value}
 	 * @see Math#asin(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double asin(final double value) {
 		return Math.asin(value);
 	}
@@ -296,7 +269,6 @@ public class Doubles {
 	 * @return the result of {@code asin(value)} divided by pi
 	 * @see #asin(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double asinpi(final double value) {
 		return asin(value) / PI;
 	}
@@ -318,7 +290,6 @@ public class Doubles {
 	 * @return the arc tangent of {@code value}
 	 * @see Math#atan(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double atan(final double value) {
 		return Math.atan(value);
 	}
@@ -350,7 +321,6 @@ public class Doubles {
 	 * @return the angle <i>theta</i> from the conversion of rectangular coordinates (x, y) to polar coordinates (r, <i>theta</i>)
 	 * @see Math#atan2(double, double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double atan2(final double y, final double x) {
 		return Math.atan2(y, x);
 	}
@@ -363,7 +333,6 @@ public class Doubles {
 	 * @return the result of {@code atan2(y, x)} divided by (pi * 2)
 	 * @see #atan2(double, double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double atan2pi2(final double y, final double x) {
 		return atan2(y, x) / PI_MULTIPLIED_BY_2;
 	}
@@ -389,7 +358,6 @@ public class Doubles {
 	 * @return the result of the bilinear interpolation operation
 	 * @see #lerp(double, double, double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double blerp(final double value00, final double value01, final double value10, final double value11, final double tX, final double tY) {
 		return lerp(lerp(value00, value01, tX), lerp(value10, value11, tX), tY);
 	}
@@ -410,7 +378,6 @@ public class Doubles {
 	 * @return the smallest (closest to negative infinity) {@code double} value that is greater than or equal to {@code value} and is equal to a mathematical integer
 	 * @see Math#ceil(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double ceil(final double value) {
 		return Math.ceil(value);
 	}
@@ -429,7 +396,6 @@ public class Doubles {
 	 * @return the trigonometric cosine of {@code angleRadians}
 	 * @see Math#cos(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double cos(final double angleRadians) {
 		return Math.cos(angleRadians);
 	}
@@ -516,7 +482,6 @@ public class Doubles {
 	 * @return Euler's number {@code e} raised to the power of {@code exponent}
 	 * @see Math#exp(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double exp(final double exponent) {
 		return Math.exp(exponent);
 	}
@@ -528,7 +493,6 @@ public class Doubles {
 	 * @param defaultValue a {@code double} value
 	 * @return {@code value} if it is finite and {@code defaultValue} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static double finiteOrDefault(final double value, final double defaultValue) {
 		if(isInfinite(value)) {
 			return defaultValue;
@@ -552,7 +516,6 @@ public class Doubles {
 	 * @return the largest (closest to positive infinity) {@code double} value that is less than or equal to {@code value} and is equal to a mathematical integer
 	 * @see Math#floor(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double floor(final double value) {
 		return Math.floor(value);
 	}
@@ -570,7 +533,6 @@ public class Doubles {
 	 * @param value a value
 	 * @return the fractional part of {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static double fractionalPart(final double value) {
 		return fractionalPart(value, false);
 	}
@@ -589,7 +551,6 @@ public class Doubles {
 	 * @param isUsingCeilOnNegativeValue {@code true} if, and only if, {@code Doubles.ceil(double)} should be used if {@code value} is negative, {@code false} otherwise
 	 * @return the fractional part of {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static double fractionalPart(final double value, final boolean isUsingCeilOnNegativeValue) {
 		return value < 0.0D && isUsingCeilOnNegativeValue ? ceil(value) - value : value - floor(value);
 	}
@@ -600,7 +561,6 @@ public class Doubles {
 	 * @param value an {@code int} value
 	 * @return the gamma of {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static double gamma(final int value) {
 		return (value * MACHINE_EPSILON) / (1.0D - value * MACHINE_EPSILON);
 	}
@@ -613,7 +573,6 @@ public class Doubles {
 	 * @param valueAdd the value that might be added to {@code value}
 	 * @return {@code value} if, and only if, {@code value >= threshold}, {@code value + valueAdd} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public static double getOrAdd(final double value, final double threshold, final double valueAdd) {
 		return value < threshold ? value + valueAdd : value;
 	}
@@ -628,7 +587,6 @@ public class Doubles {
 	 * @param t the factor
 	 * @return the result of the linear interpolation operation
 	 */
-//	TODO: Add Unit Tests!
 	public static double lerp(final double value1, final double value2, final double t) {
 		return (1.0D - t) * value1 + t * value2;
 	}
@@ -649,7 +607,6 @@ public class Doubles {
 	 * @return the natural logarithm (base {@code e}) of the {@code double} value {@code value}
 	 * @see Math#log(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double log(final double value) {
 		return Math.log(value);
 	}
@@ -667,7 +624,6 @@ public class Doubles {
 	 * @return the greater value of {@code a} and {@code b}
 	 * @see Math#max(double, double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double max(final double a, final double b) {
 		return Math.max(a, b);
 	}
@@ -685,7 +641,6 @@ public class Doubles {
 	 * @param c a value
 	 * @return the greater value of {@code a}, {@code b} and {@code c}
 	 */
-//	TODO: Add Unit Tests!
 	public static double max(final double a, final double b, final double c) {
 		return max(max(a, b), c);
 	}
@@ -704,7 +659,6 @@ public class Doubles {
 	 * @param d a value
 	 * @return the greater value of {@code a}, {@code b}, {@code c} and {@code d}
 	 */
-//	TODO: Add Unit Tests!
 	public static double max(final double a, final double b, final double c, final double d) {
 		return max(max(a, b), max(c, d));
 	}
@@ -721,7 +675,6 @@ public class Doubles {
 	 * @param b a value
 	 * @return the greater value of {@code a} and {@code b}
 	 */
-//	TODO: Add Unit Tests!
 	public static double maxOrNaN(final double a, final double b) {
 		final boolean isNaNA = isNaN(a);
 		final boolean isNaNB = isNaN(b);
@@ -750,7 +703,6 @@ public class Doubles {
 	 * @return the smaller value of {@code a} and {@code b}
 	 * @see Math#min(double, double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double min(final double a, final double b) {
 		return Math.min(a, b);
 	}
@@ -768,7 +720,6 @@ public class Doubles {
 	 * @param c a value
 	 * @return the smaller value of {@code a}, {@code b} and {@code c}
 	 */
-//	TODO: Add Unit Tests!
 	public static double min(final double a, final double b, final double c) {
 		return min(min(a, b), c);
 	}
@@ -787,7 +738,6 @@ public class Doubles {
 	 * @param d a value
 	 * @return the smaller value of {@code a}, {@code b}, {@code c} and {@code d}
 	 */
-//	TODO: Add Unit Tests!
 	public static double min(final double a, final double b, final double c, final double d) {
 		return min(min(a, b), min(c, d));
 	}
@@ -804,7 +754,6 @@ public class Doubles {
 	 * @param b a value
 	 * @return the smaller value of {@code a} and {@code b}
 	 */
-//	TODO: Add Unit Tests!
 	public static double minOrNaN(final double a, final double b) {
 		final boolean isNaNA = isNaN(a);
 		final boolean isNaNB = isNaN(b);
@@ -826,7 +775,6 @@ public class Doubles {
 	 * @param value starting floating-point value
 	 * @return the floating-point value adjacent to {@code value} in the direction of negative infinity
 	 */
-//	TODO: Add Unit Tests!
 	public static double nextDown(final double value) {
 		return Math.nextDown(value);
 	}
@@ -837,7 +785,6 @@ public class Doubles {
 	 * @param value starting floating-point value
 	 * @return the floating-point value adjacent to {@code value} in the direction of positive infinity
 	 */
-//	TODO: Add Unit Tests!
 	public static double nextUp(final double value) {
 		return Math.nextUp(value);
 	}
@@ -852,7 +799,6 @@ public class Doubles {
 	 * @param b the {@code double} value that represents the maximum or minimum boundary
 	 * @return the normalized representation of {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static double normalize(final double value, final double a, final double b) {
 		final double maximum = max(a, b);
 		final double minimum = min(a, b);
@@ -900,7 +846,6 @@ public class Doubles {
 	 * @return {@code base} raised to the power of {@code exponent}
 	 * @see Math#pow(double, double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double pow(final double base, final double exponent) {
 		return Math.pow(base, exponent);
 	}
@@ -913,7 +858,6 @@ public class Doubles {
 	 * @param base the base
 	 * @return {@code base} raised to the power of {@code 2.0D}
 	 */
-//	TODO: Add Unit Tests!
 	public static double pow2(final double base) {
 		return base * base;
 	}
@@ -926,7 +870,6 @@ public class Doubles {
 	 * @param base the base
 	 * @return {@code base} raised to the power of {@code 5.0D}
 	 */
-//	TODO: Add Unit Tests!
 	public static double pow5(final double base) {
 		return base * base * base * base * base;
 	}
@@ -940,7 +883,6 @@ public class Doubles {
 	 * @param exponent the exponent
 	 * @return {@code base} raised to the power of {@code exponent}
 	 */
-//	TODO: Add Unit Tests!
 	public static double powR(final double base, final int exponent) {
 		switch(exponent) {
 			case 0:
@@ -998,7 +940,6 @@ public class Doubles {
 	 * 
 	 * @return a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code 1.0D} (exclusive)
 	 */
-//	TODO: Add Unit Tests!
 	public static double random() {
 		return ThreadLocalRandom.current().nextDouble();
 	}
@@ -1016,7 +957,6 @@ public class Doubles {
 	 * @param value the value to saturate (or clamp)
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static double saturate(final double value) {
 		return saturate(value, 0.0D, 1.0D);
 	}
@@ -1032,7 +972,6 @@ public class Doubles {
 	 * @param edgeB the maximum or minimum value
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static double saturate(final double value, final double edgeA, final double edgeB) {
 		final double minimum = min(edgeA, edgeB);
 		final double maximum = max(edgeA, edgeB);
@@ -1061,7 +1000,6 @@ public class Doubles {
 	 * @return the trigonometric sine of {@code angleRadians}
 	 * @see Math#sin(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double sin(final double angleRadians) {
 		return Math.sin(angleRadians);
 	}
@@ -1072,7 +1010,6 @@ public class Doubles {
 	 * @param value a {@code double} value
 	 * @return the hyperbolic sine of a {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static double sinh(final double value) {
 		return Math.sinh(value);
 	}
@@ -1087,7 +1024,6 @@ public class Doubles {
 	 * @param edgeB one of the edges
 	 * @return a {@code double} value
 	 */
-//	TODO: Add Unit Tests!
 	public static double smoothstep(final double value, final double edgeA, final double edgeB) {
 		final double x = saturate(normalize(value, edgeA, edgeB));
 		final double y = x * x * (3.0D - 2.0D * x);
@@ -1146,7 +1082,6 @@ public class Doubles {
 	 * @return the correctly rounded positive square root of {@code value}
 	 * @see Math#sqrt(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double sqrt(final double value) {
 		/*
 		 * double x = value;
@@ -1179,7 +1114,6 @@ public class Doubles {
 	 * @return the trigonometric tangent of {@code angleRadians}
 	 * @see Math#tan(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double tan(final double angleRadians) {
 		return Math.tan(angleRadians);
 	}
@@ -1193,7 +1127,6 @@ public class Doubles {
 	 * @return an approximately equivalent angle measured in degrees from an angle measured in radians
 	 * @see Math#toDegrees(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double toDegrees(final double angleRadians) {
 		return Math.toDegrees(angleRadians);
 	}
@@ -1204,7 +1137,6 @@ public class Doubles {
 	 * @param value a {@code float} value
 	 * @return a {@code double} representation of a {@code float} value
 	 */
-//	TODO: Add Unit Tests!
 	public static double toDouble(final float value) {
 		return value;
 	}
@@ -1215,7 +1147,6 @@ public class Doubles {
 	 * @param value an {@code int} value
 	 * @return a {@code double} representation of an {@code int} value
 	 */
-//	TODO: Add Unit Tests!
 	public static double toDouble(final int value) {
 		return value;
 	}
@@ -1229,7 +1160,6 @@ public class Doubles {
 	 * @return an approximately equivalent angle measured in radians from an angle measured in degrees
 	 * @see Math#toRadians(double)
 	 */
-//	TODO: Add Unit Tests!
 	public static double toRadians(final double angleDegrees) {
 		return Math.toRadians(angleDegrees);
 	}
@@ -1245,7 +1175,6 @@ public class Doubles {
 	 * @param b one of the values in the interval to wrap around
 	 * @return {@code value} or its wrapped around representation
 	 */
-//	TODO: Add Unit Tests!
 	public static double wrapAround(final double value, final double a, final double b) {
 		final double minimumValue = min(a, b);
 		final double maximumValue = max(a, b);
@@ -1271,7 +1200,6 @@ public class Doubles {
 	 * @param c a value
 	 * @return a {@code double[]}, with a length of {@code 2}, that contains the result
 	 */
-//	TODO: Add Unit Tests!
 	public static double[] solveQuadraticSystem(final double a, final double b, final double c) {
 		final double[] result = new double[] {Double.NaN, Double.NaN};
 		

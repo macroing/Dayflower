@@ -346,7 +346,7 @@ public final class Cylinder3D implements Shape3D {
 		final Vector3D direction = ray.getDirection();
 		
 		final double a = direction.getX() * direction.getX() + direction.getY() * direction.getY();
-		final double b = 2.0F * (direction.getX() * origin.getX() + direction.getY() * origin.getY());
+		final double b = 2.0D * (direction.getX() * origin.getX() + direction.getY() * origin.getY());
 		final double c = origin.getX() * origin.getX() + origin.getY() * origin.getY() - this.radius * this.radius;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
@@ -367,7 +367,7 @@ public final class Cylinder3D implements Shape3D {
 			}
 		}
 		
-		return Float.NaN;
+		return Double.NaN;
 	}
 	
 	/**

@@ -408,7 +408,7 @@ public final class Triangle3D implements Shape3D {
 		final Point3D c = new Point3D(this.c.getPosition());
 		final Point3D p = Objects.requireNonNull(point, "point == null");
 		
-		if(Point3D.coplanar(a, b, c, point)) {
+		if(Point3D.coplanar(a, b, c, p)) {
 			final Vector3D surfaceNormal = this.surfaceNormal;
 			
 			final Vector3D edgeAB = Vector3D.direction(a, b);

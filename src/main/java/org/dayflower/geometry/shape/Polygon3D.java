@@ -486,13 +486,13 @@ public final class Polygon3D implements Shape3D {
 		final Vector3D u = Vector3D.directionNormalized(a, b);
 		final Vector3D v = Vector3D.crossProduct(w, u);
 		
-		final Point2D[] point2Fs = new Point2D[points.length];
+		final Point2D[] point2Ds = new Point2D[points.length];
 		
 		for(int i = 0; i < points.length; i++) {
-			point2Fs[i] = doMap(a, points[i], u, v);
+			point2Ds[i] = doMap(a, points[i], u, v);
 		}
 		
-		final Polygon2D polygon = new Polygon2D(point2Fs);
+		final Polygon2D polygon = new Polygon2D(point2Ds);
 		
 		return polygon;
 	}

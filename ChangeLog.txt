@@ -1,3 +1,10 @@
+2022-04-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the ByteArraysUnitTests, DoublesUnitTests, IntsUnitTests and LongArraysUnitTests classes.
+	* ADD:		Add unit tests to the FloatsUnitTests class.
+	* CHANGE:	Fix a bug in the method indexOf(byte[], byte[], boolean, boolean) in the ByteArrays class.
+	* CHANGE:	Fix a bug in the method indexOf(long[], long[], boolean, boolean) in the LongArrays class.
+
 2022-03-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the FloatsUnitTests class.

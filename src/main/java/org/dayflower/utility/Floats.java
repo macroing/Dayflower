@@ -534,7 +534,6 @@ public final class Floats {
 	 * @param value a value
 	 * @return the fractional part of {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static float fractionalPart(final float value) {
 		return fractionalPart(value, false);
 	}
@@ -553,7 +552,6 @@ public final class Floats {
 	 * @param isUsingCeilOnNegativeValue {@code true} if, and only if, {@code Floats.ceil(float)} should be used if {@code value} is negative, {@code false} otherwise
 	 * @return the fractional part of {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static float fractionalPart(final float value, final boolean isUsingCeilOnNegativeValue) {
 		return value < 0.0F && isUsingCeilOnNegativeValue ? ceil(value) - value : value - floor(value);
 	}
@@ -564,7 +562,6 @@ public final class Floats {
 	 * @param value an {@code int} value
 	 * @return the gamma of {@code value}
 	 */
-//	TODO: Add Unit Tests!
 	public static float gamma(final int value) {
 		return (value * MACHINE_EPSILON) / (1.0F - value * MACHINE_EPSILON);
 	}
@@ -887,7 +884,6 @@ public final class Floats {
 	 * @param exponent the exponent
 	 * @return {@code base} raised to the power of {@code exponent}
 	 */
-//	TODO: Add Unit Tests!
 	public static float powR(final float base, final int exponent) {
 		switch(exponent) {
 			case 0:
@@ -1180,7 +1176,6 @@ public final class Floats {
 	 * @param b one of the values in the interval to wrap around
 	 * @return {@code value} or its wrapped around representation
 	 */
-//	TODO: Add Unit Tests!
 	public static float wrapAround(final float value, final float a, final float b) {
 		final float minimumValue = min(a, b);
 		final float maximumValue = max(a, b);
@@ -1206,7 +1201,6 @@ public final class Floats {
 	 * @param c a value
 	 * @return a {@code float[]}, with a length of {@code 2}, that contains the result
 	 */
-//	TODO: Add Unit Tests!
 	public static float[] solveQuadraticSystem(final float a, final float b, final float c) {
 		final float[] result = new float[] {Float.NaN, Float.NaN};
 		

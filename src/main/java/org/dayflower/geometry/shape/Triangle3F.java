@@ -408,7 +408,7 @@ public final class Triangle3F implements Shape3F {
 		final Point3F c = new Point3F(this.c.getPosition());
 		final Point3F p = Objects.requireNonNull(point, "point == null");
 		
-		if(Point3F.coplanar(a, b, c, point)) {
+		if(Point3F.coplanar(a, b, c, p)) {
 			final Vector3F surfaceNormal = this.surfaceNormal;
 			
 			final Vector3F edgeAB = Vector3F.direction(a, b);

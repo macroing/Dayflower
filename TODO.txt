@@ -126,11 +126,7 @@ Test API - Unit Testing:
 	*   0.0% - Scene Modifier API
 	*   0.0% - Scene Texture API
 
-	*   0.0% - Simplex API
-
-	*   0.0% - Sound API
-
-	*  63.6% - Utility API
+	*  65.7% - Utility API
 
 	*   0.0% - Wavefront Material API
 	*   0.0% - Wavefront Object API

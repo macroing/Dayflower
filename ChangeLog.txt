@@ -1,14 +1,18 @@
 2022-04-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
-	* ADD:		Add the ByteArraysUnitTests, DoublesUnitTests, IntsUnitTests and LongArraysUnitTests classes.
+	* ADD:		Add the ByteArraysUnitTests, DoubleArraysUnitTests, DoublesUnitTests, IntsUnitTests and LongArraysUnitTests classes.
 	* ADD:		Add unit tests to the FloatsUnitTests class.
 	* CHANGE:	Fix a bug in the method indexOf(byte[], byte[], boolean, boolean) in the ByteArrays class.
 	* CHANGE:	Fix a bug in the method indexOf(long[], long[], boolean, boolean) in the LongArrays class.
 	* REMOVE:	Remove the methods equal(byte[], byte[], int, int, int), indexOf(byte, byte[]), indexOf(byte[], byte[], boolean, boolean), merge(byte[], byte), merge(byte[], byte[]), splice(byte[], int), splice(byte[], int, int), splice(byte[], int, int, byte[]) and splice(byte[], int, int, byte[], byte[]) from the ByteArrays class.
 	* REMOVE:	Remove the methods convert(List<T>, Function<T, long[]>), convert(List<T>, Function<T, long[]>, int), convert(byte[]), convert(byte[], boolean), create(int), create(int, long), equal(long[], long[], int, int, int), indexOf(long, long[]), indexOf(long[], long[], boolean, boolean), merge(long[], long), merge(long[], long[]), merge(long[]...), splice(long[], int), splice(long[], int, int), splice(long[], int, int, long[]) and splice(long[], int, int, long[], long[]) from the LongArrays class.
-	* REMOVE:	Remove the methods convert(List<T>, Function<T, double[]>), convert(List<T>, Function<T, double[]>, int), create(int), create(int, DoubleSupplier), create(int, double), equal(double[], double[], int, int, int), indexOf(double, double[]), indexOf(double[], double[], boolean, boolean), merge(double[], double), merge(double[], double[]), splice(double[], int), splice(double[], int, int), splice(double[], int, int, double[]) and splice(double[], int, int, double[], double[]) from the DoubleArrays class.
+	* REMOVE:	Remove the methods convert(List<T>, Function<T, double[]>), convert(List<T>, Function<T, double[]>, int), create(int), create(int, DoubleSupplier), create(int, double), equal(double[], double[], int, int, int), indexOf(double, double[]), indexOf(double[], double[], boolean, boolean), merge(double[], double), merge(double[], double[]), merge(double[]...), splice(double[], int), splice(double[], int, int), splice(double[], int, int, double[]) and splice(double[], int, int, double[], double[]) from the DoubleArrays class.
 	* REMOVE:	Remove the methods indexOf(float, float[]), merge(float[], float) and merge(float[], float[]) from the FloatArrays class.
 	* REMOVE:	Remove the methods convert(byte[]), convert(byte[], boolean) and create(int, IntSupplier) from the IntArrays class.
+	* REMOVE:	Remove the Simplex API.
+	* REMOVE:	Remove the Sound API.
+	* REMOVE:	Remove the FilterNB interface and the EchoFilterNB class from the Filter API.
+	* REMOVE:	Remove the CircularBuffer and CircularBufferException classes from the Utility API.
 
 2022-03-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

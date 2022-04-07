@@ -211,9 +211,7 @@ The following table describes the different APIs and their current status in the
 | Scene Microfacet API                   | 100.0%  |   0.0%    |
 | Scene Modifier API                     | 100.0%  |   0.0%    |
 | Scene Texture API                      | 100.0%  |   0.0%    |
-| Simplex API                            | N/A     |   0.0%    |
-| Sound API                              | 100.0%  |   0.0%    |
-| Utility API                            | 100.0%  |  63.6%    |
+| Utility API                            | 100.0%  |  65.7%    |
 | Wavefront Material API                 | 100.0%  |   0.0%    |
 | Wavefront Object API                   | 100.0%  |   0.0%    |
 

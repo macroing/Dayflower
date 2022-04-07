@@ -18,11 +18,6 @@
  */
 package org.dayflower.utility;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
-import java.util.Objects;
-
-import org.dayflower.java.io.DoubleArrayOutputStream;
-
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code double[]} instances.
  * 
@@ -49,7 +44,6 @@ public final class DoubleArrays {
 	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}
 	 */
-//	TODO: Add Unit Tests!
 	public static double[] create(final int length, final double value0, final double value1, final double value2, final double value3) {
 		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
@@ -65,33 +59,5 @@ public final class DoubleArrays {
 		}
 		
 		return array;
-	}
-	
-	/**
-	 * Performs a merge operation on the {@code double[]} instances in {@code arrays}.
-	 * <p>
-	 * Returns a new {@code double[]} with {@code arrays} merged.
-	 * <p>
-	 * If either {@code arrays} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param arrays the {@code double[][]} instance to combine into one {@code double[]}
-	 * @return a new {@code double[]} with {@code arrays} merged
-	 * @throws NullPointerException thrown if, and only if, either {@code arrays} or at least one of its elements are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static double[] merge(final double[]... arrays) {
-		Objects.requireNonNull(arrays, "arrays == null");
-		
-		for(int i = 0; i < arrays.length; i++) {
-			Objects.requireNonNull(arrays[i], "arrays[" + i + "] == null");
-		}
-		
-		try(final DoubleArrayOutputStream doubleArrayOutputStream = new DoubleArrayOutputStream()) {
-			for(final double[] array : arrays) {
-				doubleArrayOutputStream.write(array);
-			}
-			
-			return doubleArrayOutputStream.toDoubleArray();
-		}
 	}
 }

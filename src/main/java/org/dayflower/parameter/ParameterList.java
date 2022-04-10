@@ -21,6 +21,7 @@ package org.dayflower.parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * A {@code ParameterList} represents a list of parameters.
@@ -96,7 +97,7 @@ public final class ParameterList {
 		Objects.requireNonNull(name, "name == null");
 		Objects.requireNonNull(valueDefault, "valueDefault == null");
 		
-		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof StringParameter).map(parameter -> StringParameter.class.cast(parameter)).map(stringParameter -> stringParameter.getValue()).findFirst().orElse(valueDefault);
+		return this.parameters.stream().filter(doFilterName(name)).filter(doFilterClass(StringParameter.class)).map(parameter -> StringParameter.class.cast(parameter)).map(stringParameter -> stringParameter.getValue()).findFirst().orElse(valueDefault);
 	}
 	
 	/**
@@ -125,7 +126,7 @@ public final class ParameterList {
 	public boolean getBoolean(final String name, final boolean valueDefault) {
 		Objects.requireNonNull(name, "name == null");
 		
-		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof BooleanParameter).map(parameter -> BooleanParameter.class.cast(parameter)).map(booleanParameter -> Boolean.valueOf(booleanParameter.getValue())).findFirst().orElse(Boolean.valueOf(valueDefault)).booleanValue();
+		return this.parameters.stream().filter(doFilterName(name)).filter(doFilterClass(BooleanParameter.class)).map(parameter -> BooleanParameter.class.cast(parameter)).map(booleanParameter -> Boolean.valueOf(booleanParameter.getValue())).findFirst().orElse(Boolean.valueOf(valueDefault)).booleanValue();
 	}
 	
 	/**
@@ -154,7 +155,7 @@ public final class ParameterList {
 	public double getDouble(final String name, final double valueDefault) {
 		Objects.requireNonNull(name, "name == null");
 		
-		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof DoubleParameter).map(parameter -> DoubleParameter.class.cast(parameter)).map(doubleParameter -> Double.valueOf(doubleParameter.getValue())).findFirst().orElse(Double.valueOf(valueDefault)).doubleValue();
+		return this.parameters.stream().filter(doFilterName(name)).filter(doFilterClass(DoubleParameter.class)).map(parameter -> DoubleParameter.class.cast(parameter)).map(doubleParameter -> Double.valueOf(doubleParameter.getValue())).findFirst().orElse(Double.valueOf(valueDefault)).doubleValue();
 	}
 	
 	/**
@@ -183,7 +184,7 @@ public final class ParameterList {
 	public float getFloat(final String name, final float valueDefault) {
 		Objects.requireNonNull(name, "name == null");
 		
-		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof FloatParameter).map(parameter -> FloatParameter.class.cast(parameter)).map(floatParameter -> Float.valueOf(floatParameter.getValue())).findFirst().orElse(Float.valueOf(valueDefault)).floatValue();
+		return this.parameters.stream().filter(doFilterName(name)).filter(doFilterClass(FloatParameter.class)).map(parameter -> FloatParameter.class.cast(parameter)).map(floatParameter -> Float.valueOf(floatParameter.getValue())).findFirst().orElse(Float.valueOf(valueDefault)).floatValue();
 	}
 	
 	/**
@@ -212,7 +213,7 @@ public final class ParameterList {
 	public int getInt(final String name, final int valueDefault) {
 		Objects.requireNonNull(name, "name == null");
 		
-		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof IntParameter).map(parameter -> IntParameter.class.cast(parameter)).map(intParameter -> Integer.valueOf(intParameter.getValue())).findFirst().orElse(Integer.valueOf(valueDefault)).intValue();
+		return this.parameters.stream().filter(doFilterName(name)).filter(doFilterClass(IntParameter.class)).map(parameter -> IntParameter.class.cast(parameter)).map(intParameter -> Integer.valueOf(intParameter.getValue())).findFirst().orElse(Integer.valueOf(valueDefault)).intValue();
 	}
 	
 	/**
@@ -429,5 +430,15 @@ public final class ParameterList {
 	 */
 	public void load() {
 		this.parameterLoader.load(getParameters());
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Predicate<Parameter> doFilterClass(final Class<? extends Parameter> clazz) {
+		return parameter -> clazz.isAssignableFrom(parameter.getClass());
+	}
+	
+	private static Predicate<Parameter> doFilterName(final String name) {
+		return parameter -> parameter.getName().equals(name);
 	}
 }

@@ -1,3 +1,15 @@
+parameterList.addFloat("Turbidity", 2.0F);
+parameterList.addFloat("Sun Direction X", +1.0F);
+parameterList.addFloat("Sun Direction Y", +1.0F);
+parameterList.addFloat("Sun Direction Z", -1.0F);
+parameterList.load();
+
+final float turbidity = parameterList.getFloat("Turbidity", 2.0F);
+
+final float sunDirectionWorldSpaceX = parameterList.getFloat("Sun Direction X", +1.0F);
+final float sunDirectionWorldSpaceY = parameterList.getFloat("Sun Direction Y", +1.0F);
+final float sunDirectionWorldSpaceZ = parameterList.getFloat("Sun Direction Z", -1.0F);
+
 Texture textureCheckerboardGray = new CheckerboardTexture();
 Texture textureCheckerboardRed = new CheckerboardTexture(new Color3F(1.0F, 0.01F, 0.01F), Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F));
 
@@ -36,7 +48,7 @@ Transform transformSphereI = new Transform(new Point3F(+12.5F,  1.00F, 5.0F), Qu
 
 //scene.addLight(new DirectionalLight());
 //scene.addLight(new LDRImageLight(new PerezLight().toImage(800, 800)));
-scene.addLight(new PerezLight());
+scene.addLight(new PerezLight(turbidity, new Vector3F(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ)));
 //scene.addLight(new PointLight(new Color3F(50.0F), new Point3F(0.0F, 5.0F, 5.0F)));
 //scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(50.0F), new Point3F(0.0F, 2.0F, -5.0F), Vector3F.z()));
 scene.addPrimitive(new Primitive(materialPlane, shapePlane, transformPlane));

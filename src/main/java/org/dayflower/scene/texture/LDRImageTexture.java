@@ -40,11 +40,12 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.ImageF;
-import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.awt.image.BufferedImages;
 
 /**
  * An {@code LDRImageTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from a low-dynamic-range (LDR) image.

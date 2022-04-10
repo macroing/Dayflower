@@ -37,8 +37,9 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
-import org.dayflower.java.lang.Strings;
 import org.dayflower.utility.Floats;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * An {@code AngleF} represents an angle and contains {@code float}-based values for both degrees and radians.

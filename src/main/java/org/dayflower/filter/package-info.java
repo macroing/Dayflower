@@ -8,7 +8,6 @@
  * <ul>
  * <li>{@link org.dayflower.filter.Filter2D Filter2D} represents a 2-dimensional filter that operates on and returns {@code double} values.</li>
  * <li>{@link org.dayflower.filter.Filter2F Filter2F} represents a 2-dimensional filter that operates on and returns {@code float} values.</li>
- * <li>{@link org.dayflower.filter.FilterNB FilterNB} represents an N-dimensional filter that operates on and returns {@code byte[]} values.</li>
  * </ul>
  * <p>
  * The following list contains information about the data types that represents box filters in this API.
@@ -21,11 +20,6 @@
  * <ul>
  * <li>{@link org.dayflower.filter.CatmullRomFilter2D CatmullRomFilter2D} is an implementation of {@code Filter2D} that represents a Catmull-Rom filter.</li>
  * <li>{@link org.dayflower.filter.CatmullRomFilter2F CatmullRomFilter2F} is an implementation of {@code Filter2F} that represents a Catmull-Rom filter.</li>
- * </ul>
- * <p>
- * The following list contains information about the data types that represents echo filters in this API.
- * <ul>
- * <li>{@link org.dayflower.filter.EchoFilterNB EchoFilterNB} is an implementation of {@code FilterNB} that performs an echo effect.</li>
  * </ul>
  * <p>
  * The following list contains information about the data types that represents Gaussian filters in this API.
@@ -55,9 +49,6 @@
  * <p>
  * The following list shows all dependencies for this API.
  * <ul>
- * <li>The Java I/O API</li>
- * <li>The Java Lang API</li>
- * <li>The Java Util Function API</li>
  * <li>The Utility API</li>
  * </ul>
  */

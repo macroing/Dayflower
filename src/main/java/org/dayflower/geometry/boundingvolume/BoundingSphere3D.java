@@ -37,9 +37,10 @@ import org.dayflower.geometry.Matrix44D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Vector3D;
-import org.dayflower.java.lang.Strings;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code BoundingSphere3D} is an implementation of {@link BoundingVolume3D} that represents a bounding sphere.

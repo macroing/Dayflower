@@ -38,10 +38,11 @@ import org.dayflower.color.Color4D;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.DoubleArrays;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.awt.image.BufferedImages;
 
 /**
  * A {@code DoubleImageD} is an {@link ImageD} implementation that stores individual pixels as four {@code double} values in a {@code double[]}.

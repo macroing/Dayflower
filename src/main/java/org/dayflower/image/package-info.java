@@ -45,10 +45,6 @@
  * <li>The Geometry Bounding Volume Hierarchy API</li>
  * <li>The Geometry Rasterizer API</li>
  * <li>The Geometry Shape API</li>
- * <li>The Java AWT Image API</li>
- * <li>The Java I/O API</li>
- * <li>The Java Lang API</li>
- * <li>The Java Util Function API</li>
  * <li>The Node API</li>
  * <li>The Noise API</li>
  * <li>The Utility API</li>

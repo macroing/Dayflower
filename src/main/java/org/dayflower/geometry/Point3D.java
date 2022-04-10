@@ -38,10 +38,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code Point3D} represents a point with three {@code double}-based components.

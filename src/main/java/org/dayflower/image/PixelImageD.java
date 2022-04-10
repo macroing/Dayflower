@@ -52,8 +52,9 @@ import org.dayflower.filter.Filter2D;
 import org.dayflower.filter.GaussianFilter2D;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.awt.image.BufferedImages;
 
 /**
  * A {@code PixelImageD} is an {@link ImageD} implementation that stores individual pixels as {@link PixelD} instances.

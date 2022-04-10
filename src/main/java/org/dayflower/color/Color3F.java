@@ -39,10 +39,11 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import org.dayflower.java.lang.Strings;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code Color3F} represents a color with three {@code float}-based components.

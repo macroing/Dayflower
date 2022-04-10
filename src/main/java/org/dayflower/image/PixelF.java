@@ -26,8 +26,9 @@ import java.util.Objects;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
-import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.awt.image.BufferedImages;
 
 /**
  * A {@code PixelF} represents a pixel in a {@link PixelImageF} instance.

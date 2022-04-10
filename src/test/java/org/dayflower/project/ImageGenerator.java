@@ -21,7 +21,6 @@ package org.dayflower.project;
 import java.io.File;
 import java.util.List;
 
-import org.dayflower.java.io.Files;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.gpu.GPURenderer;
@@ -29,6 +28,8 @@ import org.dayflower.renderer.observer.FileRendererObserver;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
 import org.dayflower.scene.loader.JavaSceneLoader;
+
+import org.macroing.java.io.Files;
 
 public final class ImageGenerator {
 	private ImageGenerator() {

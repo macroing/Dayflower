@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.dayflower.java.io.Files;
+import org.macroing.java.io.Files;
 
 public final class Dependency {
 	private Dependency() {

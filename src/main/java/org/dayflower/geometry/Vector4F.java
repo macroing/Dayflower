@@ -30,8 +30,9 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code Vector4F} represents a vector with four {@code float}-based components.

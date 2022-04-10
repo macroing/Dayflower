@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.dayflower.java.io.FloatArrayOutputStream;
-import org.dayflower.java.util.function.FloatSupplier;
+import org.macroing.java.io.FloatArrayOutputStream;
+import org.macroing.java.util.function.FloatSupplier;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code float[]} instances.

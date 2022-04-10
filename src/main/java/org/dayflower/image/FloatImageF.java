@@ -38,10 +38,11 @@ import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.awt.image.BufferedImages;
 
 /**
  * A {@code FloatImageF} is an {@link ImageF} implementation that stores individual pixels as four {@code float} values in a {@code float[]}.

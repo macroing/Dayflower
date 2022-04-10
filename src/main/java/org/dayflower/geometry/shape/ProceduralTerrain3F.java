@@ -36,9 +36,10 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.java.util.function.FloatBinaryOperator;
 import org.dayflower.noise.SimplexNoiseF;
 import org.dayflower.utility.Floats;
+
+import org.macroing.java.util.function.FloatBinaryOperator;
 
 /**
  * A {@code ProceduralTerrain3F} is an implementation of {@link Shape3F} that represents a procedural terrain.

@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.java.lang.Strings;
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code SpectralEmissiveStatement} represents a non-official emissive statement using spectral data ({@code "Ke spectral"}) of a Wavefront Material file.

@@ -66,11 +66,6 @@ Scene Texture API:
 	* ADD:		Add an HDRImageTexture class.
 	* ADD:		Add an ImageTexture that could be used instead of the HDRImageTexture and the LDRImageTexture.
 
-Simplex API:
-
-	* ADD:		Add Javadocs.
-	* CHANGE:	Refactor the APIs.
-
 Test API - Unit Testing:
 
 	* 100.0% - Change API
@@ -86,13 +81,6 @@ Test API - Unit Testing:
 	*   6.4% - Geometry Shape API
 
 	*   0.0% - Image API
-
-	*   0.0% - Java AWT Image API
-	*   0.0% - Java I/O API
-	* 100.0% - Java Lang API
-	*   0.0% - Java Util API
-	*   0.0% - Java Util Concurrent Atomic API
-	* 100.0% - Java Util Function API
 
 	*   0.0% - JavaFX Concurrent API
 	*   0.0% - JavaFX Scene Canvas API

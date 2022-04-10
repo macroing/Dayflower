@@ -53,8 +53,9 @@ import org.dayflower.geometry.Shape2I;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.java.util.function.TriFunction;
 import org.dayflower.noise.SimplexNoiseF;
+
+import org.macroing.java.util.function.TriFunction;
 
 /**
  * An {@code ImageF} is an extension of {@link Image} that adds additional methods that operates on {@code float}-based data types.

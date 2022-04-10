@@ -46,9 +46,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code Vector3F} represents a vector with three {@code float}-based components.

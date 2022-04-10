@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.dayflower.java.lang.Strings;
+import org.macroing.java.lang.Strings;
 
 /**
  * A class that encapsulates a document that can be written to.

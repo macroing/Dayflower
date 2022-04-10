@@ -180,12 +180,6 @@ The following table describes the different APIs and their current status in the
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |
 | Geometry Shape API                     | 100.0%  |   6.4%    |
 | Image API                              | 100.0%  |   0.0%    |
-| Java AWT Image API                     | 100.0%  |   0.0%    |
-| Java I/O API                           | 100.0%  |   0.0%    |
-| Java Lang API                          | 100.0%  | 100.0%    |
-| Java Util API                          | 100.0%  |   0.0%    |
-| Java Util Concurrent Atomic API        | 100.0%  |   0.0%    |
-| Java Util Function API                 | 100.0%  | 100.0%    |
 | JavaFX Concurrent API                  | 100.0%  |   0.0%    |
 | JavaFX Scene Canvas API                | 100.0%  |   0.0%    |
 | JavaFX Scene Control API               | 100.0%  |   0.0%    |
@@ -219,6 +213,7 @@ Dependencies
 ------------
  - [Java 8](http://www.java.com)
  - [Macroing / Aparapi](https://github.com/macroing/aparapi)
+ - [Macroing / Java](https://github.com/macroing/Java)
 
 References
 ----------

@@ -52,8 +52,9 @@ import org.dayflower.filter.Filter2F;
 import org.dayflower.filter.GaussianFilter2F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.java.awt.image.BufferedImages;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.awt.image.BufferedImages;
 
 /**
  * A {@code PixelImageF} is an {@link ImageF} implementation that stores individual pixels as {@link PixelF} instances.

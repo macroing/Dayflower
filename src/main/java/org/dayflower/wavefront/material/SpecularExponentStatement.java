@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.java.lang.Strings;
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code SpecularExponentStatement} represents a specular exponent statement ({@code "Ns"}) of a Wavefront Material file.

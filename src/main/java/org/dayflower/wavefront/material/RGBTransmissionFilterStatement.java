@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.java.lang.Strings;
+import org.macroing.java.lang.Strings;
 
 /**
  * An {@code RGBTransmissionFilterStatement} represents a transmission filter statement using RGB ({@code "Tf"}) of a Wavefront Material file.

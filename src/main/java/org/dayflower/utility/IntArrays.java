@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.dayflower.java.io.IntArrayOutputStream;
+import org.macroing.java.io.IntArrayOutputStream;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code int[]} instances.

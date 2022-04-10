@@ -30,8 +30,9 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.java.lang.Strings;
 import org.dayflower.node.Node;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code Vector4D} represents a vector with four {@code double}-based components.

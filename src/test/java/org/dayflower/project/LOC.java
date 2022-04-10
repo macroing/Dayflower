@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dayflower.java.io.Files;
+import org.macroing.java.io.Files;
 
 public final class LOC {
 	private LOC() {

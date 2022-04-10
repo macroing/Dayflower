@@ -28,9 +28,10 @@ import java.util.Objects;
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Shape2D;
 import org.dayflower.geometry.Vector2D;
-import org.dayflower.java.lang.Strings;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code Circle2D} is an implementation of {@link Shape2D} that represents a circle.

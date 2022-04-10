@@ -29,8 +29,9 @@ import java.util.function.Predicate;
 
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.image.Image;
-import org.dayflower.java.util.function.TriFunction;
 import org.dayflower.javafx.concurrent.PredicateTask;
+
+import org.macroing.java.util.function.TriFunction;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

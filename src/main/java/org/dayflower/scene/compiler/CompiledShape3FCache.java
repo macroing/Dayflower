@@ -53,12 +53,13 @@ import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
-import org.dayflower.java.io.IntArrayOutputStream;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.io.IntArrayOutputStream;
 
 /**
  * A {@code CompiledShape3FCache} contains {@link Shape3F} instances in compiled form.

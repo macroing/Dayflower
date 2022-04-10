@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.java.lang.Strings;
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code SpectralAmbientReflectivityStatement} represents an ambient reflectivity statement using spectral data ({@code "Ka spectral"}) of a Wavefront Material file.

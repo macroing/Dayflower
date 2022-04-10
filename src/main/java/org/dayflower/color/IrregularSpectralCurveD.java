@@ -26,7 +26,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
-import org.dayflower.java.io.DoubleArrayOutputStream;
+import org.macroing.java.io.DoubleArrayOutputStream;
 
 /**
  * An {@code IrregularSpectralCurveD} is an implementation of {@link SpectralCurveD} that contains irregular spectral data.

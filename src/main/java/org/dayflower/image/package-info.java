@@ -21,9 +21,9 @@
  * <li>{@link org.dayflower.image.IntImageD IntImageD} is an {@code ImageD} implementation that stores individual pixels as a packed {@code int} value in an {@code int[]}.</li>
  * <li>{@link org.dayflower.image.IntImageF IntImageF} is an {@code ImageF} implementation that stores individual pixels as a packed {@code int} value in an {@code int[]}.</li>
  * <li>{@link org.dayflower.image.PixelImageD PixelImageD} is an {@code ImageD} implementation that stores individual pixels as {@code PixelD} instances.</li>
+ * <li>{@link org.dayflower.image.PixelImageD.PixelD PixelImageD.PixelD} represents a pixel in a {@code PixelImageD} instance.</li>
  * <li>{@link org.dayflower.image.PixelImageF PixelImageF} is an {@code ImageF} implementation that stores individual pixels as {@code PixelF} instances.</li>
- * <li>{@link org.dayflower.image.PixelD PixelD} represents a pixel in a {@code PixelImageD} instance.</li>
- * <li>{@link org.dayflower.image.PixelF PixelF} represents a pixel in a {@code PixelImageF} instance.</li>
+ * <li>{@link org.dayflower.image.PixelImageF.PixelF PixelImageF.PixelF} represents a pixel in a {@code PixelImageF} instance.</li>
  * </ul>
  * <p>
  * The following list contains information about convolution kernels in this API.

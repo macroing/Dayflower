@@ -1,3 +1,7 @@
+2022-04-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Fix a bug in the GPU-based version of GlassMaterial. The DielectricFresnel-based SpecularBRDF type used the R-, G- and B-components in reverse order.
+
 2022-04-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a dependency to Macroing Java.

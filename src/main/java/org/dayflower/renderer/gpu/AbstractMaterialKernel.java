@@ -3357,9 +3357,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float fresnelG = color3FLHSGetComponent2();
 		final float fresnelB = color3FLHSGetComponent3();
 		
-		final float reflectanceScaleR = doBXDFSpecularBRDFFresnelDielectricGetReflectanceScaleB();
+		final float reflectanceScaleR = doBXDFSpecularBRDFFresnelDielectricGetReflectanceScaleR();
 		final float reflectanceScaleG = doBXDFSpecularBRDFFresnelDielectricGetReflectanceScaleG();
-		final float reflectanceScaleB = doBXDFSpecularBRDFFresnelDielectricGetReflectanceScaleR();
+		final float reflectanceScaleB = doBXDFSpecularBRDFFresnelDielectricGetReflectanceScaleB();
 		
 		final float resultR = fresnelR * reflectanceScaleR / cosThetaAbs;
 		final float resultG = fresnelG * reflectanceScaleG / cosThetaAbs;

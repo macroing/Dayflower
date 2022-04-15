@@ -37,26 +37,4 @@ public final class ByteArraysUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> ByteArrays.convert(null));
 	}
-	
-	@Test
-	public void testCreateInt() {
-		assertArrayEquals(new byte[] {(byte)(0), (byte)(0), (byte)(0)}, ByteArrays.create(3));
-		
-		assertThrows(IllegalArgumentException.class, () -> ByteArrays.create(-1));
-	}
-	
-	@Test
-	public void testCreateIntByte() {
-		assertArrayEquals(new byte[] {(byte)(1), (byte)(1), (byte)(1)}, ByteArrays.create(3, (byte)(1)));
-		
-		assertThrows(IllegalArgumentException.class, () -> ByteArrays.create(-1, (byte)(1)));
-	}
-	
-	@Test
-	public void testCreateIntByteByteByteByte() {
-		assertArrayEquals(new byte[] {(byte)(1), (byte)(2), (byte)(3), (byte)(4), (byte)(1), (byte)(2), (byte)(3), (byte)(4)}, ByteArrays.create(8, (byte)(1), (byte)(2), (byte)(3), (byte)(4)));
-		
-		assertThrows(IllegalArgumentException.class, () -> ByteArrays.create(-1, (byte)(1), (byte)(2), (byte)(3), (byte)(4)));
-		assertThrows(IllegalArgumentException.class, () -> ByteArrays.create(+2, (byte)(1), (byte)(2), (byte)(3), (byte)(4)));
-	}
 }

@@ -238,34 +238,6 @@ public final class FloatArrays {
 	}
 	
 	/**
-	 * Performs a merge operation on the {@code float[]} instances in {@code arrays}.
-	 * <p>
-	 * Returns a new {@code float[]} with {@code arrays} merged.
-	 * <p>
-	 * If either {@code arrays} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param arrays the {@code float[][]} instance to combine into one {@code float[]}
-	 * @return a new {@code float[]} with {@code arrays} merged
-	 * @throws NullPointerException thrown if, and only if, either {@code arrays} or at least one of its elements are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static float[] merge(final float[]... arrays) {
-		Objects.requireNonNull(arrays, "arrays == null");
-		
-		for(int i = 0; i < arrays.length; i++) {
-			Objects.requireNonNull(arrays[i], "arrays[" + i + "] == null");
-		}
-		
-		try(final FloatArrayOutputStream floatArrayOutputStream = new FloatArrayOutputStream()) {
-			for(final float[] array : arrays) {
-				floatArrayOutputStream.write(array);
-			}
-			
-			return floatArrayOutputStream.toFloatArray();
-		}
-	}
-	
-	/**
 	 * Performs a splice operation on the {@code float[]} instance {@code array}.
 	 * <p>
 	 * Returns a new {@code float[]} with the result of the operation.

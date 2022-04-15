@@ -42,8 +42,9 @@ import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
 import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.util.Arrays;
 
 /**
  * A {@code CompiledLightCache} contains {@link Light} instances in compiled form.
@@ -540,7 +541,7 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), DiffuseAreaLight.ID, relativeOffsetNew));
-		setDiffuseAreaLights(FloatArrays.merge(getDiffuseAreaLights(), diffuseAreaLight));
+		setDiffuseAreaLights(Arrays.merge(getDiffuseAreaLights(), diffuseAreaLight));
 		
 		return relativeOffsetNew;
 	}
@@ -568,7 +569,7 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), DirectionalLight.ID, relativeOffsetNew));
-		setDirectionalLights(FloatArrays.merge(getDirectionalLights(), directionalLight));
+		setDirectionalLights(Arrays.merge(getDirectionalLights(), directionalLight));
 		
 		return relativeOffsetNew;
 	}
@@ -597,8 +598,8 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), ImageLight.ID, relativeOffsetNew));
-		setImageLightOffsets(IntArrays.merge(getImageLightOffsets(), absoluteOffsetNew));
-		setImageLights(FloatArrays.merge(getImageLights(), imageLight));
+		setImageLightOffsets(Arrays.merge(getImageLightOffsets(), new int[] {absoluteOffsetNew}));
+		setImageLights(Arrays.merge(getImageLights(), imageLight));
 		
 		return relativeOffsetNew;
 	}
@@ -627,8 +628,8 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PerezLight.ID, relativeOffsetNew));
-		setPerezLightOffsets(IntArrays.merge(getPerezLightOffsets(), absoluteOffsetNew));
-		setPerezLights(FloatArrays.merge(getPerezLights(), perezLight));
+		setPerezLightOffsets(Arrays.merge(getPerezLightOffsets(), new int[] {absoluteOffsetNew}));
+		setPerezLights(Arrays.merge(getPerezLights(), perezLight));
 		
 		return relativeOffsetNew;
 	}
@@ -656,7 +657,7 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), PointLight.ID, relativeOffsetNew));
-		setPointLights(FloatArrays.merge(getPointLights(), pointLight));
+		setPointLights(Arrays.merge(getPointLights(), pointLight));
 		
 		return relativeOffsetNew;
 	}
@@ -684,7 +685,7 @@ public final class CompiledLightCache {
 		}
 		
 		setLightIDsAndOffsets(Structures.addStructureIDAndOffset(getLightIDsAndOffsets(), SpotLight.ID, relativeOffsetNew));
-		setSpotLights(FloatArrays.merge(getSpotLights(), spotLight));
+		setSpotLights(Arrays.merge(getSpotLights(), spotLight));
 		
 		return relativeOffsetNew;
 	}

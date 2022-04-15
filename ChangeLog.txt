@@ -1,3 +1,11 @@
+2022-04-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the dependency to Macroing Java.
+	* REMOVE:	Remove the methods create(int), create(int, byte) and create(int, byte, byte, byte, byte) from the ByteArrays class. These methods have been replaced by Arrays.repeat(byte[], int) in Macroing Java.
+	* REMOVE:	Remove the DoubleArrays class. The method create(int, double, double, double, double) has been replaced by Arrays.repeat(double[], int) in Macroing Java.
+	* REMOVE:	Remove the method merge(float[]...) from the FloatArrays class. It has been replaced by Arrays.merge(float[]...) in Macroing Java.
+	* REMOVE:	Remove the methods merge(int[], int), merge(int[], int[]) and merge(int[]...) from the IntArrays class. These methods have been replaced by Arrays.merge(int[]...) in Macroing Java.
+
 2022-04-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix a bug in the GPU-based version of GlassMaterial. The DielectricFresnel-based SpecularBRDF type used the R-, G- and B-components in reverse order.

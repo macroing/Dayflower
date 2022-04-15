@@ -43,8 +43,9 @@ import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.util.Arrays;
 
 /**
  * A {@code CompiledTextureCache} contains {@link Texture} instances in compiled form.
@@ -686,7 +687,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setBlendTextures(FloatArrays.merge(getBlendTextures(), blendTexture));
+		setBlendTextures(Arrays.merge(getBlendTextures(), blendTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -713,7 +714,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setBullseyeTextures(FloatArrays.merge(getBullseyeTextures(), bullseyeTexture));
+		setBullseyeTextures(Arrays.merge(getBullseyeTextures(), bullseyeTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -740,7 +741,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setCheckerboardTextures(FloatArrays.merge(getCheckerboardTextures(), checkerboardTexture));
+		setCheckerboardTextures(Arrays.merge(getCheckerboardTextures(), checkerboardTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -767,7 +768,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setConstantTextures(FloatArrays.merge(getConstantTextures(), constantTexture));
+		setConstantTextures(Arrays.merge(getConstantTextures(), constantTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -795,8 +796,8 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setLDRImageTextureOffsets(IntArrays.merge(getLDRImageTextureOffsets(), absoluteOffsetNew));
-		setLDRImageTextures(FloatArrays.merge(getLDRImageTextures(), lDRImageTexture));
+		setLDRImageTextureOffsets(Arrays.merge(getLDRImageTextureOffsets(), new int[] {absoluteOffsetNew}));
+		setLDRImageTextures(Arrays.merge(getLDRImageTextures(), lDRImageTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -823,7 +824,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setMarbleTextures(FloatArrays.merge(getMarbleTextures(), marbleTexture));
+		setMarbleTextures(Arrays.merge(getMarbleTextures(), marbleTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -850,7 +851,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setPolkaDotTextures(FloatArrays.merge(getPolkaDotTextures(), polkaDotTexture));
+		setPolkaDotTextures(Arrays.merge(getPolkaDotTextures(), polkaDotTexture));
 		
 		return relativeOffsetNew;
 	}
@@ -877,7 +878,7 @@ public final class CompiledTextureCache {
 			return relativeOffsetOld;
 		}
 		
-		setSimplexFractionalBrownianMotionTextures(FloatArrays.merge(getSimplexFractionalBrownianMotionTextures(), simplexFractionalBrownianMotionTexture));
+		setSimplexFractionalBrownianMotionTextures(Arrays.merge(getSimplexFractionalBrownianMotionTextures(), simplexFractionalBrownianMotionTexture));
 		
 		return relativeOffsetNew;
 	}

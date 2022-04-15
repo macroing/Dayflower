@@ -60,6 +60,7 @@ import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.io.IntArrayOutputStream;
+import org.macroing.java.util.Arrays;
 
 /**
  * A {@code CompiledShape3FCache} contains {@link Shape3F} instances in compiled form.
@@ -961,7 +962,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setCone3Fs(FloatArrays.merge(getCone3Fs(), cone3F));
+		setCone3Fs(Arrays.merge(getCone3Fs(), cone3F));
 		
 		return relativeOffsetNew;
 	}
@@ -988,7 +989,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setCylinder3Fs(FloatArrays.merge(getCylinder3Fs(), cylinder3F));
+		setCylinder3Fs(Arrays.merge(getCylinder3Fs(), cylinder3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1015,7 +1016,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setDisk3Fs(FloatArrays.merge(getDisk3Fs(), disk3F));
+		setDisk3Fs(Arrays.merge(getDisk3Fs(), disk3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1042,7 +1043,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setHyperboloid3Fs(FloatArrays.merge(getHyperboloid3Fs(), hyperboloid3F));
+		setHyperboloid3Fs(Arrays.merge(getHyperboloid3Fs(), hyperboloid3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1069,7 +1070,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setParaboloid3Fs(FloatArrays.merge(getParaboloid3Fs(), paraboloid3F));
+		setParaboloid3Fs(Arrays.merge(getParaboloid3Fs(), paraboloid3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1096,7 +1097,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setPlane3Fs(FloatArrays.merge(getPlane3Fs(), plane3F));
+		setPlane3Fs(Arrays.merge(getPlane3Fs(), plane3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1124,8 +1125,8 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setPolygon3FOffsets(IntArrays.merge(getPolygon3FOffsets(), absoluteOffsetNew));
-		setPolygon3Fs(FloatArrays.merge(getPolygon3Fs(), polygon3F));
+		setPolygon3FOffsets(Arrays.merge(getPolygon3FOffsets(), new int[] {absoluteOffsetNew}));
+		setPolygon3Fs(Arrays.merge(getPolygon3Fs(), polygon3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1152,7 +1153,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setRectangle3Fs(FloatArrays.merge(getRectangle3Fs(), rectangle3F));
+		setRectangle3Fs(Arrays.merge(getRectangle3Fs(), rectangle3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1179,7 +1180,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setRectangularCuboid3Fs(FloatArrays.merge(getRectangularCuboid3Fs(), rectangularCuboid3F));
+		setRectangularCuboid3Fs(Arrays.merge(getRectangularCuboid3Fs(), rectangularCuboid3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1206,7 +1207,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setSphere3Fs(FloatArrays.merge(getSphere3Fs(), sphere3F));
+		setSphere3Fs(Arrays.merge(getSphere3Fs(), sphere3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1233,7 +1234,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setTorus3Fs(FloatArrays.merge(getTorus3Fs(), torus3F));
+		setTorus3Fs(Arrays.merge(getTorus3Fs(), torus3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1260,7 +1261,7 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setTriangle3Fs(FloatArrays.merge(getTriangle3Fs(), triangle3F));
+		setTriangle3Fs(Arrays.merge(getTriangle3Fs(), triangle3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1288,8 +1289,8 @@ public final class CompiledShape3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setTriangleMesh3FOffsets(IntArrays.merge(getTriangleMesh3FOffsets(), absoluteOffsetNew));
-		setTriangleMesh3Fs(IntArrays.merge(getTriangleMesh3Fs(), triangleMesh3F));
+		setTriangleMesh3FOffsets(Arrays.merge(getTriangleMesh3FOffsets(), new int[] {absoluteOffsetNew}));
+		setTriangleMesh3Fs(Arrays.merge(getTriangleMesh3Fs(), triangleMesh3F));
 		
 		return relativeOffsetNew;
 	}

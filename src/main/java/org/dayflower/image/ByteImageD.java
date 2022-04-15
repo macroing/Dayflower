@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -43,6 +42,7 @@ import org.dayflower.utility.ByteArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.awt.image.BufferedImages;
+import org.macroing.java.util.Arrays;
 
 /**
  * A {@code ByteImageD} is an {@link ImageD} implementation that stores individual pixels as four {@code byte} values in a {@code byte[]}.
@@ -117,7 +117,7 @@ public final class ByteImageD extends ImageD {
 	public ByteImageD(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
-		this.data = ByteArrays.create(resolutionX * resolutionY * 4, toByte(0), toByte(0), toByte(0), toByte(255));
+		this.data = Arrays.repeat(new byte[] {toByte(0), toByte(0), toByte(0), toByte(255)}, resolutionX * resolutionY);
 	}
 	
 	/**

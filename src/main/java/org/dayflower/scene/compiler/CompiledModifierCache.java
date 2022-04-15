@@ -31,8 +31,9 @@ import org.dayflower.scene.modifier.NormalMapLDRImageModifier;
 import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.util.Arrays;
 
 /**
  * A {@code CompiledModifierCache} contains {@link Modifier} instances in compiled form.
@@ -203,8 +204,8 @@ public final class CompiledModifierCache {
 			return relativeOffsetOld;
 		}
 		
-		setNormalMapLDRImageModifierOffsets(IntArrays.merge(getNormalMapLDRImageModifierOffsets(), absoluteOffsetNew));
-		setNormalMapLDRImageModifiers(FloatArrays.merge(getNormalMapLDRImageModifiers(), normalMapLDRImageModifier));
+		setNormalMapLDRImageModifierOffsets(Arrays.merge(getNormalMapLDRImageModifierOffsets(), new int[] {absoluteOffsetNew}));
+		setNormalMapLDRImageModifiers(Arrays.merge(getNormalMapLDRImageModifiers(), normalMapLDRImageModifier));
 		
 		return relativeOffsetNew;
 	}
@@ -231,7 +232,7 @@ public final class CompiledModifierCache {
 			return relativeOffsetOld;
 		}
 		
-		setSimplexNoiseNormalMapModifiers(FloatArrays.merge(getSimplexNoiseNormalMapModifiers(), simplexNoiseNormalMapModifier));
+		setSimplexNoiseNormalMapModifiers(Arrays.merge(getSimplexNoiseNormalMapModifiers(), simplexNoiseNormalMapModifier));
 		
 		return relativeOffsetNew;
 	}

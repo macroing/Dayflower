@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -38,11 +37,11 @@ import org.dayflower.color.Color4D;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.DoubleArrays;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.awt.image.BufferedImages;
+import org.macroing.java.util.Arrays;
 
 /**
  * A {@code DoubleImageD} is an {@link ImageD} implementation that stores individual pixels as four {@code double} values in a {@code double[]}.
@@ -117,7 +116,7 @@ public final class DoubleImageD extends ImageD {
 	public DoubleImageD(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
-		this.data = DoubleArrays.create(resolutionX * resolutionY * 4, 0.0D, 0.0D, 0.0D, 1.0D);
+		this.data = Arrays.repeat(new double[] {0.0D, 0.0D, 0.0D, 1.0D}, resolutionX * resolutionY);
 	}
 	
 	/**

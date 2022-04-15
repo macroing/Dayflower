@@ -35,6 +35,8 @@ import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.java.util.Arrays;
+
 /**
  * A {@code CompiledPrimitiveCache} contains {@link Primitive} instances in compiled form.
  * 
@@ -173,8 +175,8 @@ public final class CompiledPrimitiveCache {
 			return relativeOffsetOld;
 		}
 		
-		setMatrix44Fs(FloatArrays.merge(getMatrix44Fs(), matrix44Fs));
-		setPrimitives(IntArrays.merge(getPrimitives(), primitive));
+		setMatrix44Fs(Arrays.merge(getMatrix44Fs(), matrix44Fs));
+		setPrimitives(Arrays.merge(getPrimitives(), primitive));
 		
 		return relativeOffsetNew;
 	}
@@ -334,7 +336,7 @@ public final class CompiledPrimitiveCache {
 	 * @throws NullPointerException thrown if, and only if, {@code transform} is {@code null}
 	 */
 	public static float[] toMatrix44Fs(final Transform transform) {
-		return FloatArrays.merge(transform.getObjectToWorld().toArray(), transform.getWorldToObject().toArray());
+		return Arrays.merge(transform.getObjectToWorld().toArray(), transform.getWorldToObject().toArray());
 	}
 	
 	/**

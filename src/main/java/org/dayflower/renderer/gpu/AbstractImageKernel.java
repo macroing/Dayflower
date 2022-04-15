@@ -19,9 +19,8 @@
 package org.dayflower.renderer.gpu;
 
 import org.dayflower.color.Color3F;
-import org.dayflower.utility.ByteArrays;
-import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.IntArrays;
+
+import org.macroing.java.util.Arrays;
 
 /**
  * An {@code AbstractImageKernel} is an abstract extension of the {@code AbstractKernel} class that adds additional features.
@@ -1161,18 +1160,18 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private void doSetupFilmColorFloatArray() {
-		put(this.filmColorFloatArray = FloatArrays.create(getResolution() * 3, 0.0F));
+		put(this.filmColorFloatArray = Arrays.repeat(new float[] {0.0F}, getResolution() * 3));
 	}
 	
 	private void doSetupFilmSampleIntArray() {
-		put(this.filmSampleIntArray = IntArrays.create(getResolution(), 0));
+		put(this.filmSampleIntArray = Arrays.repeat(new int[] {0}, getResolution()));
 	}
 	
 	private void doSetupImageColorByteArray() {
-		put(this.imageColorByteArray = ByteArrays.create(getResolution() * 4));
+		put(this.imageColorByteArray = Arrays.repeat(new byte[] {(byte)(0)}, getResolution() * 4));
 	}
 	
 	private void doSetupImageColorFloatArray() {
-		put(this.imageColorFloatArray = FloatArrays.create(getResolution() * 3, 0.0F));
+		put(this.imageColorFloatArray = Arrays.repeat(new float[] {0.0F}, getResolution() * 3));
 	}
 }

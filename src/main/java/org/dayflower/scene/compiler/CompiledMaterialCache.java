@@ -47,6 +47,8 @@ import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.java.util.Arrays;
+
 /**
  * A {@code CompiledMaterialCache} contains {@link Material} instances in compiled form.
  * <p>
@@ -733,7 +735,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setBullseyeMaterials(FloatArrays.merge(getBullseyeMaterials(), bullseyeMaterial));
+		setBullseyeMaterials(Arrays.merge(getBullseyeMaterials(), bullseyeMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -760,7 +762,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setCheckerboardMaterials(FloatArrays.merge(getCheckerboardMaterials(), checkerboardMaterial));
+		setCheckerboardMaterials(Arrays.merge(getCheckerboardMaterials(), checkerboardMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -787,7 +789,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setClearCoatMaterials(IntArrays.merge(getClearCoatMaterials(), clearCoatMaterial));
+		setClearCoatMaterials(Arrays.merge(getClearCoatMaterials(), clearCoatMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -814,7 +816,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setDisneyMaterials(IntArrays.merge(getDisneyMaterials(), disneyMaterial));
+		setDisneyMaterials(Arrays.merge(getDisneyMaterials(), disneyMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -841,7 +843,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setGlassMaterials(IntArrays.merge(getGlassMaterials(), glassMaterial));
+		setGlassMaterials(Arrays.merge(getGlassMaterials(), glassMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -868,7 +870,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setGlossyMaterials(IntArrays.merge(getGlossyMaterials(), glossyMaterial));
+		setGlossyMaterials(Arrays.merge(getGlossyMaterials(), glossyMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -895,7 +897,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setMatteMaterials(IntArrays.merge(getMatteMaterials(), matteMaterial));
+		setMatteMaterials(Arrays.merge(getMatteMaterials(), matteMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -922,7 +924,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setMetalMaterials(IntArrays.merge(getMetalMaterials(), metalMaterial));
+		setMetalMaterials(Arrays.merge(getMetalMaterials(), metalMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -949,7 +951,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setMirrorMaterials(IntArrays.merge(getMirrorMaterials(), mirrorMaterial));
+		setMirrorMaterials(Arrays.merge(getMirrorMaterials(), mirrorMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -976,7 +978,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setPlasticMaterials(IntArrays.merge(getPlasticMaterials(), plasticMaterial));
+		setPlasticMaterials(Arrays.merge(getPlasticMaterials(), plasticMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -1003,7 +1005,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setPolkaDotMaterials(FloatArrays.merge(getPolkaDotMaterials(), polkaDotMaterial));
+		setPolkaDotMaterials(Arrays.merge(getPolkaDotMaterials(), polkaDotMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -1030,7 +1032,7 @@ public final class CompiledMaterialCache {
 			return relativeOffsetOld;
 		}
 		
-		setSubstrateMaterials(IntArrays.merge(getSubstrateMaterials(), substrateMaterial));
+		setSubstrateMaterials(Arrays.merge(getSubstrateMaterials(), substrateMaterial));
 		
 		return relativeOffsetNew;
 	}

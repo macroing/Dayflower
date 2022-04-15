@@ -30,6 +30,8 @@ import org.dayflower.utility.Document;
 import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.java.util.Arrays;
+
 /**
  * A {@code CompiledBoundingVolume3FCache} contains {@link BoundingVolume3F} instances in compiled form.
  * <p>
@@ -247,7 +249,7 @@ public final class CompiledBoundingVolume3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setAxisAlignedBoundingBox3Fs(FloatArrays.merge(getAxisAlignedBoundingBox3Fs(), axisAlignedBoundingBox3F));
+		setAxisAlignedBoundingBox3Fs(Arrays.merge(getAxisAlignedBoundingBox3Fs(), axisAlignedBoundingBox3F));
 		
 		return relativeOffsetNew;
 	}
@@ -274,7 +276,7 @@ public final class CompiledBoundingVolume3FCache {
 			return relativeOffsetOld;
 		}
 		
-		setBoundingSphere3Fs(FloatArrays.merge(getBoundingSphere3Fs(), boundingSphere3F));
+		setBoundingSphere3Fs(Arrays.merge(getBoundingSphere3Fs(), boundingSphere3F));
 		
 		return relativeOffsetNew;
 	}

@@ -35,8 +35,8 @@ import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Shape2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.ByteArrays;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.util.Arrays;
 
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
@@ -227,7 +227,7 @@ public abstract class Image {
 	 */
 //	TODO: Add Unit Tests!
 	public byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder) {
-		return ByteArrays.convert(toIntArray(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null")));
+		return Arrays.toByteArray(toIntArray(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null")));
 	}
 	
 	/**

@@ -19,13 +19,9 @@
 package org.dayflower.utility;
 
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
-import org.macroing.java.io.FloatArrayOutputStream;
-import org.macroing.java.util.function.FloatSupplier;
+import org.macroing.java.util.Arrays;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code float[]} instances.
@@ -39,203 +35,6 @@ public final class FloatArrays {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns {@code true} if, and only if, the elements of {@code arrayA} starting at {@code offsetArrayA} are equal to the elements of {@code arrayB} starting at {@code offsetArrayB}, {@code false} otherwise.
-	 * <p>
-	 * If either {@code arrayA} or {@code arrayB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to {@code arrayB.length}, {@code length} is less than {@code 0},
-	 * {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0} or greater than {@code arrayB.length}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param arrayA a {@code float[]}
-	 * @param arrayB a {@code float[]}
-	 * @param offsetArrayA the offset to start at in {@code arrayA}
-	 * @param offsetArrayB the offset to start at in {@code arrayB}
-	 * @param length the length of the sub-arrays to test for equality
-	 * @return {@code true} if, and only if, the elements of {@code arrayA} starting at {@code offsetArrayA} are equal to the elements of {@code arrayB} starting at {@code offsetArrayB}, {@code false} otherwise
-	 * @throws IllegalArgumentException thrown if, and only if, {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to
-	 *                                  {@code arrayB.length}, {@code length} is less than {@code 0}, {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0}
-	 *                                  or greater than {@code arrayB.length}
-	 * @throws NullPointerException thrown if, and only if, either {@code arrayA} or {@code arrayB} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static boolean equal(final float[] arrayA, final float[] arrayB, final int offsetArrayA, final int offsetArrayB, final int length) {
-		Objects.requireNonNull(arrayA, "arrayA == null");
-		Objects.requireNonNull(arrayB, "arrayB == null");
-		
-		ParameterArguments.requireRange(offsetArrayA, 0, arrayA.length - 1, "offsetArrayA");
-		ParameterArguments.requireRange(offsetArrayB, 0, arrayB.length - 1, "offsetArrayB");
-		ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length");
-		ParameterArguments.requireRange(offsetArrayA + length, 0, arrayA.length, "offsetArrayA + length");
-		ParameterArguments.requireRange(offsetArrayB + length, 0, arrayB.length, "offsetArrayB + length");
-		
-		for(int i = 0; i < length; i++) {
-			if(!Floats.equal(arrayA[offsetArrayA + i], arrayB[offsetArrayB + i])) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of {@code objects} using {@code arrayFunction}.
-	 * <p>
-	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * FloatArrays.convert(objects, arrayFunction, 0);
-	 * }
-	 * </pre>
-	 * 
-	 * @param <T> the generic type
-	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code float[]} instances
-	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code float[]} instances
-	 * @return a {@code float[]} representation of {@code objects} using {@code arrayFunction}
-	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static <T> float[] convert(final List<T> objects, final Function<T, float[]> arrayFunction) {
-		return convert(objects, arrayFunction, 0);
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of {@code objects} using {@code arrayFunction}.
-	 * <p>
-	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param <T> the generic type
-	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code float[]} instances
-	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code float[]} instances
-	 * @param minimumLength the minimum length of the returned {@code float[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
-	 * @return a {@code float[]} representation of {@code objects} using {@code arrayFunction}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static <T> float[] convert(final List<T> objects, final Function<T, float[]> arrayFunction, final int minimumLength) {
-		ParameterArguments.requireNonNullList(objects, "objects");
-		
-		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
-		
-		ParameterArguments.requireRange(minimumLength, 0, Integer.MAX_VALUE, "minimumLength");
-		
-		if(objects.isEmpty()) {
-			return create(minimumLength);
-		}
-		
-		try(final FloatArrayOutputStream floatArrayOutputStream = new FloatArrayOutputStream()) {
-			for(final T object : objects) {
-				floatArrayOutputStream.write(arrayFunction.apply(object));
-			}
-			
-			final float[] array = floatArrayOutputStream.toFloatArray();
-			
-			return array.length == 0 ? create(minimumLength) : array;
-		}
-	}
-	
-	/**
-	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code 0.0F}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * FloatArrays.create(length, 0.0F);
-	 * }
-	 * </pre>
-	 * 
-	 * @param length the length of the {@code float[]}
-	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code 0.0F}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 */
-//	TODO: Add Unit Tests!
-	public static float[] create(final int length) {
-		return create(length, 0.0F);
-	}
-	
-	/**
-	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code float} values from {@code floatSupplier}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * If {@code floatSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param length the length of the {@code float[]}
-	 * @param floatSupplier the {@link FloatSupplier} to fill the {@code float[]} with
-	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code float} values from {@code floatSupplier}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code floatSupplier} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static float[] create(final int length, final FloatSupplier floatSupplier) {
-		final float[] array = new float[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		Objects.requireNonNull(floatSupplier, "floatSupplier == null");
-		
-		for(int i = 0; i < array.length; i++) {
-			array[i] = floatSupplier.getAsFloat();
-		}
-		
-		return array;
-	}
-	
-	/**
-	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code value}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param length the length of the {@code float[]}
-	 * @param value the {@code float} value to fill the {@code float[]} with
-	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code value}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 */
-//	TODO: Add Unit Tests!
-	public static float[] create(final int length, final float value) {
-		final float[] array = new float[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		Arrays.fill(array, value);
-		
-		return array;
-	}
-	
-	/**
-	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern.
-	 * <p>
-	 * If {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param length the length of the {@code float[]}
-	 * @param value0 the {@code float} at the relative offset {@code 0}
-	 * @param value1 the {@code float} at the relative offset {@code 1}
-	 * @param value2 the {@code float} at the relative offset {@code 2}
-	 * @param value3 the {@code float} at the relative offset {@code 3}
-	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code value0}, {@code value1}, {@code value2} and {@code value3} in a repeated pattern
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0} or it cannot be evenly divided by {@code 4}
-	 */
-//	TODO: Add Unit Tests!
-	public static float[] create(final int length, final float value0, final float value1, final float value2, final float value3) {
-		final float[] array = new float[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		if(array.length % 4 != 0) {
-			throw new IllegalArgumentException(String.format("%d %% 4 != 0", Integer.valueOf(length)));
-		}
-		
-		for(int i = 0; i < length; i += 4) {
-			array[i + 0] = value0;
-			array[i + 1] = value1;
-			array[i + 2] = value2;
-			array[i + 3] = value3;
-		}
-		
-		return array;
-	}
 	
 	/**
 	 * Performs a splice operation on the {@code float[]} instance {@code array}.
@@ -350,7 +149,7 @@ public final class FloatArrays {
 		final int arrayDSrcPos2 = arrayALength + arrayBLength;
 		final int arrayDLength  = arrayA.length - (arrayCSrcPos - arrayALength) + arrayBLength;
 		
-		if(arrayCSrcPos - arrayALength > 0 && !equal(array, arrayMatcher, arrayALength, 0, Ints.min(arrayCSrcPos - arrayALength, arrayMatcher.length))) {
+		if(arrayCSrcPos - arrayALength > 0 && !Arrays.equals(array, arrayMatcher, arrayALength, 0, Ints.min(arrayCSrcPos - arrayALength, arrayMatcher.length))) {
 			return array;
 		}
 		
@@ -399,7 +198,7 @@ public final class FloatArrays {
 		final int length = isIncrementingByValueLength ? value.length : 1;
 		
 		for(int indexAbsolute = 0, indexRelative = 0; indexRelative < count; indexAbsolute += length, indexRelative++) {
-			if(equal(array, value, indexAbsolute, 0, length)) {
+			if(Arrays.equals(array, value, indexAbsolute, 0, length)) {
 				return isReturningRelativeIndex ? indexRelative : indexAbsolute;
 			}
 		}

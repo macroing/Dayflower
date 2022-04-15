@@ -1606,7 +1606,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code blendTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static float[] toBlendTextures(final List<BlendTexture> blendTextures, final ToIntFunction<Texture> textureOffsetFunction) {
-		return FloatArrays.convert(blendTextures, blendTexture -> toBlendTexture(blendTexture, textureOffsetFunction));
+		return Arrays.toFloatArray(blendTextures, blendTexture -> toBlendTexture(blendTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -1696,7 +1696,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static float[] toBullseyeTextures(final List<BullseyeTexture> bullseyeTextures, final ToIntFunction<Texture> textureOffsetFunction) {
-		return FloatArrays.convert(bullseyeTextures, bullseyeTexture -> toBullseyeTexture(bullseyeTexture, textureOffsetFunction));
+		return Arrays.toFloatArray(bullseyeTextures, bullseyeTexture -> toBullseyeTexture(bullseyeTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -1786,7 +1786,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static float[] toCheckerboardTextures(final List<CheckerboardTexture> checkerboardTextures, final ToIntFunction<Texture> textureOffsetFunction) {
-		return FloatArrays.convert(checkerboardTextures, checkerboardTexture -> toCheckerboardTexture(checkerboardTexture, textureOffsetFunction));
+		return Arrays.toFloatArray(checkerboardTextures, checkerboardTexture -> toCheckerboardTexture(checkerboardTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -1822,7 +1822,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code constantTextures} or at least one of its elements are {@code null}
 	 */
 	public static float[] toConstantTextures(final List<ConstantTexture> constantTextures) {
-		return FloatArrays.convert(constantTextures, constantTexture -> toConstantTexture(constantTexture));
+		return Arrays.toFloatArray(constantTextures, constantTexture -> toConstantTexture(constantTexture));
 	}
 	
 	/**
@@ -1873,7 +1873,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTextures} or at least one of its elements are {@code null}
 	 */
 	public static float[] toLDRImageTextures(final List<LDRImageTexture> lDRImageTextures) {
-		return FloatArrays.convert(lDRImageTextures, lDRImageTexture -> toLDRImageTexture(lDRImageTexture));
+		return Arrays.toFloatArray(lDRImageTextures, lDRImageTexture -> toLDRImageTexture(lDRImageTexture));
 	}
 	
 	/**
@@ -1921,7 +1921,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code marbleTextures} or at least one of its elements are {@code null}
 	 */
 	public static float[] toMarbleTextures(final List<MarbleTexture> marbleTextures) {
-		return FloatArrays.convert(marbleTextures, marbleTexture -> toMarbleTexture(marbleTexture));
+		return Arrays.toFloatArray(marbleTextures, marbleTexture -> toMarbleTexture(marbleTexture));
 	}
 	
 	/**
@@ -2012,7 +2012,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotTextures}, at least one of its elements or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static float[] toPolkaDotTextures(final List<PolkaDotTexture> polkaDotTextures, final ToIntFunction<Texture> textureOffsetFunction) {
-		return FloatArrays.convert(polkaDotTextures, polkaDotTexture -> toPolkaDotTexture(polkaDotTexture, textureOffsetFunction));
+		return Arrays.toFloatArray(polkaDotTextures, polkaDotTexture -> toPolkaDotTexture(polkaDotTexture, textureOffsetFunction));
 	}
 	
 	/**
@@ -2053,7 +2053,7 @@ public final class CompiledTextureCache {
 	 * @throws NullPointerException thrown if, and only if, {@code simplexFractionalBrownianMotionTextures} or at least one of its elements are {@code null}
 	 */
 	public static float[] toSimplexFractionalBrownianMotionTextures(final List<SimplexFractionalBrownianMotionTexture> simplexFractionalBrownianMotionTextures) {
-		return FloatArrays.convert(simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> toSimplexFractionalBrownianMotionTexture(simplexFractionalBrownianMotionTexture));
+		return Arrays.toFloatArray(simplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> toSimplexFractionalBrownianMotionTexture(simplexFractionalBrownianMotionTexture));
 	}
 	
 	/**

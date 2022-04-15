@@ -38,7 +38,6 @@ import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.ByteArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.awt.image.BufferedImages;
@@ -86,7 +85,7 @@ public final class ByteImageF extends ImageF {
 	public ByteImageF(final BufferedImage bufferedImage) {
 		super(bufferedImage.getWidth(), bufferedImage.getHeight());
 		
-		this.data = ByteArrays.convert(PackedIntComponentOrder.ARGB.unpack(ArrayComponentOrder.RGBA, DataBufferInt.class.cast(BufferedImages.getCompatibleBufferedImage(bufferedImage).getRaster().getDataBuffer()).getData().clone()));
+		this.data = Arrays.toByteArray(PackedIntComponentOrder.ARGB.unpack(ArrayComponentOrder.RGBA, DataBufferInt.class.cast(BufferedImages.getCompatibleBufferedImage(bufferedImage).getRaster().getDataBuffer()).getData().clone()));
 	}
 	
 	/**

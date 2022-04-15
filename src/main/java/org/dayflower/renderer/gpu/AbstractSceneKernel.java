@@ -48,7 +48,8 @@ import org.dayflower.scene.compiler.CompiledCameraCache;
 import org.dayflower.scene.compiler.CompiledPrimitiveCache;
 import org.dayflower.scene.compiler.CompiledScene;
 import org.dayflower.scene.compiler.SceneCompiler;
-import org.dayflower.utility.FloatArrays;
+
+import org.macroing.java.util.Arrays;
 
 /**
  * An {@code AbstractSceneKernel} is an abstract extension of the {@link AbstractLightKernel} class that adds additional features.
@@ -1401,7 +1402,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	}
 	
 	private void doSetupPixelArray() {
-		put(this.pixelArray = FloatArrays.create(getResolution() * 2, 0.0F));
+		put(this.pixelArray = Arrays.repeat(new float[] {0.0F}, getResolution() * 2));
 	}
 	
 	private void doSetupScene() {

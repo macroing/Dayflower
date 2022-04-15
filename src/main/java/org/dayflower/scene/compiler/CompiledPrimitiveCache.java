@@ -323,7 +323,7 @@ public final class CompiledPrimitiveCache {
 	 * @throws NullPointerException thrown if, and only if, {@code primitives} or at least one of its elements are {@code null}
 	 */
 	public static float[] toMatrix44Fs(final List<Primitive> primitives) {
-		return FloatArrays.convert(primitives, primitive -> toMatrix44Fs(primitive.getTransform()));
+		return Arrays.toFloatArray(primitives, primitive -> toMatrix44Fs(primitive.getTransform()));
 	}
 	
 	/**
@@ -433,6 +433,6 @@ public final class CompiledPrimitiveCache {
 	 *                              are {@code null}
 	 */
 	public static int[] toPrimitives(final List<Primitive> primitives, final ToIntFunction<AreaLight> areaLightOffsetFunction, final ToIntFunction<BoundingVolume3F> boundingVolume3FOffsetFunction, final ToIntFunction<Material> materialOffsetFunction, final ToIntFunction<Shape3F> shape3FOffsetFunction) {
-		return IntArrays.convert(primitives, primitive -> toPrimitive(primitive, areaLightOffsetFunction, boundingVolume3FOffsetFunction, materialOffsetFunction, shape3FOffsetFunction));
+		return Arrays.toIntArray(primitives, primitive -> toPrimitive(primitive, areaLightOffsetFunction, boundingVolume3FOffsetFunction, materialOffsetFunction, shape3FOffsetFunction));
 	}
 }

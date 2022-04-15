@@ -1335,7 +1335,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code diffuseAreaLights}, at least one of its elements or {@code shapeOffsetFunction} are {@code null}
 	 */
 	public static float[] toDiffuseAreaLights(final List<DiffuseAreaLight> diffuseAreaLights, final ToIntFunction<Shape3F> shapeOffsetFunction) {
-		return FloatArrays.convert(diffuseAreaLights, diffuseAreaLight -> toDiffuseAreaLight(diffuseAreaLight, shapeOffsetFunction));
+		return Arrays.toFloatArray(diffuseAreaLights, diffuseAreaLight -> toDiffuseAreaLight(diffuseAreaLight, shapeOffsetFunction));
 	}
 	
 	/**
@@ -1379,7 +1379,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code directionalLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toDirectionalLights(final List<DirectionalLight> directionalLights) {
-		return FloatArrays.convert(directionalLights, directionalLight -> toDirectionalLight(directionalLight));
+		return Arrays.toFloatArray(directionalLights, directionalLight -> toDirectionalLight(directionalLight));
 	}
 	
 	/**
@@ -1481,7 +1481,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code imageLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toImageLights(final List<ImageLight> imageLights) {
-		return FloatArrays.convert(imageLights, imageLight -> toImageLight(imageLight));
+		return Arrays.toFloatArray(imageLights, imageLight -> toImageLight(imageLight));
 	}
 	
 	/**
@@ -1588,7 +1588,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code perezLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toPerezLights(final List<PerezLight> perezLights) {
-		return FloatArrays.convert(perezLights, perezLight -> toPerezLight(perezLight));
+		return Arrays.toFloatArray(perezLights, perezLight -> toPerezLight(perezLight));
 	}
 	
 	/**
@@ -1630,7 +1630,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code pointLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toPointLights(final List<PointLight> pointLights) {
-		return FloatArrays.convert(pointLights, pointLight -> toPointLight(pointLight));
+		return Arrays.toFloatArray(pointLights, pointLight -> toPointLight(pointLight));
 	}
 	
 	/**
@@ -1694,7 +1694,7 @@ public final class CompiledLightCache {
 	 * @throws NullPointerException thrown if, and only if, {@code spotLights} or at least one of its elements are {@code null}
 	 */
 	public static float[] toSpotLights(final List<SpotLight> spotLights) {
-		return FloatArrays.convert(spotLights, spotLight -> toSpotLight(spotLight));
+		return Arrays.toFloatArray(spotLights, spotLight -> toSpotLight(spotLight));
 	}
 	
 	/**

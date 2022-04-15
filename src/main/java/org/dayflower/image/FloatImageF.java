@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -38,11 +37,11 @@ import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.awt.image.BufferedImages;
+import org.macroing.java.util.Arrays;
 
 /**
  * A {@code FloatImageF} is an {@link ImageF} implementation that stores individual pixels as four {@code float} values in a {@code float[]}.
@@ -117,7 +116,7 @@ public final class FloatImageF extends ImageF {
 	public FloatImageF(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
-		this.data = FloatArrays.create(resolutionX * resolutionY * 4, 0.0F, 0.0F, 0.0F, 1.0F);
+		this.data = Arrays.repeat(new float[] {0.0F, 0.0F, 0.0F, 1.0F}, resolutionX * resolutionY);
 	}
 	
 	/**

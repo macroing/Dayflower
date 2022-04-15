@@ -2091,7 +2091,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code bullseyeMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
 	 */
 	public static float[] toBullseyeMaterials(final List<BullseyeMaterial> bullseyeMaterials, final ToIntFunction<Material> materialOffsetFunction) {
-		return FloatArrays.convert(bullseyeMaterials, bullseyeMaterial -> toBullseyeMaterial(bullseyeMaterial, materialOffsetFunction));
+		return Arrays.toFloatArray(bullseyeMaterials, bullseyeMaterial -> toBullseyeMaterial(bullseyeMaterial, materialOffsetFunction));
 	}
 	
 	/**
@@ -2181,7 +2181,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code checkerboardMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
 	 */
 	public static float[] toCheckerboardMaterials(final List<CheckerboardMaterial> checkerboardMaterials, final ToIntFunction<Material> materialOffsetFunction) {
-		return FloatArrays.convert(checkerboardMaterials, checkerboardMaterial -> toCheckerboardMaterial(checkerboardMaterial, materialOffsetFunction));
+		return Arrays.toFloatArray(checkerboardMaterials, checkerboardMaterial -> toCheckerboardMaterial(checkerboardMaterial, materialOffsetFunction));
 	}
 	
 	/**
@@ -2272,7 +2272,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code polkaDotMaterials}, at least one of its elements or {@code materialOffsetFunction} are {@code null}
 	 */
 	public static float[] toPolkaDotMaterials(final List<PolkaDotMaterial> polkaDotMaterials, final ToIntFunction<Material> materialOffsetFunction) {
-		return FloatArrays.convert(polkaDotMaterials, polkaDotMaterial -> toPolkaDotMaterial(polkaDotMaterial, materialOffsetFunction));
+		return Arrays.toFloatArray(polkaDotMaterials, polkaDotMaterial -> toPolkaDotMaterial(polkaDotMaterial, materialOffsetFunction));
 	}
 	
 	/**
@@ -2357,7 +2357,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code clearCoatMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static int[] toClearCoatMaterials(final List<ClearCoatMaterial> clearCoatMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
-		return IntArrays.convert(clearCoatMaterials, clearCoatMaterial -> toClearCoatMaterial(clearCoatMaterial, modifierOffsetFunction, textureOffsetFunction));
+		return Arrays.toIntArray(clearCoatMaterials, clearCoatMaterial -> toClearCoatMaterial(clearCoatMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
 	/**
@@ -2470,7 +2470,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code disneyMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static int[] toDisneyMaterials(final List<DisneyMaterial> disneyMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
-		return IntArrays.convert(disneyMaterials, disneyMaterial -> toDisneyMaterial(disneyMaterial, modifierOffsetFunction, textureOffsetFunction));
+		return Arrays.toIntArray(disneyMaterials, disneyMaterial -> toDisneyMaterial(disneyMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
 	/**
@@ -2565,7 +2565,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code glassMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static int[] toGlassMaterials(final List<GlassMaterial> glassMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
-		return IntArrays.convert(glassMaterials, glassMaterial -> toGlassMaterial(glassMaterial, modifierOffsetFunction, textureOffsetFunction));
+		return Arrays.toIntArray(glassMaterials, glassMaterial -> toGlassMaterial(glassMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
 	/**
@@ -2650,7 +2650,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code glossyMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static int[] toGlossyMaterials(final List<GlossyMaterial> glossyMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
-		return IntArrays.convert(glossyMaterials, glossyMaterial -> toGlossyMaterial(glossyMaterial, modifierOffsetFunction, textureOffsetFunction));
+		return Arrays.toIntArray(glossyMaterials, glossyMaterial -> toGlossyMaterial(glossyMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
 	/**
@@ -2735,7 +2735,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code matteMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static int[] toMatteMaterials(final List<MatteMaterial> matteMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
-		return IntArrays.convert(matteMaterials, matteMaterial -> toMatteMaterial(matteMaterial, modifierOffsetFunction, textureOffsetFunction));
+		return Arrays.toIntArray(matteMaterials, matteMaterial -> toMatteMaterial(matteMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
 	/**
@@ -2827,7 +2827,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code metalMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static int[] toMetalMaterials(final List<MetalMaterial> metalMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
-		return IntArrays.convert(metalMaterials, metalMaterial -> toMetalMaterial(metalMaterial, modifierOffsetFunction, textureOffsetFunction));
+		return Arrays.toIntArray(metalMaterials, metalMaterial -> toMetalMaterial(metalMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
 	/**
@@ -2911,7 +2911,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code mirrorMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static int[] toMirrorMaterials(final List<MirrorMaterial> mirrorMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
-		return IntArrays.convert(mirrorMaterials, mirrorMaterial -> toMirrorMaterial(mirrorMaterial, modifierOffsetFunction, textureOffsetFunction));
+		return Arrays.toIntArray(mirrorMaterials, mirrorMaterial -> toMirrorMaterial(mirrorMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
 	/**
@@ -3002,7 +3002,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code plasticMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static int[] toPlasticMaterials(final List<PlasticMaterial> plasticMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
-		return IntArrays.convert(plasticMaterials, plasticMaterial -> toPlasticMaterial(plasticMaterial, modifierOffsetFunction, textureOffsetFunction));
+		return Arrays.toIntArray(plasticMaterials, plasticMaterial -> toPlasticMaterial(plasticMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
 	/**
@@ -3094,7 +3094,7 @@ public final class CompiledMaterialCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code substrateMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
 	 */
 	public static int[] toSubstrateMaterials(final List<SubstrateMaterial> substrateMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
-		return IntArrays.convert(substrateMaterials, substrateMaterial -> toSubstrateMaterial(substrateMaterial, modifierOffsetFunction, textureOffsetFunction));
+		return Arrays.toIntArray(substrateMaterials, substrateMaterial -> toSubstrateMaterial(substrateMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

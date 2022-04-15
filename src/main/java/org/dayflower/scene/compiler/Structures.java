@@ -27,6 +27,8 @@ import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.java.util.Arrays;
+
 final class Structures {
 	private Structures() {
 		
@@ -43,7 +45,7 @@ final class Structures {
 		ParameterArguments.requireRange(structureOffset + oldStructure.length, 0, structures.length, "structureOffset + oldStructure.length");
 		ParameterArguments.requireExact(newStructure.length, oldStructure.length, "newStructure.length");
 		
-		if(FloatArrays.equal(structures, oldStructure, structureOffset, 0, oldStructure.length)) {
+		if(Arrays.equals(structures, oldStructure, structureOffset, 0, oldStructure.length)) {
 			System.arraycopy(newStructure, 0, structures, structureOffset, newStructure.length);
 			
 			return true;
@@ -82,7 +84,7 @@ final class Structures {
 		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetRelative++) {
 			final int structureLength = offsetRelative + 1 < structureOffsets.length ? structureOffsets[offsetRelative + 1] - structureOffsets[offsetRelative] : structures.length - structureOffsets[offsetRelative];
 			
-			if(structure.length == structureLength && FloatArrays.equal(structures, structure, offsetAbsolute, 0, structureLength)) {
+			if(structure.length == structureLength && Arrays.equals(structures, structure, offsetAbsolute, 0, structureLength)) {
 				return offsetAbsolute;
 			}
 			
@@ -106,7 +108,7 @@ final class Structures {
 		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetRelative++) {
 			final int structureLength = offsetRelative + 1 < structureOffsets.length ? structureOffsets[offsetRelative + 1] - structureOffsets[offsetRelative] : structures.length - structureOffsets[offsetRelative];
 			
-			if(structure.length == structureLength && IntArrays.equal(structures, structure, offsetAbsolute, 0, structureLength)) {
+			if(structure.length == structureLength && Arrays.equals(structures, structure, offsetAbsolute, 0, structureLength)) {
 				return offsetAbsolute;
 			}
 			
@@ -130,7 +132,7 @@ final class Structures {
 		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetRelative++) {
 			final int structureLength = offsetRelative + 1 < structureOffsets.length ? structureOffsets[offsetRelative + 1] - structureOffsets[offsetRelative] : structures.length - structureOffsets[offsetRelative];
 			
-			if(structure.length == structureLength && FloatArrays.equal(structures, structure, offsetAbsolute, 0, structureLength)) {
+			if(structure.length == structureLength && Arrays.equals(structures, structure, offsetAbsolute, 0, structureLength)) {
 				return offsetRelative;
 			}
 			
@@ -154,7 +156,7 @@ final class Structures {
 		for(int offsetAbsolute = 0, offsetRelative = 0; offsetRelative < structureCount; offsetRelative++) {
 			final int structureLength = offsetRelative + 1 < structureOffsets.length ? structureOffsets[offsetRelative + 1] - structureOffsets[offsetRelative] : structures.length - structureOffsets[offsetRelative];
 			
-			if(structure.length == structureLength && IntArrays.equal(structures, structure, offsetAbsolute, 0, structureLength)) {
+			if(structure.length == structureLength && Arrays.equals(structures, structure, offsetAbsolute, 0, structureLength)) {
 				return offsetRelative;
 			}
 			

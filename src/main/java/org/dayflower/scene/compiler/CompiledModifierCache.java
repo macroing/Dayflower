@@ -491,7 +491,7 @@ public final class CompiledModifierCache {
 	 * @throws NullPointerException thrown if, and only if, {@code normalMapLDRImageModifiers} or at least one of its elements are {@code null}
 	 */
 	public static float[] toNormalMapLDRImageModifiers(final List<NormalMapLDRImageModifier> normalMapLDRImageModifiers) {
-		return FloatArrays.convert(normalMapLDRImageModifiers, normalMapLDRImageModifier -> toNormalMapLDRImageModifier(normalMapLDRImageModifier));
+		return Arrays.toFloatArray(normalMapLDRImageModifiers, normalMapLDRImageModifier -> toNormalMapLDRImageModifier(normalMapLDRImageModifier));
 	}
 	
 	/**
@@ -526,7 +526,7 @@ public final class CompiledModifierCache {
 	 * @throws NullPointerException thrown if, and only if, {@code simplexNoiseNormalMapModifiers} or at least one of its elements are {@code null}
 	 */
 	public static float[] toSimplexNoiseNormalMapModifiers(final List<SimplexNoiseNormalMapModifier> simplexNoiseNormalMapModifiers) {
-		return FloatArrays.convert(simplexNoiseNormalMapModifiers, simplexNoiseNormalMapModifier -> toSimplexNoiseNormalMapModifier(simplexNoiseNormalMapModifier));
+		return Arrays.toFloatArray(simplexNoiseNormalMapModifiers, simplexNoiseNormalMapModifier -> toSimplexNoiseNormalMapModifier(simplexNoiseNormalMapModifier));
 	}
 	
 	/**

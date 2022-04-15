@@ -19,12 +19,9 @@
 package org.dayflower.utility;
 
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
-import org.macroing.java.io.IntArrayOutputStream;
+import org.macroing.java.util.Arrays;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@code int[]} instances.
@@ -38,45 +35,6 @@ public final class IntArrays {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns {@code true} if, and only if, the elements of {@code arrayA} starting at {@code offsetArrayA} are equal to the elements of {@code arrayB} starting at {@code offsetArrayB}, {@code false} otherwise.
-	 * <p>
-	 * If either {@code arrayA} or {@code arrayB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to {@code arrayB.length}, {@code length} is less than {@code 0},
-	 * {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0} or greater than {@code arrayB.length}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param arrayA an {@code int[]}
-	 * @param arrayB an {@code int[]}
-	 * @param offsetArrayA the offset to start at in {@code arrayA}
-	 * @param offsetArrayB the offset to start at in {@code arrayB}
-	 * @param length the length of the sub-arrays to test for equality
-	 * @return {@code true} if, and only if, the elements of {@code arrayA} starting at {@code offsetArrayA} are equal to the elements of {@code arrayB} starting at {@code offsetArrayB}, {@code false} otherwise
-	 * @throws IllegalArgumentException thrown if, and only if, {@code offsetArrayA} is less than {@code 0} or greater than or equal to {@code arrayA.length}, {@code offsetArrayB} is less than {@code 0} or greater than or equal to
-	 *                                  {@code arrayB.length}, {@code length} is less than {@code 0}, {@code offsetArrayA + length} is less than {@code 0} or greater than {@code arrayA.length} or {@code offsetArrayB + length} is less than {@code 0}
-	 *                                  or greater than {@code arrayB.length}
-	 * @throws NullPointerException thrown if, and only if, either {@code arrayA} or {@code arrayB} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static boolean equal(final int[] arrayA, final int[] arrayB, final int offsetArrayA, final int offsetArrayB, final int length) {
-		Objects.requireNonNull(arrayA, "arrayA == null");
-		Objects.requireNonNull(arrayB, "arrayB == null");
-		
-		ParameterArguments.requireRange(offsetArrayA, 0, arrayA.length - 1, "offsetArrayA");
-		ParameterArguments.requireRange(offsetArrayB, 0, arrayB.length - 1, "offsetArrayB");
-		ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length");
-		ParameterArguments.requireRange(offsetArrayA + length, 0, arrayA.length, "offsetArrayA + length");
-		ParameterArguments.requireRange(offsetArrayB + length, 0, arrayB.length, "offsetArrayB + length");
-		
-		for(int i = 0; i < length; i++) {
-			if(arrayA[offsetArrayA + i] != arrayB[offsetArrayB + i]) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
 	
 	/**
 	 * Returns the index of {@code value} in {@code array}, or {@code -1} if it cannot be found.
@@ -137,113 +95,12 @@ public final class IntArrays {
 		final int length = isIncrementingByValueLength ? value.length : 1;
 		
 		for(int indexAbsolute = 0, indexRelative = 0; indexRelative < count; indexAbsolute += length, indexRelative++) {
-			if(equal(array, value, indexAbsolute, 0, length)) {
+			if(Arrays.equals(array, value, indexAbsolute, 0, length)) {
 				return isReturningRelativeIndex ? indexRelative : indexAbsolute;
 			}
 		}
 		
 		return -1;
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of {@code objects} using {@code arrayFunction}.
-	 * <p>
-	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * IntArrays.convert(objects, arrayFunction, 0);
-	 * }
-	 * </pre>
-	 * 
-	 * @param <T> the generic type
-	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code int[]} instances
-	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code int[]} instances
-	 * @return an {@code int[]} representation of {@code objects} using {@code arrayFunction}
-	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static <T> int[] convert(final List<T> objects, final Function<T, int[]> arrayFunction) {
-		return convert(objects, arrayFunction, 0);
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of {@code objects} using {@code arrayFunction}.
-	 * <p>
-	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param <T> the generic type
-	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code int[]} instances
-	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code int[]} instances
-	 * @param minimumLength the minimum length of the returned {@code int[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
-	 * @return an {@code int[]} representation of {@code objects} using {@code arrayFunction}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static <T> int[] convert(final List<T> objects, final Function<T, int[]> arrayFunction, final int minimumLength) {
-		ParameterArguments.requireNonNullList(objects, "objects");
-		
-		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
-		
-		ParameterArguments.requireRange(minimumLength, 0, Integer.MAX_VALUE, "minimumLength");
-		
-		if(objects.isEmpty()) {
-			return create(minimumLength);
-		}
-		
-		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
-			for(final T object : objects) {
-				intArrayOutputStream.write(arrayFunction.apply(object));
-			}
-			
-			final int[] array = intArrayOutputStream.toIntArray();
-			
-			return array.length == 0 ? create(minimumLength) : array;
-		}
-	}
-	
-	/**
-	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code 0}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * IntArrays.create(length, 0);
-	 * }
-	 * </pre>
-	 * 
-	 * @param length the length of the {@code int[]}
-	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code 0}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 */
-//	TODO: Add Unit Tests!
-	public static int[] create(final int length) {
-		return create(length, 0);
-	}
-	
-	/**
-	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code value}.
-	 * <p>
-	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param length the length of the {@code int[]}
-	 * @param value the {@code int} value to fill the {@code int[]} with
-	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code value}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
-	 */
-//	TODO: Add Unit Tests!
-	public static int[] create(final int length, final int value) {
-		final int[] array = new int[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		Arrays.fill(array, value);
-		
-		return array;
 	}
 	
 	/**
@@ -360,7 +217,7 @@ public final class IntArrays {
 		final int arrayDSrcPos2 = arrayALength + arrayBLength;
 		final int arrayDLength  = arrayA.length - (arrayCSrcPos - arrayALength) + arrayBLength;
 		
-		if(arrayCSrcPos - arrayALength > 0 && !equal(array, arrayMatcher, arrayALength, 0, Ints.min(arrayCSrcPos - arrayALength, arrayMatcher.length))) {
+		if(arrayCSrcPos - arrayALength > 0 && !Arrays.equals(array, arrayMatcher, arrayALength, 0, Ints.min(arrayCSrcPos - arrayALength, arrayMatcher.length))) {
 			return array;
 		}
 		

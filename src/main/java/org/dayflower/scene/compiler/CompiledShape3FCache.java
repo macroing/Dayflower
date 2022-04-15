@@ -2351,7 +2351,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code cone3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toCone3Fs(final List<Cone3F> cone3Fs) {
-		return FloatArrays.convert(cone3Fs, cone3F -> toCone3F(cone3F));
+		return Arrays.toFloatArray(cone3Fs, cone3F -> toCone3F(cone3F));
 	}
 	
 	/**
@@ -2389,7 +2389,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code cylinder3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toCylinder3Fs(final List<Cylinder3F> cylinder3Fs) {
-		return FloatArrays.convert(cylinder3Fs, cylinder3F -> toCylinder3F(cylinder3F));
+		return Arrays.toFloatArray(cylinder3Fs, cylinder3F -> toCylinder3F(cylinder3F));
 	}
 	
 	/**
@@ -2427,7 +2427,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code disk3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toDisk3Fs(final List<Disk3F> disk3Fs) {
-		return FloatArrays.convert(disk3Fs, disk3F -> toDisk3F(disk3F));
+		return Arrays.toFloatArray(disk3Fs, disk3F -> toDisk3F(disk3F));
 	}
 	
 	/**
@@ -2478,7 +2478,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code hyperboloid3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toHyperboloid3Fs(final List<Hyperboloid3F> hyperboloid3Fs) {
-		return FloatArrays.convert(hyperboloid3Fs, hyperboloid3F -> toHyperboloid3F(hyperboloid3F));
+		return Arrays.toFloatArray(hyperboloid3Fs, hyperboloid3F -> toHyperboloid3F(hyperboloid3F));
 	}
 	
 	/**
@@ -2516,7 +2516,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code paraboloid3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toParaboloid3Fs(final List<Paraboloid3F> paraboloid3Fs) {
-		return FloatArrays.convert(paraboloid3Fs, paraboloid3F -> toParaboloid3F(paraboloid3F));
+		return Arrays.toFloatArray(paraboloid3Fs, paraboloid3F -> toParaboloid3F(paraboloid3F));
 	}
 	
 	/**
@@ -2567,7 +2567,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code plane3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toPlane3Fs(final List<Plane3F> plane3Fs) {
-		return FloatArrays.convert(plane3Fs, plane3F -> toPlane3F(plane3F));
+		return Arrays.toFloatArray(plane3Fs, plane3F -> toPlane3F(plane3F));
 	}
 	
 	/**
@@ -2624,7 +2624,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code polygon3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toPolygon3Fs(final List<Polygon3F> polygon3Fs) {
-		return FloatArrays.convert(polygon3Fs, polygon3F -> toPolygon3F(polygon3F));
+		return Arrays.toFloatArray(polygon3Fs, polygon3F -> toPolygon3F(polygon3F));
 	}
 	
 	/**
@@ -2675,7 +2675,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toRectangle3Fs(final List<Rectangle3F> rectangle3Fs) {
-		return FloatArrays.convert(rectangle3Fs, rectangle3F -> toRectangle3F(rectangle3F));
+		return Arrays.toFloatArray(rectangle3Fs, rectangle3F -> toRectangle3F(rectangle3F));
 	}
 	
 	/**
@@ -2715,7 +2715,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code rectangularCuboid3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toRectangularCuboid3Fs(final List<RectangularCuboid3F> rectangularCuboid3Fs) {
-		return FloatArrays.convert(rectangularCuboid3Fs, rectangularCuboid3F -> toRectangularCuboid3F(rectangularCuboid3F));
+		return Arrays.toFloatArray(rectangularCuboid3Fs, rectangularCuboid3F -> toRectangularCuboid3F(rectangularCuboid3F));
 	}
 	
 	/**
@@ -2752,7 +2752,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code sphere3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toSphere3Fs(final List<Sphere3F> sphere3Fs) {
-		return FloatArrays.convert(sphere3Fs, sphere3F -> toSphere3F(sphere3F));
+		return Arrays.toFloatArray(sphere3Fs, sphere3F -> toSphere3F(sphere3F));
 	}
 	
 	/**
@@ -2786,7 +2786,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code torus3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toTorus3Fs(final List<Torus3F> torus3Fs) {
-		return FloatArrays.convert(torus3Fs, torus3F -> toTorus3F(torus3F));
+		return Arrays.toFloatArray(torus3Fs, torus3F -> toTorus3F(torus3F));
 	}
 	
 	/**
@@ -2845,7 +2845,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, {@code triangle3Fs} or at least one of its elements are {@code null}
 	 */
 	public static float[] toTriangle3Fs(final List<Triangle3F> triangle3Fs) {
-		return FloatArrays.convert(triangle3Fs, triangle3F -> toTriangle3F(triangle3F));
+		return Arrays.toFloatArray(triangle3Fs, triangle3F -> toTriangle3F(triangle3F));
 	}
 	
 	/**
@@ -3003,7 +3003,7 @@ public final class CompiledShape3FCache {
 	 * @throws NullPointerException thrown if, and only if, either {@code triangleMesh3Fs}, at least one of its elements, {@code boundingVolume3FOffsetFunction} or {@code triangle3FOffsetFunction} are {@code null}
 	 */
 	public static int[] toTriangleMesh3Fs(final List<TriangleMesh3F> triangleMesh3Fs, final ToIntFunction<BoundingVolume3F> boundingVolume3FOffsetFunction, final ToIntFunction<Triangle3F> triangle3FOffsetFunction) {
-		return IntArrays.convert(triangleMesh3Fs, triangleMesh3F -> toTriangleMesh3F(triangleMesh3F, boundingVolume3FOffsetFunction, triangle3FOffsetFunction));
+		return Arrays.toIntArray(triangleMesh3Fs, triangleMesh3F -> toTriangleMesh3F(triangleMesh3F, boundingVolume3FOffsetFunction, triangle3FOffsetFunction));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

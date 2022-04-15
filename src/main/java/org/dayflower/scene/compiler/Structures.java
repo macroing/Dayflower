@@ -23,8 +23,6 @@ import static org.dayflower.utility.Ints.unpack;
 
 import java.util.Objects;
 
-import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.util.Arrays;
@@ -71,7 +69,7 @@ final class Structures {
 	}
 	
 	public static int getStructureOffsetAbsolute(final float[] structures, final float[] structure) {
-		return FloatArrays.indexOf(structure, structures, true, false);
+		return Arrays.indexOf(structure, structures, true, false);
 	}
 	
 	public static int getStructureOffsetAbsolute(final float[] structures, final float[] structure, final int[] structureOffsets) {
@@ -95,7 +93,7 @@ final class Structures {
 	}
 	
 	public static int getStructureOffsetAbsolute(final int[] structures, final int[] structure) {
-		return IntArrays.indexOf(structure, structures, true, false);
+		return Arrays.indexOf(structure, structures, true, false);
 	}
 	
 	public static int getStructureOffsetAbsolute(final int[] structures, final int[] structure, final int[] structureOffsets) {
@@ -119,7 +117,7 @@ final class Structures {
 	}
 	
 	public static int getStructureOffsetRelative(final float[] structures, final float[] structure) {
-		return FloatArrays.indexOf(structure, structures, true, true);
+		return Arrays.indexOf(structure, structures, true, true);
 	}
 	
 	public static int getStructureOffsetRelative(final float[] structures, final float[] structure, final int[] structureOffsets) {
@@ -143,7 +141,7 @@ final class Structures {
 	}
 	
 	public static int getStructureOffsetRelative(final int[] structures, final int[] structure) {
-		return IntArrays.indexOf(structure, structures, true, true);
+		return Arrays.indexOf(structure, structures, true, true);
 	}
 	
 	public static int getStructureOffsetRelative(final int[] structures, final int[] structure, final int[] structureOffsets) {
@@ -188,7 +186,7 @@ final class Structures {
 		ParameterArguments.requireRange(structureOffset, 0, Integer.MAX_VALUE, "structureOffset");
 		
 		final int structureIDAndOffset = pack(structureID, structureOffset);
-		final int index = IntArrays.indexOf(structureIDAndOffset, structureIDsAndOffsets);
+		final int index = Arrays.indexOf(structureIDAndOffset, structureIDsAndOffsets);
 		
 		if(index == -1) {
 			return structureIDsAndOffsets;
@@ -220,7 +218,7 @@ final class Structures {
 		ParameterArguments.requireRange(structureOffset, 0, Integer.MAX_VALUE, "structureOffset");
 		ParameterArguments.requireRange(structureLength, 1, Integer.MAX_VALUE, "structureLength");
 		
-		final int index = IntArrays.indexOf(structureOffset, structureOffsets);
+		final int index = Arrays.indexOf(structureOffset, structureOffsets);
 		
 		if(index == -1) {
 			return structureOffsets;

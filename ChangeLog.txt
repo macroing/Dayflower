@@ -12,6 +12,9 @@
 	* REMOVE:	Remove the methods convert(List<T>, Function<T, float[]>) and convert(List<T>, Function<T, float[]>, int) from the FloatArrays class. These methods have been replaced by Arrays.toFloatArray(List<T>, Function<T, float[]>) in Macroing Java.
 	* REMOVE:	Remove the methods create(int), create(int, FloatSupplier), create(int, float) and create(int, float, float, float, float) from the FloatArrays class. These methods have been replaced by Arrays.repeat(float[], int) in Macroing Java.
 	* REMOVE:	Remove the method equal(float[], float[], int, int, int) from the FloatArrays class. This method has been replaced by Arrays.equals(float[], float[], int, int, int) in Macroing Java.
+	* REMOVE:	Remove the LongArrays class. The method create(int, LongSupplier) has been replaced by Arrays.generateLongArray(int, IntToLongFunction) in Macroing Java.
+	* REMOVE:	Remove the method indexOf(float[], float[], boolean, boolean) from the FloatArrays class. This method has been replaced by Arrays.indexOf(float[], float[], boolean, boolean) in Macroing Java.
+	* REMOVE:	Remove the methods indexOf(int, int[]) and indexOf(int[], int[], boolean, boolean) from the IntArrays class. These methods have been replaced by Arrays.indexOf(int, int[]) and Arrays.indexOf(int[], int[], boolean, boolean) in Macroing Java.
 
 2022-04-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

@@ -55,8 +55,6 @@ import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.utility.Document;
-import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.io.IntArrayOutputStream;
@@ -510,7 +508,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getCone3FOffsetAbsolute(cone3F);
 		
 		if(absoluteOffset != -1) {
-			setCone3Fs(FloatArrays.splice(getCone3Fs(), absoluteOffset, CONE_3_F_LENGTH));
+			setCone3Fs(Arrays.splice(getCone3Fs(), absoluteOffset, CONE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -536,7 +534,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getCylinder3FOffsetAbsolute(cylinder3F);
 		
 		if(absoluteOffset != -1) {
-			setCylinder3Fs(FloatArrays.splice(getCylinder3Fs(), absoluteOffset, CYLINDER_3_F_LENGTH));
+			setCylinder3Fs(Arrays.splice(getCylinder3Fs(), absoluteOffset, CYLINDER_3_F_LENGTH));
 			
 			return true;
 		}
@@ -562,7 +560,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getDisk3FOffsetAbsolute(disk3F);
 		
 		if(absoluteOffset != -1) {
-			setDisk3Fs(FloatArrays.splice(getDisk3Fs(), absoluteOffset, DISK_3_F_LENGTH));
+			setDisk3Fs(Arrays.splice(getDisk3Fs(), absoluteOffset, DISK_3_F_LENGTH));
 			
 			return true;
 		}
@@ -588,7 +586,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getHyperboloid3FOffsetAbsolute(hyperboloid3F);
 		
 		if(absoluteOffset != -1) {
-			setHyperboloid3Fs(FloatArrays.splice(getHyperboloid3Fs(), absoluteOffset, HYPERBOLOID_3_F_LENGTH));
+			setHyperboloid3Fs(Arrays.splice(getHyperboloid3Fs(), absoluteOffset, HYPERBOLOID_3_F_LENGTH));
 			
 			return true;
 		}
@@ -614,7 +612,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getParaboloid3FOffsetAbsolute(paraboloid3F);
 		
 		if(absoluteOffset != -1) {
-			setParaboloid3Fs(FloatArrays.splice(getParaboloid3Fs(), absoluteOffset, PARABOLOID_3_F_LENGTH));
+			setParaboloid3Fs(Arrays.splice(getParaboloid3Fs(), absoluteOffset, PARABOLOID_3_F_LENGTH));
 			
 			return true;
 		}
@@ -640,7 +638,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getPlane3FOffsetAbsolute(plane3F);
 		
 		if(absoluteOffset != -1) {
-			setPlane3Fs(FloatArrays.splice(getPlane3Fs(), absoluteOffset, PLANE_3_F_LENGTH));
+			setPlane3Fs(Arrays.splice(getPlane3Fs(), absoluteOffset, PLANE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -667,7 +665,7 @@ public final class CompiledShape3FCache {
 		
 		if(absoluteOffset != -1) {
 			setPolygon3FOffsets(Structures.removeStructureOffset(getPolygon3FOffsets(), absoluteOffset, polygon3F.length));
-			setPolygon3Fs(FloatArrays.splice(getPolygon3Fs(), absoluteOffset, polygon3F.length));
+			setPolygon3Fs(Arrays.splice(getPolygon3Fs(), absoluteOffset, polygon3F.length));
 			
 			return true;
 		}
@@ -693,7 +691,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getRectangle3FOffsetAbsolute(rectangle3F);
 		
 		if(absoluteOffset != -1) {
-			setRectangle3Fs(FloatArrays.splice(getRectangle3Fs(), absoluteOffset, RECTANGLE_3_F_LENGTH));
+			setRectangle3Fs(Arrays.splice(getRectangle3Fs(), absoluteOffset, RECTANGLE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -719,7 +717,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getRectangularCuboid3FOffsetAbsolute(rectangularCuboid3F);
 		
 		if(absoluteOffset != -1) {
-			setRectangularCuboid3Fs(FloatArrays.splice(getRectangularCuboid3Fs(), absoluteOffset, RECTANGULAR_CUBOID_3_F_LENGTH));
+			setRectangularCuboid3Fs(Arrays.splice(getRectangularCuboid3Fs(), absoluteOffset, RECTANGULAR_CUBOID_3_F_LENGTH));
 			
 			return true;
 		}
@@ -745,7 +743,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getSphere3FOffsetAbsolute(sphere3F);
 		
 		if(absoluteOffset != -1) {
-			setSphere3Fs(FloatArrays.splice(getSphere3Fs(), absoluteOffset, SPHERE_3_F_LENGTH));
+			setSphere3Fs(Arrays.splice(getSphere3Fs(), absoluteOffset, SPHERE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -771,7 +769,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getTorus3FOffsetAbsolute(torus3F);
 		
 		if(absoluteOffset != -1) {
-			setTorus3Fs(FloatArrays.splice(getTorus3Fs(), absoluteOffset, TORUS_3_F_LENGTH));
+			setTorus3Fs(Arrays.splice(getTorus3Fs(), absoluteOffset, TORUS_3_F_LENGTH));
 			
 			return true;
 		}
@@ -797,7 +795,7 @@ public final class CompiledShape3FCache {
 		final int absoluteOffset = getTriangle3FOffsetAbsolute(triangle3F);
 		
 		if(absoluteOffset != -1) {
-			setTriangle3Fs(FloatArrays.splice(getTriangle3Fs(), absoluteOffset, TRIANGLE_3_F_LENGTH));
+			setTriangle3Fs(Arrays.splice(getTriangle3Fs(), absoluteOffset, TRIANGLE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -824,7 +822,7 @@ public final class CompiledShape3FCache {
 		
 		if(absoluteOffset != -1) {
 			setTriangleMesh3FOffsets(Structures.removeStructureOffset(getTriangleMesh3FOffsets(), absoluteOffset, triangleMesh3F.length));
-			setTriangleMesh3Fs(IntArrays.splice(getTriangleMesh3Fs(), absoluteOffset, triangleMesh3F.length));
+			setTriangleMesh3Fs(Arrays.splice(getTriangleMesh3Fs(), absoluteOffset, triangleMesh3F.length));
 			
 			return true;
 		}

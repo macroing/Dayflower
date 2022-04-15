@@ -27,7 +27,6 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.utility.Document;
-import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.util.Arrays;
@@ -113,7 +112,7 @@ public final class CompiledBoundingVolume3FCache {
 		final int absoluteOffset = getAxisAlignedBoundingBox3FOffsetAbsolute(axisAlignedBoundingBox3F);
 		
 		if(absoluteOffset != -1) {
-			setAxisAlignedBoundingBox3Fs(FloatArrays.splice(getAxisAlignedBoundingBox3Fs(), absoluteOffset, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH));
+			setAxisAlignedBoundingBox3Fs(Arrays.splice(getAxisAlignedBoundingBox3Fs(), absoluteOffset, AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH));
 			
 			return true;
 		}
@@ -139,7 +138,7 @@ public final class CompiledBoundingVolume3FCache {
 		final int absoluteOffset = getBoundingSphere3FOffsetAbsolute(boundingSphere3F);
 		
 		if(absoluteOffset != -1) {
-			setBoundingSphere3Fs(FloatArrays.splice(getBoundingSphere3Fs(), absoluteOffset, BOUNDING_SPHERE_3_F_LENGTH));
+			setBoundingSphere3Fs(Arrays.splice(getBoundingSphere3Fs(), absoluteOffset, BOUNDING_SPHERE_3_F_LENGTH));
 			
 			return true;
 		}

@@ -30,7 +30,6 @@ import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.modifier.NormalMapLDRImageModifier;
 import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
 import org.dayflower.utility.Document;
-import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.util.Arrays;
@@ -129,7 +128,7 @@ public final class CompiledModifierCache {
 		
 		if(absoluteOffset != -1) {
 			setNormalMapLDRImageModifierOffsets(Structures.removeStructureOffset(getNormalMapLDRImageModifierOffsets(), absoluteOffset, normalMapLDRImageModifier.length));
-			setNormalMapLDRImageModifiers(FloatArrays.splice(getNormalMapLDRImageModifiers(), absoluteOffset, normalMapLDRImageModifier.length));
+			setNormalMapLDRImageModifiers(Arrays.splice(getNormalMapLDRImageModifiers(), absoluteOffset, normalMapLDRImageModifier.length));
 			
 			return true;
 		}
@@ -155,7 +154,7 @@ public final class CompiledModifierCache {
 		final int absoluteOffset = getSimplexNoiseNormalMapModifierOffsetAbsolute(simplexNoiseNormalMapModifier);
 		
 		if(absoluteOffset != -1) {
-			setSimplexNoiseNormalMapModifiers(FloatArrays.splice(getSimplexNoiseNormalMapModifiers(), absoluteOffset, SIMPLEX_NOISE_NORMAL_MAP_MODIFIER_LENGTH));
+			setSimplexNoiseNormalMapModifiers(Arrays.splice(getSimplexNoiseNormalMapModifiers(), absoluteOffset, SIMPLEX_NOISE_NORMAL_MAP_MODIFIER_LENGTH));
 			
 			return true;
 		}

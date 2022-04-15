@@ -43,8 +43,6 @@ import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.utility.Document;
-import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.util.Arrays;
@@ -392,7 +390,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getBullseyeMaterialOffsetAbsolute(bullseyeMaterial);
 		
 		if(absoluteOffset != -1) {
-			setBullseyeMaterials(FloatArrays.splice(getBullseyeMaterials(), absoluteOffset, BULLSEYE_MATERIAL_LENGTH));
+			setBullseyeMaterials(Arrays.splice(getBullseyeMaterials(), absoluteOffset, BULLSEYE_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -418,7 +416,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getCheckerboardMaterialOffsetAbsolute(checkerboardMaterial);
 		
 		if(absoluteOffset != -1) {
-			setCheckerboardMaterials(FloatArrays.splice(getCheckerboardMaterials(), absoluteOffset, CHECKERBOARD_MATERIAL_LENGTH));
+			setCheckerboardMaterials(Arrays.splice(getCheckerboardMaterials(), absoluteOffset, CHECKERBOARD_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -444,7 +442,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getClearCoatMaterialOffsetAbsolute(clearCoatMaterial);
 		
 		if(absoluteOffset != -1) {
-			setClearCoatMaterials(IntArrays.splice(getClearCoatMaterials(), absoluteOffset, CLEAR_COAT_MATERIAL_LENGTH));
+			setClearCoatMaterials(Arrays.splice(getClearCoatMaterials(), absoluteOffset, CLEAR_COAT_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -470,7 +468,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getDisneyMaterialOffsetAbsolute(disneyMaterial);
 		
 		if(absoluteOffset != -1) {
-			setDisneyMaterials(IntArrays.splice(getDisneyMaterials(), absoluteOffset, DISNEY_MATERIAL_LENGTH));
+			setDisneyMaterials(Arrays.splice(getDisneyMaterials(), absoluteOffset, DISNEY_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -496,7 +494,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getGlassMaterialOffsetAbsolute(glassMaterial);
 		
 		if(absoluteOffset != -1) {
-			setGlassMaterials(IntArrays.splice(getGlassMaterials(), absoluteOffset, GLASS_MATERIAL_LENGTH));
+			setGlassMaterials(Arrays.splice(getGlassMaterials(), absoluteOffset, GLASS_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -522,7 +520,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getGlossyMaterialOffsetAbsolute(glossyMaterial);
 		
 		if(absoluteOffset != -1) {
-			setGlossyMaterials(IntArrays.splice(getGlossyMaterials(), absoluteOffset, GLOSSY_MATERIAL_LENGTH));
+			setGlossyMaterials(Arrays.splice(getGlossyMaterials(), absoluteOffset, GLOSSY_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -548,7 +546,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getMatteMaterialOffsetAbsolute(matteMaterial);
 		
 		if(absoluteOffset != -1) {
-			setMatteMaterials(IntArrays.splice(getMatteMaterials(), absoluteOffset, MATTE_MATERIAL_LENGTH));
+			setMatteMaterials(Arrays.splice(getMatteMaterials(), absoluteOffset, MATTE_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -574,7 +572,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getMetalMaterialOffsetAbsolute(metalMaterial);
 		
 		if(absoluteOffset != -1) {
-			setMetalMaterials(IntArrays.splice(getMetalMaterials(), absoluteOffset, METAL_MATERIAL_LENGTH));
+			setMetalMaterials(Arrays.splice(getMetalMaterials(), absoluteOffset, METAL_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -600,7 +598,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getMirrorMaterialOffsetAbsolute(mirrorMaterial);
 		
 		if(absoluteOffset != -1) {
-			setMirrorMaterials(IntArrays.splice(getMirrorMaterials(), absoluteOffset, MIRROR_MATERIAL_LENGTH));
+			setMirrorMaterials(Arrays.splice(getMirrorMaterials(), absoluteOffset, MIRROR_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -626,7 +624,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getPlasticMaterialOffsetAbsolute(plasticMaterial);
 		
 		if(absoluteOffset != -1) {
-			setPlasticMaterials(IntArrays.splice(getPlasticMaterials(), absoluteOffset, PLASTIC_MATERIAL_LENGTH));
+			setPlasticMaterials(Arrays.splice(getPlasticMaterials(), absoluteOffset, PLASTIC_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -652,7 +650,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getPolkaDotMaterialOffsetAbsolute(polkaDotMaterial);
 		
 		if(absoluteOffset != -1) {
-			setPolkaDotMaterials(FloatArrays.splice(getPolkaDotMaterials(), absoluteOffset, POLKA_DOT_MATERIAL_LENGTH));
+			setPolkaDotMaterials(Arrays.splice(getPolkaDotMaterials(), absoluteOffset, POLKA_DOT_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -678,7 +676,7 @@ public final class CompiledMaterialCache {
 		final int absoluteOffset = getSubstrateMaterialOffsetAbsolute(substrateMaterial);
 		
 		if(absoluteOffset != -1) {
-			setSubstrateMaterials(IntArrays.splice(getSubstrateMaterials(), absoluteOffset, SUBSTRATE_MATERIAL_LENGTH));
+			setSubstrateMaterials(Arrays.splice(getSubstrateMaterials(), absoluteOffset, SUBSTRATE_MATERIAL_LENGTH));
 			
 			return true;
 		}

@@ -15,6 +15,8 @@
 	* REMOVE:	Remove the LongArrays class. The method create(int, LongSupplier) has been replaced by Arrays.generateLongArray(int, IntToLongFunction) in Macroing Java.
 	* REMOVE:	Remove the method indexOf(float[], float[], boolean, boolean) from the FloatArrays class. This method has been replaced by Arrays.indexOf(float[], float[], boolean, boolean) in Macroing Java.
 	* REMOVE:	Remove the methods indexOf(int, int[]) and indexOf(int[], int[], boolean, boolean) from the IntArrays class. These methods have been replaced by Arrays.indexOf(int, int[]) and Arrays.indexOf(int[], int[], boolean, boolean) in Macroing Java.
+	* REMOVE:	Remove the FloatArrays class. The methods splice(float[], int), splice(float[], int, int), splice(float[], int, int, float[]) and splice(float[], int, int, float[], float[]) have been replaced by Arrays.splice(float[], int), Arrays.splice(float[], int, int) and Arrays.splice(float[], int, int, float[]) in Macroing Java.
+	* REMOVE:	Remove the IntArrays class. The methods splice(int[], int), splice(int[], int, int), splice(int[], int, int, int[]) and splice(int[], int, int, int[], int[]) have been replaced by Arrays.splice(int[], int), Arrays.splice(int[], int, int) and Arrays.splice(int[], int, int, int[]) in Macroing Java.
 
 2022-04-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

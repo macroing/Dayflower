@@ -31,8 +31,6 @@ import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Transform;
-import org.dayflower.utility.FloatArrays;
-import org.dayflower.utility.IntArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.util.Arrays;
@@ -132,8 +130,8 @@ public final class CompiledPrimitiveCache {
 			final int relativeOffset = absoluteOffset / PRIMITIVE_LENGTH;
 			final int absoluteOffsetMatrix44Fs = relativeOffset * MATRIX_4_4_F_LENGTH * 2;
 			
-			setMatrix44Fs(FloatArrays.splice(getMatrix44Fs(), absoluteOffsetMatrix44Fs, MATRIX_4_4_F_LENGTH * 2));
-			setPrimitives(IntArrays.splice(getPrimitives(), absoluteOffset, PRIMITIVE_LENGTH));
+			setMatrix44Fs(Arrays.splice(getMatrix44Fs(), absoluteOffsetMatrix44Fs, MATRIX_4_4_F_LENGTH * 2));
+			setPrimitives(Arrays.splice(getPrimitives(), absoluteOffset, PRIMITIVE_LENGTH));
 			
 			return true;
 		}

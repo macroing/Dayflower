@@ -205,7 +205,7 @@ The following table describes the different APIs and their current status in the
 | Scene Microfacet API                   | 100.0%  |   0.0%    |
 | Scene Modifier API                     | 100.0%  |   0.0%    |
 | Scene Texture API                      | 100.0%  |   0.0%    |
-| Utility API                            | 100.0%  |  70.2%    |
+| Utility API                            | 100.0%  |  72.4%    |
 | Wavefront Material API                 | 100.0%  |   0.0%    |
 | Wavefront Object API                   | 100.0%  |   0.0%    |
 

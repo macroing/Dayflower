@@ -42,7 +42,6 @@ import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.utility.Document;
-import org.dayflower.utility.FloatArrays;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.util.Arrays;
@@ -340,7 +339,7 @@ public final class CompiledTextureCache {
 		final int absoluteOffset = getBlendTextureOffsetAbsolute(blendTexture);
 		
 		if(absoluteOffset != -1) {
-			setBlendTextures(FloatArrays.splice(getBlendTextures(), absoluteOffset, BLEND_TEXTURE_LENGTH));
+			setBlendTextures(Arrays.splice(getBlendTextures(), absoluteOffset, BLEND_TEXTURE_LENGTH));
 			
 			return true;
 		}
@@ -366,7 +365,7 @@ public final class CompiledTextureCache {
 		final int absoluteOffset = getBullseyeTextureOffsetAbsolute(bullseyeTexture);
 		
 		if(absoluteOffset != -1) {
-			setBullseyeTextures(FloatArrays.splice(getBullseyeTextures(), absoluteOffset, BULLSEYE_TEXTURE_LENGTH));
+			setBullseyeTextures(Arrays.splice(getBullseyeTextures(), absoluteOffset, BULLSEYE_TEXTURE_LENGTH));
 			
 			return true;
 		}
@@ -392,7 +391,7 @@ public final class CompiledTextureCache {
 		final int absoluteOffset = getCheckerboardTextureOffsetAbsolute(checkerboardTexture);
 		
 		if(absoluteOffset != -1) {
-			setCheckerboardTextures(FloatArrays.splice(getCheckerboardTextures(), absoluteOffset, CHECKERBOARD_TEXTURE_LENGTH));
+			setCheckerboardTextures(Arrays.splice(getCheckerboardTextures(), absoluteOffset, CHECKERBOARD_TEXTURE_LENGTH));
 			
 			return true;
 		}
@@ -418,7 +417,7 @@ public final class CompiledTextureCache {
 		final int absoluteOffset = getConstantTextureOffsetAbsolute(constantTexture);
 		
 		if(absoluteOffset != -1) {
-			setConstantTextures(FloatArrays.splice(getConstantTextures(), absoluteOffset, CONSTANT_TEXTURE_LENGTH));
+			setConstantTextures(Arrays.splice(getConstantTextures(), absoluteOffset, CONSTANT_TEXTURE_LENGTH));
 			
 			return true;
 		}
@@ -445,7 +444,7 @@ public final class CompiledTextureCache {
 		
 		if(absoluteOffset != -1) {
 			setLDRImageTextureOffsets(Structures.removeStructureOffset(getLDRImageTextureOffsets(), absoluteOffset, lDRImageTexture.length));
-			setLDRImageTextures(FloatArrays.splice(getLDRImageTextures(), absoluteOffset, lDRImageTexture.length));
+			setLDRImageTextures(Arrays.splice(getLDRImageTextures(), absoluteOffset, lDRImageTexture.length));
 			
 			return true;
 		}
@@ -471,7 +470,7 @@ public final class CompiledTextureCache {
 		final int absoluteOffset = getMarbleTextureOffsetAbsolute(marbleTexture);
 		
 		if(absoluteOffset != -1) {
-			setMarbleTextures(FloatArrays.splice(getMarbleTextures(), absoluteOffset, MARBLE_TEXTURE_LENGTH));
+			setMarbleTextures(Arrays.splice(getMarbleTextures(), absoluteOffset, MARBLE_TEXTURE_LENGTH));
 			
 			return true;
 		}
@@ -497,7 +496,7 @@ public final class CompiledTextureCache {
 		final int absoluteOffset = getPolkaDotTextureOffsetAbsolute(polkaDotTexture);
 		
 		if(absoluteOffset != -1) {
-			setPolkaDotTextures(FloatArrays.splice(getPolkaDotTextures(), absoluteOffset, POLKA_DOT_TEXTURE_LENGTH));
+			setPolkaDotTextures(Arrays.splice(getPolkaDotTextures(), absoluteOffset, POLKA_DOT_TEXTURE_LENGTH));
 			
 			return true;
 		}
@@ -523,7 +522,7 @@ public final class CompiledTextureCache {
 		final int absoluteOffset = getSimplexFractionalBrownianMotionTextureOffsetAbsolute(simplexFractionalBrownianMotionTexture);
 		
 		if(absoluteOffset != -1) {
-			setSimplexFractionalBrownianMotionTextures(FloatArrays.splice(getSimplexFractionalBrownianMotionTextures(), absoluteOffset, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH));
+			setSimplexFractionalBrownianMotionTextures(Arrays.splice(getSimplexFractionalBrownianMotionTextures(), absoluteOffset, SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE_LENGTH));
 			
 			return true;
 		}

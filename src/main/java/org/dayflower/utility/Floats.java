@@ -427,13 +427,13 @@ public final class Floats {
 	}
 	
 	/**
-	 * Returns the reciprocal (or inverse) error of {@code value}.
+	 * Returns the inverse error of {@code value}.
 	 * 
 	 * @param value a {@code float} value
-	 * @return the reciprocal (or inverse) error of {@code value}
+	 * @return the inverse error of {@code value}
 	 */
 //	TODO: Add Unit Tests!
-	public static float errorReciprocal(final float value) {
+	public static float errorInverse(final float value) {
 		float p = 0.0F;
 		float x = saturate(value, -0.99999F, +0.99999F);
 		float y = -log((1.0F - x) * (1.0F + x));

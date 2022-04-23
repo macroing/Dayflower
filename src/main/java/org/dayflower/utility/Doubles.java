@@ -426,13 +426,13 @@ public class Doubles {
 	}
 	
 	/**
-	 * Returns the reciprocal (or inverse) error of {@code value}.
+	 * Returns the inverse error of {@code value}.
 	 * 
 	 * @param value a {@code double} value
-	 * @return the reciprocal (or inverse) error of {@code value}
+	 * @return the inverse error of {@code value}
 	 */
 //	TODO: Add Unit Tests!
-	public static double errorReciprocal(final double value) {
+	public static double errorInverse(final double value) {
 		double p = 0.0D;
 		double x = saturate(value, -0.99999D, +0.99999D);
 		double y = -log((1.0D - x) * (1.0D + x));

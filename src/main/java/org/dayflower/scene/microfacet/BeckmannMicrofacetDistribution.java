@@ -25,7 +25,7 @@ import static org.dayflower.utility.Floats.atan;
 import static org.dayflower.utility.Floats.cos;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.error;
-import static org.dayflower.utility.Floats.errorReciprocal;
+import static org.dayflower.utility.Floats.errorInverse;
 import static org.dayflower.utility.Floats.exp;
 import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.log;
@@ -274,7 +274,7 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 				c = 0.5F * (a + b);
 			}
 			
-			final float errorReciprocal = errorReciprocal(c);
+			final float errorReciprocal = errorInverse(c);
 			final float value = normalization * (1.0F + b + sqrtPiReciprocal * tanTheta * exp(-errorReciprocal * errorReciprocal)) - sampleX;
 			final float derivative = normalization * (1.0F - errorReciprocal * tanTheta);
 			
@@ -291,8 +291,8 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 			b -= value / derivative;
 		}
 		
-		final float x = errorReciprocal(c);
-		final float y = errorReciprocal(2.0F * max(v, 1.0e-6F) - 1.0F);
+		final float x = errorInverse(c);
+		final float y = errorInverse(2.0F * max(v, 1.0e-6F) - 1.0F);
 		
 		return new Vector2F(x, y);
 	}

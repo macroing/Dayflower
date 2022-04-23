@@ -2,6 +2,8 @@
 
 	* ADD:		Add unit tests to the IntsUnitTests class.
 	* CHANGE:	Update the dependency to Macroing Java.
+	* CHANGE:	Rename the method errorReciprocal(double) in the Doubles class to errorInverse(double).
+	* CHANGE:	Rename the method errorReciprocal(float) in the Floats class to errorInverse(float).
 	* REMOVE:	Remove the Timer class. It has been replaced by the Timer class in Macroing Java.
 
 2022-04-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>

@@ -19,7 +19,8 @@
 package org.dayflower.renderer;
 
 import org.dayflower.image.ImageF;
-import org.dayflower.utility.Timer;
+
+import org.macroing.java.util.Timer;
 
 /**
  * A {@code ProgressiveImageOrderRenderer} is an {@link ImageOrderRenderer} that performs progressive image order rendering.

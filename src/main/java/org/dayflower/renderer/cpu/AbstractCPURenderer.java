@@ -37,7 +37,8 @@ import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.utility.ParameterArguments;
-import org.dayflower.utility.Timer;
+
+import org.macroing.java.util.Timer;
 
 /**
  * An {@code AbstractCPURenderer} is an abstract implementation of {@link CombinedProgressiveImageOrderRenderer} that takes care of most aspects.

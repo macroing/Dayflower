@@ -19,6 +19,7 @@
 package org.dayflower.utility;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -87,6 +88,36 @@ public final class IntsUnitTests {
 	}
 	
 	@Test
+	public void testPackIntInt() {
+		assertEquals(0xFFFFFFFF, Ints.pack(65535, 65535));
+		assertEquals(0x00000000, Ints.pack(    0,     0));
+		
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(    -1, +0));
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+65536, +0));
+		
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+0,     -1));
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+0, +65536));
+	}
+	
+	@Test
+	public void testPackIntIntIntInt() {
+		assertEquals(0xFFFFFFFF, Ints.pack(255, 255, 255, 255));
+		assertEquals(0x00000000, Ints.pack(  0,   0,   0,   0));
+		
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(  -1, +0, +0, +0));
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+256, +0, +0, +0));
+		
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+0,   -1, +0, +0));
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+0, +256, +0, +0));
+		
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+0, +0,   -1, +0));
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+0, +0, +256, +0));
+		
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+0, +0, +0,   -1));
+		assertThrows(IllegalArgumentException.class, () -> Ints.pack(+0, +0, +0, +256));
+	}
+	
+	@Test
 	public void testPaddingInt() {
 		assertEquals(0, Ints.padding(16));
 		assertEquals(1, Ints.padding(15));
@@ -142,5 +173,29 @@ public final class IntsUnitTests {
 	@Test
 	public void testToIntFloat() {
 		assertEquals(2, Ints.toInt(2.0F));
+	}
+	
+	@Test
+	public void testUnpack() {
+		final int[] a = Ints.unpack(0xFFFFFFFF);
+		final int[] b = Ints.unpack(0xFFFF0000);
+		final int[] c = Ints.unpack(0x00000000);
+		
+		assertNotNull(a);
+		assertNotNull(b);
+		assertNotNull(c);
+		
+		assertEquals(2, a.length);
+		assertEquals(2, b.length);
+		assertEquals(2, c.length);
+		
+		assertEquals(65535, a[0]);
+		assertEquals(65535, a[1]);
+		
+		assertEquals(65535, b[0]);
+		assertEquals(    0, b[1]);
+		
+		assertEquals(0, c[0]);
+		assertEquals(0, c[1]);
 	}
 }

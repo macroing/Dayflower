@@ -36,7 +36,8 @@ import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.utility.ParameterArguments;
-import org.dayflower.utility.Timer;
+
+import org.macroing.java.util.Timer;
 
 import com.amd.aparapi.Range;
 

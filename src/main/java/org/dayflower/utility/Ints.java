@@ -247,7 +247,6 @@ public final class Ints {
 	 * @return the packed {@code int} value
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code a} or {@code b} are less than {@code 0} or greater than {@code 65535}
 	 */
-//	TODO: Add Unit Tests!
 	public static int pack(final int a, final int b) {
 		ParameterArguments.requireRange(a, 0, 65535, "a");
 		ParameterArguments.requireRange(b, 0, 65535, "b");
@@ -269,7 +268,6 @@ public final class Ints {
 	 * @return the packed {@code int} value
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are less than {@code 0} or greater than {@code 255}
 	 */
-//	TODO: Add Unit Tests!
 	public static int pack(final int a, final int b, final int c, final int d) {
 		ParameterArguments.requireRange(a, 0, 255, "a");
 		ParameterArguments.requireRange(b, 0, 255, "b");
@@ -422,7 +420,6 @@ public final class Ints {
 	 * @param packedValue a packed {@code int} value
 	 * @return an {@code int[]} with the unpacked {@code int} values
 	 */
-//	TODO: Add Unit Tests!
 	public static int[] unpack(final int packedValue) {
 		final int a = (packedValue >>> 16) & 0xFFFF;
 		final int b = (packedValue >>>  0) & 0xFFFF;

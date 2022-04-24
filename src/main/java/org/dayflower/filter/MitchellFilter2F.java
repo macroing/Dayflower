@@ -21,7 +21,6 @@ package org.dayflower.filter;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.macroing.java.lang.Strings;
@@ -50,7 +49,6 @@ public final class MitchellFilter2F extends Filter2F {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public MitchellFilter2F() {
 		this(2.0F, 2.0F, 1.0F / 3.0F, 1.0F / 3.0F);
 	}
@@ -63,7 +61,6 @@ public final class MitchellFilter2F extends Filter2F {
 	 * @param b the B-coefficient to use
 	 * @param c the C-coefficient to use
 	 */
-//	TODO: Add Unit Tests!
 	public MitchellFilter2F(final float resolutionX, final float resolutionY, final float b, final float c) {
 		super(resolutionX, resolutionY);
 		
@@ -78,7 +75,6 @@ public final class MitchellFilter2F extends Filter2F {
 	 * 
 	 * @return a {@code String} representation of this {@code MitchellFilter2F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new MitchellFilter2F(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(getResolutionX()), Strings.toNonScientificNotationJava(getResolutionY()), Strings.toNonScientificNotationJava(this.b), Strings.toNonScientificNotationJava(this.c));
@@ -92,7 +88,6 @@ public final class MitchellFilter2F extends Filter2F {
 	 * @param object the {@code Object} to compare to this {@code MitchellFilter2F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MitchellFilter2F}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -121,7 +116,6 @@ public final class MitchellFilter2F extends Filter2F {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public float evaluate(final float x, final float y) {
 		return doMitchell(x * getResolutionXReciprocal(), this.b, this.c) * doMitchell(y * getResolutionYReciprocal(), this.b, this.c);
@@ -132,7 +126,6 @@ public final class MitchellFilter2F extends Filter2F {
 	 * 
 	 * @return the B-coefficient
 	 */
-//	TODO: Add Unit Tests!
 	public float getB() {
 		return this.b;
 	}
@@ -142,7 +135,6 @@ public final class MitchellFilter2F extends Filter2F {
 	 * 
 	 * @return the C-coefficient
 	 */
-//	TODO: Add Unit Tests!
 	public float getC() {
 		return this.c;
 	}
@@ -152,7 +144,6 @@ public final class MitchellFilter2F extends Filter2F {
 	 * 
 	 * @return a hash code for this {@code MitchellFilter2F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.b), Float.valueOf(this.c));
@@ -161,12 +152,14 @@ public final class MitchellFilter2F extends Filter2F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float doMitchell(final float x, final float b, final float c) {
-		final float xAbsolute = abs(2.0F * x);
+		final float x1 = abs(2.0F * x);
+		final float x2 = x1 * x1;
+		final float x3 = x1 * x2;
 		
-		if(xAbsolute > 1.0F) {
-			return ((-b - 6.0F * c) * xAbsolute * xAbsolute * xAbsolute + (6.0F * b + 30.0F * c) * xAbsolute * xAbsolute + (-12.0F * b - 48.0F * c) * xAbsolute + (8.0F * b + 24.0F * c)) * (1.0F / 6.0F);
+		if(x1 > 1.0F) {
+			return ((-b - 6.0F * c) * x3 + (6.0F * b + 30.0F * c) * x2 + (-12.0F * b - 48.0F * c) * x1 + (8.0F * b + 24.0F * c)) * (1.0F / 6.0F);
 		}
 		
-		return ((12.0F - 9.0F * b - 6.0F * c) * xAbsolute * xAbsolute * xAbsolute + (-18.0F + 12.0F * b + 6.0F * c) * xAbsolute * xAbsolute + (6.0F - 2.0F * b)) * (1.0F / 6.0F);
+		return ((12.0F - 9.0F * b - 6.0F * c) * x3 + (-18.0F + 12.0F * b + 6.0F * c) * x2 + (6.0F - 2.0F * b)) * (1.0F / 6.0F);
 	}
 }

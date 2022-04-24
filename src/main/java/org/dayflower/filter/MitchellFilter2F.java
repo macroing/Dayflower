@@ -24,6 +24,8 @@ import static org.dayflower.utility.Floats.equal;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.macroing.java.lang.Strings;
+
 /**
  * A {@code MitchellFilter2F} is an implementation of {@link Filter2F} that represents a Mitchell filter.
  * <p>
@@ -79,7 +81,7 @@ public final class MitchellFilter2F extends Filter2F {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new MitchellFilter2F(%+.10f, %+.10f, %+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.b), Float.valueOf(this.c));
+		return String.format("new MitchellFilter2F(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(getResolutionX()), Strings.toNonScientificNotationJava(getResolutionY()), Strings.toNonScientificNotationJava(this.b), Strings.toNonScientificNotationJava(this.c));
 	}
 	
 	/**
@@ -99,11 +101,7 @@ public final class MitchellFilter2F extends Filter2F {
 			return false;
 		} else if(!equal(getResolutionX(), MitchellFilter2F.class.cast(object).getResolutionX())) {
 			return false;
-		} else if(!equal(getResolutionXReciprocal(), MitchellFilter2F.class.cast(object).getResolutionXReciprocal())) {
-			return false;
 		} else if(!equal(getResolutionY(), MitchellFilter2F.class.cast(object).getResolutionY())) {
-			return false;
-		} else if(!equal(getResolutionYReciprocal(), MitchellFilter2F.class.cast(object).getResolutionYReciprocal())) {
 			return false;
 		} else if(!equal(this.b, MitchellFilter2F.class.cast(object).b)) {
 			return false;
@@ -157,7 +155,7 @@ public final class MitchellFilter2F extends Filter2F {
 //	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionXReciprocal()), Float.valueOf(getResolutionY()), Float.valueOf(getResolutionYReciprocal()), Float.valueOf(this.b), Float.valueOf(this.c));
+		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.b), Float.valueOf(this.c));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -26,6 +26,8 @@ import static org.dayflower.utility.Doubles.sin;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.macroing.java.lang.Strings;
+
 /**
  * A {@code LanczosSincFilter2D} is an implementation of {@link Filter2D} that represents a Lanczos-Sinc filter.
  * <p>
@@ -78,7 +80,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new LanczosSincFilter2D(%+.10f, %+.10f, %+.10f)", Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()), Double.valueOf(this.tau));
+		return String.format("new LanczosSincFilter2D(%s, %s, %s)", Strings.toNonScientificNotationJava(getResolutionX()), Strings.toNonScientificNotationJava(getResolutionY()), Strings.toNonScientificNotationJava(this.tau));
 	}
 	
 	/**
@@ -98,11 +100,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 			return false;
 		} else if(!equal(getResolutionX(), LanczosSincFilter2D.class.cast(object).getResolutionX())) {
 			return false;
-		} else if(!equal(getResolutionXReciprocal(), LanczosSincFilter2D.class.cast(object).getResolutionXReciprocal())) {
-			return false;
 		} else if(!equal(getResolutionY(), LanczosSincFilter2D.class.cast(object).getResolutionY())) {
-			return false;
-		} else if(!equal(getResolutionYReciprocal(), LanczosSincFilter2D.class.cast(object).getResolutionYReciprocal())) {
 			return false;
 		} else if(!equal(this.tau, LanczosSincFilter2D.class.cast(object).tau)) {
 			return false;
@@ -144,7 +142,7 @@ public final class LanczosSincFilter2D extends Filter2D {
 //	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionXReciprocal()), Double.valueOf(getResolutionY()), Double.valueOf(getResolutionYReciprocal()), Double.valueOf(this.tau));
+		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()), Double.valueOf(this.tau));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

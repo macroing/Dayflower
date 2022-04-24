@@ -18,10 +18,8 @@
  */
 package org.dayflower.filter;
 
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.abs;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 /**
@@ -34,14 +32,10 @@ import java.util.Objects;
  */
 public final class CatmullRomFilter2D extends Filter2D {
 	/**
-	 * Constructs a new {@code CatmullRomFilter2D} instance given {@code resolutionX} and {@code resolutionY}.
-	 * 
-	 * @param resolutionX the resolution of the X-axis
-	 * @param resolutionY the resolution of the Y-axis
+	 * Constructs a new {@code CatmullRomFilter2D} instance.
 	 */
-//	TODO: Add Unit Tests!
-	public CatmullRomFilter2D(final double resolutionX, final double resolutionY) {
-		super(resolutionX, resolutionY);
+	public CatmullRomFilter2D() {
+		super(2.0D, 2.0D);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,10 +45,9 @@ public final class CatmullRomFilter2D extends Filter2D {
 	 * 
 	 * @return a {@code String} representation of this {@code CatmullRomFilter2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new CatmullRomFilter2D(%+.10f, %+.10f)", Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()));
+		return "new CatmullRomFilter2D()";
 	}
 	
 	/**
@@ -65,20 +58,11 @@ public final class CatmullRomFilter2D extends Filter2D {
 	 * @param object the {@code Object} to compare to this {@code CatmullRomFilter2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CatmullRomFilter2D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof CatmullRomFilter2D)) {
-			return false;
-		} else if(!equal(getResolutionX(), CatmullRomFilter2D.class.cast(object).getResolutionX())) {
-			return false;
-		} else if(!equal(getResolutionXReciprocal(), CatmullRomFilter2D.class.cast(object).getResolutionXReciprocal())) {
-			return false;
-		} else if(!equal(getResolutionY(), CatmullRomFilter2D.class.cast(object).getResolutionY())) {
-			return false;
-		} else if(!equal(getResolutionYReciprocal(), CatmullRomFilter2D.class.cast(object).getResolutionYReciprocal())) {
 			return false;
 		} else {
 			return true;
@@ -94,14 +78,9 @@ public final class CatmullRomFilter2D extends Filter2D {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public double evaluate(final double x, final double y) {
-		final double a = x * x + y * y;
-		final double b = sqrt(a);
-		final double c = b < 2.0D ? b < 1.0D ? 3.0D * b * a - 5.0D * a + 2.0D : -b * a + 5.0D * a - 8.0D * b + 4.0D : 0.0D;
-		
-		return c;
+		return doCatmullRom(x) * doCatmullRom(y);
 	}
 	
 	/**
@@ -109,9 +88,26 @@ public final class CatmullRomFilter2D extends Filter2D {
 	 * 
 	 * @return a hash code for this {@code CatmullRomFilter2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionXReciprocal()), Double.valueOf(getResolutionY()), Double.valueOf(getResolutionYReciprocal()));
+		return Objects.hash();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static double doCatmullRom(final double x) {
+		final double x1 = abs(x);
+		final double x2 = x1 * x1;
+		final double x3 = x1 * x2;
+		
+		if(x1 >= 2.0D) {
+			return 0.0D;
+		}
+		
+		if(x1 < 1.0D) {
+			return 3.0D * x3 - 5.0D * x2 + 2.0D;
+		}
+		
+		return -x3 + 5.0D * x2 - 8.0D * x1 + 4.0D;
 	}
 }

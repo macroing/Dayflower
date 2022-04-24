@@ -22,8 +22,9 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.max;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code TriangleFilter2D} is an implementation of {@link Filter2D} that represents a triangle filter.
@@ -44,7 +45,6 @@ public final class TriangleFilter2D extends Filter2D {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public TriangleFilter2D() {
 		this(2.0D, 2.0D);
 	}
@@ -55,7 +55,6 @@ public final class TriangleFilter2D extends Filter2D {
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 */
-//	TODO: Add Unit Tests!
 	public TriangleFilter2D(final double resolutionX, final double resolutionY) {
 		super(resolutionX, resolutionY);
 	}
@@ -67,10 +66,9 @@ public final class TriangleFilter2D extends Filter2D {
 	 * 
 	 * @return a {@code String} representation of this {@code TriangleFilter2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new TriangleFilter2D(%+.10f, %+.10f)", Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()));
+		return String.format("new TriangleFilter2D(%s, %s)", Strings.toNonScientificNotationJava(getResolutionX()), Strings.toNonScientificNotationJava(getResolutionY()));
 	}
 	
 	/**
@@ -81,7 +79,6 @@ public final class TriangleFilter2D extends Filter2D {
 	 * @param object the {@code Object} to compare to this {@code TriangleFilter2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TriangleFilter2D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -90,11 +87,7 @@ public final class TriangleFilter2D extends Filter2D {
 			return false;
 		} else if(!equal(getResolutionX(), TriangleFilter2D.class.cast(object).getResolutionX())) {
 			return false;
-		} else if(!equal(getResolutionXReciprocal(), TriangleFilter2D.class.cast(object).getResolutionXReciprocal())) {
-			return false;
 		} else if(!equal(getResolutionY(), TriangleFilter2D.class.cast(object).getResolutionY())) {
-			return false;
-		} else if(!equal(getResolutionYReciprocal(), TriangleFilter2D.class.cast(object).getResolutionYReciprocal())) {
 			return false;
 		} else {
 			return true;
@@ -110,7 +103,6 @@ public final class TriangleFilter2D extends Filter2D {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public double evaluate(final double x, final double y) {
 		return max(0.0D, getResolutionX() - abs(x)) * max(0.0D, getResolutionY() - abs(y));
@@ -121,9 +113,8 @@ public final class TriangleFilter2D extends Filter2D {
 	 * 
 	 * @return a hash code for this {@code TriangleFilter2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionXReciprocal()), Double.valueOf(getResolutionY()), Double.valueOf(getResolutionYReciprocal()));
+		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()));
 	}
 }

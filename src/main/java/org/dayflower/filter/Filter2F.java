@@ -18,8 +18,6 @@
  */
 package org.dayflower.filter;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
-
 /**
  * A {@code Filter2F} represents a 2-dimensional filter that operates on and returns {@code float} values.
  * 
@@ -47,7 +45,6 @@ public abstract class Filter2F {
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 */
-//	TODO: Add Unit Tests!
 	protected Filter2F(final float resolutionX, final float resolutionY) {
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
@@ -66,7 +63,6 @@ public abstract class Filter2F {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
-//	TODO: Add Unit Tests!
 	public abstract float evaluate(final float x, final float y);
 	
 	/**
@@ -74,7 +70,6 @@ public abstract class Filter2F {
 	 * 
 	 * @return the resolution of the X-axis
 	 */
-//	TODO: Add Unit Tests!
 	public final float getResolutionX() {
 		return this.resolutionX;
 	}
@@ -84,7 +79,6 @@ public abstract class Filter2F {
 	 * 
 	 * @return the reciprocal (or inverse) value of the resolution of the X-axis
 	 */
-//	TODO: Add Unit Tests!
 	public final float getResolutionXReciprocal() {
 		return this.resolutionXReciprocal;
 	}
@@ -94,7 +88,6 @@ public abstract class Filter2F {
 	 * 
 	 * @return the resolution of the Y-axis
 	 */
-//	TODO: Add Unit Tests!
 	public final float getResolutionY() {
 		return this.resolutionY;
 	}
@@ -104,7 +97,6 @@ public abstract class Filter2F {
 	 * 
 	 * @return the reciprocal (or inverse) value of the resolution of the Y-axis
 	 */
-//	TODO: Add Unit Tests!
 	public final float getResolutionYReciprocal() {
 		return this.resolutionYReciprocal;
 	}
@@ -114,7 +106,6 @@ public abstract class Filter2F {
 	 * 
 	 * @return a table with cached values
 	 */
-//	TODO: Add Unit Tests!
 	public final float[] createFilterTable() {
 		final float[] filterTable = new float[FILTER_TABLE_SIZE * FILTER_TABLE_SIZE];
 		

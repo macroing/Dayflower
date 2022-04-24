@@ -22,8 +22,9 @@ import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.exp;
 import static org.dayflower.utility.Doubles.max;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
+
+import org.macroing.java.lang.Strings;
 
 /**
  * A {@code GaussianFilter2D} is an implementation of {@link Filter2D} that represents a Gaussian filter.
@@ -50,7 +51,6 @@ public final class GaussianFilter2D extends Filter2D {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public GaussianFilter2D() {
 		this(2.0D, 2.0D, 2.0D);
 	}
@@ -62,7 +62,6 @@ public final class GaussianFilter2D extends Filter2D {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param falloff the falloff to use
 	 */
-//	TODO: Add Unit Tests!
 	public GaussianFilter2D(final double resolutionX, final double resolutionY, final double falloff) {
 		super(resolutionX, resolutionY);
 		
@@ -78,10 +77,9 @@ public final class GaussianFilter2D extends Filter2D {
 	 * 
 	 * @return a {@code String} representation of this {@code GaussianFilter2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new GaussianFilter2D(%+.10f, %+.10f, %+.10f)", Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()), Double.valueOf(this.falloff));
+		return String.format("new GaussianFilter2D(%s, %s, %s)", Strings.toNonScientificNotationJava(getResolutionX()), Strings.toNonScientificNotationJava(getResolutionY()), Strings.toNonScientificNotationJava(this.falloff));
 	}
 	
 	/**
@@ -92,7 +90,6 @@ public final class GaussianFilter2D extends Filter2D {
 	 * @param object the {@code Object} to compare to this {@code GaussianFilter2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code GaussianFilter2D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -101,17 +98,9 @@ public final class GaussianFilter2D extends Filter2D {
 			return false;
 		} else if(!equal(getResolutionX(), GaussianFilter2D.class.cast(object).getResolutionX())) {
 			return false;
-		} else if(!equal(getResolutionXReciprocal(), GaussianFilter2D.class.cast(object).getResolutionXReciprocal())) {
-			return false;
 		} else if(!equal(getResolutionY(), GaussianFilter2D.class.cast(object).getResolutionY())) {
 			return false;
-		} else if(!equal(getResolutionYReciprocal(), GaussianFilter2D.class.cast(object).getResolutionYReciprocal())) {
-			return false;
 		} else if(!equal(this.falloff, GaussianFilter2D.class.cast(object).falloff)) {
-			return false;
-		} else if(!equal(this.x, GaussianFilter2D.class.cast(object).x)) {
-			return false;
-		} else if(!equal(this.y, GaussianFilter2D.class.cast(object).y)) {
 			return false;
 		} else {
 			return true;
@@ -127,7 +116,6 @@ public final class GaussianFilter2D extends Filter2D {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public double evaluate(final double x, final double y) {
 		return doGaussian(x, this.x, this.falloff) * doGaussian(y, this.y, this.falloff);
@@ -138,7 +126,6 @@ public final class GaussianFilter2D extends Filter2D {
 	 * 
 	 * @return the falloff used by this {@code GaussianFilter2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public double getFalloff() {
 		return this.falloff;
 	}
@@ -148,10 +135,9 @@ public final class GaussianFilter2D extends Filter2D {
 	 * 
 	 * @return a hash code for this {@code GaussianFilter2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionXReciprocal()), Double.valueOf(getResolutionY()), Double.valueOf(getResolutionYReciprocal()), Double.valueOf(this.falloff), Double.valueOf(this.x), Double.valueOf(this.y));
+		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()), Double.valueOf(this.falloff));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

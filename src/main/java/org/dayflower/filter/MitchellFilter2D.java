@@ -24,6 +24,8 @@ import static org.dayflower.utility.Doubles.equal;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
+import org.macroing.java.lang.Strings;
+
 /**
  * A {@code MitchellFilter2D} is an implementation of {@link Filter2D} that represents a Mitchell filter.
  * <p>
@@ -79,7 +81,7 @@ public final class MitchellFilter2D extends Filter2D {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new MitchellFilter2D(%+.10f, %+.10f, %+.10f, %+.10f)", Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()), Double.valueOf(this.b), Double.valueOf(this.c));
+		return String.format("new MitchellFilter2D(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(getResolutionX()), Strings.toNonScientificNotationJava(getResolutionY()), Strings.toNonScientificNotationJava(this.b), Strings.toNonScientificNotationJava(this.c));
 	}
 	
 	/**
@@ -99,11 +101,7 @@ public final class MitchellFilter2D extends Filter2D {
 			return false;
 		} else if(!equal(getResolutionX(), MitchellFilter2D.class.cast(object).getResolutionX())) {
 			return false;
-		} else if(!equal(getResolutionXReciprocal(), MitchellFilter2D.class.cast(object).getResolutionXReciprocal())) {
-			return false;
 		} else if(!equal(getResolutionY(), MitchellFilter2D.class.cast(object).getResolutionY())) {
-			return false;
-		} else if(!equal(getResolutionYReciprocal(), MitchellFilter2D.class.cast(object).getResolutionYReciprocal())) {
 			return false;
 		} else if(!equal(this.b, MitchellFilter2D.class.cast(object).b)) {
 			return false;
@@ -157,7 +155,7 @@ public final class MitchellFilter2D extends Filter2D {
 //	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionXReciprocal()), Double.valueOf(getResolutionY()), Double.valueOf(getResolutionYReciprocal()), Double.valueOf(this.b), Double.valueOf(this.c));
+		return Objects.hash(Double.valueOf(getResolutionX()), Double.valueOf(getResolutionY()), Double.valueOf(this.b), Double.valueOf(this.c));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

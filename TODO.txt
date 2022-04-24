@@ -72,7 +72,7 @@ Test API - Unit Testing:
 
 	*  83.8% - Color API
 
-	*  54.2% - Filter API
+	*  72.1% - Filter API
 
 	*  76.5% - Geometry API
 	* 100.0% - Geometry Bounding Volume API

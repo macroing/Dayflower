@@ -173,7 +173,7 @@ The following table describes the different APIs and their current status in the
 | -------------------------------------- | ------- | --------- |
 | Change API                             | 100.0%  | 100.0%    |
 | Color API                              | 100.0%  |  83.8%    |
-| Filter API                             | 100.0%  |  54.2%    |
+| Filter API                             | 100.0%  |  72.1%    |
 | Geometry API                           | 100.0%  |  76.5%    |
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |

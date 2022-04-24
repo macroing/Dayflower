@@ -23,7 +23,6 @@ import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.sin;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.macroing.java.lang.Strings;
@@ -51,7 +50,6 @@ public final class LanczosSincFilter2F extends Filter2F {
 	 * }
 	 * </pre>
 	 */
-//	TODO: Add Unit Tests!
 	public LanczosSincFilter2F() {
 		this(4.0F, 4.0F, 3.0F);
 	}
@@ -63,7 +61,6 @@ public final class LanczosSincFilter2F extends Filter2F {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param tau the Tau to use
 	 */
-//	TODO: Add Unit Tests!
 	public LanczosSincFilter2F(final float resolutionX, final float resolutionY, final float tau) {
 		super(resolutionX, resolutionY);
 		
@@ -77,7 +74,6 @@ public final class LanczosSincFilter2F extends Filter2F {
 	 * 
 	 * @return a {@code String} representation of this {@code LanczosSincFilter2F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new LanczosSincFilter2F(%s, %s, %s)", Strings.toNonScientificNotationJava(getResolutionX()), Strings.toNonScientificNotationJava(getResolutionY()), Strings.toNonScientificNotationJava(this.tau));
@@ -91,7 +87,6 @@ public final class LanczosSincFilter2F extends Filter2F {
 	 * @param object the {@code Object} to compare to this {@code LanczosSincFilter2F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LanczosSincFilter2F}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -118,7 +113,6 @@ public final class LanczosSincFilter2F extends Filter2F {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public float evaluate(final float x, final float y) {
 		return doLanczosSinc(x * getResolutionXReciprocal(), this.tau) * doLanczosSinc(y * getResolutionYReciprocal(), this.tau);
@@ -129,7 +123,6 @@ public final class LanczosSincFilter2F extends Filter2F {
 	 * 
 	 * @return the Tau used by this {@code LanczosSincFilter2F} instance
 	 */
-//	TODO: Add Unit Tests!
 	public float getTau() {
 		return this.tau;
 	}
@@ -139,7 +132,6 @@ public final class LanczosSincFilter2F extends Filter2F {
 	 * 
 	 * @return a hash code for this {@code LanczosSincFilter2F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.tau));

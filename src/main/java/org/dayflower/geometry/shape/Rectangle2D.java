@@ -30,7 +30,6 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.dayflower.geometry.AngleD;
 import org.dayflower.geometry.Point2D;
@@ -386,34 +385,6 @@ public final class Rectangle2D implements Shape2D {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Computes the intersection between {@code a} and {@code b}.
-	 * <p>
-	 * Returns an {@code Optional} with an optional {@code Rectangle2D} instance.
-	 * <p>
-	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param a a {@code Rectangle2D} instance
-	 * @param b a {@code Rectangle2D} instance
-	 * @return an {@code Optional} with an optional {@code Rectangle2D} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Optional<Rectangle2D> intersection(final Rectangle2D a, final Rectangle2D b) {
-		final Point2D minimumA = a.getA();
-		final Point2D minimumB = b.getA();
-		final Point2D maximumA = a.getC();
-		final Point2D maximumB = b.getC();
-		final Point2D minimumC = Point2D.maximum(minimumA, minimumB);
-		final Point2D maximumC = Point2D.minimum(maximumA, maximumB);
-		
-		if(minimumC.getX() > maximumC.getX() || minimumC.getY() > maximumC.getY()) {
-			return Optional.empty();
-		}
-		
-		return Optional.of(new Rectangle2D(minimumC, maximumC));
-	}
 	
 	/**
 	 * Returns a {@code Rectangle2D} instance that contains all {@link Point2D} instances in {@code points}.

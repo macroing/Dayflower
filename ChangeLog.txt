@@ -8,6 +8,9 @@
 	* CHANGE:	Update the method evaluate(float, float) in the CatmullRomFilter2F class.
 	* REMOVE:	Remove the constructor CatmullRomFilter2D(double, double) from the CatmullRomFilter2D class.
 	* REMOVE:	Remove the constructor CatmullRomFilter2F(float, float) from the CatmullRomFilter2F class.
+	* REMOVE:	Remove the method intersection(Rectangle2D, Rectangle2D) from the Rectangle2D class.
+	* REMOVE:	Remove the method intersection(Rectangle2F, Rectangle2F) from the Rectangle2F class.
+	* REMOVE:	Remove the method intersection(Rectangle2I, Rectangle2I) from the Rectangle2I class.
 
 2022-04-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

@@ -29,7 +29,6 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Shape2I;
@@ -452,34 +451,6 @@ public final class Rectangle2I implements Shape2I {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Computes the intersection between {@code a} and {@code b}.
-	 * <p>
-	 * Returns an {@code Optional} with an optional {@code Rectangle2I} instance.
-	 * <p>
-	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param a a {@code Rectangle2I} instance
-	 * @param b a {@code Rectangle2I} instance
-	 * @return an {@code Optional} with an optional {@code Rectangle2I} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Optional<Rectangle2I> intersection(final Rectangle2I a, final Rectangle2I b) {
-		final Point2I minimumA = a.getA();
-		final Point2I minimumB = b.getA();
-		final Point2I maximumA = a.getC();
-		final Point2I maximumB = b.getC();
-		final Point2I minimumC = Point2I.maximum(minimumA, minimumB);
-		final Point2I maximumC = Point2I.minimum(maximumA, maximumB);
-		
-		if(minimumC.getX() > maximumC.getX() || minimumC.getY() > maximumC.getY()) {
-			return Optional.empty();
-		}
-		
-		return Optional.of(new Rectangle2I(minimumC, maximumC));
-	}
 	
 	/**
 	 * Returns a {@code Rectangle2I} instance that contains all {@link Point2I} instances in {@code points}.

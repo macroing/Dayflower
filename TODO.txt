@@ -9,9 +9,6 @@ Geometry Shape API:
 	* ADD:		Add a method to Rectangle2I that returns the intersection of two Rectangle2I instances using a Polygon2I instance.
 	* CHANGE:	Implement LineSegment3D.
 	* CHANGE:	Implement LineSegment3F.
-	* CHANGE:	The method intersection(Rectangle2D, Rectangle2D) of the Rectangle2D class might require updating. It does not support rotations.
-	* CHANGE:	The method intersection(Rectangle2F, Rectangle2F) of the Rectangle2F class might require updating. It does not support rotations.
-	* CHANGE:	The method intersection(Rectangle2I, Rectangle2I) of the Rectangle2I class might require updating. It does not support rotations.
 	* FIX:		Fix the ProceduralTerrain3D class.
 	* FIX:		Fix the ProceduralTerrain3F class.
 

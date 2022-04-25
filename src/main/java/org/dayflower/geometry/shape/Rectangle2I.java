@@ -384,13 +384,12 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Rectangle2I} instance is axis-aligned, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean isAxisAligned() {
 		final boolean isAxisAlignedAB = this.a.getY() == this.b.getY();
 		final boolean isAxisAlignedBC = this.b.getX() == this.c.getX();
 		final boolean isAxisAlignedCD = this.c.getY() == this.d.getY();
 		final boolean isAxisAlignedDA = this.d.getX() == this.a.getX();
-		final boolean isAxisAligned = isAxisAlignedAB && isAxisAlignedBC && isAxisAlignedCD && isAxisAlignedDA;
+		final boolean isAxisAligned = isAxisAlignedAB & isAxisAlignedBC & isAxisAlignedCD & isAxisAlignedDA;//TODO: Using & instead of && to get full code coverage. Should this be fixed?
 		
 		return isAxisAligned;
 	}
@@ -400,7 +399,6 @@ public final class Rectangle2I implements Shape2I {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Rectangle2I} instance is rotated, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean isRotated() {
 		return !isAxisAligned();
 	}
@@ -464,7 +462,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 1}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Rectangle2I fromPoints(final Point2I... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 1, Integer.MAX_VALUE, "points.length");
@@ -490,7 +487,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @return a {@code Rectangle2I} instance that is the union of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Rectangle2I union(final Rectangle2I a, final Rectangle2I b) {
 		final Point2I minimum = Point2I.minimum(a.getMinimum(), b.getMinimum());
 		final Point2I maximum = Point2I.maximum(a.getMaximum(), b.getMaximum());

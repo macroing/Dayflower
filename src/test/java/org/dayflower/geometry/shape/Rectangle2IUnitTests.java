@@ -19,6 +19,7 @@
 package org.dayflower.geometry.shape;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -278,6 +279,19 @@ public final class Rectangle2IUnitTests {
 	}
 	
 	@Test
+	public void testFromPoints() {
+		final Rectangle2I a = Rectangle2I.fromPoints(new Point2I(10, 10), new Point2I(15, 15), new Point2I(20, 20), new Point2I(25, 25), new Point2I(30, 30));
+		final Rectangle2I b = new Rectangle2I(new Point2I(10, 10), new Point2I(30, 30));
+		
+		assertEquals(a, b);
+		
+		assertThrows(NullPointerException.class, () -> Rectangle2I.fromPoints((Point2I[])(null)));
+		assertThrows(NullPointerException.class, () -> Rectangle2I.fromPoints(new Point2I(), null));
+		
+		assertThrows(IllegalArgumentException.class, () -> Rectangle2I.fromPoints());
+	}
+	
+	@Test
 	public void testGetA() {
 		final Rectangle2I rectangle = new Rectangle2I(new Point2I(10, 10), new Point2I(10, 30), new Point2I(30, 30), new Point2I(30, 10));
 		
@@ -371,10 +385,43 @@ public final class Rectangle2IUnitTests {
 	}
 	
 	@Test
+	public void testIsAxisAligned() {
+		final Rectangle2I a = new Rectangle2I(new Point2I(10, 10), new Point2I(20, 10), new Point2I(20, 20), new Point2I(10, 20));
+		final Rectangle2I b = new Rectangle2I(new Point2I(20, 20), new Point2I(25, 25), new Point2I(20, 30), new Point2I(15, 25));
+		
+		assertTrue(a.isAxisAligned());
+		
+		assertFalse(b.isAxisAligned());
+	}
+	
+	@Test
+	public void testIsRotated() {
+		final Rectangle2I a = new Rectangle2I(new Point2I(20, 20), new Point2I(25, 25), new Point2I(20, 30), new Point2I(15, 25));
+		final Rectangle2I b = new Rectangle2I(new Point2I(10, 10), new Point2I(20, 10), new Point2I(20, 20), new Point2I(10, 20));
+		
+		assertTrue(a.isRotated());
+		
+		assertFalse(b.isRotated());
+	}
+	
+	@Test
 	public void testToString() {
 		final Rectangle2I rectangle = new Rectangle2I(new Point2I(10, 10), new Point2I(20, 20));
 		
 		assertEquals("new Rectangle2I(new Point2I(10, 10), new Point2I(10, 20), new Point2I(20, 20), new Point2I(20, 10))", rectangle.toString());
+	}
+	
+	@Test
+	public void testUnion() {
+		final Rectangle2I a = new Rectangle2I(new Point2I(10, 10), new Point2I(20, 20));
+		final Rectangle2I b = new Rectangle2I(new Point2I(20, 20), new Point2I(30, 30));
+		final Rectangle2I c = new Rectangle2I(new Point2I(10, 10), new Point2I(30, 30));
+		final Rectangle2I d = Rectangle2I.union(a, b);
+		
+		assertEquals(c, d);
+		
+		assertThrows(NullPointerException.class, () -> Rectangle2I.union(a, null));
+		assertThrows(NullPointerException.class, () -> Rectangle2I.union(null, b));
 	}
 	
 	@Test

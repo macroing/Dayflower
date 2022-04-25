@@ -1,3 +1,7 @@
+2022-04-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the Rectangle2IUnitTests class.
+
 2022-04-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the BoxFilter2DUnitTests, BoxFilter2FUnitTests, CatmullRomFilter2DUnitTests, CatmullRomFilter2FUnitTests, GaussianFilter2DUnitTests, GaussianFilter2FUnitTests, LanczosSincFilter2DUnitTests, LanczosSincFilter2FUnitTests, MitchellFilter2DUnitTests, MitchellFilter2FUnitTests, TriangleFilter2DUnitTests and TriangleFilter2FUnitTests classes.

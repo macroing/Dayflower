@@ -178,7 +178,7 @@ The following table describes the different APIs and their current status in the
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |
-| Geometry Shape API                     | 100.0%  |   6.4%    |
+| Geometry Shape API                     | 100.0%  |   6.7%    |
 | Image API                              | 100.0%  |   0.0%    |
 | JavaFX Concurrent API                  | 100.0%  |   0.0%    |
 | JavaFX Scene Canvas API                | 100.0%  |   0.0%    |

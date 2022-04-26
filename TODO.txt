@@ -1,20 +1,9 @@
-Color API:
-
-	* CHANGE:	Rename the method luminance() (and those with similar names that are referencing it) to relativeLuminance() in the Color* classes.
-
 Geometry Shape API:
 
-	* ADD:		Add a method to Rectangle2D that returns the intersection of two Rectangle2D instances using a Polygon2D instance.
-	* ADD:		Add a method to Rectangle2F that returns the intersection of two Rectangle2F instances using a Polygon2F instance.
-	* ADD:		Add a method to Rectangle2I that returns the intersection of two Rectangle2I instances using a Polygon2I instance.
 	* CHANGE:	Implement LineSegment3D.
 	* CHANGE:	Implement LineSegment3F.
 	* FIX:		Fix the ProceduralTerrain3D class.
 	* FIX:		Fix the ProceduralTerrain3F class.
-
-JavaFX Application API:
-
-	* ADD:		Add support for FileParameter in the ParameterLoader implementation.
 
 Parameter API:
 

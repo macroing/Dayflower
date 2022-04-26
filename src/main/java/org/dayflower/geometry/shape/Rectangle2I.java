@@ -25,7 +25,6 @@ import static org.dayflower.utility.Ints.min;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -167,7 +166,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @param isIncludingBorderOnly {@code true} if, and only if, this method should only include {@code Point2I} instances on the border of this {@code Rectangle2I} instance, {@code false} otherwise
 	 * @return a {@code List} with {@code Point2I} instances contained in this {@code Rectangle2I} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
 		final List<Point2I> points = new ArrayList<>();
@@ -343,7 +341,6 @@ public final class Rectangle2I implements Shape2I {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle2I} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
 		return isIncludingBorderOnly ? doContainsOnLineSegments(point) : doContains(point) || doContainsOnLineSegments(point);
@@ -357,14 +354,11 @@ public final class Rectangle2I implements Shape2I {
 	 * @param object the {@code Object} to compare to this {@code Rectangle2I} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Rectangle2I}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Rectangle2I)) {
-			return false;
-		} else if(!Objects.equals(this.lineSegments, Rectangle2I.class.cast(object).lineSegments)) {
 			return false;
 		} else if(!Objects.equals(this.a, Rectangle2I.class.cast(object).a)) {
 			return false;
@@ -372,10 +366,8 @@ public final class Rectangle2I implements Shape2I {
 			return false;
 		} else if(!Objects.equals(this.c, Rectangle2I.class.cast(object).c)) {
 			return false;
-		} else if(!Objects.equals(this.d, Rectangle2I.class.cast(object).d)) {
-			return false;
 		} else {
-			return true;
+			return Objects.equals(this.d, Rectangle2I.class.cast(object).d);
 		}
 	}
 	
@@ -420,7 +412,7 @@ public final class Rectangle2I implements Shape2I {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.lineSegments, this.a, this.b, this.c, this.d);
+		return Objects.hash(this.a, this.b, this.c, this.d);
 	}
 	
 	/**

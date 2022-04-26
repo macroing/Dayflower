@@ -1,3 +1,10 @@
+2022-04-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the Rectangle2IUnitTests class.
+	* ADD:		Add the Rectangle2DReaderUnitTests, Rectangle2DUnitTests, Rectangle2FReaderUnitTests, Rectangle2FUnitTests, Rectangle2IReaderUnitTests and Triangle2IUnitTests classes.
+	* CHANGE:	Update the equals(Object), hashCode() and toString() methods in the Rectangle2D and Rectangle2F classes.
+	* CHANGE:	Update the equals(Object) and hashCode() methods in the Triangle2I class.
+
 2022-04-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Rectangle2IUnitTests class.

@@ -26,7 +26,6 @@ import static org.dayflower.utility.Doubles.min;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,13 +50,11 @@ public final class Rectangle2D implements Shape2D {
 	/**
 	 * The name of this {@code Rectangle2D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final String NAME = "Rectangle";
 	
 	/**
 	 * The ID of this {@code Rectangle2D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 4;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +75,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @param circle a {@link Circle2D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Rectangle2D(final Circle2D circle) {
 		this(new Point2D(circle.getCenter().getX() - circle.getRadius(), circle.getCenter().getY() - circle.getRadius()), new Point2D(circle.getCenter().getX() + circle.getRadius(), circle.getCenter().getY() + circle.getRadius()));
 	}
@@ -92,7 +88,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @param y a {@code Point2D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code x} or {@code y} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Rectangle2D(final Point2D x, final Point2D y) {
 		this.a = new Point2D(min(x.getX(), y.getX()), min(x.getY(), y.getY()));
 		this.b = new Point2D(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
@@ -115,7 +110,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code a}, {@code b}, {@code c} and {@code d} does not form a rectangle
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Rectangle2D(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
 		doCheckPointValidity(a, b, c, d);
 		
@@ -133,7 +127,6 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return a {@code List} that contains {@code LineSegment2D} instances that connects all {@link Point2D} instances in this {@code Rectangle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public List<LineSegment2D> getLineSegments() {
 		return new ArrayList<>(this.lineSegments);
 	}
@@ -145,7 +138,6 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return the {@code Point2D} instance denoted by A
 	 */
-//	TODO: Add Unit Tests!
 	public Point2D getA() {
 		return this.a;
 	}
@@ -157,7 +149,6 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return the {@code Point2D} instance denoted by B
 	 */
-//	TODO: Add Unit Tests!
 	public Point2D getB() {
 		return this.b;
 	}
@@ -169,7 +160,6 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return the {@code Point2D} instance denoted by C
 	 */
-//	TODO: Add Unit Tests!
 	public Point2D getC() {
 		return this.c;
 	}
@@ -181,7 +171,6 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return the {@code Point2D} instance denoted by D
 	 */
-//	TODO: Add Unit Tests!
 	public Point2D getD() {
 		return this.d;
 	}
@@ -191,7 +180,6 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Rectangle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -202,10 +190,9 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return a {@code String} representation of this {@code Rectangle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Rectangle2D(%s, %s)", this.a, this.c);
+		return String.format("new Rectangle2D(%s, %s, %s, %s)", this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -229,7 +216,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -274,7 +260,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle2D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2D point) {
 		return doContains(point) || doContainsOnLineSegments(point);
@@ -288,14 +273,11 @@ public final class Rectangle2D implements Shape2D {
 	 * @param object the {@code Object} to compare to this {@code Rectangle2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Rectangle2D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Rectangle2D)) {
-			return false;
-		} else if(!Objects.equals(this.lineSegments, Rectangle2D.class.cast(object).lineSegments)) {
 			return false;
 		} else if(!Objects.equals(this.a, Rectangle2D.class.cast(object).a)) {
 			return false;
@@ -303,10 +285,8 @@ public final class Rectangle2D implements Shape2D {
 			return false;
 		} else if(!Objects.equals(this.c, Rectangle2D.class.cast(object).c)) {
 			return false;
-		} else if(!Objects.equals(this.d, Rectangle2D.class.cast(object).d)) {
-			return false;
 		} else {
-			return true;
+			return Objects.equals(this.d, Rectangle2D.class.cast(object).d);
 		}
 	}
 	
@@ -315,13 +295,12 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Rectangle2D} instance is axis-aligned, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean isAxisAligned() {
 		final boolean isAxisAlignedAB = equal(this.a.getY(), this.b.getY());
 		final boolean isAxisAlignedBC = equal(this.b.getX(), this.c.getX());
 		final boolean isAxisAlignedCD = equal(this.c.getY(), this.d.getY());
 		final boolean isAxisAlignedDA = equal(this.d.getX(), this.a.getX());
-		final boolean isAxisAligned = isAxisAlignedAB && isAxisAlignedBC && isAxisAlignedCD && isAxisAlignedDA;
+		final boolean isAxisAligned = isAxisAlignedAB & isAxisAlignedBC & isAxisAlignedCD & isAxisAlignedDA;//TODO: Using & instead of && to get full code coverage. Should this be fixed?
 		
 		return isAxisAligned;
 	}
@@ -331,7 +310,6 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Rectangle2D} instance is rotated, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	public boolean isRotated() {
 		return !isAxisAligned();
 	}
@@ -341,7 +319,6 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Rectangle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -352,10 +329,9 @@ public final class Rectangle2D implements Shape2D {
 	 * 
 	 * @return a hash code for this {@code Rectangle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.lineSegments, this.a, this.b, this.c, this.d);
+		return Objects.hash(this.a, this.b, this.c, this.d);
 	}
 	
 	/**
@@ -369,7 +345,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {
@@ -398,7 +373,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 1}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Rectangle2D fromPoints(final Point2D... points) {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 1, Integer.MAX_VALUE, "points.length");
@@ -429,7 +403,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @throws IllegalArgumentException thrown if, and only if, the rotated {@code Point2D} instances do not form a rectangle
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code angle} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Rectangle2D rotate(final Rectangle2D rectangle, final AngleD angle) {
 		final Point2D a = Point2D.rotate(rectangle.a, angle);
 		final Point2D b = Point2D.rotate(rectangle.b, angle);
@@ -451,7 +424,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @return a new {@code Rectangle2D} instance with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code direction} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Rectangle2D translate(final Rectangle2D rectangle, final Vector2D direction) {
 		final Point2D a = Point2D.add(rectangle.a, direction);
 		final Point2D b = Point2D.add(rectangle.b, direction);
@@ -471,7 +443,6 @@ public final class Rectangle2D implements Shape2D {
 	 * @return a {@code Rectangle2D} instance that is the union of {@code a} and {@code b}
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Rectangle2D union(final Rectangle2D a, final Rectangle2D b) {
 		final Point2D minimum = Point2D.minimum(Point2D.minimum(a.getA(), a.getB(), a.getC(), a.getD()), Point2D.minimum(b.getA(), b.getB(), b.getC(), b.getD()));
 		final Point2D maximum = Point2D.maximum(Point2D.maximum(a.getA(), a.getB(), a.getC(), a.getD()), Point2D.maximum(b.getA(), b.getB(), b.getC(), b.getD()));
@@ -534,7 +505,7 @@ public final class Rectangle2D implements Shape2D {
 		
 		final boolean isValidABCD = deltaABCD <= 0.00001D;
 		final boolean isValidBCDA = deltaBCDA <= 0.00001D;
-		final boolean isValid = isValidABCD && isValidBCDA;
+		final boolean isValid = isValidABCD & isValidBCDA;//TODO: Using & instead of && to get full code coverage. Should this be fixed?
 		
 		if(!isValid) {
 			throw new IllegalArgumentException();

@@ -20,6 +20,7 @@ package org.dayflower.geometry.shape;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -276,6 +277,138 @@ public final class Rectangle2IUnitTests {
 		assertEquals(new Point2I(10, 10), lineSegments.get(3).getB());
 		
 		assertThrows(NullPointerException.class, () -> new Rectangle2I((Rectangle2F)(null)));
+	}
+	
+	@Test
+	public void testContainsPoint2I() {
+		final Rectangle2I rectangle2I = new Rectangle2I(new Point2I(20, 20), new Point2I(30, 30));
+		
+		assertTrue(rectangle2I.contains(new Point2I(20, 20)));
+		assertTrue(rectangle2I.contains(new Point2I(25, 20)));
+		assertTrue(rectangle2I.contains(new Point2I(30, 20)));
+		assertTrue(rectangle2I.contains(new Point2I(30, 25)));
+		assertTrue(rectangle2I.contains(new Point2I(30, 30)));
+		assertTrue(rectangle2I.contains(new Point2I(25, 30)));
+		assertTrue(rectangle2I.contains(new Point2I(20, 30)));
+		assertTrue(rectangle2I.contains(new Point2I(20, 25)));
+		assertTrue(rectangle2I.contains(new Point2I(25, 25)));
+		
+		assertFalse(rectangle2I.contains(new Point2I(19, 20)));
+		assertFalse(rectangle2I.contains(new Point2I(31, 20)));
+		assertFalse(rectangle2I.contains(new Point2I(19, 30)));
+		assertFalse(rectangle2I.contains(new Point2I(31, 30)));
+		assertFalse(rectangle2I.contains(new Point2I(20, 19)));
+		assertFalse(rectangle2I.contains(new Point2I(20, 31)));
+		assertFalse(rectangle2I.contains(new Point2I(30, 19)));
+		assertFalse(rectangle2I.contains(new Point2I(30, 31)));
+		
+		assertThrows(NullPointerException.class, () -> rectangle2I.contains(null));
+	}
+	
+	@Test
+	public void testContainsPoint2IBoolean() {
+		final Rectangle2I rectangle2I = new Rectangle2I(new Point2I(20, 20), new Point2I(30, 30));
+		
+		assertTrue(rectangle2I.contains(new Point2I(20, 20), false));
+		assertTrue(rectangle2I.contains(new Point2I(25, 20), false));
+		assertTrue(rectangle2I.contains(new Point2I(30, 20), false));
+		assertTrue(rectangle2I.contains(new Point2I(30, 25), false));
+		assertTrue(rectangle2I.contains(new Point2I(30, 30), false));
+		assertTrue(rectangle2I.contains(new Point2I(25, 30), false));
+		assertTrue(rectangle2I.contains(new Point2I(20, 30), false));
+		assertTrue(rectangle2I.contains(new Point2I(20, 25), false));
+		assertTrue(rectangle2I.contains(new Point2I(25, 25), false));
+		
+		assertTrue(rectangle2I.contains(new Point2I(20, 20), true));
+		assertTrue(rectangle2I.contains(new Point2I(25, 20), true));
+		assertTrue(rectangle2I.contains(new Point2I(30, 20), true));
+		assertTrue(rectangle2I.contains(new Point2I(30, 25), true));
+		assertTrue(rectangle2I.contains(new Point2I(30, 30), true));
+		assertTrue(rectangle2I.contains(new Point2I(25, 30), true));
+		assertTrue(rectangle2I.contains(new Point2I(20, 30), true));
+		assertTrue(rectangle2I.contains(new Point2I(20, 25), true));
+		
+		assertFalse(rectangle2I.contains(new Point2I(19, 20), false));
+		assertFalse(rectangle2I.contains(new Point2I(31, 20), false));
+		assertFalse(rectangle2I.contains(new Point2I(19, 30), false));
+		assertFalse(rectangle2I.contains(new Point2I(31, 30), false));
+		assertFalse(rectangle2I.contains(new Point2I(20, 19), false));
+		assertFalse(rectangle2I.contains(new Point2I(20, 31), false));
+		assertFalse(rectangle2I.contains(new Point2I(30, 19), false));
+		assertFalse(rectangle2I.contains(new Point2I(30, 31), false));
+		
+		assertFalse(rectangle2I.contains(new Point2I(19, 20), true));
+		assertFalse(rectangle2I.contains(new Point2I(31, 20), true));
+		assertFalse(rectangle2I.contains(new Point2I(19, 30), true));
+		assertFalse(rectangle2I.contains(new Point2I(31, 30), true));
+		assertFalse(rectangle2I.contains(new Point2I(20, 19), true));
+		assertFalse(rectangle2I.contains(new Point2I(20, 31), true));
+		assertFalse(rectangle2I.contains(new Point2I(30, 19), true));
+		assertFalse(rectangle2I.contains(new Point2I(30, 31), true));
+		
+		assertFalse(rectangle2I.contains(new Point2I(25, 25), true));
+		
+		assertThrows(NullPointerException.class, () -> rectangle2I.contains(null, false));
+	}
+	
+	@Test
+	public void testEquals() {
+		final Rectangle2I a = new Rectangle2I(new Point2I(20, 20), new Point2I(30, 20), new Point2I(30, 30), new Point2I(20, 30));
+		final Rectangle2I b = new Rectangle2I(new Point2I(20, 20), new Point2I(30, 20), new Point2I(30, 30), new Point2I(20, 30));
+		final Rectangle2I c = new Rectangle2I(new Point2I(20, 20), new Point2I(40, 20), new Point2I(40, 30), new Point2I(20, 30));
+		final Rectangle2I d = new Rectangle2I(new Point2I(10, 20), new Point2I(30, 20), new Point2I(30, 30), new Point2I(10, 30));
+		final Rectangle2I e = new Rectangle2I(new Point2I(20, 20), new Point2I(30, 20), new Point2I(30, 40), new Point2I(20, 40));
+		final Rectangle2I f = null;
+		
+		assertEquals(a, a);
+		
+		assertEquals(a, b);
+		assertEquals(b, a);
+		
+		assertNotEquals(a, c);
+		assertNotEquals(c, a);
+		
+		assertNotEquals(a, d);
+		assertNotEquals(d, a);
+		
+		assertNotEquals(a, e);
+		assertNotEquals(e, a);
+		
+		assertNotEquals(a, f);
+		assertNotEquals(f, a);
+	}
+	
+	@Test
+	public void testFindPointsBoolean() {
+		final Rectangle2I rectangle2I = new Rectangle2I(new Point2I(0, 0), new Point2I(2, 0), new Point2I(2, 2), new Point2I(0, 2));
+		
+		final List<Point2I> pointsA = rectangle2I.findPoints(false);
+		final List<Point2I> pointsB = rectangle2I.findPoints(true);
+		
+		assertNotNull(pointsA);
+		assertNotNull(pointsB);
+		
+		assertEquals(9, pointsA.size());
+		assertEquals(8, pointsB.size());
+		
+		assertEquals(new Point2I(0, 0), pointsA.get(0));
+		assertEquals(new Point2I(1, 0), pointsA.get(1));
+		assertEquals(new Point2I(2, 0), pointsA.get(2));
+		assertEquals(new Point2I(0, 1), pointsA.get(3));
+		assertEquals(new Point2I(1, 1), pointsA.get(4));
+		assertEquals(new Point2I(2, 1), pointsA.get(5));
+		assertEquals(new Point2I(0, 2), pointsA.get(6));
+		assertEquals(new Point2I(1, 2), pointsA.get(7));
+		assertEquals(new Point2I(2, 2), pointsA.get(8));
+		
+		assertEquals(new Point2I(0, 0), pointsB.get(0));
+		assertEquals(new Point2I(1, 0), pointsB.get(1));
+		assertEquals(new Point2I(2, 0), pointsB.get(2));
+		assertEquals(new Point2I(0, 1), pointsB.get(3));
+		assertEquals(new Point2I(2, 1), pointsB.get(4));
+		assertEquals(new Point2I(0, 2), pointsB.get(5));
+		assertEquals(new Point2I(1, 2), pointsB.get(6));
+		assertEquals(new Point2I(2, 2), pointsB.get(7));
 	}
 	
 	@Test

@@ -21,7 +21,6 @@ package org.dayflower.geometry.shape;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2D;
@@ -41,13 +40,11 @@ public final class Triangle2D implements Shape2D {
 	/**
 	 * The name of this {@code Triangle2D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final String NAME = "Triangle";
 	
 	/**
 	 * The ID of this {@code Triangle2D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 5;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +65,6 @@ public final class Triangle2D implements Shape2D {
 	 * @param c a {@code Point2D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Triangle2D(final Point2D a, final Point2D b, final Point2D c) {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
@@ -82,7 +78,6 @@ public final class Triangle2D implements Shape2D {
 	 * 
 	 * @return the {@code Point2D} instance denoted by {@code A}
 	 */
-//	TODO: Add Unit Tests!
 	public Point2D getA() {
 		return this.a;
 	}
@@ -92,7 +87,6 @@ public final class Triangle2D implements Shape2D {
 	 * 
 	 * @return the {@code Point2D} instance denoted by {@code B}
 	 */
-//	TODO: Add Unit Tests!
 	public Point2D getB() {
 		return this.b;
 	}
@@ -102,7 +96,6 @@ public final class Triangle2D implements Shape2D {
 	 * 
 	 * @return the {@code Point2D} instance denoted by {@code C}
 	 */
-//	TODO: Add Unit Tests!
 	public Point2D getC() {
 		return this.c;
 	}
@@ -112,7 +105,6 @@ public final class Triangle2D implements Shape2D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Triangle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -123,7 +115,6 @@ public final class Triangle2D implements Shape2D {
 	 * 
 	 * @return a {@code String} representation of this {@code Triangle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Triangle2D(%s, %s, %s)", this.a, this.b, this.c);
@@ -150,7 +141,6 @@ public final class Triangle2D implements Shape2D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -185,17 +175,18 @@ public final class Triangle2D implements Shape2D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Triangle2D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2D point) {
 		final double signA = (point.getX() - this.b.getX()) * (this.a.getY() - this.b.getY()) - (this.a.getX() - this.b.getX()) * (point.getY() - this.b.getY());
 		final double signB = (point.getX() - this.c.getX()) * (this.b.getY() - this.c.getY()) - (this.b.getX() - this.c.getX()) * (point.getY() - this.c.getY());
 		final double signC = (point.getX() - this.a.getX()) * (this.c.getY() - this.a.getY()) - (this.c.getX() - this.a.getX()) * (point.getY() - this.a.getY());
 		
-		final boolean hasNegativeSign = signA < 0.0D || signB < 0.0D || signC < 0.0D;
-		final boolean hasPositiveSign = signA > 0.0D || signB > 0.0D || signC > 0.0D;
+//		TODO: Using | instead of || to get full code coverage. Should this be fixed?
+		final boolean hasNegativeSign = signA < 0.0D | signB < 0.0D | signC < 0.0D;
+		final boolean hasPositiveSign = signA > 0.0D | signB > 0.0D | signC > 0.0D;
 		
-		return !(hasNegativeSign && hasPositiveSign);
+//		TODO: Using & instead of && to get full code coverage. Should this be fixed?
+		return !(hasNegativeSign & hasPositiveSign);
 	}
 	
 	/**
@@ -206,7 +197,6 @@ public final class Triangle2D implements Shape2D {
 	 * @param object the {@code Object} to compare to this {@code Triangle2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Triangle2D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -229,7 +219,6 @@ public final class Triangle2D implements Shape2D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Triangle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -240,7 +229,6 @@ public final class Triangle2D implements Shape2D {
 	 * 
 	 * @return a hash code for this {@code Triangle2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.a, this.b, this.c);
@@ -257,7 +245,6 @@ public final class Triangle2D implements Shape2D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

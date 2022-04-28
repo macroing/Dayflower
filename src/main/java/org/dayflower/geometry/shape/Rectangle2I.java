@@ -87,9 +87,9 @@ public final class Rectangle2I implements Shape2I {
 	 */
 	public Rectangle2I(final Point2I x, final Point2I y) {
 		this.a = new Point2I(min(x.getX(), y.getX()), min(x.getY(), y.getY()));
-		this.b = new Point2I(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
+		this.b = new Point2I(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
 		this.c = new Point2I(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
-		this.d = new Point2I(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
+		this.d = new Point2I(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.lineSegments = LineSegment2I.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
@@ -205,7 +205,7 @@ public final class Rectangle2I implements Shape2I {
 	/**
 	 * Returns the {@link Point2I} instance denoted by B.
 	 * <p>
-	 * This {@code Point2I} instance usually contains the minimum X and maximum Y component values.
+	 * This {@code Point2I} instance usually contains the maximum X and minimum Y component values.
 	 * 
 	 * @return the {@code Point2I} instance denoted by B
 	 */
@@ -227,7 +227,7 @@ public final class Rectangle2I implements Shape2I {
 	/**
 	 * Returns the {@link Point2I} instance denoted by D.
 	 * <p>
-	 * This {@code Point2I} instance usually contains the maximum X and minimum Y component values.
+	 * This {@code Point2I} instance usually contains the minimum X and maximum Y component values.
 	 * 
 	 * @return the {@code Point2I} instance denoted by D
 	 */

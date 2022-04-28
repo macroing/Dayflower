@@ -104,9 +104,9 @@ public final class Rectangle2FUnitTests {
 		final List<LineSegment2F> lineSegments = rectangle.getLineSegments();
 		
 		assertEquals(new Point2F(10.0F, 10.0F), rectangle.getA());
-		assertEquals(new Point2F(10.0F, 30.0F), rectangle.getB());
+		assertEquals(new Point2F(30.0F, 10.0F), rectangle.getB());
 		assertEquals(new Point2F(30.0F, 30.0F), rectangle.getC());
-		assertEquals(new Point2F(30.0F, 10.0F), rectangle.getD());
+		assertEquals(new Point2F(10.0F, 30.0F), rectangle.getD());
 		
 		assertNotNull(lineSegments);
 		
@@ -118,15 +118,15 @@ public final class Rectangle2FUnitTests {
 		assertNotNull(lineSegments.get(3));
 		
 		assertEquals(new Point2F(10.0F, 10.0F), lineSegments.get(0).getA());
-		assertEquals(new Point2F(10.0F, 30.0F), lineSegments.get(0).getB());
+		assertEquals(new Point2F(30.0F, 10.0F), lineSegments.get(0).getB());
 		
-		assertEquals(new Point2F(10.0F, 30.0F), lineSegments.get(1).getA());
+		assertEquals(new Point2F(30.0F, 10.0F), lineSegments.get(1).getA());
 		assertEquals(new Point2F(30.0F, 30.0F), lineSegments.get(1).getB());
 		
 		assertEquals(new Point2F(30.0F, 30.0F), lineSegments.get(2).getA());
-		assertEquals(new Point2F(30.0F, 10.0F), lineSegments.get(2).getB());
+		assertEquals(new Point2F(10.0F, 30.0F), lineSegments.get(2).getB());
 		
-		assertEquals(new Point2F(30.0F, 10.0F), lineSegments.get(3).getA());
+		assertEquals(new Point2F(10.0F, 30.0F), lineSegments.get(3).getA());
 		assertEquals(new Point2F(10.0F, 10.0F), lineSegments.get(3).getB());
 		
 		assertThrows(NullPointerException.class, () -> new Rectangle2F((Circle2F)(null)));
@@ -139,9 +139,9 @@ public final class Rectangle2FUnitTests {
 		final List<LineSegment2F> lineSegments = rectangle.getLineSegments();
 		
 		assertEquals(new Point2F(10.0F, 10.0F), rectangle.getA());
-		assertEquals(new Point2F(10.0F, 30.0F), rectangle.getB());
+		assertEquals(new Point2F(30.0F, 10.0F), rectangle.getB());
 		assertEquals(new Point2F(30.0F, 30.0F), rectangle.getC());
-		assertEquals(new Point2F(30.0F, 10.0F), rectangle.getD());
+		assertEquals(new Point2F(10.0F, 30.0F), rectangle.getD());
 		
 		assertNotNull(lineSegments);
 		
@@ -153,15 +153,15 @@ public final class Rectangle2FUnitTests {
 		assertNotNull(lineSegments.get(3));
 		
 		assertEquals(new Point2F(10.0F, 10.0F), lineSegments.get(0).getA());
-		assertEquals(new Point2F(10.0F, 30.0F), lineSegments.get(0).getB());
+		assertEquals(new Point2F(30.0F, 10.0F), lineSegments.get(0).getB());
 		
-		assertEquals(new Point2F(10.0F, 30.0F), lineSegments.get(1).getA());
+		assertEquals(new Point2F(30.0F, 10.0F), lineSegments.get(1).getA());
 		assertEquals(new Point2F(30.0F, 30.0F), lineSegments.get(1).getB());
 		
 		assertEquals(new Point2F(30.0F, 30.0F), lineSegments.get(2).getA());
-		assertEquals(new Point2F(30.0F, 10.0F), lineSegments.get(2).getB());
+		assertEquals(new Point2F(10.0F, 30.0F), lineSegments.get(2).getB());
 		
-		assertEquals(new Point2F(30.0F, 10.0F), lineSegments.get(3).getA());
+		assertEquals(new Point2F(10.0F, 30.0F), lineSegments.get(3).getA());
 		assertEquals(new Point2F(10.0F, 10.0F), lineSegments.get(3).getB());
 		
 		assertThrows(NullPointerException.class, () -> new Rectangle2F(new Point2F(), null));
@@ -390,7 +390,7 @@ public final class Rectangle2FUnitTests {
 	public void testToString() {
 		final Rectangle2F rectangle = new Rectangle2F(new Point2F(10.0F, 10.0F), new Point2F(20.0F, 20.0F));
 		
-		assertEquals("new Rectangle2F(new Point2F(10.0F, 10.0F), new Point2F(10.0F, 20.0F), new Point2F(20.0F, 20.0F), new Point2F(20.0F, 10.0F))", rectangle.toString());
+		assertEquals("new Rectangle2F(new Point2F(10.0F, 10.0F), new Point2F(20.0F, 10.0F), new Point2F(20.0F, 20.0F), new Point2F(10.0F, 20.0F))", rectangle.toString());
 	}
 	
 	@Test

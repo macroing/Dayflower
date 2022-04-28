@@ -126,9 +126,9 @@ public final class Triangle2IUnitTests {
 		assertNotNull(rectangle);
 		
 		assertEquals(new Point2I(10, 10), rectangle.getA());
-		assertEquals(new Point2I(10, 20), rectangle.getB());
+		assertEquals(new Point2I(20, 10), rectangle.getB());
 		assertEquals(new Point2I(20, 20), rectangle.getC());
-		assertEquals(new Point2I(20, 10), rectangle.getD());
+		assertEquals(new Point2I(10, 20), rectangle.getD());
 		
 		assertThrows(NullPointerException.class, () -> new Triangle2I(new Point2I(), new Point2I(), null));
 		assertThrows(NullPointerException.class, () -> new Triangle2I(new Point2I(), null, new Point2I()));
@@ -321,9 +321,9 @@ public final class Triangle2IUnitTests {
 		assertNotNull(rectangle);
 		
 		assertEquals(new Point2I(10, 10), rectangle.getA());
-		assertEquals(new Point2I(10, 20), rectangle.getB());
+		assertEquals(new Point2I(20, 10), rectangle.getB());
 		assertEquals(new Point2I(20, 20), rectangle.getC());
-		assertEquals(new Point2I(20, 10), rectangle.getD());
+		assertEquals(new Point2I(10, 20), rectangle.getD());
 	}
 	
 	@Test

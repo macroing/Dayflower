@@ -187,7 +187,6 @@ public interface Shape3D extends Shape {
 	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Shape3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}

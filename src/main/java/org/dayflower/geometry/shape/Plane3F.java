@@ -293,8 +293,6 @@ public final class Plane3F implements Shape3F {
 			return false;
 		} else if(!Objects.equals(this.c, Plane3F.class.cast(object).c)) {
 			return false;
-		} else if(!Objects.equals(this.surfaceNormal, Plane3F.class.cast(object).surfaceNormal)) {
-			return false;
 		} else {
 			return true;
 		}
@@ -363,7 +361,7 @@ public final class Plane3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.a, this.b, this.c, this.surfaceNormal);
+		return Objects.hash(this.a, this.b, this.c);
 	}
 	
 	/**

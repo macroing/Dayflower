@@ -90,9 +90,9 @@ public final class Rectangle2D implements Shape2D {
 	 */
 	public Rectangle2D(final Point2D x, final Point2D y) {
 		this.a = new Point2D(min(x.getX(), y.getX()), min(x.getY(), y.getY()));
-		this.b = new Point2D(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
+		this.b = new Point2D(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
 		this.c = new Point2D(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
-		this.d = new Point2D(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
+		this.d = new Point2D(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.lineSegments = LineSegment2D.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
@@ -145,7 +145,7 @@ public final class Rectangle2D implements Shape2D {
 	/**
 	 * Returns the {@link Point2D} instance denoted by B.
 	 * <p>
-	 * This {@code Point2D} instance usually contains the minimum X and maximum Y component values.
+	 * This {@code Point2D} instance usually contains the maximum X and minimum Y component values.
 	 * 
 	 * @return the {@code Point2D} instance denoted by B
 	 */
@@ -167,7 +167,7 @@ public final class Rectangle2D implements Shape2D {
 	/**
 	 * Returns the {@link Point2D} instance denoted by D.
 	 * <p>
-	 * This {@code Point2D} instance usually contains the maximum X and minimum Y component values.
+	 * This {@code Point2D} instance usually contains the minimum X and maximum Y component values.
 	 * 
 	 * @return the {@code Point2D} instance denoted by D
 	 */

@@ -21,7 +21,6 @@ package org.dayflower.geometry.shape;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,13 +44,11 @@ public final class Polygon2D implements Shape2D {
 	/**
 	 * The name of this {@code Polygon2D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final String NAME = "Polygon";
 	
 	/**
 	 * The ID of this {@code Polygon2D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +70,6 @@ public final class Polygon2D implements Shape2D {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code points.length} is less than {@code 3}
 	 * @throws NullPointerException thrown if, and only if, either {@code points} or an element in {@code points} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public Polygon2D(final Point2D... points) {
 		this.points = doRequireValidPoints(points);
 		this.lineSegments = LineSegment2D.fromPoints(this.points);
@@ -87,9 +83,17 @@ public final class Polygon2D implements Shape2D {
 	 * 
 	 * @return a {@code List} that contains {@code LineSegment2D} instances that connects all {@link Point2D} instances in this {@code Polygon2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public List<LineSegment2D> getLineSegments() {
 		return new ArrayList<>(this.lineSegments);
+	}
+	
+	/**
+	 * Returns a {@code List} that contains all {@link Point2D} instances in this {@code Polygon2D} instance.
+	 * 
+	 * @return a {@code List} that contains all {@code Point2D} instances in this {@code Polygon2D} instance
+	 */
+	public List<Point2D> getPoints() {
+		return new ArrayList<>(Arrays.asList(this.points));
 	}
 	
 	/**
@@ -101,7 +105,6 @@ public final class Polygon2D implements Shape2D {
 	 * @return the {@code Point2D} instance at index {@code index} in this {@code Polygon2D} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than or equal to {@code polygon.getPointCount()}
 	 */
-//	TODO: Add Unit Tests!
 	public Point2D getPoint(final int index) {
 		ParameterArguments.requireRange(index, 0, getPointCount() - 1, "index");
 		
@@ -113,7 +116,6 @@ public final class Polygon2D implements Shape2D {
 	 * 
 	 * @return the {@code Rectangle2D} instance that contains this {@code Polygon2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public Rectangle2D getRectangle() {
 		return this.rectangle;
 	}
@@ -123,7 +125,6 @@ public final class Polygon2D implements Shape2D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Polygon2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -134,7 +135,6 @@ public final class Polygon2D implements Shape2D {
 	 * 
 	 * @return a {@code String} representation of this {@code Polygon2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return String.format("new Polygon2D(%s)", Point2D.toString(this.points));
@@ -161,7 +161,6 @@ public final class Polygon2D implements Shape2D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -200,10 +199,9 @@ public final class Polygon2D implements Shape2D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Polygon2D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point2D point) {
-		return this.rectangle.contains(point) ? doContains(point) || doContainsOnLineSegments(point) : false;
+		return doContainsOnLineSegments(point) || doContains(point);
 	}
 	
 	/**
@@ -214,18 +212,13 @@ public final class Polygon2D implements Shape2D {
 	 * @param object the {@code Object} to compare to this {@code Polygon2D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Polygon2D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Polygon2D)) {
 			return false;
-		} else if(!Objects.equals(this.lineSegments, Polygon2D.class.cast(object).lineSegments)) {
-			return false;
 		} else if(!Arrays.equals(this.points, Polygon2D.class.cast(object).points)) {
-			return false;
-		} else if(!Objects.equals(this.rectangle, Polygon2D.class.cast(object).rectangle)) {
 			return false;
 		} else {
 			return true;
@@ -237,7 +230,6 @@ public final class Polygon2D implements Shape2D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Polygon2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -248,7 +240,6 @@ public final class Polygon2D implements Shape2D {
 	 * 
 	 * @return the {@code Point2D} count of this {@code Polygon2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	public int getPointCount() {
 		return this.points.length;
 	}
@@ -258,10 +249,9 @@ public final class Polygon2D implements Shape2D {
 	 * 
 	 * @return a hash code for this {@code Polygon2D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.lineSegments, Integer.valueOf(Arrays.hashCode(this.points)), this.rectangle);
+		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.points)));
 	}
 	
 	/**
@@ -275,7 +265,6 @@ public final class Polygon2D implements Shape2D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

@@ -1,3 +1,12 @@
+2022-04-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the Polygon2DReaderUnitTests, Polygon2DUnitTests, Polygon2FReaderUnitTests, Polygon2FUnitTests, Polygon2IReaderUnitTests and Polygon2IUnitTests classes.
+	* ADD:		Add the method getPoints() to the Polygon2D and Polygon2F classes.
+	* ADD:		Add the Plane3DUnitTests class.
+	* CHANGE:	Update the equals(Object) and hashCode() methods in the Polygon2D, Polygon2F and Polygon2I classes.
+	* CHANGE:	The points B and D in the Rectangle2D, Rectangle2F and Rectangle2I classes have been swapped by default. Before they were counter clockwise and now they are clockwise.
+	* CHANGE:	Update the equals(Object) and hashCode() methods in the Plane3D and Plane3F classes.
+
 2022-04-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Triangle2DReaderUnitTests, Triangle2DUnitTests, Triangle2FReaderUnitTests, Triangle2FUnitTests and Triangle2IReaderUnitTests classes.

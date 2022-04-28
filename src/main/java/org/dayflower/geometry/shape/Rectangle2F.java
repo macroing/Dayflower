@@ -90,9 +90,9 @@ public final class Rectangle2F implements Shape2F {
 	 */
 	public Rectangle2F(final Point2F x, final Point2F y) {
 		this.a = new Point2F(min(x.getX(), y.getX()), min(x.getY(), y.getY()));
-		this.b = new Point2F(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
+		this.b = new Point2F(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
 		this.c = new Point2F(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
-		this.d = new Point2F(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
+		this.d = new Point2F(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.lineSegments = LineSegment2F.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
@@ -145,7 +145,7 @@ public final class Rectangle2F implements Shape2F {
 	/**
 	 * Returns the {@link Point2F} instance denoted by B.
 	 * <p>
-	 * This {@code Point2F} instance usually contains the minimum X and maximum Y component values.
+	 * This {@code Point2F} instance usually contains the maximum X and minimum Y component values.
 	 * 
 	 * @return the {@code Point2F} instance denoted by B
 	 */
@@ -167,7 +167,7 @@ public final class Rectangle2F implements Shape2F {
 	/**
 	 * Returns the {@link Point2F} instance denoted by D.
 	 * <p>
-	 * This {@code Point2F} instance usually contains the maximum X and minimum Y component values.
+	 * This {@code Point2F} instance usually contains the minimum X and maximum Y component values.
 	 * 
 	 * @return the {@code Point2F} instance denoted by D
 	 */

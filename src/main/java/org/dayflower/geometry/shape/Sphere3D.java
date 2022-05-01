@@ -22,13 +22,11 @@ import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.PI;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.gamma;
 import static org.dayflower.utility.Doubles.isInfinite;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.pow;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
 import static org.dayflower.utility.Doubles.sqrt;
 
@@ -78,56 +76,12 @@ public final class Sphere3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Point3D center;
-	private final double radius;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
-	 * Constructs a new {@code Sphere3D} instance with a radius of {@code 1.0D} and a center of {@code new Point3D()}.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Sphere3D(1.0D);
-	 * }
-	 * </pre>
+	 * Constructs a new {@code Sphere3D} instance.
 	 */
 //	TODO: Add Unit Tests!
 	public Sphere3D() {
-		this(1.0D);
-	}
-	
-	/**
-	 * Constructs a new {@code Sphere3D} instance with a radius of {@code radius} and a center of {@code new Point3D()}.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Sphere3D(radius, new Point3D());
-	 * }
-	 * </pre>
-	 * 
-	 * @param radius the radius of this {@code Sphere3D} instance
-	 */
-//	TODO: Add Unit Tests!
-	public Sphere3D(final double radius) {
-		this(radius, new Point3D());
-	}
-	
-	/**
-	 * Constructs a new {@code Sphere3D} instance with a radius of {@code radius} and a center of {@code center}.
-	 * <p>
-	 * If {@code center} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param radius the radius of this {@code Sphere3D} instance
-	 * @param center the center of this {@code Sphere3D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public Sphere3D(final double radius, final Point3D center) {
-		this.center = Point3D.getCached(Objects.requireNonNull(center, "center == null"));
-		this.radius = radius;
+		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +94,7 @@ public final class Sphere3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
-		return new BoundingSphere3D(this.radius, this.center);
+		return new BoundingSphere3D(1.0D, new Point3D());
 	}
 	
 	/**
@@ -161,11 +115,11 @@ public final class Sphere3D implements Shape3D {
 		
 		final Vector3D direction = SampleGeneratorD.sampleSphereUniformDistribution(sample.getU(), sample.getV());
 		
-		final Point3D point0 = Point3D.add(this.center, direction, this.radius);
-		final Point3D point1 = Point3D.add(point0, new Vector3D(1.0D), this.radius / Point3D.distance(this.center, point0));
+		final Point3D point0 = Point3D.add(new Point3D(), direction, 1.0D);
+		final Point3D point1 = Point3D.add(point0, new Vector3D(1.0D), 1.0D / Point3D.distance(new Point3D(), point0));
 		
 		final Vector3D pointError = Vector3D.multiply(Vector3D.absolute(new Vector3D(point1)), gamma(5));
-		final Vector3D surfaceNormal = Vector3D.directionNormalized(this.center, point0);
+		final Vector3D surfaceNormal = Vector3D.directionNormalized(new Point3D(), point0);
 		
 		final double probabilityDensityFunctionValue = 1.0D / getSurfaceArea();
 		
@@ -192,7 +146,7 @@ public final class Sphere3D implements Shape3D {
 		Objects.requireNonNull(sample, "sample == null");
 		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
 		
-		final Point3D center = this.center;
+		final Point3D center = new Point3D();
 		final Point3D surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 		
 		final Vector3D direction = Vector3D.direction(surfaceIntersectionPoint, center);
@@ -201,7 +155,7 @@ public final class Sphere3D implements Shape3D {
 		
 		final Point3D origin = Point3D.offset(surfaceIntersectionPoint, direction, surfaceNormal, surfaceIntersectionPointError);
 		
-		final double radius = this.radius;
+		final double radius = 1.0D;
 		final double radiusSquared = radius * radius;
 		
 		if(Point3D.distanceSquared(center, origin) <= radiusSquared) {
@@ -292,16 +246,6 @@ public final class Sphere3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns the center of this {@code Sphere3D} instance.
-	 * 
-	 * @return the center of this {@code Sphere3D} instance
-	 */
-//	TODO: Add Unit Tests!
-	public Point3D getCenter() {
-		return this.center;
-	}
-	
-	/**
 	 * Returns a {@code String} with the name of this {@code Sphere3D} instance.
 	 * 
 	 * @return a {@code String} with the name of this {@code Sphere3D} instance
@@ -320,7 +264,7 @@ public final class Sphere3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Sphere3D(%+.10f, %s)", Double.valueOf(this.radius), this.center);
+		return "new Sphere3D()";
 	}
 	
 	/**
@@ -351,9 +295,7 @@ public final class Sphere3D implements Shape3D {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.center.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
+				return nodeHierarchicalVisitor.visitLeave(this);
 			}
 			
 			return nodeHierarchicalVisitor.visitLeave(this);
@@ -374,7 +316,7 @@ public final class Sphere3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3D point) {
-		return Point3D.distanceSquared(this.center, point) <= this.radius * this.radius;
+		return Point3D.distanceSquared(new Point3D(), point) <= 1.0D;
 	}
 	
 	/**
@@ -391,10 +333,6 @@ public final class Sphere3D implements Shape3D {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Sphere3D)) {
-			return false;
-		} else if(!Objects.equals(this.center, Sphere3D.class.cast(object).center)) {
-			return false;
-		} else if(!equal(this.radius, Sphere3D.class.cast(object).radius)) {
 			return false;
 		} else {
 			return true;
@@ -437,26 +375,6 @@ public final class Sphere3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns the radius of this {@code Sphere3D} instance.
-	 * 
-	 * @return the radius of this {@code Sphere3D} instance
-	 */
-//	TODO: Add Unit Tests!
-	public double getRadius() {
-		return this.radius;
-	}
-	
-	/**
-	 * Returns the squared radius of this {@code Sphere3D} instance.
-	 * 
-	 * @return the squared radius of this {@code Sphere3D} instance
-	 */
-//	TODO: Add Unit Tests!
-	public double getRadiusSquared() {
-		return this.radius * this.radius;
-	}
-	
-	/**
 	 * Returns the surface area of this {@code Sphere3D} instance.
 	 * 
 	 * @return the surface area of this {@code Sphere3D} instance
@@ -464,17 +382,7 @@ public final class Sphere3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
-		return PI_MULTIPLIED_BY_4 * getRadiusSquared();
-	}
-	
-	/**
-	 * Returns the volume of this {@code Sphere3D} instance.
-	 * 
-	 * @return the volume of this {@code Sphere3D} instance
-	 */
-//	TODO: Add Unit Tests!
-	public double getVolume() {
-		return 4.0D / 3.0D * PI * pow(this.radius, 3.0D);
+		return PI_MULTIPLIED_BY_4;
 	}
 	
 	/**
@@ -494,11 +402,11 @@ public final class Sphere3D implements Shape3D {
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Vector3D direction = ray.getDirection();
-		final Vector3D centerToOrigin = Vector3D.direction(this.center, ray.getOrigin());
+		final Vector3D centerToOrigin = Vector3D.direction(new Point3D(), ray.getOrigin());
 		
 		final double a = direction.lengthSquared();
 		final double b = 2.0D * Vector3D.dotProduct(centerToOrigin, direction);
-		final double c = centerToOrigin.lengthSquared() - this.radius * this.radius;
+		final double c = centerToOrigin.lengthSquared() - 1.0D;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -536,7 +444,7 @@ public final class Sphere3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.center, Double.valueOf(this.radius));
+		return Objects.hash();
 	}
 	
 	/**
@@ -555,9 +463,6 @@ public final class Sphere3D implements Shape3D {
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeInt(ID);
-			dataOutput.writeDouble(this.radius);
-			
-			this.center.write(dataOutput);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -565,24 +470,13 @@ public final class Sphere3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
-		final Vector3D w = Vector3D.directionNormalized(this.center, surfaceIntersectionPoint);
-		final Vector3D v = new Vector3D(-PI_MULTIPLIED_BY_2 * w.getY(), PI_MULTIPLIED_BY_2 * w.getX(), 0.0D);
-		
-		return new OrthonormalBasis33D(w, v);
-	}
-	
-	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
-		return Point2D.sphericalCoordinates(Vector3D.directionNormalized(this.center, surfaceIntersectionPoint));
-	}
-	
 	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double t) {
 		final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
 		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
 		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 		
-		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		final Point2D textureCoordinates = Point2D.sphericalCoordinates(Vector3D.directionNormalized(new Point3D(), surfaceIntersectionPoint));
 		
 		final Vector3D surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(surfaceIntersectionPoint);
 		
@@ -590,6 +484,13 @@ public final class Sphere3D implements Shape3D {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
+		final Vector3D w = Vector3D.directionNormalized(new Point3D(), surfaceIntersectionPoint);
+		final Vector3D v = new Vector3D(-PI_MULTIPLIED_BY_2 * w.getY(), PI_MULTIPLIED_BY_2 * w.getX(), 0.0D);
+		
+		return new OrthonormalBasis33D(w, v);
+	}
 	
 	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
 		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);

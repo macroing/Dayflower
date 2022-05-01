@@ -105,11 +105,6 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	protected float[] shape3FRectangularCuboid3FArray;
 	
 	/**
-	 * A {@code float[]} that contains spheres.
-	 */
-	protected float[] shape3FSphere3FArray;
-	
-	/**
 	 * A {@code float[]} that contains torii.
 	 */
 	protected float[] shape3FTorus3FArray;
@@ -143,7 +138,6 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		this.shape3FPolygon3FArray = new float[1];
 		this.shape3FRectangle3FArray = new float[1];
 		this.shape3FRectangularCuboid3FArray = new float[1];
-		this.shape3FSphere3FArray = new float[1];
 		this.shape3FTorus3FArray = new float[1];
 		this.shape3FTriangle3FArray = new float[1];
 		this.shape3FTriangleMesh3FArray = new int[1];
@@ -1875,24 +1869,22 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	/**
 	 * Returns {@code true} if, and only if, the current ray intersects a given sphere in object space, {@code false} otherwise.
 	 * 
-	 * @param shape3FSphere3FArrayOffset the offset for the sphere in {@link #shape3FSphere3FArray}
 	 * @param rayTMinimum the minimum parametric T value
 	 * @param rayTMaximum the maximum parametric T value
 	 * @return {@code true} if, and only if, the current ray intersects a given sphere in object space, {@code false} otherwise
 	 */
-	protected final boolean shape3FSphere3FIntersects(final int shape3FSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
-		return shape3FSphere3FIntersectionT(shape3FSphere3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	protected final boolean shape3FSphere3FIntersects(final float rayTMinimum, final float rayTMaximum) {
+		return shape3FSphere3FIntersectionT(rayTMinimum, rayTMaximum) > 0.0F;
 	}
 	
 	/**
 	 * Returns the parametric T value for a given sphere in object space, or {@code 0.0F} if no intersection was found.
 	 * 
-	 * @param shape3FSphere3FArrayOffset the offset for the sphere in {@link #shape3FSphere3FArray}
 	 * @param rayTMinimum the minimum parametric T value
 	 * @param rayTMaximum the maximum parametric T value
 	 * @return the parametric T value for a given sphere in object space, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float shape3FSphere3FIntersectionT(final int shape3FSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+	protected final float shape3FSphere3FIntersectionT(final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -1902,10 +1894,10 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the sphere variables:
-		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 0];
-		final float sphereCenterY = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 1];
-		final float sphereCenterZ = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 2];
-		final float sphereRadius = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_RADIUS];
+		final float sphereCenterX = 0.0F;
+		final float sphereCenterY = 0.0F;
+		final float sphereCenterZ = 0.0F;
+		final float sphereRadius = 1.0F;
 		final float sphereRadiusSquared = sphereRadius * sphereRadius;
 		
 //		Compute the direction from the sphere center to the ray origin:
@@ -1929,9 +1921,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 * 
 	 * @param t the parametric distance to the sphere
 	 * @param primitiveIndex the index of the primitive
-	 * @param shape3FSphere3FArrayOffset the offset in {@link #shape3FSphere3FArray}
 	 */
-	protected final void shape3FSphere3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FSphere3FArrayOffset) {
+	protected final void shape3FSphere3FIntersectionComputeLHS(final float t, final int primitiveIndex) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -1941,9 +1932,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the sphere variables:
-		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 0];
-		final float sphereCenterY = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 1];
-		final float sphereCenterZ = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 2];
+		final float sphereCenterX = 0.0F;
+		final float sphereCenterY = 0.0F;
+		final float sphereCenterZ = 0.0F;
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -1980,9 +1971,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 * 
 	 * @param t the parametric distance to the sphere
 	 * @param primitiveIndex the index of the primitive
-	 * @param shape3FSphere3FArrayOffset the offset in {@link #shape3FSphere3FArray}
 	 */
-	protected final void shape3FSphere3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FSphere3FArrayOffset) {
+	protected final void shape3FSphere3FIntersectionComputeRHS(final float t, final int primitiveIndex) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -1992,9 +1982,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the sphere variables:
-		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 0];
-		final float sphereCenterY = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 1];
-		final float sphereCenterZ = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + CompiledShape3FCache.SPHERE_3_F_OFFSET_CENTER + 2];
+		final float sphereCenterX = 0.0F;
+		final float sphereCenterY = 0.0F;
+		final float sphereCenterZ = 0.0F;
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;

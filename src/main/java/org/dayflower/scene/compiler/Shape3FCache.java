@@ -66,7 +66,6 @@ final class Shape3FCache {
 	private final Map<Polygon3F, Integer> distinctToOffsetsPolygon3Fs;
 	private final Map<Rectangle3F, Integer> distinctToOffsetsRectangle3Fs;
 	private final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboid3Fs;
-	private final Map<Sphere3F, Integer> distinctToOffsetsSphere3Fs;
 	private final Map<Torus3F, Integer> distinctToOffsetsTorus3Fs;
 	private final Map<Triangle3F, Integer> distinctToOffsetsTriangle3Fs;
 	private final Map<TriangleMesh3F, Integer> distinctToOffsetsTriangleMesh3Fs;
@@ -99,7 +98,6 @@ final class Shape3FCache {
 		this.distinctToOffsetsPolygon3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsRectangle3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsRectangularCuboid3Fs = new LinkedHashMap<>();
-		this.distinctToOffsetsSphere3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsTorus3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsTriangle3Fs = new LinkedHashMap<>();
 		this.distinctToOffsetsTriangleMesh3Fs = new LinkedHashMap<>();
@@ -143,10 +141,6 @@ final class Shape3FCache {
 		return CompiledShape3FCache.toRectangularCuboid3Fs(this.distinctRectangularCuboid3Fs);
 	}
 	
-	public float[] toSphere3Fs() {
-		return CompiledShape3FCache.toSphere3Fs(this.distinctSphere3Fs);
-	}
-	
 	public float[] toTorus3Fs() {
 		return CompiledShape3FCache.toTorus3Fs(this.distinctTorus3Fs);
 	}
@@ -174,8 +168,6 @@ final class Shape3FCache {
 			return this.distinctToOffsetsRectangle3Fs.get(shape3F).intValue();
 		} else if(shape3F instanceof RectangularCuboid3F) {
 			return this.distinctToOffsetsRectangularCuboid3Fs.get(shape3F).intValue();
-		} else if(shape3F instanceof Sphere3F) {
-			return this.distinctToOffsetsSphere3Fs.get(shape3F).intValue();
 		} else if(shape3F instanceof Torus3F) {
 			return this.distinctToOffsetsTorus3Fs.get(shape3F).intValue();
 		} else if(shape3F instanceof Triangle3F) {
@@ -219,7 +211,6 @@ final class Shape3FCache {
 		compiledShape3FCache.setPolygon3Fs(toPolygon3Fs());
 		compiledShape3FCache.setRectangle3Fs(toRectangle3Fs());
 		compiledShape3FCache.setRectangularCuboid3Fs(toRectangularCuboid3Fs());
-		compiledShape3FCache.setSphere3Fs(toSphere3Fs());
 		compiledShape3FCache.setTorus3Fs(toTorus3Fs());
 		compiledShape3FCache.setTriangle3Fs(toTriangle3Fs());
 		compiledShape3FCache.setTriangleMesh3FOffsets(toTriangleMesh3FOffsets());
@@ -249,7 +240,6 @@ final class Shape3FCache {
 		this.distinctToOffsetsPolygon3Fs.clear();
 		this.distinctToOffsetsRectangle3Fs.clear();
 		this.distinctToOffsetsRectangularCuboid3Fs.clear();
-		this.distinctToOffsetsSphere3Fs.clear();
 		this.distinctToOffsetsTorus3Fs.clear();
 		this.distinctToOffsetsTriangle3Fs.clear();
 		this.distinctToOffsetsTriangleMesh3Fs.clear();
@@ -355,10 +345,6 @@ final class Shape3FCache {
 //		Create offset mappings for all distinct RectangularCuboid3F instances:
 		this.distinctToOffsetsRectangularCuboid3Fs.clear();
 		this.distinctToOffsetsRectangularCuboid3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctRectangularCuboid3Fs, CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_LENGTH));
-		
-//		Create offset mappings for all distinct Sphere3F instances:
-		this.distinctToOffsetsSphere3Fs.clear();
-		this.distinctToOffsetsSphere3Fs.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSphere3Fs, CompiledShape3FCache.SPHERE_3_F_LENGTH));
 		
 //		Create offset mappings for all distinct Torus3F instances:
 		this.distinctToOffsetsTorus3Fs.clear();

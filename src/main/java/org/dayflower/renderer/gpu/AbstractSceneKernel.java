@@ -229,7 +229,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == RectangularCuboid3F.ID) {
 					tObjectSpace = shape3FRectangularCuboid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Sphere3F.ID) {
-					tObjectSpace = shape3FSphere3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					tObjectSpace = shape3FSphere3FIntersectionT(tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Torus3F.ID) {
 					tObjectSpace = shape3FTorus3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Triangle3F.ID) {
@@ -279,7 +279,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			} else if(shapeID == RectangularCuboid3F.ID) {
 				shape3FRectangularCuboid3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Sphere3F.ID) {
-				shape3FSphere3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FSphere3FIntersectionComputeLHS(tObjectSpace, primitiveIndex);
 			} else if(shapeID == Torus3F.ID) {
 				shape3FTorus3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Triangle3F.ID) {
@@ -365,7 +365,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == RectangularCuboid3F.ID) {
 					tObjectSpace = shape3FRectangularCuboid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Sphere3F.ID) {
-					tObjectSpace = shape3FSphere3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					tObjectSpace = shape3FSphere3FIntersectionT(tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Torus3F.ID) {
 					tObjectSpace = shape3FTorus3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Triangle3F.ID) {
@@ -415,7 +415,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			} else if(shapeID == RectangularCuboid3F.ID) {
 				shape3FRectangularCuboid3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Sphere3F.ID) {
-				shape3FSphere3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FSphere3FIntersectionComputeRHS(tObjectSpace, primitiveIndex);
 			} else if(shapeID == Torus3F.ID) {
 				shape3FTorus3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Triangle3F.ID) {
@@ -493,7 +493,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == RectangularCuboid3F.ID) {
 					isIntersectingShape = shape3FRectangularCuboid3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Sphere3F.ID) {
-					isIntersectingShape = shape3FSphere3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FSphere3FIntersects(tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Torus3F.ID) {
 					isIntersectingShape = shape3FTorus3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Triangle3F.ID) {
@@ -699,7 +699,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == RectangularCuboid3F.ID) {
 					tObjectSpace = shape3FRectangularCuboid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Sphere3F.ID) {
-					tObjectSpace = shape3FSphere3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					tObjectSpace = shape3FSphere3FIntersectionT(tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Torus3F.ID) {
 					tObjectSpace = shape3FTorus3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Triangle3F.ID) {
@@ -1421,7 +1421,6 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.shape3FPolygon3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getPolygon3Fs()));
 		put(super.shape3FRectangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangle3Fs()));
 		put(super.shape3FRectangularCuboid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangularCuboid3Fs()));
-		put(super.shape3FSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getSphere3Fs()));
 		put(super.shape3FTorus3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getTorus3Fs()));
 		put(super.shape3FTriangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getTriangle3Fs()));
 		put(super.shape3FTriangleMesh3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getTriangleMesh3Fs()));

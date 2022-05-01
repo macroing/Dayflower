@@ -295,21 +295,6 @@ public final class CompiledShape3FCache {
 	public static final int RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM = 3;
 	
 	/**
-	 * The length of a compiled {@link Sphere3F} instance.
-	 */
-	public static final int SPHERE_3_F_LENGTH = 4;
-	
-	/**
-	 * The offset for the {@link Point3F} instance that represents the center in the a compiled {@link Sphere3F} instance.
-	 */
-	public static final int SPHERE_3_F_OFFSET_CENTER = 0;
-	
-	/**
-	 * The offset for the radius in a compiled {@link Sphere3F} instance.
-	 */
-	public static final int SPHERE_3_F_OFFSET_RADIUS = 3;
-	
-	/**
 	 * The length of a compiled {@link Torus3F} instance.
 	 */
 	public static final int TORUS_3_F_LENGTH = 2;
@@ -432,7 +417,6 @@ public final class CompiledShape3FCache {
 	private float[] polygon3Fs;
 	private float[] rectangle3Fs;
 	private float[] rectangularCuboid3Fs;
-	private float[] sphere3Fs;
 	private float[] torus3Fs;
 	private float[] triangle3Fs;
 	private int[] polygon3FOffsets;
@@ -454,7 +438,6 @@ public final class CompiledShape3FCache {
 		setPolygon3Fs(new float[0]);
 		setRectangle3Fs(new float[0]);
 		setRectangularCuboid3Fs(new float[0]);
-		setSphere3Fs(new float[0]);
 		setTorus3Fs(new float[0]);
 		setTriangle3Fs(new float[0]);
 		setTriangleMesh3FOffsets(new int[0]);
@@ -673,32 +656,6 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
-	 * Removes {@code sphere3F} from this {@code CompiledShape3FCache} instance, if present.
-	 * <p>
-	 * Returns {@code true} if, and only if, {@code sphere3F} was removed, {@code false} otherwise.
-	 * <p>
-	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param sphere3F a {@link Sphere3F} instance in compiled form
-	 * @return {@code true} if, and only if, {@code sphere3F} was removed, {@code false} otherwise
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}
-	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
-	 */
-	public boolean removeSphere3F(final float[] sphere3F) {
-		final int absoluteOffset = getSphere3FOffsetAbsolute(sphere3F);
-		
-		if(absoluteOffset != -1) {
-			setSphere3Fs(Arrays.splice(getSphere3Fs(), absoluteOffset, SPHERE_3_F_LENGTH));
-			
-			return true;
-		}
-		
-		return false;
-	}
-	
-	/**
 	 * Removes {@code torus3F} from this {@code CompiledShape3FCache} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code torus3F} was removed, {@code false} otherwise.
@@ -847,15 +804,6 @@ public final class CompiledShape3FCache {
 	 */
 	public float[] getRectangularCuboid3Fs() {
 		return this.rectangularCuboid3Fs;
-	}
-	
-	/**
-	 * Returns a {@code float[]} that contains all {@link Sphere3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
-	 * 
-	 * @return a {@code float[]} that contains all {@code Sphere3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
-	 */
-	public float[] getSphere3Fs() {
-		return this.sphere3Fs;
 	}
 	
 	/**
@@ -1090,33 +1038,6 @@ public final class CompiledShape3FCache {
 		}
 		
 		setRectangularCuboid3Fs(Arrays.merge(getRectangularCuboid3Fs(), rectangularCuboid3F));
-		
-		return relativeOffsetNew;
-	}
-	
-	/**
-	 * Adds {@code sphere3F} to this {@code CompiledShape3FCache} instance, if absent.
-	 * <p>
-	 * Returns the relative offset to {@code sphere3F}.
-	 * <p>
-	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param sphere3F a {@link Sphere3F} instance in compiled form
-	 * @return the relative offset to {@code sphere3F}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}
-	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
-	 */
-	public int addSphere3F(final float[] sphere3F) {
-		final int relativeOffsetOld = getSphere3FOffsetRelative(sphere3F);
-		final int relativeOffsetNew = getSphere3FCount();
-		
-		if(relativeOffsetOld != -1) {
-			return relativeOffsetOld;
-		}
-		
-		setSphere3Fs(Arrays.merge(getSphere3Fs(), sphere3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1597,55 +1518,6 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
-	 * Returns the {@link Sphere3F} count in this {@code CompiledShape3FCache} instance.
-	 * 
-	 * @return the {@code Sphere3F} count in this {@code CompiledShape3FCache} instance
-	 */
-	public int getSphere3FCount() {
-		return Structures.getStructureCount(this.sphere3Fs, SPHERE_3_F_LENGTH);
-	}
-	
-	/**
-	 * Returns the absolute offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
-	 * <p>
-	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param sphere3F a {@link Sphere3F} instance in compiled form
-	 * @return the absolute offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}
-	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
-	 */
-	public int getSphere3FOffsetAbsolute(final float[] sphere3F) {
-		Objects.requireNonNull(sphere3F, "sphere3F == null");
-		
-		ParameterArguments.requireExactArrayLength(sphere3F, SPHERE_3_F_LENGTH, "sphere3F");
-		
-		return Structures.getStructureOffsetAbsolute(this.sphere3Fs, sphere3F);
-	}
-	
-	/**
-	 * Returns the relative offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
-	 * <p>
-	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param sphere3F a {@link Sphere3F} instance in compiled form
-	 * @return the relative offset of {@code sphere3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3F.length} is not equal to {@code CompiledShape3FCache.SPHERE_3_F_LENGTH}
-	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
-	 */
-	public int getSphere3FOffsetRelative(final float[] sphere3F) {
-		Objects.requireNonNull(sphere3F, "sphere3F == null");
-		
-		ParameterArguments.requireExactArrayLength(sphere3F, SPHERE_3_F_LENGTH, "sphere3F");
-		
-		return Structures.getStructureOffsetRelative(this.sphere3Fs, sphere3F);
-	}
-	
-	/**
 	 * Returns the {@link Torus3F} count in this {@code CompiledShape3FCache} instance.
 	 * 
 	 * @return the {@code Torus3F} count in this {@code CompiledShape3FCache} instance
@@ -1991,25 +1863,6 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
-	 * Sets all {@link Sphere3F} instances in compiled form to {@code sphere3Fs}.
-	 * <p>
-	 * If {@code sphere3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code sphere3Fs.length % CompiledShape3FCache.SPHERE_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param sphere3Fs the {@code Sphere3F} instances in compiled form
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sphere3Fs.length % CompiledShape3FCache.SPHERE_3_F_LENGTH} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code sphere3Fs} is {@code null}
-	 */
-	public void setSphere3Fs(final float[] sphere3Fs) {
-		Objects.requireNonNull(sphere3Fs, "sphere3Fs == null");
-		
-		ParameterArguments.requireExact(sphere3Fs.length % SPHERE_3_F_LENGTH, 0, "sphere3Fs.length % CompiledShape3FCache.SPHERE_3_F_LENGTH");
-		
-		this.sphere3Fs = sphere3Fs;
-	}
-	
-	/**
 	 * Sets all {@link Torus3F} instances in compiled form to {@code torus3Fs}.
 	 * <p>
 	 * If {@code torus3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -2104,7 +1957,6 @@ public final class CompiledShape3FCache {
 		document.linef("polygon3Fs[%d]", Integer.valueOf(getPolygon3FCount()));
 		document.linef("rectangle3Fs[%d]", Integer.valueOf(getRectangle3FCount()));
 		document.linef("rectangularCuboid3Fs[%d]", Integer.valueOf(getRectangularCuboid3FCount()));
-		document.linef("sphere3Fs[%d]", Integer.valueOf(getSphere3FCount()));
 		document.linef("torus3Fs[%d]", Integer.valueOf(getTorus3FCount()));
 		document.linef("triangle3Fs[%d]", Integer.valueOf(getTriangle3FCount()));
 		document.linef("triangleMesh3Fs[%d]", Integer.valueOf(getTriangleMesh3FCount()));
@@ -2505,43 +2357,6 @@ public final class CompiledShape3FCache {
 	 */
 	public static float[] toRectangularCuboid3Fs(final List<RectangularCuboid3F> rectangularCuboid3Fs) {
 		return Arrays.toFloatArray(rectangularCuboid3Fs, rectangularCuboid3F -> toRectangularCuboid3F(rectangularCuboid3F));
-	}
-	
-	/**
-	 * Returns a {@code float[]} with {@code sphere3F} in compiled form.
-	 * <p>
-	 * If {@code sphere3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param sphere3F a {@link Sphere3F} instance
-	 * @return a {@code float[]} with {@code sphere3F} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code sphere3F} is {@code null}
-	 */
-	public static float[] toSphere3F(final Sphere3F sphere3F) {
-		final Point3F center = sphere3F.getCenter();
-		
-		final float radius = sphere3F.getRadius();
-		
-		final float[] array = new float[SPHERE_3_F_LENGTH];
-		
-		array[SPHERE_3_F_OFFSET_CENTER + 0] = center.getX();
-		array[SPHERE_3_F_OFFSET_CENTER + 1] = center.getY();
-		array[SPHERE_3_F_OFFSET_CENTER + 2] = center.getZ();
-		array[SPHERE_3_F_OFFSET_RADIUS] = radius;
-		
-		return array;
-	}
-	
-	/**
-	 * Returns a {@code float[]} with all {@link Sphere3F} instances in {@code sphere3Fs} in compiled form.
-	 * <p>
-	 * If {@code sphere3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param sphere3Fs a {@code List} of {@code Sphere3F} instances
-	 * @return a {@code float[]} with all {@code Sphere3F} instances in {@code sphere3Fs} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code sphere3Fs} or at least one of its elements are {@code null}
-	 */
-	public static float[] toSphere3Fs(final List<Sphere3F> sphere3Fs) {
-		return Arrays.toFloatArray(sphere3Fs, sphere3F -> toSphere3F(sphere3F));
 	}
 	
 	/**

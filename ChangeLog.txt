@@ -1,20 +1,15 @@
 2022-05-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Plane3FUnitTests class.
-	* CHANGE:	Update the accept(NodeHierarchicalVisitor), contains(Point3D), equals(Object), hashCode(), intersectionT(Ray3D, double, double), toString() and write(DataOutput) methods in the Plane3D class.
-	* CHANGE:	Update the accept(NodeHierarchicalVisitor), contains(Point3F), equals(Object), hashCode(), intersectionT(Ray3F, float, float), toString() and write(DataOutput) methods in the Plane3F class.
-	* CHANGE:	Update the Plane3DReader and Plane3FReader classes.
+	* CHANGE:	Update the Plane3D class so that it is located on the point [0.0, 0.0, 0.0] and has a surface normal of [0.0, 0.0, 1.0]. Its variables have been removed.
+	* CHANGE:	Update the Plane3F class so that it is located on the point [0.0, 0.0, 0.0] and has a surface normal of [0.0, 0.0, 1.0]. Its variables have been removed.
+	* CHANGE:	Update the Sphere3D class so that it is located on the point [0.0, 0.0, 0.0] and has a radius of 1.0. Its variables have been removed.
+	* CHANGE:	Update the Sphere3F class so that it is located on the point [0.0, 0.0, 0.0] and has a radius of 1.0. Its variables have been removed.
 	* CHANGE:	Update the Plane3DUnitTests class.
-	* CHANGE:	Update the method write(Document) in the CompiledShape3FCache class.
-	* CHANGE:	Update the methods shape3FPlane3FIntersectionComputeLHS(float, int, int), shape3FPlane3FIntersectionComputeRHS(float, int, int), shape3FPlane3FIntersectionT(int, float, float) and shape3FPlane3FIntersects(int, float, float) in the AbstractShape3FKernel class.
-	* CHANGE:	Update the methods primitiveIntersectionComputeLHS(), primitiveIntersectionComputeRHS(), primitiveIntersectionT() and primitiveIntersects() in the AbstractSceneKernel class.
-	* CHANGE:	Update the Demo class.
-	* REMOVE:	Remove the constructor Plane3D(Point3D, Point3D, Point3D) from the Plane3D class.
-	* REMOVE:	Remove the constructor Plane3F(Point3F, Point3F, Point3F) from the Plane3F class.
-	* REMOVE:	Remove the methods getA(), getB(), getC() and getSurfaceNormal() from the Plane3D and Plane3F classes.
-	* REMOVE:	Remove all PLANE_3_F_* constants from the CompiledShape3FCache class.
-	* REMOVE:	Remove the methods addPlane3F(float[]), getPlane3FCount(), getPlane3FOffsetAbsolute(float[]), getPlane3FOffsetRelative(float[]), getPlane3Fs(), removePlane3F(float[]), setPlane3Fs(float[]), toPlane3F(Plane3F) and toPlane3Fs(List<Plane3F>) from the CompiledShape3FCache class.
-	* REMOVE:	Remove the field shape3FPlane3FArray from the AbstractShape3FKernel class.
+	* CHANGE:	Update the Plane3DReader and Plane3FReader classes because of the changes to Plane3D and Plane3F, respectively.
+	* CHANGE:	Update the Sphere3DReader and Sphere3FReader classes because of the changes to Sphere3D and Sphere3F, respectively.
+	* CHANGE:	Update the AbstractSceneKernel, AbstractShape3FKernel and CompiledShape3FCache classes because of the changes to Plane3F and Sphere3F.
+	* REMOVE:	Remove the Demo class.
 
 2022-04-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

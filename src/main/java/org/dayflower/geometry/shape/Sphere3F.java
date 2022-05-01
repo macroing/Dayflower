@@ -22,13 +22,11 @@ import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.gamma;
 import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.pow;
 import static org.dayflower.utility.Floats.solveQuadraticSystem;
 import static org.dayflower.utility.Floats.sqrt;
 
@@ -78,56 +76,12 @@ public final class Sphere3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Point3F center;
-	private final float radius;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
-	 * Constructs a new {@code Sphere3F} instance with a radius of {@code 1.0F} and a center of {@code new Point3F()}.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Sphere3F(1.0F);
-	 * }
-	 * </pre>
+	 * Constructs a new {@code Sphere3F} instance.
 	 */
 //	TODO: Add Unit Tests!
 	public Sphere3F() {
-		this(1.0F);
-	}
-	
-	/**
-	 * Constructs a new {@code Sphere3F} instance with a radius of {@code radius} and a center of {@code new Point3F()}.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Sphere3F(radius, new Point3F());
-	 * }
-	 * </pre>
-	 * 
-	 * @param radius the radius of this {@code Sphere3F} instance
-	 */
-//	TODO: Add Unit Tests!
-	public Sphere3F(final float radius) {
-		this(radius, new Point3F());
-	}
-	
-	/**
-	 * Constructs a new {@code Sphere3F} instance with a radius of {@code radius} and a center of {@code center}.
-	 * <p>
-	 * If {@code center} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param radius the radius of this {@code Sphere3F} instance
-	 * @param center the center of this {@code Sphere3F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public Sphere3F(final float radius, final Point3F center) {
-		this.center = Point3F.getCached(Objects.requireNonNull(center, "center == null"));
-		this.radius = radius;
+		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +94,7 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return new BoundingSphere3F(this.radius, this.center);
+		return new BoundingSphere3F(1.0F, new Point3F());
 	}
 	
 	/**
@@ -161,11 +115,11 @@ public final class Sphere3F implements Shape3F {
 		
 		final Vector3F direction = SampleGeneratorF.sampleSphereUniformDistribution(sample.getU(), sample.getV());
 		
-		final Point3F point0 = Point3F.add(this.center, direction, this.radius);
-		final Point3F point1 = Point3F.add(point0, new Vector3F(1.0F), this.radius / Point3F.distance(this.center, point0));
+		final Point3F point0 = Point3F.add(new Point3F(), direction, 1.0F);
+		final Point3F point1 = Point3F.add(point0, new Vector3F(1.0F), 1.0F / Point3F.distance(new Point3F(), point0));
 		
 		final Vector3F pointError = Vector3F.multiply(Vector3F.absolute(new Vector3F(point1)), gamma(5));
-		final Vector3F surfaceNormal = Vector3F.directionNormalized(this.center, point0);
+		final Vector3F surfaceNormal = Vector3F.directionNormalized(new Point3F(), point0);
 		
 		final float probabilityDensityFunctionValue = 1.0F / getSurfaceArea();
 		
@@ -192,7 +146,7 @@ public final class Sphere3F implements Shape3F {
 		Objects.requireNonNull(sample, "sample == null");
 		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
 		
-		final Point3F center = this.center;
+		final Point3F center = new Point3F();
 		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 		
 		final Vector3F direction = Vector3F.direction(surfaceIntersectionPoint, center);
@@ -201,7 +155,7 @@ public final class Sphere3F implements Shape3F {
 		
 		final Point3F origin = Point3F.offset(surfaceIntersectionPoint, direction, surfaceNormal, surfaceIntersectionPointError);
 		
-		final float radius = this.radius;
+		final float radius = 1.0F;
 		final float radiusSquared = radius * radius;
 		
 		if(Point3F.distanceSquared(center, origin) <= radiusSquared) {
@@ -292,16 +246,6 @@ public final class Sphere3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the center of this {@code Sphere3F} instance.
-	 * 
-	 * @return the center of this {@code Sphere3F} instance
-	 */
-//	TODO: Add Unit Tests!
-	public Point3F getCenter() {
-		return this.center;
-	}
-	
-	/**
 	 * Returns a {@code String} with the name of this {@code Sphere3F} instance.
 	 * 
 	 * @return a {@code String} with the name of this {@code Sphere3F} instance
@@ -320,7 +264,7 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Sphere3F(%+.10f, %s)", Float.valueOf(this.radius), this.center);
+		return "new Sphere3F()";
 	}
 	
 	/**
@@ -351,9 +295,7 @@ public final class Sphere3F implements Shape3F {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.center.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
+				return nodeHierarchicalVisitor.visitLeave(this);
 			}
 			
 			return nodeHierarchicalVisitor.visitLeave(this);
@@ -374,7 +316,7 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
-		return Point3F.distanceSquared(this.center, point) <= this.radius * this.radius;
+		return Point3F.distanceSquared(new Point3F(), point) <= 1.0F;
 	}
 	
 	/**
@@ -391,10 +333,6 @@ public final class Sphere3F implements Shape3F {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Sphere3F)) {
-			return false;
-		} else if(!Objects.equals(this.center, Sphere3F.class.cast(object).center)) {
-			return false;
-		} else if(!equal(this.radius, Sphere3F.class.cast(object).radius)) {
 			return false;
 		} else {
 			return true;
@@ -437,26 +375,6 @@ public final class Sphere3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the radius of this {@code Sphere3F} instance.
-	 * 
-	 * @return the radius of this {@code Sphere3F} instance
-	 */
-//	TODO: Add Unit Tests!
-	public float getRadius() {
-		return this.radius;
-	}
-	
-	/**
-	 * Returns the squared radius of this {@code Sphere3F} instance.
-	 * 
-	 * @return the squared radius of this {@code Sphere3F} instance
-	 */
-//	TODO: Add Unit Tests!
-	public float getRadiusSquared() {
-		return this.radius * this.radius;
-	}
-	
-	/**
 	 * Returns the surface area of this {@code Sphere3F} instance.
 	 * 
 	 * @return the surface area of this {@code Sphere3F} instance
@@ -464,17 +382,7 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
-		return PI_MULTIPLIED_BY_4 * getRadiusSquared();
-	}
-	
-	/**
-	 * Returns the volume of this {@code Sphere3F} instance.
-	 * 
-	 * @return the volume of this {@code Sphere3F} instance
-	 */
-//	TODO: Add Unit Tests!
-	public float getVolume() {
-		return 4.0F / 3.0F * PI * pow(this.radius, 3.0F);
+		return PI_MULTIPLIED_BY_4;
 	}
 	
 	/**
@@ -494,11 +402,11 @@ public final class Sphere3F implements Shape3F {
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Vector3F direction = ray.getDirection();
-		final Vector3F centerToOrigin = Vector3F.direction(this.center, ray.getOrigin());
+		final Vector3F centerToOrigin = Vector3F.direction(new Point3F(), ray.getOrigin());
 		
 		final float a = direction.lengthSquared();
 		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
-		final float c = centerToOrigin.lengthSquared() - this.radius * this.radius;
+		final float c = centerToOrigin.lengthSquared() - 1.0F;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -536,7 +444,7 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.center, Float.valueOf(this.radius));
+		return Objects.hash();
 	}
 	
 	/**
@@ -555,9 +463,6 @@ public final class Sphere3F implements Shape3F {
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeInt(ID);
-			dataOutput.writeFloat(this.radius);
-			
-			this.center.write(dataOutput);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -565,24 +470,13 @@ public final class Sphere3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
-		final Vector3F w = Vector3F.directionNormalized(this.center, surfaceIntersectionPoint);
-		final Vector3F v = new Vector3F(-PI_MULTIPLIED_BY_2 * w.getY(), PI_MULTIPLIED_BY_2 * w.getX(), 0.0F);
-		
-		return new OrthonormalBasis33F(w, v);
-	}
-	
-	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
-		return Point2F.sphericalCoordinates(Vector3F.directionNormalized(this.center, surfaceIntersectionPoint));
-	}
-	
 	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float t) {
 		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
 		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
-		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		final Point2F textureCoordinates = Point2F.sphericalCoordinates(Vector3F.directionNormalized(new Point3F(), surfaceIntersectionPoint));
 		
 		final Vector3F surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(surfaceIntersectionPoint);
 		
@@ -590,6 +484,13 @@ public final class Sphere3F implements Shape3F {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
+		final Vector3F w = Vector3F.directionNormalized(new Point3F(), surfaceIntersectionPoint);
+		final Vector3F v = new Vector3F(-PI_MULTIPLIED_BY_2 * w.getY(), PI_MULTIPLIED_BY_2 * w.getX(), 0.0F);
+		
+		return new OrthonormalBasis33F(w, v);
+	}
 	
 	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
 		return Point3F.add(ray.getOrigin(), ray.getDirection(), t);

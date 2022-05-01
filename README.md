@@ -30,12 +30,12 @@ If you prefer to use Dayflower as a library and not as an application, the follo
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.observer.FileRendererObserver;
-import org.dayflower.scene.demo.Demo;
+import org.dayflower.scene.loader.JavaSceneLoader;
 
 public class CPURendererExample {
     public static void main(String[] args) {
         CPURenderer cPURenderer = new CPURenderer(new FileRendererObserver("Image.png", true, false));
-        cPURenderer.setScene(Demo.createCornellBoxScene());
+        cPURenderer.setScene(new JavaSceneLoader().load("./resources/scenes/CornellBox.java"));
         cPURenderer.setImage();
         cPURenderer.setMaximumBounce(20);
         cPURenderer.setMinimumBounceRussianRoulette(5);
@@ -50,12 +50,12 @@ public class CPURendererExample {
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.FileRendererObserver;
-import org.dayflower.scene.demo.Demo;
+import org.dayflower.scene.loader.JavaSceneLoader;
 
 public class GPURendererExample {
     public static void main(String[] args) {
         GPURenderer gPURenderer = new GPURenderer(new FileRendererObserver("Image.png", true, false));
-        gPURenderer.setScene(Demo.createCornellBoxScene());
+        gPURenderer.setScene(new JavaSceneLoader().load("./resources/scenes/CornellBox.java"));
         gPURenderer.setImage();
         gPURenderer.setMaximumBounce(20);
         gPURenderer.setMinimumBounceRussianRoulette(5);

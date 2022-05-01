@@ -24,7 +24,9 @@ import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
 import org.dayflower.filter.BoxFilter2F;
 import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.image.ImageF;
@@ -80,10 +82,10 @@ final class WritableImageCaches {
 		final Material material1 = new MatteMaterial();
 		
 		final Shape3F shape0 = new Sphere3F();
-		final Shape3F shape1 = new Sphere3F(2.0F);
+		final Shape3F shape1 = new Sphere3F();
 		
 		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(4.0F));
-		final Transform transform1 = new Transform(camera.getPointBehindEye(4.0F));
+		final Transform transform1 = new Transform(camera.getPointBehindEye(4.0F), new Quaternion4F(), new Vector3F(2.0F, 2.0F, 2.0F));
 		
 		final AreaLight areaLight1 = new DiffuseAreaLight(transform1, 1, new Color3F(12.0F), shape1, true);
 		

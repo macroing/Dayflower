@@ -8,12 +8,12 @@ final Material material4 = new DisneyMaterial(new Color3F(255, 127, 80), Color3F
 final Shape3F shape1 = new Plane3F();
 final Shape3F shape2 = new Torus3F();
 final Shape3F shape3 = new Cone3F();
-final Shape3F shape4 = new Sphere3F(0.5F);
+final Shape3F shape4 = new Sphere3F();
 
 final Transform transform1 = new Transform(new Point3F(0.0F, 0.0F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
 final Transform transform2 = new Transform(new Point3F(0.0F, 0.75F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
 final Transform transform3 = new Transform(new Point3F(0.0F, 0.5F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
-final Transform transform4 = new Transform(new Point3F(0.0F, 0.5F, 0.0F));
+final Transform transform4 = new Transform(new Point3F(0.0F, 0.5F, 0.0F), new Quaternion4F(), new Vector3F(0.5F, 0.5F, 0.5F));
 
 final Primitive primitive1 = new Primitive(material1, shape1, transform1);
 final Primitive primitive2 = new Primitive(material2, shape2, transform2);

@@ -16,7 +16,7 @@ final Shape3F shape4 = new Plane3F();
 final Shape3F shape5 = new Plane3F();
 final Shape3F shape6 = new Plane3F();
 final Shape3F shape7 = new RectangularCuboid3F(new Point3F(-1.0F, -1.0F, -1.0F), new Point3F(1.0F, 1.0F, 1.0F));
-final Shape3F shape8 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
+final Shape3F shape8 = new Sphere3F();
 
 final Transform transform1 = new Transform(new Point3F( 0.0F, 0.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
 final Transform transform2 = new Transform(new Point3F( 0.0F, 5.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));

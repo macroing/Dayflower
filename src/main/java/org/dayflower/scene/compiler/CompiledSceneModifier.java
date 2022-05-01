@@ -452,12 +452,7 @@ public final class CompiledSceneModifier {
 			
 			return offsetAbsolute;
 		} else if(shape3F instanceof Sphere3F) {
-			final Sphere3F sphere3F = Sphere3F.class.cast(shape3F);
-			
-			final int offsetRelative = compiledShape3FCache.addSphere3F(CompiledShape3FCache.toSphere3F(sphere3F));
-			final int offsetAbsolute = offsetRelative * CompiledShape3FCache.SPHERE_3_F_LENGTH;
-			
-			return offsetAbsolute;
+			return 0;
 		} else if(shape3F instanceof Torus3F) {
 			final Torus3F torus3F = Torus3F.class.cast(shape3F);
 			

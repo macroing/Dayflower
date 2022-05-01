@@ -24,7 +24,6 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
-import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Shape3DReader;
 import org.dayflower.utility.ParameterArguments;
 
@@ -98,11 +97,7 @@ public final class Sphere3DReader implements Shape3DReader {
 		
 		ParameterArguments.requireExact(id, Sphere3D.ID, "id");
 		
-		try {
-			return new Sphere3D(dataInput.readDouble(), Point3D.read(dataInput));
-		} catch(final IOException e) {
-			throw new UncheckedIOException(e);
-		}
+		return new Sphere3D();
 	}
 	
 	/**

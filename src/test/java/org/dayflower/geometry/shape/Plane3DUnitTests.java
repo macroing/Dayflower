@@ -38,6 +38,8 @@ import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
+import org.dayflower.geometry.SurfaceIntersector3D;
+import org.dayflower.geometry.SurfaceSample3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3D;
 import org.dayflower.mock.DataOutputMock;
@@ -145,7 +147,7 @@ public final class Plane3DUnitTests {
 	}
 	
 	@Test
-	public void testIntersection() {
+	public void testIntersectionRay3DDoubleDouble() {
 		final Plane3D plane = new Plane3D();
 		
 		final Optional<SurfaceIntersection3D> optionalSurfaceIntersection = plane.intersection(new Ray3D(new Point3D(1.0D, 3.0D, 2.0D), new Vector3D(0.0D,  0.0D, -1.0D)), 0.0D, 3.0D);
@@ -155,10 +157,6 @@ public final class Plane3DUnitTests {
 		assertTrue(optionalSurfaceIntersection.isPresent());
 		
 		final SurfaceIntersection3D surfaceIntersection = optionalSurfaceIntersection.get();
-		
-		/*
-		 * TODO: Find out if the OrthonormalBasis33D instances and the Point2D instance needs to be changed.
-		 */
 		
 		assertEquals(new OrthonormalBasis33D(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(0.0D, 1.0D, 0.0D), new Vector3D(1.0D, 0.0D, 0.0D)), surfaceIntersection.getOrthonormalBasisG());
 		assertEquals(new OrthonormalBasis33D(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(0.0D, 1.0D, 0.0D), new Vector3D(1.0D, 0.0D, 0.0D)), surfaceIntersection.getOrthonormalBasisS());
@@ -174,6 +172,17 @@ public final class Plane3DUnitTests {
 		assertFalse(plane.intersection(new Ray3D(new Point3D(0.0D, 0.0D, 0.0D), new Vector3D(1.0D, 0.0D, 0.0D)), 0.0D, 1.0D).isPresent());
 		
 		assertThrows(NullPointerException.class, () -> plane.intersection(null, 0.0D, 0.0D));
+	}
+	
+	@Test
+	public void testIntersectionSurfaceIntersector3D() {
+		final Plane3D plane = new Plane3D();
+		
+		assertTrue(plane.intersection(new SurfaceIntersector3D(new Ray3D(new Point3D(1.0D, 3.0D, 2.0D), new Vector3D(0.0D,  0.0D, -1.0D)), 0.0D, 3.0D)));
+		
+		assertFalse(plane.intersection(new SurfaceIntersector3D(new Ray3D(new Point3D(0.0D, 0.0D, 0.0D), new Vector3D(1.0D, 0.0D, 0.0D)), 0.0D, 1.0D)));
+		
+		assertThrows(NullPointerException.class, () -> plane.intersection(null));
 	}
 	
 	@Test
@@ -206,6 +215,17 @@ public final class Plane3DUnitTests {
 		assertTrue(plane.intersects(new Ray3D(new Point3D(0.0D, 0.0D, 2.0D), new Vector3D(0.0D, 0.0D, -1.0D)), 0.0D, 3.0D));
 		
 		assertThrows(NullPointerException.class, () -> plane.intersectionT(null, 0.0D, 0.0D));
+	}
+	
+	@Test
+	public void testSamplePoint2D() {
+		final Plane3D plane = new Plane3D();
+		
+		final Optional<SurfaceSample3D> optionalSurfaceSample = plane.sample(new Point2D());
+		
+		assertFalse(optionalSurfaceSample.isPresent());
+		
+		assertThrows(NullPointerException.class, () -> plane.sample(null));
 	}
 	
 	@Test

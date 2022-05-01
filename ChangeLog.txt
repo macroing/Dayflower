@@ -1,5 +1,6 @@
 2022-05-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the Plane3FUnitTests class.
 	* CHANGE:	Update the accept(NodeHierarchicalVisitor), contains(Point3D), equals(Object), hashCode(), intersectionT(Ray3D, double, double), toString() and write(DataOutput) methods in the Plane3D class.
 	* CHANGE:	Update the accept(NodeHierarchicalVisitor), contains(Point3F), equals(Object), hashCode(), intersectionT(Ray3F, float, float), toString() and write(DataOutput) methods in the Plane3F class.
 	* CHANGE:	Update the Plane3DReader and Plane3FReader classes.

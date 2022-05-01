@@ -105,7 +105,6 @@ public interface Shape3F extends Shape {
 	 * @return an optional {@code SurfaceSample3F} with the surface sample
 	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default Optional<SurfaceSample3F> sample(final Point2F sample) {
 		Objects.requireNonNull(sample, "sample == null");
 		
@@ -171,7 +170,6 @@ public interface Shape3F extends Shape {
 	 * @return {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code Shape3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersector} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default boolean intersection(final SurfaceIntersector3F surfaceIntersector) {
 		return surfaceIntersector.intersection(this);
 	}
@@ -187,7 +185,6 @@ public interface Shape3F extends Shape {
 	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	default boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}

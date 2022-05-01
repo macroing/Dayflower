@@ -22,7 +22,9 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
@@ -139,7 +141,7 @@ final class CenteredVBoxes {
 			if(material != null && shape != null) {
 				final
 				Scene scene = renderer.getScene();
-				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(renderer, shape))));
+				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(renderer, shape), doGetQuaternionByShape(shape))));
 			}
 		}, renderer instanceof GPURenderer);
 		centeredVBox.addSeparator();
@@ -232,6 +234,10 @@ final class CenteredVBoxes {
 		} else {
 			return new Point3F();
 		}
+	}
+	
+	private static Quaternion4F doGetQuaternionByShape(final Shape3F shape) {
+		return shape instanceof Plane3F ? Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))) : new Quaternion4F();
 	}
 	
 	private static Shape3F doCreateShape(final ComboBox<String> comboBoxShape) {

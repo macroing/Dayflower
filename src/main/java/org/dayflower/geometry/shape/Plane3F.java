@@ -24,7 +24,6 @@ import static org.dayflower.utility.Floats.isZero;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -54,13 +53,11 @@ public final class Plane3F implements Shape3F {
 	/**
 	 * The name of this {@code Plane3F} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final String NAME = "Plane";
 	
 	/**
 	 * The ID of this {@code Plane3F} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 10;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +65,6 @@ public final class Plane3F implements Shape3F {
 	/**
 	 * Constructs a new {@code Plane3F} instance.
 	 */
-//	TODO: Add Unit Tests!
 	public Plane3F() {
 		
 	}
@@ -80,7 +76,6 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return a {@code BoundingVolume3F} instance that contains this {@code Plane3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		return new InfiniteBoundingVolume3F();
@@ -99,7 +94,6 @@ public final class Plane3F implements Shape3F {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
@@ -116,7 +110,6 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return a {@code String} with the name of this {@code Plane3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -127,7 +120,6 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return a {@code String} representation of this {@code Plane3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return "new Plane3F()";
@@ -154,7 +146,6 @@ public final class Plane3F implements Shape3F {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -179,7 +170,6 @@ public final class Plane3F implements Shape3F {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Plane3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
 		return isZero(point.getZ());
@@ -193,7 +183,6 @@ public final class Plane3F implements Shape3F {
 	 * @param object the {@code Object} to compare to this {@code Plane3F} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Plane3F}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -212,7 +201,6 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return the surface area of this {@code Plane3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
 		return Float.POSITIVE_INFINITY;
@@ -231,7 +219,6 @@ public final class Plane3F implements Shape3F {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float dotProduct = Vector3F.dotProduct(Vector3F.z(), ray.getDirection());
@@ -254,7 +241,6 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Plane3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -265,7 +251,6 @@ public final class Plane3F implements Shape3F {
 	 * 
 	 * @return a hash code for this {@code Plane3F} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash();
@@ -282,7 +267,6 @@ public final class Plane3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

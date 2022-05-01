@@ -35,7 +35,6 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
-import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -66,44 +65,12 @@ public final class Plane3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Point3F a;
-	private final Point3F b;
-	private final Point3F c;
-	private final Vector3F surfaceNormal;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
 	 * Constructs a new {@code Plane3F} instance.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 0.0F, 0.0F));
-	 * }
-	 * </pre>
 	 */
 //	TODO: Add Unit Tests!
 	public Plane3F() {
-		this(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 0.0F, 0.0F));
-	}
-	
-	/**
-	 * Constructs a new {@code Plane3F} instance given the three {@link Point3F} instances {@code a}, {@code b} and {@code c}.
-	 * <p>
-	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param a the {@code Point3F} instance denoted by {@code A}
-	 * @param b the {@code Point3F} instance denoted by {@code B}
-	 * @param c the {@code Point3F} instance denoted by {@code C}
-	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public Plane3F(final Point3F a, final Point3F b, final Point3F c) {
-		this.a = Point3F.getCached(Objects.requireNonNull(a, "a == null"));
-		this.b = Point3F.getCached(Objects.requireNonNull(b, "b == null"));
-		this.c = Point3F.getCached(Objects.requireNonNull(c, "c == null"));
-		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(a, b, c));
+		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,36 +112,6 @@ public final class Plane3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the {@link Point3F} instance denoted by {@code A}.
-	 * 
-	 * @return the {@code Point3F} instance denoted by {@code A}
-	 */
-//	TODO: Add Unit Tests!
-	public Point3F getA() {
-		return this.a;
-	}
-	
-	/**
-	 * Returns the {@link Point3F} instance denoted by {@code B}.
-	 * 
-	 * @return the {@code Point3F} instance denoted by {@code B}
-	 */
-//	TODO: Add Unit Tests!
-	public Point3F getB() {
-		return this.b;
-	}
-	
-	/**
-	 * Returns the {@link Point3F} instance denoted by {@code C}.
-	 * 
-	 * @return the {@code Point3F} instance denoted by {@code C}
-	 */
-//	TODO: Add Unit Tests!
-	public Point3F getC() {
-		return this.c;
-	}
-	
-	/**
 	 * Returns a {@code String} with the name of this {@code Plane3F} instance.
 	 * 
 	 * @return a {@code String} with the name of this {@code Plane3F} instance
@@ -193,17 +130,7 @@ public final class Plane3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
-		return String.format("new Plane3F(%s, %s, %s)", this.a, this.b, this.c);
-	}
-	
-	/**
-	 * Returns the {@link Vector3F} instance used as surface normal.
-	 * 
-	 * @return the {@code Vector3F} instance used as surface normal
-	 */
-//	TODO: Add Unit Tests!
-	public Vector3F getSurfaceNormal() {
-		return this.surfaceNormal;
+		return "new Plane3F()";
 	}
 	
 	/**
@@ -234,21 +161,7 @@ public final class Plane3F implements Shape3F {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.a.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.b.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.c.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.surfaceNormal.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
+				return nodeHierarchicalVisitor.visitLeave(this);
 			}
 			
 			return nodeHierarchicalVisitor.visitLeave(this);
@@ -269,7 +182,7 @@ public final class Plane3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
-		return Point3F.coplanar(this.a, this.b, this.c, point);
+		return isZero(point.getZ());
 	}
 	
 	/**
@@ -286,12 +199,6 @@ public final class Plane3F implements Shape3F {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Plane3F)) {
-			return false;
-		} else if(!Objects.equals(this.a, Plane3F.class.cast(object).a)) {
-			return false;
-		} else if(!Objects.equals(this.b, Plane3F.class.cast(object).b)) {
-			return false;
-		} else if(!Objects.equals(this.c, Plane3F.class.cast(object).c)) {
 			return false;
 		} else {
 			return true;
@@ -327,13 +234,13 @@ public final class Plane3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final float dotProduct = Vector3F.dotProduct(this.surfaceNormal, ray.getDirection());
+		final float dotProduct = Vector3F.dotProduct(Vector3F.z(), ray.getDirection());
 		
 		if(isZero(dotProduct)) {
 			return Float.NaN;
 		}
 		
-		final float t = Vector3F.dotProduct(Vector3F.direction(ray.getOrigin(), this.a), this.surfaceNormal) / dotProduct;
+		final float t = Vector3F.dotProduct(Vector3F.direction(ray.getOrigin(), new Point3F()), Vector3F.z()) / dotProduct;
 		
 		if(t > tMinimum && t < tMaximum) {
 			return t;
@@ -361,7 +268,7 @@ public final class Plane3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.a, this.b, this.c);
+		return Objects.hash();
 	}
 	
 	/**
@@ -380,10 +287,6 @@ public final class Plane3F implements Shape3F {
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeInt(ID);
-			
-			this.a.write(dataOutput);
-			this.b.write(dataOutput);
-			this.c.write(dataOutput);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -391,41 +294,15 @@ public final class Plane3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private OrthonormalBasis33F doCreateOrthonormalBasisG() {
-		return new OrthonormalBasis33F(this.surfaceNormal);
-	}
-	
-	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
-		final Vector3F surfaceNormalAbs = Vector3F.absolute(this.surfaceNormal);
-		
-		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
-		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
-		
-		final Vector2F vA = isX ? Vector2F.directionYZ(this.a) : isY ? Vector2F.directionZX(this.a) : Vector2F.directionXY(this.a);
-		final Vector2F vB = isX ? Vector2F.directionYZ(this.b) : isY ? Vector2F.directionZX(this.b) : Vector2F.directionXY(this.b);
-		final Vector2F vC = isX ? Vector2F.directionYZ(this.c) : isY ? Vector2F.directionZX(this.c) : Vector2F.directionXY(this.c);
-		final Vector2F vAB = Vector2F.subtract(vB, vA);
-		final Vector2F vAC = Vector2F.subtract(vC, vA);
-		
-		final float determinant = Vector2F.crossProduct(vAC, vAB);
-		final float determinantReciprocal = 1.0F / determinant;
-		
-		final float hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
-		final float hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
-		
-		final float u = hU * (-vAC.getY() * determinantReciprocal) + hV * (+vAC.getX() * determinantReciprocal) + Vector2F.crossProduct(vAC, vA) * determinantReciprocal;
-		final float v = hU * (+vAB.getY() * determinantReciprocal) + hV * (-vAB.getX() * determinantReciprocal) + Vector2F.crossProduct(vAB, vA) * determinantReciprocal;
-		
-		return new Point2F(u, v);
-	}
-	
 	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float t) {
 		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
-		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG();
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(Vector3F.z(), Vector3F.y(), Vector3F.x());
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
-		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		final Vector3F direction = new Vector3F(surfaceIntersectionPoint);
+		
+		final Point2F textureCoordinates = new Point2F(Vector3F.dotProduct(orthonormalBasisG.getU(), direction), Vector3F.dotProduct(orthonormalBasisG.getV(), direction));
 		
 		final Vector3F surfaceIntersectionPointError = new Vector3F();
 		

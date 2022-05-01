@@ -6,7 +6,7 @@ final Material material2 = new GlassMaterial();
 final Shape3F shape1 = new Plane3F();
 final Shape3F shape2 = new Sphere3F();
 
-final Transform transform1 = new Transform(new Point3F(0.0F, 0.0F, 0.0F));
+final Transform transform1 = new Transform(new Point3F(0.0F, 0.0F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
 final Transform transform2 = new Transform(new Point3F(0.0F, 1.0F, 0.0F));
 
 final Primitive primitive1 = new Primitive(material1, shape1, transform1);

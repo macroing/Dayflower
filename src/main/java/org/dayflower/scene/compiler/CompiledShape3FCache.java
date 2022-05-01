@@ -225,31 +225,6 @@ public final class CompiledShape3FCache {
 	public static final int PARABOLOID_3_F_OFFSET_Z_MIN = 3;
 	
 	/**
-	 * The length of a compiled {@link Plane3F} instance.
-	 */
-	public static final int PLANE_3_F_LENGTH = 16;
-	
-	/**
-	 * The offset for the {@link Point3F} instance denoted by {@code A} in a compiled {@link Plane3F} instance.
-	 */
-	public static final int PLANE_3_F_OFFSET_A = 0;
-	
-	/**
-	 * The offset for the {@link Point3F} instance denoted by {@code B} in a compiled {@link Plane3F} instance.
-	 */
-	public static final int PLANE_3_F_OFFSET_B = 3;
-	
-	/**
-	 * The offset for the {@link Point3F} instance denoted by {@code C} in a compiled {@link Plane3F} instance.
-	 */
-	public static final int PLANE_3_F_OFFSET_C = 6;
-	
-	/**
-	 * The offset for the {@link Vector3F} instance that represents the surface normal in a compiled {@link Plane3F} instance.
-	 */
-	public static final int PLANE_3_F_OFFSET_SURFACE_NORMAL = 9;
-	
-	/**
 	 * The offset for the {@link Point2F} count in a compiled {@link Polygon3F} instance.
 	 */
 	public static final int POLYGON_3_F_OFFSET_POINT_2_F_COUNT = 12;
@@ -454,7 +429,6 @@ public final class CompiledShape3FCache {
 	private float[] disk3Fs;
 	private float[] hyperboloid3Fs;
 	private float[] paraboloid3Fs;
-	private float[] plane3Fs;
 	private float[] polygon3Fs;
 	private float[] rectangle3Fs;
 	private float[] rectangularCuboid3Fs;
@@ -476,7 +450,6 @@ public final class CompiledShape3FCache {
 		setDisk3Fs(new float[0]);
 		setHyperboloid3Fs(new float[0]);
 		setParaboloid3Fs(new float[0]);
-		setPlane3Fs(new float[0]);
 		setPolygon3FOffsets(new int[0]);
 		setPolygon3Fs(new float[0]);
 		setRectangle3Fs(new float[0]);
@@ -613,32 +586,6 @@ public final class CompiledShape3FCache {
 		
 		if(absoluteOffset != -1) {
 			setParaboloid3Fs(Arrays.splice(getParaboloid3Fs(), absoluteOffset, PARABOLOID_3_F_LENGTH));
-			
-			return true;
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * Removes {@code plane3F} from this {@code CompiledShape3FCache} instance, if present.
-	 * <p>
-	 * Returns {@code true} if, and only if, {@code plane3F} was removed, {@code false} otherwise.
-	 * <p>
-	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param plane3F a {@link Plane3F} instance in compiled form
-	 * @return {@code true} if, and only if, {@code plane3F} was removed, {@code false} otherwise
-	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}
-	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
-	 */
-	public boolean removePlane3F(final float[] plane3F) {
-		final int absoluteOffset = getPlane3FOffsetAbsolute(plane3F);
-		
-		if(absoluteOffset != -1) {
-			setPlane3Fs(Arrays.splice(getPlane3Fs(), absoluteOffset, PLANE_3_F_LENGTH));
 			
 			return true;
 		}
@@ -876,15 +823,6 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
-	 * Returns a {@code float[]} that contains all {@link Plane3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
-	 * 
-	 * @return a {@code float[]} that contains all {@code Plane3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
-	 */
-	public float[] getPlane3Fs() {
-		return this.plane3Fs;
-	}
-	
-	/**
 	 * Returns a {@code float[]} that contains all {@link Polygon3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance.
 	 * 
 	 * @return a {@code float[]} that contains all {@code Polygon3F} instances in compiled form that are associated with this {@code CompiledShape3FCache} instance
@@ -1069,33 +1007,6 @@ public final class CompiledShape3FCache {
 		}
 		
 		setParaboloid3Fs(Arrays.merge(getParaboloid3Fs(), paraboloid3F));
-		
-		return relativeOffsetNew;
-	}
-	
-	/**
-	 * Adds {@code plane3F} to this {@code CompiledShape3FCache} instance, if absent.
-	 * <p>
-	 * Returns the relative offset to {@code plane3F}.
-	 * <p>
-	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param plane3F a {@link Plane3F} instance in compiled form
-	 * @return the relative offset to {@code plane3F}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}
-	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
-	 */
-	public int addPlane3F(final float[] plane3F) {
-		final int relativeOffsetOld = getPlane3FOffsetRelative(plane3F);
-		final int relativeOffsetNew = getPlane3FCount();
-		
-		if(relativeOffsetOld != -1) {
-			return relativeOffsetOld;
-		}
-		
-		setPlane3Fs(Arrays.merge(getPlane3Fs(), plane3F));
 		
 		return relativeOffsetNew;
 	}
@@ -1536,55 +1447,6 @@ public final class CompiledShape3FCache {
 		ParameterArguments.requireExactArrayLength(paraboloid3F, PARABOLOID_3_F_LENGTH, "paraboloid3F");
 		
 		return Structures.getStructureOffsetRelative(this.paraboloid3Fs, paraboloid3F);
-	}
-	
-	/**
-	 * Returns the {@link Plane3F} count in this {@code CompiledShape3FCache} instance.
-	 * 
-	 * @return the {@code Plane3F} count in this {@code CompiledShape3FCache} instance
-	 */
-	public int getPlane3FCount() {
-		return Structures.getStructureCount(this.plane3Fs, PLANE_3_F_LENGTH);
-	}
-	
-	/**
-	 * Returns the absolute offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
-	 * <p>
-	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param plane3F a {@link Plane3F} instance in compiled form
-	 * @return the absolute offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}
-	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
-	 */
-	public int getPlane3FOffsetAbsolute(final float[] plane3F) {
-		Objects.requireNonNull(plane3F, "plane3F == null");
-		
-		ParameterArguments.requireExactArrayLength(plane3F, PLANE_3_F_LENGTH, "plane3F");
-		
-		return Structures.getStructureOffsetAbsolute(this.plane3Fs, plane3F);
-	}
-	
-	/**
-	 * Returns the relative offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found.
-	 * <p>
-	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param plane3F a {@link Plane3F} instance in compiled form
-	 * @return the relative offset of {@code plane3F} in this {@code CompiledShape3FCache} instance, or {@code -1} if it cannot be found
-	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3F.length} is not equal to {@code CompiledShape3FCache.PLANE_3_F_LENGTH}
-	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
-	 */
-	public int getPlane3FOffsetRelative(final float[] plane3F) {
-		Objects.requireNonNull(plane3F, "plane3F == null");
-		
-		ParameterArguments.requireExactArrayLength(plane3F, PLANE_3_F_LENGTH, "plane3F");
-		
-		return Structures.getStructureOffsetRelative(this.plane3Fs, plane3F);
 	}
 	
 	/**
@@ -2053,25 +1915,6 @@ public final class CompiledShape3FCache {
 	}
 	
 	/**
-	 * Sets all {@link Plane3F} instances in compiled form to {@code plane3Fs}.
-	 * <p>
-	 * If {@code plane3Fs} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code plane3Fs.length % CompiledShape3FCache.PLANE_3_F_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param plane3Fs the {@code Plane3F} instances in compiled form
-	 * @throws IllegalArgumentException thrown if, and only if, {@code plane3Fs.length % CompiledShape3FCache.PLANE_3_F_LENGTH} is not equal to {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code plane3Fs} is {@code null}
-	 */
-	public void setPlane3Fs(final float[] plane3Fs) {
-		Objects.requireNonNull(plane3Fs, "plane3Fs == null");
-		
-		ParameterArguments.requireExact(plane3Fs.length % PLANE_3_F_LENGTH, 0, "plane3Fs.length % CompiledShape3FCache.PLANE_3_F_LENGTH");
-		
-		this.plane3Fs = plane3Fs;
-	}
-	
-	/**
 	 * Sets the {@code int[]} that contains the offsets for all {@link Polygon3F} instances to {@code polygon3FOffsets}.
 	 * <p>
 	 * If {@code polygon3FOffsets} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -2258,7 +2101,6 @@ public final class CompiledShape3FCache {
 		document.linef("disk3Fs[%d]", Integer.valueOf(getDisk3FCount()));
 		document.linef("hyperboloid3Fs[%d]", Integer.valueOf(getHyperboloid3FCount()));
 		document.linef("paraboloid3Fs[%d]", Integer.valueOf(getParaboloid3FCount()));
-		document.linef("plane3Fs[%d]", Integer.valueOf(getPlane3FCount()));
 		document.linef("polygon3Fs[%d]", Integer.valueOf(getPolygon3FCount()));
 		document.linef("rectangle3Fs[%d]", Integer.valueOf(getRectangle3FCount()));
 		document.linef("rectangularCuboid3Fs[%d]", Integer.valueOf(getRectangularCuboid3FCount()));
@@ -2515,57 +2357,6 @@ public final class CompiledShape3FCache {
 	 */
 	public static float[] toParaboloid3Fs(final List<Paraboloid3F> paraboloid3Fs) {
 		return Arrays.toFloatArray(paraboloid3Fs, paraboloid3F -> toParaboloid3F(paraboloid3F));
-	}
-	
-	/**
-	 * Returns a {@code float[]} with {@code plane3F} in compiled form.
-	 * <p>
-	 * If {@code plane3F} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param plane3F a {@link Plane3F} instance
-	 * @return a {@code float[]} with {@code plane3F} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code plane3F} is {@code null}
-	 */
-	public static float[] toPlane3F(final Plane3F plane3F) {
-		final Point3F a = plane3F.getA();
-		final Point3F b = plane3F.getB();
-		final Point3F c = plane3F.getC();
-		
-		final Vector3F surfaceNormal = plane3F.getSurfaceNormal();
-		
-		final float[] array = new float[PLANE_3_F_LENGTH];
-		
-		array[PLANE_3_F_OFFSET_A + 0] = a.getX();							//Block #1
-		array[PLANE_3_F_OFFSET_A + 1] = a.getY();							//Block #1
-		array[PLANE_3_F_OFFSET_A + 2] = a.getZ();							//Block #1
-		array[PLANE_3_F_OFFSET_B + 0] = b.getX();							//Block #1
-		array[PLANE_3_F_OFFSET_B + 1] = b.getY();							//Block #1
-		array[PLANE_3_F_OFFSET_B + 2] = b.getZ();							//Block #1
-		array[PLANE_3_F_OFFSET_C + 0] = c.getX();							//Block #1
-		array[PLANE_3_F_OFFSET_C + 1] = c.getY();							//Block #1
-		array[PLANE_3_F_OFFSET_C + 2] = c.getZ();							//Block #2
-		array[PLANE_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();	//Block #2
-		array[PLANE_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();	//Block #2
-		array[PLANE_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();	//Block #2
-		array[12] = 0.0F;													//Block #2
-		array[13] = 0.0F;													//Block #2
-		array[14] = 0.0F;													//Block #2
-		array[15] = 0.0F;													//Block #2
-		
-		return array;
-	}
-	
-	/**
-	 * Returns a {@code float[]} with all {@link Plane3F} instances in {@code plane3Fs} in compiled form.
-	 * <p>
-	 * If {@code plane3Fs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param plane3Fs a {@code List} of {@code Plane3F} instances
-	 * @return a {@code float[]} with all {@code Plane3F} instances in {@code plane3Fs} in compiled form
-	 * @throws NullPointerException thrown if, and only if, {@code plane3Fs} or at least one of its elements are {@code null}
-	 */
-	public static float[] toPlane3Fs(final List<Plane3F> plane3Fs) {
-		return Arrays.toFloatArray(plane3Fs, plane3F -> toPlane3F(plane3F));
 	}
 	
 	/**

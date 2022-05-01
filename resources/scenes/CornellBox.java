@@ -9,21 +9,21 @@ final Material material6 = new MatteMaterial(new Color3F(0.75F, 0.25F, 0.25F));
 final Material material7 = new MirrorMaterial(Color3F.GRAY_0_50);
 final Material material8 = new GlassMaterial();
 
-final Shape3F shape1 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F,  1.0F), new Point3F(1.0F, 0.0F,  0.0F));
-final Shape3F shape2 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F, -1.0F), new Point3F(1.0F, 0.0F,  0.0F));
-final Shape3F shape3 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));
-final Shape3F shape4 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));
-final Shape3F shape5 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F, -1.0F));
-final Shape3F shape6 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));
+final Shape3F shape1 = new Plane3F();
+final Shape3F shape2 = new Plane3F();
+final Shape3F shape3 = new Plane3F();
+final Shape3F shape4 = new Plane3F();
+final Shape3F shape5 = new Plane3F();
+final Shape3F shape6 = new Plane3F();
 final Shape3F shape7 = new RectangularCuboid3F(new Point3F(-1.0F, -1.0F, -1.0F), new Point3F(1.0F, 1.0F, 1.0F));
 final Shape3F shape8 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
 
-final Transform transform1 = new Transform(new Point3F( 0.0F, 0.0F,  0.0F));
-final Transform transform2 = new Transform(new Point3F( 0.0F, 5.0F,  0.0F));
+final Transform transform1 = new Transform(new Point3F( 0.0F, 0.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
+final Transform transform2 = new Transform(new Point3F( 0.0F, 5.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
 final Transform transform3 = new Transform(new Point3F( 0.0F, 0.0F,  0.0F));
 final Transform transform4 = new Transform(new Point3F( 0.0F, 0.0F, 10.0F));
-final Transform transform5 = new Transform(new Point3F( 3.0F, 0.0F,  0.0F));
-final Transform transform6 = new Transform(new Point3F(-3.0F, 0.0F,  0.0F));
+final Transform transform5 = new Transform(new Point3F( 3.0F, 0.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateY(AngleF.degrees(90.0F))));
+final Transform transform6 = new Transform(new Point3F(-3.0F, 0.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateY(AngleF.degrees(90.0F))));
 final Transform transform7 = new Transform(new Point3F(-1.5F, 1.0F,  8.0F));
 final Transform transform8 = new Transform(new Point3F( 1.5F, 1.0F,  7.0F));
 

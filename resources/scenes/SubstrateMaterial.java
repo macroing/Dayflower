@@ -8,7 +8,7 @@ Shape3F shape2 = new Torus3F();
 Shape3F shape3 = new Cone3F();
 Shape3F shape4 = new Sphere3F(0.5F);
 
-Transform transform1 = new Transform(new Point3F(0.0F, 0.0F, 0.0F));
+Transform transform1 = new Transform(new Point3F(0.0F, 0.0F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
 Transform transform2 = new Transform(new Point3F(0.0F, 0.75F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
 Transform transform3 = new Transform(new Point3F(0.0F, 0.5F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
 Transform transform4 = new Transform(new Point3F(0.0F, 0.5F, 0.0F));

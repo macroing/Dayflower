@@ -24,7 +24,6 @@ import static org.dayflower.utility.Doubles.isZero;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
 
@@ -35,7 +34,6 @@ import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
-import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -64,42 +62,11 @@ public final class Plane3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Point3D a;
-	private final Point3D b;
-	private final Point3D c;
-	private final Vector3D surfaceNormal;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
 	 * Constructs a new {@code Plane3D} instance.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Plane3D(new Point3D(0.0D, 0.0D, 0.0D), new Point3D(0.0D, 0.0D, 1.0D), new Point3D(1.0D, 0.0D, 0.0D));
-	 * }
-	 * </pre>
 	 */
 	public Plane3D() {
-		this(new Point3D(0.0D, 0.0D, 0.0D), new Point3D(0.0D, 0.0D, 1.0D), new Point3D(1.0D, 0.0D, 0.0D));
-	}
-	
-	/**
-	 * Constructs a new {@code Plane3D} instance given the three {@link Point3D} instances {@code a}, {@code b} and {@code c}.
-	 * <p>
-	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param a the {@code Point3D} instance denoted by {@code A}
-	 * @param b the {@code Point3D} instance denoted by {@code B}
-	 * @param c the {@code Point3D} instance denoted by {@code C}
-	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
-	 */
-	public Plane3D(final Point3D a, final Point3D b, final Point3D c) {
-		this.a = Point3D.getCached(Objects.requireNonNull(a, "a == null"));
-		this.b = Point3D.getCached(Objects.requireNonNull(b, "b == null"));
-		this.c = Point3D.getCached(Objects.requireNonNull(c, "c == null"));
-		this.surfaceNormal = Vector3D.getCached(Vector3D.normalNormalized(a, b, c));
+		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +94,6 @@ public final class Plane3D implements Shape3D {
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
@@ -137,33 +103,6 @@ public final class Plane3D implements Shape3D {
 		}
 		
 		return Optional.of(doCreateSurfaceIntersection(ray, t));
-	}
-	
-	/**
-	 * Returns the {@link Point3D} instance denoted by {@code A}.
-	 * 
-	 * @return the {@code Point3D} instance denoted by {@code A}
-	 */
-	public Point3D getA() {
-		return this.a;
-	}
-	
-	/**
-	 * Returns the {@link Point3D} instance denoted by {@code B}.
-	 * 
-	 * @return the {@code Point3D} instance denoted by {@code B}
-	 */
-	public Point3D getB() {
-		return this.b;
-	}
-	
-	/**
-	 * Returns the {@link Point3D} instance denoted by {@code C}.
-	 * 
-	 * @return the {@code Point3D} instance denoted by {@code C}
-	 */
-	public Point3D getC() {
-		return this.c;
 	}
 	
 	/**
@@ -183,16 +122,7 @@ public final class Plane3D implements Shape3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Plane3D(%s, %s, %s)", this.a, this.b, this.c);
-	}
-	
-	/**
-	 * Returns the {@link Vector3D} instance used as surface normal.
-	 * 
-	 * @return the {@code Vector3D} instance used as surface normal
-	 */
-	public Vector3D getSurfaceNormal() {
-		return this.surfaceNormal;
+		return "new Plane3D()";
 	}
 	
 	/**
@@ -222,21 +152,7 @@ public final class Plane3D implements Shape3D {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.a.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.b.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.c.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.surfaceNormal.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
+				return nodeHierarchicalVisitor.visitLeave(this);
 			}
 			
 			return nodeHierarchicalVisitor.visitLeave(this);
@@ -256,7 +172,7 @@ public final class Plane3D implements Shape3D {
 	 */
 	@Override
 	public boolean contains(final Point3D point) {
-		return Point3D.coplanar(this.a, this.b, this.c, point);
+		return isZero(point.getZ());
 	}
 	
 	/**
@@ -272,12 +188,6 @@ public final class Plane3D implements Shape3D {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Plane3D)) {
-			return false;
-		} else if(!Objects.equals(this.a, Plane3D.class.cast(object).a)) {
-			return false;
-		} else if(!Objects.equals(this.b, Plane3D.class.cast(object).b)) {
-			return false;
-		} else if(!Objects.equals(this.c, Plane3D.class.cast(object).c)) {
 			return false;
 		} else {
 			return true;
@@ -311,13 +221,13 @@ public final class Plane3D implements Shape3D {
 	 */
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final double dotProduct = Vector3D.dotProduct(this.surfaceNormal, ray.getDirection());
+		final double dotProduct = Vector3D.dotProduct(Vector3D.z(), ray.getDirection());
 		
 		if(isZero(dotProduct)) {
 			return Double.NaN;
 		}
 		
-		final double t = Vector3D.dotProduct(Vector3D.direction(ray.getOrigin(), this.a), this.surfaceNormal) / dotProduct;
+		final double t = Vector3D.dotProduct(Vector3D.direction(ray.getOrigin(), new Point3D()), Vector3D.z()) / dotProduct;
 		
 		if(t > tMinimum && t < tMaximum) {
 			return t;
@@ -343,7 +253,7 @@ public final class Plane3D implements Shape3D {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.a, this.b, this.c);
+		return Objects.hash();
 	}
 	
 	/**
@@ -361,10 +271,6 @@ public final class Plane3D implements Shape3D {
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeInt(ID);
-			
-			this.a.write(dataOutput);
-			this.b.write(dataOutput);
-			this.c.write(dataOutput);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -372,41 +278,15 @@ public final class Plane3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private OrthonormalBasis33D doCreateOrthonormalBasisG() {
-		return new OrthonormalBasis33D(this.surfaceNormal);
-	}
-	
-	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
-		final Vector3D surfaceNormalAbs = Vector3D.absolute(this.surfaceNormal);
-		
-		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
-		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
-		
-		final Vector2D vA = isX ? Vector2D.directionYZ(this.a) : isY ? Vector2D.directionZX(this.a) : Vector2D.directionXY(this.a);
-		final Vector2D vB = isX ? Vector2D.directionYZ(this.b) : isY ? Vector2D.directionZX(this.b) : Vector2D.directionXY(this.b);
-		final Vector2D vC = isX ? Vector2D.directionYZ(this.c) : isY ? Vector2D.directionZX(this.c) : Vector2D.directionXY(this.c);
-		final Vector2D vAB = Vector2D.subtract(vB, vA);
-		final Vector2D vAC = Vector2D.subtract(vC, vA);
-		
-		final double determinant = Vector2D.crossProduct(vAC, vAB);
-		final double determinantReciprocal = 1.0D / determinant;
-		
-		final double hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
-		final double hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
-		
-		final double u = hU * (-vAC.getY() * determinantReciprocal) + hV * (+vAC.getX() * determinantReciprocal) + Vector2D.crossProduct(vAC, vA) * determinantReciprocal;
-		final double v = hU * (+vAB.getY() * determinantReciprocal) + hV * (-vAB.getX() * determinantReciprocal) + Vector2D.crossProduct(vAB, vA) * determinantReciprocal;
-		
-		return new Point2D(u, v);
-	}
-	
 	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double t) {
 		final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 		
-		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG();
+		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(Vector3D.z(), Vector3D.y(), Vector3D.x());
 		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 		
-		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
+		final Vector3D direction = new Vector3D(surfaceIntersectionPoint);
+		
+		final Point2D textureCoordinates = new Point2D(Vector3D.dotProduct(orthonormalBasisG.getU(), direction), Vector3D.dotProduct(orthonormalBasisG.getV(), direction));
 		
 		final Vector3D surfaceIntersectionPointError = new Vector3D();
 		

@@ -436,12 +436,7 @@ public final class CompiledSceneModifier {
 			
 			return offsetAbsolute;
 		} else if(shape3F instanceof Plane3F) {
-			final Plane3F plane3F = Plane3F.class.cast(shape3F);
-			
-			final int offsetRelative = compiledShape3FCache.addPlane3F(CompiledShape3FCache.toPlane3F(plane3F));
-			final int offsetAbsolute = offsetRelative * CompiledShape3FCache.PLANE_3_F_LENGTH;
-			
-			return offsetAbsolute;
+			return 0;
 		} else if(shape3F instanceof Rectangle3F) {
 			final Rectangle3F rectangle3F = Rectangle3F.class.cast(shape3F);
 			

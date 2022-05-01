@@ -221,7 +221,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == Paraboloid3F.ID) {
 					tObjectSpace = shape3FParaboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
-					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					tObjectSpace = shape3FPlane3FIntersectionT(tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Polygon3F.ID) {
 					tObjectSpace = shape3FPolygon3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Rectangle3F.ID) {
@@ -271,7 +271,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			} else if(shapeID == Paraboloid3F.ID) {
 				shape3FParaboloid3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Plane3F.ID) {
-				shape3FPlane3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FPlane3FIntersectionComputeLHS(tObjectSpace, primitiveIndex);
 			} else if(shapeID == Polygon3F.ID) {
 				shape3FPolygon3FIntersectionComputeLHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Rectangle3F.ID) {
@@ -357,7 +357,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == Paraboloid3F.ID) {
 					tObjectSpace = shape3FParaboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
-					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					tObjectSpace = shape3FPlane3FIntersectionT(tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Polygon3F.ID) {
 					tObjectSpace = shape3FPolygon3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Rectangle3F.ID) {
@@ -407,7 +407,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			} else if(shapeID == Paraboloid3F.ID) {
 				shape3FParaboloid3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Plane3F.ID) {
-				shape3FPlane3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
+				shape3FPlane3FIntersectionComputeRHS(tObjectSpace, primitiveIndex);
 			} else if(shapeID == Polygon3F.ID) {
 				shape3FPolygon3FIntersectionComputeRHS(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Rectangle3F.ID) {
@@ -485,7 +485,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == Paraboloid3F.ID) {
 					isIntersectingShape = shape3FParaboloid3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
-					isIntersectingShape = shape3FPlane3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FPlane3FIntersects(tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Polygon3F.ID) {
 					isIntersectingShape = shape3FPolygon3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Rectangle3F.ID) {
@@ -691,7 +691,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == Paraboloid3F.ID) {
 					tObjectSpace = shape3FParaboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
-					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					tObjectSpace = shape3FPlane3FIntersectionT(tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Polygon3F.ID) {
 					tObjectSpace = shape3FPolygon3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Rectangle3F.ID) {
@@ -1418,7 +1418,6 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.shape3FDisk3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getDisk3Fs()));
 		put(super.shape3FHyperboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getHyperboloid3Fs()));
 		put(super.shape3FParaboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getParaboloid3Fs()));
-		put(super.shape3FPlane3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getPlane3Fs()));
 		put(super.shape3FPolygon3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getPolygon3Fs()));
 		put(super.shape3FRectangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangle3Fs()));
 		put(super.shape3FRectangularCuboid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangularCuboid3Fs()));

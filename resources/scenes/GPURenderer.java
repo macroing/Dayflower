@@ -35,7 +35,7 @@ Shape3F shapeSphereG = new Sphere3F();
 Shape3F shapeSphereH = new Sphere3F();
 Shape3F shapeSphereI = new Sphere3F();
 
-Transform transformPlane = new Transform(new Point3F(0.0F, 0.0F, 0.0F));
+Transform transformPlane = new Transform(new Point3F(0.0F, 0.0F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
 Transform transformSphereA = new Transform(new Point3F(- 7.5F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
 Transform transformSphereB = new Transform(new Point3F(- 5.0F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
 Transform transformSphereC = new Transform(new Point3F(- 2.5F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));

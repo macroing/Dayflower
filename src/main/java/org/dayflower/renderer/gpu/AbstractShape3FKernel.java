@@ -90,11 +90,6 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	protected float[] shape3FParaboloid3FArray;
 	
 	/**
-	 * A {@code float[]} that contains planes.
-	 */
-	protected float[] shape3FPlane3FArray;
-	
-	/**
 	 * A {@code float[]} that contains polygons.
 	 */
 	protected float[] shape3FPolygon3FArray;
@@ -145,7 +140,6 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		this.shape3FDisk3FArray = new float[1];
 		this.shape3FHyperboloid3FArray = new float[1];
 		this.shape3FParaboloid3FArray = new float[1];
-		this.shape3FPlane3FArray = new float[1];
 		this.shape3FPolygon3FArray = new float[1];
 		this.shape3FRectangle3FArray = new float[1];
 		this.shape3FRectangularCuboid3FArray = new float[1];
@@ -1039,24 +1033,22 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	/**
 	 * Returns {@code true} if, and only if, the current ray intersects a given plane in object space, {@code false} otherwise.
 	 * 
-	 * @param shape3FPlane3FArrayOffset the offset for the plane in {@link #shape3FPlane3FArray}
 	 * @param rayTMinimum the minimum parametric T value
 	 * @param rayTMaximum the maximum parametric T value
 	 * @return {@code true} if, and only if, the current ray intersects a given plane in object space, {@code false} otherwise
 	 */
-	protected final boolean shape3FPlane3FIntersects(final int shape3FPlane3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
-		return shape3FPlane3FIntersectionT(shape3FPlane3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	protected final boolean shape3FPlane3FIntersects(final float rayTMinimum, final float rayTMaximum) {
+		return shape3FPlane3FIntersectionT(rayTMinimum, rayTMaximum) > 0.0F;
 	}
 	
 	/**
 	 * Returns the parametric T value for a given plane in object space, or {@code 0.0F} if no intersection was found.
 	 * 
-	 * @param shape3FPlane3FArrayOffset the offset for the plane in {@link #shape3FPlane3FArray}
 	 * @param rayTMinimum the minimum parametric T value
 	 * @param rayTMaximum the maximum parametric T value
 	 * @return the parametric T value for a given plane in object space, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float shape3FPlane3FIntersectionT(final int shape3FPlane3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+	protected final float shape3FPlane3FIntersectionT(final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -1065,32 +1057,16 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rayDirectionY = ray3FGetDirectionComponent2();
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
-//		Retrieve the plane variables that will be referred to by 'planeA' and 'planeSurfaceNormal' in the comments:
-		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 0];
-		final float planeAY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 1];
-		final float planeAZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 2];
-		final float planeSurfaceNormalX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 0];
-		final float planeSurfaceNormalY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 1];
-		final float planeSurfaceNormalZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 2];
+		final float dotProduct = vector3FDotProduct(0.0F, 0.0F, 1.0F, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-//		Compute the determinant, which is the dot product between 'planeSurfaceNormal' and 'rayDirection':
-		final float determinant = planeSurfaceNormalX * rayDirectionX + planeSurfaceNormalY * rayDirectionY + planeSurfaceNormalZ * rayDirectionZ;
-		
-//		Check if the determinant is close to 0.0 and, if that is the case, return a miss:
-		if(determinant >= -0.0001F && determinant <= +0.0001F) {
+		if(dotProduct == -0.0F || dotProduct == +0.0F) {
 			return 0.0F;
 		}
 		
-//		Compute the direction from 'rayOrigin' to 'planeA', denoted by 'rayOriginToPlaneA' in the comments:
-		final float rayOriginToPlaneAX = planeAX - rayOriginX;
-		final float rayOriginToPlaneAY = planeAY - rayOriginY;
-		final float rayOriginToPlaneAZ = planeAZ - rayOriginZ;
+		final float t = vector3FDotProduct(-rayOriginX, -rayOriginY, -rayOriginZ, 0.0F, 0.0F, 1.0F) / dotProduct;
 		
-//		Compute the intersection as the dot product between 'rayOriginToPlaneA' and 'planeSurfaceNormal' followed by a division with the determinant:
-		final float intersectionT = (rayOriginToPlaneAX * planeSurfaceNormalX + rayOriginToPlaneAY * planeSurfaceNormalY + rayOriginToPlaneAZ * planeSurfaceNormalZ) / determinant;
-		
-		if(intersectionT > rayTMinimum && intersectionT < rayTMaximum) {
-			return intersectionT;
+		if(t > rayTMinimum && t < rayTMaximum) {
+			return t;
 		}
 		
 		return 0.0F;
@@ -1101,9 +1077,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 * 
 	 * @param t the parametric distance to the plane
 	 * @param primitiveIndex the index of the primitive
-	 * @param shape3FPlane3FArrayOffset the offset in {@link #shape3FPlane3FArray}
 	 */
-	protected final void shape3FPlane3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FPlane3FArrayOffset) {
+	protected final void shape3FPlane3FIntersectionComputeLHS(final float t, final int primitiveIndex) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -1112,54 +1087,18 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rayDirectionY = ray3FGetDirectionComponent2();
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
-//		Retrieve the plane variables:
-		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 0];
-		final float planeAY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 1];
-		final float planeAZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 2];
-		final float planeBX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 0];
-		final float planeBY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 1];
-		final float planeBZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 2];
-		final float planeCX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 0];
-		final float planeCY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 1];
-		final float planeCZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 2];
-		final float planeSurfaceNormalX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 0];
-		final float planeSurfaceNormalY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 1];
-		final float planeSurfaceNormalZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 2];
-		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-//		Compute variables necessary for computing the texture coordinates:
-		final boolean isXLarger = abs(planeSurfaceNormalX) > abs(planeSurfaceNormalY) && abs(planeSurfaceNormalX) > abs(planeSurfaceNormalZ);
-		final boolean isYLarger = abs(planeSurfaceNormalY) > abs(planeSurfaceNormalZ);
-		
-//		Compute variables necessary for computing the texture coordinates:
-		final float aX = isXLarger ? planeAY      : isYLarger ? planeAZ      : planeAX;
-		final float aY = isXLarger ? planeAZ      : isYLarger ? planeAX      : planeAY;
-		final float bX = isXLarger ? planeCY - aX : isYLarger ? planeCZ - aX : planeCX - aX;
-		final float bY = isXLarger ? planeCZ - aY : isYLarger ? planeCX - aY : planeCY - aY;
-		final float cX = isXLarger ? planeBY - aX : isYLarger ? planeBZ - aX : planeBX - aX;
-		final float cY = isXLarger ? planeBZ - aY : isYLarger ? planeBX - aY : planeBY - aY;
-		
-//		Compute variables necessary for computing the texture coordinates:
-		final float determinantReciprocal = 1.0F / (bX * cY - bY * cX);
-		
-//		Compute variables necessary for computing the texture coordinates:
-		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
-		final float v = isXLarger ? surfaceIntersectionPointZ : isYLarger ? surfaceIntersectionPointX : surfaceIntersectionPointY;
-		
 //		Compute the texture coordinates:
-		final float textureCoordinatesU = u * (-bY * determinantReciprocal) + v * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
-		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
-		
-//		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(planeSurfaceNormalX, planeSurfaceNormalY, planeSurfaceNormalZ);
+		final float textureCoordinatesU = vector3FDotProduct(1.0F, 0.0F, 0.0F, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		final float textureCoordinatesV = vector3FDotProduct(0.0F, 1.0F, 0.0F, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
-		intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F();
+		intersectionLHSSetOrthonormalBasisG(1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+		intersectionLHSSetOrthonormalBasisS(1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -1170,9 +1109,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 * 
 	 * @param t the parametric distance to the plane
 	 * @param primitiveIndex the index of the primitive
-	 * @param shape3FPlane3FArrayOffset the offset in {@link #shape3FPlane3FArray}
 	 */
-	protected final void shape3FPlane3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FPlane3FArrayOffset) {
+	protected final void shape3FPlane3FIntersectionComputeRHS(final float t, final int primitiveIndex) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
 		final float rayOriginY = ray3FGetOriginComponent2();
@@ -1181,54 +1119,18 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rayDirectionY = ray3FGetDirectionComponent2();
 		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
-//		Retrieve the plane variables:
-		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 0];
-		final float planeAY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 1];
-		final float planeAZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_A + 2];
-		final float planeBX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 0];
-		final float planeBY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 1];
-		final float planeBZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_B + 2];
-		final float planeCX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 0];
-		final float planeCY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 1];
-		final float planeCZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_C + 2];
-		final float planeSurfaceNormalX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 0];
-		final float planeSurfaceNormalY = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 1];
-		final float planeSurfaceNormalZ = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + CompiledShape3FCache.PLANE_3_F_OFFSET_SURFACE_NORMAL + 2];
-		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-//		Compute variables necessary for computing the texture coordinates:
-		final boolean isXLarger = abs(planeSurfaceNormalX) > abs(planeSurfaceNormalY) && abs(planeSurfaceNormalX) > abs(planeSurfaceNormalZ);
-		final boolean isYLarger = abs(planeSurfaceNormalY) > abs(planeSurfaceNormalZ);
-		
-//		Compute variables necessary for computing the texture coordinates:
-		final float aX = isXLarger ? planeAY      : isYLarger ? planeAZ      : planeAX;
-		final float aY = isXLarger ? planeAZ      : isYLarger ? planeAX      : planeAY;
-		final float bX = isXLarger ? planeCY - aX : isYLarger ? planeCZ - aX : planeCX - aX;
-		final float bY = isXLarger ? planeCZ - aY : isYLarger ? planeCX - aY : planeCY - aY;
-		final float cX = isXLarger ? planeBY - aX : isYLarger ? planeBZ - aX : planeBX - aX;
-		final float cY = isXLarger ? planeBZ - aY : isYLarger ? planeBX - aY : planeBY - aY;
-		
-//		Compute variables necessary for computing the texture coordinates:
-		final float determinantReciprocal = 1.0F / (bX * cY - bY * cX);
-		
-//		Compute variables necessary for computing the texture coordinates:
-		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
-		final float v = isXLarger ? surfaceIntersectionPointZ : isYLarger ? surfaceIntersectionPointX : surfaceIntersectionPointY;
-		
 //		Compute the texture coordinates:
-		final float textureCoordinatesU = u * (-bY * determinantReciprocal) + v * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
-		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
-		
-//		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(planeSurfaceNormalX, planeSurfaceNormalY, planeSurfaceNormalZ);
+		final float textureCoordinatesU = vector3FDotProduct(1.0F, 0.0F, 0.0F, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		final float textureCoordinatesV = vector3FDotProduct(0.0F, 1.0F, 0.0F, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		
 //		Update the intersection array:
-		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
-		intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F();
+		intersectionRHSSetOrthonormalBasisG(1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+		intersectionRHSSetOrthonormalBasisS(1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);

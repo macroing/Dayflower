@@ -65,13 +65,11 @@ public final class Sphere3D implements Shape3D {
 	/**
 	 * The name of this {@code Sphere3D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final String NAME = "Sphere";
 	
 	/**
 	 * The ID of this {@code Sphere3D} class.
 	 */
-//	TODO: Add Unit Tests!
 	public static final int ID = 15;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +77,6 @@ public final class Sphere3D implements Shape3D {
 	/**
 	 * Constructs a new {@code Sphere3D} instance.
 	 */
-//	TODO: Add Unit Tests!
 	public Sphere3D() {
 		
 	}
@@ -91,7 +88,6 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code Sphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
 		return new BoundingSphere3D(1.0D, new Point3D());
@@ -250,7 +246,6 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return a {@code String} with the name of this {@code Sphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String getName() {
 		return NAME;
@@ -261,7 +256,6 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return a {@code String} representation of this {@code Sphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public String toString() {
 		return "new Sphere3D()";
@@ -288,7 +282,6 @@ public final class Sphere3D implements Shape3D {
 	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
 	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
 		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
@@ -313,7 +306,6 @@ public final class Sphere3D implements Shape3D {
 	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Sphere3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3D point) {
 		return Point3D.distanceSquared(new Point3D(), point) <= 1.0D;
@@ -327,7 +319,6 @@ public final class Sphere3D implements Shape3D {
 	 * @param object the {@code Object} to compare to this {@code Sphere3D} instance for equality
 	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Sphere3D}, and their respective values are equal, {@code false} otherwise
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -379,7 +370,6 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return the surface area of this {@code Sphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
 		return PI_MULTIPLIED_BY_4;
@@ -398,7 +388,6 @@ public final class Sphere3D implements Shape3D {
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final Vector3D direction = ray.getDirection();
@@ -430,7 +419,6 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return an {@code int} with the ID of this {@code Sphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int getID() {
 		return ID;
@@ -441,7 +429,6 @@ public final class Sphere3D implements Shape3D {
 	 * 
 	 * @return a hash code for this {@code Sphere3D} instance
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
 		return Objects.hash();
@@ -458,7 +445,6 @@ public final class Sphere3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, {@code dataOutput} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-//	TODO: Add Unit Tests!
 	@Override
 	public void write(final DataOutput dataOutput) {
 		try {

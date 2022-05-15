@@ -1746,8 +1746,8 @@ public final class CompiledTextureCache {
 		array[CHECKERBOARD_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
 		array[CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_A] = textureAValue;			//Block #1
 		array[CHECKERBOARD_TEXTURE_OFFSET_TEXTURE_B] = textureBValue;			//Block #1
-		array[CHECKERBOARD_TEXTURE_OFFSET_SCALE + 0] = scale.getX();			//Block #1
-		array[CHECKERBOARD_TEXTURE_OFFSET_SCALE + 1] = scale.getY();			//Block #1
+		array[CHECKERBOARD_TEXTURE_OFFSET_SCALE + 0] = scale.x;					//Block #1
+		array[CHECKERBOARD_TEXTURE_OFFSET_SCALE + 1] = scale.y;					//Block #1
 		array[6] = 0.0F;														//Block #1
 		array[7] = 0.0F;														//Block #1
 		
@@ -1846,8 +1846,8 @@ public final class CompiledTextureCache {
 		final float[] array = new float[getLDRImageTextureLength(lDRImageTexture)];
 		
 		array[L_D_R_IMAGE_TEXTURE_OFFSET_ANGLE_RADIANS] = angle.getRadians();
-		array[L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 0] = scale.getU();
-		array[L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 1] = scale.getV();
+		array[L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 0] = scale.x;
+		array[L_D_R_IMAGE_TEXTURE_OFFSET_SCALE + 1] = scale.y;
 		array[L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_X] = resolutionX;
 		array[L_D_R_IMAGE_TEXTURE_OFFSET_RESOLUTION_Y] = resolutionY;
 		

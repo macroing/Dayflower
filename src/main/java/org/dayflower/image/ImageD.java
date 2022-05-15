@@ -1935,7 +1935,7 @@ public abstract class ImageD extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageD scale(final Vector2D scale) {
-		return scale(toInt(ceil(getResolutionX() * scale.getX())), toInt(ceil(getResolutionY() * scale.getY())));
+		return scale(toInt(ceil(getResolutionX() * scale.x)), toInt(ceil(getResolutionY() * scale.y)));
 	}
 	
 	/**

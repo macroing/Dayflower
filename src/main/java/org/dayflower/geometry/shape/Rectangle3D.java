@@ -470,8 +470,8 @@ public final class Rectangle3D implements Shape3D {
 		final double hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
 		final double hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
 		
-		final double u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2D.crossProduct(vA, vAB) * determinantReciprocal;
-		final double v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2D.crossProduct(vAC, vA) * determinantReciprocal;
+		final double u = hU * (-vAB.y * determinantReciprocal) + hV * (+vAB.x * determinantReciprocal) + Vector2D.crossProduct(vA, vAB) * determinantReciprocal;
+		final double v = hU * (+vAC.y * determinantReciprocal) + hV * (-vAC.x * determinantReciprocal) + Vector2D.crossProduct(vAC, vA) * determinantReciprocal;
 		
 		return new Point2D(u, v);
 	}

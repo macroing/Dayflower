@@ -49,11 +49,11 @@ public final class Vector2FUnitTests {
 		final Vector2F a = Vector2F.absolute(new Vector2F(+1.0F, +2.0F));
 		final Vector2F b = Vector2F.absolute(new Vector2F(-1.0F, -2.0F));
 		
-		assertEquals(1.0F, a.getComponent1());
-		assertEquals(2.0F, a.getComponent2());
+		assertEquals(1.0F, a.x);
+		assertEquals(2.0F, a.y);
 		
-		assertEquals(1.0F, b.getComponent1());
-		assertEquals(2.0F, b.getComponent2());
+		assertEquals(1.0F, b.x);
+		assertEquals(2.0F, b.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.absolute(null));
 	}
@@ -64,8 +64,8 @@ public final class Vector2FUnitTests {
 		final Vector2F b = new Vector2F(2.0F, 3.0F);
 		final Vector2F c = Vector2F.add(a, b);
 		
-		assertEquals(3.0F, c.getComponent1());
-		assertEquals(5.0F, c.getComponent2());
+		assertEquals(3.0F, c.x);
+		assertEquals(5.0F, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.add(a, null));
 		assertThrows(NullPointerException.class, () -> Vector2F.add(null, b));
@@ -78,8 +78,8 @@ public final class Vector2FUnitTests {
 		final Vector2F c = new Vector2F(3.0F, 4.0F);
 		final Vector2F d = Vector2F.add(a, b, c);
 		
-		assertEquals(6.0F, d.getComponent1());
-		assertEquals(9.0F, d.getComponent2());
+		assertEquals(6.0F, d.x);
+		assertEquals(9.0F, d.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.add(a, b, null));
 		assertThrows(NullPointerException.class, () -> Vector2F.add(a, null, c));
@@ -122,32 +122,32 @@ public final class Vector2FUnitTests {
 	public void testConstructor() {
 		final Vector2F vector = new Vector2F();
 		
-		assertEquals(0.0F, vector.getComponent1());
-		assertEquals(0.0F, vector.getComponent2());
+		assertEquals(0.0F, vector.x);
+		assertEquals(0.0F, vector.y);
 	}
 	
 	@Test
 	public void testConstructorFloat() {
 		final Vector2F vector = new Vector2F(1.0F);
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(1.0F, vector.getComponent2());
+		assertEquals(1.0F, vector.x);
+		assertEquals(1.0F, vector.y);
 	}
 	
 	@Test
 	public void testConstructorFloatFloat() {
 		final Vector2F vector = new Vector2F(1.0F, 2.0F);
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(2.0F, vector.getComponent2());
+		assertEquals(1.0F, vector.x);
+		assertEquals(2.0F, vector.y);
 	}
 	
 	@Test
 	public void testConstructorPoint2F() {
 		final Vector2F vector = new Vector2F(new Point2F(1.0F, 2.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(2.0F, vector.getComponent2());
+		assertEquals(1.0F, vector.x);
+		assertEquals(2.0F, vector.y);
 		
 		assertThrows(NullPointerException.class, () -> new Vector2F((Point2F)(null)));
 	}
@@ -156,8 +156,8 @@ public final class Vector2FUnitTests {
 	public void testConstructorPoint3F() {
 		final Vector2F vector = new Vector2F(new Point3F(1.0F, 2.0F, 3.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(2.0F, vector.getComponent2());
+		assertEquals(1.0F, vector.x);
+		assertEquals(2.0F, vector.y);
 		
 		assertThrows(NullPointerException.class, () -> new Vector2F((Point3F)(null)));
 	}
@@ -177,8 +177,8 @@ public final class Vector2FUnitTests {
 	public void testDirection() {
 		final Vector2F vector = Vector2F.direction(new Point2F(1.0F, 2.0F), new Point2F(2.0F, 3.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(1.0F, vector.getComponent2());
+		assertEquals(1.0F, vector.x);
+		assertEquals(1.0F, vector.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.direction(new Point2F(1.0F, 2.0F), null));
 		assertThrows(NullPointerException.class, () -> Vector2F.direction(null, new Point2F(2.0F, 3.0F)));
@@ -188,8 +188,8 @@ public final class Vector2FUnitTests {
 	public void testDirectionNormalized() {
 		final Vector2F vector = Vector2F.directionNormalized(new Point2F(1.0F, 2.0F), new Point2F(2.0F, 2.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(0.0F, vector.getComponent2());
+		assertEquals(1.0F, vector.x);
+		assertEquals(0.0F, vector.y);
 		
 		assertTrue(vector.isUnitVector());
 		
@@ -201,8 +201,8 @@ public final class Vector2FUnitTests {
 	public void testDirectionXY() {
 		final Vector2F vector = Vector2F.directionXY(new Point3F(1.0F, 2.0F, 3.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(2.0F, vector.getComponent2());
+		assertEquals(1.0F, vector.x);
+		assertEquals(2.0F, vector.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.directionXY(null));
 	}
@@ -211,8 +211,8 @@ public final class Vector2FUnitTests {
 	public void testDirectionYZ() {
 		final Vector2F vector = Vector2F.directionYZ(new Point3F(1.0F, 2.0F, 3.0F));
 		
-		assertEquals(2.0F, vector.getComponent1());
-		assertEquals(3.0F, vector.getComponent2());
+		assertEquals(2.0F, vector.x);
+		assertEquals(3.0F, vector.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.directionYZ(null));
 	}
@@ -221,8 +221,8 @@ public final class Vector2FUnitTests {
 	public void testDirectionZX() {
 		final Vector2F vector = Vector2F.directionZX(new Point3F(1.0F, 2.0F, 3.0F));
 		
-		assertEquals(3.0F, vector.getComponent1());
-		assertEquals(1.0F, vector.getComponent2());
+		assertEquals(3.0F, vector.x);
+		assertEquals(1.0F, vector.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.directionZX(null));
 	}
@@ -233,11 +233,11 @@ public final class Vector2FUnitTests {
 		final Vector2F b = Vector2F.divide(a, 2.0F);
 		final Vector2F c = Vector2F.divide(a, Float.NaN);
 		
-		assertEquals(1.0F, b.getComponent1());
-		assertEquals(2.0F, b.getComponent2());
+		assertEquals(1.0F, b.x);
+		assertEquals(2.0F, b.y);
 		
-		assertEquals(0.0F, c.getComponent1());
-		assertEquals(0.0F, c.getComponent2());
+		assertEquals(0.0F, c.x);
+		assertEquals(0.0F, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.divide(null, 2.0F));
 	}
@@ -274,48 +274,6 @@ public final class Vector2FUnitTests {
 		assertNotEquals(d, a);
 		assertNotEquals(a, e);
 		assertNotEquals(e, a);
-	}
-	
-	@Test
-	public void testGetComponent1() {
-		final Vector2F vector = new Vector2F(2.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getComponent1());
-	}
-	
-	@Test
-	public void testGetComponent2() {
-		final Vector2F vector = new Vector2F(0.0F, 2.0F);
-		
-		assertEquals(2.0F, vector.getComponent2());
-	}
-	
-	@Test
-	public void testGetU() {
-		final Vector2F vector = new Vector2F(2.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getU());
-	}
-	
-	@Test
-	public void testGetV() {
-		final Vector2F vector = new Vector2F(0.0F, 2.0F);
-		
-		assertEquals(2.0F, vector.getV());
-	}
-	
-	@Test
-	public void testGetX() {
-		final Vector2F vector = new Vector2F(2.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getX());
-	}
-	
-	@Test
-	public void testGetY() {
-		final Vector2F vector = new Vector2F(0.0F, 2.0F);
-		
-		assertEquals(2.0F, vector.getY());
 	}
 	
 	@Test
@@ -363,8 +321,8 @@ public final class Vector2FUnitTests {
 		final Vector2F b = new Vector2F(5.0F, 5.0F);
 		final Vector2F c = Vector2F.lerp(a, b, 0.25F);
 		
-		assertEquals(2.0F, c.getComponent1());
-		assertEquals(2.0F, c.getComponent2());
+		assertEquals(2.0F, c.x);
+		assertEquals(2.0F, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.lerp(a, null, 0.25F));
 		assertThrows(NullPointerException.class, () -> Vector2F.lerp(null, b, 0.25F));
@@ -375,8 +333,8 @@ public final class Vector2FUnitTests {
 		final Vector2F a = new Vector2F(1.0F, 2.0F);
 		final Vector2F b = Vector2F.multiply(a, 2.0F);
 		
-		assertEquals(2.0F, b.getComponent1());
-		assertEquals(4.0F, b.getComponent2());
+		assertEquals(2.0F, b.x);
+		assertEquals(4.0F, b.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.multiply(null, 2.0F));
 	}
@@ -387,43 +345,13 @@ public final class Vector2FUnitTests {
 		final Vector2F b = Vector2F.negate(a);
 		final Vector2F c = Vector2F.negate(b);
 		
-		assertEquals(-1.0F, b.getComponent1());
-		assertEquals(-2.0F, b.getComponent2());
+		assertEquals(-1.0F, b.x);
+		assertEquals(-2.0F, b.y);
 		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
+		assertEquals(+1.0F, c.x);
+		assertEquals(+2.0F, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.negate(null));
-	}
-	
-	@Test
-	public void testNegateComponent1() {
-		final Vector2F a = new Vector2F(1.0F, 2.0F);
-		final Vector2F b = Vector2F.negateComponent1(a);
-		final Vector2F c = Vector2F.negateComponent1(b);
-		
-		assertEquals(-1.0F, b.getComponent1());
-		assertEquals(+2.0F, b.getComponent2());
-		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
-		
-		assertThrows(NullPointerException.class, () -> Vector2F.negateComponent1(null));
-	}
-	
-	@Test
-	public void testNegateComponent2() {
-		final Vector2F a = new Vector2F(1.0F, 2.0F);
-		final Vector2F b = Vector2F.negateComponent2(a);
-		final Vector2F c = Vector2F.negateComponent2(b);
-		
-		assertEquals(+1.0F, b.getComponent1());
-		assertEquals(-2.0F, b.getComponent2());
-		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
-		
-		assertThrows(NullPointerException.class, () -> Vector2F.negateComponent2(null));
 	}
 	
 	@Test
@@ -479,8 +407,8 @@ public final class Vector2FUnitTests {
 		final Vector2F a = new Vector2F(1.0F, 2.0F);
 		final Vector2F b = Vector2F.perpendicular(a);
 		
-		assertEquals(+2.0F, b.getComponent1());
-		assertEquals(-1.0F, b.getComponent2());
+		assertEquals(+2.0F, b.x);
+		assertEquals(-1.0F, b.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.perpendicular(null));
 	}
@@ -489,16 +417,16 @@ public final class Vector2FUnitTests {
 	public void testRandom() {
 		final Vector2F vector = Vector2F.random();
 		
-		assertTrue(vector.getComponent1() >= -1.0F && vector.getComponent1() <= 1.0F);
-		assertTrue(vector.getComponent2() >= -1.0F && vector.getComponent2() <= 1.0F);
+		assertTrue(vector.x >= -1.0F && vector.x <= 1.0F);
+		assertTrue(vector.y >= -1.0F && vector.y <= 1.0F);
 	}
 	
 	@Test
 	public void testRandomNormalized() {
 		final Vector2F vector = Vector2F.randomNormalized();
 		
-		assertTrue(vector.getComponent1() >= -1.0F && vector.getComponent1() <= 1.0F);
-		assertTrue(vector.getComponent2() >= -1.0F && vector.getComponent2() <= 1.0F);
+		assertTrue(vector.x >= -1.0F && vector.x <= 1.0F);
+		assertTrue(vector.y >= -1.0F && vector.y <= 1.0F);
 		
 		assertTrue(vector.isUnitVector());
 	}
@@ -511,8 +439,8 @@ public final class Vector2FUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeFloat(a.getComponent1());
-		dataOutput.writeFloat(a.getComponent2());
+		dataOutput.writeFloat(a.x);
+		dataOutput.writeFloat(a.y);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		
@@ -529,11 +457,11 @@ public final class Vector2FUnitTests {
 		final Vector2F a = Vector2F.reciprocal(new Vector2F(Float.NaN, Float.NaN));
 		final Vector2F b = Vector2F.reciprocal(new Vector2F(2.0F, 4.0F));
 		
-		assertEquals(Float.NaN, a.getComponent1());
-		assertEquals(Float.NaN, a.getComponent2());
+		assertEquals(Float.NaN, a.x);
+		assertEquals(Float.NaN, a.y);
 		
-		assertEquals(0.50F, b.getComponent1());
-		assertEquals(0.25F, b.getComponent2());
+		assertEquals(0.50F, b.x);
+		assertEquals(0.25F, b.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.reciprocal(null));
 	}
@@ -544,8 +472,8 @@ public final class Vector2FUnitTests {
 		final Vector2F b = new Vector2F(2.0F, 3.0F);
 		final Vector2F c = Vector2F.subtract(a, b);
 		
-		assertEquals(1.0F, c.getComponent1());
-		assertEquals(2.0F, c.getComponent2());
+		assertEquals(1.0F, c.x);
+		assertEquals(2.0F, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.subtract(a, null));
 		assertThrows(NullPointerException.class, () -> Vector2F.subtract(null, b));
@@ -579,8 +507,8 @@ public final class Vector2FUnitTests {
 		final Vector2F a = new Vector2F(1.0F, 1.0F);
 		final Vector2F b = Vector2F.transform(matrix, a);
 		
-		assertEquals(2.0F, b.getComponent1());
-		assertEquals(4.0F, b.getComponent2());
+		assertEquals(2.0F, b.x);
+		assertEquals(4.0F, b.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.transform(matrix, null));
 		assertThrows(NullPointerException.class, () -> Vector2F.transform(null, a));
@@ -593,43 +521,11 @@ public final class Vector2FUnitTests {
 		final Vector2F a = new Vector2F(1.0F, 0.0F);
 		final Vector2F b = Vector2F.transformTranspose(matrix, a);
 		
-		assertEquals(-1.0000000000000000F, b.getComponent1());
-		assertEquals(+0.0000000874227766F, b.getComponent2());
+		assertEquals(-1.0000000000000000F, b.x);
+		assertEquals(+0.0000000874227766F, b.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2F.transformTranspose(matrix, null));
 		assertThrows(NullPointerException.class, () -> Vector2F.transformTranspose(null, a));
-	}
-	
-	@Test
-	public void testU() {
-		final Vector2F vector = Vector2F.u();
-		
-		assertEquals(1.0F, vector.getU());
-		assertEquals(0.0F, vector.getV());
-	}
-	
-	@Test
-	public void testUFloat() {
-		final Vector2F vector = Vector2F.u(2.0F);
-		
-		assertEquals(2.0F, vector.getU());
-		assertEquals(0.0F, vector.getV());
-	}
-	
-	@Test
-	public void testV() {
-		final Vector2F vector = Vector2F.v();
-		
-		assertEquals(0.0F, vector.getU());
-		assertEquals(1.0F, vector.getV());
-	}
-	
-	@Test
-	public void testVFloat() {
-		final Vector2F vector = Vector2F.v(2.0F);
-		
-		assertEquals(0.0F, vector.getU());
-		assertEquals(2.0F, vector.getV());
 	}
 	
 	@Test
@@ -656,31 +552,31 @@ public final class Vector2FUnitTests {
 	public void testX() {
 		final Vector2F vector = Vector2F.x();
 		
-		assertEquals(1.0F, vector.getX());
-		assertEquals(0.0F, vector.getY());
+		assertEquals(1.0F, vector.x);
+		assertEquals(0.0F, vector.y);
 	}
 	
 	@Test
 	public void testXFloat() {
 		final Vector2F vector = Vector2F.x(2.0F);
 		
-		assertEquals(2.0F, vector.getX());
-		assertEquals(0.0F, vector.getY());
+		assertEquals(2.0F, vector.x);
+		assertEquals(0.0F, vector.y);
 	}
 	
 	@Test
 	public void testY() {
 		final Vector2F vector = Vector2F.y();
 		
-		assertEquals(0.0F, vector.getX());
-		assertEquals(1.0F, vector.getY());
+		assertEquals(0.0F, vector.x);
+		assertEquals(1.0F, vector.y);
 	}
 	
 	@Test
 	public void testYFloat() {
 		final Vector2F vector = Vector2F.y(2.0F);
 		
-		assertEquals(0.0F, vector.getX());
-		assertEquals(2.0F, vector.getY());
+		assertEquals(0.0F, vector.x);
+		assertEquals(2.0F, vector.y);
 	}
 }

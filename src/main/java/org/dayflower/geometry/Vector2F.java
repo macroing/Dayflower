@@ -64,9 +64,15 @@ public final class Vector2F implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * The X-component of this {@code Vector2F} instance.
+	 */
+	public final float x;
 	
-	private final float component1;
-	private final float component2;
+	/**
+	 * The Y-component of this {@code Vector2F} instance.
+	 */
+	public final float y;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -85,41 +91,41 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Vector2F} instance given the component values {@code point.x} and {@code point.y}.
+	 * Constructs a new {@code Vector2F} instance given the component values {@code p.x} and {@code p.y}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Vector2F(point.x, point.y);
+	 * new Vector2F(p.x, p.y);
 	 * }
 	 * </pre>
 	 * 
-	 * @param point a {@link Point2F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Vector2F(final Point2F point) {
-		this(point.x, point.y);
+	public Vector2F(final Point2F p) {
+		this(p.x, p.y);
 	}
 	
 	/**
-	 * Constructs a new {@code Vector2F} instance given the component values {@code point.getComponent1()} and {@code point.getComponent2()}.
+	 * Constructs a new {@code Vector2F} instance given the component values {@code p.getComponent1()} and {@code p.getComponent2()}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Vector2F(point.getComponent1(), point.getComponent2());
+	 * new Vector2F(p.getComponent1(), p.getComponent2());
 	 * }
 	 * </pre>
 	 * 
-	 * @param point a {@link Point3F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Vector2F(final Point3F point) {
-		this(point.getComponent1(), point.getComponent2());
+	public Vector2F(final Point3F p) {
+		this(p.getComponent1(), p.getComponent2());
 	}
 	
 	/**
@@ -139,14 +145,14 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Vector2F} instance given the component values {@code component1} and {@code component2}.
+	 * Constructs a new {@code Vector2F} instance given the component values {@code x} and {@code y}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
 	 */
-	public Vector2F(final float component1, final float component2) {
-		this.component1 = component1;
-		this.component2 = component2;
+	public Vector2F(final float x, final float y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,7 +164,7 @@ public final class Vector2F implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Vector2F(%s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2));
+		return String.format("new Vector2F(%s, %s)", Strings.toNonScientificNotationJava(this.x), Strings.toNonScientificNotationJava(this.y));
 	}
 	
 	/**
@@ -175,9 +181,9 @@ public final class Vector2F implements Node {
 			return true;
 		} else if(!(object instanceof Vector2F)) {
 			return false;
-		} else if(!equal(this.component1, Vector2F.class.cast(object).component1)) {
+		} else if(!equal(this.x, Vector2F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.component2, Vector2F.class.cast(object).component2)) {
+		} else if(!equal(this.y, Vector2F.class.cast(object).y)) {
 			return false;
 		} else {
 			return true;
@@ -199,60 +205,6 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-	public float getComponent1() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-	public float getComponent2() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the U-component.
-	 * 
-	 * @return the value of the U-component
-	 */
-	public float getU() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the V-component.
-	 * 
-	 * @return the value of the V-component
-	 */
-	public float getV() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-	public float getX() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-	public float getY() {
-		return this.component2;
-	}
-	
-	/**
 	 * Returns the length of this {@code Vector2F} instance.
 	 * 
 	 * @return the length of this {@code Vector2F} instance
@@ -267,7 +219,7 @@ public final class Vector2F implements Node {
 	 * @return the squared length of this {@code Vector2F} instance
 	 */
 	public float lengthSquared() {
-		return this.component1 * this.component1 + this.component2 * this.component2;
+		return this.x * this.x + this.y * this.y;
 	}
 	
 	/**
@@ -276,10 +228,7 @@ public final class Vector2F implements Node {
 	 * @return a {@code float[]} representation of this {@code Vector2F} instance
 	 */
 	public float[] toArray() {
-		return new float[] {
-			this.component1,
-			this.component2
-		};
+		return new float[] {this.x, this.y};
 	}
 	
 	/**
@@ -289,7 +238,7 @@ public final class Vector2F implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2));
+		return Objects.hash(Float.valueOf(this.x), Float.valueOf(this.y));
 	}
 	
 	/**
@@ -305,8 +254,8 @@ public final class Vector2F implements Node {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeFloat(this.component1);
-			dataOutput.writeFloat(this.component2);
+			dataOutput.writeFloat(this.x);
+			dataOutput.writeFloat(this.y);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -315,62 +264,53 @@ public final class Vector2F implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a new {@code Vector2F} instance with the absolute component values of {@code vector}.
+	 * Returns a new {@code Vector2F} instance with the absolute component values of {@code v}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector2F} instance
-	 * @return a new {@code Vector2F} instance with the absolute component values of {@code vector}
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@code Vector2F} instance
+	 * @return a new {@code Vector2F} instance with the absolute component values of {@code v}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector2F absolute(final Vector2F vector) {
-		final float component1 = abs(vector.component1);
-		final float component2 = abs(vector.component2);
-		
-		return new Vector2F(component1, component2);
+	public static Vector2F absolute(final Vector2F v) {
+		return new Vector2F(abs(v.x), abs(v.y));
 	}
 	
 	/**
-	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
+	 * Adds the component values of {@code vRHS} to the component values of {@code vLHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the addition.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector addition is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector2F} instance on the right-hand side
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vRHS the {@code Vector2F} instance on the right-hand side
 	 * @return a new {@code Vector2F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector2F add(final Vector2F vectorLHS, final Vector2F vectorRHS) {
-		final float component1 = vectorLHS.component1 + vectorRHS.component1;
-		final float component2 = vectorLHS.component2 + vectorRHS.component2;
-		
-		return new Vector2F(component1, component2);
+	public static Vector2F add(final Vector2F vLHS, final Vector2F vRHS) {
+		return new Vector2F(vLHS.x + vRHS.x, vLHS.y + vRHS.y);
 	}
 	
 	/**
-	 * Adds the component values of {@code vectorA}, {@code vectorB} and {@code vectorC}.
+	 * Adds the component values of {@code a}, {@code b} and {@code c}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the addition.
 	 * <p>
-	 * If either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector addition is performed componentwise.
 	 * 
-	 * @param vectorA a {@code Vector2F} instance
-	 * @param vectorB a {@code Vector2F} instance
-	 * @param vectorC a {@code Vector2F} instance
+	 * @param a a {@code Vector2F} instance
+	 * @param b a {@code Vector2F} instance
+	 * @param c a {@code Vector2F} instance
 	 * @return a new {@code Vector2F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-	public static Vector2F add(final Vector2F vectorA, final Vector2F vectorB, final Vector2F vectorC) {
-		final float component1 = vectorA.component1 + vectorB.component1 + vectorC.component1;
-		final float component2 = vectorA.component2 + vectorB.component2 + vectorC.component2;
-		
-		return new Vector2F(component1, component2);
+	public static Vector2F add(final Vector2F a, final Vector2F b, final Vector2F c) {
+		return new Vector2F(a.x + b.x + c.x, a.y + b.y + c.y);
 	}
 	
 	/**
@@ -384,10 +324,7 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
 	public static Vector2F direction(final Point2F eye, final Point2F lookAt) {
-		final float component1 = lookAt.x - eye.x;
-		final float component2 = lookAt.y - eye.y;
-		
-		return new Vector2F(component1, component2);
+		return new Vector2F(lookAt.x - eye.x, lookAt.y - eye.y);
 	}
 	
 	/**
@@ -405,76 +342,73 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
-	 * Returns a {@code Vector2F} instance that points in the direction of {@code point.getX()} and {@code point.getY()}.
+	 * Returns a {@code Vector2F} instance that points in the direction of {@code p.getX()} and {@code p.getY()}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@link Point3F} instance
-	 * @return a {@code Vector2F} instance that points in the direction of {@code point.getX()} and {@code point.getY()}
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point3F} instance
+	 * @return a {@code Vector2F} instance that points in the direction of {@code p.getX()} and {@code p.getY()}
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public static Vector2F directionXY(final Point3F point) {
-		return new Vector2F(point.getX(), point.getY());
+	public static Vector2F directionXY(final Point3F p) {
+		return new Vector2F(p.getX(), p.getY());
 	}
 	
 	/**
-	 * Returns a {@code Vector2F} instance that points in the direction of {@code point.getY()} and {@code point.getZ()}.
+	 * Returns a {@code Vector2F} instance that points in the direction of {@code p.getY()} and {@code p.getZ()}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@link Point3F} instance
-	 * @return a {@code Vector2F} instance that points in the direction of {@code point.getY()} and {@code point.getZ()}
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point3F} instance
+	 * @return a {@code Vector2F} instance that points in the direction of {@code p.getY()} and {@code p.getZ()}
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public static Vector2F directionYZ(final Point3F point) {
-		return new Vector2F(point.getY(), point.getZ());
+	public static Vector2F directionYZ(final Point3F p) {
+		return new Vector2F(p.getY(), p.getZ());
 	}
 	
 	/**
-	 * Returns a {@code Vector2F} instance that points in the direction of {@code point.getZ()} and {@code point.getX()}.
+	 * Returns a {@code Vector2F} instance that points in the direction of {@code p.getZ()} and {@code p.getX()}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@link Point3F} instance
-	 * @return a {@code Vector2F} instance that points in the direction of {@code point.getZ()} and {@code point.getX()}
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point3F} instance
+	 * @return a {@code Vector2F} instance that points in the direction of {@code p.getZ()} and {@code p.getX()}
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public static Vector2F directionZX(final Point3F point) {
-		return new Vector2F(point.getZ(), point.getX());
+	public static Vector2F directionZX(final Point3F p) {
+		return new Vector2F(p.getZ(), p.getX());
 	}
 	
 	/**
-	 * Divides the component values of {@code vectorLHS} with {@code scalarRHS}.
+	 * Divides the component values of {@code vLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the division.
 	 * <p>
-	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector division is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector2F} instance with the result of the division
-	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
-	public static Vector2F divide(final Vector2F vectorLHS, final float scalarRHS) {
-		final float component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0F);
-		final float component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0F);
-		
-		return new Vector2F(component1, component2);
+	public static Vector2F divide(final Vector2F vLHS, final float sRHS) {
+		return new Vector2F(finiteOrDefault(vLHS.x / sRHS, 0.0F), finiteOrDefault(vLHS.y / sRHS, 0.0F));
 	}
 	
 	/**
-	 * Returns a cached version of {@code vector}.
+	 * Returns a cached version of {@code v}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector2F} instance
-	 * @return a cached version of {@code vector}
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@code Vector2F} instance
+	 * @return a cached version of {@code v}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector2F getCached(final Vector2F vector) {
-		return CACHE.computeIfAbsent(Objects.requireNonNull(vector, "vector == null"), key -> vector);
+	public static Vector2F getCached(final Vector2F v) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(v, "v == null"), key -> v);
 	}
 	
 	/**
@@ -491,125 +425,77 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Vector2F lerp(final Vector2F a, final Vector2F b, final float t) {
-		final float component1 = Floats.lerp(a.component1, b.component1, t);
-		final float component2 = Floats.lerp(a.component2, b.component2, t);
-		
-		return new Vector2F(component1, component2);
+		return new Vector2F(Floats.lerp(a.x, b.x, t), Floats.lerp(a.y, b.y, t));
 	}
 	
 	/**
-	 * Multiplies the component values of {@code vectorLHS} with {@code scalarRHS}.
+	 * Multiplies the component values of {@code vLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the multiplication.
 	 * <p>
-	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector multiplication is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector2F} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
-	public static Vector2F multiply(final Vector2F vectorLHS, final float scalarRHS) {
-		final float component1 = vectorLHS.component1 * scalarRHS;
-		final float component2 = vectorLHS.component2 * scalarRHS;
-		
-		return new Vector2F(component1, component2);
+	public static Vector2F multiply(final Vector2F vLHS, final float sRHS) {
+		return new Vector2F(vLHS.x * sRHS, vLHS.y * sRHS);
 	}
 	
 	/**
-	 * Negates the component values of {@code vector}.
+	 * Negates the component values of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the negation.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector2F} instance
+	 * @param v a {@code Vector2F} instance
 	 * @return a new {@code Vector2F} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector2F negate(final Vector2F vector) {
-		final float component1 = -vector.component1;
-		final float component2 = -vector.component2;
-		
-		return new Vector2F(component1, component2);
+	public static Vector2F negate(final Vector2F v) {
+		return new Vector2F(-v.x, -v.y);
 	}
 	
 	/**
-	 * Negates the component 1 value of {@code vector}.
-	 * <p>
-	 * Returns a new {@code Vector2F} instance with the result of the negation.
-	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param vector a {@code Vector2F} instance
-	 * @return a new {@code Vector2F} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
-	 */
-	public static Vector2F negateComponent1(final Vector2F vector) {
-		final float component1 = -vector.component1;
-		final float component2 = +vector.component2;
-		
-		return new Vector2F(component1, component2);
-	}
-	
-	/**
-	 * Negates the component 2 value of {@code vector}.
-	 * <p>
-	 * Returns a new {@code Vector2F} instance with the result of the negation.
-	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param vector a {@code Vector2F} instance
-	 * @return a new {@code Vector2F} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
-	 */
-	public static Vector2F negateComponent2(final Vector2F vector) {
-		final float component1 = +vector.component1;
-		final float component2 = -vector.component2;
-		
-		return new Vector2F(component1, component2);
-	}
-	
-	/**
-	 * Normalizes the component values of {@code vector}.
+	 * Normalizes the component values of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the normalization.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector2F} instance
+	 * @param v a {@code Vector2F} instance
 	 * @return a new {@code Vector2F} instance with the result of the normalization
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector2F normalize(final Vector2F vector) {
-		final float length = vector.length();
+	public static Vector2F normalize(final Vector2F v) {
+		final float length = v.length();
 		
 		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
 		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
-			return vector;
+			return v;
 		}
 		
-		return divide(vector, length);
+		return divide(v, length);
 	}
 	
 	/**
-	 * Returns a {@code Vector2F} instance that is perpendicular to {@code vector}.
+	 * Returns a {@code Vector2F} instance that is perpendicular to {@code v}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector2F} instance
-	 * @return a {@code Vector2F} instance that is perpendicular to {@code vector}
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@code Vector2F} instance
+	 * @return a {@code Vector2F} instance that is perpendicular to {@code v}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector2F perpendicular(final Vector2F vector) {
-		final float component1 = +vector.component2;
-		final float component2 = -vector.component1;
-		
-		return new Vector2F(component1, component2);
+	public static Vector2F perpendicular(final Vector2F v) {
+		return new Vector2F(v.y, -v.x);
 	}
 	
 	/**
@@ -618,10 +504,7 @@ public final class Vector2F implements Node {
 	 * @return a random {@code Vector2F} instance
 	 */
 	public static Vector2F random() {
-		final float component1 = Floats.random() * 2.0F - 1.0F;
-		final float component2 = Floats.random() * 2.0F - 1.0F;
-		
-		return new Vector2F(component1, component2);
+		return new Vector2F(Floats.random() * 2.0F - 1.0F, Floats.random() * 2.0F - 1.0F);
 	}
 	
 	/**
@@ -647,126 +530,79 @@ public final class Vector2F implements Node {
 	 */
 	public static Vector2F read(final DataInput dataInput) {
 		try {
-			final float component1 = dataInput.readFloat();
-			final float component2 = dataInput.readFloat();
-			
-			return new Vector2F(component1, component2);
+			return new Vector2F(dataInput.readFloat(), dataInput.readFloat());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Returns a new {@code Vector2F} instance with the reciprocal (or inverse) component values of {@code vector}.
+	 * Returns a new {@code Vector2F} instance with the reciprocal (or inverse) component values of {@code v}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector2F} instance
-	 * @return a new {@code Vector2F} instance with the reciprocal (or inverse) component values of {@code vector}
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@code Vector2F} instance
+	 * @return a new {@code Vector2F} instance with the reciprocal (or inverse) component values of {@code v}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector2F reciprocal(final Vector2F vector) {
-		final float component1 = 1.0F / vector.component1;
-		final float component2 = 1.0F / vector.component2;
-		
-		return new Vector2F(component1, component2);
+	public static Vector2F reciprocal(final Vector2F v) {
+		return new Vector2F(1.0F / v.x, 1.0F / v.y);
 	}
 	
 	/**
-	 * Subtracts the component values of {@code vectorRHS} from the component values of {@code vectorLHS}.
+	 * Subtracts the component values of {@code vRHS} from the component values of {@code vLHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector subtraction is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector2F} instance on the right-hand side
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vRHS the {@code Vector2F} instance on the right-hand side
 	 * @return a new {@code Vector2F} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector2F subtract(final Vector2F vectorLHS, final Vector2F vectorRHS) {
-		final float component1 = vectorLHS.component1 - vectorRHS.component1;
-		final float component2 = vectorLHS.component2 - vectorRHS.component2;
-		
-		return new Vector2F(component1, component2);
+	public static Vector2F subtract(final Vector2F vLHS, final Vector2F vRHS) {
+		return new Vector2F(vLHS.x - vRHS.x, vLHS.y - vRHS.y);
 	}
 	
 	/**
-	 * Transforms the {@code Vector2F} {@code vectorRHS} with the {@link Matrix33F} {@code matrixLHS}.
+	 * Transforms the {@code Vector2F} {@code vRHS} with the {@link Matrix33F} {@code mLHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix33F} instance
-	 * @param vectorRHS a {@code Vector2F} instance
+	 * @param mLHS a {@code Matrix33F} instance
+	 * @param vRHS a {@code Vector2F} instance
 	 * @return a new {@code Vector2F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector2F transform(final Matrix33F matrixLHS, final Vector2F vectorRHS) {
-		final float component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement12() * vectorRHS.component2;
-		final float component2 = matrixLHS.getElement21() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2;
+	public static Vector2F transform(final Matrix33F mLHS, final Vector2F vRHS) {
+		final float x = mLHS.getElement11() * vRHS.x + mLHS.getElement12() * vRHS.y;
+		final float y = mLHS.getElement21() * vRHS.x + mLHS.getElement22() * vRHS.y;
 		
-		return new Vector2F(component1, component2);
+		return new Vector2F(x, y);
 	}
 	
 	/**
-	 * Transforms the {@code Vector2F} {@code vectorRHS} with the {@link Matrix33F} {@code matrixLHS} in transpose order.
+	 * Transforms the {@code Vector2F} {@code vRHS} with the {@link Matrix33F} {@code mLHS} in transpose order.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix33F} instance
-	 * @param vectorRHS a {@code Vector2F} instance
+	 * @param mLHS a {@code Matrix33F} instance
+	 * @param vRHS a {@code Vector2F} instance
 	 * @return a new {@code Vector2F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector2F transformTranspose(final Matrix33F matrixLHS, final Vector2F vectorRHS) {
-		final float component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement21() * vectorRHS.component2;
-		final float component2 = matrixLHS.getElement12() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2;
+	public static Vector2F transformTranspose(final Matrix33F mLHS, final Vector2F vRHS) {
+		final float x = mLHS.getElement11() * vRHS.x + mLHS.getElement21() * vRHS.y;
+		final float y = mLHS.getElement12() * vRHS.x + mLHS.getElement22() * vRHS.y;
 		
-		return new Vector2F(component1, component2);
-	}
-	
-	/**
-	 * Returns a new {@code Vector2F} instance equivalent to {@code new Vector2F(1.0F, 0.0F)}.
-	 * 
-	 * @return a new {@code Vector2F} instance equivalent to {@code new Vector2F(1.0F, 0.0F)}
-	 */
-	public static Vector2F u() {
-		return u(1.0F);
-	}
-	
-	/**
-	 * Returns a new {@code Vector2F} instance equivalent to {@code new Vector2F(u, 0.0F)}.
-	 * 
-	 * @param u the value of the U-component
-	 * @return a new {@code Vector2F} instance equivalent to {@code new Vector2F(u, 0.0F)}
-	 */
-	public static Vector2F u(final float u) {
-		return new Vector2F(u, 0.0F);
-	}
-	
-	/**
-	 * Returns a new {@code Vector2F} instance equivalent to {@code new Vector2F(0.0F, 1.0F)}.
-	 * 
-	 * @return a new {@code Vector2F} instance equivalent to {@code new Vector2F(0.0F, 1.0F)}
-	 */
-	public static Vector2F v() {
-		return v(1.0F);
-	}
-	
-	/**
-	 * Returns a new {@code Vector2F} instance equivalent to {@code new Vector2F(0.0F, v)}.
-	 * 
-	 * @param v the value of the V-component
-	 * @return a new {@code Vector2F} instance equivalent to {@code new Vector2F(0.0F, v)}
-	 */
-	public static Vector2F v(final float v) {
-		return new Vector2F(0.0F, v);
+		return new Vector2F(x, y);
 	}
 	
 	/**
@@ -822,31 +658,31 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
-	 * Returns the cross product of {@code vectorLHS} and {@code vectorRHS}.
+	 * Returns the cross product of {@code vLHS} and {@code vRHS}.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector2F} instance on the right-hand side
-	 * @return the cross product of {@code vectorLHS} and {@code vectorRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vRHS the {@code Vector2F} instance on the right-hand side
+	 * @return the cross product of {@code vLHS} and {@code vRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static float crossProduct(final Vector2F vectorLHS, final Vector2F vectorRHS) {
-		return vectorLHS.component1 * vectorRHS.component2 - vectorLHS.component2 * vectorRHS.component1;
+	public static float crossProduct(final Vector2F vLHS, final Vector2F vRHS) {
+		return vLHS.x * vRHS.y - vLHS.y * vRHS.x;
 	}
 	
 	/**
-	 * Returns the dot product of {@code vectorLHS} and {@code vectorRHS}.
+	 * Returns the dot product of {@code vLHS} and {@code vRHS}.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector2F} instance on the right-hand side
-	 * @return the dot product of {@code vectorLHS} and {@code vectorRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vRHS the {@code Vector2F} instance on the right-hand side
+	 * @return the dot product of {@code vLHS} and {@code vRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static float dotProduct(final Vector2F vectorLHS, final Vector2F vectorRHS) {
-		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2;
+	public static float dotProduct(final Vector2F vLHS, final Vector2F vRHS) {
+		return vLHS.x * vRHS.x + vLHS.y * vRHS.y;
 	}
 	
 	/**

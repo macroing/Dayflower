@@ -141,8 +141,8 @@ public final class Ray2DUnitTests {
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
 		dataOutput.writeDouble(a.getOrigin().x);
 		dataOutput.writeDouble(a.getOrigin().y);
-		dataOutput.writeDouble(a.getDirection().getX());
-		dataOutput.writeDouble(a.getDirection().getY());
+		dataOutput.writeDouble(a.getDirection().x);
+		dataOutput.writeDouble(a.getDirection().y);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		

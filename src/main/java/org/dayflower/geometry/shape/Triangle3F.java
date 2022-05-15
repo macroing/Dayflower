@@ -910,9 +910,9 @@ public final class Triangle3F implements Shape3F {
 		
 		final float determinantReciprocal = 1.0F / determinant;
 		
-		final float x = (-textureCoordinatesCB.getU() * edgeCA.getX() + textureCoordinatesCA.getU() * edgeCB.getX()) * determinantReciprocal;
-		final float y = (-textureCoordinatesCB.getU() * edgeCA.getY() + textureCoordinatesCA.getU() * edgeCB.getY()) * determinantReciprocal;
-		final float z = (-textureCoordinatesCB.getU() * edgeCA.getZ() + textureCoordinatesCA.getU() * edgeCB.getZ()) * determinantReciprocal;
+		final float x = (-textureCoordinatesCB.x * edgeCA.getX() + textureCoordinatesCA.x * edgeCB.getX()) * determinantReciprocal;
+		final float y = (-textureCoordinatesCB.x * edgeCA.getY() + textureCoordinatesCA.x * edgeCB.getY()) * determinantReciprocal;
+		final float z = (-textureCoordinatesCB.x * edgeCA.getZ() + textureCoordinatesCA.x * edgeCB.getZ()) * determinantReciprocal;
 		
 		final Vector3F v = new Vector3F(x, y, z);
 		

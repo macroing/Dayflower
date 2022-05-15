@@ -751,8 +751,8 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
 	 */
 	public static Point3D scale(final Point3D point, final Vector2D scale) {
-		final double component1 = point.component1 * scale.getComponent1();
-		final double component2 = point.component2 * scale.getComponent2();
+		final double component1 = point.component1 * scale.x;
+		final double component2 = point.component2 * scale.y;
 		final double component3 = point.component3;
 		
 		return new Point3D(component1, component2, component3);

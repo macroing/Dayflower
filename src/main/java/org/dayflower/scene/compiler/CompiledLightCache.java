@@ -1451,8 +1451,8 @@ public final class CompiledLightCache {
 		
 //		Block #5:
 		array[IMAGE_LIGHT_OFFSET_ANGLE_RADIANS] = angle.getRadians();
-		array[IMAGE_LIGHT_OFFSET_SCALE + 0] = scale.getU();
-		array[IMAGE_LIGHT_OFFSET_SCALE + 1] = scale.getV();
+		array[IMAGE_LIGHT_OFFSET_SCALE + 0] = scale.x;
+		array[IMAGE_LIGHT_OFFSET_SCALE + 1] = scale.y;
 		array[IMAGE_LIGHT_OFFSET_RADIUS] = radius;
 		array[IMAGE_LIGHT_OFFSET_RESOLUTION_X] = resolutionX;
 		array[IMAGE_LIGHT_OFFSET_RESOLUTION_Y] = resolutionY;

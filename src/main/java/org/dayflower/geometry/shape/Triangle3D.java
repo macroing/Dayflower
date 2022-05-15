@@ -910,9 +910,9 @@ public final class Triangle3D implements Shape3D {
 		
 		final double determinantReciprocal = 1.0D / determinant;
 		
-		final double x = (-textureCoordinatesCB.getU() * edgeCA.getX() + textureCoordinatesCA.getU() * edgeCB.getX()) * determinantReciprocal;
-		final double y = (-textureCoordinatesCB.getU() * edgeCA.getY() + textureCoordinatesCA.getU() * edgeCB.getY()) * determinantReciprocal;
-		final double z = (-textureCoordinatesCB.getU() * edgeCA.getZ() + textureCoordinatesCA.getU() * edgeCB.getZ()) * determinantReciprocal;
+		final double x = (-textureCoordinatesCB.x * edgeCA.getX() + textureCoordinatesCA.x * edgeCB.getX()) * determinantReciprocal;
+		final double y = (-textureCoordinatesCB.x * edgeCA.getY() + textureCoordinatesCA.x * edgeCB.getY()) * determinantReciprocal;
+		final double z = (-textureCoordinatesCB.x * edgeCA.getZ() + textureCoordinatesCA.x * edgeCB.getZ()) * determinantReciprocal;
 		
 		final Vector3D v = new Vector3D(x, y, z);
 		

@@ -1935,7 +1935,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageF scale(final Vector2F scale) {
-		return scale(toInt(ceil(getResolutionX() * scale.getX())), toInt(ceil(getResolutionY() * scale.getY())));
+		return scale(toInt(ceil(getResolutionX() * scale.x)), toInt(ceil(getResolutionY() * scale.y)));
 	}
 	
 	/**

@@ -470,8 +470,8 @@ public final class Rectangle3F implements Shape3F {
 		final float hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
 		final float hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
 		
-		final float u = hU * (-vAB.getY() * determinantReciprocal) + hV * (+vAB.getX() * determinantReciprocal) + Vector2F.crossProduct(vA, vAB) * determinantReciprocal;
-		final float v = hU * (+vAC.getY() * determinantReciprocal) + hV * (-vAC.getX() * determinantReciprocal) + Vector2F.crossProduct(vAC, vA) * determinantReciprocal;
+		final float u = hU * (-vAB.y * determinantReciprocal) + hV * (+vAB.x * determinantReciprocal) + Vector2F.crossProduct(vA, vAB) * determinantReciprocal;
+		final float v = hU * (+vAC.y * determinantReciprocal) + hV * (-vAC.x * determinantReciprocal) + Vector2F.crossProduct(vAC, vA) * determinantReciprocal;
 		
 		return new Point2F(u, v);
 	}

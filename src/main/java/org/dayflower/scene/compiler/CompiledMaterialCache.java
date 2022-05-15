@@ -2140,8 +2140,8 @@ public final class CompiledMaterialCache {
 		array[CHECKERBOARD_MATERIAL_OFFSET_ANGLE_RADIANS] = angle.getRadians();	//Block #1
 		array[CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_A] = materialAValue;		//Block #1
 		array[CHECKERBOARD_MATERIAL_OFFSET_MATERIAL_B] = materialBValue;		//Block #1
-		array[CHECKERBOARD_MATERIAL_OFFSET_SCALE + 0] = scale.getX();			//Block #1
-		array[CHECKERBOARD_MATERIAL_OFFSET_SCALE + 1] = scale.getY();			//Block #1
+		array[CHECKERBOARD_MATERIAL_OFFSET_SCALE + 0] = scale.x;				//Block #1
+		array[CHECKERBOARD_MATERIAL_OFFSET_SCALE + 1] = scale.y;				//Block #1
 		array[6] = 0.0F;														//Block #1
 		array[7] = 0.0F;														//Block #1
 		

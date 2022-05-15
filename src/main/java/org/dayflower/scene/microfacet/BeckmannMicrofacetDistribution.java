@@ -302,8 +302,8 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 		
 		final Vector2F slope = doComputeSlope(iStretched.cosTheta(), u, v);
 		
-		final float x = -((iStretched.cosPhi() * slope.getX() - iStretched.sinPhi() * slope.getY()) * alphaX);
-		final float y = -((iStretched.sinPhi() * slope.getX() + iStretched.cosPhi() * slope.getY()) * alphaY);
+		final float x = -((iStretched.cosPhi() * slope.x - iStretched.sinPhi() * slope.y) * alphaX);
+		final float y = -((iStretched.sinPhi() * slope.x + iStretched.cosPhi() * slope.y) * alphaY);
 		final float z = 1.0F;
 		
 		return Vector3F.normalize(new Vector3F(x, y, z));

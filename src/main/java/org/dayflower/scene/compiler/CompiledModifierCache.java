@@ -464,8 +464,8 @@ public final class CompiledModifierCache {
 		final float[] array = new float[getNormalMapLDRImageModifierLength(normalMapLDRImageModifier)];
 		
 		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_ANGLE_RADIANS] = angle.getRadians();
-		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_SCALE + 0] = scale.getU();
-		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_SCALE + 1] = scale.getV();
+		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_SCALE + 0] = scale.x;
+		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_SCALE + 1] = scale.y;
 		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_RESOLUTION_X] = resolutionX;
 		array[NORMAL_MAP_L_D_R_IMAGE_MODIFIER_OFFSET_RESOLUTION_Y] = resolutionY;
 		

@@ -484,7 +484,7 @@ public final class Matrix33F implements Node {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix33F.scale(vector.getX(), vector.getY());
+	 * Matrix33F.scale(vector.x, vector.y);
 	 * }
 	 * </pre>
 	 * 
@@ -493,7 +493,7 @@ public final class Matrix33F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Matrix33F scale(final Vector2F vector) {
-		return scale(vector.getX(), vector.getY());
+		return scale(vector.x, vector.y);
 	}
 	
 	/**

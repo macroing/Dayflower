@@ -116,14 +116,14 @@ public final class Point2D implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Point2D} instance given the component values {@code v.getComponent1()} and {@code v.getComponent2()}.
+	 * Constructs a new {@code Point2D} instance given the component values {@code v.x} and {@code v.y}.
 	 * <p>
 	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point2D(v.getComponent1(), v.getComponent2());
+	 * new Point2D(v.x, v.y);
 	 * }
 	 * </pre>
 	 * 
@@ -131,7 +131,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
 	public Point2D(final Vector2D v) {
-		this(v.getComponent1(), v.getComponent2());
+		this(v.x, v.y);
 	}
 	
 	/**
@@ -238,61 +238,52 @@ public final class Point2D implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Adds the component values of {@code vectorRHS} to the component values of {@code pointLHS}.
+	 * Adds the component values of {@code vRHS} to the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the result of the addition.
 	 * <p>
-	 * If either {@code pointLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code pLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point2D} instance on the left-hand side
-	 * @param vectorRHS the {@link Vector2D} instance on the right-hand side
+	 * @param pLHS the {@code Point2D} instance on the left-hand side
+	 * @param vRHS the {@link Vector2D} instance on the right-hand side
 	 * @return a new {@code Point2D} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code pLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Point2D add(final Point2D pointLHS, final Vector2D vectorRHS) {
-		final double component1 = pointLHS.x + vectorRHS.getComponent1();
-		final double component2 = pointLHS.y + vectorRHS.getComponent2();
-		
-		return new Point2D(component1, component2);
+	public static Point2D add(final Point2D pLHS, final Vector2D vRHS) {
+		return new Point2D(pLHS.x + vRHS.x, pLHS.y + vRHS.y);
 	}
 	
 	/**
-	 * Adds the component values of {@code vectorRHS} multiplied by {@code scalar} to the component values of {@code pointLHS}.
+	 * Adds the component values of {@code vRHS} multiplied by {@code s} to the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the result of the addition.
 	 * <p>
-	 * If either {@code pointLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code pLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point2D} instance on the left-hand side
-	 * @param vectorRHS the {@link Vector2D} instance on the right-hand side
-	 * @param scalar the scalar to multiply the component values of {@code vectorRHS} with
+	 * @param pLHS the {@code Point2D} instance on the left-hand side
+	 * @param vRHS the {@link Vector2D} instance on the right-hand side
+	 * @param s the scalar to multiply the component values of {@code vRHS} with
 	 * @return a new {@code Point2D} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code pLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Point2D add(final Point2D pointLHS, final Vector2D vectorRHS, final double scalar) {
-		final double component1 = pointLHS.x + vectorRHS.getComponent1() * scalar;
-		final double component2 = pointLHS.y + vectorRHS.getComponent2() * scalar;
-		
-		return new Point2D(component1, component2);
+	public static Point2D add(final Point2D pLHS, final Vector2D vRHS, final double s) {
+		return new Point2D(pLHS.x + vRHS.x * s, pLHS.y + vRHS.y * s);
 	}
 	
 	/**
-	 * Adds {@code scalarRHS} to the component values of {@code pointLHS}.
+	 * Adds {@code sRHS} to the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the result of the addition.
 	 * <p>
-	 * If {@code pointLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code pLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point2D} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param pLHS the {@code Point2D} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Point2D} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code pLHS} is {@code null}
 	 */
-	public static Point2D add(final Point2D pointLHS, final double scalarRHS) {
-		final double component1 = pointLHS.x + scalarRHS;
-		final double component2 = pointLHS.y + scalarRHS;
-		
-		return new Point2D(component1, component2);
+	public static Point2D add(final Point2D pLHS, final double sRHS) {
+		return new Point2D(pLHS.x + sRHS, pLHS.y + sRHS);
 	}
 	
 	/**
@@ -308,10 +299,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D centroid(final Point2D a, final Point2D b) {
-		final double component1 = (a.x + b.x) / 2.0D;
-		final double component2 = (a.y + b.y) / 2.0D;
-		
-		return new Point2D(component1, component2);
+		return new Point2D((a.x + b.x) / 2.0D, (a.y + b.y) / 2.0D);
 	}
 	
 	/**
@@ -326,10 +314,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c) {
-		final double component1 = (a.x + b.x + c.x) / 3.0D;
-		final double component2 = (a.y + b.y + c.y) / 3.0D;
-		
-		return new Point2D(component1, component2);
+		return new Point2D((a.x + b.x + c.x) / 3.0D, (a.y + b.y + c.y) / 3.0D);
 	}
 	
 	/**
@@ -345,10 +330,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
-		final double component1 = (a.x + b.x + c.x + d.x) / 4.0D;
-		final double component2 = (a.y + b.y + c.y + d.y) / 4.0D;
-		
-		return new Point2D(component1, component2);
+		return new Point2D((a.x + b.x + c.x + d.x) / 4.0D, (a.y + b.y + c.y + d.y) / 4.0D);
 	}
 	
 	/**
@@ -368,10 +350,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
 	 */
 	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c, final Point2D d, final Point2D e, final Point2D f, final Point2D g, final Point2D h) {
-		final double component1 = (a.x + b.x + c.x + d.x + e.x + f.x + g.x + h.x) / 8.0D;
-		final double component2 = (a.y + b.y + c.y + d.y + e.y + f.y + g.y + h.y) / 8.0D;
-		
-		return new Point2D(component1, component2);
+		return new Point2D((a.x + b.x + c.x + d.x + e.x + f.x + g.x + h.x) / 8.0D, (a.y + b.y + c.y + d.y + e.y + f.y + g.y + h.y) / 8.0D);
 	}
 	
 	/**
@@ -379,21 +358,21 @@ public final class Point2D implements Node {
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the interpolated texture coordinates.
 	 * <p>
-	 * If either {@code textureCoordinatesA}, {@code textureCoordinatesB}, {@code textureCoordinatesC} or {@code barycentricCoordinates} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code pTCA}, {@code pTCB}, {@code pTCC} or {@code pBC} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureCoordinatesA a {@code Point2D} instance denoting the texture coordinates of vertex {@code A} of a triangle
-	 * @param textureCoordinatesB a {@code Point2D} instance denoting the texture coordinates of vertex {@code B} of a triangle
-	 * @param textureCoordinatesC a {@code Point2D} instance denoting the texture coordinates of vertex {@code C} of a triangle
-	 * @param barycentricCoordinates a {@link Point3D} instance denoting the Barycentric coordinates
+	 * @param pTCA a {@code Point2D} instance denoting the texture coordinates of vertex {@code A} of a triangle
+	 * @param pTCB a {@code Point2D} instance denoting the texture coordinates of vertex {@code B} of a triangle
+	 * @param pTCC a {@code Point2D} instance denoting the texture coordinates of vertex {@code C} of a triangle
+	 * @param pBC a {@link Point3D} instance denoting the Barycentric coordinates
 	 * @return a new {@code Point2D} instance with the interpolated texture coordinates
-	 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinatesA}, {@code textureCoordinatesB}, {@code textureCoordinatesC} or {@code barycentricCoordinates} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code pTCA}, {@code pTCB}, {@code pTCC} or {@code pBC} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Point2D createTextureCoordinates(final Point2D textureCoordinatesA, final Point2D textureCoordinatesB, final Point2D textureCoordinatesC, final Point3D barycentricCoordinates) {
-		final double u = textureCoordinatesA.x * barycentricCoordinates.getU() + textureCoordinatesB.x * barycentricCoordinates.getV() + textureCoordinatesC.x * barycentricCoordinates.getW();
-		final double v = textureCoordinatesA.y * barycentricCoordinates.getU() + textureCoordinatesB.y * barycentricCoordinates.getV() + textureCoordinatesC.y * barycentricCoordinates.getW();
+	public static Point2D createTextureCoordinates(final Point2D pTCA, final Point2D pTCB, final Point2D pTCC, final Point3D pBC) {
+		final double x = pTCA.x * pBC.getU() + pTCB.x * pBC.getV() + pTCC.x * pBC.getW();
+		final double y = pTCA.y * pBC.getU() + pTCB.y * pBC.getV() + pTCC.y * pBC.getW();
 		
-		return new Point2D(u, v);
+		return new Point2D(x, y);
 	}
 	
 	/**
@@ -425,16 +404,16 @@ public final class Point2D implements Node {
 	}
 	
 	/**
-	 * Returns a cached version of {@code point}.
+	 * Returns a cached version of {@code p}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@code Point2D} instance
-	 * @return a cached version of {@code point}
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@code Point2D} instance
+	 * @return a cached version of {@code p}
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public static Point2D getCached(final Point2D point) {
-		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
+	public static Point2D getCached(final Point2D p) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(p, "p == null"), key -> p);
 	}
 	
 	/**
@@ -451,10 +430,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D lerp(final Point2D a, final Point2D b, final double t) {
-		final double component1 = Doubles.lerp(a.x, b.x, t);
-		final double component2 = Doubles.lerp(a.y, b.y, t);
-		
-		return new Point2D(component1, component2);
+		return new Point2D(Doubles.lerp(a.x, b.x, t), Doubles.lerp(a.y, b.y, t));
 	}
 	
 	/**
@@ -463,10 +439,7 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the largest component values
 	 */
 	public static Point2D maximum() {
-		final double component1 = MAX_VALUE;
-		final double component2 = MAX_VALUE;
-		
-		return new Point2D(component1, component2);
+		return new Point2D(MAX_VALUE, MAX_VALUE);
 	}
 	
 	/**
@@ -480,10 +453,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D maximum(final Point2D a, final Point2D b) {
-		final double component1 = max(a.x, b.x);
-		final double component2 = max(a.y, b.y);
-		
-		return new Point2D(component1, component2);
+		return new Point2D(max(a.x, b.x), max(a.y, b.y));
 	}
 	
 	/**
@@ -498,10 +468,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2D maximum(final Point2D a, final Point2D b, final Point2D c) {
-		final double component1 = max(a.x, b.x, c.x);
-		final double component2 = max(a.y, b.y, c.y);
-		
-		return new Point2D(component1, component2);
+		return new Point2D(max(a.x, b.x, c.x), max(a.y, b.y, c.y));
 	}
 	
 	/**
@@ -517,10 +484,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2D maximum(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
-		final double component1 = max(a.x, b.x, c.x, d.x);
-		final double component2 = max(a.y, b.y, c.y, d.y);
-		
-		return new Point2D(component1, component2);
+		return new Point2D(max(a.x, b.x, c.x, d.x), max(a.y, b.y, c.y, d.y));
 	}
 	
 	/**
@@ -534,10 +498,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D midpoint(final Point2D a, final Point2D b) {
-		final double component1 = (a.x + b.x) * 0.5D;
-		final double component2 = (a.y + b.y) * 0.5D;
-		
-		return new Point2D(component1, component2);
+		return new Point2D((a.x + b.x) * 0.5D, (a.y + b.y) * 0.5D);
 	}
 	
 	/**
@@ -546,10 +507,7 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the smallest component values
 	 */
 	public static Point2D minimum() {
-		final double component1 = MIN_VALUE;
-		final double component2 = MIN_VALUE;
-		
-		return new Point2D(component1, component2);
+		return new Point2D(MIN_VALUE, MIN_VALUE);
 	}
 	
 	/**
@@ -563,10 +521,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D minimum(final Point2D a, final Point2D b) {
-		final double component1 = min(a.x, b.x);
-		final double component2 = min(a.y, b.y);
-		
-		return new Point2D(component1, component2);
+		return new Point2D(min(a.x, b.x), min(a.y, b.y));
 	}
 	
 	/**
@@ -581,10 +536,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2D minimum(final Point2D a, final Point2D b, final Point2D c) {
-		final double component1 = min(a.x, b.x, c.x);
-		final double component2 = min(a.y, b.y, c.y);
-		
-		return new Point2D(component1, component2);
+		return new Point2D(min(a.x, b.x, c.x), min(a.y, b.y, c.y));
 	}
 	
 	/**
@@ -600,10 +552,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2D minimum(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
-		final double component1 = min(a.x, b.x, c.x, d.x);
-		final double component2 = min(a.y, b.y, c.y, d.y);
-		
-		return new Point2D(component1, component2);
+		return new Point2D(min(a.x, b.x, c.x, d.x), min(a.y, b.y, c.y, d.y));
 	}
 	
 	/**
@@ -620,57 +569,47 @@ public final class Point2D implements Node {
 	 */
 	public static Point2D read(final DataInput dataInput) {
 		try {
-			final double component1 = dataInput.readDouble();
-			final double component2 = dataInput.readDouble();
-			
-			return new Point2D(component1, component2);
+			return new Point2D(dataInput.readDouble(), dataInput.readDouble());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Rotates {@code point} using {@code angle}.
+	 * Rotates {@code p} using {@code a}.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the rotation applied.
 	 * <p>
-	 * If either {@code point} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code p} or {@code a} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@code Point2D} instance
-	 * @param angle an {@link AngleD} instance
+	 * @param p a {@code Point2D} instance
+	 * @param a an {@link AngleD} instance
 	 * @return a new {@code Point2D} instance with the rotation applied
-	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code angle} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code p} or {@code a} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Point2D rotateCounterclockwise(final Point2D point, final AngleD angle) {
-		final double angleRadians = angle.getRadians();
-		final double angleRadiansCos = cos(angleRadians);
-		final double angleRadiansSin = sin(angleRadians);
+	public static Point2D rotateCounterclockwise(final Point2D p, final AngleD a) {
+		final double cos = cos(a.getRadians());
+		final double sin = sin(a.getRadians());
 		
-		final double component1 = point.x * angleRadiansCos - point.y * angleRadiansSin;
-		final double component2 = point.y * angleRadiansCos + point.x * angleRadiansSin;
-		
-		return new Point2D(component1, component2);
+		return new Point2D(p.x * cos - p.y * sin, p.y * cos + p.x * sin);
 	}
 	
 	/**
-	 * Scales {@code point} using {@code scale}.
+	 * Scales {@code p} using {@code v}.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the scale applied.
 	 * <p>
-	 * If either {@code point} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code p} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@code Point2D} instance
-	 * @param scale a {@link Vector2D} instance
+	 * @param p a {@code Point2D} instance
+	 * @param v a {@link Vector2D} instance
 	 * @return a new {@code Point2D} instance with the scale applied
-	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code p} or {@code v} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Point2D scale(final Point2D point, final Vector2D scale) {
-		final double component1 = point.x * scale.getComponent1();
-		final double component2 = point.y * scale.getComponent2();
-		
-		return new Point2D(component1, component2);
+	public static Point2D scale(final Point2D p, final Vector2D v) {
+		return new Point2D(p.x * v.x, p.y * v.y);
 	}
 	
 	/**
@@ -688,99 +627,90 @@ public final class Point2D implements Node {
 	}
 	
 	/**
-	 * Subtracts the component values of {@code vectorRHS} from the component values of {@code pointLHS}.
+	 * Subtracts the component values of {@code vRHS} from the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code pointLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code pLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point2D} instance on the left-hand side
-	 * @param vectorRHS the {@link Vector2D} instance on the right-hand side
+	 * @param pLHS the {@code Point2D} instance on the left-hand side
+	 * @param vRHS the {@link Vector2D} instance on the right-hand side
 	 * @return a new {@code Point2D} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code pLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Point2D subtract(final Point2D pointLHS, final Vector2D vectorRHS) {
-		final double component1 = pointLHS.x - vectorRHS.getComponent1();
-		final double component2 = pointLHS.y - vectorRHS.getComponent2();
-		
-		return new Point2D(component1, component2);
+	public static Point2D subtract(final Point2D pLHS, final Vector2D vRHS) {
+		return new Point2D(pLHS.x - vRHS.x, pLHS.y - vRHS.y);
 	}
 	
 	/**
-	 * Subtracts {@code scalarRHS} from the component values of {@code pointLHS}.
+	 * Subtracts {@code sRHS} from the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the result of the subtraction.
 	 * <p>
-	 * If {@code pointLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code pLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point2D} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param pLHS the {@code Point2D} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Point2D} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code pLHS} is {@code null}
 	 */
-	public static Point2D subtract(final Point2D pointLHS, final double scalarRHS) {
-		final double component1 = pointLHS.x - scalarRHS;
-		final double component2 = pointLHS.y - scalarRHS;
-		
-		return new Point2D(component1, component2);
+	public static Point2D subtract(final Point2D pLHS, final double sRHS) {
+		return new Point2D(pLHS.x - sRHS, pLHS.y - sRHS);
 	}
 	
 	/**
-	 * Returns a new {@code Point2D} instance with {@code point} inside the image represented by {@code resolutionX} and {@code resolutionY}.
+	 * Returns a new {@code Point2D} instance with {@code p} inside the image represented by {@code resolutionX} and {@code resolutionY}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@code Point2D} instance
+	 * @param p a {@code Point2D} instance
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @return a new {@code Point2D} instance with {@code point} inside the image represented by {@code resolutionX} and {@code resolutionY}
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @return a new {@code Point2D} instance with {@code p} inside the image represented by {@code resolutionX} and {@code resolutionY}
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Point2D toImage(final Point2D point, final double resolutionX, final double resolutionY) {
-		final double component1 = positiveModulo(point.x * resolutionX - 0.5D, resolutionX);
-		final double component2 = positiveModulo(point.y * resolutionY - 0.5D, resolutionY);
-		
-		return new Point2D(component1, component2);
+	public static Point2D toImage(final Point2D p, final double resolutionX, final double resolutionY) {
+		return new Point2D(positiveModulo(p.x * resolutionX - 0.5D, resolutionX), positiveModulo(p.y * resolutionY - 0.5D, resolutionY));
 	}
 	
 	/**
-	 * Transforms the {@code Point2D} {@code pointRHS} with the {@link Matrix33D} {@code matrixLHS}.
+	 * Transforms the {@code Point2D} {@code pRHS} with the {@link Matrix33D} {@code mLHS}.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code pRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix33D} instance
-	 * @param pointRHS a {@code Point2D} instance
+	 * @param mLHS a {@code Matrix33D} instance
+	 * @param pRHS a {@code Point2D} instance
 	 * @return a new {@code Point2D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
-	public static Point2D transform(final Matrix33D matrixLHS, final Point2D pointRHS) {
-		final double component1 = matrixLHS.getElement11() * pointRHS.x + matrixLHS.getElement12() * pointRHS.y + matrixLHS.getElement13();
-		final double component2 = matrixLHS.getElement21() * pointRHS.x + matrixLHS.getElement22() * pointRHS.y + matrixLHS.getElement23();
+	public static Point2D transform(final Matrix33D mLHS, final Point2D pRHS) {
+		final double x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13();
+		final double y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23();
 		
-		return new Point2D(component1, component2);
+		return new Point2D(x, y);
 	}
 	
 	/**
-	 * Transforms the {@code Point2D} {@code pointRHS} with the {@link Matrix33D} {@code matrixLHS} and divides the result.
+	 * Transforms the {@code Point2D} {@code pRHS} with the {@link Matrix33D} {@code mLHS} and divides the result.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code pRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix33D} instance
-	 * @param pointRHS a {@code Point2D} instance
+	 * @param mLHS a {@code Matrix33D} instance
+	 * @param pRHS a {@code Point2D} instance
 	 * @return a new {@code Point2D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
-	public static Point2D transformAndDivide(final Matrix33D matrixLHS, final Point2D pointRHS) {
-		final double component1 = matrixLHS.getElement11() * pointRHS.x + matrixLHS.getElement12() * pointRHS.y + matrixLHS.getElement13();
-		final double component2 = matrixLHS.getElement21() * pointRHS.x + matrixLHS.getElement22() * pointRHS.y + matrixLHS.getElement23();
-		final double component3 = matrixLHS.getElement31() * pointRHS.x + matrixLHS.getElement32() * pointRHS.y + matrixLHS.getElement33();
+	public static Point2D transformAndDivide(final Matrix33D mLHS, final Point2D pRHS) {
+		final double x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13();
+		final double y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23();
+		final double z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33();
 		
-		return equal(component3, 1.0D) || isZero(component3) ? new Point2D(component1, component2) : new Point2D(component1 / component3, component2 / component3);
+		return equal(z, 1.0D) || isZero(z) ? new Point2D(x, y) : new Point2D(x / z, y / z);
 	}
 	
 	/**

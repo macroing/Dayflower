@@ -270,8 +270,8 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		
 		final Vector2F slope = doComputeSlope(incomingStretched.cosTheta(), u, v);
 		
-		final float x = -((incomingStretched.cosPhi() * slope.getX() - incomingStretched.sinPhi() * slope.getY()) * alphaX);
-		final float y = -((incomingStretched.sinPhi() * slope.getX() + incomingStretched.cosPhi() * slope.getY()) * alphaY);
+		final float x = -((incomingStretched.cosPhi() * slope.x - incomingStretched.sinPhi() * slope.y) * alphaX);
+		final float y = -((incomingStretched.sinPhi() * slope.x + incomingStretched.cosPhi() * slope.y) * alphaY);
 		final float z = 1.0F;
 		
 		return Vector3F.normalize(new Vector3F(x, y, z));

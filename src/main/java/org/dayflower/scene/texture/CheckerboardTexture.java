@@ -220,8 +220,8 @@ public final class CheckerboardTexture implements Texture {
 		final float u = intersection.getTextureCoordinates().x;
 		final float v = intersection.getTextureCoordinates().y;
 		
-		final boolean isU = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.scale.getU()) > 0.5F;
-		final boolean isV = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.scale.getV()) > 0.5F;
+		final boolean isU = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.scale.x) > 0.5F;
+		final boolean isV = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.scale.y) > 0.5F;
 		
 		return isU ^ isV ? this.textureA.getColor(intersection) : this.textureB.getColor(intersection);
 	}

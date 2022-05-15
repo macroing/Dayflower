@@ -2248,8 +2248,8 @@ public final class CompiledShape3FCache {
 		for(int i = 0; i < projectedPolygon.getPointCount(); i++) {
 			final Point2F pointI = projectedPolygon.getPoint(i);
 			
-			array[POLYGON_3_F_OFFSET_POINT_2_F + i * 2 + 0] = pointI.getX();
-			array[POLYGON_3_F_OFFSET_POINT_2_F + i * 2 + 1] = pointI.getY();
+			array[POLYGON_3_F_OFFSET_POINT_2_F + i * 2 + 0] = pointI.x;
+			array[POLYGON_3_F_OFFSET_POINT_2_F + i * 2 + 1] = pointI.y;
 		}
 		
 		return array;
@@ -2419,12 +2419,12 @@ public final class CompiledShape3FCache {
 		array[TRIANGLE_3_F_OFFSET_C_POSITION + 1] = c.getPosition().getY();						//Block #1
 		array[TRIANGLE_3_F_OFFSET_C_POSITION + 2] = c.getPosition().getZ();						//Block #2
 		
-		array[TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 0] = a.getTextureCoordinates().getU();//Block #2
-		array[TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 1] = a.getTextureCoordinates().getV();//Block #2
-		array[TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 0] = b.getTextureCoordinates().getU();//Block #2
-		array[TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 1] = b.getTextureCoordinates().getV();//Block #2
-		array[TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 0] = c.getTextureCoordinates().getU();//Block #2
-		array[TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 1] = c.getTextureCoordinates().getV();//Block #2
+		array[TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 0] = a.getTextureCoordinates().x;		//Block #2
+		array[TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 1] = a.getTextureCoordinates().y;		//Block #2
+		array[TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 0] = b.getTextureCoordinates().x;		//Block #2
+		array[TRIANGLE_3_F_OFFSET_B_TEXTURE_COORDINATES + 1] = b.getTextureCoordinates().y;		//Block #2
+		array[TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 0] = c.getTextureCoordinates().x;		//Block #2
+		array[TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 1] = c.getTextureCoordinates().y;		//Block #2
 		
 		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 0] = a.getNormal().getX();			//Block #2
 		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 1] = a.getNormal().getY();			//Block #3

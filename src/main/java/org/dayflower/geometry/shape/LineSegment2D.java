@@ -167,12 +167,12 @@ public final class LineSegment2D implements Shape2D {
 	 */
 	@Override
 	public boolean contains(final Point2D point) {
-		final double aX = this.a.getX();
-		final double aY = this.a.getY();
-		final double bX = this.b.getX();
-		final double bY = this.b.getY();
-		final double pX = point.getX();
-		final double pY = point.getY();
+		final double aX = this.a.x;
+		final double aY = this.a.y;
+		final double bX = this.b.x;
+		final double bY = this.b.y;
+		final double pX = point.x;
+		final double pY = point.y;
 		
 		final double dAPX = pX - aX;
 		final double dAPY = pY - aY;

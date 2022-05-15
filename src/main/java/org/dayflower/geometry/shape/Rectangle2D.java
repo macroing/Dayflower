@@ -76,7 +76,7 @@ public final class Rectangle2D implements Shape2D {
 	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
 	 */
 	public Rectangle2D(final Circle2D circle) {
-		this(new Point2D(circle.getCenter().getX() - circle.getRadius(), circle.getCenter().getY() - circle.getRadius()), new Point2D(circle.getCenter().getX() + circle.getRadius(), circle.getCenter().getY() + circle.getRadius()));
+		this(new Point2D(circle.getCenter().x - circle.getRadius(), circle.getCenter().y - circle.getRadius()), new Point2D(circle.getCenter().x + circle.getRadius(), circle.getCenter().y + circle.getRadius()));
 	}
 	
 	/**
@@ -89,10 +89,10 @@ public final class Rectangle2D implements Shape2D {
 	 * @throws NullPointerException thrown if, and only if, either {@code x} or {@code y} are {@code null}
 	 */
 	public Rectangle2D(final Point2D x, final Point2D y) {
-		this.a = new Point2D(min(x.getX(), y.getX()), min(x.getY(), y.getY()));
-		this.b = new Point2D(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
-		this.c = new Point2D(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
-		this.d = new Point2D(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
+		this.a = new Point2D(min(x.x, y.x), min(x.y, y.y));
+		this.b = new Point2D(max(x.x, y.x), min(x.y, y.y));
+		this.c = new Point2D(max(x.x, y.x), max(x.y, y.y));
+		this.d = new Point2D(min(x.x, y.x), max(x.y, y.y));
 		this.lineSegments = LineSegment2D.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
@@ -296,10 +296,10 @@ public final class Rectangle2D implements Shape2D {
 	 * @return {@code true} if, and only if, this {@code Rectangle2D} instance is axis-aligned, {@code false} otherwise
 	 */
 	public boolean isAxisAligned() {
-		final boolean isAxisAlignedAB = equal(this.a.getY(), this.b.getY());
-		final boolean isAxisAlignedBC = equal(this.b.getX(), this.c.getX());
-		final boolean isAxisAlignedCD = equal(this.c.getY(), this.d.getY());
-		final boolean isAxisAlignedDA = equal(this.d.getX(), this.a.getX());
+		final boolean isAxisAlignedAB = equal(this.a.y, this.b.y);
+		final boolean isAxisAlignedBC = equal(this.b.x, this.c.x);
+		final boolean isAxisAlignedCD = equal(this.c.y, this.d.y);
+		final boolean isAxisAlignedDA = equal(this.d.x, this.a.x);
 		final boolean isAxisAligned = isAxisAlignedAB & isAxisAlignedBC & isAxisAlignedCD & isAxisAlignedDA;//TODO: Using & instead of && to get full code coverage. Should this be fixed?
 		
 		return isAxisAligned;
@@ -404,10 +404,10 @@ public final class Rectangle2D implements Shape2D {
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code angle} are {@code null}
 	 */
 	public static Rectangle2D rotate(final Rectangle2D rectangle, final AngleD angle) {
-		final Point2D a = Point2D.rotate(rectangle.a, angle);
-		final Point2D b = Point2D.rotate(rectangle.b, angle);
-		final Point2D c = Point2D.rotate(rectangle.c, angle);
-		final Point2D d = Point2D.rotate(rectangle.d, angle);
+		final Point2D a = Point2D.rotateCounterclockwise(rectangle.a, angle);
+		final Point2D b = Point2D.rotateCounterclockwise(rectangle.b, angle);
+		final Point2D c = Point2D.rotateCounterclockwise(rectangle.c, angle);
+		final Point2D d = Point2D.rotateCounterclockwise(rectangle.d, angle);
 		
 		return new Rectangle2D(a, b, c, d);
 	}
@@ -455,8 +455,8 @@ public final class Rectangle2D implements Shape2D {
 	private boolean doContains(final Point2D point) {
 		boolean isInside = false;
 		
-		final double pX = point.getX();
-		final double pY = point.getY();
+		final double pX = point.x;
+		final double pY = point.y;
 		
 		final Point2D[] points = {this.a, this.b, this.c, this.d};
 		
@@ -464,10 +464,10 @@ public final class Rectangle2D implements Shape2D {
 			final Point2D pointI = points[i];
 			final Point2D pointJ = points[j];
 			
-			final double iX = pointI.getX();
-			final double iY = pointI.getY();
-			final double jX = pointJ.getX();
-			final double jY = pointJ.getY();
+			final double iX = pointI.x;
+			final double iY = pointI.y;
+			final double jX = pointJ.x;
+			final double jY = pointJ.y;
 			
 			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
 				isInside = !isInside;

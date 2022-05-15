@@ -22,7 +22,6 @@ import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.MIN_VALUE;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
-import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isZero;
@@ -30,9 +29,6 @@ import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.positiveModulo;
 import static org.dayflower.utility.Doubles.sin;
-import static org.dayflower.utility.Doubles.sqrt;
-import static org.dayflower.utility.Doubles.toDegrees;
-import static org.dayflower.utility.Doubles.toRadians;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -74,8 +70,15 @@ public final class Point2D implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final double component1;
-	private final double component2;
+	/**
+	 * The X-component of this {@code Point2D} instance.
+	 */
+	public final double x;
+	
+	/**
+	 * The Y-component of this {@code Point2D} instance.
+	 */
+	public final double y;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -94,41 +97,41 @@ public final class Point2D implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Point2D} instance given the component values {@code point.getComponent1()} and {@code point.getComponent2()}.
+	 * Constructs a new {@code Point2D} instance given the component values {@code p.x} and {@code p.y}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point2D(point.getComponent1(), point.getComponent2());
+	 * new Point2D(p.x, p.y);
 	 * }
 	 * </pre>
 	 * 
-	 * @param point a {@link Point2F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Point2D(final Point2F point) {
-		this(point.getComponent1(), point.getComponent2());
+	public Point2D(final Point2F p) {
+		this(p.x, p.y);
 	}
 	
 	/**
-	 * Constructs a new {@code Point2D} instance given the component values {@code vector.getComponent1()} and {@code vector.getComponent2()}.
+	 * Constructs a new {@code Point2D} instance given the component values {@code v.getComponent1()} and {@code v.getComponent2()}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point2D(vector.getComponent1(), vector.getComponent2());
+	 * new Point2D(v.getComponent1(), v.getComponent2());
 	 * }
 	 * </pre>
 	 * 
-	 * @param vector a {@link Vector2D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@link Vector2D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public Point2D(final Vector2D vector) {
-		this(vector.getComponent1(), vector.getComponent2());
+	public Point2D(final Vector2D v) {
+		this(v.getComponent1(), v.getComponent2());
 	}
 	
 	/**
@@ -148,14 +151,14 @@ public final class Point2D implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Point2D} instance given the component values {@code component1} and {@code component2}.
+	 * Constructs a new {@code Point2D} instance given the component values {@code x} and {@code y}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
 	 */
-	public Point2D(final double component1, final double component2) {
-		this.component1 = component1;
-		this.component2 = component2;
+	public Point2D(final double x, final double y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +170,7 @@ public final class Point2D implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Point2D(%s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2));
+		return String.format("new Point2D(%s, %s)", Strings.toNonScientificNotationJava(this.x), Strings.toNonScientificNotationJava(this.y));
 	}
 	
 	/**
@@ -184,109 +187,13 @@ public final class Point2D implements Node {
 			return true;
 		} else if(!(object instanceof Point2D)) {
 			return false;
-		} else if(!equal(this.component1, Point2D.class.cast(object).component1)) {
+		} else if(!equal(this.x, Point2D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.component2, Point2D.class.cast(object).component2)) {
+		} else if(!equal(this.y, Point2D.class.cast(object).y)) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the value of the component at index {@code index}.
-	 * <p>
-	 * If {@code index} is less than {@code 0} or greater than {@code 1}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param index the index of the component whose value to return
-	 * @return the value of the component at index {@code index}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code 1}
-	 */
-	public double getComponent(final int index) {
-		switch(index) {
-			case 0:
-				return this.component1;
-			case 1:
-				return this.component2;
-			default:
-				throw new IllegalArgumentException(String.format("Illegal index: index=%s", Integer.toString(index)));
-		}
-	}
-	
-	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-	public double getComponent1() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-	public double getComponent2() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the latitude.
-	 * <p>
-	 * The latitude is the same as component 2, Y or V.
-	 * 
-	 * @return the value of the latitude
-	 */
-	public double getLatitude() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the longitude.
-	 * <p>
-	 * The longitude is the same as component 1, X or U.
-	 * 
-	 * @return the value of the longitude
-	 */
-	public double getLongitude() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the U-component.
-	 * 
-	 * @return the value of the U-component
-	 */
-	public double getU() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the V-component.
-	 * 
-	 * @return the value of the V-component
-	 */
-	public double getV() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-	public double getX() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-	public double getY() {
-		return this.component2;
 	}
 	
 	/**
@@ -295,10 +202,7 @@ public final class Point2D implements Node {
 	 * @return a {@code double[]} representation of this {@code Point2D} instance
 	 */
 	public double[] toArray() {
-		return new double[] {
-			this.component1,
-			this.component2
-		};
+		return new double[] {this.x, this.y};
 	}
 	
 	/**
@@ -308,7 +212,7 @@ public final class Point2D implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2));
+		return Objects.hash(Double.valueOf(this.x), Double.valueOf(this.y));
 	}
 	
 	/**
@@ -324,8 +228,8 @@ public final class Point2D implements Node {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeDouble(this.component1);
-			dataOutput.writeDouble(this.component2);
+			dataOutput.writeDouble(this.x);
+			dataOutput.writeDouble(this.y);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -346,8 +250,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
 	public static Point2D add(final Point2D pointLHS, final Vector2D vectorRHS) {
-		final double component1 = pointLHS.component1 + vectorRHS.getComponent1();
-		final double component2 = pointLHS.component2 + vectorRHS.getComponent2();
+		final double component1 = pointLHS.x + vectorRHS.getComponent1();
+		final double component2 = pointLHS.y + vectorRHS.getComponent2();
 		
 		return new Point2D(component1, component2);
 	}
@@ -366,8 +270,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
 	public static Point2D add(final Point2D pointLHS, final Vector2D vectorRHS, final double scalar) {
-		final double component1 = pointLHS.component1 + vectorRHS.getComponent1() * scalar;
-		final double component2 = pointLHS.component2 + vectorRHS.getComponent2() * scalar;
+		final double component1 = pointLHS.x + vectorRHS.getComponent1() * scalar;
+		final double component2 = pointLHS.y + vectorRHS.getComponent2() * scalar;
 		
 		return new Point2D(component1, component2);
 	}
@@ -385,36 +289,10 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
 	 */
 	public static Point2D add(final Point2D pointLHS, final double scalarRHS) {
-		final double component1 = pointLHS.component1 + scalarRHS;
-		final double component2 = pointLHS.component2 + scalarRHS;
+		final double component1 = pointLHS.x + scalarRHS;
+		final double component2 = pointLHS.y + scalarRHS;
 		
 		return new Point2D(component1, component2);
-	}
-	
-	/**
-	 * Adds {@code distanceKmLongitude} and {@code distanceKmLatitude} to {@code point}.
-	 * <p>
-	 * Returns a new {@code Point2D} instance with the result of the addition.
-	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param point a {@code Point2D} instance
-	 * @param distanceKmLongitude the distance to add to the longitude, in Km
-	 * @param distanceKmLatitude the distance to add to the latitude, in Km
-	 * @return a new {@code Point2D} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Point2D addDistanceKm(final Point2D point, final double distanceKmLongitude, final double distanceKmLatitude) {
-		final double radius = 6371.0D;
-		
-		final double oldLongitude = point.getLongitude();
-		final double oldLatitude = point.getLatitude();
-		
-		final double newLongitude = oldLongitude + toDegrees(distanceKmLongitude / radius) / cos(toRadians(oldLatitude));
-		final double newLatitude = oldLatitude + toDegrees(distanceKmLatitude / radius);
-		
-		return new Point2D(newLongitude, newLatitude);
 	}
 	
 	/**
@@ -430,8 +308,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D centroid(final Point2D a, final Point2D b) {
-		final double component1 = (a.component1 + b.component1) / 2.0D;
-		final double component2 = (a.component2 + b.component2) / 2.0D;
+		final double component1 = (a.x + b.x) / 2.0D;
+		final double component2 = (a.y + b.y) / 2.0D;
 		
 		return new Point2D(component1, component2);
 	}
@@ -448,8 +326,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c) {
-		final double component1 = (a.component1 + b.component1 + c.component1) / 3.0D;
-		final double component2 = (a.component2 + b.component2 + c.component2) / 3.0D;
+		final double component1 = (a.x + b.x + c.x) / 3.0D;
+		final double component2 = (a.y + b.y + c.y) / 3.0D;
 		
 		return new Point2D(component1, component2);
 	}
@@ -467,8 +345,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
-		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0D;
-		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0D;
+		final double component1 = (a.x + b.x + c.x + d.x) / 4.0D;
+		final double component2 = (a.y + b.y + c.y + d.y) / 4.0D;
 		
 		return new Point2D(component1, component2);
 	}
@@ -490,8 +368,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
 	 */
 	public static Point2D centroid(final Point2D a, final Point2D b, final Point2D c, final Point2D d, final Point2D e, final Point2D f, final Point2D g, final Point2D h) {
-		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0D;
-		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0D;
+		final double component1 = (a.x + b.x + c.x + d.x + e.x + f.x + g.x + h.x) / 8.0D;
+		final double component2 = (a.y + b.y + c.y + d.y + e.y + f.y + g.y + h.y) / 8.0D;
 		
 		return new Point2D(component1, component2);
 	}
@@ -512,8 +390,8 @@ public final class Point2D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D createTextureCoordinates(final Point2D textureCoordinatesA, final Point2D textureCoordinatesB, final Point2D textureCoordinatesC, final Point3D barycentricCoordinates) {
-		final double u = textureCoordinatesA.getU() * barycentricCoordinates.getU() + textureCoordinatesB.getU() * barycentricCoordinates.getV() + textureCoordinatesC.getU() * barycentricCoordinates.getW();
-		final double v = textureCoordinatesA.getV() * barycentricCoordinates.getU() + textureCoordinatesB.getV() * barycentricCoordinates.getV() + textureCoordinatesC.getV() * barycentricCoordinates.getW();
+		final double u = textureCoordinatesA.x * barycentricCoordinates.getU() + textureCoordinatesB.x * barycentricCoordinates.getV() + textureCoordinatesC.x * barycentricCoordinates.getW();
+		final double v = textureCoordinatesA.y * barycentricCoordinates.getU() + textureCoordinatesB.y * barycentricCoordinates.getV() + textureCoordinatesC.y * barycentricCoordinates.getW();
 		
 		return new Point2D(u, v);
 	}
@@ -573,8 +451,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D lerp(final Point2D a, final Point2D b, final double t) {
-		final double component1 = Doubles.lerp(a.component1, b.component1, t);
-		final double component2 = Doubles.lerp(a.component2, b.component2, t);
+		final double component1 = Doubles.lerp(a.x, b.x, t);
+		final double component2 = Doubles.lerp(a.y, b.y, t);
 		
 		return new Point2D(component1, component2);
 	}
@@ -602,8 +480,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D maximum(final Point2D a, final Point2D b) {
-		final double component1 = max(a.component1, b.component1);
-		final double component2 = max(a.component2, b.component2);
+		final double component1 = max(a.x, b.x);
+		final double component2 = max(a.y, b.y);
 		
 		return new Point2D(component1, component2);
 	}
@@ -620,8 +498,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2D maximum(final Point2D a, final Point2D b, final Point2D c) {
-		final double component1 = max(a.component1, b.component1, c.component1);
-		final double component2 = max(a.component2, b.component2, c.component2);
+		final double component1 = max(a.x, b.x, c.x);
+		final double component2 = max(a.y, b.y, c.y);
 		
 		return new Point2D(component1, component2);
 	}
@@ -639,8 +517,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2D maximum(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
-		final double component1 = max(a.component1, b.component1, c.component1, d.component1);
-		final double component2 = max(a.component2, b.component2, c.component2, d.component2);
+		final double component1 = max(a.x, b.x, c.x, d.x);
+		final double component2 = max(a.y, b.y, c.y, d.y);
 		
 		return new Point2D(component1, component2);
 	}
@@ -656,8 +534,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D midpoint(final Point2D a, final Point2D b) {
-		final double component1 = (a.component1 + b.component1) * 0.5D;
-		final double component2 = (a.component2 + b.component2) * 0.5D;
+		final double component1 = (a.x + b.x) * 0.5D;
+		final double component2 = (a.y + b.y) * 0.5D;
 		
 		return new Point2D(component1, component2);
 	}
@@ -685,8 +563,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D minimum(final Point2D a, final Point2D b) {
-		final double component1 = min(a.component1, b.component1);
-		final double component2 = min(a.component2, b.component2);
+		final double component1 = min(a.x, b.x);
+		final double component2 = min(a.y, b.y);
 		
 		return new Point2D(component1, component2);
 	}
@@ -703,8 +581,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2D minimum(final Point2D a, final Point2D b, final Point2D c) {
-		final double component1 = min(a.component1, b.component1, c.component1);
-		final double component2 = min(a.component2, b.component2, c.component2);
+		final double component1 = min(a.x, b.x, c.x);
+		final double component2 = min(a.y, b.y, c.y);
 		
 		return new Point2D(component1, component2);
 	}
@@ -722,8 +600,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2D minimum(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
-		final double component1 = min(a.component1, b.component1, c.component1, d.component1);
-		final double component2 = min(a.component2, b.component2, c.component2, d.component2);
+		final double component1 = min(a.x, b.x, c.x, d.x);
+		final double component2 = min(a.y, b.y, c.y, d.y);
 		
 		return new Point2D(component1, component2);
 	}
@@ -764,13 +642,13 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code angle} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Point2D rotate(final Point2D point, final AngleD angle) {
+	public static Point2D rotateCounterclockwise(final Point2D point, final AngleD angle) {
 		final double angleRadians = angle.getRadians();
 		final double angleRadiansCos = cos(angleRadians);
 		final double angleRadiansSin = sin(angleRadians);
 		
-		final double component1 = point.component1 * angleRadiansCos - point.component2 * angleRadiansSin;
-		final double component2 = point.component2 * angleRadiansCos + point.component1 * angleRadiansSin;
+		final double component1 = point.x * angleRadiansCos - point.y * angleRadiansSin;
+		final double component2 = point.y * angleRadiansCos + point.x * angleRadiansSin;
 		
 		return new Point2D(component1, component2);
 	}
@@ -789,8 +667,8 @@ public final class Point2D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D scale(final Point2D point, final Vector2D scale) {
-		final double component1 = point.component1 * scale.getComponent1();
-		final double component2 = point.component2 * scale.getComponent2();
+		final double component1 = point.x * scale.getComponent1();
+		final double component2 = point.y * scale.getComponent2();
 		
 		return new Point2D(component1, component2);
 	}
@@ -822,8 +700,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
 	 */
 	public static Point2D subtract(final Point2D pointLHS, final Vector2D vectorRHS) {
-		final double component1 = pointLHS.component1 - vectorRHS.getComponent1();
-		final double component2 = pointLHS.component2 - vectorRHS.getComponent2();
+		final double component1 = pointLHS.x - vectorRHS.getComponent1();
+		final double component2 = pointLHS.y - vectorRHS.getComponent2();
 		
 		return new Point2D(component1, component2);
 	}
@@ -841,8 +719,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
 	 */
 	public static Point2D subtract(final Point2D pointLHS, final double scalarRHS) {
-		final double component1 = pointLHS.component1 - scalarRHS;
-		final double component2 = pointLHS.component2 - scalarRHS;
+		final double component1 = pointLHS.x - scalarRHS;
+		final double component2 = pointLHS.y - scalarRHS;
 		
 		return new Point2D(component1, component2);
 	}
@@ -860,8 +738,8 @@ public final class Point2D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D toImage(final Point2D point, final double resolutionX, final double resolutionY) {
-		final double component1 = positiveModulo(point.component1 * resolutionX - 0.5D, resolutionX);
-		final double component2 = positiveModulo(point.component2 * resolutionY - 0.5D, resolutionY);
+		final double component1 = positiveModulo(point.x * resolutionX - 0.5D, resolutionX);
+		final double component2 = positiveModulo(point.y * resolutionY - 0.5D, resolutionY);
 		
 		return new Point2D(component1, component2);
 	}
@@ -879,8 +757,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
 	public static Point2D transform(final Matrix33D matrixLHS, final Point2D pointRHS) {
-		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13();
-		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23();
+		final double component1 = matrixLHS.getElement11() * pointRHS.x + matrixLHS.getElement12() * pointRHS.y + matrixLHS.getElement13();
+		final double component2 = matrixLHS.getElement21() * pointRHS.x + matrixLHS.getElement22() * pointRHS.y + matrixLHS.getElement23();
 		
 		return new Point2D(component1, component2);
 	}
@@ -898,9 +776,9 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
 	public static Point2D transformAndDivide(final Matrix33D matrixLHS, final Point2D pointRHS) {
-		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13();
-		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23();
-		final double component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33();
+		final double component1 = matrixLHS.getElement11() * pointRHS.x + matrixLHS.getElement12() * pointRHS.y + matrixLHS.getElement13();
+		final double component2 = matrixLHS.getElement21() * pointRHS.x + matrixLHS.getElement22() * pointRHS.y + matrixLHS.getElement23();
+		final double component3 = matrixLHS.getElement31() * pointRHS.x + matrixLHS.getElement32() * pointRHS.y + matrixLHS.getElement33();
 		
 		return equal(component3, 1.0D) || isZero(component3) ? new Point2D(component1, component2) : new Point2D(component1 / component3, component2 / component3);
 	}
@@ -943,36 +821,6 @@ public final class Point2D implements Node {
 	 */
 	public static double distance(final Point2D eye, final Point2D lookAt) {
 		return Vector2D.direction(eye, lookAt).length();
-	}
-	
-	/**
-	 * Returns the distance between {@code pointA} and {@code pointB} in Km.
-	 * <p>
-	 * If either {@code pointA} or {@code pointB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method is using the longitude and latitude.
-	 * 
-	 * @param pointA a {@code Point2D} instance
-	 * @param pointB a {@code Point2D} instance
-	 * @return the distance between {@code pointA} and {@code pointB} in Km
-	 * @throws NullPointerException thrown if, and only if, either {@code pointA} or {@code pointB} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static double distanceKm(final Point2D pointA, final Point2D pointB) {
-		final double radius = 6371.0D;
-		
-		final double a = sin(toRadians(pointB.getLatitude() - pointA.getLatitude()) / 2.0D);
-		final double b = cos(toRadians(pointA.getLatitude()));
-		final double c = cos(toRadians(pointB.getLatitude()));
-		final double d = sin(toRadians(pointB.getLongitude() - pointA.getLongitude()) / 2.0D);
-		final double e = a * a + b * c * d * d;
-		
-		final double x = sqrt(1.0D - e);
-		final double y = sqrt(e);
-		
-		final double distance = radius * 2.0D * atan2(y, x);
-		
-		return distance;
 	}
 	
 	/**

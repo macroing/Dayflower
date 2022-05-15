@@ -102,7 +102,7 @@ public final class OrenNayarBRDF extends BXDF {
 			final Point2F sampleA = samplesA.get(i);
 			final Point2F sampleB = i < samplesB.size() ? samplesB.get(i) : new Point2F(random(), random());
 			
-			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
+			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.x, sampleB.y);
 			
 			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			
@@ -226,7 +226,7 @@ public final class OrenNayarBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.x, sample.y);
 		final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
 		
 		final BXDFType bXDFType = getBXDFType();

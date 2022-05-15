@@ -109,7 +109,7 @@ public final class Sphere3D implements Shape3D {
 	public Optional<SurfaceSample3D> sample(final Point2D sample) {
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3D direction = SampleGeneratorD.sampleSphereUniformDistribution(sample.getU(), sample.getV());
+		final Vector3D direction = SampleGeneratorD.sampleSphereUniformDistribution(sample.x, sample.y);
 		
 		final Point3D point0 = Point3D.add(new Point3D(), direction, 1.0D);
 		final Point3D point1 = Point3D.add(point0, new Vector3D(1.0D), 1.0D / Point3D.distance(new Point3D(), point0));
@@ -198,11 +198,11 @@ public final class Sphere3D implements Shape3D {
 		final double sinThetaMaxSquared = sinThetaMax * sinThetaMax;
 		final double sinThetaMaxReciprocal = 1.0D / sinThetaMax;
 		final double cosThetaMax = sqrt(max(0.0D, 1.0D - sinThetaMaxSquared));
-		final double cosTheta = sinThetaMaxSquared < 0.00068523D ? sqrt(1.0D - sinThetaMaxSquared * sample.getU()) : (cosThetaMax - 1.0D) * sample.getU() + 1.0D;
-		final double sinThetaSquared = sinThetaMaxSquared < 0.00068523D ? sinThetaMaxSquared * sample.getU() : 1.0D - cosTheta * cosTheta;
+		final double cosTheta = sinThetaMaxSquared < 0.00068523D ? sqrt(1.0D - sinThetaMaxSquared * sample.x) : (cosThetaMax - 1.0D) * sample.x + 1.0D;
+		final double sinThetaSquared = sinThetaMaxSquared < 0.00068523D ? sinThetaMaxSquared * sample.x : 1.0D - cosTheta * cosTheta;
 		final double cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * sqrt(max(0.0D, 1.0D - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
 		final double sinAlpha = sqrt(max(0.0D, 1.0D - cosAlpha * cosAlpha));
-		final double phi = sample.getV() * 2.0D * PI;
+		final double phi = sample.y * 2.0D * PI;
 		
 		final Vector3D sphericalDirection = Vector3D.directionSpherical(sinAlpha, cosAlpha, phi, x, y, z);
 		

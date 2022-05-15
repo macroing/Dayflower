@@ -1,3 +1,13 @@
+2022-05-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Rename the method rotate(Point2D, AngleD) in the Point2D class to rotateCounterclockwise(Point2D, AngleD).
+	* CHANGE:	Rename the method rotate(Point2F, AngleF) in the Point2F class to rotateCounterclockwise(Point2F, AngleF).
+	* CHANGE:	Rename the fields component1 and component2 in the Point2D class to x and y, respectively. They have also been made public.
+	* CHANGE:	Rename the fields component1 and component2 in the Point2F class to x and y, respectively. They have also been made public.
+	* CHANGE:	Update all classes and unit tests that have been affected by the change in Point2D and Point2F.
+	* REMOVE:	Remove the methods addDistanceKm(Point2D, double, double), distanceKm(Point2D, Point2D), getComponent(int), getComponent1(), getComponent2(), getLatitude(), getLongitude(), getU(), getV(), getX() and getY() from the Point2D class.
+	* REMOVE:	Remove the methods addDistanceKm(Point2F, float, float), distanceKm(Point2F, Point2F), getComponent(int), getComponent1(), getComponent2(), getLatitude(), getLongitude(), getU(), getV(), getX() and getY() from the Point2F class.
+
 2022-05-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Sphere3DUnitTests class.

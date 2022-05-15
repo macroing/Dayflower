@@ -541,7 +541,7 @@ public final class Matrix33F implements Node {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix33F.translate(point.getX(), point.getY());
+	 * Matrix33F.translate(point.x, point.y);
 	 * }
 	 * </pre>
 	 * 
@@ -550,7 +550,7 @@ public final class Matrix33F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	public static Matrix33F translate(final Point2F point) {
-		return translate(point.getX(), point.getY());
+		return translate(point.x, point.y);
 	}
 	
 	/**

@@ -531,8 +531,8 @@ public final class PolkaDotMaterial implements Material {
 		final float cosAngleRadians = cos(this.angle.getRadians());
 		final float sinAngleRadians = sin(this.angle.getRadians());
 		
-		final float u = intersection.getTextureCoordinates().getU();
-		final float v = intersection.getTextureCoordinates().getV();
+		final float u = intersection.getTextureCoordinates().x;
+		final float v = intersection.getTextureCoordinates().y;
 		
 		final float x = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.cellResolution) - 0.5F;
 		final float y = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.cellResolution) - 0.5F;

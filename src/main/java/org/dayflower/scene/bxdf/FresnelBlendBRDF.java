@@ -109,7 +109,7 @@ public final class FresnelBlendBRDF extends BXDF {
 			final Point2F sampleA = samplesA.get(i);
 			final Point2F sampleB = i < samplesB.size() ? samplesB.get(i) : new Point2F(random(), random());
 			
-			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
+			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.x, sampleB.y);
 			
 			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			
@@ -239,9 +239,9 @@ public final class FresnelBlendBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		if(sample.getU() < 0.5F) {
-			final float u = min(2.0F * sample.getU(), ONE_MINUS_EPSILON);
-			final float v = sample.getV();
+		if(sample.x < 0.5F) {
+			final float u = min(2.0F * sample.x, ONE_MINUS_EPSILON);
+			final float v = sample.y;
 			
 			final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(u, v);
 			final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
@@ -255,8 +255,8 @@ public final class FresnelBlendBRDF extends BXDF {
 			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 		}
 		
-		final float u = min(2.0F * (sample.getU() - 0.5F), ONE_MINUS_EPSILON);
-		final float v = sample.getV();
+		final float u = min(2.0F * (sample.x - 0.5F), ONE_MINUS_EPSILON);
+		final float v = sample.y;
 		
 		final Vector3F halfway = this.microfacetDistribution.sampleHalfway(outgoing, new Point2F(u, v));
 		

@@ -100,11 +100,11 @@ public final class LineSegment2FUnitTests {
 			assertTrue(lineSegment.contains(Point2F.midpoint(lineSegment.getA(), lineSegment.getB())));
 			assertTrue(lineSegment.contains(lineSegment.getB()));
 			
-			assertFalse(lineSegment.contains(new Point2F(lineSegment.getA().getX() + 100.0F, lineSegment.getA().getY())));
-			assertFalse(lineSegment.contains(new Point2F(lineSegment.getA().getX() - 100.0F, lineSegment.getA().getY())));
+			assertFalse(lineSegment.contains(new Point2F(lineSegment.getA().x + 100.0F, lineSegment.getA().y)));
+			assertFalse(lineSegment.contains(new Point2F(lineSegment.getA().x - 100.0F, lineSegment.getA().y)));
 			
-			assertFalse(lineSegment.contains(new Point2F(lineSegment.getA().getX(), lineSegment.getA().getY() + 100.0F)));
-			assertFalse(lineSegment.contains(new Point2F(lineSegment.getA().getX(), lineSegment.getA().getY() - 100.0F)));
+			assertFalse(lineSegment.contains(new Point2F(lineSegment.getA().x, lineSegment.getA().y + 100.0F)));
+			assertFalse(lineSegment.contains(new Point2F(lineSegment.getA().x, lineSegment.getA().y - 100.0F)));
 		}
 		
 		assertThrows(NullPointerException.class, () -> new LineSegment2F(new Point2F(10.0F, 10.0F), new Point2F(20.0F, 10.0F)).contains(null));

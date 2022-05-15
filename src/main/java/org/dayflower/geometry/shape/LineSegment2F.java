@@ -167,12 +167,12 @@ public final class LineSegment2F implements Shape2F {
 	 */
 	@Override
 	public boolean contains(final Point2F point) {
-		final float aX = this.a.getX();
-		final float aY = this.a.getY();
-		final float bX = this.b.getX();
-		final float bY = this.b.getY();
-		final float pX = point.getX();
-		final float pY = point.getY();
+		final float aX = this.a.x;
+		final float aY = this.a.y;
+		final float bX = this.b.x;
+		final float bY = this.b.y;
+		final float pX = point.x;
+		final float pY = point.y;
 		
 		final float dAPX = pX - aX;
 		final float dAPY = pY - aY;

@@ -85,14 +85,14 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Vector2F} instance given the component values {@code point.getComponent1()} and {@code point.getComponent2()}.
+	 * Constructs a new {@code Vector2F} instance given the component values {@code point.x} and {@code point.y}.
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Vector2F(point.getComponent1(), point.getComponent2());
+	 * new Vector2F(point.x, point.y);
 	 * }
 	 * </pre>
 	 * 
@@ -100,7 +100,7 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	public Vector2F(final Point2F point) {
-		this(point.getComponent1(), point.getComponent2());
+		this(point.x, point.y);
 	}
 	
 	/**
@@ -384,8 +384,8 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
 	public static Vector2F direction(final Point2F eye, final Point2F lookAt) {
-		final float component1 = lookAt.getComponent1() - eye.getComponent1();
-		final float component2 = lookAt.getComponent2() - eye.getComponent2();
+		final float component1 = lookAt.x - eye.x;
+		final float component2 = lookAt.y - eye.y;
 		
 		return new Vector2F(component1, component2);
 	}

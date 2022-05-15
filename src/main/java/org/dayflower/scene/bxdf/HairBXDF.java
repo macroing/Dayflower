@@ -147,7 +147,7 @@ public final class HairBXDF extends BXDF {
 			final Point2F sampleA = samplesA.get(i);
 			final Point2F sampleB = i < samplesB.size() ? samplesB.get(i) : new Point2F(random(), random());
 			
-			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
+			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.x, sampleB.y);
 			
 			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			
@@ -324,20 +324,20 @@ public final class HairBXDF extends BXDF {
 		final float cosThetaOutgoing = sqrt(max(0.0F, 1.0F - sinThetaOutgoing * sinThetaOutgoing));
 		final float phiOutgoing = atan2(outgoing.getZ(), outgoing.getY());
 		
-		final Point2F[] samples = new Point2F[] {Point2F.decodeMortonCode1By1(sample.getU()), Point2F.decodeMortonCode1By1(sample.getV())};
+		final Point2F[] samples = new Point2F[] {Point2F.decodeMortonCode1By1(sample.x), Point2F.decodeMortonCode1By1(sample.y)};
 		
 		final float[] probabilityDensityFunctionValues = doComputeAPProbabilityDensityFunctionValues(this.sigmaA, cosThetaOutgoing, this.eta, this.h);
 		
 		int p = 0;
 		
 		for(int i = 0; i < 3; i++) {
-			if(samples[0].getU() < probabilityDensityFunctionValues[i]) {
+			if(samples[0].x < probabilityDensityFunctionValues[i]) {
 				p = i;
 				
 				break;
 			}
 			
-			samples[0] = new Point2F(samples[0].getU() - probabilityDensityFunctionValues[i], samples[0].getV());
+			samples[0] = new Point2F(samples[0].x - probabilityDensityFunctionValues[i], samples[0].y);
 		}
 		
 		float sinThetaOutgoingP = 0.0F;
@@ -366,18 +366,18 @@ public final class HairBXDF extends BXDF {
 				break;
 		}
 		
-		samples[1] = new Point2F(max(samples[1].getU(), 1.0e-5F), samples[1].getV());
+		samples[1] = new Point2F(max(samples[1].x, 1.0e-5F), samples[1].y);
 		
-		final float cosTheta = 1.0F + this.v[p] * log(samples[1].getU() + (1.0F - samples[1].getU()) * exp(-2.0F / this.v[p]));
+		final float cosTheta = 1.0F + this.v[p] * log(samples[1].x + (1.0F - samples[1].x) * exp(-2.0F / this.v[p]));
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float cosPhi = cos(2.0F * PI * samples[1].getV());
+		final float cosPhi = cos(2.0F * PI * samples[1].y);
 		final float sinThetaIncoming = -cosTheta * sinThetaOutgoingP + sinTheta * cosPhi * cosThetaOutgoingP;
 		final float cosThetaIncoming = sqrt(max(0.0F, 1.0F - sinThetaIncoming * sinThetaIncoming));
 		
 		final float etap = sqrt(this.eta * this.eta - sinThetaOutgoing * sinThetaOutgoing) / cosThetaOutgoing;
 		final float sinGammaTransmission = this.h / etap;
 		final float gammaTransmission = asin(saturate(sinGammaTransmission, -1.0F, 1.0F));
-		final float deltaPhi = p < 3 ? doComputePhi(this.gammaOutgoing, gammaTransmission, p) + doLogisticTrimmedSample(samples[0].getV(), this.s, -PI, PI) : 2.0F * PI * samples[0].getV();
+		final float deltaPhi = p < 3 ? doComputePhi(this.gammaOutgoing, gammaTransmission, p) + doLogisticTrimmedSample(samples[0].y, this.s, -PI, PI) : 2.0F * PI * samples[0].y;
 		final float phiIncoming = phiOutgoing + deltaPhi;
 		
 		final Vector3F incoming = new Vector3F(sinThetaIncoming, cosThetaIncoming * cos(phiIncoming), cosThetaIncoming * sin(phiIncoming));

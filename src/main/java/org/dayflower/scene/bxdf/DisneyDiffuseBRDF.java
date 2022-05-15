@@ -162,7 +162,7 @@ public final class DisneyDiffuseBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.x, sample.y);
 		final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
 		
 		final BXDFType bXDFType = getBXDFType();

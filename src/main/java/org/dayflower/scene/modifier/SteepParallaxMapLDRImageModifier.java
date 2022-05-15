@@ -310,8 +310,8 @@ public final class SteepParallaxMapLDRImageModifier extends AbstractLDRImageModi
 		final float deltaU = directionScaled.getU() * layersReciprocal;
 		final float deltaV = directionScaled.getV() * layersReciprocal;
 		
-		float u = textureCoordinates.getU();
-		float v = textureCoordinates.getV();
+		float u = textureCoordinates.x;
+		float v = textureCoordinates.y;
 		
 		float currentHeight = getColorRGB(u, v).getR();
 		float currentLayerDepth = 0.0F;

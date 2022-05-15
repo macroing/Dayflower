@@ -284,17 +284,17 @@ public final class Polygon2D implements Shape2D {
 	private boolean doContains(final Point2D point) {
 		boolean isInside = false;
 		
-		final double pX = point.getX();
-		final double pY = point.getY();
+		final double pX = point.x;
+		final double pY = point.y;
 		
 		for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
 			final Point2D pointI = this.points[i];
 			final Point2D pointJ = this.points[j];
 			
-			final double iX = pointI.getX();
-			final double iY = pointI.getY();
-			final double jX = pointJ.getX();
-			final double jY = pointJ.getY();
+			final double iX = pointI.x;
+			final double iY = pointI.y;
+			final double jX = pointJ.x;
+			final double jY = pointJ.y;
 			
 			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
 				isInside = !isInside;

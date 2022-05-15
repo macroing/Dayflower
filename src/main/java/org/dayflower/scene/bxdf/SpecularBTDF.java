@@ -106,7 +106,7 @@ public final class SpecularBTDF extends BXDF {
 			final Point2F sampleA = samplesA.get(i);
 			final Point2F sampleB = i < samplesB.size() ? samplesB.get(i) : new Point2F(random(), random());
 			
-			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
+			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.x, sampleB.y);
 			
 			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			

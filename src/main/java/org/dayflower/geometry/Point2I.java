@@ -81,7 +81,7 @@ public final class Point2I implements Node {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point2I(Ints.toInt(point.getComponent1()), Ints.toInt(point.getComponent2()));
+	 * new Point2I(Ints.toInt(point.x), Ints.toInt(point.y));
 	 * }
 	 * </pre>
 	 * 
@@ -89,7 +89,7 @@ public final class Point2I implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	public Point2I(final Point2D point) {
-		this(toInt(point.getComponent1()), toInt(point.getComponent2()));
+		this(toInt(point.x), toInt(point.y));
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public final class Point2I implements Node {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point2I(Ints.toInt(point.getComponent1()), Ints.toInt(point.getComponent2()));
+	 * new Point2I(Ints.toInt(point.x), Ints.toInt(point.y));
 	 * }
 	 * </pre>
 	 * 
@@ -108,7 +108,7 @@ public final class Point2I implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	public Point2I(final Point2F point) {
-		this(toInt(point.getComponent1()), toInt(point.getComponent2()));
+		this(toInt(point.x), toInt(point.y));
 	}
 	
 	/**

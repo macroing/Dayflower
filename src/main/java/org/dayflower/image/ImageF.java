@@ -121,7 +121,7 @@ public abstract class ImageF extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.getColorRGB(point.getX(), point.getY(), pixelOperation);
+	 * image.getColorRGB(point.x, point.y, pixelOperation);
 	 * }
 	 * </pre>
 	 * 
@@ -132,7 +132,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color3F getColorRGB(final Point2F point, final PixelOperation pixelOperation) {
-		return getColorRGB(point.getX(), point.getY(), pixelOperation);
+		return getColorRGB(point.x, point.y, pixelOperation);
 	}
 	
 	/**
@@ -346,7 +346,7 @@ public abstract class ImageF extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.getColorRGBA(point.getX(), point.getY(), function);
+	 * image.getColorRGBA(point.x, point.y, function);
 	 * }
 	 * </pre>
 	 * 
@@ -357,7 +357,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color4F getColorRGBA(final Point2F point, final Function<Point2I, Color4F> function) {
-		return getColorRGBA(point.getX(), point.getY(), function);
+		return getColorRGBA(point.x, point.y, function);
 	}
 	
 	/**
@@ -372,7 +372,7 @@ public abstract class ImageF extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.getColorRGBA(point.getX(), point.getY(), pixelOperation);
+	 * image.getColorRGBA(point.x, point.y, pixelOperation);
 	 * }
 	 * </pre>
 	 * 
@@ -383,7 +383,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color4F getColorRGBA(final Point2F point, final PixelOperation pixelOperation) {
-		return getColorRGBA(point.getX(), point.getY(), pixelOperation);
+		return getColorRGBA(point.x, point.y, pixelOperation);
 	}
 	
 	/**
@@ -1892,12 +1892,12 @@ public abstract class ImageF extends Image {
 		final Point2F maximum = Point2F.maximum(rectangleC.getA(), rectangleC.getB(), rectangleC.getC(), rectangleC.getD());
 		
 //		Compute the second translation direction for the new and old ImageF instances:
-		final Vector2F directionBToNewImage = new Vector2F(abs(min(minimum.getX(), 0.0F)), abs(min(minimum.getY(), 0.0F)));
+		final Vector2F directionBToNewImage = new Vector2F(abs(min(minimum.x, 0.0F)), abs(min(minimum.y, 0.0F)));
 		final Vector2F directionBToOldImage = Vector2F.negate(directionBToNewImage);
 		
 //		Compute the resolution for the new ImageF instance:
-		final int newResolutionX = toInt(maximum.getX() - minimum.getX());
-		final int newResolutionY = toInt(maximum.getY() - minimum.getY());
+		final int newResolutionX = toInt(maximum.x - minimum.x);
+		final int newResolutionY = toInt(maximum.y - minimum.y);
 		
 //		Initialize the old and new ImageF instances:
 		final ImageF oldImage = this;
@@ -1908,7 +1908,7 @@ public abstract class ImageF extends Image {
 //				Compute the current Point2F instance for the new ImageF instance and reverse the operations to get the equivalent Point2F instance for the old ImageF instance:
 				final Point2F a = new Point2F(x, y);
 				final Point2F b = Point2F.add(a, directionBToOldImage);
-				final Point2F c = Point2F.rotate(b, angleToOldImage);
+				final Point2F c = Point2F.rotateCounterclockwise(b, angleToOldImage);
 				final Point2F d = Point2F.add(c, directionAToOldImage);
 				
 //				Set the Color4F instance in the new ImageF instance:

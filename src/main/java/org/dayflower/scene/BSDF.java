@@ -320,11 +320,11 @@ public final class BSDF {
 			return Optional.empty();
 		}
 		
-		final int match = min((int)(floor(sample.getU() * matches)), matches - 1);
+		final int match = min((int)(floor(sample.x * matches)), matches - 1);
 		
 		final BXDF matchingBXDF = matchingBXDFs[match];
 		
-		final Point2F sampleRemapped = new Point2F(min(sample.getU() * matches - match, 0.99999994F), sample.getV());
+		final Point2F sampleRemapped = new Point2F(min(sample.x * matches - match, 0.99999994F), sample.y);
 		
 		final Optional<BXDFResult> optionalBXDFResult = matchingBXDF.sampleDistributionFunction(outgoing, normal, sampleRemapped);
 		

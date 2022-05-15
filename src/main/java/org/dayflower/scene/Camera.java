@@ -280,7 +280,7 @@ public final class Camera implements Node {
 		
 		final Point3F pointOnPlaneOneUnitAwayFromEye = new Point3F(Vector3F.add(Vector3F.add(Vector3F.multiply(u, fieldOfViewX * cameraX), Vector3F.multiply(v, fieldOfViewY * cameraY)), Vector3F.add(new Vector3F(eye), Vector3F.multiply(w, wFactor))));
 		final Point3F pointOnImagePlane = Point3F.add(eye, Vector3F.direction(eye, pointOnPlaneOneUnitAwayFromEye), focalDistance);
-		final Point3F origin = apertureRadius > 0.00001F ? Point3F.add(eye, Vector3F.add(Vector3F.multiply(u, point.getU() * apertureRadius), Vector3F.multiply(v, point.getV() * apertureRadius))) : eye;
+		final Point3F origin = apertureRadius > 0.00001F ? Point3F.add(eye, Vector3F.add(Vector3F.multiply(u, point.x * apertureRadius), Vector3F.multiply(v, point.y * apertureRadius))) : eye;
 		
 		final Vector3F direction = Vector3F.directionNormalized(origin, pointOnImagePlane);
 		

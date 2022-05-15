@@ -98,7 +98,7 @@ public final class DisneyClearCoatBRDF extends BXDF {
 			final Point2F sampleA = samplesA.get(i);
 			final Point2F sampleB = i < samplesB.size() ? samplesB.get(i) : new Point2F(random(), random());
 			
-			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
+			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.x, sampleB.y);
 			
 			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			
@@ -224,9 +224,9 @@ public final class DisneyClearCoatBRDF extends BXDF {
 		}
 		
 		final float alphaSquared = this.gloss * this.gloss;
-		final float cosTheta = sqrt(max(0.0F, (1.0F - pow(alphaSquared, 1.0F - sample.getU())) / (1.0F - alphaSquared)));
+		final float cosTheta = sqrt(max(0.0F, (1.0F - pow(alphaSquared, 1.0F - sample.x)) / (1.0F - alphaSquared)));
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = 2.0F * PI * sample.getV();
+		final float phi = 2.0F * PI * sample.y;
 		
 		final Vector3F halfwaySample = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
 		final Vector3F halfway = Vector3F.sameHemisphereZ(outgoing, halfwaySample) ? halfwaySample : Vector3F.negate(halfwaySample);

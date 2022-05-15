@@ -221,7 +221,7 @@ public final class AshikhminShirleyBRDF extends BXDF {
 			return Optional.empty();
 		}
 		
-		final Vector3F nSample = SampleGeneratorF.sampleHemispherePowerCosineDistribution(sample.getU(), sample.getV(), this.exponent);
+		final Vector3F nSample = SampleGeneratorF.sampleHemispherePowerCosineDistribution(sample.x, sample.y, this.exponent);
 		final Vector3F n = Vector3F.faceForward(normal, outgoing, nSample);
 		
 		if(Vector3F.dotProduct(outgoing, n) < 0.0F) {

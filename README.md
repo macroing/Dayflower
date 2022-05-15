@@ -175,7 +175,7 @@ The following table describes the different APIs and their current status in the
 | Change API                             | 100.0%  | 100.0%    |
 | Color API                              | 100.0%  |  83.8%    |
 | Filter API                             | 100.0%  | 100.0%    |
-| Geometry API                           | 100.0%  |  78.0%    |
+| Geometry API                           | 100.0%  |  78.4%    |
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |

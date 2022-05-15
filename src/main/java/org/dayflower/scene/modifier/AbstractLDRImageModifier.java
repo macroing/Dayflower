@@ -277,15 +277,15 @@ public abstract class AbstractLDRImageModifier implements Modifier {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	protected final Color3F getColorRGB(final Point2F point, final boolean isUsingBilinearInterpolation) {
-		final Point2F pointRotated = Point2F.rotate(point, this.angle);
+		final Point2F pointRotated = Point2F.rotateCounterclockwise(point, this.angle);
 		final Point2F pointScaled = Point2F.scale(pointRotated, this.scale);
 		final Point2F pointImage = Point2F.toImage(pointScaled, this.resolutionX, this.resolutionY);
 		
 		if(isUsingBilinearInterpolation) {
-			return doGetColorRGBBilinearInterpolation(pointImage.getX(), pointImage.getY());
+			return doGetColorRGBBilinearInterpolation(pointImage.x, pointImage.y);
 		}
 		
-		return doGetColorRGB(toInt(pointImage.getX()), toInt(pointImage.getY()));
+		return doGetColorRGB(toInt(pointImage.x), toInt(pointImage.y));
 	}
 	
 	/**

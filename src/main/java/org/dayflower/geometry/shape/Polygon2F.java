@@ -284,17 +284,17 @@ public final class Polygon2F implements Shape2F {
 	private boolean doContains(final Point2F point) {
 		boolean isInside = false;
 		
-		final float pX = point.getX();
-		final float pY = point.getY();
+		final float pX = point.x;
+		final float pY = point.y;
 		
 		for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
 			final Point2F pointI = this.points[i];
 			final Point2F pointJ = this.points[j];
 			
-			final float iX = pointI.getX();
-			final float iY = pointI.getY();
-			final float jX = pointJ.getX();
-			final float jY = pointJ.getY();
+			final float iX = pointI.x;
+			final float iY = pointI.y;
+			final float jX = pointJ.x;
+			final float jY = pointJ.y;
 			
 			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
 				isInside = !isInside;

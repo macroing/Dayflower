@@ -96,8 +96,8 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float alphaX = this.alphaX;
 		final float alphaY = this.alphaY;
 		
-		final float u = sample.getU();
-		final float v = sample.getV();
+		final float u = sample.x;
+		final float v = sample.y;
 		
 		if(isSamplingVisibleArea()) {
 			return outgoing.getZ() >= 0.0F ? doSample(outgoing, alphaX, alphaY, u, v) : Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));

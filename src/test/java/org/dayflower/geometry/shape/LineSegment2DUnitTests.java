@@ -100,11 +100,11 @@ public final class LineSegment2DUnitTests {
 			assertTrue(lineSegment.contains(Point2D.midpoint(lineSegment.getA(), lineSegment.getB())));
 			assertTrue(lineSegment.contains(lineSegment.getB()));
 			
-			assertFalse(lineSegment.contains(new Point2D(lineSegment.getA().getX() + 100.0D, lineSegment.getA().getY())));
-			assertFalse(lineSegment.contains(new Point2D(lineSegment.getA().getX() - 100.0D, lineSegment.getA().getY())));
+			assertFalse(lineSegment.contains(new Point2D(lineSegment.getA().x + 100.0D, lineSegment.getA().y)));
+			assertFalse(lineSegment.contains(new Point2D(lineSegment.getA().x - 100.0D, lineSegment.getA().y)));
 			
-			assertFalse(lineSegment.contains(new Point2D(lineSegment.getA().getX(), lineSegment.getA().getY() + 100.0D)));
-			assertFalse(lineSegment.contains(new Point2D(lineSegment.getA().getX(), lineSegment.getA().getY() - 100.0D)));
+			assertFalse(lineSegment.contains(new Point2D(lineSegment.getA().x, lineSegment.getA().y + 100.0D)));
+			assertFalse(lineSegment.contains(new Point2D(lineSegment.getA().x, lineSegment.getA().y - 100.0D)));
 		}
 		
 		assertThrows(NullPointerException.class, () -> new LineSegment2D(new Point2D(10.0D, 10.0D), new Point2D(20.0D, 10.0D)).contains(null));

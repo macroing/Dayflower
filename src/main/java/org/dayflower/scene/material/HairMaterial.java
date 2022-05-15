@@ -622,7 +622,7 @@ public final class HairMaterial implements Material {
 		
 		final Color3F sigmaA = doComputeSigmaA(intersection, betaN);
 		
-		final float h = -1.0F + 2.0F * intersection.getTextureCoordinates().getV();
+		final float h = -1.0F + 2.0F * intersection.getTextureCoordinates().y;
 		
 		return Optional.of(new BSDF(intersection, new HairBXDF(sigmaA, alpha, betaM, betaN, eta, h), false, eta));
 	}

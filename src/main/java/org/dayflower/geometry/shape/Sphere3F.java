@@ -113,7 +113,7 @@ public final class Sphere3F implements Shape3F {
 	public Optional<SurfaceSample3F> sample(final Point2F sample) {
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F direction = SampleGeneratorF.sampleSphereUniformDistribution(sample.getU(), sample.getV());
+		final Vector3F direction = SampleGeneratorF.sampleSphereUniformDistribution(sample.x, sample.y);
 		
 		final Point3F point0 = Point3F.add(new Point3F(), direction, 1.0F);
 		final Point3F point1 = Point3F.add(point0, new Vector3F(1.0F), 1.0F / Point3F.distance(new Point3F(), point0));
@@ -202,11 +202,11 @@ public final class Sphere3F implements Shape3F {
 		final float sinThetaMaxSquared = sinThetaMax * sinThetaMax;
 		final float sinThetaMaxReciprocal = 1.0F / sinThetaMax;
 		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
-		final float cosTheta = sinThetaMaxSquared < 0.00068523F ? sqrt(1.0F - sinThetaMaxSquared * sample.getU()) : (cosThetaMax - 1.0F) * sample.getU() + 1.0F;
-		final float sinThetaSquared = sinThetaMaxSquared < 0.00068523F ? sinThetaMaxSquared * sample.getU() : 1.0F - cosTheta * cosTheta;
+		final float cosTheta = sinThetaMaxSquared < 0.00068523F ? sqrt(1.0F - sinThetaMaxSquared * sample.x) : (cosThetaMax - 1.0F) * sample.x + 1.0F;
+		final float sinThetaSquared = sinThetaMaxSquared < 0.00068523F ? sinThetaMaxSquared * sample.x : 1.0F - cosTheta * cosTheta;
 		final float cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * sqrt(max(0.0F, 1.0F - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
 		final float sinAlpha = sqrt(max(0.0F, 1.0F - cosAlpha * cosAlpha));
-		final float phi = sample.getV() * 2.0F * PI;
+		final float phi = sample.y * 2.0F * PI;
 		
 		final Vector3F sphericalDirection = Vector3F.directionSpherical(sinAlpha, cosAlpha, phi, x, y, z);
 		

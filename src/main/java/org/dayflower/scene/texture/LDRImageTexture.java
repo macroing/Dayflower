@@ -233,11 +233,11 @@ public final class LDRImageTexture implements Texture {
 	@Override
 	public Color3F getColor(final Intersection intersection) {
 		final Point2F textureCoordinates = intersection.getTextureCoordinates();
-		final Point2F textureCoordinatesRotated = Point2F.rotate(textureCoordinates, this.angle);
+		final Point2F textureCoordinatesRotated = Point2F.rotateCounterclockwise(textureCoordinates, this.angle);
 		final Point2F textureCoordinatesScaled = Point2F.scale(textureCoordinatesRotated, this.scale);
 		final Point2F textureCoordinatesImage = Point2F.toImage(textureCoordinatesScaled, this.resolutionX, this.resolutionY);
 		
-		return doGetColorRGB(textureCoordinatesImage.getX(), textureCoordinatesImage.getY());
+		return doGetColorRGB(textureCoordinatesImage.x, textureCoordinatesImage.y);
 	}
 	
 	/**

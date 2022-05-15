@@ -121,7 +121,7 @@ public abstract class ImageD extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.getColorRGB(point.getX(), point.getY(), pixelOperation);
+	 * image.getColorRGB(point.x, point.y, pixelOperation);
 	 * }
 	 * </pre>
 	 * 
@@ -132,7 +132,7 @@ public abstract class ImageD extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color3D getColorRGB(final Point2D point, final PixelOperation pixelOperation) {
-		return getColorRGB(point.getX(), point.getY(), pixelOperation);
+		return getColorRGB(point.x, point.y, pixelOperation);
 	}
 	
 	/**
@@ -346,7 +346,7 @@ public abstract class ImageD extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.getColorRGBA(point.getX(), point.getY(), function);
+	 * image.getColorRGBA(point.x, point.y, function);
 	 * }
 	 * </pre>
 	 * 
@@ -357,7 +357,7 @@ public abstract class ImageD extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final Point2D point, final Function<Point2I, Color4D> function) {
-		return getColorRGBA(point.getX(), point.getY(), function);
+		return getColorRGBA(point.x, point.y, function);
 	}
 	
 	/**
@@ -372,7 +372,7 @@ public abstract class ImageD extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.getColorRGBA(point.getX(), point.getY(), pixelOperation);
+	 * image.getColorRGBA(point.x, point.y, pixelOperation);
 	 * }
 	 * </pre>
 	 * 
@@ -383,7 +383,7 @@ public abstract class ImageD extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color4D getColorRGBA(final Point2D point, final PixelOperation pixelOperation) {
-		return getColorRGBA(point.getX(), point.getY(), pixelOperation);
+		return getColorRGBA(point.x, point.y, pixelOperation);
 	}
 	
 	/**
@@ -1892,12 +1892,12 @@ public abstract class ImageD extends Image {
 		final Point2D maximum = Point2D.maximum(rectangleC.getA(), rectangleC.getB(), rectangleC.getC(), rectangleC.getD());
 		
 //		Compute the second translation direction for the new and old ImageD instances:
-		final Vector2D directionBToNewImage = new Vector2D(abs(min(minimum.getX(), 0.0D)), abs(min(minimum.getY(), 0.0D)));
+		final Vector2D directionBToNewImage = new Vector2D(abs(min(minimum.x, 0.0D)), abs(min(minimum.y, 0.0D)));
 		final Vector2D directionBToOldImage = Vector2D.negate(directionBToNewImage);
 		
 //		Compute the resolution for the new ImageD instance:
-		final int newResolutionX = toInt(maximum.getX() - minimum.getX());
-		final int newResolutionY = toInt(maximum.getY() - minimum.getY());
+		final int newResolutionX = toInt(maximum.x - minimum.x);
+		final int newResolutionY = toInt(maximum.y - minimum.y);
 		
 //		Initialize the old and new ImageD instances:
 		final ImageD oldImage = this;
@@ -1908,7 +1908,7 @@ public abstract class ImageD extends Image {
 //				Compute the current Point2D instance for the new ImageD instance and reverse the operations to get the equivalent Point2D instance for the old ImageD instance:
 				final Point2D a = new Point2D(x, y);
 				final Point2D b = Point2D.add(a, directionBToOldImage);
-				final Point2D c = Point2D.rotate(b, angleToOldImage);
+				final Point2D c = Point2D.rotateCounterclockwise(b, angleToOldImage);
 				final Point2D d = Point2D.add(c, directionAToOldImage);
 				
 //				Set the Color4D instance in the new ImageD instance:

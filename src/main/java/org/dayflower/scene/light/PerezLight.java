@@ -295,7 +295,7 @@ public final class PerezLight extends Light {
 				
 //				final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
 				
-//				final Sample2F sampleRemapped = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
+//				final Sample2F sampleRemapped = new Sample2F(sphericalCoordinates.x, sphericalCoordinates.y);
 				
 //				final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true) / (2.0F * PI * PI * sinTheta);
 				final float probabilityDensityFunctionValue = 1.0F;
@@ -304,7 +304,7 @@ public final class PerezLight extends Light {
 //			}
 		}
 		
-		final Sample2F sampleRemapped = this.distribution.continuousRemap(new Sample2F(sample.getU(), sample.getV()));
+		final Sample2F sampleRemapped = this.distribution.continuousRemap(new Sample2F(sample.x, sample.y));
 		
 		final float probabilityDensityFunctionValueRemapped = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true);
 		
@@ -482,7 +482,7 @@ public final class PerezLight extends Light {
 		
 		final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
 		
-		final Sample2F sample = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
+		final Sample2F sample = new Sample2F(sphericalCoordinates.x, sphericalCoordinates.y);
 		
 		final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample, true) / (2.0F * PI * PI * sinTheta);
 		

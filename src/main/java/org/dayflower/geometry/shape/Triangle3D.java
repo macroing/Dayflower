@@ -158,7 +158,7 @@ public final class Triangle3D implements Shape3D {
 	public Optional<SurfaceSample3D> sample(final Point2D sample) {
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Point3D barycentricCoordinates = SampleGeneratorD.sampleTriangleUniformDistribution(sample.getU(), sample.getV());
+		final Point3D barycentricCoordinates = SampleGeneratorD.sampleTriangleUniformDistribution(sample.x, sample.y);
 		
 		final Point4D positionA = this.a.getPosition();
 		final Point4D positionB = this.b.getPosition();
@@ -252,10 +252,10 @@ public final class Triangle3D implements Shape3D {
 		final Vector3D edgeAB = Vector3D.direction(positionA, positionB);
 		final Vector3D edgeAC = Vector3D.direction(positionA, positionC);
 		
-		final double deltaABU = textureCoordinatesB.getU() - textureCoordinatesA.getU();
-		final double deltaABV = textureCoordinatesB.getV() - textureCoordinatesA.getV();
-		final double deltaACU = textureCoordinatesC.getU() - textureCoordinatesA.getU();
-		final double deltaACV = textureCoordinatesC.getV() - textureCoordinatesA.getV();
+		final double deltaABU = textureCoordinatesB.x - textureCoordinatesA.x;
+		final double deltaABV = textureCoordinatesB.y - textureCoordinatesA.y;
+		final double deltaACU = textureCoordinatesC.x - textureCoordinatesA.x;
+		final double deltaACV = textureCoordinatesC.y - textureCoordinatesA.y;
 		
 		final double dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
 		final double fraction = dividend < -0.0D || dividend > +0.0D ? 1.0D / dividend : 0.0D;
@@ -285,10 +285,10 @@ public final class Triangle3D implements Shape3D {
 		final Vector3D edgeAB = Vector3D.direction(positionA, positionB);
 		final Vector3D edgeAC = Vector3D.direction(positionA, positionC);
 		
-		final double deltaABU = textureCoordinatesB.getU() - textureCoordinatesA.getU();
-		final double deltaABV = textureCoordinatesB.getV() - textureCoordinatesA.getV();
-		final double deltaACU = textureCoordinatesC.getU() - textureCoordinatesA.getU();
-		final double deltaACV = textureCoordinatesC.getV() - textureCoordinatesA.getV();
+		final double deltaABU = textureCoordinatesB.x - textureCoordinatesA.x;
+		final double deltaABV = textureCoordinatesB.y - textureCoordinatesA.y;
+		final double deltaACU = textureCoordinatesC.x - textureCoordinatesA.x;
+		final double deltaACV = textureCoordinatesC.y - textureCoordinatesA.y;
 		
 		final double dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
 		final double fraction = dividend < -0.0D || dividend > +0.0D ? 1.0D / dividend : 0.0D;

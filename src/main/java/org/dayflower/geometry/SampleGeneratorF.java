@@ -298,8 +298,8 @@ public final class SampleGeneratorF {
 	public static Vector3F sampleHemisphereCosineDistribution(final float u, final float v) {
 		final Point2F point = sampleDiskUniformDistributionByConcentricMapping(u, v);
 		
-		final float component1 = point.getComponent1();
-		final float component2 = point.getComponent2();
+		final float component1 = point.x;
+		final float component2 = point.y;
 		final float component3 = sqrt(max(0.0F, 1.0F - component1 * component1 - component2 * component2));
 		
 		return new Vector3F(component1, component2, component3);

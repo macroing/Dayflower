@@ -520,7 +520,7 @@ public final class Matrix44DUnitTests {
 	}
 	
 	@Test
-	public void testRotateOrthonormalBasis33F() {
+	public void testRotateOrthonormalBasis33D() {
 		final Matrix44D matrix = Matrix44D.rotate(new OrthonormalBasis33D(Vector3D.z(), Vector3D.y(), Vector3D.x()));
 		
 		assertEquals(1.0D, matrix.getElement11());

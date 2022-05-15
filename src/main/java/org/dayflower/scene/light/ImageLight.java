@@ -207,7 +207,7 @@ public final class ImageLight extends Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Sample2F sampleRemapped = this.distribution.continuousRemap(new Sample2F(sample.getU(), sample.getV()));
+		final Sample2F sampleRemapped = this.distribution.continuousRemap(new Sample2F(sample.x, sample.y));
 		
 		final float probabilityDensityFunctionValueRemapped = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true);
 		
@@ -358,7 +358,7 @@ public final class ImageLight extends Light {
 		
 		final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
 		
-		final Sample2F sample = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
+		final Sample2F sample = new Sample2F(sphericalCoordinates.x, sphericalCoordinates.y);
 		
 		final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample, true) / (2.0F * PI * PI * sinTheta);
 		
@@ -542,11 +542,11 @@ public final class ImageLight extends Light {
 	
 	private Color3F doRadianceSky(final Vector3F direction) {
 		final Point2F textureCoordinates = Point2F.sphericalCoordinates(direction);
-		final Point2F textureCoordinatesRotated = Point2F.rotate(textureCoordinates, this.angle);
+		final Point2F textureCoordinatesRotated = Point2F.rotateCounterclockwise(textureCoordinates, this.angle);
 		final Point2F textureCoordinatesScaled = Point2F.scale(textureCoordinatesRotated, this.scale);
 		final Point2F textureCoordinatesImage = Point2F.toImage(textureCoordinatesScaled, this.image.getResolutionX(), this.image.getResolutionY());
 		
-		return this.image.getColorRGB(textureCoordinatesImage.getX(), textureCoordinatesImage.getY(), PixelOperation.WRAP_AROUND);
+		return this.image.getColorRGB(textureCoordinatesImage.x, textureCoordinatesImage.y, PixelOperation.WRAP_AROUND);
 	}
 	
 	private Distribution2F doCreateDistribution() {

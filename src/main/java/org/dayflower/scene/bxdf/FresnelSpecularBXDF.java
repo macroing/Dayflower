@@ -106,7 +106,7 @@ public final class FresnelSpecularBXDF extends BXDF {
 			final Point2F sampleA = samplesA.get(i);
 			final Point2F sampleB = i < samplesB.size() ? samplesB.get(i) : new Point2F(random(), random());
 			
-			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
+			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.x, sampleB.y);
 			
 			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			
@@ -217,7 +217,7 @@ public final class FresnelSpecularBXDF extends BXDF {
 		
 		final float reflectance = DielectricFresnel.evaluate(outgoing.cosTheta(), this.etaA, this.etaB);
 		
-		if(sample.getU() < reflectance) {
+		if(sample.x < reflectance) {
 			final BXDFType bXDFType = BXDFType.SPECULAR_REFLECTION;
 			
 			final Vector3F incoming = new Vector3F(-outgoing.getX(), -outgoing.getY(), outgoing.getZ());

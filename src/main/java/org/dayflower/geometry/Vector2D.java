@@ -395,10 +395,7 @@ public final class Vector2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
 	public static Vector2D divide(final Vector2D vLHS, final double sRHS) {
-		final double component1 = finiteOrDefault(vLHS.x / sRHS, 0.0D);
-		final double component2 = finiteOrDefault(vLHS.y / sRHS, 0.0D);
-		
-		return new Vector2D(component1, component2);
+		return new Vector2D(finiteOrDefault(vLHS.x / sRHS, 0.0D), finiteOrDefault(vLHS.y / sRHS, 0.0D));
 	}
 	
 	/**

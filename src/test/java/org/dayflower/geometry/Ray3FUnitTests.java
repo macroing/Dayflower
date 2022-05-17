@@ -139,9 +139,9 @@ public final class Ray3FUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeFloat(a.getOrigin().getX());
-		dataOutput.writeFloat(a.getOrigin().getY());
-		dataOutput.writeFloat(a.getOrigin().getZ());
+		dataOutput.writeFloat(a.getOrigin().x);
+		dataOutput.writeFloat(a.getOrigin().y);
+		dataOutput.writeFloat(a.getOrigin().z);
 		dataOutput.writeFloat(a.getDirection().getX());
 		dataOutput.writeFloat(a.getDirection().getY());
 		dataOutput.writeFloat(a.getDirection().getZ());

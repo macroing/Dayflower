@@ -348,7 +348,7 @@ public final class Transform implements Node {
 	 */
 	public void moveX(final float distance) {
 		final Point3F oldPosition = this.position;
-		final Point3F newPosition = new Point3F(oldPosition.getX() + distance, oldPosition.getY(), oldPosition.getZ());
+		final Point3F newPosition = new Point3F(oldPosition.x + distance, oldPosition.y, oldPosition.z);
 		
 		setPosition(newPosition);
 	}
@@ -360,7 +360,7 @@ public final class Transform implements Node {
 	 */
 	public void moveY(final float distance) {
 		final Point3F oldPosition = this.position;
-		final Point3F newPosition = new Point3F(oldPosition.getX(), oldPosition.getY() + distance, oldPosition.getZ());
+		final Point3F newPosition = new Point3F(oldPosition.x, oldPosition.y + distance, oldPosition.z);
 		
 		setPosition(newPosition);
 	}
@@ -372,7 +372,7 @@ public final class Transform implements Node {
 	 */
 	public void moveZ(final float distance) {
 		final Point3F oldPosition = this.position;
-		final Point3F newPosition = new Point3F(oldPosition.getX(), oldPosition.getY(), oldPosition.getZ() + distance);
+		final Point3F newPosition = new Point3F(oldPosition.x, oldPosition.y, oldPosition.z + distance);
 		
 		setPosition(newPosition);
 	}

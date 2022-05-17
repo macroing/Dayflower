@@ -123,9 +123,9 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	@Override
 	public BoundingSphere3F transform(final Matrix44F matrix) {
 		final Point3F center = Point3F.transformAndDivide(matrix, this.center);
-		final Point3F x = Point3F.transformAndDivide(matrix, new Point3F(this.center.getX() + this.radius, this.center.getY(), this.center.getZ()));
-		final Point3F y = Point3F.transformAndDivide(matrix, new Point3F(this.center.getX(), this.center.getY() + this.radius, this.center.getZ()));
-		final Point3F z = Point3F.transformAndDivide(matrix, new Point3F(this.center.getX(), this.center.getY(), this.center.getZ() + this.radius));
+		final Point3F x = Point3F.transformAndDivide(matrix, new Point3F(this.center.x + this.radius, this.center.y, this.center.z));
+		final Point3F y = Point3F.transformAndDivide(matrix, new Point3F(this.center.x, this.center.y + this.radius, this.center.z));
+		final Point3F z = Point3F.transformAndDivide(matrix, new Point3F(this.center.x, this.center.y, this.center.z + this.radius));
 		
 		final float distanceSquaredFromCenterToX = Point3F.distanceSquared(center, x);
 		final float distanceSquaredFromCenterToY = Point3F.distanceSquared(center, y);

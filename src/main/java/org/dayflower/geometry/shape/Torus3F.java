@@ -429,9 +429,9 @@ public final class Torus3F implements Shape3F {
 		
 		final float derivative = direction.lengthSquared() - this.radiusInnerSquared - this.radiusOuterSquared;
 		
-		final float x = surfaceIntersectionPoint.getX() * derivative;
-		final float y = surfaceIntersectionPoint.getY() * derivative;
-		final float z = surfaceIntersectionPoint.getZ() * derivative + 2.0F * this.radiusOuterSquared * surfaceIntersectionPoint.getZ();
+		final float x = surfaceIntersectionPoint.x * derivative;
+		final float y = surfaceIntersectionPoint.y * derivative;
+		final float z = surfaceIntersectionPoint.z * derivative + 2.0F * this.radiusOuterSquared * surfaceIntersectionPoint.z;
 		
 		final Vector3F w = Vector3F.normalize(new Vector3F(x, y, z));
 		
@@ -439,8 +439,8 @@ public final class Torus3F implements Shape3F {
 	}
 	
 	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
-		final float phi = asin(saturate(surfaceIntersectionPoint.getZ() / this.radiusInner, -1.0F, 1.0F));
-		final float theta = getOrAdd(atan2(surfaceIntersectionPoint.getY(), surfaceIntersectionPoint.getX()), 0.0F, PI_MULTIPLIED_BY_2);
+		final float phi = asin(saturate(surfaceIntersectionPoint.z / this.radiusInner, -1.0F, 1.0F));
+		final float theta = getOrAdd(atan2(surfaceIntersectionPoint.y, surfaceIntersectionPoint.x), 0.0F, PI_MULTIPLIED_BY_2);
 		
 		final float u = theta * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float v = (phi + PI_DIVIDED_BY_2) * PI_RECIPROCAL;

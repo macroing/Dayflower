@@ -1054,9 +1054,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F normal(final Vector3F normalA, final Vector3F normalB, final Vector3F normalC, final Point3F barycentricCoordinates) {
-		final float component1 = normalA.x * barycentricCoordinates.getU() + normalB.x * barycentricCoordinates.getV() + normalC.x * barycentricCoordinates.getW();
-		final float component2 = normalA.y * barycentricCoordinates.getU() + normalB.y * barycentricCoordinates.getV() + normalC.y * barycentricCoordinates.getW();
-		final float component3 = normalA.z * barycentricCoordinates.getU() + normalB.z * barycentricCoordinates.getV() + normalC.z * barycentricCoordinates.getW();
+		final float component1 = normalA.x * barycentricCoordinates.x + normalB.x * barycentricCoordinates.y + normalC.x * barycentricCoordinates.z;
+		final float component2 = normalA.y * barycentricCoordinates.x + normalB.y * barycentricCoordinates.y + normalC.y * barycentricCoordinates.z;
+		final float component3 = normalA.z * barycentricCoordinates.x + normalB.z * barycentricCoordinates.y + normalC.z * barycentricCoordinates.z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1344,9 +1344,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transformError(final Matrix44F matrix, final Point3F point) {
-		final float component1 = gamma(3) * (abs(matrix.getElement11() * point.getComponent1()) + abs(matrix.getElement12() * point.getY()) + abs(matrix.getElement13() * point.getZ()) + abs(matrix.getElement14()));
-		final float component2 = gamma(3) * (abs(matrix.getElement21() * point.getComponent1()) + abs(matrix.getElement22() * point.getY()) + abs(matrix.getElement23() * point.getZ()) + abs(matrix.getElement24()));
-		final float component3 = gamma(3) * (abs(matrix.getElement31() * point.getComponent1()) + abs(matrix.getElement32() * point.getY()) + abs(matrix.getElement33() * point.getZ()) + abs(matrix.getElement34()));
+		final float component1 = gamma(3) * (abs(matrix.getElement11() * point.x) + abs(matrix.getElement12() * point.y) + abs(matrix.getElement13() * point.z) + abs(matrix.getElement14()));
+		final float component2 = gamma(3) * (abs(matrix.getElement21() * point.x) + abs(matrix.getElement22() * point.y) + abs(matrix.getElement23() * point.z) + abs(matrix.getElement24()));
+		final float component3 = gamma(3) * (abs(matrix.getElement31() * point.x) + abs(matrix.getElement32() * point.y) + abs(matrix.getElement33() * point.z) + abs(matrix.getElement34()));
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1366,9 +1366,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transformError(final Matrix44F matrix, final Point3F point, final Vector3F vector) {
-		final float component1 = (gamma(3) + 1.0F) * (abs(matrix.getElement11()) * vector.x + abs(matrix.getElement12()) * vector.y + abs(matrix.getElement13()) * vector.z) + gamma(3) * (abs(matrix.getElement11() * point.getComponent1()) + abs(matrix.getElement12() * point.getComponent2()) + abs(matrix.getElement13() * point.getComponent3()) + abs(matrix.getElement14()));
-		final float component2 = (gamma(3) + 1.0F) * (abs(matrix.getElement21()) * vector.x + abs(matrix.getElement22()) * vector.y + abs(matrix.getElement23()) * vector.z) + gamma(3) * (abs(matrix.getElement21() * point.getComponent1()) + abs(matrix.getElement22() * point.getComponent2()) + abs(matrix.getElement23() * point.getComponent3()) + abs(matrix.getElement24()));
-		final float component3 = (gamma(3) + 1.0F) * (abs(matrix.getElement31()) * vector.x + abs(matrix.getElement32()) * vector.y + abs(matrix.getElement33()) * vector.z) + gamma(3) * (abs(matrix.getElement31() * point.getComponent1()) + abs(matrix.getElement32() * point.getComponent2()) + abs(matrix.getElement33() * point.getComponent3()) + abs(matrix.getElement34()));
+		final float component1 = (gamma(3) + 1.0F) * (abs(matrix.getElement11()) * vector.x + abs(matrix.getElement12()) * vector.y + abs(matrix.getElement13()) * vector.z) + gamma(3) * (abs(matrix.getElement11() * point.x) + abs(matrix.getElement12() * point.y) + abs(matrix.getElement13() * point.z) + abs(matrix.getElement14()));
+		final float component2 = (gamma(3) + 1.0F) * (abs(matrix.getElement21()) * vector.x + abs(matrix.getElement22()) * vector.y + abs(matrix.getElement23()) * vector.z) + gamma(3) * (abs(matrix.getElement21() * point.x) + abs(matrix.getElement22() * point.y) + abs(matrix.getElement23() * point.z) + abs(matrix.getElement24()));
+		final float component3 = (gamma(3) + 1.0F) * (abs(matrix.getElement31()) * vector.x + abs(matrix.getElement32()) * vector.y + abs(matrix.getElement33()) * vector.z) + gamma(3) * (abs(matrix.getElement31() * point.x) + abs(matrix.getElement32() * point.y) + abs(matrix.getElement33() * point.z) + abs(matrix.getElement34()));
 		
 		return new Vector3F(component1, component2, component3);
 	}

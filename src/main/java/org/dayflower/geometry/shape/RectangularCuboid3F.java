@@ -237,7 +237,7 @@ public final class RectangularCuboid3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
-		return point.getX() >= this.minimum.getX() && point.getX() <= this.maximum.getX() && point.getY() >= this.minimum.getY() && point.getY() <= this.maximum.getY() && point.getZ() >= this.minimum.getZ() && point.getZ() <= this.maximum.getZ();
+		return point.x >= this.minimum.x && point.x <= this.maximum.x && point.y >= this.minimum.y && point.y <= this.maximum.y && point.z >= this.minimum.z && point.z <= this.maximum.z;
 	}
 	
 	/**
@@ -272,9 +272,9 @@ public final class RectangularCuboid3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
-		final float x = this.maximum.getX() - this.minimum.getX();
-		final float y = this.maximum.getY() - this.minimum.getY();
-		final float z = this.maximum.getZ() - this.minimum.getZ();
+		final float x = this.maximum.x - this.minimum.x;
+		final float y = this.maximum.y - this.minimum.y;
+		final float z = this.maximum.z - this.minimum.z;
 		final float surfaceArea = 2.0F * (x * y + y * z + z * x);
 		
 		return surfaceArea;
@@ -287,9 +287,9 @@ public final class RectangularCuboid3F implements Shape3F {
 	 */
 //	TODO: Add Unit Tests!
 	public float getVolume() {
-		final float x = this.maximum.getX() - this.minimum.getX();
-		final float y = this.maximum.getY() - this.minimum.getY();
-		final float z = this.maximum.getZ() - this.minimum.getZ();
+		final float x = this.maximum.x - this.minimum.x;
+		final float y = this.maximum.y - this.minimum.y;
+		final float z = this.maximum.z - this.minimum.z;
 		final float volume = x * y * z;
 		
 		return volume;
@@ -386,27 +386,27 @@ public final class RectangularCuboid3F implements Shape3F {
 		
 		final Vector3F halfDirection = Vector3F.multiply(Vector3F.direction(this.minimum, this.maximum), 0.5F);
 		
-		if(surfaceIntersectionPoint.getX() + halfDirection.getX() - 0.0001F < midpoint.getX()) {
+		if(surfaceIntersectionPoint.x + halfDirection.getX() - 0.0001F < midpoint.x) {
 			return new OrthonormalBasis33F(Vector3F.x(-1.0F));
 		}
 		
-		if(surfaceIntersectionPoint.getX() - halfDirection.getX() + 0.0001F > midpoint.getX()) {
+		if(surfaceIntersectionPoint.x - halfDirection.getX() + 0.0001F > midpoint.x) {
 			return new OrthonormalBasis33F(Vector3F.x(+1.0F));
 		}
 		
-		if(surfaceIntersectionPoint.getY() + halfDirection.getY() - 0.0001F < midpoint.getY()) {
+		if(surfaceIntersectionPoint.y + halfDirection.getY() - 0.0001F < midpoint.y) {
 			return new OrthonormalBasis33F(Vector3F.y(-1.0F));
 		}
 		
-		if(surfaceIntersectionPoint.getY() - halfDirection.getY() + 0.0001F > midpoint.getY()) {
+		if(surfaceIntersectionPoint.y - halfDirection.getY() + 0.0001F > midpoint.y) {
 			return new OrthonormalBasis33F(Vector3F.y(+1.0F));
 		}
 		
-		if(surfaceIntersectionPoint.getZ() + halfDirection.getZ() - 0.0001F < midpoint.getZ()) {
+		if(surfaceIntersectionPoint.z + halfDirection.getZ() - 0.0001F < midpoint.z) {
 			return new OrthonormalBasis33F(Vector3F.z(-1.0F));
 		}
 		
-		if(surfaceIntersectionPoint.getZ() - halfDirection.getZ() + 0.0001F > midpoint.getZ()) {
+		if(surfaceIntersectionPoint.z - halfDirection.getZ() + 0.0001F > midpoint.z) {
 			return new OrthonormalBasis33F(Vector3F.z(+1.0F));
 		}
 		
@@ -418,23 +418,23 @@ public final class RectangularCuboid3F implements Shape3F {
 		
 		final Vector3F halfDirection = Vector3F.multiply(Vector3F.direction(this.minimum, this.maximum), 0.5F);
 		
-		if(surfaceIntersectionPoint.getX() + halfDirection.getX() - 0.0001F < midpoint.getX() || surfaceIntersectionPoint.getX() - halfDirection.getX() + 0.0001F > midpoint.getX()) {
-			final float u = normalize(surfaceIntersectionPoint.getZ(), this.minimum.getZ(), this.maximum.getZ());
-			final float v = normalize(surfaceIntersectionPoint.getY(), this.minimum.getY(), this.maximum.getY());
+		if(surfaceIntersectionPoint.x + halfDirection.getX() - 0.0001F < midpoint.x || surfaceIntersectionPoint.x - halfDirection.getX() + 0.0001F > midpoint.x) {
+			final float u = normalize(surfaceIntersectionPoint.z, this.minimum.z, this.maximum.z);
+			final float v = normalize(surfaceIntersectionPoint.y, this.minimum.y, this.maximum.y);
 			
 			return new Point2F(u, v);
 		}
 		
-		if(surfaceIntersectionPoint.getY() + halfDirection.getY() - 0.0001F < midpoint.getY() || surfaceIntersectionPoint.getY() - halfDirection.getY() + 0.0001F > midpoint.getY()) {
-			final float u = normalize(surfaceIntersectionPoint.getX(), this.minimum.getX(), this.maximum.getX());
-			final float v = normalize(surfaceIntersectionPoint.getZ(), this.minimum.getZ(), this.maximum.getZ());
+		if(surfaceIntersectionPoint.y + halfDirection.getY() - 0.0001F < midpoint.y || surfaceIntersectionPoint.y - halfDirection.getY() + 0.0001F > midpoint.y) {
+			final float u = normalize(surfaceIntersectionPoint.x, this.minimum.x, this.maximum.x);
+			final float v = normalize(surfaceIntersectionPoint.z, this.minimum.z, this.maximum.z);
 			
 			return new Point2F(u, v);
 		}
 		
-		if(surfaceIntersectionPoint.getZ() + halfDirection.getZ() - 0.0001F < midpoint.getZ() || surfaceIntersectionPoint.getZ() - halfDirection.getZ() + 0.0001F > midpoint.getZ()) {
-			final float u = normalize(surfaceIntersectionPoint.getX(), this.minimum.getX(), this.maximum.getX());
-			final float v = normalize(surfaceIntersectionPoint.getY(), this.minimum.getY(), this.maximum.getY());
+		if(surfaceIntersectionPoint.z + halfDirection.getZ() - 0.0001F < midpoint.z || surfaceIntersectionPoint.z - halfDirection.getZ() + 0.0001F > midpoint.z) {
+			final float u = normalize(surfaceIntersectionPoint.x, this.minimum.x, this.maximum.x);
+			final float v = normalize(surfaceIntersectionPoint.y, this.minimum.y, this.maximum.y);
 			
 			return new Point2F(u, v);
 		}

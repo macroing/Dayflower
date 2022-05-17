@@ -1610,9 +1610,9 @@ public final class CompiledLightCache {
 		array[POINT_LIGHT_OFFSET_INTENSITY + 0] = intensity.getR();	//Block #1
 		array[POINT_LIGHT_OFFSET_INTENSITY + 1] = intensity.getG();	//Block #1
 		array[POINT_LIGHT_OFFSET_INTENSITY + 2] = intensity.getB();	//Block #1
-		array[POINT_LIGHT_OFFSET_POSITION + 0] = position.getX();	//Block #1
-		array[POINT_LIGHT_OFFSET_POSITION + 1] = position.getY();	//Block #1
-		array[POINT_LIGHT_OFFSET_POSITION + 2] = position.getZ();	//Block #1
+		array[POINT_LIGHT_OFFSET_POSITION + 0] = position.x;		//Block #1
+		array[POINT_LIGHT_OFFSET_POSITION + 1] = position.y;		//Block #1
+		array[POINT_LIGHT_OFFSET_POSITION + 2] = position.z;		//Block #1
 		array[6] = 0.0F;											//Block #1
 		array[7] = 0.0F;											//Block #1
 		
@@ -1674,9 +1674,9 @@ public final class CompiledLightCache {
 		array[SPOT_LIGHT_OFFSET_INTENSITY + 0] = intensity.getR();											//Block #3
 		array[SPOT_LIGHT_OFFSET_INTENSITY + 1] = intensity.getG();											//Block #3
 		array[SPOT_LIGHT_OFFSET_INTENSITY + 2] = intensity.getB();											//Block #3
-		array[SPOT_LIGHT_OFFSET_POSITION + 0] = position.getX();											//Block #3
-		array[SPOT_LIGHT_OFFSET_POSITION + 1] = position.getY();											//Block #3
-		array[SPOT_LIGHT_OFFSET_POSITION + 2] = position.getZ();											//Block #3
+		array[SPOT_LIGHT_OFFSET_POSITION + 0] = position.x;													//Block #3
+		array[SPOT_LIGHT_OFFSET_POSITION + 1] = position.y;													//Block #3
+		array[SPOT_LIGHT_OFFSET_POSITION + 2] = position.z;													//Block #3
 		array[SPOT_LIGHT_OFFSET_COS_CONE_ANGLE] = cosConeAngle;												//Block #3
 		array[SPOT_LIGHT_OFFSET_COS_CONE_ANGLE_MINUS_CONE_ANGLE_DELTA] = cosConeAngleMinusConeAngleDelta;	//Block #3
 		

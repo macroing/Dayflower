@@ -2145,12 +2145,12 @@ public final class CompiledShape3FCache {
 		final float[] array = new float[HYPERBOLOID_3_F_LENGTH];
 		
 		array[HYPERBOLOID_3_F_OFFSET_PHI_MAX] = phiMax;
-		array[HYPERBOLOID_3_F_OFFSET_POINT_A + 0] = a.getX();
-		array[HYPERBOLOID_3_F_OFFSET_POINT_A + 1] = a.getY();
-		array[HYPERBOLOID_3_F_OFFSET_POINT_A + 2] = a.getZ();
-		array[HYPERBOLOID_3_F_OFFSET_POINT_B + 0] = b.getX();
-		array[HYPERBOLOID_3_F_OFFSET_POINT_B + 1] = b.getY();
-		array[HYPERBOLOID_3_F_OFFSET_POINT_B + 2] = b.getZ();
+		array[HYPERBOLOID_3_F_OFFSET_POINT_A + 0] = a.x;
+		array[HYPERBOLOID_3_F_OFFSET_POINT_A + 1] = a.y;
+		array[HYPERBOLOID_3_F_OFFSET_POINT_A + 2] = a.z;
+		array[HYPERBOLOID_3_F_OFFSET_POINT_B + 0] = b.x;
+		array[HYPERBOLOID_3_F_OFFSET_POINT_B + 1] = b.y;
+		array[HYPERBOLOID_3_F_OFFSET_POINT_B + 2] = b.z;
 		array[HYPERBOLOID_3_F_OFFSET_A_H] = aH;
 		array[HYPERBOLOID_3_F_OFFSET_C_H] = cH;
 		array[HYPERBOLOID_3_F_OFFSET_R_MAX] = rMax;
@@ -2231,15 +2231,15 @@ public final class CompiledShape3FCache {
 		
 		final float[] array = new float[getPolygon3FLength(polygon3F)];
 		
-		array[POLYGON_3_F_OFFSET_POINT_3_F_0 + 0] = point0.getX();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_0 + 1] = point0.getY();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_0 + 2] = point0.getZ();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 0] = point1.getX();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 1] = point1.getY();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 2] = point1.getZ();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 0] = pointN.getX();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 1] = pointN.getY();
-		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 2] = pointN.getZ();
+		array[POLYGON_3_F_OFFSET_POINT_3_F_0 + 0] = point0.x;
+		array[POLYGON_3_F_OFFSET_POINT_3_F_0 + 1] = point0.y;
+		array[POLYGON_3_F_OFFSET_POINT_3_F_0 + 2] = point0.z;
+		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 0] = point1.x;
+		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 1] = point1.y;
+		array[POLYGON_3_F_OFFSET_POINT_3_F_1 + 2] = point1.z;
+		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 0] = pointN.x;
+		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 1] = pointN.y;
+		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 2] = pointN.z;
 		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();
 		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();
 		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();
@@ -2286,9 +2286,9 @@ public final class CompiledShape3FCache {
 		
 		final float[] array = new float[RECTANGLE_3_F_LENGTH];
 		
-		array[RECTANGLE_3_F_OFFSET_POSITION + 0] = position.getX();				//Block #1
-		array[RECTANGLE_3_F_OFFSET_POSITION + 1] = position.getY();				//Block #1
-		array[RECTANGLE_3_F_OFFSET_POSITION + 2] = position.getZ();				//Block #1
+		array[RECTANGLE_3_F_OFFSET_POSITION + 0] = position.x;					//Block #1
+		array[RECTANGLE_3_F_OFFSET_POSITION + 1] = position.y;					//Block #1
+		array[RECTANGLE_3_F_OFFSET_POSITION + 2] = position.z;					//Block #1
 		array[RECTANGLE_3_F_OFFSET_SIDE_A + 0] = sideA.getX();					//Block #1
 		array[RECTANGLE_3_F_OFFSET_SIDE_A + 1] = sideA.getY();					//Block #1
 		array[RECTANGLE_3_F_OFFSET_SIDE_A + 2] = sideA.getZ();					//Block #1
@@ -2334,14 +2334,14 @@ public final class CompiledShape3FCache {
 		
 		final float[] array = new float[RECTANGULAR_CUBOID_3_F_LENGTH];
 		
-		array[RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 0] = maximum.getX();	//Block #1
-		array[RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 1] = maximum.getY();	//Block #1
-		array[RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 2] = maximum.getZ();	//Block #1
-		array[RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 0] = minimum.getX();	//Block #1
-		array[RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 1] = minimum.getY();	//Block #1
-		array[RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 2] = minimum.getZ();	//Block #1
-		array[6] = 0.0F;													//Block #1
-		array[7] = 0.0F;													//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 0] = maximum.x;	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 1] = maximum.y;	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 2] = maximum.z;	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 0] = minimum.x;	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 1] = minimum.y;	//Block #1
+		array[RECTANGULAR_CUBOID_3_F_OFFSET_MINIMUM + 2] = minimum.z;	//Block #1
+		array[6] = 0.0F;												//Block #1
+		array[7] = 0.0F;												//Block #1
 		
 		return array;
 	}

@@ -961,12 +961,12 @@ public final class TriangleMesh3F implements Shape3F {
 			final Point3F maximum = Point3F.maximum(a, b, c);
 			final Point3F minimum = Point3F.minimum(a, b, c);
 			
-			maximumX = max(maximumX, maximum.getX());
-			maximumY = max(maximumY, maximum.getY());
-			maximumZ = max(maximumZ, maximum.getZ());
-			minimumX = min(minimumX, minimum.getX());
-			minimumY = min(minimumY, minimum.getY());
-			minimumZ = min(minimumZ, minimum.getZ());
+			maximumX = max(maximumX, maximum.x);
+			maximumY = max(maximumY, maximum.y);
+			maximumZ = max(maximumZ, maximum.z);
+			minimumX = min(minimumX, minimum.x);
+			minimumY = min(minimumY, minimum.y);
+			minimumZ = min(minimumZ, minimum.z);
 			
 			processableBVHItems.add(new BVHItem3F<>(new AxisAlignedBoundingBox3F(maximum, minimum), triangle));
 		}

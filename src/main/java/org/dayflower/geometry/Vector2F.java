@@ -110,14 +110,14 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Vector2F} instance given the component values {@code p.getComponent1()} and {@code p.getComponent2()}.
+	 * Constructs a new {@code Vector2F} instance given the component values {@code p.x} and {@code p.y}.
 	 * <p>
 	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Vector2F(p.getComponent1(), p.getComponent2());
+	 * new Vector2F(p.x, p.y);
 	 * }
 	 * </pre>
 	 * 
@@ -125,7 +125,7 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
 	public Vector2F(final Point3F p) {
-		this(p.getComponent1(), p.getComponent2());
+		this(p.x, p.y);
 	}
 	
 	/**
@@ -342,42 +342,42 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
-	 * Returns a {@code Vector2F} instance that points in the direction of {@code p.getX()} and {@code p.getY()}.
+	 * Returns a {@code Vector2F} instance that points in the direction of {@code p.x} and {@code p.y}.
 	 * <p>
 	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param p a {@link Point3F} instance
-	 * @return a {@code Vector2F} instance that points in the direction of {@code p.getX()} and {@code p.getY()}
+	 * @return a {@code Vector2F} instance that points in the direction of {@code p.x} and {@code p.y}
 	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
 	public static Vector2F directionXY(final Point3F p) {
-		return new Vector2F(p.getX(), p.getY());
+		return new Vector2F(p.x, p.y);
 	}
 	
 	/**
-	 * Returns a {@code Vector2F} instance that points in the direction of {@code p.getY()} and {@code p.getZ()}.
+	 * Returns a {@code Vector2F} instance that points in the direction of {@code p.y} and {@code p.z}.
 	 * <p>
 	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param p a {@link Point3F} instance
-	 * @return a {@code Vector2F} instance that points in the direction of {@code p.getY()} and {@code p.getZ()}
+	 * @return a {@code Vector2F} instance that points in the direction of {@code p.y} and {@code p.z}
 	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
 	public static Vector2F directionYZ(final Point3F p) {
-		return new Vector2F(p.getY(), p.getZ());
+		return new Vector2F(p.y, p.z);
 	}
 	
 	/**
-	 * Returns a {@code Vector2F} instance that points in the direction of {@code p.getZ()} and {@code p.getX()}.
+	 * Returns a {@code Vector2F} instance that points in the direction of {@code p.z} and {@code p.x}.
 	 * <p>
 	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param p a {@link Point3F} instance
-	 * @return a {@code Vector2F} instance that points in the direction of {@code p.getZ()} and {@code p.getX()}
+	 * @return a {@code Vector2F} instance that points in the direction of {@code p.z} and {@code p.x}
 	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
 	public static Vector2F directionZX(final Point3F p) {
-		return new Vector2F(p.getZ(), p.getX());
+		return new Vector2F(p.z, p.x);
 	}
 	
 	/**

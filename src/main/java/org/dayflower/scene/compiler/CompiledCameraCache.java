@@ -185,9 +185,9 @@ public final class CompiledCameraCache {
 		array[CAMERA_OFFSET_ORTHONORMAL_BASIS_W + 0] = orthonormalBasis.getW().getX();
 		array[CAMERA_OFFSET_ORTHONORMAL_BASIS_W + 1] = orthonormalBasis.getW().getY();
 		array[CAMERA_OFFSET_ORTHONORMAL_BASIS_W + 2] = orthonormalBasis.getW().getZ();
-		array[CAMERA_OFFSET_EYE + 0] = eye.getX();
-		array[CAMERA_OFFSET_EYE + 1] = eye.getY();
-		array[CAMERA_OFFSET_EYE + 2] = eye.getZ();
+		array[CAMERA_OFFSET_EYE + 0] = eye.x;
+		array[CAMERA_OFFSET_EYE + 1] = eye.y;
+		array[CAMERA_OFFSET_EYE + 2] = eye.z;
 		array[CAMERA_OFFSET_APERTURE_RADIUS] = apertureRadius;
 		array[CAMERA_OFFSET_FOCAL_DISTANCE] = focalDistance;
 		array[CAMERA_OFFSET_RESOLUTION_X] = resolutionX;

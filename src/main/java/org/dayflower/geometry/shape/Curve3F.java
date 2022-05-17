@@ -202,20 +202,20 @@ public final class Curve3F implements Shape3F {
 		final float yMaximum = 0.0F;
 		final float zMaximum = ray.getDirection().length() * tMaximum;
 		
-		if(max(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) + widthE < tMinimum || min(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) - widthE > xMaximum) {
+		if(max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		if(max(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) + widthE < tMinimum || min(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) - widthE > yMaximum) {
+		if(max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		if(max(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) + widthE < tMinimum || min(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) - widthE > zMaximum) {
+		if(max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final float l01 = max(abs(pointI.getX() - 2.0F * pointJ.getX() + pointK.getX()), abs(pointI.getY() - 2.0F * pointJ.getY() + pointK.getY()), abs(pointI.getZ() - 2.0F * pointJ.getZ() + pointK.getZ()));
-		final float l02 = max(abs(pointJ.getX() - 2.0F * pointK.getX() + pointL.getX()), abs(pointJ.getY() - 2.0F * pointK.getY() + pointL.getY()), abs(pointJ.getZ() - 2.0F * pointK.getZ() + pointL.getZ()));
+		final float l01 = max(abs(pointI.x - 2.0F * pointJ.x + pointK.x), abs(pointI.y - 2.0F * pointJ.y + pointK.y), abs(pointI.z - 2.0F * pointJ.z + pointK.z));
+		final float l02 = max(abs(pointJ.x - 2.0F * pointK.x + pointL.x), abs(pointJ.y - 2.0F * pointK.y + pointL.y), abs(pointJ.z - 2.0F * pointK.z + pointL.z));
 		final float l03 = max(l01, l02);
 		
 		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
@@ -419,20 +419,20 @@ public final class Curve3F implements Shape3F {
 		final float yMaximum = 0.0F;
 		final float zMaximum = ray.getDirection().length() * tMaximum;
 		
-		if(max(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) + widthE < tMinimum || min(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) - widthE > xMaximum) {
+		if(max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
 			return Float.NaN;
 		}
 		
-		if(max(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) + widthE < tMinimum || min(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) - widthE > yMaximum) {
+		if(max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
 			return Float.NaN;
 		}
 		
-		if(max(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) + widthE < tMinimum || min(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) - widthE > zMaximum) {
+		if(max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
 			return Float.NaN;
 		}
 		
-		final float l01 = max(abs(pointI.getX() - 2.0F * pointJ.getX() + pointK.getX()), abs(pointI.getY() - 2.0F * pointJ.getY() + pointK.getY()), abs(pointI.getZ() - 2.0F * pointJ.getZ() + pointK.getZ()));
-		final float l02 = max(abs(pointJ.getX() - 2.0F * pointK.getX() + pointL.getX()), abs(pointJ.getY() - 2.0F * pointK.getY() + pointL.getY()), abs(pointJ.getZ() - 2.0F * pointK.getZ() + pointL.getZ()));
+		final float l01 = max(abs(pointI.x - 2.0F * pointJ.x + pointK.x), abs(pointI.y - 2.0F * pointJ.y + pointK.y), abs(pointI.z - 2.0F * pointJ.z + pointK.z));
+		final float l02 = max(abs(pointJ.x - 2.0F * pointK.x + pointL.x), abs(pointJ.y - 2.0F * pointK.y + pointL.y), abs(pointJ.z - 2.0F * pointK.z + pointL.z));
 		final float l03 = max(l01, l02);
 		
 		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
@@ -1187,14 +1187,14 @@ public final class Curve3F implements Shape3F {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final float edgeA = (pointB.getY() - pointA.getY()) * -pointA.getY() + pointA.getX() * (pointA.getX() - pointB.getX());
-		final float edgeB = (pointC.getY() - pointD.getY()) * -pointD.getY() + pointD.getX() * (pointD.getX() - pointC.getX());
+		final float edgeA = (pointB.y - pointA.y) * -pointA.y + pointA.x * (pointA.x - pointB.x);
+		final float edgeB = (pointC.y - pointD.y) * -pointD.y + pointD.x * (pointD.x - pointC.x);
 		
 		if(edgeA < 0.0F || edgeB < 0.0F) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final Vector2F segmentDirection = new Vector2F(pointD.getX() - pointA.getX(), pointD.getY() - pointA.getY());
+		final Vector2F segmentDirection = new Vector2F(pointD.x - pointA.x, pointD.y - pointA.y);
 		
 		final float denominator = segmentDirection.lengthSquared();
 		
@@ -1202,7 +1202,7 @@ public final class Curve3F implements Shape3F {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final float w = Vector2F.dotProduct(Vector2F.negate(new Vector2F(pointA.getX(), pointA.getY())), segmentDirection) / denominator;
+		final float w = Vector2F.dotProduct(Vector2F.negate(new Vector2F(pointA.x, pointA.y)), segmentDirection) / denominator;
 		final float u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
 		final float hitWidth = doComputeHitWidth(data, ray, u);
 		
@@ -1210,7 +1210,7 @@ public final class Curve3F implements Shape3F {
 		
 		final Vector3F derivative = doBezierEvaluateDerivative(pointA, pointB, pointC, pointD, saturate(w));
 		
-		final float pointCurveDistanceSquared = point.getX() * point.getX() + point.getY() * point.getY();
+		final float pointCurveDistanceSquared = point.x * point.x + point.y * point.y;
 		
 		if(pointCurveDistanceSquared > hitWidth * hitWidth * 0.25F) {
 			return SurfaceIntersection3F.EMPTY;
@@ -1218,14 +1218,14 @@ public final class Curve3F implements Shape3F {
 		
 		final float zMaximum = rayDirectionLength * tMaximum;
 		
-		if(point.getZ() < tMinimum || point.getZ() > zMaximum) {
+		if(point.z < tMinimum || point.z > zMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
 		final float pointCurveDistance = sqrt(pointCurveDistanceSquared);
-		final float edgeFunction = derivative.getX() * -point.getY() + point.getX() * derivative.getY();
+		final float edgeFunction = derivative.getX() * -point.y + point.x * derivative.getY();
 		final float v = edgeFunction > 0.0F ? 0.5F + pointCurveDistance / hitWidth : 0.5F - pointCurveDistance / hitWidth;
-		final float t = point.getZ() / rayDirectionLength;
+		final float t = point.z / rayDirectionLength;
 		
 		final OrthonormalBasis33F orthonormalBasisG = doComputeOrthonormalBasisG(data, objectToRay, rayToObject, hitWidth, u, v);
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
@@ -1280,14 +1280,14 @@ public final class Curve3F implements Shape3F {
 			return Float.NaN;
 		}
 		
-		final float edgeA = (pointB.getY() - pointA.getY()) * -pointA.getY() + pointA.getX() * (pointA.getX() - pointB.getX());
-		final float edgeB = (pointC.getY() - pointD.getY()) * -pointD.getY() + pointD.getX() * (pointD.getX() - pointC.getX());
+		final float edgeA = (pointB.y - pointA.y) * -pointA.y + pointA.x * (pointA.x - pointB.x);
+		final float edgeB = (pointC.y - pointD.y) * -pointD.y + pointD.x * (pointD.x - pointC.x);
 		
 		if(edgeA < 0.0F || edgeB < 0.0F) {
 			return Float.NaN;
 		}
 		
-		final Vector2F segmentDirection = new Vector2F(pointD.getX() - pointA.getX(), pointD.getY() - pointA.getY());
+		final Vector2F segmentDirection = new Vector2F(pointD.x - pointA.x, pointD.y - pointA.y);
 		
 		final float denominator = segmentDirection.lengthSquared();
 		
@@ -1295,13 +1295,13 @@ public final class Curve3F implements Shape3F {
 			return Float.NaN;
 		}
 		
-		final float w = Vector2F.dotProduct(Vector2F.negate(new Vector2F(pointA.getX(), pointA.getY())), segmentDirection) / denominator;
+		final float w = Vector2F.dotProduct(Vector2F.negate(new Vector2F(pointA.x, pointA.y)), segmentDirection) / denominator;
 		final float u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
 		final float hitWidth = doComputeHitWidth(data, ray, u);
 		
 		final Point3F point = doBezierEvaluate(pointA, pointB, pointC, pointD, saturate(w));
 		
-		final float pointCurveDistanceSquared = point.getX() * point.getX() + point.getY() * point.getY();
+		final float pointCurveDistanceSquared = point.x * point.x + point.y * point.y;
 		
 		if(pointCurveDistanceSquared > hitWidth * hitWidth * 0.25F) {
 			return Float.NaN;
@@ -1309,11 +1309,11 @@ public final class Curve3F implements Shape3F {
 		
 		final float zMaximum = rayDirectionLength * tMaximum;
 		
-		if(point.getZ() < tMinimum || point.getZ() > zMaximum) {
+		if(point.z < tMinimum || point.z > zMaximum) {
 			return Float.NaN;
 		}
 		
-		final float t = point.getZ() / rayDirectionLength;
+		final float t = point.z / rayDirectionLength;
 		
 		return t;
 	}
@@ -1423,8 +1423,8 @@ public final class Curve3F implements Shape3F {
 	}
 	
 	private static boolean doIsInsideX(final Point3F[] points, final float width, final float minimum, final float maximum, final int offset) {
-		final float max = max(points[offset + 0].getX(), points[offset + 1].getX(), points[offset + 2].getX(), points[offset + 3].getX());
-		final float min = min(points[offset + 0].getX(), points[offset + 1].getX(), points[offset + 2].getX(), points[offset + 3].getX());
+		final float max = max(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
+		final float min = min(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1432,8 +1432,8 @@ public final class Curve3F implements Shape3F {
 	}
 	
 	private static boolean doIsInsideY(final Point3F[] points, final float width, final float minimum, final float maximum, final int offset) {
-		final float max = max(points[offset + 0].getY(), points[offset + 1].getY(), points[offset + 2].getY(), points[offset + 3].getY());
-		final float min = min(points[offset + 0].getY(), points[offset + 1].getY(), points[offset + 2].getY(), points[offset + 3].getY());
+		final float max = max(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
+		final float min = min(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1441,8 +1441,8 @@ public final class Curve3F implements Shape3F {
 	}
 	
 	private static boolean doIsInsideZ(final Point3F[] points, final float width, final float minimum, final float maximum, final int offset) {
-		final float max = max(points[offset + 0].getZ(), points[offset + 1].getZ(), points[offset + 2].getZ(), points[offset + 3].getZ());
-		final float min = min(points[offset + 0].getZ(), points[offset + 1].getZ(), points[offset + 2].getZ(), points[offset + 3].getZ());
+		final float max = max(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
+		final float min = min(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		

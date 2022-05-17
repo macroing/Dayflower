@@ -99,12 +99,12 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 */
 	@Override
 	public AxisAlignedBoundingBox3F transform(final Matrix44F matrix) {
-		final float maximumX = this.maximum.getX();
-		final float maximumY = this.maximum.getY();
-		final float maximumZ = this.maximum.getZ();
-		final float minimumX = this.minimum.getX();
-		final float minimumY = this.minimum.getY();
-		final float minimumZ = this.minimum.getZ();
+		final float maximumX = this.maximum.x;
+		final float maximumY = this.maximum.y;
+		final float maximumZ = this.maximum.z;
+		final float minimumX = this.minimum.x;
+		final float minimumY = this.minimum.y;
+		final float minimumZ = this.minimum.z;
 		
 		final Point3F[] points = new Point3F[] {
 			Point3F.transformAndDivide(matrix, new Point3F(minimumX, minimumY, minimumZ)),
@@ -139,17 +139,17 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 */
 	@Override
 	public Point3F getClosestPointTo(final Point3F point) {
-		final float maximumX = this.maximum.getX();
-		final float maximumY = this.maximum.getY();
-		final float maximumZ = this.maximum.getZ();
+		final float maximumX = this.maximum.x;
+		final float maximumY = this.maximum.y;
+		final float maximumZ = this.maximum.z;
 		
-		final float minimumX = this.minimum.getX();
-		final float minimumY = this.minimum.getY();
-		final float minimumZ = this.minimum.getZ();
+		final float minimumX = this.minimum.x;
+		final float minimumY = this.minimum.y;
+		final float minimumZ = this.minimum.z;
 		
-		final float x = point.getX() < minimumX ? minimumX : point.getX() > maximumX ? maximumX : point.getX();
-		final float y = point.getY() < minimumY ? minimumY : point.getY() > maximumY ? maximumY : point.getY();
-		final float z = point.getZ() < minimumZ ? minimumZ : point.getZ() > maximumZ ? maximumZ : point.getZ();
+		final float x = point.x < minimumX ? minimumX : point.x > maximumX ? maximumX : point.x;
+		final float y = point.y < minimumY ? minimumY : point.y > maximumY ? maximumY : point.y;
+		final float z = point.z < minimumZ ? minimumZ : point.z > maximumZ ? maximumZ : point.z;
 		
 		return new Point3F(x, y, z);
 	}
@@ -237,7 +237,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 */
 	@Override
 	public boolean contains(final Point3F point) {
-		return point.getX() >= this.minimum.getX() && point.getX() <= this.maximum.getX() && point.getY() >= this.minimum.getY() && point.getY() <= this.maximum.getY() && point.getZ() >= this.minimum.getZ() && point.getZ() <= this.maximum.getZ();
+		return point.x >= this.minimum.x && point.x <= this.maximum.x && point.y >= this.minimum.y && point.y <= this.maximum.y && point.z >= this.minimum.z && point.z <= this.maximum.z;
 	}
 	
 	/**
@@ -270,9 +270,9 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		final float x = this.maximum.getX() - this.minimum.getX();
-		final float y = this.maximum.getY() - this.minimum.getY();
-		final float z = this.maximum.getZ() - this.minimum.getZ();
+		final float x = this.maximum.x - this.minimum.x;
+		final float y = this.maximum.y - this.minimum.y;
+		final float z = this.maximum.z - this.minimum.z;
 		final float surfaceArea = 2.0F * (x * y + y * z + z * x);
 		
 		return surfaceArea;
@@ -285,9 +285,9 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 */
 	@Override
 	public float getVolume() {
-		final float x = this.maximum.getX() - this.minimum.getX();
-		final float y = this.maximum.getY() - this.minimum.getY();
-		final float z = this.maximum.getZ() - this.minimum.getZ();
+		final float x = this.maximum.x - this.minimum.x;
+		final float y = this.maximum.y - this.minimum.y;
+		final float z = this.maximum.z - this.minimum.z;
 		final float volume = x * y * z;
 		
 		return volume;

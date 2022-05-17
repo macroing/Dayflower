@@ -1580,9 +1580,9 @@ public final class Scene implements Node {
 			return new LeafBVHNode(maximum, minimum, depth, primitives);
 		}
 		
-		final float sideX = maximum.getX() - minimum.getX();
-		final float sideY = maximum.getY() - minimum.getY();
-		final float sideZ = maximum.getZ() - minimum.getZ();
+		final float sideX = maximum.x - minimum.x;
+		final float sideY = maximum.y - minimum.y;
+		final float sideZ = maximum.z - minimum.z;
 		
 		float minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
 		float bestSplit = MAX_VALUE;
@@ -1631,21 +1631,21 @@ public final class Scene implements Node {
 					final float value = mid.getComponent(axis);
 					
 					if(value < newSplit) {
-						maximumLX = max(maximumLX, max.getX());
-						maximumLY = max(maximumLY, max.getY());
-						maximumLZ = max(maximumLZ, max.getZ());
-						minimumLX = min(minimumLX, min.getX());
-						minimumLY = min(minimumLY, min.getY());
-						minimumLZ = min(minimumLZ, min.getZ());
+						maximumLX = max(maximumLX, max.x);
+						maximumLY = max(maximumLY, max.y);
+						maximumLZ = max(maximumLZ, max.z);
+						minimumLX = min(minimumLX, min.x);
+						minimumLY = min(minimumLY, min.y);
+						minimumLZ = min(minimumLZ, min.z);
 						
 						countL++;
 					} else {
-						maximumRX = max(maximumRX, max.getX());
-						maximumRY = max(maximumRY, max.getY());
-						maximumRZ = max(maximumRZ, max.getZ());
-						minimumRX = min(minimumRX, min.getX());
-						minimumRY = min(minimumRY, min.getY());
-						minimumRZ = min(minimumRZ, min.getZ());
+						maximumRX = max(maximumRX, max.x);
+						maximumRY = max(maximumRY, max.y);
+						maximumRZ = max(maximumRZ, max.z);
+						minimumRX = min(minimumRX, min.x);
+						minimumRY = min(minimumRY, min.y);
+						minimumRZ = min(minimumRZ, min.z);
 						
 						countR++;
 					}
@@ -1715,21 +1715,21 @@ public final class Scene implements Node {
 			if(value < bestSplit) {
 				leafBVHNodesL.add(processableLeafBVHNode);
 				
-				maximumLX = max(maximumLX, max.getX());
-				maximumLY = max(maximumLY, max.getY());
-				maximumLZ = max(maximumLZ, max.getZ());
-				minimumLX = min(minimumLX, min.getX());
-				minimumLY = min(minimumLY, min.getY());
-				minimumLZ = min(minimumLZ, min.getZ());
+				maximumLX = max(maximumLX, max.x);
+				maximumLY = max(maximumLY, max.y);
+				maximumLZ = max(maximumLZ, max.z);
+				minimumLX = min(minimumLX, min.x);
+				minimumLY = min(minimumLY, min.y);
+				minimumLZ = min(minimumLZ, min.z);
 			} else {
 				leafBVHNodesR.add(processableLeafBVHNode);
 				
-				maximumRX = max(maximumRX, max.getX());
-				maximumRY = max(maximumRY, max.getY());
-				maximumRZ = max(maximumRZ, max.getZ());
-				minimumRX = min(minimumRX, min.getX());
-				minimumRY = min(minimumRY, min.getY());
-				minimumRZ = min(minimumRZ, min.getZ());
+				maximumRX = max(maximumRX, max.x);
+				maximumRY = max(maximumRY, max.y);
+				maximumRZ = max(maximumRZ, max.z);
+				minimumRX = min(minimumRX, min.x);
+				minimumRY = min(minimumRY, min.y);
+				minimumRZ = min(minimumRZ, min.z);
 			}
 		}
 		
@@ -1768,12 +1768,12 @@ public final class Scene implements Node {
 			final Point3F maximum = boundingVolume.getMaximum();
 			final Point3F minimum = boundingVolume.getMinimum();
 			
-			maximumX = max(maximumX, maximum.getX());
-			maximumY = max(maximumY, maximum.getY());
-			maximumZ = max(maximumZ, maximum.getZ());
-			minimumX = min(minimumX, minimum.getX());
-			minimumY = min(minimumY, minimum.getY());
-			minimumZ = min(minimumZ, minimum.getZ());
+			maximumX = max(maximumX, maximum.x);
+			maximumY = max(maximumY, maximum.y);
+			maximumZ = max(maximumZ, maximum.z);
+			minimumX = min(minimumX, minimum.x);
+			minimumY = min(minimumY, minimum.y);
+			minimumZ = min(minimumZ, minimum.z);
 			
 			processableLeafBVHNodes.add(new LeafBVHNode(maximum, minimum, 0, Arrays.asList(primitive)));
 		}

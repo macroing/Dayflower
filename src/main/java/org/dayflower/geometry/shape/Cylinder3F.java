@@ -253,7 +253,7 @@ public final class Cylinder3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
-		return point.getZ() >= this.zMin && point.getZ() <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
+		return point.z >= this.zMin && point.z <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
 	}
 	
 	/**
@@ -346,8 +346,8 @@ public final class Cylinder3F implements Shape3F {
 		final Vector3F direction = ray.getDirection();
 		
 		final float a = direction.getX() * direction.getX() + direction.getY() * direction.getY();
-		final float b = 2.0F * (direction.getX() * origin.getX() + direction.getY() * origin.getY());
-		final float c = origin.getX() * origin.getX() + origin.getY() * origin.getY() - this.radius * this.radius;
+		final float b = 2.0F * (direction.getX() * origin.x + direction.getY() * origin.y);
+		final float c = origin.x * origin.x + origin.y * origin.y - this.radius * this.radius;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -361,7 +361,7 @@ public final class Cylinder3F implements Shape3F {
 			if(t > tMinimum && t < tMaximum) {
 				final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.getZ() >= this.zMin && surfaceIntersectionPoint.getZ() <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+				if(surfaceIntersectionPoint.z >= this.zMin && surfaceIntersectionPoint.z <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}
@@ -422,8 +422,8 @@ public final class Cylinder3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
-		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
-		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
+		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;
 		final float uZ = +0.0F;
 		
 		final float vX = 0.0F;
@@ -439,7 +439,7 @@ public final class Cylinder3F implements Shape3F {
 	
 	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
 		final float u = surfaceIntersectionPoint.sphericalPhi() / this.phiMax.getRadians();
-		final float v = (surfaceIntersectionPoint.getZ() - this.zMin) / (this.zMax - this.zMin);
+		final float v = (surfaceIntersectionPoint.z - this.zMin) / (this.zMax - this.zMin);
 		
 		return new Point2F(u, v);
 	}
@@ -467,6 +467,6 @@ public final class Cylinder3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Vector3F doCreateSurfaceIntersectionPointError(final Point3F surfaceIntersectionPoint) {
-		return Vector3F.multiply(Vector3F.absolute(new Vector3F(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getY(), 0.0F)), gamma(3));
+		return Vector3F.multiply(Vector3F.absolute(new Vector3F(surfaceIntersectionPoint.x, surfaceIntersectionPoint.y, 0.0F)), gamma(3));
 	}
 }

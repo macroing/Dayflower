@@ -172,7 +172,7 @@ public final class Plane3F implements Shape3F {
 	 */
 	@Override
 	public boolean contains(final Point3F point) {
-		return isZero(point.getZ());
+		return isZero(point.z);
 	}
 	
 	/**

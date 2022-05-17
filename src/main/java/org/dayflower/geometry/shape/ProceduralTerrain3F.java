@@ -155,7 +155,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
-		return point.getY() < doApplyAsFloat(point.getX(), point.getZ());
+		return point.y < doApplyAsFloat(point.x, point.z);
 	}
 	
 	/**
@@ -213,9 +213,9 @@ public final class ProceduralTerrain3F implements Shape3F {
 		
 		final Vector3F direction = ray.getDirection();
 		
-		final float originX = origin.getX();
-		final float originY = origin.getY();
-		final float originZ = origin.getZ();
+		final float originX = origin.x;
+		final float originY = origin.y;
+		final float originZ = origin.z;
 		
 		final float directionX = direction.getX();
 		final float directionY = direction.getY();
@@ -338,9 +338,9 @@ public final class ProceduralTerrain3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
-		final float x = doApplyAsFloat(surfaceIntersectionPoint.getX() - 0.0001F, surfaceIntersectionPoint.getZ() - 0.0000F) - doApplyAsFloat(surfaceIntersectionPoint.getX() + 0.0001F, surfaceIntersectionPoint.getZ() + 0.0000F);
+		final float x = doApplyAsFloat(surfaceIntersectionPoint.x - 0.0001F, surfaceIntersectionPoint.z - 0.0000F) - doApplyAsFloat(surfaceIntersectionPoint.x + 0.0001F, surfaceIntersectionPoint.z + 0.0000F);
 		final float y = 2.0F * 0.0001F;
-		final float z = doApplyAsFloat(surfaceIntersectionPoint.getX() - 0.0000F, surfaceIntersectionPoint.getZ() - 0.0001F) - doApplyAsFloat(surfaceIntersectionPoint.getX() + 0.0000F, surfaceIntersectionPoint.getZ() + 0.0001F);
+		final float z = doApplyAsFloat(surfaceIntersectionPoint.x - 0.0000F, surfaceIntersectionPoint.z - 0.0001F) - doApplyAsFloat(surfaceIntersectionPoint.x + 0.0000F, surfaceIntersectionPoint.z + 0.0001F);
 		
 		final Vector3F w = Vector3F.normalize(new Vector3F(x, y, z));
 		
@@ -367,7 +367,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
-		return new Point2F(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getZ());
+		return new Point2F(surfaceIntersectionPoint.x, surfaceIntersectionPoint.z);
 	}
 	
 	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {

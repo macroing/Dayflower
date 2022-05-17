@@ -4,10 +4,10 @@
 	* CHANGE:	Update all classes and unit tests that have been affected by the change in the Point2I and Vector2I classes.
 	* CHANGE:	Rename the fields component1, component2 and component3 in the Point3D, Point3F, Vector3D and Vector3F classes to x, y and z, respectively. They have also been made public.
 	* CHANGE:	Rename the fields component1, component2, component3 and component4 in the Point4D, Point4F, Vector4D and Vector4F classes to x, y, z and w, respectively. They have also been made public.
-	* CHANGE:	Update all classes and unit tests that have been affected by the change in the Point3D, Point4D, Point4F, Vector4D and Vector4D classes.
+	* CHANGE:	Update all classes and unit tests that have been affected by the change in the Point3D, Point3F, Point4D, Point4F, Vector4D and Vector4D classes.
 	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getU(), getV(), getX() and getY() from the Point2I and Vector2I classes.
 	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getComponent3(), getComponent4(), getW(), getX(), getY() and getZ() from the Point4D, Point4F, Vector4D and Vector4F classes.
-	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getComponent3(), getU(), getV(), getW(), getX(), getY() and getZ() from the Point3D class.
+	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getComponent3(), getU(), getV(), getW(), getX(), getY() and getZ() from the Point3D and Point3F classes.
 
 2022-05-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

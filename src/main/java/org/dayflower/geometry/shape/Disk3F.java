@@ -350,7 +350,7 @@ public final class Disk3F implements Shape3F {
 			return Float.NaN;
 		}
 		
-		final float t = (this.zMax - origin.getZ()) / direction.getZ();
+		final float t = (this.zMax - origin.z) / direction.getZ();
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return Float.NaN;
@@ -421,12 +421,12 @@ public final class Disk3F implements Shape3F {
 	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
 		final float length = new Vector2F(surfaceIntersectionPoint).length();
 		
-		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
-		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
+		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;
 		final float uZ = +0.0F;
 		
-		final float vX = surfaceIntersectionPoint.getX() * (this.radiusInner - this.radiusOuter) / length;
-		final float vY = surfaceIntersectionPoint.getY() * (this.radiusInner - this.radiusOuter) / length;
+		final float vX = surfaceIntersectionPoint.x * (this.radiusInner - this.radiusOuter) / length;
+		final float vY = surfaceIntersectionPoint.y * (this.radiusInner - this.radiusOuter) / length;
 		final float vZ = 0.0F;
 		
 		final Vector3F u = Vector3F.normalize(new Vector3F(uX, uY, uZ));
@@ -445,7 +445,7 @@ public final class Disk3F implements Shape3F {
 	
 	private Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
 		final Point3F surfaceIntersectionPoint = Point3F.add(ray.getOrigin(), ray.getDirection(), t);
-		final Point3F surfaceIntersectionPointTransformed = new Point3F(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getY(), this.zMax);
+		final Point3F surfaceIntersectionPointTransformed = new Point3F(surfaceIntersectionPoint.x, surfaceIntersectionPoint.y, this.zMax);
 		
 		return surfaceIntersectionPointTransformed;
 	}

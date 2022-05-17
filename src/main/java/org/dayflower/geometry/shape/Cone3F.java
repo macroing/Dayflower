@@ -227,7 +227,7 @@ public final class Cone3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
-		return point.getZ() >= 0.0F && point.getZ() <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
+		return point.z >= 0.0F && point.z <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
 	}
 	
 	/**
@@ -309,8 +309,8 @@ public final class Cone3F implements Shape3F {
 		
 		final float k = (this.radius / this.zMax) * (this.radius / this.zMax);
 		final float a = direction.getX() * direction.getX() + direction.getY() * direction.getY() - k * direction.getZ() * direction.getZ();
-		final float b = 2.0F * (direction.getX() * origin.getX() + direction.getY() * origin.getY() - k * direction.getZ() * (origin.getZ() - this.zMax));
-		final float c = origin.getX() * origin.getX() + origin.getY() * origin.getY() - k * (origin.getZ() - this.zMax) * (origin.getZ() - this.zMax);
+		final float b = 2.0F * (direction.getX() * origin.x + direction.getY() * origin.y - k * direction.getZ() * (origin.z - this.zMax));
+		final float c = origin.x * origin.x + origin.y * origin.y - k * (origin.z - this.zMax) * (origin.z - this.zMax);
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -324,7 +324,7 @@ public final class Cone3F implements Shape3F {
 			if(t > tMinimum && t < tMaximum) {
 				final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.getZ() >= 0.0F && surfaceIntersectionPoint.getZ() <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+				if(surfaceIntersectionPoint.z >= 0.0F && surfaceIntersectionPoint.z <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}
@@ -384,14 +384,14 @@ public final class Cone3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
-		final float value = 1.0F - (surfaceIntersectionPoint.getZ() / this.zMax);
+		final float value = 1.0F - (surfaceIntersectionPoint.z / this.zMax);
 		
-		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
-		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
+		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;
 		final float uZ = +0.0F;
 		
-		final float vX = -surfaceIntersectionPoint.getX() / value;
-		final float vY = -surfaceIntersectionPoint.getY() / value;
+		final float vX = -surfaceIntersectionPoint.x / value;
+		final float vY = -surfaceIntersectionPoint.y / value;
 		final float vZ = +this.zMax;
 		
 		final Vector3F u = Vector3F.normalize(new Vector3F(uX, uY, uZ));
@@ -403,7 +403,7 @@ public final class Cone3F implements Shape3F {
 	
 	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
 		final float u = surfaceIntersectionPoint.sphericalPhi() / this.phiMax.getRadians();
-		final float v = surfaceIntersectionPoint.getZ() / this.zMax;
+		final float v = surfaceIntersectionPoint.z / this.zMax;
 		
 		return new Point2F(u, v);
 	}

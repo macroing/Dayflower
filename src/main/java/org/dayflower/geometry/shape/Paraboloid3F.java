@@ -252,7 +252,7 @@ public final class Paraboloid3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3F point) {
-		return point.getZ() >= this.zMin && point.getZ() <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
+		return point.z >= this.zMin && point.z <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
 	}
 	
 	/**
@@ -356,8 +356,8 @@ public final class Paraboloid3F implements Shape3F {
 		final float k = this.zMax / (this.radius * this.radius);
 		
 		final float a = k * (direction.getX() * direction.getX() + direction.getY() * direction.getY());
-		final float b = 2.0F * k * (direction.getX() * origin.getX() + direction.getY() * origin.getY()) - direction.getZ();
-		final float c = k * (origin.getX() * origin.getX() + origin.getY() * origin.getY()) - origin.getZ();
+		final float b = 2.0F * k * (direction.getX() * origin.x + direction.getY() * origin.y) - direction.getZ();
+		final float c = k * (origin.x * origin.x + origin.y * origin.y) - origin.z;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -371,7 +371,7 @@ public final class Paraboloid3F implements Shape3F {
 			if(t > tMinimum && t < tMaximum) {
 				final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.getZ() >= this.zMin && surfaceIntersectionPoint.getZ() <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+				if(surfaceIntersectionPoint.z >= this.zMin && surfaceIntersectionPoint.z <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}
@@ -432,12 +432,12 @@ public final class Paraboloid3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
-		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
-		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
+		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;
 		final float uZ = +0.0F;
 		
-		final float vX = (this.zMax - this.zMin) * (surfaceIntersectionPoint.getX() / (2.0F * surfaceIntersectionPoint.getZ()));
-		final float vY = (this.zMax - this.zMin) * (surfaceIntersectionPoint.getY() / (2.0F * surfaceIntersectionPoint.getZ()));
+		final float vX = (this.zMax - this.zMin) * (surfaceIntersectionPoint.x / (2.0F * surfaceIntersectionPoint.z));
+		final float vY = (this.zMax - this.zMin) * (surfaceIntersectionPoint.y / (2.0F * surfaceIntersectionPoint.z));
 		final float vZ = this.zMax - this.zMin;
 		
 		final Vector3F u = Vector3F.normalize(new Vector3F(uX, uY, uZ));
@@ -449,7 +449,7 @@ public final class Paraboloid3F implements Shape3F {
 	
 	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
 		final float u = surfaceIntersectionPoint.sphericalPhi() / this.phiMax.getRadians();
-		final float v = (surfaceIntersectionPoint.getZ() - this.zMin) / (this.zMax - this.zMin);
+		final float v = (surfaceIntersectionPoint.z - this.zMin) / (this.zMax - this.zMin);
 		
 		return new Point2F(u, v);
 	}

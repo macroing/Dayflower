@@ -154,7 +154,7 @@ final class ScenePropertyView extends VBox {
 			} else if(object instanceof Point3F) {
 				final Point3F position = Point3F.class.cast(object);
 				
-				return String.format("[%+.10f, %+.10f, %+.10f]", Float.valueOf(position.getX()), Float.valueOf(position.getY()), Float.valueOf(position.getZ()));
+				return String.format("[%+.10f, %+.10f, %+.10f]", Float.valueOf(position.x), Float.valueOf(position.y), Float.valueOf(position.z));
 			} else if(object instanceof Primitive) {
 				return "Primitive " + Primitive.class.cast(object).getInstanceID();
 			} else if(object instanceof Quaternion4F) {

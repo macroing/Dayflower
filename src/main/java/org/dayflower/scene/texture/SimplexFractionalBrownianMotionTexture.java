@@ -127,9 +127,9 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	public Color3F getColor(final Intersection intersection) {
 		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
-		final float x = surfaceIntersectionPoint.getX();
-		final float y = surfaceIntersectionPoint.getY();
-		final float z = surfaceIntersectionPoint.getZ();
+		final float x = surfaceIntersectionPoint.x;
+		final float y = surfaceIntersectionPoint.y;
+		final float z = surfaceIntersectionPoint.z;
 		
 		final float noise = SimplexNoiseF.fractionalBrownianMotionXYZ(x, y, z, this.frequency, this.gain, 0.0F, 1.0F, this.octaves);
 		

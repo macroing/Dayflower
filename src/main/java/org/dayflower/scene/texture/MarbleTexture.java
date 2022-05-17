@@ -131,9 +131,9 @@ public final class MarbleTexture implements Texture {
 	public Color3F getColor(final Intersection intersection) {
 		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
-		final float x = surfaceIntersectionPoint.getX() * this.frequency;
-		final float y = surfaceIntersectionPoint.getY() * this.frequency;
-		final float z = surfaceIntersectionPoint.getZ() * this.frequency;
+		final float x = surfaceIntersectionPoint.x * this.frequency;
+		final float y = surfaceIntersectionPoint.y * this.frequency;
+		final float z = surfaceIntersectionPoint.z * this.frequency;
 		final float r = this.scale * PerlinNoiseF.turbulenceXYZ(x, y, z, this.octaves);
 		final float s = 2.0F * abs(sin(x + r));
 		final float t = s < 1.0F ? s : s - 1.0F;

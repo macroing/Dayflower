@@ -370,8 +370,8 @@ public final class Point2F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2F createTextureCoordinates(final Point2F pTCA, final Point2F pTCB, final Point2F pTCC, final Point3F pBC) {
-		final float x = pTCA.x * pBC.getU() + pTCB.x * pBC.getV() + pTCC.x * pBC.getW();
-		final float y = pTCA.y * pBC.getU() + pTCB.y * pBC.getV() + pTCC.y * pBC.getW();
+		final float x = pTCA.x * pBC.x + pTCB.x * pBC.y + pTCC.x * pBC.z;
+		final float y = pTCA.y * pBC.x + pTCB.y * pBC.y + pTCC.y * pBC.z;
 		
 		return new Point2F(x, y);
 	}

@@ -2046,9 +2046,9 @@ public final class CompiledMaterialCache {
 		final float[] array = new float[BULLSEYE_MATERIAL_LENGTH];
 		
 //		Because the BullseyeMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 0] = origin.getX();		//Block #1
-		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 1] = origin.getY();		//Block #1
-		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 2] = origin.getZ();		//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 0] = origin.x;			//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 1] = origin.y;			//Block #1
+		array[BULLSEYE_MATERIAL_OFFSET_ORIGIN + 2] = origin.z;			//Block #1
 		array[BULLSEYE_MATERIAL_OFFSET_MATERIAL_A] = materialAValue;	//Block #1
 		array[BULLSEYE_MATERIAL_OFFSET_MATERIAL_B] = materialBValue;	//Block #1
 		array[BULLSEYE_MATERIAL_OFFSET_SCALE] = scale;					//Block #1

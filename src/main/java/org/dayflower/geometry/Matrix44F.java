@@ -685,15 +685,15 @@ public final class Matrix44F implements Node {
 		final float element11 = u.getX();
 		final float element12 = v.getX();
 		final float element13 = w.getX();
-		final float element14 = eye.getX();
+		final float element14 = eye.x;
 		final float element21 = u.getY();
 		final float element22 = v.getY();
 		final float element23 = w.getY();
-		final float element24 = eye.getY();
+		final float element24 = eye.y;
 		final float element31 = u.getZ();
 		final float element32 = v.getZ();
 		final float element33 = w.getZ();
-		final float element34 = eye.getZ();
+		final float element34 = eye.z;
 		final float element41 = 0.0F;
 		final float element42 = 0.0F;
 		final float element43 = 0.0F;
@@ -1238,7 +1238,7 @@ public final class Matrix44F implements Node {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix44F.translate(point.getX(), point.getY(), point.getZ());
+	 * Matrix44F.translate(point.x, point.y, point.z);
 	 * }
 	 * </pre>
 	 * 
@@ -1247,7 +1247,7 @@ public final class Matrix44F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	public static Matrix44F translate(final Point3F point) {
-		return translate(point.getX(), point.getY(), point.getZ());
+		return translate(point.x, point.y, point.z);
 	}
 	
 	/**

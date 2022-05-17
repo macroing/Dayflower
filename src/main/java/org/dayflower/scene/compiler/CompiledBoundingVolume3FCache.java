@@ -473,12 +473,12 @@ public final class CompiledBoundingVolume3FCache {
 		
 		final float[] array = new float[AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH];
 		
-		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 0] = maximum.getX();
-		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 1] = maximum.getY();
-		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 2] = maximum.getZ();
-		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 0] = minimum.getX();
-		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 1] = minimum.getY();
-		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 2] = minimum.getZ();
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 0] = maximum.x;
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 1] = maximum.y;
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 2] = maximum.z;
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 0] = minimum.x;
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 1] = minimum.y;
+		array[AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MINIMUM + 2] = minimum.z;
 		array[6] = 0.0F;
 		array[7] = 0.0F;
 		
@@ -514,9 +514,9 @@ public final class CompiledBoundingVolume3FCache {
 		
 		final float[] array = new float[BOUNDING_SPHERE_3_F_LENGTH];
 		
-		array[BOUNDING_SPHERE_3_F_OFFSET_CENTER + 0] = center.getX();
-		array[BOUNDING_SPHERE_3_F_OFFSET_CENTER + 1] = center.getY();
-		array[BOUNDING_SPHERE_3_F_OFFSET_CENTER + 2] = center.getZ();
+		array[BOUNDING_SPHERE_3_F_OFFSET_CENTER + 0] = center.x;
+		array[BOUNDING_SPHERE_3_F_OFFSET_CENTER + 1] = center.y;
+		array[BOUNDING_SPHERE_3_F_OFFSET_CENTER + 2] = center.z;
 		array[BOUNDING_SPHERE_3_F_OFFSET_RADIUS] = radius;
 		
 		return array;

@@ -418,8 +418,8 @@ public final class Polygon3F implements Shape3F {
 		final float determinant = Vector2F.crossProduct(vAB, vAC);
 		final float determinantReciprocal = 1.0F / determinant;
 		
-		final float hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
-		final float hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
+		final float hU = isX ? surfaceIntersectionPoint.y : isY ? surfaceIntersectionPoint.z : surfaceIntersectionPoint.x;
+		final float hV = isX ? surfaceIntersectionPoint.z : isY ? surfaceIntersectionPoint.x : surfaceIntersectionPoint.y;
 		
 		final float u = hU * (-vAB.y * determinantReciprocal) + hV * (+vAB.x * determinantReciprocal) + Vector2F.crossProduct(vA, vAB) * determinantReciprocal;
 		final float v = hU * (+vAC.y * determinantReciprocal) + hV * (-vAC.x * determinantReciprocal) + Vector2F.crossProduct(vAC, vA) * determinantReciprocal;

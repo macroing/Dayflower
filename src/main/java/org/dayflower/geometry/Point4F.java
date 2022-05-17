@@ -47,10 +47,25 @@ public final class Point4F implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final float component1;
-	private final float component2;
-	private final float component3;
-	private final float component4;
+	/**
+	 * The W-component of this {@code Point4F} instance.
+	 */
+	public final float w;
+	
+	/**
+	 * The X-component of this {@code Point4F} instance.
+	 */
+	public final float x;
+	
+	/**
+	 * The Y-component of this {@code Point4F} instance.
+	 */
+	public final float y;
+	
+	/**
+	 * The Z-component of this {@code Point4F} instance.
+	 */
+	public final float z;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -69,60 +84,60 @@ public final class Point4F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Point4F} instance given the component values {@code point.getComponent1()}, {@code point.getComponent2()}, {@code point.getComponent3()} and {@code 1.0F}.
+	 * Constructs a new {@code Point4F} instance given the component values {@code p.x}, {@code p.y}, {@code p.z} and {@code 1.0F}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point4F(point.getComponent1(), point.getComponent2(), point.getComponent3(), 1.0F);
+	 * new Point4F(p.x, p.y, p.z, 1.0F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param point a {@link Point3F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Point4F(final Point3F point) {
-		this(point.getComponent1(), point.getComponent2(), point.getComponent3(), 1.0F);
+	public Point4F(final Point3F p) {
+		this(p.x, p.y, p.z, 1.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code Point4F} instance given the component values {@code vector.getComponent1()}, {@code vector.getComponent2()}, {@code vector.getComponent3()} and {@code 1.0F}.
+	 * Constructs a new {@code Point4F} instance given the component values {@code v.x}, {@code v.y}, {@code v.z} and {@code 1.0F}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point4F(vector.getComponent1(), vector.getComponent2(), vector.getComponent3(), 1.0F);
+	 * new Point4F(v.x, v.y, v.z, 1.0F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param vector a {@link Vector3F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@link Vector3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public Point4F(final Vector3F vector) {
-		this(vector.getComponent1(), vector.getComponent2(), vector.getComponent3(), 1.0F);
+	public Point4F(final Vector3F v) {
+		this(v.x, v.y, v.z, 1.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code Point4F} instance given the component values {@code vector.getComponent1()}, {@code vector.getComponent2()}, {@code vector.getComponent3()} and {@code vector.getComponent4()}.
+	 * Constructs a new {@code Point4F} instance given the component values {@code v.x}, {@code v.y}, {@code v.z} and {@code v.w}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point4F(vector.getComponent1(), vector.getComponent2(), vector.getComponent3(), vector.getComponent4());
+	 * new Point4F(v.x, v.y, v.z, v.w);
 	 * }
 	 * </pre>
 	 * 
-	 * @param vector a {@link Vector4F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@link Vector4F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public Point4F(final Vector4F vector) {
-		this(vector.getComponent1(), vector.getComponent2(), vector.getComponent3(), vector.getComponent4());
+	public Point4F(final Vector4F v) {
+		this(v.x, v.y, v.z, v.w);
 	}
 	
 	/**
@@ -142,36 +157,36 @@ public final class Point4F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Point4F} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code 1.0F}.
+	 * Constructs a new {@code Point4F} instance given the component values {@code x}, {@code y}, {@code z} and {@code 1.0F}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point4F(component1, component2, component3, 1.0F);
+	 * new Point4F(x, y, z, 1.0F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
 	 */
-	public Point4F(final float component1, final float component2, final float component3) {
-		this(component1, component2, component3, 1.0F);
+	public Point4F(final float x, final float y, final float z) {
+		this(x, y, z, 1.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code Point4F} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code component4}.
+	 * Constructs a new {@code Point4F} instance given the component values {@code x}, {@code y}, {@code z} and {@code w}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
-	 * @param component4 the value of component 4
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
+	 * @param w the value of the W-component
 	 */
-	public Point4F(final float component1, final float component2, final float component3, final float component4) {
-		this.component1 = component1;
-		this.component2 = component2;
-		this.component3 = component3;
-		this.component4 = component4;
+	public Point4F(final float x, final float y, final float z, final float w) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.w = w;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +198,7 @@ public final class Point4F implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Point4F(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3), Strings.toNonScientificNotationJava(this.component4));
+		return String.format("new Point4F(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.x), Strings.toNonScientificNotationJava(this.y), Strings.toNonScientificNotationJava(this.z), Strings.toNonScientificNotationJava(this.w));
 	}
 	
 	/**
@@ -200,13 +215,13 @@ public final class Point4F implements Node {
 			return true;
 		} else if(!(object instanceof Point4F)) {
 			return false;
-		} else if(!equal(this.component1, Point4F.class.cast(object).component1)) {
+		} else if(!equal(this.w, Point4F.class.cast(object).w)) {
 			return false;
-		} else if(!equal(this.component2, Point4F.class.cast(object).component2)) {
+		} else if(!equal(this.x, Point4F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.component3, Point4F.class.cast(object).component3)) {
+		} else if(!equal(this.y, Point4F.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.component4, Point4F.class.cast(object).component4)) {
+		} else if(!equal(this.z, Point4F.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -225,88 +240,16 @@ public final class Point4F implements Node {
 	public float getComponent(final int index) {
 		switch(index) {
 			case 0:
-				return this.component1;
+				return this.x;
 			case 1:
-				return this.component2;
+				return this.y;
 			case 2:
-				return this.component3;
+				return this.z;
 			case 3:
-				return this.component4;
+				return this.w;
 			default:
 				throw new IllegalArgumentException(String.format("Illegal index: index=%s", Integer.toString(index)));
 		}
-	}
-	
-	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-	public float getComponent1() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-	public float getComponent2() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of component 3.
-	 * 
-	 * @return the value of component 3
-	 */
-	public float getComponent3() {
-		return this.component3;
-	}
-	
-	/**
-	 * Returns the value of component 4.
-	 * 
-	 * @return the value of component 4
-	 */
-	public float getComponent4() {
-		return this.component4;
-	}
-	
-	/**
-	 * Returns the value of the W-component.
-	 * 
-	 * @return the value of the W-component
-	 */
-	public float getW() {
-		return this.component4;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-	public float getX() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-	public float getY() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the Z-component.
-	 * 
-	 * @return the value of the Z-component
-	 */
-	public float getZ() {
-		return this.component3;
 	}
 	
 	/**
@@ -315,12 +258,7 @@ public final class Point4F implements Node {
 	 * @return a {@code float[]} representation of this {@code Point4F} instance
 	 */
 	public float[] toArray() {
-		return new float[] {
-			this.component1,
-			this.component2,
-			this.component3,
-			this.component4
-		};
+		return new float[] {this.x, this.y, this.z, this.w};
 	}
 	
 	/**
@@ -330,7 +268,7 @@ public final class Point4F implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3), Float.valueOf(this.component4));
+		return Objects.hash(Float.valueOf(this.w), Float.valueOf(this.x), Float.valueOf(this.y), Float.valueOf(this.z));
 	}
 	
 	/**
@@ -346,10 +284,10 @@ public final class Point4F implements Node {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeFloat(this.component1);
-			dataOutput.writeFloat(this.component2);
-			dataOutput.writeFloat(this.component3);
-			dataOutput.writeFloat(this.component4);
+			dataOutput.writeFloat(this.x);
+			dataOutput.writeFloat(this.y);
+			dataOutput.writeFloat(this.z);
+			dataOutput.writeFloat(this.w);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -358,16 +296,16 @@ public final class Point4F implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a cached version of {@code point}.
+	 * Returns a cached version of {@code p}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@code Point4F} instance
-	 * @return a cached version of {@code point}
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@code Point4F} instance
+	 * @return a cached version of {@code p}
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public static Point4F getCached(final Point4F point) {
-		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
+	public static Point4F getCached(final Point4F p) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(p, "p == null"), key -> p);
 	}
 	
 	/**
@@ -384,12 +322,7 @@ public final class Point4F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point4F lerp(final Point4F a, final Point4F b, final float t) {
-		final float component1 = Floats.lerp(a.component1, b.component1, t);
-		final float component2 = Floats.lerp(a.component2, b.component2, t);
-		final float component3 = Floats.lerp(a.component3, b.component3, t);
-		final float component4 = Floats.lerp(a.component4, b.component4, t);
-		
-		return new Point4F(component1, component2, component3, component4);
+		return new Point4F(Floats.lerp(a.x, b.x, t), Floats.lerp(a.y, b.y, t), Floats.lerp(a.z, b.z, t), Floats.lerp(a.w, b.w, t));
 	}
 	
 	/**
@@ -406,57 +339,52 @@ public final class Point4F implements Node {
 	 */
 	public static Point4F read(final DataInput dataInput) {
 		try {
-			final float component1 = dataInput.readFloat();
-			final float component2 = dataInput.readFloat();
-			final float component3 = dataInput.readFloat();
-			final float component4 = dataInput.readFloat();
-			
-			return new Point4F(component1, component2, component3, component4);
+			return new Point4F(dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Transforms the {@code Point4F} {@code pointRHS} with the {@link Matrix44F} {@code matrixLHS}.
+	 * Transforms the {@code Point4F} {@code pRHS} with the {@link Matrix44F} {@code mLHS}.
 	 * <p>
 	 * Returns a new {@code Point4F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code pRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix44F} instance
-	 * @param pointRHS a {@code Point4F} instance
+	 * @param mLHS a {@code Matrix44F} instance
+	 * @param pRHS a {@code Point4F} instance
 	 * @return a new {@code Point4F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
-	public static Point4F transform(final Matrix44F matrixLHS, final Point4F pointRHS) {
-		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14() * pointRHS.component4;
-		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24() * pointRHS.component4;
-		final float component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34() * pointRHS.component4;
-		final float component4 = matrixLHS.getElement41() * pointRHS.component1 + matrixLHS.getElement42() * pointRHS.component2 + matrixLHS.getElement43() * pointRHS.component3 + matrixLHS.getElement44() * pointRHS.component4;
+	public static Point4F transform(final Matrix44F mLHS, final Point4F pRHS) {
+		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14() * pRHS.w;
+		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24() * pRHS.w;
+		final float z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34() * pRHS.w;
+		final float w = mLHS.getElement41() * pRHS.x + mLHS.getElement42() * pRHS.y + mLHS.getElement43() * pRHS.z + mLHS.getElement44() * pRHS.w;
 		
-		return new Point4F(component1, component2, component3, component4);
+		return new Point4F(x, y, z, w);
 	}
 	
 	/**
-	 * Transforms the {@code Point4F} {@code pointRHS} with the {@link Matrix44F} {@code matrixLHS} and divides the result.
+	 * Transforms the {@code Point4F} {@code pRHS} with the {@link Matrix44F} {@code mLHS} and divides the result.
 	 * <p>
 	 * Returns a new {@code Point4F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code pRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix44F} instance
-	 * @param pointRHS a {@code Point4F} instance
+	 * @param mLHS a {@code Matrix44F} instance
+	 * @param pRHS a {@code Point4F} instance
 	 * @return a new {@code Point4F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
-	public static Point4F transformAndDivide(final Matrix44F matrixLHS, final Point4F pointRHS) {
-		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14() * pointRHS.component4;
-		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24() * pointRHS.component4;
-		final float component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34() * pointRHS.component4;
-		final float component4 = matrixLHS.getElement41() * pointRHS.component1 + matrixLHS.getElement42() * pointRHS.component2 + matrixLHS.getElement43() * pointRHS.component3 + matrixLHS.getElement44() * pointRHS.component4;
+	public static Point4F transformAndDivide(final Matrix44F mLHS, final Point4F pRHS) {
+		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14() * pRHS.w;
+		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24() * pRHS.w;
+		final float z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34() * pRHS.w;
+		final float w = mLHS.getElement41() * pRHS.x + mLHS.getElement42() * pRHS.y + mLHS.getElement43() * pRHS.z + mLHS.getElement44() * pRHS.w;
 		
-		return equal(component4, 1.0F) || isZero(component4) ? new Point4F(component1, component2, component3, component4) : new Point4F(component1 / component4, component2 / component4, component3 / component4, component4);
+		return equal(w, 1.0F) || isZero(w) ? new Point4F(x, y, z, w) : new Point4F(x / w, y / w, z / w, w);
 	}
 	
 	/**

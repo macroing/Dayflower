@@ -76,9 +76,20 @@ public final class Vector3F implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final float component1;
-	private final float component2;
-	private final float component3;
+	/**
+	 * The X-component of this {@code Vector3F} instance.
+	 */
+	public final float x;
+	
+	/**
+	 * The Y-component of this {@code Vector3F} instance.
+	 */
+	public final float y;
+	
+	/**
+	 * The Z-component of this {@code Vector3F} instance.
+	 */
+	public final float z;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -97,22 +108,22 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Vector3F} instance given the component values {@code point.getComponent1()}, {@code point.getComponent2()} and {@code point.getComponent3()}.
+	 * Constructs a new {@code Vector3F} instance given the component values {@code p.x}, {@code p.y} and {@code p.z}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Vector3F(point.getComponent1(), point.getComponent2(), point.getComponent3());
+	 * new Vector3F(p.x, p.y, p.z);
 	 * }
 	 * </pre>
 	 * 
-	 * @param point a {@link Point3F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Vector3F(final Point3F point) {
-		this(point.getComponent1(), point.getComponent2(), point.getComponent3());
+	public Vector3F(final Point3F p) {
+		this(p.x, p.y, p.z);
 	}
 	
 	/**
@@ -132,16 +143,16 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Vector3F} instance given the component values {@code component1}, {@code component2} and {@code component3}.
+	 * Constructs a new {@code Vector3F} instance given the component values {@code x}, {@code y} and {@code z}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
 	 */
-	public Vector3F(final float component1, final float component2, final float component3) {
-		this.component1 = component1;
-		this.component2 = component2;
-		this.component3 = component3;
+	public Vector3F(final float x, final float y, final float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +164,7 @@ public final class Vector3F implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Vector3F(%s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3));
+		return String.format("new Vector3F(%s, %s, %s)", Strings.toNonScientificNotationJava(this.x), Strings.toNonScientificNotationJava(this.y), Strings.toNonScientificNotationJava(this.z));
 	}
 	
 	/**
@@ -170,11 +181,11 @@ public final class Vector3F implements Node {
 			return true;
 		} else if(!(object instanceof Vector3F)) {
 			return false;
-		} else if(!equal(this.component1, Vector3F.class.cast(object).component1)) {
+		} else if(!equal(this.x, Vector3F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.component2, Vector3F.class.cast(object).component2)) {
+		} else if(!equal(this.y, Vector3F.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.component3, Vector3F.class.cast(object).component3)) {
+		} else if(!equal(this.z, Vector3F.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -207,7 +218,7 @@ public final class Vector3F implements Node {
 			return 1.0F;
 		}
 		
-		return saturate(this.component1 / sinTheta, -1.0F, 1.0F);
+		return saturate(this.x / sinTheta, -1.0F, 1.0F);
 	}
 	
 	/**
@@ -225,7 +236,7 @@ public final class Vector3F implements Node {
 	 * @return the cosine of the angle theta
 	 */
 	public float cosTheta() {
-		return this.component3;
+		return this.z;
 	}
 	
 	/**
@@ -261,7 +272,7 @@ public final class Vector3F implements Node {
 	 * @return the value of component 1
 	 */
 	public float getComponent1() {
-		return this.component1;
+		return this.x;
 	}
 	
 	/**
@@ -270,7 +281,7 @@ public final class Vector3F implements Node {
 	 * @return the value of component 2
 	 */
 	public float getComponent2() {
-		return this.component2;
+		return this.y;
 	}
 	
 	/**
@@ -279,7 +290,7 @@ public final class Vector3F implements Node {
 	 * @return the value of component 3
 	 */
 	public float getComponent3() {
-		return this.component3;
+		return this.z;
 	}
 	
 	/**
@@ -288,7 +299,7 @@ public final class Vector3F implements Node {
 	 * @return the value of the U-component
 	 */
 	public float getU() {
-		return this.component1;
+		return this.x;
 	}
 	
 	/**
@@ -297,7 +308,7 @@ public final class Vector3F implements Node {
 	 * @return the value of the V-component
 	 */
 	public float getV() {
-		return this.component2;
+		return this.y;
 	}
 	
 	/**
@@ -306,7 +317,7 @@ public final class Vector3F implements Node {
 	 * @return the value of the W-component
 	 */
 	public float getW() {
-		return this.component3;
+		return this.z;
 	}
 	
 	/**
@@ -315,7 +326,7 @@ public final class Vector3F implements Node {
 	 * @return the value of the X-component
 	 */
 	public float getX() {
-		return this.component1;
+		return this.x;
 	}
 	
 	/**
@@ -324,7 +335,7 @@ public final class Vector3F implements Node {
 	 * @return the value of the Y-component
 	 */
 	public float getY() {
-		return this.component2;
+		return this.y;
 	}
 	
 	/**
@@ -333,7 +344,7 @@ public final class Vector3F implements Node {
 	 * @return the value of the Z-component
 	 */
 	public float getZ() {
-		return this.component3;
+		return this.z;
 	}
 	
 	/**
@@ -351,7 +362,7 @@ public final class Vector3F implements Node {
 	 * @return the squared length of this {@code Vector3F} instance
 	 */
 	public float lengthSquared() {
-		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3;
+		return this.x * this.x + this.y * this.y + this.z * this.z;
 	}
 	
 	/**
@@ -366,7 +377,7 @@ public final class Vector3F implements Node {
 			return 0.0F;
 		}
 		
-		return saturate(this.component2 / sinTheta, -1.0F, 1.0F);
+		return saturate(this.y / sinTheta, -1.0F, 1.0F);
 	}
 	
 	/**
@@ -403,7 +414,7 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public float sphericalPhi() {
-		return getOrAdd(atan2(this.component2, this.component1), 0.0F, PI_MULTIPLIED_BY_2);
+		return getOrAdd(atan2(this.y, this.x), 0.0F, PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -413,7 +424,7 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public float sphericalTheta() {
-		return acos(saturate(this.component3, -1.0F, 1.0F));
+		return acos(saturate(this.z, -1.0F, 1.0F));
 	}
 	
 	/**
@@ -449,11 +460,7 @@ public final class Vector3F implements Node {
 	 * @return a {@code float[]} representation of this {@code Vector3F} instance
 	 */
 	public float[] toArray() {
-		return new float[] {
-			this.component1,
-			this.component2,
-			this.component3
-		};
+		return new float[] {this.x, this.y, this.z};
 	}
 	
 	/**
@@ -463,7 +470,7 @@ public final class Vector3F implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
+		return Objects.hash(Float.valueOf(this.x), Float.valueOf(this.y), Float.valueOf(this.z));
 	}
 	
 	/**
@@ -479,9 +486,9 @@ public final class Vector3F implements Node {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeFloat(this.component1);
-			dataOutput.writeFloat(this.component2);
-			dataOutput.writeFloat(this.component3);
+			dataOutput.writeFloat(this.x);
+			dataOutput.writeFloat(this.y);
+			dataOutput.writeFloat(this.z);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -541,65 +548,53 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
-	 * Returns a new {@code Vector3F} instance with the absolute component values of {@code vector}.
+	 * Returns a new {@code Vector3F} instance with the absolute component values of {@code v}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector3F} instance
-	 * @return a new {@code Vector3F} instance with the absolute component values of {@code vector}
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the absolute component values of {@code v}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector3F absolute(final Vector3F vector) {
-		final float component1 = abs(vector.component1);
-		final float component2 = abs(vector.component2);
-		final float component3 = abs(vector.component3);
-		
-		return new Vector3F(component1, component2, component3);
+	public static Vector3F absolute(final Vector3F v) {
+		return new Vector3F(abs(v.x), abs(v.y), abs(v.z));
 	}
 	
 	/**
-	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
+	 * Adds the component values of {@code vRHS} to the component values of {@code vLHS}.
 	 * <p>
 	 * Returns a new {@code Vector3F} instance with the result of the addition.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector addition is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
 	 * @return a new {@code Vector3F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector3F add(final Vector3F vectorLHS, final Vector3F vectorRHS) {
-		final float component1 = vectorLHS.component1 + vectorRHS.component1;
-		final float component2 = vectorLHS.component2 + vectorRHS.component2;
-		final float component3 = vectorLHS.component3 + vectorRHS.component3;
-		
-		return new Vector3F(component1, component2, component3);
+	public static Vector3F add(final Vector3F vLHS, final Vector3F vRHS) {
+		return new Vector3F(vLHS.x + vRHS.x, vLHS.y + vRHS.y, vLHS.z + vRHS.z);
 	}
 	
 	/**
-	 * Adds the component values of {@code vectorA}, {@code vectorB} and {@code vectorC}.
+	 * Adds the component values of {@code a}, {@code b} and {@code c}.
 	 * <p>
 	 * Returns a new {@code Vector3F} instance with the result of the addition.
 	 * <p>
-	 * If either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector addition is performed componentwise.
 	 * 
-	 * @param vectorA a {@code Vector3F} instance
-	 * @param vectorB a {@code Vector3F} instance
-	 * @param vectorC a {@code Vector3F} instance
+	 * @param a a {@code Vector3F} instance
+	 * @param b a {@code Vector3F} instance
+	 * @param c a {@code Vector3F} instance
 	 * @return a new {@code Vector3F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-	public static Vector3F add(final Vector3F vectorA, final Vector3F vectorB, final Vector3F vectorC) {
-		final float component1 = vectorA.component1 + vectorB.component1 + vectorC.component1;
-		final float component2 = vectorA.component2 + vectorB.component2 + vectorC.component2;
-		final float component3 = vectorA.component3 + vectorB.component3 + vectorC.component3;
-		
-		return new Vector3F(component1, component2, component3);
+	public static Vector3F add(final Vector3F a, final Vector3F b, final Vector3F c) {
+		return new Vector3F(a.x + b.x + c.x, a.y + b.y + c.y, a.z + b.z + c.z);
 	}
 	
 	/**
@@ -614,39 +609,35 @@ public final class Vector3F implements Node {
 	public static Vector3F computeV(final Vector3F w) {
 		final Vector3F wNormalized = normalize(w);
 		
-		final float absWNormalizedComponent1 = abs(wNormalized.component1);
-		final float absWNormalizedComponent2 = abs(wNormalized.component2);
-		final float absWNormalizedComponent3 = abs(wNormalized.component3);
+		final float absWNormalizedComponent1 = abs(wNormalized.x);
+		final float absWNormalizedComponent2 = abs(wNormalized.y);
+		final float absWNormalizedComponent3 = abs(wNormalized.z);
 		
 		if(absWNormalizedComponent1 < absWNormalizedComponent2 && absWNormalizedComponent1 < absWNormalizedComponent3) {
-			return normalize(new Vector3F(0.0F, wNormalized.component3, -wNormalized.component2));
+			return normalize(new Vector3F(0.0F, wNormalized.z, -wNormalized.y));
 		}
 		
 		if(absWNormalizedComponent2 < absWNormalizedComponent3) {
-			return normalize(new Vector3F(wNormalized.component3, 0.0F, -wNormalized.component1));
+			return normalize(new Vector3F(wNormalized.z, 0.0F, -wNormalized.x));
 		}
 		
-		return normalize(new Vector3F(wNormalized.component2, -wNormalized.component1, 0.0F));
+		return normalize(new Vector3F(wNormalized.y, -wNormalized.x, 0.0F));
 	}
 	
 	/**
-	 * Computes the cross product of {@code vectorLHS} and {@code vectorRHS}.
+	 * Computes the cross product of {@code vLHS} and {@code vRHS}.
 	 * <p>
 	 * Returns a new {@code Vector3F} instance with the result of the operation.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
 	 * @return a new {@code Vector3F} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector3F crossProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
-		final float component1 = vectorLHS.component2 * vectorRHS.component3 - vectorLHS.component3 * vectorRHS.component2;
-		final float component2 = vectorLHS.component3 * vectorRHS.component1 - vectorLHS.component1 * vectorRHS.component3;
-		final float component3 = vectorLHS.component1 * vectorRHS.component2 - vectorLHS.component2 * vectorRHS.component1;
-		
-		return new Vector3F(component1, component2, component3);
+	public static Vector3F crossProduct(final Vector3F vLHS, final Vector3F vRHS) {
+		return new Vector3F(vLHS.y * vRHS.z - vLHS.z * vRHS.y, vLHS.z * vRHS.x - vLHS.x * vRHS.z, vLHS.x * vRHS.y - vLHS.y * vRHS.x);
 	}
 	
 	/**
@@ -660,11 +651,7 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
 	public static Vector3F direction(final Point3F eye, final Point3F lookAt) {
-		final float component1 = lookAt.getComponent1() - eye.getComponent1();
-		final float component2 = lookAt.getComponent2() - eye.getComponent2();
-		final float component3 = lookAt.getComponent3() - eye.getComponent3();
-		
-		return new Vector3F(component1, component2, component3);
+		return new Vector3F(lookAt.x - eye.x, lookAt.y - eye.y, lookAt.z - eye.z);
 	}
 	
 	/**
@@ -678,11 +665,7 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
 	public static Vector3F direction(final Point4F eye, final Point4F lookAt) {
-		final float component1 = lookAt.getComponent1() - eye.getComponent1();
-		final float component2 = lookAt.getComponent2() - eye.getComponent2();
-		final float component3 = lookAt.getComponent3() - eye.getComponent3();
-		
-		return new Vector3F(component1, component2, component3);
+		return new Vector3F(lookAt.x - eye.x, lookAt.y - eye.y, lookAt.z - eye.z);
 	}
 	
 	/**
@@ -771,11 +754,7 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F directionSpherical(final float sinTheta, final float cosTheta, final float phi, final Vector3F x, final Vector3F y, final Vector3F z) {
-		final Vector3F sphericalX = multiply(x, sinTheta * cos(phi));
-		final Vector3F sphericalY = multiply(y, sinTheta * sin(phi));
-		final Vector3F sphericalZ = multiply(z, cosTheta);
-		
-		return add(sphericalX, sphericalY, sphericalZ);
+		return add(multiply(x, sinTheta * cos(phi)), multiply(y, sinTheta * sin(phi)), multiply(z, cosTheta));
 	}
 	
 	/**
@@ -791,129 +770,121 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
-	 * Divides the component values of {@code vectorLHS} with {@code scalarRHS}.
+	 * Divides the component values of {@code vLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Vector3F} instance with the result of the division.
 	 * <p>
-	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector division is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector3F} instance with the result of the division
-	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
-	public static Vector3F divide(final Vector3F vectorLHS, final float scalarRHS) {
-		final float component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0F);
-		final float component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0F);
-		final float component3 = finiteOrDefault(vectorLHS.component3 / scalarRHS, 0.0F);
-		
-		return new Vector3F(component1, component2, component3);
+	public static Vector3F divide(final Vector3F vLHS, final float sRHS) {
+		return new Vector3F(finiteOrDefault(vLHS.x / sRHS, 0.0F), finiteOrDefault(vLHS.y / sRHS, 0.0F), finiteOrDefault(vLHS.z / sRHS, 0.0F));
 	}
 	
 	/**
-	 * Returns {@code Vector3F.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3F.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively.
+	 * Returns {@code Vector3F.negate(vLHS)} or {@code vLHS} as {@code Vector3F.dotProduct(vLHS, vRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side
-	 * @return {@code Vector3F.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3F.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return {@code Vector3F.negate(vLHS)} or {@code vLHS} as {@code Vector3F.dotProduct(vLHS, vRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector3F faceForward(final Vector3F vectorLHS, final Vector3F vectorRHS) {
-		return dotProduct(vectorLHS, vectorRHS) < 0.0F ? negate(vectorLHS) : vectorLHS;
+	public static Vector3F faceForward(final Vector3F vLHS, final Vector3F vRHS) {
+		return dotProduct(vLHS, vRHS) < 0.0F ? negate(vLHS) : vLHS;
 	}
 	
 	/**
-	 * Returns {@code Vector3F.negate(direction)} or {@code direction} as {@code Vector3F.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively.
+	 * Returns {@code Vector3F.negate(direction)} or {@code direction} as {@code Vector3F.dotProduct(vLHS, vRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively.
 	 * <p>
-	 * If either {@code vectorLHS}, {@code vectorRHS} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS}, {@code vRHS} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
 	 * @param direction the {@code Vector3F} instance to potentially negate and then return
-	 * @return {@code Vector3F.negate(direction)} or {@code direction} as {@code Vector3F.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS}, {@code vectorRHS} or {@code direction} are {@code null}
+	 * @return {@code Vector3F.negate(direction)} or {@code direction} as {@code Vector3F.dotProduct(vLHS, vRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS}, {@code vRHS} or {@code direction} are {@code null}
 	 */
-	public static Vector3F faceForward(final Vector3F vectorLHS, final Vector3F vectorRHS, final Vector3F direction) {
-		return dotProduct(vectorLHS, vectorRHS) < 0.0F ? negate(direction) : Objects.requireNonNull(direction, "direction == null");
+	public static Vector3F faceForward(final Vector3F vLHS, final Vector3F vRHS, final Vector3F direction) {
+		return dotProduct(vLHS, vRHS) < 0.0F ? negate(direction) : Objects.requireNonNull(direction, "direction == null");
 	}
 	
 	/**
-	 * Returns {@code Vector3F.negateComponent3(vectorRHS)} or {@code vectorRHS} as {@code vectorLHS.getComponent3()} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively.
+	 * Returns {@code Vector3F.negateComponent3(vRHS)} or {@code vRHS} as {@code vLHS.z} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side to potentially negate and then return
-	 * @return {@code Vector3F.negateComponent3(vectorRHS)} or {@code vectorRHS} as {@code vectorLHS.getComponent3()} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side to potentially negate and then return
+	 * @return {@code Vector3F.negateComponent3(vRHS)} or {@code vRHS} as {@code vLHS.z} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector3F faceForwardComponent3(final Vector3F vectorLHS, final Vector3F vectorRHS) {
-		return vectorLHS.component3 < 0.0F ? negateComponent3(vectorRHS) : Objects.requireNonNull(vectorRHS, "vectorRHS == null");
+	public static Vector3F faceForwardComponent3(final Vector3F vLHS, final Vector3F vRHS) {
+		return vLHS.z < 0.0F ? negateComponent3(vRHS) : Objects.requireNonNull(vRHS, "vRHS == null");
 	}
 	
 	/**
-	 * Returns {@code Vector3F.negateComponent3(vectorRHS)} or {@code vectorRHS} as {@code vectorLHS.getComponent3()} is greater than {@code 0.0F} or less than or equal to {@code 0.0F}, respectively.
+	 * Returns {@code Vector3F.negateComponent3(vRHS)} or {@code vRHS} as {@code vLHS.z} is greater than {@code 0.0F} or less than or equal to {@code 0.0F}, respectively.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side to potentially negate and then return
-	 * @return {@code Vector3F.negateComponent3(vectorRHS)} or {@code vectorRHS} as {@code vectorLHS.getComponent3()} is greater than {@code 0.0F} or less than or equal to {@code 0.0F}, respectively
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side to potentially negate and then return
+	 * @return {@code Vector3F.negateComponent3(vRHS)} or {@code vRHS} as {@code vLHS.z} is greater than {@code 0.0F} or less than or equal to {@code 0.0F}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Vector3F faceForwardComponent3Negated(final Vector3F vectorLHS, final Vector3F vectorRHS) {
-		return vectorLHS.component3 > 0.0F ? negateComponent3(vectorRHS) : Objects.requireNonNull(vectorRHS, "vectorRHS == null");
+	public static Vector3F faceForwardComponent3Negated(final Vector3F vLHS, final Vector3F vRHS) {
+		return vLHS.z > 0.0F ? negateComponent3(vRHS) : Objects.requireNonNull(vRHS, "vRHS == null");
 	}
 	
 	/**
-	 * Returns {@code Vector3F.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3F.dotProduct(vectorLHS, vectorRHS)} is greater than {@code 0.0F} or less than or equal to {@code 0.0F}, respectively.
+	 * Returns {@code Vector3F.negate(vLHS)} or {@code vLHS} as {@code Vector3F.dotProduct(vLHS, vRHS)} is greater than {@code 0.0F} or less than or equal to {@code 0.0F}, respectively.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side
-	 * @return {@code Vector3F.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3F.dotProduct(vectorLHS, vectorRHS)} is greater than {@code 0.0F} or less than or equal to {@code 0.0F}, respectively
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return {@code Vector3F.negate(vLHS)} or {@code vLHS} as {@code Vector3F.dotProduct(vLHS, vRHS)} is greater than {@code 0.0F} or less than or equal to {@code 0.0F}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Vector3F faceForwardNegated(final Vector3F vectorLHS, final Vector3F vectorRHS) {
-		return dotProduct(vectorLHS, vectorRHS) > 0.0F ? negate(vectorLHS) : vectorLHS;
+	public static Vector3F faceForwardNegated(final Vector3F vLHS, final Vector3F vRHS) {
+		return dotProduct(vLHS, vRHS) > 0.0F ? negate(vLHS) : vLHS;
 	}
 	
 	/**
-	 * Returns a cached version of {@code vector}.
+	 * Returns a cached version of {@code v}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector3F} instance
-	 * @return a cached version of {@code vector}
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@code Vector3F} instance
+	 * @return a cached version of {@code v}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector3F getCached(final Vector3F vector) {
-		return CACHE.computeIfAbsent(Objects.requireNonNull(vector, "vector == null"), key -> vector);
+	public static Vector3F getCached(final Vector3F v) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(v, "v == null"), key -> v);
 	}
 	
 	/**
-	 * Returns a {@code Vector3F} instance that contains the Hadamard product of {@code vectorLHS} and {@code vectorRHS}.
+	 * Returns a {@code Vector3F} instance that contains the Hadamard product of {@code vLHS} and {@code vRHS}.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side
-	 * @return a {@code Vector3F} instance that contains the Hadamard product of {@code vectorLHS} and {@code vectorRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return a {@code Vector3F} instance that contains the Hadamard product of {@code vLHS} and {@code vRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector3F hadamardProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
-		final float component1 = vectorLHS.component1 * vectorRHS.component1;
-		final float component2 = vectorLHS.component2 * vectorRHS.component2;
-		final float component3 = vectorLHS.component3 * vectorRHS.component3;
-		
-		return new Vector3F(component1, component2, component3);
+	public static Vector3F hadamardProduct(final Vector3F vLHS, final Vector3F vRHS) {
+		return new Vector3F(vLHS.x * vRHS.x, vLHS.y * vRHS.y, vLHS.z * vRHS.z);
 	}
 	
 	/**
@@ -946,11 +917,7 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Vector3F lerp(final Vector3F a, final Vector3F b, final float t) {
-		final float component1 = Floats.lerp(a.component1, b.component1, t);
-		final float component2 = Floats.lerp(a.component2, b.component2, t);
-		final float component3 = Floats.lerp(a.component3, b.component3, t);
-		
-		return new Vector3F(component1, component2, component3);
+		return new Vector3F(Floats.lerp(a.x, b.x, t), Floats.lerp(a.y, b.y, t), Floats.lerp(a.z, b.z, t));
 	}
 	
 	/**
@@ -968,9 +935,9 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
 	public static Vector3F multiply(final Vector3F vectorLHS, final float scalarRHS) {
-		final float component1 = vectorLHS.component1 * scalarRHS;
-		final float component2 = vectorLHS.component2 * scalarRHS;
-		final float component3 = vectorLHS.component3 * scalarRHS;
+		final float component1 = vectorLHS.x * scalarRHS;
+		final float component2 = vectorLHS.y * scalarRHS;
+		final float component3 = vectorLHS.z * scalarRHS;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -987,9 +954,9 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3F negate(final Vector3F vector) {
-		final float component1 = -vector.component1;
-		final float component2 = -vector.component2;
-		final float component3 = -vector.component3;
+		final float component1 = -vector.x;
+		final float component2 = -vector.y;
+		final float component3 = -vector.z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1006,9 +973,9 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3F negateComponent1(final Vector3F vector) {
-		final float component1 = -vector.component1;
-		final float component2 = +vector.component2;
-		final float component3 = +vector.component3;
+		final float component1 = -vector.x;
+		final float component2 = +vector.y;
+		final float component3 = +vector.z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1025,9 +992,9 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3F negateComponent2(final Vector3F vector) {
-		final float component1 = +vector.component1;
-		final float component2 = -vector.component2;
-		final float component3 = +vector.component3;
+		final float component1 = +vector.x;
+		final float component2 = -vector.y;
+		final float component3 = +vector.z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1044,9 +1011,9 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3F negateComponent3(final Vector3F vector) {
-		final float component1 = +vector.component1;
-		final float component2 = +vector.component2;
-		final float component3 = -vector.component3;
+		final float component1 = +vector.x;
+		final float component2 = +vector.y;
+		final float component3 = -vector.z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1087,9 +1054,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F normal(final Vector3F normalA, final Vector3F normalB, final Vector3F normalC, final Point3F barycentricCoordinates) {
-		final float component1 = normalA.component1 * barycentricCoordinates.getU() + normalB.component1 * barycentricCoordinates.getV() + normalC.component1 * barycentricCoordinates.getW();
-		final float component2 = normalA.component2 * barycentricCoordinates.getU() + normalB.component2 * barycentricCoordinates.getV() + normalC.component2 * barycentricCoordinates.getW();
-		final float component3 = normalA.component3 * barycentricCoordinates.getU() + normalB.component3 * barycentricCoordinates.getV() + normalC.component3 * barycentricCoordinates.getW();
+		final float component1 = normalA.x * barycentricCoordinates.getU() + normalB.x * barycentricCoordinates.getV() + normalC.x * barycentricCoordinates.getW();
+		final float component2 = normalA.y * barycentricCoordinates.getU() + normalB.y * barycentricCoordinates.getV() + normalC.y * barycentricCoordinates.getW();
+		final float component3 = normalA.z * barycentricCoordinates.getU() + normalB.z * barycentricCoordinates.getV() + normalC.z * barycentricCoordinates.getW();
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1210,9 +1177,9 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3F reciprocal(final Vector3F vector) {
-		final float component1 = 1.0F / vector.component1;
-		final float component2 = 1.0F / vector.component2;
-		final float component3 = 1.0F / vector.component3;
+		final float component1 = 1.0F / vector.x;
+		final float component2 = 1.0F / vector.y;
+		final float component3 = 1.0F / vector.z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1314,9 +1281,9 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
 	public static Vector3F subtract(final Vector3F vectorLHS, final Vector3F vectorRHS) {
-		final float component1 = vectorLHS.component1 - vectorRHS.component1;
-		final float component2 = vectorLHS.component2 - vectorRHS.component2;
-		final float component3 = vectorLHS.component3 - vectorRHS.component3;
+		final float component1 = vectorLHS.x - vectorRHS.x;
+		final float component2 = vectorLHS.y - vectorRHS.y;
+		final float component3 = vectorLHS.z - vectorRHS.z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1335,9 +1302,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transform(final Matrix44F matrixLHS, final Vector3F vectorRHS) {
-		final float component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement12() * vectorRHS.component2 + matrixLHS.getElement13() * vectorRHS.component3;
-		final float component2 = matrixLHS.getElement21() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2 + matrixLHS.getElement23() * vectorRHS.component3;
-		final float component3 = matrixLHS.getElement31() * vectorRHS.component1 + matrixLHS.getElement32() * vectorRHS.component2 + matrixLHS.getElement33() * vectorRHS.component3;
+		final float component1 = matrixLHS.getElement11() * vectorRHS.x + matrixLHS.getElement12() * vectorRHS.y + matrixLHS.getElement13() * vectorRHS.z;
+		final float component2 = matrixLHS.getElement21() * vectorRHS.x + matrixLHS.getElement22() * vectorRHS.y + matrixLHS.getElement23() * vectorRHS.z;
+		final float component3 = matrixLHS.getElement31() * vectorRHS.x + matrixLHS.getElement32() * vectorRHS.y + matrixLHS.getElement33() * vectorRHS.z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1356,9 +1323,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transform(final Vector3F vectorLHS, final OrthonormalBasis33F orthonormalBasisRHS) {
-		final float component1 = vectorLHS.component1 * orthonormalBasisRHS.getU().component1 + vectorLHS.component2 * orthonormalBasisRHS.getV().component1 + vectorLHS.component3 * orthonormalBasisRHS.getW().component1;
-		final float component2 = vectorLHS.component1 * orthonormalBasisRHS.getU().component2 + vectorLHS.component2 * orthonormalBasisRHS.getV().component2 + vectorLHS.component3 * orthonormalBasisRHS.getW().component2;
-		final float component3 = vectorLHS.component1 * orthonormalBasisRHS.getU().component3 + vectorLHS.component2 * orthonormalBasisRHS.getV().component3 + vectorLHS.component3 * orthonormalBasisRHS.getW().component3;
+		final float component1 = vectorLHS.x * orthonormalBasisRHS.getU().x + vectorLHS.y * orthonormalBasisRHS.getV().x + vectorLHS.z * orthonormalBasisRHS.getW().x;
+		final float component2 = vectorLHS.x * orthonormalBasisRHS.getU().y + vectorLHS.y * orthonormalBasisRHS.getV().y + vectorLHS.z * orthonormalBasisRHS.getW().y;
+		final float component3 = vectorLHS.x * orthonormalBasisRHS.getU().z + vectorLHS.y * orthonormalBasisRHS.getV().z + vectorLHS.z * orthonormalBasisRHS.getW().z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1399,9 +1366,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transformError(final Matrix44F matrix, final Point3F point, final Vector3F vector) {
-		final float component1 = (gamma(3) + 1.0F) * (abs(matrix.getElement11()) * vector.component1 + abs(matrix.getElement12()) * vector.component2 + abs(matrix.getElement13()) * vector.component3) + gamma(3) * (abs(matrix.getElement11() * point.getComponent1()) + abs(matrix.getElement12() * point.getComponent2()) + abs(matrix.getElement13() * point.getComponent3()) + abs(matrix.getElement14()));
-		final float component2 = (gamma(3) + 1.0F) * (abs(matrix.getElement21()) * vector.component1 + abs(matrix.getElement22()) * vector.component2 + abs(matrix.getElement23()) * vector.component3) + gamma(3) * (abs(matrix.getElement21() * point.getComponent1()) + abs(matrix.getElement22() * point.getComponent2()) + abs(matrix.getElement23() * point.getComponent3()) + abs(matrix.getElement24()));
-		final float component3 = (gamma(3) + 1.0F) * (abs(matrix.getElement31()) * vector.component1 + abs(matrix.getElement32()) * vector.component2 + abs(matrix.getElement33()) * vector.component3) + gamma(3) * (abs(matrix.getElement31() * point.getComponent1()) + abs(matrix.getElement32() * point.getComponent2()) + abs(matrix.getElement33() * point.getComponent3()) + abs(matrix.getElement34()));
+		final float component1 = (gamma(3) + 1.0F) * (abs(matrix.getElement11()) * vector.x + abs(matrix.getElement12()) * vector.y + abs(matrix.getElement13()) * vector.z) + gamma(3) * (abs(matrix.getElement11() * point.getComponent1()) + abs(matrix.getElement12() * point.getComponent2()) + abs(matrix.getElement13() * point.getComponent3()) + abs(matrix.getElement14()));
+		final float component2 = (gamma(3) + 1.0F) * (abs(matrix.getElement21()) * vector.x + abs(matrix.getElement22()) * vector.y + abs(matrix.getElement23()) * vector.z) + gamma(3) * (abs(matrix.getElement21() * point.getComponent1()) + abs(matrix.getElement22() * point.getComponent2()) + abs(matrix.getElement23() * point.getComponent3()) + abs(matrix.getElement24()));
+		final float component3 = (gamma(3) + 1.0F) * (abs(matrix.getElement31()) * vector.x + abs(matrix.getElement32()) * vector.y + abs(matrix.getElement33()) * vector.z) + gamma(3) * (abs(matrix.getElement31() * point.getComponent1()) + abs(matrix.getElement32() * point.getComponent2()) + abs(matrix.getElement33() * point.getComponent3()) + abs(matrix.getElement34()));
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1441,9 +1408,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transformTranspose(final Matrix44F matrixLHS, final Vector3F vectorRHS) {
-		final float component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement21() * vectorRHS.component2 + matrixLHS.getElement31() * vectorRHS.component3;
-		final float component2 = matrixLHS.getElement12() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2 + matrixLHS.getElement32() * vectorRHS.component3;
-		final float component3 = matrixLHS.getElement13() * vectorRHS.component1 + matrixLHS.getElement23() * vectorRHS.component2 + matrixLHS.getElement33() * vectorRHS.component3;
+		final float component1 = matrixLHS.getElement11() * vectorRHS.x + matrixLHS.getElement21() * vectorRHS.y + matrixLHS.getElement31() * vectorRHS.z;
+		final float component2 = matrixLHS.getElement12() * vectorRHS.x + matrixLHS.getElement22() * vectorRHS.y + matrixLHS.getElement32() * vectorRHS.z;
+		final float component3 = matrixLHS.getElement13() * vectorRHS.x + matrixLHS.getElement23() * vectorRHS.y + matrixLHS.getElement33() * vectorRHS.z;
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -1608,7 +1575,7 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
 	public static boolean sameHemisphereZ(final Vector3F vLHS, final Vector3F vRHS) {
-		return vLHS.component3 * vRHS.component3 > 0.0F;
+		return vLHS.z * vRHS.z > 0.0F;
 	}
 	
 	/**
@@ -1622,7 +1589,7 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
 	public static float dotProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
-		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3;
+		return vectorLHS.x * vectorRHS.x + vectorLHS.y * vectorRHS.y + vectorLHS.z * vectorRHS.z;
 	}
 	
 	/**

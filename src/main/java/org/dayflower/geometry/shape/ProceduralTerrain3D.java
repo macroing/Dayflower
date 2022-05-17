@@ -154,7 +154,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3D point) {
-		return point.getY() < doApplyAsDouble(point.getX(), point.getZ());
+		return point.y < doApplyAsDouble(point.x, point.z);
 	}
 	
 	/**
@@ -212,9 +212,9 @@ public final class ProceduralTerrain3D implements Shape3D {
 		
 		final Vector3D direction = ray.getDirection();
 		
-		final double originX = origin.getX();
-		final double originY = origin.getY();
-		final double originZ = origin.getZ();
+		final double originX = origin.x;
+		final double originY = origin.y;
+		final double originZ = origin.z;
 		
 		final double directionX = direction.getX();
 		final double directionY = direction.getY();
@@ -337,9 +337,9 @@ public final class ProceduralTerrain3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
-		final double x = doApplyAsDouble(surfaceIntersectionPoint.getX() - 0.0001D, surfaceIntersectionPoint.getZ() - 0.0000D) - doApplyAsDouble(surfaceIntersectionPoint.getX() + 0.0001D, surfaceIntersectionPoint.getZ() + 0.0000D);
+		final double x = doApplyAsDouble(surfaceIntersectionPoint.x - 0.0001D, surfaceIntersectionPoint.z - 0.0000D) - doApplyAsDouble(surfaceIntersectionPoint.x + 0.0001D, surfaceIntersectionPoint.z + 0.0000D);
 		final double y = 2.0D * 0.0001D;
-		final double z = doApplyAsDouble(surfaceIntersectionPoint.getX() - 0.0000D, surfaceIntersectionPoint.getZ() - 0.0001D) - doApplyAsDouble(surfaceIntersectionPoint.getX() + 0.0000D, surfaceIntersectionPoint.getZ() + 0.0001D);
+		final double z = doApplyAsDouble(surfaceIntersectionPoint.x - 0.0000D, surfaceIntersectionPoint.z - 0.0001D) - doApplyAsDouble(surfaceIntersectionPoint.x + 0.0000D, surfaceIntersectionPoint.z + 0.0001D);
 		
 		final Vector3D w = Vector3D.normalize(new Vector3D(x, y, z));
 		
@@ -366,7 +366,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
-		return new Point2D(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getZ());
+		return new Point2D(surfaceIntersectionPoint.x, surfaceIntersectionPoint.z);
 	}
 	
 	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {

@@ -516,19 +516,19 @@ public final class ByteImageD extends ImageD {
 	 * <p>
 	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If either {@code rectangle.getC().x - rectangle.getA().x} or {@code rectangle.getC().y - rectangle.getA().y} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * If the permission {@code readDisplayPixels} is not granted, a {@code SecurityException} will be thrown.
 	 * 
 	 * @param rectangle a {@link Rectangle2I} that contains the bounds
 	 * @return a new {@code ByteImageD} instance
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code rectangle.getC().x - rectangle.getA().x} or {@code rectangle.getC().y - rectangle.getA().y} are less than or equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
 	 */
 //	TODO: Add Unit Tests!
 	public static ByteImageD createScreenCapture(final Rectangle2I rectangle) {
-		return new ByteImageD(BufferedImages.createScreenCapture(rectangle.getA().getX(), rectangle.getA().getY(), rectangle.getC().getX() - rectangle.getA().getX(), rectangle.getC().getY() - rectangle.getA().getY()));
+		return new ByteImageD(BufferedImages.createScreenCapture(rectangle.getA().x, rectangle.getA().y, rectangle.getC().x - rectangle.getA().x, rectangle.getC().y - rectangle.getA().y));
 	}
 	
 	/**

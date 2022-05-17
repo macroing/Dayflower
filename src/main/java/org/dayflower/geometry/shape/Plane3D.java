@@ -172,7 +172,7 @@ public final class Plane3D implements Shape3D {
 	 */
 	@Override
 	public boolean contains(final Point3D point) {
-		return isZero(point.getZ());
+		return isZero(point.z);
 	}
 	
 	/**

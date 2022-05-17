@@ -350,7 +350,7 @@ public final class Disk3D implements Shape3D {
 			return Double.NaN;
 		}
 		
-		final double t = (this.zMax - origin.getZ()) / direction.getZ();
+		final double t = (this.zMax - origin.z) / direction.getZ();
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return Double.NaN;
@@ -421,12 +421,12 @@ public final class Disk3D implements Shape3D {
 	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
 		final double length = new Vector2D(surfaceIntersectionPoint).length();
 		
-		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
-		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
+		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;
 		final double uZ = +0.0D;
 		
-		final double vX = surfaceIntersectionPoint.getX() * (this.radiusInner - this.radiusOuter) / length;
-		final double vY = surfaceIntersectionPoint.getY() * (this.radiusInner - this.radiusOuter) / length;
+		final double vX = surfaceIntersectionPoint.x * (this.radiusInner - this.radiusOuter) / length;
+		final double vY = surfaceIntersectionPoint.y * (this.radiusInner - this.radiusOuter) / length;
 		final double vZ = 0.0D;
 		
 		final Vector3D u = Vector3D.normalize(new Vector3D(uX, uY, uZ));
@@ -445,7 +445,7 @@ public final class Disk3D implements Shape3D {
 	
 	private Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
 		final Point3D surfaceIntersectionPoint = Point3D.add(ray.getOrigin(), ray.getDirection(), t);
-		final Point3D surfaceIntersectionPointTransformed = new Point3D(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getY(), this.zMax);
+		final Point3D surfaceIntersectionPointTransformed = new Point3D(surfaceIntersectionPoint.x, surfaceIntersectionPoint.y, this.zMax);
 		
 		return surfaceIntersectionPointTransformed;
 	}

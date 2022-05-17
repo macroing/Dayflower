@@ -227,7 +227,7 @@ public final class Cone3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3D point) {
-		return point.getZ() >= 0.0D && point.getZ() <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
+		return point.z >= 0.0D && point.z <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
 	}
 	
 	/**
@@ -309,8 +309,8 @@ public final class Cone3D implements Shape3D {
 		
 		final double k = (this.radius / this.zMax) * (this.radius / this.zMax);
 		final double a = direction.getX() * direction.getX() + direction.getY() * direction.getY() - k * direction.getZ() * direction.getZ();
-		final double b = 2.0D * (direction.getX() * origin.getX() + direction.getY() * origin.getY() - k * direction.getZ() * (origin.getZ() - this.zMax));
-		final double c = origin.getX() * origin.getX() + origin.getY() * origin.getY() - k * (origin.getZ() - this.zMax) * (origin.getZ() - this.zMax);
+		final double b = 2.0D * (direction.getX() * origin.x + direction.getY() * origin.y - k * direction.getZ() * (origin.z - this.zMax));
+		final double c = origin.x * origin.x + origin.y * origin.y - k * (origin.z - this.zMax) * (origin.z - this.zMax);
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -324,7 +324,7 @@ public final class Cone3D implements Shape3D {
 			if(t > tMinimum && t < tMaximum) {
 				final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.getZ() >= 0.0D && surfaceIntersectionPoint.getZ() <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+				if(surfaceIntersectionPoint.z >= 0.0D && surfaceIntersectionPoint.z <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}
@@ -384,14 +384,14 @@ public final class Cone3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
-		final double value = 1.0D - (surfaceIntersectionPoint.getZ() / this.zMax);
+		final double value = 1.0D - (surfaceIntersectionPoint.z / this.zMax);
 		
-		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
-		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
+		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;
 		final double uZ = +0.0D;
 		
-		final double vX = -surfaceIntersectionPoint.getX() / value;
-		final double vY = -surfaceIntersectionPoint.getY() / value;
+		final double vX = -surfaceIntersectionPoint.x / value;
+		final double vY = -surfaceIntersectionPoint.y / value;
 		final double vZ = +this.zMax;
 		
 		final Vector3D u = Vector3D.normalize(new Vector3D(uX, uY, uZ));
@@ -403,7 +403,7 @@ public final class Cone3D implements Shape3D {
 	
 	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
 		final double u = surfaceIntersectionPoint.sphericalPhi() / this.phiMax.getRadians();
-		final double v = surfaceIntersectionPoint.getZ() / this.zMax;
+		final double v = surfaceIntersectionPoint.z / this.zMax;
 		
 		return new Point2D(u, v);
 	}

@@ -99,12 +99,12 @@ public final class AxisAlignedBoundingBox3D implements BoundingVolume3D {
 	 */
 	@Override
 	public AxisAlignedBoundingBox3D transform(final Matrix44D matrix) {
-		final double maximumX = this.maximum.getX();
-		final double maximumY = this.maximum.getY();
-		final double maximumZ = this.maximum.getZ();
-		final double minimumX = this.minimum.getX();
-		final double minimumY = this.minimum.getY();
-		final double minimumZ = this.minimum.getZ();
+		final double maximumX = this.maximum.x;
+		final double maximumY = this.maximum.y;
+		final double maximumZ = this.maximum.z;
+		final double minimumX = this.minimum.x;
+		final double minimumY = this.minimum.y;
+		final double minimumZ = this.minimum.z;
 		
 		final Point3D[] points = new Point3D[] {
 			Point3D.transformAndDivide(matrix, new Point3D(minimumX, minimumY, minimumZ)),
@@ -139,17 +139,17 @@ public final class AxisAlignedBoundingBox3D implements BoundingVolume3D {
 	 */
 	@Override
 	public Point3D getClosestPointTo(final Point3D point) {
-		final double maximumX = this.maximum.getX();
-		final double maximumY = this.maximum.getY();
-		final double maximumZ = this.maximum.getZ();
+		final double maximumX = this.maximum.x;
+		final double maximumY = this.maximum.y;
+		final double maximumZ = this.maximum.z;
 		
-		final double minimumX = this.minimum.getX();
-		final double minimumY = this.minimum.getY();
-		final double minimumZ = this.minimum.getZ();
+		final double minimumX = this.minimum.x;
+		final double minimumY = this.minimum.y;
+		final double minimumZ = this.minimum.z;
 		
-		final double x = point.getX() < minimumX ? minimumX : point.getX() > maximumX ? maximumX : point.getX();
-		final double y = point.getY() < minimumY ? minimumY : point.getY() > maximumY ? maximumY : point.getY();
-		final double z = point.getZ() < minimumZ ? minimumZ : point.getZ() > maximumZ ? maximumZ : point.getZ();
+		final double x = point.x < minimumX ? minimumX : point.x > maximumX ? maximumX : point.x;
+		final double y = point.y < minimumY ? minimumY : point.y > maximumY ? maximumY : point.y;
+		final double z = point.z < minimumZ ? minimumZ : point.z > maximumZ ? maximumZ : point.z;
 		
 		return new Point3D(x, y, z);
 	}
@@ -237,7 +237,7 @@ public final class AxisAlignedBoundingBox3D implements BoundingVolume3D {
 	 */
 	@Override
 	public boolean contains(final Point3D point) {
-		return point.getX() >= this.minimum.getX() && point.getX() <= this.maximum.getX() && point.getY() >= this.minimum.getY() && point.getY() <= this.maximum.getY() && point.getZ() >= this.minimum.getZ() && point.getZ() <= this.maximum.getZ();
+		return point.x >= this.minimum.x && point.x <= this.maximum.x && point.y >= this.minimum.y && point.y <= this.maximum.y && point.z >= this.minimum.z && point.z <= this.maximum.z;
 	}
 	
 	/**
@@ -270,9 +270,9 @@ public final class AxisAlignedBoundingBox3D implements BoundingVolume3D {
 	 */
 	@Override
 	public double getSurfaceArea() {
-		final double x = this.maximum.getX() - this.minimum.getX();
-		final double y = this.maximum.getY() - this.minimum.getY();
-		final double z = this.maximum.getZ() - this.minimum.getZ();
+		final double x = this.maximum.x - this.minimum.x;
+		final double y = this.maximum.y - this.minimum.y;
+		final double z = this.maximum.z - this.minimum.z;
 		final double surfaceArea = 2.0D * (x * y + y * z + z * x);
 		
 		return surfaceArea;
@@ -285,9 +285,9 @@ public final class AxisAlignedBoundingBox3D implements BoundingVolume3D {
 	 */
 	@Override
 	public double getVolume() {
-		final double x = this.maximum.getX() - this.minimum.getX();
-		final double y = this.maximum.getY() - this.minimum.getY();
-		final double z = this.maximum.getZ() - this.minimum.getZ();
+		final double x = this.maximum.x - this.minimum.x;
+		final double y = this.maximum.y - this.minimum.y;
+		final double z = this.maximum.z - this.minimum.z;
 		final double volume = x * y * z;
 		
 		return volume;

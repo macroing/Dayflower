@@ -961,12 +961,12 @@ public final class TriangleMesh3D implements Shape3D {
 			final Point3D maximum = Point3D.maximum(a, b, c);
 			final Point3D minimum = Point3D.minimum(a, b, c);
 			
-			maximumX = max(maximumX, maximum.getX());
-			maximumY = max(maximumY, maximum.getY());
-			maximumZ = max(maximumZ, maximum.getZ());
-			minimumX = min(minimumX, minimum.getX());
-			minimumY = min(minimumY, minimum.getY());
-			minimumZ = min(minimumZ, minimum.getZ());
+			maximumX = max(maximumX, maximum.x);
+			maximumY = max(maximumY, maximum.y);
+			maximumZ = max(maximumZ, maximum.z);
+			minimumX = min(minimumX, minimum.x);
+			minimumY = min(minimumY, minimum.y);
+			minimumZ = min(minimumZ, minimum.z);
 			
 			processableBVHItems.add(new BVHItem3D<>(new AxisAlignedBoundingBox3D(maximum, minimum), triangle));
 		}

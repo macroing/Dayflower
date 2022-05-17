@@ -52,24 +52,24 @@ public final class Point2IUnitTests {
 	public void testConstructor() {
 		final Point2I point = new Point2I();
 		
-		assertEquals(0, point.getComponent1());
-		assertEquals(0, point.getComponent2());
+		assertEquals(0, point.x);
+		assertEquals(0, point.y);
 	}
 	
 	@Test
 	public void testConstructorIntInt() {
 		final Point2I point = new Point2I(1, 2);
 		
-		assertEquals(1, point.getComponent1());
-		assertEquals(2, point.getComponent2());
+		assertEquals(1, point.x);
+		assertEquals(2, point.y);
 	}
 	
 	@Test
 	public void testConstructorPoint2D() {
 		final Point2I point = new Point2I(new Point2D(1.0D, 2.0D));
 		
-		assertEquals(1, point.getComponent1());
-		assertEquals(2, point.getComponent2());
+		assertEquals(1, point.x);
+		assertEquals(2, point.y);
 		
 		assertThrows(NullPointerException.class, () -> new Point2I((Point2D)(null)));
 	}
@@ -78,8 +78,8 @@ public final class Point2IUnitTests {
 	public void testConstructorPoint2F() {
 		final Point2I point = new Point2I(new Point2F(1.0F, 2.0F));
 		
-		assertEquals(1, point.getComponent1());
-		assertEquals(2, point.getComponent2());
+		assertEquals(1, point.x);
+		assertEquals(2, point.y);
 		
 		assertThrows(NullPointerException.class, () -> new Point2I((Point2F)(null)));
 	}
@@ -88,8 +88,8 @@ public final class Point2IUnitTests {
 	public void testConstructorVector2I() {
 		final Point2I point = new Point2I(new Vector2I(1, 2));
 		
-		assertEquals(1, point.getComponent1());
-		assertEquals(2, point.getComponent2());
+		assertEquals(1, point.x);
+		assertEquals(2, point.y);
 		
 		assertThrows(NullPointerException.class, () -> new Point2I((Vector2I)(null)));
 	}
@@ -140,48 +140,6 @@ public final class Point2IUnitTests {
 	}
 	
 	@Test
-	public void testGetComponent1() {
-		final Point2I point = new Point2I(2, 0);
-		
-		assertEquals(2, point.getComponent1());
-	}
-	
-	@Test
-	public void testGetComponent2() {
-		final Point2I point = new Point2I(0, 2);
-		
-		assertEquals(2, point.getComponent2());
-	}
-	
-	@Test
-	public void testGetU() {
-		final Point2I point = new Point2I(2, 0);
-		
-		assertEquals(2, point.getU());
-	}
-	
-	@Test
-	public void testGetV() {
-		final Point2I point = new Point2I(0, 2);
-		
-		assertEquals(2, point.getV());
-	}
-	
-	@Test
-	public void testGetX() {
-		final Point2I point = new Point2I(2, 0);
-		
-		assertEquals(2, point.getX());
-	}
-	
-	@Test
-	public void testGetY() {
-		final Point2I point = new Point2I(0, 2);
-		
-		assertEquals(2, point.getY());
-	}
-	
-	@Test
 	public void testHashCode() {
 		final Point2I a = new Point2I(1, 2);
 		final Point2I b = new Point2I(1, 2);
@@ -201,8 +159,8 @@ public final class Point2IUnitTests {
 		final Point2I b = new Point2I(3, 4);
 		final Point2I c = Point2I.maximum(a, b);
 		
-		assertEquals(3, c.getComponent1());
-		assertEquals(4, c.getComponent2());
+		assertEquals(3, c.x);
+		assertEquals(4, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Point2I.maximum(a, null));
 		assertThrows(NullPointerException.class, () -> Point2I.maximum(null, b));
@@ -215,8 +173,8 @@ public final class Point2IUnitTests {
 		final Point2I c = new Point2I(5, 6);
 		final Point2I d = Point2I.maximum(a, b, c);
 		
-		assertEquals(5, d.getComponent1());
-		assertEquals(6, d.getComponent2());
+		assertEquals(5, d.x);
+		assertEquals(6, d.y);
 		
 		assertThrows(NullPointerException.class, () -> Point2I.maximum(a, b, null));
 		assertThrows(NullPointerException.class, () -> Point2I.maximum(a, null, c));
@@ -231,8 +189,8 @@ public final class Point2IUnitTests {
 		final Point2I d = new Point2I(7, 8);
 		final Point2I e = Point2I.maximum(a, b, c, d);
 		
-		assertEquals(7, e.getComponent1());
-		assertEquals(8, e.getComponent2());
+		assertEquals(7, e.x);
+		assertEquals(8, e.y);
 		
 		assertThrows(NullPointerException.class, () -> Point2I.maximum(a, b, c, null));
 		assertThrows(NullPointerException.class, () -> Point2I.maximum(a, b, null, d));
@@ -246,8 +204,8 @@ public final class Point2IUnitTests {
 		final Point2I b = new Point2I(4, 8);
 		final Point2I c = Point2I.midpoint(a, b);
 		
-		assertEquals(3, c.getComponent1());
-		assertEquals(6, c.getComponent2());
+		assertEquals(3, c.x);
+		assertEquals(6, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Point2I.midpoint(a, null));
 		assertThrows(NullPointerException.class, () -> Point2I.midpoint(null, b));
@@ -264,8 +222,8 @@ public final class Point2IUnitTests {
 		final Point2I b = new Point2I(3, 4);
 		final Point2I c = Point2I.minimum(a, b);
 		
-		assertEquals(1, c.getComponent1());
-		assertEquals(2, c.getComponent2());
+		assertEquals(1, c.x);
+		assertEquals(2, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Point2I.minimum(a, null));
 		assertThrows(NullPointerException.class, () -> Point2I.minimum(null, b));
@@ -278,8 +236,8 @@ public final class Point2IUnitTests {
 		final Point2I c = new Point2I(5, 6);
 		final Point2I d = Point2I.minimum(a, b, c);
 		
-		assertEquals(1, d.getComponent1());
-		assertEquals(2, d.getComponent2());
+		assertEquals(1, d.x);
+		assertEquals(2, d.y);
 		
 		assertThrows(NullPointerException.class, () -> Point2I.minimum(a, b, null));
 		assertThrows(NullPointerException.class, () -> Point2I.minimum(a, null, c));
@@ -294,8 +252,8 @@ public final class Point2IUnitTests {
 		final Point2I d = new Point2I(7, 8);
 		final Point2I e = Point2I.minimum(a, b, c, d);
 		
-		assertEquals(1, e.getComponent1());
-		assertEquals(2, e.getComponent2());
+		assertEquals(1, e.x);
+		assertEquals(2, e.y);
 		
 		assertThrows(NullPointerException.class, () -> Point2I.minimum(a, b, c, null));
 		assertThrows(NullPointerException.class, () -> Point2I.minimum(a, b, null, d));
@@ -311,8 +269,8 @@ public final class Point2IUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeInt(a.getComponent1());
-		dataOutput.writeInt(a.getComponent2());
+		dataOutput.writeInt(a.x);
+		dataOutput.writeInt(a.y);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		

@@ -100,11 +100,11 @@ public final class LineSegment2IUnitTests {
 			assertTrue(lineSegment.contains(Point2I.midpoint(lineSegment.getA(), lineSegment.getB())));
 			assertTrue(lineSegment.contains(lineSegment.getB()));
 			
-			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().getX() + 100, lineSegment.getA().getY())));
-			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().getX() - 100, lineSegment.getA().getY())));
+			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().x + 100, lineSegment.getA().y)));
+			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().x - 100, lineSegment.getA().y)));
 			
-			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().getX(), lineSegment.getA().getY() + 100)));
-			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().getX(), lineSegment.getA().getY() - 100)));
+			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().x, lineSegment.getA().y + 100)));
+			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().x, lineSegment.getA().y - 100)));
 		}
 		
 		assertThrows(NullPointerException.class, () -> new LineSegment2I(new Point2I(10, 10), new Point2I(20, 10)).contains(null));
@@ -119,11 +119,11 @@ public final class LineSegment2IUnitTests {
 			assertTrue(lineSegment.contains(Point2I.midpoint(lineSegment.getA(), lineSegment.getB()), false));
 			assertTrue(lineSegment.contains(lineSegment.getB(), false));
 			
-			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().getX() + 100, lineSegment.getA().getY()), false));
-			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().getX() - 100, lineSegment.getA().getY()), false));
+			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().x + 100, lineSegment.getA().y), false));
+			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().x - 100, lineSegment.getA().y), false));
 			
-			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().getX(), lineSegment.getA().getY() + 100), false));
-			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().getX(), lineSegment.getA().getY() - 100), false));
+			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().x, lineSegment.getA().y + 100), false));
+			assertFalse(lineSegment.contains(new Point2I(lineSegment.getA().x, lineSegment.getA().y - 100), false));
 		}
 		
 		assertThrows(NullPointerException.class, () -> new LineSegment2I(new Point2I(10, 10), new Point2I(20, 10)).contains(null, false));

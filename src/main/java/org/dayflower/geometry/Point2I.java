@@ -54,8 +54,15 @@ public final class Point2I implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final int component1;
-	private final int component2;
+	/**
+	 * The X-component of this {@code Point2I} instance.
+	 */
+	public final int x;
+	
+	/**
+	 * The Y-component of this {@code Point2I} instance.
+	 */
+	public final int y;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -74,71 +81,71 @@ public final class Point2I implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Point2I} instance given the component values {@code Ints.toInt(point.getComponent1())} and {@code Ints.toInt(point.getComponent2())}.
+	 * Constructs a new {@code Point2I} instance given the component values {@code Ints.toInt(p.x)} and {@code Ints.toInt(p.y)}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Point2I(Ints.toInt(point.x), Ints.toInt(point.y));
-	 * }
-	 * </pre>
-	 * 
-	 * @param point a {@link Point2D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
-	 */
-	public Point2I(final Point2D point) {
-		this(toInt(point.x), toInt(point.y));
-	}
-	
-	/**
-	 * Constructs a new {@code Point2I} instance given the component values {@code Ints.toInt(point.getComponent1())} and {@code Ints.toInt(point.getComponent2())}.
-	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point2I(Ints.toInt(point.x), Ints.toInt(point.y));
+	 * new Point2I(Ints.toInt(p.x), Ints.toInt(p.y));
 	 * }
 	 * </pre>
 	 * 
-	 * @param point a {@link Point2F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point2D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Point2I(final Point2F point) {
-		this(toInt(point.x), toInt(point.y));
+	public Point2I(final Point2D p) {
+		this(toInt(p.x), toInt(p.y));
 	}
 	
 	/**
-	 * Constructs a new {@code Point2I} instance given the component values {@code vector.getComponent1()} and {@code vector.getComponent2()}.
+	 * Constructs a new {@code Point2I} instance given the component values {@code Ints.toInt(p.x)} and {@code Ints.toInt(p.y)}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point2I(vector.getComponent1(), vector.getComponent2());
+	 * new Point2I(Ints.toInt(p.x), Ints.toInt(p.y));
 	 * }
 	 * </pre>
 	 * 
-	 * @param vector a {@link Vector2I} instance
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param p a {@link Point2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Point2I(final Vector2I vector) {
-		this(vector.getComponent1(), vector.getComponent2());
+	public Point2I(final Point2F p) {
+		this(toInt(p.x), toInt(p.y));
 	}
 	
 	/**
-	 * Constructs a new {@code Point2I} instance given the component values {@code component1} and {@code component2}.
+	 * Constructs a new {@code Point2I} instance given the component values {@code v.x} and {@code v.y}.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point2I(v.x, v.y);
+	 * }
+	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
+	 * @param v a {@link Vector2I} instance
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public Point2I(final int component1, final int component2) {
-		this.component1 = component1;
-		this.component2 = component2;
+	public Point2I(final Vector2I v) {
+		this(v.x, v.y);
+	}
+	
+	/**
+	 * Constructs a new {@code Point2I} instance given the component values {@code x} and {@code y}.
+	 * 
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 */
+	public Point2I(final int x, final int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +157,7 @@ public final class Point2I implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Point2I(%d, %d)", Integer.valueOf(this.component1), Integer.valueOf(this.component2));
+		return String.format("new Point2I(%d, %d)", Integer.valueOf(this.x), Integer.valueOf(this.y));
 	}
 	
 	/**
@@ -167,67 +174,13 @@ public final class Point2I implements Node {
 			return true;
 		} else if(!(object instanceof Point2I)) {
 			return false;
-		} else if(this.component1 != Point2I.class.cast(object).component1) {
+		} else if(this.x != Point2I.class.cast(object).x) {
 			return false;
-		} else if(this.component2 != Point2I.class.cast(object).component2) {
+		} else if(this.y != Point2I.class.cast(object).y) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-	public int getComponent1() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-	public int getComponent2() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the U-component.
-	 * 
-	 * @return the value of the U-component
-	 */
-	public int getU() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the V-component.
-	 * 
-	 * @return the value of the V-component
-	 */
-	public int getV() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-	public int getX() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-	public int getY() {
-		return this.component2;
 	}
 	
 	/**
@@ -237,7 +190,7 @@ public final class Point2I implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(this.component1), Integer.valueOf(this.component2));
+		return Objects.hash(Integer.valueOf(this.x), Integer.valueOf(this.y));
 	}
 	
 	/**
@@ -246,10 +199,7 @@ public final class Point2I implements Node {
 	 * @return a {@code int[]} representation of this {@code Point2I} instance
 	 */
 	public int[] toArray() {
-		return new int[] {
-			this.component1,
-			this.component2
-		};
+		return new int[] {this.x, this.y};
 	}
 	
 	/**
@@ -265,8 +215,8 @@ public final class Point2I implements Node {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeInt(this.component1);
-			dataOutput.writeInt(this.component2);
+			dataOutput.writeInt(this.x);
+			dataOutput.writeInt(this.y);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -280,10 +230,7 @@ public final class Point2I implements Node {
 	 * @return a new {@code Point2I} instance with the largest component values
 	 */
 	public static Point2I maximum() {
-		final int component1 = MAX_VALUE;
-		final int component2 = MAX_VALUE;
-		
-		return new Point2I(component1, component2);
+		return new Point2I(MAX_VALUE, MAX_VALUE);
 	}
 	
 	/**
@@ -297,10 +244,7 @@ public final class Point2I implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2I maximum(final Point2I a, final Point2I b) {
-		final int component1 = max(a.component1, b.component1);
-		final int component2 = max(a.component2, b.component2);
-		
-		return new Point2I(component1, component2);
+		return new Point2I(max(a.x, b.x), max(a.y, b.y));
 	}
 	
 	/**
@@ -315,10 +259,7 @@ public final class Point2I implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2I maximum(final Point2I a, final Point2I b, final Point2I c) {
-		final int component1 = max(a.component1, b.component1, c.component1);
-		final int component2 = max(a.component2, b.component2, c.component2);
-		
-		return new Point2I(component1, component2);
+		return new Point2I(max(a.x, b.x, c.x), max(a.y, b.y, c.y));
 	}
 	
 	/**
@@ -334,10 +275,7 @@ public final class Point2I implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2I maximum(final Point2I a, final Point2I b, final Point2I c, final Point2I d) {
-		final int component1 = max(a.component1, b.component1, c.component1, d.component1);
-		final int component2 = max(a.component2, b.component2, c.component2, d.component2);
-		
-		return new Point2I(component1, component2);
+		return new Point2I(max(a.x, b.x, c.x, d.x), max(a.y, b.y, c.y, d.y));
 	}
 	
 	/**
@@ -351,10 +289,7 @@ public final class Point2I implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2I midpoint(final Point2I a, final Point2I b) {
-		final int component1 = (a.component1 + b.component1) / 2;
-		final int component2 = (a.component2 + b.component2) / 2;
-		
-		return new Point2I(component1, component2);
+		return new Point2I((a.x + b.x) / 2, (a.y + b.y) / 2);
 	}
 	
 	/**
@@ -363,10 +298,7 @@ public final class Point2I implements Node {
 	 * @return a new {@code Point2I} instance with the smallest component values
 	 */
 	public static Point2I minimum() {
-		final int component1 = MIN_VALUE;
-		final int component2 = MIN_VALUE;
-		
-		return new Point2I(component1, component2);
+		return new Point2I(MIN_VALUE, MIN_VALUE);
 	}
 	
 	/**
@@ -380,10 +312,7 @@ public final class Point2I implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2I minimum(final Point2I a, final Point2I b) {
-		final int component1 = min(a.component1, b.component1);
-		final int component2 = min(a.component2, b.component2);
-		
-		return new Point2I(component1, component2);
+		return new Point2I(min(a.x, b.x), min(a.y, b.y));
 	}
 	
 	/**
@@ -398,10 +327,7 @@ public final class Point2I implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2I minimum(final Point2I a, final Point2I b, final Point2I c) {
-		final int component1 = min(a.component1, b.component1, c.component1);
-		final int component2 = min(a.component2, b.component2, c.component2);
-		
-		return new Point2I(component1, component2);
+		return new Point2I(min(a.x, b.x, c.x), min(a.y, b.y, c.y));
 	}
 	
 	/**
@@ -417,10 +343,7 @@ public final class Point2I implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2I minimum(final Point2I a, final Point2I b, final Point2I c, final Point2I d) {
-		final int component1 = min(a.component1, b.component1, c.component1, d.component1);
-		final int component2 = min(a.component2, b.component2, c.component2, d.component2);
-		
-		return new Point2I(component1, component2);
+		return new Point2I(min(a.x, b.x, c.x, d.x), min(a.y, b.y, c.y, d.y));
 	}
 	
 	/**
@@ -437,10 +360,7 @@ public final class Point2I implements Node {
 	 */
 	public static Point2I read(final DataInput dataInput) {
 		try {
-			final int component1 = dataInput.readInt();
-			final int component2 = dataInput.readInt();
-			
-			return new Point2I(component1, component2);
+			return new Point2I(dataInput.readInt(), dataInput.readInt());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}

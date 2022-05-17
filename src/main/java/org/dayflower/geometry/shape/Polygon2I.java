@@ -292,17 +292,17 @@ public final class Polygon2I implements Shape2I {
 	private boolean doContains(final Point2I point) {
 		boolean isInside = false;
 		
-		final int pX = point.getX();
-		final int pY = point.getY();
+		final int pX = point.x;
+		final int pY = point.y;
 		
 		for(int i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
 			final Point2I pointI = this.points[i];
 			final Point2I pointJ = this.points[j];
 			
-			final int iX = pointI.getX();
-			final int iY = pointI.getY();
-			final int jX = pointJ.getX();
-			final int jY = pointJ.getY();
+			final int iX = pointI.x;
+			final int iY = pointI.y;
+			final int jX = pointJ.x;
+			final int jY = pointJ.y;
 			
 			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
 				isInside = !isInside;

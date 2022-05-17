@@ -168,17 +168,17 @@ public final class Triangle3D implements Shape3D {
 		final Vector3D normalB = this.b.getNormal();
 		final Vector3D normalC = this.c.getNormal();
 		
-		final double x = positionA.getX() * barycentricCoordinates.getX() + positionB.getX() * barycentricCoordinates.getY() + positionC.getX() * barycentricCoordinates.getZ();
-		final double y = positionA.getY() * barycentricCoordinates.getX() + positionB.getY() * barycentricCoordinates.getY() + positionC.getY() * barycentricCoordinates.getZ();
-		final double z = positionA.getZ() * barycentricCoordinates.getX() + positionB.getZ() * barycentricCoordinates.getY() + positionC.getZ() * barycentricCoordinates.getZ();
+		final double x = positionA.x * barycentricCoordinates.x + positionB.x * barycentricCoordinates.y + positionC.x * barycentricCoordinates.z;
+		final double y = positionA.y * barycentricCoordinates.x + positionB.y * barycentricCoordinates.y + positionC.y * barycentricCoordinates.z;
+		final double z = positionA.z * barycentricCoordinates.x + positionB.z * barycentricCoordinates.y + positionC.z * barycentricCoordinates.z;
 		
 		final Point3D point = new Point3D(x, y, z);
 		
 		final Vector3D surfaceNormal = Vector3D.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
 		
-		final double pointErrorX = (abs(positionA.getX() * barycentricCoordinates.getX()) + abs(positionB.getX() * barycentricCoordinates.getY()) + abs(positionC.getX() * barycentricCoordinates.getZ())) * gamma(6);
-		final double pointErrorY = (abs(positionA.getY() * barycentricCoordinates.getX()) + abs(positionB.getY() * barycentricCoordinates.getY()) + abs(positionC.getY() * barycentricCoordinates.getZ())) * gamma(6);
-		final double pointErrorZ = (abs(positionA.getZ() * barycentricCoordinates.getX()) + abs(positionB.getZ() * barycentricCoordinates.getY()) + abs(positionC.getZ() * barycentricCoordinates.getZ())) * gamma(6);
+		final double pointErrorX = (abs(positionA.x * barycentricCoordinates.x) + abs(positionB.x * barycentricCoordinates.y) + abs(positionC.x * barycentricCoordinates.z)) * gamma(6);
+		final double pointErrorY = (abs(positionA.y * barycentricCoordinates.x) + abs(positionB.y * barycentricCoordinates.y) + abs(positionC.y * barycentricCoordinates.z)) * gamma(6);
+		final double pointErrorZ = (abs(positionA.z * barycentricCoordinates.x) + abs(positionB.z * barycentricCoordinates.y) + abs(positionC.z * barycentricCoordinates.z)) * gamma(6);
 		
 		final Vector3D pointError = new Vector3D(pointErrorX, pointErrorY, pointErrorZ);
 		
@@ -973,9 +973,9 @@ public final class Triangle3D implements Shape3D {
 		final Point4D b = this.b.getPosition();
 		final Point4D c = this.c.getPosition();
 		
-		final double xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
-		final double yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
-		final double zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
+		final double xAbsSum = abs(barycentricCoordinates.x + a.x) + abs(barycentricCoordinates.y + b.x) + abs(barycentricCoordinates.z + c.x);
+		final double yAbsSum = abs(barycentricCoordinates.x + a.y) + abs(barycentricCoordinates.y + b.y) + abs(barycentricCoordinates.z + c.y);
+		final double zAbsSum = abs(barycentricCoordinates.x + a.z) + abs(barycentricCoordinates.y + b.z) + abs(barycentricCoordinates.z + c.z);
 		
 		return Vector3D.multiply(new Vector3D(xAbsSum, yAbsSum, zAbsSum), gamma(7));
 	}

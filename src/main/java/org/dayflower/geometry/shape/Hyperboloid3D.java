@@ -155,8 +155,8 @@ public final class Hyperboloid3D implements Shape3D {
 		Objects.requireNonNull(a, "a == null");
 		Objects.requireNonNull(b, "b == null");
 		
-		Point3D pointA = isZero(a.getZ()) ? a : isZero(b.getZ()) ? b : a;
-		Point3D pointB = isZero(a.getZ()) ? b : isZero(b.getZ()) ? a : b;
+		Point3D pointA = isZero(a.z) ? a : isZero(b.z) ? b : a;
+		Point3D pointB = isZero(a.z) ? b : isZero(b.z) ? a : b;
 		Point3D pointC = pointA;
 		
 		double aH = Double.POSITIVE_INFINITY;
@@ -165,11 +165,11 @@ public final class Hyperboloid3D implements Shape3D {
 		for(int i = 0; i < 10 && (isInfinite(aH) || isNaN(aH)); i++) {
 			pointC = Point3D.add(pointC, Vector3D.multiply(Vector3D.direction(pointA, pointB), 2.0D));
 			
-			final double c = pointC.getX() * pointC.getX() + pointC.getY() * pointC.getY();
-			final double d = pointB.getX() * pointB.getX() + pointB.getY() * pointB.getY();
+			final double c = pointC.x * pointC.x + pointC.y * pointC.y;
+			final double d = pointB.x * pointB.x + pointB.y * pointB.y;
 			
-			aH = (1.0D / c - (pointC.getZ() * pointC.getZ()) / (c * pointB.getZ() * pointB.getZ())) / (1.0D - (d * pointC.getZ() * pointC.getZ()) / (c * pointB.getZ() * pointB.getZ()));
-			cH = (aH * d - 1.0D) / (pointB.getZ() * pointB.getZ());
+			aH = (1.0D / c - (pointC.z * pointC.z) / (c * pointB.z * pointB.z)) / (1.0D - (d * pointC.z * pointC.z) / (c * pointB.z * pointB.z));
+			cH = (aH * d - 1.0D) / (pointB.z * pointB.z);
 		}
 		
 		if(isInfinite(aH) || isNaN(aH)) {
@@ -181,9 +181,9 @@ public final class Hyperboloid3D implements Shape3D {
 		this.b = pointB;
 		this.aH = aH;
 		this.cH = cH;
-		this.rMax = max(sqrt(a.getX() * a.getX() + a.getY() * a.getY()), sqrt(b.getX() * b.getX() + b.getY() * b.getY()));
-		this.zMax = max(a.getZ(), b.getZ());
-		this.zMin = min(a.getZ(), b.getZ());
+		this.rMax = max(sqrt(a.x * a.x + a.y * a.y), sqrt(b.x * b.x + b.y * b.y));
+		this.zMax = max(a.z, b.z);
+		this.zMin = min(a.z, b.z);
 	}
 	
 	/**
@@ -315,7 +315,7 @@ public final class Hyperboloid3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3D point) {
-		return point.getZ() >= this.zMin && point.getZ() <= this.zMax && doComputePhi(point) <= this.phiMax.getRadians();
+		return point.z >= this.zMin && point.z <= this.zMax && doComputePhi(point) <= this.phiMax.getRadians();
 	}
 	
 	/**
@@ -392,27 +392,27 @@ public final class Hyperboloid3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
-		final double aX11 = this.a.getX();
+		final double aX11 = this.a.x;
 		final double aX21 = aX11 * aX11;
 		final double aX31 = aX21 * aX11;
 		final double aX41 = aX31 * aX11;
 		final double aX42 = aX41 * 2.0D;
-		final double aY11 = this.a.getY();
+		final double aY11 = this.a.y;
 		final double aY21 = aY11 * aY11;
 		final double aY25 = aY21 * 5.0D;
-		final double aZ11 = this.a.getZ();
+		final double aZ11 = this.a.z;
 		final double aZ21 = aZ11 * aZ11;
 		
-		final double bX11 = this.b.getX();
+		final double bX11 = this.b.x;
 		final double bX21 = bX11 * bX11;
 		final double bX31 = bX21 * bX11;
 		final double bX41 = bX31 * bX11;
 		final double bX42 = bX41 * 2.0D;
-		final double bY11 = this.b.getY();
+		final double bY11 = this.b.y;
 		final double bY21 = bY11 * bY11;
 		final double bY24 = bY21 * 4.0D;
 		final double bY25 = bY21 * 5.0D;
-		final double bZ11 = this.b.getZ();
+		final double bZ11 = this.b.z;
 		final double bZ21 = bZ11 * bZ11;
 		
 		final double cX11 = aX11 * bX11;
@@ -484,8 +484,8 @@ public final class Hyperboloid3D implements Shape3D {
 		final Vector3D direction = ray.getDirection();
 		
 		final double a = this.aH * direction.getX() * direction.getX() + this.aH * direction.getY() * direction.getY() - this.cH * direction.getZ() * direction.getZ();
-		final double b = 2.0D * (this.aH * direction.getX() * origin.getX() + this.aH * direction.getY() * origin.getY() - this.cH * direction.getZ() * origin.getZ());
-		final double c = this.aH * origin.getX() * origin.getX() + this.aH * origin.getY() * origin.getY() - this.cH * origin.getZ() * origin.getZ() - 1.0D;
+		final double b = 2.0D * (this.aH * direction.getX() * origin.x + this.aH * direction.getY() * origin.y - this.cH * direction.getZ() * origin.z);
+		final double c = this.aH * origin.x * origin.x + this.aH * origin.y * origin.y - this.cH * origin.z * origin.z - 1.0D;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -499,7 +499,7 @@ public final class Hyperboloid3D implements Shape3D {
 			if(t > tMinimum && t < tMaximum) {
 				final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.getZ() >= this.zMin && surfaceIntersectionPoint.getZ() <= this.zMax && doComputePhi(surfaceIntersectionPoint) <= this.phiMax.getRadians()) {
+				if(surfaceIntersectionPoint.z >= this.zMin && surfaceIntersectionPoint.z <= this.zMax && doComputePhi(surfaceIntersectionPoint) <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}
@@ -568,13 +568,13 @@ public final class Hyperboloid3D implements Shape3D {
 		final double phiCos = cos(phi);
 		final double phiSin = sin(phi);
 		
-		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
-		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
+		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;
 		final double uZ = +0.0D;
 		
-		final double vX = (this.b.getX() - this.a.getX()) * phiCos - (this.b.getY() - this.a.getY()) * phiSin;
-		final double vY = (this.b.getX() - this.a.getX()) * phiSin + (this.b.getY() - this.a.getY()) * phiCos;
-		final double vZ = this.b.getZ() - this.a.getZ();
+		final double vX = (this.b.x - this.a.x) * phiCos - (this.b.y - this.a.y) * phiSin;
+		final double vY = (this.b.x - this.a.x) * phiSin + (this.b.y - this.a.y) * phiCos;
+		final double vZ = this.b.z - this.a.z;
 		
 		final Vector3D u = Vector3D.normalize(new Vector3D(uX, uY, uZ));
 		final Vector3D v = Vector3D.normalize(new Vector3D(vX, vY, vZ));
@@ -584,7 +584,7 @@ public final class Hyperboloid3D implements Shape3D {
 	}
 	
 	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
-		final double v = (surfaceIntersectionPoint.getZ() - this.a.getZ()) / (this.b.getZ() - this.a.getZ());
+		final double v = (surfaceIntersectionPoint.z - this.a.z) / (this.b.z - this.a.z);
 		final double u = doComputePhi(surfaceIntersectionPoint, v) / this.phiMax.getRadians();
 		
 		return new Point2D(u, v);
@@ -604,12 +604,12 @@ public final class Hyperboloid3D implements Shape3D {
 	}
 	
 	private double doComputePhi(final Point3D surfaceIntersectionPoint) {
-		return doComputePhi(surfaceIntersectionPoint, (surfaceIntersectionPoint.getZ() - this.a.getZ()) / (this.b.getZ() - this.a.getZ()));
+		return doComputePhi(surfaceIntersectionPoint, (surfaceIntersectionPoint.z - this.a.z) / (this.b.z - this.a.z));
 	}
 	
 	private double doComputePhi(final Point3D surfaceIntersectionPoint, final double v) {
 		final Point3D a = Point3D.lerp(this.a, this.b, v);
-		final Point3D b = new Point3D(surfaceIntersectionPoint.getX() * a.getX() + surfaceIntersectionPoint.getY() * a.getY(), surfaceIntersectionPoint.getY() * a.getX() - surfaceIntersectionPoint.getX() * a.getY(), 0.0D);
+		final Point3D b = new Point3D(surfaceIntersectionPoint.x * a.x + surfaceIntersectionPoint.y * a.y, surfaceIntersectionPoint.y * a.x - surfaceIntersectionPoint.x * a.y, 0.0D);
 		
 		return b.sphericalPhi();
 	}

@@ -428,9 +428,9 @@ public final class Torus3D implements Shape3D {
 		
 		final double derivative = direction.lengthSquared() - this.radiusInnerSquared - this.radiusOuterSquared;
 		
-		final double x = surfaceIntersectionPoint.getX() * derivative;
-		final double y = surfaceIntersectionPoint.getY() * derivative;
-		final double z = surfaceIntersectionPoint.getZ() * derivative + 2.0D * this.radiusOuterSquared * surfaceIntersectionPoint.getZ();
+		final double x = surfaceIntersectionPoint.x * derivative;
+		final double y = surfaceIntersectionPoint.y * derivative;
+		final double z = surfaceIntersectionPoint.z * derivative + 2.0D * this.radiusOuterSquared * surfaceIntersectionPoint.z;
 		
 		final Vector3D w = Vector3D.normalize(new Vector3D(x, y, z));
 		
@@ -438,8 +438,8 @@ public final class Torus3D implements Shape3D {
 	}
 	
 	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
-		final double phi = asin(saturate(surfaceIntersectionPoint.getZ() / this.radiusInner, -1.0D, 1.0D));
-		final double theta = getOrAdd(atan2(surfaceIntersectionPoint.getY(), surfaceIntersectionPoint.getX()), 0.0D, PI_MULTIPLIED_BY_2);
+		final double phi = asin(saturate(surfaceIntersectionPoint.z / this.radiusInner, -1.0D, 1.0D));
+		final double theta = getOrAdd(atan2(surfaceIntersectionPoint.y, surfaceIntersectionPoint.x), 0.0D, PI_MULTIPLIED_BY_2);
 		
 		final double u = theta * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final double v = (phi + PI_DIVIDED_BY_2) * PI_RECIPROCAL;

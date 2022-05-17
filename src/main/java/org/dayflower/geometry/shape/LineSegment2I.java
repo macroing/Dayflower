@@ -83,10 +83,10 @@ public final class LineSegment2I implements Shape2I {
 	 */
 	@Override
 	public List<Point2I> findPoints(final boolean isIncludingBorderOnly) {
-		final int aX = this.a.getX();
-		final int aY = this.a.getY();
-		final int bX = this.b.getX();
-		final int bY = this.b.getY();
+		final int aX = this.a.x;
+		final int aY = this.a.y;
+		final int bX = this.b.x;
+		final int bY = this.b.y;
 		
 		final int w = bX - aX;
 		final int h = bY - aY;
@@ -240,12 +240,12 @@ public final class LineSegment2I implements Shape2I {
 	 */
 	@Override
 	public boolean contains(final Point2I point, final boolean isIncludingBorderOnly) {
-		final int aX = this.a.getX();
-		final int aY = this.a.getY();
-		final int bX = this.b.getX();
-		final int bY = this.b.getY();
-		final int pX = point.getX();
-		final int pY = point.getY();
+		final int aX = this.a.x;
+		final int aY = this.a.y;
+		final int bX = this.b.x;
+		final int bY = this.b.y;
+		final int pX = point.x;
+		final int pY = point.y;
 		
 		final int dAPX = pX - aX;
 		final int dAPY = pY - aY;

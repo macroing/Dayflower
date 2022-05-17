@@ -123,9 +123,9 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	@Override
 	public BoundingSphere3D transform(final Matrix44D matrix) {
 		final Point3D center = Point3D.transformAndDivide(matrix, this.center);
-		final Point3D x = Point3D.transformAndDivide(matrix, new Point3D(this.center.getX() + this.radius, this.center.getY(), this.center.getZ()));
-		final Point3D y = Point3D.transformAndDivide(matrix, new Point3D(this.center.getX(), this.center.getY() + this.radius, this.center.getZ()));
-		final Point3D z = Point3D.transformAndDivide(matrix, new Point3D(this.center.getX(), this.center.getY(), this.center.getZ() + this.radius));
+		final Point3D x = Point3D.transformAndDivide(matrix, new Point3D(this.center.x + this.radius, this.center.y, this.center.z));
+		final Point3D y = Point3D.transformAndDivide(matrix, new Point3D(this.center.x, this.center.y + this.radius, this.center.z));
+		final Point3D z = Point3D.transformAndDivide(matrix, new Point3D(this.center.x, this.center.y, this.center.z + this.radius));
 		
 		final double distanceSquaredFromCenterToX = Point3D.distanceSquared(center, x);
 		final double distanceSquaredFromCenterToY = Point3D.distanceSquared(center, y);

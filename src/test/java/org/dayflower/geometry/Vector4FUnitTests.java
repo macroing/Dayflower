@@ -49,10 +49,10 @@ public final class Vector4FUnitTests {
 		final Vector4F b = new Vector4F(2.0F, 3.0F, 4.0F, 5.0F);
 		final Vector4F c = Vector4F.add(a, b);
 		
-		assertEquals(3.0F, c.getComponent1());
-		assertEquals(5.0F, c.getComponent2());
-		assertEquals(7.0F, c.getComponent3());
-		assertEquals(9.0F, c.getComponent4());
+		assertEquals(3.0F, c.x);
+		assertEquals(5.0F, c.y);
+		assertEquals(7.0F, c.z);
+		assertEquals(9.0F, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Vector4F.add(a, null));
 		assertThrows(NullPointerException.class, () -> Vector4F.add(null, b));
@@ -62,40 +62,40 @@ public final class Vector4FUnitTests {
 	public void testConstructor() {
 		final Vector4F vector = new Vector4F();
 		
-		assertEquals(0.0F, vector.getComponent1());
-		assertEquals(0.0F, vector.getComponent2());
-		assertEquals(0.0F, vector.getComponent3());
-		assertEquals(1.0F, vector.getComponent4());
+		assertEquals(0.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(0.0F, vector.z);
+		assertEquals(1.0F, vector.w);
 	}
 	
 	@Test
 	public void testConstructorFloatFloatFloat() {
 		final Vector4F vector = new Vector4F(2.0F, 3.0F, 4.0F);
 		
-		assertEquals(2.0F, vector.getComponent1());
-		assertEquals(3.0F, vector.getComponent2());
-		assertEquals(4.0F, vector.getComponent3());
-		assertEquals(1.0F, vector.getComponent4());
+		assertEquals(2.0F, vector.x);
+		assertEquals(3.0F, vector.y);
+		assertEquals(4.0F, vector.z);
+		assertEquals(1.0F, vector.w);
 	}
 	
 	@Test
 	public void testConstructorFloatFloatFloatFloat() {
 		final Vector4F vector = new Vector4F(1.0F, 2.0F, 3.0F, 4.0F);
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(2.0F, vector.getComponent2());
-		assertEquals(3.0F, vector.getComponent3());
-		assertEquals(4.0F, vector.getComponent4());
+		assertEquals(1.0F, vector.x);
+		assertEquals(2.0F, vector.y);
+		assertEquals(3.0F, vector.z);
+		assertEquals(4.0F, vector.w);
 	}
 	
 	@Test
 	public void testConstructorPoint4F() {
 		final Vector4F vector = new Vector4F(new Point4F(1.0F, 2.0F, 3.0F, 4.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(2.0F, vector.getComponent2());
-		assertEquals(3.0F, vector.getComponent3());
-		assertEquals(4.0F, vector.getComponent4());
+		assertEquals(1.0F, vector.x);
+		assertEquals(2.0F, vector.y);
+		assertEquals(3.0F, vector.z);
+		assertEquals(4.0F, vector.w);
 		
 		assertThrows(NullPointerException.class, () -> new Vector4F(null));
 	}
@@ -106,15 +106,15 @@ public final class Vector4FUnitTests {
 		final Vector4F b = Vector4F.divide(a, 2.0F);
 		final Vector4F c = Vector4F.divide(a, Float.NaN);
 		
-		assertEquals(1.0F, b.getComponent1());
-		assertEquals(2.0F, b.getComponent2());
-		assertEquals(4.0F, b.getComponent3());
-		assertEquals(8.0F, b.getComponent4());
+		assertEquals(1.0F, b.x);
+		assertEquals(2.0F, b.y);
+		assertEquals(4.0F, b.z);
+		assertEquals(8.0F, b.w);
 		
-		assertEquals(0.0F, c.getComponent1());
-		assertEquals(0.0F, c.getComponent2());
-		assertEquals(0.0F, c.getComponent3());
-		assertEquals(0.0F, c.getComponent4());
+		assertEquals(0.0F, c.x);
+		assertEquals(0.0F, c.y);
+		assertEquals(0.0F, c.z);
+		assertEquals(0.0F, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Vector4F.divide(null, 2.0F));
 	}
@@ -160,62 +160,6 @@ public final class Vector4FUnitTests {
 	}
 	
 	@Test
-	public void testGetComponent1() {
-		final Vector4F vector = new Vector4F(2.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getComponent1());
-	}
-	
-	@Test
-	public void testGetComponent2() {
-		final Vector4F vector = new Vector4F(0.0F, 2.0F, 0.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getComponent2());
-	}
-	
-	@Test
-	public void testGetComponent3() {
-		final Vector4F vector = new Vector4F(0.0F, 0.0F, 2.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getComponent3());
-	}
-	
-	@Test
-	public void testGetComponent4() {
-		final Vector4F vector = new Vector4F(0.0F, 0.0F, 0.0F, 2.0F);
-		
-		assertEquals(2.0F, vector.getComponent4());
-	}
-	
-	@Test
-	public void testGetW() {
-		final Vector4F vector = new Vector4F(0.0F, 0.0F, 0.0F, 2.0F);
-		
-		assertEquals(2.0F, vector.getW());
-	}
-	
-	@Test
-	public void testGetX() {
-		final Vector4F vector = new Vector4F(2.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getX());
-	}
-	
-	@Test
-	public void testGetY() {
-		final Vector4F vector = new Vector4F(0.0F, 2.0F, 0.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getY());
-	}
-	
-	@Test
-	public void testGetZ() {
-		final Vector4F vector = new Vector4F(0.0F, 0.0F, 2.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getZ());
-	}
-	
-	@Test
 	public void testHashCode() {
 		final Vector4F a = new Vector4F(1.0F, 2.0F, 3.0F, 4.0F);
 		final Vector4F b = new Vector4F(1.0F, 2.0F, 3.0F, 4.0F);
@@ -249,10 +193,10 @@ public final class Vector4FUnitTests {
 		final Vector4F a = new Vector4F(1.0F, 2.0F, 3.0F, 4.0F);
 		final Vector4F b = Vector4F.multiply(a, 2.0F);
 		
-		assertEquals(2.0F, b.getComponent1());
-		assertEquals(4.0F, b.getComponent2());
-		assertEquals(6.0F, b.getComponent3());
-		assertEquals(8.0F, b.getComponent4());
+		assertEquals(2.0F, b.x);
+		assertEquals(4.0F, b.y);
+		assertEquals(6.0F, b.z);
+		assertEquals(8.0F, b.w);
 		
 		assertThrows(NullPointerException.class, () -> Vector4F.multiply(null, 2.0F));
 	}
@@ -263,15 +207,15 @@ public final class Vector4FUnitTests {
 		final Vector4F b = Vector4F.negate(a);
 		final Vector4F c = Vector4F.negate(b);
 		
-		assertEquals(-1.0F, b.getComponent1());
-		assertEquals(-2.0F, b.getComponent2());
-		assertEquals(-3.0F, b.getComponent3());
-		assertEquals(-4.0F, b.getComponent4());
+		assertEquals(-1.0F, b.x);
+		assertEquals(-2.0F, b.y);
+		assertEquals(-3.0F, b.z);
+		assertEquals(-4.0F, b.w);
 		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
-		assertEquals(+3.0F, c.getComponent3());
-		assertEquals(+4.0F, c.getComponent4());
+		assertEquals(+1.0F, c.x);
+		assertEquals(+2.0F, c.y);
+		assertEquals(+3.0F, c.z);
+		assertEquals(+4.0F, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Vector4F.negate(null));
 	}
@@ -317,10 +261,10 @@ public final class Vector4FUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeFloat(a.getComponent1());
-		dataOutput.writeFloat(a.getComponent2());
-		dataOutput.writeFloat(a.getComponent3());
-		dataOutput.writeFloat(a.getComponent4());
+		dataOutput.writeFloat(a.x);
+		dataOutput.writeFloat(a.y);
+		dataOutput.writeFloat(a.z);
+		dataOutput.writeFloat(a.w);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		
@@ -338,10 +282,10 @@ public final class Vector4FUnitTests {
 		final Vector4F b = new Vector4F(2.0F, 3.0F, 4.0F, 5.0F);
 		final Vector4F c = Vector4F.subtract(a, b);
 		
-		assertEquals(1.0F, c.getComponent1());
-		assertEquals(2.0F, c.getComponent2());
-		assertEquals(3.0F, c.getComponent3());
-		assertEquals(4.0F, c.getComponent4());
+		assertEquals(1.0F, c.x);
+		assertEquals(2.0F, c.y);
+		assertEquals(3.0F, c.z);
+		assertEquals(4.0F, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Vector4F.subtract(a, null));
 		assertThrows(NullPointerException.class, () -> Vector4F.subtract(null, b));

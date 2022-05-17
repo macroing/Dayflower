@@ -79,9 +79,9 @@ public final class BVHNode3Ds {
 			return new LeafBVHNode3D<>(maximum, minimum, depth, shapes);
 		}
 		
-		final double sideX = maximum.getX() - minimum.getX();
-		final double sideY = maximum.getY() - minimum.getY();
-		final double sideZ = maximum.getZ() - minimum.getZ();
+		final double sideX = maximum.x - minimum.x;
+		final double sideY = maximum.y - minimum.y;
+		final double sideZ = maximum.z - minimum.z;
 		
 		double minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
 		double bestSplit = MAX_VALUE;
@@ -130,21 +130,21 @@ public final class BVHNode3Ds {
 					final double value = mid.getComponent(axis);
 					
 					if(value < newSplit) {
-						maximumLX = max(maximumLX, max.getX());
-						maximumLY = max(maximumLY, max.getY());
-						maximumLZ = max(maximumLZ, max.getZ());
-						minimumLX = min(minimumLX, min.getX());
-						minimumLY = min(minimumLY, min.getY());
-						minimumLZ = min(minimumLZ, min.getZ());
+						maximumLX = max(maximumLX, max.x);
+						maximumLY = max(maximumLY, max.y);
+						maximumLZ = max(maximumLZ, max.z);
+						minimumLX = min(minimumLX, min.x);
+						minimumLY = min(minimumLY, min.y);
+						minimumLZ = min(minimumLZ, min.z);
 						
 						countL++;
 					} else {
-						maximumRX = max(maximumRX, max.getX());
-						maximumRY = max(maximumRY, max.getY());
-						maximumRZ = max(maximumRZ, max.getZ());
-						minimumRX = min(minimumRX, min.getX());
-						minimumRY = min(minimumRY, min.getY());
-						minimumRZ = min(minimumRZ, min.getZ());
+						maximumRX = max(maximumRX, max.x);
+						maximumRY = max(maximumRY, max.y);
+						maximumRZ = max(maximumRZ, max.z);
+						minimumRX = min(minimumRX, min.x);
+						minimumRY = min(minimumRY, min.y);
+						minimumRZ = min(minimumRZ, min.z);
 						
 						countR++;
 					}
@@ -212,21 +212,21 @@ public final class BVHNode3Ds {
 			if(value < bestSplit) {
 				processableBVHItemsL.add(processableBVHItem);
 				
-				maximumLX = max(maximumLX, max.getX());
-				maximumLY = max(maximumLY, max.getY());
-				maximumLZ = max(maximumLZ, max.getZ());
-				minimumLX = min(minimumLX, min.getX());
-				minimumLY = min(minimumLY, min.getY());
-				minimumLZ = min(minimumLZ, min.getZ());
+				maximumLX = max(maximumLX, max.x);
+				maximumLY = max(maximumLY, max.y);
+				maximumLZ = max(maximumLZ, max.z);
+				minimumLX = min(minimumLX, min.x);
+				minimumLY = min(minimumLY, min.y);
+				minimumLZ = min(minimumLZ, min.z);
 			} else {
 				processableBVHItemsR.add(processableBVHItem);
 				
-				maximumRX = max(maximumRX, max.getX());
-				maximumRY = max(maximumRY, max.getY());
-				maximumRZ = max(maximumRZ, max.getZ());
-				minimumRX = min(minimumRX, min.getX());
-				minimumRY = min(minimumRY, min.getY());
-				minimumRZ = min(minimumRZ, min.getZ());
+				maximumRX = max(maximumRX, max.x);
+				maximumRY = max(maximumRY, max.y);
+				maximumRZ = max(maximumRZ, max.z);
+				minimumRX = min(minimumRX, min.x);
+				minimumRY = min(minimumRY, min.y);
+				minimumRZ = min(minimumRZ, min.z);
 			}
 		}
 		

@@ -166,7 +166,7 @@ public abstract class ImageF extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.getColorRGB(point.getX(), point.getY(), pixelOperation);
+	 * image.getColorRGB(point.x, point.y, pixelOperation);
 	 * }
 	 * </pre>
 	 * 
@@ -177,7 +177,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color3F getColorRGB(final Point2I point, final PixelOperation pixelOperation) {
-		return getColorRGB(point.getX(), point.getY(), pixelOperation);
+		return getColorRGB(point.x, point.y, pixelOperation);
 	}
 	
 	/**
@@ -415,7 +415,7 @@ public abstract class ImageF extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.getColorRGBA(point.getX(), point.getY(), function);
+	 * image.getColorRGBA(point.x, point.y, function);
 	 * }
 	 * </pre>
 	 * 
@@ -426,7 +426,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color4F getColorRGBA(final Point2I point, final Function<Point2I, Color4F> function) {
-		return getColorRGBA(point.getX(), point.getY(), function);
+		return getColorRGBA(point.x, point.y, function);
 	}
 	
 	/**
@@ -439,7 +439,7 @@ public abstract class ImageF extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.getColorRGBA(point.getX(), point.getY(), pixelOperation);
+	 * image.getColorRGBA(point.x, point.y, pixelOperation);
 	 * }
 	 * </pre>
 	 * 
@@ -450,7 +450,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color4F getColorRGBA(final Point2I point, final PixelOperation pixelOperation) {
-		return getColorRGBA(point.getX(), point.getY(), pixelOperation);
+		return getColorRGBA(point.x, point.y, pixelOperation);
 	}
 	
 	/**
@@ -760,19 +760,19 @@ public abstract class ImageF extends Image {
 		final Point2I maximum = shape.getMaximum();
 		final Point2I minimum = shape.getMinimum();
 		
-		final int resolutionX = maximum.getX() - minimum.getX() + 1;
-		final int resolutionY = maximum.getY() - minimum.getY() + 1;
+		final int resolutionX = maximum.x - minimum.x + 1;
+		final int resolutionY = maximum.y - minimum.y + 1;
 		
 		final ImageF image = newImage(resolutionX, resolutionY);
 		
 		final List<Point2I> points = shape.findPoints();
 		
 		for(final Point2I point : points) {
-			final int sourceX = point.getX();
-			final int sourceY = point.getY();
+			final int sourceX = point.x;
+			final int sourceY = point.y;
 			
-			final int targetX = sourceX - minimum.getX();
-			final int targetY = sourceY - minimum.getY();
+			final int targetX = sourceX - minimum.x;
+			final int targetY = sourceY - minimum.y;
 			
 			final Color4F colorRGBA = getColorRGBA(sourceX, sourceY);
 			
@@ -824,7 +824,7 @@ public abstract class ImageF extends Image {
 		
 		doChangeBegin();
 		
-		shape.findPointsOfIntersection(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
+		shape.findPointsOfIntersection(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.x, point.y), point)), point.x, point.y));
 		
 		doChangeEnd();
 		
@@ -927,7 +927,7 @@ public abstract class ImageF extends Image {
 		
 		doChangeBegin();
 		
-		shape.findPointsOfComplement(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
+		shape.findPointsOfComplement(getBounds(), true).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.x, point.y), point)), point.x, point.y));
 		
 		doChangeEnd();
 		
@@ -1032,8 +1032,8 @@ public abstract class ImageF extends Image {
 		final float resolutionY = getResolutionY();
 		
 		return update((color, point) -> {
-			final float tX = 1.0F / resolutionX * point.getX();
-			final float tY = 1.0F / resolutionY * point.getY();
+			final float tX = 1.0F / resolutionX * point.x;
+			final float tY = 1.0F / resolutionY * point.y;
 			
 			return new Color4F(Color3F.blend(Color3F.blend(a, b, tX), Color3F.blend(c, d, tX), tY));
 		});
@@ -1102,7 +1102,7 @@ public abstract class ImageF extends Image {
 //	TODO: Add Unit Tests!
 	public final ImageF fillImage(final ImageF sourceImage, final Point2I targetPosition, final TriFunction<Color4F, Color4F, Point2I, Color4F> triFunction) {
 		final Rectangle2I sourceBounds = sourceImage.getBounds();
-		final Rectangle2I targetBounds = new Rectangle2I(targetPosition, new Point2I(targetPosition.getX() + (sourceBounds.getC().getX() - sourceBounds.getA().getX()), targetPosition.getY() + (sourceBounds.getC().getY() - sourceBounds.getA().getY())));
+		final Rectangle2I targetBounds = new Rectangle2I(targetPosition, new Point2I(targetPosition.x + (sourceBounds.getC().x - sourceBounds.getA().x), targetPosition.y + (sourceBounds.getC().y - sourceBounds.getA().y)));
 		
 		return fillImage(sourceImage, sourceBounds, targetBounds, triFunction);
 	}
@@ -1181,14 +1181,14 @@ public abstract class ImageF extends Image {
 		
 		final ImageF targetImage = this;
 		
-		final int sourceMinimumX = sourceBounds.getA().getX();
-		final int sourceMinimumY = sourceBounds.getA().getY();
-		final int sourceMaximumX = sourceBounds.getC().getX();
-		final int sourceMaximumY = sourceBounds.getC().getY();
-		final int targetMinimumX = targetBounds.getA().getX();
-		final int targetMinimumY = targetBounds.getA().getY();
-		final int targetMaximumX = targetBounds.getC().getX();
-		final int targetMaximumY = targetBounds.getC().getY();
+		final int sourceMinimumX = sourceBounds.getA().x;
+		final int sourceMinimumY = sourceBounds.getA().y;
+		final int sourceMaximumX = sourceBounds.getC().x;
+		final int sourceMaximumY = sourceBounds.getC().y;
+		final int targetMinimumX = targetBounds.getA().x;
+		final int targetMinimumY = targetBounds.getA().y;
+		final int targetMaximumX = targetBounds.getC().x;
+		final int targetMaximumY = targetBounds.getC().y;
 		
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
@@ -1307,7 +1307,7 @@ public abstract class ImageF extends Image {
 		
 		doChangeBegin();
 		
-		shape.findPointsOfIntersection(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
+		shape.findPointsOfIntersection(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.x, point.y), point)), point.x, point.y));
 		
 		doChangeEnd();
 		
@@ -1410,7 +1410,7 @@ public abstract class ImageF extends Image {
 		
 		doChangeBegin();
 		
-		shape.findPointsOfComplement(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.getX(), point.getY()), point)), point.getX(), point.getY()));
+		shape.findPointsOfComplement(getBounds()).forEach(point -> doSetColorRGBA(Objects.requireNonNull(biFunction.apply(getColorRGBA(point.x, point.y), point)), point.x, point.y));
 		
 		doChangeEnd();
 		
@@ -1537,8 +1537,8 @@ public abstract class ImageF extends Image {
 		final float maximumY = getResolutionY();
 		
 		return update((color, point) -> {
-			final float x = (point.getX() - minimumX) / (maximumX - minimumX);
-			final float y = (point.getY() - minimumY) / (maximumY - minimumY);
+			final float x = (point.x - minimumX) / (maximumX - minimumX);
+			final float y = (point.y - minimumY) / (maximumY - minimumY);
 			
 			final float noise = SimplexNoiseF.fractionalBrownianMotionXY(x, y, frequency, gain, 0.0F, 1.0F, octaves);
 			
@@ -2328,10 +2328,10 @@ public abstract class ImageF extends Image {
 		final Point2I minimum = bounds.getA();
 		final Point2I maximum = bounds.getC();
 		
-		final int minimumX = max(minimum.getX(), 0);
-		final int minimumY = max(minimum.getY(), 0);
-		final int maximumX = min(maximum.getX(), getResolutionX() - 1);
-		final int maximumY = min(maximum.getY(), getResolutionY() - 1);
+		final int minimumX = max(minimum.x, 0);
+		final int minimumY = max(minimum.y, 0);
+		final int maximumX = min(maximum.x, getResolutionX() - 1);
+		final int maximumY = min(maximum.y, getResolutionY() - 1);
 		
 		for(int y = minimumY; y <= maximumY; y++) {
 			for(int x = minimumX; x <= maximumX; x++) {

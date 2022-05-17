@@ -69,9 +69,20 @@ public final class Point3F implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final float component1;
-	private final float component2;
-	private final float component3;
+	/**
+	 * The X-component of this {@code Point3F} instance.
+	 */
+	public final float x;
+	
+	/**
+	 * The Y-component of this {@code Point3F} instance.
+	 */
+	public final float y;
+	
+	/**
+	 * The Z-component of this {@code Point3F} instance.
+	 */
+	public final float z;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -90,41 +101,41 @@ public final class Point3F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Point3F} instance given the component values {@code point.getComponent1()}, {@code point.getComponent2()} and {@code point.getComponent3()}.
+	 * Constructs a new {@code Point3F} instance given the component values {@code p.x}, {@code p.y} and {@code p.z}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point3F(point.getComponent1(), point.getComponent2(), point.getComponent3());
+	 * new Point3F(p.x, p.y, p.z);
 	 * }
 	 * </pre>
 	 * 
-	 * @param point a {@link Point4F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point4F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Point3F(final Point4F point) {
-		this(point.getComponent1(), point.getComponent2(), point.getComponent3());
+	public Point3F(final Point4F p) {
+		this(p.x, p.y, p.z);
 	}
 	
 	/**
-	 * Constructs a new {@code Point3F} instance given the component values {@code vector.getComponent1()}, {@code vector.getComponent2()} and {@code vector.getComponent3()}.
+	 * Constructs a new {@code Point3F} instance given the component values {@code v.x}, {@code v.y} and {@code v.z}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point3F(vector.getComponent1(), vector.getComponent2(), vector.getComponent3());
+	 * new Point3F(v.x, v.y, v.z);
 	 * }
 	 * </pre>
 	 * 
-	 * @param vector a {@link Vector3F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@link Vector3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public Point3F(final Vector3F vector) {
-		this(vector.getComponent1(), vector.getComponent2(), vector.getComponent3());
+	public Point3F(final Vector3F v) {
+		this(v.x, v.y, v.z);
 	}
 	
 	/**
@@ -144,16 +155,16 @@ public final class Point3F implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Point3F} instance given the component values {@code component1}, {@code component2} and {@code component3}.
+	 * Constructs a new {@code Point3F} instance given the component values {@code x}, {@code y} and {@code z}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
 	 */
-	public Point3F(final float component1, final float component2, final float component3) {
-		this.component1 = component1;
-		this.component2 = component2;
-		this.component3 = component3;
+	public Point3F(final float x, final float y, final float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +176,7 @@ public final class Point3F implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Point3F(%s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3));
+		return String.format("new Point3F(%s, %s, %s)", Strings.toNonScientificNotationJava(this.x), Strings.toNonScientificNotationJava(this.y), Strings.toNonScientificNotationJava(this.z));
 	}
 	
 	/**
@@ -182,11 +193,11 @@ public final class Point3F implements Node {
 			return true;
 		} else if(!(object instanceof Point3F)) {
 			return false;
-		} else if(!equal(this.component1, Point3F.class.cast(object).component1)) {
+		} else if(!equal(this.x, Point3F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.component2, Point3F.class.cast(object).component2)) {
+		} else if(!equal(this.y, Point3F.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.component3, Point3F.class.cast(object).component3)) {
+		} else if(!equal(this.z, Point3F.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -205,11 +216,11 @@ public final class Point3F implements Node {
 	public float getComponent(final int index) {
 		switch(index) {
 			case 0:
-				return this.component1;
+				return this.x;
 			case 1:
-				return this.component2;
+				return this.y;
 			case 2:
-				return this.component3;
+				return this.z;
 			default:
 				throw new IllegalArgumentException(String.format("Illegal index: index=%s", Integer.toString(index)));
 		}
@@ -221,7 +232,7 @@ public final class Point3F implements Node {
 	 * @return the value of component 1
 	 */
 	public float getComponent1() {
-		return this.component1;
+		return this.x;
 	}
 	
 	/**
@@ -230,7 +241,7 @@ public final class Point3F implements Node {
 	 * @return the value of component 2
 	 */
 	public float getComponent2() {
-		return this.component2;
+		return this.y;
 	}
 	
 	/**
@@ -239,7 +250,7 @@ public final class Point3F implements Node {
 	 * @return the value of component 3
 	 */
 	public float getComponent3() {
-		return this.component3;
+		return this.z;
 	}
 	
 	/**
@@ -248,7 +259,7 @@ public final class Point3F implements Node {
 	 * @return the value of the U-component
 	 */
 	public float getU() {
-		return this.component1;
+		return this.x;
 	}
 	
 	/**
@@ -257,7 +268,7 @@ public final class Point3F implements Node {
 	 * @return the value of the V-component
 	 */
 	public float getV() {
-		return this.component2;
+		return this.y;
 	}
 	
 	/**
@@ -266,7 +277,7 @@ public final class Point3F implements Node {
 	 * @return the value of the W-component
 	 */
 	public float getW() {
-		return this.component3;
+		return this.z;
 	}
 	
 	/**
@@ -275,7 +286,7 @@ public final class Point3F implements Node {
 	 * @return the value of the X-component
 	 */
 	public float getX() {
-		return this.component1;
+		return this.x;
 	}
 	
 	/**
@@ -284,7 +295,7 @@ public final class Point3F implements Node {
 	 * @return the value of the Y-component
 	 */
 	public float getY() {
-		return this.component2;
+		return this.y;
 	}
 	
 	/**
@@ -293,7 +304,7 @@ public final class Point3F implements Node {
 	 * @return the value of the Z-component
 	 */
 	public float getZ() {
-		return this.component3;
+		return this.z;
 	}
 	
 	/**
@@ -302,7 +313,7 @@ public final class Point3F implements Node {
 	 * @return the spherical phi angle
 	 */
 	public float sphericalPhi() {
-		return getOrAdd(atan2(this.component2, this.component1), 0.0F, PI_MULTIPLIED_BY_2);
+		return getOrAdd(atan2(this.y, this.x), 0.0F, PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -311,11 +322,7 @@ public final class Point3F implements Node {
 	 * @return a {@code float[]} representation of this {@code Point3F} instance
 	 */
 	public float[] toArray() {
-		return new float[] {
-			this.component1,
-			this.component2,
-			this.component3
-		};
+		return new float[] {this.x, this.y, this.z};
 	}
 	
 	/**
@@ -325,7 +332,7 @@ public final class Point3F implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
+		return Objects.hash(Float.valueOf(this.x), Float.valueOf(this.y), Float.valueOf(this.z));
 	}
 	
 	/**
@@ -341,9 +348,9 @@ public final class Point3F implements Node {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeFloat(this.component1);
-			dataOutput.writeFloat(this.component2);
-			dataOutput.writeFloat(this.component3);
+			dataOutput.writeFloat(this.x);
+			dataOutput.writeFloat(this.y);
+			dataOutput.writeFloat(this.z);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -352,64 +359,52 @@ public final class Point3F implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Adds the component values of {@code vectorRHS} to the component values of {@code pointLHS}.
+	 * Adds the component values of {@code vRHS} to the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point3F} instance with the result of the addition.
 	 * <p>
-	 * If either {@code pointLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code pLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point3F} instance on the left-hand side
-	 * @param vectorRHS the {@link Vector3F} instance on the right-hand side
+	 * @param pLHS the {@code Point3F} instance on the left-hand side
+	 * @param vRHS the {@link Vector3F} instance on the right-hand side
 	 * @return a new {@code Point3F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code pLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Point3F add(final Point3F pointLHS, final Vector3F vectorRHS) {
-		final float component1 = pointLHS.component1 + vectorRHS.getComponent1();
-		final float component2 = pointLHS.component2 + vectorRHS.getComponent2();
-		final float component3 = pointLHS.component3 + vectorRHS.getComponent3();
-		
-		return new Point3F(component1, component2, component3);
+	public static Point3F add(final Point3F pLHS, final Vector3F vRHS) {
+		return new Point3F(pLHS.x + vRHS.x, pLHS.y + vRHS.y, pLHS.z + vRHS.z);
 	}
 	
 	/**
-	 * Adds the component values of {@code vectorRHS} multiplied by {@code scalar} to the component values of {@code pointLHS}.
+	 * Adds the component values of {@code vRHS} multiplied by {@code s} to the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point3F} instance with the result of the addition.
 	 * <p>
-	 * If either {@code pointLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code pLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point3F} instance on the left-hand side
-	 * @param vectorRHS the {@link Vector3F} instance on the right-hand side
-	 * @param scalar the scalar to multiply the component values of {@code vectorRHS} with
+	 * @param pLHS the {@code Point3F} instance on the left-hand side
+	 * @param vRHS the {@link Vector3F} instance on the right-hand side
+	 * @param s the scalar to multiply the component values of {@code vRHS} with
 	 * @return a new {@code Point3F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code pLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Point3F add(final Point3F pointLHS, final Vector3F vectorRHS, final float scalar) {
-		final float component1 = pointLHS.component1 + vectorRHS.getComponent1() * scalar;
-		final float component2 = pointLHS.component2 + vectorRHS.getComponent2() * scalar;
-		final float component3 = pointLHS.component3 + vectorRHS.getComponent3() * scalar;
-		
-		return new Point3F(component1, component2, component3);
+	public static Point3F add(final Point3F pLHS, final Vector3F vRHS, final float s) {
+		return new Point3F(pLHS.x + vRHS.x * s, pLHS.y + vRHS.y * s, pLHS.z + vRHS.z * s);
 	}
 	
 	/**
-	 * Adds {@code scalarRHS} to the component values of {@code pointLHS}.
+	 * Adds {@code sRHS} to the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point3F} instance with the result of the addition.
 	 * <p>
-	 * If {@code pointLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code pLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point3F} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param pLHS the {@code Point3F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Point3F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code pLHS} is {@code null}
 	 */
-	public static Point3F add(final Point3F pointLHS, final float scalarRHS) {
-		final float component1 = pointLHS.component1 + scalarRHS;
-		final float component2 = pointLHS.component2 + scalarRHS;
-		final float component3 = pointLHS.component3 + scalarRHS;
-		
-		return new Point3F(component1, component2, component3);
+	public static Point3F add(final Point3F pLHS, final float sRHS) {
+		return new Point3F(pLHS.x + sRHS, pLHS.y + sRHS, pLHS.z + sRHS);
 	}
 	
 	/**
@@ -425,11 +420,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point3F centroid(final Point3F a, final Point3F b) {
-		final float component1 = (a.component1 + b.component1) / 2.0F;
-		final float component2 = (a.component2 + b.component2) / 2.0F;
-		final float component3 = (a.component3 + b.component3) / 2.0F;
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F((a.x + b.x) / 2.0F, (a.y + b.y) / 2.0F, (a.z + b.z) / 2.0F);
 	}
 	
 	/**
@@ -444,11 +435,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point3F centroid(final Point3F a, final Point3F b, final Point3F c) {
-		final float component1 = (a.component1 + b.component1 + c.component1) / 3.0F;
-		final float component2 = (a.component2 + b.component2 + c.component2) / 3.0F;
-		final float component3 = (a.component3 + b.component3 + c.component3) / 3.0F;
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F((a.x + b.x + c.x) / 3.0F, (a.y + b.y + c.y) / 3.0F, (a.z + b.z + c.z) / 3.0F);
 	}
 	
 	/**
@@ -464,11 +451,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point3F centroid(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
-		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0F;
-		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0F;
-		final float component3 = (a.component3 + b.component3 + c.component3 + d.component3) / 4.0F;
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F((a.x + b.x + c.x + d.x) / 4.0F, (a.y + b.y + c.y + d.y) / 4.0F, (a.z + b.z + c.z + d.z) / 4.0F);
 	}
 	
 	/**
@@ -488,24 +471,20 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
 	 */
 	public static Point3F centroid(final Point3F a, final Point3F b, final Point3F c, final Point3F d, final Point3F e, final Point3F f, final Point3F g, final Point3F h) {
-		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0F;
-		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0F;
-		final float component3 = (a.component3 + b.component3 + c.component3 + d.component3 + e.component3 + f.component3 + g.component3 + h.component3) / 8.0F;
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F((a.x + b.x + c.x + d.x + e.x + f.x + g.x + h.x) / 8.0F, (a.y + b.y + c.y + d.y + e.y + f.y + g.y + h.y) / 8.0F, (a.z + b.z + c.z + d.z + e.z + f.z + g.z + h.z) / 8.0F);
 	}
 	
 	/**
-	 * Returns a cached version of {@code point}.
+	 * Returns a cached version of {@code p}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@code Point3F} instance
-	 * @return a cached version of {@code point}
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@code Point3F} instance
+	 * @return a cached version of {@code p}
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public static Point3F getCached(final Point3F point) {
-		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
+	public static Point3F getCached(final Point3F p) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(p, "p == null"), key -> p);
 	}
 	
 	/**
@@ -522,11 +501,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point3F lerp(final Point3F a, final Point3F b, final float t) {
-		final float component1 = Floats.lerp(a.component1, b.component1, t);
-		final float component2 = Floats.lerp(a.component2, b.component2, t);
-		final float component3 = Floats.lerp(a.component3, b.component3, t);
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(Floats.lerp(a.x, b.x, t), Floats.lerp(a.y, b.y, t), Floats.lerp(a.z, b.z, t));
 	}
 	
 	/**
@@ -535,11 +510,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the largest component values
 	 */
 	public static Point3F maximum() {
-		final float component1 = MAX_VALUE;
-		final float component2 = MAX_VALUE;
-		final float component3 = MAX_VALUE;
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(MAX_VALUE, MAX_VALUE, MAX_VALUE);
 	}
 	
 	/**
@@ -553,11 +524,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point3F maximum(final Point3F a, final Point3F b) {
-		final float component1 = max(a.component1, b.component1);
-		final float component2 = max(a.component2, b.component2);
-		final float component3 = max(a.component3, b.component3);
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
 	}
 	
 	/**
@@ -572,11 +539,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point3F maximum(final Point3F a, final Point3F b, final Point3F c) {
-		final float component1 = max(a.component1, b.component1, c.component1);
-		final float component2 = max(a.component2, b.component2, c.component2);
-		final float component3 = max(a.component3, b.component3, c.component3);
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(max(a.x, b.x, c.x), max(a.y, b.y, c.y), max(a.z, b.z, c.z));
 	}
 	
 	/**
@@ -592,11 +555,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point3F maximum(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
-		final float component1 = max(a.component1, b.component1, c.component1, d.component1);
-		final float component2 = max(a.component2, b.component2, c.component2, d.component2);
-		final float component3 = max(a.component3, b.component3, c.component3, d.component3);
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(max(a.x, b.x, c.x, d.x), max(a.y, b.y, c.y, d.y), max(a.z, b.z, c.z, d.z));
 	}
 	
 	/**
@@ -610,11 +569,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point3F midpoint(final Point3F a, final Point3F b) {
-		final float component1 = (a.component1 + b.component1) * 0.5F;
-		final float component2 = (a.component2 + b.component2) * 0.5F;
-		final float component3 = (a.component3 + b.component3) * 0.5F;
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F((a.x + b.x) * 0.5F, (a.y + b.y) * 0.5F, (a.z + b.z) * 0.5F);
 	}
 	
 	/**
@@ -623,11 +578,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the smallest component values
 	 */
 	public static Point3F minimum() {
-		final float component1 = MIN_VALUE;
-		final float component2 = MIN_VALUE;
-		final float component3 = MIN_VALUE;
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(MIN_VALUE, MIN_VALUE, MIN_VALUE);
 	}
 	
 	/**
@@ -641,11 +592,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point3F minimum(final Point3F a, final Point3F b) {
-		final float component1 = min(a.component1, b.component1);
-		final float component2 = min(a.component2, b.component2);
-		final float component3 = min(a.component3, b.component3);
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
 	}
 	
 	/**
@@ -660,11 +607,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point3F minimum(final Point3F a, final Point3F b, final Point3F c) {
-		final float component1 = min(a.component1, b.component1, c.component1);
-		final float component2 = min(a.component2, b.component2, c.component2);
-		final float component3 = min(a.component3, b.component3, c.component3);
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(min(a.x, b.x, c.x), min(a.y, b.y, c.y), min(a.z, b.z, c.z));
 	}
 	
 	/**
@@ -680,11 +623,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point3F minimum(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
-		final float component1 = min(a.component1, b.component1, c.component1, d.component1);
-		final float component2 = min(a.component2, b.component2, c.component2, d.component2);
-		final float component3 = min(a.component3, b.component3, c.component3, d.component3);
-		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(min(a.x, b.x, c.x, d.x), min(a.y, b.y, c.y, d.y), min(a.z, b.z, c.z, d.z));
 	}
 	
 	/**
@@ -707,11 +646,11 @@ public final class Point3F implements Node {
 		
 		final Point3F pointOffset = add(point, offsetCorrectlyOriented);
 		
-		final float component1 = offset.getComponent1() > 0.0F ? nextUp(pointOffset.component1) : nextDown(pointOffset.component1);
-		final float component2 = offset.getComponent2() > 0.0F ? nextUp(pointOffset.component2) : nextDown(pointOffset.component2);
-		final float component3 = offset.getComponent3() > 0.0F ? nextUp(pointOffset.component3) : nextDown(pointOffset.component3);
+		final float x = offset.getComponent1() > 0.0F ? nextUp(pointOffset.x) : nextDown(pointOffset.x);
+		final float y = offset.getComponent2() > 0.0F ? nextUp(pointOffset.y) : nextDown(pointOffset.y);
+		final float z = offset.getComponent3() > 0.0F ? nextUp(pointOffset.z) : nextDown(pointOffset.z);
 		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(x, y, z);
 	}
 	
 	/**
@@ -728,135 +667,115 @@ public final class Point3F implements Node {
 	 */
 	public static Point3F read(final DataInput dataInput) {
 		try {
-			final float component1 = dataInput.readFloat();
-			final float component2 = dataInput.readFloat();
-			final float component3 = dataInput.readFloat();
-			
-			return new Point3F(component1, component2, component3);
+			return new Point3F(dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Scales {@code point} using {@code scale}.
+	 * Scales {@code p} using {@code v}.
 	 * <p>
 	 * Returns a new {@code Point3F} instance with the scale applied.
 	 * <p>
-	 * If either {@code point} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code p} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@code Point3F} instance
-	 * @param scale a {@link Vector2F} instance
+	 * @param p a {@code Point3F} instance
+	 * @param v a {@link Vector2F} instance
 	 * @return a new {@code Point3F} instance with the scale applied
-	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code p} or {@code v} are {@code null}
 	 */
-	public static Point3F scale(final Point3F point, final Vector2F scale) {
-		final float component1 = point.component1 * scale.x;
-		final float component2 = point.component2 * scale.y;
-		final float component3 = point.component3;
-		
-		return new Point3F(component1, component2, component3);
+	public static Point3F scale(final Point3F p, final Vector2F v) {
+		return new Point3F(p.x * v.x, p.y * v.y, p.z);
 	}
 	
 	/**
-	 * Scales {@code point} using {@code scale}.
+	 * Scales {@code p} using {@code v}.
 	 * <p>
 	 * Returns a new {@code Point3F} instance with the scale applied.
 	 * <p>
-	 * If either {@code point} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code p} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param point a {@code Point3F} instance
-	 * @param scale a {@link Vector3F} instance
+	 * @param p a {@code Point3F} instance
+	 * @param v a {@link Vector3F} instance
 	 * @return a new {@code Point3F} instance with the scale applied
-	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code p} or {@code v} are {@code null}
 	 */
-	public static Point3F scale(final Point3F point, final Vector3F scale) {
-		final float component1 = point.component1 * scale.getComponent1();
-		final float component2 = point.component2 * scale.getComponent2();
-		final float component3 = point.component3 * scale.getComponent3();
-		
-		return new Point3F(component1, component2, component3);
+	public static Point3F scale(final Point3F p, final Vector3F v) {
+		return new Point3F(p.x * v.x, p.y * v.y, p.z * v.z);
 	}
 	
 	/**
-	 * Subtracts the component values of {@code vectorRHS} from the component values of {@code pointLHS}.
+	 * Subtracts the component values of {@code vRHS} from the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point3F} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code pointLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code pLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point3F} instance on the left-hand side
-	 * @param vectorRHS the {@link Vector3F} instance on the right-hand side
+	 * @param pLHS the {@code Point3F} instance on the left-hand side
+	 * @param vRHS the {@link Vector3F} instance on the right-hand side
 	 * @return a new {@code Point3F} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code pLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Point3F subtract(final Point3F pointLHS, final Vector3F vectorRHS) {
-		final float component1 = pointLHS.component1 - vectorRHS.getComponent1();
-		final float component2 = pointLHS.component2 - vectorRHS.getComponent2();
-		final float component3 = pointLHS.component3 - vectorRHS.getComponent3();
-		
-		return new Point3F(component1, component2, component3);
+	public static Point3F subtract(final Point3F pLHS, final Vector3F vRHS) {
+		return new Point3F(pLHS.x - vRHS.x, pLHS.y - vRHS.y, pLHS.z - vRHS.z);
 	}
 	
 	/**
-	 * Subtracts {@code scalarRHS} from the component values of {@code pointLHS}.
+	 * Subtracts {@code sRHS} from the component values of {@code pLHS}.
 	 * <p>
 	 * Returns a new {@code Point3F} instance with the result of the subtraction.
 	 * <p>
-	 * If {@code pointLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code pLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointLHS the {@code Point3F} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param pLHS the {@code Point3F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Point3F} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, {@code pointLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code pLHS} is {@code null}
 	 */
-	public static Point3F subtract(final Point3F pointLHS, final float scalarRHS) {
-		final float component1 = pointLHS.component1 - scalarRHS;
-		final float component2 = pointLHS.component2 - scalarRHS;
-		final float component3 = pointLHS.component3 - scalarRHS;
-		
-		return new Point3F(component1, component2, component3);
+	public static Point3F subtract(final Point3F pLHS, final float sRHS) {
+		return new Point3F(pLHS.x - sRHS, pLHS.y - sRHS, pLHS.z - sRHS);
 	}
 	
 	/**
-	 * Transforms the {@code Point3F} {@code pointRHS} with the {@link Matrix44F} {@code matrixLHS}.
+	 * Transforms the {@code Point3F} {@code pRHS} with the {@link Matrix44F} {@code mLHS}.
 	 * <p>
 	 * Returns a new {@code Point3F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code pRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix44F} instance
-	 * @param pointRHS a {@code Point3F} instance
+	 * @param mLHS a {@code Matrix44F} instance
+	 * @param pRHS a {@code Point3F} instance
 	 * @return a new {@code Point3F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
-	public static Point3F transform(final Matrix44F matrixLHS, final Point3F pointRHS) {
-		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
-		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
-		final float component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34();
+	public static Point3F transform(final Matrix44F mLHS, final Point3F pRHS) {
+		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14();
+		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24();
+		final float z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34();
 		
-		return new Point3F(component1, component2, component3);
+		return new Point3F(x, y, z);
 	}
 	
 	/**
-	 * Transforms the {@code Point3F} {@code pointRHS} with the {@link Matrix44F} {@code matrixLHS} and divides the result.
+	 * Transforms the {@code Point3F} {@code pRHS} with the {@link Matrix44F} {@code mLHS} and divides the result.
 	 * <p>
 	 * Returns a new {@code Point3F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code pRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix44F} instance
-	 * @param pointRHS a {@code Point3F} instance
+	 * @param mLHS a {@code Matrix44F} instance
+	 * @param pRHS a {@code Point3F} instance
 	 * @return a new {@code Point3F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
-	public static Point3F transformAndDivide(final Matrix44F matrixLHS, final Point3F pointRHS) {
-		final float component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
-		final float component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
-		final float component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34();
-		final float component4 = matrixLHS.getElement41() * pointRHS.component1 + matrixLHS.getElement42() * pointRHS.component2 + matrixLHS.getElement43() * pointRHS.component3 + matrixLHS.getElement44();
+	public static Point3F transformAndDivide(final Matrix44F mLHS, final Point3F pRHS) {
+		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14();
+		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24();
+		final float z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34();
+		final float w = mLHS.getElement41() * pRHS.x + mLHS.getElement42() * pRHS.y + mLHS.getElement43() * pRHS.z + mLHS.getElement44();
 		
-		return equal(component4, 1.0F) || isZero(component4) ? new Point3F(component1, component2, component3) : new Point3F(component1 / component4, component2 / component4, component3 / component4);
+		return equal(w, 1.0F) || isZero(w) ? new Point3F(x, y, z) : new Point3F(x / w, y / w, z / w);
 	}
 	
 	/**
@@ -901,19 +820,19 @@ public final class Point3F implements Node {
 		ParameterArguments.requireNonNullArray(points, "points");
 		ParameterArguments.requireRange(points.length, 3, Integer.MAX_VALUE, "points.length");
 		
-		final Point3F point0 = points[0];
-		final Point3F point1 = points[1];
-		final Point3F point2 = points[2];
+		final Point3F p0 = points[0];
+		final Point3F p1 = points[1];
+		final Point3F p2 = points[2];
 		
-		final Vector3F vector0 = Vector3F.directionNormalized(point0, point1);
-		final Vector3F vector1 = Vector3F.directionNormalized(point0, point2);
+		final Vector3F v0 = Vector3F.directionNormalized(p0, p1);
+		final Vector3F v1 = Vector3F.directionNormalized(p0, p2);
 		
 		for(int i = 3; i < points.length; i++) {
-			final Point3F pointI = points[i];
+			final Point3F pI = points[i];
 			
-			final Vector3F vector2 = Vector3F.directionNormalized(point0, pointI);
+			final Vector3F v2 = Vector3F.directionNormalized(p0, pI);
 			
-			if(!isZero(Vector3F.tripleProduct(vector0, vector2, vector1))) {
+			if(!isZero(Vector3F.tripleProduct(v0, v2, v1))) {
 				return false;
 			}
 		}

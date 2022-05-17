@@ -56,15 +56,15 @@ public final class Rasterizer2I {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2I[] rasterize(final LineSegment2I lineSegment, final Rectangle2I rectangle) {
-		final int lAX = lineSegment.getA().getX();
-		final int lAY = lineSegment.getA().getY();
-		final int lBX = lineSegment.getB().getX();
-		final int lBY = lineSegment.getB().getY();
+		final int lAX = lineSegment.getA().x;
+		final int lAY = lineSegment.getA().y;
+		final int lBX = lineSegment.getB().x;
+		final int lBY = lineSegment.getB().y;
 		
-		final int rAX = rectangle.getA().getX();
-		final int rAY = rectangle.getA().getY();
-		final int rCX = rectangle.getC().getX();
-		final int rCY = rectangle.getC().getY();
+		final int rAX = rectangle.getA().x;
+		final int rAY = rectangle.getA().y;
+		final int rCX = rectangle.getC().x;
+		final int rCY = rectangle.getC().y;
 		
 		final int clippedAX = lAX < rAX ? rAX : lAX >= rCX ? rCX - 1 : lAX;
 		final int clippedAY = lAY < rAY ? rAY : lAY >= rCY ? rCY - 1 : lAY;
@@ -133,12 +133,12 @@ public final class Rasterizer2I {
 		final Point2I vertexB = vertices[1];
 		final Point2I vertexC = vertices[2];
 		
-		if(vertexB.getY() == vertexC.getY()) {
+		if(vertexB.y == vertexC.y) {
 			return doRasterizeTriangleTopDown(vertexA, vertexB, vertexC, rectangle);
-		} else if(vertexA.getY() == vertexB.getY()) {
+		} else if(vertexA.y == vertexB.y) {
 			return doRasterizeTriangleBottomUp(vertexA, vertexB, vertexC, rectangle);
 		} else {
-			final Point2I vertexD = new Point2I(toInt(vertexA.getX() + (toFloat(vertexB.getY() - vertexA.getY()) / (vertexC.getY() - vertexA.getY())) * (vertexC.getX() - vertexA.getX())), vertexB.getY());
+			final Point2I vertexD = new Point2I(toInt(vertexA.x + (toFloat(vertexB.y - vertexA.y) / (vertexC.y - vertexA.y)) * (vertexC.x - vertexA.x)), vertexB.y);
 			
 			final Point2I[][] scanLinesTopDown = doRasterizeTriangleTopDown(vertexA, vertexB, vertexD, rectangle);
 			final Point2I[][] scanLinesBottomUp = doRasterizeTriangleBottomUp(vertexB, vertexD, vertexC, rectangle);
@@ -159,14 +159,14 @@ public final class Rasterizer2I {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Point2I[][] doRasterizeTriangleBottomUp(final Point2I vertexA, final Point2I vertexB, final Point2I vertexC, final Rectangle2I rectangle) {
-		final float slope0 = toFloat(vertexC.getX() - vertexA.getX()) / (vertexC.getY() - vertexA.getY());
-		final float slope1 = toFloat(vertexC.getX() - vertexB.getX()) / (vertexC.getY() - vertexB.getY());
+		final float slope0 = toFloat(vertexC.x - vertexA.x) / (vertexC.y - vertexA.y);
+		final float slope1 = toFloat(vertexC.x - vertexB.x) / (vertexC.y - vertexB.y);
 		
-		float x0 = vertexC.getX();
-		float x1 = vertexC.getX() + 0.5F;
+		float x0 = vertexC.x;
+		float x1 = vertexC.x + 0.5F;
 		
-		final int yStart = vertexC.getY();
-		final int yEnd = vertexA.getY();
+		final int yStart = vertexC.y;
+		final int yEnd = vertexA.y;
 		final int yLength = yStart - yEnd;
 		
 		final Point2I[][] scanLines = new Point2I[yLength][];
@@ -187,14 +187,14 @@ public final class Rasterizer2I {
 	}
 	
 	private static Point2I[][] doRasterizeTriangleTopDown(final Point2I vertexA, final Point2I vertexB, final Point2I vertexC, final Rectangle2I rectangle) {
-		final float slope0 = toFloat(vertexB.getX() - vertexA.getX()) / (vertexB.getY() - vertexA.getY());
-		final float slope1 = toFloat(vertexC.getX() - vertexA.getX()) / (vertexC.getY() - vertexA.getY());
+		final float slope0 = toFloat(vertexB.x - vertexA.x) / (vertexB.y - vertexA.y);
+		final float slope1 = toFloat(vertexC.x - vertexA.x) / (vertexC.y - vertexA.y);
 		
-		float x0 = vertexA.getX();
-		float x1 = vertexA.getX() + 0.5F;
+		float x0 = vertexA.x;
+		float x1 = vertexA.x + 0.5F;
 		
-		final int yStart = vertexA.getY();
-		final int yEnd = vertexB.getY();
+		final int yStart = vertexA.y;
+		final int yEnd = vertexB.y;
 		final int yLength = yEnd - yStart + 1;
 		
 		final Point2I[][] scanLines = new Point2I[yLength][];
@@ -215,7 +215,7 @@ public final class Rasterizer2I {
 	}
 	
 	private static void doSortVerticesAscendingByY(final Point2I[] vertices) {
-		if(vertices[0].getY() > vertices[1].getY()) {
+		if(vertices[0].y > vertices[1].y) {
 			final Point2I a = vertices[0];
 			final Point2I b = vertices[1];
 			
@@ -223,7 +223,7 @@ public final class Rasterizer2I {
 			vertices[1] = a;
 		}
 		
-		if(vertices[0].getY() > vertices[2].getY()) {
+		if(vertices[0].y > vertices[2].y) {
 			final Point2I a = vertices[0];
 			final Point2I c = vertices[2];
 			
@@ -231,7 +231,7 @@ public final class Rasterizer2I {
 			vertices[2] = a;
 		}
 		
-		if(vertices[1].getY() > vertices[2].getY()) {
+		if(vertices[1].y > vertices[2].y) {
 			final Point2I b = vertices[1];
 			final Point2I c = vertices[2];
 			

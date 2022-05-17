@@ -73,7 +73,7 @@ public final class Rectangle2I implements Shape2I {
 	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
 	 */
 	public Rectangle2I(final Circle2I circle) {
-		this(new Point2I(circle.getCenter().getX() - circle.getRadius(), circle.getCenter().getY() - circle.getRadius()), new Point2I(circle.getCenter().getX() + circle.getRadius(), circle.getCenter().getY() + circle.getRadius()));
+		this(new Point2I(circle.getCenter().x - circle.getRadius(), circle.getCenter().y - circle.getRadius()), new Point2I(circle.getCenter().x + circle.getRadius(), circle.getCenter().y + circle.getRadius()));
 	}
 	
 	/**
@@ -86,10 +86,10 @@ public final class Rectangle2I implements Shape2I {
 	 * @throws NullPointerException thrown if, and only if, either {@code x} or {@code y} are {@code null}
 	 */
 	public Rectangle2I(final Point2I x, final Point2I y) {
-		this.a = new Point2I(min(x.getX(), y.getX()), min(x.getY(), y.getY()));
-		this.b = new Point2I(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
-		this.c = new Point2I(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
-		this.d = new Point2I(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
+		this.a = new Point2I(min(x.x, y.x), min(x.y, y.y));
+		this.b = new Point2I(max(x.x, y.x), min(x.y, y.y));
+		this.c = new Point2I(max(x.x, y.x), max(x.y, y.y));
+		this.d = new Point2I(min(x.x, y.x), max(x.y, y.y));
 		this.lineSegments = LineSegment2I.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
@@ -173,10 +173,10 @@ public final class Rectangle2I implements Shape2I {
 		final Point2I maximum = Point2I.maximum(Point2I.maximum(this.a, this.b), Point2I.maximum(this.c, this.d));
 		final Point2I minimum = Point2I.minimum(Point2I.minimum(this.a, this.b), Point2I.minimum(this.c, this.d));
 		
-		final int maximumX = maximum.getX();
-		final int minimumX = minimum.getX();
-		final int maximumY = maximum.getY();
-		final int minimumY = minimum.getY();
+		final int maximumX = maximum.x;
+		final int minimumX = minimum.x;
+		final int maximumY = maximum.y;
+		final int minimumY = minimum.y;
 		
 		for(int y = minimumY; y <= maximumY; y++) {
 			for(int x = minimumX; x <= maximumX; x++) {
@@ -377,10 +377,10 @@ public final class Rectangle2I implements Shape2I {
 	 * @return {@code true} if, and only if, this {@code Rectangle2I} instance is axis-aligned, {@code false} otherwise
 	 */
 	public boolean isAxisAligned() {
-		final boolean isAxisAlignedAB = this.a.getY() == this.b.getY();
-		final boolean isAxisAlignedBC = this.b.getX() == this.c.getX();
-		final boolean isAxisAlignedCD = this.c.getY() == this.d.getY();
-		final boolean isAxisAlignedDA = this.d.getX() == this.a.getX();
+		final boolean isAxisAlignedAB = this.a.y == this.b.y;
+		final boolean isAxisAlignedBC = this.b.x == this.c.x;
+		final boolean isAxisAlignedCD = this.c.y == this.d.y;
+		final boolean isAxisAlignedDA = this.d.x == this.a.x;
 		final boolean isAxisAligned = isAxisAlignedAB & isAxisAlignedBC & isAxisAlignedCD & isAxisAlignedDA;//TODO: Using & instead of && to get full code coverage. Should this be fixed?
 		
 		return isAxisAligned;
@@ -491,8 +491,8 @@ public final class Rectangle2I implements Shape2I {
 	private boolean doContains(final Point2I point) {
 		boolean isInside = false;
 		
-		final int pX = point.getX();
-		final int pY = point.getY();
+		final int pX = point.x;
+		final int pY = point.y;
 		
 		final Point2I[] points = {this.a, this.b, this.c, this.d};
 		
@@ -500,10 +500,10 @@ public final class Rectangle2I implements Shape2I {
 			final Point2I pointI = points[i];
 			final Point2I pointJ = points[j];
 			
-			final int iX = pointI.getX();
-			final int iY = pointI.getY();
-			final int jX = pointJ.getX();
-			final int jY = pointJ.getY();
+			final int iX = pointI.x;
+			final int iY = pointI.y;
+			final int jX = pointJ.x;
+			final int jY = pointJ.y;
 			
 			if((iY > pY) != (jY > pY) && pX < (jX - iX) * (pY - iY) / (jY - iY) + iX) {
 				isInside = !isInside;

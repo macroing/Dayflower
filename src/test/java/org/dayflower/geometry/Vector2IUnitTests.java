@@ -48,8 +48,8 @@ public final class Vector2IUnitTests {
 		final Vector2I b = new Vector2I(2, 3);
 		final Vector2I c = Vector2I.add(a, b);
 		
-		assertEquals(3, c.getComponent1());
-		assertEquals(5, c.getComponent2());
+		assertEquals(3, c.x);
+		assertEquals(5, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2I.add(a, null));
 		assertThrows(NullPointerException.class, () -> Vector2I.add(null, b));
@@ -59,24 +59,24 @@ public final class Vector2IUnitTests {
 	public void testConstructor() {
 		final Vector2I vector = new Vector2I();
 		
-		assertEquals(0, vector.getComponent1());
-		assertEquals(0, vector.getComponent2());
+		assertEquals(0, vector.x);
+		assertEquals(0, vector.y);
 	}
 	
 	@Test
 	public void testConstructorIntInt() {
 		final Vector2I vector = new Vector2I(1, 2);
 		
-		assertEquals(1, vector.getComponent1());
-		assertEquals(2, vector.getComponent2());
+		assertEquals(1, vector.x);
+		assertEquals(2, vector.y);
 	}
 	
 	@Test
 	public void testConstructorPoint2I() {
 		final Vector2I vector = new Vector2I(new Point2I(1, 2));
 		
-		assertEquals(1, vector.getComponent1());
-		assertEquals(2, vector.getComponent2());
+		assertEquals(1, vector.x);
+		assertEquals(2, vector.y);
 		
 		assertThrows(NullPointerException.class, () -> new Vector2I(null));
 	}
@@ -85,8 +85,8 @@ public final class Vector2IUnitTests {
 	public void testDirection() {
 		final Vector2I vector = Vector2I.direction(new Point2I(1, 2), new Point2I(2, 3));
 		
-		assertEquals(1, vector.getComponent1());
-		assertEquals(1, vector.getComponent2());
+		assertEquals(1, vector.x);
+		assertEquals(1, vector.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2I.direction(new Point2I(1, 2), null));
 		assertThrows(NullPointerException.class, () -> Vector2I.direction(null, new Point2I(2, 3)));
@@ -97,8 +97,8 @@ public final class Vector2IUnitTests {
 		final Vector2I a = new Vector2I(2, 4);
 		final Vector2I b = Vector2I.divide(a, 2);
 		
-		assertEquals(1, b.getComponent1());
-		assertEquals(2, b.getComponent2());
+		assertEquals(1, b.x);
+		assertEquals(2, b.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2I.divide(null, 2));
 	}
@@ -120,48 +120,6 @@ public final class Vector2IUnitTests {
 		assertNotEquals(d, a);
 		assertNotEquals(a, e);
 		assertNotEquals(e, a);
-	}
-	
-	@Test
-	public void testGetComponent1() {
-		final Vector2I vector = new Vector2I(2, 0);
-		
-		assertEquals(2, vector.getComponent1());
-	}
-	
-	@Test
-	public void testGetComponent2() {
-		final Vector2I vector = new Vector2I(0, 2);
-		
-		assertEquals(2, vector.getComponent2());
-	}
-	
-	@Test
-	public void testGetU() {
-		final Vector2I vector = new Vector2I(2, 0);
-		
-		assertEquals(2, vector.getU());
-	}
-	
-	@Test
-	public void testGetV() {
-		final Vector2I vector = new Vector2I(0, 2);
-		
-		assertEquals(2, vector.getV());
-	}
-	
-	@Test
-	public void testGetX() {
-		final Vector2I vector = new Vector2I(2, 0);
-		
-		assertEquals(2, vector.getX());
-	}
-	
-	@Test
-	public void testGetY() {
-		final Vector2I vector = new Vector2I(0, 2);
-		
-		assertEquals(2, vector.getY());
 	}
 	
 	@Test
@@ -194,8 +152,8 @@ public final class Vector2IUnitTests {
 		final Vector2I a = new Vector2I(1, 2);
 		final Vector2I b = Vector2I.multiply(a, 2);
 		
-		assertEquals(2, b.getComponent1());
-		assertEquals(4, b.getComponent2());
+		assertEquals(2, b.x);
+		assertEquals(4, b.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2I.multiply(null, 2));
 	}
@@ -206,11 +164,11 @@ public final class Vector2IUnitTests {
 		final Vector2I b = Vector2I.negate(a);
 		final Vector2I c = Vector2I.negate(b);
 		
-		assertEquals(-1, b.getComponent1());
-		assertEquals(-2, b.getComponent2());
+		assertEquals(-1, b.x);
+		assertEquals(-2, b.y);
 		
-		assertEquals(+1, c.getComponent1());
-		assertEquals(+2, c.getComponent2());
+		assertEquals(+1, c.x);
+		assertEquals(+2, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2I.negate(null));
 	}
@@ -220,8 +178,8 @@ public final class Vector2IUnitTests {
 		final Vector2I a = new Vector2I(1, 2);
 		final Vector2I b = Vector2I.perpendicular(a);
 		
-		assertEquals(+2, b.getComponent1());
-		assertEquals(-1, b.getComponent2());
+		assertEquals(+2, b.x);
+		assertEquals(-1, b.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2I.perpendicular(null));
 	}
@@ -234,8 +192,8 @@ public final class Vector2IUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeInt(a.getComponent1());
-		dataOutput.writeInt(a.getComponent2());
+		dataOutput.writeInt(a.x);
+		dataOutput.writeInt(a.y);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		
@@ -253,8 +211,8 @@ public final class Vector2IUnitTests {
 		final Vector2I b = new Vector2I(2, 3);
 		final Vector2I c = Vector2I.subtract(a, b);
 		
-		assertEquals(1, c.getComponent1());
-		assertEquals(2, c.getComponent2());
+		assertEquals(1, c.x);
+		assertEquals(2, c.y);
 		
 		assertThrows(NullPointerException.class, () -> Vector2I.subtract(a, null));
 		assertThrows(NullPointerException.class, () -> Vector2I.subtract(null, b));

@@ -318,9 +318,9 @@ public final class Triangle2I implements Shape2I {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private boolean doContains(final Point2I point) {
-		final int signA = (point.getX() - this.b.getX()) * (this.a.getY() - this.b.getY()) - (this.a.getX() - this.b.getX()) * (point.getY() - this.b.getY());
-		final int signB = (point.getX() - this.c.getX()) * (this.b.getY() - this.c.getY()) - (this.b.getX() - this.c.getX()) * (point.getY() - this.c.getY());
-		final int signC = (point.getX() - this.a.getX()) * (this.c.getY() - this.a.getY()) - (this.c.getX() - this.a.getX()) * (point.getY() - this.a.getY());
+		final int signA = (point.x - this.b.x) * (this.a.y - this.b.y) - (this.a.x - this.b.x) * (point.y - this.b.y);
+		final int signB = (point.x - this.c.x) * (this.b.y - this.c.y) - (this.b.x - this.c.x) * (point.y - this.c.y);
+		final int signC = (point.x - this.a.x) * (this.c.y - this.a.y) - (this.c.x - this.a.x) * (point.y - this.a.y);
 		
 //		TODO: Using | instead of || to get full code coverage. Should this be fixed?
 		final boolean hasNegativeSign = signA < 0 | signB < 0 | signC < 0;

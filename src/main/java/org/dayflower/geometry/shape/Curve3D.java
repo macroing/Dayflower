@@ -202,20 +202,20 @@ public final class Curve3D implements Shape3D {
 		final double yMaximum = 0.0D;
 		final double zMaximum = ray.getDirection().length() * tMaximum;
 		
-		if(max(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) + widthE < tMinimum || min(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) - widthE > xMaximum) {
+		if(max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		if(max(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) + widthE < tMinimum || min(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) - widthE > yMaximum) {
+		if(max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		if(max(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) + widthE < tMinimum || min(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) - widthE > zMaximum) {
+		if(max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final double l01 = max(abs(pointI.getX() - 2.0D * pointJ.getX() + pointK.getX()), abs(pointI.getY() - 2.0D * pointJ.getY() + pointK.getY()), abs(pointI.getZ() - 2.0D * pointJ.getZ() + pointK.getZ()));
-		final double l02 = max(abs(pointJ.getX() - 2.0D * pointK.getX() + pointL.getX()), abs(pointJ.getY() - 2.0D * pointK.getY() + pointL.getY()), abs(pointJ.getZ() - 2.0D * pointK.getZ() + pointL.getZ()));
+		final double l01 = max(abs(pointI.x - 2.0D * pointJ.x + pointK.x), abs(pointI.y - 2.0D * pointJ.y + pointK.y), abs(pointI.z - 2.0D * pointJ.z + pointK.z));
+		final double l02 = max(abs(pointJ.x - 2.0D * pointK.x + pointL.x), abs(pointJ.y - 2.0D * pointK.y + pointL.y), abs(pointJ.z - 2.0D * pointK.z + pointL.z));
 		final double l03 = max(l01, l02);
 		
 		final int depth = saturate(doLog2(1.41421356237D * 6.0D * l03 / (8.0D * (max(widthA, widthB) * 0.05D))) / 2, 0, 10);
@@ -419,20 +419,20 @@ public final class Curve3D implements Shape3D {
 		final double yMaximum = 0.0D;
 		final double zMaximum = ray.getDirection().length() * tMaximum;
 		
-		if(max(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) + widthE < tMinimum || min(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) - widthE > xMaximum) {
+		if(max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
 			return Double.NaN;
 		}
 		
-		if(max(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) + widthE < tMinimum || min(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) - widthE > yMaximum) {
+		if(max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
 			return Double.NaN;
 		}
 		
-		if(max(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) + widthE < tMinimum || min(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) - widthE > zMaximum) {
+		if(max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
 			return Double.NaN;
 		}
 		
-		final double l01 = max(abs(pointI.getX() - 2.0D * pointJ.getX() + pointK.getX()), abs(pointI.getY() - 2.0D * pointJ.getY() + pointK.getY()), abs(pointI.getZ() - 2.0D * pointJ.getZ() + pointK.getZ()));
-		final double l02 = max(abs(pointJ.getX() - 2.0D * pointK.getX() + pointL.getX()), abs(pointJ.getY() - 2.0D * pointK.getY() + pointL.getY()), abs(pointJ.getZ() - 2.0D * pointK.getZ() + pointL.getZ()));
+		final double l01 = max(abs(pointI.x - 2.0D * pointJ.x + pointK.x), abs(pointI.y - 2.0D * pointJ.y + pointK.y), abs(pointI.z - 2.0D * pointJ.z + pointK.z));
+		final double l02 = max(abs(pointJ.x - 2.0D * pointK.x + pointL.x), abs(pointJ.y - 2.0D * pointK.y + pointL.y), abs(pointJ.z - 2.0D * pointK.z + pointL.z));
 		final double l03 = max(l01, l02);
 		
 		final int depth = saturate(doLog2(1.41421356237D * 6.0D * l03 / (8.0D * (max(widthA, widthB) * 0.05D))) / 2, 0, 10);
@@ -1187,14 +1187,14 @@ public final class Curve3D implements Shape3D {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final double edgeA = (pointB.getY() - pointA.getY()) * -pointA.getY() + pointA.getX() * (pointA.getX() - pointB.getX());
-		final double edgeB = (pointC.getY() - pointD.getY()) * -pointD.getY() + pointD.getX() * (pointD.getX() - pointC.getX());
+		final double edgeA = (pointB.y - pointA.y) * -pointA.y + pointA.x * (pointA.x - pointB.x);
+		final double edgeB = (pointC.y - pointD.y) * -pointD.y + pointD.x * (pointD.x - pointC.x);
 		
 		if(edgeA < 0.0D || edgeB < 0.0D) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final Vector2D segmentDirection = new Vector2D(pointD.getX() - pointA.getX(), pointD.getY() - pointA.getY());
+		final Vector2D segmentDirection = new Vector2D(pointD.x - pointA.x, pointD.y - pointA.y);
 		
 		final double denominator = segmentDirection.lengthSquared();
 		
@@ -1202,7 +1202,7 @@ public final class Curve3D implements Shape3D {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final double w = Vector2D.dotProduct(Vector2D.negate(new Vector2D(pointA.getX(), pointA.getY())), segmentDirection) / denominator;
+		final double w = Vector2D.dotProduct(Vector2D.negate(new Vector2D(pointA.x, pointA.y)), segmentDirection) / denominator;
 		final double u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
 		final double hitWidth = doComputeHitWidth(data, ray, u);
 		
@@ -1210,7 +1210,7 @@ public final class Curve3D implements Shape3D {
 		
 		final Vector3D derivative = doBezierEvaluateDerivative(pointA, pointB, pointC, pointD, saturate(w));
 		
-		final double pointCurveDistanceSquared = point.getX() * point.getX() + point.getY() * point.getY();
+		final double pointCurveDistanceSquared = point.x * point.x + point.y * point.y;
 		
 		if(pointCurveDistanceSquared > hitWidth * hitWidth * 0.25D) {
 			return SurfaceIntersection3D.EMPTY;
@@ -1218,14 +1218,14 @@ public final class Curve3D implements Shape3D {
 		
 		final double zMaximum = rayDirectionLength * tMaximum;
 		
-		if(point.getZ() < tMinimum || point.getZ() > zMaximum) {
+		if(point.z < tMinimum || point.z > zMaximum) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
 		final double pointCurveDistance = sqrt(pointCurveDistanceSquared);
-		final double edgeFunction = derivative.getX() * -point.getY() + point.getX() * derivative.getY();
+		final double edgeFunction = derivative.getX() * -point.y + point.x * derivative.getY();
 		final double v = edgeFunction > 0.0D ? 0.5D + pointCurveDistance / hitWidth : 0.5D - pointCurveDistance / hitWidth;
-		final double t = point.getZ() / rayDirectionLength;
+		final double t = point.z / rayDirectionLength;
 		
 		final OrthonormalBasis33D orthonormalBasisG = doComputeOrthonormalBasisG(data, objectToRay, rayToObject, hitWidth, u, v);
 		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
@@ -1280,14 +1280,14 @@ public final class Curve3D implements Shape3D {
 			return Double.NaN;
 		}
 		
-		final double edgeA = (pointB.getY() - pointA.getY()) * -pointA.getY() + pointA.getX() * (pointA.getX() - pointB.getX());
-		final double edgeB = (pointC.getY() - pointD.getY()) * -pointD.getY() + pointD.getX() * (pointD.getX() - pointC.getX());
+		final double edgeA = (pointB.y - pointA.y) * -pointA.y + pointA.x * (pointA.x - pointB.x);
+		final double edgeB = (pointC.y - pointD.y) * -pointD.y + pointD.x * (pointD.x - pointC.x);
 		
 		if(edgeA < 0.0D || edgeB < 0.0D) {
 			return Double.NaN;
 		}
 		
-		final Vector2D segmentDirection = new Vector2D(pointD.getX() - pointA.getX(), pointD.getY() - pointA.getY());
+		final Vector2D segmentDirection = new Vector2D(pointD.x - pointA.x, pointD.y - pointA.y);
 		
 		final double denominator = segmentDirection.lengthSquared();
 		
@@ -1295,13 +1295,13 @@ public final class Curve3D implements Shape3D {
 			return Double.NaN;
 		}
 		
-		final double w = Vector2D.dotProduct(Vector2D.negate(new Vector2D(pointA.getX(), pointA.getY())), segmentDirection) / denominator;
+		final double w = Vector2D.dotProduct(Vector2D.negate(new Vector2D(pointA.x, pointA.y)), segmentDirection) / denominator;
 		final double u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
 		final double hitWidth = doComputeHitWidth(data, ray, u);
 		
 		final Point3D point = doBezierEvaluate(pointA, pointB, pointC, pointD, saturate(w));
 		
-		final double pointCurveDistanceSquared = point.getX() * point.getX() + point.getY() * point.getY();
+		final double pointCurveDistanceSquared = point.x * point.x + point.y * point.y;
 		
 		if(pointCurveDistanceSquared > hitWidth * hitWidth * 0.25D) {
 			return Double.NaN;
@@ -1309,11 +1309,11 @@ public final class Curve3D implements Shape3D {
 		
 		final double zMaximum = rayDirectionLength * tMaximum;
 		
-		if(point.getZ() < tMinimum || point.getZ() > zMaximum) {
+		if(point.z < tMinimum || point.z > zMaximum) {
 			return Double.NaN;
 		}
 		
-		final double t = point.getZ() / rayDirectionLength;
+		final double t = point.z / rayDirectionLength;
 		
 		return t;
 	}
@@ -1423,8 +1423,8 @@ public final class Curve3D implements Shape3D {
 	}
 	
 	private static boolean doIsInsideX(final Point3D[] points, final double width, final double minimum, final double maximum, final int offset) {
-		final double max = max(points[offset + 0].getX(), points[offset + 1].getX(), points[offset + 2].getX(), points[offset + 3].getX());
-		final double min = min(points[offset + 0].getX(), points[offset + 1].getX(), points[offset + 2].getX(), points[offset + 3].getX());
+		final double max = max(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
+		final double min = min(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1432,8 +1432,8 @@ public final class Curve3D implements Shape3D {
 	}
 	
 	private static boolean doIsInsideY(final Point3D[] points, final double width, final double minimum, final double maximum, final int offset) {
-		final double max = max(points[offset + 0].getY(), points[offset + 1].getY(), points[offset + 2].getY(), points[offset + 3].getY());
-		final double min = min(points[offset + 0].getY(), points[offset + 1].getY(), points[offset + 2].getY(), points[offset + 3].getY());
+		final double max = max(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
+		final double min = min(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1441,8 +1441,8 @@ public final class Curve3D implements Shape3D {
 	}
 	
 	private static boolean doIsInsideZ(final Point3D[] points, final double width, final double minimum, final double maximum, final int offset) {
-		final double max = max(points[offset + 0].getZ(), points[offset + 1].getZ(), points[offset + 2].getZ(), points[offset + 3].getZ());
-		final double min = min(points[offset + 0].getZ(), points[offset + 1].getZ(), points[offset + 2].getZ(), points[offset + 3].getZ());
+		final double max = max(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
+		final double min = min(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		

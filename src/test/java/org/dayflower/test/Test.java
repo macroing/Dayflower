@@ -119,7 +119,7 @@ public final class Test {
 		final float radiusOuter = radiusInner + 100.0F;
 		
 		final Point2F pointCenter = new Point2F(resolutionX / 2.0F, resolutionY / 2.0F);
-		final Point2F pointPixel = new Point2F(point.getX(), point.getY());
+		final Point2F pointPixel = new Point2F(point.x, point.y);
 		final Point2F pointInner = Point2F.add(pointCenter, Vector2F.directionNormalized(pointCenter, pointPixel), radiusInner);
 		final Point2F pointOuter = Point2F.add(pointCenter, Vector2F.directionNormalized(pointCenter, pointPixel), radiusOuter);
 		
@@ -271,7 +271,7 @@ public final class Test {
 		ImageF imageF = new IntImageF(800, 800);
 		imageF.clear(Color4F.WHITE);
 		imageF.drawShape(new Polygon2I(new Point2I(100, 100), new Point2I(200, 100), new Point2I(300, 200), new Point2I(200, 300), new Point2I(100, 200)), Color4F.BLACK);
-		imageF.fillRegion(500, 500, (colorRGBA, point) -> new Color4F(point.getX() % 255, point.getY() % 255, 100));
+		imageF.fillRegion(500, 500, (colorRGBA, point) -> new Color4F(point.x % 255, point.y % 255, 100));
 		imageF.fillRegion(150, 150, (colorARGB, point) -> Color4F.random());
 		imageF.save("./generated/Test/Image-Fill-Region.png");
 	}

@@ -2409,15 +2409,15 @@ public final class CompiledShape3FCache {
 		
 		final float[] array = new float[TRIANGLE_3_F_LENGTH];
 		
-		array[TRIANGLE_3_F_OFFSET_A_POSITION + 0] = a.getPosition().getX();						//Block #1
-		array[TRIANGLE_3_F_OFFSET_A_POSITION + 1] = a.getPosition().getY();						//Block #1
-		array[TRIANGLE_3_F_OFFSET_A_POSITION + 2] = a.getPosition().getZ();						//Block #1
-		array[TRIANGLE_3_F_OFFSET_B_POSITION + 0] = b.getPosition().getX();						//Block #1
-		array[TRIANGLE_3_F_OFFSET_B_POSITION + 1] = b.getPosition().getY();						//Block #1
-		array[TRIANGLE_3_F_OFFSET_B_POSITION + 2] = b.getPosition().getZ();						//Block #1
-		array[TRIANGLE_3_F_OFFSET_C_POSITION + 0] = c.getPosition().getX();						//Block #1
-		array[TRIANGLE_3_F_OFFSET_C_POSITION + 1] = c.getPosition().getY();						//Block #1
-		array[TRIANGLE_3_F_OFFSET_C_POSITION + 2] = c.getPosition().getZ();						//Block #2
+		array[TRIANGLE_3_F_OFFSET_A_POSITION + 0] = a.getPosition().x;							//Block #1
+		array[TRIANGLE_3_F_OFFSET_A_POSITION + 1] = a.getPosition().y;							//Block #1
+		array[TRIANGLE_3_F_OFFSET_A_POSITION + 2] = a.getPosition().z;							//Block #1
+		array[TRIANGLE_3_F_OFFSET_B_POSITION + 0] = b.getPosition().x;							//Block #1
+		array[TRIANGLE_3_F_OFFSET_B_POSITION + 1] = b.getPosition().y;							//Block #1
+		array[TRIANGLE_3_F_OFFSET_B_POSITION + 2] = b.getPosition().z;							//Block #1
+		array[TRIANGLE_3_F_OFFSET_C_POSITION + 0] = c.getPosition().x;							//Block #1
+		array[TRIANGLE_3_F_OFFSET_C_POSITION + 1] = c.getPosition().y;							//Block #1
+		array[TRIANGLE_3_F_OFFSET_C_POSITION + 2] = c.getPosition().z;							//Block #2
 		
 		array[TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 0] = a.getTextureCoordinates().x;		//Block #2
 		array[TRIANGLE_3_F_OFFSET_A_TEXTURE_COORDINATES + 1] = a.getTextureCoordinates().y;		//Block #2

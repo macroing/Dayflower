@@ -36,8 +36,15 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class Vector2I {
-	private final int component1;
-	private final int component2;
+	/**
+	 * The X-component of this {@code Vector2I} instance.
+	 */
+	public final int x;
+	
+	/**
+	 * The Y-component of this {@code Vector2I} instance.
+	 */
+	public final int y;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -56,33 +63,33 @@ public final class Vector2I {
 	}
 	
 	/**
-	 * Constructs a new {@code Vector2I} instance given the component values {@code point.getComponent1()} and {@code point.getComponent2()}.
+	 * Constructs a new {@code Vector2I} instance given the component values {@code p.x} and {@code p.y}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Vector2I(point.getComponent1(), point.getComponent2());
+	 * new Vector2I(p.x, p.y);
 	 * }
 	 * </pre>
 	 * 
-	 * @param point a {@link Point2I} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @param p a {@link Point2I} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Vector2I(final Point2I point) {
-		this(point.getComponent1(), point.getComponent2());
+	public Vector2I(final Point2I p) {
+		this(p.x, p.y);
 	}
 	
 	/**
-	 * Constructs a new {@code Vector2I} instance given the component values {@code component1} and {@code component2}.
+	 * Constructs a new {@code Vector2I} instance given the component values {@code x} and {@code y}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
 	 */
-	public Vector2I(final int component1, final int component2) {
-		this.component1 = component1;
-		this.component2 = component2;
+	public Vector2I(final int x, final int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +101,7 @@ public final class Vector2I {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Vector2I(%d, %d)", Integer.valueOf(this.component1), Integer.valueOf(this.component2));
+		return String.format("new Vector2I(%d, %d)", Integer.valueOf(this.x), Integer.valueOf(this.y));
 	}
 	
 	/**
@@ -111,67 +118,13 @@ public final class Vector2I {
 			return true;
 		} else if(!(object instanceof Vector2I)) {
 			return false;
-		} else if(this.component1 != Vector2I.class.cast(object).component1) {
+		} else if(this.x != Vector2I.class.cast(object).x) {
 			return false;
-		} else if(this.component2 != Vector2I.class.cast(object).component2) {
+		} else if(this.y != Vector2I.class.cast(object).y) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-	public int getComponent1() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-	public int getComponent2() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the U-component.
-	 * 
-	 * @return the value of the U-component
-	 */
-	public int getU() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the V-component.
-	 * 
-	 * @return the value of the V-component
-	 */
-	public int getV() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-	public int getX() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-	public int getY() {
-		return this.component2;
 	}
 	
 	/**
@@ -181,7 +134,7 @@ public final class Vector2I {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(this.component1), Integer.valueOf(this.component2));
+		return Objects.hash(Integer.valueOf(this.x), Integer.valueOf(this.y));
 	}
 	
 	/**
@@ -199,7 +152,7 @@ public final class Vector2I {
 	 * @return the squared length of this {@code Vector2I} instance
 	 */
 	public int lengthSquared() {
-		return this.component1 * this.component1 + this.component2 * this.component2;
+		return this.x * this.x + this.y * this.y;
 	}
 	
 	/**
@@ -208,10 +161,7 @@ public final class Vector2I {
 	 * @return a {@code int[]} representation of this {@code Vector2I} instance
 	 */
 	public int[] toArray() {
-		return new int[] {
-			this.component1,
-			this.component2
-		};
+		return new int[] {this.x, this.y};
 	}
 	
 	/**
@@ -227,8 +177,8 @@ public final class Vector2I {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeInt(this.component1);
-			dataOutput.writeInt(this.component2);
+			dataOutput.writeInt(this.x);
+			dataOutput.writeInt(this.y);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -237,24 +187,21 @@ public final class Vector2I {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
+	 * Adds the component values of {@code vRHS} to the component values of {@code vLHS}.
 	 * <p>
 	 * Returns a new {@code Vector2I} instance with the result of the addition.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector addition is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector2I} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector2I} instance on the right-hand side
+	 * @param vLHS the {@code Vector2I} instance on the left-hand side
+	 * @param vRHS the {@code Vector2I} instance on the right-hand side
 	 * @return a new {@code Vector2I} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector2I add(final Vector2I vectorLHS, final Vector2I vectorRHS) {
-		final int component1 = vectorLHS.component1 + vectorRHS.component1;
-		final int component2 = vectorLHS.component2 + vectorRHS.component2;
-		
-		return new Vector2I(component1, component2);
+	public static Vector2I add(final Vector2I vLHS, final Vector2I vRHS) {
+		return new Vector2I(vLHS.x + vRHS.x, vLHS.y + vRHS.y);
 	}
 	
 	/**
@@ -268,86 +215,71 @@ public final class Vector2I {
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
 	public static Vector2I direction(final Point2I eye, final Point2I lookAt) {
-		final int component1 = lookAt.getComponent1() - eye.getComponent1();
-		final int component2 = lookAt.getComponent2() - eye.getComponent2();
-		
-		return new Vector2I(component1, component2);
+		return new Vector2I(lookAt.x - eye.x, lookAt.y - eye.y);
 	}
 	
 	/**
-	 * Divides the component values of {@code vectorLHS} with {@code scalarRHS}.
+	 * Divides the component values of {@code vLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Vector2I} instance with the result of the division.
 	 * <p>
-	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector division is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector2I} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param vLHS the {@code Vector2I} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector2I} instance with the result of the division
-	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
-	public static Vector2I divide(final Vector2I vectorLHS, final int scalarRHS) {
-		final int component1 = vectorLHS.component1 / scalarRHS;
-		final int component2 = vectorLHS.component2 / scalarRHS;
-		
-		return new Vector2I(component1, component2);
+	public static Vector2I divide(final Vector2I vLHS, final int sRHS) {
+		return new Vector2I(vLHS.x / sRHS, vLHS.y / sRHS);
 	}
 	
 	/**
-	 * Multiplies the component values of {@code vectorLHS} with {@code scalarRHS}.
+	 * Multiplies the component values of {@code vLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Vector2I} instance with the result of the multiplication.
 	 * <p>
-	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector multiplication is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector2I} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param vLHS the {@code Vector2I} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector2I} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
-	public static Vector2I multiply(final Vector2I vectorLHS, final int scalarRHS) {
-		final int component1 = vectorLHS.component1 * scalarRHS;
-		final int component2 = vectorLHS.component2 * scalarRHS;
-		
-		return new Vector2I(component1, component2);
+	public static Vector2I multiply(final Vector2I vLHS, final int sRHS) {
+		return new Vector2I(vLHS.x * sRHS, vLHS.y * sRHS);
 	}
 	
 	/**
-	 * Negates the component values of {@code vector}.
+	 * Negates the component values of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector2I} instance with the result of the negation.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector2I} instance
+	 * @param v a {@code Vector2I} instance
 	 * @return a new {@code Vector2I} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector2I negate(final Vector2I vector) {
-		final int component1 = -vector.component1;
-		final int component2 = -vector.component2;
-		
-		return new Vector2I(component1, component2);
+	public static Vector2I negate(final Vector2I v) {
+		return new Vector2I(-v.x, -v.y);
 	}
 	
 	/**
-	 * Returns a {@code Vector2I} instance that is perpendicular to {@code vector}.
+	 * Returns a {@code Vector2I} instance that is perpendicular to {@code v}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector2I} instance
-	 * @return a {@code Vector2I} instance that is perpendicular to {@code vector}
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@code Vector2I} instance
+	 * @return a {@code Vector2I} instance that is perpendicular to {@code v}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector2I perpendicular(final Vector2I vector) {
-		final int component1 = +vector.component2;
-		final int component2 = -vector.component1;
-		
-		return new Vector2I(component1, component2);
+	public static Vector2I perpendicular(final Vector2I v) {
+		return new Vector2I(v.y, -v.x);
 	}
 	
 	/**
@@ -364,33 +296,27 @@ public final class Vector2I {
 	 */
 	public static Vector2I read(final DataInput dataInput) {
 		try {
-			final int component1 = dataInput.readInt();
-			final int component2 = dataInput.readInt();
-			
-			return new Vector2I(component1, component2);
+			return new Vector2I(dataInput.readInt(), dataInput.readInt());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Subtracts the component values of {@code vectorRHS} from the component values of {@code vectorLHS}.
+	 * Subtracts the component values of {@code vRHS} from the component values of {@code vLHS}.
 	 * <p>
 	 * Returns a new {@code Vector2I} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector subtraction is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector2I} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector2I} instance on the right-hand side
+	 * @param vLHS the {@code Vector2I} instance on the left-hand side
+	 * @param vRHS the {@code Vector2I} instance on the right-hand side
 	 * @return a new {@code Vector2I} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector2I subtract(final Vector2I vectorLHS, final Vector2I vectorRHS) {
-		final int component1 = vectorLHS.component1 - vectorRHS.component1;
-		final int component2 = vectorLHS.component2 - vectorRHS.component2;
-		
-		return new Vector2I(component1, component2);
+	public static Vector2I subtract(final Vector2I vLHS, final Vector2I vRHS) {
+		return new Vector2I(vLHS.x - vRHS.x, vLHS.y - vRHS.y);
 	}
 }

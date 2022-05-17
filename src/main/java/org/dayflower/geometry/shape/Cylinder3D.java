@@ -253,7 +253,7 @@ public final class Cylinder3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean contains(final Point3D point) {
-		return point.getZ() >= this.zMin && point.getZ() <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
+		return point.z >= this.zMin && point.z <= this.zMax && point.sphericalPhi() <= this.phiMax.getRadians();
 	}
 	
 	/**
@@ -346,8 +346,8 @@ public final class Cylinder3D implements Shape3D {
 		final Vector3D direction = ray.getDirection();
 		
 		final double a = direction.getX() * direction.getX() + direction.getY() * direction.getY();
-		final double b = 2.0D * (direction.getX() * origin.getX() + direction.getY() * origin.getY());
-		final double c = origin.getX() * origin.getX() + origin.getY() * origin.getY() - this.radius * this.radius;
+		final double b = 2.0D * (direction.getX() * origin.x + direction.getY() * origin.y);
+		final double c = origin.x * origin.x + origin.y * origin.y - this.radius * this.radius;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -361,7 +361,7 @@ public final class Cylinder3D implements Shape3D {
 			if(t > tMinimum && t < tMaximum) {
 				final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.getZ() >= this.zMin && surfaceIntersectionPoint.getZ() <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+				if(surfaceIntersectionPoint.z >= this.zMin && surfaceIntersectionPoint.z <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}
@@ -422,8 +422,8 @@ public final class Cylinder3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
-		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.getY();
-		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.getX();
+		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
+		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;
 		final double uZ = +0.0D;
 		
 		final double vX = 0.0D;
@@ -439,7 +439,7 @@ public final class Cylinder3D implements Shape3D {
 	
 	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
 		final double u = surfaceIntersectionPoint.sphericalPhi() / this.phiMax.getRadians();
-		final double v = (surfaceIntersectionPoint.getZ() - this.zMin) / (this.zMax - this.zMin);
+		final double v = (surfaceIntersectionPoint.z - this.zMin) / (this.zMax - this.zMin);
 		
 		return new Point2D(u, v);
 	}
@@ -467,6 +467,6 @@ public final class Cylinder3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Vector3D doCreateSurfaceIntersectionPointError(final Point3D surfaceIntersectionPoint) {
-		return Vector3D.multiply(Vector3D.absolute(new Vector3D(surfaceIntersectionPoint.getX(), surfaceIntersectionPoint.getY(), 0.0D)), gamma(3));
+		return Vector3D.multiply(Vector3D.absolute(new Vector3D(surfaceIntersectionPoint.x, surfaceIntersectionPoint.y, 0.0D)), gamma(3));
 	}
 }

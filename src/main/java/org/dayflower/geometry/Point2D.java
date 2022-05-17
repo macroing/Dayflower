@@ -369,8 +369,8 @@ public final class Point2D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D createTextureCoordinates(final Point2D pTCA, final Point2D pTCB, final Point2D pTCC, final Point3D pBC) {
-		final double x = pTCA.x * pBC.getU() + pTCB.x * pBC.getV() + pTCC.x * pBC.getW();
-		final double y = pTCA.y * pBC.getU() + pTCB.y * pBC.getV() + pTCC.y * pBC.getW();
+		final double x = pTCA.x * pBC.x + pTCB.x * pBC.y + pTCC.x * pBC.z;
+		final double y = pTCA.y * pBC.x + pTCB.y * pBC.y + pTCC.y * pBC.z;
 		
 		return new Point2D(x, y);
 	}

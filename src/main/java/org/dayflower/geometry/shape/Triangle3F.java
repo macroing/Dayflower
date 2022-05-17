@@ -168,17 +168,17 @@ public final class Triangle3F implements Shape3F {
 		final Vector3F normalB = this.b.getNormal();
 		final Vector3F normalC = this.c.getNormal();
 		
-		final float x = positionA.getX() * barycentricCoordinates.getX() + positionB.getX() * barycentricCoordinates.getY() + positionC.getX() * barycentricCoordinates.getZ();
-		final float y = positionA.getY() * barycentricCoordinates.getX() + positionB.getY() * barycentricCoordinates.getY() + positionC.getY() * barycentricCoordinates.getZ();
-		final float z = positionA.getZ() * barycentricCoordinates.getX() + positionB.getZ() * barycentricCoordinates.getY() + positionC.getZ() * barycentricCoordinates.getZ();
+		final float x = positionA.x * barycentricCoordinates.getX() + positionB.x * barycentricCoordinates.getY() + positionC.x * barycentricCoordinates.getZ();
+		final float y = positionA.y * barycentricCoordinates.getX() + positionB.y * barycentricCoordinates.getY() + positionC.y * barycentricCoordinates.getZ();
+		final float z = positionA.z * barycentricCoordinates.getX() + positionB.z * barycentricCoordinates.getY() + positionC.z * barycentricCoordinates.getZ();
 		
 		final Point3F point = new Point3F(x, y, z);
 		
 		final Vector3F surfaceNormal = Vector3F.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
 		
-		final float pointErrorX = (abs(positionA.getX() * barycentricCoordinates.getX()) + abs(positionB.getX() * barycentricCoordinates.getY()) + abs(positionC.getX() * barycentricCoordinates.getZ())) * gamma(6);
-		final float pointErrorY = (abs(positionA.getY() * barycentricCoordinates.getX()) + abs(positionB.getY() * barycentricCoordinates.getY()) + abs(positionC.getY() * barycentricCoordinates.getZ())) * gamma(6);
-		final float pointErrorZ = (abs(positionA.getZ() * barycentricCoordinates.getX()) + abs(positionB.getZ() * barycentricCoordinates.getY()) + abs(positionC.getZ() * barycentricCoordinates.getZ())) * gamma(6);
+		final float pointErrorX = (abs(positionA.x * barycentricCoordinates.getX()) + abs(positionB.x * barycentricCoordinates.getY()) + abs(positionC.x * barycentricCoordinates.getZ())) * gamma(6);
+		final float pointErrorY = (abs(positionA.y * barycentricCoordinates.getX()) + abs(positionB.y * barycentricCoordinates.getY()) + abs(positionC.y * barycentricCoordinates.getZ())) * gamma(6);
+		final float pointErrorZ = (abs(positionA.z * barycentricCoordinates.getX()) + abs(positionB.z * barycentricCoordinates.getY()) + abs(positionC.z * barycentricCoordinates.getZ())) * gamma(6);
 		
 		final Vector3F pointError = new Vector3F(pointErrorX, pointErrorY, pointErrorZ);
 		
@@ -973,9 +973,9 @@ public final class Triangle3F implements Shape3F {
 		final Point4F b = this.b.getPosition();
 		final Point4F c = this.c.getPosition();
 		
-		final float xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
-		final float yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
-		final float zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
+		final float xAbsSum = abs(barycentricCoordinates.getU() + a.x) + abs(barycentricCoordinates.getV() + b.x) + abs(barycentricCoordinates.getW() + c.x);
+		final float yAbsSum = abs(barycentricCoordinates.getU() + a.y) + abs(barycentricCoordinates.getV() + b.y) + abs(barycentricCoordinates.getW() + c.y);
+		final float zAbsSum = abs(barycentricCoordinates.getU() + a.z) + abs(barycentricCoordinates.getV() + b.z) + abs(barycentricCoordinates.getW() + c.z);
 		
 		return Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
 	}

@@ -139,9 +139,9 @@ public final class Ray3DUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeDouble(a.getOrigin().getX());
-		dataOutput.writeDouble(a.getOrigin().getY());
-		dataOutput.writeDouble(a.getOrigin().getZ());
+		dataOutput.writeDouble(a.getOrigin().x);
+		dataOutput.writeDouble(a.getOrigin().y);
+		dataOutput.writeDouble(a.getOrigin().z);
 		dataOutput.writeDouble(a.getDirection().getX());
 		dataOutput.writeDouble(a.getDirection().getY());
 		dataOutput.writeDouble(a.getDirection().getZ());

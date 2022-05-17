@@ -147,10 +147,10 @@ public final class Circle2I implements Shape2I {
 		final Point2I maximum = getMaximum();
 		final Point2I minimum = getMinimum();
 		
-		final int maximumX = maximum.getX();
-		final int minimumX = minimum.getX();
-		final int maximumY = maximum.getY();
-		final int minimumY = minimum.getY();
+		final int maximumX = maximum.x;
+		final int minimumX = minimum.x;
+		final int maximumY = maximum.y;
+		final int minimumY = minimum.y;
 		
 		for(int y = minimumY; y <= maximumY; y++) {
 			for(int x = minimumX; x <= maximumX; x++) {
@@ -181,7 +181,7 @@ public final class Circle2I implements Shape2I {
 	 */
 	@Override
 	public Point2I getMaximum() {
-		return new Point2I(this.center.getX() + this.radius, this.center.getY() + this.radius);
+		return new Point2I(this.center.x + this.radius, this.center.y + this.radius);
 	}
 	
 	/**
@@ -191,7 +191,7 @@ public final class Circle2I implements Shape2I {
 	 */
 	@Override
 	public Point2I getMinimum() {
-		return new Point2I(this.center.getX() - this.radius, this.center.getY() - this.radius);
+		return new Point2I(this.center.x - this.radius, this.center.y - this.radius);
 	}
 	
 	/**

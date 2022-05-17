@@ -43,10 +43,25 @@ import org.macroing.java.lang.Strings;
  * @author J&#246;rgen Lundgren
  */
 public final class Vector4D implements Node {
-	private final double component1;
-	private final double component2;
-	private final double component3;
-	private final double component4;
+	/**
+	 * The W-component of this {@code Vector4D} instance.
+	 */
+	public final double w;
+	
+	/**
+	 * The X-component of this {@code Vector4D} instance.
+	 */
+	public final double x;
+	
+	/**
+	 * The Y-component of this {@code Vector4D} instance.
+	 */
+	public final double y;
+	
+	/**
+	 * The Z-component of this {@code Vector4D} instance.
+	 */
+	public final double z;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -65,55 +80,55 @@ public final class Vector4D implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Vector4D} instance given the component values {@code point.getComponent1()}, {@code point.getComponent2()}, {@code point.getComponent3()} and {@code point.getComponent4()}.
+	 * Constructs a new {@code Vector4D} instance given the component values {@code p.x}, {@code p.y}, {@code p.z} and {@code p.w}.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Vector4D(point.getComponent1(), point.getComponent2(), point.getComponent3(), point.getComponent4());
-	 * }
-	 * </pre>
-	 * 
-	 * @param point a {@link Point4D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
-	 */
-	public Vector4D(final Point4D point) {
-		this(point.getComponent1(), point.getComponent2(), point.getComponent3(), point.getComponent4());
-	}
-	
-	/**
-	 * Constructs a new {@code Vector4D} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code 1.0D}.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Vector4D(component1, component2, component3, 1.0D);
+	 * new Vector4D(p.x, p.y, p.z, p.w);
 	 * }
 	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
+	 * @param p a {@link Point4D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public Vector4D(final double component1, final double component2, final double component3) {
-		this(component1, component2, component3, 1.0D);
+	public Vector4D(final Point4D p) {
+		this(p.x, p.y, p.z, p.w);
 	}
 	
 	/**
-	 * Constructs a new {@code Vector4D} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code component4}.
+	 * Constructs a new {@code Vector4D} instance given the component values {@code x}, {@code y}, {@code z} and {@code 1.0D}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Vector4D(x, y, z, 1.0D);
+	 * }
+	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
-	 * @param component4 the value of component 4
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
 	 */
-	public Vector4D(final double component1, final double component2, final double component3, final double component4) {
-		this.component1 = component1;
-		this.component2 = component2;
-		this.component3 = component3;
-		this.component4 = component4;
+	public Vector4D(final double x, final double y, final double z) {
+		this(x, y, z, 1.0D);
+	}
+	
+	/**
+	 * Constructs a new {@code Vector4D} instance given the component values {@code x}, {@code y}, {@code z} and {@code w}.
+	 * 
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
+	 * @param w the value of the W-component
+	 */
+	public Vector4D(final double x, final double y, final double z, final double w) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.w = w;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +140,7 @@ public final class Vector4D implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Vector4D(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3), Strings.toNonScientificNotationJava(this.component4));
+		return String.format("new Vector4D(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.x), Strings.toNonScientificNotationJava(this.y), Strings.toNonScientificNotationJava(this.z), Strings.toNonScientificNotationJava(this.w));
 	}
 	
 	/**
@@ -142,89 +157,17 @@ public final class Vector4D implements Node {
 			return true;
 		} else if(!(object instanceof Vector4D)) {
 			return false;
-		} else if(!equal(this.component1, Vector4D.class.cast(object).component1)) {
+		} else if(!equal(this.w, Vector4D.class.cast(object).w)) {
 			return false;
-		} else if(!equal(this.component2, Vector4D.class.cast(object).component2)) {
+		} else if(!equal(this.x, Vector4D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.component3, Vector4D.class.cast(object).component3)) {
+		} else if(!equal(this.y, Vector4D.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.component4, Vector4D.class.cast(object).component4)) {
+		} else if(!equal(this.z, Vector4D.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-	public double getComponent1() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-	public double getComponent2() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of component 3.
-	 * 
-	 * @return the value of component 3
-	 */
-	public double getComponent3() {
-		return this.component3;
-	}
-	
-	/**
-	 * Returns the value of component 4.
-	 * 
-	 * @return the value of component 4
-	 */
-	public double getComponent4() {
-		return this.component4;
-	}
-	
-	/**
-	 * Returns the value of the W-component.
-	 * 
-	 * @return the value of the W-component
-	 */
-	public double getW() {
-		return this.component4;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-	public double getX() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-	public double getY() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the Z-component.
-	 * 
-	 * @return the value of the Z-component
-	 */
-	public double getZ() {
-		return this.component3;
 	}
 	
 	/**
@@ -242,7 +185,7 @@ public final class Vector4D implements Node {
 	 * @return the squared length of this {@code Vector4D} instance
 	 */
 	public double lengthSquared() {
-		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3 + this.component4 * this.component4;
+		return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
 	}
 	
 	/**
@@ -251,12 +194,7 @@ public final class Vector4D implements Node {
 	 * @return a {@code double[]} representation of this {@code Vector4D} instance
 	 */
 	public double[] toArray() {
-		return new double[] {
-			this.component1,
-			this.component2,
-			this.component3,
-			this.component4
-		};
+		return new double[] {this.x, this.y, this.z, this.w};
 	}
 	
 	/**
@@ -266,7 +204,7 @@ public final class Vector4D implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3), Double.valueOf(this.component4));
+		return Objects.hash(Double.valueOf(this.w), Double.valueOf(this.x), Double.valueOf(this.y), Double.valueOf(this.z));
 	}
 	
 	/**
@@ -282,10 +220,10 @@ public final class Vector4D implements Node {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeDouble(this.component1);
-			dataOutput.writeDouble(this.component2);
-			dataOutput.writeDouble(this.component3);
-			dataOutput.writeDouble(this.component4);
+			dataOutput.writeDouble(this.x);
+			dataOutput.writeDouble(this.y);
+			dataOutput.writeDouble(this.z);
+			dataOutput.writeDouble(this.w);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -294,116 +232,96 @@ public final class Vector4D implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
+	 * Adds the component values of {@code vRHS} to the component values of {@code vLHS}.
 	 * <p>
 	 * Returns a new {@code Vector4D} instance with the result of the addition.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector addition is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector4D} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector4D} instance on the right-hand side
+	 * @param vLHS the {@code Vector4D} instance on the left-hand side
+	 * @param vRHS the {@code Vector4D} instance on the right-hand side
 	 * @return a new {@code Vector4D} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector4D add(final Vector4D vectorLHS, final Vector4D vectorRHS) {
-		final double component1 = vectorLHS.component1 + vectorRHS.component1;
-		final double component2 = vectorLHS.component2 + vectorRHS.component2;
-		final double component3 = vectorLHS.component3 + vectorRHS.component3;
-		final double component4 = vectorLHS.component4 + vectorRHS.component4;
-		
-		return new Vector4D(component1, component2, component3, component4);
+	public static Vector4D add(final Vector4D vLHS, final Vector4D vRHS) {
+		return new Vector4D(vLHS.x + vRHS.x, vLHS.y + vRHS.y, vLHS.z + vRHS.z, vLHS.w + vRHS.w);
 	}
 	
 	/**
-	 * Divides the component values of {@code vectorLHS} with {@code scalarRHS}.
+	 * Divides the component values of {@code vLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Vector4D} instance with the result of the division.
 	 * <p>
-	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector division is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector4D} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param vLHS the {@code Vector4D} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector4D} instance with the result of the division
-	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
-	public static Vector4D divide(final Vector4D vectorLHS, final double scalarRHS) {
-		final double component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0D);
-		final double component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0D);
-		final double component3 = finiteOrDefault(vectorLHS.component3 / scalarRHS, 0.0D);
-		final double component4 = finiteOrDefault(vectorLHS.component4 / scalarRHS, 0.0D);
-		
-		return new Vector4D(component1, component2, component3, component4);
+	public static Vector4D divide(final Vector4D vLHS, final double sRHS) {
+		return new Vector4D(finiteOrDefault(vLHS.x / sRHS, 0.0D), finiteOrDefault(vLHS.y / sRHS, 0.0D), finiteOrDefault(vLHS.z / sRHS, 0.0D), finiteOrDefault(vLHS.w / sRHS, 0.0D));
 	}
 	
 	/**
-	 * Multiplies the component values of {@code vectorLHS} with {@code scalarRHS}.
+	 * Multiplies the component values of {@code vLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Vector4D} instance with the result of the multiplication.
 	 * <p>
-	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector multiplication is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector4D} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param vLHS the {@code Vector4D} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector4D} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
-	public static Vector4D multiply(final Vector4D vectorLHS, final double scalarRHS) {
-		final double component1 = vectorLHS.component1 * scalarRHS;
-		final double component2 = vectorLHS.component2 * scalarRHS;
-		final double component3 = vectorLHS.component3 * scalarRHS;
-		final double component4 = vectorLHS.component4 * scalarRHS;
-		
-		return new Vector4D(component1, component2, component3, component4);
+	public static Vector4D multiply(final Vector4D vLHS, final double sRHS) {
+		return new Vector4D(vLHS.x * sRHS, vLHS.y * sRHS, vLHS.z * sRHS, vLHS.w * sRHS);
 	}
 	
 	/**
-	 * Negates the component values of {@code vector}.
+	 * Negates the component values of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector4D} instance with the result of the negation.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector4D} instance
+	 * @param v a {@code Vector4D} instance
 	 * @return a new {@code Vector4D} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector4D negate(final Vector4D vector) {
-		final double component1 = -vector.component1;
-		final double component2 = -vector.component2;
-		final double component3 = -vector.component3;
-		final double component4 = -vector.component4;
-		
-		return new Vector4D(component1, component2, component3, component4);
+	public static Vector4D negate(final Vector4D v) {
+		return new Vector4D(-v.x, -v.y, -v.z, -v.w);
 	}
 	
 	/**
-	 * Normalizes the component values of {@code vector}.
+	 * Normalizes the component values of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector4D} instance with the result of the normalization.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector4D} instance
+	 * @param v a {@code Vector4D} instance
 	 * @return a new {@code Vector4D} instance with the result of the normalization
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector4D normalize(final Vector4D vector) {
-		final double length = vector.length();
+	public static Vector4D normalize(final Vector4D v) {
+		final double length = v.length();
 		
 		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
 		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
-			return vector;
+			return v;
 		}
 		
-		return divide(vector, length);
+		return divide(v, length);
 	}
 	
 	/**
@@ -420,51 +338,41 @@ public final class Vector4D implements Node {
 	 */
 	public static Vector4D read(final DataInput dataInput) {
 		try {
-			final double component1 = dataInput.readDouble();
-			final double component2 = dataInput.readDouble();
-			final double component3 = dataInput.readDouble();
-			final double component4 = dataInput.readDouble();
-			
-			return new Vector4D(component1, component2, component3, component4);
+			return new Vector4D(dataInput.readDouble(), dataInput.readDouble(), dataInput.readDouble(), dataInput.readDouble());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Subtracts the component values of {@code vectorRHS} from the component values of {@code vectorLHS}.
+	 * Subtracts the component values of {@code vRHS} from the component values of {@code vLHS}.
 	 * <p>
 	 * Returns a new {@code Vector4D} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector subtraction is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector4D} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector4D} instance on the right-hand side
+	 * @param vLHS the {@code Vector4D} instance on the left-hand side
+	 * @param vRHS the {@code Vector4D} instance on the right-hand side
 	 * @return a new {@code Vector4D} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector4D subtract(final Vector4D vectorLHS, final Vector4D vectorRHS) {
-		final double component1 = vectorLHS.component1 - vectorRHS.component1;
-		final double component2 = vectorLHS.component2 - vectorRHS.component2;
-		final double component3 = vectorLHS.component3 - vectorRHS.component3;
-		final double component4 = vectorLHS.component4 - vectorRHS.component4;
-		
-		return new Vector4D(component1, component2, component3, component4);
+	public static Vector4D subtract(final Vector4D vLHS, final Vector4D vRHS) {
+		return new Vector4D(vLHS.x - vRHS.x, vLHS.y - vRHS.y, vLHS.z - vRHS.z, vLHS.w - vRHS.w);
 	}
 	
 	/**
-	 * Returns the dot product of {@code vectorLHS} and {@code vectorRHS}.
+	 * Returns the dot product of {@code vLHS} and {@code vRHS}.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector4D} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector4D} instance on the right-hand side
-	 * @return the dot product of {@code vectorLHS} and {@code vectorRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector4D} instance on the left-hand side
+	 * @param vRHS the {@code Vector4D} instance on the right-hand side
+	 * @return the dot product of {@code vLHS} and {@code vRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static double dotProduct(final Vector4D vectorLHS, final Vector4D vectorRHS) {
-		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3 + vectorLHS.component4 * vectorRHS.component4;
+	public static double dotProduct(final Vector4D vLHS, final Vector4D vRHS) {
+		return vLHS.x * vRHS.x + vLHS.y * vRHS.y + vLHS.z * vRHS.z + vLHS.w * vRHS.w;
 	}
 }

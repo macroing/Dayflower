@@ -451,8 +451,8 @@ public final class Rectangle3D implements Shape3D {
 	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
 		final Vector3D surfaceNormalAbs = Vector3D.absolute(this.surfaceNormal);
 		
-		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
-		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
+		final boolean isX = surfaceNormalAbs.x > surfaceNormalAbs.y && surfaceNormalAbs.x > surfaceNormalAbs.z;
+		final boolean isY = surfaceNormalAbs.y > surfaceNormalAbs.z;
 		
 		final Point3D a = this.a;
 		final Point3D b = this.b;

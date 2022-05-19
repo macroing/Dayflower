@@ -142,9 +142,9 @@ public final class Ray3FUnitTests {
 		dataOutput.writeFloat(a.getOrigin().x);
 		dataOutput.writeFloat(a.getOrigin().y);
 		dataOutput.writeFloat(a.getOrigin().z);
-		dataOutput.writeFloat(a.getDirection().getX());
-		dataOutput.writeFloat(a.getDirection().getY());
-		dataOutput.writeFloat(a.getDirection().getZ());
+		dataOutput.writeFloat(a.getDirection().x);
+		dataOutput.writeFloat(a.getDirection().y);
+		dataOutput.writeFloat(a.getDirection().z);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		

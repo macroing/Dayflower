@@ -361,62 +361,62 @@ public final class Matrix33F implements Node {
 	}
 	
 	/**
-	 * Returns a new {@code Matrix33F} instance that is the inverse of {@code matrix}.
+	 * Returns a new {@code Matrix33F} instance that is the inverse of {@code m}.
 	 * <p>
-	 * If {@code matrix} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code m} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code m} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * To make sure {@code matrix} is invertible, consider calling {@link #isInvertible()}.
+	 * To make sure {@code m} is invertible, consider calling {@link #isInvertible()}.
 	 * 
-	 * @param matrix a {@code Matrix33F} instance
-	 * @return a new {@code Matrix33F} instance that is the inverse of {@code matrix}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix} cannot be inverted
-	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
+	 * @param m a {@code Matrix33F} instance
+	 * @return a new {@code Matrix33F} instance that is the inverse of {@code m}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code m} cannot be inverted
+	 * @throws NullPointerException thrown if, and only if, {@code m} is {@code null}
 	 */
-	public static Matrix33F inverse(final Matrix33F matrix) {
-		if(!matrix.isInvertible()) {
-			throw new IllegalArgumentException("The Matrix33F 'matrix' cannot be inverted!");
+	public static Matrix33F inverse(final Matrix33F m) {
+		if(!m.isInvertible()) {
+			throw new IllegalArgumentException("The Matrix33F 'm' cannot be inverted!");
 		}
 		
-		final float determinant = matrix.determinant();
+		final float determinant = m.determinant();
 		final float determinantReciprocal = 1.0F / determinant;
 		
-		final float element11 = (matrix.element22 * matrix.element33 - matrix.element32 * matrix.element23) * determinantReciprocal;
-		final float element12 = (matrix.element13 * matrix.element32 - matrix.element12 * matrix.element33) * determinantReciprocal;
-		final float element13 = (matrix.element12 * matrix.element23 - matrix.element13 * matrix.element22) * determinantReciprocal;
-		final float element21 = (matrix.element23 * matrix.element31 - matrix.element21 * matrix.element33) * determinantReciprocal;
-		final float element22 = (matrix.element11 * matrix.element33 - matrix.element13 * matrix.element31) * determinantReciprocal;
-		final float element23 = (matrix.element21 * matrix.element13 - matrix.element11 * matrix.element23) * determinantReciprocal;
-		final float element31 = (matrix.element21 * matrix.element32 - matrix.element31 * matrix.element22) * determinantReciprocal;
-		final float element32 = (matrix.element31 * matrix.element12 - matrix.element11 * matrix.element32) * determinantReciprocal;
-		final float element33 = (matrix.element11 * matrix.element22 - matrix.element21 * matrix.element12) * determinantReciprocal;
+		final float element11 = (m.element22 * m.element33 - m.element32 * m.element23) * determinantReciprocal;
+		final float element12 = (m.element13 * m.element32 - m.element12 * m.element33) * determinantReciprocal;
+		final float element13 = (m.element12 * m.element23 - m.element13 * m.element22) * determinantReciprocal;
+		final float element21 = (m.element23 * m.element31 - m.element21 * m.element33) * determinantReciprocal;
+		final float element22 = (m.element11 * m.element33 - m.element13 * m.element31) * determinantReciprocal;
+		final float element23 = (m.element21 * m.element13 - m.element11 * m.element23) * determinantReciprocal;
+		final float element31 = (m.element21 * m.element32 - m.element31 * m.element22) * determinantReciprocal;
+		final float element32 = (m.element31 * m.element12 - m.element11 * m.element32) * determinantReciprocal;
+		final float element33 = (m.element11 * m.element22 - m.element21 * m.element12) * determinantReciprocal;
 		
 		return new Matrix33F(element11, element12, element13, element21, element22, element23, element31, element32, element33);
 	}
 	
 	/**
-	 * Multiplies the element values of {@code matrixLHS} with the element values of {@code matrixRHS}.
+	 * Multiplies the element values of {@code mLHS} with the element values of {@code mRHS}.
 	 * <p>
 	 * Returns a new {@code Matrix33F} instance with the result of the multiplication.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code matrixRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code mRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS the {@code Matrix33F} instance on the left-hand side
-	 * @param matrixRHS the {@code Matrix33F} instance on the right-hand side
+	 * @param mLHS the {@code Matrix33F} instance on the left-hand side
+	 * @param mRHS the {@code Matrix33F} instance on the right-hand side
 	 * @return a new {@code Matrix33F} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code matrixRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code mRHS} are {@code null}
 	 */
-	public static Matrix33F multiply(final Matrix33F matrixLHS, final Matrix33F matrixRHS) {
-		final float element11 = matrixLHS.element11 * matrixRHS.element11 + matrixLHS.element12 * matrixRHS.element21 + matrixLHS.element13 * matrixRHS.element31;
-		final float element12 = matrixLHS.element11 * matrixRHS.element12 + matrixLHS.element12 * matrixRHS.element22 + matrixLHS.element13 * matrixRHS.element32;
-		final float element13 = matrixLHS.element11 * matrixRHS.element13 + matrixLHS.element12 * matrixRHS.element23 + matrixLHS.element13 * matrixRHS.element33;
-		final float element21 = matrixLHS.element21 * matrixRHS.element11 + matrixLHS.element22 * matrixRHS.element21 + matrixLHS.element23 * matrixRHS.element31;
-		final float element22 = matrixLHS.element21 * matrixRHS.element12 + matrixLHS.element22 * matrixRHS.element22 + matrixLHS.element23 * matrixRHS.element32;
-		final float element23 = matrixLHS.element21 * matrixRHS.element13 + matrixLHS.element22 * matrixRHS.element23 + matrixLHS.element23 * matrixRHS.element33;
-		final float element31 = matrixLHS.element31 * matrixRHS.element11 + matrixLHS.element32 * matrixRHS.element21 + matrixLHS.element33 * matrixRHS.element31;
-		final float element32 = matrixLHS.element31 * matrixRHS.element12 + matrixLHS.element32 * matrixRHS.element22 + matrixLHS.element33 * matrixRHS.element32;
-		final float element33 = matrixLHS.element31 * matrixRHS.element13 + matrixLHS.element32 * matrixRHS.element23 + matrixLHS.element33 * matrixRHS.element33;
+	public static Matrix33F multiply(final Matrix33F mLHS, final Matrix33F mRHS) {
+		final float element11 = mLHS.element11 * mRHS.element11 + mLHS.element12 * mRHS.element21 + mLHS.element13 * mRHS.element31;
+		final float element12 = mLHS.element11 * mRHS.element12 + mLHS.element12 * mRHS.element22 + mLHS.element13 * mRHS.element32;
+		final float element13 = mLHS.element11 * mRHS.element13 + mLHS.element12 * mRHS.element23 + mLHS.element13 * mRHS.element33;
+		final float element21 = mLHS.element21 * mRHS.element11 + mLHS.element22 * mRHS.element21 + mLHS.element23 * mRHS.element31;
+		final float element22 = mLHS.element21 * mRHS.element12 + mLHS.element22 * mRHS.element22 + mLHS.element23 * mRHS.element32;
+		final float element23 = mLHS.element21 * mRHS.element13 + mLHS.element22 * mRHS.element23 + mLHS.element23 * mRHS.element33;
+		final float element31 = mLHS.element31 * mRHS.element11 + mLHS.element32 * mRHS.element21 + mLHS.element33 * mRHS.element31;
+		final float element32 = mLHS.element31 * mRHS.element12 + mLHS.element32 * mRHS.element22 + mLHS.element33 * mRHS.element32;
+		final float element33 = mLHS.element31 * mRHS.element13 + mLHS.element32 * mRHS.element23 + mLHS.element33 * mRHS.element33;
 		
 		return new Matrix33F(element11, element12, element13, element21, element22, element23, element31, element32, element33);
 	}
@@ -435,17 +435,7 @@ public final class Matrix33F implements Node {
 	 */
 	public static Matrix33F read(final DataInput dataInput) {
 		try {
-			final float element11 = dataInput.readFloat();
-			final float element12 = dataInput.readFloat();
-			final float element13 = dataInput.readFloat();
-			final float element21 = dataInput.readFloat();
-			final float element22 = dataInput.readFloat();
-			final float element23 = dataInput.readFloat();
-			final float element31 = dataInput.readFloat();
-			final float element32 = dataInput.readFloat();
-			final float element33 = dataInput.readFloat();
-			
-			return new Matrix33F(element11, element12, element13, element21, element22, element23, element31, element32, element33);
+			return new Matrix33F(dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -454,7 +444,7 @@ public final class Matrix33F implements Node {
 	/**
 	 * Returns a {@code Matrix33F} instance that rotates around the origin.
 	 * <p>
-	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code a} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * The layout looks like this:
 	 * <pre>
@@ -465,13 +455,13 @@ public final class Matrix33F implements Node {
 	 * }
 	 * </pre>
 	 * 
-	 * @param angle an {@link AngleF} instance
+	 * @param a an {@link AngleF} instance
 	 * @return a {@code Matrix33F} instance that rotates around the origin
-	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
 	 */
-	public static Matrix33F rotate(final AngleF angle) {
-		final float cos = cos(angle.getRadians());
-		final float sin = sin(angle.getRadians());
+	public static Matrix33F rotate(final AngleF a) {
+		final float cos = cos(a.getRadians());
+		final float sin = sin(a.getRadians());
 		
 		return new Matrix33F(cos, sin, 0.0F, -sin, cos, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -479,21 +469,21 @@ public final class Matrix33F implements Node {
 	/**
 	 * Returns a {@code Matrix33F} instance that scales along the X- and Y-axes.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix33F.scale(vector.x, vector.y);
+	 * Matrix33F.scale(v.x, v.y);
 	 * }
 	 * </pre>
 	 * 
-	 * @param vector a {@link Vector2F} instance that contains the scale factors along the X- and Y-axes
+	 * @param v a {@link Vector2F} instance that contains the scale factors along the X- and Y-axes
 	 * @return a {@code Matrix33F} instance that scales along the X- and Y-axes
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Matrix33F scale(final Vector2F vector) {
-		return scale(vector.x, vector.y);
+	public static Matrix33F scale(final Vector2F v) {
+		return scale(v.x, v.y);
 	}
 	
 	/**
@@ -502,15 +492,15 @@ public final class Matrix33F implements Node {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix33F.scale(scalar, scalar);
+	 * Matrix33F.scale(s, s);
 	 * }
 	 * </pre>
 	 * 
-	 * @param scalar the scale factor along the X- and Y-axes
+	 * @param s the scale factor along the X- and Y-axes
 	 * @return a {@code Matrix33F} instance that scales along the X- and Y-axes
 	 */
-	public static Matrix33F scale(final float scalar) {
-		return scale(scalar, scalar);
+	public static Matrix33F scale(final float s) {
+		return scale(s, s);
 	}
 	
 	/**
@@ -536,21 +526,21 @@ public final class Matrix33F implements Node {
 	/**
 	 * Returns a {@code Matrix33F} instance that translates along the X- and Y-axes.
 	 * <p>
-	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix33F.translate(point.x, point.y);
+	 * Matrix33F.translate(p.x, p.y);
 	 * }
 	 * </pre>
 	 * 
-	 * @param point a {@link Point2F} instance that contains the translation factors along the X- and Y-axes
+	 * @param p a {@link Point2F} instance that contains the translation factors along the X- and Y-axes
 	 * @return a {@code Matrix33F} instance that translates along the X- and Y-axes
-	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
-	public static Matrix33F translate(final Point2F point) {
-		return translate(point.x, point.y);
+	public static Matrix33F translate(final Point2F p) {
+		return translate(p.x, p.y);
 	}
 	
 	/**
@@ -574,25 +564,15 @@ public final class Matrix33F implements Node {
 	}
 	
 	/**
-	 * Returns a new {@code Matrix33F} instance that is the transpose of {@code matrix}.
+	 * Returns a new {@code Matrix33F} instance that is the transpose of {@code m}.
 	 * <p>
-	 * If {@code matrix} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code m} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrix a {@code Matrix33F} instance
-	 * @return a new {@code Matrix33F} instance that is the transpose of {@code matrix}
-	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
+	 * @param m a {@code Matrix33F} instance
+	 * @return a new {@code Matrix33F} instance that is the transpose of {@code m}
+	 * @throws NullPointerException thrown if, and only if, {@code m} is {@code null}
 	 */
-	public static Matrix33F transpose(final Matrix33F matrix) {
-		final float element11 = matrix.element11;
-		final float element12 = matrix.element21;
-		final float element13 = matrix.element31;
-		final float element21 = matrix.element12;
-		final float element22 = matrix.element22;
-		final float element23 = matrix.element32;
-		final float element31 = matrix.element13;
-		final float element32 = matrix.element23;
-		final float element33 = matrix.element33;
-		
-		return new Matrix33F(element11, element12, element13, element21, element22, element23, element31, element32, element33);
+	public static Matrix33F transpose(final Matrix33F m) {
+		return new Matrix33F(m.element11, m.element21, m.element31, m.element12, m.element22, m.element32, m.element13, m.element23, m.element33);
 	}
 }

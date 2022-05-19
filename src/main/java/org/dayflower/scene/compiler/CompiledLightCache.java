@@ -1356,14 +1356,14 @@ public final class CompiledLightCache {
 		final float[] array = new float[DIRECTIONAL_LIGHT_LENGTH];
 		
 //		Because the DirectionalLight occupy 8/8 positions in a block, it should be aligned.
-		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 0] = radiance.getR();		//Block #1
-		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 1] = radiance.getG();		//Block #1
-		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 2] = radiance.getB();		//Block #1
-		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 0] = direction.getX();	//Block #1
-		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 1] = direction.getY();	//Block #1
-		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 2] = direction.getZ();	//Block #1
-		array[DIRECTIONAL_LIGHT_OFFSET_RADIUS] = radius;					//Block #1
-		array[7] = 0.0F;													//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 0] = radiance.getR();	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 1] = radiance.getG();	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 2] = radiance.getB();	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 0] = direction.x;	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 1] = direction.y;	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 2] = direction.z;	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIUS] = radius;				//Block #1
+		array[7] = 0.0F;												//Block #1
 		
 		return array;
 	}
@@ -1555,14 +1555,14 @@ public final class CompiledLightCache {
 		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 0] = sunColor.getR();
 		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 1] = sunColor.getG();
 		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 2] = sunColor.getB();
-		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 0] = sunDirectionObjectSpace.getX();
-		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 1] = sunDirectionObjectSpace.getY();
-		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 2] = sunDirectionObjectSpace.getZ();
-		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 0] = sunDirectionWorldSpace.getX();
-		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 1] = sunDirectionWorldSpace.getY();
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 0] = sunDirectionObjectSpace.x;
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 1] = sunDirectionObjectSpace.y;
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 2] = sunDirectionObjectSpace.z;
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 0] = sunDirectionWorldSpace.x;
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 1] = sunDirectionWorldSpace.y;
 		
 //		Block #6:
-		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2] = sunDirectionWorldSpace.getZ();
+		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2] = sunDirectionWorldSpace.z;
 		array[PEREZ_LIGHT_OFFSET_TURBIDITY] = turbidity;
 		array[PEREZ_LIGHT_OFFSET_ZENITH + 0] = toFloat(zenith[0]);
 		array[PEREZ_LIGHT_OFFSET_ZENITH + 1] = toFloat(zenith[1]);

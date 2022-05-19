@@ -187,7 +187,7 @@ public final class DisneyClearCoatBRDF extends BXDF {
 		
 		final Vector3F halfway = Vector3F.add(incoming, outgoing);
 		
-		if(isZero(halfway.getX()) && isZero(halfway.getY()) && isZero(halfway.getZ())) {
+		if(isZero(halfway.x) && isZero(halfway.y) && isZero(halfway.z)) {
 			return Color3F.BLACK;
 		}
 		
@@ -219,7 +219,7 @@ public final class DisneyClearCoatBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		if(isZero(outgoing.getZ())) {
+		if(isZero(outgoing.z)) {
 			return Optional.empty();
 		}
 		
@@ -303,7 +303,7 @@ public final class DisneyClearCoatBRDF extends BXDF {
 		
 		final Vector3F halfway = Vector3F.add(incoming, outgoing);
 		
-		if(isZero(halfway.getX()) && isZero(halfway.getY()) && isZero(halfway.getZ())) {
+		if(isZero(halfway.x) && isZero(halfway.y) && isZero(halfway.z)) {
 			return 0.0F;
 		}
 		

@@ -308,7 +308,7 @@ public final class BSDF {
 		final Vector3F outgoing = this.outgoingLocalSpace;
 		final Vector3F normal = this.normalLocalSpace;
 		
-		if(isZero(outgoing.getZ())) {
+		if(isZero(outgoing.z)) {
 			return Optional.empty();
 		}
 		
@@ -459,7 +459,7 @@ public final class BSDF {
 		final Vector3F normal = this.normalLocalSpace;
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpaceCorrectlyOriented);
 		
-		if(isZero(outgoing.getZ())) {
+		if(isZero(outgoing.z)) {
 			return 0.0F;
 		}
 		

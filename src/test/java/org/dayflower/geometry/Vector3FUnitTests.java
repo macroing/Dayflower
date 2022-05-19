@@ -49,13 +49,13 @@ public final class Vector3FUnitTests {
 		final Vector3F a = Vector3F.absolute(new Vector3F(+1.0F, +2.0F, +3.0F));
 		final Vector3F b = Vector3F.absolute(new Vector3F(-1.0F, -2.0F, -3.0F));
 		
-		assertEquals(1.0F, a.getComponent1());
-		assertEquals(2.0F, a.getComponent2());
-		assertEquals(3.0F, a.getComponent3());
+		assertEquals(1.0F, a.x);
+		assertEquals(2.0F, a.y);
+		assertEquals(3.0F, a.z);
 		
-		assertEquals(1.0F, b.getComponent1());
-		assertEquals(2.0F, b.getComponent2());
-		assertEquals(3.0F, b.getComponent3());
+		assertEquals(1.0F, b.x);
+		assertEquals(2.0F, b.y);
+		assertEquals(3.0F, b.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.absolute(null));
 	}
@@ -66,9 +66,9 @@ public final class Vector3FUnitTests {
 		final Vector3F b = new Vector3F(2.0F, 3.0F, 4.0F);
 		final Vector3F c = Vector3F.add(a, b);
 		
-		assertEquals(3.0F, c.getComponent1());
-		assertEquals(5.0F, c.getComponent2());
-		assertEquals(7.0F, c.getComponent3());
+		assertEquals(3.0F, c.x);
+		assertEquals(5.0F, c.y);
+		assertEquals(7.0F, c.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.add(a, null));
 		assertThrows(NullPointerException.class, () -> Vector3F.add(null, b));
@@ -81,9 +81,9 @@ public final class Vector3FUnitTests {
 		final Vector3F c = new Vector3F(3.0F, 4.0F, 5.0F);
 		final Vector3F d = Vector3F.add(a, b, c);
 		
-		assertEquals( 6.0F, d.getComponent1());
-		assertEquals( 9.0F, d.getComponent2());
-		assertEquals(12.0F, d.getComponent3());
+		assertEquals( 6.0F, d.x);
+		assertEquals( 9.0F, d.y);
+		assertEquals(12.0F, d.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.add(a, b, null));
 		assertThrows(NullPointerException.class, () -> Vector3F.add(a, null, c));
@@ -127,17 +127,17 @@ public final class Vector3FUnitTests {
 		final Vector3F e = new Vector3F(0.0F, 0.0F, 1.0F);
 		final Vector3F f = Vector3F.computeV(e);
 		
-		assertEquals(+0.0F, b.getComponent1());
-		assertEquals(-1.0F, b.getComponent2());
-		assertEquals(+0.0F, b.getComponent3());
+		assertEquals(+0.0F, b.x);
+		assertEquals(-1.0F, b.y);
+		assertEquals(+0.0F, b.z);
 		
-		assertEquals(+1.0F, d.getComponent1());
-		assertEquals(-0.0F, d.getComponent2());
-		assertEquals(+0.0F, d.getComponent3());
+		assertEquals(+1.0F, d.x);
+		assertEquals(-0.0F, d.y);
+		assertEquals(+0.0F, d.z);
 		
-		assertEquals(+1.0F, f.getComponent1());
-		assertEquals(+0.0F, f.getComponent2());
-		assertEquals(-0.0F, f.getComponent3());
+		assertEquals(+1.0F, f.x);
+		assertEquals(+0.0F, f.y);
+		assertEquals(-0.0F, f.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.computeV(null));
 	}
@@ -152,36 +152,36 @@ public final class Vector3FUnitTests {
 	public void testConstructor() {
 		final Vector3F vector = new Vector3F();
 		
-		assertEquals(0.0F, vector.getComponent1());
-		assertEquals(0.0F, vector.getComponent2());
-		assertEquals(0.0F, vector.getComponent3());
+		assertEquals(0.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 	}
 	
 	@Test
 	public void testConstructorFloat() {
 		final Vector3F vector = new Vector3F(1.0F);
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(1.0F, vector.getComponent2());
-		assertEquals(1.0F, vector.getComponent3());
+		assertEquals(1.0F, vector.x);
+		assertEquals(1.0F, vector.y);
+		assertEquals(1.0F, vector.z);
 	}
 	
 	@Test
 	public void testConstructorFloatFloatFloat() {
 		final Vector3F vector = new Vector3F(1.0F, 2.0F, 3.0F);
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(2.0F, vector.getComponent2());
-		assertEquals(3.0F, vector.getComponent3());
+		assertEquals(1.0F, vector.x);
+		assertEquals(2.0F, vector.y);
+		assertEquals(3.0F, vector.z);
 	}
 	
 	@Test
 	public void testConstructorPoint3F() {
 		final Vector3F vector = new Vector3F(new Point3F(1.0F, 2.0F, 3.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(2.0F, vector.getComponent2());
-		assertEquals(3.0F, vector.getComponent3());
+		assertEquals(1.0F, vector.x);
+		assertEquals(2.0F, vector.y);
+		assertEquals(3.0F, vector.z);
 		
 		assertThrows(NullPointerException.class, () -> new Vector3F(null));
 	}
@@ -244,9 +244,9 @@ public final class Vector3FUnitTests {
 		final Vector3F b = new Vector3F(0.0F, 1.0F, 0.0F);
 		final Vector3F c = Vector3F.crossProduct(a, b);
 		
-		assertEquals(0.0F, c.getComponent1());
-		assertEquals(0.0F, c.getComponent2());
-		assertEquals(1.0F, c.getComponent3());
+		assertEquals(0.0F, c.x);
+		assertEquals(0.0F, c.y);
+		assertEquals(1.0F, c.z);
 		
 		assertTrue(c.isUnitVector());
 		
@@ -258,9 +258,9 @@ public final class Vector3FUnitTests {
 	public void testDirectionNormalizedPoint3FPoint3F() {
 		final Vector3F vector = Vector3F.directionNormalized(new Point3F(1.0F, 2.0F, 3.0F), new Point3F(2.0F, 2.0F, 3.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(0.0F, vector.getComponent2());
-		assertEquals(0.0F, vector.getComponent3());
+		assertEquals(1.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 		
 		assertTrue(vector.isUnitVector());
 		
@@ -272,9 +272,9 @@ public final class Vector3FUnitTests {
 	public void testDirectionNormalizedPoint4FPoint4F() {
 		final Vector3F vector = Vector3F.directionNormalized(new Point4F(1.0F, 2.0F, 3.0F), new Point4F(2.0F, 2.0F, 3.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(0.0F, vector.getComponent2());
-		assertEquals(0.0F, vector.getComponent3());
+		assertEquals(1.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 		
 		assertTrue(vector.isUnitVector());
 		
@@ -286,9 +286,9 @@ public final class Vector3FUnitTests {
 	public void testDirectionPoint3FPoint3F() {
 		final Vector3F vector = Vector3F.direction(new Point3F(1.0F, 2.0F, 3.0F), new Point3F(2.0F, 3.0F, 4.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(1.0F, vector.getComponent2());
-		assertEquals(1.0F, vector.getComponent3());
+		assertEquals(1.0F, vector.x);
+		assertEquals(1.0F, vector.y);
+		assertEquals(1.0F, vector.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.direction(new Point3F(1.0F, 2.0F, 3.0F), null));
 		assertThrows(NullPointerException.class, () -> Vector3F.direction(null, new Point3F(2.0F, 3.0F, 4.0F)));
@@ -298,9 +298,9 @@ public final class Vector3FUnitTests {
 	public void testDirectionPoint4FPoint4F() {
 		final Vector3F vector = Vector3F.direction(new Point4F(1.0F, 2.0F, 3.0F), new Point4F(2.0F, 3.0F, 4.0F));
 		
-		assertEquals(1.0F, vector.getComponent1());
-		assertEquals(1.0F, vector.getComponent2());
-		assertEquals(1.0F, vector.getComponent3());
+		assertEquals(1.0F, vector.x);
+		assertEquals(1.0F, vector.y);
+		assertEquals(1.0F, vector.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.direction(new Point4F(1.0F, 2.0F, 3.0F), null));
 		assertThrows(NullPointerException.class, () -> Vector3F.direction(null, new Point4F(2.0F, 3.0F, 4.0F)));
@@ -312,13 +312,13 @@ public final class Vector3FUnitTests {
 		final Vector3F b = Vector3F.divide(a, 2.0F);
 		final Vector3F c = Vector3F.divide(a, Float.NaN);
 		
-		assertEquals(1.0F, b.getComponent1());
-		assertEquals(2.0F, b.getComponent2());
-		assertEquals(4.0F, b.getComponent3());
+		assertEquals(1.0F, b.x);
+		assertEquals(2.0F, b.y);
+		assertEquals(4.0F, b.z);
 		
-		assertEquals(0.0F, c.getComponent1());
-		assertEquals(0.0F, c.getComponent2());
-		assertEquals(0.0F, c.getComponent3());
+		assertEquals(0.0F, c.x);
+		assertEquals(0.0F, c.y);
+		assertEquals(0.0F, c.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.divide(null, 2.0F));
 	}
@@ -376,20 +376,6 @@ public final class Vector3FUnitTests {
 	}
 	
 	@Test
-	public void testFaceForwardComponent3() {
-		final Vector3F a = new Vector3F(+0.0F, +0.0F, -1.0F);
-		final Vector3F b = new Vector3F(+0.0F, +0.0F, +1.0F);
-		final Vector3F c = Vector3F.faceForwardComponent3(a, a);
-		final Vector3F d = Vector3F.faceForwardComponent3(b, b);
-		
-		assertEquals(b, c);
-		assertEquals(b, d);
-		
-		assertThrows(NullPointerException.class, () -> Vector3F.faceForwardComponent3(a, null));
-		assertThrows(NullPointerException.class, () -> Vector3F.faceForwardComponent3(null, b));
-	}
-	
-	@Test
 	public void testFaceForwardVector3FVector3F() {
 		final Vector3F a = new Vector3F(-1.0F, -0.0F, -0.0F);
 		final Vector3F b = new Vector3F(+1.0F, +0.0F, +0.0F);
@@ -419,66 +405,17 @@ public final class Vector3FUnitTests {
 	}
 	
 	@Test
-	public void testGetComponent1() {
-		final Vector3F vector = new Vector3F(2.0F, 0.0F, 0.0F);
+	public void testFaceForwardZ() {
+		final Vector3F a = new Vector3F(+0.0F, +0.0F, -1.0F);
+		final Vector3F b = new Vector3F(+0.0F, +0.0F, +1.0F);
+		final Vector3F c = Vector3F.faceForwardZ(a, a);
+		final Vector3F d = Vector3F.faceForwardZ(b, b);
 		
-		assertEquals(2.0F, vector.getComponent1());
-	}
-	
-	@Test
-	public void testGetComponent2() {
-		final Vector3F vector = new Vector3F(0.0F, 2.0F, 0.0F);
+		assertEquals(b, c);
+		assertEquals(b, d);
 		
-		assertEquals(2.0F, vector.getComponent2());
-	}
-	
-	@Test
-	public void testGetComponent3() {
-		final Vector3F vector = new Vector3F(0.0F, 0.0F, 2.0F);
-		
-		assertEquals(2.0F, vector.getComponent3());
-	}
-	
-	@Test
-	public void testGetU() {
-		final Vector3F vector = new Vector3F(2.0F, 0.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getU());
-	}
-	
-	@Test
-	public void testGetV() {
-		final Vector3F vector = new Vector3F(0.0F, 2.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getV());
-	}
-	
-	@Test
-	public void testGetW() {
-		final Vector3F vector = new Vector3F(0.0F, 0.0F, 2.0F);
-		
-		assertEquals(2.0F, vector.getW());
-	}
-	
-	@Test
-	public void testGetX() {
-		final Vector3F vector = new Vector3F(2.0F, 0.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getX());
-	}
-	
-	@Test
-	public void testGetY() {
-		final Vector3F vector = new Vector3F(0.0F, 2.0F, 0.0F);
-		
-		assertEquals(2.0F, vector.getY());
-	}
-	
-	@Test
-	public void testGetZ() {
-		final Vector3F vector = new Vector3F(0.0F, 0.0F, 2.0F);
-		
-		assertEquals(2.0F, vector.getZ());
+		assertThrows(NullPointerException.class, () -> Vector3F.faceForwardZ(a, null));
+		assertThrows(NullPointerException.class, () -> Vector3F.faceForwardZ(null, b));
 	}
 	
 	@Test
@@ -487,9 +424,9 @@ public final class Vector3FUnitTests {
 		final Vector3F b = new Vector3F(2.0F, 3.0F, 4.0F);
 		final Vector3F c = Vector3F.hadamardProduct(a, b);
 		
-		assertEquals( 2.0F, c.getComponent1());
-		assertEquals( 6.0F, c.getComponent2());
-		assertEquals(12.0F, c.getComponent3());
+		assertEquals( 2.0F, c.x);
+		assertEquals( 6.0F, c.y);
+		assertEquals(12.0F, c.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.hadamardProduct(a, null));
 		assertThrows(NullPointerException.class, () -> Vector3F.hadamardProduct(null, b));
@@ -544,9 +481,9 @@ public final class Vector3FUnitTests {
 		final Vector3F b = new Vector3F(5.0F, 5.0F, 5.0F);
 		final Vector3F c = Vector3F.lerp(a, b, 0.25F);
 		
-		assertEquals(2.0F, c.getComponent1());
-		assertEquals(2.0F, c.getComponent2());
-		assertEquals(2.0F, c.getComponent3());
+		assertEquals(2.0F, c.x);
+		assertEquals(2.0F, c.y);
+		assertEquals(2.0F, c.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.lerp(a, null, 0.25F));
 		assertThrows(NullPointerException.class, () -> Vector3F.lerp(null, b, 0.25F));
@@ -557,9 +494,9 @@ public final class Vector3FUnitTests {
 		final Vector3F a = new Vector3F(1.0F, 2.0F, 3.0F);
 		final Vector3F b = Vector3F.multiply(a, 2.0F);
 		
-		assertEquals(2.0F, b.getComponent1());
-		assertEquals(4.0F, b.getComponent2());
-		assertEquals(6.0F, b.getComponent3());
+		assertEquals(2.0F, b.x);
+		assertEquals(4.0F, b.y);
+		assertEquals(6.0F, b.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.multiply(null, 2.0F));
 	}
@@ -570,66 +507,66 @@ public final class Vector3FUnitTests {
 		final Vector3F b = Vector3F.negate(a);
 		final Vector3F c = Vector3F.negate(b);
 		
-		assertEquals(-1.0F, b.getComponent1());
-		assertEquals(-2.0F, b.getComponent2());
-		assertEquals(-3.0F, b.getComponent3());
+		assertEquals(-1.0F, b.x);
+		assertEquals(-2.0F, b.y);
+		assertEquals(-3.0F, b.z);
 		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
-		assertEquals(+3.0F, c.getComponent3());
+		assertEquals(+1.0F, c.x);
+		assertEquals(+2.0F, c.y);
+		assertEquals(+3.0F, c.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.negate(null));
 	}
 	
 	@Test
-	public void testNegateComponent1() {
+	public void testNegateX() {
 		final Vector3F a = new Vector3F(1.0F, 2.0F, 3.0F);
-		final Vector3F b = Vector3F.negateComponent1(a);
-		final Vector3F c = Vector3F.negateComponent1(b);
+		final Vector3F b = Vector3F.negateX(a);
+		final Vector3F c = Vector3F.negateX(b);
 		
-		assertEquals(-1.0F, b.getComponent1());
-		assertEquals(+2.0F, b.getComponent2());
-		assertEquals(+3.0F, b.getComponent3());
+		assertEquals(-1.0F, b.x);
+		assertEquals(+2.0F, b.y);
+		assertEquals(+3.0F, b.z);
 		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
-		assertEquals(+3.0F, c.getComponent3());
+		assertEquals(+1.0F, c.x);
+		assertEquals(+2.0F, c.y);
+		assertEquals(+3.0F, c.z);
 		
-		assertThrows(NullPointerException.class, () -> Vector3F.negateComponent1(null));
+		assertThrows(NullPointerException.class, () -> Vector3F.negateX(null));
 	}
 	
 	@Test
-	public void testNegateComponent2() {
+	public void testNegateY() {
 		final Vector3F a = new Vector3F(1.0F, 2.0F, 3.0F);
-		final Vector3F b = Vector3F.negateComponent2(a);
-		final Vector3F c = Vector3F.negateComponent2(b);
+		final Vector3F b = Vector3F.negateY(a);
+		final Vector3F c = Vector3F.negateY(b);
 		
-		assertEquals(+1.0F, b.getComponent1());
-		assertEquals(-2.0F, b.getComponent2());
-		assertEquals(+3.0F, b.getComponent3());
+		assertEquals(+1.0F, b.x);
+		assertEquals(-2.0F, b.y);
+		assertEquals(+3.0F, b.z);
 		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
-		assertEquals(+3.0F, c.getComponent3());
+		assertEquals(+1.0F, c.x);
+		assertEquals(+2.0F, c.y);
+		assertEquals(+3.0F, c.z);
 		
-		assertThrows(NullPointerException.class, () -> Vector3F.negateComponent2(null));
+		assertThrows(NullPointerException.class, () -> Vector3F.negateY(null));
 	}
 	
 	@Test
-	public void testNegateComponent3() {
+	public void testNegateZ() {
 		final Vector3F a = new Vector3F(1.0F, 2.0F, 3.0F);
-		final Vector3F b = Vector3F.negateComponent3(a);
-		final Vector3F c = Vector3F.negateComponent3(b);
+		final Vector3F b = Vector3F.negateZ(a);
+		final Vector3F c = Vector3F.negateZ(b);
 		
-		assertEquals(+1.0F, b.getComponent1());
-		assertEquals(+2.0F, b.getComponent2());
-		assertEquals(-3.0F, b.getComponent3());
+		assertEquals(+1.0F, b.x);
+		assertEquals(+2.0F, b.y);
+		assertEquals(-3.0F, b.z);
 		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
-		assertEquals(+3.0F, c.getComponent3());
+		assertEquals(+1.0F, c.x);
+		assertEquals(+2.0F, c.y);
+		assertEquals(+3.0F, c.z);
 		
-		assertThrows(NullPointerException.class, () -> Vector3F.negateComponent3(null));
+		assertThrows(NullPointerException.class, () -> Vector3F.negateZ(null));
 	}
 	
 	@Test
@@ -640,9 +577,9 @@ public final class Vector3FUnitTests {
 		
 		final Vector3F vector = Vector3F.normalNormalized(a, b, c);
 		
-		assertEquals(0.0F, vector.getComponent1());
-		assertEquals(0.0F, vector.getComponent2());
-		assertEquals(1.0F, vector.getComponent3());
+		assertEquals(0.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(1.0F, vector.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.normalNormalized(a, b, null));
 		assertThrows(NullPointerException.class, () -> Vector3F.normalNormalized(a, null, c));
@@ -657,9 +594,9 @@ public final class Vector3FUnitTests {
 		
 		final Vector3F vector = Vector3F.normal(a, b, c);
 		
-		assertEquals(0.0F, vector.getComponent1());
-		assertEquals(0.0F, vector.getComponent2());
-		assertEquals(1.0F, vector.getComponent3());
+		assertEquals(0.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(1.0F, vector.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.normal(a, b, null));
 		assertThrows(NullPointerException.class, () -> Vector3F.normal(a, null, c));
@@ -723,18 +660,18 @@ public final class Vector3FUnitTests {
 	public void testRandom() {
 		final Vector3F vector = Vector3F.random();
 		
-		assertTrue(vector.getComponent1() >= -1.0F && vector.getComponent1() <= 1.0F);
-		assertTrue(vector.getComponent2() >= -1.0F && vector.getComponent2() <= 1.0F);
-		assertTrue(vector.getComponent3() >= -1.0F && vector.getComponent3() <= 1.0F);
+		assertTrue(vector.x >= -1.0F && vector.x <= 1.0F);
+		assertTrue(vector.y >= -1.0F && vector.y <= 1.0F);
+		assertTrue(vector.z >= -1.0F && vector.z <= 1.0F);
 	}
 	
 	@Test
 	public void testRandomNormalized() {
 		final Vector3F vector = Vector3F.randomNormalized();
 		
-		assertTrue(vector.getComponent1() >= -1.0F && vector.getComponent1() <= 1.0F);
-		assertTrue(vector.getComponent2() >= -1.0F && vector.getComponent2() <= 1.0F);
-		assertTrue(vector.getComponent3() >= -1.0F && vector.getComponent3() <= 1.0F);
+		assertTrue(vector.x >= -1.0F && vector.x <= 1.0F);
+		assertTrue(vector.y >= -1.0F && vector.y <= 1.0F);
+		assertTrue(vector.z >= -1.0F && vector.z <= 1.0F);
 		
 		assertTrue(vector.isUnitVector());
 	}
@@ -747,9 +684,9 @@ public final class Vector3FUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeFloat(a.getComponent1());
-		dataOutput.writeFloat(a.getComponent2());
-		dataOutput.writeFloat(a.getComponent3());
+		dataOutput.writeFloat(a.x);
+		dataOutput.writeFloat(a.y);
+		dataOutput.writeFloat(a.z);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		
@@ -766,13 +703,13 @@ public final class Vector3FUnitTests {
 		final Vector3F a = Vector3F.reciprocal(new Vector3F(Float.NaN, Float.NaN, Float.NaN));
 		final Vector3F b = Vector3F.reciprocal(new Vector3F(2.0F, 4.0F, 8.0F));
 		
-		assertEquals(Float.NaN, a.getComponent1());
-		assertEquals(Float.NaN, a.getComponent2());
-		assertEquals(Float.NaN, a.getComponent3());
+		assertEquals(Float.NaN, a.x);
+		assertEquals(Float.NaN, a.y);
+		assertEquals(Float.NaN, a.z);
 		
-		assertEquals(0.500F, b.getComponent1());
-		assertEquals(0.250F, b.getComponent2());
-		assertEquals(0.125F, b.getComponent3());
+		assertEquals(0.500F, b.x);
+		assertEquals(0.250F, b.y);
+		assertEquals(0.125F, b.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.reciprocal(null));
 	}
@@ -853,9 +790,9 @@ public final class Vector3FUnitTests {
 		final Vector3F b = new Vector3F(2.0F, 3.0F, 4.0F);
 		final Vector3F c = Vector3F.subtract(a, b);
 		
-		assertEquals(1.0F, c.getComponent1());
-		assertEquals(2.0F, c.getComponent2());
-		assertEquals(3.0F, c.getComponent3());
+		assertEquals(1.0F, c.x);
+		assertEquals(2.0F, c.y);
+		assertEquals(3.0F, c.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.subtract(a, null));
 		assertThrows(NullPointerException.class, () -> Vector3F.subtract(null, b));
@@ -920,54 +857,54 @@ public final class Vector3FUnitTests {
 	public void testU() {
 		final Vector3F vector = Vector3F.u();
 		
-		assertEquals(1.0F, vector.getU());
-		assertEquals(0.0F, vector.getV());
-		assertEquals(0.0F, vector.getW());
+		assertEquals(1.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 	}
 	
 	@Test
 	public void testUFloat() {
 		final Vector3F vector = Vector3F.u(2.0F);
 		
-		assertEquals(2.0F, vector.getU());
-		assertEquals(0.0F, vector.getV());
-		assertEquals(0.0F, vector.getW());
+		assertEquals(2.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 	}
 	
 	@Test
 	public void testV() {
 		final Vector3F vector = Vector3F.v();
 		
-		assertEquals(0.0F, vector.getU());
-		assertEquals(1.0F, vector.getV());
-		assertEquals(0.0F, vector.getW());
+		assertEquals(0.0F, vector.x);
+		assertEquals(1.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 	}
 	
 	@Test
 	public void testVFloat() {
 		final Vector3F vector = Vector3F.v(2.0F);
 		
-		assertEquals(0.0F, vector.getU());
-		assertEquals(2.0F, vector.getV());
-		assertEquals(0.0F, vector.getW());
+		assertEquals(0.0F, vector.x);
+		assertEquals(2.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 	}
 	
 	@Test
 	public void testW() {
 		final Vector3F vector = Vector3F.w();
 		
-		assertEquals(0.0F, vector.getU());
-		assertEquals(0.0F, vector.getV());
-		assertEquals(1.0F, vector.getW());
+		assertEquals(0.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(1.0F, vector.z);
 	}
 	
 	@Test
 	public void testWFloat() {
 		final Vector3F vector = Vector3F.w(2.0F);
 		
-		assertEquals(0.0F, vector.getU());
-		assertEquals(0.0F, vector.getV());
-		assertEquals(2.0F, vector.getW());
+		assertEquals(0.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(2.0F, vector.z);
 	}
 	
 	@Test
@@ -994,53 +931,53 @@ public final class Vector3FUnitTests {
 	public void testX() {
 		final Vector3F vector = Vector3F.x();
 		
-		assertEquals(1.0F, vector.getX());
-		assertEquals(0.0F, vector.getY());
-		assertEquals(0.0F, vector.getZ());
+		assertEquals(1.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 	}
 	
 	@Test
 	public void testXFloat() {
 		final Vector3F vector = Vector3F.x(2.0F);
 		
-		assertEquals(2.0F, vector.getX());
-		assertEquals(0.0F, vector.getY());
-		assertEquals(0.0F, vector.getZ());
+		assertEquals(2.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 	}
 	
 	@Test
 	public void testY() {
 		final Vector3F vector = Vector3F.y();
 		
-		assertEquals(0.0F, vector.getX());
-		assertEquals(1.0F, vector.getY());
-		assertEquals(0.0F, vector.getZ());
+		assertEquals(0.0F, vector.x);
+		assertEquals(1.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 	}
 	
 	@Test
 	public void testYFloat() {
 		final Vector3F vector = Vector3F.y(2.0F);
 		
-		assertEquals(0.0F, vector.getX());
-		assertEquals(2.0F, vector.getY());
-		assertEquals(0.0F, vector.getZ());
+		assertEquals(0.0F, vector.x);
+		assertEquals(2.0F, vector.y);
+		assertEquals(0.0F, vector.z);
 	}
 	
 	@Test
 	public void testZ() {
 		final Vector3F vector = Vector3F.z();
 		
-		assertEquals(0.0F, vector.getX());
-		assertEquals(0.0F, vector.getY());
-		assertEquals(1.0F, vector.getZ());
+		assertEquals(0.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(1.0F, vector.z);
 	}
 	
 	@Test
 	public void testZFloat() {
 		final Vector3F vector = Vector3F.z(2.0F);
 		
-		assertEquals(0.0F, vector.getX());
-		assertEquals(0.0F, vector.getY());
-		assertEquals(2.0F, vector.getZ());
+		assertEquals(0.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(2.0F, vector.z);
 	}
 }

@@ -64,9 +64,9 @@ public final class SurfaceNormalTexture implements Texture {
 	public Color3F getColor(final Intersection intersection) {
 		final Vector3F surfaceNormal = intersection.getSurfaceNormalSCorrectlyOriented();
 		
-		final float r = (surfaceNormal.getX() + 1.0F) / 2.0F;
-		final float g = (surfaceNormal.getY() + 1.0F) / 2.0F;
-		final float b = (surfaceNormal.getZ() + 1.0F) / 2.0F;
+		final float r = (surfaceNormal.x + 1.0F) / 2.0F;
+		final float g = (surfaceNormal.y + 1.0F) / 2.0F;
+		final float b = (surfaceNormal.z + 1.0F) / 2.0F;
 		
 		return new Color3F(r, g, b);
 	}

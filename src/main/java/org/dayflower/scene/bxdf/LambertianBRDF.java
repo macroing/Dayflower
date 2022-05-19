@@ -152,7 +152,7 @@ public final class LambertianBRDF extends BXDF {
 		Objects.requireNonNull(sample, "sample == null");
 		
 		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.x, sample.y);
-		final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
+		final Vector3F incoming = Vector3F.faceForwardZ(outgoing, incomingSample);
 		
 		final BXDFType bXDFType = getBXDFType();
 		

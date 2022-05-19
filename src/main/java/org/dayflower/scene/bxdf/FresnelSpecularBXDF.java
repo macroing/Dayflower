@@ -220,7 +220,7 @@ public final class FresnelSpecularBXDF extends BXDF {
 		if(sample.x < reflectance) {
 			final BXDFType bXDFType = BXDFType.SPECULAR_REFLECTION;
 			
-			final Vector3F incoming = new Vector3F(-outgoing.getX(), -outgoing.getY(), outgoing.getZ());
+			final Vector3F incoming = new Vector3F(-outgoing.x, -outgoing.y, outgoing.z);
 			
 			final Color3F result = Color3F.divide(Color3F.multiply(this.reflectanceScale, reflectance), incoming.cosThetaAbs());
 			

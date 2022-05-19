@@ -595,13 +595,13 @@ public final class PerezLight extends Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F doRadianceSky(final Vector3F direction) {
-		if(direction.getZ() < 0.0F) {
+		if(direction.z < 0.0F) {
 			return Color3F.BLACK;
 		}
 		
-		final Vector3F directionSaturated = Vector3F.normalize(new Vector3F(direction.getX(), direction.getY(), max(direction.getZ(), 0.001F)));
+		final Vector3F directionSaturated = Vector3F.normalize(new Vector3F(direction.x, direction.y, max(direction.z, 0.001F)));
 		
-		final double theta = acos(saturate(directionSaturated.getZ(), -1.0D, 1.0D));
+		final double theta = acos(saturate(directionSaturated.z, -1.0D, 1.0D));
 		final double gamma = acos(saturate(Vector3F.dotProduct(directionSaturated, this.sunDirectionObjectSpace), -1.0D, 1.0D));
 		final double relativeLuminance = doCalculatePerezFunction(this.perezRelativeLuminance, theta, gamma, this.zenith[0]) * 0.0001D;
 		final double x = doCalculatePerezFunction(this.perezX, theta, gamma, this.zenith[1]);
@@ -692,7 +692,7 @@ public final class PerezLight extends Light {
 	}
 	
 	private void doSetSunColor() {
-		if(this.sunDirectionObjectSpace.getZ() > 0.0F) {
+		if(this.sunDirectionObjectSpace.z > 0.0F) {
 			this.sunColor = Color3F.minimumTo0(ColorSpaceF.getDefault().convertXYZToRGB(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(true), 0.0001F)));
 		} else {
 			this.sunColor = Color3F.BLACK;
@@ -708,7 +708,7 @@ public final class PerezLight extends Light {
 	}
 	
 	private void doSetTheta() {
-		this.theta = acos(saturate(this.sunDirectionObjectSpace.getZ(), -1.0F, 1.0F));
+		this.theta = acos(saturate(this.sunDirectionObjectSpace.z, -1.0F, 1.0F));
 	}
 	
 	private void doSetTransform() {

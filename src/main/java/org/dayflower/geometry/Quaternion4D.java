@@ -47,10 +47,25 @@ import org.macroing.java.lang.Strings;
  * @author J&#246;rgen Lundgren
  */
 public final class Quaternion4D implements Node {
-	private final double component1;
-	private final double component2;
-	private final double component3;
-	private final double component4;
+	/**
+	 * The W-component of this {@code Quaternion4D} instance.
+	 */
+	public final double w;
+	
+	/**
+	 * The X-component of this {@code Quaternion4D} instance.
+	 */
+	public final double x;
+	
+	/**
+	 * The Y-component of this {@code Quaternion4D} instance.
+	 */
+	public final double y;
+	
+	/**
+	 * The Z-component of this {@code Quaternion4D} instance.
+	 */
+	public final double z;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -69,55 +84,55 @@ public final class Quaternion4D implements Node {
 	}
 	
 	/**
-	 * Constructs a new {@code Quaternion4D} instance given the component values {@code vector.getComponent1()}, {@code vector.getComponent2()}, {@code vector.getComponent3()} and {@code 1.0D}.
+	 * Constructs a new {@code Quaternion4D} instance given the component values {@code v.x}, {@code v.y}, {@code v.z} and {@code 1.0D}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Quaternion4D(vector.getComponent1(), vector.getComponent2(), vector.getComponent3());
-	 * }
-	 * </pre>
-	 * 
-	 * @param vector a {@link Vector3D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
-	 */
-	public Quaternion4D(final Vector3D vector) {
-		this(vector.getComponent1(), vector.getComponent2(), vector.getComponent3());
-	}
-	
-	/**
-	 * Constructs a new {@code Quaternion4D} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code 1.0D}.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Quaternion4D(component1, component2, component3, 1.0D);
+	 * new Quaternion4D(v.x, v.y, v.z);
 	 * }
 	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
+	 * @param v a {@link Vector3D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public Quaternion4D(final double component1, final double component2, final double component3) {
-		this(component1, component2, component3, 1.0F);
+	public Quaternion4D(final Vector3D v) {
+		this(v.x, v.y, v.z);
 	}
 	
 	/**
-	 * Constructs a new {@code Quaternion4D} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code component4}.
+	 * Constructs a new {@code Quaternion4D} instance given the component values {@code x}, {@code y}, {@code z} and {@code 1.0D}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Quaternion4D(x, y, z, 1.0D);
+	 * }
+	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
-	 * @param component4 the value of component 4
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
 	 */
-	public Quaternion4D(final double component1, final double component2, final double component3, final double component4) {
-		this.component1 = component1;
-		this.component2 = component2;
-		this.component3 = component3;
-		this.component4 = component4;
+	public Quaternion4D(final double x, final double y, final double z) {
+		this(x, y, z, 1.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code Quaternion4D} instance given the component values {@code x}, {@code y}, {@code z} and {@code w}.
+	 * 
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
+	 * @param w the value of the W-component
+	 */
+	public Quaternion4D(final double x, final double y, final double z, final double w) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.w = w;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +144,7 @@ public final class Quaternion4D implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Quaternion4D(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3), Strings.toNonScientificNotationJava(this.component4));
+		return String.format("new Quaternion4D(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.x), Strings.toNonScientificNotationJava(this.y), Strings.toNonScientificNotationJava(this.z), Strings.toNonScientificNotationJava(this.w));
 	}
 	
 	/**
@@ -146,89 +161,17 @@ public final class Quaternion4D implements Node {
 			return true;
 		} else if(!(object instanceof Quaternion4D)) {
 			return false;
-		} else if(!equal(this.component1, Quaternion4D.class.cast(object).component1)) {
+		} else if(!equal(this.x, Quaternion4D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.component2, Quaternion4D.class.cast(object).component2)) {
+		} else if(!equal(this.y, Quaternion4D.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.component3, Quaternion4D.class.cast(object).component3)) {
+		} else if(!equal(this.z, Quaternion4D.class.cast(object).z)) {
 			return false;
-		} else if(!equal(this.component4, Quaternion4D.class.cast(object).component4)) {
+		} else if(!equal(this.w, Quaternion4D.class.cast(object).w)) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-	public double getComponent1() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-	public double getComponent2() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of component 3.
-	 * 
-	 * @return the value of component 3
-	 */
-	public double getComponent3() {
-		return this.component3;
-	}
-	
-	/**
-	 * Returns the value of component 4.
-	 * 
-	 * @return the value of component 4
-	 */
-	public double getComponent4() {
-		return this.component4;
-	}
-	
-	/**
-	 * Returns the value of the W-component.
-	 * 
-	 * @return the value of the W-component
-	 */
-	public double getW() {
-		return this.component4;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-	public double getX() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-	public double getY() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the Z-component.
-	 * 
-	 * @return the value of the Z-component
-	 */
-	public double getZ() {
-		return this.component3;
 	}
 	
 	/**
@@ -246,7 +189,7 @@ public final class Quaternion4D implements Node {
 	 * @return the squared length of this {@code Quaternion4D} instance
 	 */
 	public double lengthSquared() {
-		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3 + this.component4 * this.component4;
+		return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
 	}
 	
 	/**
@@ -256,7 +199,7 @@ public final class Quaternion4D implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(this.component1), Double.valueOf(this.component2), Double.valueOf(this.component3), Double.valueOf(this.component4));
+		return Objects.hash(Double.valueOf(this.x), Double.valueOf(this.y), Double.valueOf(this.z), Double.valueOf(this.w));
 	}
 	
 	/**
@@ -272,10 +215,10 @@ public final class Quaternion4D implements Node {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeDouble(this.component1);
-			dataOutput.writeDouble(this.component2);
-			dataOutput.writeDouble(this.component3);
-			dataOutput.writeDouble(this.component4);
+			dataOutput.writeDouble(this.x);
+			dataOutput.writeDouble(this.y);
+			dataOutput.writeDouble(this.z);
+			dataOutput.writeDouble(this.w);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -284,156 +227,141 @@ public final class Quaternion4D implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Adds the component values of {@code quaternionRHS} to the component values of {@code quaternionLHS}.
+	 * Adds the component values of {@code qRHS} to the component values of {@code qLHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the addition.
 	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Quaternion addition is performed componentwise.
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
 	 * @return a new {@code Quaternion4D} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
 	 */
-	public static Quaternion4D add(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
-		final double component1 = quaternionLHS.component1 + quaternionRHS.component1;
-		final double component2 = quaternionLHS.component2 + quaternionRHS.component2;
-		final double component3 = quaternionLHS.component3 + quaternionRHS.component3;
-		final double component4 = quaternionLHS.component4 + quaternionRHS.component4;
-		
-		return new Quaternion4D(component1, component2, component3, component4);
+	public static Quaternion4D add(final Quaternion4D qLHS, final Quaternion4D qRHS) {
+		return new Quaternion4D(qLHS.x + qRHS.x, qLHS.y + qRHS.y, qLHS.z + qRHS.z, qLHS.w + qRHS.w);
 	}
 	
 	/**
-	 * Conjugates the component values of {@code quaternion}.
+	 * Conjugates the component values of {@code q}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the conjugation.
 	 * <p>
-	 * If {@code quaternion} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code q} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param quaternion a {@code Quaternion4D} instance
+	 * @param q a {@code Quaternion4D} instance
 	 * @return a new {@code Quaternion4D} instance with the result of the conjugation
-	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code q} is {@code null}
 	 */
-	public static Quaternion4D conjugate(final Quaternion4D quaternion) {
-		final double component1 = -quaternion.component1;
-		final double component2 = -quaternion.component2;
-		final double component3 = -quaternion.component3;
-		final double component4 = +quaternion.component4;
-		
-		return new Quaternion4D(component1, component2, component3, component4);
+	public static Quaternion4D conjugate(final Quaternion4D q) {
+		return new Quaternion4D(-q.x, -q.y, -q.z, q.w);
 	}
 	
 	/**
-	 * Divides the component values of {@code quaternionLHS} with {@code scalarRHS}.
+	 * Divides the component values of {@code qLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the division.
 	 * <p>
-	 * If {@code quaternionLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code qLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Quaternion division is performed componentwise.
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Quaternion4D} instance with the result of the division
-	 * @throws NullPointerException thrown if, and only if, {@code quaternionLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code qLHS} is {@code null}
 	 */
-	public static Quaternion4D divide(final Quaternion4D quaternionLHS, final double scalarRHS) {
-		final double component1 = quaternionLHS.component1 / scalarRHS;
-		final double component2 = quaternionLHS.component2 / scalarRHS;
-		final double component3 = quaternionLHS.component3 / scalarRHS;
-		final double component4 = quaternionLHS.component4 / scalarRHS;
-		
-		return new Quaternion4D(component1, component2, component3, component4);
+	public static Quaternion4D divide(final Quaternion4D qLHS, final double sRHS) {
+		return new Quaternion4D(qLHS.x / sRHS, qLHS.y / sRHS, qLHS.z / sRHS, qLHS.w / sRHS);
 	}
 	
 	/**
 	 * Returns a new {@code Quaternion4D} instance based on an {@link AngleD} instance and a {@link Vector3D} instance.
 	 * <p>
-	 * If either {@code angle} or {@code vector} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param angle an {@code AngleD} instance
-	 * @param vector a {@code Vector3D} instance
+	 * @param a an {@code AngleD} instance
+	 * @param v a {@code Vector3D} instance
 	 * @return a new {@code Quaternion4D} instance based on an {@code AngleD} instance and a {@code Vector3D} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code vector} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code v} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Quaternion4D from(final AngleD angle, final Vector3D vector) {
-		final AngleD angleHalf = AngleD.half(angle);
+	public static Quaternion4D from(final AngleD a, final Vector3D v) {
+		final AngleD aHalf = AngleD.half(a);
 		
-		final double sin = sin(angleHalf.getRadians());
-		final double cos = cos(angleHalf.getRadians());
+		final double sin = sin(aHalf.getRadians());
+		final double cos = cos(aHalf.getRadians());
 		
-		final double component1 = vector.getComponent1() * sin;
-		final double component2 = vector.getComponent2() * sin;
-		final double component3 = vector.getComponent3() * sin;
-		final double component4 = cos;
+		final double x = v.x * sin;
+		final double y = v.y * sin;
+		final double z = v.z * sin;
+		final double w = cos;
 		
-		return new Quaternion4D(component1, component2, component3, component4);
+		return new Quaternion4D(x, y, z, w);
 	}
 	
 	/**
 	 * Returns a new {@code Quaternion4D} instance based on a {@link Matrix44D} instance.
 	 * <p>
-	 * If {@code matrix} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code m} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrix a {@code Matrix44D} instance
+	 * @param m a {@code Matrix44D} instance
 	 * @return a new {@code Quaternion4D} instance based on a {@code Matrix44D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code m} is {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Quaternion4D from(final Matrix44D matrix) {
-		final double element11 = matrix.getElement11();
-		final double element12 = matrix.getElement12();
-		final double element13 = matrix.getElement13();
-		final double element21 = matrix.getElement21();
-		final double element22 = matrix.getElement22();
-		final double element23 = matrix.getElement23();
-		final double element31 = matrix.getElement31();
-		final double element32 = matrix.getElement32();
-		final double element33 = matrix.getElement33();
+	public static Quaternion4D from(final Matrix44D m) {
+		final double element11 = m.getElement11();
+		final double element12 = m.getElement12();
+		final double element13 = m.getElement13();
+		final double element21 = m.getElement21();
+		final double element22 = m.getElement22();
+		final double element23 = m.getElement23();
+		final double element31 = m.getElement31();
+		final double element32 = m.getElement32();
+		final double element33 = m.getElement33();
 		
 		if(element11 + element22 + element33 > 0.0D) {
 			final double scalar = 0.5D / sqrt(element11 + element22 + element33 + 1.0D);
 			
-			final double component1 = (element23 - element32) * scalar;
-			final double component2 = (element31 - element13) * scalar;
-			final double component3 = (element12 - element21) * scalar;
-			final double component4 = 0.25D / scalar;
+			final double x = (element23 - element32) * scalar;
+			final double y = (element31 - element13) * scalar;
+			final double z = (element12 - element21) * scalar;
+			final double w = 0.25D / scalar;
 			
-			return normalize(new Quaternion4D(component1, component2, component3, component4));
+			return normalize(new Quaternion4D(x, y, z, w));
 		} else if(element11 > element22 && element11 > element33) {
 			final double scalar = 2.0D * sqrt(1.0D + element11 - element22 - element23);
 			final double scalarReciprocal = 1.0D / scalar;
 			
-			final double component1 = 0.25D * scalar;
-			final double component2 = (element21 + element12) * scalarReciprocal;
-			final double component3 = (element31 + element13) * scalarReciprocal;
-			final double component4 = (element23 - element32) * scalarReciprocal;
+			final double x = 0.25D * scalar;
+			final double y = (element21 + element12) * scalarReciprocal;
+			final double z = (element31 + element13) * scalarReciprocal;
+			final double w = (element23 - element32) * scalarReciprocal;
 			
-			return normalize(new Quaternion4D(component1, component2, component3, component4));
+			return normalize(new Quaternion4D(x, y, z, w));
 		} else if(element22 > element33) {
 			final double scalar = 2.0D * sqrt(1.0D + element22 - element11 - element33);
 			final double scalarReciprocal = 1.0D / scalar;
 			
-			final double component1 = (element21 + element12) * scalarReciprocal;
-			final double component2 = 0.25D * scalar;
-			final double component3 = (element32 + element23) * scalarReciprocal;
-			final double component4 = (element31 - element13) * scalarReciprocal;
+			final double x = (element21 + element12) * scalarReciprocal;
+			final double y = 0.25D * scalar;
+			final double z = (element32 + element23) * scalarReciprocal;
+			final double w = (element31 - element13) * scalarReciprocal;
 			
-			return normalize(new Quaternion4D(component1, component2, component3, component4));
+			return normalize(new Quaternion4D(x, y, z, w));
 		} else {
 			final double scalar = 2.0F * sqrt(1.0D + element33 - element11 - element22);
 			final double scalarReciprocal = 1.0D / scalar;
 			
-			final double component1 = (element31 + element13) * scalarReciprocal;
-			final double component2 = (element23 + element32) * scalarReciprocal;
-			final double component3 = 0.25D * scalar;
-			final double component4 = (element12 - element21) * scalarReciprocal;
+			final double x = (element31 + element13) * scalarReciprocal;
+			final double y = (element23 + element32) * scalarReciprocal;
+			final double z = 0.25D * scalar;
+			final double w = (element12 - element21) * scalarReciprocal;
 			
-			return normalize(new Quaternion4D(component1, component2, component3, component4));
+			return normalize(new Quaternion4D(x, y, z, w));
 		}
 	}
 	
@@ -459,265 +387,255 @@ public final class Quaternion4D implements Node {
 	}
 	
 	/**
-	 * Performs a normalized linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
+	 * Performs a normalized linear interpolation between {@code qLHS} and {@code qRHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the operation.
 	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Quaternion4D.linearInterpolationNormalized(quaternionLHS, quaternionRHS, 0.5D);
+	 * Quaternion4D.linearInterpolationNormalized(qLHS, qRHS, 0.5D);
 	 * }
 	 * </pre>
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
 	 * @return a new {@code Quaternion4D} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Quaternion4D linearInterpolationNormalized(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
-		return linearInterpolationNormalized(quaternionLHS, quaternionRHS, 0.5D);
+	public static Quaternion4D linearInterpolationNormalized(final Quaternion4D qLHS, final Quaternion4D qRHS) {
+		return linearInterpolationNormalized(qLHS, qRHS, 0.5D);
 	}
 	
 	/**
-	 * Performs a normalized linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
+	 * Performs a normalized linear interpolation between {@code qLHS} and {@code qRHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the operation.
 	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Quaternion4D.linearInterpolationNormalized(quaternionLHS, quaternionRHS, t, false);
+	 * Quaternion4D.linearInterpolationNormalized(qLHS, qRHS, t, false);
 	 * }
 	 * </pre>
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
 	 * @param t the factor
 	 * @return a new {@code Quaternion4D} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Quaternion4D linearInterpolationNormalized(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS, final double t) {
-		return linearInterpolationNormalized(quaternionLHS, quaternionRHS, t, false);
+	public static Quaternion4D linearInterpolationNormalized(final Quaternion4D qLHS, final Quaternion4D qRHS, final double t) {
+		return linearInterpolationNormalized(qLHS, qRHS, t, false);
 	}
 	
 	/**
-	 * Performs a normalized linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
+	 * Performs a normalized linear interpolation between {@code qLHS} and {@code qRHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the operation.
 	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
-	 * @param t the factor
-	 * @param isInterpolatingShortest {@code true} if, and only if, the shortest interpolation should be used, {@code false} otherwise
-	 * @return a new {@code Quaternion4D} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Quaternion4D linearInterpolationNormalized(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS, final double t, final boolean isInterpolatingShortest) {
-		return normalize(add(multiply(subtract(isInterpolatingShortest && dotProduct(quaternionLHS, quaternionRHS) < 0.0D ? negate(quaternionRHS) : quaternionRHS, quaternionLHS), t), quaternionLHS));
-	}
-	
-	/**
-	 * Performs a spherical linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
-	 * <p>
-	 * Returns a new {@code Quaternion4D} instance with the result of the operation.
-	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Quaternion4D.linearInterpolationSpherical(quaternionLHS, quaternionRHS, 0.5D);
-	 * }
-	 * </pre>
-	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
-	 * @return a new {@code Quaternion4D} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Quaternion4D linearInterpolationSpherical(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
-		return linearInterpolationSpherical(quaternionLHS, quaternionRHS, 0.5D);
-	}
-	
-	/**
-	 * Performs a spherical linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
-	 * <p>
-	 * Returns a new {@code Quaternion4D} instance with the result of the operation.
-	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Quaternion4D.linearInterpolationSpherical(quaternionLHS, quaternionRHS, t, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
-	 * @param t the factor
-	 * @return a new {@code Quaternion4D} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Quaternion4D linearInterpolationSpherical(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS, final double t) {
-		return linearInterpolationSpherical(quaternionLHS, quaternionRHS, t, false);
-	}
-	
-	/**
-	 * Performs a spherical linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
-	 * <p>
-	 * Returns a new {@code Quaternion4D} instance with the result of the operation.
-	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
 	 * @param t the factor
 	 * @param isInterpolatingShortest {@code true} if, and only if, the shortest interpolation should be used, {@code false} otherwise
 	 * @return a new {@code Quaternion4D} instance with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Quaternion4D linearInterpolationSpherical(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS, final double t, final boolean isInterpolatingShortest) {
-		final double cos = dotProduct(quaternionLHS, quaternionRHS);
+	public static Quaternion4D linearInterpolationNormalized(final Quaternion4D qLHS, final Quaternion4D qRHS, final double t, final boolean isInterpolatingShortest) {
+		return normalize(add(multiply(subtract(isInterpolatingShortest && dotProduct(qLHS, qRHS) < 0.0D ? negate(qRHS) : qRHS, qLHS), t), qLHS));
+	}
+	
+	/**
+	 * Performs a spherical linear interpolation between {@code qLHS} and {@code qRHS}.
+	 * <p>
+	 * Returns a new {@code Quaternion4D} instance with the result of the operation.
+	 * <p>
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Quaternion4D.linearInterpolationSpherical(qLHS, qRHS, 0.5D);
+	 * }
+	 * </pre>
+	 * 
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @return a new {@code Quaternion4D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Quaternion4D linearInterpolationSpherical(final Quaternion4D qLHS, final Quaternion4D qRHS) {
+		return linearInterpolationSpherical(qLHS, qRHS, 0.5D);
+	}
+	
+	/**
+	 * Performs a spherical linear interpolation between {@code qLHS} and {@code qRHS}.
+	 * <p>
+	 * Returns a new {@code Quaternion4D} instance with the result of the operation.
+	 * <p>
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Quaternion4D.linearInterpolationSpherical(qLHS, qRHS, t, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @param t the factor
+	 * @return a new {@code Quaternion4D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Quaternion4D linearInterpolationSpherical(final Quaternion4D qLHS, final Quaternion4D qRHS, final double t) {
+		return linearInterpolationSpherical(qLHS, qRHS, t, false);
+	}
+	
+	/**
+	 * Performs a spherical linear interpolation between {@code qLHS} and {@code qRHS}.
+	 * <p>
+	 * Returns a new {@code Quaternion4D} instance with the result of the operation.
+	 * <p>
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @param t the factor
+	 * @param isInterpolatingShortest {@code true} if, and only if, the shortest interpolation should be used, {@code false} otherwise
+	 * @return a new {@code Quaternion4D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Quaternion4D linearInterpolationSpherical(final Quaternion4D qLHS, final Quaternion4D qRHS, final double t, final boolean isInterpolatingShortest) {
+		final double cos = dotProduct(qLHS, qRHS);
 		
 		final double x = isInterpolatingShortest && cos < 0.0D ? -cos : cos;
 		final double y = sqrt(1.0D - x * x);
 		
-		final Quaternion4D quaternion1 = isInterpolatingShortest && cos < 0.0D ? negate(quaternionRHS) : quaternionRHS;
+		final Quaternion4D quaternion1 = isInterpolatingShortest && cos < 0.0D ? negate(qRHS) : qRHS;
 		
 		if(abs(x) >= 1.0D - 1000.0D) {
-			return linearInterpolationNormalized(quaternionLHS, quaternion1, t);
+			return linearInterpolationNormalized(qLHS, quaternion1, t);
 		}
 		
 		final double theta = atan2(y, x);
 		
-		return add(multiply(quaternionLHS, sin((1.0D - t) * theta) / y), multiply(quaternion1, sin(t * theta) / y));
+		return add(multiply(qLHS, sin((1.0D - t) * theta) / y), multiply(quaternion1, sin(t * theta) / y));
 	}
 	
 	/**
-	 * Multiplies the component values of {@code quaternionLHS} with the component values of {@code quaternionRHS}.
+	 * Multiplies the component values of {@code qLHS} with the component values of {@code qRHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the multiplication.
 	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Quaternion multiplication is performed componentwise.
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
 	 * @return a new {@code Quaternion4D} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
 	 */
-	public static Quaternion4D multiply(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
-		final double component1 = quaternionLHS.component1 * quaternionRHS.component4 + quaternionLHS.component4 * quaternionRHS.component1 + quaternionLHS.component2 * quaternionRHS.component3 - quaternionLHS.component3 * quaternionRHS.component2;
-		final double component2 = quaternionLHS.component2 * quaternionRHS.component4 + quaternionLHS.component4 * quaternionRHS.component2 + quaternionLHS.component3 * quaternionRHS.component1 - quaternionLHS.component1 * quaternionRHS.component3;
-		final double component3 = quaternionLHS.component3 * quaternionRHS.component4 + quaternionLHS.component4 * quaternionRHS.component3 + quaternionLHS.component1 * quaternionRHS.component2 - quaternionLHS.component2 * quaternionRHS.component1;
-		final double component4 = quaternionLHS.component4 * quaternionRHS.component4 - quaternionLHS.component1 * quaternionRHS.component1 - quaternionLHS.component2 * quaternionRHS.component2 - quaternionLHS.component3 * quaternionRHS.component3;
+	public static Quaternion4D multiply(final Quaternion4D qLHS, final Quaternion4D qRHS) {
+		final double x = qLHS.x * qRHS.w + qLHS.w * qRHS.x + qLHS.y * qRHS.z - qLHS.z * qRHS.y;
+		final double y = qLHS.y * qRHS.w + qLHS.w * qRHS.y + qLHS.z * qRHS.x - qLHS.x * qRHS.z;
+		final double z = qLHS.z * qRHS.w + qLHS.w * qRHS.z + qLHS.x * qRHS.y - qLHS.y * qRHS.x;
+		final double w = qLHS.w * qRHS.w - qLHS.x * qRHS.x - qLHS.y * qRHS.y - qLHS.z * qRHS.z;
 		
-		return new Quaternion4D(component1, component2, component3, component4);
+		return new Quaternion4D(x, y, z, w);
 	}
 	
 	/**
-	 * Multiplies the component values of {@code quaternionLHS} with the component values of {@code vectorRHS}.
+	 * Multiplies the component values of {@code qLHS} with the component values of {@code vRHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the multiplication.
 	 * <p>
-	 * If either {@code quaternionLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code qLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Quaternion multiplication is performed componentwise.
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param vectorRHS the {@link Vector3D} instance on the right-hand side
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param vRHS the {@link Vector3D} instance on the right-hand side
 	 * @return a new {@code Quaternion4D} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Quaternion4D multiply(final Quaternion4D quaternionLHS, final Vector3D vectorRHS) {
-		final double component1 = +quaternionLHS.component4 * vectorRHS.getComponent1() + quaternionLHS.component2 * vectorRHS.getComponent3() - quaternionLHS.component3 * vectorRHS.getComponent2();
-		final double component2 = +quaternionLHS.component4 * vectorRHS.getComponent2() + quaternionLHS.component3 * vectorRHS.getComponent1() - quaternionLHS.component1 * vectorRHS.getComponent3();
-		final double component3 = +quaternionLHS.component4 * vectorRHS.getComponent3() + quaternionLHS.component1 * vectorRHS.getComponent2() - quaternionLHS.component2 * vectorRHS.getComponent1();
-		final double component4 = -quaternionLHS.component1 * vectorRHS.getComponent1() - quaternionLHS.component2 * vectorRHS.getComponent2() - quaternionLHS.component3 * vectorRHS.getComponent3();
+	public static Quaternion4D multiply(final Quaternion4D qLHS, final Vector3D vRHS) {
+		final double x = +qLHS.w * vRHS.x + qLHS.y * vRHS.z - qLHS.z * vRHS.y;
+		final double y = +qLHS.w * vRHS.y + qLHS.z * vRHS.x - qLHS.x * vRHS.z;
+		final double z = +qLHS.w * vRHS.z + qLHS.x * vRHS.y - qLHS.y * vRHS.x;
+		final double w = -qLHS.x * vRHS.x - qLHS.y * vRHS.y - qLHS.z * vRHS.z;
 		
-		return new Quaternion4D(component1, component2, component3, component4);
+		return new Quaternion4D(x, y, z, w);
 	}
 	
 	/**
-	 * Multiplies the component values of {@code quaternionLHS} with {@code scalarRHS}.
+	 * Multiplies the component values of {@code qLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the multiplication.
 	 * <p>
-	 * If {@code quaternionLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code qLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Quaternion multiplication is performed componentwise.
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Quaternion4D} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, {@code quaternionLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code qLHS} is {@code null}
 	 */
-	public static Quaternion4D multiply(final Quaternion4D quaternionLHS, final double scalarRHS) {
-		final double component1 = quaternionLHS.component1 * scalarRHS;
-		final double component2 = quaternionLHS.component2 * scalarRHS;
-		final double component3 = quaternionLHS.component3 * scalarRHS;
-		final double component4 = quaternionLHS.component4 * scalarRHS;
-		
-		return new Quaternion4D(component1, component2, component3, component4);
+	public static Quaternion4D multiply(final Quaternion4D qLHS, final double sRHS) {
+		return new Quaternion4D(qLHS.x * sRHS, qLHS.y * sRHS, qLHS.z * sRHS, qLHS.w * sRHS);
 	}
 	
 	/**
-	 * Negates the component values of {@code quaternion}.
+	 * Negates the component values of {@code q}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the negation.
 	 * <p>
-	 * If {@code quaternion} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code q} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param quaternion a {@code Quaternion4D} instance
+	 * @param q a {@code Quaternion4D} instance
 	 * @return a new {@code Quaternion4D} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code q} is {@code null}
 	 */
-	public static Quaternion4D negate(final Quaternion4D quaternion) {
-		final double component1 = -quaternion.component1;
-		final double component2 = -quaternion.component2;
-		final double component3 = -quaternion.component3;
-		final double component4 = -quaternion.component4;
-		
-		return new Quaternion4D(component1, component2, component3, component4);
+	public static Quaternion4D negate(final Quaternion4D q) {
+		return new Quaternion4D(-q.x, -q.y, -q.z, -q.w);
 	}
 	
 	/**
-	 * Normalizes the component values of {@code quaternion}.
+	 * Normalizes the component values of {@code q}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the normalization.
 	 * <p>
-	 * If {@code quaternion} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code q} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param quaternion a {@code Quaternion4D} instance
+	 * @param q a {@code Quaternion4D} instance
 	 * @return a new {@code Quaternion4D} instance with the result of the normalization
-	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code q} is {@code null}
 	 */
-	public static Quaternion4D normalize(final Quaternion4D quaternion) {
-		final double length = quaternion.length();
+	public static Quaternion4D normalize(final Quaternion4D q) {
+		final double length = q.length();
 		
 		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
 		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
-			return quaternion;
+			return q;
 		}
 		
-		return divide(quaternion, length);
+		return divide(q, length);
 	}
 	
 	/**
@@ -734,51 +652,41 @@ public final class Quaternion4D implements Node {
 	 */
 	public static Quaternion4D read(final DataInput dataInput) {
 		try {
-			final double component1 = dataInput.readDouble();
-			final double component2 = dataInput.readDouble();
-			final double component3 = dataInput.readDouble();
-			final double component4 = dataInput.readDouble();
-			
-			return new Quaternion4D(component1, component2, component3, component4);
+			return new Quaternion4D(dataInput.readDouble(), dataInput.readDouble(), dataInput.readDouble(), dataInput.readDouble());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Subtracts the component values of {@code quaternionRHS} from the component values of {@code quaternionLHS}.
+	 * Subtracts the component values of {@code qRHS} from the component values of {@code qLHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4D} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Quaternion subtraction is performed componentwise.
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
 	 * @return a new {@code Quaternion4D} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
 	 */
-	public static Quaternion4D subtract(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
-		final double component1 = quaternionLHS.component1 - quaternionRHS.component1;
-		final double component2 = quaternionLHS.component2 - quaternionRHS.component2;
-		final double component3 = quaternionLHS.component3 - quaternionRHS.component3;
-		final double component4 = quaternionLHS.component4 - quaternionRHS.component4;
-		
-		return new Quaternion4D(component1, component2, component3, component4);
+	public static Quaternion4D subtract(final Quaternion4D qLHS, final Quaternion4D qRHS) {
+		return new Quaternion4D(qLHS.x - qRHS.x, qLHS.y - qRHS.y, qLHS.z - qRHS.z, qLHS.w - qRHS.w);
 	}
 	
 	/**
-	 * Returns the dot product of {@code quaternionLHS} and {@code quaternionRHS}.
+	 * Returns the dot product of {@code qLHS} and {@code qRHS}.
 	 * <p>
-	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code qLHS} or {@code qRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param quaternionLHS the {@code Quaternion4D} instance on the left-hand side
-	 * @param quaternionRHS the {@code Quaternion4D} instance on the right-hand side
-	 * @return the dot product of {@code quaternionLHS} and {@code quaternionRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 * @param qLHS the {@code Quaternion4D} instance on the left-hand side
+	 * @param qRHS the {@code Quaternion4D} instance on the right-hand side
+	 * @return the dot product of {@code qLHS} and {@code qRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code qLHS} or {@code qRHS} are {@code null}
 	 */
-	public static double dotProduct(final Quaternion4D quaternionLHS, final Quaternion4D quaternionRHS) {
-		return quaternionLHS.component1 * quaternionRHS.component1 + quaternionLHS.component2 * quaternionRHS.component2 + quaternionLHS.component3 * quaternionRHS.component3 + quaternionLHS.component4 * quaternionRHS.component4;
+	public static double dotProduct(final Quaternion4D qLHS, final Quaternion4D qRHS) {
+		return qLHS.x * qRHS.x + qLHS.y * qRHS.y + qLHS.z * qRHS.z + qLHS.w * qRHS.w;
 	}
 }

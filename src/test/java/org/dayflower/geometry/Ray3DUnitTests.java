@@ -142,9 +142,9 @@ public final class Ray3DUnitTests {
 		dataOutput.writeDouble(a.getOrigin().x);
 		dataOutput.writeDouble(a.getOrigin().y);
 		dataOutput.writeDouble(a.getOrigin().z);
-		dataOutput.writeDouble(a.getDirection().getX());
-		dataOutput.writeDouble(a.getDirection().getY());
-		dataOutput.writeDouble(a.getDirection().getZ());
+		dataOutput.writeDouble(a.getDirection().x);
+		dataOutput.writeDouble(a.getDirection().y);
+		dataOutput.writeDouble(a.getDirection().z);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		

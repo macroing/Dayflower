@@ -1223,7 +1223,7 @@ public final class Curve3D implements Shape3D {
 		}
 		
 		final double pointCurveDistance = sqrt(pointCurveDistanceSquared);
-		final double edgeFunction = derivative.getX() * -point.y + point.x * derivative.getY();
+		final double edgeFunction = derivative.x * -point.y + point.x * derivative.y;
 		final double v = edgeFunction > 0.0D ? 0.5D + pointCurveDistance / hitWidth : 0.5D - pointCurveDistance / hitWidth;
 		final double t = point.z / rayDirectionLength;
 		
@@ -1325,7 +1325,7 @@ public final class Curve3D implements Shape3D {
 			case CYLINDER: {
 				final Vector3D directionU = Vector3D.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
 				final Vector3D directionUPlane = Vector3D.normalize(Vector3D.transform(objectToRay, directionU));
-				final Vector3D directionVPlane = Vector3D.normalize(Vector3D.transform(Matrix44D.rotate(AngleD.degrees(-lerp(-90.0D, 90.0D, v), -90.0D, 90.0D), directionUPlane), Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.getY(), directionUPlane.getX(), 0.0D)), hitWidth)));
+				final Vector3D directionVPlane = Vector3D.normalize(Vector3D.transform(Matrix44D.rotate(AngleD.degrees(-lerp(-90.0D, 90.0D, v), -90.0D, 90.0D), directionUPlane), Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.y, directionUPlane.x, 0.0D)), hitWidth)));
 				final Vector3D directionV = Vector3D.normalize(Vector3D.transform(rayToObject, directionVPlane));
 				final Vector3D directionW = Vector3D.normalize(Vector3D.crossProduct(directionU, directionV));
 				
@@ -1334,7 +1334,7 @@ public final class Curve3D implements Shape3D {
 			case FLAT: {
 				final Vector3D directionU = Vector3D.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
 				final Vector3D directionUPlane = Vector3D.normalize(Vector3D.transform(objectToRay, directionU));
-				final Vector3D directionVPlane = Vector3D.normalize(Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.getY(), directionUPlane.getX(), 0.0D)), hitWidth));
+				final Vector3D directionVPlane = Vector3D.normalize(Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.y, directionUPlane.x, 0.0D)), hitWidth));
 				final Vector3D directionV = Vector3D.normalize(Vector3D.transform(rayToObject, directionVPlane));
 				final Vector3D directionW = Vector3D.normalize(Vector3D.crossProduct(directionU, directionV));
 				
@@ -1415,10 +1415,10 @@ public final class Curve3D implements Shape3D {
 		
 		if(!isZero(directionX.lengthSquared())) {
 			return directionX;
-		} else if(abs(directionR.getX()) > abs(directionR.getY())) {
-			return Vector3D.normalize(new Vector3D(-directionR.getZ(), 0.0D, directionR.getX()));
+		} else if(abs(directionR.x) > abs(directionR.y)) {
+			return Vector3D.normalize(new Vector3D(-directionR.z, 0.0D, directionR.x));
 		} else {
-			return Vector3D.normalize(new Vector3D(0.0D, directionR.getZ(), -directionR.getY()));
+			return Vector3D.normalize(new Vector3D(0.0D, directionR.z, -directionR.y));
 		}
 	}
 	

@@ -349,8 +349,8 @@ public final class Torus3F implements Shape3F {
 		final double f2 = this.radiusInnerSquared;
 		final double f3 = this.radiusOuterSquared;
 		final double f4 = directionToOrigin.lengthSquared() - f2 - f3;
-		final double f5 = direction.getZ();
-		final double f6 = directionToOrigin.getZ();
+		final double f5 = direction.z;
+		final double f6 = directionToOrigin.z;
 		
 		final double a = f0 * f0;
 		final double b = f0 * 2.0D * f1;

@@ -308,8 +308,8 @@ public final class Cone3F implements Shape3F {
 		final Vector3F direction = ray.getDirection();
 		
 		final float k = (this.radius / this.zMax) * (this.radius / this.zMax);
-		final float a = direction.getX() * direction.getX() + direction.getY() * direction.getY() - k * direction.getZ() * direction.getZ();
-		final float b = 2.0F * (direction.getX() * origin.x + direction.getY() * origin.y - k * direction.getZ() * (origin.z - this.zMax));
+		final float a = direction.x * direction.x + direction.y * direction.y - k * direction.z * direction.z;
+		final float b = 2.0F * (direction.x * origin.x + direction.y * origin.y - k * direction.z * (origin.z - this.zMax));
 		final float c = origin.x * origin.x + origin.y * origin.y - k * (origin.z - this.zMax) * (origin.z - this.zMax);
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);

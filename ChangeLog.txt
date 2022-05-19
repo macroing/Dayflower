@@ -1,3 +1,14 @@
+2022-05-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Rename the methods negateComponent1(Vector3D), negateComponent2(Vector3D) and negateComponent3(Vector3D) in the Vector3D class to negateX(Vector3D), negateY(Vector3D) and negateZ(Vector3D), respectively.
+	* CHANGE:	Rename the methods faceForwardComponent3(Vector3D, Vector3D) and faceForwardComponent3Negated(Vector3D, Vector3D) in the Vector3D class to faceForwardZ(Vector3D, Vector3D) and faceForwardZNegated(Vector3D, Vector3D), respectively.
+	* CHANGE:	Rename the methods negateComponent1(Vector3F), negateComponent2(Vector3F) and negateComponent3(Vector3F) in the Vector3F class to negateX(Vector3F), negateY(Vector3F) and negateZ(Vector3F), respectively.
+	* CHANGE:	Rename the methods faceForwardComponent3(Vector3F, Vector3F) and faceForwardComponent3Negated(Vector3F, Vector3F) in the Vector3F class to faceForwardZ(Vector3F, Vector3F) and faceForwardZNegated(Vector3F, Vector3F), respectively.
+	* CHANGE:	Update all classes and unit tests that have been affected by the change in the Quaternion4D, Quaternion4F, Vector3D and Vector3F classes.
+	* CHANGE:	Rename the fields component1, component2, component3 and component4 in the Quaternion4D and Quaternion4F classes to x, y, z and w, respectively. They have also been made public.
+	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getComponent3(), getU(), getV(), getW(), getX(), getY() and getZ() from the Vector3D and Vector3F classes.
+	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getComponent3(), getComponent4(), getW(), getX(), getY() and getZ() from the Quaternion4D and Quaternion4F classes.
+
 2022-05-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Rename the fields component1 and component2 in the Point2I and Vector2I classes to x and y, respectively. They have also been made public.

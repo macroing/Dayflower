@@ -317,8 +317,8 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 		final Vector3F directionA = Vector3F.hadamardProduct(Vector3F.direction(origin, maximum), directionReciprocal);
 		final Vector3F directionB = Vector3F.hadamardProduct(Vector3F.direction(origin, minimum), directionReciprocal);
 		
-		final float t0 = max(min(directionA.getX(), directionB.getX()), min(directionA.getY(), directionB.getY()), min(directionA.getZ(), directionB.getZ()));
-		final float t1 = min(max(directionA.getX(), directionB.getX()), max(directionA.getY(), directionB.getY()), max(directionA.getZ(), directionB.getZ()));
+		final float t0 = max(min(directionA.x, directionB.x), min(directionA.y, directionB.y), min(directionA.z, directionB.z));
+		final float t1 = min(max(directionA.x, directionB.x), max(directionA.y, directionB.y), max(directionA.z, directionB.z));
 		
 		return t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
 	}

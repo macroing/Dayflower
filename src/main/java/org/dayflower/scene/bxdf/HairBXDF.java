@@ -234,13 +234,13 @@ public final class HairBXDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final float sinThetaOutgoing = outgoing.getX();
+		final float sinThetaOutgoing = outgoing.x;
 		final float cosThetaOutgoing = sqrt(max(0.0F, 1.0F - sinThetaOutgoing * sinThetaOutgoing));
-		final float phiOutgoing = atan2(outgoing.getZ(), outgoing.getY());
+		final float phiOutgoing = atan2(outgoing.z, outgoing.y);
 		
-		final float sinThetaIncoming = incoming.getX();
+		final float sinThetaIncoming = incoming.x;
 		final float cosThetaIncoming = sqrt(max(0.0F, 1.0F - sinThetaIncoming * sinThetaIncoming));
-		final float phiIncoming = atan2(incoming.getZ(), incoming.getY());
+		final float phiIncoming = atan2(incoming.z, incoming.y);
 		
 		final float sinThetaTransmission = sinThetaOutgoing / this.eta;
 		final float cosThetaTransmission = sqrt(max(0.0F, 1.0F - sinThetaTransmission * sinThetaTransmission));
@@ -320,9 +320,9 @@ public final class HairBXDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final float sinThetaOutgoing = outgoing.getX();
+		final float sinThetaOutgoing = outgoing.x;
 		final float cosThetaOutgoing = sqrt(max(0.0F, 1.0F - sinThetaOutgoing * sinThetaOutgoing));
-		final float phiOutgoing = atan2(outgoing.getZ(), outgoing.getY());
+		final float phiOutgoing = atan2(outgoing.z, outgoing.y);
 		
 		final Point2F[] samples = new Point2F[] {Point2F.decodeMortonCode1By1(sample.x), Point2F.decodeMortonCode1By1(sample.y)};
 		
@@ -495,13 +495,13 @@ public final class HairBXDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final float sinThetaOutgoing = outgoing.getX();
+		final float sinThetaOutgoing = outgoing.x;
 		final float cosThetaOutgoing = sqrt(max(0.0F, 1.0F - sinThetaOutgoing * sinThetaOutgoing));
-		final float phiOutgoing = atan2(outgoing.getZ(), outgoing.getY());
+		final float phiOutgoing = atan2(outgoing.z, outgoing.y);
 		
-		final float sinThetaIncoming = incoming.getX();
+		final float sinThetaIncoming = incoming.x;
 		final float cosThetaIncoming = sqrt(max(0.0F, 1.0F - sinThetaIncoming * sinThetaIncoming));
-		final float phiIncoming = atan2(incoming.getZ(), incoming.getY());
+		final float phiIncoming = atan2(incoming.z, incoming.y);
 		
 		final float etap = sqrt(this.eta * this.eta - sinThetaOutgoing * sinThetaOutgoing) / cosThetaOutgoing;
 		final float sinGammaTransmission = this.h / etap;

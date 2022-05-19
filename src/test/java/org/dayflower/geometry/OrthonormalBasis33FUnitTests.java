@@ -312,15 +312,15 @@ public final class OrthonormalBasis33FUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeFloat(a.getW().getX());
-		dataOutput.writeFloat(a.getW().getY());
-		dataOutput.writeFloat(a.getW().getZ());
-		dataOutput.writeFloat(a.getV().getX());
-		dataOutput.writeFloat(a.getV().getY());
-		dataOutput.writeFloat(a.getV().getZ());
-		dataOutput.writeFloat(a.getU().getX());
-		dataOutput.writeFloat(a.getU().getY());
-		dataOutput.writeFloat(a.getU().getZ());
+		dataOutput.writeFloat(a.getW().x);
+		dataOutput.writeFloat(a.getW().y);
+		dataOutput.writeFloat(a.getW().z);
+		dataOutput.writeFloat(a.getV().x);
+		dataOutput.writeFloat(a.getV().y);
+		dataOutput.writeFloat(a.getV().z);
+		dataOutput.writeFloat(a.getU().x);
+		dataOutput.writeFloat(a.getU().y);
+		dataOutput.writeFloat(a.getU().z);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		

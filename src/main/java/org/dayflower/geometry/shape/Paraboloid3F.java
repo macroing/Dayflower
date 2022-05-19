@@ -355,8 +355,8 @@ public final class Paraboloid3F implements Shape3F {
 		
 		final float k = this.zMax / (this.radius * this.radius);
 		
-		final float a = k * (direction.getX() * direction.getX() + direction.getY() * direction.getY());
-		final float b = 2.0F * k * (direction.getX() * origin.x + direction.getY() * origin.y) - direction.getZ();
+		final float a = k * (direction.x * direction.x + direction.y * direction.y);
+		final float b = 2.0F * k * (direction.x * origin.x + direction.y * origin.y) - direction.z;
 		final float c = k * (origin.x * origin.x + origin.y * origin.y) - origin.z;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);

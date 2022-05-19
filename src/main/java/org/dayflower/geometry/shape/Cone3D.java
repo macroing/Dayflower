@@ -308,8 +308,8 @@ public final class Cone3D implements Shape3D {
 		final Vector3D direction = ray.getDirection();
 		
 		final double k = (this.radius / this.zMax) * (this.radius / this.zMax);
-		final double a = direction.getX() * direction.getX() + direction.getY() * direction.getY() - k * direction.getZ() * direction.getZ();
-		final double b = 2.0D * (direction.getX() * origin.x + direction.getY() * origin.y - k * direction.getZ() * (origin.z - this.zMax));
+		final double a = direction.x * direction.x + direction.y * direction.y - k * direction.z * direction.z;
+		final double b = 2.0D * (direction.x * origin.x + direction.y * origin.y - k * direction.z * (origin.z - this.zMax));
 		final double c = origin.x * origin.x + origin.y * origin.y - k * (origin.z - this.zMax) * (origin.z - this.zMax);
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);

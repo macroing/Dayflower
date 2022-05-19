@@ -355,8 +355,8 @@ public final class Paraboloid3D implements Shape3D {
 		
 		final double k = this.zMax / (this.radius * this.radius);
 		
-		final double a = k * (direction.getX() * direction.getX() + direction.getY() * direction.getY());
-		final double b = 2.0D * k * (direction.getX() * origin.x + direction.getY() * origin.y) - direction.getZ();
+		final double a = k * (direction.x * direction.x + direction.y * direction.y);
+		final double b = 2.0D * k * (direction.x * origin.x + direction.y * origin.y) - direction.z;
 		final double c = k * (origin.x * origin.x + origin.y * origin.y) - origin.z;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);

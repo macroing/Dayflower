@@ -2240,9 +2240,9 @@ public final class CompiledShape3FCache {
 		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 0] = pointN.x;
 		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 1] = pointN.y;
 		array[POLYGON_3_F_OFFSET_POINT_3_F_N + 2] = pointN.z;
-		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();
-		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();
-		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();
+		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.x;
+		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.y;
+		array[POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.z;
 		array[POLYGON_3_F_OFFSET_POINT_2_F_COUNT] = projectedPolygon.getPointCount();
 		
 		for(int i = 0; i < projectedPolygon.getPointCount(); i++) {
@@ -2286,22 +2286,22 @@ public final class CompiledShape3FCache {
 		
 		final float[] array = new float[RECTANGLE_3_F_LENGTH];
 		
-		array[RECTANGLE_3_F_OFFSET_POSITION + 0] = position.x;					//Block #1
-		array[RECTANGLE_3_F_OFFSET_POSITION + 1] = position.y;					//Block #1
-		array[RECTANGLE_3_F_OFFSET_POSITION + 2] = position.z;					//Block #1
-		array[RECTANGLE_3_F_OFFSET_SIDE_A + 0] = sideA.getX();					//Block #1
-		array[RECTANGLE_3_F_OFFSET_SIDE_A + 1] = sideA.getY();					//Block #1
-		array[RECTANGLE_3_F_OFFSET_SIDE_A + 2] = sideA.getZ();					//Block #1
-		array[RECTANGLE_3_F_OFFSET_SIDE_B + 0] = sideB.getX();					//Block #1
-		array[RECTANGLE_3_F_OFFSET_SIDE_B + 1] = sideB.getY();					//Block #1
-		array[RECTANGLE_3_F_OFFSET_SIDE_B + 2] = sideB.getZ();					//Block #2
-		array[RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.getX();	//Block #2
-		array[RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.getY();	//Block #2
-		array[RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.getZ();	//Block #2
-		array[12] = 0.0F;														//Block #2
-		array[13] = 0.0F;														//Block #2
-		array[14] = 0.0F;														//Block #2
-		array[15] = 0.0F;														//Block #2
+		array[RECTANGLE_3_F_OFFSET_POSITION + 0] = position.x;				//Block #1
+		array[RECTANGLE_3_F_OFFSET_POSITION + 1] = position.y;				//Block #1
+		array[RECTANGLE_3_F_OFFSET_POSITION + 2] = position.z;				//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_A + 0] = sideA.x;					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_A + 1] = sideA.y;					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_A + 2] = sideA.z;					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_B + 0] = sideB.x;					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_B + 1] = sideB.y;					//Block #1
+		array[RECTANGLE_3_F_OFFSET_SIDE_B + 2] = sideB.z;					//Block #2
+		array[RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 0] = surfaceNormal.x;	//Block #2
+		array[RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 1] = surfaceNormal.y;	//Block #2
+		array[RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 2] = surfaceNormal.z;	//Block #2
+		array[12] = 0.0F;													//Block #2
+		array[13] = 0.0F;													//Block #2
+		array[14] = 0.0F;													//Block #2
+		array[15] = 0.0F;													//Block #2
 		
 		return array;
 	}
@@ -2426,15 +2426,15 @@ public final class CompiledShape3FCache {
 		array[TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 0] = c.getTextureCoordinates().x;		//Block #2
 		array[TRIANGLE_3_F_OFFSET_C_TEXTURE_COORDINATES + 1] = c.getTextureCoordinates().y;		//Block #2
 		
-		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 0] = a.getNormal().getX();			//Block #2
-		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 1] = a.getNormal().getY();			//Block #3
-		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 2] = a.getNormal().getZ();			//Block #3
-		array[TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 0] = b.getNormal().getX();			//Block #3
-		array[TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 1] = b.getNormal().getY();			//Block #3
-		array[TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 2] = b.getNormal().getZ();			//Block #3
-		array[TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 0] = c.getNormal().getX();			//Block #3
-		array[TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 1] = c.getNormal().getY();			//Block #3
-		array[TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 2] = c.getNormal().getZ();			//Block #3
+		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 0] = a.getNormal().x;					//Block #2
+		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 1] = a.getNormal().y;					//Block #3
+		array[TRIANGLE_3_F_OFFSET_A_ORTHONORMAL_BASIS_W + 2] = a.getNormal().z;					//Block #3
+		array[TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 0] = b.getNormal().x;					//Block #3
+		array[TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 1] = b.getNormal().y;					//Block #3
+		array[TRIANGLE_3_F_OFFSET_B_ORTHONORMAL_BASIS_W + 2] = b.getNormal().z;					//Block #3
+		array[TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 0] = c.getNormal().x;					//Block #3
+		array[TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 1] = c.getNormal().y;					//Block #3
+		array[TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 2] = c.getNormal().z;					//Block #3
 		
 		return array;
 	}

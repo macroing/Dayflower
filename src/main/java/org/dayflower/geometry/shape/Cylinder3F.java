@@ -345,8 +345,8 @@ public final class Cylinder3F implements Shape3F {
 		
 		final Vector3F direction = ray.getDirection();
 		
-		final float a = direction.getX() * direction.getX() + direction.getY() * direction.getY();
-		final float b = 2.0F * (direction.getX() * origin.x + direction.getY() * origin.y);
+		final float a = direction.x * direction.x + direction.y * direction.y;
+		final float b = 2.0F * (direction.x * origin.x + direction.y * origin.y);
 		final float c = origin.x * origin.x + origin.y * origin.y - this.radius * this.radius;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);

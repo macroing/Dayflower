@@ -483,8 +483,8 @@ public final class Hyperboloid3F implements Shape3F {
 		
 		final Vector3F direction = ray.getDirection();
 		
-		final float a = this.aH * direction.getX() * direction.getX() + this.aH * direction.getY() * direction.getY() - this.cH * direction.getZ() * direction.getZ();
-		final float b = 2.0F * (this.aH * direction.getX() * origin.x + this.aH * direction.getY() * origin.y - this.cH * direction.getZ() * origin.z);
+		final float a = this.aH * direction.x * direction.x + this.aH * direction.y * direction.y - this.cH * direction.z * direction.z;
+		final float b = 2.0F * (this.aH * direction.x * origin.x + this.aH * direction.y * origin.y - this.cH * direction.z * origin.z);
 		final float c = this.aH * origin.x * origin.x + this.aH * origin.y * origin.y - this.cH * origin.z * origin.z - 1.0F;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);

@@ -106,7 +106,7 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 		final float v = sample.y;
 		
 		if(isSamplingVisibleArea()) {
-			return outgoing.getZ() >= 0.0F ? doSample(outgoing, alphaX, alphaY, u, v) : Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
+			return outgoing.z >= 0.0F ? doSample(outgoing, alphaX, alphaY, u, v) : Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
 		} else if(equal(alphaX, alphaY)) {
 			final float phi = v * 2.0F * PI;
 			final float cosTheta = 1.0F / sqrt(1.0F + -alphaX * alphaX * log(1.0F - u));
@@ -298,7 +298,7 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	}
 	
 	private static Vector3F doSample(final Vector3F i, final float alphaX, final float alphaY, final float u, final float v) {
-		final Vector3F iStretched = Vector3F.normalize(new Vector3F(i.getX() * alphaX, i.getY() * alphaY, i.getZ()));
+		final Vector3F iStretched = Vector3F.normalize(new Vector3F(i.x * alphaX, i.y * alphaY, i.z));
 		
 		final Vector2F slope = doComputeSlope(iStretched.cosTheta(), u, v);
 		

@@ -345,8 +345,8 @@ public final class Cylinder3D implements Shape3D {
 		
 		final Vector3D direction = ray.getDirection();
 		
-		final double a = direction.getX() * direction.getX() + direction.getY() * direction.getY();
-		final double b = 2.0D * (direction.getX() * origin.x + direction.getY() * origin.y);
+		final double a = direction.x * direction.x + direction.y * direction.y;
+		final double b = 2.0D * (direction.x * origin.x + direction.y * origin.y);
 		final double c = origin.x * origin.x + origin.y * origin.y - this.radius * this.radius;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);

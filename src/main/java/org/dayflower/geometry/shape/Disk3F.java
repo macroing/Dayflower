@@ -346,11 +346,11 @@ public final class Disk3F implements Shape3F {
 		
 		final Vector3F direction = ray.getDirection();
 		
-		if(isZero(direction.getZ())) {
+		if(isZero(direction.z)) {
 			return Float.NaN;
 		}
 		
-		final float t = (this.zMax - origin.z) / direction.getZ();
+		final float t = (this.zMax - origin.z) / direction.z;
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return Float.NaN;

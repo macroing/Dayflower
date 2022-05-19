@@ -487,7 +487,7 @@ public final class Sphere3F implements Shape3F {
 	
 	private static OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
 		final Vector3F w = Vector3F.directionNormalized(new Point3F(), surfaceIntersectionPoint);
-		final Vector3F v = new Vector3F(-PI_MULTIPLIED_BY_2 * w.getY(), PI_MULTIPLIED_BY_2 * w.getX(), 0.0F);
+		final Vector3F v = new Vector3F(-PI_MULTIPLIED_BY_2 * w.y, PI_MULTIPLIED_BY_2 * w.x, 0.0F);
 		
 		return new OrthonormalBasis33F(w, v);
 	}

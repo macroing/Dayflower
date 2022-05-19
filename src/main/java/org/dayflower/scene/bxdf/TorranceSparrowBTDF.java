@@ -215,7 +215,7 @@ public final class TorranceSparrowBTDF extends BXDF {
 		final float eta = cosThetaOutgoing > 0.0F ? etaB / etaA : etaA / etaB;
 		
 		final Vector3F halfwayTemporary = Vector3F.normalize(Vector3F.add(Vector3F.multiply(incoming, eta), outgoing));
-		final Vector3F halfway = halfwayTemporary.getZ() < 0.0F ? Vector3F.negate(halfwayTemporary) : halfwayTemporary;
+		final Vector3F halfway = halfwayTemporary.z < 0.0F ? Vector3F.negate(halfwayTemporary) : halfwayTemporary;
 		
 		final float outgoingDotH = Vector3F.dotProduct(outgoing, halfway);
 		final float incomingDotH = Vector3F.dotProduct(incoming, halfway);
@@ -255,7 +255,7 @@ public final class TorranceSparrowBTDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		if(isZero(outgoing.getZ())) {
+		if(isZero(outgoing.z)) {
 			return Optional.empty();
 		}
 		

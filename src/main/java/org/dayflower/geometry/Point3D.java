@@ -307,7 +307,7 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code pLHS} or {@code vRHS} are {@code null}
 	 */
 	public static Point3D add(final Point3D pLHS, final Vector3D vRHS, final double s) {
-		return new Point3D(pLHS.x + vRHS.getComponent1() * s, pLHS.y + vRHS.getComponent2() * s, pLHS.z + vRHS.getComponent3() * s);
+		return new Point3D(pLHS.x + vRHS.x * s, pLHS.y + vRHS.y * s, pLHS.z + vRHS.z * s);
 	}
 	
 	/**
@@ -565,9 +565,9 @@ public final class Point3D implements Node {
 		
 		final Point3D pointOffset = add(point, offsetCorrectlyOriented);
 		
-		final double x = offset.getComponent1() > 0.0D ? nextUp(pointOffset.x) : nextDown(pointOffset.x);
-		final double y = offset.getComponent2() > 0.0D ? nextUp(pointOffset.y) : nextDown(pointOffset.y);
-		final double z = offset.getComponent3() > 0.0D ? nextUp(pointOffset.z) : nextDown(pointOffset.z);
+		final double x = offset.x > 0.0D ? nextUp(pointOffset.x) : nextDown(pointOffset.x);
+		final double y = offset.y > 0.0D ? nextUp(pointOffset.y) : nextDown(pointOffset.y);
+		final double z = offset.z > 0.0D ? nextUp(pointOffset.z) : nextDown(pointOffset.z);
 		
 		return new Point3D(x, y, z);
 	}

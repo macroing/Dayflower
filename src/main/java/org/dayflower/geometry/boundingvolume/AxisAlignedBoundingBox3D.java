@@ -317,8 +317,8 @@ public final class AxisAlignedBoundingBox3D implements BoundingVolume3D {
 		final Vector3D directionA = Vector3D.hadamardProduct(Vector3D.direction(origin, maximum), directionReciprocal);
 		final Vector3D directionB = Vector3D.hadamardProduct(Vector3D.direction(origin, minimum), directionReciprocal);
 		
-		final double t0 = max(min(directionA.getX(), directionB.getX()), min(directionA.getY(), directionB.getY()), min(directionA.getZ(), directionB.getZ()));
-		final double t1 = min(max(directionA.getX(), directionB.getX()), max(directionA.getY(), directionB.getY()), max(directionA.getZ(), directionB.getZ()));
+		final double t0 = max(min(directionA.x, directionB.x), min(directionA.y, directionB.y), min(directionA.z, directionB.z));
+		final double t1 = min(max(directionA.x, directionB.x), max(directionA.y, directionB.y), max(directionA.z, directionB.z));
 		
 		return t0 > t1 ? Double.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
 	}

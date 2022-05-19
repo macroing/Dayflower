@@ -483,8 +483,8 @@ public final class Hyperboloid3D implements Shape3D {
 		
 		final Vector3D direction = ray.getDirection();
 		
-		final double a = this.aH * direction.getX() * direction.getX() + this.aH * direction.getY() * direction.getY() - this.cH * direction.getZ() * direction.getZ();
-		final double b = 2.0D * (this.aH * direction.getX() * origin.x + this.aH * direction.getY() * origin.y - this.cH * direction.getZ() * origin.z);
+		final double a = this.aH * direction.x * direction.x + this.aH * direction.y * direction.y - this.cH * direction.z * direction.z;
+		final double b = 2.0D * (this.aH * direction.x * origin.x + this.aH * direction.y * origin.y - this.cH * direction.z * origin.z);
 		final double c = this.aH * origin.x * origin.x + this.aH * origin.y * origin.y - this.cH * origin.z * origin.z - 1.0D;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);

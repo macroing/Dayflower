@@ -147,12 +147,12 @@ public final class SmallPTD {
 		final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution2();
 		
 		final Vector3D w = surfaceNormalCorrectlyOriented;
-		final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.getX()) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
+		final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.x) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
 		final Vector3D v = Vector3D.crossProduct(w, u);
 		
 		final Point3D newOrigin = intersection.getSurfaceIntersectionPoint();
 		
-		final Vector3D newDirection = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
+		final Vector3D newDirection = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.x), Vector3D.multiply(v, s.y), Vector3D.multiply(w, s.z)));
 		
 		final Ray3D newRay = new Ray3D(newOrigin, newDirection);
 		
@@ -170,7 +170,7 @@ public final class SmallPTD {
 		
 		final Point3D newOrigin = intersection.getSurfaceIntersectionPoint();
 		
-		final Vector3D newDirection = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
+		final Vector3D newDirection = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.x), Vector3D.multiply(v, s.y), Vector3D.multiply(w, s.z)));
 		
 		final Ray3D newRay = new Ray3D(newOrigin, newDirection);
 		

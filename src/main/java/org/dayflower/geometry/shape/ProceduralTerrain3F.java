@@ -217,9 +217,9 @@ public final class ProceduralTerrain3F implements Shape3F {
 		final float originY = origin.y;
 		final float originZ = origin.z;
 		
-		final float directionX = direction.getX();
-		final float directionY = direction.getY();
-		final float directionZ = direction.getZ();
+		final float directionX = direction.x;
+		final float directionY = direction.y;
+		final float directionZ = direction.z;
 		
 		float t = 0.0F;
 		float tDelta = 0.01F;

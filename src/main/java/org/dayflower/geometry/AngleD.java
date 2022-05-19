@@ -388,7 +388,7 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD pitch(final Vector3D direction) {
-		return degrees(toDegrees(asin(direction.getY())), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
+		return degrees(toDegrees(asin(direction.y)), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
 	}
 	
 	/**
@@ -505,6 +505,6 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD yaw(final Vector3D direction) {
-		return degrees(toDegrees(atan2(direction.getX(), direction.getZ())));
+		return degrees(toDegrees(atan2(direction.x, direction.z)));
 	}
 }

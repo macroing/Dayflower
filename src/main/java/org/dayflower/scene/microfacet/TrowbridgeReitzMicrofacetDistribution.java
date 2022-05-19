@@ -100,7 +100,7 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float v = sample.y;
 		
 		if(isSamplingVisibleArea()) {
-			return outgoing.getZ() >= 0.0F ? doSample(outgoing, alphaX, alphaY, u, v) : Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
+			return outgoing.z >= 0.0F ? doSample(outgoing, alphaX, alphaY, u, v) : Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
 		} else if(equal(alphaX, alphaY)) {
 			final float phi = v * 2.0F * PI;
 			final float cosTheta = 1.0F / sqrt(1.0F + alphaX * alphaX * u / (1.0F - u));
@@ -266,7 +266,7 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	}
 	
 	private static Vector3F doSample(final Vector3F incoming, final float alphaX, final float alphaY, final float u, final float v) {
-		final Vector3F incomingStretched = Vector3F.normalize(new Vector3F(incoming.getX() * alphaX, incoming.getY() * alphaY, incoming.getZ()));
+		final Vector3F incomingStretched = Vector3F.normalize(new Vector3F(incoming.x * alphaX, incoming.y * alphaY, incoming.z));
 		
 		final Vector2F slope = doComputeSlope(incomingStretched.cosTheta(), u, v);
 		

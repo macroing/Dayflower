@@ -388,7 +388,7 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF pitch(final Vector3F direction) {
-		return degrees(toDegrees(asin(direction.getY())), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
+		return degrees(toDegrees(asin(direction.y)), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
 	}
 	
 	/**
@@ -505,6 +505,6 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF yaw(final Vector3F direction) {
-		return degrees(toDegrees(atan2(direction.getX(), direction.getZ())));
+		return degrees(toDegrees(atan2(direction.x, direction.z)));
 	}
 }

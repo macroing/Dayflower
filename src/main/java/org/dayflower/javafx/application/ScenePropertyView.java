@@ -160,7 +160,7 @@ final class ScenePropertyView extends VBox {
 			} else if(object instanceof Quaternion4F) {
 				final Quaternion4F rotation = Quaternion4F.class.cast(object);
 				
-				return String.format("[%+.10f, %+.10f, %+.10f, %+.10f]", Float.valueOf(rotation.getX()), Float.valueOf(rotation.getY()), Float.valueOf(rotation.getZ()), Float.valueOf(rotation.getW()));
+				return String.format("[%+.10f, %+.10f, %+.10f, %+.10f]", Float.valueOf(rotation.x), Float.valueOf(rotation.y), Float.valueOf(rotation.z), Float.valueOf(rotation.w));
 			} else if(object instanceof Scene) {
 				return Scene.class.cast(object).getName();
 			} else if(object instanceof Shape3F) {
@@ -170,7 +170,7 @@ final class ScenePropertyView extends VBox {
 			} else if(object instanceof Vector3F) {
 				final Vector3F scale = Vector3F.class.cast(object);
 				
-				return String.format("[%+.10f, %+.10f, %+.10f]", Float.valueOf(scale.getX()), Float.valueOf(scale.getY()), Float.valueOf(scale.getZ()));
+				return String.format("[%+.10f, %+.10f, %+.10f]", Float.valueOf(scale.x), Float.valueOf(scale.y), Float.valueOf(scale.z));
 			} else {
 				return "";
 			}

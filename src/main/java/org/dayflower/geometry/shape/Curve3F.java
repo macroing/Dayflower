@@ -1223,7 +1223,7 @@ public final class Curve3F implements Shape3F {
 		}
 		
 		final float pointCurveDistance = sqrt(pointCurveDistanceSquared);
-		final float edgeFunction = derivative.getX() * -point.y + point.x * derivative.getY();
+		final float edgeFunction = derivative.x * -point.y + point.x * derivative.y;
 		final float v = edgeFunction > 0.0F ? 0.5F + pointCurveDistance / hitWidth : 0.5F - pointCurveDistance / hitWidth;
 		final float t = point.z / rayDirectionLength;
 		
@@ -1325,7 +1325,7 @@ public final class Curve3F implements Shape3F {
 			case CYLINDER: {
 				final Vector3F directionU = Vector3F.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
 				final Vector3F directionUPlane = Vector3F.normalize(Vector3F.transform(objectToRay, directionU));
-				final Vector3F directionVPlane = Vector3F.normalize(Vector3F.transform(Matrix44F.rotate(AngleF.degrees(-lerp(-90.0F, 90.0F, v), -90.0F, 90.0F), directionUPlane), Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth)));
+				final Vector3F directionVPlane = Vector3F.normalize(Vector3F.transform(Matrix44F.rotate(AngleF.degrees(-lerp(-90.0F, 90.0F, v), -90.0F, 90.0F), directionUPlane), Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.y, directionUPlane.x, 0.0F)), hitWidth)));
 				final Vector3F directionV = Vector3F.normalize(Vector3F.transform(rayToObject, directionVPlane));
 				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
 				
@@ -1334,7 +1334,7 @@ public final class Curve3F implements Shape3F {
 			case FLAT: {
 				final Vector3F directionU = Vector3F.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
 				final Vector3F directionUPlane = Vector3F.normalize(Vector3F.transform(objectToRay, directionU));
-				final Vector3F directionVPlane = Vector3F.normalize(Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth));
+				final Vector3F directionVPlane = Vector3F.normalize(Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.y, directionUPlane.x, 0.0F)), hitWidth));
 				final Vector3F directionV = Vector3F.normalize(Vector3F.transform(rayToObject, directionVPlane));
 				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
 				
@@ -1415,10 +1415,10 @@ public final class Curve3F implements Shape3F {
 		
 		if(!isZero(directionX.lengthSquared())) {
 			return directionX;
-		} else if(abs(directionR.getX()) > abs(directionR.getY())) {
-			return Vector3F.normalize(new Vector3F(-directionR.getZ(), 0.0F, directionR.getX()));
+		} else if(abs(directionR.x) > abs(directionR.y)) {
+			return Vector3F.normalize(new Vector3F(-directionR.z, 0.0F, directionR.x));
 		} else {
-			return Vector3F.normalize(new Vector3F(0.0F, directionR.getZ(), -directionR.getY()));
+			return Vector3F.normalize(new Vector3F(0.0F, directionR.z, -directionR.y));
 		}
 	}
 	

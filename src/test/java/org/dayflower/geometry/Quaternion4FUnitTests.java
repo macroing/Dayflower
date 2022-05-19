@@ -48,10 +48,10 @@ public final class Quaternion4FUnitTests {
 		final Quaternion4F b = new Quaternion4F(2.0F, 3.0F, 4.0F, 5.0F);
 		final Quaternion4F c = Quaternion4F.add(a, b);
 		
-		assertEquals(3.0F, c.getComponent1());
-		assertEquals(5.0F, c.getComponent2());
-		assertEquals(7.0F, c.getComponent3());
-		assertEquals(9.0F, c.getComponent4());
+		assertEquals(3.0F, c.x);
+		assertEquals(5.0F, c.y);
+		assertEquals(7.0F, c.z);
+		assertEquals(9.0F, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.add(a, null));
 		assertThrows(NullPointerException.class, () -> Quaternion4F.add(null, b));
@@ -63,15 +63,15 @@ public final class Quaternion4FUnitTests {
 		final Quaternion4F b = Quaternion4F.conjugate(a);
 		final Quaternion4F c = Quaternion4F.conjugate(b);
 		
-		assertEquals(-1.0F, b.getComponent1());
-		assertEquals(-2.0F, b.getComponent2());
-		assertEquals(-3.0F, b.getComponent3());
-		assertEquals(+4.0F, b.getComponent4());
+		assertEquals(-1.0F, b.x);
+		assertEquals(-2.0F, b.y);
+		assertEquals(-3.0F, b.z);
+		assertEquals(+4.0F, b.w);
 		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
-		assertEquals(+3.0F, c.getComponent3());
-		assertEquals(+4.0F, c.getComponent4());
+		assertEquals(+1.0F, c.x);
+		assertEquals(+2.0F, c.y);
+		assertEquals(+3.0F, c.z);
+		assertEquals(+4.0F, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.conjugate(null));
 	}
@@ -80,40 +80,40 @@ public final class Quaternion4FUnitTests {
 	public void testConstructor() {
 		final Quaternion4F quaternion = new Quaternion4F();
 		
-		assertEquals(0.0F, quaternion.getComponent1());
-		assertEquals(0.0F, quaternion.getComponent2());
-		assertEquals(0.0F, quaternion.getComponent3());
-		assertEquals(1.0F, quaternion.getComponent4());
+		assertEquals(0.0F, quaternion.x);
+		assertEquals(0.0F, quaternion.y);
+		assertEquals(0.0F, quaternion.z);
+		assertEquals(1.0F, quaternion.w);
 	}
 	
 	@Test
 	public void testConstructorFloatFloatFloat() {
 		final Quaternion4F quaternion = new Quaternion4F(2.0F, 3.0F, 4.0F);
 		
-		assertEquals(2.0F, quaternion.getComponent1());
-		assertEquals(3.0F, quaternion.getComponent2());
-		assertEquals(4.0F, quaternion.getComponent3());
-		assertEquals(1.0F, quaternion.getComponent4());
+		assertEquals(2.0F, quaternion.x);
+		assertEquals(3.0F, quaternion.y);
+		assertEquals(4.0F, quaternion.z);
+		assertEquals(1.0F, quaternion.w);
 	}
 	
 	@Test
 	public void testConstructorFloatFloatFloatFloat() {
 		final Quaternion4F quaternion = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
 		
-		assertEquals(1.0F, quaternion.getComponent1());
-		assertEquals(2.0F, quaternion.getComponent2());
-		assertEquals(3.0F, quaternion.getComponent3());
-		assertEquals(4.0F, quaternion.getComponent4());
+		assertEquals(1.0F, quaternion.x);
+		assertEquals(2.0F, quaternion.y);
+		assertEquals(3.0F, quaternion.z);
+		assertEquals(4.0F, quaternion.w);
 	}
 	
 	@Test
 	public void testConstructorVector3F() {
 		final Quaternion4F quaternion = new Quaternion4F(new Vector3F(2.0F, 3.0F, 4.0F));
 		
-		assertEquals(2.0F, quaternion.getComponent1());
-		assertEquals(3.0F, quaternion.getComponent2());
-		assertEquals(4.0F, quaternion.getComponent3());
-		assertEquals(1.0F, quaternion.getComponent4());
+		assertEquals(2.0F, quaternion.x);
+		assertEquals(3.0F, quaternion.y);
+		assertEquals(4.0F, quaternion.z);
+		assertEquals(1.0F, quaternion.w);
 		
 		assertThrows(NullPointerException.class, () -> new Quaternion4F(null));
 	}
@@ -124,15 +124,15 @@ public final class Quaternion4FUnitTests {
 		final Quaternion4F b = Quaternion4F.divide(a, 2.0F);
 		final Quaternion4F c = Quaternion4F.divide(a, Float.NaN);
 		
-		assertEquals(1.0F, b.getComponent1());
-		assertEquals(2.0F, b.getComponent2());
-		assertEquals(4.0F, b.getComponent3());
-		assertEquals(8.0F, b.getComponent4());
+		assertEquals(1.0F, b.x);
+		assertEquals(2.0F, b.y);
+		assertEquals(4.0F, b.z);
+		assertEquals(8.0F, b.w);
 		
-		assertEquals(Float.NaN, c.getComponent1());
-		assertEquals(Float.NaN, c.getComponent2());
-		assertEquals(Float.NaN, c.getComponent3());
-		assertEquals(Float.NaN, c.getComponent4());
+		assertEquals(Float.NaN, c.x);
+		assertEquals(Float.NaN, c.y);
+		assertEquals(Float.NaN, c.z);
+		assertEquals(Float.NaN, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.divide(null, 2.0F));
 	}
@@ -178,62 +178,6 @@ public final class Quaternion4FUnitTests {
 	}
 	
 	@Test
-	public void testGetComponent1() {
-		final Quaternion4F quaternion = new Quaternion4F(1.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, quaternion.getComponent1());
-	}
-	
-	@Test
-	public void testGetComponent2() {
-		final Quaternion4F quaternion = new Quaternion4F(0.0F, 1.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, quaternion.getComponent2());
-	}
-	
-	@Test
-	public void testGetComponent3() {
-		final Quaternion4F quaternion = new Quaternion4F(0.0F, 0.0F, 1.0F, 0.0F);
-		
-		assertEquals(1.0F, quaternion.getComponent3());
-	}
-	
-	@Test
-	public void testGetComponent4() {
-		final Quaternion4F quaternion = new Quaternion4F(0.0F, 0.0F, 0.0F, 1.0F);
-		
-		assertEquals(1.0F, quaternion.getComponent4());
-	}
-	
-	@Test
-	public void testGetW() {
-		final Quaternion4F quaternion = new Quaternion4F(0.0F, 0.0F, 0.0F, 1.0F);
-		
-		assertEquals(1.0F, quaternion.getW());
-	}
-	
-	@Test
-	public void testGetX() {
-		final Quaternion4F quaternion = new Quaternion4F(1.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, quaternion.getX());
-	}
-	
-	@Test
-	public void testGetY() {
-		final Quaternion4F quaternion = new Quaternion4F(0.0F, 1.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, quaternion.getY());
-	}
-	
-	@Test
-	public void testGetZ() {
-		final Quaternion4F quaternion = new Quaternion4F(0.0F, 0.0F, 1.0F, 0.0F);
-		
-		assertEquals(1.0F, quaternion.getZ());
-	}
-	
-	@Test
 	public void testHashCode() {
 		final Quaternion4F a = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
 		final Quaternion4F b = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
@@ -267,10 +211,10 @@ public final class Quaternion4FUnitTests {
 		final Quaternion4F a = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
 		final Quaternion4F b = Quaternion4F.multiply(a, 2.0F);
 		
-		assertEquals(2.0F, b.getComponent1());
-		assertEquals(4.0F, b.getComponent2());
-		assertEquals(6.0F, b.getComponent3());
-		assertEquals(8.0F, b.getComponent4());
+		assertEquals(2.0F, b.x);
+		assertEquals(4.0F, b.y);
+		assertEquals(6.0F, b.z);
+		assertEquals(8.0F, b.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(null, 2.0F));
 	}
@@ -281,10 +225,10 @@ public final class Quaternion4FUnitTests {
 		final Quaternion4F b = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
 		final Quaternion4F c = Quaternion4F.multiply(a, b);
 		
-		assertEquals( 8.0F, c.getComponent1());
-		assertEquals(16.0F, c.getComponent2());
-		assertEquals(24.0F, c.getComponent3());
-		assertEquals( 2.0F, c.getComponent4());
+		assertEquals( 8.0F, c.x);
+		assertEquals(16.0F, c.y);
+		assertEquals(24.0F, c.z);
+		assertEquals( 2.0F, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(a, (Quaternion4F)(null)));
 		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(null, b));
@@ -295,10 +239,10 @@ public final class Quaternion4FUnitTests {
 		final Quaternion4F a = new Quaternion4F(1.0F, 2.0F, 3.0F, 4.0F);
 		final Quaternion4F b = Quaternion4F.multiply(a, new Vector3F(1.0F, 2.0F, 3.0F));
 		
-		assertEquals(+ 4.0F, b.getComponent1());
-		assertEquals(+ 8.0F, b.getComponent2());
-		assertEquals(+12.0F, b.getComponent3());
-		assertEquals(-14.0F, b.getComponent4());
+		assertEquals(+ 4.0F, b.x);
+		assertEquals(+ 8.0F, b.y);
+		assertEquals(+12.0F, b.z);
+		assertEquals(-14.0F, b.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(a, (Vector3F)(null)));
 		assertThrows(NullPointerException.class, () -> Quaternion4F.multiply(null, new Vector3F(1.0F, 2.0F, 3.0F)));
@@ -310,15 +254,15 @@ public final class Quaternion4FUnitTests {
 		final Quaternion4F b = Quaternion4F.negate(a);
 		final Quaternion4F c = Quaternion4F.negate(b);
 		
-		assertEquals(-1.0F, b.getComponent1());
-		assertEquals(-2.0F, b.getComponent2());
-		assertEquals(-3.0F, b.getComponent3());
-		assertEquals(-4.0F, b.getComponent4());
+		assertEquals(-1.0F, b.x);
+		assertEquals(-2.0F, b.y);
+		assertEquals(-3.0F, b.z);
+		assertEquals(-4.0F, b.w);
 		
-		assertEquals(+1.0F, c.getComponent1());
-		assertEquals(+2.0F, c.getComponent2());
-		assertEquals(+3.0F, c.getComponent3());
-		assertEquals(+4.0F, c.getComponent4());
+		assertEquals(+1.0F, c.x);
+		assertEquals(+2.0F, c.y);
+		assertEquals(+3.0F, c.z);
+		assertEquals(+4.0F, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.negate(null));
 	}
@@ -364,10 +308,10 @@ public final class Quaternion4FUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeFloat(a.getComponent1());
-		dataOutput.writeFloat(a.getComponent2());
-		dataOutput.writeFloat(a.getComponent3());
-		dataOutput.writeFloat(a.getComponent4());
+		dataOutput.writeFloat(a.x);
+		dataOutput.writeFloat(a.y);
+		dataOutput.writeFloat(a.z);
+		dataOutput.writeFloat(a.w);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		
@@ -385,10 +329,10 @@ public final class Quaternion4FUnitTests {
 		final Quaternion4F b = new Quaternion4F(2.0F, 3.0F, 4.0F, 5.0F);
 		final Quaternion4F c = Quaternion4F.subtract(a, b);
 		
-		assertEquals(1.0F, c.getComponent1());
-		assertEquals(2.0F, c.getComponent2());
-		assertEquals(3.0F, c.getComponent3());
-		assertEquals(4.0F, c.getComponent4());
+		assertEquals(1.0F, c.x);
+		assertEquals(2.0F, c.y);
+		assertEquals(3.0F, c.z);
+		assertEquals(4.0F, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4F.subtract(a, null));
 		assertThrows(NullPointerException.class, () -> Quaternion4F.subtract(null, b));

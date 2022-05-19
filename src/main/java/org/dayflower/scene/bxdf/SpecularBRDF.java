@@ -204,7 +204,7 @@ public final class SpecularBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F incoming = new Vector3F(-outgoing.getX(), -outgoing.getY(), outgoing.getZ());
+		final Vector3F incoming = new Vector3F(-outgoing.x, -outgoing.y, outgoing.z);
 		
 		final BXDFType bXDFType = getBXDFType();
 		

@@ -166,7 +166,7 @@ public final class AshikhminShirleyBRDF extends BXDF {
 		
 		final Vector3F n = Vector3F.subtract(outgoing, incoming);
 		
-		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+		if(isZero(n.x) && isZero(n.y) && isZero(n.z)) {
 			return Color3F.BLACK;
 		}
 		
@@ -217,7 +217,7 @@ public final class AshikhminShirleyBRDF extends BXDF {
 		 * return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 		 */
 		
-		if(isZero(outgoing.getZ())) {
+		if(isZero(outgoing.z)) {
 			return Optional.empty();
 		}
 		

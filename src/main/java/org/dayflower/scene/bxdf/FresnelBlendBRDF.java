@@ -198,7 +198,7 @@ public final class FresnelBlendBRDF extends BXDF {
 		
 		final Vector3F halfway = Vector3F.add(outgoing, incoming);
 		
-		if(isZero(halfway.getX()) && isZero(halfway.getY()) && isZero(halfway.getZ())) {
+		if(isZero(halfway.x) && isZero(halfway.y) && isZero(halfway.z)) {
 			return Color3F.BLACK;
 		}
 		
@@ -244,7 +244,7 @@ public final class FresnelBlendBRDF extends BXDF {
 			final float v = sample.y;
 			
 			final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(u, v);
-			final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
+			final Vector3F incoming = Vector3F.faceForwardZ(outgoing, incomingSample);
 			
 			final BXDFType bXDFType = getBXDFType();
 			

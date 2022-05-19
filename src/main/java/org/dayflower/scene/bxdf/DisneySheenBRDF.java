@@ -133,7 +133,7 @@ public final class DisneySheenBRDF extends BXDF {
 		
 		final Vector3F halfway = Vector3F.add(incoming, outgoing);
 		
-		if(isZero(halfway.getX()) && isZero(halfway.getY()) && isZero(halfway.getZ())) {
+		if(isZero(halfway.x) && isZero(halfway.y) && isZero(halfway.z)) {
 			return Color3F.BLACK;
 		}
 		
@@ -164,7 +164,7 @@ public final class DisneySheenBRDF extends BXDF {
 		Objects.requireNonNull(sample, "sample == null");
 		
 		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.x, sample.y);
-		final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
+		final Vector3F incoming = Vector3F.faceForwardZ(outgoing, incomingSample);
 		
 		final BXDFType bXDFType = getBXDFType();
 		

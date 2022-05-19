@@ -473,7 +473,7 @@ public final class Sphere3D implements Shape3D {
 	
 	private static OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
 		final Vector3D w = Vector3D.directionNormalized(new Point3D(), surfaceIntersectionPoint);
-		final Vector3D v = new Vector3D(-PI_MULTIPLIED_BY_2 * w.getY(), PI_MULTIPLIED_BY_2 * w.getX(), 0.0D);
+		final Vector3D v = new Vector3D(-PI_MULTIPLIED_BY_2 * w.y, PI_MULTIPLIED_BY_2 * w.x, 0.0D);
 		
 		return new OrthonormalBasis33D(w, v);
 	}

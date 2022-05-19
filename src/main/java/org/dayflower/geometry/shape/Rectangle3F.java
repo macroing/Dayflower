@@ -451,8 +451,8 @@ public final class Rectangle3F implements Shape3F {
 	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
 		final Vector3F surfaceNormalAbs = Vector3F.absolute(this.surfaceNormal);
 		
-		final boolean isX = surfaceNormalAbs.getX() > surfaceNormalAbs.getY() && surfaceNormalAbs.getX() > surfaceNormalAbs.getZ();
-		final boolean isY = surfaceNormalAbs.getY() > surfaceNormalAbs.getZ();
+		final boolean isX = surfaceNormalAbs.x > surfaceNormalAbs.y && surfaceNormalAbs.x > surfaceNormalAbs.z;
+		final boolean isY = surfaceNormalAbs.y > surfaceNormalAbs.z;
 		
 		final Point3F a = this.a;
 		final Point3F b = this.b;

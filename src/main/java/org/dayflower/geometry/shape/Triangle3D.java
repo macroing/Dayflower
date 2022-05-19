@@ -260,9 +260,9 @@ public final class Triangle3D implements Shape3D {
 		final double dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
 		final double fraction = dividend < -0.0D || dividend > +0.0D ? 1.0D / dividend : 0.0D;
 		
-		final double x = fraction * (-deltaACU * edgeAB.getX() + deltaABU * edgeAC.getX());
-		final double y = fraction * (-deltaACU * edgeAB.getY() + deltaABU * edgeAC.getY());
-		final double z = fraction * (-deltaACU * edgeAB.getZ() + deltaABU * edgeAC.getZ());
+		final double x = fraction * (-deltaACU * edgeAB.x + deltaABU * edgeAC.x);
+		final double y = fraction * (-deltaACU * edgeAB.y + deltaABU * edgeAC.y);
+		final double z = fraction * (-deltaACU * edgeAB.z + deltaABU * edgeAC.z);
 		
 		return Vector3D.normalize(new Vector3D(x, y, z));
 	}
@@ -293,9 +293,9 @@ public final class Triangle3D implements Shape3D {
 		final double dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
 		final double fraction = dividend < -0.0D || dividend > +0.0D ? 1.0D / dividend : 0.0D;
 		
-		final double x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
-		final double y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
-		final double z = fraction * (deltaACV * edgeAB.getZ() - deltaABV * edgeAC.getZ());
+		final double x = fraction * (deltaACV * edgeAB.x - deltaABV * edgeAC.x);
+		final double y = fraction * (deltaACV * edgeAB.y - deltaABV * edgeAC.y);
+		final double z = fraction * (deltaACV * edgeAB.z - deltaABV * edgeAC.z);
 		
 		return Vector3D.normalize(new Vector3D(x, y, z));
 	}
@@ -910,9 +910,9 @@ public final class Triangle3D implements Shape3D {
 		
 		final double determinantReciprocal = 1.0D / determinant;
 		
-		final double x = (-textureCoordinatesCB.x * edgeCA.getX() + textureCoordinatesCA.x * edgeCB.getX()) * determinantReciprocal;
-		final double y = (-textureCoordinatesCB.x * edgeCA.getY() + textureCoordinatesCA.x * edgeCB.getY()) * determinantReciprocal;
-		final double z = (-textureCoordinatesCB.x * edgeCA.getZ() + textureCoordinatesCA.x * edgeCB.getZ()) * determinantReciprocal;
+		final double x = (-textureCoordinatesCB.x * edgeCA.x + textureCoordinatesCA.x * edgeCB.x) * determinantReciprocal;
+		final double y = (-textureCoordinatesCB.x * edgeCA.y + textureCoordinatesCA.x * edgeCB.y) * determinantReciprocal;
+		final double z = (-textureCoordinatesCB.x * edgeCA.z + textureCoordinatesCA.x * edgeCB.z) * determinantReciprocal;
 		
 		final Vector3D v = new Vector3D(x, y, z);
 		

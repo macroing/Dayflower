@@ -267,87 +267,6 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-	public double getComponent1() {
-		return this.x;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-	public double getComponent2() {
-		return this.y;
-	}
-	
-	/**
-	 * Returns the value of component 3.
-	 * 
-	 * @return the value of component 3
-	 */
-	public double getComponent3() {
-		return this.z;
-	}
-	
-	/**
-	 * Returns the value of the U-component.
-	 * 
-	 * @return the value of the U-component
-	 */
-	public double getU() {
-		return this.x;
-	}
-	
-	/**
-	 * Returns the value of the V-component.
-	 * 
-	 * @return the value of the V-component
-	 */
-	public double getV() {
-		return this.y;
-	}
-	
-	/**
-	 * Returns the value of the W-component.
-	 * 
-	 * @return the value of the W-component
-	 */
-	public double getW() {
-		return this.z;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-	public double getX() {
-		return this.x;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-	public double getY() {
-		return this.y;
-	}
-	
-	/**
-	 * Returns the value of the Z-component.
-	 * 
-	 * @return the value of the Z-component
-	 */
-	public double getZ() {
-		return this.z;
-	}
-	
-	/**
 	 * Returns the length of this {@code Vector3D} instance.
 	 * 
 	 * @return the length of this {@code Vector3D} instance
@@ -813,32 +732,32 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
-	 * Returns {@code Vector3D.negateComponent3(vRHS)} or {@code vRHS} as {@code vLHS.z} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively.
+	 * Returns {@code Vector3D.negateZ(vRHS)} or {@code vRHS} as {@code vLHS.z} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively.
 	 * <p>
 	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param vLHS the {@code Vector3D} instance on the left-hand side
 	 * @param vRHS the {@code Vector3D} instance on the right-hand side to potentially negate and then return
-	 * @return {@code Vector3D.negateComponent3(vRHS)} or {@code vRHS} as {@code vLHS.z} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively
+	 * @return {@code Vector3D.negateZ(vRHS)} or {@code vRHS} as {@code vLHS.z} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector3D faceForwardComponent3(final Vector3D vLHS, final Vector3D vRHS) {
-		return vLHS.z < 0.0D ? negateComponent3(vRHS) : Objects.requireNonNull(vRHS, "vRHS == null");
+	public static Vector3D faceForwardZ(final Vector3D vLHS, final Vector3D vRHS) {
+		return vLHS.z < 0.0D ? negateZ(vRHS) : Objects.requireNonNull(vRHS, "vRHS == null");
 	}
 	
 	/**
-	 * Returns {@code Vector3D.negateComponent3(vRHS)} or {@code vRHS} as {@code vLHS.z} is greater than {@code 0.0D} or less than or equal to {@code 0.0D}, respectively.
+	 * Returns {@code Vector3D.negateZ(vRHS)} or {@code vRHS} as {@code vLHS.z} is greater than {@code 0.0D} or less than or equal to {@code 0.0D}, respectively.
 	 * <p>
 	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param vLHS the {@code Vector3D} instance on the left-hand side
 	 * @param vRHS the {@code Vector3D} instance on the right-hand side to potentially negate and then return
-	 * @return {@code Vector3D.negateComponent3(vRHS)} or {@code vRHS} as {@code vLHS.z} is greater than {@code 0.0D} or less than or equal to {@code 0.0D}, respectively
+	 * @return {@code Vector3D.negateZ(vRHS)} or {@code vRHS} as {@code vLHS.z} is greater than {@code 0.0D} or less than or equal to {@code 0.0D}, respectively
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Vector3D faceForwardComponent3Negated(final Vector3D vLHS, final Vector3D vRHS) {
-		return vLHS.z > 0.0D ? negateComponent3(vRHS) : Objects.requireNonNull(vRHS, "vRHS == null");
+	public static Vector3D faceForwardZNegated(final Vector3D vLHS, final Vector3D vRHS) {
+		return vLHS.z > 0.0D ? negateZ(vRHS) : Objects.requireNonNull(vRHS, "vRHS == null");
 	}
 	
 	/**
@@ -917,101 +836,81 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
-	 * Multiplies the component values of {@code vectorLHS} with {@code scalarRHS}.
+	 * Multiplies the component values of {@code vLHS} with {@code sRHS}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the multiplication.
 	 * <p>
-	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector multiplication is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
-	 * @param scalarRHS the scalar value on the right-hand side
+	 * @param vLHS the {@code Vector3D} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector3D} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
-	public static Vector3D multiply(final Vector3D vectorLHS, final double scalarRHS) {
-		final double component1 = vectorLHS.x * scalarRHS;
-		final double component2 = vectorLHS.y * scalarRHS;
-		final double component3 = vectorLHS.z * scalarRHS;
-		
-		return new Vector3D(component1, component2, component3);
+	public static Vector3D multiply(final Vector3D vLHS, final double sRHS) {
+		return new Vector3D(vLHS.x * sRHS, vLHS.y * sRHS, vLHS.z * sRHS);
 	}
 	
 	/**
-	 * Negates the component values of {@code vector}.
+	 * Negates the component values of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the negation.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector3D} instance
+	 * @param v a {@code Vector3D} instance
 	 * @return a new {@code Vector3D} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector3D negate(final Vector3D vector) {
-		final double component1 = -vector.x;
-		final double component2 = -vector.y;
-		final double component3 = -vector.z;
-		
-		return new Vector3D(component1, component2, component3);
+	public static Vector3D negate(final Vector3D v) {
+		return new Vector3D(-v.x, -v.y, -v.z);
 	}
 	
 	/**
-	 * Negates the component 1 value of {@code vector}.
+	 * Negates the X-component of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the negation.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector3D} instance
+	 * @param v a {@code Vector3D} instance
 	 * @return a new {@code Vector3D} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector3D negateComponent1(final Vector3D vector) {
-		final double component1 = -vector.x;
-		final double component2 = +vector.y;
-		final double component3 = +vector.z;
-		
-		return new Vector3D(component1, component2, component3);
+	public static Vector3D negateX(final Vector3D v) {
+		return new Vector3D(-v.x, v.y, v.z);
 	}
 	
 	/**
-	 * Negates the component 2 value of {@code vector}.
+	 * Negates the Y-component of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the negation.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector3D} instance
+	 * @param v a {@code Vector3D} instance
 	 * @return a new {@code Vector3D} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector3D negateComponent2(final Vector3D vector) {
-		final double component1 = +vector.x;
-		final double component2 = -vector.y;
-		final double component3 = +vector.z;
-		
-		return new Vector3D(component1, component2, component3);
+	public static Vector3D negateY(final Vector3D v) {
+		return new Vector3D(v.x, -v.y, v.z);
 	}
 	
 	/**
-	 * Negates the component 3 value of {@code vector}.
+	 * Negates the Z-component of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the negation.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector3D} instance
+	 * @param v a {@code Vector3D} instance
 	 * @return a new {@code Vector3D} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector3D negateComponent3(final Vector3D vector) {
-		final double component1 = +vector.x;
-		final double component2 = +vector.y;
-		final double component3 = -vector.z;
-		
-		return new Vector3D(component1, component2, component3);
+	public static Vector3D negateZ(final Vector3D v) {
+		return new Vector3D(v.x, v.y, -v.z);
 	}
 	
 	/**
@@ -1026,10 +925,7 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Vector3D normal(final Point3D a, final Point3D b, final Point3D c) {
-		final Vector3D edgeAB = directionNormalized(a, b);
-		final Vector3D edgeAC = directionNormalized(a, c);
-		
-		return crossProduct(edgeAB, edgeAC);
+		return crossProduct(directionNormalized(a, b), directionNormalized(a, c));
 	}
 	
 	/**
@@ -1050,11 +946,11 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D normal(final Vector3D normalA, final Vector3D normalB, final Vector3D normalC, final Point3D barycentricCoordinates) {
-		final double component1 = normalA.x * barycentricCoordinates.x + normalB.x * barycentricCoordinates.y + normalC.x * barycentricCoordinates.z;
-		final double component2 = normalA.y * barycentricCoordinates.x + normalB.y * barycentricCoordinates.y + normalC.y * barycentricCoordinates.z;
-		final double component3 = normalA.z * barycentricCoordinates.x + normalB.z * barycentricCoordinates.y + normalC.z * barycentricCoordinates.z;
+		final double x = normalA.x * barycentricCoordinates.x + normalB.x * barycentricCoordinates.y + normalC.x * barycentricCoordinates.z;
+		final double y = normalA.y * barycentricCoordinates.x + normalB.y * barycentricCoordinates.y + normalC.y * barycentricCoordinates.z;
+		final double z = normalA.z * barycentricCoordinates.x + normalB.z * barycentricCoordinates.y + normalC.z * barycentricCoordinates.z;
 		
-		return new Vector3D(component1, component2, component3);
+		return new Vector3D(x, y, z);
 	}
 	
 	/**
@@ -1094,27 +990,27 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
-	 * Normalizes the component values of {@code vector}.
+	 * Normalizes the component values of {@code v}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the normalization.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector3D} instance
+	 * @param v a {@code Vector3D} instance
 	 * @return a new {@code Vector3D} instance with the result of the normalization
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector3D normalize(final Vector3D vector) {
-		final double length = vector.length();
+	public static Vector3D normalize(final Vector3D v) {
+		final double length = v.length();
 		
 		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
 		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
-			return vector;
+			return v;
 		}
 		
-		return divide(vector, length);
+		return divide(v, length);
 	}
 	
 	/**
@@ -1123,11 +1019,7 @@ public final class Vector3D implements Node {
 	 * @return a random {@code Vector3D} instance
 	 */
 	public static Vector3D random() {
-		final double component1 = Doubles.random() * 2.0D - 1.0D;
-		final double component2 = Doubles.random() * 2.0D - 1.0D;
-		final double component3 = Doubles.random() * 2.0D - 1.0D;
-		
-		return new Vector3D(component1, component2, component3);
+		return new Vector3D(Doubles.random() * 2.0D - 1.0D, Doubles.random() * 2.0D - 1.0D, Doubles.random() * 2.0D - 1.0D);
 	}
 	
 	/**
@@ -1153,31 +1045,23 @@ public final class Vector3D implements Node {
 	 */
 	public static Vector3D read(final DataInput dataInput) {
 		try {
-			final double component1 = dataInput.readDouble();
-			final double component2 = dataInput.readDouble();
-			final double component3 = dataInput.readDouble();
-			
-			return new Vector3D(component1, component2, component3);
+			return new Vector3D(dataInput.readDouble(), dataInput.readDouble(), dataInput.readDouble());
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Returns a new {@code Vector3D} instance with the reciprocal (or inverse) component values of {@code vector}.
+	 * Returns a new {@code Vector3D} instance with the reciprocal (or inverse) component values of {@code v}.
 	 * <p>
-	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vector a {@code Vector3D} instance
-	 * @return a new {@code Vector3D} instance with the reciprocal (or inverse) component values of {@code vector}
-	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 * @param v a {@code Vector3D} instance
+	 * @return a new {@code Vector3D} instance with the reciprocal (or inverse) component values of {@code v}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
-	public static Vector3D reciprocal(final Vector3D vector) {
-		final double component1 = 1.0D / vector.x;
-		final double component2 = 1.0D / vector.y;
-		final double component3 = 1.0D / vector.z;
-		
-		return new Vector3D(component1, component2, component3);
+	public static Vector3D reciprocal(final Vector3D v) {
+		return new Vector3D(1.0D / v.x, 1.0D / v.y, 1.0D / v.z);
 	}
 	
 	/**
@@ -1263,152 +1147,148 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
-	 * Subtracts the component values of {@code vectorRHS} from the component values of {@code vectorLHS}.
+	 * Subtracts the component values of {@code vRHS} from the component values of {@code vLHS}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector subtraction is performed componentwise.
 	 * 
-	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3D} instance on the right-hand side
+	 * @param vLHS the {@code Vector3D} instance on the left-hand side
+	 * @param vRHS the {@code Vector3D} instance on the right-hand side
 	 * @return a new {@code Vector3D} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static Vector3D subtract(final Vector3D vectorLHS, final Vector3D vectorRHS) {
-		final double component1 = vectorLHS.x - vectorRHS.x;
-		final double component2 = vectorLHS.y - vectorRHS.y;
-		final double component3 = vectorLHS.z - vectorRHS.z;
-		
-		return new Vector3D(component1, component2, component3);
+	public static Vector3D subtract(final Vector3D vLHS, final Vector3D vRHS) {
+		return new Vector3D(vLHS.x - vRHS.x, vLHS.y - vRHS.y, vLHS.z - vRHS.z);
 	}
 	
 	/**
-	 * Transforms the {@code Vector3D} {@code vectorRHS} with the {@link Matrix44D} {@code matrixLHS}.
+	 * Transforms the {@code Vector3D} {@code vRHS} with the {@link Matrix44D} {@code mLHS}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix44D} instance
-	 * @param vectorRHS a {@code Vector3D} instance
+	 * @param mLHS a {@code Matrix44D} instance
+	 * @param vRHS a {@code Vector3D} instance
 	 * @return a new {@code Vector3D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Vector3D transform(final Matrix44D matrixLHS, final Vector3D vectorRHS) {
-		final double component1 = matrixLHS.getElement11() * vectorRHS.x + matrixLHS.getElement12() * vectorRHS.y + matrixLHS.getElement13() * vectorRHS.z;
-		final double component2 = matrixLHS.getElement21() * vectorRHS.x + matrixLHS.getElement22() * vectorRHS.y + matrixLHS.getElement23() * vectorRHS.z;
-		final double component3 = matrixLHS.getElement31() * vectorRHS.x + matrixLHS.getElement32() * vectorRHS.y + matrixLHS.getElement33() * vectorRHS.z;
+	public static Vector3D transform(final Matrix44D mLHS, final Vector3D vRHS) {
+		final double x = mLHS.getElement11() * vRHS.x + mLHS.getElement12() * vRHS.y + mLHS.getElement13() * vRHS.z;
+		final double y = mLHS.getElement21() * vRHS.x + mLHS.getElement22() * vRHS.y + mLHS.getElement23() * vRHS.z;
+		final double z = mLHS.getElement31() * vRHS.x + mLHS.getElement32() * vRHS.y + mLHS.getElement33() * vRHS.z;
 		
-		return new Vector3D(component1, component2, component3);
+		return new Vector3D(x, y, z);
 	}
 	
 	/**
-	 * Transforms the {@code Vector3D} {@code vectorRHS} with the {@link OrthonormalBasis33D} {@code orthonormalBasisRHS}.
+	 * Transforms the {@code Vector3D} {@code vLHS} with the {@link OrthonormalBasis33D} {@code oRHS}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code oRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS a {@code Vector3D} instance
-	 * @param orthonormalBasisRHS an {@code OrthonormalBasis33D} instance
+	 * @param vLHS a {@code Vector3D} instance
+	 * @param oRHS an {@code OrthonormalBasis33D} instance
 	 * @return a new {@code Vector3D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code oRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Vector3D transform(final Vector3D vectorLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
-		final double component1 = vectorLHS.x * orthonormalBasisRHS.getU().x + vectorLHS.y * orthonormalBasisRHS.getV().x + vectorLHS.z * orthonormalBasisRHS.getW().x;
-		final double component2 = vectorLHS.x * orthonormalBasisRHS.getU().y + vectorLHS.y * orthonormalBasisRHS.getV().y + vectorLHS.z * orthonormalBasisRHS.getW().y;
-		final double component3 = vectorLHS.x * orthonormalBasisRHS.getU().z + vectorLHS.y * orthonormalBasisRHS.getV().z + vectorLHS.z * orthonormalBasisRHS.getW().z;
+	public static Vector3D transform(final Vector3D vLHS, final OrthonormalBasis33D oRHS) {
+		final double x = vLHS.x * oRHS.getU().x + vLHS.y * oRHS.getV().x + vLHS.z * oRHS.getW().x;
+		final double y = vLHS.x * oRHS.getU().y + vLHS.y * oRHS.getV().y + vLHS.z * oRHS.getW().y;
+		final double z = vLHS.x * oRHS.getU().z + vLHS.y * oRHS.getV().z + vLHS.z * oRHS.getW().z;
 		
-		return new Vector3D(component1, component2, component3);
+		return new Vector3D(x, y, z);
 	}
 	
 	/**
-	 * Transforms the error of the {@link Point3D} {@code point} with the {@link Matrix44D} {@code matrix}.
+	 * Transforms the error of the {@link Point3D} {@code p} with the {@link Matrix44D} {@code m}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrix} or {@code point} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code m} or {@code p} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrix a {@code Matrix44D} instance
-	 * @param point a {@code Point3D} instance
+	 * @param m a {@code Matrix44D} instance
+	 * @param p a {@code Point3D} instance
 	 * @return a new {@code Vector3D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrix} or {@code point} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code m} or {@code p} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Vector3D transformError(final Matrix44D matrix, final Point3D point) {
-		final double component1 = gamma(3) * (abs(matrix.getElement11() * point.x) + abs(matrix.getElement12() * point.y) + abs(matrix.getElement13() * point.z) + abs(matrix.getElement14()));
-		final double component2 = gamma(3) * (abs(matrix.getElement21() * point.x) + abs(matrix.getElement22() * point.y) + abs(matrix.getElement23() * point.z) + abs(matrix.getElement24()));
-		final double component3 = gamma(3) * (abs(matrix.getElement31() * point.x) + abs(matrix.getElement32() * point.y) + abs(matrix.getElement33() * point.z) + abs(matrix.getElement34()));
+	public static Vector3D transformError(final Matrix44D m, final Point3D p) {
+		final double x = gamma(3) * (abs(m.getElement11() * p.x) + abs(m.getElement12() * p.y) + abs(m.getElement13() * p.z) + abs(m.getElement14()));
+		final double y = gamma(3) * (abs(m.getElement21() * p.x) + abs(m.getElement22() * p.y) + abs(m.getElement23() * p.z) + abs(m.getElement24()));
+		final double z = gamma(3) * (abs(m.getElement31() * p.x) + abs(m.getElement32() * p.y) + abs(m.getElement33() * p.z) + abs(m.getElement34()));
 		
-		return new Vector3D(component1, component2, component3);
+		return new Vector3D(x, y, z);
 	}
 	
 	/**
-	 * Transforms the error of the {@code Vector3D} {@code vector} with the {@link Matrix44D} {@code matrix}.
+	 * Transforms the error of the {@code Vector3D} {@code v} with the {@link Matrix44D} {@code m}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrix}, {@code point} or {@code vector} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code m}, {@code p} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrix a {@code Matrix44D} instance
-	 * @param point a {@link Point3D} instance
-	 * @param vector a {@code Vector3D} instance
+	 * @param m a {@code Matrix44D} instance
+	 * @param p a {@link Point3D} instance
+	 * @param v a {@code Vector3D} instance
 	 * @return a new {@code Vector3D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrix}, {@code point} or {@code vector} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code m}, {@code p} or {@code v} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Vector3D transformError(final Matrix44D matrix, final Point3D point, final Vector3D vector) {
-		final double component1 = (gamma(3) + 1.0D) * (abs(matrix.getElement11()) * vector.x + abs(matrix.getElement12()) * vector.y + abs(matrix.getElement13()) * vector.z) + gamma(3) * (abs(matrix.getElement11() * point.x) + abs(matrix.getElement12() * point.y) + abs(matrix.getElement13() * point.z) + abs(matrix.getElement14()));
-		final double component2 = (gamma(3) + 1.0D) * (abs(matrix.getElement21()) * vector.x + abs(matrix.getElement22()) * vector.y + abs(matrix.getElement23()) * vector.z) + gamma(3) * (abs(matrix.getElement21() * point.x) + abs(matrix.getElement22() * point.y) + abs(matrix.getElement23() * point.z) + abs(matrix.getElement24()));
-		final double component3 = (gamma(3) + 1.0D) * (abs(matrix.getElement31()) * vector.x + abs(matrix.getElement32()) * vector.y + abs(matrix.getElement33()) * vector.z) + gamma(3) * (abs(matrix.getElement31() * point.x) + abs(matrix.getElement32() * point.y) + abs(matrix.getElement33() * point.z) + abs(matrix.getElement34()));
+	public static Vector3D transformError(final Matrix44D m, final Point3D p, final Vector3D v) {
+		final double x = (gamma(3) + 1.0D) * (abs(m.getElement11()) * v.x + abs(m.getElement12()) * v.y + abs(m.getElement13()) * v.z) + gamma(3) * (abs(m.getElement11() * p.x) + abs(m.getElement12() * p.y) + abs(m.getElement13() * p.z) + abs(m.getElement14()));
+		final double y = (gamma(3) + 1.0D) * (abs(m.getElement21()) * v.x + abs(m.getElement22()) * v.y + abs(m.getElement23()) * v.z) + gamma(3) * (abs(m.getElement21() * p.x) + abs(m.getElement22() * p.y) + abs(m.getElement23() * p.z) + abs(m.getElement24()));
+		final double z = (gamma(3) + 1.0D) * (abs(m.getElement31()) * v.x + abs(m.getElement32()) * v.y + abs(m.getElement33()) * v.z) + gamma(3) * (abs(m.getElement31() * p.x) + abs(m.getElement32() * p.y) + abs(m.getElement33() * p.z) + abs(m.getElement34()));
 		
-		return new Vector3D(component1, component2, component3);
+		return new Vector3D(x, y, z);
 	}
 	
 	/**
-	 * Transforms the {@code Vector3D} {@code vectorRHS} with the {@link OrthonormalBasis33D} {@code orthonormalBasisRHS} in reverse order.
+	 * Transforms the {@code Vector3D} {@code vLHS} with the {@link OrthonormalBasis33D} {@code oRHS} in reverse order.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code oRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS a {@code Vector3D} instance
-	 * @param orthonormalBasisRHS an {@code OrthonormalBasis33D} instance
+	 * @param vLHS a {@code Vector3D} instance
+	 * @param oRHS an {@code OrthonormalBasis33D} instance
 	 * @return a new {@code Vector3D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code oRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Vector3D transformReverse(final Vector3D vectorLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
-		final double component1 = dotProduct(vectorLHS, orthonormalBasisRHS.getU());
-		final double component2 = dotProduct(vectorLHS, orthonormalBasisRHS.getV());
-		final double component3 = dotProduct(vectorLHS, orthonormalBasisRHS.getW());
+	public static Vector3D transformReverse(final Vector3D vLHS, final OrthonormalBasis33D oRHS) {
+		final double x = dotProduct(vLHS, oRHS.getU());
+		final double y = dotProduct(vLHS, oRHS.getV());
+		final double z = dotProduct(vLHS, oRHS.getW());
 		
-		return new Vector3D(component1, component2, component3);
+		return new Vector3D(x, y, z);
 	}
 	
 	/**
-	 * Transforms the {@code Vector3D} {@code vectorRHS} with the {@link Matrix44D} {@code matrixLHS} in transpose order.
+	 * Transforms the {@code Vector3D} {@code vRHS} with the {@link Matrix44D} {@code mLHS} in transpose order.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code matrixLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param matrixLHS a {@code Matrix44D} instance
-	 * @param vectorRHS a {@code Vector3D} instance
+	 * @param mLHS a {@code Matrix44D} instance
+	 * @param vRHS a {@code Vector3D} instance
 	 * @return a new {@code Vector3D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static Vector3D transformTranspose(final Matrix44D matrixLHS, final Vector3D vectorRHS) {
-		final double component1 = matrixLHS.getElement11() * vectorRHS.x + matrixLHS.getElement21() * vectorRHS.y + matrixLHS.getElement31() * vectorRHS.z;
-		final double component2 = matrixLHS.getElement12() * vectorRHS.x + matrixLHS.getElement22() * vectorRHS.y + matrixLHS.getElement32() * vectorRHS.z;
-		final double component3 = matrixLHS.getElement13() * vectorRHS.x + matrixLHS.getElement23() * vectorRHS.y + matrixLHS.getElement33() * vectorRHS.z;
+	public static Vector3D transformTranspose(final Matrix44D mLHS, final Vector3D vRHS) {
+		final double x = mLHS.getElement11() * vRHS.x + mLHS.getElement21() * vRHS.y + mLHS.getElement31() * vRHS.z;
+		final double y = mLHS.getElement12() * vRHS.x + mLHS.getElement22() * vRHS.y + mLHS.getElement32() * vRHS.z;
+		final double z = mLHS.getElement13() * vRHS.x + mLHS.getElement23() * vRHS.y + mLHS.getElement33() * vRHS.z;
 		
-		return new Vector3D(component1, component2, component3);
+		return new Vector3D(x, y, z);
 	}
 	
 	/**
@@ -1575,54 +1455,54 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
-	 * Returns the dot product of {@code vectorLHS} and {@code vectorRHS}.
+	 * Returns the dot product of {@code vLHS} and {@code vRHS}.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3D} instance on the right-hand side
-	 * @return the dot product of {@code vectorLHS} and {@code vectorRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector3D} instance on the left-hand side
+	 * @param vRHS the {@code Vector3D} instance on the right-hand side
+	 * @return the dot product of {@code vLHS} and {@code vRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static double dotProduct(final Vector3D vectorLHS, final Vector3D vectorRHS) {
-		return vectorLHS.x * vectorRHS.x + vectorLHS.y * vectorRHS.y + vectorLHS.z * vectorRHS.z;
+	public static double dotProduct(final Vector3D vLHS, final Vector3D vRHS) {
+		return vLHS.x * vRHS.x + vLHS.y * vRHS.y + vLHS.z * vRHS.z;
 	}
 	
 	/**
-	 * Returns the absolute dot product of {@code vectorLHS} and {@code vectorRHS}.
+	 * Returns the absolute dot product of {@code vLHS} and {@code vRHS}.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3D} instance on the right-hand side
-	 * @return the absolute dot product of {@code vectorLHS} and {@code vectorRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 * @param vLHS the {@code Vector3D} instance on the left-hand side
+	 * @param vRHS the {@code Vector3D} instance on the right-hand side
+	 * @return the absolute dot product of {@code vLHS} and {@code vRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
-	public static double dotProductAbs(final Vector3D vectorLHS, final Vector3D vectorRHS) {
-		return abs(dotProduct(vectorLHS, vectorRHS));
+	public static double dotProductAbs(final Vector3D vLHS, final Vector3D vRHS) {
+		return abs(dotProduct(vLHS, vRHS));
 	}
 	
 	/**
-	 * Returns the triple product of {@code vectorLHSDP}, {@code vectorLHSCP} and {@code vectorRHSCP}.
+	 * Returns the triple product of {@code vLHSDP}, {@code vLHSCP} and {@code vRHSCP}.
 	 * <p>
-	 * If either {@code vectorLHSDP}, {@code vectorLHSCP} or {@code vectorRHSCP} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vLHSDP}, {@code vLHSCP} or {@code vRHSCP} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Vector3D.dotProduct(vectorLHSDP, Vector3D.crossProduct(vectorLHSCP, vectorRHSCP));
+	 * Vector3D.dotProduct(vLHSDP, Vector3D.crossProduct(vLHSCP, vRHSCP));
 	 * }
 	 * </pre>
 	 * 
-	 * @param vectorLHSDP the {@code Vector3D} instance on the left-hand side of the dot product
-	 * @param vectorLHSCP the {@code Vector3D} instance of the left-hand side of the cross product
-	 * @param vectorRHSCP the {@code Vector3D} instance of the right-hand side of the cross product
-	 * @return the triple product of {@code vectorLHSDP}, {@code vectorLHSCP} and {@code vectorRHSCP}
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHSDP}, {@code vectorLHSCP} or {@code vectorRHSCP} are {@code null}
+	 * @param vLHSDP the {@code Vector3D} instance on the left-hand side of the dot product
+	 * @param vLHSCP the {@code Vector3D} instance of the left-hand side of the cross product
+	 * @param vRHSCP the {@code Vector3D} instance of the right-hand side of the cross product
+	 * @return the triple product of {@code vLHSDP}, {@code vLHSCP} and {@code vRHSCP}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHSDP}, {@code vLHSCP} or {@code vRHSCP} are {@code null}
 	 */
 //	TODO: Add Unit Tests!
-	public static double tripleProduct(final Vector3D vectorLHSDP, final Vector3D vectorLHSCP, final Vector3D vectorRHSCP) {
-		return dotProduct(vectorLHSDP, crossProduct(vectorLHSCP, vectorRHSCP));
+	public static double tripleProduct(final Vector3D vLHSDP, final Vector3D vLHSCP, final Vector3D vRHSCP) {
+		return dotProduct(vLHSDP, crossProduct(vLHSCP, vRHSCP));
 	}
 	
 	/**

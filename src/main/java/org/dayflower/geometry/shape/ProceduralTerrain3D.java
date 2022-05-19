@@ -216,9 +216,9 @@ public final class ProceduralTerrain3D implements Shape3D {
 		final double originY = origin.y;
 		final double originZ = origin.z;
 		
-		final double directionX = direction.getX();
-		final double directionY = direction.getY();
-		final double directionZ = direction.getZ();
+		final double directionX = direction.x;
+		final double directionY = direction.y;
+		final double directionZ = direction.z;
 		
 		double t = 0.0D;
 		double tDelta = 0.01D;

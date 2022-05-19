@@ -307,8 +307,8 @@ public final class SteepParallaxMapLDRImageModifier extends AbstractLDRImageModi
 		final Vector3F directionNormalized = Vector3F.normalize(directionTransformed);
 		final Vector3F directionScaled = Vector3F.multiply(directionNormalized, heightScale);
 		
-		final float deltaU = directionScaled.getU() * layersReciprocal;
-		final float deltaV = directionScaled.getV() * layersReciprocal;
+		final float deltaU = directionScaled.x * layersReciprocal;
+		final float deltaV = directionScaled.y * layersReciprocal;
 		
 		float u = textureCoordinates.x;
 		float v = textureCoordinates.y;

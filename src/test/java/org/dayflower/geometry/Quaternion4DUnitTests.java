@@ -48,10 +48,10 @@ public final class Quaternion4DUnitTests {
 		final Quaternion4D b = new Quaternion4D(2.0D, 3.0D, 4.0D, 5.0D);
 		final Quaternion4D c = Quaternion4D.add(a, b);
 		
-		assertEquals(3.0D, c.getComponent1());
-		assertEquals(5.0D, c.getComponent2());
-		assertEquals(7.0D, c.getComponent3());
-		assertEquals(9.0D, c.getComponent4());
+		assertEquals(3.0D, c.x);
+		assertEquals(5.0D, c.y);
+		assertEquals(7.0D, c.z);
+		assertEquals(9.0D, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.add(a, null));
 		assertThrows(NullPointerException.class, () -> Quaternion4D.add(null, b));
@@ -63,15 +63,15 @@ public final class Quaternion4DUnitTests {
 		final Quaternion4D b = Quaternion4D.conjugate(a);
 		final Quaternion4D c = Quaternion4D.conjugate(b);
 		
-		assertEquals(-1.0D, b.getComponent1());
-		assertEquals(-2.0D, b.getComponent2());
-		assertEquals(-3.0D, b.getComponent3());
-		assertEquals(+4.0D, b.getComponent4());
+		assertEquals(-1.0D, b.x);
+		assertEquals(-2.0D, b.y);
+		assertEquals(-3.0D, b.z);
+		assertEquals(+4.0D, b.w);
 		
-		assertEquals(+1.0D, c.getComponent1());
-		assertEquals(+2.0D, c.getComponent2());
-		assertEquals(+3.0D, c.getComponent3());
-		assertEquals(+4.0D, c.getComponent4());
+		assertEquals(+1.0D, c.x);
+		assertEquals(+2.0D, c.y);
+		assertEquals(+3.0D, c.z);
+		assertEquals(+4.0D, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.conjugate(null));
 	}
@@ -80,40 +80,40 @@ public final class Quaternion4DUnitTests {
 	public void testConstructor() {
 		final Quaternion4D quaternion = new Quaternion4D();
 		
-		assertEquals(0.0D, quaternion.getComponent1());
-		assertEquals(0.0D, quaternion.getComponent2());
-		assertEquals(0.0D, quaternion.getComponent3());
-		assertEquals(1.0D, quaternion.getComponent4());
+		assertEquals(0.0D, quaternion.x);
+		assertEquals(0.0D, quaternion.y);
+		assertEquals(0.0D, quaternion.z);
+		assertEquals(1.0D, quaternion.w);
 	}
 	
 	@Test
 	public void testConstructorDoubleDoubleDouble() {
 		final Quaternion4D quaternion = new Quaternion4D(2.0D, 3.0D, 4.0D);
 		
-		assertEquals(2.0D, quaternion.getComponent1());
-		assertEquals(3.0D, quaternion.getComponent2());
-		assertEquals(4.0D, quaternion.getComponent3());
-		assertEquals(1.0D, quaternion.getComponent4());
+		assertEquals(2.0D, quaternion.x);
+		assertEquals(3.0D, quaternion.y);
+		assertEquals(4.0D, quaternion.z);
+		assertEquals(1.0D, quaternion.w);
 	}
 	
 	@Test
 	public void testConstructorDoubleDoubleDoubleDouble() {
 		final Quaternion4D quaternion = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
 		
-		assertEquals(1.0D, quaternion.getComponent1());
-		assertEquals(2.0D, quaternion.getComponent2());
-		assertEquals(3.0D, quaternion.getComponent3());
-		assertEquals(4.0D, quaternion.getComponent4());
+		assertEquals(1.0D, quaternion.x);
+		assertEquals(2.0D, quaternion.y);
+		assertEquals(3.0D, quaternion.z);
+		assertEquals(4.0D, quaternion.w);
 	}
 	
 	@Test
 	public void testConstructorVector3D() {
 		final Quaternion4D quaternion = new Quaternion4D(new Vector3D(2.0D, 3.0D, 4.0D));
 		
-		assertEquals(2.0D, quaternion.getComponent1());
-		assertEquals(3.0D, quaternion.getComponent2());
-		assertEquals(4.0D, quaternion.getComponent3());
-		assertEquals(1.0D, quaternion.getComponent4());
+		assertEquals(2.0D, quaternion.x);
+		assertEquals(3.0D, quaternion.y);
+		assertEquals(4.0D, quaternion.z);
+		assertEquals(1.0D, quaternion.w);
 		
 		assertThrows(NullPointerException.class, () -> new Quaternion4D(null));
 	}
@@ -124,15 +124,15 @@ public final class Quaternion4DUnitTests {
 		final Quaternion4D b = Quaternion4D.divide(a, 2.0D);
 		final Quaternion4D c = Quaternion4D.divide(a, Double.NaN);
 		
-		assertEquals(1.0D, b.getComponent1());
-		assertEquals(2.0D, b.getComponent2());
-		assertEquals(4.0D, b.getComponent3());
-		assertEquals(8.0D, b.getComponent4());
+		assertEquals(1.0D, b.x);
+		assertEquals(2.0D, b.y);
+		assertEquals(4.0D, b.z);
+		assertEquals(8.0D, b.w);
 		
-		assertEquals(Double.NaN, c.getComponent1());
-		assertEquals(Double.NaN, c.getComponent2());
-		assertEquals(Double.NaN, c.getComponent3());
-		assertEquals(Double.NaN, c.getComponent4());
+		assertEquals(Double.NaN, c.x);
+		assertEquals(Double.NaN, c.y);
+		assertEquals(Double.NaN, c.z);
+		assertEquals(Double.NaN, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.divide(null, 2.0D));
 	}
@@ -178,62 +178,6 @@ public final class Quaternion4DUnitTests {
 	}
 	
 	@Test
-	public void testGetComponent1() {
-		final Quaternion4D quaternion = new Quaternion4D(1.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, quaternion.getComponent1());
-	}
-	
-	@Test
-	public void testGetComponent2() {
-		final Quaternion4D quaternion = new Quaternion4D(0.0D, 1.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, quaternion.getComponent2());
-	}
-	
-	@Test
-	public void testGetComponent3() {
-		final Quaternion4D quaternion = new Quaternion4D(0.0D, 0.0D, 1.0D, 0.0D);
-		
-		assertEquals(1.0D, quaternion.getComponent3());
-	}
-	
-	@Test
-	public void testGetComponent4() {
-		final Quaternion4D quaternion = new Quaternion4D(0.0D, 0.0D, 0.0D, 1.0D);
-		
-		assertEquals(1.0D, quaternion.getComponent4());
-	}
-	
-	@Test
-	public void testGetW() {
-		final Quaternion4D quaternion = new Quaternion4D(0.0D, 0.0D, 0.0D, 1.0D);
-		
-		assertEquals(1.0D, quaternion.getW());
-	}
-	
-	@Test
-	public void testGetX() {
-		final Quaternion4D quaternion = new Quaternion4D(1.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, quaternion.getX());
-	}
-	
-	@Test
-	public void testGetY() {
-		final Quaternion4D quaternion = new Quaternion4D(0.0D, 1.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, quaternion.getY());
-	}
-	
-	@Test
-	public void testGetZ() {
-		final Quaternion4D quaternion = new Quaternion4D(0.0D, 0.0D, 1.0D, 0.0D);
-		
-		assertEquals(1.0D, quaternion.getZ());
-	}
-	
-	@Test
 	public void testHashCode() {
 		final Quaternion4D a = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
 		final Quaternion4D b = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
@@ -267,10 +211,10 @@ public final class Quaternion4DUnitTests {
 		final Quaternion4D a = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
 		final Quaternion4D b = Quaternion4D.multiply(a, 2.0D);
 		
-		assertEquals(2.0D, b.getComponent1());
-		assertEquals(4.0D, b.getComponent2());
-		assertEquals(6.0D, b.getComponent3());
-		assertEquals(8.0D, b.getComponent4());
+		assertEquals(2.0D, b.x);
+		assertEquals(4.0D, b.y);
+		assertEquals(6.0D, b.z);
+		assertEquals(8.0D, b.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(null, 2.0D));
 	}
@@ -281,10 +225,10 @@ public final class Quaternion4DUnitTests {
 		final Quaternion4D b = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
 		final Quaternion4D c = Quaternion4D.multiply(a, b);
 		
-		assertEquals( 8.0D, c.getComponent1());
-		assertEquals(16.0D, c.getComponent2());
-		assertEquals(24.0D, c.getComponent3());
-		assertEquals( 2.0D, c.getComponent4());
+		assertEquals( 8.0D, c.x);
+		assertEquals(16.0D, c.y);
+		assertEquals(24.0D, c.z);
+		assertEquals( 2.0D, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(a, (Quaternion4D)(null)));
 		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(null, b));
@@ -295,10 +239,10 @@ public final class Quaternion4DUnitTests {
 		final Quaternion4D a = new Quaternion4D(1.0D, 2.0D, 3.0D, 4.0D);
 		final Quaternion4D b = Quaternion4D.multiply(a, new Vector3D(1.0D, 2.0D, 3.0D));
 		
-		assertEquals(+ 4.0D, b.getComponent1());
-		assertEquals(+ 8.0D, b.getComponent2());
-		assertEquals(+12.0D, b.getComponent3());
-		assertEquals(-14.0D, b.getComponent4());
+		assertEquals(+ 4.0D, b.x);
+		assertEquals(+ 8.0D, b.y);
+		assertEquals(+12.0D, b.z);
+		assertEquals(-14.0D, b.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(a, (Vector3D)(null)));
 		assertThrows(NullPointerException.class, () -> Quaternion4D.multiply(null, new Vector3D(1.0D, 2.0D, 3.0D)));
@@ -310,15 +254,15 @@ public final class Quaternion4DUnitTests {
 		final Quaternion4D b = Quaternion4D.negate(a);
 		final Quaternion4D c = Quaternion4D.negate(b);
 		
-		assertEquals(-1.0D, b.getComponent1());
-		assertEquals(-2.0D, b.getComponent2());
-		assertEquals(-3.0D, b.getComponent3());
-		assertEquals(-4.0D, b.getComponent4());
+		assertEquals(-1.0D, b.x);
+		assertEquals(-2.0D, b.y);
+		assertEquals(-3.0D, b.z);
+		assertEquals(-4.0D, b.w);
 		
-		assertEquals(+1.0D, c.getComponent1());
-		assertEquals(+2.0D, c.getComponent2());
-		assertEquals(+3.0D, c.getComponent3());
-		assertEquals(+4.0D, c.getComponent4());
+		assertEquals(+1.0D, c.x);
+		assertEquals(+2.0D, c.y);
+		assertEquals(+3.0D, c.z);
+		assertEquals(+4.0D, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.negate(null));
 	}
@@ -364,10 +308,10 @@ public final class Quaternion4DUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeDouble(a.getComponent1());
-		dataOutput.writeDouble(a.getComponent2());
-		dataOutput.writeDouble(a.getComponent3());
-		dataOutput.writeDouble(a.getComponent4());
+		dataOutput.writeDouble(a.x);
+		dataOutput.writeDouble(a.y);
+		dataOutput.writeDouble(a.z);
+		dataOutput.writeDouble(a.w);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		
@@ -385,10 +329,10 @@ public final class Quaternion4DUnitTests {
 		final Quaternion4D b = new Quaternion4D(2.0D, 3.0D, 4.0D, 5.0D);
 		final Quaternion4D c = Quaternion4D.subtract(a, b);
 		
-		assertEquals(1.0D, c.getComponent1());
-		assertEquals(2.0D, c.getComponent2());
-		assertEquals(3.0D, c.getComponent3());
-		assertEquals(4.0D, c.getComponent4());
+		assertEquals(1.0D, c.x);
+		assertEquals(2.0D, c.y);
+		assertEquals(3.0D, c.z);
+		assertEquals(4.0D, c.w);
 		
 		assertThrows(NullPointerException.class, () -> Quaternion4D.subtract(a, null));
 		assertThrows(NullPointerException.class, () -> Quaternion4D.subtract(null, b));

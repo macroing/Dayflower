@@ -346,11 +346,11 @@ public final class Disk3D implements Shape3D {
 		
 		final Vector3D direction = ray.getDirection();
 		
-		if(isZero(direction.getZ())) {
+		if(isZero(direction.z)) {
 			return Double.NaN;
 		}
 		
-		final double t = (this.zMax - origin.z) / direction.getZ();
+		final double t = (this.zMax - origin.z) / direction.z;
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return Double.NaN;

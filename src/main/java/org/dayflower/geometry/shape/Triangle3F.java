@@ -260,9 +260,9 @@ public final class Triangle3F implements Shape3F {
 		final float dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
 		final float fraction = dividend < -0.0F || dividend > +0.0F ? 1.0F / dividend : 0.0F;
 		
-		final float x = fraction * (-deltaACU * edgeAB.getX() + deltaABU * edgeAC.getX());
-		final float y = fraction * (-deltaACU * edgeAB.getY() + deltaABU * edgeAC.getY());
-		final float z = fraction * (-deltaACU * edgeAB.getZ() + deltaABU * edgeAC.getZ());
+		final float x = fraction * (-deltaACU * edgeAB.x + deltaABU * edgeAC.x);
+		final float y = fraction * (-deltaACU * edgeAB.y + deltaABU * edgeAC.y);
+		final float z = fraction * (-deltaACU * edgeAB.z + deltaABU * edgeAC.z);
 		
 		return Vector3F.normalize(new Vector3F(x, y, z));
 	}
@@ -293,9 +293,9 @@ public final class Triangle3F implements Shape3F {
 		final float dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
 		final float fraction = dividend < -0.0F || dividend > +0.0F ? 1.0F / dividend : 0.0F;
 		
-		final float x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
-		final float y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
-		final float z = fraction * (deltaACV * edgeAB.getZ() - deltaABV * edgeAC.getZ());
+		final float x = fraction * (deltaACV * edgeAB.x - deltaABV * edgeAC.x);
+		final float y = fraction * (deltaACV * edgeAB.y - deltaABV * edgeAC.y);
+		final float z = fraction * (deltaACV * edgeAB.z - deltaABV * edgeAC.z);
 		
 		return Vector3F.normalize(new Vector3F(x, y, z));
 	}
@@ -910,9 +910,9 @@ public final class Triangle3F implements Shape3F {
 		
 		final float determinantReciprocal = 1.0F / determinant;
 		
-		final float x = (-textureCoordinatesCB.x * edgeCA.getX() + textureCoordinatesCA.x * edgeCB.getX()) * determinantReciprocal;
-		final float y = (-textureCoordinatesCB.x * edgeCA.getY() + textureCoordinatesCA.x * edgeCB.getY()) * determinantReciprocal;
-		final float z = (-textureCoordinatesCB.x * edgeCA.getZ() + textureCoordinatesCA.x * edgeCB.getZ()) * determinantReciprocal;
+		final float x = (-textureCoordinatesCB.x * edgeCA.x + textureCoordinatesCA.x * edgeCB.x) * determinantReciprocal;
+		final float y = (-textureCoordinatesCB.x * edgeCA.y + textureCoordinatesCA.x * edgeCB.y) * determinantReciprocal;
+		final float z = (-textureCoordinatesCB.x * edgeCA.z + textureCoordinatesCA.x * edgeCB.z) * determinantReciprocal;
 		
 		final Vector3F v = new Vector3F(x, y, z);
 		

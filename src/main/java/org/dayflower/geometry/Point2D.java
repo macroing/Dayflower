@@ -687,8 +687,8 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point2D transform(final Matrix33D mLHS, final Point2D pRHS) {
-		final double x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13();
-		final double y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23();
+		final double x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13;
+		final double y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23;
 		
 		return new Point2D(x, y);
 	}
@@ -706,9 +706,9 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point2D transformAndDivide(final Matrix33D mLHS, final Point2D pRHS) {
-		final double x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13();
-		final double y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23();
-		final double z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33();
+		final double x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13;
+		final double y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23;
+		final double z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33;
 		
 		return equal(z, 1.0D) || isZero(z) ? new Point2D(x, y) : new Point2D(x / z, y / z);
 	}

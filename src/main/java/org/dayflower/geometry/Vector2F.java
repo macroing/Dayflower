@@ -580,8 +580,8 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
 	 */
 	public static Vector2F transform(final Matrix33F mLHS, final Vector2F vRHS) {
-		final float x = mLHS.getElement11() * vRHS.x + mLHS.getElement12() * vRHS.y;
-		final float y = mLHS.getElement21() * vRHS.x + mLHS.getElement22() * vRHS.y;
+		final float x = mLHS.element11 * vRHS.x + mLHS.element12 * vRHS.y;
+		final float y = mLHS.element21 * vRHS.x + mLHS.element22 * vRHS.y;
 		
 		return new Vector2F(x, y);
 	}
@@ -599,8 +599,8 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
 	 */
 	public static Vector2F transformTranspose(final Matrix33F mLHS, final Vector2F vRHS) {
-		final float x = mLHS.getElement11() * vRHS.x + mLHS.getElement21() * vRHS.y;
-		final float y = mLHS.getElement12() * vRHS.x + mLHS.getElement22() * vRHS.y;
+		final float x = mLHS.element11 * vRHS.x + mLHS.element21 * vRHS.y;
+		final float y = mLHS.element12 * vRHS.x + mLHS.element22 * vRHS.y;
 		
 		return new Vector2F(x, y);
 	}

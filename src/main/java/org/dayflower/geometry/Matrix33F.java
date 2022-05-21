@@ -45,15 +45,50 @@ import org.macroing.java.lang.Strings;
  * @author J&#246;rgen Lundgren
  */
 public final class Matrix33F implements Node {
-	private final float element11;
-	private final float element12;
-	private final float element13;
-	private final float element21;
-	private final float element22;
-	private final float element23;
-	private final float element31;
-	private final float element32;
-	private final float element33;
+	/**
+	 * The value of the element at index 0 or row 1 and column 1.
+	 */
+	public final float element11;
+	
+	/**
+	 * The value of the element at index 1 or row 1 and column 2.
+	 */
+	public final float element12;
+	
+	/**
+	 * The value of the element at index 2 or row 1 and column 3.
+	 */
+	public final float element13;
+	
+	/**
+	 * The value of the element at index 3 or row 2 and column 1.
+	 */
+	public final float element21;
+	
+	/**
+	 * The value of the element at index 4 or row 2 and column 2.
+	 */
+	public final float element22;
+	
+	/**
+	 * The value of the element at index 5 or row 2 and column 3.
+	 */
+	public final float element23;
+	
+	/**
+	 * The value of the element at index 6 or row 3 and column 1.
+	 */
+	public final float element31;
+	
+	/**
+	 * The value of the element at index 7 or row 3 and column 2.
+	 */
+	public final float element32;
+	
+	/**
+	 * The value of the element at index 8 or row 3 and column 3.
+	 */
+	public final float element33;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -225,87 +260,6 @@ public final class Matrix33F implements Node {
 		ParameterArguments.requireRange(column, 1, 3, "column");
 		
 		return getElement((row - 1) * 3 + (column - 1));
-	}
-	
-	/**
-	 * Returns the value of the element at index 0 or row 1 and column 1.
-	 * 
-	 * @return the value of the element at index 0 or row 1 and column 1
-	 */
-	public float getElement11() {
-		return this.element11;
-	}
-	
-	/**
-	 * Returns the value of the element at index 1 or row 1 and column 2.
-	 * 
-	 * @return the value of the element at index 1 or row 1 and column 2
-	 */
-	public float getElement12() {
-		return this.element12;
-	}
-	
-	/**
-	 * Returns the value of the element at index 2 or row 1 and column 3.
-	 * 
-	 * @return the value of the element at index 2 or row 1 and column 3
-	 */
-	public float getElement13() {
-		return this.element13;
-	}
-	
-	/**
-	 * Returns the value of the element at index 3 or row 2 and column 1.
-	 * 
-	 * @return the value of the element at index 3 or row 2 and column 1
-	 */
-	public float getElement21() {
-		return this.element21;
-	}
-	
-	/**
-	 * Returns the value of the element at index 4 or row 2 and column 2.
-	 * 
-	 * @return the value of the element at index 4 or row 2 and column 2
-	 */
-	public float getElement22() {
-		return this.element22;
-	}
-	
-	/**
-	 * Returns the value of the element at index 5 or row 2 and column 3.
-	 * 
-	 * @return the value of the element at index 5 or row 2 and column 3
-	 */
-	public float getElement23() {
-		return this.element23;
-	}
-	
-	/**
-	 * Returns the value of the element at index 6 or row 3 and column 1.
-	 * 
-	 * @return the value of the element at index 6 or row 3 and column 1
-	 */
-	public float getElement31() {
-		return this.element31;
-	}
-	
-	/**
-	 * Returns the value of the element at index 7 or row 3 and column 2.
-	 * 
-	 * @return the value of the element at index 7 or row 3 and column 2
-	 */
-	public float getElement32() {
-		return this.element32;
-	}
-	
-	/**
-	 * Returns the value of the element at index 8 or row 3 and column 3.
-	 * 
-	 * @return the value of the element at index 8 or row 3 and column 3
-	 */
-	public float getElement33() {
-		return this.element33;
 	}
 	
 	/**

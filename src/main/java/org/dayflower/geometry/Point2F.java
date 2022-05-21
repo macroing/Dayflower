@@ -688,8 +688,8 @@ public final class Point2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point2F transform(final Matrix33F mLHS, final Point2F pRHS) {
-		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13();
-		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23();
+		final float x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13;
+		final float y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23;
 		
 		return new Point2F(x, y);
 	}
@@ -707,9 +707,9 @@ public final class Point2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point2F transformAndDivide(final Matrix33F mLHS, final Point2F pRHS) {
-		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13();
-		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23();
-		final float z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33();
+		final float x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13;
+		final float y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23;
+		final float z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33;
 		
 		return equal(z, 1.0F) || isZero(z) ? new Point2F(x, y) : new Point2F(x / z, y / z);
 	}

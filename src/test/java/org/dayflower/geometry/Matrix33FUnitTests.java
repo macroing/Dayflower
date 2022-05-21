@@ -47,30 +47,30 @@ public final class Matrix33FUnitTests {
 	public void testConstructor() {
 		final Matrix33F matrix = new Matrix33F();
 		
-		assertEquals(1.0F, matrix.getElement11());
-		assertEquals(0.0F, matrix.getElement12());
-		assertEquals(0.0F, matrix.getElement13());
-		assertEquals(0.0F, matrix.getElement21());
-		assertEquals(1.0F, matrix.getElement22());
-		assertEquals(0.0F, matrix.getElement23());
-		assertEquals(0.0F, matrix.getElement31());
-		assertEquals(0.0F, matrix.getElement32());
-		assertEquals(1.0F, matrix.getElement33());
+		assertEquals(1.0F, matrix.element11);
+		assertEquals(0.0F, matrix.element12);
+		assertEquals(0.0F, matrix.element13);
+		assertEquals(0.0F, matrix.element21);
+		assertEquals(1.0F, matrix.element22);
+		assertEquals(0.0F, matrix.element23);
+		assertEquals(0.0F, matrix.element31);
+		assertEquals(0.0F, matrix.element32);
+		assertEquals(1.0F, matrix.element33);
 	}
 	
 	@Test
 	public void testConstructorFloatFloatFloatFloatFloatFloatFloatFloatFloat() {
 		final Matrix33F matrix = new Matrix33F(1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F);
 		
-		assertEquals(1.0F, matrix.getElement11());
-		assertEquals(2.0F, matrix.getElement12());
-		assertEquals(3.0F, matrix.getElement13());
-		assertEquals(4.0F, matrix.getElement21());
-		assertEquals(5.0F, matrix.getElement22());
-		assertEquals(6.0F, matrix.getElement23());
-		assertEquals(7.0F, matrix.getElement31());
-		assertEquals(8.0F, matrix.getElement32());
-		assertEquals(9.0F, matrix.getElement33());
+		assertEquals(1.0F, matrix.element11);
+		assertEquals(2.0F, matrix.element12);
+		assertEquals(3.0F, matrix.element13);
+		assertEquals(4.0F, matrix.element21);
+		assertEquals(5.0F, matrix.element22);
+		assertEquals(6.0F, matrix.element23);
+		assertEquals(7.0F, matrix.element31);
+		assertEquals(8.0F, matrix.element32);
+		assertEquals(9.0F, matrix.element33);
 	}
 	
 	@Test
@@ -159,69 +159,6 @@ public final class Matrix33FUnitTests {
 	}
 	
 	@Test
-	public void testGetElement11() {
-		final Matrix33F matrix = new Matrix33F(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, matrix.getElement11());
-	}
-	
-	@Test
-	public void testGetElement12() {
-		final Matrix33F matrix = new Matrix33F(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, matrix.getElement12());
-	}
-	
-	@Test
-	public void testGetElement13() {
-		final Matrix33F matrix = new Matrix33F(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, matrix.getElement13());
-	}
-	
-	@Test
-	public void testGetElement21() {
-		final Matrix33F matrix = new Matrix33F(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, matrix.getElement21());
-	}
-	
-	@Test
-	public void testGetElement22() {
-		final Matrix33F matrix = new Matrix33F(0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, matrix.getElement22());
-	}
-	
-	@Test
-	public void testGetElement23() {
-		final Matrix33F matrix = new Matrix33F(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, matrix.getElement23());
-	}
-	
-	@Test
-	public void testGetElement31() {
-		final Matrix33F matrix = new Matrix33F(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-		
-		assertEquals(1.0F, matrix.getElement31());
-	}
-	
-	@Test
-	public void testGetElement32() {
-		final Matrix33F matrix = new Matrix33F(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
-		
-		assertEquals(1.0F, matrix.getElement32());
-	}
-	
-	@Test
-	public void testGetElement33() {
-		final Matrix33F matrix = new Matrix33F(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
-		
-		assertEquals(1.0F, matrix.getElement33());
-	}
-	
-	@Test
 	public void testHashCode() {
 		final Matrix33F a = new Matrix33F(1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F);
 		final Matrix33F b = new Matrix33F(1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F);
@@ -234,15 +171,15 @@ public final class Matrix33FUnitTests {
 	public void testIdentity() {
 		final Matrix33F matrix = Matrix33F.identity();
 		
-		assertEquals(1.0F, matrix.getElement11());
-		assertEquals(0.0F, matrix.getElement12());
-		assertEquals(0.0F, matrix.getElement13());
-		assertEquals(0.0F, matrix.getElement21());
-		assertEquals(1.0F, matrix.getElement22());
-		assertEquals(0.0F, matrix.getElement23());
-		assertEquals(0.0F, matrix.getElement31());
-		assertEquals(0.0F, matrix.getElement32());
-		assertEquals(1.0F, matrix.getElement33());
+		assertEquals(1.0F, matrix.element11);
+		assertEquals(0.0F, matrix.element12);
+		assertEquals(0.0F, matrix.element13);
+		assertEquals(0.0F, matrix.element21);
+		assertEquals(1.0F, matrix.element22);
+		assertEquals(0.0F, matrix.element23);
+		assertEquals(0.0F, matrix.element31);
+		assertEquals(0.0F, matrix.element32);
+		assertEquals(1.0F, matrix.element33);
 	}
 	
 	@Test
@@ -275,15 +212,15 @@ public final class Matrix33FUnitTests {
 		final Matrix33F b = new Matrix33F(1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F);
 		final Matrix33F c = Matrix33F.multiply(a, b);
 		
-		assertEquals( 30.0F, c.getElement11());
-		assertEquals( 36.0F, c.getElement12());
-		assertEquals( 42.0F, c.getElement13());
-		assertEquals( 66.0F, c.getElement21());
-		assertEquals( 81.0F, c.getElement22());
-		assertEquals( 96.0F, c.getElement23());
-		assertEquals(102.0F, c.getElement31());
-		assertEquals(126.0F, c.getElement32());
-		assertEquals(150.0F, c.getElement33());
+		assertEquals( 30.0F, c.element11);
+		assertEquals( 36.0F, c.element12);
+		assertEquals( 42.0F, c.element13);
+		assertEquals( 66.0F, c.element21);
+		assertEquals( 81.0F, c.element22);
+		assertEquals( 96.0F, c.element23);
+		assertEquals(102.0F, c.element31);
+		assertEquals(126.0F, c.element32);
+		assertEquals(150.0F, c.element33);
 		
 		assertThrows(NullPointerException.class, () -> Matrix33F.multiply(a, null));
 		assertThrows(NullPointerException.class, () -> Matrix33F.multiply(null, b));
@@ -297,15 +234,15 @@ public final class Matrix33FUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeFloat(a.getElement11());
-		dataOutput.writeFloat(a.getElement12());
-		dataOutput.writeFloat(a.getElement13());
-		dataOutput.writeFloat(a.getElement21());
-		dataOutput.writeFloat(a.getElement22());
-		dataOutput.writeFloat(a.getElement23());
-		dataOutput.writeFloat(a.getElement31());
-		dataOutput.writeFloat(a.getElement32());
-		dataOutput.writeFloat(a.getElement33());
+		dataOutput.writeFloat(a.element11);
+		dataOutput.writeFloat(a.element12);
+		dataOutput.writeFloat(a.element13);
+		dataOutput.writeFloat(a.element21);
+		dataOutput.writeFloat(a.element22);
+		dataOutput.writeFloat(a.element23);
+		dataOutput.writeFloat(a.element31);
+		dataOutput.writeFloat(a.element32);
+		dataOutput.writeFloat(a.element33);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		
@@ -321,15 +258,15 @@ public final class Matrix33FUnitTests {
 	public void testRotate() {
 		final Matrix33F matrix = Matrix33F.rotate(AngleF.degrees(0.0F));
 		
-		assertEquals(+1.0F, matrix.getElement11());
-		assertEquals(+0.0F, matrix.getElement12());
-		assertEquals(+0.0F, matrix.getElement13());
-		assertEquals(-0.0F, matrix.getElement21());
-		assertEquals(+1.0F, matrix.getElement22());
-		assertEquals(+0.0F, matrix.getElement23());
-		assertEquals(+0.0F, matrix.getElement31());
-		assertEquals(+0.0F, matrix.getElement32());
-		assertEquals(+1.0F, matrix.getElement33());
+		assertEquals(+1.0F, matrix.element11);
+		assertEquals(+0.0F, matrix.element12);
+		assertEquals(+0.0F, matrix.element13);
+		assertEquals(-0.0F, matrix.element21);
+		assertEquals(+1.0F, matrix.element22);
+		assertEquals(+0.0F, matrix.element23);
+		assertEquals(+0.0F, matrix.element31);
+		assertEquals(+0.0F, matrix.element32);
+		assertEquals(+1.0F, matrix.element33);
 		
 		assertThrows(NullPointerException.class, () -> Matrix33F.rotate(null));
 	}
@@ -338,45 +275,45 @@ public final class Matrix33FUnitTests {
 	public void testScaleFloat() {
 		final Matrix33F matrix = Matrix33F.scale(2.0F);
 		
-		assertEquals(2.0F, matrix.getElement11());
-		assertEquals(0.0F, matrix.getElement12());
-		assertEquals(0.0F, matrix.getElement13());
-		assertEquals(0.0F, matrix.getElement21());
-		assertEquals(2.0F, matrix.getElement22());
-		assertEquals(0.0F, matrix.getElement23());
-		assertEquals(0.0F, matrix.getElement31());
-		assertEquals(0.0F, matrix.getElement32());
-		assertEquals(1.0F, matrix.getElement33());
+		assertEquals(2.0F, matrix.element11);
+		assertEquals(0.0F, matrix.element12);
+		assertEquals(0.0F, matrix.element13);
+		assertEquals(0.0F, matrix.element21);
+		assertEquals(2.0F, matrix.element22);
+		assertEquals(0.0F, matrix.element23);
+		assertEquals(0.0F, matrix.element31);
+		assertEquals(0.0F, matrix.element32);
+		assertEquals(1.0F, matrix.element33);
 	}
 	
 	@Test
 	public void testScaleFloatFloat() {
 		final Matrix33F matrix = Matrix33F.scale(2.0F, 3.0F);
 		
-		assertEquals(2.0F, matrix.getElement11());
-		assertEquals(0.0F, matrix.getElement12());
-		assertEquals(0.0F, matrix.getElement13());
-		assertEquals(0.0F, matrix.getElement21());
-		assertEquals(3.0F, matrix.getElement22());
-		assertEquals(0.0F, matrix.getElement23());
-		assertEquals(0.0F, matrix.getElement31());
-		assertEquals(0.0F, matrix.getElement32());
-		assertEquals(1.0F, matrix.getElement33());
+		assertEquals(2.0F, matrix.element11);
+		assertEquals(0.0F, matrix.element12);
+		assertEquals(0.0F, matrix.element13);
+		assertEquals(0.0F, matrix.element21);
+		assertEquals(3.0F, matrix.element22);
+		assertEquals(0.0F, matrix.element23);
+		assertEquals(0.0F, matrix.element31);
+		assertEquals(0.0F, matrix.element32);
+		assertEquals(1.0F, matrix.element33);
 	}
 	
 	@Test
 	public void testScaleVector2F() {
 		final Matrix33F matrix = Matrix33F.scale(new Vector2F(2.0F, 3.0F));
 		
-		assertEquals(2.0F, matrix.getElement11());
-		assertEquals(0.0F, matrix.getElement12());
-		assertEquals(0.0F, matrix.getElement13());
-		assertEquals(0.0F, matrix.getElement21());
-		assertEquals(3.0F, matrix.getElement22());
-		assertEquals(0.0F, matrix.getElement23());
-		assertEquals(0.0F, matrix.getElement31());
-		assertEquals(0.0F, matrix.getElement32());
-		assertEquals(1.0F, matrix.getElement33());
+		assertEquals(2.0F, matrix.element11);
+		assertEquals(0.0F, matrix.element12);
+		assertEquals(0.0F, matrix.element13);
+		assertEquals(0.0F, matrix.element21);
+		assertEquals(3.0F, matrix.element22);
+		assertEquals(0.0F, matrix.element23);
+		assertEquals(0.0F, matrix.element31);
+		assertEquals(0.0F, matrix.element32);
+		assertEquals(1.0F, matrix.element33);
 		
 		assertThrows(NullPointerException.class, () -> Matrix33F.scale(null));
 	}
@@ -392,30 +329,30 @@ public final class Matrix33FUnitTests {
 	public void testTranslateFloatFloat() {
 		final Matrix33F matrix = Matrix33F.translate(2.0F, 3.0F);
 		
-		assertEquals(1.0F, matrix.getElement11());
-		assertEquals(0.0F, matrix.getElement12());
-		assertEquals(2.0F, matrix.getElement13());
-		assertEquals(0.0F, matrix.getElement21());
-		assertEquals(1.0F, matrix.getElement22());
-		assertEquals(3.0F, matrix.getElement23());
-		assertEquals(0.0F, matrix.getElement31());
-		assertEquals(0.0F, matrix.getElement32());
-		assertEquals(1.0F, matrix.getElement33());
+		assertEquals(1.0F, matrix.element11);
+		assertEquals(0.0F, matrix.element12);
+		assertEquals(2.0F, matrix.element13);
+		assertEquals(0.0F, matrix.element21);
+		assertEquals(1.0F, matrix.element22);
+		assertEquals(3.0F, matrix.element23);
+		assertEquals(0.0F, matrix.element31);
+		assertEquals(0.0F, matrix.element32);
+		assertEquals(1.0F, matrix.element33);
 	}
 	
 	@Test
 	public void testTranslatePoint2F() {
 		final Matrix33F matrix = Matrix33F.translate(new Point2F(2.0F, 3.0F));
 		
-		assertEquals(1.0F, matrix.getElement11());
-		assertEquals(0.0F, matrix.getElement12());
-		assertEquals(2.0F, matrix.getElement13());
-		assertEquals(0.0F, matrix.getElement21());
-		assertEquals(1.0F, matrix.getElement22());
-		assertEquals(3.0F, matrix.getElement23());
-		assertEquals(0.0F, matrix.getElement31());
-		assertEquals(0.0F, matrix.getElement32());
-		assertEquals(1.0F, matrix.getElement33());
+		assertEquals(1.0F, matrix.element11);
+		assertEquals(0.0F, matrix.element12);
+		assertEquals(2.0F, matrix.element13);
+		assertEquals(0.0F, matrix.element21);
+		assertEquals(1.0F, matrix.element22);
+		assertEquals(3.0F, matrix.element23);
+		assertEquals(0.0F, matrix.element31);
+		assertEquals(0.0F, matrix.element32);
+		assertEquals(1.0F, matrix.element33);
 		
 		assertThrows(NullPointerException.class, () -> Matrix33F.translate(null));
 	}
@@ -425,15 +362,15 @@ public final class Matrix33FUnitTests {
 		final Matrix33F a = new Matrix33F(1.0F, 2.0F, 3.0F, 4.0F, 5.0F, 6.0F, 7.0F, 8.0F, 9.0F);
 		final Matrix33F b = Matrix33F.transpose(a);
 		
-		assertEquals(1.0F, b.getElement11());
-		assertEquals(4.0F, b.getElement12());
-		assertEquals(7.0F, b.getElement13());
-		assertEquals(2.0F, b.getElement21());
-		assertEquals(5.0F, b.getElement22());
-		assertEquals(8.0F, b.getElement23());
-		assertEquals(3.0F, b.getElement31());
-		assertEquals(6.0F, b.getElement32());
-		assertEquals(9.0F, b.getElement33());
+		assertEquals(1.0F, b.element11);
+		assertEquals(4.0F, b.element12);
+		assertEquals(7.0F, b.element13);
+		assertEquals(2.0F, b.element21);
+		assertEquals(5.0F, b.element22);
+		assertEquals(8.0F, b.element23);
+		assertEquals(3.0F, b.element31);
+		assertEquals(6.0F, b.element32);
+		assertEquals(9.0F, b.element33);
 		
 		assertThrows(NullPointerException.class, () -> Matrix33F.transpose(null));
 	}

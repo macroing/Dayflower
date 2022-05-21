@@ -580,8 +580,8 @@ public final class Vector2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
 	 */
 	public static Vector2D transform(final Matrix33D mLHS, final Vector2D vRHS) {
-		final double x = mLHS.getElement11() * vRHS.x + mLHS.getElement12() * vRHS.y;
-		final double y = mLHS.getElement21() * vRHS.x + mLHS.getElement22() * vRHS.y;
+		final double x = mLHS.element11 * vRHS.x + mLHS.element12 * vRHS.y;
+		final double y = mLHS.element21 * vRHS.x + mLHS.element22 * vRHS.y;
 		
 		return new Vector2D(x, y);
 	}
@@ -599,8 +599,8 @@ public final class Vector2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
 	 */
 	public static Vector2D transformTranspose(final Matrix33D mLHS, final Vector2D vRHS) {
-		final double x = mLHS.getElement11() * vRHS.x + mLHS.getElement21() * vRHS.y;
-		final double y = mLHS.getElement12() * vRHS.x + mLHS.getElement22() * vRHS.y;
+		final double x = mLHS.element11 * vRHS.x + mLHS.element21 * vRHS.y;
+		final double y = mLHS.element12 * vRHS.x + mLHS.element22 * vRHS.y;
 		
 		return new Vector2D(x, y);
 	}

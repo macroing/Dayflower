@@ -313,15 +313,15 @@ public final class Quaternion4D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Quaternion4D from(final Matrix44D m) {
-		final double element11 = m.getElement11();
-		final double element12 = m.getElement12();
-		final double element13 = m.getElement13();
-		final double element21 = m.getElement21();
-		final double element22 = m.getElement22();
-		final double element23 = m.getElement23();
-		final double element31 = m.getElement31();
-		final double element32 = m.getElement32();
-		final double element33 = m.getElement33();
+		final double element11 = m.element11;
+		final double element12 = m.element12;
+		final double element13 = m.element13;
+		final double element21 = m.element21;
+		final double element22 = m.element22;
+		final double element23 = m.element23;
+		final double element31 = m.element31;
+		final double element32 = m.element32;
+		final double element33 = m.element33;
 		
 		if(element11 + element22 + element33 > 0.0D) {
 			final double scalar = 0.5D / sqrt(element11 + element22 + element33 + 1.0D);

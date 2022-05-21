@@ -69,44 +69,44 @@ public final class Matrix44DUnitTests {
 	public void testConstructor() {
 		final Matrix44D matrix = new Matrix44D();
 		
-		assertEquals(1.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(0.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(1.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(0.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(1.0D, matrix.getElement33());
-		assertEquals(0.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(1.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(0.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(1.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(0.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(1.0D, matrix.element33);
+		assertEquals(0.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 	}
 	
 	@Test
 	public void testConstructorDoubleDoubleDoubleDoubleDoubleDoubleDoubleDoubleDoubleDoubleDoubleDoubleDoubleDoubleDoubleDouble() {
 		final Matrix44D matrix = new Matrix44D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D, 10.0D, 11.0D, 12.0D, 13.0D, 14.0D, 15.0D, 16.0D);
 		
-		assertEquals( 1.0D, matrix.getElement11());
-		assertEquals( 2.0D, matrix.getElement12());
-		assertEquals( 3.0D, matrix.getElement13());
-		assertEquals( 4.0D, matrix.getElement14());
-		assertEquals( 5.0D, matrix.getElement21());
-		assertEquals( 6.0D, matrix.getElement22());
-		assertEquals( 7.0D, matrix.getElement23());
-		assertEquals( 8.0D, matrix.getElement24());
-		assertEquals( 9.0D, matrix.getElement31());
-		assertEquals(10.0D, matrix.getElement32());
-		assertEquals(11.0D, matrix.getElement33());
-		assertEquals(12.0D, matrix.getElement34());
-		assertEquals(13.0D, matrix.getElement41());
-		assertEquals(14.0D, matrix.getElement42());
-		assertEquals(15.0D, matrix.getElement43());
-		assertEquals(16.0D, matrix.getElement44());
+		assertEquals( 1.0D, matrix.element11);
+		assertEquals( 2.0D, matrix.element12);
+		assertEquals( 3.0D, matrix.element13);
+		assertEquals( 4.0D, matrix.element14);
+		assertEquals( 5.0D, matrix.element21);
+		assertEquals( 6.0D, matrix.element22);
+		assertEquals( 7.0D, matrix.element23);
+		assertEquals( 8.0D, matrix.element24);
+		assertEquals( 9.0D, matrix.element31);
+		assertEquals(10.0D, matrix.element32);
+		assertEquals(11.0D, matrix.element33);
+		assertEquals(12.0D, matrix.element34);
+		assertEquals(13.0D, matrix.element41);
+		assertEquals(14.0D, matrix.element42);
+		assertEquals(15.0D, matrix.element43);
+		assertEquals(16.0D, matrix.element44);
 	}
 	
 	@Test
@@ -230,118 +230,6 @@ public final class Matrix44DUnitTests {
 	}
 	
 	@Test
-	public void testGetElement11() {
-		final Matrix44D matrix = new Matrix44D(1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement11());
-	}
-	
-	@Test
-	public void testGetElement12() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement12());
-	}
-	
-	@Test
-	public void testGetElement13() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement13());
-	}
-	
-	@Test
-	public void testGetElement14() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement14());
-	}
-	
-	@Test
-	public void testGetElement21() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement21());
-	}
-	
-	@Test
-	public void testGetElement22() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement22());
-	}
-	
-	@Test
-	public void testGetElement23() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement23());
-	}
-	
-	@Test
-	public void testGetElement24() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement24());
-	}
-	
-	@Test
-	public void testGetElement31() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement31());
-	}
-	
-	@Test
-	public void testGetElement32() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement32());
-	}
-	
-	@Test
-	public void testGetElement33() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement33());
-	}
-	
-	@Test
-	public void testGetElement34() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement34());
-	}
-	
-	@Test
-	public void testGetElement41() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement41());
-	}
-	
-	@Test
-	public void testGetElement42() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement42());
-	}
-	
-	@Test
-	public void testGetElement43() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 0.0D);
-		
-		assertEquals(1.0D, matrix.getElement43());
-	}
-	
-	@Test
-	public void testGetElement44() {
-		final Matrix44D matrix = new Matrix44D(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
-		
-		assertEquals(1.0D, matrix.getElement44());
-	}
-	
-	@Test
 	public void testHashCode() {
 		final Matrix44D a = new Matrix44D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D, 10.0D, 11.0D, 12.0D, 13.0D, 14.0D, 15.0D, 16.0D);
 		final Matrix44D b = new Matrix44D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D, 10.0D, 11.0D, 12.0D, 13.0D, 14.0D, 15.0D, 16.0D);
@@ -354,22 +242,22 @@ public final class Matrix44DUnitTests {
 	public void testIdentity() {
 		final Matrix44D matrix = Matrix44D.identity();
 		
-		assertEquals(1.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(0.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(1.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(0.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(1.0D, matrix.getElement33());
-		assertEquals(0.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(1.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(0.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(1.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(0.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(1.0D, matrix.element33);
+		assertEquals(0.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 	}
 	
 	@Test
@@ -400,22 +288,22 @@ public final class Matrix44DUnitTests {
 	public void testLookAt() {
 		final Matrix44D matrix = Matrix44D.lookAt(new Point3D(1.0D, 1.0D, 1.0D), new Point3D(1.0D, 1.0D, 2.0D), Vector3D.y());
 		
-		assertEquals(1.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(1.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(1.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(1.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(1.0D, matrix.getElement33());
-		assertEquals(1.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(1.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(1.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(1.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(1.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(1.0D, matrix.element33);
+		assertEquals(1.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.lookAt(new Point3D(), new Point3D(), null));
 		assertThrows(NullPointerException.class, () -> Matrix44D.lookAt(new Point3D(), null, new Vector3D()));
@@ -428,22 +316,22 @@ public final class Matrix44DUnitTests {
 		final Matrix44D b = new Matrix44D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D, 10.0D, 11.0D, 12.0D, 13.0D, 14.0D, 15.0D, 16.0D);
 		final Matrix44D c = Matrix44D.multiply(a, b);
 		
-		assertEquals( 90.0D, c.getElement11());
-		assertEquals(100.0D, c.getElement12());
-		assertEquals(110.0D, c.getElement13());
-		assertEquals(120.0D, c.getElement14());
-		assertEquals(202.0D, c.getElement21());
-		assertEquals(228.0D, c.getElement22());
-		assertEquals(254.0D, c.getElement23());
-		assertEquals(280.0D, c.getElement24());
-		assertEquals(314.0D, c.getElement31());
-		assertEquals(356.0D, c.getElement32());
-		assertEquals(398.0D, c.getElement33());
-		assertEquals(440.0D, c.getElement34());
-		assertEquals(426.0D, c.getElement41());
-		assertEquals(484.0D, c.getElement42());
-		assertEquals(542.0D, c.getElement43());
-		assertEquals(600.0D, c.getElement44());
+		assertEquals( 90.0D, c.element11);
+		assertEquals(100.0D, c.element12);
+		assertEquals(110.0D, c.element13);
+		assertEquals(120.0D, c.element14);
+		assertEquals(202.0D, c.element21);
+		assertEquals(228.0D, c.element22);
+		assertEquals(254.0D, c.element23);
+		assertEquals(280.0D, c.element24);
+		assertEquals(314.0D, c.element31);
+		assertEquals(356.0D, c.element32);
+		assertEquals(398.0D, c.element33);
+		assertEquals(440.0D, c.element34);
+		assertEquals(426.0D, c.element41);
+		assertEquals(484.0D, c.element42);
+		assertEquals(542.0D, c.element43);
+		assertEquals(600.0D, c.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.multiply(a, null));
 		assertThrows(NullPointerException.class, () -> Matrix44D.multiply(null, b));
@@ -457,22 +345,22 @@ public final class Matrix44DUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeDouble(a.getElement11());
-		dataOutput.writeDouble(a.getElement12());
-		dataOutput.writeDouble(a.getElement13());
-		dataOutput.writeDouble(a.getElement14());
-		dataOutput.writeDouble(a.getElement21());
-		dataOutput.writeDouble(a.getElement22());
-		dataOutput.writeDouble(a.getElement23());
-		dataOutput.writeDouble(a.getElement24());
-		dataOutput.writeDouble(a.getElement31());
-		dataOutput.writeDouble(a.getElement32());
-		dataOutput.writeDouble(a.getElement33());
-		dataOutput.writeDouble(a.getElement34());
-		dataOutput.writeDouble(a.getElement41());
-		dataOutput.writeDouble(a.getElement42());
-		dataOutput.writeDouble(a.getElement43());
-		dataOutput.writeDouble(a.getElement44());
+		dataOutput.writeDouble(a.element11);
+		dataOutput.writeDouble(a.element12);
+		dataOutput.writeDouble(a.element13);
+		dataOutput.writeDouble(a.element14);
+		dataOutput.writeDouble(a.element21);
+		dataOutput.writeDouble(a.element22);
+		dataOutput.writeDouble(a.element23);
+		dataOutput.writeDouble(a.element24);
+		dataOutput.writeDouble(a.element31);
+		dataOutput.writeDouble(a.element32);
+		dataOutput.writeDouble(a.element33);
+		dataOutput.writeDouble(a.element34);
+		dataOutput.writeDouble(a.element41);
+		dataOutput.writeDouble(a.element42);
+		dataOutput.writeDouble(a.element43);
+		dataOutput.writeDouble(a.element44);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		
@@ -523,22 +411,22 @@ public final class Matrix44DUnitTests {
 	public void testRotateOrthonormalBasis33D() {
 		final Matrix44D matrix = Matrix44D.rotate(new OrthonormalBasis33D(Vector3D.z(), Vector3D.y(), Vector3D.x()));
 		
-		assertEquals(1.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(0.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(1.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(0.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(1.0D, matrix.getElement33());
-		assertEquals(0.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(1.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(0.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(1.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(0.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(1.0D, matrix.element33);
+		assertEquals(0.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.rotate((OrthonormalBasis33D)(null)));
 	}
@@ -547,22 +435,22 @@ public final class Matrix44DUnitTests {
 	public void testRotateVector3DVector3D() {
 		final Matrix44D matrix = Matrix44D.rotate(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(0.0D, 1.0D, 0.0D));
 		
-		assertEquals(1.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(0.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(1.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(0.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(1.0D, matrix.getElement33());
-		assertEquals(0.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(1.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(0.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(1.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(0.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(1.0D, matrix.element33);
+		assertEquals(0.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.rotate(new Vector3D(0.0D, 0.0D, 1.0D), null));
 		assertThrows(NullPointerException.class, () -> Matrix44D.rotate((Vector3D)(null), new Vector3D(0.0D, 1.0D, 0.0D)));
@@ -572,22 +460,22 @@ public final class Matrix44DUnitTests {
 	public void testRotateVector3DVector3DVector3D() {
 		final Matrix44D matrix = Matrix44D.rotate(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(0.0D, 1.0D, 0.0D), new Vector3D(1.0D, 0.0D, 0.0D));
 		
-		assertEquals(1.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(0.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(1.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(0.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(1.0D, matrix.getElement33());
-		assertEquals(0.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(1.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(0.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(1.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(0.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(1.0D, matrix.element33);
+		assertEquals(0.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.rotate(new Vector3D(0.0D, 0.0D, 1.0D), new Vector3D(0.0D, 1.0D, 0.0D), null));
 		assertThrows(NullPointerException.class, () -> Matrix44D.rotate(new Vector3D(0.0D, 0.0D, 1.0D), null, new Vector3D(1.0D, 0.0D, 0.0D)));
@@ -603,22 +491,22 @@ public final class Matrix44DUnitTests {
 		
 		final Matrix44D matrix = Matrix44D.rotateX(AngleD.degrees(angleDegrees));
 		
-		assertEquals(1.0D,             matrix.getElement11());
-		assertEquals(0.0D,             matrix.getElement12());
-		assertEquals(0.0D,             matrix.getElement13());
-		assertEquals(0.0D,             matrix.getElement14());
-		assertEquals(0.0D,             matrix.getElement21());
-		assertEquals(+angleRadiansCos, matrix.getElement22());
-		assertEquals(-angleRadiansSin, matrix.getElement23());
-		assertEquals(0.0D,             matrix.getElement24());
-		assertEquals(0.0D,             matrix.getElement31());
-		assertEquals(+angleRadiansSin, matrix.getElement32());
-		assertEquals(+angleRadiansCos, matrix.getElement33());
-		assertEquals(0.0D,             matrix.getElement34());
-		assertEquals(0.0D,             matrix.getElement41());
-		assertEquals(0.0D,             matrix.getElement42());
-		assertEquals(0.0D,             matrix.getElement43());
-		assertEquals(1.0D,             matrix.getElement44());
+		assertEquals(1.0D,             matrix.element11);
+		assertEquals(0.0D,             matrix.element12);
+		assertEquals(0.0D,             matrix.element13);
+		assertEquals(0.0D,             matrix.element14);
+		assertEquals(0.0D,             matrix.element21);
+		assertEquals(+angleRadiansCos, matrix.element22);
+		assertEquals(-angleRadiansSin, matrix.element23);
+		assertEquals(0.0D,             matrix.element24);
+		assertEquals(0.0D,             matrix.element31);
+		assertEquals(+angleRadiansSin, matrix.element32);
+		assertEquals(+angleRadiansCos, matrix.element33);
+		assertEquals(0.0D,             matrix.element34);
+		assertEquals(0.0D,             matrix.element41);
+		assertEquals(0.0D,             matrix.element42);
+		assertEquals(0.0D,             matrix.element43);
+		assertEquals(1.0D,             matrix.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.rotateX(null));
 	}
@@ -632,22 +520,22 @@ public final class Matrix44DUnitTests {
 		
 		final Matrix44D matrix = Matrix44D.rotateX(angleDegrees);
 		
-		assertEquals(1.0D,             matrix.getElement11());
-		assertEquals(0.0D,             matrix.getElement12());
-		assertEquals(0.0D,             matrix.getElement13());
-		assertEquals(0.0D,             matrix.getElement14());
-		assertEquals(0.0D,             matrix.getElement21());
-		assertEquals(+angleRadiansCos, matrix.getElement22());
-		assertEquals(-angleRadiansSin, matrix.getElement23());
-		assertEquals(0.0D,             matrix.getElement24());
-		assertEquals(0.0D,             matrix.getElement31());
-		assertEquals(+angleRadiansSin, matrix.getElement32());
-		assertEquals(+angleRadiansCos, matrix.getElement33());
-		assertEquals(0.0D,             matrix.getElement34());
-		assertEquals(0.0D,             matrix.getElement41());
-		assertEquals(0.0D,             matrix.getElement42());
-		assertEquals(0.0D,             matrix.getElement43());
-		assertEquals(1.0D,             matrix.getElement44());
+		assertEquals(1.0D,             matrix.element11);
+		assertEquals(0.0D,             matrix.element12);
+		assertEquals(0.0D,             matrix.element13);
+		assertEquals(0.0D,             matrix.element14);
+		assertEquals(0.0D,             matrix.element21);
+		assertEquals(+angleRadiansCos, matrix.element22);
+		assertEquals(-angleRadiansSin, matrix.element23);
+		assertEquals(0.0D,             matrix.element24);
+		assertEquals(0.0D,             matrix.element31);
+		assertEquals(+angleRadiansSin, matrix.element32);
+		assertEquals(+angleRadiansCos, matrix.element33);
+		assertEquals(0.0D,             matrix.element34);
+		assertEquals(0.0D,             matrix.element41);
+		assertEquals(0.0D,             matrix.element42);
+		assertEquals(0.0D,             matrix.element43);
+		assertEquals(1.0D,             matrix.element44);
 	}
 	
 	@Test
@@ -660,39 +548,39 @@ public final class Matrix44DUnitTests {
 		final Matrix44D a = Matrix44D.rotateX(angleDegrees, false);
 		final Matrix44D b = Matrix44D.rotateX(angleRadians, true);
 		
-		assertEquals(1.0D,             a.getElement11());
-		assertEquals(0.0D,             a.getElement12());
-		assertEquals(0.0D,             a.getElement13());
-		assertEquals(0.0D,             a.getElement14());
-		assertEquals(0.0D,             a.getElement21());
-		assertEquals(+angleRadiansCos, a.getElement22());
-		assertEquals(-angleRadiansSin, a.getElement23());
-		assertEquals(0.0D,             a.getElement24());
-		assertEquals(0.0D,             a.getElement31());
-		assertEquals(+angleRadiansSin, a.getElement32());
-		assertEquals(+angleRadiansCos, a.getElement33());
-		assertEquals(0.0D,             a.getElement34());
-		assertEquals(0.0D,             a.getElement41());
-		assertEquals(0.0D,             a.getElement42());
-		assertEquals(0.0D,             a.getElement43());
-		assertEquals(1.0D,             a.getElement44());
+		assertEquals(1.0D,             a.element11);
+		assertEquals(0.0D,             a.element12);
+		assertEquals(0.0D,             a.element13);
+		assertEquals(0.0D,             a.element14);
+		assertEquals(0.0D,             a.element21);
+		assertEquals(+angleRadiansCos, a.element22);
+		assertEquals(-angleRadiansSin, a.element23);
+		assertEquals(0.0D,             a.element24);
+		assertEquals(0.0D,             a.element31);
+		assertEquals(+angleRadiansSin, a.element32);
+		assertEquals(+angleRadiansCos, a.element33);
+		assertEquals(0.0D,             a.element34);
+		assertEquals(0.0D,             a.element41);
+		assertEquals(0.0D,             a.element42);
+		assertEquals(0.0D,             a.element43);
+		assertEquals(1.0D,             a.element44);
 		
-		assertEquals(1.0D,             b.getElement11());
-		assertEquals(0.0D,             b.getElement12());
-		assertEquals(0.0D,             b.getElement13());
-		assertEquals(0.0D,             b.getElement14());
-		assertEquals(0.0D,             b.getElement21());
-		assertEquals(+angleRadiansCos, b.getElement22());
-		assertEquals(-angleRadiansSin, b.getElement23());
-		assertEquals(0.0D,             b.getElement24());
-		assertEquals(0.0D,             b.getElement31());
-		assertEquals(+angleRadiansSin, b.getElement32());
-		assertEquals(+angleRadiansCos, b.getElement33());
-		assertEquals(0.0D,             b.getElement34());
-		assertEquals(0.0D,             b.getElement41());
-		assertEquals(0.0D,             b.getElement42());
-		assertEquals(0.0D,             b.getElement43());
-		assertEquals(1.0D,             b.getElement44());
+		assertEquals(1.0D,             b.element11);
+		assertEquals(0.0D,             b.element12);
+		assertEquals(0.0D,             b.element13);
+		assertEquals(0.0D,             b.element14);
+		assertEquals(0.0D,             b.element21);
+		assertEquals(+angleRadiansCos, b.element22);
+		assertEquals(-angleRadiansSin, b.element23);
+		assertEquals(0.0D,             b.element24);
+		assertEquals(0.0D,             b.element31);
+		assertEquals(+angleRadiansSin, b.element32);
+		assertEquals(+angleRadiansCos, b.element33);
+		assertEquals(0.0D,             b.element34);
+		assertEquals(0.0D,             b.element41);
+		assertEquals(0.0D,             b.element42);
+		assertEquals(0.0D,             b.element43);
+		assertEquals(1.0D,             b.element44);
 	}
 	
 	@Test
@@ -704,22 +592,22 @@ public final class Matrix44DUnitTests {
 		
 		final Matrix44D matrix = Matrix44D.rotateY(AngleD.degrees(angleDegrees));
 		
-		assertEquals(+angleRadiansCos, matrix.getElement11());
-		assertEquals(0.0D,             matrix.getElement12());
-		assertEquals(+angleRadiansSin, matrix.getElement13());
-		assertEquals(0.0D,             matrix.getElement14());
-		assertEquals(0.0D,             matrix.getElement21());
-		assertEquals(1.0D,             matrix.getElement22());
-		assertEquals(0.0D,             matrix.getElement23());
-		assertEquals(0.0D,             matrix.getElement24());
-		assertEquals(-angleRadiansSin, matrix.getElement31());
-		assertEquals(0.0D,             matrix.getElement32());
-		assertEquals(+angleRadiansCos, matrix.getElement33());
-		assertEquals(0.0D,             matrix.getElement34());
-		assertEquals(0.0D,             matrix.getElement41());
-		assertEquals(0.0D,             matrix.getElement42());
-		assertEquals(0.0D,             matrix.getElement43());
-		assertEquals(1.0D,             matrix.getElement44());
+		assertEquals(+angleRadiansCos, matrix.element11);
+		assertEquals(0.0D,             matrix.element12);
+		assertEquals(+angleRadiansSin, matrix.element13);
+		assertEquals(0.0D,             matrix.element14);
+		assertEquals(0.0D,             matrix.element21);
+		assertEquals(1.0D,             matrix.element22);
+		assertEquals(0.0D,             matrix.element23);
+		assertEquals(0.0D,             matrix.element24);
+		assertEquals(-angleRadiansSin, matrix.element31);
+		assertEquals(0.0D,             matrix.element32);
+		assertEquals(+angleRadiansCos, matrix.element33);
+		assertEquals(0.0D,             matrix.element34);
+		assertEquals(0.0D,             matrix.element41);
+		assertEquals(0.0D,             matrix.element42);
+		assertEquals(0.0D,             matrix.element43);
+		assertEquals(1.0D,             matrix.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.rotateY(null));
 	}
@@ -733,22 +621,22 @@ public final class Matrix44DUnitTests {
 		
 		final Matrix44D matrix = Matrix44D.rotateY(angleDegrees);
 		
-		assertEquals(+angleRadiansCos, matrix.getElement11());
-		assertEquals(0.0D,             matrix.getElement12());
-		assertEquals(+angleRadiansSin, matrix.getElement13());
-		assertEquals(0.0D,             matrix.getElement14());
-		assertEquals(0.0D,             matrix.getElement21());
-		assertEquals(1.0D,             matrix.getElement22());
-		assertEquals(0.0D,             matrix.getElement23());
-		assertEquals(0.0D,             matrix.getElement24());
-		assertEquals(-angleRadiansSin, matrix.getElement31());
-		assertEquals(0.0D,             matrix.getElement32());
-		assertEquals(+angleRadiansCos, matrix.getElement33());
-		assertEquals(0.0D,             matrix.getElement34());
-		assertEquals(0.0D,             matrix.getElement41());
-		assertEquals(0.0D,             matrix.getElement42());
-		assertEquals(0.0D,             matrix.getElement43());
-		assertEquals(1.0D,             matrix.getElement44());
+		assertEquals(+angleRadiansCos, matrix.element11);
+		assertEquals(0.0D,             matrix.element12);
+		assertEquals(+angleRadiansSin, matrix.element13);
+		assertEquals(0.0D,             matrix.element14);
+		assertEquals(0.0D,             matrix.element21);
+		assertEquals(1.0D,             matrix.element22);
+		assertEquals(0.0D,             matrix.element23);
+		assertEquals(0.0D,             matrix.element24);
+		assertEquals(-angleRadiansSin, matrix.element31);
+		assertEquals(0.0D,             matrix.element32);
+		assertEquals(+angleRadiansCos, matrix.element33);
+		assertEquals(0.0D,             matrix.element34);
+		assertEquals(0.0D,             matrix.element41);
+		assertEquals(0.0D,             matrix.element42);
+		assertEquals(0.0D,             matrix.element43);
+		assertEquals(1.0D,             matrix.element44);
 	}
 	
 	@Test
@@ -761,39 +649,39 @@ public final class Matrix44DUnitTests {
 		final Matrix44D a = Matrix44D.rotateY(angleDegrees, false);
 		final Matrix44D b = Matrix44D.rotateY(angleRadians, true);
 		
-		assertEquals(+angleRadiansCos, a.getElement11());
-		assertEquals(0.0D,             a.getElement12());
-		assertEquals(+angleRadiansSin, a.getElement13());
-		assertEquals(0.0D,             a.getElement14());
-		assertEquals(0.0D,             a.getElement21());
-		assertEquals(1.0D,             a.getElement22());
-		assertEquals(0.0D,             a.getElement23());
-		assertEquals(0.0D,             a.getElement24());
-		assertEquals(-angleRadiansSin, a.getElement31());
-		assertEquals(0.0D,             a.getElement32());
-		assertEquals(+angleRadiansCos, a.getElement33());
-		assertEquals(0.0D,             a.getElement34());
-		assertEquals(0.0D,             a.getElement41());
-		assertEquals(0.0D,             a.getElement42());
-		assertEquals(0.0D,             a.getElement43());
-		assertEquals(1.0D,             a.getElement44());
+		assertEquals(+angleRadiansCos, a.element11);
+		assertEquals(0.0D,             a.element12);
+		assertEquals(+angleRadiansSin, a.element13);
+		assertEquals(0.0D,             a.element14);
+		assertEquals(0.0D,             a.element21);
+		assertEquals(1.0D,             a.element22);
+		assertEquals(0.0D,             a.element23);
+		assertEquals(0.0D,             a.element24);
+		assertEquals(-angleRadiansSin, a.element31);
+		assertEquals(0.0D,             a.element32);
+		assertEquals(+angleRadiansCos, a.element33);
+		assertEquals(0.0D,             a.element34);
+		assertEquals(0.0D,             a.element41);
+		assertEquals(0.0D,             a.element42);
+		assertEquals(0.0D,             a.element43);
+		assertEquals(1.0D,             a.element44);
 		
-		assertEquals(+angleRadiansCos, b.getElement11());
-		assertEquals(0.0D,             b.getElement12());
-		assertEquals(+angleRadiansSin, b.getElement13());
-		assertEquals(0.0D,             b.getElement14());
-		assertEquals(0.0D,             b.getElement21());
-		assertEquals(1.0D,             b.getElement22());
-		assertEquals(0.0D,             b.getElement23());
-		assertEquals(0.0D,             b.getElement24());
-		assertEquals(-angleRadiansSin, b.getElement31());
-		assertEquals(0.0D,             b.getElement32());
-		assertEquals(+angleRadiansCos, b.getElement33());
-		assertEquals(0.0D,             b.getElement34());
-		assertEquals(0.0D,             b.getElement41());
-		assertEquals(0.0D,             b.getElement42());
-		assertEquals(0.0D,             b.getElement43());
-		assertEquals(1.0D,             b.getElement44());
+		assertEquals(+angleRadiansCos, b.element11);
+		assertEquals(0.0D,             b.element12);
+		assertEquals(+angleRadiansSin, b.element13);
+		assertEquals(0.0D,             b.element14);
+		assertEquals(0.0D,             b.element21);
+		assertEquals(1.0D,             b.element22);
+		assertEquals(0.0D,             b.element23);
+		assertEquals(0.0D,             b.element24);
+		assertEquals(-angleRadiansSin, b.element31);
+		assertEquals(0.0D,             b.element32);
+		assertEquals(+angleRadiansCos, b.element33);
+		assertEquals(0.0D,             b.element34);
+		assertEquals(0.0D,             b.element41);
+		assertEquals(0.0D,             b.element42);
+		assertEquals(0.0D,             b.element43);
+		assertEquals(1.0D,             b.element44);
 	}
 	
 	@Test
@@ -805,22 +693,22 @@ public final class Matrix44DUnitTests {
 		
 		final Matrix44D matrix = Matrix44D.rotateZ(AngleD.degrees(angleDegrees));
 		
-		assertEquals(+angleRadiansCos, matrix.getElement11());
-		assertEquals(-angleRadiansSin, matrix.getElement12());
-		assertEquals(0.0D,             matrix.getElement13());
-		assertEquals(0.0D,             matrix.getElement14());
-		assertEquals(+angleRadiansSin, matrix.getElement21());
-		assertEquals(+angleRadiansCos, matrix.getElement22());
-		assertEquals(0.0D,             matrix.getElement23());
-		assertEquals(0.0D,             matrix.getElement24());
-		assertEquals(0.0D,             matrix.getElement31());
-		assertEquals(0.0D,             matrix.getElement32());
-		assertEquals(1.0D,             matrix.getElement33());
-		assertEquals(0.0D,             matrix.getElement34());
-		assertEquals(0.0D,             matrix.getElement41());
-		assertEquals(0.0D,             matrix.getElement42());
-		assertEquals(0.0D,             matrix.getElement43());
-		assertEquals(1.0D,             matrix.getElement44());
+		assertEquals(+angleRadiansCos, matrix.element11);
+		assertEquals(-angleRadiansSin, matrix.element12);
+		assertEquals(0.0D,             matrix.element13);
+		assertEquals(0.0D,             matrix.element14);
+		assertEquals(+angleRadiansSin, matrix.element21);
+		assertEquals(+angleRadiansCos, matrix.element22);
+		assertEquals(0.0D,             matrix.element23);
+		assertEquals(0.0D,             matrix.element24);
+		assertEquals(0.0D,             matrix.element31);
+		assertEquals(0.0D,             matrix.element32);
+		assertEquals(1.0D,             matrix.element33);
+		assertEquals(0.0D,             matrix.element34);
+		assertEquals(0.0D,             matrix.element41);
+		assertEquals(0.0D,             matrix.element42);
+		assertEquals(0.0D,             matrix.element43);
+		assertEquals(1.0D,             matrix.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.rotateZ(null));
 	}
@@ -834,22 +722,22 @@ public final class Matrix44DUnitTests {
 		
 		final Matrix44D matrix = Matrix44D.rotateZ(angleDegrees);
 		
-		assertEquals(+angleRadiansCos, matrix.getElement11());
-		assertEquals(-angleRadiansSin, matrix.getElement12());
-		assertEquals(0.0D,             matrix.getElement13());
-		assertEquals(0.0D,             matrix.getElement14());
-		assertEquals(+angleRadiansSin, matrix.getElement21());
-		assertEquals(+angleRadiansCos, matrix.getElement22());
-		assertEquals(0.0D,             matrix.getElement23());
-		assertEquals(0.0D,             matrix.getElement24());
-		assertEquals(0.0D,             matrix.getElement31());
-		assertEquals(0.0D,             matrix.getElement32());
-		assertEquals(1.0D,             matrix.getElement33());
-		assertEquals(0.0D,             matrix.getElement34());
-		assertEquals(0.0D,             matrix.getElement41());
-		assertEquals(0.0D,             matrix.getElement42());
-		assertEquals(0.0D,             matrix.getElement43());
-		assertEquals(1.0D,             matrix.getElement44());
+		assertEquals(+angleRadiansCos, matrix.element11);
+		assertEquals(-angleRadiansSin, matrix.element12);
+		assertEquals(0.0D,             matrix.element13);
+		assertEquals(0.0D,             matrix.element14);
+		assertEquals(+angleRadiansSin, matrix.element21);
+		assertEquals(+angleRadiansCos, matrix.element22);
+		assertEquals(0.0D,             matrix.element23);
+		assertEquals(0.0D,             matrix.element24);
+		assertEquals(0.0D,             matrix.element31);
+		assertEquals(0.0D,             matrix.element32);
+		assertEquals(1.0D,             matrix.element33);
+		assertEquals(0.0D,             matrix.element34);
+		assertEquals(0.0D,             matrix.element41);
+		assertEquals(0.0D,             matrix.element42);
+		assertEquals(0.0D,             matrix.element43);
+		assertEquals(1.0D,             matrix.element44);
 	}
 	
 	@Test
@@ -862,105 +750,105 @@ public final class Matrix44DUnitTests {
 		final Matrix44D a = Matrix44D.rotateZ(angleDegrees, false);
 		final Matrix44D b = Matrix44D.rotateZ(angleRadians, true);
 		
-		assertEquals(+angleRadiansCos, a.getElement11());
-		assertEquals(-angleRadiansSin, a.getElement12());
-		assertEquals(0.0D,             a.getElement13());
-		assertEquals(0.0D,             a.getElement14());
-		assertEquals(+angleRadiansSin, a.getElement21());
-		assertEquals(+angleRadiansCos, a.getElement22());
-		assertEquals(0.0D,             a.getElement23());
-		assertEquals(0.0D,             a.getElement24());
-		assertEquals(0.0D,             a.getElement31());
-		assertEquals(0.0D,             a.getElement32());
-		assertEquals(1.0D,             a.getElement33());
-		assertEquals(0.0D,             a.getElement34());
-		assertEquals(0.0D,             a.getElement41());
-		assertEquals(0.0D,             a.getElement42());
-		assertEquals(0.0D,             a.getElement43());
-		assertEquals(1.0D,             a.getElement44());
+		assertEquals(+angleRadiansCos, a.element11);
+		assertEquals(-angleRadiansSin, a.element12);
+		assertEquals(0.0D,             a.element13);
+		assertEquals(0.0D,             a.element14);
+		assertEquals(+angleRadiansSin, a.element21);
+		assertEquals(+angleRadiansCos, a.element22);
+		assertEquals(0.0D,             a.element23);
+		assertEquals(0.0D,             a.element24);
+		assertEquals(0.0D,             a.element31);
+		assertEquals(0.0D,             a.element32);
+		assertEquals(1.0D,             a.element33);
+		assertEquals(0.0D,             a.element34);
+		assertEquals(0.0D,             a.element41);
+		assertEquals(0.0D,             a.element42);
+		assertEquals(0.0D,             a.element43);
+		assertEquals(1.0D,             a.element44);
 		
-		assertEquals(+angleRadiansCos, b.getElement11());
-		assertEquals(-angleRadiansSin, b.getElement12());
-		assertEquals(0.0D,             b.getElement13());
-		assertEquals(0.0D,             b.getElement14());
-		assertEquals(+angleRadiansSin, b.getElement21());
-		assertEquals(+angleRadiansCos, b.getElement22());
-		assertEquals(0.0D,             b.getElement23());
-		assertEquals(0.0D,             b.getElement24());
-		assertEquals(0.0D,             b.getElement31());
-		assertEquals(0.0D,             b.getElement32());
-		assertEquals(1.0D,             b.getElement33());
-		assertEquals(0.0D,             b.getElement34());
-		assertEquals(0.0D,             b.getElement41());
-		assertEquals(0.0D,             b.getElement42());
-		assertEquals(0.0D,             b.getElement43());
-		assertEquals(1.0D,             b.getElement44());
+		assertEquals(+angleRadiansCos, b.element11);
+		assertEquals(-angleRadiansSin, b.element12);
+		assertEquals(0.0D,             b.element13);
+		assertEquals(0.0D,             b.element14);
+		assertEquals(+angleRadiansSin, b.element21);
+		assertEquals(+angleRadiansCos, b.element22);
+		assertEquals(0.0D,             b.element23);
+		assertEquals(0.0D,             b.element24);
+		assertEquals(0.0D,             b.element31);
+		assertEquals(0.0D,             b.element32);
+		assertEquals(1.0D,             b.element33);
+		assertEquals(0.0D,             b.element34);
+		assertEquals(0.0D,             b.element41);
+		assertEquals(0.0D,             b.element42);
+		assertEquals(0.0D,             b.element43);
+		assertEquals(1.0D,             b.element44);
 	}
 	
 	@Test
 	public void testScaleDouble() {
 		final Matrix44D matrix = Matrix44D.scale(2.0D);
 		
-		assertEquals(2.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(0.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(2.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(0.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(2.0D, matrix.getElement33());
-		assertEquals(0.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(2.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(0.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(2.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(0.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(2.0D, matrix.element33);
+		assertEquals(0.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 	}
 	
 	@Test
 	public void testScaleDoubleDoubleDouble() {
 		final Matrix44D matrix = Matrix44D.scale(2.0D, 3.0D, 4.0D);
 		
-		assertEquals(2.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(0.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(3.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(0.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(4.0D, matrix.getElement33());
-		assertEquals(0.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(2.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(0.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(3.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(0.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(4.0D, matrix.element33);
+		assertEquals(0.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 	}
 	
 	@Test
 	public void testScaleVector3D() {
 		final Matrix44D matrix = Matrix44D.scale(new Vector3D(2.0D, 3.0D, 4.0D));
 		
-		assertEquals(2.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(0.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(3.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(0.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(4.0D, matrix.getElement33());
-		assertEquals(0.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(2.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(0.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(3.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(0.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(4.0D, matrix.element33);
+		assertEquals(0.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.scale(null));
 	}
@@ -1004,44 +892,44 @@ public final class Matrix44DUnitTests {
 	public void testTranslateDoubleDoubleDouble() {
 		final Matrix44D matrix = Matrix44D.translate(2.0D, 3.0D, 4.0D);
 		
-		assertEquals(1.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(2.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(1.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(3.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(1.0D, matrix.getElement33());
-		assertEquals(4.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(1.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(2.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(1.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(3.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(1.0D, matrix.element33);
+		assertEquals(4.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 	}
 	
 	@Test
 	public void testTranslatePoint3D() {
 		final Matrix44D matrix = Matrix44D.translate(new Point3D(2.0D, 3.0D, 4.0D));
 		
-		assertEquals(1.0D, matrix.getElement11());
-		assertEquals(0.0D, matrix.getElement12());
-		assertEquals(0.0D, matrix.getElement13());
-		assertEquals(2.0D, matrix.getElement14());
-		assertEquals(0.0D, matrix.getElement21());
-		assertEquals(1.0D, matrix.getElement22());
-		assertEquals(0.0D, matrix.getElement23());
-		assertEquals(3.0D, matrix.getElement24());
-		assertEquals(0.0D, matrix.getElement31());
-		assertEquals(0.0D, matrix.getElement32());
-		assertEquals(1.0D, matrix.getElement33());
-		assertEquals(4.0D, matrix.getElement34());
-		assertEquals(0.0D, matrix.getElement41());
-		assertEquals(0.0D, matrix.getElement42());
-		assertEquals(0.0D, matrix.getElement43());
-		assertEquals(1.0D, matrix.getElement44());
+		assertEquals(1.0D, matrix.element11);
+		assertEquals(0.0D, matrix.element12);
+		assertEquals(0.0D, matrix.element13);
+		assertEquals(2.0D, matrix.element14);
+		assertEquals(0.0D, matrix.element21);
+		assertEquals(1.0D, matrix.element22);
+		assertEquals(0.0D, matrix.element23);
+		assertEquals(3.0D, matrix.element24);
+		assertEquals(0.0D, matrix.element31);
+		assertEquals(0.0D, matrix.element32);
+		assertEquals(1.0D, matrix.element33);
+		assertEquals(4.0D, matrix.element34);
+		assertEquals(0.0D, matrix.element41);
+		assertEquals(0.0D, matrix.element42);
+		assertEquals(0.0D, matrix.element43);
+		assertEquals(1.0D, matrix.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.translate(null));
 	}
@@ -1051,22 +939,22 @@ public final class Matrix44DUnitTests {
 		final Matrix44D a = new Matrix44D(1.0D, 2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, 8.0D, 9.0D, 10.0D, 11.0D, 12.0D, 13.0D, 14.0D, 15.0D, 16.0D);
 		final Matrix44D b = Matrix44D.transpose(a);
 		
-		assertEquals( 1.0D, b.getElement11());
-		assertEquals( 5.0D, b.getElement12());
-		assertEquals( 9.0D, b.getElement13());
-		assertEquals(13.0D, b.getElement14());
-		assertEquals( 2.0D, b.getElement21());
-		assertEquals( 6.0D, b.getElement22());
-		assertEquals(10.0D, b.getElement23());
-		assertEquals(14.0D, b.getElement24());
-		assertEquals( 3.0D, b.getElement31());
-		assertEquals( 7.0D, b.getElement32());
-		assertEquals(11.0D, b.getElement33());
-		assertEquals(15.0D, b.getElement34());
-		assertEquals( 4.0D, b.getElement41());
-		assertEquals( 8.0D, b.getElement42());
-		assertEquals(12.0D, b.getElement43());
-		assertEquals(16.0D, b.getElement44());
+		assertEquals( 1.0D, b.element11);
+		assertEquals( 5.0D, b.element12);
+		assertEquals( 9.0D, b.element13);
+		assertEquals(13.0D, b.element14);
+		assertEquals( 2.0D, b.element21);
+		assertEquals( 6.0D, b.element22);
+		assertEquals(10.0D, b.element23);
+		assertEquals(14.0D, b.element24);
+		assertEquals( 3.0D, b.element31);
+		assertEquals( 7.0D, b.element32);
+		assertEquals(11.0D, b.element33);
+		assertEquals(15.0D, b.element34);
+		assertEquals( 4.0D, b.element41);
+		assertEquals( 8.0D, b.element42);
+		assertEquals(12.0D, b.element43);
+		assertEquals(16.0D, b.element44);
 		
 		assertThrows(NullPointerException.class, () -> Matrix44D.transpose(null));
 	}

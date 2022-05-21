@@ -669,9 +669,9 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point3D transform(final Matrix44D mLHS, final Point3D pRHS) {
-		final double x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14();
-		final double y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24();
-		final double z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34();
+		final double x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13 * pRHS.z + mLHS.element14;
+		final double y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23 * pRHS.z + mLHS.element24;
+		final double z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34;
 		
 		return new Point3D(x, y, z);
 	}
@@ -689,10 +689,10 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point3D transformAndDivide(final Matrix44D mLHS, final Point3D pRHS) {
-		final double x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14();
-		final double y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24();
-		final double z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34();
-		final double w = mLHS.getElement41() * pRHS.x + mLHS.getElement42() * pRHS.y + mLHS.getElement43() * pRHS.z + mLHS.getElement44();
+		final double x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13 * pRHS.z + mLHS.element14;
+		final double y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23 * pRHS.z + mLHS.element24;
+		final double z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34;
+		final double w = mLHS.element41 * pRHS.x + mLHS.element42 * pRHS.y + mLHS.element43 * pRHS.z + mLHS.element44;
 		
 		return equal(w, 1.0D) || isZero(w) ? new Point3D(x, y, z) : new Point3D(x / w, y / w, z / w);
 	}

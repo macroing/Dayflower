@@ -1178,9 +1178,9 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D transform(final Matrix44D mLHS, final Vector3D vRHS) {
-		final double x = mLHS.getElement11() * vRHS.x + mLHS.getElement12() * vRHS.y + mLHS.getElement13() * vRHS.z;
-		final double y = mLHS.getElement21() * vRHS.x + mLHS.getElement22() * vRHS.y + mLHS.getElement23() * vRHS.z;
-		final double z = mLHS.getElement31() * vRHS.x + mLHS.getElement32() * vRHS.y + mLHS.getElement33() * vRHS.z;
+		final double x = mLHS.element11 * vRHS.x + mLHS.element12 * vRHS.y + mLHS.element13 * vRHS.z;
+		final double y = mLHS.element21 * vRHS.x + mLHS.element22 * vRHS.y + mLHS.element23 * vRHS.z;
+		final double z = mLHS.element31 * vRHS.x + mLHS.element32 * vRHS.y + mLHS.element33 * vRHS.z;
 		
 		return new Vector3D(x, y, z);
 	}
@@ -1199,9 +1199,9 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D transform(final Vector3D vLHS, final OrthonormalBasis33D oRHS) {
-		final double x = vLHS.x * oRHS.getU().x + vLHS.y * oRHS.getV().x + vLHS.z * oRHS.getW().x;
-		final double y = vLHS.x * oRHS.getU().y + vLHS.y * oRHS.getV().y + vLHS.z * oRHS.getW().y;
-		final double z = vLHS.x * oRHS.getU().z + vLHS.y * oRHS.getV().z + vLHS.z * oRHS.getW().z;
+		final double x = vLHS.x * oRHS.u.x + vLHS.y * oRHS.v.x + vLHS.z * oRHS.w.x;
+		final double y = vLHS.x * oRHS.u.y + vLHS.y * oRHS.v.y + vLHS.z * oRHS.w.y;
+		final double z = vLHS.x * oRHS.u.z + vLHS.y * oRHS.v.z + vLHS.z * oRHS.w.z;
 		
 		return new Vector3D(x, y, z);
 	}
@@ -1220,9 +1220,9 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D transformError(final Matrix44D m, final Point3D p) {
-		final double x = gamma(3) * (abs(m.getElement11() * p.x) + abs(m.getElement12() * p.y) + abs(m.getElement13() * p.z) + abs(m.getElement14()));
-		final double y = gamma(3) * (abs(m.getElement21() * p.x) + abs(m.getElement22() * p.y) + abs(m.getElement23() * p.z) + abs(m.getElement24()));
-		final double z = gamma(3) * (abs(m.getElement31() * p.x) + abs(m.getElement32() * p.y) + abs(m.getElement33() * p.z) + abs(m.getElement34()));
+		final double x = gamma(3) * (abs(m.element11 * p.x) + abs(m.element12 * p.y) + abs(m.element13 * p.z) + abs(m.element14));
+		final double y = gamma(3) * (abs(m.element21 * p.x) + abs(m.element22 * p.y) + abs(m.element23 * p.z) + abs(m.element24));
+		final double z = gamma(3) * (abs(m.element31 * p.x) + abs(m.element32 * p.y) + abs(m.element33 * p.z) + abs(m.element34));
 		
 		return new Vector3D(x, y, z);
 	}
@@ -1242,9 +1242,9 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D transformError(final Matrix44D m, final Point3D p, final Vector3D v) {
-		final double x = (gamma(3) + 1.0D) * (abs(m.getElement11()) * v.x + abs(m.getElement12()) * v.y + abs(m.getElement13()) * v.z) + gamma(3) * (abs(m.getElement11() * p.x) + abs(m.getElement12() * p.y) + abs(m.getElement13() * p.z) + abs(m.getElement14()));
-		final double y = (gamma(3) + 1.0D) * (abs(m.getElement21()) * v.x + abs(m.getElement22()) * v.y + abs(m.getElement23()) * v.z) + gamma(3) * (abs(m.getElement21() * p.x) + abs(m.getElement22() * p.y) + abs(m.getElement23() * p.z) + abs(m.getElement24()));
-		final double z = (gamma(3) + 1.0D) * (abs(m.getElement31()) * v.x + abs(m.getElement32()) * v.y + abs(m.getElement33()) * v.z) + gamma(3) * (abs(m.getElement31() * p.x) + abs(m.getElement32() * p.y) + abs(m.getElement33() * p.z) + abs(m.getElement34()));
+		final double x = (gamma(3) + 1.0D) * (abs(m.element11) * v.x + abs(m.element12) * v.y + abs(m.element13) * v.z) + gamma(3) * (abs(m.element11 * p.x) + abs(m.element12 * p.y) + abs(m.element13 * p.z) + abs(m.element14));
+		final double y = (gamma(3) + 1.0D) * (abs(m.element21) * v.x + abs(m.element22) * v.y + abs(m.element23) * v.z) + gamma(3) * (abs(m.element21 * p.x) + abs(m.element22 * p.y) + abs(m.element23 * p.z) + abs(m.element24));
+		final double z = (gamma(3) + 1.0D) * (abs(m.element31) * v.x + abs(m.element32) * v.y + abs(m.element33) * v.z) + gamma(3) * (abs(m.element31 * p.x) + abs(m.element32 * p.y) + abs(m.element33 * p.z) + abs(m.element34));
 		
 		return new Vector3D(x, y, z);
 	}
@@ -1263,9 +1263,9 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D transformReverse(final Vector3D vLHS, final OrthonormalBasis33D oRHS) {
-		final double x = dotProduct(vLHS, oRHS.getU());
-		final double y = dotProduct(vLHS, oRHS.getV());
-		final double z = dotProduct(vLHS, oRHS.getW());
+		final double x = dotProduct(vLHS, oRHS.u);
+		final double y = dotProduct(vLHS, oRHS.v);
+		final double z = dotProduct(vLHS, oRHS.w);
 		
 		return new Vector3D(x, y, z);
 	}
@@ -1284,9 +1284,9 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D transformTranspose(final Matrix44D mLHS, final Vector3D vRHS) {
-		final double x = mLHS.getElement11() * vRHS.x + mLHS.getElement21() * vRHS.y + mLHS.getElement31() * vRHS.z;
-		final double y = mLHS.getElement12() * vRHS.x + mLHS.getElement22() * vRHS.y + mLHS.getElement32() * vRHS.z;
-		final double z = mLHS.getElement13() * vRHS.x + mLHS.getElement23() * vRHS.y + mLHS.getElement33() * vRHS.z;
+		final double x = mLHS.element11 * vRHS.x + mLHS.element21 * vRHS.y + mLHS.element31 * vRHS.z;
+		final double y = mLHS.element12 * vRHS.x + mLHS.element22 * vRHS.y + mLHS.element32 * vRHS.z;
+		final double z = mLHS.element13 * vRHS.x + mLHS.element23 * vRHS.y + mLHS.element33 * vRHS.z;
 		
 		return new Vector3D(x, y, z);
 	}

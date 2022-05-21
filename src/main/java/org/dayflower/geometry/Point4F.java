@@ -358,10 +358,10 @@ public final class Point4F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point4F transform(final Matrix44F mLHS, final Point4F pRHS) {
-		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14() * pRHS.w;
-		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24() * pRHS.w;
-		final float z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34() * pRHS.w;
-		final float w = mLHS.getElement41() * pRHS.x + mLHS.getElement42() * pRHS.y + mLHS.getElement43() * pRHS.z + mLHS.getElement44() * pRHS.w;
+		final float x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13 * pRHS.z + mLHS.element14 * pRHS.w;
+		final float y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23 * pRHS.z + mLHS.element24 * pRHS.w;
+		final float z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34 * pRHS.w;
+		final float w = mLHS.element41 * pRHS.x + mLHS.element42 * pRHS.y + mLHS.element43 * pRHS.z + mLHS.element44 * pRHS.w;
 		
 		return new Point4F(x, y, z, w);
 	}
@@ -379,10 +379,10 @@ public final class Point4F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point4F transformAndDivide(final Matrix44F mLHS, final Point4F pRHS) {
-		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14() * pRHS.w;
-		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24() * pRHS.w;
-		final float z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34() * pRHS.w;
-		final float w = mLHS.getElement41() * pRHS.x + mLHS.getElement42() * pRHS.y + mLHS.getElement43() * pRHS.z + mLHS.getElement44() * pRHS.w;
+		final float x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13 * pRHS.z + mLHS.element14 * pRHS.w;
+		final float y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23 * pRHS.z + mLHS.element24 * pRHS.w;
+		final float z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34 * pRHS.w;
+		final float w = mLHS.element41 * pRHS.x + mLHS.element42 * pRHS.y + mLHS.element43 * pRHS.z + mLHS.element44 * pRHS.w;
 		
 		return equal(w, 1.0F) || isZero(w) ? new Point4F(x, y, z, w) : new Point4F(x / w, y / w, z / w, w);
 	}

@@ -44,9 +44,20 @@ public final class OrthonormalBasis33F implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Vector3F u;
-	private final Vector3F v;
-	private final Vector3F w;
+	/**
+	 * The U-direction.
+	 */
+	public final Vector3F u;
+	
+	/**
+	 * The V-direction.
+	 */
+	public final Vector3F v;
+	
+	/**
+	 * The W-direction.
+	 */
+	public final Vector3F w;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -130,33 +141,6 @@ public final class OrthonormalBasis33F implements Node {
 	@Override
 	public String toString() {
 		return String.format("new OrthonormalBasis33F(%s, %s, %s)", this.w, this.v, this.u);
-	}
-	
-	/**
-	 * Returns the {@link Vector3F} pointing in the U-direction.
-	 * 
-	 * @return the {@code Vector3F} pointing in the U-direction
-	 */
-	public Vector3F getU() {
-		return this.u;
-	}
-	
-	/**
-	 * Returns the {@link Vector3F} pointing in the V-direction.
-	 * 
-	 * @return the {@code Vector3F} pointing in the V-direction
-	 */
-	public Vector3F getV() {
-		return this.v;
-	}
-	
-	/**
-	 * Returns the {@link Vector3F} pointing in the W-direction.
-	 * 
-	 * @return the {@code Vector3F} pointing in the W-direction
-	 */
-	public Vector3F getW() {
-		return this.w;
 	}
 	
 	/**
@@ -304,7 +288,7 @@ public final class OrthonormalBasis33F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
 	public static OrthonormalBasis33F getCached(final OrthonormalBasis33F orthonormalBasis) {
-		return CACHE.computeIfAbsent(Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null"), key -> new OrthonormalBasis33F(Vector3F.getCached(orthonormalBasis.getW()), Vector3F.getCached(orthonormalBasis.getV()), Vector3F.getCached(orthonormalBasis.getU())));
+		return CACHE.computeIfAbsent(Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null"), key -> new OrthonormalBasis33F(Vector3F.getCached(orthonormalBasis.w), Vector3F.getCached(orthonormalBasis.v), Vector3F.getCached(orthonormalBasis.u)));
 	}
 	
 	/**

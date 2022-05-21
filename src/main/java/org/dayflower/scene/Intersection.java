@@ -223,7 +223,7 @@ public final class Intersection {
 	 * @return the {@code Vector3F} instance that represents the surface normal for the geometry in world space
 	 */
 	private Vector3F getSurfaceNormalG() {
-		return this.orthonormalBasisG.getW();
+		return this.orthonormalBasisG.w;
 	}
 	
 	/**
@@ -241,7 +241,7 @@ public final class Intersection {
 	 * @return the {@code Vector3F} instance that represents the surface normal for shading in world space
 	 */
 	public Vector3F getSurfaceNormalS() {
-		return this.orthonormalBasisS.getW();
+		return this.orthonormalBasisS.w;
 	}
 	
 	/**
@@ -336,7 +336,7 @@ public final class Intersection {
 	 * @throws NullPointerException thrown if, and only if, {@code surfaceNormalG} is {@code null}
 	 */
 	public void setSurfaceNormalG(final Vector3F surfaceNormalG) {
-		this.orthonormalBasisG = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalG, "surfaceNormalG == null"), this.orthonormalBasisG.getV());
+		this.orthonormalBasisG = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalG, "surfaceNormalG == null"), this.orthonormalBasisG.v);
 	}
 	
 	/**
@@ -348,7 +348,7 @@ public final class Intersection {
 	 * @throws NullPointerException thrown if, and only if, {@code surfaceNormalS} is {@code null}
 	 */
 	public void setSurfaceNormalS(final Vector3F surfaceNormalS) {
-		this.orthonormalBasisS = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalS, "surfaceNormalS == null"), this.orthonormalBasisS.getV());
+		this.orthonormalBasisS = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalS, "surfaceNormalS == null"), this.orthonormalBasisS.v);
 	}
 	
 	/**

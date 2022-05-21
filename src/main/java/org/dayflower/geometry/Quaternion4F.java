@@ -313,15 +313,15 @@ public final class Quaternion4F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Quaternion4F from(final Matrix44F m) {
-		final float element11 = m.getElement11();
-		final float element12 = m.getElement12();
-		final float element13 = m.getElement13();
-		final float element21 = m.getElement21();
-		final float element22 = m.getElement22();
-		final float element23 = m.getElement23();
-		final float element31 = m.getElement31();
-		final float element32 = m.getElement32();
-		final float element33 = m.getElement33();
+		final float element11 = m.element11;
+		final float element12 = m.element12;
+		final float element13 = m.element13;
+		final float element21 = m.element21;
+		final float element22 = m.element22;
+		final float element23 = m.element23;
+		final float element31 = m.element31;
+		final float element32 = m.element32;
+		final float element33 = m.element33;
 		
 		if(element11 + element22 + element33 > 0.0F) {
 			final float scalar = 0.5F / sqrt(element11 + element22 + element33 + 1.0F);

@@ -1,8 +1,10 @@
 2022-05-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
-	* CHANGE:	The fields of the Matrix33D and Matrix33F classes have been made public.
-	* CHANGE:	Update all classes and unit tests that have been affected by the change in the Matrix33D and Matrix33F classes.
-	* REMOVE:	Remove the methods getElement11(), getElement12(), getElement13(), getElement21(), getElement22(), getElement23(), getElement31(), getElement32() and getElement33() in the Matrix33D and Matrix33F classes.
+	* CHANGE:	The fields of the Matrix33D, Matrix33F, Matrix44D, Matrix44F, OrthonormalBasis33D and OrthonormalBasis33F classes have been made public.
+	* CHANGE:	Update all classes and unit tests that have been affected by the change in the Matrix33D, Matrix33F, Matrix44D, Matrix44F, OrthonormalBasis33D and OrthonormalBasis33F classes.
+	* REMOVE:	Remove the methods getElement11(), getElement12(), getElement13(), getElement21(), getElement22(), getElement23(), getElement31(), getElement32() and getElement33() from the Matrix33D and Matrix33F classes.
+	* REMOVE:	Remove the methods getElement11(), getElement12(), getElement13(), getElement14(), getElement21(), getElement22(), getElement23(), getElement24(), getElement31(), getElement32(), getElement33(), getElement34(), getElement41(), getElement42(), getElement43() and getElement44() from the Matrix44D and Matrix44F classes.
+	* REMOVE:	Remove the methods getU(), getV() and getW() from the OrthonormalBasis33D and OrthonormalBasis33F classes.
 
 2022-05-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

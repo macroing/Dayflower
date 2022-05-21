@@ -341,13 +341,13 @@ public final class Cylinder3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F origin = ray.getOrigin();
+		final Point3F o = ray.getOrigin();
 		
-		final Vector3F direction = ray.getDirection();
+		final Vector3F d = ray.getDirection();
 		
-		final float a = direction.x * direction.x + direction.y * direction.y;
-		final float b = 2.0F * (direction.x * origin.x + direction.y * origin.y);
-		final float c = origin.x * origin.x + origin.y * origin.y - this.radius * this.radius;
+		final float a = d.x * d.x + d.y * d.y;
+		final float b = 2.0F * (d.x * o.x + d.y * o.y);
+		final float c = o.x * o.x + o.y * o.y - this.radius * this.radius;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -359,9 +359,9 @@ public final class Cylinder3F implements Shape3F {
 			}
 			
 			if(t > tMinimum && t < tMaximum) {
-				final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+				final Point3F p = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.z >= this.zMin && surfaceIntersectionPoint.z <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+				if(p.z >= this.zMin && p.z <= this.zMax && p.sphericalPhi() <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}

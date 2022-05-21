@@ -229,7 +229,7 @@ public final class SurfaceIntersection3D {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * surfaceIntersection.getOrthonormalBasisG().getW();
+	 * surfaceIntersection.getOrthonormalBasisG().w;
 	 * }
 	 * </pre>
 	 * 
@@ -237,7 +237,7 @@ public final class SurfaceIntersection3D {
 	 */
 //	TODO: Add Unit Tests!
 	public Vector3D getSurfaceNormalG() {
-		return this.orthonormalBasisG.getW();
+		return this.orthonormalBasisG.w;
 	}
 	
 	/**
@@ -246,7 +246,7 @@ public final class SurfaceIntersection3D {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * surfaceIntersection.getOrthonormalBasisS().getW();
+	 * surfaceIntersection.getOrthonormalBasisS().w;
 	 * }
 	 * </pre>
 	 * 
@@ -254,7 +254,7 @@ public final class SurfaceIntersection3D {
 	 */
 //	TODO: Add Unit Tests!
 	public Vector3D getSurfaceNormalS() {
-		return this.orthonormalBasisS.getW();
+		return this.orthonormalBasisS.w;
 	}
 	
 	/**
@@ -356,7 +356,7 @@ public final class SurfaceIntersection3D {
 	 */
 //	TODO: Add Unit Tests!
 	public static SurfaceIntersection3D orient(final SurfaceIntersection3D surfaceIntersection, final Vector3D direction) {
-		if(Vector3D.dotProduct(direction, surfaceIntersection.getOrthonormalBasisG().getW()) >= 0.0D) {
+		if(Vector3D.dotProduct(direction, surfaceIntersection.getOrthonormalBasisG().w) >= 0.0D) {
 			final OrthonormalBasis33D orthonormalBasisG = OrthonormalBasis33D.flipW(surfaceIntersection.orthonormalBasisG);
 			final OrthonormalBasis33D orthonormalBasisS = OrthonormalBasis33D.flipW(surfaceIntersection.orthonormalBasisS);
 			
@@ -424,7 +424,7 @@ public final class SurfaceIntersection3D {
 		final OrthonormalBasis33D orthonormalBasisSOldSpace = surfaceIntersection.orthonormalBasisS;
 		final OrthonormalBasis33D orthonormalBasisGNewSpace = OrthonormalBasis33D.transformTranspose(matrixInverse, orthonormalBasisGOldSpace);
 		final OrthonormalBasis33D orthonormalBasisSNewSpace = OrthonormalBasis33D.transformTranspose(matrixInverse, orthonormalBasisSOldSpace);
-		final OrthonormalBasis33D orthonormalBasisSNewSpaceCorrectlyOriented = Vector3D.dotProduct(orthonormalBasisSNewSpace.getW(), orthonormalBasisGNewSpace.getW()) < 0.0D ? OrthonormalBasis33D.flipW(orthonormalBasisSNewSpace) : orthonormalBasisSNewSpace;
+		final OrthonormalBasis33D orthonormalBasisSNewSpaceCorrectlyOriented = Vector3D.dotProduct(orthonormalBasisSNewSpace.w, orthonormalBasisGNewSpace.w) < 0.0D ? OrthonormalBasis33D.flipW(orthonormalBasisSNewSpace) : orthonormalBasisSNewSpace;
 		
 		final Point2D textureCoordinates = surfaceIntersection.textureCoordinates;
 		

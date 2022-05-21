@@ -479,13 +479,13 @@ public final class Hyperboloid3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F origin = ray.getOrigin();
+		final Point3F o = ray.getOrigin();
 		
-		final Vector3F direction = ray.getDirection();
+		final Vector3F d = ray.getDirection();
 		
-		final float a = this.aH * direction.x * direction.x + this.aH * direction.y * direction.y - this.cH * direction.z * direction.z;
-		final float b = 2.0F * (this.aH * direction.x * origin.x + this.aH * direction.y * origin.y - this.cH * direction.z * origin.z);
-		final float c = this.aH * origin.x * origin.x + this.aH * origin.y * origin.y - this.cH * origin.z * origin.z - 1.0F;
+		final float a = this.aH * d.x * d.x + this.aH * d.y * d.y - this.cH * d.z * d.z;
+		final float b = 2.0F * (this.aH * d.x * o.x + this.aH * d.y * o.y - this.cH * d.z * o.z);
+		final float c = this.aH * o.x * o.x + this.aH * o.y * o.y - this.cH * o.z * o.z - 1.0F;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -497,9 +497,9 @@ public final class Hyperboloid3F implements Shape3F {
 			}
 			
 			if(t > tMinimum && t < tMaximum) {
-				final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+				final Point3F p = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.z >= this.zMin && surfaceIntersectionPoint.z <= this.zMax && doComputePhi(surfaceIntersectionPoint) <= this.phiMax.getRadians()) {
+				if(p.z >= this.zMin && p.z <= this.zMax && doComputePhi(p) <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}

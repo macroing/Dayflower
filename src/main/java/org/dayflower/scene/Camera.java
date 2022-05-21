@@ -257,9 +257,9 @@ public final class Camera implements Node {
 		
 		final OrthonormalBasis33F orthonormalBasis = this.orthonormalBasis;
 		
-		final Vector3F u = orthonormalBasis.getU();
-		final Vector3F v = orthonormalBasis.getV();
-		final Vector3F w = orthonormalBasis.getW();
+		final Vector3F u = orthonormalBasis.u;
+		final Vector3F v = orthonormalBasis.v;
+		final Vector3F w = orthonormalBasis.w;
 		
 		final float cameraX = 2.0F * ((imageX + pixelX) / (resolutionX - 1.0F)) - 1.0F;
 		final float cameraY = 2.0F * ((imageY + pixelY) / (resolutionY - 1.0F)) - 1.0F;
@@ -316,7 +316,7 @@ public final class Camera implements Node {
 	public Point3F getPointAboveEye(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F v = this.orthonormalBasis.getV();
+		final Vector3F v = this.orthonormalBasis.v;
 		
 		final float x = eye.x + v.x * distance;
 		final float y = eye.y + v.y * distance;
@@ -334,7 +334,7 @@ public final class Camera implements Node {
 	public Point3F getPointBehindEye(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F w = this.orthonormalBasis.getW();
+		final Vector3F w = this.orthonormalBasis.w;
 		
 		final float x = eye.x - w.x * distance;
 		final float y = eye.y - w.y * distance;
@@ -352,7 +352,7 @@ public final class Camera implements Node {
 	public Point3F getPointBelowEye(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F v = this.orthonormalBasis.getV();
+		final Vector3F v = this.orthonormalBasis.v;
 		
 		final float x = eye.x - v.x * distance;
 		final float y = eye.y - v.y * distance;
@@ -370,7 +370,7 @@ public final class Camera implements Node {
 	public Point3F getPointInfrontOfEye(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F w = this.orthonormalBasis.getW();
+		final Vector3F w = this.orthonormalBasis.w;
 		
 		final float x = eye.x + w.x * distance;
 		final float y = eye.y + w.y * distance;
@@ -388,7 +388,7 @@ public final class Camera implements Node {
 	public Point3F getPointLeftOfEye(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F u = this.orthonormalBasis.getU();
+		final Vector3F u = this.orthonormalBasis.u;
 		
 		final float x = eye.x - u.x * distance;
 		final float y = eye.y - u.y * distance;
@@ -406,7 +406,7 @@ public final class Camera implements Node {
 	public Point3F getPointRightOfEye(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F u = this.orthonormalBasis.getU();
+		final Vector3F u = this.orthonormalBasis.u;
 		
 		final float x = eye.x + u.x * distance;
 		final float y = eye.y + u.y * distance;
@@ -563,7 +563,7 @@ public final class Camera implements Node {
 	public void moveBackward(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F w = this.orthonormalBasis.getW();
+		final Vector3F w = this.orthonormalBasis.w;
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		
@@ -582,7 +582,7 @@ public final class Camera implements Node {
 	public void moveDown(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F v = this.orthonormalBasis.getV();
+		final Vector3F v = this.orthonormalBasis.v;
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		
@@ -601,7 +601,7 @@ public final class Camera implements Node {
 	public void moveForward(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F w = this.orthonormalBasis.getW();
+		final Vector3F w = this.orthonormalBasis.w;
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		
@@ -620,7 +620,7 @@ public final class Camera implements Node {
 	public void moveLeft(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F u = this.orthonormalBasis.getU();
+		final Vector3F u = this.orthonormalBasis.u;
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		
@@ -639,7 +639,7 @@ public final class Camera implements Node {
 	public void moveRight(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F u = this.orthonormalBasis.getU();
+		final Vector3F u = this.orthonormalBasis.u;
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		
@@ -658,7 +658,7 @@ public final class Camera implements Node {
 	public void moveUp(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F v = this.orthonormalBasis.getV();
+		final Vector3F v = this.orthonormalBasis.v;
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		

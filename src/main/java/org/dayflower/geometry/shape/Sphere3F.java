@@ -194,9 +194,9 @@ public final class Sphere3F implements Shape3F {
 		
 		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(directionToCenter);
 		
-		final Vector3F x = Vector3F.negate(orthonormalBasis.getU());
-		final Vector3F y = Vector3F.negate(orthonormalBasis.getV());
-		final Vector3F z = Vector3F.negate(orthonormalBasis.getW());
+		final Vector3F x = Vector3F.negate(orthonormalBasis.u);
+		final Vector3F y = Vector3F.negate(orthonormalBasis.v);
+		final Vector3F z = Vector3F.negate(orthonormalBasis.w);
 		
 		final float sinThetaMax = radius * distanceReciprocal;
 		final float sinThetaMaxSquared = sinThetaMax * sinThetaMax;

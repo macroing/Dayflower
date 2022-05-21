@@ -190,9 +190,9 @@ public final class Sphere3D implements Shape3D {
 		
 		final OrthonormalBasis33D orthonormalBasis = new OrthonormalBasis33D(directionToCenter);
 		
-		final Vector3D x = Vector3D.negate(orthonormalBasis.getU());
-		final Vector3D y = Vector3D.negate(orthonormalBasis.getV());
-		final Vector3D z = Vector3D.negate(orthonormalBasis.getW());
+		final Vector3D x = Vector3D.negate(orthonormalBasis.u);
+		final Vector3D y = Vector3D.negate(orthonormalBasis.v);
+		final Vector3D z = Vector3D.negate(orthonormalBasis.w);
 		
 		final double sinThetaMax = radius * distanceReciprocal;
 		final double sinThetaMaxSquared = sinThetaMax * sinThetaMax;

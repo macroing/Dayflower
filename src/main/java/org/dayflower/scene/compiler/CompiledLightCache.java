@@ -1259,38 +1259,38 @@ public final class CompiledLightCache {
 		final float[] array = new float[DIFFUSE_AREA_LIGHT_LENGTH];
 		
 //		Because the DiffuseAreaLight occupy 40/40 positions in five blocks, it should be aligned.
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();	//Block #1
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();	//Block #1
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();	//Block #1
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();	//Block #1
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();	//Block #1
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();	//Block #1
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();	//Block #1
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();	//Block #1
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();	//Block #2
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();	//Block #2
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();	//Block #2
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();	//Block #2
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();	//Block #2
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();	//Block #2
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();	//Block #2
-		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();	//Block #2
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();	//Block #3
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();	//Block #3
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();	//Block #3
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();	//Block #3
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();	//Block #3
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();	//Block #3
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();	//Block #3
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();	//Block #3
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();	//Block #4
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();	//Block #4
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();	//Block #4
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();	//Block #4
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();	//Block #4
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();	//Block #4
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();	//Block #4
-		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();	//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.element11;		//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.element12;		//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.element13;		//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.element14;		//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.element21;		//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.element22;		//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.element23;		//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.element24;		//Block #1
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.element31;		//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.element32;		//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.element33;		//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.element34;		//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.element41;		//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.element42;		//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.element43;		//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.element44;		//Block #2
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.element11;		//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.element12;		//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.element13;		//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.element14;		//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.element21;		//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.element22;		//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.element23;		//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.element24;		//Block #3
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.element31;		//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.element32;		//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.element33;		//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.element34;		//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.element41;		//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.element42;		//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.element43;		//Block #4
+		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.element44;		//Block #4
 		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 0] = radianceEmitted.getR();			//Block #5
 		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 1] = radianceEmitted.getG();			//Block #5
 		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 2] = radianceEmitted.getB();			//Block #5
@@ -1410,44 +1410,44 @@ public final class CompiledLightCache {
 		final float[] array = new float[getImageLightLength(imageLight)];
 		
 //		Block #1:
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.element11;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.element12;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.element13;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.element14;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.element21;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.element22;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.element23;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.element24;
 		
 //		Block #2:
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();
-		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.element31;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.element32;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.element33;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.element34;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.element41;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.element42;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.element43;
+		array[IMAGE_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.element44;
 		
 //		Block #3:
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.element11;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.element12;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.element13;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.element14;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.element21;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.element22;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.element23;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.element24;
 		
 //		Block #4:
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();
-		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.element31;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.element32;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.element33;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.element34;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.element41;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.element42;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.element43;
+		array[IMAGE_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.element44;
 		
 //		Block #5:
 		array[IMAGE_LIGHT_OFFSET_ANGLE_RADIANS] = angle.getRadians();
@@ -1512,44 +1512,44 @@ public final class CompiledLightCache {
 		final float[] array = new float[getPerezLightLength(perezLight)];
 		
 //		Block #1:
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.element11;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.element12;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.element13;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.element14;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.element21;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.element22;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.element23;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.element24;
 		
 //		Block #2:
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();
-		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.element31;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.element32;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.element33;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.element34;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.element41;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.element42;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.element43;
+		array[PEREZ_LIGHT_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.element44;
 		
 //		Block #3:
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.element11;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.element12;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.element13;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.element14;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.element21;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.element22;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.element23;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.element24;
 		
 //		Block #4:
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();
-		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.element31;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.element32;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.element33;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.element34;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.element41;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.element42;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.element43;
+		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.element44;
 		
 //		Block #5:
 		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 0] = sunColor.getR();
@@ -1655,22 +1655,22 @@ public final class CompiledLightCache {
 		final float[] array = new float[SPOT_LIGHT_LENGTH];
 		
 //		Because the SpotLight occupy 24/24 positions in three blocks, it should be aligned.
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();						//Block #1
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();						//Block #1
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();						//Block #1
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();						//Block #1
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();						//Block #1
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();						//Block #1
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();						//Block #1
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();						//Block #1
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();						//Block #2
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();						//Block #2
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();						//Block #2
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();						//Block #2
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();						//Block #2
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();						//Block #2
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();						//Block #2
-		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();						//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.element11;							//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.element12;							//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.element13;							//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.element14;							//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.element21;							//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.element22;							//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.element23;							//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.element24;							//Block #1
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.element31;							//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.element32;							//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.element33;							//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.element34;							//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.element41;							//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.element42;							//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.element43;							//Block #2
+		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.element44;							//Block #2
 		array[SPOT_LIGHT_OFFSET_INTENSITY + 0] = intensity.getR();											//Block #3
 		array[SPOT_LIGHT_OFFSET_INTENSITY + 1] = intensity.getG();											//Block #3
 		array[SPOT_LIGHT_OFFSET_INTENSITY + 2] = intensity.getB();											//Block #3

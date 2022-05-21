@@ -39,7 +39,7 @@ import org.macroing.java.lang.Strings;
 /**
  * A {@code Matrix44D} represents a 4 x 4 matrix with 16 {@code double}-based elements.
  * <p>
- * The default order of this {@code Matrix44D} class is row-major.
+ * The default order of this {@code Matrix44D} class is row-major. It stores its rotation and translation vectors as column vectors.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
@@ -134,22 +134,85 @@ public final class Matrix44D implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final double element11;
-	private final double element12;
-	private final double element13;
-	private final double element14;
-	private final double element21;
-	private final double element22;
-	private final double element23;
-	private final double element24;
-	private final double element31;
-	private final double element32;
-	private final double element33;
-	private final double element34;
-	private final double element41;
-	private final double element42;
-	private final double element43;
-	private final double element44;
+	/**
+	 * The value of the element at index 0 or row 1 and column 1.
+	 */
+	public final double element11;
+	
+	/**
+	 * The value of the element at index 1 or row 1 and column 2.
+	 */
+	public final double element12;
+	
+	/**
+	 * The value of the element at index 2 or row 1 and column 3.
+	 */
+	public final double element13;
+	
+	/**
+	 * The value of the element at index 3 or row 1 and column 4.
+	 */
+	public final double element14;
+	
+	/**
+	 * The value of the element at index 4 or row 2 and column 1.
+	 */
+	public final double element21;
+	
+	/**
+	 * The value of the element at index 5 or row 2 and column 2.
+	 */
+	public final double element22;
+	
+	/**
+	 * The value of the element at index 6 or row 2 and column 3.
+	 */
+	public final double element23;
+	
+	/**
+	 * The value of the element at index 7 or row 2 and column 4.
+	 */
+	public final double element24;
+	
+	/**
+	 * The value of the element at index 8 or row 3 and column 1.
+	 */
+	public final double element31;
+	
+	/**
+	 * The value of the element at index 9 or row 3 and column 2.
+	 */
+	public final double element32;
+	
+	/**
+	 * The value of the element at index 10 or row 3 and column 3.
+	 */
+	public final double element33;
+	
+	/**
+	 * The value of the element at index 11 or row 3 and column 4.
+	 */
+	public final double element34;
+	
+	/**
+	 * The value of the element at index 12 or row 4 and column 1.
+	 */
+	public final double element41;
+	
+	/**
+	 * The value of the element at index 13 or row 4 and column 2.
+	 */
+	public final double element42;
+	
+	/**
+	 * The value of the element at index 14 or row 4 and column 3.
+	 */
+	public final double element43;
+	
+	/**
+	 * The value of the element at index 15 or row 4 and column 4.
+	 */
+	public final double element44;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -370,150 +433,6 @@ public final class Matrix44D implements Node {
 		ParameterArguments.requireRange(column, 1, 4, "column");
 		
 		return getElement((row - 1) * 4 + (column - 1));
-	}
-	
-	/**
-	 * Returns the value of the element at index 0 or row 1 and column 1.
-	 * 
-	 * @return the value of the element at index 0 or row 1 and column 1
-	 */
-	public double getElement11() {
-		return this.element11;
-	}
-	
-	/**
-	 * Returns the value of the element at index 1 or row 1 and column 2.
-	 * 
-	 * @return the value of the element at index 1 or row 1 and column 2
-	 */
-	public double getElement12() {
-		return this.element12;
-	}
-	
-	/**
-	 * Returns the value of the element at index 2 or row 1 and column 3.
-	 * 
-	 * @return the value of the element at index 2 or row 1 and column 3
-	 */
-	public double getElement13() {
-		return this.element13;
-	}
-	
-	/**
-	 * Returns the value of the element at index 3 or row 1 and column 4.
-	 * 
-	 * @return the value of the element at index 3 or row 1 and column 4
-	 */
-	public double getElement14() {
-		return this.element14;
-	}
-	
-	/**
-	 * Returns the value of the element at index 4 or row 2 and column 1.
-	 * 
-	 * @return the value of the element at index 4 or row 2 and column 1
-	 */
-	public double getElement21() {
-		return this.element21;
-	}
-	
-	/**
-	 * Returns the value of the element at index 5 or row 2 and column 2.
-	 * 
-	 * @return the value of the element at index 5 or row 2 and column 2
-	 */
-	public double getElement22() {
-		return this.element22;
-	}
-	
-	/**
-	 * Returns the value of the element at index 6 or row 2 and column 3.
-	 * 
-	 * @return the value of the element at index 6 or row 2 and column 3
-	 */
-	public double getElement23() {
-		return this.element23;
-	}
-	
-	/**
-	 * Returns the value of the element at index 7 or row 2 and column 4.
-	 * 
-	 * @return the value of the element at index 7 or row 2 and column 4
-	 */
-	public double getElement24() {
-		return this.element24;
-	}
-	
-	/**
-	 * Returns the value of the element at index 8 or row 3 and column 1.
-	 * 
-	 * @return the value of the element at index 8 or row 3 and column 1
-	 */
-	public double getElement31() {
-		return this.element31;
-	}
-	
-	/**
-	 * Returns the value of the element at index 9 or row 3 and column 2.
-	 * 
-	 * @return the value of the element at index 9 or row 3 and column 2
-	 */
-	public double getElement32() {
-		return this.element32;
-	}
-	
-	/**
-	 * Returns the value of the element at index 10 or row 3 and column 3.
-	 * 
-	 * @return the value of the element at index 10 or row 3 and column 3
-	 */
-	public double getElement33() {
-		return this.element33;
-	}
-	
-	/**
-	 * Returns the value of the element at index 11 or row 3 and column 4.
-	 * 
-	 * @return the value of the element at index 11 or row 3 and column 4
-	 */
-	public double getElement34() {
-		return this.element34;
-	}
-	
-	/**
-	 * Returns the value of the element at index 12 or row 4 and column 1.
-	 * 
-	 * @return the value of the element at index 12 or row 4 and column 1
-	 */
-	public double getElement41() {
-		return this.element41;
-	}
-	
-	/**
-	 * Returns the value of the element at index 13 or row 4 and column 2.
-	 * 
-	 * @return the value of the element at index 13 or row 4 and column 2
-	 */
-	public double getElement42() {
-		return this.element42;
-	}
-	
-	/**
-	 * Returns the value of the element at index 14 or row 4 and column 3.
-	 * 
-	 * @return the value of the element at index 14 or row 4 and column 3
-	 */
-	public double getElement43() {
-		return this.element43;
-	}
-	
-	/**
-	 * Returns the value of the element at index 15 or row 4 and column 4.
-	 * 
-	 * @return the value of the element at index 15 or row 4 and column 4
-	 */
-	public double getElement44() {
-		return this.element44;
 	}
 	
 	/**
@@ -825,11 +744,7 @@ public final class Matrix44D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code o} is {@code null}
 	 */
 	public static Matrix44D rotate(final OrthonormalBasis33D o) {
-		final Vector3D u = o.getU();
-		final Vector3D v = o.getV();
-		final Vector3D w = o.getW();
-		
-		return rotate(w, v, u);
+		return rotate(o.w, o.v, o.u);
 	}
 	
 	/**

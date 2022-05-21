@@ -341,13 +341,13 @@ public final class Cylinder3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		final Point3D origin = ray.getOrigin();
+		final Point3D o = ray.getOrigin();
 		
-		final Vector3D direction = ray.getDirection();
+		final Vector3D d = ray.getDirection();
 		
-		final double a = direction.x * direction.x + direction.y * direction.y;
-		final double b = 2.0D * (direction.x * origin.x + direction.y * origin.y);
-		final double c = origin.x * origin.x + origin.y * origin.y - this.radius * this.radius;
+		final double a = d.x * d.x + d.y * d.y;
+		final double b = 2.0D * (d.x * o.x + d.y * o.y);
+		final double c = o.x * o.x + o.y * o.y - this.radius * this.radius;
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -359,9 +359,9 @@ public final class Cylinder3D implements Shape3D {
 			}
 			
 			if(t > tMinimum && t < tMaximum) {
-				final Point3D surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+				final Point3D p = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.z >= this.zMin && surfaceIntersectionPoint.z <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+				if(p.z >= this.zMin && p.z <= this.zMax && p.sphericalPhi() <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}

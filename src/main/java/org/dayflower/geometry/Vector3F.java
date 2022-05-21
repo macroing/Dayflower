@@ -1178,9 +1178,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transform(final Matrix44F mLHS, final Vector3F vRHS) {
-		final float x = mLHS.getElement11() * vRHS.x + mLHS.getElement12() * vRHS.y + mLHS.getElement13() * vRHS.z;
-		final float y = mLHS.getElement21() * vRHS.x + mLHS.getElement22() * vRHS.y + mLHS.getElement23() * vRHS.z;
-		final float z = mLHS.getElement31() * vRHS.x + mLHS.getElement32() * vRHS.y + mLHS.getElement33() * vRHS.z;
+		final float x = mLHS.element11 * vRHS.x + mLHS.element12 * vRHS.y + mLHS.element13 * vRHS.z;
+		final float y = mLHS.element21 * vRHS.x + mLHS.element22 * vRHS.y + mLHS.element23 * vRHS.z;
+		final float z = mLHS.element31 * vRHS.x + mLHS.element32 * vRHS.y + mLHS.element33 * vRHS.z;
 		
 		return new Vector3F(x, y, z);
 	}
@@ -1199,9 +1199,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transform(final Vector3F vLHS, final OrthonormalBasis33F oRHS) {
-		final float x = vLHS.x * oRHS.getU().x + vLHS.y * oRHS.getV().x + vLHS.z * oRHS.getW().x;
-		final float y = vLHS.x * oRHS.getU().y + vLHS.y * oRHS.getV().y + vLHS.z * oRHS.getW().y;
-		final float z = vLHS.x * oRHS.getU().z + vLHS.y * oRHS.getV().z + vLHS.z * oRHS.getW().z;
+		final float x = vLHS.x * oRHS.u.x + vLHS.y * oRHS.v.x + vLHS.z * oRHS.w.x;
+		final float y = vLHS.x * oRHS.u.y + vLHS.y * oRHS.v.y + vLHS.z * oRHS.w.y;
+		final float z = vLHS.x * oRHS.u.z + vLHS.y * oRHS.v.z + vLHS.z * oRHS.w.z;
 		
 		return new Vector3F(x, y, z);
 	}
@@ -1220,9 +1220,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transformError(final Matrix44F m, final Point3F p) {
-		final float x = gamma(3) * (abs(m.getElement11() * p.x) + abs(m.getElement12() * p.y) + abs(m.getElement13() * p.z) + abs(m.getElement14()));
-		final float y = gamma(3) * (abs(m.getElement21() * p.x) + abs(m.getElement22() * p.y) + abs(m.getElement23() * p.z) + abs(m.getElement24()));
-		final float z = gamma(3) * (abs(m.getElement31() * p.x) + abs(m.getElement32() * p.y) + abs(m.getElement33() * p.z) + abs(m.getElement34()));
+		final float x = gamma(3) * (abs(m.element11 * p.x) + abs(m.element12 * p.y) + abs(m.element13 * p.z) + abs(m.element14));
+		final float y = gamma(3) * (abs(m.element21 * p.x) + abs(m.element22 * p.y) + abs(m.element23 * p.z) + abs(m.element24));
+		final float z = gamma(3) * (abs(m.element31 * p.x) + abs(m.element32 * p.y) + abs(m.element33 * p.z) + abs(m.element34));
 		
 		return new Vector3F(x, y, z);
 	}
@@ -1242,9 +1242,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transformError(final Matrix44F m, final Point3F p, final Vector3F v) {
-		final float x = (gamma(3) + 1.0F) * (abs(m.getElement11()) * v.x + abs(m.getElement12()) * v.y + abs(m.getElement13()) * v.z) + gamma(3) * (abs(m.getElement11() * p.x) + abs(m.getElement12() * p.y) + abs(m.getElement13() * p.z) + abs(m.getElement14()));
-		final float y = (gamma(3) + 1.0F) * (abs(m.getElement21()) * v.x + abs(m.getElement22()) * v.y + abs(m.getElement23()) * v.z) + gamma(3) * (abs(m.getElement21() * p.x) + abs(m.getElement22() * p.y) + abs(m.getElement23() * p.z) + abs(m.getElement24()));
-		final float z = (gamma(3) + 1.0F) * (abs(m.getElement31()) * v.x + abs(m.getElement32()) * v.y + abs(m.getElement33()) * v.z) + gamma(3) * (abs(m.getElement31() * p.x) + abs(m.getElement32() * p.y) + abs(m.getElement33() * p.z) + abs(m.getElement34()));
+		final float x = (gamma(3) + 1.0F) * (abs(m.element11) * v.x + abs(m.element12) * v.y + abs(m.element13) * v.z) + gamma(3) * (abs(m.element11 * p.x) + abs(m.element12 * p.y) + abs(m.element13 * p.z) + abs(m.element14));
+		final float y = (gamma(3) + 1.0F) * (abs(m.element21) * v.x + abs(m.element22) * v.y + abs(m.element23) * v.z) + gamma(3) * (abs(m.element21 * p.x) + abs(m.element22 * p.y) + abs(m.element23 * p.z) + abs(m.element24));
+		final float z = (gamma(3) + 1.0F) * (abs(m.element31) * v.x + abs(m.element32) * v.y + abs(m.element33) * v.z) + gamma(3) * (abs(m.element31 * p.x) + abs(m.element32 * p.y) + abs(m.element33 * p.z) + abs(m.element34));
 		
 		return new Vector3F(x, y, z);
 	}
@@ -1263,9 +1263,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transformReverse(final Vector3F vLHS, final OrthonormalBasis33F oRHS) {
-		final float x = dotProduct(vLHS, oRHS.getU());
-		final float y = dotProduct(vLHS, oRHS.getV());
-		final float z = dotProduct(vLHS, oRHS.getW());
+		final float x = dotProduct(vLHS, oRHS.u);
+		final float y = dotProduct(vLHS, oRHS.v);
+		final float z = dotProduct(vLHS, oRHS.w);
 		
 		return new Vector3F(x, y, z);
 	}
@@ -1284,9 +1284,9 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F transformTranspose(final Matrix44F mLHS, final Vector3F vRHS) {
-		final float x = mLHS.getElement11() * vRHS.x + mLHS.getElement21() * vRHS.y + mLHS.getElement31() * vRHS.z;
-		final float y = mLHS.getElement12() * vRHS.x + mLHS.getElement22() * vRHS.y + mLHS.getElement32() * vRHS.z;
-		final float z = mLHS.getElement13() * vRHS.x + mLHS.getElement23() * vRHS.y + mLHS.getElement33() * vRHS.z;
+		final float x = mLHS.element11 * vRHS.x + mLHS.element21 * vRHS.y + mLHS.element31 * vRHS.z;
+		final float y = mLHS.element12 * vRHS.x + mLHS.element22 * vRHS.y + mLHS.element32 * vRHS.z;
+		final float z = mLHS.element13 * vRHS.x + mLHS.element23 * vRHS.y + mLHS.element33 * vRHS.z;
 		
 		return new Vector3F(x, y, z);
 	}

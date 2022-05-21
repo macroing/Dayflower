@@ -286,7 +286,7 @@ public final class Plane3D implements Shape3D {
 		
 		final Vector3D direction = new Vector3D(surfaceIntersectionPoint);
 		
-		final Point2D textureCoordinates = new Point2D(Vector3D.dotProduct(orthonormalBasisG.getU(), direction), Vector3D.dotProduct(orthonormalBasisG.getV(), direction));
+		final Point2D textureCoordinates = new Point2D(Vector3D.dotProduct(orthonormalBasisG.u, direction), Vector3D.dotProduct(orthonormalBasisG.v, direction));
 		
 		final Vector3D surfaceIntersectionPointError = new Vector3D();
 		

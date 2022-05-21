@@ -303,14 +303,14 @@ public final class Cone3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F origin = ray.getOrigin();
+		final Point3F o = ray.getOrigin();
 		
-		final Vector3F direction = ray.getDirection();
+		final Vector3F d = ray.getDirection();
 		
 		final float k = (this.radius / this.zMax) * (this.radius / this.zMax);
-		final float a = direction.x * direction.x + direction.y * direction.y - k * direction.z * direction.z;
-		final float b = 2.0F * (direction.x * origin.x + direction.y * origin.y - k * direction.z * (origin.z - this.zMax));
-		final float c = origin.x * origin.x + origin.y * origin.y - k * (origin.z - this.zMax) * (origin.z - this.zMax);
+		final float a = d.x * d.x + d.y * d.y - k * d.z * d.z;
+		final float b = 2.0F * (d.x * o.x + d.y * o.y - k * d.z * (o.z - this.zMax));
+		final float c = o.x * o.x + o.y * o.y - k * (o.z - this.zMax) * (o.z - this.zMax);
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -322,9 +322,9 @@ public final class Cone3F implements Shape3F {
 			}
 			
 			if(t > tMinimum && t < tMaximum) {
-				final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
+				final Point3F p = doCreateSurfaceIntersectionPoint(ray, t);
 				
-				if(surfaceIntersectionPoint.z >= 0.0F && surfaceIntersectionPoint.z <= this.zMax && surfaceIntersectionPoint.sphericalPhi() <= this.phiMax.getRadians()) {
+				if(p.z >= 0.0F && p.z <= this.zMax && p.sphericalPhi() <= this.phiMax.getRadians()) {
 					return t;
 				}
 			}

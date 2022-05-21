@@ -669,9 +669,9 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point3F transform(final Matrix44F mLHS, final Point3F pRHS) {
-		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14();
-		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24();
-		final float z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34();
+		final float x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13 * pRHS.z + mLHS.element14;
+		final float y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23 * pRHS.z + mLHS.element24;
+		final float z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34;
 		
 		return new Point3F(x, y, z);
 	}
@@ -689,10 +689,10 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code pRHS} are {@code null}
 	 */
 	public static Point3F transformAndDivide(final Matrix44F mLHS, final Point3F pRHS) {
-		final float x = mLHS.getElement11() * pRHS.x + mLHS.getElement12() * pRHS.y + mLHS.getElement13() * pRHS.z + mLHS.getElement14();
-		final float y = mLHS.getElement21() * pRHS.x + mLHS.getElement22() * pRHS.y + mLHS.getElement23() * pRHS.z + mLHS.getElement24();
-		final float z = mLHS.getElement31() * pRHS.x + mLHS.getElement32() * pRHS.y + mLHS.getElement33() * pRHS.z + mLHS.getElement34();
-		final float w = mLHS.getElement41() * pRHS.x + mLHS.getElement42() * pRHS.y + mLHS.getElement43() * pRHS.z + mLHS.getElement44();
+		final float x = mLHS.element11 * pRHS.x + mLHS.element12 * pRHS.y + mLHS.element13 * pRHS.z + mLHS.element14;
+		final float y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23 * pRHS.z + mLHS.element24;
+		final float z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34;
+		final float w = mLHS.element41 * pRHS.x + mLHS.element42 * pRHS.y + mLHS.element43 * pRHS.z + mLHS.element44;
 		
 		return equal(w, 1.0F) || isZero(w) ? new Point3F(x, y, z) : new Point3F(x / w, y / w, z / w);
 	}

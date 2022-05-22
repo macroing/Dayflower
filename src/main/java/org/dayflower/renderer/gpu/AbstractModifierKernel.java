@@ -76,8 +76,8 @@ public abstract class AbstractModifierKernel extends AbstractShape3FKernel {
 		if(modifierID == NoOpModifier.ID) {
 			return;
 		} else if(modifierID == NormalMapLDRImageModifier.ID) {
-			final float textureCoordinatesU = intersectionLHSGetTextureCoordinatesComponent1();
-			final float textureCoordinatesV = intersectionLHSGetTextureCoordinatesComponent2();
+			final float textureCoordinatesU = intersectionLHSGetTextureCoordinatesX();
+			final float textureCoordinatesV = intersectionLHSGetTextureCoordinatesY();
 			
 			final int currentModifierOffsetAbsolute = this.modifierNormalMapLDRImageModifierOffsetArray[modifierOffset];
 			
@@ -115,13 +115,13 @@ public abstract class AbstractModifierKernel extends AbstractShape3FKernel {
 			
 			intersectionLHSSetOrthonormalBasisSWTransform(directionX, directionY, directionZ);
 		} else if(modifierID == SimplexNoiseNormalMapModifier.ID) {
-			final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
-			final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
-			final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
+			final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
+			final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
+			final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointZ();
 			
-			final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWComponent1();
-			final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWComponent2();
-			final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+			final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWX();
+			final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWY();
+			final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWZ();
 			
 			final float frequency = this.modifierSimplexNoiseNormalMapModifierArray[modifierOffset + CompiledModifierCache.SIMPLEX_NOISE_NORMAL_MAP_MODIFIER_OFFSET_FREQUENCY];
 			final float frequencyReciprocal = 1.0F / frequency;

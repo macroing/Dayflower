@@ -1,3 +1,10 @@
+2022-05-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the Vector3DUnitTests and Vector3FUnitTests classes.
+	* CHANGE:	Refactor parts of the GPU-renderer.
+	* REMOVE:	Remove the method refraction2(Vector3D, Vector3D, double) from the Vector3D class.
+	* REMOVE:	Remove the method refraction2(Vector3F, Vector3F, float) from the Vector3F class.
+
 2022-05-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	The fields of the Matrix33D, Matrix33F, Matrix44D, Matrix44F, OrthonormalBasis33D and OrthonormalBasis33F classes have been made public.

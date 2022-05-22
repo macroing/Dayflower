@@ -23,6 +23,7 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.random;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
+import static org.dayflower.utility.Doubles.sqrt;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -107,7 +108,7 @@ public final class SmallPTD {
 		
 		final Ray3D reflectionRay = new Ray3D(reflectionOrigin, reflectionDirection);
 		
-		final Optional<Vector3D> optionalTransmissionDirection = Vector3D.refraction2(direction, surfaceNormalCorrectlyOriented, eta);
+		final Optional<Vector3D> optionalTransmissionDirection = refraction(direction, surfaceNormalCorrectlyOriented, eta);
 		
 		if(optionalTransmissionDirection.isPresent()) {
 			final Point3D transmissionOrigin = intersection.getSurfaceIntersectionPoint();
@@ -189,6 +190,20 @@ public final class SmallPTD {
 		final Color3D radiance = radiance(newRay, scene, depth);
 		
 		return radiance;
+	}
+	
+	public static Optional<Vector3D> refraction(final Vector3D direction, final Vector3D normal, final double eta) {
+		final double cosThetaI = Vector3D.dotProduct(direction, normal);
+		final double sinThetaISquared = 1.0D - cosThetaI * cosThetaI;
+		final double sinThetaTSquared = 1.0D - eta * eta * sinThetaISquared;
+		
+		if(sinThetaTSquared < 0.0D) {
+			return Optional.empty();
+		}
+		
+		final double cosThetaT = sqrt(sinThetaTSquared);
+		
+		return Optional.of(Vector3D.subtract(Vector3D.multiply(direction, eta), Vector3D.multiply(normal, eta * cosThetaI + cosThetaT)));
 	}
 	
 	public static void main(final String[] args) {

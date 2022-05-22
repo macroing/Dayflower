@@ -175,7 +175,7 @@ public final class SpecularBXDF extends BXDF {
 		final float etaT = isEntering ? etaB : etaA;
 		final float eta = etaI / etaT;
 		
-		final Optional<Vector3F> optionalRefractionDirection = Vector3F.refraction2(direction, normalCorrectlyOriented, eta);
+		final Optional<Vector3F> optionalRefractionDirection = Vector3F.refraction(direction, normalCorrectlyOriented, eta);
 		
 		if(optionalRefractionDirection.isPresent()) {
 			final Vector3F refractionDirection = optionalRefractionDirection.get();

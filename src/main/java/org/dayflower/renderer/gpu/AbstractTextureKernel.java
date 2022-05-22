@@ -203,20 +203,20 @@ public abstract class AbstractTextureKernel extends AbstractModifierKernel {
 		float component2 = 0.0F;
 		float component3 = 0.0F;
 		
-		final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
-		final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
-		final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWX();
+		final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWY();
+		final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWZ();
 		final float surfaceNormalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float surfaceNormalCorrectlyOrientedX = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
 		final float surfaceNormalCorrectlyOrientedY = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
 		final float surfaceNormalCorrectlyOrientedZ = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
 		
-		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
-		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
-		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointZ();
 		
-		final float textureCoordinatesU = intersectionLHSGetTextureCoordinatesComponent1();
-		final float textureCoordinatesV = intersectionLHSGetTextureCoordinatesComponent2();
+		final float textureCoordinatesU = intersectionLHSGetTextureCoordinatesX();
+		final float textureCoordinatesV = intersectionLHSGetTextureCoordinatesY();
 		
 		while(currentTextureID != -1 && currentTextureOffset != -1) {
 			if(currentTextureID == BullseyeTexture.ID) {

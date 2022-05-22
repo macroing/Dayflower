@@ -159,17 +159,17 @@ public final class GPURenderer extends AbstractGPURenderer {
 							final float resultG = materialBSDFResultGetResultG();
 							final float resultB = materialBSDFResultGetResultB();
 							
-							final float surfaceNormalGX = intersectionLHSGetOrthonormalBasisGWComponent1();
-							final float surfaceNormalGY = intersectionLHSGetOrthonormalBasisGWComponent2();
-							final float surfaceNormalGZ = intersectionLHSGetOrthonormalBasisGWComponent3();
+							final float surfaceNormalGX = intersectionLHSGetOrthonormalBasisGWX();
+							final float surfaceNormalGY = intersectionLHSGetOrthonormalBasisGWY();
+							final float surfaceNormalGZ = intersectionLHSGetOrthonormalBasisGWZ();
 							final float surfaceNormalGDotRayDirection = vector3FDotProduct(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 							final float surfaceNormalGCorrectlyOrientedX = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGX : surfaceNormalGX;
 							final float surfaceNormalGCorrectlyOrientedY = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGY : surfaceNormalGY;
 							final float surfaceNormalGCorrectlyOrientedZ = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGZ : surfaceNormalGZ;
 							
-							final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWComponent1();
-							final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWComponent2();
-							final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+							final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWX();
+							final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWY();
+							final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWZ();
 							final float surfaceNormalSDotRayDirection = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 							final float surfaceNormalSCorrectlyOrientedX = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSX : surfaceNormalSX;
 							final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
@@ -262,9 +262,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 				final float rayDirectionY = ray3FGetDirectionComponent2();
 				final float rayDirectionZ = ray3FGetDirectionComponent3();
 				
-				final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
-				final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
-				final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+				final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWX();
+				final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWY();
+				final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWZ();
 				
 				final float rayDirectionDotSurfaceNormal = vector3FDotProduct(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 				final float rayDirectionDotSurfaceNormalAbs = abs(rayDirectionDotSurfaceNormal);
@@ -299,9 +299,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 				final float resultG = materialBSDFResultGetResultG();
 				final float resultB = materialBSDFResultGetResultB();
 				
-				final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWComponent1();
-				final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWComponent2();
-				final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+				final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWX();
+				final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWY();
+				final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWZ();
 				final float surfaceNormalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, ray3FGetDirectionComponent1(), ray3FGetDirectionComponent2(), ray3FGetDirectionComponent3());
 				final float surfaceNormalCorrectlyOrientedX = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
 				final float surfaceNormalCorrectlyOrientedY = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;

@@ -32,6 +32,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Optional;
 
 import org.dayflower.mock.DataOutputMock;
 import org.junit.jupiter.api.Test;
@@ -587,6 +588,20 @@ public final class Vector3FUnitTests {
 	}
 	
 	@Test
+	public void testNormalNormalizedVector3FVector3FVector3FPoint3F() {
+		final Vector3F vector = Vector3F.normalNormalized(new Vector3F(1.0F, 0.0F, 0.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 0.0F, 0.0F));
+		
+		assertEquals(1.0F, vector.x);
+		assertEquals(0.0F, vector.y);
+		assertEquals(0.0F, vector.z);
+		
+		assertThrows(NullPointerException.class, () -> Vector3F.normalNormalized(new Vector3F(1.0F, 0.0F, 0.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(0.0F, 0.0F, 1.0F), null));
+		assertThrows(NullPointerException.class, () -> Vector3F.normalNormalized(new Vector3F(1.0F, 0.0F, 0.0F), new Vector3F(0.0F, 1.0F, 0.0F), null, new Point3F(1.0F, 1.0F, 1.0F)));
+		assertThrows(NullPointerException.class, () -> Vector3F.normalNormalized(new Vector3F(1.0F, 0.0F, 0.0F), null, new Vector3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 1.0F, 1.0F)));
+		assertThrows(NullPointerException.class, () -> Vector3F.normalNormalized(null, new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 1.0F, 1.0F)));
+	}
+	
+	@Test
 	public void testNormalPoint3FPoint3FPoint3F() {
 		final Point3F a = new Point3F(0.0F, 0.0F, 0.0F);
 		final Point3F b = new Point3F(1.0F, 0.0F, 0.0F);
@@ -601,6 +616,20 @@ public final class Vector3FUnitTests {
 		assertThrows(NullPointerException.class, () -> Vector3F.normal(a, b, null));
 		assertThrows(NullPointerException.class, () -> Vector3F.normal(a, null, c));
 		assertThrows(NullPointerException.class, () -> Vector3F.normal(null, b, c));
+	}
+	
+	@Test
+	public void testNormalVector3FVector3FVector3FPoint3F() {
+		final Vector3F vector = Vector3F.normal(new Vector3F(1.0F, 0.0F, 0.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 1.0F, 1.0F));
+		
+		assertEquals(1.0F, vector.x);
+		assertEquals(1.0F, vector.y);
+		assertEquals(1.0F, vector.z);
+		
+		assertThrows(NullPointerException.class, () -> Vector3F.normal(new Vector3F(1.0F, 0.0F, 0.0F), new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(0.0F, 0.0F, 1.0F), null));
+		assertThrows(NullPointerException.class, () -> Vector3F.normal(new Vector3F(1.0F, 0.0F, 0.0F), new Vector3F(0.0F, 1.0F, 0.0F), null, new Point3F(1.0F, 1.0F, 1.0F)));
+		assertThrows(NullPointerException.class, () -> Vector3F.normal(new Vector3F(1.0F, 0.0F, 0.0F), null, new Vector3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 1.0F, 1.0F)));
+		assertThrows(NullPointerException.class, () -> Vector3F.normal(null, new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 1.0F, 1.0F)));
 	}
 	
 	@Test
@@ -712,6 +741,26 @@ public final class Vector3FUnitTests {
 		assertEquals(0.125F, b.z);
 		
 		assertThrows(NullPointerException.class, () -> Vector3F.reciprocal(null));
+	}
+	
+	@Test
+	public void testRefraction() {
+		final Optional<Vector3F> a = Vector3F.refraction(new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(0.0F, 1.0F, 0.0F), 1.0F);
+		final Optional<Vector3F> b = Vector3F.refraction(new Vector3F(0.0F, 1.0F, 0.0F), new Vector3F(1.0F, 0.0F, 0.0F), 1.0F);
+		
+		assertNotNull(a);
+		assertNotNull(b);
+		
+		assertTrue(a.isPresent());
+		
+		assertFalse(b.isPresent());
+		
+		assertEquals(+0.0F, a.get().x);
+		assertEquals(-1.0F, a.get().y);
+		assertEquals(+0.0F, a.get().z);
+		
+		assertThrows(NullPointerException.class, () -> Vector3F.refraction(new Vector3F(0.0F, 1.0F, 0.0F), null, 1.0F));
+		assertThrows(NullPointerException.class, () -> Vector3F.refraction(null, new Vector3F(0.0F, 1.0F, 0.0F), 1.0F));
 	}
 	
 	@Test

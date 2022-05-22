@@ -304,7 +304,7 @@ public final class ClearCoatMaterial implements Material {
 		final float etaT = isEntering ? etaB : etaA;
 		final float eta = etaI / etaT;
 		
-		final Optional<Vector3F> optionalRefractionDirection = Vector3F.refraction2(direction, surfaceNormalCorrectlyOriented, eta);
+		final Optional<Vector3F> optionalRefractionDirection = Vector3F.refraction(direction, surfaceNormalCorrectlyOriented, eta);
 		
 		if(optionalRefractionDirection.isPresent()) {
 			final Vector3F refractionDirection = optionalRefractionDirection.get();

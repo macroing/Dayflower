@@ -860,27 +860,27 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float matrixInverseElement33 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
 		
 //		Retrieve the old variables from the intersection array:
-		final float oldOrthonormalBasisGUX = intersectionLHSGetOrthonormalBasisGUComponent1();
-		final float oldOrthonormalBasisGUY = intersectionLHSGetOrthonormalBasisGUComponent2();
-		final float oldOrthonormalBasisGUZ = intersectionLHSGetOrthonormalBasisGUComponent3();
-		final float oldOrthonormalBasisGVX = intersectionLHSGetOrthonormalBasisGVComponent1();
-		final float oldOrthonormalBasisGVY = intersectionLHSGetOrthonormalBasisGVComponent2();
-		final float oldOrthonormalBasisGVZ = intersectionLHSGetOrthonormalBasisGVComponent3();
-		final float oldOrthonormalBasisGWX = intersectionLHSGetOrthonormalBasisGWComponent1();
-		final float oldOrthonormalBasisGWY = intersectionLHSGetOrthonormalBasisGWComponent2();
-		final float oldOrthonormalBasisGWZ = intersectionLHSGetOrthonormalBasisGWComponent3();
-		final float oldOrthonormalBasisSUX = intersectionLHSGetOrthonormalBasisSUComponent1();
-		final float oldOrthonormalBasisSUY = intersectionLHSGetOrthonormalBasisSUComponent2();
-		final float oldOrthonormalBasisSUZ = intersectionLHSGetOrthonormalBasisSUComponent3();
-		final float oldOrthonormalBasisSVX = intersectionLHSGetOrthonormalBasisSVComponent1();
-		final float oldOrthonormalBasisSVY = intersectionLHSGetOrthonormalBasisSVComponent2();
-		final float oldOrthonormalBasisSVZ = intersectionLHSGetOrthonormalBasisSVComponent3();
-		final float oldOrthonormalBasisSWX = intersectionLHSGetOrthonormalBasisSWComponent1();
-		final float oldOrthonormalBasisSWY = intersectionLHSGetOrthonormalBasisSWComponent2();
-		final float oldOrthonormalBasisSWZ = intersectionLHSGetOrthonormalBasisSWComponent3();
-		final float oldSurfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
-		final float oldSurfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
-		final float oldSurfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
+		final float oldOrthonormalBasisGUX = intersectionLHSGetOrthonormalBasisGUX();
+		final float oldOrthonormalBasisGUY = intersectionLHSGetOrthonormalBasisGUY();
+		final float oldOrthonormalBasisGUZ = intersectionLHSGetOrthonormalBasisGUZ();
+		final float oldOrthonormalBasisGVX = intersectionLHSGetOrthonormalBasisGVX();
+		final float oldOrthonormalBasisGVY = intersectionLHSGetOrthonormalBasisGVY();
+		final float oldOrthonormalBasisGVZ = intersectionLHSGetOrthonormalBasisGVZ();
+		final float oldOrthonormalBasisGWX = intersectionLHSGetOrthonormalBasisGWX();
+		final float oldOrthonormalBasisGWY = intersectionLHSGetOrthonormalBasisGWY();
+		final float oldOrthonormalBasisGWZ = intersectionLHSGetOrthonormalBasisGWZ();
+		final float oldOrthonormalBasisSUX = intersectionLHSGetOrthonormalBasisSUX();
+		final float oldOrthonormalBasisSUY = intersectionLHSGetOrthonormalBasisSUY();
+		final float oldOrthonormalBasisSUZ = intersectionLHSGetOrthonormalBasisSUZ();
+		final float oldOrthonormalBasisSVX = intersectionLHSGetOrthonormalBasisSVX();
+		final float oldOrthonormalBasisSVY = intersectionLHSGetOrthonormalBasisSVY();
+		final float oldOrthonormalBasisSVZ = intersectionLHSGetOrthonormalBasisSVZ();
+		final float oldOrthonormalBasisSWX = intersectionLHSGetOrthonormalBasisSWX();
+		final float oldOrthonormalBasisSWY = intersectionLHSGetOrthonormalBasisSWY();
+		final float oldOrthonormalBasisSWZ = intersectionLHSGetOrthonormalBasisSWZ();
+		final float oldSurfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
+		final float oldSurfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
+		final float oldSurfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointZ();
 		
 //		Transform the U-direction of the geometric orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
@@ -1083,17 +1083,17 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final boolean isUsingDeltaDistribution = lightIsUsingDeltaDistribution();
 		final boolean isSampling = lightSampleRadianceIncoming(sampleAU, sampleAV, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float normalX = intersectionLHSGetOrthonormalBasisSWComponent1();
-		final float normalY = intersectionLHSGetOrthonormalBasisSWComponent2();
-		final float normalZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+		final float normalX = intersectionLHSGetOrthonormalBasisSWX();
+		final float normalY = intersectionLHSGetOrthonormalBasisSWY();
+		final float normalZ = intersectionLHSGetOrthonormalBasisSWZ();
 		final float normalDotRayDirection = vector3FDotProduct(normalX, normalY, normalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float normalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -normalX : normalX;
 		final float normalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -normalY : normalY;
 		final float normalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -normalZ : normalZ;
 		
-		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
-		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
-		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointZ();
 		
 		float lightDirectR = 0.0F;
 		float lightDirectG = 0.0F;

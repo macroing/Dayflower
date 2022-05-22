@@ -66,21 +66,21 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V = 3;
 	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W = 6;
 	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE = 9;
-	private static final int POINT_2_F_ARRAY_OFFSET_COMPONENT_1 = 0;
-	private static final int POINT_2_F_ARRAY_OFFSET_COMPONENT_2 = 1;
+	private static final int POINT_2_F_ARRAY_OFFSET_X = 0;
+	private static final int POINT_2_F_ARRAY_OFFSET_Y = 1;
 	private static final int POINT_2_F_ARRAY_SIZE = 2;
-	private static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
-	private static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_2 = 1;
-	private static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
+	private static final int POINT_3_F_ARRAY_OFFSET_X = 0;
+	private static final int POINT_3_F_ARRAY_OFFSET_Y = 1;
+	private static final int POINT_3_F_ARRAY_OFFSET_Z = 2;
 	private static final int POINT_3_F_ARRAY_SIZE = 3;
 	private static final int RAY_3_F_ARRAY_OFFSET_DIRECTION = 3;
 	private static final int RAY_3_F_ARRAY_OFFSET_ORIGIN = 0;
 	private static final int RAY_3_F_ARRAY_OFFSET_T_MAXIMUM = 7;
 	private static final int RAY_3_F_ARRAY_OFFSET_T_MINIMUM = 6;
 	private static final int RAY_3_F_ARRAY_SIZE = 8;
-	private static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
-	private static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2 = 1;
-	private static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
+	private static final int VECTOR_3_F_ARRAY_OFFSET_X = 0;
+	private static final int VECTOR_3_F_ARRAY_OFFSET_Y = 1;
+	private static final int VECTOR_3_F_ARRAY_OFFSET_Z = 2;
 	private static final int VECTOR_3_F_ARRAY_SIZE = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,209 +140,209 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the X-component of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the X-component of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisGUComponent1() {
+	protected final float intersectionLHSGetOrthonormalBasisGUX() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Y-component of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Y-component of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisGUComponent2() {
+	protected final float intersectionLHSGetOrthonormalBasisGUY() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Z-component of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Z-component of the U-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisGUComponent3() {
+	protected final float intersectionLHSGetOrthonormalBasisGUZ() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of X-component of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of X-component of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisGVComponent1() {
+	protected final float intersectionLHSGetOrthonormalBasisGVX() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Y-component of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Y-component of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisGVComponent2() {
+	protected final float intersectionLHSGetOrthonormalBasisGVY() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Z-component of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Z-component of the V-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisGVComponent3() {
+	protected final float intersectionLHSGetOrthonormalBasisGVZ() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the X-component of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the X-component of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisGWComponent1() {
+	protected final float intersectionLHSGetOrthonormalBasisGWX() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Y-component of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Y-component of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisGWComponent2() {
+	protected final float intersectionLHSGetOrthonormalBasisGWY() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Z-component of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Z-component of the W-direction of the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisGWComponent3() {
+	protected final float intersectionLHSGetOrthonormalBasisGWZ() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the X-component of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the X-component of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisSUComponent1() {
+	protected final float intersectionLHSGetOrthonormalBasisSUX() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Y-component of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Y-component of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisSUComponent2() {
+	protected final float intersectionLHSGetOrthonormalBasisSUY() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Z-component of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Z-component of the U-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisSUComponent3() {
+	protected final float intersectionLHSGetOrthonormalBasisSUZ() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the X-component of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the X-component of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisSVComponent1() {
+	protected final float intersectionLHSGetOrthonormalBasisSVX() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Y-component of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Y-component of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisSVComponent2() {
+	protected final float intersectionLHSGetOrthonormalBasisSVY() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Z-component of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Z-component of the V-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisSVComponent3() {
+	protected final float intersectionLHSGetOrthonormalBasisSVZ() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the X-component of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the X-component of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisSWComponent1() {
+	protected final float intersectionLHSGetOrthonormalBasisSWX() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Y-component of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Y-component of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisSWComponent2() {
+	protected final float intersectionLHSGetOrthonormalBasisSWY() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Z-component of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Z-component of the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetOrthonormalBasisSWComponent3() {
+	protected final float intersectionLHSGetOrthonormalBasisSWZ() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the surface intersection point in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the X-component of the surface intersection point in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the surface intersection point in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the X-component of the surface intersection point in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetSurfaceIntersectionPointComponent1() {
+	protected final float intersectionLHSGetSurfaceIntersectionPointX() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the surface intersection point in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Y-component of the surface intersection point in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the surface intersection point in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Y-component of the surface intersection point in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetSurfaceIntersectionPointComponent2() {
+	protected final float intersectionLHSGetSurfaceIntersectionPointY() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
 	}
 	
 	/**
-	 * Returns the value of component 3 of the surface intersection point in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Z-component of the surface intersection point in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 3 of the surface intersection point in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Z-component of the surface intersection point in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetSurfaceIntersectionPointComponent3() {
+	protected final float intersectionLHSGetSurfaceIntersectionPointZ() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
 	}
 	
 	/**
-	 * Returns the value of component 1 of the texture coordinates in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the X-component of the texture coordinates in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 1 of the texture coordinates in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the X-component of the texture coordinates in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetTextureCoordinatesComponent1() {
+	protected final float intersectionLHSGetTextureCoordinatesX() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
 	}
 	
 	/**
-	 * Returns the value of component 2 of the texture coordinates in {@link #intersectionLHSArray_$private$24}.
+	 * Returns the value of the Y-component of the texture coordinates in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @return the value of component 2 of the texture coordinates in {@link #intersectionLHSArray_$private$24}
+	 * @return the value of the Y-component of the texture coordinates in {@link #intersectionLHSArray_$private$24}
 	 */
-	protected final float intersectionLHSGetTextureCoordinatesComponent2() {
+	protected final float intersectionLHSGetTextureCoordinatesY() {
 		return this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
 	}
 	
@@ -358,26 +358,26 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @param uComponent1 component 1 of the U-direction
-	 * @param uComponent2 component 2 of the U-direction
-	 * @param uComponent3 component 3 of the U-direction
-	 * @param vComponent1 component 1 of the V-direction
-	 * @param vComponent2 component 2 of the V-direction
-	 * @param vComponent3 component 3 of the V-direction
-	 * @param wComponent1 component 1 of the W-direction
-	 * @param wComponent2 component 2 of the W-direction
-	 * @param wComponent3 component 3 of the W-direction
+	 * @param uX the X-component of the U-direction
+	 * @param uY the Y-component of the U-direction
+	 * @param uZ the Z-component of the U-direction
+	 * @param vX the X-component of the V-direction
+	 * @param vY the Y-component of the V-direction
+	 * @param vZ the Z-component of the V-direction
+	 * @param wX the X-component of the W-direction
+	 * @param wY the Y-component of the W-direction
+	 * @param wZ the Z-component of the W-direction
 	 */
-	protected final void intersectionLHSSetOrthonormalBasisG(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = uComponent1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1] = uComponent2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2] = uComponent3;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0] = vComponent1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1] = vComponent2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2] = vComponent3;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0] = wComponent1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1] = wComponent2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2] = wComponent3;
+	protected final void intersectionLHSSetOrthonormalBasisG(final float uX, final float uY, final float uZ, final float vX, final float vY, final float vZ, final float wX, final float wY, final float wZ) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = uX;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1] = uY;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2] = uZ;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0] = vX;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1] = vY;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2] = vZ;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0] = wX;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1] = wY;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2] = wZ;
 	}
 	
 	/**
@@ -398,26 +398,26 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @param uComponent1 component 1 of the U-direction
-	 * @param uComponent2 component 2 of the U-direction
-	 * @param uComponent3 component 3 of the U-direction
-	 * @param vComponent1 component 1 of the V-direction
-	 * @param vComponent2 component 2 of the V-direction
-	 * @param vComponent3 component 3 of the V-direction
-	 * @param wComponent1 component 1 of the W-direction
-	 * @param wComponent2 component 2 of the W-direction
-	 * @param wComponent3 component 3 of the W-direction
+	 * @param uX the X-component of the U-direction
+	 * @param uY the Y-component of the U-direction
+	 * @param uZ the Z-component of the U-direction
+	 * @param vX the X-component of the V-direction
+	 * @param vY the Y-component of the V-direction
+	 * @param vZ the Z-component of the V-direction
+	 * @param wX the X-component of the W-direction
+	 * @param wY the Y-component of the W-direction
+	 * @param wZ the Z-component of the W-direction
 	 */
-	protected final void intersectionLHSSetOrthonormalBasisS(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = uComponent1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = uComponent2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = uComponent3;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = vComponent1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = vComponent2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = vComponent3;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = wComponent1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = wComponent2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = wComponent3;
+	protected final void intersectionLHSSetOrthonormalBasisS(final float uX, final float uY, final float uZ, final float vX, final float vY, final float vZ, final float wX, final float wY, final float wZ) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = uX;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = uY;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = uZ;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = vX;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = vY;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = vZ;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = wX;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = wY;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = wZ;
 	}
 	
 	/**
@@ -438,63 +438,63 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @param component1 component 1 of the W-direction
-	 * @param component2 component 2 of the W-direction
-	 * @param component3 component 3 of the W-direction
+	 * @param x the X-component of the W-direction
+	 * @param y the Y-component of the W-direction
+	 * @param z the Z-component of the W-direction
 	 */
-	protected final void intersectionLHSSetOrthonormalBasisSW(final float component1, final float component2, final float component3) {
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = component1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = component2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = component3;
+	protected final void intersectionLHSSetOrthonormalBasisSW(final float x, final float y, final float z) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = x;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = y;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = z;
 	}
 	
 	/**
 	 * Sets the W-direction of the orthonormal basis for shading in {@link #intersectionLHSArray_$private$24} to a transformed representation.
 	 * 
-	 * @param component1 component 1 of the vector to transform with
-	 * @param component2 component 2 of the vector to transform with
-	 * @param component3 component 3 of the vector to transform with
+	 * @param x the X-component of the vector to transform with
+	 * @param y the Y-component of the vector to transform with
+	 * @param z the Z-component of the vector to transform with
 	 */
-	protected final void intersectionLHSSetOrthonormalBasisSWTransform(final float component1, final float component2, final float component3) {
-		final float oldUComponent1 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
-		final float oldUComponent2 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
-		final float oldUComponent3 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
-		final float oldVComponent1 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
-		final float oldVComponent2 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
-		final float oldVComponent3 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
-		final float oldWComponent1 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
-		final float oldWComponent2 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
-		final float oldWComponent3 = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
+	protected final void intersectionLHSSetOrthonormalBasisSWTransform(final float x, final float y, final float z) {
+		final float oldUX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
+		final float oldUY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
+		final float oldUZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
+		final float oldVX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
+		final float oldVY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
+		final float oldVZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
+		final float oldWX = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
+		final float oldWY = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
+		final float oldWZ = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
 		
-		final float newWComponent1 = component1 * oldUComponent1 + component2 * oldVComponent1 + component3 * oldWComponent1;
-		final float newWComponent2 = component1 * oldUComponent2 + component2 * oldVComponent2 + component3 * oldWComponent2;
-		final float newWComponent3 = component1 * oldUComponent3 + component2 * oldVComponent3 + component3 * oldWComponent3;
-		final float newWLengthReciprocal = vector3FLengthReciprocal(newWComponent1, newWComponent2, newWComponent3);
-		final float newWNormalizedComponent1 = newWComponent1 * newWLengthReciprocal;
-		final float newWNormalizedComponent2 = newWComponent2 * newWLengthReciprocal;
-		final float newWNormalizedComponent3 = newWComponent3 * newWLengthReciprocal;
+		final float newWX = x * oldUX + y * oldVX + z * oldWX;
+		final float newWY = x * oldUY + y * oldVY + z * oldWY;
+		final float newWZ = x * oldUZ + y * oldVZ + z * oldWZ;
+		final float newWLengthReciprocal = vector3FLengthReciprocal(newWX, newWY, newWZ);
+		final float newWNormalizedX = newWX * newWLengthReciprocal;
+		final float newWNormalizedY = newWY * newWLengthReciprocal;
+		final float newWNormalizedZ = newWZ * newWLengthReciprocal;
 		
-		final float newUComponent1 = oldVComponent2 * newWNormalizedComponent3 - oldVComponent3 * newWNormalizedComponent2;
-		final float newUComponent2 = oldVComponent3 * newWNormalizedComponent1 - oldVComponent1 * newWNormalizedComponent3;
-		final float newUComponent3 = oldVComponent1 * newWNormalizedComponent2 - oldVComponent2 * newWNormalizedComponent1;
-		final float newULengthReciprocal = vector3FLengthReciprocal(newUComponent1, newUComponent2, newUComponent3);
-		final float newUNormalizedComponent1 = newUComponent1 * newULengthReciprocal;
-		final float newUNormalizedComponent2 = newUComponent2 * newULengthReciprocal;
-		final float newUNormalizedComponent3 = newUComponent3 * newULengthReciprocal;
+		final float newUX = oldVY * newWNormalizedZ - oldVZ * newWNormalizedY;
+		final float newUY = oldVZ * newWNormalizedX - oldVX * newWNormalizedZ;
+		final float newUZ = oldVX * newWNormalizedY - oldVY * newWNormalizedX;
+		final float newULengthReciprocal = vector3FLengthReciprocal(newUX, newUY, newUZ);
+		final float newUNormalizedX = newUX * newULengthReciprocal;
+		final float newUNormalizedY = newUY * newULengthReciprocal;
+		final float newUNormalizedZ = newUZ * newULengthReciprocal;
 		
-		final float newVNormalizedComponent1 = newWNormalizedComponent2 * newUNormalizedComponent3 - newWNormalizedComponent3 * newUNormalizedComponent2;
-		final float newVNormalizedComponent2 = newWNormalizedComponent3 * newUNormalizedComponent1 - newWNormalizedComponent1 * newUNormalizedComponent3;
-		final float newVNormalizedComponent3 = newWNormalizedComponent1 * newUNormalizedComponent2 - newWNormalizedComponent2 * newUNormalizedComponent1;
+		final float newVNormalizedX = newWNormalizedY * newUNormalizedZ - newWNormalizedZ * newUNormalizedY;
+		final float newVNormalizedY = newWNormalizedZ * newUNormalizedX - newWNormalizedX * newUNormalizedZ;
+		final float newVNormalizedZ = newWNormalizedX * newUNormalizedY - newWNormalizedY * newUNormalizedX;
 		
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = newUNormalizedComponent1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = newUNormalizedComponent2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = newUNormalizedComponent3;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = newVNormalizedComponent1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = newVNormalizedComponent2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = newVNormalizedComponent3;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = newWNormalizedComponent1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = newWNormalizedComponent2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = newWNormalizedComponent3;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = newUNormalizedX;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = newUNormalizedY;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = newUNormalizedZ;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = newVNormalizedX;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = newVNormalizedY;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = newVNormalizedZ;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = newWNormalizedX;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = newWNormalizedY;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = newWNormalizedZ;
 	}
 	
 	/**
@@ -509,25 +509,25 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets the surface intersection point in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @param component1 component 1 of the surface intersection point
-	 * @param component2 component 2 of the surface intersection point
-	 * @param component3 component 3 of the surface intersection point
+	 * @param x the X-component of the surface intersection point
+	 * @param y the Y-component of the surface intersection point
+	 * @param z the Z-component of the surface intersection point
 	 */
-	protected final void intersectionLHSSetSurfaceIntersectionPoint(final float component1, final float component2, final float component3) {
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = component1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = component2;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = component3;
+	protected final void intersectionLHSSetSurfaceIntersectionPoint(final float x, final float y, final float z) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = x;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = y;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = z;
 	}
 	
 	/**
 	 * Sets the texture coordinates in {@link #intersectionLHSArray_$private$24}.
 	 * 
-	 * @param component1 component 1 of the texture coordinates
-	 * @param component2 component 2 of the texture coordinates
+	 * @param x the X-component of the texture coordinates
+	 * @param y the Y-component of the texture coordinates
 	 */
-	protected final void intersectionLHSSetTextureCoordinates(final float component1, final float component2) {
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = component1;
-		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = component2;
+	protected final void intersectionLHSSetTextureCoordinates(final float x, final float y) {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = x;
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = y;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1286,9 +1286,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * This method will normalize the W-direction vector.
 	 */
 	protected final void orthonormalBasis33FSetVector3F() {
-		final float orthonormalBasisWX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float orthonormalBasisWY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float orthonormalBasisWZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float orthonormalBasisWX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X];
+		final float orthonormalBasisWY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y];
+		final float orthonormalBasisWZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z];
 		
 		orthonormalBasis33FSetFromW(orthonormalBasisWX, orthonormalBasisWY, orthonormalBasisWZ);
 	}
@@ -1298,32 +1298,32 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the value of component 1 in {@link #point2FArray_$private$2}.
+	 * Returns the value of the X-component in {@link #point2FArray_$private$2}.
 	 * 
-	 * @return the value of component 1 in {@link #point2FArray_$private$2}
+	 * @return the value of the X-component in {@link #point2FArray_$private$2}
 	 */
-	protected final float point2FGetComponent1() {
-		return this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_1];
+	protected final float point2FGetX() {
+		return this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_X];
 	}
 	
 	/**
-	 * Returns the value of component 2 in {@link #point2FArray_$private$2}.
+	 * Returns the value of the Y-component in {@link #point2FArray_$private$2}.
 	 * 
-	 * @return the value of component 2 in {@link #point2FArray_$private$2}
+	 * @return the value of the Y-component in {@link #point2FArray_$private$2}
 	 */
-	protected final float point2FGetComponent2() {
-		return this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_2];
+	protected final float point2FGetY() {
+		return this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_Y];
 	}
 	
 	/**
 	 * Sets a point in {@link #point2FArray_$private$2}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
 	 */
-	protected final void point2FSet(final float component1, final float component2) {
-		this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_1] = component1;
-		this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_2] = component2;
+	protected final void point2FSet(final float x, final float y) {
+		this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_X] = x;
+		this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_Y] = y;
 	}
 	
 	/**
@@ -1337,8 +1337,8 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final void point2FSetSampleDiskUniformDistributionByConcentricMapping(final float u, final float v, final float radius) {
 		if(checkIsZero(u) && checkIsZero(v)) {
-			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_1] = 0.0F;
-			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_2] = 0.0F;
+			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_X] = 0.0F;
+			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_Y] = 0.0F;
 		} else {
 			final float a = u * 2.0F - 1.0F;
 			final float b = v * 2.0F - 1.0F;
@@ -1348,8 +1348,8 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 			final float phi = isCaseA ? PI_DIVIDED_BY_4 * (b / a) : PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
 			final float r = isCaseA ? radius * a : radius * b;
 			
-			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_1] = r * cos(phi);
-			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_2] = r * sin(phi);
+			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_X] = r * cos(phi);
+			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_Y] = r * sin(phi);
 		}
 	}
 	
@@ -1393,7 +1393,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return the value of component 1 in {@link #point3FArray_$private$3}
 	 */
 	protected final float point3FGetComponent1() {
-		return this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];
+		return this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_X];
 	}
 	
 	/**
@@ -1402,7 +1402,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return the value of component 2 in {@link #point3FArray_$private$3}
 	 */
 	protected final float point3FGetComponent2() {
-		return this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2];
+		return this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_Y];
 	}
 	
 	/**
@@ -1411,7 +1411,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return the value of component 3 in {@link #point3FArray_$private$3}
 	 */
 	protected final float point3FGetComponent3() {
-		return this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3];
+		return this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_Z];
 	}
 	
 	/**
@@ -1440,9 +1440,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float newComponent2 = element21 * component1 + element22 * component2 + element23 * component3 + element24;
 		final float newComponent3 = element31 * component1 + element32 * component2 + element33 * component3 + element34;
 		
-		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
-		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
-		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_X] = newComponent1;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_Y] = newComponent2;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_Z] = newComponent3;
 	}
 	
 	/**
@@ -1480,9 +1480,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		
 		final boolean isDividing = newComponent4 != +0.0F && newComponent4 != -0.0F && newComponent4 != 1.0F;
 		
-		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = isDividing ? newComponent1 / newComponent4 : newComponent1;
-		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = isDividing ? newComponent2 / newComponent4 : newComponent2;
-		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = isDividing ? newComponent3 / newComponent4 : newComponent3;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_X] = isDividing ? newComponent1 / newComponent4 : newComponent1;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_Y] = isDividing ? newComponent2 / newComponent4 : newComponent2;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_Z] = isDividing ? newComponent3 / newComponent4 : newComponent3;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1612,13 +1612,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param rayDirectionZ the Z-coordinate of the ray direction
 	 */
 	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FLHS(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
-		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointComponent1();
-		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointComponent2();
-		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointComponent3();
+		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
+		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
+		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointZ();
 		
-		final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWComponent1();
-		final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWComponent2();
-		final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWComponent3();
+		final float surfaceNormalSX = intersectionLHSGetOrthonormalBasisSWX();
+		final float surfaceNormalSY = intersectionLHSGetOrthonormalBasisSWY();
+		final float surfaceNormalSZ = intersectionLHSGetOrthonormalBasisSWZ();
 		final float surfaceNormalSDotRayDirection = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		final float surfaceNormalSCorrectlyOrientedX = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSX : surfaceNormalSX;
 		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
@@ -1814,53 +1814,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float refractionDirectionNormalizedY = refractionDirectionY * refractionDirectionLengthReciprocal;
 		final float refractionDirectionNormalizedZ = refractionDirectionZ * refractionDirectionLengthReciprocal;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = refractionDirectionNormalizedX;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = refractionDirectionNormalizedY;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = refractionDirectionNormalizedZ;
-		
-		return true;
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * Returns {@code true} if, and only if, the vector was set, {@code false} otherwise.
-	 * <p>
-	 * The vector is constructed as the refraction vector of the direction vector represented by {@code directionX}, {@code directionY} and {@code directionZ} with regards to the normal vector represented by {@code normalX}, {@code normalY}
-	 * and {@code normalZ}.
-	 * 
-	 * @param directionX the X-component of the direction vector
-	 * @param directionY the Y-component of the direction vector
-	 * @param directionZ the Z-component of the direction vector
-	 * @param normalX the X-component of the normal vector
-	 * @param normalY the Y-component of the normal vector
-	 * @param normalZ the Z-component of the normal vector
-	 * @param eta the index of refraction (IOR)
-	 * @return {@code true} if, and only if, the vector was set, {@code false} otherwise
-	 */
-	protected final boolean vector3FSetRefraction2(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final float eta) {
-		final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, normalX, normalY, normalZ);
-		final float sinThetaISquared = 1.0F - cosThetaI * cosThetaI;
-		final float sinThetaTSquared = 1.0F - eta * eta * sinThetaISquared;
-		final float cosThetaT = sqrt(sinThetaTSquared);
-		
-		final boolean isTotalInternalReflection = sinThetaTSquared < 0.0F;
-		
-		if(isTotalInternalReflection) {
-			return false;
-		}
-		
-		final float refractionDirectionX = directionX * eta - normalX * (eta * cosThetaI + cosThetaT);
-		final float refractionDirectionY = directionY * eta - normalY * (eta * cosThetaI + cosThetaT);
-		final float refractionDirectionZ = directionZ * eta - normalZ * (eta * cosThetaI + cosThetaT);
-		final float refractionDirectionLengthReciprocal = vector3FLengthReciprocal(refractionDirectionX, refractionDirectionY, refractionDirectionZ);
-		final float refractionDirectionNormalizedX = refractionDirectionX * refractionDirectionLengthReciprocal;
-		final float refractionDirectionNormalizedY = refractionDirectionY * refractionDirectionLengthReciprocal;
-		final float refractionDirectionNormalizedZ = refractionDirectionZ * refractionDirectionLengthReciprocal;
-		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = refractionDirectionNormalizedX;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = refractionDirectionNormalizedY;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = refractionDirectionNormalizedZ;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = refractionDirectionNormalizedX;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = refractionDirectionNormalizedY;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = refractionDirectionNormalizedZ;
 		
 		return true;
 	}
@@ -1962,7 +1918,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return the value of component 1 in {@link #vector3FArray_$private$3}
 	 */
 	protected final float vector3FGetComponent1() {
-		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X];
 	}
 	
 	/**
@@ -1971,7 +1927,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return the value of component 2 in {@link #vector3FArray_$private$3}
 	 */
 	protected final float vector3FGetComponent2() {
-		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y];
 	}
 	
 	/**
@@ -1980,7 +1936,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return the value of component 3 in {@link #vector3FArray_$private$3}
 	 */
 	protected final float vector3FGetComponent3() {
-		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z];
 	}
 	
 	/**
@@ -2140,9 +2096,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param component3 the value of component 3 of the vector
 	 */
 	protected final void vector3FSet(final float component1, final float component2, final float component3) {
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = component3;
 	}
 	
 	/**
@@ -2389,9 +2345,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float newComponent2 = element21 * component1 + element22 * component2 + element23 * component3;
 		final float newComponent3 = element31 * component1 + element32 * component2 + element33 * component3;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = newComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = newComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = newComponent3;
 	}
 	
 	/**
@@ -2421,9 +2377,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
 		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = newNormalizedComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = newNormalizedComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = newNormalizedComponent3;
 	}
 	
 	/**
@@ -2449,9 +2405,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float newComponent2 = element12 * component1 + element22 * component2 + element32 * component3;
 		final float newComponent3 = element13 * component1 + element23 * component2 + element33 * component3;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = newComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = newComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = newComponent3;
 	}
 	
 	/**
@@ -2481,9 +2437,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
 		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = newNormalizedComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = newNormalizedComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = newNormalizedComponent3;
 	}
 	
 	/**
@@ -2502,13 +2458,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final boolean isLengthLTEThreshold = length <= 1.00000012F;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = component1;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = component2;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = component3;
 		} else {
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1 / length;
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2 / length;
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3 / length;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = component1 / length;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = component2 / length;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = component3 / length;
 		}
 	}
 	
@@ -2540,9 +2496,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
 		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = newNormalizedComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = newNormalizedComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = newNormalizedComponent3;
 	}
 	
 	/**
@@ -2551,9 +2507,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * The vector is constructed by transforming the vector in {@code vector3FArray_$private$3} with the orthonormal basis in {@link #orthonormalBasis33FArray_$private$9} and normalizing it.
 	 */
 	protected final void vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F() {
-		final float component1 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float component2 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float component3 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float component1 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X];
+		final float component2 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y];
+		final float component3 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z];
 		
 		vector3FSetOrthonormalBasis33FTransformNormalize(component1, component2, component3);
 	}
@@ -2586,9 +2542,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
 		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = newNormalizedComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = newNormalizedComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = newNormalizedComponent3;
 	}
 	
 	/**
@@ -2597,9 +2553,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * The vector is constructed by transforming the vector in {@code vector3FArray_$private$3} with the orthonormal basis in {@link #orthonormalBasis33FArray_$private$9} in reverse order and normalizing it.
 	 */
 	protected final void vector3FSetOrthonormalBasis33FTransformReverseNormalizeFromVector3F() {
-		final float component1 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float component2 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float component3 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float component1 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X];
+		final float component2 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y];
+		final float component3 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z];
 		
 		vector3FSetOrthonormalBasis33FTransformReverseNormalize(component1, component2, component3);
 	}
@@ -2615,13 +2571,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected final void vector3FSetSampleHemisphereCosineDistribution(final float u, final float v) {
 		point2FSetSampleDiskUniformDistributionByConcentricMapping(u, v, 1.0F);
 		
-		final float component1 = point2FGetComponent1();
-		final float component2 = point2FGetComponent2();
+		final float component1 = point2FGetX();
+		final float component2 = point2FGetY();
 		final float component3 = sqrt(max(0.0F, 1.0F - component1 * component1 - component2 * component2));
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = component3;
 	}
 	
 	/**
@@ -2641,9 +2597,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float component2 = sinTheta * sin(phi);
 		final float component3 = cosTheta;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = component3;
 	}
 	
 	/**
@@ -2664,9 +2620,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float component2 = sinTheta * sin(phi);
 		final float component3 = cosTheta;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = component3;
 	}
 	
 	/**
@@ -2686,9 +2642,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float component2 = sinTheta * sin(phi);
 		final float component3 = cosTheta;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = component3;
 	}
 	
 	/**
@@ -2714,9 +2670,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float reflectionY = normalY * directionDotNormalMultipliedByTwo - directionY;
 		final float reflectionZ = normalZ * directionDotNormalMultipliedByTwo - directionZ;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = reflectionX;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = reflectionY;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = reflectionZ;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = reflectionX;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = reflectionY;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = reflectionZ;
 	}
 	
 	/**
@@ -2742,8 +2698,8 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float reflectionY = directionY - normalY * directionDotNormalMultipliedByTwo;
 		final float reflectionZ = directionZ - normalZ * directionDotNormalMultipliedByTwo;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = reflectionX;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = reflectionY;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = reflectionZ;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = reflectionX;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = reflectionY;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = reflectionZ;
 	}
 }

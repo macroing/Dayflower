@@ -426,7 +426,6 @@ public final class Vector3F implements Node {
 	 * @return an optional {@code Vector3F} instance that represents the refraction of {@code direction} with regards to {@code normal}
 	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Optional<Vector3F> refraction(final Vector3F direction, final Vector3F normal, final float eta) {
 		final float cosThetaI = dotProduct(direction, normal);
 		final float sinThetaISquared = max(0.0F, 1.0F - cosThetaI * cosThetaI);
@@ -439,31 +438,6 @@ public final class Vector3F implements Node {
 		final float cosThetaT = sqrt(1.0F - sinThetaTSquared);
 		
 		return Optional.of(add(multiply(negate(direction), eta), multiply(normal, eta * cosThetaI - cosThetaT)));
-	}
-	
-	/**
-	 * Returns an optional {@code Vector3F} instance that represents the refraction of {@code direction} with regards to {@code normal}.
-	 * <p>
-	 * If either {@code direction} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param direction the {@code Vector3F} instance that will be refracted with regards to {@code normal}
-	 * @param normal the {@code Vector3F} instance that represents the normal of the surface
-	 * @param eta the index of refraction
-	 * @return an optional {@code Vector3F} instance that represents the refraction of {@code direction} with regards to {@code normal}
-	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Optional<Vector3F> refraction2(final Vector3F direction, final Vector3F normal, final float eta) {
-		final float cosThetaI = dotProduct(direction, normal);
-		final float sinThetaISquared = 1.0F - cosThetaI * cosThetaI;
-		final float sinThetaTSquared = 1.0F - eta * eta * sinThetaISquared;
-		final float cosThetaT = sqrt(sinThetaTSquared);
-		
-		if(sinThetaTSquared < 0.0F) {
-			return Optional.empty();
-		}
-		
-		return Optional.of(subtract(multiply(direction, eta), multiply(normal, eta * cosThetaI + cosThetaT)));
 	}
 	
 	/**
@@ -944,7 +918,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the interpolated normal
 	 * @throws NullPointerException thrown if, and only if, either {@code normalA}, {@code normalB}, {@code normalC} or {@code barycentricCoordinates} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F normal(final Vector3F normalA, final Vector3F normalB, final Vector3F normalC, final Point3F barycentricCoordinates) {
 		final float x = normalA.x * barycentricCoordinates.x + normalB.x * barycentricCoordinates.y + normalC.x * barycentricCoordinates.z;
 		final float y = normalA.y * barycentricCoordinates.x + normalB.y * barycentricCoordinates.y + normalC.y * barycentricCoordinates.z;
@@ -984,7 +957,6 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance with the interpolated and normalized normal
 	 * @throws NullPointerException thrown if, and only if, either {@code normalA}, {@code normalB}, {@code normalC} or {@code barycentricCoordinates} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static Vector3F normalNormalized(final Vector3F normalA, final Vector3F normalB, final Vector3F normalC, final Point3F barycentricCoordinates) {
 		return normalize(normal(normalA, normalB, normalC, barycentricCoordinates));
 	}

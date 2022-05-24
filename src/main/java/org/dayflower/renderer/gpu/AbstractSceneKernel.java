@@ -934,9 +934,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		point3FSetMatrix44FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
 		
 //		Retrieve the transformed surface intersection point:
-		final float newSurfaceIntersectionPointX = point3FGetComponent1();
-		final float newSurfaceIntersectionPointY = point3FGetComponent2();
-		final float newSurfaceIntersectionPointZ = point3FGetComponent3();
+		final float newSurfaceIntersectionPointX = point3FGetX();
+		final float newSurfaceIntersectionPointY = point3FGetY();
+		final float newSurfaceIntersectionPointZ = point3FGetZ();
 		
 //		Update the intersection array:
 		intersectionLHSSetOrthonormalBasisG(newOrthonormalBasisGUX, newOrthonormalBasisGUY, newOrthonormalBasisGUZ, newOrthonormalBasisGVX, newOrthonormalBasisGVY, newOrthonormalBasisGVZ, newOrthonormalBasisGWX, newOrthonormalBasisGWY, newOrthonormalBasisGWZ);
@@ -975,27 +975,27 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float matrixInverseElement33 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffsetMatrixInverse + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
 		
 //		Retrieve the old variables from the intersection array:
-		final float oldOrthonormalBasisGUX = intersectionRHSGetOrthonormalBasisGUComponent1();
-		final float oldOrthonormalBasisGUY = intersectionRHSGetOrthonormalBasisGUComponent2();
-		final float oldOrthonormalBasisGUZ = intersectionRHSGetOrthonormalBasisGUComponent3();
-		final float oldOrthonormalBasisGVX = intersectionRHSGetOrthonormalBasisGVComponent1();
-		final float oldOrthonormalBasisGVY = intersectionRHSGetOrthonormalBasisGVComponent2();
-		final float oldOrthonormalBasisGVZ = intersectionRHSGetOrthonormalBasisGVComponent3();
-		final float oldOrthonormalBasisGWX = intersectionRHSGetOrthonormalBasisGWComponent1();
-		final float oldOrthonormalBasisGWY = intersectionRHSGetOrthonormalBasisGWComponent2();
-		final float oldOrthonormalBasisGWZ = intersectionRHSGetOrthonormalBasisGWComponent3();
-		final float oldOrthonormalBasisSUX = intersectionRHSGetOrthonormalBasisSUComponent1();
-		final float oldOrthonormalBasisSUY = intersectionRHSGetOrthonormalBasisSUComponent2();
-		final float oldOrthonormalBasisSUZ = intersectionRHSGetOrthonormalBasisSUComponent3();
-		final float oldOrthonormalBasisSVX = intersectionRHSGetOrthonormalBasisSVComponent1();
-		final float oldOrthonormalBasisSVY = intersectionRHSGetOrthonormalBasisSVComponent2();
-		final float oldOrthonormalBasisSVZ = intersectionRHSGetOrthonormalBasisSVComponent3();
-		final float oldOrthonormalBasisSWX = intersectionRHSGetOrthonormalBasisSWComponent1();
-		final float oldOrthonormalBasisSWY = intersectionRHSGetOrthonormalBasisSWComponent2();
-		final float oldOrthonormalBasisSWZ = intersectionRHSGetOrthonormalBasisSWComponent3();
-		final float oldSurfaceIntersectionPointX = intersectionRHSGetSurfaceIntersectionPointComponent1();
-		final float oldSurfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointComponent2();
-		final float oldSurfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointComponent3();
+		final float oldOrthonormalBasisGUX = intersectionRHSGetOrthonormalBasisGUX();
+		final float oldOrthonormalBasisGUY = intersectionRHSGetOrthonormalBasisGUY();
+		final float oldOrthonormalBasisGUZ = intersectionRHSGetOrthonormalBasisGUZ();
+		final float oldOrthonormalBasisGVX = intersectionRHSGetOrthonormalBasisGVX();
+		final float oldOrthonormalBasisGVY = intersectionRHSGetOrthonormalBasisGVY();
+		final float oldOrthonormalBasisGVZ = intersectionRHSGetOrthonormalBasisGVZ();
+		final float oldOrthonormalBasisGWX = intersectionRHSGetOrthonormalBasisGWX();
+		final float oldOrthonormalBasisGWY = intersectionRHSGetOrthonormalBasisGWY();
+		final float oldOrthonormalBasisGWZ = intersectionRHSGetOrthonormalBasisGWZ();
+		final float oldOrthonormalBasisSUX = intersectionRHSGetOrthonormalBasisSUX();
+		final float oldOrthonormalBasisSUY = intersectionRHSGetOrthonormalBasisSUY();
+		final float oldOrthonormalBasisSUZ = intersectionRHSGetOrthonormalBasisSUZ();
+		final float oldOrthonormalBasisSVX = intersectionRHSGetOrthonormalBasisSVX();
+		final float oldOrthonormalBasisSVY = intersectionRHSGetOrthonormalBasisSVY();
+		final float oldOrthonormalBasisSVZ = intersectionRHSGetOrthonormalBasisSVZ();
+		final float oldOrthonormalBasisSWX = intersectionRHSGetOrthonormalBasisSWX();
+		final float oldOrthonormalBasisSWY = intersectionRHSGetOrthonormalBasisSWY();
+		final float oldOrthonormalBasisSWZ = intersectionRHSGetOrthonormalBasisSWZ();
+		final float oldSurfaceIntersectionPointX = intersectionRHSGetSurfaceIntersectionPointX();
+		final float oldSurfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointY();
+		final float oldSurfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointZ();
 		
 //		Transform the U-direction of the geometric orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
@@ -1049,9 +1049,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		point3FSetMatrix44FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
 		
 //		Retrieve the transformed surface intersection point:
-		final float newSurfaceIntersectionPointX = point3FGetComponent1();
-		final float newSurfaceIntersectionPointY = point3FGetComponent2();
-		final float newSurfaceIntersectionPointZ = point3FGetComponent3();
+		final float newSurfaceIntersectionPointX = point3FGetX();
+		final float newSurfaceIntersectionPointY = point3FGetY();
+		final float newSurfaceIntersectionPointZ = point3FGetZ();
 		
 //		Update the intersection array:
 		intersectionRHSSetOrthonormalBasisG(newOrthonormalBasisGUX, newOrthonormalBasisGUY, newOrthonormalBasisGUZ, newOrthonormalBasisGVX, newOrthonormalBasisGVY, newOrthonormalBasisGVZ, newOrthonormalBasisGWX, newOrthonormalBasisGWY, newOrthonormalBasisGWZ);
@@ -1277,7 +1277,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				ray3FSetTMinimum(tMinimum);
 				
 				if(!primitiveIntersects()) {
-					lightEvaluateRadianceEmitted(ray3FGetDirectionComponent1(), ray3FGetDirectionComponent2(), ray3FGetDirectionComponent3());
+					lightEvaluateRadianceEmitted(ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ());
 					
 					final float lightIncomingR = color3FLHSGetR();
 					final float lightIncomingG = color3FLHSGetG();
@@ -1317,14 +1317,14 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float element44 = this.primitiveMatrix44FArray[primitiveMatrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_4];
 		
 //		Retrieve the ray origin components from the old space:
-		final float oldOriginX = ray3FGetOriginComponent1();
-		final float oldOriginY = ray3FGetOriginComponent2();
-		final float oldOriginZ = ray3FGetOriginComponent3();
+		final float oldOriginX = ray3FGetOriginX();
+		final float oldOriginY = ray3FGetOriginY();
+		final float oldOriginZ = ray3FGetOriginZ();
 		
 //		Retrieve the ray direction components from the old space:
-		final float oldDirectionX = ray3FGetDirectionComponent1();
-		final float oldDirectionY = ray3FGetDirectionComponent2();
-		final float oldDirectionZ = ray3FGetDirectionComponent3();
+		final float oldDirectionX = ray3FGetDirectionX();
+		final float oldDirectionY = ray3FGetDirectionY();
+		final float oldDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the ray boundary variables from the old space:
 		final float oldTMinimum = ray3FGetTMinimum();
@@ -1337,9 +1337,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		vector3FSetMatrix44FTransformNormalize(element11, element12, element13, element21, element22, element23, element31, element32, element33, oldDirectionX, oldDirectionY, oldDirectionZ);
 		
 //		Retrieve the ray origin components from the new space:
-		final float newOriginX = point3FGetComponent1();
-		final float newOriginY = point3FGetComponent2();
-		final float newOriginZ = point3FGetComponent3();
+		final float newOriginX = point3FGetX();
+		final float newOriginY = point3FGetY();
+		final float newOriginZ = point3FGetZ();
 		
 //		Retrieve the ray direction components from the new space:
 		final float newDirectionX = vector3FGetComponent1();
@@ -1361,9 +1361,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			point3FSetMatrix44FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMinimumX, oldReferencePointTMinimumY, oldReferencePointTMinimumZ);
 			
 //			Retrieve the reference point from the new space:
-			final float newReferencePointTMinimumX = point3FGetComponent1();
-			final float newReferencePointTMinimumY = point3FGetComponent2();
-			final float newReferencePointTMinimumZ = point3FGetComponent3();
+			final float newReferencePointTMinimumX = point3FGetX();
+			final float newReferencePointTMinimumY = point3FGetY();
+			final float newReferencePointTMinimumZ = point3FGetZ();
 			
 //			Compute the distance from the origin in the new space to the reference point in the new space:
 			final float distanceOriginToReferencePointTMinimum = point3FDistance(newOriginX, newOriginY, newOriginZ, newReferencePointTMinimumX, newReferencePointTMinimumY, newReferencePointTMinimumZ);
@@ -1383,9 +1383,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			point3FSetMatrix44FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMaximumX, oldReferencePointTMaximumY, oldReferencePointTMaximumZ);
 			
 //			Retrieve the reference point from the new space:
-			final float newReferencePointTMaximumX = point3FGetComponent1();
-			final float newReferencePointTMaximumY = point3FGetComponent2();
-			final float newReferencePointTMaximumZ = point3FGetComponent3();
+			final float newReferencePointTMaximumX = point3FGetX();
+			final float newReferencePointTMaximumY = point3FGetY();
+			final float newReferencePointTMaximumZ = point3FGetZ();
 			
 //			Compute the distance from the origin in the new space to the reference point in the new space:
 			final float distanceOriginToReferencePointTMaximum = point3FDistance(newOriginX, newOriginY, newOriginZ, newReferencePointTMaximumX, newReferencePointTMaximumY, newReferencePointTMaximumZ);

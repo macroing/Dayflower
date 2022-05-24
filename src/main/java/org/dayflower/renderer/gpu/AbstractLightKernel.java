@@ -892,7 +892,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float incomingWorldSpaceY = vector3FGetComponent2();
 		final float incomingWorldSpaceZ = vector3FGetComponent3();
 		
-		final float sinTheta = vector3FSinTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		final float sinTheta = sqrt(max(0.0F, 1.0F - incomingObjectSpaceZ * incomingObjectSpaceZ));
 		
 		if(checkIsZero(sinTheta)) {
 			return false;
@@ -1302,7 +1302,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float incomingWorldSpaceY = vector3FGetComponent2();
 		final float incomingWorldSpaceZ = vector3FGetComponent3();
 		
-		final float sinTheta = vector3FSinTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		final float sinTheta = sqrt(max(0.0F, 1.0F - incomingObjectSpaceZ * incomingObjectSpaceZ));
 		
 		if(checkIsZero(sinTheta)) {
 			return false;
@@ -1814,11 +1814,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float directionObjectSpaceY = element21 * directionX + element22 * directionY + element23 * directionZ;
 		final float directionObjectSpaceZ = element31 * directionX + element32 * directionY + element33 * directionZ;
 		final float directionObjectSpaceLengthReciprocal = vector3FLengthReciprocal(directionObjectSpaceX, directionObjectSpaceY, directionObjectSpaceZ);
-		final float directionObjectSpaceNormalizedX = directionObjectSpaceX * directionObjectSpaceLengthReciprocal;
-		final float directionObjectSpaceNormalizedY = directionObjectSpaceY * directionObjectSpaceLengthReciprocal;
+//		final float directionObjectSpaceNormalizedX = directionObjectSpaceX * directionObjectSpaceLengthReciprocal;
+//		final float directionObjectSpaceNormalizedY = directionObjectSpaceY * directionObjectSpaceLengthReciprocal;
 		final float directionObjectSpaceNormalizedZ = directionObjectSpaceZ * directionObjectSpaceLengthReciprocal;
 		
-		final float cosTheta = vector3FCosTheta(directionObjectSpaceNormalizedX, directionObjectSpaceNormalizedY, directionObjectSpaceNormalizedZ);
+		final float cosTheta = directionObjectSpaceNormalizedZ;
 		
 		if(cosTheta < cosConeAngle) {
 			return 0.0F;

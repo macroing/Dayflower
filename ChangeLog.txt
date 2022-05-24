@@ -1,3 +1,7 @@
+2022-05-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Refactor parts of the GPU-renderer.
+
 2022-05-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Vector3DUnitTests and Vector3FUnitTests classes.

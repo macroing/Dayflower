@@ -97,12 +97,12 @@ public abstract class AbstractBoundingVolume3FKernel extends AbstractGeometryKer
 		final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffsetAbsolute = boundingVolume3FAxisAlignedBoundingBox3FArrayOffset * CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH;
 		
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalComponent1();
-		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalComponent2();
-		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalX();
+		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalY();
+		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalZ();
 		
 //		Retrieve the axis aligned bounding box variables:
 		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffsetAbsolute + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 0];
@@ -165,12 +165,12 @@ public abstract class AbstractBoundingVolume3FKernel extends AbstractGeometryKer
 		final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffsetAbsolute = boundingVolume3FAxisAlignedBoundingBox3FArrayOffset * CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH;
 		
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalComponent1();
-		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalComponent2();
-		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalX();
+		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalY();
+		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalZ();
 		
 //		Retrieve the axis aligned bounding box variables:
 		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffsetAbsolute + CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_OFFSET_MAXIMUM + 0];
@@ -243,12 +243,12 @@ public abstract class AbstractBoundingVolume3FKernel extends AbstractGeometryKer
 		final int boundingVolume3FBoundingSphere3FArrayOffsetAbsolute = boundingVolume3FBoundingSphere3FArrayOffset * CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH;
 		
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the bounding sphere variables:
 		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffsetAbsolute + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 0];
@@ -303,12 +303,12 @@ public abstract class AbstractBoundingVolume3FKernel extends AbstractGeometryKer
 		final int boundingVolume3FBoundingSphere3FArrayOffsetAbsolute = boundingVolume3FBoundingSphere3FArrayOffset * CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH;
 		
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the bounding sphere variables:
 		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffsetAbsolute + CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_OFFSET_CENTER + 0];

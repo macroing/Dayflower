@@ -213,12 +213,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FCone3FIntersectionT(final int shape3FCone3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the disk variables that will be referred to by 'conePhiMax', 'coneRadius' and 'coneZMax' in the comments:
 		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_PHI_MAX];
@@ -276,12 +276,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FCone3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FCone3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the disk variables that will be referred to by 'conePhiMax' and 'coneZMax' in the comments:
 		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_PHI_MAX];
@@ -314,12 +314,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FCone3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FCone3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the disk variables that will be referred to by 'conePhiMax' and 'coneZMax' in the comments:
 		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + CompiledShape3FCache.CONE_3_F_OFFSET_PHI_MAX];
@@ -369,12 +369,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FCylinder3FIntersectionT(final int shape3FCylinder3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the cylinder variables that will be referred to by 'cylinderPhiMax', 'cylinderRadius', 'cylinderZMax' and 'cylinderZMin' in the comments:
 		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_PHI_MAX];
@@ -443,12 +443,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FCylinder3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FCylinder3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the cylinder variables that will be referred to by 'cylinderPhiMax', 'cylinderRadius', 'cylinderZMax' and 'cylinderZMin' in the comments:
 		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_PHI_MAX];
@@ -489,12 +489,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FCylinder3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FCylinder3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the cylinder variables that will be referred to by 'cylinderPhiMax', 'cylinderRadius', 'cylinderZMax' and 'cylinderZMin' in the comments:
 		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + CompiledShape3FCache.CYLINDER_3_F_OFFSET_PHI_MAX];
@@ -552,12 +552,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FDisk3FIntersectionT(final int shape3FDisk3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 		if(rayDirectionZ == 0.0F) {
 			return 0.0F;
@@ -602,10 +602,10 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FDisk3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FDisk3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
 		
 //		Retrieve the disk variables that will be referred to by 'diskPhiMax', 'diskRadiusInner', 'diskRadiusOuter' and 'diskZMax' in the comments:
 		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_PHI_MAX];
@@ -642,10 +642,10 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FDisk3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FDisk3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
 		
 //		Retrieve the disk variables that will be referred to by 'diskPhiMax', 'diskRadiusInner', 'diskRadiusOuter' and 'diskZMax' in the comments:
 		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + CompiledShape3FCache.DISK_3_F_OFFSET_PHI_MAX];
@@ -699,12 +699,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FHyperboloid3FIntersectionT(final int shape3FHyperboloid3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the hyperboloid variables that will be referred to by 'hyperboloidPhiMax', 'hyperboloidA', 'hyperboloidB', 'hyperboloidAH', 'hyperboloidCH', 'hyperboloidZMax' and 'hyperboloidZMin' in the comments:
 		final float hyperboloidPhiMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_PHI_MAX];
@@ -774,12 +774,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FHyperboloid3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FHyperboloid3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the hyperboloid variables that will be referred to by 'hyperboloidPhiMax', 'hyperboloidA' and 'hyperboloidB' in the comments:
 		final float hyperboloidPhiMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_PHI_MAX];
@@ -822,12 +822,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FHyperboloid3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FHyperboloid3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the hyperboloid variables that will be referred to by 'hyperboloidPhiMax', 'hyperboloidA' and 'hyperboloidB' in the comments:
 		final float hyperboloidPhiMax = this.shape3FHyperboloid3FArray[shape3FHyperboloid3FArrayOffset + CompiledShape3FCache.HYPERBOLOID_3_F_OFFSET_PHI_MAX];
@@ -887,12 +887,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FParaboloid3FIntersectionT(final int shape3FParaboloid3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the paraboloid variables that will be referred to by 'paraboloidPhiMax', 'paraboloidRadius', 'paraboloidZMax' and 'paraboloidZMin' in the comments:
 		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_PHI_MAX];
@@ -951,12 +951,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FParaboloid3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FParaboloid3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the paraboloid variables that will be referred to by 'paraboloidPhiMax', 'paraboloidZMax' and 'paraboloidZMin' in the comments:
 		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_PHI_MAX];
@@ -990,12 +990,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FParaboloid3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FParaboloid3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the paraboloid variables that will be referred to by 'paraboloidPhiMax', 'paraboloidZMax' and 'paraboloidZMin' in the comments:
 		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + CompiledShape3FCache.PARABOLOID_3_F_OFFSET_PHI_MAX];
@@ -1044,12 +1044,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FPlane3FIntersectionT(final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 		final float dotProduct = vector3FDotProduct(0.0F, 0.0F, 1.0F, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
@@ -1074,12 +1074,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FPlane3FIntersectionComputeLHS(final float t, final int primitiveIndex) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -1106,12 +1106,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FPlane3FIntersectionComputeRHS(final float t, final int primitiveIndex) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -1156,12 +1156,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FPolygon3FIntersectionT(final int shape3FPolygon3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the polygon variables that will be referred to by 'polygonA', 'polygonB' and 'polygonSurfaceNormal' in the comments:
 		final float polygonAX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 0];
@@ -1259,12 +1259,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FPolygon3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FPolygon3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the polygon variables:
 		final float polygonAX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 0];
@@ -1329,12 +1329,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FPolygon3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FPolygon3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the polygon variables:
 		final float polygonAX = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_POINT_3_F_0 + 0];
@@ -1416,12 +1416,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FRectangle3FIntersectionT(final int shape3FRectangle3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the rectangle variables that will be referred to by 'rectanglePosition', 'rectangleSideA', 'rectangleSideB' and 'rectangleSurfaceNormal' in the comments:
 		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 0];
@@ -1503,12 +1503,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FRectangle3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FRectangle3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the rectangle variables that will be referred to by 'rectanglePosition', 'rectangleSideA', 'rectangleSideB' and 'rectangleSurfaceNormal' in the comments:
 		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 0];
@@ -1584,12 +1584,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FRectangle3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FRectangle3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the rectangle variables that will be referred to by 'rectanglePosition', 'rectangleSideA', 'rectangleSideB' and 'rectangleSurfaceNormal' in the comments:
 		final float rectanglePositionX = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_POSITION + 0];
@@ -1682,12 +1682,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FRectangularCuboid3FIntersectionT(final int shape3FRectangularCuboid3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalComponent1();
-		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalComponent2();
-		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalX();
+		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalY();
+		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalZ();
 		
 //		Retrieve the rectangular cuboid variables:
 		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 0];
@@ -1731,12 +1731,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FRectangularCuboid3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FRectangularCuboid3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the rectangular cuboid variables:
 		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 0];
@@ -1801,12 +1801,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FRectangularCuboid3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FRectangularCuboid3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the rectangular cuboid variables:
 		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + CompiledShape3FCache.RECTANGULAR_CUBOID_3_F_OFFSET_MAXIMUM + 0];
@@ -1886,12 +1886,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FSphere3FIntersectionT(final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the sphere variables:
 		final float sphereCenterX = 0.0F;
@@ -1924,12 +1924,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FSphere3FIntersectionComputeLHS(final float t, final int primitiveIndex) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the sphere variables:
 		final float sphereCenterX = 0.0F;
@@ -1974,12 +1974,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FSphere3FIntersectionComputeRHS(final float t, final int primitiveIndex) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the sphere variables:
 		final float sphereCenterX = 0.0F;
@@ -2042,12 +2042,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FTorus3FIntersectionT(final int shape3FTorus3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the torus variables:
 		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + CompiledShape3FCache.TORUS_3_F_OFFSET_RADIUS_INNER];
@@ -2112,12 +2112,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FTorus3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FTorus3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the torus variables:
 		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + CompiledShape3FCache.TORUS_3_F_OFFSET_RADIUS_INNER];
@@ -2162,12 +2162,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FTorus3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FTorus3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the torus variables:
 		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + CompiledShape3FCache.TORUS_3_F_OFFSET_RADIUS_INNER];
@@ -2229,12 +2229,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final float shape3FTriangle3FIntersectionT(final int shape3FTriangle3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
 		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 0];
@@ -2311,12 +2311,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FTriangle3FIntersectionComputeLHS(final float t, final int primitiveIndex, final int shape3FTriangle3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
 		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 0];
@@ -2454,12 +2454,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 */
 	protected final void shape3FTriangle3FIntersectionComputeRHS(final float t, final int primitiveIndex, final int shape3FTriangle3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
 		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_A_POSITION + 0];

@@ -882,15 +882,15 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		vector3FSetDirectionSpherical2(sampleRemappedU, sampleRemappedV);
 		
-		final float incomingObjectSpaceX = vector3FGetComponent1();
-		final float incomingObjectSpaceY = vector3FGetComponent2();
-		final float incomingObjectSpaceZ = vector3FGetComponent3();
+		final float incomingObjectSpaceX = vector3FGetX();
+		final float incomingObjectSpaceY = vector3FGetY();
+		final float incomingObjectSpaceZ = vector3FGetZ();
 		
 		doLightImageLightTransformToWorldSpace(offset, incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
 		
-		final float incomingWorldSpaceX = vector3FGetComponent1();
-		final float incomingWorldSpaceY = vector3FGetComponent2();
-		final float incomingWorldSpaceZ = vector3FGetComponent3();
+		final float incomingWorldSpaceX = vector3FGetX();
+		final float incomingWorldSpaceY = vector3FGetY();
+		final float incomingWorldSpaceZ = vector3FGetZ();
 		
 		final float sinTheta = sqrt(max(0.0F, 1.0F - incomingObjectSpaceZ * incomingObjectSpaceZ));
 		
@@ -994,18 +994,18 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		doLightImageLightTransformToObjectSpace(offset, incomingX, incomingY, incomingZ);
 		
-		final float incomingObjectSpaceX = vector3FGetComponent1();
-		final float incomingObjectSpaceY = vector3FGetComponent2();
-		final float incomingObjectSpaceZ = vector3FGetComponent3();
+		final float incomingObjectSpaceX = vector3FGetX();
+		final float incomingObjectSpaceY = vector3FGetY();
+		final float incomingObjectSpaceZ = vector3FGetZ();
 		
-		final float sinTheta = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		final float sinTheta = vector3FSphericalTheta(incomingObjectSpaceZ);
 		
 		if(checkIsZero(sinTheta)) {
 			return 0.0F;
 		}
 		
-		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float v = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
+		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float v = vector3FSphericalTheta(incomingObjectSpaceZ) * PI_RECIPROCAL;
 		
 		final float probabilityDensityFunctionValue = doLightImageLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + CompiledLightCache.IMAGE_LIGHT_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
 		
@@ -1087,7 +1087,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int offset = lightGetOffset();
 		
 		doLightImageLightTransformToObjectSpace(offset, rayDirectionX, rayDirectionY, rayDirectionZ);
-		doLightImageLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doLightImageLightRadianceSky(offset, vector3FGetX(), vector3FGetY(), vector3FGetZ());
 	}
 	
 	private void doLightImageLightPower() {
@@ -1105,8 +1105,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int resolutionX = doLightImageLightGetResolutionX(offset);
 		final int resolutionY = doLightImageLightGetResolutionY(offset);
 		
-		final float textureCoordinatesU = vector3FSphericalPhi(directionX, directionY, directionZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = vector3FSphericalTheta(directionX, directionY, directionZ) * PI_RECIPROCAL;
+		final float textureCoordinatesU = vector3FSphericalPhi(directionX, directionY) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = vector3FSphericalTheta(directionZ) * PI_RECIPROCAL;
 		
 		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
 		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
@@ -1292,15 +1292,15 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		vector3FSetDirectionSpherical2(sampleRemappedU, sampleRemappedV);
 		
-		final float incomingObjectSpaceX = vector3FGetComponent1();
-		final float incomingObjectSpaceY = vector3FGetComponent2();
-		final float incomingObjectSpaceZ = vector3FGetComponent3();
+		final float incomingObjectSpaceX = vector3FGetX();
+		final float incomingObjectSpaceY = vector3FGetY();
+		final float incomingObjectSpaceZ = vector3FGetZ();
 		
 		doLightPerezLightTransformToWorldSpace(offset, incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
 		
-		final float incomingWorldSpaceX = vector3FGetComponent1();
-		final float incomingWorldSpaceY = vector3FGetComponent2();
-		final float incomingWorldSpaceZ = vector3FGetComponent3();
+		final float incomingWorldSpaceX = vector3FGetX();
+		final float incomingWorldSpaceY = vector3FGetY();
+		final float incomingWorldSpaceZ = vector3FGetZ();
 		
 		final float sinTheta = sqrt(max(0.0F, 1.0F - incomingObjectSpaceZ * incomingObjectSpaceZ));
 		
@@ -1406,18 +1406,18 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		doLightPerezLightTransformToObjectSpace(offset, incomingX, incomingY, incomingZ);
 		
-		final float incomingObjectSpaceX = vector3FGetComponent1();
-		final float incomingObjectSpaceY = vector3FGetComponent2();
-		final float incomingObjectSpaceZ = vector3FGetComponent3();
+		final float incomingObjectSpaceX = vector3FGetX();
+		final float incomingObjectSpaceY = vector3FGetY();
+		final float incomingObjectSpaceZ = vector3FGetZ();
 		
-		final float sinTheta = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		final float sinTheta = vector3FSphericalTheta(incomingObjectSpaceZ);
 		
 		if(checkIsZero(sinTheta)) {
 			return 0.0F;
 		}
 		
-		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float v = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
+		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float v = vector3FSphericalTheta(incomingObjectSpaceZ) * PI_RECIPROCAL;
 		
 		final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + CompiledLightCache.PEREZ_LIGHT_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
 		
@@ -1515,7 +1515,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int offset = lightGetOffset();
 		
 		doLightPerezLightTransformToObjectSpace(offset, rayDirectionX, rayDirectionY, rayDirectionZ);
-		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionObjectSpaceX(offset), doLightPerezLightGetSunDirectionObjectSpaceY(offset), doLightPerezLightGetSunDirectionObjectSpaceZ(offset));
+		doLightPerezLightRadianceSky(offset, vector3FGetX(), vector3FGetY(), vector3FGetZ(), doLightPerezLightGetSunDirectionObjectSpaceX(offset), doLightPerezLightGetSunDirectionObjectSpaceY(offset), doLightPerezLightGetSunDirectionObjectSpaceZ(offset));
 		
 		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());
 	}
@@ -1529,7 +1529,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		vector3FSetDirectionSpherical2(0.5F, 0.5F);
 		
-		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionObjectSpaceX(offset), doLightPerezLightGetSunDirectionObjectSpaceY(offset), doLightPerezLightGetSunDirectionObjectSpaceZ(offset));
+		doLightPerezLightRadianceSky(offset, vector3FGetX(), vector3FGetY(), vector3FGetZ(), doLightPerezLightGetSunDirectionObjectSpaceX(offset), doLightPerezLightGetSunDirectionObjectSpaceY(offset), doLightPerezLightGetSunDirectionObjectSpaceZ(offset));
 		
 		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());
 		color3FLHSSet(color3FLHSGetR() * resultFactor, color3FLHSGetG() * resultFactor, color3FLHSGetB() * resultFactor);
@@ -1544,9 +1544,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		vector3FSetNormalize(directionX, directionY, max(directionZ, 0.001F));
 		
-		final float directionSaturatedX = vector3FGetComponent1();
-		final float directionSaturatedY = vector3FGetComponent2();
-		final float directionSaturatedZ = vector3FGetComponent3();
+		final float directionSaturatedX = vector3FGetX();
+		final float directionSaturatedY = vector3FGetY();
+		final float directionSaturatedZ = vector3FGetZ();
 		
 		final float thetaA = acos(saturateF(directionSaturatedZ, -1.0F, 1.0F));
 		final float thetaACos = cos(thetaA);

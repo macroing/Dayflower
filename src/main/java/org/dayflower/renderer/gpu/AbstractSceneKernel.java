@@ -886,49 +886,49 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
 		
 //		Retrieve the transformed U-direction of the geometric orthonormal basis:
-		final float newOrthonormalBasisGUX = vector3FGetComponent1();
-		final float newOrthonormalBasisGUY = vector3FGetComponent2();
-		final float newOrthonormalBasisGUZ = vector3FGetComponent3();
+		final float newOrthonormalBasisGUX = vector3FGetX();
+		final float newOrthonormalBasisGUY = vector3FGetY();
+		final float newOrthonormalBasisGUZ = vector3FGetZ();
 		
 //		Transform the V-direction of the geometric orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGVX, oldOrthonormalBasisGVY, oldOrthonormalBasisGVZ);
 		
 //		Retrieve the transformed V-direction of the geometric orthonormal basis:
-		final float newOrthonormalBasisGVX = vector3FGetComponent1();
-		final float newOrthonormalBasisGVY = vector3FGetComponent2();
-		final float newOrthonormalBasisGVZ = vector3FGetComponent3();
+		final float newOrthonormalBasisGVX = vector3FGetX();
+		final float newOrthonormalBasisGVY = vector3FGetY();
+		final float newOrthonormalBasisGVZ = vector3FGetZ();
 		
 //		Transform the W-direction of the geometric orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGWX, oldOrthonormalBasisGWY, oldOrthonormalBasisGWZ);
 		
 //		Retrieve the transformed W-direction of the geometric orthonormal basis:
-		final float newOrthonormalBasisGWX = vector3FGetComponent1();
-		final float newOrthonormalBasisGWY = vector3FGetComponent2();
-		final float newOrthonormalBasisGWZ = vector3FGetComponent3();
+		final float newOrthonormalBasisGWX = vector3FGetX();
+		final float newOrthonormalBasisGWY = vector3FGetY();
+		final float newOrthonormalBasisGWZ = vector3FGetZ();
 		
 //		Transform the U-direction of the shading orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSUX, oldOrthonormalBasisSUY, oldOrthonormalBasisSUZ);
 		
 //		Retrieve the transformed U-direction of the shading orthonormal basis:
-		final float newOrthonormalBasisSUX = vector3FGetComponent1();
-		final float newOrthonormalBasisSUY = vector3FGetComponent2();
-		final float newOrthonormalBasisSUZ = vector3FGetComponent3();
+		final float newOrthonormalBasisSUX = vector3FGetX();
+		final float newOrthonormalBasisSUY = vector3FGetY();
+		final float newOrthonormalBasisSUZ = vector3FGetZ();
 		
 //		Transform the V-direction of the shading orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSVX, oldOrthonormalBasisSVY, oldOrthonormalBasisSVZ);
 		
 //		Retrieve the transformed V-direction of the shading orthonormal basis:
-		final float newOrthonormalBasisSVX = vector3FGetComponent1();
-		final float newOrthonormalBasisSVY = vector3FGetComponent2();
-		final float newOrthonormalBasisSVZ = vector3FGetComponent3();
+		final float newOrthonormalBasisSVX = vector3FGetX();
+		final float newOrthonormalBasisSVY = vector3FGetY();
+		final float newOrthonormalBasisSVZ = vector3FGetZ();
 		
 //		Transform the W-direction of the shading orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSWX, oldOrthonormalBasisSWY, oldOrthonormalBasisSWZ);
 		
 //		Retrieve the transformed W-direction of the shading orthonormal basis:
-		final float newOrthonormalBasisSWX = vector3FGetComponent1();
-		final float newOrthonormalBasisSWY = vector3FGetComponent2();
-		final float newOrthonormalBasisSWZ = vector3FGetComponent3();
+		final float newOrthonormalBasisSWX = vector3FGetX();
+		final float newOrthonormalBasisSWY = vector3FGetY();
+		final float newOrthonormalBasisSWZ = vector3FGetZ();
 		
 //		Transform the surface intersection point:
 		point3FSetMatrix44FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
@@ -1001,49 +1001,49 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
 		
 //		Retrieve the transformed U-direction of the geometric orthonormal basis:
-		final float newOrthonormalBasisGUX = vector3FGetComponent1();
-		final float newOrthonormalBasisGUY = vector3FGetComponent2();
-		final float newOrthonormalBasisGUZ = vector3FGetComponent3();
+		final float newOrthonormalBasisGUX = vector3FGetX();
+		final float newOrthonormalBasisGUY = vector3FGetY();
+		final float newOrthonormalBasisGUZ = vector3FGetZ();
 		
 //		Transform the V-direction of the geometric orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGVX, oldOrthonormalBasisGVY, oldOrthonormalBasisGVZ);
 		
 //		Retrieve the transformed V-direction of the geometric orthonormal basis:
-		final float newOrthonormalBasisGVX = vector3FGetComponent1();
-		final float newOrthonormalBasisGVY = vector3FGetComponent2();
-		final float newOrthonormalBasisGVZ = vector3FGetComponent3();
+		final float newOrthonormalBasisGVX = vector3FGetX();
+		final float newOrthonormalBasisGVY = vector3FGetY();
+		final float newOrthonormalBasisGVZ = vector3FGetZ();
 		
 //		Transform the W-direction of the geometric orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGWX, oldOrthonormalBasisGWY, oldOrthonormalBasisGWZ);
 		
 //		Retrieve the transformed W-direction of the geometric orthonormal basis:
-		final float newOrthonormalBasisGWX = vector3FGetComponent1();
-		final float newOrthonormalBasisGWY = vector3FGetComponent2();
-		final float newOrthonormalBasisGWZ = vector3FGetComponent3();
+		final float newOrthonormalBasisGWX = vector3FGetX();
+		final float newOrthonormalBasisGWY = vector3FGetY();
+		final float newOrthonormalBasisGWZ = vector3FGetZ();
 		
 //		Transform the U-direction of the shading orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSUX, oldOrthonormalBasisSUY, oldOrthonormalBasisSUZ);
 		
 //		Retrieve the transformed U-direction of the shading orthonormal basis:
-		final float newOrthonormalBasisSUX = vector3FGetComponent1();
-		final float newOrthonormalBasisSUY = vector3FGetComponent2();
-		final float newOrthonormalBasisSUZ = vector3FGetComponent3();
+		final float newOrthonormalBasisSUX = vector3FGetX();
+		final float newOrthonormalBasisSUY = vector3FGetY();
+		final float newOrthonormalBasisSUZ = vector3FGetZ();
 		
 //		Transform the V-direction of the shading orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSVX, oldOrthonormalBasisSVY, oldOrthonormalBasisSVZ);
 		
 //		Retrieve the transformed V-direction of the shading orthonormal basis:
-		final float newOrthonormalBasisSVX = vector3FGetComponent1();
-		final float newOrthonormalBasisSVY = vector3FGetComponent2();
-		final float newOrthonormalBasisSVZ = vector3FGetComponent3();
+		final float newOrthonormalBasisSVX = vector3FGetX();
+		final float newOrthonormalBasisSVY = vector3FGetY();
+		final float newOrthonormalBasisSVZ = vector3FGetZ();
 		
 //		Transform the W-direction of the shading orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSWX, oldOrthonormalBasisSWY, oldOrthonormalBasisSWZ);
 		
 //		Retrieve the transformed W-direction of the shading orthonormal basis:
-		final float newOrthonormalBasisSWX = vector3FGetComponent1();
-		final float newOrthonormalBasisSWY = vector3FGetComponent2();
-		final float newOrthonormalBasisSWZ = vector3FGetComponent3();
+		final float newOrthonormalBasisSWX = vector3FGetX();
+		final float newOrthonormalBasisSWY = vector3FGetY();
+		final float newOrthonormalBasisSWZ = vector3FGetZ();
 		
 //		Transform the surface intersection point:
 		point3FSetMatrix44FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
@@ -1342,9 +1342,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float newOriginZ = point3FGetZ();
 		
 //		Retrieve the ray direction components from the new space:
-		final float newDirectionX = vector3FGetComponent1();
-		final float newDirectionY = vector3FGetComponent2();
-		final float newDirectionZ = vector3FGetComponent3();
+		final float newDirectionX = vector3FGetX();
+		final float newDirectionY = vector3FGetY();
+		final float newDirectionZ = vector3FGetZ();
 		
 //		Initialize the ray boundary variables of the new space to the ray boundary variables from the old space:
 		float newTMinimum = oldTMinimum;

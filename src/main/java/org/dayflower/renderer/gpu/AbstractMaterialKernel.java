@@ -1161,9 +1161,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFSetEta(eta);
 		
 		if(vector3FSetRefraction(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, eta)) {
-			final float refractionDirectionX = vector3FGetComponent1();
-			final float refractionDirectionY = vector3FGetComponent2();
-			final float refractionDirectionZ = vector3FGetComponent3();
+			final float refractionDirectionX = vector3FGetX();
+			final float refractionDirectionY = vector3FGetY();
+			final float refractionDirectionZ = vector3FGetZ();
 			
 			final float cosThetaI = vector3FDotProduct(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
@@ -2063,9 +2063,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		vector3FSetOrthonormalBasis33FTransformNormalize(incomingX, incomingY, incomingZ);
 		
-		final float incomingTransformedX = vector3FGetComponent1();
-		final float incomingTransformedY = vector3FGetComponent2();
-		final float incomingTransformedZ = vector3FGetComponent3();
+		final float incomingTransformedX = vector3FGetX();
+		final float incomingTransformedY = vector3FGetY();
+		final float incomingTransformedZ = vector3FGetZ();
 		
 		doBSDFResultSetIncoming(incomingTransformedX, incomingTransformedY, incomingTransformedZ);
 	}
@@ -2269,7 +2269,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalSampleY = sinTheta * sin(phi);
 		final float normalSampleZ = cosTheta;
 		
-		final boolean isSameHemisphereZ = vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, normalSampleX, normalSampleY, normalSampleZ);
+		final boolean isSameHemisphereZ = outgoingZ * normalSampleZ > 0.0F;
 		
 		final float normalX = isSameHemisphereZ ? normalSampleX : -normalSampleX;
 		final float normalY = isSameHemisphereZ ? normalSampleY : -normalSampleY;
@@ -2282,7 +2282,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingY = normalY * outgoingDotNormalMultipliedByTwo - outgoingY;
 		final float incomingZ = normalZ * outgoingDotNormalMultipliedByTwo - outgoingZ;
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			return false;
 		}
 		
@@ -2302,7 +2302,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
 			
 			return 0.0F;
@@ -2415,9 +2415,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFDisneyDiffuseBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
-		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFDisneyDiffuseBRDFEvaluateDistributionFunction();
 		doBXDFDisneyDiffuseBRDFEvaluateProbabilityDensityFunction();
 		
@@ -2496,9 +2496,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFDisneyFakeSSBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
-		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFDisneyFakeSSBRDFEvaluateDistributionFunction();
 		doBXDFDisneyFakeSSBRDFEvaluateProbabilityDensityFunction();
 		
@@ -2604,9 +2604,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFDisneyRetroBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
-		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFDisneyRetroBRDFEvaluateDistributionFunction();
 		doBXDFDisneyRetroBRDFEvaluateProbabilityDensityFunction();
 		
@@ -2711,9 +2711,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFDisneySheenBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
-		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFDisneySheenBRDFEvaluateDistributionFunction();
 		doBXDFDisneySheenBRDFEvaluateProbabilityDensityFunction();
 		
@@ -2814,9 +2814,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			final float vRemapped = v;
 			
 			vector3FSetSampleHemisphereCosineDistribution(uRemapped, vRemapped);
-			vector3FSetFaceForwardRHSComponent3(outgoingX, outgoingY, outgoingZ, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+			vector3FSetFaceForwardRHSComponent3(outgoingX, outgoingY, outgoingZ, vector3FGetX(), vector3FGetY(), vector3FGetZ());
 			
-			doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+			doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 			doBXDFFresnelBlendBRDFEvaluateDistributionFunction();
 			doBXDFFresnelBlendBRDFEvaluateProbabilityDensityFunction();
 			
@@ -2830,13 +2830,13 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		doMicrofacetDistributionTrowbridgeReitzSampleNormal(outgoingX, outgoingY, outgoingZ, uRemapped, vRemapped);
 		
-		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
-		final float incomingX = vector3FGetComponent1();
-		final float incomingY = vector3FGetComponent2();
-		final float incomingZ = vector3FGetComponent3();
+		final float incomingX = vector3FGetX();
+		final float incomingY = vector3FGetY();
+		final float incomingZ = vector3FGetZ();
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			return false;
 		}
 		
@@ -2856,7 +2856,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
 			
 			return 0.0F;
@@ -3012,9 +3012,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFLambertianBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
-		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFLambertianBRDFEvaluateDistributionFunction();
 		doBXDFLambertianBRDFEvaluateProbabilityDensityFunction();
 		
@@ -3076,9 +3076,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFLambertianBTDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3Negated(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		vector3FSetFaceForwardRHSComponent3Negated(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
-		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFLambertianBTDFEvaluateDistributionFunction();
 		doBXDFLambertianBTDFEvaluateProbabilityDensityFunction();
 		
@@ -3140,9 +3140,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFOrenNayarBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
-		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFOrenNayarBRDFEvaluateDistributionFunction();
 		doBXDFOrenNayarBRDFEvaluateProbabilityDensityFunction();
 		
@@ -3201,8 +3201,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float cosThetaAbsIncoming = abs(incomingZ);
 		final float cosThetaAbsOutgoing = abs(outgoingZ);
 		
-		final float sinPhiIncoming = vector3FSinPhi(incomingX, incomingY, incomingZ);
-		final float sinPhiOutgoing = vector3FSinPhi(outgoingX, outgoingY, outgoingZ);
+		final float sinPhiIncoming = checkIsZero(sinThetaIncoming) ? 0.0F : saturateF(incomingY / sinThetaIncoming, -1.0F, 1.0F);
+		final float sinPhiOutgoing = checkIsZero(sinThetaOutgoing) ? 0.0F : saturateF(outgoingY / sinThetaOutgoing, -1.0F, 1.0F);
 		
 		final float maxCos = sinThetaIncoming > 1.0e-4F && sinThetaOutgoing > 1.0e-4F ? max(0.0F, cosPhiIncoming * cosPhiOutgoing + sinPhiIncoming * sinPhiOutgoing) : 0.0F;
 		
@@ -3447,9 +3447,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return false;
 		}
 		
-		final float incomingX = vector3FGetComponent1();
-		final float incomingY = vector3FGetComponent2();
-		final float incomingZ = vector3FGetComponent3();
+		final float incomingX = vector3FGetX();
+		final float incomingY = vector3FGetY();
+		final float incomingZ = vector3FGetZ();
 		
 		final float cosTheta = incomingZ;
 		final float cosThetaAbs = abs(cosTheta);
@@ -3551,9 +3551,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		doMicrofacetDistributionTrowbridgeReitzSampleNormal(outgoingX, outgoingY, outgoingZ, u, v);
 		
-		final float normalX = vector3FGetComponent1();
-		final float normalY = vector3FGetComponent2();
-		final float normalZ = vector3FGetComponent3();
+		final float normalX = vector3FGetX();
+		final float normalY = vector3FGetY();
+		final float normalZ = vector3FGetZ();
 		
 		if(vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ) < 0.0F) {
 			return false;
@@ -3561,11 +3561,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
 		
-		final float incomingX = vector3FGetComponent1();
-		final float incomingY = vector3FGetComponent2();
-		final float incomingZ = vector3FGetComponent3();
+		final float incomingX = vector3FGetX();
+		final float incomingY = vector3FGetY();
+		final float incomingZ = vector3FGetZ();
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			return false;
 		}
 		
@@ -3585,7 +3585,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
 			
 			return 0.0F;
@@ -3796,9 +3796,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		doMicrofacetDistributionTrowbridgeReitzSampleNormal(outgoingX, outgoingY, outgoingZ, u, v);
 		
-		final float normalX = vector3FGetComponent1();
-		final float normalY = vector3FGetComponent2();
-		final float normalZ = vector3FGetComponent3();
+		final float normalX = vector3FGetX();
+		final float normalY = vector3FGetY();
+		final float normalZ = vector3FGetZ();
 		
 		if(vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ) < 0.0F) {
 			return false;
@@ -3806,11 +3806,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
 		
-		final float incomingX = vector3FGetComponent1();
-		final float incomingY = vector3FGetComponent2();
-		final float incomingZ = vector3FGetComponent3();
+		final float incomingX = vector3FGetX();
+		final float incomingY = vector3FGetY();
+		final float incomingZ = vector3FGetZ();
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			return false;
 		}
 		
@@ -3830,7 +3830,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
 			
 			return 0.0F;
@@ -3998,9 +3998,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		doMicrofacetDistributionTrowbridgeReitzSampleNormal(outgoingX, outgoingY, outgoingZ, u, v);
 		
-		final float normalX = vector3FGetComponent1();
-		final float normalY = vector3FGetComponent2();
-		final float normalZ = vector3FGetComponent3();
+		final float normalX = vector3FGetX();
+		final float normalY = vector3FGetY();
+		final float normalZ = vector3FGetZ();
 		
 		if(vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ) < 0.0F) {
 			return false;
@@ -4008,11 +4008,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
 		
-		final float incomingX = vector3FGetComponent1();
-		final float incomingY = vector3FGetComponent2();
-		final float incomingZ = vector3FGetComponent3();
+		final float incomingX = vector3FGetX();
+		final float incomingY = vector3FGetY();
+		final float incomingZ = vector3FGetZ();
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			return false;
 		}
 		
@@ -4032,7 +4032,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ <= 0.0F) {
 			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
 			
 			return 0.0F;
@@ -4225,9 +4225,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		doMicrofacetDistributionTrowbridgeReitzSampleNormal(outgoingX, outgoingY, outgoingZ, u, v);
 		
-		final float normalX = vector3FGetComponent1();
-		final float normalY = vector3FGetComponent2();
-		final float normalZ = vector3FGetComponent3();
+		final float normalX = vector3FGetX();
+		final float normalY = vector3FGetY();
+		final float normalZ = vector3FGetZ();
 		
 		if(vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ) < 0.0F) {
 			return false;
@@ -4241,7 +4241,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return false;
 		}
 		
-		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateDistributionFunction();
 		doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateProbabilityDensityFunction();
 		
@@ -4257,7 +4257,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		if(vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ > 0.0F) {
 			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
 			
 			return 0.0F;
@@ -4333,7 +4333,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		if(vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+		if(outgoingZ * incomingZ > 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -4481,7 +4481,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private void doBXDFResultSetIncomingTransformedFromBSDFResult() {
 		vector3FSetOrthonormalBasis33FTransformReverseNormalize(materialBSDFResultGetIncomingX(), materialBSDFResultGetIncomingY(), materialBSDFResultGetIncomingZ());
 		
-		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 	}
 	
 	private void doBXDFResultSetNormal(final float x, final float y, final float z) {
@@ -4493,7 +4493,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private void doBXDFResultSetNormalTransformedFromBSDFResult() {
 		vector3FSetOrthonormalBasis33FTransformReverseNormalize(doBSDFResultGetNormalX(), doBSDFResultGetNormalY(), doBSDFResultGetNormalZ());
 		
-		doBXDFResultSetNormal(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetNormal(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 	}
 	
 	private void doBXDFResultSetOutgoing(final float x, final float y, final float z) {
@@ -4505,7 +4505,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private void doBXDFResultSetOutgoingTransformedFromBSDFResult() {
 		vector3FSetOrthonormalBasis33FTransformReverseNormalize(doBSDFResultGetOutgoingX(), doBSDFResultGetOutgoingY(), doBSDFResultGetOutgoingZ());
 		
-		doBXDFResultSetOutgoing(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doBXDFResultSetOutgoing(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 	}
 	
 	private void doBXDFResultSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
@@ -4627,9 +4627,13 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private float doMicrofacetDistributionTrowbridgeReitzComputeDifferentialArea(final float normalX, final float normalY, final float normalZ) {
-		final float tanThetaSquaredNormal = vector3FTanThetaSquared(normalX, normalY, normalZ);
+		final float cosThetaSquared = normalZ * normalZ;
 		
-		if(checkIsInfinite(tanThetaSquaredNormal)) {
+		final float sinThetaSquared = max(0.0F, 1.0F - cosThetaSquared);
+		
+		final float tanThetaSquared = sinThetaSquared / cosThetaSquared;
+		
+		if(checkIsInfinite(tanThetaSquared)) {
 			return 0.0F;
 		}
 		
@@ -4638,31 +4642,44 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float alphaY = doMicrofacetDistributionTrowbridgeReitzGetAlphaY();
 		final float alphaYSquared = alphaY * alphaY;
 		
-		final float cosPhiSquaredNormal = vector3FCosPhiSquared(normalX, normalY, normalZ);
-		final float sinPhiSquaredNormal = vector3FSinPhiSquared(normalX, normalY, normalZ);
+		final float sinTheta = sqrt(sinThetaSquared);
 		
-		final float cosThetaQuarticNormal = normalZ * normalZ * normalZ * normalZ;
+		final float cosPhi = checkIsZero(sinTheta) ? 1.0F : saturateF(normalX / sinTheta, -1.0F, 1.0F);
+		final float cosPhiSquared = cosPhi * cosPhi;
 		
-		final float exponent = (cosPhiSquaredNormal / alphaXSquared + sinPhiSquaredNormal / alphaYSquared) * tanThetaSquaredNormal;
+		final float sinPhi = checkIsZero(sinTheta) ? 0.0F : saturateF(normalY / sinTheta, -1.0F, 1.0F);
+		final float sinPhiSquared = sinPhi * sinPhi;
 		
-		final float differentialArea = 1.0F / (PI * alphaX * alphaY * cosThetaQuarticNormal * (1.0F + exponent) * (1.0F + exponent));
+		final float cosThetaQuartic = cosThetaSquared * cosThetaSquared;
+		
+		final float exponent = (cosPhiSquared / alphaXSquared + sinPhiSquared / alphaYSquared) * tanThetaSquared;
+		
+		final float differentialArea = 1.0F / (PI * alphaX * alphaY * cosThetaQuartic * (1.0F + exponent) * (1.0F + exponent));
 		
 		return differentialArea;
 	}
 	
 	private float doMicrofacetDistributionTrowbridgeReitzComputeLambda(final float outgoingX, final float outgoingY, final float outgoingZ) {
-		final float tanThetaAbsOutgoing = vector3FTanThetaAbs(outgoingX, outgoingY, outgoingZ);
-		
 		final float alphaX = doMicrofacetDistributionTrowbridgeReitzGetAlphaX();
 		final float alphaY = doMicrofacetDistributionTrowbridgeReitzGetAlphaY();
 		
-		final float cosPhiSquaredOutgoing = vector3FCosPhiSquared(outgoingX, outgoingY, outgoingZ);
-		final float sinPhiSquaredOutgoing = vector3FSinPhiSquared(outgoingX, outgoingY, outgoingZ);
+		final float cosThetaSquared = outgoingZ * outgoingZ;
 		
-		final float alpha = sqrt(cosPhiSquaredOutgoing * alphaX * alphaX + sinPhiSquaredOutgoing * alphaY * alphaY);
-		final float alphaTanThetaAbsOutgoingSquared = (alpha * tanThetaAbsOutgoing) * (alpha * tanThetaAbsOutgoing);
+		final float sinThetaSquared = max(0.0F, 1.0F - cosThetaSquared);
+		final float sinTheta = sqrt(sinThetaSquared);
 		
-		final float lambda = checkIsInfinite(tanThetaAbsOutgoing) ? 0.0F : (-1.0F + sqrt(1.0F + alphaTanThetaAbsOutgoingSquared)) / 2.0F;
+		final float tanThetaAbs = abs(sinTheta / outgoingZ);
+		
+		final float cosPhi = checkIsZero(sinTheta) ? 1.0F : saturateF(outgoingX / sinTheta, -1.0F, 1.0F);
+		final float cosPhiSquared = cosPhi * cosPhi;
+		
+		final float sinPhi = checkIsZero(sinTheta) ? 0.0F : saturateF(outgoingY / sinTheta, -1.0F, 1.0F);
+		final float sinPhiSquared = sinPhi * sinPhi;
+		
+		final float alpha = sqrt(cosPhiSquared * alphaX * alphaX + sinPhiSquared * alphaY * alphaY);
+		final float alphaTanThetaAbsSquared = (alpha * tanThetaAbs) * (alpha * tanThetaAbs);
+		
+		final float lambda = checkIsInfinite(tanThetaAbs) ? 0.0F : (-1.0F + sqrt(1.0F + alphaTanThetaAbsSquared)) / 2.0F;
 		
 		return lambda;
 	}
@@ -4714,8 +4731,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_ALPHA_Y];
 	}
 	
-	private void doMicrofacetDistributionTrowbridgeReitzComputeSlope(final float cosThetaIncoming, final float u, final float v) {
-		if(cosThetaIncoming > 0.9999F) {
+	private void doMicrofacetDistributionTrowbridgeReitzComputeSlope(final float cosTheta, final float u, final float v) {
+		if(cosTheta > 0.9999F) {
 			final float r = sqrt(u / (1.0F - u));
 			final float phi = v * PI_MULTIPLIED_BY_2;
 			
@@ -4724,13 +4741,13 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			
 			vector3FSet(x, y, 0.0F);
 		} else {
-			final float sinThetaIncoming = sqrt(max(0.0F, 1.0F - cosThetaIncoming * cosThetaIncoming));
-			final float tanThetaIncoming = sinThetaIncoming / cosThetaIncoming;
+			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+			final float tanTheta = sinTheta / cosTheta;
 			
-			final float a = 2.0F / (1.0F + sqrt(1.0F + tanThetaIncoming * tanThetaIncoming));
+			final float a = 2.0F / (1.0F + sqrt(1.0F + tanTheta * tanTheta));
 			final float b = 2.0F * u / a - 1.0F;
 			final float c = min(1.0F / (b * b - 1.0F), 1.0e10F);
-			final float d = tanThetaIncoming;
+			final float d = tanTheta;
 			final float e = sqrt(max(d * d * c * c - (b * b - d * d) * c, 0.0F));
 			final float f = d * c - e;
 			final float g = d * c + e;
@@ -4738,7 +4755,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			final float i = v > 0.5F ? 2.0F * (v - 0.5F) : 2.0F * (0.5F - v);
 			final float j = (i * (i * (i * 0.27385F - 0.73369F) + 0.46341F)) / (i * (i * (i * 0.093073F + 0.309420F) - 1.0F) + 0.597999F);
 			
-			final float x = b < 0.0F || g > 1.0F / tanThetaIncoming ? f : g;
+			final float x = b < 0.0F || g > 1.0F / tanTheta ? f : g;
 			final float y = h * j * sqrt(1.0F + x * x);
 			
 			vector3FSet(x, y, 0.0F);
@@ -4769,8 +4786,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		doMicrofacetDistributionTrowbridgeReitzComputeSlope(cosTheta, u, v);
 		
-		final float slopeX = vector3FGetComponent1();
-		final float slopeY = vector3FGetComponent2();
+		final float slopeX = vector3FGetX();
+		final float slopeY = vector3FGetY();
 		
 		final float sampleX = -((cosPhi * slopeX - sinPhi * slopeY) * alphaX);
 		final float sampleY = -((sinPhi * slopeX + cosPhi * slopeY) * alphaY);

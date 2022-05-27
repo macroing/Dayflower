@@ -1622,9 +1622,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
 		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
 		
-		final float directionX = vector3FGetComponent1();
-		final float directionY = vector3FGetComponent2();
-		final float directionZ = vector3FGetComponent3();
+		final float directionX = vector3FGetX();
+		final float directionY = vector3FGetY();
+		final float directionZ = vector3FGetZ();
 		final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
 		final float directionNormalizedX = directionX * directionLengthReciprocal;
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
@@ -1676,9 +1676,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
 		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
 		
-		final float directionX = vector3FGetComponent1();
-		final float directionY = vector3FGetComponent2();
-		final float directionZ = vector3FGetComponent3();
+		final float directionX = vector3FGetX();
+		final float directionY = vector3FGetY();
+		final float directionZ = vector3FGetZ();
 		final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
 		final float directionNormalizedX = directionX * directionLengthReciprocal;
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
@@ -1743,39 +1743,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns {@code true} if, and only if, both vectors are in the same hemisphere, {@code false} otherwise.
-	 * 
-	 * @param component1LHS the value of component 1 for the vector on the left-hand side
-	 * @param component2LHS the value of component 2 for the vector on the left-hand side
-	 * @param component3LHS the value of component 3 for the vector on the left-hand side
-	 * @param component1RHS the value of component 1 for the vector on the right-hand side
-	 * @param component2RHS the value of component 2 for the vector on the right-hand side
-	 * @param component3RHS the value of component 3 for the vector on the right-hand side
-	 * @return {@code true} if, and only if, both vectors are in the same hemisphere, {@code false} otherwise
-	 */
-	protected final boolean vector3FSameHemisphere(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
-		return vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) > 0.0F;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, both vectors are in the same hemisphere, {@code false} otherwise.
-	 * <p>
-	 * This method only operates on the Z-component (component 3), just like PBRT.
-	 * 
-	 * @param component1LHS the value of component 1 for the vector on the left-hand side
-	 * @param component2LHS the value of component 2 for the vector on the left-hand side
-	 * @param component3LHS the value of component 3 for the vector on the left-hand side
-	 * @param component1RHS the value of component 1 for the vector on the right-hand side
-	 * @param component2RHS the value of component 2 for the vector on the right-hand side
-	 * @param component3RHS the value of component 3 for the vector on the right-hand side
-	 * @return {@code true} if, and only if, both vectors are in the same hemisphere, {@code false} otherwise
-	 */
-	@SuppressWarnings("static-method")
-	protected final boolean vector3FSameHemisphereZ(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
-		return component3LHS * component3RHS > 0.0F;
-	}
-	
-	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
 	 * Returns {@code true} if, and only if, the vector was set, {@code false} otherwise.
@@ -1820,35 +1787,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	}
 	
 	/**
-	 * Returns the cosine of the angle phi.
-	 * 
-	 * @param component1 the value of component 1 for the vector
-	 * @param component2 the value of component 2 for the vector
-	 * @param component3 the value of component 3 for the vector
-	 * @return the cosine of the angle phi
-	 */
-	protected final float vector3FCosPhi(final float component1, final float component2, final float component3) {
-		final float sinTheta = vector3FSinTheta(component1, component2, component3);
-		
-		return checkIsZero(sinTheta) ? 1.0F : saturateF(component1 / sinTheta, -1.0F, 1.0F);
-	}
-	
-	/**
-	 * Returns the cosine of the angle phi in squared form.
-	 * 
-	 * @param component1 the value of component 1 for the vector
-	 * @param component2 the value of component 2 for the vector
-	 * @param component3 the value of component 3 for the vector
-	 * @return the cosine of the angle phi in squared form
-	 */
-	protected final float vector3FCosPhiSquared(final float component1, final float component2, final float component3) {
-		final float cosPhi = vector3FCosPhi(component1, component2, component3);
-		final float cosPhiSquared = cosPhi * cosPhi;
-		
-		return cosPhiSquared;
-	}
-	
-	/**
 	 * Returns the dot product between the vector represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} and the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS}.
 	 * 
 	 * @param component1LHS the value of component 1 for the vector on the left hand side
@@ -1865,191 +1803,103 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	}
 	
 	/**
-	 * Returns the value of component 1 in {@link #vector3FArray_$private$3}.
+	 * Returns the value of the X-component in {@link #vector3FArray_$private$3}.
 	 * 
-	 * @return the value of component 1 in {@link #vector3FArray_$private$3}
+	 * @return the value of the X-component in {@link #vector3FArray_$private$3}
 	 */
-	protected final float vector3FGetComponent1() {
+	protected final float vector3FGetX() {
 		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X];
 	}
 	
 	/**
-	 * Returns the value of component 2 in {@link #vector3FArray_$private$3}.
+	 * Returns the value of the Y-component in {@link #vector3FArray_$private$3}.
 	 * 
-	 * @return the value of component 2 in {@link #vector3FArray_$private$3}
+	 * @return the value of the Y-component in {@link #vector3FArray_$private$3}
 	 */
-	protected final float vector3FGetComponent2() {
+	protected final float vector3FGetY() {
 		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y];
 	}
 	
 	/**
-	 * Returns the value of component 3 in {@link #vector3FArray_$private$3}.
+	 * Returns the value of the Z-component in {@link #vector3FArray_$private$3}.
 	 * 
-	 * @return the value of component 3 in {@link #vector3FArray_$private$3}
+	 * @return the value of the Z-component in {@link #vector3FArray_$private$3}
 	 */
-	protected final float vector3FGetComponent3() {
+	protected final float vector3FGetZ() {
 		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z];
 	}
 	
 	/**
-	 * Returns the length of the vector represented by {@code component1}, {@code component2} and {@code component3}.
+	 * Returns the length of the vector represented by {@code x}, {@code y} and {@code z}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
-	 * @return the length of the vector represented by {@code component1}, {@code component2} and {@code component3}
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
+	 * @return the length of the vector represented by {@code x}, {@code y} and {@code z}
 	 */
-	protected final float vector3FLength(final float component1, final float component2, final float component3) {
-		return sqrt(vector3FLengthSquared(component1, component2, component3));
+	protected final float vector3FLength(final float x, final float y, final float z) {
+		return sqrt(vector3FLengthSquared(x, y, z));
 	}
 	
 	/**
-	 * Returns the reciprocal (or inverse) length of the vector represented by {@code component1}, {@code component2} and {@code component3}.
+	 * Returns the reciprocal (or inverse) length of the vector represented by {@code x}, {@code y} and {@code z}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
-	 * @return the reciprocal (or inverse) length of the vector represented by {@code component1}, {@code component2} and {@code component3}
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
+	 * @return the reciprocal (or inverse) length of the vector represented by {@code x}, {@code y} and {@code z}
 	 */
-	protected final float vector3FLengthReciprocal(final float component1, final float component2, final float component3) {
-		return rsqrt(vector3FLengthSquared(component1, component2, component3));
+	protected final float vector3FLengthReciprocal(final float x, final float y, final float z) {
+		return rsqrt(vector3FLengthSquared(x, y, z));
 	}
 	
 	/**
-	 * Returns the squared length of the vector represented by {@code component1}, {@code component2} and {@code component3}.
+	 * Returns the squared length of the vector represented by {@code x}, {@code y} and {@code z}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
-	 * @return the squared length of the vector represented by {@code component1}, {@code component2} and {@code component3}
+	 * @param x the value of the X-component
+	 * @param y the value of the Y-component
+	 * @param z the value of the Z-component
+	 * @return the squared length of the vector represented by {@code x}, {@code y} and {@code z}
 	 */
 	@SuppressWarnings("static-method")
-	protected final float vector3FLengthSquared(final float component1, final float component2, final float component3) {
-		return component1 * component1 + component2 * component2 + component3 * component3;
-	}
-	
-	/**
-	 * Returns the sine of the angle phi.
-	 * 
-	 * @param component1 the value of component 1 for the vector
-	 * @param component2 the value of component 2 for the vector
-	 * @param component3 the value of component 3 for the vector
-	 * @return the sine of the angle phi
-	 */
-	protected final float vector3FSinPhi(final float component1, final float component2, final float component3) {
-		final float sinTheta = sqrt(max(0.0F, 1.0F - component3 * component3));
-		
-		return checkIsZero(sinTheta) ? 0.0F : saturateF(component2 / sinTheta, -1.0F, 1.0F);
-	}
-	
-	/**
-	 * Returns the sine of the angle phi in squared form.
-	 * 
-	 * @param component1 the value of component 1 for the vector
-	 * @param component2 the value of component 2 for the vector
-	 * @param component3 the value of component 3 for the vector
-	 * @return the sine of the angle phi in squared form
-	 */
-	protected final float vector3FSinPhiSquared(final float component1, final float component2, final float component3) {
-		final float sinPhi = vector3FSinPhi(component1, component2, component3);
-		final float sinPhiSquared = sinPhi * sinPhi;
-		
-		return sinPhiSquared;
-	}
-	
-	/**
-	 * Returns the sine of the angle theta.
-	 * 
-	 * @param component1 the value of component 1 for the vector
-	 * @param component2 the value of component 2 for the vector
-	 * @param component3 the value of component 3 for the vector
-	 * @return the sine of the angle theta
-	 */
-	protected final float vector3FSinTheta(final float component1, final float component2, final float component3) {
-		return sqrt(max(0.0F, 1.0F - component3 * component3));
+	protected final float vector3FLengthSquared(final float x, final float y, final float z) {
+		return x * x + y * y + z * z;
 	}
 	
 	/**
 	 * Returns the spherical phi angle.
 	 * 
-	 * @param component1 the value of component 1 for the vector
-	 * @param component2 the value of component 2 for the vector
-	 * @param component3 the value of component 3 for the vector
+	 * @param x the value of the X-component for the vector
+	 * @param y the value of the Y-component for the vector
 	 * @return the spherical phi angle
 	 */
-	protected final float vector3FSphericalPhi(final float component1, final float component2, final float component3) {
-		return addIfLessThanThreshold(atan2(component2, component1), 0.0F, PI_MULTIPLIED_BY_2);
+	protected final float vector3FSphericalPhi(final float x, final float y) {
+		return addIfLessThanThreshold(atan2(y, x), 0.0F, PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
 	 * Returns the spherical theta angle.
 	 * 
-	 * @param component1 the value of component 1 for the vector
-	 * @param component2 the value of component 2 for the vector
-	 * @param component3 the value of component 3 for the vector
+	 * @param z the value of the Z-component for the vector
 	 * @return the spherical theta angle
 	 */
-	protected final float vector3FSphericalTheta(final float component1, final float component2, final float component3) {
-		return acos(saturateF(component3, -1.0F, 1.0F));
-	}
-	
-	/**
-	 * Returns the tangent of the angle theta in absolute form.
-	 * 
-	 * @param component1 the value of component 1 for the vector
-	 * @param component2 the value of component 2 for the vector
-	 * @param component3 the value of component 3 for the vector
-	 * @return the tangent of the angle theta in absolute form
-	 */
-	protected final float vector3FTanThetaAbs(final float component1, final float component2, final float component3) {
-		return abs(sqrt(max(0.0F, 1.0F - component3 * component3)) / component3);
-	}
-	
-	/**
-	 * Returns the tangent of the angle theta in squared form.
-	 * 
-	 * @param component1 the value of component 1 for the vector
-	 * @param component2 the value of component 2 for the vector
-	 * @param component3 the value of component 3 for the vector
-	 * @return the tangent of the angle theta in squared form
-	 */
-	protected final float vector3FTanThetaSquared(final float component1, final float component2, final float component3) {
-		final float cosThetaSquared = component3 * component3;
-		
-		return max(0.0F, 1.0F - cosThetaSquared) / cosThetaSquared;
+	protected final float vector3FSphericalTheta(final float z) {
+		return acos(saturateF(z, -1.0F, 1.0F));
 	}
 	
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
-	 * The vector is constructed using the vector represented by {@code component1}, {@code component2} and {@code component3}.
+	 * The vector is constructed using the vector represented by {@code x}, {@code y} and {@code z}.
 	 * 
-	 * @param component1 the value of component 1 of the vector
-	 * @param component2 the value of component 2 of the vector
-	 * @param component3 the value of component 3 of the vector
+	 * @param x the value of the X-component of the vector
+	 * @param y the value of the Y-component of the vector
+	 * @param z the value of the Z-component of the vector
 	 */
-	protected final void vector3FSet(final float component1, final float component2, final float component3) {
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = component1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = component2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = component3;
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed by perturbing the normal, which is represented by {@code normalX}, {@code normalY} and {@code normalZ}, with a direction sampled using a hemisphere cosine distribution.
-	 * 
-	 * @param normalX the X-component of the normal vector
-	 * @param normalY the Y-component of the normal vector
-	 * @param normalZ the Z-component of the normal vector
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 */
-	protected final void vector3FSetDiffuseReflection(final float normalX, final float normalY, final float normalZ, final float u, final float v) {
-		orthonormalBasis33FSetFromW(normalX, normalY, normalZ);
-		
-		vector3FSetSampleHemisphereCosineDistribution2(u, v);
-		vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+	protected final void vector3FSet(final float x, final float y, final float z) {
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = x;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = y;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = z;
 	}
 	
 	/**
@@ -2075,72 +1925,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final void vector3FSetDirectionSpherical3(final float sinTheta, final float cosTheta, final float phi) {
 		vector3FSet(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta);
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed by negating the vector represented by {@code component1Direction}, {@code component2Direction} and {@code component3Direction} if, and only if, the dot product between the vector represented by {@code component1LHS},
-	 * {@code component2LHS} and {@code component3LHS} and the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} is less than {@code 0.0F}. Otherwise, its current values will be used.
-	 * 
-	 * @param component1LHS the value of component 1 of the vector on the left-hand side
-	 * @param component2LHS the value of component 2 of the vector on the left-hand side
-	 * @param component3LHS the value of component 3 of the vector on the left-hand side
-	 * @param component1RHS the value of component 1 of the vector on the right-hand side
-	 * @param component2RHS the value of component 2 of the vector on the right-hand side
-	 * @param component3RHS the value of component 3 of the vector on the right-hand side
-	 * @param component1Direction the value of component 1 of the vector to set, whether it is negated or not
-	 * @param component2Direction the value of component 2 of the vector to set, whether it is negated or not
-	 * @param component3Direction the value of component 3 of the vector to set, whether it is negated or not
-	 */
-	protected final void vector3FSetFaceForwardDirection(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS, final float component1Direction, final float component2Direction, final float component3Direction) {
-		if(vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) < 0.0F) {
-			vector3FSet(-component1Direction, -component2Direction, -component3Direction);
-		} else {
-			vector3FSet(+component1Direction, +component2Direction, +component3Direction);
-		}
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed by negating the vector represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} if, and only if, the dot product between that vector and the vector represented by {@code component1RHS},
-	 * {@code component2RHS} and {@code component3RHS} is less than {@code 0.0F}. Otherwise, its current values will be used.
-	 * 
-	 * @param component1LHS the value of component 1 of the vector on the left-hand side
-	 * @param component2LHS the value of component 2 of the vector on the left-hand side
-	 * @param component3LHS the value of component 3 of the vector on the left-hand side
-	 * @param component1RHS the value of component 1 of the vector on the right-hand side
-	 * @param component2RHS the value of component 2 of the vector on the right-hand side
-	 * @param component3RHS the value of component 3 of the vector on the right-hand side
-	 */
-	protected final void vector3FSetFaceForwardLHS(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
-		if(vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) < 0.0F) {
-			vector3FSet(-component1LHS, -component2LHS, -component3LHS);
-		} else {
-			vector3FSet(+component1LHS, +component2LHS, +component3LHS);
-		}
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed by negating the vector represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} if, and only if, the dot product between that vector and the vector represented by {@code component1RHS},
-	 * {@code component2RHS} and {@code component3RHS} is greater than or equal to {@code 0.0F}. Otherwise, its current values will be used.
-	 * 
-	 * @param component1LHS the value of component 1 of the vector on the left-hand side
-	 * @param component2LHS the value of component 2 of the vector on the left-hand side
-	 * @param component3LHS the value of component 3 of the vector on the left-hand side
-	 * @param component1RHS the value of component 1 of the vector on the right-hand side
-	 * @param component2RHS the value of component 2 of the vector on the right-hand side
-	 * @param component3RHS the value of component 3 of the vector on the right-hand side
-	 */
-	protected final void vector3FSetFaceForwardLHSNegated(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
-		if(vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) < 0.0F) {
-			vector3FSet(+component1LHS, +component2LHS, +component3LHS);
-		} else {
-			vector3FSet(-component1LHS, -component2LHS, -component3LHS);
-		}
 	}
 	
 	/**
@@ -2175,84 +1959,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final void vector3FSetFaceForwardRHSComponent3Negated(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
 		vector3FSet(+component1RHS, +component2RHS, component3LHS > 0.0F ? -component3RHS : +component3RHS);
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed by perturbing the specular reflection direction with a direction sampled using a hemisphere power-cosine distribution.
-	 * <p>
-	 * The specular reflection direction is constructed by calling {@link #vector3FSetSpecularReflection(float, float, float, float, float, float)}, with the parameter arguments {@code directionX}, {@code directionY}, {@code directionZ},
-	 * {@code normalX}, {@code normalY} and {@code normalZ}.
-	 * 
-	 * @param directionX the X-component of the direction vector
-	 * @param directionY the Y-component of the direction vector
-	 * @param directionZ the Z-component of the direction vector
-	 * @param normalX the X-component of the normal vector
-	 * @param normalY the Y-component of the normal vector
-	 * @param normalZ the Z-component of the normal vector
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param exponent the exponent to use
-	 */
-	protected final void vector3FSetGlossyReflection(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final float u, final float v, final float exponent) {
-		vector3FSetSpecularReflection(directionX, directionY, directionZ, normalX, normalY, normalZ);
-		
-		orthonormalBasis33FSetVector3F();
-		
-		vector3FSetSampleHemispherePowerCosineDistribution(u, v, exponent);
-		vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed by perturbing the specular reflection direction with a direction sampled using a hemisphere power-cosine distribution.
-	 * <p>
-	 * The specular reflection direction is constructed by calling {@link #vector3FSetSpecularReflectionFacingSurface(float, float, float, float, float, float)}, with the parameter arguments {@code directionX}, {@code directionY}, {@code directionZ},
-	 * {@code normalX}, {@code normalY} and {@code normalZ}.
-	 * 
-	 * @param directionX the X-component of the direction vector
-	 * @param directionY the Y-component of the direction vector
-	 * @param directionZ the Z-component of the direction vector
-	 * @param normalX the X-component of the normal vector
-	 * @param normalY the Y-component of the normal vector
-	 * @param normalZ the Z-component of the normal vector
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param exponent the exponent to use
-	 */
-	protected final void vector3FSetGlossyReflectionFacingSurface(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final float u, final float v, final float exponent) {
-		vector3FSetSpecularReflectionFacingSurface(directionX, directionY, directionZ, normalX, normalY, normalZ);
-		
-		orthonormalBasis33FSetVector3F();
-		
-		vector3FSetSampleHemispherePowerCosineDistribution(u, v, exponent);
-		vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed using {@code vector3FSet(normalX, normalY, normalZ)} or {@code vector3FSetNormalize(outgoingX - incomingX, outgoingY - incomingY, outgoingZ - incomingZ)}, as
-	 * {@code vector3FDotProduct(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)} is greater than {@code 0.999F} or less than or equal to {@code 0.999F}, respectively.
-	 * 
-	 * @param outgoingX the X-component of the vector that points in the opposite direction of the ray
-	 * @param outgoingY the Y-component of the vector that points in the opposite direction of the ray
-	 * @param outgoingZ the Z-component of the vector that points in the opposite direction of the ray
-	 * @param normalX the X-component of the vector that points in the direction of the surface normal
-	 * @param normalY the Y-component of the vector that points in the direction of the surface normal
-	 * @param normalZ the Z-component of the vector that points in the direction of the surface normal
-	 * @param incomingX the X-component of the vector that points in the direction of the light source to the surface intersection point
-	 * @param incomingY the Y-component of the vector that points in the direction of the light source to the surface intersection point
-	 * @param incomingZ the Z-component of the vector that points in the direction of the light source to the surface intersection point
-	 */
-	protected final void vector3FSetHalf(final float outgoingX, final float outgoingY, final float outgoingZ, final float normalX, final float normalY, final float normalZ, final float incomingX, final float incomingY, final float incomingZ) {
-		if(vector3FDotProduct(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ) > 0.999F) {
-			vector3FSet(normalX, normalY, normalZ);
-		} else {
-			vector3FSetNormalize(outgoingX - incomingX, outgoingY - incomingY, outgoingZ - incomingZ);
-		}
 	}
 	
 	/**
@@ -2483,19 +2189,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
-	 * The vector is constructed by transforming the vector in {@code vector3FArray_$private$3} with the orthonormal basis in {@link #orthonormalBasis33FArray_$private$9} in reverse order and normalizing it.
-	 */
-	protected final void vector3FSetOrthonormalBasis33FTransformReverseNormalizeFromVector3F() {
-		final float x = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X];
-		final float y = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y];
-		final float z = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z];
-		
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(x, y, z);
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
 	 * The vector is constructed by sampling a direction on a hemisphere with a cosine distribution.
 	 * 
 	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
@@ -2507,51 +2200,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float x = point2FGetX();
 		final float y = point2FGetY();
 		final float z = sqrt(max(0.0F, 1.0F - x * x - y * y));
-		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = x;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = y;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = z;
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed by sampling a direction on a hemisphere with a cosine distribution.
-	 * 
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 */
-	protected final void vector3FSetSampleHemisphereCosineDistribution2(final float u, final float v) {
-		final float sinTheta = sqrt(v);
-		final float cosTheta = sqrt(1.0F - v);
-		final float phi = PI_MULTIPLIED_BY_2 * u;
-		
-		final float x = sinTheta * cos(phi);
-		final float y = sinTheta * sin(phi);
-		final float z = cosTheta;
-		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = x;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = y;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = z;
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed by sampling a direction on a hemisphere with a power-cosine distribution.
-	 * 
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param exponent the exponent to use
-	 */
-	protected final void vector3FSetSampleHemispherePowerCosineDistribution(final float u, final float v, final float exponent) {
-		final float cosTheta = pow(1.0F - u, 1.0F / (exponent + 1.0F));
-		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_2 * v;
-		
-		final float x = sinTheta * cos(phi);
-		final float y = sinTheta * sin(phi);
-		final float z = cosTheta;
 		
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = x;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = y;
@@ -2602,34 +2250,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float reflectionX = normalX * directionDotNormalMultipliedByTwo - directionX;
 		final float reflectionY = normalY * directionDotNormalMultipliedByTwo - directionY;
 		final float reflectionZ = normalZ * directionDotNormalMultipliedByTwo - directionZ;
-		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = reflectionX;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = reflectionY;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = reflectionZ;
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed as the specular reflection vector of the direction vector represented by {@code directionX}, {@code directionY} and {@code directionZ} with regards to the normal vector represented by {@code normalX}, {@code normalY}
-	 * and {@code normalZ}.
-	 * <p>
-	 * This method assumes that the direction vector is pointing towards the surface. It is facing it. This is usually the case for the direction of a ray that intersects the surface.
-	 * 
-	 * @param directionX the X-component of the direction vector
-	 * @param directionY the Y-component of the direction vector
-	 * @param directionZ the Z-component of the direction vector
-	 * @param normalX the X-component of the normal vector
-	 * @param normalY the Y-component of the normal vector
-	 * @param normalZ the Z-component of the normal vector
-	 */
-	protected final void vector3FSetSpecularReflectionFacingSurface(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ) {
-		final float directionDotNormal = vector3FDotProduct(directionX, directionY, directionZ, normalX, normalY, normalZ);
-		final float directionDotNormalMultipliedByTwo = directionDotNormal * 2.0F;
-		
-		final float reflectionX = directionX - normalX * directionDotNormalMultipliedByTwo;
-		final float reflectionY = directionY - normalY * directionDotNormalMultipliedByTwo;
-		final float reflectionZ = directionZ - normalZ * directionDotNormalMultipliedByTwo;
 		
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = reflectionX;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = reflectionY;

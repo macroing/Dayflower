@@ -2415,7 +2415,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFDisneyDiffuseBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
+		vector3FSetFaceForwardRHSZ(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
 		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFDisneyDiffuseBRDFEvaluateDistributionFunction();
@@ -2496,7 +2496,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFDisneyFakeSSBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
+		vector3FSetFaceForwardRHSZ(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
 		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFDisneyFakeSSBRDFEvaluateDistributionFunction();
@@ -2604,7 +2604,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFDisneyRetroBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
+		vector3FSetFaceForwardRHSZ(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
 		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFDisneyRetroBRDFEvaluateDistributionFunction();
@@ -2711,7 +2711,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFDisneySheenBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
+		vector3FSetFaceForwardRHSZ(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
 		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFDisneySheenBRDFEvaluateDistributionFunction();
@@ -2814,7 +2814,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			final float vRemapped = v;
 			
 			vector3FSetSampleHemisphereCosineDistribution(uRemapped, vRemapped);
-			vector3FSetFaceForwardRHSComponent3(outgoingX, outgoingY, outgoingZ, vector3FGetX(), vector3FGetY(), vector3FGetZ());
+			vector3FSetFaceForwardRHSZ(outgoingX, outgoingY, outgoingZ, vector3FGetX(), vector3FGetY(), vector3FGetZ());
 			
 			doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 			doBXDFFresnelBlendBRDFEvaluateDistributionFunction();
@@ -3012,7 +3012,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFLambertianBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
+		vector3FSetFaceForwardRHSZ(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
 		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFLambertianBRDFEvaluateDistributionFunction();
@@ -3076,7 +3076,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFLambertianBTDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3Negated(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
+		vector3FSetFaceForwardRHSZNegated(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
 		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFLambertianBTDFEvaluateDistributionFunction();
@@ -3140,7 +3140,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFOrenNayarBRDFSampleDistributionFunction(final float u, final float v) {
 		vector3FSetSampleHemisphereCosineDistribution(u, v);
-		vector3FSetFaceForwardRHSComponent3(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
+		vector3FSetFaceForwardRHSZ(doBXDFResultGetOutgoingX(), doBXDFResultGetOutgoingY(), doBXDFResultGetOutgoingZ(), vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		
 		doBXDFResultSetIncoming(vector3FGetX(), vector3FGetY(), vector3FGetZ());
 		doBXDFOrenNayarBRDFEvaluateDistributionFunction();

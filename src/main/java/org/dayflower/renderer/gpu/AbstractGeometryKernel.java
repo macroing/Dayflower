@@ -1787,19 +1787,19 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	}
 	
 	/**
-	 * Returns the dot product between the vector represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} and the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS}.
+	 * Returns the dot product between the vector represented by {@code vLHSX}, {@code vLHSY} and {@code vLHSZ} and the vector represented by {@code vRHSX}, {@code vRHSY} and {@code vRHSZ}.
 	 * 
-	 * @param component1LHS the value of component 1 for the vector on the left hand side
-	 * @param component2LHS the value of component 2 for the vector on the left hand side
-	 * @param component3LHS the value of component 3 for the vector on the left hand side
-	 * @param component1RHS the value of component 1 for the vector on the right hand side
-	 * @param component2RHS the value of component 2 for the vector on the right hand side
-	 * @param component3RHS the value of component 3 for the vector on the right hand side
-	 * @return the dot product between the vector represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} and the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS}
+	 * @param vLHSX the value of the X-component for the vector on the left hand side
+	 * @param vLHSY the value of the Y-component for the vector on the left hand side
+	 * @param vLHSZ the value of the Z-component for the vector on the left hand side
+	 * @param vRHSX the value of the X-component for the vector on the right hand side
+	 * @param vRHSY the value of the Y-component for the vector on the right hand side
+	 * @param vRHSZ the value of the Z-component for the vector on the right hand side
+	 * @return the dot product between the vector represented by {@code vLHSX}, {@code vLHSY} and {@code vLHSZ} and the vector represented by {@code vRHSX}, {@code vRHSY} and {@code vRHSZ}
 	 */
 	@SuppressWarnings("static-method")
-	protected final float vector3FDotProduct(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
-		return component1LHS * component1RHS + component2LHS * component2RHS + component3LHS * component3RHS;
+	protected final float vector3FDotProduct(final float vLHSX, final float vLHSY, final float vLHSZ, final float vRHSX, final float vRHSY, final float vRHSZ) {
+		return vLHSX * vRHSX + vLHSY * vRHSY + vLHSZ * vRHSZ;
 	}
 	
 	/**
@@ -1930,35 +1930,33 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
-	 * The vector is constructed by negating component 3 of the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} if, and only if, {@code component3LHS} is less than {@code 0.0F}. Otherwise, its current value
-	 * will be used.
+	 * The vector is constructed by negating the Z-component of the vector represented by {@code vRHSX}, {@code vRHSY} and {@code vRHSZ} if, and only if, {@code vLHSZ} is less than {@code 0.0F}. Otherwise, its current value will be used.
 	 * 
-	 * @param component1LHS the value of component 1 of the vector on the left-hand side
-	 * @param component2LHS the value of component 2 of the vector on the left-hand side
-	 * @param component3LHS the value of component 3 of the vector on the left-hand side
-	 * @param component1RHS the value of component 1 of the vector on the right-hand side
-	 * @param component2RHS the value of component 2 of the vector on the right-hand side
-	 * @param component3RHS the value of component 3 of the vector on the right-hand side
+	 * @param vLHSX the value of the X-component of the vector on the left-hand side
+	 * @param vLHSY the value of the Y-component of the vector on the left-hand side
+	 * @param vLHSZ the value of the Z-component of the vector on the left-hand side
+	 * @param vRHSX the value of the X-component of the vector on the right-hand side
+	 * @param vRHSY the value of the Y-component of the vector on the right-hand side
+	 * @param vRHSZ the value of the Z-component of the vector on the right-hand side
 	 */
-	protected final void vector3FSetFaceForwardRHSComponent3(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
-		vector3FSet(+component1RHS, +component2RHS, component3LHS < 0.0F ? -component3RHS : +component3RHS);
+	protected final void vector3FSetFaceForwardRHSZ(final float vLHSX, final float vLHSY, final float vLHSZ, final float vRHSX, final float vRHSY, final float vRHSZ) {
+		vector3FSet(+vRHSX, +vRHSY, vLHSZ < 0.0F ? -vRHSZ : +vRHSZ);
 	}
 	
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
-	 * The vector is constructed by negating component 3 of the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} if, and only if, {@code component3LHS} is greater than {@code 0.0F}. Otherwise, its current
-	 * value will be used.
+	 * The vector is constructed by negating the Z-component of the vector represented by {@code vRHSX}, {@code vRHSY} and {@code vRHSZ} if, and only if, {@code vLHSZ} is greater than {@code 0.0F}. Otherwise, its current value will be used.
 	 * 
-	 * @param component1LHS the value of component 1 of the vector on the left-hand side
-	 * @param component2LHS the value of component 2 of the vector on the left-hand side
-	 * @param component3LHS the value of component 3 of the vector on the left-hand side
-	 * @param component1RHS the value of component 1 of the vector on the right-hand side
-	 * @param component2RHS the value of component 2 of the vector on the right-hand side
-	 * @param component3RHS the value of component 3 of the vector on the right-hand side
+	 * @param vLHSX the value of the X-component of the vector on the left-hand side
+	 * @param vLHSY the value of the Y-component of the vector on the left-hand side
+	 * @param vLHSZ the value of the Z-component of the vector on the left-hand side
+	 * @param vRHSX the value of the X-component of the vector on the right-hand side
+	 * @param vRHSY the value of the Y-component of the vector on the right-hand side
+	 * @param vRHSZ the value of the Z-component of the vector on the right-hand side
 	 */
-	protected final void vector3FSetFaceForwardRHSComponent3Negated(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
-		vector3FSet(+component1RHS, +component2RHS, component3LHS > 0.0F ? -component3RHS : +component3RHS);
+	protected final void vector3FSetFaceForwardRHSZNegated(final float vLHSX, final float vLHSY, final float vLHSZ, final float vRHSX, final float vRHSY, final float vRHSZ) {
+		vector3FSet(+vRHSX, +vRHSY, vLHSZ > 0.0F ? -vRHSZ : +vRHSZ);
 	}
 	
 	/**

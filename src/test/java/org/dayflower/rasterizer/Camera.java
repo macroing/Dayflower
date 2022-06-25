@@ -18,11 +18,11 @@
  */
 package org.dayflower.rasterizer;
 
-import java.awt.event.KeyEvent;
-
 import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.Transform;
 import org.dayflower.utility.Floats;
 
 public final class Camera {
@@ -31,7 +31,7 @@ public final class Camera {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Matrix44F projection;
-	private Transform transform;
+	private final Transform transform;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -43,13 +43,13 @@ public final class Camera {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public Matrix44F getViewProjection() {
-		final Matrix44F rotation = Matrix44F.transpose(Matrix44F.rotate(Quaternion4F.conjugate(this.transform.getRotation())));
+		final Matrix44F rotation = Matrix44F.rotate(this.transform.getRotation());
 		
-		final Vector3F position = Vector3F.multiply(this.transform.getPosition(), -1.0F);
+		final Point3F position = this.transform.getPosition();
 		
-		final float x = position.x;
-		final float y = position.y;
-		final float z = position.z;
+		final float x = -position.x;
+		final float y = -position.y;
+		final float z = -position.z;
 		
 		final Matrix44F translation = Matrix44F.translate(x, y, z);
 		final Matrix44F view = Matrix44F.multiply(rotation, translation);
@@ -57,58 +57,34 @@ public final class Camera {
 		return Matrix44F.multiply(this.projection, view);
 	}
 	
-	public void update(final Input input, final float delta) {
-		final float sensitivityX = 2.66F * delta;
-		final float sensitivityY = 2.0F * delta;
-		final float distance = 5.0F * delta;
-		
-		final float mouseMovementX = input.getAndResetMouseMovementX() * 0.5F * delta;
-		final float mouseMovementY = input.getAndResetMouseMovementY() * 0.5F * delta;
-		
-		doRotate(Y_AXIS, mouseMovementX);
-		doRotate(doGetRight(this.transform.getRotation()), mouseMovementY);
-		
-		if(input.getKey(KeyEvent.VK_ESCAPE)) {
-			System.exit(0);
-		}
-		
-		if(input.getKey(KeyEvent.VK_W)) {
-			doMove(doGetForward(this.transform.getRotation()), distance);
-		}
-		
-		if(input.getKey(KeyEvent.VK_S)) {
-			doMove(doGetBack(this.transform.getRotation()), distance);
-		}
-		
-		if(input.getKey(KeyEvent.VK_A)) {
-			doMove(doGetLeft(this.transform.getRotation()), distance);
-		}
-		
-		if(input.getKey(KeyEvent.VK_D)) {
-			doMove(doGetRight(this.transform.getRotation()), distance);
-		}
-		
-		if(input.getKey(KeyEvent.VK_RIGHT)) {
-			doRotate(Y_AXIS, sensitivityX);
-		}
-		
-		if(input.getKey(KeyEvent.VK_LEFT)) {
-			doRotate(Y_AXIS, -sensitivityX);
-		}
-		
-		if(input.getKey(KeyEvent.VK_DOWN)) {
-			doRotate(doGetRight(this.transform.getRotation()), sensitivityY);
-		}
-		
-		if(input.getKey(KeyEvent.VK_UP)) {
-			doRotate(doGetRight(this.transform.getRotation()), -sensitivityY);
-		}
+	public void moveBack(final float distance) {
+		doMove(doGetBack(), distance);
+	}
+	
+	public void moveForward(final float distance) {
+		doMove(doGetForward(), distance);
+	}
+	
+	public void moveLeft(final float distance) {
+		doMove(doGetLeft(), distance);
+	}
+	
+	public void moveRight(final float distance) {
+		doMove(doGetRight(), distance);
+	}
+	
+	public void rotateRight(final float distance) {
+		doRotate(doGetRight(), distance);
+	}
+	
+	public void rotateUp(final float distance) {
+		doRotate(Y_AXIS, distance);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private void doMove(final Vector3F direction, final float distance) {
-		this.transform = this.transform.setPosition(Vector3F.add(this.transform.getPosition(), Vector3F.multiply(direction, distance)));
+		this.transform.setPosition(Point3F.add(this.transform.getPosition(), Vector3F.multiply(direction, distance)));
 	}
 	
 	private void doRotate(final Vector3F axis, final float angle) {
@@ -119,42 +95,34 @@ public final class Camera {
 		final float y = axis.y * sinHalfAngle;
 		final float z = axis.z * sinHalfAngle;
 		
-		this.transform = this.transform.rotate(new Quaternion4F(x, y, z, cosHalfAngle));
+		this.transform.rotate(new Quaternion4F(x, y, z, cosHalfAngle));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Vector3F doGetBack(final Quaternion4F q) {
-		return doRotate(q, new Vector3F(0.0F, 0.0F, -1.0F));
+	private Vector3F doGetBack() {
+		return Vector3F.rotate(this.transform.getRotation(), Vector3F.z(-1.0F));
 	}
 	
 	@SuppressWarnings("unused")
-	private static Vector3F doGetDown(final Quaternion4F q) {
-		return doRotate(q, new Vector3F(0.0F, -1.0F, 0.0F));
+	private Vector3F doGetDown() {
+		return Vector3F.rotate(this.transform.getRotation(), Vector3F.y(-1.0F));
 	}
 	
-	private static Vector3F doGetForward(final Quaternion4F q) {
-		return doRotate(q, new Vector3F(0.0F, 0.0F, 1.0F));
+	private Vector3F doGetForward() {
+		return Vector3F.rotate(this.transform.getRotation(), Vector3F.z(1.0F));
 	}
 	
-	private static Vector3F doGetLeft(final Quaternion4F q) {
-		return doRotate(q, new Vector3F(-1.0F, 0.0F, 0.0F));
+	private Vector3F doGetLeft() {
+		return Vector3F.rotate(this.transform.getRotation(), Vector3F.x(-1.0F));
 	}
 	
-	private static Vector3F doGetRight(final Quaternion4F q) {
-		return doRotate(q, new Vector3F(1.0F, 0.0F, 0.0F));
+	private Vector3F doGetRight() {
+		return Vector3F.rotate(this.transform.getRotation(), Vector3F.x(1.0F));
 	}
 	
 	@SuppressWarnings("unused")
-	private static Vector3F doGetUp(final Quaternion4F q) {
-		return doRotate(q, new Vector3F(0.0F, 1.0F, 0.0F));
-	}
-	
-	private static Vector3F doRotate(final Quaternion4F q, final Vector3F v) {
-		final Quaternion4F q0 = Quaternion4F.conjugate(q);
-		final Quaternion4F q1 = Quaternion4F.multiply(q, v);
-		final Quaternion4F q2 = Quaternion4F.multiply(q1, q0);
-		
-		return new Vector3F(q2.x, q2.y, q2.z);
+	private Vector3F doGetUp() {
+		return Vector3F.rotate(this.transform.getRotation(), Vector3F.y(1.0F));
 	}
 }

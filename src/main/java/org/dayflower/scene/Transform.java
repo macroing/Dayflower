@@ -342,6 +342,19 @@ public final class Transform implements Node {
 	}
 	
 	/**
+	 * Rotates this {@code Transform} instance to look at {@code point}.
+	 * <p>
+	 * If either {@code point} or {@code up} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point the {@link Point3F} instance to look at
+	 * @param up the {@link Vector3F} instance that denoted up
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code up} are {@code null}
+	 */
+	public void lookAt(final Point3F point, final Vector3F up) {
+		rotate(Quaternion4F.from(Matrix44F.rotate(up, Vector3F.directionNormalized(this.position, point))));
+	}
+	
+	/**
 	 * Moves the position associated with this {@code Transform} instance along the X-axis with a distance of {@code distance}.
 	 * 
 	 * @param distance the distance to move along the X-axis

@@ -1119,6 +1119,25 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Vector3D} instance that represents {@code v} rotated by {@code q}.
+	 * <p>
+	 * If either {@code q} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param q a {@link Quaternion4D} instance
+	 * @param v a {@code Vector3D} instance
+	 * @return a {@code Vector3D} instance that represents {@code v} rotated by {@code q}
+	 * @throws NullPointerException thrown if, and only if, either {@code q} or {@code v} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Vector3D rotate(final Quaternion4D q, final Vector3D v) {
+		final Quaternion4D q0 = Quaternion4D.conjugate(q);
+		final Quaternion4D q1 = Quaternion4D.multiply(q, v);
+		final Quaternion4D q2 = Quaternion4D.multiply(q1, q0);
+		
+		return new Vector3D(q2.x, q2.y, q2.z);
+	}
+	
+	/**
 	 * Subtracts the component values of {@code vRHS} from the component values of {@code vLHS}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the subtraction.

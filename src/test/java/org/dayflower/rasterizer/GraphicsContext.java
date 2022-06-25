@@ -25,10 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Point4F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
+import org.dayflower.utility.Floats;
 
 public final class GraphicsContext extends Bitmap {
 	private final Matrix44F identity;
@@ -64,7 +66,7 @@ public final class GraphicsContext extends Bitmap {
 			return;
 		}
 		
-		final List<Vertex3F> vertices0 = new ArrayList<>();
+		final List<Vertex3F> vertices0 = new ArrayList<>(3);
 		final List<Vertex3F> vertices1 = new ArrayList<>();
 		
 		vertices0.add(a);
@@ -80,11 +82,11 @@ public final class GraphicsContext extends Bitmap {
 		}
 	}
 	
-	public void drawTriangleMesh(final TriangleMesh3F triangleMesh, final Matrix44F viewProjection, final Matrix44F model, final Bitmap bitmap) {
+	public void drawTriangleMesh(final TriangleMesh3F triangleMesh, final Matrix44F viewProjection, final Matrix44F model, final Matrix44F modelInverse, final Bitmap bitmap) {
 		final Matrix44F modelViewProjection = Matrix44F.multiply(viewProjection, model);
 		
 		for(final Triangle3F triangle : triangleMesh.getTriangles()) {
-			drawTriangle(Triangle3F.transform(triangle, modelViewProjection, model), bitmap);
+			drawTriangle(Triangle3F.transform(triangle, modelViewProjection, modelInverse), bitmap);
 		}
 	}
 	
@@ -98,15 +100,15 @@ public final class GraphicsContext extends Bitmap {
 		
 		final float depthXStep = gradients.getDepthXStep();
 		final float lightIntensityXStep = gradients.getLightIntensityXStep();
-		final float oneOverZXStep = gradients.getOneOverZXStep();
 		final float textureCoordinateXXStep = gradients.getTextureCoordinateXXStep();
 		final float textureCoordinateYXStep = gradients.getTextureCoordinateYXStep();
+		final float zReciprocalXStep = gradients.getZReciprocalXStep();
 		
 		float depth = left.getDepth() + depthXStep * xPrestep;
 		float lightIntensity = left.getLightIntensity() + lightIntensityXStep * xPrestep;
-		float oneOverZ = left.getOneOverZ() + oneOverZXStep * xPrestep;
 		float textureCoordinateX = left.getTextureCoordinateX() + textureCoordinateXXStep * xPrestep;
 		float textureCoordinateY = left.getTextureCoordinateY() + textureCoordinateYXStep * xPrestep;
+		float zReciprocal = left.getZReciprocal() + zReciprocalXStep * xPrestep;
 		
 		for(int i = xMinimum; i < xMaximum; i++) {
 			final int index = i + j * getWidth();
@@ -114,7 +116,7 @@ public final class GraphicsContext extends Bitmap {
 			if(depth < this.zBuffer[index]) {
 				this.zBuffer[index] = depth;
 				
-				final float z = 1.0F / oneOverZ;
+				final float z = 1.0F / zReciprocal;
 				
 				final int sourceX = (int)((textureCoordinateX * z) * (bitmap.getWidth() - 1) + 0.5F);
 				final int sourceY = (int)((textureCoordinateY * z) * (bitmap.getHeight() - 1) + 0.5F);
@@ -124,9 +126,9 @@ public final class GraphicsContext extends Bitmap {
 			
 			depth += depthXStep;
 			lightIntensity += lightIntensityXStep;
-			oneOverZ += oneOverZXStep;
 			textureCoordinateX += textureCoordinateXXStep;
 			textureCoordinateY += textureCoordinateYXStep;
+			zReciprocal += zReciprocalXStep;
 		}
 	}
 	
@@ -222,11 +224,15 @@ public final class GraphicsContext extends Bitmap {
 	}
 	
 	private static float doComputeTriangleAreaMultipliedByTwo(final Vertex3F a, final Vertex3F b, final Vertex3F c) {
-		final float x1 = b.getPosition().x - a.getPosition().x;
-		final float y1 = b.getPosition().y - a.getPosition().y;
+		final Point4F aP = a.getPosition();
+		final Point4F bP = b.getPosition();
+		final Point4F cP = c.getPosition();
 		
-		final float x2 = c.getPosition().x - a.getPosition().x;
-		final float y2 = c.getPosition().y - a.getPosition().y;
+		final float x1 = bP.x - aP.x;
+		final float y1 = bP.y - aP.y;
+		
+		final float x2 = cP.x - aP.x;
+		final float y2 = cP.y - aP.y;
 		
 		return x1 * y2 - x2 * y1;
 	}
@@ -234,17 +240,21 @@ public final class GraphicsContext extends Bitmap {
 	private static void doClipPolygonComponent(final List<Vertex3F> vertices, final int componentIndex, final float componentFactor, final List<Vertex3F> result) {
 		Vertex3F previousVertex = vertices.get(vertices.size() - 1);
 		
-		float previousComponent = previousVertex.getPosition().getComponent(componentIndex) * componentFactor;
+		Point4F previousPosition = previousVertex.getPosition();
 		
-		boolean previousInside = previousComponent <= previousVertex.getPosition().w;
+		float previousComponent = previousPosition.getComponent(componentIndex) * componentFactor;
+		
+		boolean previousInside = previousComponent <= previousPosition.w;
 		
 		for(final Vertex3F currentVertex : vertices) {
-			float currentComponent = currentVertex.getPosition().getComponent(componentIndex) * componentFactor;
+			final Point4F currentPosition = currentVertex.getPosition();
 			
-			final boolean currentInside = currentComponent <= currentVertex.getPosition().w;
+			final float currentComponent = currentPosition.getComponent(componentIndex) * componentFactor;
+			
+			final boolean currentInside = currentComponent <= currentPosition.w;
 			
 			if(currentInside ^ previousInside) {
-				final float fraction = (previousVertex.getPosition().w - previousComponent) / ((previousVertex.getPosition().w - previousComponent) - (currentVertex.getPosition().w - currentComponent));
+				final float fraction = (previousPosition.w - previousComponent) / ((previousPosition.w - previousComponent) - (currentPosition.w - currentComponent));
 				
 				result.add(Vertex3F.lerp(previousVertex, currentVertex, fraction));
 			}
@@ -254,6 +264,7 @@ public final class GraphicsContext extends Bitmap {
 			}
 			
 			previousVertex = currentVertex;
+			previousPosition = currentPosition;
 			previousComponent = currentComponent;
 			previousInside = currentInside;
 		}
@@ -266,32 +277,35 @@ public final class GraphicsContext extends Bitmap {
 		private float depthStep;
 		private float lightIntensity;
 		private float lightIntensityStep;
-		private float oneOverZ;
-		private float oneOverZStep;
 		private float textureCoordinateX;
 		private float textureCoordinateXStep;
 		private float textureCoordinateY;
 		private float textureCoordinateYStep;
 		private float x;
 		private float xStep;
+		private float zReciprocal;
+		private float zReciprocalStep;
 		private int yEnd;
 		private int yStart;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public Edge(final Gradients gradients, final Vertex3F minimumY, final Vertex3F maximumY, final int minimumYIndex) {
-			this.yStart = toInt(ceil(minimumY.getPosition().y));
-			this.yEnd = toInt(ceil(maximumY.getPosition().y));
+		public Edge(final Gradients gradients, final Vertex3F a, final Vertex3F b, final int minimumYIndex) {
+			final Point4F aP = a.getPosition();
+			final Point4F bP = b.getPosition();
 			
-			final float xDistance = maximumY.getPosition().x - minimumY.getPosition().x;
-			final float yDistance = maximumY.getPosition().y - minimumY.getPosition().y;
+			this.yStart = toInt(ceil(aP.y));
+			this.yEnd = toInt(ceil(bP.y));
 			
-			final float yPrestep = this.yStart - minimumY.getPosition().y;
+			final float xDistance = bP.x - aP.x;
+			final float yDistance = bP.y - aP.y;
+			
+			final float yPrestep = this.yStart - aP.y;
 			
 			this.xStep = xDistance / yDistance;
-			this.x = minimumY.getPosition().x + yPrestep * this.xStep;
+			this.x = aP.x + yPrestep * this.xStep;
 			
-			final float xPrestep = this.x - minimumY.getPosition().x;
+			final float xPrestep = this.x - aP.x;
 			
 			this.textureCoordinateX = gradients.getTextureCoordinateX(minimumYIndex) + gradients.getTextureCoordinateXXStep() * xPrestep + gradients.getTextureCoordinateXYStep() * yPrestep;
 			this.textureCoordinateXStep = gradients.getTextureCoordinateXYStep() + gradients.getTextureCoordinateXXStep() * this.xStep;
@@ -299,8 +313,8 @@ public final class GraphicsContext extends Bitmap {
 			this.textureCoordinateY = gradients.getTextureCoordinateY(minimumYIndex) + gradients.getTextureCoordinateYXStep() * xPrestep + gradients.getTextureCoordinateYYStep() * yPrestep;
 			this.textureCoordinateYStep = gradients.getTextureCoordinateYYStep() + gradients.getTextureCoordinateYXStep() * this.xStep;
 			
-			this.oneOverZ = gradients.getOneOverZ(minimumYIndex) + gradients.getOneOverZXStep() * xPrestep + gradients.getOneOverZYStep() * yPrestep;
-			this.oneOverZStep = gradients.getOneOverZYStep() + gradients.getOneOverZXStep() * this.xStep;
+			this.zReciprocal = gradients.getZReciprocal(minimumYIndex) + gradients.getZReciprocalXStep() * xPrestep + gradients.getZReciprocalYStep() * yPrestep;
+			this.zReciprocalStep = gradients.getZReciprocalYStep() + gradients.getZReciprocalXStep() * this.xStep;
 			
 			this.depth = gradients.getDepth(minimumYIndex) + gradients.getDepthXStep() * xPrestep + gradients.getDepthYStep() * yPrestep;
 			this.depthStep = gradients.getDepthYStep() + gradients.getDepthXStep() * this.xStep;
@@ -319,10 +333,6 @@ public final class GraphicsContext extends Bitmap {
 			return this.lightIntensity;
 		}
 		
-		public float getOneOverZ() {
-			return this.oneOverZ;
-		}
-		
 		public float getTextureCoordinateX() {
 			return this.textureCoordinateX;
 		}
@@ -333,6 +343,10 @@ public final class GraphicsContext extends Bitmap {
 		
 		public float getX() {
 			return this.x;
+		}
+		
+		public float getZReciprocal() {
+			return this.zReciprocal;
 		}
 		
 		public int getYEnd() {
@@ -346,70 +360,76 @@ public final class GraphicsContext extends Bitmap {
 		public void step() {
 			this.depth += this.depthStep;
 			this.lightIntensity += this.lightIntensityStep;
-			this.oneOverZ += this.oneOverZStep;
 			this.textureCoordinateX += this.textureCoordinateXStep;
 			this.textureCoordinateY += this.textureCoordinateYStep;
 			this.x += this.xStep;
+			this.zReciprocal += this.zReciprocalStep;
 		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class Gradients {
+		private static final Vector3F LIGHT_DIRECTION = Vector3F.normalize(new Vector3F(0.0F, 0.0F, 1.0F));
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 		private final float depthXStep;
 		private final float depthYStep;
 		private final float lightIntensityXStep;
 		private final float lightIntensityYStep;
-		private final float oneOverZXStep;
-		private final float oneOverZYStep;
 		private final float textureCoordinateXXStep;
 		private final float textureCoordinateXYStep;
 		private final float textureCoordinateYXStep;
 		private final float textureCoordinateYYStep;
+		private final float zReciprocalXStep;
+		private final float zReciprocalYStep;
 		private final float[] depth = new float[3];
 		private final float[] lightIntensity = new float[3];
-		private final float[] oneOverZ = new float[3];
 		private final float[] textureCoordinateX = new float[3];
 		private final float[] textureCoordinateY = new float[3];
+		private final float[] zReciprocals = new float[3];
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public Gradients(final Vertex3F minimumY, final Vertex3F middleY, final Vertex3F maximumY) {
-			final float oneOverDX = 1.0F / (((middleY.getPosition().x - maximumY.getPosition().x) * (minimumY.getPosition().y - maximumY.getPosition().y)) - ((minimumY.getPosition().x - maximumY.getPosition().x) * (middleY.getPosition().y - maximumY.getPosition().y)));
-			final float oneOverDY = -oneOverDX;
+		public Gradients(final Vertex3F a, final Vertex3F b, final Vertex3F c) {
+			final Point4F aP = a.getPosition();
+			final Point4F bP = b.getPosition();
+			final Point4F cP = c.getPosition();
 			
-			this.depth[0] = minimumY.getPosition().z;
-			this.depth[1] = middleY.getPosition().z;
-			this.depth[2] = maximumY.getPosition().z;
+			final float dXReciprocal = 1.0F / (((bP.x - cP.x) * (aP.y - cP.y)) - ((aP.x - cP.x) * (bP.y - cP.y)));
+			final float dYReciprocal = -dXReciprocal;
 			
-			final Vector3F lightDirection = Vector3F.normalize(new Vector3F(0.0F, 3.0F, -1.0F));
+			this.depth[0] = aP.z;
+			this.depth[1] = bP.z;
+			this.depth[2] = cP.z;
 			
-			this.lightIntensity[0] = doSaturate(Vector3F.dotProduct(minimumY.getNormal(), lightDirection)) * 0.9F + 0.1F;
-			this.lightIntensity[1] = doSaturate(Vector3F.dotProduct(middleY.getNormal(), lightDirection)) * 0.9F + 0.1F;
-			this.lightIntensity[2] = doSaturate(Vector3F.dotProduct(maximumY.getNormal(), lightDirection)) * 0.9F + 0.1F;
+			this.lightIntensity[0] = Floats.saturate(Vector3F.dotProduct(a.getNormal(), LIGHT_DIRECTION)) * 0.9F + 0.1F;
+			this.lightIntensity[1] = Floats.saturate(Vector3F.dotProduct(b.getNormal(), LIGHT_DIRECTION)) * 0.9F + 0.1F;
+			this.lightIntensity[2] = Floats.saturate(Vector3F.dotProduct(c.getNormal(), LIGHT_DIRECTION)) * 0.9F + 0.1F;
 			
-			this.oneOverZ[0] = 1.0F / minimumY.getPosition().w;
-			this.oneOverZ[1] = 1.0F / middleY.getPosition().w;
-			this.oneOverZ[2] = 1.0F / maximumY.getPosition().w;
+			this.zReciprocals[0] = 1.0F / aP.w;
+			this.zReciprocals[1] = 1.0F / bP.w;
+			this.zReciprocals[2] = 1.0F / cP.w;
 			
-			this.textureCoordinateX[0] = minimumY.getTextureCoordinates().x * this.oneOverZ[0];
-			this.textureCoordinateX[1] = middleY.getTextureCoordinates().x * this.oneOverZ[1];
-			this.textureCoordinateX[2] = maximumY.getTextureCoordinates().x * this.oneOverZ[2];
+			this.textureCoordinateX[0] = a.getTextureCoordinates().x * this.zReciprocals[0];
+			this.textureCoordinateX[1] = b.getTextureCoordinates().x * this.zReciprocals[1];
+			this.textureCoordinateX[2] = c.getTextureCoordinates().x * this.zReciprocals[2];
 			
-			this.textureCoordinateY[0] = minimumY.getTextureCoordinates().y * this.oneOverZ[0];
-			this.textureCoordinateY[1] = middleY.getTextureCoordinates().y * this.oneOverZ[1];
-			this.textureCoordinateY[2] = maximumY.getTextureCoordinates().y * this.oneOverZ[2];
+			this.textureCoordinateY[0] = a.getTextureCoordinates().y * this.zReciprocals[0];
+			this.textureCoordinateY[1] = b.getTextureCoordinates().y * this.zReciprocals[1];
+			this.textureCoordinateY[2] = c.getTextureCoordinates().y * this.zReciprocals[2];
 			
-			this.textureCoordinateXXStep = doCalculateXStep(this.textureCoordinateX, minimumY, middleY, maximumY, oneOverDX);
-			this.textureCoordinateXYStep = doCalculateYStep(this.textureCoordinateX, minimumY, middleY, maximumY, oneOverDY);
-			this.textureCoordinateYXStep = doCalculateXStep(this.textureCoordinateY, minimumY, middleY, maximumY, oneOverDX);
-			this.textureCoordinateYYStep = doCalculateYStep(this.textureCoordinateY, minimumY, middleY, maximumY, oneOverDY);
-			this.oneOverZXStep = doCalculateXStep(this.oneOverZ, minimumY, middleY, maximumY, oneOverDX);
-			this.oneOverZYStep = doCalculateYStep(this.oneOverZ, minimumY, middleY, maximumY, oneOverDY);
-			this.depthXStep = doCalculateXStep(this.depth, minimumY, middleY, maximumY, oneOverDX);
-			this.depthYStep = doCalculateYStep(this.depth, minimumY, middleY, maximumY, oneOverDY);
-			this.lightIntensityXStep = doCalculateXStep(this.lightIntensity, minimumY, middleY, maximumY, oneOverDX);
-			this.lightIntensityYStep = doCalculateYStep(this.lightIntensity, minimumY, middleY, maximumY, oneOverDY);
+			this.textureCoordinateXXStep = doCalculateXStep(this.textureCoordinateX, aP, bP, cP, dXReciprocal);
+			this.textureCoordinateXYStep = doCalculateYStep(this.textureCoordinateX, aP, bP, cP, dYReciprocal);
+			this.textureCoordinateYXStep = doCalculateXStep(this.textureCoordinateY, aP, bP, cP, dXReciprocal);
+			this.textureCoordinateYYStep = doCalculateYStep(this.textureCoordinateY, aP, bP, cP, dYReciprocal);
+			this.zReciprocalXStep = doCalculateXStep(this.zReciprocals, aP, bP, cP, dXReciprocal);
+			this.zReciprocalYStep = doCalculateYStep(this.zReciprocals, aP, bP, cP, dYReciprocal);
+			this.depthXStep = doCalculateXStep(this.depth, aP, bP, cP, dXReciprocal);
+			this.depthYStep = doCalculateYStep(this.depth, aP, bP, cP, dYReciprocal);
+			this.lightIntensityXStep = doCalculateXStep(this.lightIntensity, aP, bP, cP, dXReciprocal);
+			this.lightIntensityYStep = doCalculateYStep(this.lightIntensity, aP, bP, cP, dYReciprocal);
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -438,18 +458,6 @@ public final class GraphicsContext extends Bitmap {
 			return this.lightIntensityYStep;
 		}
 		
-		public float getOneOverZ(final int index) {
-			return this.oneOverZ[index];
-		}
-		
-		public float getOneOverZXStep() {
-			return this.oneOverZXStep;
-		}
-		
-		public float getOneOverZYStep() {
-			return this.oneOverZYStep;
-		}
-		
 		public float getTextureCoordinateX(final int index) {
 			return this.textureCoordinateX[index];
 		}
@@ -474,18 +482,26 @@ public final class GraphicsContext extends Bitmap {
 			return this.textureCoordinateYYStep;
 		}
 		
+		public float getZReciprocal(final int index) {
+			return this.zReciprocals[index];
+		}
+		
+		public float getZReciprocalXStep() {
+			return this.zReciprocalXStep;
+		}
+		
+		public float getZReciprocalYStep() {
+			return this.zReciprocalYStep;
+		}
+		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		private static float doCalculateXStep(final float[] values, final Vertex3F minimumY, final Vertex3F middleY, final Vertex3F maximumY, final float oneOverDX) {
-			return (((values[1] - values[2]) * (minimumY.getPosition().y - maximumY.getPosition().y)) - ((values[0] - values[2]) * (middleY.getPosition().y - maximumY.getPosition().y))) * oneOverDX;
+		private static float doCalculateXStep(final float[] values, final Point4F a, final Point4F b, final Point4F c, final float dXReciprocal) {
+			return (((values[1] - values[2]) * (a.y - c.y)) - ((values[0] - values[2]) * (b.y - c.y))) * dXReciprocal;
 		}
 		
-		private static float doCalculateYStep(final float[] values, final Vertex3F minimumY, final Vertex3F middleY, final Vertex3F maximumY, final float oneOverDY) {
-			return (((values[1] - values[2]) * (minimumY.getPosition().x - maximumY.getPosition().x)) - ((values[0] - values[2]) * (middleY.getPosition().x - maximumY.getPosition().x))) * oneOverDY;
-		}
-		
-		public static float doSaturate(final float value) {
-			return value < 0.0F ? 0.0F : value > 1.0F ? 1.0F : value;
+		private static float doCalculateYStep(final float[] values, final Point4F a, final Point4F b, final Point4F c, final float dYReciprocal) {
+			return (((values[1] - values[2]) * (a.x - c.x)) - ((values[0] - values[2]) * (b.x - c.x))) * dYReciprocal;
 		}
 	}
 }

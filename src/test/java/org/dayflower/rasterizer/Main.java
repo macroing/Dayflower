@@ -51,7 +51,7 @@ public final class Main {
 		final Bitmap bitmapMonkey = new Bitmap("./resources/textures/Texture_8.jpg");
 		final Bitmap bitmapTerrain = new Bitmap("./resources/textures/Texture_2.png");
 		
-		final TriangleMesh3F meshMonkey = TriangleMesh3F.readWavefrontObject("./resources/models/monkey0.obj").get(0);
+		final TriangleMesh3F meshMonkey = TriangleMesh3F.readWavefrontObject("./resources/models/smoothMonkey2.obj").get(0);
 		final TriangleMesh3F meshTerrain = TriangleMesh3F.readWavefrontObject("./resources/models/terrain2.obj").get(0);
 		
 		Transform transformMonkey = new Transform(new Point3F(0.0F, 1.0F, 3.0F));
@@ -86,8 +86,8 @@ public final class Main {
 				
 				graphicsContext.clear(BLACK);
 				graphicsContext.clearZBuffer();
-				graphicsContext.drawTriangleMesh(meshMonkey, viewProjection, transformMonkey.getObjectToWorld(), bitmapMonkey);
-				graphicsContext.drawTriangleMesh(meshTerrain, viewProjection, transformTerrain.getObjectToWorld(), bitmapTerrain);
+				graphicsContext.drawTriangleMesh(meshMonkey, viewProjection, transformMonkey.getObjectToWorld(), transformMonkey.getWorldToObject(), bitmapMonkey);
+				graphicsContext.drawTriangleMesh(meshTerrain, viewProjection, transformTerrain.getObjectToWorld(), transformTerrain.getWorldToObject(), bitmapTerrain);
 				
 				display.swapBuffers();
 				

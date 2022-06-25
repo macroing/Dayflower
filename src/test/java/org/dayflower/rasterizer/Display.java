@@ -46,7 +46,7 @@ public final class Display extends Canvas {
 	private final BufferedImage bufferedImage;
 	private final BufferStrategy bufferStrategy;
 	private final byte[] components;
-	private final Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage(""), new Point(0, 0), "invisible");
+	private final Cursor cursor;
 	private final Graphics graphics;
 	private final GraphicsContext graphicsContext;
 	private final Input input;
@@ -55,6 +55,8 @@ public final class Display extends Canvas {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public Display(final String title) {
+		this.cursor = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage(""), new Point(0, 0), "invisible");
+		
 		this.jFrame = new JFrame();
 		
 		final Rectangle bounds = getMaximumBoundsFor(this.jFrame, true);

@@ -284,6 +284,19 @@ public final class DoublesUnitTests {
 	}
 	
 	@Test
+	public void testPositiveModulo() {
+		assertEquals(-0.0D, Doubles.positiveModulo(-2.0D, -1.0D));
+		assertEquals(-2.0D, Doubles.positiveModulo(-2.0D, -3.0D));
+		
+		assertEquals(+0.0D, Doubles.positiveModulo(-2.0D, +1.0D));
+		
+		assertEquals(+0.0D, Doubles.positiveModulo(+2.0D, -1.0D));
+		
+		assertEquals(+0.0D, Doubles.positiveModulo(+2.0D, +1.0D));
+		assertEquals(+2.0D, Doubles.positiveModulo(+2.0D, +3.0D));
+	}
+	
+	@Test
 	public void testPow() {
 		assertEquals(Math.pow(2.0D, 2.0D), Doubles.pow(2.0D, 2.0D));
 	}

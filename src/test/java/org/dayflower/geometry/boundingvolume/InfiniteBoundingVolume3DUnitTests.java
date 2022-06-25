@@ -28,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.UncheckedIOException;
 
 import org.dayflower.geometry.Matrix44D;
@@ -244,5 +245,37 @@ public final class InfiniteBoundingVolume3DUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> a.write((DataOutput)(null)));
 		assertThrows(UncheckedIOException.class, () -> a.write(new DataOutputMock()));
+	}
+	
+	@Test
+	public void testWriteFile() {
+		final File directory = new File("./generated/unit-tests");
+		
+		if(!directory.isDirectory()) {
+			directory.mkdirs();
+		}
+		
+		final
+		InfiniteBoundingVolume3D infiniteBoundingVolume3D = new InfiniteBoundingVolume3D();
+		infiniteBoundingVolume3D.write(new File("./generated/unit-tests/InfiniteBoundingVolume3D"));
+		
+		assertThrows(NullPointerException.class, () -> infiniteBoundingVolume3D.write((File)(null)));
+		assertThrows(UncheckedIOException.class, () -> infiniteBoundingVolume3D.write(new File("./generated/unit-tests/non-existing-directory/InfiniteBoundingVolume3D")));
+	}
+	
+	@Test
+	public void testWriteString() {
+		final File directory = new File("./generated/unit-tests");
+		
+		if(!directory.isDirectory()) {
+			directory.mkdirs();
+		}
+		
+		final
+		InfiniteBoundingVolume3D infiniteBoundingVolume3D = new InfiniteBoundingVolume3D();
+		infiniteBoundingVolume3D.write("./generated/unit-tests/InfiniteBoundingVolume3D");
+		
+		assertThrows(NullPointerException.class, () -> infiniteBoundingVolume3D.write((String)(null)));
+		assertThrows(UncheckedIOException.class, () -> infiniteBoundingVolume3D.write("./generated/unit-tests/non-existing-directory/InfiniteBoundingVolume3D"));
 	}
 }

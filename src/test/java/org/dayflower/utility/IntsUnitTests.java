@@ -130,6 +130,19 @@ public final class IntsUnitTests {
 	}
 	
 	@Test
+	public void testPositiveModulo() {
+		assertEquals(-0, Ints.positiveModulo(-2, -1));
+		assertEquals(-2, Ints.positiveModulo(-2, -3));
+		
+		assertEquals(+0, Ints.positiveModulo(-2, +1));
+		
+		assertEquals(+0, Ints.positiveModulo(+2, -1));
+		
+		assertEquals(+0, Ints.positiveModulo(+2, +1));
+		assertEquals(+2, Ints.positiveModulo(+2, +3));
+	}
+	
+	@Test
 	public void testReverseBits() {
 		final int a = 1234;
 		final int b = Ints.reverseBits(a);

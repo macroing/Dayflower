@@ -29,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.UncheckedIOException;
 
 import org.dayflower.geometry.Matrix44F;
@@ -370,5 +371,37 @@ public final class BoundingSphere3FUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> a.write((DataOutput)(null)));
 		assertThrows(UncheckedIOException.class, () -> a.write(new DataOutputMock()));
+	}
+	
+	@Test
+	public void testWriteFile() {
+		final File directory = new File("./generated/unit-tests");
+		
+		if(!directory.isDirectory()) {
+			directory.mkdirs();
+		}
+		
+		final
+		BoundingSphere3F boundingSphere3F = new BoundingSphere3F(2.0F, new Point3F(2.0F, 2.0F, 2.0F));
+		boundingSphere3F.write(new File("./generated/unit-tests/BoundingSphere3F"));
+		
+		assertThrows(NullPointerException.class, () -> boundingSphere3F.write((File)(null)));
+		assertThrows(UncheckedIOException.class, () -> boundingSphere3F.write(new File("./generated/unit-tests/non-existing-directory/BoundingSphere3F")));
+	}
+	
+	@Test
+	public void testWriteString() {
+		final File directory = new File("./generated/unit-tests");
+		
+		if(!directory.isDirectory()) {
+			directory.mkdirs();
+		}
+		
+		final
+		BoundingSphere3F boundingSphere3F = new BoundingSphere3F(2.0F, new Point3F(2.0F, 2.0F, 2.0F));
+		boundingSphere3F.write("./generated/unit-tests/BoundingSphere3F");
+		
+		assertThrows(NullPointerException.class, () -> boundingSphere3F.write((String)(null)));
+		assertThrows(UncheckedIOException.class, () -> boundingSphere3F.write("./generated/unit-tests/non-existing-directory/BoundingSphere3F"));
 	}
 }

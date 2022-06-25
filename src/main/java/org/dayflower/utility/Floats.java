@@ -832,7 +832,6 @@ public final class Floats {
 	 * @param y a {@code float} value
 	 * @return a {@code float} value
 	 */
-//	TODO: Add Unit Tests!
 	public static float positiveModulo(final float x, final float y) {
 		return x < 0.0F ? (x % y + y) % y : x % y;
 	}

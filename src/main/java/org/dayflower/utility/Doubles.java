@@ -831,7 +831,6 @@ public class Doubles {
 	 * @param y a {@code double} value
 	 * @return a {@code double} value
 	 */
-//	TODO: Add Unit Tests!
 	public static double positiveModulo(final double x, final double y) {
 		return x < 0.0D ? (x % y + y) % y : x % y;
 	}

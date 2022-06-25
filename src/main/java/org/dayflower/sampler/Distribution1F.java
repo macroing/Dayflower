@@ -21,12 +21,12 @@ package org.dayflower.sampler;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.toFloat;
-import static org.dayflower.utility.Ints.findInterval;
 import static org.dayflower.utility.Ints.saturate;
 import static org.dayflower.utility.Ints.toInt;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.IntPredicate;
 
 import org.dayflower.utility.ParameterArguments;
 
@@ -294,7 +294,7 @@ public final class Distribution1F {
 	 * @return the index of the closest value to {@code value} in the cumulative distribution function (CDF)
 	 */
 	public int index(final float value) {
-		return findInterval(this.cumulativeDistributionFunction.length, currentIndex -> cumulativeDistributionFunction(currentIndex) <= value);
+		return doFindInterval(this.cumulativeDistributionFunction.length, currentIndex -> cumulativeDistributionFunction(currentIndex) <= value);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -569,6 +569,31 @@ public final class Distribution1F {
 			int currentMiddle = currentMinimum + currentHalf;
 			
 			if(cumulativeDistributionFunction(array, offset, currentMiddle) <= value) {
+				currentMinimum = currentMiddle + 1;
+				currentLength -= currentHalf + 1;
+			} else {
+				currentLength = currentHalf;
+			}
+		}
+		
+		return saturate(currentMinimum - 1, 0, length - 2);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static int doFindInterval(final int length, final IntPredicate intPredicate) {
+		ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length");
+		
+		Objects.requireNonNull(intPredicate, "intPredicate == null");
+		
+		int currentMinimum = 0;
+		int currentLength = length;
+		
+		while(currentLength > 0) {
+			int currentHalf = currentLength >> 1;
+			int currentMiddle = currentMinimum + currentHalf;
+			
+			if(intPredicate.test(currentMiddle)) {
 				currentMinimum = currentMiddle + 1;
 				currentLength -= currentHalf + 1;
 			} else {

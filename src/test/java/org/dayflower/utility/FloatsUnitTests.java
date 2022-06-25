@@ -284,6 +284,19 @@ public final class FloatsUnitTests {
 	}
 	
 	@Test
+	public void testPositiveModulo() {
+		assertEquals(-0.0F, Floats.positiveModulo(-2.0F, -1.0F));
+		assertEquals(-2.0F, Floats.positiveModulo(-2.0F, -3.0F));
+		
+		assertEquals(+0.0F, Floats.positiveModulo(-2.0F, +1.0F));
+		
+		assertEquals(+0.0F, Floats.positiveModulo(+2.0F, -1.0F));
+		
+		assertEquals(+0.0F, Floats.positiveModulo(+2.0F, +1.0F));
+		assertEquals(+2.0F, Floats.positiveModulo(+2.0F, +3.0F));
+	}
+	
+	@Test
 	public void testPow() {
 		assertEquals((float)(Math.pow(2.0F, 2.0F)), Floats.pow(2.0F, 2.0F));
 	}

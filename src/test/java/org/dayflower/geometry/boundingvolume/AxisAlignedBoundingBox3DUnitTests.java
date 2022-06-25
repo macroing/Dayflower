@@ -29,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.UncheckedIOException;
 
 import org.dayflower.geometry.BoundingVolume3D;
@@ -369,5 +370,37 @@ public final class AxisAlignedBoundingBox3DUnitTests {
 		
 		assertThrows(NullPointerException.class, () -> a.write((DataOutput)(null)));
 		assertThrows(UncheckedIOException.class, () -> a.write(new DataOutputMock()));
+	}
+	
+	@Test
+	public void testWriteFile() {
+		final File directory = new File("./generated/unit-tests");
+		
+		if(!directory.isDirectory()) {
+			directory.mkdirs();
+		}
+		
+		final
+		AxisAlignedBoundingBox3D axisAlignedBoundingBox3D = new AxisAlignedBoundingBox3D(new Point3D(-1.0D, -1.0D, -1.0D), new Point3D(+1.0D, +1.0D, +1.0D));
+		axisAlignedBoundingBox3D.write(new File("./generated/unit-tests/AxisAlignedBoundingBox3D"));
+		
+		assertThrows(NullPointerException.class, () -> axisAlignedBoundingBox3D.write((File)(null)));
+		assertThrows(UncheckedIOException.class, () -> axisAlignedBoundingBox3D.write(new File("./generated/unit-tests/non-existing-directory/AxisAlignedBoundingBox3D")));
+	}
+	
+	@Test
+	public void testWriteString() {
+		final File directory = new File("./generated/unit-tests");
+		
+		if(!directory.isDirectory()) {
+			directory.mkdirs();
+		}
+		
+		final
+		AxisAlignedBoundingBox3D axisAlignedBoundingBox3D = new AxisAlignedBoundingBox3D(new Point3D(-1.0D, -1.0D, -1.0D), new Point3D(+1.0D, +1.0D, +1.0D));
+		axisAlignedBoundingBox3D.write("./generated/unit-tests/AxisAlignedBoundingBox3D");
+		
+		assertThrows(NullPointerException.class, () -> axisAlignedBoundingBox3D.write((String)(null)));
+		assertThrows(UncheckedIOException.class, () -> axisAlignedBoundingBox3D.write("./generated/unit-tests/non-existing-directory/AxisAlignedBoundingBox3D"));
 	}
 }

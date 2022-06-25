@@ -1,3 +1,13 @@
+2022-06-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add unit tests to the DoublesUnitTests, FloatsUnitTests and IntsUnitTests classes.
+	* ADD:		Add unit tests to the AxisAlignedBoundingBox3DUnitTests, AxisAlignedBoundingBox3FUnitTests, BoundingSphere3DUnitTests, BoundingSphere3FUnitTests, InfiniteBoundingVolume3DUnitTests and InfiniteBoundingVolume3FUnitTests classes.
+	* ADD:		Add the NodeMockA and NodeMockB classes that implements Node.
+	* ADD:		Add the NodeFilterMock class that implements NodeFilter.
+	* ADD:		Add the NodeFilterUnitTests and NodeTraversalExceptionUnitTests classes.
+	* REMOVE:	Remove the method findInterval(int, IntPredicate) from the Ints class. The method has been moved to the Distribution1F class.
+	* REMOVE:	Remove the AbstractReflectiveNodeHierarchicalVisitor class.
+
 2022-05-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Refactor parts of the GPU-renderer.

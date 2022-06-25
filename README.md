@@ -171,11 +171,11 @@ The following table describes the different APIs and their current status in the
 
 | Name                                   | Javadoc | Unit Test |
 | -------------------------------------- | ------- | --------- |
-| Dayflower                              | 100.0%  |  26.3%    |
+| Dayflower                              | 100.0%  |  26.5%    |
 | Change API                             | 100.0%  | 100.0%    |
 | Color API                              | 100.0%  |  83.8%    |
 | Filter API                             | 100.0%  | 100.0%    |
-| Geometry API                           | 100.0%  |  78.1%    |
+| Geometry API                           | 100.0%  |  78.2%    |
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |
@@ -186,7 +186,7 @@ The following table describes the different APIs and their current status in the
 | JavaFX Scene Control API               | 100.0%  |   0.0%    |
 | JavaFX Scene Image API                 | 100.0%  | 100.0%    |
 | JavaFX Scene Layout API                | 100.0%  |   0.0%    |
-| Node API                               | 100.0%  |   5.5%    |
+| Node API                               | 100.0%  |  67.2%    |
 | Noise API                              | 100.0%  |   0.0%    |
 | Parameter API                          | 100.0%  |   0.0%    |
 | Renderer API                           | 100.0%  |   0.0%    |
@@ -198,7 +198,6 @@ The following table describes the different APIs and their current status in the
 | Scene BSSRDF API                       | 100.0%  |   0.0%    |
 | Scene BXDF API                         | 100.0%  |   0.0%    |
 | Scene Compiler API                     | 100.0%  |   0.0%    |
-| Scene Demo API                         | 100.0%  |   0.0%    |
 | Scene Fresnel API                      | 100.0%  |   0.0%    |
 | Scene Light API                        | 100.0%  |   0.0%    |
 | Scene Loader API                       | 100.0%  |   0.0%    |
@@ -206,7 +205,7 @@ The following table describes the different APIs and their current status in the
 | Scene Microfacet API                   | 100.0%  |   0.0%    |
 | Scene Modifier API                     | 100.0%  |   0.0%    |
 | Scene Texture API                      | 100.0%  |   0.0%    |
-| Utility API                            | 100.0%  |  74.9%    |
+| Utility API                            | 100.0%  |  75.9%    |
 | Wavefront Material API                 | 100.0%  |   0.0%    |
 | Wavefront Object API                   | 100.0%  |   0.0%    |
 

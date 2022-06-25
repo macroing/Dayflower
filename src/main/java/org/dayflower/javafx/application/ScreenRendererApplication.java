@@ -134,11 +134,9 @@ public final class ScreenRendererApplication extends Application {
 				final int y = (int)(boundsInScreen.getMinY());
 				final int width = (int)(boundsInScreen.getWidth());
 				final int height = (int)(boundsInScreen.getHeight());
-				long l0 = System.currentTimeMillis();
+				
 				final ImageF image = function.get().apply(IntImageF.createScreenCapture(new Rectangle2I(new Point2I(x - width, y), new Point2I(x, y + height))));
-				long l1 = System.currentTimeMillis();
-				long l2 = l1 - l0;
-				System.out.println(l2 + " millis");
+				
 				final WritableImage writableImage = image.toWritableImage();
 				
 				final

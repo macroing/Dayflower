@@ -18,6 +18,7 @@
  */
 package org.dayflower.node;
 
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ public final class NodeCache {
 	/**
 	 * Constructs a new empty {@code NodeCache} instance.
 	 */
+//	TODO: Add Unit Tests!
 	public NodeCache() {
 		this.cache = new HashMap<>();
 	}
@@ -54,6 +56,7 @@ public final class NodeCache {
 	 * @return a {@code List} with all {@code Node} instances in this {@code NodeCache} instance that are assignment compatible to {@code clazz}
 	 * @throws NullPointerException thrown if, and only if, {@code clazz} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public <T extends Node> List<T> getAll(final Class<T> clazz) {
 		Objects.requireNonNull(clazz, "clazz == null");
 		
@@ -76,6 +79,7 @@ public final class NodeCache {
 	 * @return a {@code List} with all distinct {@code Node} instances in this {@code NodeCache} instance that are assignment compatible to {@code clazz}
 	 * @throws NullPointerException thrown if, and only if, {@code clazz} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public <T extends Node> List<T> getAllDistinct(final Class<T> clazz) {
 		Objects.requireNonNull(clazz, "clazz == null");
 		
@@ -103,6 +107,7 @@ public final class NodeCache {
 	 * @param node the root {@link Node} to add
 	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void add(final Node node) {
 		add(node, NodeFilter.any());
 	}
@@ -116,6 +121,7 @@ public final class NodeCache {
 	 * @param nodeFilter a {@link NodeFilter} that determines whether a {@code Node} instance will be added or not
 	 * @throws NullPointerException thrown if, and only if, either {@code node} or {@code nodeFilter} are {@code null}
 	 */
+//	TODO: Add Unit Tests!
 	public void add(final Node node, final NodeFilter nodeFilter) {
 		Objects.requireNonNull(node, "node == null");
 		Objects.requireNonNull(nodeFilter, "nodeFilter == null");
@@ -126,6 +132,7 @@ public final class NodeCache {
 	/**
 	 * Clears this {@code NodeCache} instance.
 	 */
+//	TODO: Add Unit Tests!
 	public void clear() {
 		this.cache.clear();
 	}

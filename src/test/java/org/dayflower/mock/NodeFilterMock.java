@@ -16,45 +16,34 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.node;
+package org.dayflower.mock;
 
-import java.util.List;
 import java.util.Objects;
 
-final class NodeHierarchicalVisitorImpl <T extends Node> implements NodeHierarchicalVisitor {
-	private final Class<T> clazz;
-	private final List<T> list;
-	private final NodeFilter nodeFilter;
+import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
+
+public final class NodeFilterMock implements NodeFilter {
+	private final boolean isAccepted;
+	private final boolean isThrowingRuntimeException;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	NodeHierarchicalVisitorImpl(final NodeFilter nodeFilter, final List<T> list, final Class<T> clazz) {
-		this.nodeFilter = Objects.requireNonNull(nodeFilter, "nodeFilter == null");
-		this.list = Objects.requireNonNull(list, "list == null");
-		this.clazz = Objects.requireNonNull(clazz, "clazz == null");
+	public NodeFilterMock(final boolean isAccepted, final boolean isThrowingRuntimeException) {
+		this.isAccepted = isAccepted;
+		this.isThrowingRuntimeException = isThrowingRuntimeException;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
-	public boolean visitEnter(final Node node) {
+	public boolean isAccepted(final Node node) {
 		Objects.requireNonNull(node, "node == null");
 		
-		try {
-			if(this.nodeFilter.isAccepted(node) & this.clazz.isAssignableFrom(node.getClass())) {
-				this.list.add(this.clazz.cast(node));
-			}
-		} catch(final RuntimeException e) {
-			throw new NodeTraversalException(e);
+		if(this.isThrowingRuntimeException) {
+			throw new RuntimeException();
 		}
 		
-		return true;
-	}
-	
-	@Override
-	public boolean visitLeave(final Node node) {
-		Objects.requireNonNull(node, "node == null");
-		
-		return true;
+		return this.isAccepted;
 	}
 }

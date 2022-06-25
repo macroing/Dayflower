@@ -5,6 +5,14 @@
 	* ADD:		Add the NodeMockA and NodeMockB classes that implements Node.
 	* ADD:		Add the NodeFilterMock class that implements NodeFilter.
 	* ADD:		Add the NodeFilterUnitTests and NodeTraversalExceptionUnitTests classes.
+	* ADD:		Add the methods transform(Triangle3D, Matrix44D, Matrix44D) and transformAndDivide(Triangle3D, Matrix44D, Matrix44D) to the Triangle3D class.
+	* ADD:		Add the method isInsideViewFrustum() to the Triangle3D.Vertex3D class.
+	* ADD:		Add the methods transform(Triangle3F, Matrix44F, Matrix44F) and transformAndDivide(Triangle3F, Matrix44F, Matrix44F) to the Triangle3F class.
+	* ADD:		Add the method isInsideViewFrustum() to the Triangle3F.Vertex3F class.
+	* ADD:		Add the constructor Triangle3D(Vertex3D, Vertex3D, Vertex3D, boolean) to the Triangle3D class.
+	* ADD:		Add the constructor Triangle3F(Vertex3F, Vertex3F, Vertex3F, boolean) to the Triangle3F class.
+	* ADD:		Add the constructor Vertex3D(Point2D, Point4D, Vector3D, boolean) to the Triangle3D.Vertex3D class.
+	* ADD:		Add the constructor Vertex3F(Point2F, Point4F, Vector3F, boolean) to the Triangle3F.Vertex3F class.
 	* REMOVE:	Remove the method findInterval(int, IntPredicate) from the Ints class. The method has been moved to the Distribution1F class.
 	* REMOVE:	Remove the AbstractReflectiveNodeHierarchicalVisitor class.
 

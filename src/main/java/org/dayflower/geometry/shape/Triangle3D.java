@@ -126,6 +126,25 @@ public final class Triangle3D implements Shape3D {
 		this.surfaceNormal = Vector3D.getCached(Vector3D.normalNormalized(new Point3D(a.getPosition()), new Point3D(b.getPosition()), new Point3D(c.getPosition())));
 	}
 	
+	/**
+	 * Constructs a new {@code Triangle3D} instance.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@link Vertex3D} instance denoted by {@code A}
+	 * @param b a {@code Vertex3D} instance denoted by {@code B}
+	 * @param c a {@code Vertex3D} instance denoted by {@code C}
+	 * @param isCached {@code true} if, and only if, the cache should be used, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public Triangle3D(final Vertex3D a, final Vertex3D b, final Vertex3D c, final boolean isCached) {
+		this.a = isCached ? Vertex3D.getCached(Objects.requireNonNull(a, "a == null")) : Objects.requireNonNull(a, "a == null");
+		this.b = isCached ? Vertex3D.getCached(Objects.requireNonNull(b, "b == null")) : Objects.requireNonNull(b, "b == null");
+		this.c = isCached ? Vertex3D.getCached(Objects.requireNonNull(c, "c == null")) : Objects.requireNonNull(c, "c == null");
+		this.surfaceNormal = isCached ? Vector3D.getCached(Vector3D.normalNormalized(new Point3D(a.getPosition()), new Point3D(b.getPosition()), new Point3D(c.getPosition()))) : null;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -307,7 +326,7 @@ public final class Triangle3D implements Shape3D {
 	 */
 //	TODO: Add Unit Tests!
 	public Vector3D getSurfaceNormal() {
-		return this.surfaceNormal;
+		return this.surfaceNormal != null ? this.surfaceNormal : Vector3D.normalNormalized(new Point3D(this.a.getPosition()), new Point3D(this.b.getPosition()), new Point3D(this.c.getPosition()));
 	}
 	
 	/**
@@ -368,7 +387,7 @@ public final class Triangle3D implements Shape3D {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.surfaceNormal.accept(nodeHierarchicalVisitor)) {
+				if(this.surfaceNormal != null && !this.surfaceNormal.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -409,7 +428,7 @@ public final class Triangle3D implements Shape3D {
 		final Point3D p = Objects.requireNonNull(point, "point == null");
 		
 		if(Point3D.coplanar(a, b, c, p)) {
-			final Vector3D surfaceNormal = this.surfaceNormal;
+			final Vector3D surfaceNormal = getSurfaceNormal();
 			
 			final Vector3D edgeAB = Vector3D.direction(a, b);
 			final Vector3D edgeBC = Vector3D.direction(b, c);
@@ -588,6 +607,52 @@ public final class Triangle3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Performs a transformation.
+	 * <p>
+	 * Returns a new {@code Triangle3D} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code triangle}, {@code matrix} or {@code matrixInverse} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangle the {@code Triangle3D} instance to transform
+	 * @param matrix the {@link Matrix44D} instance to perform the transformation with
+	 * @param matrixInverse the {@code Matrix44D} instance to perform the inverse transformation with
+	 * @return a new {@code Triangle3D} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code triangle}, {@code matrix} or {@code matrixInverse} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Triangle3D transform(final Triangle3D triangle, final Matrix44D matrix, final Matrix44D matrixInverse) {
+		final Vertex3D a = Vertex3D.transform(triangle.a, matrix, matrixInverse);
+		final Vertex3D b = Vertex3D.transform(triangle.b, matrix, matrixInverse);
+		final Vertex3D c = Vertex3D.transform(triangle.c, matrix, matrixInverse);
+		
+		return new Triangle3D(a, b, c);
+	}
+	
+	/**
+	 * Performs a transformation.
+	 * <p>
+	 * Returns a new {@code Triangle3D} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code triangle}, {@code matrix} or {@code matrixInverse} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangle the {@code Triangle3D} instance to transform
+	 * @param matrix the {@link Matrix44D} instance to perform the transformation with
+	 * @param matrixInverse the {@code Matrix44D} instance to perform the inverse transformation with
+	 * @return a new {@code Triangle3D} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code triangle}, {@code matrix} or {@code matrixInverse} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Triangle3D transformAndDivide(final Triangle3D triangle, final Matrix44D matrix, final Matrix44D matrixInverse) {
+		final Vertex3D a = Vertex3D.transformAndDivide(triangle.a, matrix, matrixInverse);
+		final Vertex3D b = Vertex3D.transformAndDivide(triangle.b, matrix, matrixInverse);
+		final Vertex3D c = Vertex3D.transformAndDivide(triangle.c, matrix, matrixInverse);
+		
+		return new Triangle3D(a, b, c);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * A {@code Vertex3D} denotes a vertex of a {@link Triangle3D} instance.
 	 * <p>
 	 * This class is immutable and therefore thread-safe.
@@ -621,6 +686,24 @@ public final class Triangle3D implements Shape3D {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
 			this.position = Point4D.getCached(Objects.requireNonNull(position, "position == null"));
 			this.normal = Vector3D.getCached(Objects.requireNonNull(normal, "normal == null"));
+		}
+		
+		/**
+		 * Constructs a new {@code Vertex3D} instance.
+		 * <p>
+		 * If either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3D} instance
+		 * @param position the position associated with this {@code Vertex3D} instance
+		 * @param normal the normal associated with this {@code Vertex3D} instance
+		 * @param isCached {@code true} if, and only if, the cache should be used, {@code false} otherwise
+		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}
+		 */
+//		TODO: Add Unit Tests!
+		public Vertex3D(final Point2D textureCoordinates, final Point4D position, final Vector3D normal, final boolean isCached) {
+			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
+			this.position = isCached ? Point4D.getCached(Objects.requireNonNull(position, "position == null")) : Objects.requireNonNull(position, "position == null");
+			this.normal = isCached ? Vector3D.getCached(Objects.requireNonNull(normal, "normal == null")) : Objects.requireNonNull(normal, "normal == null");
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -740,6 +823,20 @@ public final class Triangle3D implements Shape3D {
 		}
 		
 		/**
+		 * Returns {@code true} if, and only if, this {@code Vertex3D} instance is inside the view frustum, {@code false} otherwise.
+		 * 
+		 * @return {@code true} if, and only if, this {@code Vertex3D} instance is inside the view frustum, {@code false} otherwise
+		 */
+//		TODO: Add Unit Tests!
+		public boolean isInsideViewFrustum() {
+			final boolean isInsideViewFrustumX = abs(this.position.x) <= abs(this.position.w);
+			final boolean isInsideViewFrustumY = abs(this.position.y) <= abs(this.position.w);
+			final boolean isInsideViewFrustumZ = abs(this.position.z) <= abs(this.position.w);
+			
+			return isInsideViewFrustumX && isInsideViewFrustumY && isInsideViewFrustumZ;
+		}
+		
+		/**
 		 * Returns a hash code for this {@code Vertex3D} instance.
 		 * 
 		 * @return a hash code for this {@code Vertex3D} instance
@@ -805,7 +902,7 @@ public final class Triangle3D implements Shape3D {
 			
 			final Vector3D normal = Vector3D.normalize(Vector3D.lerp(a.normal, b.normal, t));
 			
-			return new Vertex3D(textureCoordinates, position, normal);
+			return new Vertex3D(textureCoordinates, position, normal, false);
 		}
 		
 		/**
@@ -829,7 +926,7 @@ public final class Triangle3D implements Shape3D {
 			
 			final Vector3D normal = Vector3D.normalize(Vector3D.transformTranspose(matrixInverse, vertex.normal));
 			
-			return new Vertex3D(textureCoordinates, position, normal);
+			return new Vertex3D(textureCoordinates, position, normal, false);
 		}
 		
 		/**
@@ -853,7 +950,7 @@ public final class Triangle3D implements Shape3D {
 			
 			final Vector3D normal = Vector3D.normalize(Vector3D.transformTranspose(matrixInverse, vertex.normal));
 			
-			return new Vertex3D(textureCoordinates, position, normal);
+			return new Vertex3D(textureCoordinates, position, normal, false);
 		}
 		
 		/**
@@ -878,7 +975,7 @@ public final class Triangle3D implements Shape3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private OrthonormalBasis33D doCreateOrthonormalBasisG() {
-		return new OrthonormalBasis33D(this.surfaceNormal);
+		return new OrthonormalBasis33D(getSurfaceNormal());
 	}
 	
 	private OrthonormalBasis33D doCreateOrthonormalBasisS(final Point3D barycentricCoordinates) {

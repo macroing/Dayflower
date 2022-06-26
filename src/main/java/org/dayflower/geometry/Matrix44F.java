@@ -22,6 +22,7 @@ import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.cos;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.tan;
 import static org.dayflower.utility.Floats.toRadians;
 
 import java.io.DataInput;
@@ -655,6 +656,42 @@ public final class Matrix44F implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Matrix44F} instance for perspective projection.
+	 * <p>
+	 * If {@code fieldOfView} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param fieldOfView an {@link AngleF} instance with the field of view
+	 * @param aspectRatio the aspect ratio
+	 * @param zNear the distance to the near plane on the Z-axis
+	 * @param zFar the distance to the far plane on the Z-axis
+	 * @return a {@code Matrix44F} instance for perspective projection
+	 * @throws NullPointerException thrown if, and only if, {@code fieldOfView} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Matrix44F perspective(final AngleF fieldOfView, final float aspectRatio, final float zNear, final float zFar) {
+		final float tanHalfFieldOfView = tan(fieldOfView.getRadians() / 2.0F);
+		
+		final float element11 = 1.0F / (tanHalfFieldOfView * aspectRatio);
+		final float element12 = 0.0F;
+		final float element13 = 0.0F;
+		final float element14 = 0.0F;
+		final float element21 = 0.0F;
+		final float element22 = 1.0F / tanHalfFieldOfView;
+		final float element23 = 0.0F;
+		final float element24 = 0.0F;
+		final float element31 = 0.0F;
+		final float element32 = 0.0F;
+		final float element33 = zFar / (zFar - zNear);
+		final float element34 = -zFar * zNear / (zFar - zNear);
+		final float element41 = 0.0F;
+		final float element42 = 0.0F;
+		final float element43 = 1.0F;
+		final float element44 = 0.0F;
+		
+		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
+	}
+	
+	/**
 	 * Returns a new {@code Matrix44F} instance by reading it from {@code dataInput}.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1126,6 +1163,38 @@ public final class Matrix44F implements Node {
 	 */
 	public static Matrix44F scale(final float x, final float y, final float z) {
 		return new Matrix44F(x, 0.0F, 0.0F, 0.0F, 0.0F, y, 0.0F, 0.0F, 0.0F, 0.0F, z, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+	}
+	
+	/**
+	 * Returns a {@code Matrix44F} instance for screen space transformation.
+	 * 
+	 * @param width the width of the screen
+	 * @param height the height of the screen
+	 * @return a {@code Matrix44F} instance for screen space transformation
+	 */
+//	TODO: Add Unit Tests!
+	public static Matrix44F screenSpaceTransform(final float width, final float height) {
+		final float halfWidth = width * 0.5F;
+		final float halfHeight = height * 0.5F;
+		
+		final float element11 = halfWidth;
+		final float element12 = 0.0F;
+		final float element13 = 0.0F;
+		final float element14 = halfWidth - 0.5F;
+		final float element21 = 0.0F;
+		final float element22 = -halfHeight;
+		final float element23 = 0.0F;
+		final float element24 = halfHeight - 0.5F;
+		final float element31 = 0.0F;
+		final float element32 = 0.0F;
+		final float element33 = 1.0F;
+		final float element34 = 0.0F;
+		final float element41 = 0.0F;
+		final float element42 = 0.0F;
+		final float element43 = 0.0F;
+		final float element44 = 1.0F;
+		
+		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
 	/**

@@ -22,6 +22,7 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.sin;
+import static org.dayflower.utility.Doubles.tan;
 import static org.dayflower.utility.Doubles.toRadians;
 
 import java.io.DataInput;
@@ -655,6 +656,42 @@ public final class Matrix44D implements Node {
 	}
 	
 	/**
+	 * Returns a {@code Matrix44D} instance for perspective projection.
+	 * <p>
+	 * If {@code fieldOfView} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param fieldOfView an {@link AngleD} instance with the field of view
+	 * @param aspectRatio the aspect ratio
+	 * @param zNear the distance to the near plane on the Z-axis
+	 * @param zFar the distance to the far plane on the Z-axis
+	 * @return a {@code Matrix44D} instance for perspective projection
+	 * @throws NullPointerException thrown if, and only if, {@code fieldOfView} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Matrix44D perspective(final AngleD fieldOfView, final double aspectRatio, final double zNear, final double zFar) {
+		final double tanHalfFieldOfView = tan(fieldOfView.getRadians() / 2.0D);
+		
+		final double element11 = 1.0D / (tanHalfFieldOfView * aspectRatio);
+		final double element12 = 0.0D;
+		final double element13 = 0.0D;
+		final double element14 = 0.0D;
+		final double element21 = 0.0D;
+		final double element22 = 1.0D / tanHalfFieldOfView;
+		final double element23 = 0.0D;
+		final double element24 = 0.0D;
+		final double element31 = 0.0D;
+		final double element32 = 0.0D;
+		final double element33 = zFar / (zFar - zNear);
+		final double element34 = -zFar * zNear / (zFar - zNear);
+		final double element41 = 0.0D;
+		final double element42 = 0.0D;
+		final double element43 = 1.0D;
+		final double element44 = 0.0D;
+		
+		return new Matrix44D(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
+	}
+	
+	/**
 	 * Returns a new {@code Matrix44D} instance by reading it from {@code dataInput}.
 	 * <p>
 	 * If {@code dataInput} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1126,6 +1163,38 @@ public final class Matrix44D implements Node {
 	 */
 	public static Matrix44D scale(final double x, final double y, final double z) {
 		return new Matrix44D(x, 0.0D, 0.0D, 0.0D, 0.0D, y, 0.0D, 0.0D, 0.0D, 0.0D, z, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D);
+	}
+	
+	/**
+	 * Returns a {@code Matrix44D} instance for screen space transformation.
+	 * 
+	 * @param width the width of the screen
+	 * @param height the height of the screen
+	 * @return a {@code Matrix44D} instance for screen space transformation
+	 */
+//	TODO: Add Unit Tests!
+	public static Matrix44D screenSpaceTransform(final double width, final double height) {
+		final double halfWidth = width * 0.5D;
+		final double halfHeight = height * 0.5D;
+		
+		final double element11 = halfWidth;
+		final double element12 = 0.0D;
+		final double element13 = 0.0D;
+		final double element14 = halfWidth - 0.5D;
+		final double element21 = 0.0D;
+		final double element22 = -halfHeight;
+		final double element23 = 0.0D;
+		final double element24 = halfHeight - 0.5D;
+		final double element31 = 0.0D;
+		final double element32 = 0.0D;
+		final double element33 = 1.0D;
+		final double element34 = 0.0D;
+		final double element41 = 0.0D;
+		final double element42 = 0.0D;
+		final double element43 = 0.0D;
+		final double element44 = 1.0D;
+		
+		return new Matrix44D(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
 	/**

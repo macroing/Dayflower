@@ -21,6 +21,7 @@ package org.dayflower.rasterizer;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
@@ -30,7 +31,6 @@ import org.dayflower.utility.Floats;
 
 public final class Main {
 	private static final byte BLACK = 0b0;
-	private static final float FIELD_OF_VIEW = 70.0F;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -57,7 +57,7 @@ public final class Main {
 		Transform transformMonkey = new Transform(new Point3F(0.0F, 1.0F, 3.0F));
 		Transform transformTerrain = new Transform(new Point3F(0.0F, -1.0F, 0.0F));
 		
-		final Camera camera = new Camera(doPerspective(FIELD_OF_VIEW, width / height, 0.1F, 1000.0F));
+		final Camera camera = new Camera(Matrix44F.perspective(AngleF.degrees(70.0F), width / height, 0.1F, 1000.0F));
 		
 		long previousTime = System.nanoTime();
 		
@@ -103,12 +103,6 @@ public final class Main {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Matrix44F doPerspective(final float fieldOfView, final float aspectRatio, final float zNear, final float zFar) {
-		final float tanHalfFieldOfView = Floats.tan(Floats.toRadians(fieldOfView / 2.0F));
-		
-		return new Matrix44F(1.0F / (tanHalfFieldOfView * aspectRatio), 0.0F, 0.0F, 0.0F, 0.0F, 1.0F / tanHalfFieldOfView, 0.0F, 0.0F, 0.0F, 0.0F, zFar / (zFar - zNear), -zFar * zNear / (zFar - zNear), 0.0F, 0.0F, 1.0F, 0.0F);
-	}
 	
 	private static void doUpdateCamera(final Camera camera, final Input input, final float delta) {
 		final float sensitivityX = 2.66F * delta;

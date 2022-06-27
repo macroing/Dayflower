@@ -25,6 +25,9 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.utility.Floats;
+import org.dayflower.utility.Ints;
+
 public class Bitmap {
 	private final byte[] components;
 	private final int height;
@@ -67,11 +70,7 @@ public class Bitmap {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public byte getComponent(final int index) {
-		try {
-			return this.components[index];
-		} catch(final ArrayIndexOutOfBoundsException e) {
-			return 0;
-		}
+		return index >= 0 && index < this.components.length ? this.components[index] : 0;
 	}
 	
 	public int getHeight() {
@@ -84,6 +83,63 @@ public class Bitmap {
 	
 	public void clear(final byte shade) {
 		Arrays.fill(this.components, shade);
+	}
+	
+	public void copyPixel(final int destinationX, final int destinationY, final float sourceX, final float sourceY, final Bitmap bitmap, final float lightIntensity) {
+		final int destinationIndex = (destinationX + destinationY * this.width) * 4;
+		
+		final int minimumX = Ints.toInt(Floats.floor(sourceX));
+		final int maximumX = Ints.toInt(Floats.ceil(sourceX));
+		
+		final int minimumY = Ints.toInt(Floats.floor(sourceY));
+		final int maximumY = Ints.toInt(Floats.ceil(sourceY));
+		
+		final int index00 = (minimumX + minimumY * bitmap.getWidth()) * 4;
+		final int index01 = (maximumX + minimumY * bitmap.getWidth()) * 4;
+		final int index10 = (minimumX + maximumY * bitmap.getWidth()) * 4;
+		final int index11 = (maximumX + maximumY * bitmap.getWidth()) * 4;
+		
+		if(minimumX == maximumX && minimumY == maximumY) {
+			this.components[destinationIndex + 0] = (byte)((bitmap.getComponent(index00 + 0) & 0xFF) * lightIntensity);
+			this.components[destinationIndex + 1] = (byte)((bitmap.getComponent(index00 + 1) & 0xFF) * lightIntensity);
+			this.components[destinationIndex + 2] = (byte)((bitmap.getComponent(index00 + 2) & 0xFF) * lightIntensity);
+			this.components[destinationIndex + 3] = (byte)((bitmap.getComponent(index00 + 3) & 0xFF) * lightIntensity);
+			
+			return;
+		}
+		
+		final float component000 = bitmap.getComponent(index00 + 0) & 0xFF;
+		final float component001 = bitmap.getComponent(index00 + 1) & 0xFF;
+		final float component002 = bitmap.getComponent(index00 + 2) & 0xFF;
+		final float component003 = bitmap.getComponent(index00 + 3) & 0xFF;
+		
+		final float component010 = bitmap.getComponent(index01 + 0) & 0xFF;
+		final float component011 = bitmap.getComponent(index01 + 1) & 0xFF;
+		final float component012 = bitmap.getComponent(index01 + 2) & 0xFF;
+		final float component013 = bitmap.getComponent(index01 + 3) & 0xFF;
+		
+		final float component100 = bitmap.getComponent(index10 + 0) & 0xFF;
+		final float component101 = bitmap.getComponent(index10 + 1) & 0xFF;
+		final float component102 = bitmap.getComponent(index10 + 2) & 0xFF;
+		final float component103 = bitmap.getComponent(index10 + 3) & 0xFF;
+		
+		final float component110 = bitmap.getComponent(index11 + 0) & 0xFF;
+		final float component111 = bitmap.getComponent(index11 + 1) & 0xFF;
+		final float component112 = bitmap.getComponent(index11 + 2) & 0xFF;
+		final float component113 = bitmap.getComponent(index11 + 3) & 0xFF;
+		
+		final float xFactor = sourceX - minimumX;
+		final float yFactor = sourceY - minimumY;
+		
+		final float component0 = Floats.lerp(Floats.lerp(component000, component010, xFactor), Floats.lerp(component100, component110, xFactor), yFactor) * lightIntensity;
+		final float component1 = Floats.lerp(Floats.lerp(component001, component011, xFactor), Floats.lerp(component101, component111, xFactor), yFactor) * lightIntensity;
+		final float component2 = Floats.lerp(Floats.lerp(component002, component012, xFactor), Floats.lerp(component102, component112, xFactor), yFactor) * lightIntensity;
+		final float component3 = Floats.lerp(Floats.lerp(component003, component013, xFactor), Floats.lerp(component103, component113, xFactor), yFactor) * lightIntensity;
+		
+		this.components[destinationIndex + 0] = (byte)(component0);
+		this.components[destinationIndex + 1] = (byte)(component1);
+		this.components[destinationIndex + 2] = (byte)(component2);
+		this.components[destinationIndex + 3] = (byte)(component3);
 	}
 	
 	public void copyPixel(final int destinationX, final int destinationY, final int sourceX, final int sourceY, final Bitmap bitmap, final float lightIntensity) {

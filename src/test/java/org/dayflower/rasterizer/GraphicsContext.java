@@ -121,6 +121,10 @@ public final class GraphicsContext extends Bitmap {
 				final int sourceX = (int)((textureCoordinateX * currentZ) * (bitmap.getWidth() - 1) + 0.5F);
 				final int sourceY = (int)((textureCoordinateY * currentZ) * (bitmap.getHeight() - 1) + 0.5F);
 				
+//				Bilinear interpolation:
+//				final float sourceX = textureCoordinateX * currentZ * (bitmap.getWidth() - 1) + 0.5F;
+//				final float sourceY = textureCoordinateY * currentZ * (bitmap.getHeight() - 1) + 0.5F;
+				
 				copyPixel(x, y, sourceX, sourceY, bitmap, Math.min(lightIntensity, 1.0F));
 			}
 			
@@ -360,7 +364,8 @@ public final class GraphicsContext extends Bitmap {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class Gradients {
-		private static final Vector3F LIGHT_DIRECTION = Vector3F.normalize(new Vector3F(0.0F, 0.0F, 1.0F));
+		private static final Vector3F LIGHT_DIRECTION_Y = Vector3F.normalize(new Vector3F(0.0F, 1.0F, 0.0F));
+		private static final Vector3F LIGHT_DIRECTION_Z = Vector3F.normalize(new Vector3F(0.0F, 0.0F, 1.0F));
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -396,9 +401,9 @@ public final class GraphicsContext extends Bitmap {
 			this.zs[2] = cP.z;
 			
 			this.lightIntensity = new float[3];
-			this.lightIntensity[0] = Floats.saturate(Vector3F.dotProduct(a.getNormal(), LIGHT_DIRECTION)) * 0.9F + 0.1F;
-			this.lightIntensity[1] = Floats.saturate(Vector3F.dotProduct(b.getNormal(), LIGHT_DIRECTION)) * 0.9F + 0.1F;
-			this.lightIntensity[2] = Floats.saturate(Vector3F.dotProduct(c.getNormal(), LIGHT_DIRECTION)) * 0.9F + 0.1F;
+			this.lightIntensity[0] = Floats.saturate((Vector3F.dotProduct(a.getNormal(), LIGHT_DIRECTION_Y) + Vector3F.dotProduct(a.getNormal(), LIGHT_DIRECTION_Z))) * 0.9F + 0.1F;
+			this.lightIntensity[1] = Floats.saturate((Vector3F.dotProduct(b.getNormal(), LIGHT_DIRECTION_Y) + Vector3F.dotProduct(b.getNormal(), LIGHT_DIRECTION_Z))) * 0.9F + 0.1F;
+			this.lightIntensity[2] = Floats.saturate((Vector3F.dotProduct(c.getNormal(), LIGHT_DIRECTION_Y) + Vector3F.dotProduct(c.getNormal(), LIGHT_DIRECTION_Z))) * 0.9F + 0.1F;
 			
 			this.zReciprocals = new float[3];
 			this.zReciprocals[0] = 1.0F / aP.w;

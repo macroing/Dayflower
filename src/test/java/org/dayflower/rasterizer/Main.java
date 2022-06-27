@@ -25,9 +25,9 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.Transform;
-import org.dayflower.utility.Floats;
 
 public final class Main {
 	private static final byte BLACK = 0b0;
@@ -75,14 +75,7 @@ public final class Main {
 				
 				final Matrix44F viewProjection = camera.getViewProjection();
 				
-				final float sinHalfAngle = Floats.sin(delta / 2.0F);
-				final float cosHalfAngle = Floats.cos(delta / 2.0F);
-				
-				final float x = 0.0F * sinHalfAngle;
-				final float y = 1.0F * sinHalfAngle;
-				final float z = 0.0F * sinHalfAngle;
-				
-				transformMonkey.rotate(new Quaternion4F(x, y, z, cosHalfAngle));
+				transformMonkey.rotate(Quaternion4F.from(AngleF.radians(delta), Vector3F.y()));
 				
 				graphicsContext.clear(BLACK);
 				graphicsContext.clearZBuffer();

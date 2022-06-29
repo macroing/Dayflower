@@ -21,6 +21,8 @@ package org.dayflower.verlet;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import org.dayflower.geometry.Point2I;
+
 public final class Circle {
 	private PointMass attachedPointMass;
 	private final float radius;
@@ -37,25 +39,38 @@ public final class Circle {
 		this.attachedPointMass = attachedPointMass;
 	}
 	
-	public void draw(final Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillOval((int)(this.attachedPointMass.getX()), (int)(this.attachedPointMass.getY()), (int)(this.radius * 2.0F), (int)(this.radius * 2.0F));
+	public void draw(final Camera camera, final Graphics g) {
+		final Point2I p = camera.getProjectedPoint(this.attachedPointMass.getX(), this.attachedPointMass.getY(), this.attachedPointMass.getZ());
+		
+		if(p != null) {
+			g.setColor(Color.BLACK);
+			g.fillOval(p.x, p.y, (int)(this.radius * 2.0F), (int)(this.radius * 2.0F));
+		}
 	}
 	
-	public void solveConstraints(final int width, final int height) {
+	public void solveConstraints(final int resolutionX, final int resolutionY, final int resolutionZ) {
 		float x = this.attachedPointMass.getX();
 		float y = this.attachedPointMass.getY();
+		float z = this.attachedPointMass.getZ();
+		
+		if(z < this.radius) {
+			z = 2.0F * (this.radius) - z;
+		}
+		
+		if(z > resolutionZ - this.radius) {
+			z = 2.0F * (resolutionZ - this.radius) - z;
+		}
 		
 		if(y < this.radius) {
 			y = 2.0F * (this.radius) - y;
 		}
 		
-		if(y > height - this.radius) {
-			y = 2.0F * (height - this.radius) - y;
+		if(y > resolutionY - this.radius) {
+			y = 2.0F * (resolutionY - this.radius) - y;
 		}
 		
-		if(x > width - this.radius) {
-			x = 2.0F * (width - this.radius) - x;
+		if(x > resolutionX - this.radius) {
+			x = 2.0F * (resolutionX - this.radius) - x;
 		}
 		
 		if(x < this.radius) {

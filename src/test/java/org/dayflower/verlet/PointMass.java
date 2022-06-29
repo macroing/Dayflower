@@ -23,6 +23,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dayflower.geometry.Point2I;
+
 public final class PointMass {
 	private List<Link> links;
 	private boolean isPinned;
@@ -41,10 +43,6 @@ public final class PointMass {
 	private float z;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public PointMass(final float x, final float y) {
-		this(x, y, 0.0F);
-	}
 	
 	public PointMass(final float x, final float y, final float z) {
 		this.links = new ArrayList<>();
@@ -75,18 +73,10 @@ public final class PointMass {
 		return this.z;
 	}
 	
-	public void add(final float x, final float y) {
-		add(x, y, 0.0F);
-	}
-	
 	public void add(final float x, final float y, final float z) {
 		this.x += x;
 		this.y += y;
 		this.z += z;
-	}
-	
-	public void applyForce(final float forceX, final float forceY) {
-		applyForce(forceX, forceY, 0.0F);
 	}
 	
 	public void applyForce(final float forceX, final float forceY, final float forceZ) {
@@ -111,22 +101,22 @@ public final class PointMass {
 		this.links.add(new Link(this, pointMass, restingDistance, stiffness, tearSensitivity, isDrawing));
 	}
 	
-	public void draw(final Graphics g) {
+	public void draw(final Camera camera, final Graphics g) {
 		g.setColor(Color.BLACK);
 		
 		if(this.links.size() > 0) {
 			for(int i = 0; i < this.links.size(); i++) {
 				final
 				Link link = this.links.get(i);
-				link.draw(g);
+				link.draw(camera, g);
 			}
 		} else {
-			g.drawRect((int)(this.x), (int)(this.y), 1, 1);
+			final Point2I p = camera.getProjectedPoint(this.x, this.y, this.z);
+			
+			if(p != null) {
+				g.drawRect(p.x, p.y, 1, 1);
+			}
 		}
-	}
-	
-	public void pinTo(final float pinX, final float pinY) {
-		pinTo(pinX, pinY, 0.0F);
 	}
 	
 	public void pinTo(final float pinX, final float pinY, final float pinZ) {
@@ -157,31 +147,27 @@ public final class PointMass {
 		this.z = z;
 	}
 	
-	public void solveConstraints(final int x, final int y) {
-		solveConstraints(x, y, 0.0F);
-	}
-	
-	public void solveConstraints(final int x, final int y, final float z) {
+	public void solveConstraints(final int x, final int y, final int z) {
 		for(int i = 0; i < this.links.size(); i++) {
 			final
 			Link link = this.links.get(i);
 			link.solve();
 		}
 		
-		if(this.z < 1.0F) {
-			this.z = 2.0F - this.z;
-		}
-		
 		if(this.z > z - 1.0F) {
 			this.z = 2.0F * (z - 1.0F) - this.z;
 		}
 		
-		if(this.y < 1.0F) {
-			this.y = 2.0F - this.y;
+		if(this.z < 1.0F) {
+			this.z = 2.0F - this.z;
 		}
 		
 		if(this.y > y - 1.0F) {
 			this.y = 2.0F * (y - 1.0F) - this.y;
+		}
+		
+		if(this.y < 1.0F) {
+			this.y = 2.0F - this.y;
 		}
 		
 		if(this.x > x - 1.0F) {
@@ -197,10 +183,6 @@ public final class PointMass {
 			this.y = this.pinY;
 			this.z = this.pinZ;
 		}
-	}
-	
-	public void subtract(final float x, final float y) {
-		subtract(x, y, 0.0F);
 	}
 	
 	public void subtract(final float x, final float y, final float z) {
@@ -227,7 +209,7 @@ public final class PointMass {
 	}
 	
 	public void updatePhysics(final float gravity, final float timeStep) {
-		applyForce(0, this.mass * gravity);
+		applyForce(0.0F, this.mass * gravity, 0.0F);
 		
 		final float velX = (this.x - this.lastX) * 0.99F;
 		final float velY = (this.y - this.lastY) * 0.99F;

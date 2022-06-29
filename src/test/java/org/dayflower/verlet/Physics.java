@@ -65,7 +65,7 @@ public final class Physics {
 		}
 	}
 	
-	public void update(final Input input, final int width, final int height) {
+	public void update(final Input input, final int resolutionX, final int resolutionY, final int resolutionZ) {
 		this.currentTime = System.currentTimeMillis() - this.startTime;
 		
 		final long deltaTimeMS = this.currentTime - this.previousTime;
@@ -81,11 +81,11 @@ public final class Physics {
 		for(int iteration = 1; iteration <= timeStepAmount; iteration++) {
 			for(int x = 0; x < this.constraintAccuracy; x++) {
 				for(final PointMass pointMass : this.pointMasses) {
-					pointMass.solveConstraints(width, height);
+					pointMass.solveConstraints(resolutionX, resolutionY, resolutionZ);
 				}
 				
 				for(final Circle circle : this.circles) {
-					circle.solveConstraints(width, height);
+					circle.solveConstraints(resolutionX, resolutionY, resolutionZ);
 				}
 			}
 			

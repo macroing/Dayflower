@@ -37,19 +37,21 @@ public final class VerletSimulator extends Canvas {
 	
 	private final BufferStrategy bufferStrategy;
 	private final BufferedImage bufferedImage;
+	private final Camera camera;
 	private final Graphics graphics;
 	private final Input input;
 	private final JFrame jFrame;
 	private final List<Circle> circles;
 	private final List<PointMass> pointMasses;
 	private final Physics physics;
-	private final int height;
-	private final int width;
+	private final int resolutionX;
+	private final int resolutionY;
+	private final int resolutionZ;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public VerletSimulator(final int width, final int height) {
-		final Dimension size = new Dimension(width, height);
+	public VerletSimulator(final int resolutionX, final int resolutionY, final int resolutionZ) {
+		final Dimension size = new Dimension(resolutionX, resolutionY);
 		
 		setPreferredSize(size);
 		setMinimumSize(size);
@@ -58,14 +60,16 @@ public final class VerletSimulator extends Canvas {
 		createBufferStrategy(1);
 		
 		this.bufferStrategy = getBufferStrategy();
-		this.bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		this.bufferedImage = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_ARGB);
+		this.camera = new Camera();
 		this.input = new Input();
 		this.jFrame = new JFrame();
 		this.circles = new ArrayList<>();
 		this.pointMasses = new ArrayList<>();
 		this.physics = new Physics(this.circles, this.pointMasses);
-		this.height = height;
-		this.width = width;
+		this.resolutionX = resolutionX;
+		this.resolutionY = resolutionY;
+		this.resolutionZ = resolutionZ;
 		
 		this.jFrame.add(this);
 		this.jFrame.pack();
@@ -89,12 +93,20 @@ public final class VerletSimulator extends Canvas {
 	
 	public static void main(final String[] args) {
 		final
-		VerletSimulator verletSimulator = new VerletSimulator(640, 480);
+		VerletSimulator verletSimulator = new VerletSimulator(640, 480, 100);
 		verletSimulator.doShow();
+		
+		long previousTime = System.nanoTime();
 		
 		while(true) {
 			try {
-				verletSimulator.doUpdate();
+				final long currentTime = System.nanoTime();
+				
+				final float delta = (float)((currentTime - previousTime) / 1000000000.0D);
+				
+				previousTime = currentTime;
+				
+				verletSimulator.doUpdate(delta);
 				verletSimulator.doDraw();
 				verletSimulator.doSwapBuffers();
 				
@@ -110,7 +122,7 @@ public final class VerletSimulator extends Canvas {
 	private void doCreateBodies() {
 		for(int i = 0; i < 25; i++) {
 			final
-			Body body = Body.createRandom(this.width, this.height);
+			Body body = Body.createRandom(this.resolutionX, this.resolutionY);
 			body.add(this.circles, this.pointMasses);
 		}
 	}
@@ -122,13 +134,13 @@ public final class VerletSimulator extends Canvas {
 		final int curtainHeight = 40;
 		final int curtainWidth = 60;
 		
-		final int midWidth = (int)(this.width / 2.0F - (curtainWidth * restingDistances) / 2.0F);
+		final int midWidth = (int)(this.resolutionX / 2.0F - (curtainWidth * restingDistances) / 2.0F);
 		
 		final int yStart = 25;
 		
 		for(int y = 0; y <= curtainHeight; y++) {
 			for(int x = 0; x <= curtainWidth; x++) {
-				final PointMass pointMass = new PointMass(midWidth + x * restingDistances, y * restingDistances + yStart);
+				final PointMass pointMass = new PointMass(midWidth + x * restingDistances, y * restingDistances + yStart, 5.0F);
 				
 				if(x != 0) {
 					pointMass.attachTo(this.pointMasses.get(this.pointMasses.size() - 1), restingDistances, stiffnesses);
@@ -139,7 +151,7 @@ public final class VerletSimulator extends Canvas {
 				}
 				
 				if(y == 0) {
-					pointMass.pinTo(pointMass.getX(), pointMass.getY());
+					pointMass.pinTo(pointMass.getX(), pointMass.getY(), pointMass.getZ());
 				}
 				
 				this.pointMasses.add(pointMass);
@@ -153,14 +165,14 @@ public final class VerletSimulator extends Canvas {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		this.physics.update(this.input, this.width, this.height);
+		this.physics.update(this.input, this.resolutionX, this.resolutionY, this.resolutionZ);
 		
 		for(final PointMass pointMass : this.pointMasses) {
-			pointMass.draw(g);
+			pointMass.draw(this.camera, g);
 		}
 		
 		for(final Circle circle : this.circles) {
-			circle.draw(g);
+			circle.draw(this.camera, g);
 		}
 	}
 	
@@ -173,12 +185,17 @@ public final class VerletSimulator extends Canvas {
 	}
 	
 	private void doSwapBuffers() {
-		this.graphics.drawImage(this.bufferedImage, 0, 0, this.width, this.height, null);
+		this.graphics.drawImage(this.bufferedImage, 0, 0, this.resolutionX, this.resolutionY, null);
 		
 		this.bufferStrategy.show();
 	}
 	
-	private void doUpdate() {
+	private void doUpdate(final float delta) {
+		final float distance = 50.0F * delta;
+		
+		final float sensitivityX = 4.66F * delta;
+		final float sensitivityY = 4.0F * delta;
+		
 		if(this.input.isKeyPressed(KeyEvent.VK_R)) {
 			this.pointMasses.clear();
 			this.circles.clear();
@@ -189,6 +206,38 @@ public final class VerletSimulator extends Canvas {
 		
 		if(this.input.isKeyPressed(KeyEvent.VK_G)) {
 			this.physics.toggleGravity();
+		}
+		
+		if(this.input.isKeyPressed(KeyEvent.VK_W)) {
+			this.camera.moveForward(distance);
+		}
+		
+		if(this.input.isKeyPressed(KeyEvent.VK_S)) {
+			this.camera.moveBack(distance);
+		}
+		
+		if(this.input.isKeyPressed(KeyEvent.VK_A)) {
+			this.camera.moveLeft(distance);
+		}
+		
+		if(this.input.isKeyPressed(KeyEvent.VK_D)) {
+			this.camera.moveRight(distance);
+		}
+		
+		if(this.input.isKeyPressed(KeyEvent.VK_RIGHT)) {
+			this.camera.rotateUp(sensitivityX);
+		}
+		
+		if(this.input.isKeyPressed(KeyEvent.VK_LEFT)) {
+			this.camera.rotateUp(-sensitivityX);
+		}
+		
+		if(this.input.isKeyPressed(KeyEvent.VK_DOWN)) {
+			this.camera.rotateRight(sensitivityY);
+		}
+		
+		if(this.input.isKeyPressed(KeyEvent.VK_UP)) {
+			this.camera.rotateRight(-sensitivityY);
 		}
 	}
 }

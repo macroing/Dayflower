@@ -41,48 +41,48 @@ public final class Body {
 	public Body(final float x, final float y, final float bodyHeight) {
 		this.headLength = bodyHeight / 7.5F;
 		
-		this.shoulder = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.shoulder = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.shoulder.setMass(26.0F);
 		
-		this.head = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.head = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.head.setMass(4.0F);
 		this.head.attachTo(this.shoulder, 5.0F / 4.0F * this.headLength, 1.0F, bodyHeight * 2.0F, true);
 		
-		this.elbowLeft = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.elbowLeft = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.elbowLeft.setMass(2.0F);
 		this.elbowLeft.attachTo(this.shoulder, this.headLength * 3.0F / 2.0F, 1.0F, bodyHeight * 2.0F, true);
 		
-		this.elbowRight = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.elbowRight = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.elbowRight.setMass(2.0F);
 		this.elbowRight.attachTo(this.shoulder, this.headLength * 3.0F / 2.0F, 1.0F, bodyHeight * 2.0F, true);
 		
-		this.handLeft = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.handLeft = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.handLeft.setMass(2.0F);
 		this.handLeft.attachTo(this.elbowLeft, this.headLength * 2.0F, 1.0F, bodyHeight * 2.0F, true);
 		
-		this.handRight = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.handRight = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.handRight.setMass(2.0F);
 		this.handRight.attachTo(this.elbowRight, this.headLength * 2.0F, 1.0F, bodyHeight * 2.0F, true);
 		
-		this.pelvis = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.pelvis = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.pelvis.setMass(15.0F);
 		this.pelvis.attachTo(this.shoulder, this.headLength * 3.5F, 0.8F, bodyHeight * 2.0F, true);
 		this.pelvis.attachTo(this.head, this.headLength * 4.75F, 0.02F, bodyHeight * 2.0F, false);
 		
-		this.kneeLeft = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.kneeLeft = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.kneeLeft.setMass(10.0F);
 		this.kneeLeft.attachTo(this.pelvis, this.headLength * 2.0F, 1.0F, bodyHeight * 2.0F, true);
 		
-		this.kneeRight = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.kneeRight = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.kneeRight.setMass(10.0F);
 		this.kneeRight.attachTo(this.pelvis, this.headLength * 2.0F, 1.0F, bodyHeight * 2.0F, true);
 		
-		this.footLeft = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.footLeft = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.footLeft.setMass(5.0F);
 		this.footLeft.attachTo(this.kneeLeft, this.headLength * 2.0F, 1.0F, bodyHeight * 2.0F, true);
 		this.footLeft.attachTo(this.shoulder, this.headLength * 7.5F, 0.001F, bodyHeight * 2.0F, false);
 		
-		this.footRight = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F));
+		this.footRight = new PointMass(x + doRandom(-5.0F, 5.0F), y + doRandom(-5.0F, 5.0F), 5.0F);
 		this.footRight.setMass(5.0F);
 		this.footRight.attachTo(this.kneeRight, this.headLength * 2.0F, 1.0F, bodyHeight * 2.0F, true);
 		this.footRight.attachTo(this.shoulder, this.headLength * 7.5F, 0.001F, bodyHeight * 2.0F, false);

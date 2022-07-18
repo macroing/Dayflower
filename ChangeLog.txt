@@ -3,6 +3,10 @@
 	* ADD:		Add the NodeCacheUnitTests class.
 	* ADD:		Add the RenderingAlgorithmUnitTests class.
 	* ADD:		Add unit tests to the PackedIntComponentOrderUnitTests class.
+	* ADD:		Add the methods blend(Color4D, Color4D, Color4D, Color4D, double, double), getCached(Color4D), getCacheSize() and clearCache() to the Color4D class.
+	* ADD:		Add the methods blend(Color4F, Color4F, Color4F, Color4F, float, float), getCached(Color4F), getCacheSize() and clearCache() to the Color4F class.
+	* ADD:		Add the Color class that contains color operations for primitive types.
+	* ADD:		Add the Image 2 API. This API may replace the Image API in the future. But it is not ready yet.
 
 2022-06-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

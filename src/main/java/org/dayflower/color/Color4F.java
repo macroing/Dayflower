@@ -33,6 +33,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -100,6 +102,10 @@ public final class Color4F {
 	 * A {@code Color4F} denoting the color yellow.
 	 */
 	public static final Color4F YELLOW = new Color4F(1.0F, 1.0F, 0.0F);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final Map<Color4F, Color4F> CACHE = new HashMap<>();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -1070,6 +1076,34 @@ public final class Color4F {
 	}
 	
 	/**
+	 * Blends the component values of {@code color11}, {@code color12}, {@code color21} and {@code color22}.
+	 * <p>
+	 * Returns a new {@code Color4F} instance with the result of the blend.
+	 * <p>
+	 * If either {@code color11}, {@code color12}, {@code color21} or {@code color22} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4F.blend(Color4F.blend(color11, color12, tX), Color4F.blend(color21, color22, tX), tY);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color11 the {@code Color4F} instance on row 1 and column 1
+	 * @param color12 the {@code Color4F} instance on row 1 and column 2
+	 * @param color21 the {@code Color4F} instance on row 2 and column 1
+	 * @param color22 the {@code Color4F} instance on row 2 and column 2
+	 * @param tX the factor to use for all components in the first and second blend operation
+	 * @param tY the factor to use for all components in the third blend operation
+	 * @return a new {@code Color4F} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code color11}, {@code color12}, {@code color21} or {@code color22} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Color4F blend(final Color4F color11, final Color4F color12, final Color4F color21, final Color4F color22, final float tX, final float tY) {
+		return blend(blend(color11, color12, tX), blend(color21, color22, tX), tY);
+	}
+	
+	/**
 	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
 	 * <p>
 	 * Returns a new {@code Color4F} instance with the result of the blend.
@@ -1140,6 +1174,20 @@ public final class Color4F {
 		final float component3 = (colorA.component3 * colorA.component4 + colorB.component3 * colorB.component4 * (1.0F - colorA.component4)) / component4;
 		
 		return new Color4F(component1, component2, component3, component4);
+	}
+	
+	/**
+	 * Returns a cached version of {@code color}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a cached version of {@code color}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Color4F getCached(final Color4F color) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(color, "color == null"), key -> color);
 	}
 	
 	/**
@@ -1671,5 +1719,23 @@ public final class Color4F {
 		}
 		
 		return colors;
+	}
+	
+	/**
+	 * Returns the size of the cache.
+	 * 
+	 * @return the size of the cache
+	 */
+//	TODO: Add Unit Tests!
+	public static int getCacheSize() {
+		return CACHE.size();
+	}
+	
+	/**
+	 * Clears the cache.
+	 */
+//	TODO: Add Unit Tests!
+	public static void clearCache() {
+		CACHE.clear();
 	}
 }

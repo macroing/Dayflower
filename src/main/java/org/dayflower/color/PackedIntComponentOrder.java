@@ -18,7 +18,6 @@
  */
 package org.dayflower.color;
 
-import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 /**
@@ -120,8 +119,10 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code PackedIntComponentOrder} has a shift for the B-component, {@code false} otherwise
 	 */
+	@SuppressWarnings("static-method")
 	public boolean hasShiftB() {
-		return this.shiftB != -1;
+//		return this.shiftB != -1;
+		return true;
 	}
 	
 	/**
@@ -129,8 +130,10 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code PackedIntComponentOrder} has a shift for the G-component, {@code false} otherwise
 	 */
+	@SuppressWarnings("static-method")
 	public boolean hasShiftG() {
-		return this.shiftG != -1;
+//		return this.shiftG != -1;
+		return true;
 	}
 	
 	/**
@@ -138,8 +141,10 @@ public enum PackedIntComponentOrder {
 	 * 
 	 * @return {@code true} if, and only if, this {@code PackedIntComponentOrder} has a shift for the R-component, {@code false} otherwise
 	 */
+	@SuppressWarnings("static-method")
 	public boolean hasShiftR() {
-		return this.shiftR != -1;
+//		return this.shiftR != -1;
+		return true;
 	}
 	
 	/**
@@ -148,7 +153,8 @@ public enum PackedIntComponentOrder {
 	 * @return the component count of this {@code PackedIntComponentOrder} instance
 	 */
 	public int getComponentCount() {
-		return (hasShiftR() ? 1 : 0) + (hasShiftG() ? 1 : 0) + (hasShiftB() ? 1 : 0) + (hasShiftA() ? 1 : 0);
+//		return (hasShiftR() ? 1 : 0) + (hasShiftG() ? 1 : 0) + (hasShiftB() ? 1 : 0) + (hasShiftA() ? 1 : 0);
+		return 3 + (hasShiftA() ? 1 : 0);
 	}
 	
 	/**
@@ -196,7 +202,8 @@ public enum PackedIntComponentOrder {
 	 * @return an {@code int} with {@code r}, {@code g} and {@code b} in a packed form
 	 */
 	public int pack(final int r, final int g, final int b) {
-		return (hasShiftR() ? ((r & 0xFF) << getShiftR()) : 0) | (hasShiftG() ? ((g & 0xFF) << getShiftG()) : 0) | (hasShiftB() ? ((b & 0xFF) << getShiftB()) : 0);
+//		return (hasShiftR() ? ((r & 0xFF) << getShiftR()) : 0) | (hasShiftG() ? ((g & 0xFF) << getShiftG()) : 0) | (hasShiftB() ? ((b & 0xFF) << getShiftB()) : 0);
+		return ((r & 0xFF) << getShiftR()) | ((g & 0xFF) << getShiftG()) | ((b & 0xFF) << getShiftB());
 	}
 	
 	/**
@@ -209,7 +216,8 @@ public enum PackedIntComponentOrder {
 	 * @return an {@code int} with {@code r}, {@code g}, {@code b} and {@code a} in a packed form
 	 */
 	public int pack(final int r, final int g, final int b, final int a) {
-		return (hasShiftR() ? ((r & 0xFF) << getShiftR()) : 0) | (hasShiftG() ? ((g & 0xFF) << getShiftG()) : 0) | (hasShiftB() ? ((b & 0xFF) << getShiftB()) : 0) | (hasShiftA() ? ((a & 0xFF) << getShiftA()) : 0);
+//		return (hasShiftR() ? ((r & 0xFF) << getShiftR()) : 0) | (hasShiftG() ? ((g & 0xFF) << getShiftG()) : 0) | (hasShiftB() ? ((b & 0xFF) << getShiftB()) : 0) | (hasShiftA() ? ((a & 0xFF) << getShiftA()) : 0);
+		return ((r & 0xFF) << getShiftR()) | ((g & 0xFF) << getShiftG()) | ((b & 0xFF) << getShiftB()) | (hasShiftA() ? ((a & 0xFF) << getShiftA()) : 0);
 	}
 	
 	/**
@@ -229,7 +237,8 @@ public enum PackedIntComponentOrder {
 	 * @return an {@code int} with the unpacked B-component, or {@code 0} if it could not unpack
 	 */
 	public int unpackB(final int color) {
-		return hasShiftB() ? (color >> getShiftB()) & 0xFF : 0;
+//		return hasShiftB() ? (color >> getShiftB()) & 0xFF : 0;
+		return (color >> getShiftB()) & 0xFF;
 	}
 	
 	/**
@@ -239,7 +248,8 @@ public enum PackedIntComponentOrder {
 	 * @return an {@code int} with the unpacked G-component, or {@code 0} if it could not unpack
 	 */
 	public int unpackG(final int color) {
-		return hasShiftG() ? (color >> getShiftG()) & 0xFF : 0;
+//		return hasShiftG() ? (color >> getShiftG()) & 0xFF : 0;
+		return (color >> getShiftG()) & 0xFF;
 	}
 	
 	/**
@@ -249,7 +259,8 @@ public enum PackedIntComponentOrder {
 	 * @return an {@code int} with the unpacked R-component, or {@code 0} if it could not unpack
 	 */
 	public int unpackR(final int color) {
-		return hasShiftR() ? (color >> getShiftR()) & 0xFF : 0;
+//		return hasShiftR() ? (color >> getShiftR()) & 0xFF : 0;
+		return (color >> getShiftR()) & 0xFF;
 	}
 	
 	/**
@@ -267,7 +278,6 @@ public enum PackedIntComponentOrder {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount() != 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrder} or {@code array} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public int[] pack(final ArrayComponentOrder arrayComponentOrder, final byte[] array) {
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
 		Objects.requireNonNull(array, "array == null");
@@ -309,7 +319,6 @@ public enum PackedIntComponentOrder {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount() != 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrder} or {@code array} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public int[] pack(final ArrayComponentOrder arrayComponentOrder, final int[] array) {
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
 		Objects.requireNonNull(array, "array == null");
@@ -348,7 +357,6 @@ public enum PackedIntComponentOrder {
 	 * @return a new {@code int[]} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrder} or {@code array} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public int[] unpack(final ArrayComponentOrder arrayComponentOrder, final int[] array) {
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
 		Objects.requireNonNull(array, "array == null");
@@ -365,17 +373,17 @@ public enum PackedIntComponentOrder {
 			
 			final int offset = i * arrayComponentOrder.getComponentCount();
 			
-			if(arrayComponentOrder.hasOffsetR()) {
+//			if(arrayComponentOrder.hasOffsetR()) {
 				arrayUnpacked[offset + arrayComponentOrder.getOffsetR()] = r;
-			}
+//			}
 			
-			if(arrayComponentOrder.hasOffsetG()) {
+//			if(arrayComponentOrder.hasOffsetG()) {
 				arrayUnpacked[offset + arrayComponentOrder.getOffsetG()] = g;
-			}
+//			}
 			
-			if(arrayComponentOrder.hasOffsetB()) {
+//			if(arrayComponentOrder.hasOffsetB()) {
 				arrayUnpacked[offset + arrayComponentOrder.getOffsetB()] = b;
-			}
+//			}
 			
 			if(arrayComponentOrder.hasOffsetA()) {
 				arrayUnpacked[offset + arrayComponentOrder.getOffsetA()] = a;
@@ -400,7 +408,6 @@ public enum PackedIntComponentOrder {
 	 * @return a new {@code int[]} with the result of the conversion
 	 * @throws NullPointerException thrown if, and only if, either {@code packedIntComponentOrderA}, {@code packedIntComponentOrderB} or {@code array} are {@code null}
 	 */
-//	TODO: Add Unit Tests!
 	public static int[] convert(final PackedIntComponentOrder packedIntComponentOrderA, final PackedIntComponentOrder packedIntComponentOrderB, final int[] array) {
 		Objects.requireNonNull(packedIntComponentOrderA, "packedIntComponentOrderA == null");
 		Objects.requireNonNull(packedIntComponentOrderB, "packedIntComponentOrderB == null");

@@ -18,8 +18,10 @@
  */
 package org.dayflower.color;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,24 @@ public final class PackedIntComponentOrderUnitTests {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Test
+	public void testConvert() {
+		final int[] arrayA = new int[] {255, 1, 2, 3, 255, 4, 5, 6};
+		final int[] arrayB = PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.ARGB, arrayA);
+		final int[] arrayC = PackedIntComponentOrder.convert(PackedIntComponentOrder.ARGB, PackedIntComponentOrder.ABGR, arrayB);
+		final int[] arrayD = PackedIntComponentOrder.convert(PackedIntComponentOrder.ABGR, PackedIntComponentOrder.ARGB, arrayC);
+		
+		assertEquals(2, arrayB.length);
+		assertEquals(2, arrayC.length);
+		assertEquals(2, arrayD.length);
+		
+		assertArrayEquals(arrayB, arrayD);
+		
+		assertThrows(NullPointerException.class, () -> PackedIntComponentOrder.convert(PackedIntComponentOrder.ARGB, PackedIntComponentOrder.ABGR, null));
+		assertThrows(NullPointerException.class, () -> PackedIntComponentOrder.convert(PackedIntComponentOrder.ARGB, null, new int[0]));
+		assertThrows(NullPointerException.class, () -> PackedIntComponentOrder.convert(null, PackedIntComponentOrder.ABGR, new int[0]));
+	}
 	
 	@Test
 	public void testGetComponentCount() {
@@ -105,6 +125,38 @@ public final class PackedIntComponentOrderUnitTests {
 	}
 	
 	@Test
+	public void testPackArrayComponentOrderByteArray() {
+		final int[] arrayA = PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.ARGB, new byte[] {(byte)(255), (byte)(1), (byte)(2), (byte)(3), (byte)(255), (byte)(4), (byte)(5), (byte)(6)});
+		final int[] arrayB = PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.BGRA, new byte[] {(byte)(3), (byte)(2), (byte)(1), (byte)(255), (byte)(6), (byte)(5), (byte)(4), (byte)(255)});
+		
+		assertEquals(2, arrayA.length);
+		assertEquals(2, arrayB.length);
+		
+		assertArrayEquals(arrayA, arrayB);
+		
+		assertThrows(NullPointerException.class, () -> PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.ARGB, (byte[])(null)));
+		assertThrows(NullPointerException.class, () -> PackedIntComponentOrder.ARGB.pack(null, new byte[0]));
+		
+		assertThrows(IllegalArgumentException.class, () -> PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.ARGB, new byte[1]));
+	}
+	
+	@Test
+	public void testPackArrayComponentOrderIntArray() {
+		final int[] arrayA = PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.ARGB, new int[] {255, 1, 2, 3, 255, 4, 5, 6});
+		final int[] arrayB = PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.BGRA, new int[] {3, 2, 1, 255, 6, 5, 4, 255});
+		
+		assertEquals(2, arrayA.length);
+		assertEquals(2, arrayB.length);
+		
+		assertArrayEquals(arrayA, arrayB);
+		
+		assertThrows(NullPointerException.class, () -> PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.ARGB, (int[])(null)));
+		assertThrows(NullPointerException.class, () -> PackedIntComponentOrder.ARGB.pack(null, new int[0]));
+		
+		assertThrows(IllegalArgumentException.class, () -> PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.ARGB, new int[1]));
+	}
+	
+	@Test
 	public void testPackIntIntInt() {
 		final int colorA = PackedIntComponentOrder.ABGR.pack(10, 20, 30);
 		final int colorB = PackedIntComponentOrder.ARGB.pack(10, 20, 30);
@@ -156,6 +208,25 @@ public final class PackedIntComponentOrderUnitTests {
 		assertEquals( 40, colorBComponentA);
 		assertEquals(255, colorCComponentA);
 		assertEquals(255, colorDComponentA);
+	}
+	
+	@Test
+	public void testUnpackArrayComponentOrderIntArray() {
+		final int[] arrayA = new int[] {255, 1, 2, 3, 255, 4, 5, 6};
+		final int[] arrayB = PackedIntComponentOrder.ARGB.pack(ArrayComponentOrder.ARGB, arrayA);
+		final int[] arrayC = PackedIntComponentOrder.ARGB.unpack(ArrayComponentOrder.ARGB, arrayB);
+		final int[] arrayD = new int[] {1, 2, 3, 4, 5, 6};
+		final int[] arrayE = PackedIntComponentOrder.RGB.pack(ArrayComponentOrder.RGB, arrayD);
+		final int[] arrayF = PackedIntComponentOrder.RGB.unpack(ArrayComponentOrder.RGB, arrayE);
+		
+		assertEquals(8, arrayC.length);
+		assertEquals(6, arrayF.length);
+		
+		assertArrayEquals(arrayA, arrayC);
+		assertArrayEquals(arrayD, arrayF);
+		
+		assertThrows(NullPointerException.class, () -> PackedIntComponentOrder.ARGB.unpack(ArrayComponentOrder.ARGB, null));
+		assertThrows(NullPointerException.class, () -> PackedIntComponentOrder.ARGB.unpack(null, new int[0]));
 	}
 	
 	@Test

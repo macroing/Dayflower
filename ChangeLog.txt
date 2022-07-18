@@ -1,3 +1,9 @@
+2022-07-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the NodeCacheUnitTests class.
+	* ADD:		Add the RenderingAlgorithmUnitTests class.
+	* ADD:		Add unit tests to the PackedIntComponentOrderUnitTests class.
+
 2022-06-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods perspective(AngleD, double, double, double) and screenSpaceTransform(double, double) to the Matrix44D class.

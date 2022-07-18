@@ -7,6 +7,12 @@
 	* ADD:		Add the methods blend(Color4F, Color4F, Color4F, Color4F, float, float), getCached(Color4F), getCacheSize() and clearCache() to the Color4F class.
 	* ADD:		Add the Color class that contains color operations for primitive types.
 	* ADD:		Add the Image 2 API. This API may replace the Image API in the future. But it is not ready yet.
+	* ADD:		Add the constructor Color4D(Color4F) to the Color4D class.
+	* ADD:		Add the constructor Color4F(Color4D) to the Color4F class.
+	* ADD:		Add the method blend(Color3D, Color3D, Color3D, Color3D, double, double) to the Color3D class.
+	* ADD:		Add the method blend(Color3F, Color3F, Color3F, Color3F, float, float) to the Color3F class.
+	* ADD:		Add the constructor Color3D(Color4F) to the Color3D class.
+	* ADD:		Add the constructor Color3F(Color4D) to the Color3F class.
 
 2022-06-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

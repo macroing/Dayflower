@@ -25,8 +25,12 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import org.dayflower.color.Color3D;
+import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4D;
+import org.dayflower.color.Color4F;
 import org.dayflower.utility.Doubles;
+import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 import org.macroing.java.awt.image.BufferedImages;
 
@@ -90,6 +94,26 @@ final class Color4DData extends Data {
 	}
 	
 	@Override
+	public Color3D getColor3D(final int index) {
+		return index >= 0 && index < this.colors.length ? new Color3D(this.colors[index]) : Color3D.BLACK;
+	}
+	
+	@Override
+	public Color3D getColor3D(final int x, final int y) {
+		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? new Color3D(this.colors[y * this.resolutionX + x]) : Color3D.BLACK;
+	}
+	
+	@Override
+	public Color3F getColor3F(final int index) {
+		return index >= 0 && index < this.colors.length ? new Color3F(this.colors[index]) : Color3F.BLACK;
+	}
+	
+	@Override
+	public Color3F getColor3F(final int x, final int y) {
+		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? new Color3F(this.colors[y * this.resolutionX + x]) : Color3F.BLACK;
+	}
+	
+	@Override
 	public Color4D getColor4D(final int index) {
 		return index >= 0 && index < this.colors.length ? this.colors[index] : Color4D.TRANSPARENT;
 	}
@@ -97,6 +121,16 @@ final class Color4DData extends Data {
 	@Override
 	public Color4D getColor4D(final int x, final int y) {
 		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? this.colors[y * this.resolutionX + x] : Color4D.TRANSPARENT;
+	}
+	
+	@Override
+	public Color4F getColor4F(final int index) {
+		return index >= 0 && index < this.colors.length ? new Color4F(this.colors[index]) : Color4F.TRANSPARENT;
+	}
+	
+	@Override
+	public Color4F getColor4F(final int x, final int y) {
+		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? new Color4F(this.colors[y * this.resolutionX + x]) : Color4F.TRANSPARENT;
 	}
 	
 	@Override
@@ -241,15 +275,15 @@ final class Color4DData extends Data {
 			return false;
 		}
 		
-		final double angleDegrees = isAngleInRadians ? Math.toDegrees(angle) : angle;
+		final double angleDegrees = isAngleInRadians ? Doubles.toDegrees(angle) : angle;
 		
 		if(Doubles.equal(angleDegrees, +360.0D) || Doubles.equal(angleDegrees, -360.0D)) {
 			return false;
 		}
 		
-		final double angleRadians = isAngleInRadians ? angle : Math.toRadians(angle);
-		final double angleRadiansCos = Math.cos(angleRadians);
-		final double angleRadiansSin = Math.sin(angleRadians);
+		final double angleRadians = isAngleInRadians ? angle : Doubles.toRadians(angle);
+		final double angleRadiansCos = Doubles.cos(angleRadians);
+		final double angleRadiansSin = Doubles.sin(angleRadians);
 		
 		final double directionAX = -this.resolutionX * 0.5D;
 		final double directionAY = -this.resolutionY * 0.5D;
@@ -286,8 +320,8 @@ final class Color4DData extends Data {
 		final Color4D[] newColors = new Color4D[newResolutionX * newResolutionY];
 		final Color4D[] oldColors = this.colors;
 		
-		final double directionBX = Math.abs(Math.min(minimumX, 0.0D));
-		final double directionBY = Math.abs(Math.min(minimumY, 0.0D));
+		final double directionBX = Doubles.abs(Doubles.min(minimumX, 0.0D));
+		final double directionBY = Doubles.abs(Doubles.min(minimumY, 0.0D));
 		
 		for(int y = 0; y < newResolutionY; y++) {
 			for(int x = 0; x < newResolutionX; x++) {
@@ -299,6 +333,87 @@ final class Color4DData extends Data {
 				
 				final int cX = (int)(bX - directionAX - 0.5D);
 				final int cY = (int)(bY - directionAY - 0.5D);
+				
+				newColors[y * newResolutionX + x] = getColor4D(cX, cY);
+			}
+		}
+		
+		if(changeBegin()) {
+			changeAdd(new StateChange(newColors, oldColors, newResolutionX, oldResolutionX, newResolutionY, oldResolutionY));
+			changeEnd();
+		}
+		
+		this.colors = newColors;
+		this.resolutionX = newResolutionX;
+		this.resolutionY = newResolutionY;
+		
+		return true;
+	}
+	
+	@Override
+	public boolean rotate(final float angle, final boolean isAngleInRadians) {
+		if(Floats.isZero(angle)) {
+			return false;
+		}
+		
+		final float angleDegrees = isAngleInRadians ? Floats.toDegrees(angle) : angle;
+		
+		if(Floats.equal(angleDegrees, +360.0F) || Floats.equal(angleDegrees, -360.0F)) {
+			return false;
+		}
+		
+		final float angleRadians = isAngleInRadians ? angle : Floats.toRadians(angle);
+		final float angleRadiansCos = Floats.cos(angleRadians);
+		final float angleRadiansSin = Floats.sin(angleRadians);
+		
+		final float directionAX = -this.resolutionX * 0.5F;
+		final float directionAY = -this.resolutionY * 0.5F;
+		
+		final float rectangleAAX = directionAX;
+		final float rectangleAAY = directionAY;
+		final float rectangleABX = directionAX;
+		final float rectangleABY = directionAY + this.resolutionY;
+		final float rectangleACX = directionAX + this.resolutionX;
+		final float rectangleACY = directionAY + this.resolutionY;
+		final float rectangleADX = directionAX + this.resolutionX;
+		final float rectangleADY = directionAY;
+		
+		final float rectangleBAX = rectangleAAX * angleRadiansCos - rectangleAAY * angleRadiansSin;
+		final float rectangleBAY = rectangleAAY * angleRadiansCos + rectangleAAX * angleRadiansSin;
+		final float rectangleBBX = rectangleABX * angleRadiansCos - rectangleABY * angleRadiansSin;
+		final float rectangleBBY = rectangleABY * angleRadiansCos + rectangleABX * angleRadiansSin;
+		final float rectangleBCX = rectangleACX * angleRadiansCos - rectangleACY * angleRadiansSin;
+		final float rectangleBCY = rectangleACY * angleRadiansCos + rectangleACX * angleRadiansSin;
+		final float rectangleBDX = rectangleADX * angleRadiansCos - rectangleADY * angleRadiansSin;
+		final float rectangleBDY = rectangleADY * angleRadiansCos + rectangleADX * angleRadiansSin;
+		
+		final float minimumX = Floats.min(rectangleBAX, rectangleBBX, rectangleBCX, rectangleBDX);
+		final float minimumY = Floats.min(rectangleBAY, rectangleBBY, rectangleBCY, rectangleBDY);
+		final float maximumX = Floats.max(rectangleBAX, rectangleBBX, rectangleBCX, rectangleBDX);
+		final float maximumY = Floats.max(rectangleBAY, rectangleBBY, rectangleBCY, rectangleBDY);
+		
+		final int newResolutionX = (int)(maximumX - minimumX);
+		final int newResolutionY = (int)(maximumY - minimumY);
+		
+		final int oldResolutionX = this.resolutionX;
+		final int oldResolutionY = this.resolutionY;
+		
+		final Color4D[] newColors = new Color4D[newResolutionX * newResolutionY];
+		final Color4D[] oldColors = this.colors;
+		
+		final float directionBX = Floats.abs(Floats.min(minimumX, 0.0F));
+		final float directionBY = Floats.abs(Floats.min(minimumY, 0.0F));
+		
+		for(int y = 0; y < newResolutionY; y++) {
+			for(int x = 0; x < newResolutionX; x++) {
+				final float aX = x - directionBX;
+				final float aY = y - directionBY;
+				
+				final float bX = aX * angleRadiansCos - aY * -angleRadiansSin;
+				final float bY = aY * angleRadiansCos + aX * -angleRadiansSin;
+				
+				final int cX = (int)(bX - directionAX - 0.5F);
+				final int cY = (int)(bY - directionAY - 0.5F);
 				
 				newColors[y * newResolutionX + x] = getColor4D(cX, cY);
 			}
@@ -354,6 +469,26 @@ final class Color4DData extends Data {
 		this.resolutionY = newResolutionY;
 		
 		return true;
+	}
+	
+	@Override
+	public boolean setColor3D(final Color3D color, final int index) {
+		return setColor4D(new Color4D(Objects.requireNonNull(color, "color == null")), index);
+	}
+	
+	@Override
+	public boolean setColor3D(final Color3D color, final int x, final int y) {
+		return setColor4D(new Color4D(Objects.requireNonNull(color, "color == null")), x, y);
+	}
+	
+	@Override
+	public boolean setColor3F(final Color3F color, final int index) {
+		return setColor4D(new Color4D(Objects.requireNonNull(color, "color == null")), index);
+	}
+	
+	@Override
+	public boolean setColor3F(final Color3F color, final int x, final int y) {
+		return setColor4D(new Color4D(Objects.requireNonNull(color, "color == null")), x, y);
 	}
 	
 	@Override
@@ -414,6 +549,16 @@ final class Color4DData extends Data {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public boolean setColor4F(final Color4F color, final int index) {
+		return setColor4D(new Color4D(Objects.requireNonNull(color, "color == null")), index);
+	}
+	
+	@Override
+	public boolean setColor4F(final Color4F color, final int x, final int y) {
+		return setColor4D(new Color4D(Objects.requireNonNull(color, "color == null")), x, y);
 	}
 	
 	@Override

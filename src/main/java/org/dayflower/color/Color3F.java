@@ -286,6 +286,19 @@ public final class Color3F {
 	 * <p>
 	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param color a {@link Color4D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public Color3F(final Color4D color) {
+		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()));
+	}
+	
+	/**
+	 * Constructs a new {@code Color3F} instance from {@code color}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
 	 * @param color a {@link Color4F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
@@ -1234,6 +1247,34 @@ public final class Color3F {
 	 */
 	public static Color3F blend(final Color3F colorLHS, final Color3F colorRHS) {
 		return blend(colorLHS, colorRHS, 0.5F);
+	}
+	
+	/**
+	 * Blends the component values of {@code color11}, {@code color12}, {@code color21} and {@code color22}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the blend.
+	 * <p>
+	 * If either {@code color11}, {@code color12}, {@code color21} or {@code color22} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.blend(Color3F.blend(color11, color12, tX), Color3F.blend(color21, color22, tX), tY);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color11 the {@code Color3F} instance on row 1 and column 1
+	 * @param color12 the {@code Color3F} instance on row 1 and column 2
+	 * @param color21 the {@code Color3F} instance on row 2 and column 1
+	 * @param color22 the {@code Color3F} instance on row 2 and column 2
+	 * @param tX the factor to use for all components in the first and second blend operation
+	 * @param tY the factor to use for all components in the third blend operation
+	 * @return a new {@code Color3F} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code color11}, {@code color12}, {@code color21} or {@code color22} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Color3F blend(final Color3F color11, final Color3F color12, final Color3F color21, final Color3F color22, final float tX, final float tY) {
+		return blend(blend(color11, color12, tX), blend(color21, color22, tX), tY);
 	}
 	
 	/**

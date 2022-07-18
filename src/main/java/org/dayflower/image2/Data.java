@@ -24,7 +24,12 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.dayflower.color.Color;
+import org.dayflower.color.Color3D;
+import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4D;
+import org.dayflower.color.Color4F;
+import org.dayflower.utility.Doubles;
+import org.dayflower.utility.Floats;
 
 /**
  * A {@code Data} contains data for an image.
@@ -82,6 +87,128 @@ public abstract class Data {
 	public abstract BufferedImage toBufferedImage(final boolean isRGB);
 	
 	/**
+	 * Returns the {@link Color3D} at {@code x} and {@code y} in this {@code Data} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0.0D} or greater than or equal to {@code data.getResolutionX()}, {@code Color3D.BLACK} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0.0D} or greater than or equal to {@code data.getResolutionY()}, {@code Color3D.BLACK} will be returned.
+	 * <p>
+	 * If both {@code x} and {@code y} are equal to mathematical integers, this method is equivalent to {@link #getColor3D(int, int)}. Otherwise, bilinear interpolation will be performed on the closest pixels.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color3D} at {@code x} and {@code y} in this {@code Data} instance
+	 */
+	public final Color3D getColor3D(final double x, final double y) {
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		if(x < 0.0D || x >= resolutionX) {
+			return Color3D.BLACK;
+		}
+		
+		if(y < 0.0D || y >= resolutionY) {
+			return Color3D.BLACK;
+		}
+		
+		final int minimumX = (int)(Doubles.floor(x));
+		final int maximumX = (int)(Doubles.ceil(x));
+		
+		final int minimumY = (int)(Doubles.floor(y));
+		final int maximumY = (int)(Doubles.ceil(y));
+		
+		if(minimumX == maximumX && minimumY == maximumY) {
+			return getColor3D(minimumX, minimumY);
+		}
+		
+		return Color3D.blend(getColor3D(minimumX, minimumY), getColor3D(maximumX, minimumY), getColor3D(minimumX, maximumY), getColor3D(maximumX, maximumY), x - minimumX, y - minimumY);
+	}
+	
+	/**
+	 * Returns the {@link Color3D} at {@code index} in this {@code Data} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code data.getResolution()}, {@code Color3D.BLACK} will be returned.
+	 * 
+	 * @param index the index of the pixel
+	 * @return the {@code Color3D} at {@code index} in this {@code Data} instance
+	 */
+	public abstract Color3D getColor3D(final int index);
+	
+	/**
+	 * Returns the {@link Color3D} at {@code x} and {@code y} in this {@code Data} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code data.getResolutionX()}, {@code Color3D.BLACK} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code data.getResolutionY()}, {@code Color3D.BLACK} will be returned.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color3D} at {@code x} and {@code y} in this {@code Data} instance
+	 */
+	public abstract Color3D getColor3D(final int x, final int y);
+	
+	/**
+	 * Returns the {@link Color3F} at {@code x} and {@code y} in this {@code Data} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0.0F} or greater than or equal to {@code data.getResolutionX()}, {@code Color3F.BLACK} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0.0F} or greater than or equal to {@code data.getResolutionY()}, {@code Color3F.BLACK} will be returned.
+	 * <p>
+	 * If both {@code x} and {@code y} are equal to mathematical integers, this method is equivalent to {@link #getColor3F(int, int)}. Otherwise, bilinear interpolation will be performed on the closest pixels.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color3F} at {@code x} and {@code y} in this {@code Data} instance
+	 */
+	public final Color3F getColor3F(final float x, final float y) {
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		if(x < 0.0F || x >= resolutionX) {
+			return Color3F.BLACK;
+		}
+		
+		if(y < 0.0F || y >= resolutionY) {
+			return Color3F.BLACK;
+		}
+		
+		final int minimumX = (int)(Floats.floor(x));
+		final int maximumX = (int)(Floats.ceil(x));
+		
+		final int minimumY = (int)(Floats.floor(y));
+		final int maximumY = (int)(Floats.ceil(y));
+		
+		if(minimumX == maximumX && minimumY == maximumY) {
+			return getColor3F(minimumX, minimumY);
+		}
+		
+		return Color3F.blend(getColor3F(minimumX, minimumY), getColor3F(maximumX, minimumY), getColor3F(minimumX, maximumY), getColor3F(maximumX, maximumY), x - minimumX, y - minimumY);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} at {@code index} in this {@code Data} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code data.getResolution()}, {@code Color3F.BLACK} will be returned.
+	 * 
+	 * @param index the index of the pixel
+	 * @return the {@code Color3F} at {@code index} in this {@code Data} instance
+	 */
+	public abstract Color3F getColor3F(final int index);
+	
+	/**
+	 * Returns the {@link Color3F} at {@code x} and {@code y} in this {@code Data} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code data.getResolutionX()}, {@code Color3F.BLACK} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code data.getResolutionY()}, {@code Color3F.BLACK} will be returned.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color3F} at {@code x} and {@code y} in this {@code Data} instance
+	 */
+	public abstract Color3F getColor3F(final int x, final int y);
+	
+	/**
 	 * Returns the {@link Color4D} at {@code x} and {@code y} in this {@code Data} instance.
 	 * <p>
 	 * If {@code x} is less than {@code 0.0D} or greater than or equal to {@code data.getResolutionX()}, {@code Color4D.TRANSPARENT} will be returned.
@@ -106,11 +233,11 @@ public abstract class Data {
 			return Color4D.TRANSPARENT;
 		}
 		
-		final int minimumX = (int)(Math.floor(x));
-		final int maximumX = (int)(Math.ceil(x));
+		final int minimumX = (int)(Doubles.floor(x));
+		final int maximumX = (int)(Doubles.ceil(x));
 		
-		final int minimumY = (int)(Math.floor(y));
-		final int maximumY = (int)(Math.ceil(y));
+		final int minimumY = (int)(Doubles.floor(y));
+		final int maximumY = (int)(Doubles.ceil(y));
 		
 		if(minimumX == maximumX && minimumY == maximumY) {
 			return getColor4D(minimumX, minimumY);
@@ -141,6 +268,67 @@ public abstract class Data {
 	 * @return the {@code Color4D} at {@code x} and {@code y} in this {@code Data} instance
 	 */
 	public abstract Color4D getColor4D(final int x, final int y);
+	
+	/**
+	 * Returns the {@link Color4F} at {@code x} and {@code y} in this {@code Data} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0.0F} or greater than or equal to {@code data.getResolutionX()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0.0F} or greater than or equal to {@code data.getResolutionY()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * <p>
+	 * If both {@code x} and {@code y} are equal to mathematical integers, this method is equivalent to {@link #getColor4F(int, int)}. Otherwise, bilinear interpolation will be performed on the closest pixels.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color4F} at {@code x} and {@code y} in this {@code Data} instance
+	 */
+	public final Color4F getColor4F(final float x, final float y) {
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		if(x < 0.0F || x >= resolutionX) {
+			return Color4F.TRANSPARENT;
+		}
+		
+		if(y < 0.0F || y >= resolutionY) {
+			return Color4F.TRANSPARENT;
+		}
+		
+		final int minimumX = (int)(Floats.floor(x));
+		final int maximumX = (int)(Floats.ceil(x));
+		
+		final int minimumY = (int)(Floats.floor(y));
+		final int maximumY = (int)(Floats.ceil(y));
+		
+		if(minimumX == maximumX && minimumY == maximumY) {
+			return getColor4F(minimumX, minimumY);
+		}
+		
+		return Color4F.blend(getColor4F(minimumX, minimumY), getColor4F(maximumX, minimumY), getColor4F(minimumX, maximumY), getColor4F(maximumX, maximumY), x - minimumX, y - minimumY);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} at {@code index} in this {@code Data} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code data.getResolution()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * 
+	 * @param index the index of the pixel
+	 * @return the {@code Color4F} at {@code index} in this {@code Data} instance
+	 */
+	public abstract Color4F getColor4F(final int index);
+	
+	/**
+	 * Returns the {@link Color4F} at {@code x} and {@code y} in this {@code Data} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code data.getResolutionX()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code data.getResolutionY()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color4F} at {@code x} and {@code y} in this {@code Data} instance
+	 */
+	public abstract Color4F getColor4F(final int x, final int y);
 	
 	/**
 	 * Returns a copy of this {@code Data} instance.
@@ -329,6 +517,17 @@ public abstract class Data {
 	public abstract boolean rotate(final double angle, final boolean isAngleInRadians);
 	
 	/**
+	 * Rotates this {@code Data} instance by {@code angle} degrees or radians.
+	 * <p>
+	 * Returns {@code true} if, and only if, the rotation was performed, {@code false} otherwise.
+	 * 
+	 * @param angle an angle in degrees or radians
+	 * @param isAngleInRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
+	 * @return {@code true} if, and only if, the rotation was performed, {@code false} otherwise
+	 */
+	public abstract boolean rotate(final float angle, final boolean isAngleInRadians);
+	
+	/**
 	 * Scales this {@code Data} instance to a new resolution given the scale factors {@code scaleX} and {@code scaleY}.
 	 * <p>
 	 * Returns {@code true} if, and only if, the resolution is changed as a result of this operation, {@code false} otherwise.
@@ -342,8 +541,28 @@ public abstract class Data {
 	 * @return {@code true} if, and only if, the resolution is changed as a result of this operation, {@code false} otherwise
 	 */
 	public final boolean scale(final double scaleX, final double scaleY) {
-		final int resolutionX = (int)(Math.ceil(getResolutionX() * scaleX));
-		final int resolutionY = (int)(Math.ceil(getResolutionY() * scaleY));
+		final int resolutionX = (int)(Doubles.ceil(getResolutionX() * scaleX));
+		final int resolutionY = (int)(Doubles.ceil(getResolutionY() * scaleY));
+		
+		return scale(resolutionX, resolutionY);
+	}
+	
+	/**
+	 * Scales this {@code Data} instance to a new resolution given the scale factors {@code scaleX} and {@code scaleY}.
+	 * <p>
+	 * Returns {@code true} if, and only if, the resolution is changed as a result of this operation, {@code false} otherwise.
+	 * <p>
+	 * If either {@code scaleX} or {@code scaleY} are less than or equal to {@code 0.0F}, the resolution will not be changed.
+	 * <p>
+	 * If both {@code scaleX} and {@code scaleY} are equal to {@code 1.0F}, the resolution will not be changed.
+	 * 
+	 * @param scaleX the scale factor along the X-axis
+	 * @param scaleY the scale factor along the Y-axis
+	 * @return {@code true} if, and only if, the resolution is changed as a result of this operation, {@code false} otherwise
+	 */
+	public final boolean scale(final float scaleX, final float scaleY) {
+		final int resolutionX = (int)(Floats.ceil(getResolutionX() * scaleX));
+		final int resolutionY = (int)(Floats.ceil(getResolutionY() * scaleY));
 		
 		return scale(resolutionX, resolutionY);
 	}
@@ -393,6 +612,76 @@ public abstract class Data {
 	 * <p>
 	 * If {@code index} is less than {@code 0} or greater than or equal to {@code data.getResolution()}, the color of the pixel at {@code index} will not be set.
 	 * 
+	 * @param color the {@link Color3D} instance to set
+	 * @param index the index of the pixel
+	 * @return {@code true} if, and only if, the color of the pixel at {@code index} is set, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public abstract boolean setColor3D(final Color3D color, final int index);
+	
+	/**
+	 * Sets the color of the pixel at {@code x} and {@code y} in this {@code Data} instance to {@code color}.
+	 * <p>
+	 * Returns {@code true} if, and only if, the color of the pixel at {@code x} and {@code y} is set, {@code false} otherwise.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code data.getResolutionX()}, the color of the pixel at {@code x} and {@code y} will not be set.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code data.getResolutionY()}, the color of the pixel at {@code x} and {@code y} will not be set.
+	 * 
+	 * @param color the {@link Color3D} instance to set
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return {@code true} if, and only if, the color of the pixel at {@code x} and {@code y} is set, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public abstract boolean setColor3D(final Color3D color, final int x, final int y);
+	
+	/**
+	 * Sets the color of the pixel at {@code index} in this {@code Data} instance to {@code color}.
+	 * <p>
+	 * Returns {@code true} if, and only if, the color of the pixel at {@code index} is set, {@code false} otherwise.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code data.getResolution()}, the color of the pixel at {@code index} will not be set.
+	 * 
+	 * @param color the {@link Color3F} instance to set
+	 * @param index the index of the pixel
+	 * @return {@code true} if, and only if, the color of the pixel at {@code index} is set, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public abstract boolean setColor3F(final Color3F color, final int index);
+	
+	/**
+	 * Sets the color of the pixel at {@code x} and {@code y} in this {@code Data} instance to {@code color}.
+	 * <p>
+	 * Returns {@code true} if, and only if, the color of the pixel at {@code x} and {@code y} is set, {@code false} otherwise.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code data.getResolutionX()}, the color of the pixel at {@code x} and {@code y} will not be set.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code data.getResolutionY()}, the color of the pixel at {@code x} and {@code y} will not be set.
+	 * 
+	 * @param color the {@link Color3F} instance to set
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return {@code true} if, and only if, the color of the pixel at {@code x} and {@code y} is set, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public abstract boolean setColor3F(final Color3F color, final int x, final int y);
+	
+	/**
+	 * Sets the color of the pixel at {@code index} in this {@code Data} instance to {@code color}.
+	 * <p>
+	 * Returns {@code true} if, and only if, the color of the pixel at {@code index} is set, {@code false} otherwise.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code data.getResolution()}, the color of the pixel at {@code index} will not be set.
+	 * 
 	 * @param color the {@link Color4D} instance to set
 	 * @param index the index of the pixel
 	 * @return {@code true} if, and only if, the color of the pixel at {@code index} is set, {@code false} otherwise
@@ -418,6 +707,41 @@ public abstract class Data {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public abstract boolean setColor4D(final Color4D color, final int x, final int y);
+	
+	/**
+	 * Sets the color of the pixel at {@code index} in this {@code Data} instance to {@code color}.
+	 * <p>
+	 * Returns {@code true} if, and only if, the color of the pixel at {@code index} is set, {@code false} otherwise.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code data.getResolution()}, the color of the pixel at {@code index} will not be set.
+	 * 
+	 * @param color the {@link Color4F} instance to set
+	 * @param index the index of the pixel
+	 * @return {@code true} if, and only if, the color of the pixel at {@code index} is set, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public abstract boolean setColor4F(final Color4F color, final int index);
+	
+	/**
+	 * Sets the color of the pixel at {@code x} and {@code y} in this {@code Data} instance to {@code color}.
+	 * <p>
+	 * Returns {@code true} if, and only if, the color of the pixel at {@code x} and {@code y} is set, {@code false} otherwise.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code data.getResolutionX()}, the color of the pixel at {@code x} and {@code y} will not be set.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code data.getResolutionY()}, the color of the pixel at {@code x} and {@code y} will not be set.
+	 * 
+	 * @param color the {@link Color4F} instance to set
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return {@code true} if, and only if, the color of the pixel at {@code x} and {@code y} is set, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public abstract boolean setColor4F(final Color4F color, final int x, final int y);
 	
 	/**
 	 * Sets the color of the pixel at {@code index} in this {@code Data} instance to {@code colorARGB}.
@@ -590,11 +914,49 @@ public abstract class Data {
 			return 0;
 		}
 		
-		final int minimumX = (int)(Math.floor(x));
-		final int maximumX = (int)(Math.ceil(x));
+		final int minimumX = (int)(Doubles.floor(x));
+		final int maximumX = (int)(Doubles.ceil(x));
 		
-		final int minimumY = (int)(Math.floor(y));
-		final int maximumY = (int)(Math.ceil(y));
+		final int minimumY = (int)(Doubles.floor(y));
+		final int maximumY = (int)(Doubles.ceil(y));
+		
+		if(minimumX == maximumX && minimumY == maximumY) {
+			return getColorARGB(minimumX, minimumY);
+		}
+		
+		return Color.blend(getColorARGB(minimumX, minimumY), getColorARGB(maximumX, minimumY), getColorARGB(minimumX, maximumY), getColorARGB(maximumX, maximumY), x - minimumX, y - minimumY);
+	}
+	
+	/**
+	 * Returns the color at {@code x} and {@code y} in this {@code Data} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0.0F} or greater than or equal to {@code data.getResolutionX()}, {@code Color.TRANSPARENT} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0.0F} or greater than or equal to {@code data.getResolutionY()}, {@code Color.TRANSPARENT} will be returned.
+	 * <p>
+	 * If both {@code x} and {@code y} are equal to mathematical integers, this method is equivalent to {@link #getColorARGB(int, int)}. Otherwise, bilinear interpolation will be performed on the closest pixels.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the color at {@code x} and {@code y} in this {@code Data} instance
+	 */
+	public final int getColorARGB(final float x, final float y) {
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		if(x < 0.0D || x >= resolutionX) {
+			return 0;
+		}
+		
+		if(y < 0.0D || y >= resolutionY) {
+			return 0;
+		}
+		
+		final int minimumX = (int)(Floats.floor(x));
+		final int maximumX = (int)(Floats.ceil(x));
+		
+		final int minimumY = (int)(Floats.floor(y));
+		final int maximumY = (int)(Floats.ceil(y));
 		
 		if(minimumX == maximumX && minimumY == maximumY) {
 			return getColorARGB(minimumX, minimumY);

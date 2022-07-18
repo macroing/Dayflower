@@ -294,6 +294,19 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Constructs a new {@code Color3D} instance from {@code color}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color4F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public Color3D(final Color4F color) {
+		this(toDouble(color.getComponent1()), toDouble(color.getComponent2()), toDouble(color.getComponent3()));
+	}
+	
+	/**
 	 * Constructs a new {@code Color3D} instance denoting a grayscale color.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
@@ -1234,6 +1247,34 @@ public final class Color3D {
 	 */
 	public static Color3D blend(final Color3D colorLHS, final Color3D colorRHS) {
 		return blend(colorLHS, colorRHS, 0.5D);
+	}
+	
+	/**
+	 * Blends the component values of {@code color11}, {@code color12}, {@code color21} and {@code color22}.
+	 * <p>
+	 * Returns a new {@code Color3D} instance with the result of the blend.
+	 * <p>
+	 * If either {@code color11}, {@code color12}, {@code color21} or {@code color22} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3D.blend(Color3D.blend(color11, color12, tX), Color3D.blend(color21, color22, tX), tY);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color11 the {@code Color3D} instance on row 1 and column 1
+	 * @param color12 the {@code Color3D} instance on row 1 and column 2
+	 * @param color21 the {@code Color3D} instance on row 2 and column 1
+	 * @param color22 the {@code Color3D} instance on row 2 and column 2
+	 * @param tX the factor to use for all components in the first and second blend operation
+	 * @param tY the factor to use for all components in the third blend operation
+	 * @return a new {@code Color3D} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code color11}, {@code color12}, {@code color21} or {@code color22} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Color3D blend(final Color3D color11, final Color3D color12, final Color3D color21, final Color3D color22, final double tX, final double tY) {
+		return blend(blend(color11, color12, tX), blend(color21, color22, tX), tY);
 	}
 	
 	/**

@@ -181,6 +181,19 @@ public final class Color4D {
 	}
 	
 	/**
+	 * Constructs a new {@code Color4D} instance from {@code color}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color4F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public Color4D(final Color4F color) {
+		this(toDouble(color.getComponent1()), toDouble(color.getComponent2()), toDouble(color.getComponent3()), toDouble(color.getComponent4()));
+	}
+	
+	/**
 	 * Constructs a new {@code Color4D} instance denoting a grayscale color.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:

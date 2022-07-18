@@ -32,7 +32,10 @@ import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.color.Color3D;
+import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4D;
+import org.dayflower.color.Color4F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Shape2I;
 import org.dayflower.geometry.shape.Rectangle2I;
@@ -327,6 +330,142 @@ public final class Image {
 	}
 	
 	/**
+	 * Returns the {@link Color3D} at {@code point} in this {@code Image} instance.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point.x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, {@code Color3D.BLACK} will be returned.
+	 * <p>
+	 * If {@code point.y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, {@code Color3D.BLACK} will be returned.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColor3D(point.x, point.y);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2I} instance that contains the X- and Y-components of the pixel
+	 * @return the {@code Color3D} at {@code point} in this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Color3D getColor3D(final Point2I point) {
+		return getColor3D(point.x, point.y);
+	}
+	
+	/**
+	 * Returns the {@link Color3D} at {@code x} and {@code y} in this {@code Image} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0.0D} or greater than or equal to {@code image.getResolutionX()}, {@code Color3D.BLACK} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0.0D} or greater than or equal to {@code image.getResolutionY()}, {@code Color3D.BLACK} will be returned.
+	 * <p>
+	 * If both {@code x} and {@code y} are equal to mathematical integers, this method is equivalent to {@link #getColor3D(int, int)}. Otherwise, bilinear interpolation will be performed on the closest pixels.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color3D} at {@code x} and {@code y} in this {@code Image} instance
+	 */
+	public Color3D getColor3D(final double x, final double y) {
+		return this.data.getColor3D(x, y);
+	}
+	
+	/**
+	 * Returns the {@link Color3D} at {@code index} in this {@code Image} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code image.getResolution()}, {@code Color3D.BLACK} will be returned.
+	 * 
+	 * @param index the index of the pixel
+	 * @return the {@code Color3D} at {@code index} in this {@code Image} instance
+	 */
+	public Color3D getColor3D(final int index) {
+		return this.data.getColor3D(index);
+	}
+	
+	/**
+	 * Returns the {@link Color3D} at {@code x} and {@code y} in this {@code Image} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, {@code Color3D.BLACK} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, {@code Color3D.BLACK} will be returned.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color3D} at {@code x} and {@code y} in this {@code Image} instance
+	 */
+	public Color3D getColor3D(final int x, final int y) {
+		return this.data.getColor3D(x, y);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} at {@code point} in this {@code Image} instance.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point.x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, {@code Color3F.BLACK} will be returned.
+	 * <p>
+	 * If {@code point.y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, {@code Color3F.BLACK} will be returned.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColor3F(point.x, point.y);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2I} instance that contains the X- and Y-components of the pixel
+	 * @return the {@code Color3F} at {@code point} in this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Color3F getColor3F(final Point2I point) {
+		return getColor3F(point.x, point.y);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} at {@code x} and {@code y} in this {@code Image} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0.0F} or greater than or equal to {@code image.getResolutionX()}, {@code Color3F.BLACK} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0.0F} or greater than or equal to {@code image.getResolutionY()}, {@code Color3F.BLACK} will be returned.
+	 * <p>
+	 * If both {@code x} and {@code y} are equal to mathematical integers, this method is equivalent to {@link #getColor3F(int, int)}. Otherwise, bilinear interpolation will be performed on the closest pixels.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color3F} at {@code x} and {@code y} in this {@code Image} instance
+	 */
+	public Color3F getColor3F(final float x, final float y) {
+		return this.data.getColor3F(x, y);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} at {@code index} in this {@code Image} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code image.getResolution()}, {@code Color3F.BLACK} will be returned.
+	 * 
+	 * @param index the index of the pixel
+	 * @return the {@code Color3F} at {@code index} in this {@code Image} instance
+	 */
+	public Color3F getColor3F(final int index) {
+		return this.data.getColor3F(index);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} at {@code x} and {@code y} in this {@code Image} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, {@code Color3F.BLACK} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, {@code Color3F.BLACK} will be returned.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color3F} at {@code x} and {@code y} in this {@code Image} instance
+	 */
+	public Color3F getColor3F(final int x, final int y) {
+		return this.data.getColor3F(x, y);
+	}
+	
+	/**
 	 * Returns the {@link Color4D} at {@code point} in this {@code Image} instance.
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -392,6 +531,74 @@ public final class Image {
 	 */
 	public Color4D getColor4D(final int x, final int y) {
 		return this.data.getColor4D(x, y);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} at {@code point} in this {@code Image} instance.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point.x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * <p>
+	 * If {@code point.y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColor4F(point.x, point.y);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2I} instance that contains the X- and Y-components of the pixel
+	 * @return the {@code Color4F} at {@code point} in this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Color4F getColor4F(final Point2I point) {
+		return getColor4F(point.x, point.y);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} at {@code x} and {@code y} in this {@code Image} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0.0F} or greater than or equal to {@code image.getResolutionX()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0.0F} or greater than or equal to {@code image.getResolutionY()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * <p>
+	 * If both {@code x} and {@code y} are equal to mathematical integers, this method is equivalent to {@link #getColor4F(int, int)}. Otherwise, bilinear interpolation will be performed on the closest pixels.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color4F} at {@code x} and {@code y} in this {@code Image} instance
+	 */
+	public Color4F getColor4F(final float x, final float y) {
+		return this.data.getColor4F(x, y);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} at {@code index} in this {@code Image} instance.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code image.getResolution()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * 
+	 * @param index the index of the pixel
+	 * @return the {@code Color4F} at {@code index} in this {@code Image} instance
+	 */
+	public Color4F getColor4F(final int index) {
+		return this.data.getColor4F(index);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} at {@code x} and {@code y} in this {@code Image} instance.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, {@code Color4F.TRANSPARENT} will be returned.
+	 * 
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return the {@code Color4F} at {@code x} and {@code y} in this {@code Image} instance
+	 */
+	public Color4F getColor4F(final int x, final int y) {
+		return this.data.getColor4F(x, y);
 	}
 	
 	/**
@@ -485,7 +692,7 @@ public final class Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawShape(shape, Color4D.BLACK);
+	 * image.drawShapeColor4D(shape, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -493,8 +700,8 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-	public Image drawShape(final Shape2I shape) {
-		return drawShape(shape, Color4D.BLACK);
+	public Image drawShapeColor4D(final Shape2I shape) {
+		return drawShapeColor4D(shape, Color4D.BLACK);
 	}
 	
 	/**
@@ -509,7 +716,7 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code operator} are {@code null} or {@code operator} returns {@code null}
 	 */
-	public Image drawShape(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> operator) {
+	public Image drawShapeColor4D(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> operator) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(operator, "operator == null");
 		
@@ -532,7 +739,7 @@ public final class Image {
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawShape(shape, (currentColor, currentPoint) -> color);
+	 * image.drawShapeColor4D(shape, (currentColor, currentPoint) -> color);
 	 * }
 	 * </pre>
 	 * 
@@ -541,11 +748,11 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code color} are {@code null}
 	 */
-	public Image drawShape(final Shape2I shape, final Color4D color) {
+	public Image drawShapeColor4D(final Shape2I shape, final Color4D color) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(color, "color == null");
 		
-		return drawShape(shape, (currentColor, currentPoint) -> color);
+		return drawShapeColor4D(shape, (currentColor, currentPoint) -> color);
 	}
 	
 	/**
@@ -558,7 +765,7 @@ public final class Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawShapeComplement(shape, Color4D.BLACK);
+	 * image.drawShapeComplementColor4D(shape, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -566,8 +773,8 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-	public Image drawShapeComplement(final Shape2I shape) {
-		return drawShapeComplement(shape, Color4D.BLACK);
+	public Image drawShapeComplementColor4D(final Shape2I shape) {
+		return drawShapeComplementColor4D(shape, Color4D.BLACK);
 	}
 	
 	/**
@@ -582,7 +789,7 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code operator} are {@code null} or {@code operator} returns {@code null}
 	 */
-	public Image drawShapeComplement(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> operator) {
+	public Image drawShapeComplementColor4D(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> operator) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(operator, "operator == null");
 		
@@ -605,7 +812,7 @@ public final class Image {
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawShapeComplement(shape, (currentColor, currentPoint) -> color);
+	 * image.drawShapeComplementColor4D(shape, (currentColor, currentPoint) -> color);
 	 * }
 	 * </pre>
 	 * 
@@ -614,11 +821,11 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code color} are {@code null}
 	 */
-	public Image drawShapeComplement(final Shape2I shape, final Color4D color) {
+	public Image drawShapeComplementColor4D(final Shape2I shape, final Color4D color) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(color, "color == null");
 		
-		return drawShapeComplement(shape, (currentColor, currentPoint) -> color);
+		return drawShapeComplementColor4D(shape, (currentColor, currentPoint) -> color);
 	}
 	
 	/**
@@ -1001,7 +1208,7 @@ public final class Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillShape(shape, Color4D.BLACK);
+	 * image.fillShapeColor4D(shape, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -1009,8 +1216,8 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-	public Image fillShape(final Shape2I shape) {
-		return fillShape(shape, Color4D.BLACK);
+	public Image fillShapeColor4D(final Shape2I shape) {
+		return fillShapeColor4D(shape, Color4D.BLACK);
 	}
 	
 	/**
@@ -1025,7 +1232,7 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code operator} are {@code null} or {@code operator} returns {@code null}
 	 */
-	public Image fillShape(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> operator) {
+	public Image fillShapeColor4D(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> operator) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(operator, "operator == null");
 		
@@ -1048,7 +1255,7 @@ public final class Image {
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillShape(shape, (currentColor, currentPoint) -> color);
+	 * image.fillShapeColor4D(shape, (currentColor, currentPoint) -> color);
 	 * }
 	 * </pre>
 	 * 
@@ -1057,11 +1264,11 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code color} are {@code null}
 	 */
-	public Image fillShape(final Shape2I shape, final Color4D color) {
+	public Image fillShapeColor4D(final Shape2I shape, final Color4D color) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(color, "color == null");
 		
-		return fillShape(shape, (currentColor, currentPoint) -> color);
+		return fillShapeColor4D(shape, (currentColor, currentPoint) -> color);
 	}
 	
 	/**
@@ -1074,7 +1281,7 @@ public final class Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillShapeComplement(shape, Color4D.BLACK);
+	 * image.fillShapeComplementColor4D(shape, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -1082,8 +1289,8 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
-	public Image fillShapeComplement(final Shape2I shape) {
-		return fillShapeComplement(shape, Color4D.BLACK);
+	public Image fillShapeComplementColor4D(final Shape2I shape) {
+		return fillShapeComplementColor4D(shape, Color4D.BLACK);
 	}
 	
 	/**
@@ -1098,7 +1305,7 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code operator} are {@code null} or {@code operator} returns {@code null}
 	 */
-	public Image fillShapeComplement(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> operator) {
+	public Image fillShapeComplementColor4D(final Shape2I shape, final BiFunction<Color4D, Point2I, Color4D> operator) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(operator, "operator == null");
 		
@@ -1121,7 +1328,7 @@ public final class Image {
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillShapeComplement(shape, (currentColor, currentPoint) -> color);
+	 * image.fillShapeComplementColor4D(shape, (currentColor, currentPoint) -> color);
 	 * }
 	 * </pre>
 	 * 
@@ -1130,11 +1337,11 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code shape} or {@code color} are {@code null}
 	 */
-	public Image fillShapeComplement(final Shape2I shape, final Color4D color) {
+	public Image fillShapeComplementColor4D(final Shape2I shape, final Color4D color) {
 		Objects.requireNonNull(shape, "shape == null");
 		Objects.requireNonNull(color, "color == null");
 		
-		return fillShapeComplement(shape, (currentColor, currentPoint) -> color);
+		return fillShapeComplementColor4D(shape, (currentColor, currentPoint) -> color);
 	}
 	
 	/**
@@ -1256,6 +1463,52 @@ public final class Image {
 	 * @return this {@code Image} instance
 	 */
 	public Image rotate(final double angle, final boolean isAngleInRadians) {
+		this.data.rotate(angle, isAngleInRadians);
+		
+		return this;
+	}
+	
+	/**
+	 * Rotates this {@code Image} instance by {@code angle} degrees.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * A rotation is performed on the entire image. It scales the image so the content will fit. Therefore, it is not advised to perform multiple rotations on a given {@code Image} instance.
+	 * <p>
+	 * If you need to perform multiple rotations, consider using the {@link #copy()} method and apply the rotation to the copy.
+	 * <p>
+	 * This operation is roughly as fast for {@link Data} instances created by both {@link DataFactory#forColor4D()} and {@link DataFactory#forColorARGB()}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.rotate(angle, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an angle in degrees
+	 * @return this {@code Image} instance
+	 */
+	public Image rotate(final float angle) {
+		return rotate(angle, false);
+	}
+	
+	/**
+	 * Rotates this {@code Image} instance by {@code angle} degrees or radians.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * A rotation is performed on the entire image. It scales the image so the content will fit. Therefore, it is not advised to perform multiple rotations on a given {@code Image} instance.
+	 * <p>
+	 * If you need to perform multiple rotations, consider using the {@link #copy()} method and apply the rotation to the copy.
+	 * <p>
+	 * This operation is roughly as fast for {@link Data} instances created by both {@link DataFactory#forColor4D()} and {@link DataFactory#forColorARGB()}.
+	 * 
+	 * @param angle an angle in degrees or radians
+	 * @param isAngleInRadians {@code true} if, and only if, {@code angle} is in radians, {@code false} otherwise
+	 * @return this {@code Image} instance
+	 */
+	public Image rotate(final float angle, final boolean isAngleInRadians) {
 		this.data.rotate(angle, isAngleInRadians);
 		
 		return this;
@@ -1385,6 +1638,146 @@ public final class Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
+	 * image.setColor3D(color, point.x, point.y);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color the {@link Color3D} to set
+	 * @param point the {@link Point2I} that contains the X- and Y-components of the pixel
+	 * @return this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code color} or {@code point} are {@code null}
+	 */
+	public Image setColor3D(final Color3D color, final Point2I point) {
+		return setColor3D(color, point.x, point.y);
+	}
+	
+	/**
+	 * Sets the color of the pixel at {@code index} in this {@code Image} instance to {@code color}.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code image.getResolution()}, nothing will happen.
+	 * 
+	 * @param color the {@link Color3D} to set
+	 * @param index the index of the pixel
+	 * @return this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Image setColor3D(final Color3D color, final int index) {
+		this.data.setColor3D(Objects.requireNonNull(color, "color == null"), index);
+		
+		return this;
+	}
+	
+	/**
+	 * Sets the color of the pixel at {@code x} and {@code y} in this {@code Image} instance to {@code color}.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, nothing will happen.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, nothing will happen.
+	 * 
+	 * @param color the {@link Color3D} to set
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Image setColor3D(final Color3D color, final int x, final int y) {
+		this.data.setColor3D(Objects.requireNonNull(color, "color == null"), x, y);
+		
+		return this;
+	}
+	
+	/**
+	 * Sets the color of the pixel at {@code point} in this {@code Image} instance to {@code color}.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * If either {@code color} or {@code point} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point.x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, nothing will happen.
+	 * <p>
+	 * If {@code point.y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, nothing will happen.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.setColor3F(color, point.x, point.y);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color the {@link Color3F} to set
+	 * @param point the {@link Point2I} that contains the X- and Y-components of the pixel
+	 * @return this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code color} or {@code point} are {@code null}
+	 */
+	public Image setColor3F(final Color3F color, final Point2I point) {
+		return setColor3F(color, point.x, point.y);
+	}
+	
+	/**
+	 * Sets the color of the pixel at {@code index} in this {@code Image} instance to {@code color}.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code image.getResolution()}, nothing will happen.
+	 * 
+	 * @param color the {@link Color3F} to set
+	 * @param index the index of the pixel
+	 * @return this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Image setColor3F(final Color3F color, final int index) {
+		this.data.setColor3F(Objects.requireNonNull(color, "color == null"), index);
+		
+		return this;
+	}
+	
+	/**
+	 * Sets the color of the pixel at {@code x} and {@code y} in this {@code Image} instance to {@code color}.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, nothing will happen.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, nothing will happen.
+	 * 
+	 * @param color the {@link Color3F} to set
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Image setColor3F(final Color3F color, final int x, final int y) {
+		this.data.setColor3F(Objects.requireNonNull(color, "color == null"), x, y);
+		
+		return this;
+	}
+	
+	/**
+	 * Sets the color of the pixel at {@code point} in this {@code Image} instance to {@code color}.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * If either {@code color} or {@code point} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point.x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, nothing will happen.
+	 * <p>
+	 * If {@code point.y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, nothing will happen.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
 	 * image.setColor4D(color, point.x, point.y);
 	 * }
 	 * </pre>
@@ -1437,6 +1830,76 @@ public final class Image {
 	 */
 	public Image setColor4D(final Color4D color, final int x, final int y) {
 		this.data.setColor4D(Objects.requireNonNull(color, "color == null"), x, y);
+		
+		return this;
+	}
+	
+	/**
+	 * Sets the color of the pixel at {@code point} in this {@code Image} instance to {@code color}.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * If either {@code color} or {@code point} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code point.x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, nothing will happen.
+	 * <p>
+	 * If {@code point.y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, nothing will happen.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.setColor4F(color, point.x, point.y);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color the {@link Color4F} to set
+	 * @param point the {@link Point2I} that contains the X- and Y-components of the pixel
+	 * @return this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code color} or {@code point} are {@code null}
+	 */
+	public Image setColor4F(final Color4F color, final Point2I point) {
+		return setColor4F(color, point.x, point.y);
+	}
+	
+	/**
+	 * Sets the color of the pixel at {@code index} in this {@code Image} instance to {@code color}.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code image.getResolution()}, nothing will happen.
+	 * 
+	 * @param color the {@link Color4F} to set
+	 * @param index the index of the pixel
+	 * @return this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Image setColor4F(final Color4F color, final int index) {
+		this.data.setColor4F(Objects.requireNonNull(color, "color == null"), index);
+		
+		return this;
+	}
+	
+	/**
+	 * Sets the color of the pixel at {@code x} and {@code y} in this {@code Image} instance to {@code color}.
+	 * <p>
+	 * Returns this {@code Image} instance.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code x} is less than {@code 0} or greater than or equal to {@code image.getResolutionX()}, nothing will happen.
+	 * <p>
+	 * If {@code y} is less than {@code 0} or greater than or equal to {@code image.getResolutionY()}, nothing will happen.
+	 * 
+	 * @param color the {@link Color4F} to set
+	 * @param x the X-component of the pixel
+	 * @param y the Y-component of the pixel
+	 * @return this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Image setColor4F(final Color4F color, final int x, final int y) {
+		this.data.setColor4F(Objects.requireNonNull(color, "color == null"), x, y);
 		
 		return this;
 	}

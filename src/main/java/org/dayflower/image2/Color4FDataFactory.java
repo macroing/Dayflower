@@ -23,8 +23,8 @@ import java.awt.image.BufferedImage;
 import org.dayflower.color.Color4D;
 import org.dayflower.color.Color4F;
 
-final class ColorARGBDataFactory extends DataFactory {
-	public ColorARGBDataFactory() {
+final class Color4FDataFactory extends DataFactory {
+	public Color4FDataFactory() {
 		
 	}
 	
@@ -32,21 +32,21 @@ final class ColorARGBDataFactory extends DataFactory {
 	
 	@Override
 	public Data create(final BufferedImage bufferedImage) {
-		return new ColorARGBData(bufferedImage);
+		return new Color4FData(bufferedImage);
 	}
 	
 	@Override
 	public Data create(final int resolutionX, final int resolutionY) {
-		return new ColorARGBData(resolutionX, resolutionY);
+		return new Color4FData(resolutionX, resolutionY);
 	}
 	
 	@Override
 	public Data create(final int resolutionX, final int resolutionY, final Color4D color) {
-		return new ColorARGBData(resolutionX, resolutionY, color);
+		return new Color4FData(resolutionX, resolutionY, color);
 	}
 	
 	@Override
 	public Data create(final int resolutionX, final int resolutionY, final Color4F color) {
-		return new ColorARGBData(resolutionX, resolutionY, color);
+		return new Color4FData(resolutionX, resolutionY, color);
 	}
 }

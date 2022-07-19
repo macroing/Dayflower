@@ -21,6 +21,7 @@ package org.dayflower.image2;
 import java.awt.image.BufferedImage;
 
 import org.dayflower.color.Color4D;
+import org.dayflower.color.Color4F;
 
 final class Color4DDataFactory extends DataFactory {
 	public Color4DDataFactory() {
@@ -41,6 +42,11 @@ final class Color4DDataFactory extends DataFactory {
 	
 	@Override
 	public Data create(final int resolutionX, final int resolutionY, final Color4D color) {
+		return new Color4DData(resolutionX, resolutionY, color);
+	}
+	
+	@Override
+	public Data create(final int resolutionX, final int resolutionY, final Color4F color) {
 		return new Color4DData(resolutionX, resolutionY, color);
 	}
 }

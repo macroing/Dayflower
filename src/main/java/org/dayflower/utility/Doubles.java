@@ -944,6 +944,48 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code bound} (exclusive).
+	 * <p>
+	 * If {@code bound} is less than or equal to {@code 0.0D}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param bound the upper bound (exclusive) that must be positive
+	 * @return a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code bound} (exclusive)
+	 * @throws IllegalArgumentException thrown if, and only if, {@code bound} is less than or equal to {@code 0.0D}
+	 */
+//	TODO: Add Unit Tests!
+	public static double random(final double bound) {
+		return ThreadLocalRandom.current().nextDouble(bound);
+	}
+	
+	/**
+	 * Returns a pseudorandom {@code double} value between {@code origin} (inclusive) and {@code bound} (exclusive).
+	 * <p>
+	 * If {@code origin} is greater than or equal to {@code bound}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param origin the least value returned
+	 * @param bound the upper bound (exclusive)
+	 * @return a pseudorandom {@code double} value between {@code origin} (inclusive) and {@code bound} (exclusive)
+	 * @throws IllegalArgumentException thrown if, and only if, {@code origin} is greater than or equal to {@code bound}
+	 */
+//	TODO: Add Unit Tests!
+	public static double random(final double origin, final double bound) {
+		return ThreadLocalRandom.current().nextDouble(origin, bound);
+	}
+	
+	/**
+	 * Returns the {@code double} value that is closest in value to the argument and is equal to a mathematical integer.
+	 * <p>
+	 * If two {@code double} values that are mathematical integers are equally close, the result is the integer value that is even.
+	 * 
+	 * @param value a {@code double} value
+	 * @return the {@code double} value that is closest in value to the argument and is equal to a mathematical integer
+	 */
+//	TODO: Add Unit Tests!
+	public static double rint(final double value) {
+		return Math.rint(value);
+	}
+	
+	/**
 	 * Returns a saturated (or clamped) value based on {@code value}.
 	 * <p>
 	 * Calling this method is equivalent to the following:

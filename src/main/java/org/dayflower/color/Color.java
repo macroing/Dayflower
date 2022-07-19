@@ -22,6 +22,7 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.dayflower.utility.Doubles;
+import org.dayflower.utility.Floats;
 
 /**
  * This {@code Color} class consists exclusively of static methods that operates on colors that are defined by primitive types such as {@code double} and {@code int}.
@@ -587,6 +588,76 @@ public final class Color {
 	 * @return the average component value of {@code r}, {@code g} and {@code b}
 	 */
 //	TODO: Add Unit Tests!
+	public static float average(final float r, final float g, final float b) {
+		return (r + g + b) / 3.0F;
+	}
+	
+	/**
+	 * Returns the relative luminance of the color represented by {@code r}, {@code g} and {@code b}.
+	 * 
+	 * @param r the R-component of the color
+	 * @param g the G-component of the color
+	 * @param b the B-component of the color
+	 * @return the relative luminance of the color represented by {@code r}, {@code g} and {@code b}
+	 */
+//	TODO: Add Unit Tests!
+	public static float relativeLuminance(final float r, final float g, final float b) {
+		return r * 0.212671F + g * 0.715160F + b * 0.072169F;
+	}
+	
+	/**
+	 * Returns a {@code float} with the value of the A-component in {@code colorARGB}.
+	 * 
+	 * @param colorARGB an {@code int} that contains packed A-, R-, G- and B-components
+	 * @return a {@code float} with the value of the A-component in {@code colorARGB}
+	 */
+//	TODO: Add Unit Tests!
+	public static float unpackAAsFloat(final int colorARGB) {
+		return unpackA(colorARGB) / 255.0F;
+	}
+	
+	/**
+	 * Returns a {@code float} with the value of the B-component in {@code colorARGB}.
+	 * 
+	 * @param colorARGB an {@code int} that contains packed A-, R-, G- and B-components
+	 * @return a {@code float} with the value of the B-component in {@code colorARGB}
+	 */
+//	TODO: Add Unit Tests!
+	public static float unpackBAsFloat(final int colorARGB) {
+		return unpackB(colorARGB) / 255.0F;
+	}
+	
+	/**
+	 * Returns a {@code float} with the value of the G-component in {@code colorARGB}.
+	 * 
+	 * @param colorARGB an {@code int} that contains packed A-, R-, G- and B-components
+	 * @return a {@code float} with the value of the G-component in {@code colorARGB}
+	 */
+//	TODO: Add Unit Tests!
+	public static float unpackGAsFloat(final int colorARGB) {
+		return unpackG(colorARGB) / 255.0F;
+	}
+	
+	/**
+	 * Returns a {@code float} with the value of the R-component in {@code colorARGB}.
+	 * 
+	 * @param colorARGB an {@code int} that contains packed A-, R-, G- and B-components
+	 * @return a {@code float} with the value of the R-component in {@code colorARGB}
+	 */
+//	TODO: Add Unit Tests!
+	public static float unpackRAsFloat(final int colorARGB) {
+		return unpackR(colorARGB) / 255.0F;
+	}
+	
+	/**
+	 * Returns the average component value of {@code r}, {@code g} and {@code b}.
+	 * 
+	 * @param r the value of the R-component
+	 * @param g the value of the G-component
+	 * @param b the value of the B-component
+	 * @return the average component value of {@code r}, {@code g} and {@code b}
+	 */
+//	TODO: Add Unit Tests!
 	public static int average(final int r, final int g, final int b) {
 		return (r + g + b) / 3;
 	}
@@ -637,6 +708,51 @@ public final class Color {
 	}
 	
 	/**
+	 * Blends the component values of {@code colorARGBLHS} and {@code colorARGBRHS}.
+	 * <p>
+	 * Returns an {@code int} that contains the color in packed form.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color.blend(colorARGBLHS, colorARGBRHS, t, t, t, t);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorARGBLHS an {@code int} that contains packed A-, R-, G- and B-components
+	 * @param colorARGBRHS an {@code int} that contains packed A-, R-, G- and B-components
+	 * @param t the factor to use for all components in the blending process
+	 * @return an {@code int} that contains the color in packed form
+	 */
+//	TODO: Add Unit Tests!
+	public static int blend(final int colorARGBLHS, final int colorARGBRHS, final float t) {
+		return blend(colorARGBLHS, colorARGBRHS, t, t, t, t);
+	}
+	
+	/**
+	 * Blends the component values of {@code colorARGBLHS} and {@code colorARGBRHS}.
+	 * <p>
+	 * Returns an {@code int} that contains the color in packed form.
+	 * 
+	 * @param colorARGBLHS an {@code int} that contains packed A-, R-, G- and B-components
+	 * @param colorARGBRHS an {@code int} that contains packed A-, R-, G- and B-components
+	 * @param tR the factor to use for the R-component in the blending process
+	 * @param tG the factor to use for the G-component in the blending process
+	 * @param tB the factor to use for the B-component in the blending process
+	 * @param tA the factor to use for the A-component in the blending process
+	 * @return an {@code int} that contains the color in packed form
+	 */
+//	TODO: Add Unit Tests!
+	public static int blend(final int colorARGBLHS, final int colorARGBRHS, final float tR, final float tG, final float tB, final float tA) {
+		final int r = doConvertComponentFromFloatToInt(Floats.lerp(unpackRAsFloat(colorARGBLHS), unpackRAsFloat(colorARGBRHS), tR));
+		final int g = doConvertComponentFromFloatToInt(Floats.lerp(unpackGAsFloat(colorARGBLHS), unpackGAsFloat(colorARGBRHS), tG));
+		final int b = doConvertComponentFromFloatToInt(Floats.lerp(unpackBAsFloat(colorARGBLHS), unpackBAsFloat(colorARGBRHS), tB));
+		final int a = doConvertComponentFromFloatToInt(Floats.lerp(unpackAAsFloat(colorARGBLHS), unpackAAsFloat(colorARGBRHS), tA));
+		
+		return packRGBA(r, g, b, a);
+	}
+	
+	/**
 	 * Blends the component values of {@code colorARGB11}, {@code colorARGB12}, {@code colorARGB21} and {@code colorARGB22}.
 	 * <p>
 	 * Returns an {@code int} that contains the color in packed form.
@@ -658,6 +774,31 @@ public final class Color {
 	 */
 //	TODO: Add Unit Tests!
 	public static int blend(final int colorARGB11, final int colorARGB12, final int colorARGB21, final int colorARGB22, final double tX, final double tY) {
+		return blend(blend(colorARGB11, colorARGB12, tX), blend(colorARGB21, colorARGB22, tX), tY);
+	}
+	
+	/**
+	 * Blends the component values of {@code colorARGB11}, {@code colorARGB12}, {@code colorARGB21} and {@code colorARGB22}.
+	 * <p>
+	 * Returns an {@code int} that contains the color in packed form.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color.blend(Color.blend(colorARGB11, colorARGB12, tX), Color.blend(colorARGB21, colorARGB22, tX), tY);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorARGB11 an {@code int} that contains packed A-, R-, G- and B-components
+	 * @param colorARGB12 an {@code int} that contains packed A-, R-, G- and B-components
+	 * @param colorARGB21 an {@code int} that contains packed A-, R-, G- and B-components
+	 * @param colorARGB22 an {@code int} that contains packed A-, R-, G- and B-components
+	 * @param tX the factor to use for all components in the first two blend operations
+	 * @param tY the factor to use for all components in the third blend operation
+	 * @return an {@code int} that contains the color in packed form
+	 */
+//	TODO: Add Unit Tests!
+	public static int blend(final int colorARGB11, final int colorARGB12, final int colorARGB21, final int colorARGB22, final float tX, final float tY) {
 		return blend(blend(colorARGB11, colorARGB12, tX), blend(colorARGB21, colorARGB22, tX), tY);
 	}
 	
@@ -910,6 +1051,24 @@ public final class Color {
 	}
 	
 	/**
+	 * Returns an {@code int} that contains {@code grayscale}, {@code grayscale}, {@code grayscale} and {@code 1.0F} in packed form.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color.packGrayscale(grayscale, 1.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param grayscale the value of the R, G- and B-components
+	 * @return an {@code int} that contains {@code grayscale}, {@code grayscale}, {@code grayscale} and {@code 1.0F} in packed form
+	 */
+//	TODO: Add Unit Tests!
+	public static int packGrayscale(final float grayscale) {
+		return packGrayscaleA(grayscale, 1.0F);
+	}
+	
+	/**
 	 * Returns an {@code int} that contains {@code grayscale}, {@code grayscale}, {@code grayscale} and {@code 255} in packed form.
 	 * <p>
 	 * Calling this method is equivalent to the following:
@@ -961,6 +1120,25 @@ public final class Color {
 	 * @return an {@code int} that contains {@code grayscale}, {@code grayscale}, {@code grayscale} and {@code a} in packed form
 	 */
 //	TODO: Add Unit Tests!
+	public static int packGrayscaleA(final float grayscale, final float a) {
+		return packRGBA(grayscale, grayscale, grayscale, a);
+	}
+	
+	/**
+	 * Returns an {@code int} that contains {@code grayscale}, {@code grayscale}, {@code grayscale} and {@code a} in packed form.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color.packRGBA(grayscale, grayscale, grayscale, a);
+	 * }
+	 * </pre>
+	 * 
+	 * @param grayscale the value of the R, G- and B-components
+	 * @param a the value of the A-component
+	 * @return an {@code int} that contains {@code grayscale}, {@code grayscale}, {@code grayscale} and {@code a} in packed form
+	 */
+//	TODO: Add Unit Tests!
 	public static int packGrayscaleA(final int grayscale, final int a) {
 		return packRGBA(grayscale, grayscale, grayscale, a);
 	}
@@ -983,6 +1161,26 @@ public final class Color {
 //	TODO: Add Unit Tests!
 	public static int packRGB(final double r, final double g, final double b) {
 		return packRGBA(r, g, b, 1.0D);
+	}
+	
+	/**
+	 * Returns an {@code int} that contains {@code r}, {@code g}, {@code b} and {@code 1.0D} in packed form.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color.packRGBA(r, g, b, 1.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param r the value of the R-component
+	 * @param g the value of the G-component
+	 * @param b the value of the B-component
+	 * @return an {@code int} that contains {@code r}, {@code g}, {@code b} and {@code 1.0D} in packed form
+	 */
+//	TODO: Add Unit Tests!
+	public static int packRGB(final float r, final float g, final float b) {
+		return packRGBA(r, g, b, 1.0F);
 	}
 	
 	/**
@@ -1017,6 +1215,20 @@ public final class Color {
 //	TODO: Add Unit Tests!
 	public static int packRGBA(final double r, final double g, final double b, final double a) {
 		return packRGBA(doConvertComponentFromDoubleToInt(r), doConvertComponentFromDoubleToInt(g), doConvertComponentFromDoubleToInt(b), doConvertComponentFromDoubleToInt(a));
+	}
+	
+	/**
+	 * Returns an {@code int} that contains {@code r}, {@code g}, {@code b} and {@code a} in packed form.
+	 * 
+	 * @param r the value of the R-component
+	 * @param g the value of the G-component
+	 * @param b the value of the B-component
+	 * @param a the value of the A-component
+	 * @return an {@code int} that contains {@code r}, {@code g}, {@code b} and {@code a} in packed form
+	 */
+//	TODO: Add Unit Tests!
+	public static int packRGBA(final float r, final float g, final float b, final float a) {
+		return packRGBA(doConvertComponentFromFloatToInt(r), doConvertComponentFromFloatToInt(g), doConvertComponentFromFloatToInt(b), doConvertComponentFromFloatToInt(a));
 	}
 	
 	/**
@@ -1412,6 +1624,10 @@ public final class Color {
 	
 	private static int doConvertComponentFromDoubleToInt(final double component) {
 		return (int)(Doubles.saturate(component) * 255.0D + 0.5D);
+	}
+	
+	private static int doConvertComponentFromFloatToInt(final float component) {
+		return (int)(Floats.saturate(component) * 255.0F + 0.5F);
 	}
 	
 	private static int doNextInt() {

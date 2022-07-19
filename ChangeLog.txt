@@ -1,3 +1,11 @@
+2022-07-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods random(double), random(double, double) and rint(double) to the Doubles class.
+	* ADD:		Add the methods random(float), random(float, float) and rint(float) to the Floats class.
+	* ADD:		Add the ConvolutionKernelNF class.
+	* ADD:		Add new float-based methods to the Color class.
+	* CHANGE:	Update the Image 2 API.
+
 2022-07-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the NodeCacheUnitTests class.

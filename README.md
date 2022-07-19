@@ -171,9 +171,9 @@ The following table describes the different APIs and their current status in the
 
 | Name                                   | Javadoc | Unit Test |
 | -------------------------------------- | ------- | --------- |
-| Dayflower                              | 100.0%  |  25.7%    |
+| Dayflower                              | 100.0%  |  25.2%    |
 | Change API                             | 100.0%  | 100.0%    |
-| Color API                              | 100.0%  |  82.2%    |
+| Color API                              | 100.0%  |  81.9%    |
 | Filter API                             | 100.0%  | 100.0%    |
 | Geometry API                           | 100.0%  |  77.3%    |
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
@@ -206,7 +206,7 @@ The following table describes the different APIs and their current status in the
 | Scene Microfacet API                   | 100.0%  |   0.0%    |
 | Scene Modifier API                     | 100.0%  |   0.0%    |
 | Scene Texture API                      | 100.0%  |   0.0%    |
-| Utility API                            | 100.0%  |  75.9%    |
+| Utility API                            | 100.0%  |  75.1%    |
 | Wavefront Material API                 | 100.0%  |   0.0%    |
 | Wavefront Object API                   | 100.0%  |   0.0%    |
 

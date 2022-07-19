@@ -450,6 +450,20 @@ public abstract class Data {
 	public abstract boolean convolve(final ConvolutionKernelND convolutionKernel, final int[] indices);
 	
 	/**
+	 * Applies {@code convolutionKernel} to all pixels in this {@code Data} instance that are provided by {@code indices}.
+	 * <p>
+	 * Returns {@code true} if, and only if, at least one pixel was convolved, {@code false} otherwise.
+	 * <p>
+	 * If either {@code convolutionKernel} or {@code indices} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param convolutionKernel the {@link ConvolutionKernelNF} instance to apply
+	 * @param indices an {@code int[]} that provides the indices of the pixels to apply {@code convolutionKernel} to
+	 * @return {@code true} if, and only if, at least one pixel was convolved, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code convolutionKernel} or {@code indices} are {@code null}
+	 */
+	public abstract boolean convolve(final ConvolutionKernelNF convolutionKernel, final int[] indices);
+	
+	/**
 	 * Compares {@code object} to this {@code Data} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Data}, and they are equal, {@code false} otherwise.

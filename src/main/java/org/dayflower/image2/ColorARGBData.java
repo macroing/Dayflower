@@ -80,6 +80,14 @@ final class ColorARGBData extends Data {
 		Arrays.fill(this.colors, color.pack());
 	}
 	
+	public ColorARGBData(final int resolutionX, final int resolutionY, final Color4F color) {
+		this.resolutionX = ParameterArguments.requireRange(resolutionX, 1, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = ParameterArguments.requireRange(resolutionY, 1, Integer.MAX_VALUE, "resolutionY");
+		this.colors = new int[ParameterArguments.requireRange(resolutionX * resolutionY, 1, Integer.MAX_VALUE, "resolutionX * resolutionY")];
+		
+		Arrays.fill(this.colors, color.pack());
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
@@ -222,6 +230,95 @@ final class ColorARGBData extends Data {
 							final int imageIndex = (imageRow + imageX) * 3;
 							
 							final double element = elements[kernelRow + kernelX];
+							
+							colorR += colors[imageIndex + 0] * element;
+							colorG += colors[imageIndex + 1] * element;
+							colorB += colors[imageIndex + 2] * element;
+						}
+					}
+				}
+				
+				colorR = colorR * factor + bias;
+				colorG = colorG * factor + bias;
+				colorB = colorB * factor + bias;
+				
+				newColors[index] = Color.packRGBA(colorR, colorG, colorB, colorA);
+				
+				count++;
+			}
+		}
+		
+		if(hasChangeBegun) {
+			if(count > 0) {
+				changeAdd(new StateChange(resolutionX, resolutionX, resolutionY, resolutionY, newColors, oldColors));
+			}
+			
+			changeEnd();
+		}
+		
+		if(count > 0) {
+			this.colors = newColors;
+		}
+		
+		return count > 0;
+	}
+	
+	@Override
+	public boolean convolve(final ConvolutionKernelNF convolutionKernel, final int[] indices) {
+		Objects.requireNonNull(convolutionKernel, "convolutionKernel == null");
+		Objects.requireNonNull(indices, "indices == null");
+		
+		if(indices.length == 0) {
+			return false;
+		}
+		
+		final float bias = convolutionKernel.getBias();
+		final float factor = convolutionKernel.getFactor();
+		
+		final float[] elements = convolutionKernel.getElements();
+		
+		final int kernelResolution = convolutionKernel.getResolution();
+		final int kernelOffset = (kernelResolution - 1) / 2;
+		
+		final int resolution  = getResolution();
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		final int[] oldColors = this.colors;
+		final int[] newColors = this.colors.clone();
+		
+		final double[] colors = doUnpackColorsAsDoubleArrayRGB();
+		
+		final boolean hasChangeBegun = changeBegin();
+		
+		int count = 0;
+		
+		for(final int index : indices) {
+			if(index >= 0 && index < resolution) {
+				final int x = index % resolutionX;
+				final int y = index / resolutionX;
+				
+				final int xOffset = x - kernelOffset;
+				final int yOffset = y - kernelOffset;
+				
+				float colorR = 0.0F;
+				float colorG = 0.0F;
+				float colorB = 0.0F;
+				float colorA = Color.unpackAAsFloat(oldColors[index]);
+				
+				for(int kernelY = 0; kernelY < kernelResolution; kernelY++) {
+					final int imageY = yOffset + kernelY;
+					final int imageRow = imageY * resolutionX;
+					
+					final int kernelRow = kernelY * kernelResolution;
+					
+					for(int kernelX = 0; kernelX < kernelResolution; kernelX++) {
+						final int imageX = xOffset + kernelX;
+						
+						if(imageX >= 0 && imageX < resolutionX && imageY >= 0 && imageY < resolutionY) {
+							final int imageIndex = (imageRow + imageX) * 3;
+							
+							final float element = elements[kernelRow + kernelX];
 							
 							colorR += colors[imageIndex + 0] * element;
 							colorG += colors[imageIndex + 1] * element;

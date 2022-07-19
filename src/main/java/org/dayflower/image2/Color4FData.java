@@ -34,53 +34,53 @@ import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 import org.macroing.java.awt.image.BufferedImages;
 
-final class Color4DData extends Data {
-	private Color4D[] colors;
+final class Color4FData extends Data {
+	private Color4F[] colors;
 	private int resolutionX;
 	private int resolutionY;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public Color4DData() {
+	public Color4FData() {
 		this(1024, 768);
 	}
 	
-	public Color4DData(final BufferedImage bufferedImage) {
-		this.colors = Arrays.stream(DataBufferInt.class.cast(BufferedImages.getCompatibleBufferedImage(bufferedImage).getRaster().getDataBuffer()).getData()).mapToObj(colorARGB -> Color4D.unpack(colorARGB)).toArray(Color4D[]::new);
+	public Color4FData(final BufferedImage bufferedImage) {
+		this.colors = Arrays.stream(DataBufferInt.class.cast(BufferedImages.getCompatibleBufferedImage(bufferedImage).getRaster().getDataBuffer()).getData()).mapToObj(colorARGB -> Color4F.unpack(colorARGB)).toArray(Color4F[]::new);
 		this.resolutionX = bufferedImage.getWidth();
 		this.resolutionY = bufferedImage.getHeight();
 	}
 	
-	public Color4DData(final Color4DData color4DData) {
-		super(color4DData);
+	public Color4FData(final Color4FData color4FData) {
+		super(color4FData);
 		
-		this.colors = color4DData.colors.clone();
-		this.resolutionX = color4DData.resolutionX;
-		this.resolutionY = color4DData.resolutionY;
+		this.colors = color4FData.colors.clone();
+		this.resolutionX = color4FData.resolutionX;
+		this.resolutionY = color4FData.resolutionY;
 	}
 	
-	public Color4DData(final Color4DData color4DData, final boolean isIgnoringChangeHistory) {
-		super(color4DData, isIgnoringChangeHistory);
+	public Color4FData(final Color4FData color4FData, final boolean isIgnoringChangeHistory) {
+		super(color4FData, isIgnoringChangeHistory);
 		
-		this.colors = color4DData.colors.clone();
-		this.resolutionX = color4DData.resolutionX;
-		this.resolutionY = color4DData.resolutionY;
+		this.colors = color4FData.colors.clone();
+		this.resolutionX = color4FData.resolutionX;
+		this.resolutionY = color4FData.resolutionY;
 	}
 	
-	public Color4DData(final int resolutionX, final int resolutionY) {
-		this(resolutionX, resolutionY, Color4D.WHITE);
+	public Color4FData(final int resolutionX, final int resolutionY) {
+		this(resolutionX, resolutionY, Color4F.WHITE);
 	}
 	
-	public Color4DData(final int resolutionX, final int resolutionY, final Color4D color) {
+	public Color4FData(final int resolutionX, final int resolutionY, final Color4D color) {
+		this(resolutionX, resolutionY, new Color4F(color));
+	}
+	
+	public Color4FData(final int resolutionX, final int resolutionY, final Color4F color) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 1, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 1, Integer.MAX_VALUE, "resolutionY");
-		this.colors = new Color4D[ParameterArguments.requireRange(resolutionX * resolutionY, 1, Integer.MAX_VALUE, "resolutionX * resolutionY")];
+		this.colors = new Color4F[ParameterArguments.requireRange(resolutionX * resolutionY, 1, Integer.MAX_VALUE, "resolutionX * resolutionY")];
 		
 		Arrays.fill(this.colors, Objects.requireNonNull(color, "color == null"));
-	}
-	
-	public Color4DData(final int resolutionX, final int resolutionY, final Color4F color) {
-		this(resolutionX, resolutionY, new Color4D(color));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,27 +119,27 @@ final class Color4DData extends Data {
 	
 	@Override
 	public Color4D getColor4D(final int index) {
-		return index >= 0 && index < this.colors.length ? this.colors[index] : Color4D.TRANSPARENT;
+		return index >= 0 && index < this.colors.length ? new Color4D(this.colors[index]) : Color4D.TRANSPARENT;
 	}
 	
 	@Override
 	public Color4D getColor4D(final int x, final int y) {
-		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? this.colors[y * this.resolutionX + x] : Color4D.TRANSPARENT;
+		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? new Color4D(this.colors[y * this.resolutionX + x]) : Color4D.TRANSPARENT;
 	}
 	
 	@Override
 	public Color4F getColor4F(final int index) {
-		return index >= 0 && index < this.colors.length ? new Color4F(this.colors[index]) : Color4F.TRANSPARENT;
+		return index >= 0 && index < this.colors.length ? this.colors[index] : Color4F.TRANSPARENT;
 	}
 	
 	@Override
 	public Color4F getColor4F(final int x, final int y) {
-		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? new Color4F(this.colors[y * this.resolutionX + x]) : Color4F.TRANSPARENT;
+		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? this.colors[y * this.resolutionX + x] : Color4F.TRANSPARENT;
 	}
 	
 	@Override
 	public Data copy(final boolean isIgnoringChangeHistory) {
-		return new Color4DData(this, isIgnoringChangeHistory);
+		return new Color4FData(this, isIgnoringChangeHistory);
 	}
 	
 	@Override
@@ -152,7 +152,7 @@ final class Color4DData extends Data {
 		
 		graphics2DConsumer.accept(graphics2D);
 		
-		final Color4D[] colors = Arrays.stream(DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData()).mapToObj(colorARGB -> Color4D.unpack(colorARGB)).toArray(Color4D[]::new);
+		final Color4F[] colors = Arrays.stream(DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData()).mapToObj(colorARGB -> Color4F.unpack(colorARGB)).toArray(Color4F[]::new);
 		
 		if(changeBegin()) {
 			changeAdd(new StateChange(colors, this.colors, this.resolutionX, this.resolutionX, this.resolutionY, this.resolutionY));
@@ -166,7 +166,7 @@ final class Color4DData extends Data {
 	
 	@Override
 	public DataFactory getDataFactory() {
-		return new Color4DDataFactory();
+		return new Color4FDataFactory();
 	}
 	
 	@Override
@@ -190,8 +190,8 @@ final class Color4DData extends Data {
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
 		
-		final Color4D[] oldColors = this.colors;
-		final Color4D[] newColors = this.colors.clone();
+		final Color4F[] oldColors = this.colors;
+		final Color4F[] newColors = this.colors.clone();
 		
 		final boolean hasChangeBegun = changeBegin();
 		
@@ -205,10 +205,10 @@ final class Color4DData extends Data {
 				final int xOffset = x - kernelOffset;
 				final int yOffset = y - kernelOffset;
 				
-				double colorR = 0.0D;
-				double colorG = 0.0D;
-				double colorB = 0.0D;
-				double colorA = oldColors[index].getA();
+				float colorR = 0.0F;
+				float colorG = 0.0F;
+				float colorB = 0.0F;
+				float colorA = oldColors[index].getA();
 				
 				for(int kernelY = 0; kernelY < kernelResolution; kernelY++) {
 					final int imageY = yOffset + kernelY;
@@ -220,7 +220,7 @@ final class Color4DData extends Data {
 						final int imageX = xOffset + kernelX;
 						
 						if(imageX >= 0 && imageX < resolutionX && imageY >= 0 && imageY < resolutionY) {
-							final Color4D color = oldColors[imageRow + imageX];
+							final Color4F color = oldColors[imageRow + imageX];
 							
 							final double element = elements[kernelRow + kernelX];
 							
@@ -231,11 +231,11 @@ final class Color4DData extends Data {
 					}
 				}
 				
-				colorR = colorR * factor + bias;
-				colorG = colorG * factor + bias;
-				colorB = colorB * factor + bias;
+				colorR = (float)(colorR * factor + bias);
+				colorG = (float)(colorG * factor + bias);
+				colorB = (float)(colorB * factor + bias);
 				
-				newColors[index] = new Color4D(colorR, colorG, colorB, colorA);
+				newColors[index] = new Color4F(colorR, colorG, colorB, colorA);
 				
 				count++;
 			}
@@ -277,8 +277,8 @@ final class Color4DData extends Data {
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
 		
-		final Color4D[] oldColors = this.colors;
-		final Color4D[] newColors = this.colors.clone();
+		final Color4F[] oldColors = this.colors;
+		final Color4F[] newColors = this.colors.clone();
 		
 		final boolean hasChangeBegun = changeBegin();
 		
@@ -292,10 +292,10 @@ final class Color4DData extends Data {
 				final int xOffset = x - kernelOffset;
 				final int yOffset = y - kernelOffset;
 				
-				double colorR = 0.0D;
-				double colorG = 0.0D;
-				double colorB = 0.0D;
-				double colorA = oldColors[index].getA();
+				float colorR = 0.0F;
+				float colorG = 0.0F;
+				float colorB = 0.0F;
+				float colorA = oldColors[index].getA();
 				
 				for(int kernelY = 0; kernelY < kernelResolution; kernelY++) {
 					final int imageY = yOffset + kernelY;
@@ -307,9 +307,9 @@ final class Color4DData extends Data {
 						final int imageX = xOffset + kernelX;
 						
 						if(imageX >= 0 && imageX < resolutionX && imageY >= 0 && imageY < resolutionY) {
-							final Color4D color = oldColors[imageRow + imageX];
+							final Color4F color = oldColors[imageRow + imageX];
 							
-							final double element = elements[kernelRow + kernelX];
+							final float element = elements[kernelRow + kernelX];
 							
 							colorR += color.getR() * element;
 							colorG += color.getG() * element;
@@ -322,7 +322,7 @@ final class Color4DData extends Data {
 				colorG = colorG * factor + bias;
 				colorB = colorB * factor + bias;
 				
-				newColors[index] = new Color4D(colorR, colorG, colorB, colorA);
+				newColors[index] = new Color4F(colorR, colorG, colorB, colorA);
 				
 				count++;
 			}
@@ -347,13 +347,13 @@ final class Color4DData extends Data {
 	public boolean equals(final Object object) {
 		if(!super.equals(object)) {
 			return false;
-		} else if(!(object instanceof Color4DData)) {
+		} else if(!(object instanceof Color4FData)) {
 			return false;
-		} else if(!Arrays.equals(this.colors, Color4DData.class.cast(object).colors)) {
+		} else if(!Arrays.equals(this.colors, Color4FData.class.cast(object).colors)) {
 			return false;
-		} else if(this.resolutionX != Color4DData.class.cast(object).resolutionX) {
+		} else if(this.resolutionX != Color4FData.class.cast(object).resolutionX) {
 			return false;
-		} else if(this.resolutionY != Color4DData.class.cast(object).resolutionY) {
+		} else if(this.resolutionY != Color4FData.class.cast(object).resolutionY) {
 			return false;
 		} else {
 			return true;
@@ -408,8 +408,8 @@ final class Color4DData extends Data {
 		final int oldResolutionX = this.resolutionX;
 		final int oldResolutionY = this.resolutionY;
 		
-		final Color4D[] newColors = new Color4D[newResolutionX * newResolutionY];
-		final Color4D[] oldColors = this.colors;
+		final Color4F[] newColors = new Color4F[newResolutionX * newResolutionY];
+		final Color4F[] oldColors = this.colors;
 		
 		final double directionBX = Doubles.abs(Doubles.min(minimumX, 0.0D));
 		final double directionBY = Doubles.abs(Doubles.min(minimumY, 0.0D));
@@ -425,7 +425,7 @@ final class Color4DData extends Data {
 				final int cX = (int)(bX - directionAX - 0.5D);
 				final int cY = (int)(bY - directionAY - 0.5D);
 				
-				newColors[y * newResolutionX + x] = getColor4D(cX, cY);
+				newColors[y * newResolutionX + x] = getColor4F(cX, cY);
 			}
 		}
 		
@@ -489,8 +489,8 @@ final class Color4DData extends Data {
 		final int oldResolutionX = this.resolutionX;
 		final int oldResolutionY = this.resolutionY;
 		
-		final Color4D[] newColors = new Color4D[newResolutionX * newResolutionY];
-		final Color4D[] oldColors = this.colors;
+		final Color4F[] newColors = new Color4F[newResolutionX * newResolutionY];
+		final Color4F[] oldColors = this.colors;
 		
 		final float directionBX = Floats.abs(Floats.min(minimumX, 0.0F));
 		final float directionBY = Floats.abs(Floats.min(minimumY, 0.0F));
@@ -506,7 +506,7 @@ final class Color4DData extends Data {
 				final int cX = (int)(bX - directionAX - 0.5F);
 				final int cY = (int)(bY - directionAY - 0.5F);
 				
-				newColors[y * newResolutionX + x] = getColor4D(cX, cY);
+				newColors[y * newResolutionX + x] = getColor4F(cX, cY);
 			}
 		}
 		
@@ -538,15 +538,15 @@ final class Color4DData extends Data {
 		final int oldResolutionX = this.resolutionX;
 		final int oldResolutionY = this.resolutionY;
 		
-		final Color4D[] newColors = new Color4D[newResolutionX * newResolutionY];
-		final Color4D[] oldColors = this.colors;
+		final Color4F[] newColors = new Color4F[newResolutionX * newResolutionY];
+		final Color4F[] oldColors = this.colors;
 		
-		final double scaleX = (double)(oldResolutionX) / (double)(newResolutionX);
-		final double scaleY = (double)(oldResolutionY) / (double)(newResolutionY);
+		final float scaleX = (float)(oldResolutionX) / (float)(newResolutionX);
+		final float scaleY = (float)(oldResolutionY) / (float)(newResolutionY);
 		
 		for(int y = 0; y < newResolutionY; y++) {
 			for(int x = 0; x < newResolutionX; x++) {
-				newColors[y * newResolutionX + x] = getColor4D(x * scaleX, y * scaleY);
+				newColors[y * newResolutionX + x] = getColor4F(x * scaleX, y * scaleY);
 			}
 		}
 		
@@ -584,11 +584,21 @@ final class Color4DData extends Data {
 	
 	@Override
 	public boolean setColor4D(final Color4D color, final int index) {
+		return setColor4F(new Color4F(Objects.requireNonNull(color, "color == null")), index);
+	}
+	
+	@Override
+	public boolean setColor4D(final Color4D color, final int x, final int y) {
+		return setColor4F(new Color4F(Objects.requireNonNull(color, "color == null")), x, y);
+	}
+	
+	@Override
+	public boolean setColor4F(final Color4F color, final int index) {
 		Objects.requireNonNull(color, "color == null");
 		
 		if(index >= 0 && index < this.colors.length) {
-			final Color4D newColor = color;
-			final Color4D oldColor = this.colors[index];
+			final Color4F newColor = color;
+			final Color4F oldColor = this.colors[index];
 			
 			if(!newColor.equals(oldColor)) {
 				final boolean hasChangeBegun = hasChangeBegun();
@@ -612,14 +622,14 @@ final class Color4DData extends Data {
 	}
 	
 	@Override
-	public boolean setColor4D(final Color4D color, final int x, final int y) {
+	public boolean setColor4F(final Color4F color, final int x, final int y) {
 		Objects.requireNonNull(color, "color == null");
 		
 		if(x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
 			final int index = y * this.resolutionX + x;
 			
-			final Color4D newColor = color;
-			final Color4D oldColor = this.colors[index];
+			final Color4F newColor = color;
+			final Color4F oldColor = this.colors[index];
 			
 			if(!newColor.equals(oldColor)) {
 				final boolean hasChangeBegun = hasChangeBegun();
@@ -643,20 +653,10 @@ final class Color4DData extends Data {
 	}
 	
 	@Override
-	public boolean setColor4F(final Color4F color, final int index) {
-		return setColor4D(new Color4D(Objects.requireNonNull(color, "color == null")), index);
-	}
-	
-	@Override
-	public boolean setColor4F(final Color4F color, final int x, final int y) {
-		return setColor4D(new Color4D(Objects.requireNonNull(color, "color == null")), x, y);
-	}
-	
-	@Override
 	public boolean setColorARGB(final int colorARGB, final int index) {
 		if(index >= 0 && index < this.colors.length) {
-			final Color4D newColor = Color4D.unpack(colorARGB);
-			final Color4D oldColor = this.colors[index];
+			final Color4F newColor = Color4F.unpack(colorARGB);
+			final Color4F oldColor = this.colors[index];
 			
 			if(!newColor.equals(oldColor)) {
 				final boolean hasChangeBegun = hasChangeBegun();
@@ -684,8 +684,8 @@ final class Color4DData extends Data {
 		if(x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
 			final int index = y * this.resolutionX + x;
 			
-			final Color4D newColor = Color4D.unpack(colorARGB);
-			final Color4D oldColor = this.colors[index];
+			final Color4F newColor = Color4F.unpack(colorARGB);
+			final Color4F oldColor = this.colors[index];
 			
 			if(!newColor.equals(oldColor)) {
 				final boolean hasChangeBegun = hasChangeBegun();
@@ -712,14 +712,14 @@ final class Color4DData extends Data {
 	public boolean setContent(final Data data) {
 		Objects.requireNonNull(data, "data == null");
 		
-		if(data instanceof Color4DData) {
-			final Color4DData color4DData = Color4DData.class.cast(data);
+		if(data instanceof Color4FData) {
+			final Color4FData color4FData = Color4FData.class.cast(data);
 			
-			final Color4D[] newColors = color4DData.colors.clone();
-			final Color4D[] oldColors = this.colors;
+			final Color4F[] newColors = color4FData.colors.clone();
+			final Color4F[] oldColors = this.colors;
 			
-			final int newResolutionX = color4DData.resolutionX;
-			final int newResolutionY = color4DData.resolutionY;
+			final int newResolutionX = color4FData.resolutionX;
+			final int newResolutionY = color4FData.resolutionY;
 			
 			final int oldResolutionX = this.resolutionX;
 			final int oldResolutionY = this.resolutionY;
@@ -755,8 +755,8 @@ final class Color4DData extends Data {
 		final int oldResolutionX = this.resolutionX;
 		final int oldResolutionY = this.resolutionY;
 		
-		final Color4D[] newColors = new Color4D[newResolutionX * newResolutionY];
-		final Color4D[] oldColors = this.colors;
+		final Color4F[] newColors = new Color4F[newResolutionX * newResolutionY];
+		final Color4F[] oldColors = this.colors;
 		
 		for(int y = 0; y < newResolutionY; y++) {
 			for(int x = 0; x < newResolutionX; x++) {
@@ -767,7 +767,7 @@ final class Color4DData extends Data {
 					
 					newColors[newIndex] = oldColors[oldIndex];
 				} else {
-					newColors[newIndex] = Color4D.WHITE;
+					newColors[newIndex] = Color4F.WHITE;
 				}
 			}
 		}
@@ -794,8 +794,8 @@ final class Color4DData extends Data {
 			return false;
 		}
 		
-		final Color4D colorA = this.colors[indexA];
-		final Color4D colorB = this.colors[indexB];
+		final Color4F colorA = this.colors[indexA];
+		final Color4F colorB = this.colors[indexB];
 		
 		final boolean hasChangeBegun = hasChangeBegun();
 		final boolean hasChangeBegunNow = !hasChangeBegun && changeBegin();
@@ -820,8 +820,8 @@ final class Color4DData extends Data {
 		int cached = 0;
 		
 		for(int i = 0; i < this.colors.length; i++) {
-			final Color4D oldColor = this.colors[i];
-			final Color4D newColor = Color4D.getCached(oldColor);
+			final Color4F oldColor = this.colors[i];
+			final Color4F newColor = Color4F.getCached(oldColor);
 			
 			if(oldColor != newColor) {
 				cached++;
@@ -835,12 +835,12 @@ final class Color4DData extends Data {
 	
 	@Override
 	public int getColorARGB(final int index) {
-		return getColor4D(index).pack();
+		return getColor4F(index).pack();
 	}
 	
 	@Override
 	public int getColorARGB(final int x, final int y) {
-		return getColor4D(x, y).pack();
+		return getColor4F(x, y).pack();
 	}
 	
 	@Override
@@ -865,11 +865,11 @@ final class Color4DData extends Data {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	void updatePixel(final Color4D color, final int index) {
+	void updatePixel(final Color4F color, final int index) {
 		this.colors[index] = color;
 	}
 	
-	void updateState(final Color4D[] colors, final int resolutionX, final int resolutionY) {
+	void updateState(final Color4F[] colors, final int resolutionX, final int resolutionY) {
 		this.colors = colors.clone();
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
@@ -878,13 +878,13 @@ final class Color4DData extends Data {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class PixelChange implements Change {
-		private final Color4D colorRedo;
-		private final Color4D colorUndo;
+		private final Color4F colorRedo;
+		private final Color4F colorUndo;
 		private final int index;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public PixelChange(final Color4D colorRedo, final Color4D colorUndo, final int index) {
+		public PixelChange(final Color4F colorRedo, final Color4F colorUndo, final int index) {
 			this.colorRedo = colorRedo;
 			this.colorUndo = colorUndo;
 			this.index = index;
@@ -916,19 +916,19 @@ final class Color4DData extends Data {
 		
 		@Override
 		public void redo(final Data data) {
-			if(data instanceof Color4DData) {
+			if(data instanceof Color4FData) {
 				final
-				Color4DData color4DData = Color4DData.class.cast(data);
-				color4DData.updatePixel(this.colorRedo, this.index);
+				Color4FData color4FData = Color4FData.class.cast(data);
+				color4FData.updatePixel(this.colorRedo, this.index);
 			}
 		}
 		
 		@Override
 		public void undo(final Data data) {
-			if(data instanceof Color4DData) {
+			if(data instanceof Color4FData) {
 				final
-				Color4DData color4DData = Color4DData.class.cast(data);
-				color4DData.updatePixel(this.colorUndo, this.index);
+				Color4FData color4FData = Color4FData.class.cast(data);
+				color4FData.updatePixel(this.colorUndo, this.index);
 			}
 		}
 	}
@@ -936,8 +936,8 @@ final class Color4DData extends Data {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class StateChange implements Change {
-		private final Color4D[] colorsRedo;
-		private final Color4D[] colorsUndo;
+		private final Color4F[] colorsRedo;
+		private final Color4F[] colorsUndo;
 		private final int resolutionXRedo;
 		private final int resolutionXUndo;
 		private final int resolutionYRedo;
@@ -945,7 +945,7 @@ final class Color4DData extends Data {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public StateChange(final Color4D[] colorsRedo, final Color4D[] colorsUndo, final int resolutionXRedo, final int resolutionXUndo, final int resolutionYRedo, final int resolutionYUndo) {
+		public StateChange(final Color4F[] colorsRedo, final Color4F[] colorsUndo, final int resolutionXRedo, final int resolutionXUndo, final int resolutionYRedo, final int resolutionYUndo) {
 			this.colorsRedo = colorsRedo.clone();
 			this.colorsUndo = colorsUndo.clone();
 			this.resolutionXRedo = resolutionXRedo;
@@ -986,19 +986,19 @@ final class Color4DData extends Data {
 		
 		@Override
 		public void redo(final Data data) {
-			if(data instanceof Color4DData) {
+			if(data instanceof Color4FData) {
 				final
-				Color4DData color4DData = Color4DData.class.cast(data);
-				color4DData.updateState(this.colorsRedo, this.resolutionXRedo, this.resolutionYRedo);
+				Color4FData color4FData = Color4FData.class.cast(data);
+				color4FData.updateState(this.colorsRedo, this.resolutionXRedo, this.resolutionYRedo);
 			}
 		}
 		
 		@Override
 		public void undo(final Data data) {
-			if(data instanceof Color4DData) {
+			if(data instanceof Color4FData) {
 				final
-				Color4DData color4DData = Color4DData.class.cast(data);
-				color4DData.updateState(this.colorsUndo, this.resolutionXUndo, this.resolutionYUndo);
+				Color4FData color4FData = Color4FData.class.cast(data);
+				color4FData.updateState(this.colorsUndo, this.resolutionXUndo, this.resolutionYUndo);
 			}
 		}
 	}

@@ -29,6 +29,7 @@ import java.util.Objects;
 import javax.imageio.ImageIO;
 
 import org.dayflower.color.Color4D;
+import org.dayflower.color.Color4F;
 
 //TODO: Add Javadocs!
 public abstract class DataFactory {
@@ -134,6 +135,9 @@ public abstract class DataFactory {
 	
 //	TODO: Add Javadocs!
 	public abstract Data create(final int resolutionX, final int resolutionY, final Color4D color);
+	
+//	TODO: Add Javadocs!
+	public abstract Data create(final int resolutionX, final int resolutionY, final Color4F color);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

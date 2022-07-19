@@ -20,6 +20,7 @@ package org.dayflower.image;
 
 import static org.dayflower.utility.Bytes.toByte;
 import static org.dayflower.utility.Ints.max;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -38,6 +39,7 @@ import org.dayflower.color.Color4D;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.utility.Doubles;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.awt.image.BufferedImages;
@@ -666,10 +668,10 @@ public final class ByteImageD extends ImageD {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
 		if(index >= 0 && index < getResolution()) {
-			this.data[index * 4 + 0] = colorRGBA.getAsByteR();
-			this.data[index * 4 + 1] = colorRGBA.getAsByteG();
-			this.data[index * 4 + 2] = colorRGBA.getAsByteB();
-			this.data[index * 4 + 3] = colorRGBA.getAsByteA();
+			this.data[index * 4 + 0] = (byte)(toInt(Doubles.saturate(colorRGBA.r) * 255.0D + 0.5D) & 0xFF);
+			this.data[index * 4 + 1] = (byte)(toInt(Doubles.saturate(colorRGBA.g) * 255.0D + 0.5D) & 0xFF);
+			this.data[index * 4 + 2] = (byte)(toInt(Doubles.saturate(colorRGBA.b) * 255.0D + 0.5D) & 0xFF);
+			this.data[index * 4 + 3] = (byte)(toInt(Doubles.saturate(colorRGBA.a) * 255.0D + 0.5D) & 0xFF);
 		}
 	}
 }

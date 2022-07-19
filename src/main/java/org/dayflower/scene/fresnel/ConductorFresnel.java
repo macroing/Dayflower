@@ -160,13 +160,13 @@ public final class ConductorFresnel implements Fresnel {
 		final float saturateCosThetaI = saturate(cosThetaI, -1.0F, 1.0F);
 		final float saturateCosThetaIMultipliedBy2 = saturateCosThetaI * 2.0F;
 		
-		final float etaR = etaT.getR() / etaI.getR();
-		final float etaG = etaT.getG() / etaI.getG();
-		final float etaB = etaT.getB() / etaI.getB();
+		final float etaR = etaT.r / etaI.r;
+		final float etaG = etaT.g / etaI.g;
+		final float etaB = etaT.b / etaI.b;
 		
-		final float etaKR = k.getR() / etaI.getR();
-		final float etaKG = k.getG() / etaI.getG();
-		final float etaKB = k.getB() / etaI.getB();
+		final float etaKR = k.r / etaI.r;
+		final float etaKG = k.g / etaI.g;
+		final float etaKB = k.b / etaI.b;
 		
 		final float cosThetaISquared = saturateCosThetaI * saturateCosThetaI;
 		final float sinThetaISquared = 1.0F - cosThetaISquared;

@@ -149,9 +149,9 @@ public final class ColorSpaceD {
 	 */
 //	TODO: Add Unit Tests!
 	public Color3D convertRGBToXYZ(final Color3D colorRGB) {
-		final double r = colorRGB.getR();
-		final double g = colorRGB.getG();
-		final double b = colorRGB.getB();
+		final double r = colorRGB.r;
+		final double g = colorRGB.g;
+		final double b = colorRGB.b;
 		
 		final double x = this.matrixRGBToXYZ[0] * r + this.matrixRGBToXYZ[3] * g + this.matrixRGBToXYZ[6] * b;
 		final double y = this.matrixRGBToXYZ[1] * r + this.matrixRGBToXYZ[4] * g + this.matrixRGBToXYZ[7] * b;
@@ -173,9 +173,9 @@ public final class ColorSpaceD {
 	 */
 //	TODO: Add Unit Tests!
 	public Color3D convertXYZToRGB(final Color3D colorXYZ) {
-		final double x = colorXYZ.getX();
-		final double y = colorXYZ.getY();
-		final double z = colorXYZ.getZ();
+		final double x = colorXYZ.r;
+		final double y = colorXYZ.g;
+		final double z = colorXYZ.b;
 		
 		final double r = this.matrixXYZToRGB[0] * x + this.matrixXYZToRGB[1] * y + this.matrixXYZToRGB[2] * z;
 		final double g = this.matrixXYZToRGB[3] * x + this.matrixXYZToRGB[4] * y + this.matrixXYZToRGB[5] * z;
@@ -197,11 +197,11 @@ public final class ColorSpaceD {
 	 */
 //	TODO: Add Unit Tests!
 	public Color3D redoGammaCorrection(final Color3D color) {
-		final double component1 = doRedoGammaCorrection(color.getComponent1());
-		final double component2 = doRedoGammaCorrection(color.getComponent2());
-		final double component3 = doRedoGammaCorrection(color.getComponent3());
+		final double r = doRedoGammaCorrection(color.r);
+		final double g = doRedoGammaCorrection(color.g);
+		final double b = doRedoGammaCorrection(color.b);
 		
-		return new Color3D(component1, component2, component3);
+		return new Color3D(r, g, b);
 	}
 	
 	/**
@@ -217,11 +217,11 @@ public final class ColorSpaceD {
 	 */
 //	TODO: Add Unit Tests!
 	public Color3D undoGammaCorrection(final Color3D color) {
-		final double component1 = doUndoGammaCorrection(color.getComponent1());
-		final double component2 = doUndoGammaCorrection(color.getComponent2());
-		final double component3 = doUndoGammaCorrection(color.getComponent3());
+		final double r = doUndoGammaCorrection(color.r);
+		final double g = doUndoGammaCorrection(color.g);
+		final double b = doUndoGammaCorrection(color.b);
 		
-		return new Color3D(component1, component2, component3);
+		return new Color3D(r, g, b);
 	}
 	
 	/**
@@ -237,10 +237,10 @@ public final class ColorSpaceD {
 	 */
 //	TODO: Add Unit Tests!
 	public Color4D convertRGBAToXYZA(final Color4D colorRGBA) {
-		final double r = colorRGBA.getR();
-		final double g = colorRGBA.getG();
-		final double b = colorRGBA.getB();
-		final double a = colorRGBA.getA();
+		final double r = colorRGBA.r;
+		final double g = colorRGBA.g;
+		final double b = colorRGBA.b;
+		final double a = colorRGBA.a;
 		
 		final double x = this.matrixRGBToXYZ[0] * r + this.matrixRGBToXYZ[3] * g + this.matrixRGBToXYZ[6] * b;
 		final double y = this.matrixRGBToXYZ[1] * r + this.matrixRGBToXYZ[4] * g + this.matrixRGBToXYZ[7] * b;
@@ -262,10 +262,10 @@ public final class ColorSpaceD {
 	 */
 //	TODO: Add Unit Tests!
 	public Color4D convertXYZAToRGBA(final Color4D colorXYZA) {
-		final double x = colorXYZA.getX();
-		final double y = colorXYZA.getY();
-		final double z = colorXYZA.getZ();
-		final double a = colorXYZA.getA();
+		final double x = colorXYZA.r;
+		final double y = colorXYZA.g;
+		final double z = colorXYZA.b;
+		final double a = colorXYZA.a;
 		
 		final double r = this.matrixXYZToRGB[0] * x + this.matrixXYZToRGB[1] * y + this.matrixXYZToRGB[2] * z;
 		final double g = this.matrixXYZToRGB[3] * x + this.matrixXYZToRGB[4] * y + this.matrixXYZToRGB[5] * z;
@@ -287,12 +287,12 @@ public final class ColorSpaceD {
 	 */
 //	TODO: Add Unit Tests!
 	public Color4D redoGammaCorrection(final Color4D color) {
-		final double component1 = doRedoGammaCorrection(color.getComponent1());
-		final double component2 = doRedoGammaCorrection(color.getComponent2());
-		final double component3 = doRedoGammaCorrection(color.getComponent3());
-		final double component4 = color.getComponent4();
+		final double r = doRedoGammaCorrection(color.r);
+		final double g = doRedoGammaCorrection(color.g);
+		final double b = doRedoGammaCorrection(color.b);
+		final double a = color.a;
 		
-		return new Color4D(component1, component2, component3, component4);
+		return new Color4D(r, g, b, a);
 	}
 	
 	/**
@@ -308,12 +308,12 @@ public final class ColorSpaceD {
 	 */
 //	TODO: Add Unit Tests!
 	public Color4D undoGammaCorrection(final Color4D color) {
-		final double component1 = doUndoGammaCorrection(color.getComponent1());
-		final double component2 = doUndoGammaCorrection(color.getComponent2());
-		final double component3 = doUndoGammaCorrection(color.getComponent3());
-		final double component4 = color.getComponent4();
+		final double r = doUndoGammaCorrection(color.r);
+		final double g = doUndoGammaCorrection(color.g);
+		final double b = doUndoGammaCorrection(color.b);
+		final double a = color.a;
 		
-		return new Color4D(component1, component2, component3, component4);
+		return new Color4D(r, g, b, a);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -102,9 +102,9 @@ public final class ChromaticSpectralCurveD extends SpectralCurveD {
 		final double m1 = (-1.3515D - 1.7703D  * x +  5.9114D * y) / (0.0241D + 0.2562D * x - 0.7341D * y);
 		final double m2 = (+0.03D   - 31.4424D * x + 30.0717D * y) / (0.0241D + 0.2562D * x - 0.7341D * y);
 		
-		final double x0 = S0_XYZ.getX() + m1 * S1_XYZ.getX() + m2 * S2_XYZ.getX();
-		final double y0 = S0_XYZ.getY() + m1 * S1_XYZ.getY() + m2 * S2_XYZ.getY();
-		final double z0 = S0_XYZ.getZ() + m1 * S1_XYZ.getZ() + m2 * S2_XYZ.getZ();
+		final double x0 = S0_XYZ.r + m1 * S1_XYZ.r + m2 * S2_XYZ.r;
+		final double y0 = S0_XYZ.g + m1 * S1_XYZ.g + m2 * S2_XYZ.g;
+		final double z0 = S0_XYZ.b + m1 * S1_XYZ.b + m2 * S2_XYZ.b;
 		
 		return new Color3D(x0, y0, z0);
 	}

@@ -52,20 +52,20 @@ public final class Color4DUnitTests {
 	public void testConstructor() {
 		final Color4D color = new Color4D();
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertEquals(0.0D, color.getComponent2());
-		assertEquals(0.0D, color.getComponent3());
-		assertEquals(1.0D, color.getComponent4());
+		assertEquals(0.0D, color.r);
+		assertEquals(0.0D, color.g);
+		assertEquals(0.0D, color.b);
+		assertEquals(1.0D, color.a);
 	}
 	
 	@Test
 	public void testConstructorColor3D() {
 		final Color4D color = new Color4D(new Color3D(1.0D, 1.0D, 1.0D));
 		
-		assertEquals(1.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
-		assertEquals(1.0D, color.getComponent4());
+		assertEquals(1.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
+		assertEquals(1.0D, color.a);
 		
 		assertThrows(NullPointerException.class, () -> new Color4D((Color3D)(null)));
 	}
@@ -74,10 +74,10 @@ public final class Color4DUnitTests {
 	public void testConstructorColor3DDouble() {
 		final Color4D color = new Color4D(new Color3D(1.0D, 1.0D, 1.0D), 0.5D);
 		
-		assertEquals(1.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
-		assertEquals(0.5D, color.getComponent4());
+		assertEquals(1.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
+		assertEquals(0.5D, color.a);
 		
 		assertThrows(NullPointerException.class, () -> new Color4D((Color3D)(null), 0.5D));
 	}
@@ -86,10 +86,10 @@ public final class Color4DUnitTests {
 	public void testConstructorColor3F() {
 		final Color4D color = new Color4D(new Color3F(1.0F, 1.0F, 1.0F));
 		
-		assertEquals(1.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
-		assertEquals(1.0D, color.getComponent4());
+		assertEquals(1.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
+		assertEquals(1.0D, color.a);
 		
 		assertThrows(NullPointerException.class, () -> new Color4D((Color3F)(null)));
 	}
@@ -98,10 +98,10 @@ public final class Color4DUnitTests {
 	public void testConstructorColor3FDouble() {
 		final Color4D color = new Color4D(new Color3F(1.0F, 1.0F, 1.0F), 0.5D);
 		
-		assertEquals(1.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
-		assertEquals(0.5D, color.getComponent4());
+		assertEquals(1.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
+		assertEquals(0.5D, color.a);
 		
 		assertThrows(NullPointerException.class, () -> new Color4D((Color3F)(null), 0.5D));
 	}
@@ -110,70 +110,70 @@ public final class Color4DUnitTests {
 	public void testConstructorDouble() {
 		final Color4D color = new Color4D(2.0D);
 		
-		assertEquals(2.0D, color.getComponent1());
-		assertEquals(2.0D, color.getComponent2());
-		assertEquals(2.0D, color.getComponent3());
-		assertEquals(1.0D, color.getComponent4());
+		assertEquals(2.0D, color.r);
+		assertEquals(2.0D, color.g);
+		assertEquals(2.0D, color.b);
+		assertEquals(1.0D, color.a);
 	}
 	
 	@Test
 	public void testConstructorDoubleDouble() {
 		final Color4D color = new Color4D(2.0D, 0.5D);
 		
-		assertEquals(2.0D, color.getComponent1());
-		assertEquals(2.0D, color.getComponent2());
-		assertEquals(2.0D, color.getComponent3());
-		assertEquals(0.5D, color.getComponent4());
+		assertEquals(2.0D, color.r);
+		assertEquals(2.0D, color.g);
+		assertEquals(2.0D, color.b);
+		assertEquals(0.5D, color.a);
 	}
 	
 	@Test
 	public void testConstructorDoubleDoubleDouble() {
 		final Color4D color = new Color4D(0.0D, 1.0D, 2.0D);
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(2.0D, color.getComponent3());
-		assertEquals(1.0D, color.getComponent4());
+		assertEquals(0.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(2.0D, color.b);
+		assertEquals(1.0D, color.a);
 	}
 	
 	@Test
 	public void testConstructorDoubleDoubleDoubleDouble() {
 		final Color4D color = new Color4D(0.0D, 1.0D, 2.0D, 0.5D);
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(2.0D, color.getComponent3());
-		assertEquals(0.5D, color.getComponent4());
+		assertEquals(0.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(2.0D, color.b);
+		assertEquals(0.5D, color.a);
 	}
 	
 	@Test
 	public void testConstructorInt() {
 		final Color4D color = new Color4D(255);
 		
-		assertEquals(1.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
-		assertEquals(1.0D, color.getComponent4());
+		assertEquals(1.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
+		assertEquals(1.0D, color.a);
 	}
 	
 	@Test
 	public void testConstructorIntIntInt() {
 		final Color4D color = new Color4D(0, 255, 300);
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
-		assertEquals(1.0D, color.getComponent4());
+		assertEquals(0.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
+		assertEquals(1.0D, color.a);
 	}
 	
 	@Test
 	public void testConstructorIntIntIntInt() {
 		final Color4D color = new Color4D(0, 255, 300, 255);
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
-		assertEquals(1.0D, color.getComponent4());
+		assertEquals(0.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
+		assertEquals(1.0D, color.a);
 	}
 	
 	@Test

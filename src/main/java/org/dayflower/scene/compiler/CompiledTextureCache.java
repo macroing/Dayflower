@@ -1803,9 +1803,9 @@ public final class CompiledTextureCache {
 		final float[] array = new float[CONSTANT_TEXTURE_LENGTH];
 		
 //		Because the ConstantTexture occupy 4/8 positions in a block, it should be aligned.
-		array[CONSTANT_TEXTURE_OFFSET_COLOR + 0] = color.getR();
-		array[CONSTANT_TEXTURE_OFFSET_COLOR + 1] = color.getG();
-		array[CONSTANT_TEXTURE_OFFSET_COLOR + 2] = color.getB();
+		array[CONSTANT_TEXTURE_OFFSET_COLOR + 0] = color.r;
+		array[CONSTANT_TEXTURE_OFFSET_COLOR + 1] = color.g;
+		array[CONSTANT_TEXTURE_OFFSET_COLOR + 2] = color.b;
 		array[3] = 0.0F;
 		
 		return array;

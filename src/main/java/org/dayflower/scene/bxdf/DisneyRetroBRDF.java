@@ -151,9 +151,9 @@ public final class DisneyRetroBRDF extends BXDF {
 		final float a = 2.0F * this.roughness * cosThetaD * cosThetaD;
 		final float b = fresnelOutgoing + fresnelIncoming + fresnelOutgoing * fresnelIncoming * (a - 1.0F);
 		
-		final float component1 = this.reflectanceScale.getComponent1() * PI_RECIPROCAL * a * b;
-		final float component2 = this.reflectanceScale.getComponent2() * PI_RECIPROCAL * a * b;
-		final float component3 = this.reflectanceScale.getComponent3() * PI_RECIPROCAL * a * b;
+		final float component1 = this.reflectanceScale.r * PI_RECIPROCAL * a * b;
+		final float component2 = this.reflectanceScale.g * PI_RECIPROCAL * a * b;
+		final float component3 = this.reflectanceScale.b * PI_RECIPROCAL * a * b;
 		
 		return new Color3F(component1, component2, component3);
 	}

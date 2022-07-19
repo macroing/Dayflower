@@ -208,7 +208,7 @@ final class Color4FData extends Data {
 				float colorR = 0.0F;
 				float colorG = 0.0F;
 				float colorB = 0.0F;
-				float colorA = oldColors[index].getA();
+				float colorA = oldColors[index].a;
 				
 				for(int kernelY = 0; kernelY < kernelResolution; kernelY++) {
 					final int imageY = yOffset + kernelY;
@@ -224,9 +224,9 @@ final class Color4FData extends Data {
 							
 							final double element = elements[kernelRow + kernelX];
 							
-							colorR += color.getR() * element;
-							colorG += color.getG() * element;
-							colorB += color.getB() * element;
+							colorR += color.r * element;
+							colorG += color.g * element;
+							colorB += color.b * element;
 						}
 					}
 				}
@@ -295,7 +295,7 @@ final class Color4FData extends Data {
 				float colorR = 0.0F;
 				float colorG = 0.0F;
 				float colorB = 0.0F;
-				float colorA = oldColors[index].getA();
+				float colorA = oldColors[index].a;
 				
 				for(int kernelY = 0; kernelY < kernelResolution; kernelY++) {
 					final int imageY = yOffset + kernelY;
@@ -311,9 +311,9 @@ final class Color4FData extends Data {
 							
 							final float element = elements[kernelRow + kernelX];
 							
-							colorR += color.getR() * element;
-							colorG += color.getG() * element;
-							colorB += color.getB() * element;
+							colorR += color.r * element;
+							colorG += color.g * element;
+							colorB += color.b * element;
 						}
 					}
 				}

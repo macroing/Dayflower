@@ -41,17 +41,17 @@ public final class ColorConversions {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Color3D doConvertRGBToXYZ(final Color3D color) {
-		final double x = 0.412453D * color.getR() + 0.357580D * color.getG() + 0.180423D * color.getB();
-		final double y = 0.212671D * color.getR() + 0.715160D * color.getG() + 0.072169D * color.getB();
-		final double z = 0.019334D * color.getR() + 0.119193D * color.getG() + 0.950227D * color.getB();
+		final double x = 0.412453D * color.r + 0.357580D * color.g + 0.180423D * color.b;
+		final double y = 0.212671D * color.r + 0.715160D * color.g + 0.072169D * color.b;
+		final double z = 0.019334D * color.r + 0.119193D * color.g + 0.950227D * color.b;
 		
 		return new Color3D(x, y, z);
 	}
 	
 	private static Color3D doConvertXYZToRGB(final Color3D color) {
-		final double r = +3.240479D * color.getX() - 1.537150D * color.getY() - 0.498535D * color.getZ();
-		final double g = -0.969256D * color.getX() + 1.875991D * color.getY() + 0.041556D * color.getZ();
-		final double b = +0.055648D * color.getX() - 0.204043D * color.getY() + 1.057311D * color.getZ();
+		final double r = +3.240479D * color.r - 1.537150D * color.g - 0.498535D * color.b;
+		final double g = -0.969256D * color.r + 1.875991D * color.g + 0.041556D * color.b;
+		final double b = +0.055648D * color.r - 0.204043D * color.g + 1.057311D * color.b;
 		
 		return new Color3D(r, g, b);
 	}
@@ -63,9 +63,9 @@ public final class ColorConversions {
 		final double slope = 12.92D;
 		final double slopeMatch = 1.055D;
 		
-		final double component1 = color.getR() <= breakPoint ? color.getR() * slope : slopeMatch * pow(color.getR(), 1.0D / gamma) - segmentOffset;
-		final double component2 = color.getG() <= breakPoint ? color.getG() * slope : slopeMatch * pow(color.getG(), 1.0D / gamma) - segmentOffset;
-		final double component3 = color.getB() <= breakPoint ? color.getB() * slope : slopeMatch * pow(color.getB(), 1.0D / gamma) - segmentOffset;
+		final double component1 = color.r <= breakPoint ? color.r * slope : slopeMatch * pow(color.r, 1.0D / gamma) - segmentOffset;
+		final double component2 = color.g <= breakPoint ? color.g * slope : slopeMatch * pow(color.g, 1.0D / gamma) - segmentOffset;
+		final double component3 = color.b <= breakPoint ? color.b * slope : slopeMatch * pow(color.b, 1.0D / gamma) - segmentOffset;
 		
 		return new Color3D(component1, component2, component3);
 	}
@@ -77,25 +77,25 @@ public final class ColorConversions {
 		final double slope = 12.92D;
 		final double slopeMatch = 1.055D;
 		
-		final double component1 = color.getR() <= breakPoint * slope ? color.getR() / slope : pow((color.getR() + segmentOffset) / slopeMatch, gamma);
-		final double component2 = color.getG() <= breakPoint * slope ? color.getG() / slope : pow((color.getG() + segmentOffset) / slopeMatch, gamma);
-		final double component3 = color.getB() <= breakPoint * slope ? color.getB() / slope : pow((color.getB() + segmentOffset) / slopeMatch, gamma);
+		final double component1 = color.r <= breakPoint * slope ? color.r / slope : pow((color.r + segmentOffset) / slopeMatch, gamma);
+		final double component2 = color.g <= breakPoint * slope ? color.g / slope : pow((color.g + segmentOffset) / slopeMatch, gamma);
+		final double component3 = color.b <= breakPoint * slope ? color.b / slope : pow((color.b + segmentOffset) / slopeMatch, gamma);
 		
 		return new Color3D(component1, component2, component3);
 	}
 	
 	private static Color3F doConvertRGBToXYZ(final Color3F color) {
-		final float x = 0.412453F * color.getR() + 0.357580F * color.getG() + 0.180423F * color.getB();
-		final float y = 0.212671F * color.getR() + 0.715160F * color.getG() + 0.072169F * color.getB();
-		final float z = 0.019334F * color.getR() + 0.119193F * color.getG() + 0.950227F * color.getB();
+		final float x = 0.412453F * color.r + 0.357580F * color.g + 0.180423F * color.b;
+		final float y = 0.212671F * color.r + 0.715160F * color.g + 0.072169F * color.b;
+		final float z = 0.019334F * color.r + 0.119193F * color.g + 0.950227F * color.b;
 		
 		return new Color3F(x, y, z);
 	}
 	
 	private static Color3F doConvertXYZToRGB(final Color3F color) {
-		final float r = +3.240479F * color.getX() - 1.537150F * color.getY() - 0.498535F * color.getZ();
-		final float g = -0.969256F * color.getX() + 1.875991F * color.getY() + 0.041556F * color.getZ();
-		final float b = +0.055648F * color.getX() - 0.204043F * color.getY() + 1.057311F * color.getZ();
+		final float r = +3.240479F * color.r - 1.537150F * color.g - 0.498535F * color.b;
+		final float g = -0.969256F * color.r + 1.875991F * color.g + 0.041556F * color.b;
+		final float b = +0.055648F * color.r - 0.204043F * color.g + 1.057311F * color.b;
 		
 		return new Color3F(r, g, b);
 	}
@@ -107,9 +107,9 @@ public final class ColorConversions {
 		final float slope = 12.92F;
 		final float slopeMatch = 1.055F;
 		
-		final float component1 = color.getR() <= breakPoint ? color.getR() * slope : slopeMatch * pow(color.getR(), 1.0F / gamma) - segmentOffset;
-		final float component2 = color.getG() <= breakPoint ? color.getG() * slope : slopeMatch * pow(color.getG(), 1.0F / gamma) - segmentOffset;
-		final float component3 = color.getB() <= breakPoint ? color.getB() * slope : slopeMatch * pow(color.getB(), 1.0F / gamma) - segmentOffset;
+		final float component1 = color.r <= breakPoint ? color.r * slope : slopeMatch * pow(color.r, 1.0F / gamma) - segmentOffset;
+		final float component2 = color.g <= breakPoint ? color.g * slope : slopeMatch * pow(color.g, 1.0F / gamma) - segmentOffset;
+		final float component3 = color.b <= breakPoint ? color.b * slope : slopeMatch * pow(color.b, 1.0F / gamma) - segmentOffset;
 		
 		return new Color3F(component1, component2, component3);
 	}
@@ -121,9 +121,9 @@ public final class ColorConversions {
 		final float slope = 12.92F;
 		final float slopeMatch = 1.055F;
 		
-		final float component1 = color.getR() <= breakPoint * slope ? color.getR() / slope : pow((color.getR() + segmentOffset) / slopeMatch, gamma);
-		final float component2 = color.getG() <= breakPoint * slope ? color.getG() / slope : pow((color.getG() + segmentOffset) / slopeMatch, gamma);
-		final float component3 = color.getB() <= breakPoint * slope ? color.getB() / slope : pow((color.getB() + segmentOffset) / slopeMatch, gamma);
+		final float component1 = color.r <= breakPoint * slope ? color.r / slope : pow((color.r + segmentOffset) / slopeMatch, gamma);
+		final float component2 = color.g <= breakPoint * slope ? color.g / slope : pow((color.g + segmentOffset) / slopeMatch, gamma);
+		final float component3 = color.b <= breakPoint * slope ? color.b / slope : pow((color.b + segmentOffset) / slopeMatch, gamma);
 		
 		return new Color3F(component1, component2, component3);
 	}

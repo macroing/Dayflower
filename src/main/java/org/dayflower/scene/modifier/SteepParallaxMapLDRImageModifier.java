@@ -313,14 +313,14 @@ public final class SteepParallaxMapLDRImageModifier extends AbstractLDRImageModi
 		float u = textureCoordinates.x;
 		float v = textureCoordinates.y;
 		
-		float currentHeight = getColorRGB(u, v).getR();
+		float currentHeight = getColorRGB(u, v).r;
 		float currentLayerDepth = 0.0F;
 		
 		while(currentLayerDepth < currentHeight) {
 			u -= deltaU;
 			v -= deltaV;
 			
-			currentHeight = getColorRGB(u, v).getR();
+			currentHeight = getColorRGB(u, v).r;
 			currentLayerDepth += layersReciprocal;
 		}
 		

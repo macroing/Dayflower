@@ -109,10 +109,25 @@ public final class Color4F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final float component1;
-	private final float component2;
-	private final float component3;
-	private final float component4;
+	/**
+	 * The A-component of this {@code Color4F} instance.
+	 */
+	public final float a;
+	
+	/**
+	 * The B-component of this {@code Color4F} instance.
+	 */
+	public final float b;
+	
+	/**
+	 * The G-component of this {@code Color4F} instance.
+	 */
+	public final float g;
+	
+	/**
+	 * The R-component of this {@code Color4F} instance.
+	 */
+	public final float r;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -139,20 +154,20 @@ public final class Color4F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public Color4F(final Color3D color) {
-		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()));
+		this(toFloat(color.r), toFloat(color.g), toFloat(color.b));
 	}
 	
 	/**
-	 * Constructs a new {@code Color4F} instance from {@code color} and {@code component4}.
+	 * Constructs a new {@code Color4F} instance from {@code color} and {@code a}.
 	 * <p>
 	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param color a {@link Color3D} instance
-	 * @param component4 the value of component 4
+	 * @param a the value of component 4
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-	public Color4F(final Color3D color, final float component4) {
-		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()), component4);
+	public Color4F(final Color3D color, final float a) {
+		this(toFloat(color.r), toFloat(color.g), toFloat(color.b), a);
 	}
 	
 	/**
@@ -164,20 +179,20 @@ public final class Color4F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public Color4F(final Color3F color) {
-		this(color.getComponent1(), color.getComponent2(), color.getComponent3());
+		this(color.r, color.g, color.b);
 	}
 	
 	/**
-	 * Constructs a new {@code Color4F} instance from {@code color} and {@code component4}.
+	 * Constructs a new {@code Color4F} instance from {@code color} and {@code a}.
 	 * <p>
 	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param color a {@link Color3F} instance
-	 * @param component4 the value of component 4
+	 * @param a the value of component 4
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-	public Color4F(final Color3F color, final float component4) {
-		this(color.getComponent1(), color.getComponent2(), color.getComponent3(), component4);
+	public Color4F(final Color3F color, final float a) {
+		this(color.r, color.g, color.b, a);
 	}
 	
 	/**
@@ -190,7 +205,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public Color4F(final Color4D color) {
-		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()), toFloat(color.getComponent4()));
+		this(toFloat(color.r), toFloat(color.g), toFloat(color.b), toFloat(color.a));
 	}
 	
 	/**
@@ -215,48 +230,48 @@ public final class Color4F {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Color4F(component, component, component, component4);
+	 * new Color4F(component, component, component, a);
 	 * }
 	 * </pre>
 	 * 
 	 * @param component the value of component 1, component 2 and component 3
-	 * @param component4 the value of component 4
+	 * @param a the value of component 4
 	 */
-	public Color4F(final float component, final float component4) {
-		this(component, component, component, component4);
+	public Color4F(final float component, final float a) {
+		this(component, component, component, a);
 	}
 	
 	/**
-	 * Constructs a new {@code Color4F} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code 1.0F}.
+	 * Constructs a new {@code Color4F} instance given the component values {@code r}, {@code g}, {@code b} and {@code 1.0F}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Color4F(component1, component2, component3, 1.0F);
+	 * new Color4F(r, g, b, 1.0F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
+	 * @param r the value of component 1
+	 * @param g the value of component 2
+	 * @param b the value of component 3
 	 */
-	public Color4F(final float component1, final float component2, final float component3) {
-		this(component1, component2, component3, 1.0F);
+	public Color4F(final float r, final float g, final float b) {
+		this(r, g, b, 1.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code Color4F} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code component4}.
+	 * Constructs a new {@code Color4F} instance given the component values {@code r}, {@code g}, {@code b} and {@code a}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
-	 * @param component4 the value of component 4
+	 * @param r the value of component 1
+	 * @param g the value of component 2
+	 * @param b the value of component 3
+	 * @param a the value of component 4
 	 */
-	public Color4F(final float component1, final float component2, final float component3, final float component4) {
-		this.component1 = component1;
-		this.component2 = component2;
-		this.component3 = component3;
-		this.component4 = component4;
+	public Color4F(final float r, final float g, final float b, final float a) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		this.a = a;
 	}
 	
 	/**
@@ -276,40 +291,40 @@ public final class Color4F {
 	}
 	
 	/**
-	 * Constructs a new {@code Color4F} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code 255}.
+	 * Constructs a new {@code Color4F} instance given the component values {@code r}, {@code g}, {@code b} and {@code 255}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Color4F(component1, component2, component3, 255);
+	 * new Color4F(r, g, b, 255);
 	 * }
 	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
+	 * @param r the value of component 1
+	 * @param g the value of component 2
+	 * @param b the value of component 3
 	 */
-	public Color4F(final int component1, final int component2, final int component3) {
-		this(component1, component2, component3, 255);
+	public Color4F(final int r, final int g, final int b) {
+		this(r, g, b, 255);
 	}
 	
 	/**
-	 * Constructs a new {@code Color4F} instance given the component values {@code component1}, {@code component2}, {@code component3} and {@code component4}.
+	 * Constructs a new {@code Color4F} instance given the component values {@code r}, {@code g}, {@code b} and {@code a}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Color4F(Ints.saturate(component1) / 255.0F, Ints.saturate(component2) / 255.0F, Ints.saturate(component3) / 255.0F, Ints.saturate(component4) / 255.0F);
+	 * new Color4F(Ints.saturate(r) / 255.0F, Ints.saturate(g) / 255.0F, Ints.saturate(b) / 255.0F, Ints.saturate(a) / 255.0F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
-	 * @param component4 the value of component 4
+	 * @param r the value of component 1
+	 * @param g the value of component 2
+	 * @param b the value of component 3
+	 * @param a the value of component 4
 	 */
-	public Color4F(final int component1, final int component2, final int component3, final int component4) {
-		this(Ints.saturate(component1) / 255.0F, Ints.saturate(component2) / 255.0F, Ints.saturate(component3) / 255.0F, Ints.saturate(component4) / 255.0F);
+	public Color4F(final int r, final int g, final int b, final int a) {
+		this(Ints.saturate(r) / 255.0F, Ints.saturate(g) / 255.0F, Ints.saturate(b) / 255.0F, Ints.saturate(a) / 255.0F);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -321,7 +336,7 @@ public final class Color4F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Color4F(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3), Strings.toNonScientificNotationJava(this.component4));
+		return String.format("new Color4F(%s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.r), Strings.toNonScientificNotationJava(this.g), Strings.toNonScientificNotationJava(this.b), Strings.toNonScientificNotationJava(this.a));
 	}
 	
 	/**
@@ -337,13 +352,13 @@ public final class Color4F {
 			return true;
 		} else if(color == null) {
 			return false;
-		} else if(!equal(this.component1, color.component1)) {
+		} else if(!equal(this.r, color.r)) {
 			return false;
-		} else if(!equal(this.component2, color.component2)) {
+		} else if(!equal(this.g, color.g)) {
 			return false;
-		} else if(!equal(this.component3, color.component3)) {
+		} else if(!equal(this.b, color.b)) {
 			return false;
-		} else if(!equal(this.component4, color.component4)) {
+		} else if(!equal(this.a, color.a)) {
 			return false;
 		} else {
 			return true;
@@ -375,7 +390,7 @@ public final class Color4F {
 	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color4F} instance is infinite, {@code false} otherwise
 	 */
 	public boolean hasInfinites() {
-		return isInfinite(this.component1) || isInfinite(this.component2) || isInfinite(this.component3) || isInfinite(this.component4);
+		return isInfinite(this.r) || isInfinite(this.g) || isInfinite(this.b) || isInfinite(this.a);
 	}
 	
 	/**
@@ -384,7 +399,7 @@ public final class Color4F {
 	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color4F} instance is equal to {@code Float.NaN}, {@code false} otherwise
 	 */
 	public boolean hasNaNs() {
-		return isNaN(this.component1) || isNaN(this.component2) || isNaN(this.component3) || isNaN(this.component4);
+		return isNaN(this.r) || isNaN(this.g) || isNaN(this.b) || isNaN(this.a);
 	}
 	
 	/**
@@ -395,7 +410,7 @@ public final class Color4F {
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is black, {@code false} otherwise
 	 */
 	public boolean isBlack() {
-		return isGrayscale() && isZero(this.component1);
+		return isGrayscale() && isZero(this.r);
 	}
 	
 	/**
@@ -417,14 +432,14 @@ public final class Color4F {
 	/**
 	 * Returns {@code true} if, and only if, this {@code Color4F} instance is considered blue, {@code false} otherwise.
 	 * <p>
-	 * The {@code Color4F} instance {@code color} is considered blue if, and only if, {@code color.getB() - thresholdR >= color.getR()} and {@code color.getB() - thresholdG >= color.getG()}.
+	 * The {@code Color4F} instance {@code color} is considered blue if, and only if, {@code color.b - thresholdR >= color.r} and {@code color.b - thresholdG >= color.g}.
 	 * 
 	 * @param thresholdR the threshold for the R-component
 	 * @param thresholdG the threshold for the G-component
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered blue, {@code false} otherwise
 	 */
 	public boolean isBlue(final float thresholdR, final float thresholdG) {
-		return getB() - thresholdR >= getR() && getB() - thresholdG >= getG();
+		return this.b - thresholdR >= this.r && this.b - thresholdG >= this.g;
 	}
 	
 	/**
@@ -433,7 +448,7 @@ public final class Color4F {
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered cyan, {@code false} otherwise
 	 */
 	public boolean isCyan() {
-		return equal(this.component2, this.component3) && this.component1 < this.component2;
+		return equal(this.g, this.b) && this.r < this.g;
 	}
 	
 	/**
@@ -444,7 +459,7 @@ public final class Color4F {
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is a grayscale color, {@code false} otherwise
 	 */
 	public boolean isGrayscale() {
-		return equal(this.component1, this.component2, this.component3);
+		return equal(this.r, this.g, this.b);
 	}
 	
 	/**
@@ -466,14 +481,14 @@ public final class Color4F {
 	/**
 	 * Returns {@code true} if, and only if, this {@code Color4F} instance is considered green, {@code false} otherwise.
 	 * <p>
-	 * The {@code Color4F} instance {@code color} is considered green if, and only if, {@code color.getG() - thresholdR >= color.getR()} and {@code color.getG() - thresholdB >= color.getB()}.
+	 * The {@code Color4F} instance {@code color} is considered green if, and only if, {@code color.g - thresholdR >= color.r} and {@code color.g - thresholdB >= color.b}.
 	 * 
 	 * @param thresholdR the threshold for the R-component
 	 * @param thresholdB the threshold for the B-component
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered green, {@code false} otherwise
 	 */
 	public boolean isGreen(final float thresholdR, final float thresholdB) {
-		return getG() - thresholdR >= getR() && getG() - thresholdB >= getB();
+		return this.g - thresholdR >= this.r && this.g - thresholdB >= this.b;
 	}
 	
 	/**
@@ -482,7 +497,7 @@ public final class Color4F {
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered magenta, {@code false} otherwise
 	 */
 	public boolean isMagenta() {
-		return equal(this.component1, this.component3) && this.component2 < this.component3;
+		return equal(this.r, this.b) && this.g < this.b;
 	}
 	
 	/**
@@ -504,14 +519,14 @@ public final class Color4F {
 	/**
 	 * Returns {@code true} if, and only if, this {@code Color4F} instance is considered red, {@code false} otherwise.
 	 * <p>
-	 * The {@code Color4F} instance {@code color} is considered red if, and only if, {@code color.getR() - thresholdG >= color.getG()} and {@code color.getR() - thresholdB >= color.getB()}.
+	 * The {@code Color4F} instance {@code color} is considered red if, and only if, {@code color.r - thresholdG >= color.g} and {@code color.r - thresholdB >= color.b}.
 	 * 
 	 * @param thresholdG the threshold for the G-component
 	 * @param thresholdB the threshold for the B-component
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered red, {@code false} otherwise
 	 */
 	public boolean isRed(final float thresholdG, final float thresholdB) {
-		return getR() - thresholdG >= getG() && getR() - thresholdB >= getB();
+		return this.r - thresholdG >= this.g && this.r - thresholdB >= this.b;
 	}
 	
 	/**
@@ -522,7 +537,7 @@ public final class Color4F {
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is white, {@code false} otherwise
 	 */
 	public boolean isWhite() {
-		return isGrayscale() && this.component1 >= 1.0F;
+		return isGrayscale() && this.r >= 1.0F;
 	}
 	
 	/**
@@ -531,139 +546,7 @@ public final class Color4F {
 	 * @return {@code true} if, and only if, this {@code Color4F} instance is considered yellow, {@code false} otherwise
 	 */
 	public boolean isYellow() {
-		return equal(this.component1, this.component2) && this.component3 < this.component1;
-	}
-	
-	/**
-	 * Returns the value of the A-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the A-component as a {@code byte}
-	 */
-	public byte getAsByteA() {
-		return (byte)(getAsIntA() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the B-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the B-component as a {@code byte}
-	 */
-	public byte getAsByteB() {
-		return (byte)(getAsIntB() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of component 1 as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 1 as a {@code byte}
-	 */
-	public byte getAsByteComponent1() {
-		return (byte)(getAsIntComponent1() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of component 2 as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 2 as a {@code byte}
-	 */
-	public byte getAsByteComponent2() {
-		return (byte)(getAsIntComponent2() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of component 3 as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 3 as a {@code byte}
-	 */
-	public byte getAsByteComponent3() {
-		return (byte)(getAsIntComponent3() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of component 4 as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 4 as a {@code byte}
-	 */
-	public byte getAsByteComponent4() {
-		return (byte)(getAsIntComponent4() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the G-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the G-component as a {@code byte}
-	 */
-	public byte getAsByteG() {
-		return (byte)(getAsIntG() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the R-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the R-component as a {@code byte}
-	 */
-	public byte getAsByteR() {
-		return (byte)(getAsIntR() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the W-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the W-component as a {@code byte}
-	 */
-	public byte getAsByteW() {
-		return (byte)(getAsIntW() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the X-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the X-component as a {@code byte}
-	 */
-	public byte getAsByteX() {
-		return (byte)(getAsIntX() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the Y-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Y-component as a {@code byte}
-	 */
-	public byte getAsByteY() {
-		return (byte)(getAsIntY() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the Z-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Z-component as a {@code byte}
-	 */
-	public byte getAsByteZ() {
-		return (byte)(getAsIntZ() & 0xFF);
+		return equal(this.r, this.g) && this.b < this.r;
 	}
 	
 	/**
@@ -675,127 +558,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public float average() {
-		return (this.component1 + this.component2 + this.component3) / 3.0F;
-	}
-	
-	/**
-	 * Returns the value of the A-component.
-	 * 
-	 * @return the value of the A-component
-	 */
-//	TODO: Add Unit Tests!
-	public float getA() {
-		return this.component4;
-	}
-	
-	/**
-	 * Returns the value of the B-component.
-	 * 
-	 * @return the value of the B-component
-	 */
-//	TODO: Add Unit Tests!
-	public float getB() {
-		return this.component3;
-	}
-	
-	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-//	TODO: Add Unit Tests!
-	public float getComponent1() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-//	TODO: Add Unit Tests!
-	public float getComponent2() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of component 3.
-	 * 
-	 * @return the value of component 3
-	 */
-//	TODO: Add Unit Tests!
-	public float getComponent3() {
-		return this.component3;
-	}
-	
-	/**
-	 * Returns the value of component 4.
-	 * 
-	 * @return the value of component 4
-	 */
-//	TODO: Add Unit Tests!
-	public float getComponent4() {
-		return this.component4;
-	}
-	
-	/**
-	 * Returns the value of the G-component.
-	 * 
-	 * @return the value of the G-component
-	 */
-//	TODO: Add Unit Tests!
-	public float getG() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the R-component.
-	 * 
-	 * @return the value of the R-component
-	 */
-//	TODO: Add Unit Tests!
-	public float getR() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the W-component.
-	 * 
-	 * @return the value of the W-component
-	 */
-//	TODO: Add Unit Tests!
-	public float getW() {
-		return this.component4;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-//	TODO: Add Unit Tests!
-	public float getX() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-//	TODO: Add Unit Tests!
-	public float getY() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the Z-component.
-	 * 
-	 * @return the value of the Z-component
-	 */
-//	TODO: Add Unit Tests!
-	public float getZ() {
-		return this.component3;
+		return (this.r + this.g + this.b) / 3.0F;
 	}
 	
 	/**
@@ -821,7 +584,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public float luminance() {
-		return this.component1 * 0.212671F + this.component2 * 0.715160F + this.component3 * 0.072169F;
+		return this.r * 0.212671F + this.g * 0.715160F + this.b * 0.072169F;
 	}
 	
 	/**
@@ -831,7 +594,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public float maximum() {
-		return max(this.component1, this.component2, this.component3);
+		return max(this.r, this.g, this.b);
 	}
 	
 	/**
@@ -841,151 +604,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public float minimum() {
-		return min(this.component1, this.component2, this.component3);
-	}
-	
-	/**
-	 * Returns the value of the A-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the A-component as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntA() {
-		return toInt(Floats.saturate(getA()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the B-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the B-component as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntB() {
-		return toInt(Floats.saturate(getB()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of component 1 as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 1 as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntComponent1() {
-		return toInt(Floats.saturate(getComponent1()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of component 2 as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 2 as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntComponent2() {
-		return toInt(Floats.saturate(getComponent2()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of component 3 as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 3 as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntComponent3() {
-		return toInt(Floats.saturate(getComponent3()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of component 4 as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 4 as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntComponent4() {
-		return toInt(Floats.saturate(getComponent4()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the G-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the G-component as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntG() {
-		return toInt(Floats.saturate(getG()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the R-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the R-component as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntR() {
-		return toInt(Floats.saturate(getR()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the W-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the W-component as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntW() {
-		return toInt(Floats.saturate(getW()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the X-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the X-component as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntX() {
-		return toInt(Floats.saturate(getX()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the Y-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Y-component as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntY() {
-		return toInt(Floats.saturate(getY()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the Z-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Z-component as an {@code int}
-	 */
-//	TODO: Add Unit Tests!
-	public int getAsIntZ() {
-		return toInt(Floats.saturate(getZ()) * 255.0F + 0.5F);
+		return min(this.r, this.g, this.b);
 	}
 	
 	/**
@@ -996,7 +615,7 @@ public final class Color4F {
 //	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3), Float.valueOf(this.component4));
+		return Objects.hash(Float.valueOf(this.r), Float.valueOf(this.g), Float.valueOf(this.b), Float.valueOf(this.a));
 	}
 	
 	/**
@@ -1031,10 +650,10 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
-		final int r = getAsIntR();
-		final int g = getAsIntG();
-		final int b = getAsIntB();
-		final int a = getAsIntA();
+		final int r = toInt(Floats.saturate(this.r) * 255.0F + 0.5F);
+		final int g = toInt(Floats.saturate(this.g) * 255.0F + 0.5F);
+		final int b = toInt(Floats.saturate(this.b) * 255.0F + 0.5F);
+		final int a = toInt(Floats.saturate(this.a) * 255.0F + 0.5F);
 		
 		return packedIntComponentOrder.pack(r, g, b, a);
 	}
@@ -1053,10 +672,10 @@ public final class Color4F {
 //	TODO: Add Unit Tests!
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeFloat(this.component1);
-			dataOutput.writeFloat(this.component2);
-			dataOutput.writeFloat(this.component3);
-			dataOutput.writeFloat(this.component4);
+			dataOutput.writeFloat(this.r);
+			dataOutput.writeFloat(this.g);
+			dataOutput.writeFloat(this.b);
+			dataOutput.writeFloat(this.a);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -1159,12 +778,12 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F blend(final Color4F colorLHS, final Color4F colorRHS, final float tComponent1, final float tComponent2, final float tComponent3, final float tComponent4) {
-		final float component1 = lerp(colorLHS.component1, colorRHS.component1, tComponent1);
-		final float component2 = lerp(colorLHS.component2, colorRHS.component2, tComponent2);
-		final float component3 = lerp(colorLHS.component3, colorRHS.component3, tComponent3);
-		final float component4 = lerp(colorLHS.component4, colorRHS.component4, tComponent4);
+		final float r = lerp(colorLHS.r, colorRHS.r, tComponent1);
+		final float g = lerp(colorLHS.g, colorRHS.g, tComponent2);
+		final float b = lerp(colorLHS.b, colorRHS.b, tComponent3);
+		final float a = lerp(colorLHS.a, colorRHS.a, tComponent4);
 		
-		return new Color4F(component1, component2, component3, component4);
+		return new Color4F(r, g, b, a);
 	}
 	
 	/**
@@ -1181,12 +800,12 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F blendOver(final Color4F colorA, final Color4F colorB) {
-		final float component4 = colorA.component4 + colorB.component4 * (1.0F - colorA.component4);
-		final float component1 = (colorA.component1 * colorA.component4 + colorB.component1 * colorB.component4 * (1.0F - colorA.component4)) / component4;
-		final float component2 = (colorA.component2 * colorA.component4 + colorB.component2 * colorB.component4 * (1.0F - colorA.component4)) / component4;
-		final float component3 = (colorA.component3 * colorA.component4 + colorB.component3 * colorB.component4 * (1.0F - colorA.component4)) / component4;
+		final float a = colorA.a + colorB.a * (1.0F - colorA.a);
+		final float r = (colorA.r * colorA.a + colorB.r * colorB.a * (1.0F - colorA.a)) / a;
+		final float g = (colorA.g * colorA.a + colorB.g * colorB.a * (1.0F - colorA.a)) / a;
+		final float b = (colorA.b * colorA.a + colorB.b * colorB.a * (1.0F - colorA.a)) / a;
 		
-		return new Color4F(component1, component2, component3, component4);
+		return new Color4F(r, g, b, a);
 	}
 	
 	/**
@@ -1214,7 +833,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F grayscaleAverage(final Color4F color) {
-		return new Color4F(color.average(), color.component4);
+		return new Color4F(color.average(), color.a);
 	}
 	
 	/**
@@ -1228,7 +847,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F grayscaleComponent1(final Color4F color) {
-		return new Color4F(color.component1, color.component4);
+		return new Color4F(color.r, color.a);
 	}
 	
 	/**
@@ -1242,7 +861,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F grayscaleComponent2(final Color4F color) {
-		return new Color4F(color.component2, color.component4);
+		return new Color4F(color.g, color.a);
 	}
 	
 	/**
@@ -1256,7 +875,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F grayscaleComponent3(final Color4F color) {
-		return new Color4F(color.component3, color.component4);
+		return new Color4F(color.b, color.a);
 	}
 	
 	/**
@@ -1270,7 +889,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F grayscaleLightness(final Color4F color) {
-		return new Color4F(color.lightness(), color.component4);
+		return new Color4F(color.lightness(), color.a);
 	}
 	
 	/**
@@ -1284,7 +903,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F grayscaleLuminance(final Color4F color) {
-		return new Color4F(color.luminance(), color.component4);
+		return new Color4F(color.luminance(), color.a);
 	}
 	
 	/**
@@ -1298,7 +917,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F grayscaleMaximum(final Color4F color) {
-		return new Color4F(color.maximum(), color.component4);
+		return new Color4F(color.maximum(), color.a);
 	}
 	
 	/**
@@ -1312,7 +931,7 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F grayscaleMinimum(final Color4F color) {
-		return new Color4F(color.minimum(), color.component4);
+		return new Color4F(color.minimum(), color.a);
 	}
 	
 	/**
@@ -1328,12 +947,12 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F invert(final Color4F color) {
-		final float component1 = 1.0F - color.component1;
-		final float component2 = 1.0F - color.component2;
-		final float component3 = 1.0F - color.component3;
-		final float component4 =        color.component4;
+		final float r = 1.0F - color.r;
+		final float g = 1.0F - color.g;
+		final float b = 1.0F - color.b;
+		final float a =        color.a;
 		
-		return new Color4F(component1, component2, component3, component4);
+		return new Color4F(r, g, b, a);
 	}
 	
 	/**
@@ -1350,11 +969,11 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F random() {
-		final float component1 = Floats.random();
-		final float component2 = Floats.random();
-		final float component3 = Floats.random();
+		final float r = Floats.random();
+		final float g = Floats.random();
+		final float b = Floats.random();
 		
-		return new Color4F(component1, component2, component3);
+		return new Color4F(r, g, b);
 	}
 	
 	/**
@@ -1371,11 +990,11 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F randomComponent1() {
-		final float component1 = Floats.random();
-		final float component2 = 0.0F;
-		final float component3 = 0.0F;
+		final float r = Floats.random();
+		final float g = 0.0F;
+		final float b = 0.0F;
 		
-		return new Color4F(component1, component2, component3);
+		return new Color4F(r, g, b);
 	}
 	
 	/**
@@ -1392,11 +1011,11 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F randomComponent2() {
-		final float component1 = 0.0F;
-		final float component2 = Floats.random();
-		final float component3 = 0.0F;
+		final float r = 0.0F;
+		final float g = Floats.random();
+		final float b = 0.0F;
 		
-		return new Color4F(component1, component2, component3);
+		return new Color4F(r, g, b);
 	}
 	
 	/**
@@ -1413,11 +1032,11 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F randomComponent3() {
-		final float component1 = 0.0F;
-		final float component2 = 0.0F;
-		final float component3 = Floats.random();
+		final float r = 0.0F;
+		final float g = 0.0F;
+		final float b = Floats.random();
 		
-		return new Color4F(component1, component2, component3);
+		return new Color4F(r, g, b);
 	}
 	
 	/**
@@ -1435,12 +1054,12 @@ public final class Color4F {
 //	TODO: Add Unit Tests!
 	public static Color4F read(final DataInput dataInput) {
 		try {
-			final float component1 = dataInput.readFloat();
-			final float component2 = dataInput.readFloat();
-			final float component3 = dataInput.readFloat();
-			final float component4 = dataInput.readFloat();
+			final float r = dataInput.readFloat();
+			final float g = dataInput.readFloat();
+			final float b = dataInput.readFloat();
+			final float a = dataInput.readFloat();
 			
-			return new Color4F(component1, component2, component3, component4);
+			return new Color4F(r, g, b, a);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -1459,12 +1078,12 @@ public final class Color4F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color4F sepia(final Color4F color) {
-		final float component1 = color.component1 * 0.393F + color.component2 * 0.769F + color.component3 * 0.189F;
-		final float component2 = color.component1 * 0.349F + color.component2 * 0.686F + color.component3 * 0.168F;
-		final float component3 = color.component1 * 0.272F + color.component2 * 0.534F + color.component3 * 0.131F;
-		final float component4 = color.component4;
+		final float r = color.r * 0.393F + color.g * 0.769F + color.b * 0.189F;
+		final float g = color.r * 0.349F + color.g * 0.686F + color.b * 0.168F;
+		final float b = color.r * 0.272F + color.g * 0.534F + color.b * 0.131F;
+		final float a = color.a;
 		
-		return new Color4F(component1, component2, component3, component4);
+		return new Color4F(r, g, b, a);
 	}
 	
 	/**

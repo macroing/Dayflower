@@ -102,9 +102,9 @@ public final class ChromaticSpectralCurveF extends SpectralCurveF {
 		final float m1 = (-1.3515F - 1.7703F  * x +  5.9114F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
 		final float m2 = (+0.03F   - 31.4424F * x + 30.0717F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
 		
-		final float x0 = S0_XYZ.getX() + m1 * S1_XYZ.getX() + m2 * S2_XYZ.getX();
-		final float y0 = S0_XYZ.getY() + m1 * S1_XYZ.getY() + m2 * S2_XYZ.getY();
-		final float z0 = S0_XYZ.getZ() + m1 * S1_XYZ.getZ() + m2 * S2_XYZ.getZ();
+		final float x0 = S0_XYZ.r + m1 * S1_XYZ.r + m2 * S2_XYZ.r;
+		final float y0 = S0_XYZ.g + m1 * S1_XYZ.g + m2 * S2_XYZ.g;
+		final float z0 = S0_XYZ.b + m1 * S1_XYZ.b + m2 * S2_XYZ.b;
 		
 		return new Color3F(x0, y0, z0);
 	}

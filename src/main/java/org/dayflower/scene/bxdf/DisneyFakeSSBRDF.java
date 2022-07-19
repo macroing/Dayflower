@@ -155,9 +155,9 @@ public final class DisneyFakeSSBRDF extends BXDF {
 		
 		final float scaleSS = 1.25F * (fresnelSS * (1.0F / (cosThetaAbsOutgoing + cosThetaAbsIncoming) - 0.5F) + 0.5F);
 		
-		final float component1 = this.reflectanceScale.getComponent1() * PI_RECIPROCAL * scaleSS;
-		final float component2 = this.reflectanceScale.getComponent2() * PI_RECIPROCAL * scaleSS;
-		final float component3 = this.reflectanceScale.getComponent3() * PI_RECIPROCAL * scaleSS;
+		final float component1 = this.reflectanceScale.r * PI_RECIPROCAL * scaleSS;
+		final float component2 = this.reflectanceScale.g * PI_RECIPROCAL * scaleSS;
+		final float component3 = this.reflectanceScale.b * PI_RECIPROCAL * scaleSS;
 		
 		return new Color3F(component1, component2, component3);
 	}

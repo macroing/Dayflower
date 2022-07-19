@@ -1291,9 +1291,9 @@ public final class CompiledLightCache {
 		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.element42;		//Block #4
 		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.element43;		//Block #4
 		array[DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.element44;		//Block #4
-		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 0] = radianceEmitted.getR();			//Block #5
-		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 1] = radianceEmitted.getG();			//Block #5
-		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 2] = radianceEmitted.getB();			//Block #5
+		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 0] = radianceEmitted.r;				//Block #5
+		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 1] = radianceEmitted.g;				//Block #5
+		array[DIFFUSE_AREA_LIGHT_OFFSET_RADIANCE_EMITTED + 2] = radianceEmitted.b;				//Block #5
 		array[DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_ID] = shape.getID();								//Block #5
 		array[DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_OFFSET] = shapeOffsetFunction.applyAsInt(shape);	//Block #5
 		array[DIFFUSE_AREA_LIGHT_OFFSET_SHAPE_SURFACE_AREA] = shape.getSurfaceArea();			//Block #5
@@ -1356,9 +1356,9 @@ public final class CompiledLightCache {
 		final float[] array = new float[DIRECTIONAL_LIGHT_LENGTH];
 		
 //		Because the DirectionalLight occupy 8/8 positions in a block, it should be aligned.
-		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 0] = radiance.getR();	//Block #1
-		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 1] = radiance.getG();	//Block #1
-		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 2] = radiance.getB();	//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 0] = radiance.r;		//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 1] = radiance.g;		//Block #1
+		array[DIRECTIONAL_LIGHT_OFFSET_RADIANCE + 2] = radiance.b;		//Block #1
 		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 0] = direction.x;	//Block #1
 		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 1] = direction.y;	//Block #1
 		array[DIRECTIONAL_LIGHT_OFFSET_DIRECTION + 2] = direction.z;	//Block #1
@@ -1552,9 +1552,9 @@ public final class CompiledLightCache {
 		array[PEREZ_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.element44;
 		
 //		Block #5:
-		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 0] = sunColor.getR();
-		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 1] = sunColor.getG();
-		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 2] = sunColor.getB();
+		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 0] = sunColor.r;
+		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 1] = sunColor.g;
+		array[PEREZ_LIGHT_OFFSET_SUN_COLOR + 2] = sunColor.b;
 		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 0] = sunDirectionObjectSpace.x;
 		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 1] = sunDirectionObjectSpace.y;
 		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_OBJECT_SPACE + 2] = sunDirectionObjectSpace.z;
@@ -1607,9 +1607,9 @@ public final class CompiledLightCache {
 		final float[] array = new float[POINT_LIGHT_LENGTH];
 		
 //		Because the PointLight occupy 8/8 positions in a block, it should be aligned.
-		array[POINT_LIGHT_OFFSET_INTENSITY + 0] = intensity.getR();	//Block #1
-		array[POINT_LIGHT_OFFSET_INTENSITY + 1] = intensity.getG();	//Block #1
-		array[POINT_LIGHT_OFFSET_INTENSITY + 2] = intensity.getB();	//Block #1
+		array[POINT_LIGHT_OFFSET_INTENSITY + 0] = intensity.r;		//Block #1
+		array[POINT_LIGHT_OFFSET_INTENSITY + 1] = intensity.g;		//Block #1
+		array[POINT_LIGHT_OFFSET_INTENSITY + 2] = intensity.b;		//Block #1
 		array[POINT_LIGHT_OFFSET_POSITION + 0] = position.x;		//Block #1
 		array[POINT_LIGHT_OFFSET_POSITION + 1] = position.y;		//Block #1
 		array[POINT_LIGHT_OFFSET_POSITION + 2] = position.z;		//Block #1
@@ -1671,9 +1671,9 @@ public final class CompiledLightCache {
 		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.element42;							//Block #2
 		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.element43;							//Block #2
 		array[SPOT_LIGHT_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.element44;							//Block #2
-		array[SPOT_LIGHT_OFFSET_INTENSITY + 0] = intensity.getR();											//Block #3
-		array[SPOT_LIGHT_OFFSET_INTENSITY + 1] = intensity.getG();											//Block #3
-		array[SPOT_LIGHT_OFFSET_INTENSITY + 2] = intensity.getB();											//Block #3
+		array[SPOT_LIGHT_OFFSET_INTENSITY + 0] = intensity.r;												//Block #3
+		array[SPOT_LIGHT_OFFSET_INTENSITY + 1] = intensity.g;												//Block #3
+		array[SPOT_LIGHT_OFFSET_INTENSITY + 2] = intensity.b;												//Block #3
 		array[SPOT_LIGHT_OFFSET_POSITION + 0] = position.x;													//Block #3
 		array[SPOT_LIGHT_OFFSET_POSITION + 1] = position.y;													//Block #3
 		array[SPOT_LIGHT_OFFSET_POSITION + 2] = position.z;													//Block #3

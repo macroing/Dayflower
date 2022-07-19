@@ -51,9 +51,9 @@ public final class Color3DUnitTests {
 		final Color3D c = new Color3D(3.0D, 4.0D, 5.0D);
 		final Color3D d = Color3D.addAndMultiply(a, b, c);
 		
-		assertEquals( 7.0D, d.getComponent1());
-		assertEquals(14.0D, d.getComponent2());
-		assertEquals(23.0D, d.getComponent3());
+		assertEquals( 7.0D, d.r);
+		assertEquals(14.0D, d.g);
+		assertEquals(23.0D, d.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.addAndMultiply(a, b, null));
 		assertThrows(NullPointerException.class, () -> Color3D.addAndMultiply(a, null, c));
@@ -67,9 +67,9 @@ public final class Color3DUnitTests {
 		final Color3D c = new Color3D(3.0D, 4.0D, 5.0D);
 		final Color3D d = Color3D.addAndMultiply(a, b, c, 2.0D);
 		
-		assertEquals(13.0D, d.getComponent1());
-		assertEquals(26.0D, d.getComponent2());
-		assertEquals(43.0D, d.getComponent3());
+		assertEquals(13.0D, d.r);
+		assertEquals(26.0D, d.g);
+		assertEquals(43.0D, d.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.addAndMultiply(a, b, null, 2.0D));
 		assertThrows(NullPointerException.class, () -> Color3D.addAndMultiply(a, null, c, 2.0D));
@@ -82,9 +82,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(2.0D, 3.0D, 4.0D);
 		final Color3D c = Color3D.add(a, b);
 		
-		assertEquals(3.0D, c.getComponent1());
-		assertEquals(5.0D, c.getComponent2());
-		assertEquals(7.0D, c.getComponent3());
+		assertEquals(3.0D, c.r);
+		assertEquals(5.0D, c.g);
+		assertEquals(7.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.add(a, null));
 		assertThrows(NullPointerException.class, () -> Color3D.add(null, b));
@@ -95,9 +95,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(1.0D, 2.0D, 3.0D);
 		final Color3D b = Color3D.add(a, 2.0D);
 		
-		assertEquals(3.0D, b.getComponent1());
-		assertEquals(4.0D, b.getComponent2());
-		assertEquals(5.0D, b.getComponent3());
+		assertEquals(3.0D, b.r);
+		assertEquals(4.0D, b.g);
+		assertEquals(5.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.add(null, 2.0D));
 	}
@@ -110,9 +110,9 @@ public final class Color3DUnitTests {
 		final Color3D d = new Color3D(4.0D, 5.0D, 6.0D);
 		final Color3D e = Color3D.addMultiplyAndDivide(a, b, c, d, 2.0D, 2.0D);
 		
-		assertEquals( 25.0D, e.getComponent1());
-		assertEquals( 62.0D, e.getComponent2());
-		assertEquals(123.0D, e.getComponent3());
+		assertEquals( 25.0D, e.r);
+		assertEquals( 62.0D, e.g);
+		assertEquals(123.0D, e.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.addMultiplyAndDivide(a, b, c, null, 2.0D, 2.0D));
 		assertThrows(NullPointerException.class, () -> Color3D.addMultiplyAndDivide(a, b, null, d, 2.0D, 2.0D));
@@ -127,9 +127,9 @@ public final class Color3DUnitTests {
 		final Color3D c = new Color3D(3.0D, 4.0D, 5.0D);
 		final Color3D d = Color3D.addMultiplyAndDivide(a, b, c, 2.0D);
 		
-		assertEquals( 4.0D, d.getComponent1());
-		assertEquals( 8.0D, d.getComponent2());
-		assertEquals(13.0D, d.getComponent3());
+		assertEquals( 4.0D, d.r);
+		assertEquals( 8.0D, d.g);
+		assertEquals(13.0D, d.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.addMultiplyAndDivide(a, b, null, 2.0D));
 		assertThrows(NullPointerException.class, () -> Color3D.addMultiplyAndDivide(a, null, c, 2.0D));
@@ -143,9 +143,9 @@ public final class Color3DUnitTests {
 		final Color3D c = new Color3D(3.0D, 4.0D, 5.0D);
 		final Color3D d = Color3D.addMultiplyAndDivide(a, b, c, 2.0D, 2.0D);
 		
-		assertEquals( 7.0D, d.getComponent1());
-		assertEquals(14.0D, d.getComponent2());
-		assertEquals(23.0D, d.getComponent3());
+		assertEquals( 7.0D, d.r);
+		assertEquals(14.0D, d.g);
+		assertEquals(23.0D, d.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.addMultiplyAndDivide(a, b, null, 2.0D, 2.0D));
 		assertThrows(NullPointerException.class, () -> Color3D.addMultiplyAndDivide(a, null, c, 2.0D, 2.0D));
@@ -162,17 +162,17 @@ public final class Color3DUnitTests {
 		final Color3D f = Color3D.addSample(e, b, 3);
 		final Color3D g = Color3D.addSample(f, d, 4);
 		
-		assertEquals(0.5D, e.getComponent1());
-		assertEquals(0.5D, e.getComponent2());
-		assertEquals(0.5D, e.getComponent3());
+		assertEquals(0.5D, e.r);
+		assertEquals(0.5D, e.g);
+		assertEquals(0.5D, e.b);
 		
-		assertEquals(0.5D, f.getComponent1());
-		assertEquals(0.5D, f.getComponent2());
-		assertEquals(0.5D, f.getComponent3());
+		assertEquals(0.5D, f.r);
+		assertEquals(0.5D, f.g);
+		assertEquals(0.5D, f.b);
 		
-		assertEquals(0.75D, g.getComponent1());
-		assertEquals(0.75D, g.getComponent2());
-		assertEquals(0.75D, g.getComponent3());
+		assertEquals(0.75D, g.r);
+		assertEquals(0.75D, g.g);
+		assertEquals(0.75D, g.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.addSample(a, null, 1));
 		assertThrows(NullPointerException.class, () -> Color3D.addSample(null, b, 1));
@@ -219,9 +219,9 @@ public final class Color3DUnitTests {
 		
 		for(final Color3D color : colors) {
 			assertNotNull(color);
-			assertTrue(color.getComponent1() >= 0.0D && color.getComponent1() < 1.0D);
-			assertTrue(color.getComponent2() >= 0.0D && color.getComponent2() < 1.0D);
-			assertTrue(color.getComponent3() >= 0.0D && color.getComponent3() < 1.0D);
+			assertTrue(color.r >= 0.0D && color.r < 1.0D);
+			assertTrue(color.g >= 0.0D && color.g < 1.0D);
+			assertTrue(color.b >= 0.0D && color.b < 1.0D);
 		}
 		
 		assertThrows(IllegalArgumentException.class, () -> Color3D.arrayRandom(-1));
@@ -241,19 +241,19 @@ public final class Color3DUnitTests {
 		final Color3D c = colors[2];
 		
 		assertNotNull(a);
-		assertEquals(1.0D, a.getComponent1());
-		assertEquals(0.0D, a.getComponent2());
-		assertEquals(0.0D, a.getComponent3());
+		assertEquals(1.0D, a.r);
+		assertEquals(0.0D, a.g);
+		assertEquals(0.0D, a.b);
 		
 		assertNotNull(b);
-		assertEquals(0.0D, b.getComponent1());
-		assertEquals(1.0D, b.getComponent2());
-		assertEquals(0.0D, b.getComponent3());
+		assertEquals(0.0D, b.r);
+		assertEquals(1.0D, b.g);
+		assertEquals(0.0D, b.b);
 		
 		assertNotNull(c);
-		assertEquals(0.0D, c.getComponent1());
-		assertEquals(0.0D, c.getComponent2());
-		assertEquals(1.0D, c.getComponent3());
+		assertEquals(0.0D, c.r);
+		assertEquals(0.0D, c.g);
+		assertEquals(1.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.arrayRead((byte[])(null)));
 		assertThrows(IllegalArgumentException.class, () -> Color3D.arrayRead(new byte[] {(byte)(255), (byte)(255)}));
@@ -282,19 +282,19 @@ public final class Color3DUnitTests {
 			final Color3D c = colors[2];
 			
 			assertNotNull(a);
-			assertEquals(1.0D, a.getComponent1());
-			assertEquals(0.0D, a.getComponent2());
-			assertEquals(0.0D, a.getComponent3());
+			assertEquals(1.0D, a.r);
+			assertEquals(0.0D, a.g);
+			assertEquals(0.0D, a.b);
 			
 			assertNotNull(b);
-			assertEquals(0.0D, b.getComponent1());
-			assertEquals(1.0D, b.getComponent2());
-			assertEquals(0.0D, b.getComponent3());
+			assertEquals(0.0D, b.r);
+			assertEquals(1.0D, b.g);
+			assertEquals(0.0D, b.b);
 			
 			assertNotNull(c);
-			assertEquals(0.0D, c.getComponent1());
-			assertEquals(0.0D, c.getComponent2());
-			assertEquals(1.0D, c.getComponent3());
+			assertEquals(0.0D, c.r);
+			assertEquals(0.0D, c.g);
+			assertEquals(1.0D, c.b);
 		}
 		
 		assertThrows(NullPointerException.class, () -> Color3D.arrayRead((byte[])(null), ArrayComponentOrder.ARGB));
@@ -316,19 +316,19 @@ public final class Color3DUnitTests {
 		final Color3D c = colors[2];
 		
 		assertNotNull(a);
-		assertEquals(1.0D, a.getComponent1());
-		assertEquals(0.0D, a.getComponent2());
-		assertEquals(0.0D, a.getComponent3());
+		assertEquals(1.0D, a.r);
+		assertEquals(0.0D, a.g);
+		assertEquals(0.0D, a.b);
 		
 		assertNotNull(b);
-		assertEquals(0.0D, b.getComponent1());
-		assertEquals(1.0D, b.getComponent2());
-		assertEquals(0.0D, b.getComponent3());
+		assertEquals(0.0D, b.r);
+		assertEquals(1.0D, b.g);
+		assertEquals(0.0D, b.b);
 		
 		assertNotNull(c);
-		assertEquals(0.0D, c.getComponent1());
-		assertEquals(0.0D, c.getComponent2());
-		assertEquals(1.0D, c.getComponent3());
+		assertEquals(0.0D, c.r);
+		assertEquals(0.0D, c.g);
+		assertEquals(1.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.arrayRead((int[])(null)));
 		assertThrows(IllegalArgumentException.class, () -> Color3D.arrayRead(new int[] {255, 255}));
@@ -357,19 +357,19 @@ public final class Color3DUnitTests {
 			final Color3D c = colors[2];
 			
 			assertNotNull(a);
-			assertEquals(1.0D, a.getComponent1());
-			assertEquals(0.0D, a.getComponent2());
-			assertEquals(0.0D, a.getComponent3());
+			assertEquals(1.0D, a.r);
+			assertEquals(0.0D, a.g);
+			assertEquals(0.0D, a.b);
 			
 			assertNotNull(b);
-			assertEquals(0.0D, b.getComponent1());
-			assertEquals(1.0D, b.getComponent2());
-			assertEquals(0.0D, b.getComponent3());
+			assertEquals(0.0D, b.r);
+			assertEquals(1.0D, b.g);
+			assertEquals(0.0D, b.b);
 			
 			assertNotNull(c);
-			assertEquals(0.0D, c.getComponent1());
-			assertEquals(0.0D, c.getComponent2());
-			assertEquals(1.0D, c.getComponent3());
+			assertEquals(0.0D, c.r);
+			assertEquals(0.0D, c.g);
+			assertEquals(1.0D, c.b);
 		}
 		
 		assertThrows(NullPointerException.class, () -> Color3D.arrayRead((int[])(null), ArrayComponentOrder.ARGB));
@@ -395,19 +395,19 @@ public final class Color3DUnitTests {
 		final Color3D c = colors[2];
 		
 		assertNotNull(a);
-		assertEquals(1.0D, a.getComponent1());
-		assertEquals(0.0D, a.getComponent2());
-		assertEquals(0.0D, a.getComponent3());
+		assertEquals(1.0D, a.r);
+		assertEquals(0.0D, a.g);
+		assertEquals(0.0D, a.b);
 		
 		assertNotNull(b);
-		assertEquals(0.0D, b.getComponent1());
-		assertEquals(1.0D, b.getComponent2());
-		assertEquals(0.0D, b.getComponent3());
+		assertEquals(0.0D, b.r);
+		assertEquals(1.0D, b.g);
+		assertEquals(0.0D, b.b);
 		
 		assertNotNull(c);
-		assertEquals(0.0D, c.getComponent1());
-		assertEquals(0.0D, c.getComponent2());
-		assertEquals(1.0D, c.getComponent3());
+		assertEquals(0.0D, c.r);
+		assertEquals(0.0D, c.g);
+		assertEquals(1.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.arrayUnpack(null));
 	}
@@ -433,19 +433,19 @@ public final class Color3DUnitTests {
 			final Color3D c = colors[2];
 			
 			assertNotNull(a);
-			assertEquals(1.0D, a.getComponent1());
-			assertEquals(0.0D, a.getComponent2());
-			assertEquals(0.0D, a.getComponent3());
+			assertEquals(1.0D, a.r);
+			assertEquals(0.0D, a.g);
+			assertEquals(0.0D, a.b);
 			
 			assertNotNull(b);
-			assertEquals(0.0D, b.getComponent1());
-			assertEquals(1.0D, b.getComponent2());
-			assertEquals(0.0D, b.getComponent3());
+			assertEquals(0.0D, b.r);
+			assertEquals(1.0D, b.g);
+			assertEquals(0.0D, b.b);
 			
 			assertNotNull(c);
-			assertEquals(0.0D, c.getComponent1());
-			assertEquals(0.0D, c.getComponent2());
-			assertEquals(1.0D, c.getComponent3());
+			assertEquals(0.0D, c.r);
+			assertEquals(0.0D, c.g);
+			assertEquals(1.0D, c.b);
 		}
 		
 		assertThrows(NullPointerException.class, () -> Color3D.arrayUnpack(null, PackedIntComponentOrder.ARGB));
@@ -465,9 +465,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(3.0D, 3.0D, 3.0D);
 		final Color3D c = Color3D.blend(a, b);
 		
-		assertEquals(2.0D, c.getComponent1());
-		assertEquals(2.0D, c.getComponent2());
-		assertEquals(2.0D, c.getComponent3());
+		assertEquals(2.0D, c.r);
+		assertEquals(2.0D, c.g);
+		assertEquals(2.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.blend(a, null));
 		assertThrows(NullPointerException.class, () -> Color3D.blend(null, b));
@@ -479,9 +479,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(5.0D, 5.0D, 5.0D);
 		final Color3D c = Color3D.blend(a, b, 0.25D);
 		
-		assertEquals(2.0D, c.getComponent1());
-		assertEquals(2.0D, c.getComponent2());
-		assertEquals(2.0D, c.getComponent3());
+		assertEquals(2.0D, c.r);
+		assertEquals(2.0D, c.g);
+		assertEquals(2.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.blend(a, null, 0.25D));
 		assertThrows(NullPointerException.class, () -> Color3D.blend(null, b, 0.25D));
@@ -493,9 +493,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(2.0D, 2.0D, 2.0D);
 		final Color3D c = Color3D.blend(a, b, 0.0D, 0.5D, 1.0D);
 		
-		assertEquals(1.0D, c.getComponent1());
-		assertEquals(1.5D, c.getComponent2());
-		assertEquals(2.0D, c.getComponent3());
+		assertEquals(1.0D, c.r);
+		assertEquals(1.5D, c.g);
+		assertEquals(2.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.blend(a, null, 0.0D, 0.5D, 1.0D));
 		assertThrows(NullPointerException.class, () -> Color3D.blend(null, b, 0.0D, 0.5D, 1.0D));
@@ -530,18 +530,18 @@ public final class Color3DUnitTests {
 	public void testConstructor() {
 		final Color3D color = new Color3D();
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertEquals(0.0D, color.getComponent2());
-		assertEquals(0.0D, color.getComponent3());
+		assertEquals(0.0D, color.r);
+		assertEquals(0.0D, color.g);
+		assertEquals(0.0D, color.b);
 	}
 	
 	@Test
 	public void testConstructorColor3F() {
 		final Color3D color = new Color3D(new Color3F(1.0F, 1.0F, 1.0F));
 		
-		assertEquals(1.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
+		assertEquals(1.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
 		
 		assertThrows(NullPointerException.class, () -> new Color3D((Color3F)(null)));
 	}
@@ -550,9 +550,9 @@ public final class Color3DUnitTests {
 	public void testConstructorColor4D() {
 		final Color3D color = new Color3D(new Color4D(1.0D, 1.0D, 1.0D));
 		
-		assertEquals(1.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
+		assertEquals(1.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
 		
 		assertThrows(NullPointerException.class, () -> new Color3D((Color4D)(null)));
 	}
@@ -561,36 +561,36 @@ public final class Color3DUnitTests {
 	public void testConstructorDouble() {
 		final Color3D color = new Color3D(2.0D);
 		
-		assertEquals(2.0D, color.getComponent1());
-		assertEquals(2.0D, color.getComponent2());
-		assertEquals(2.0D, color.getComponent3());
+		assertEquals(2.0D, color.r);
+		assertEquals(2.0D, color.g);
+		assertEquals(2.0D, color.b);
 	}
 	
 	@Test
 	public void testConstructorDoubleDoubleDouble() {
 		final Color3D color = new Color3D(0.0D, 1.0D, 2.0D);
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(2.0D, color.getComponent3());
+		assertEquals(0.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(2.0D, color.b);
 	}
 	
 	@Test
 	public void testConstructorInt() {
 		final Color3D color = new Color3D(255);
 		
-		assertEquals(1.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
+		assertEquals(1.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
 	}
 	
 	@Test
 	public void testConstructorIntIntInt() {
 		final Color3D color = new Color3D(0, 255, 300);
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertEquals(1.0D, color.getComponent2());
-		assertEquals(1.0D, color.getComponent3());
+		assertEquals(0.0D, color.r);
+		assertEquals(1.0D, color.g);
+		assertEquals(1.0D, color.b);
 	}
 	
 	@Test
@@ -601,25 +601,25 @@ public final class Color3DUnitTests {
 		final Color3D d = Color3D.divide(new Color3D(1.0D, 1.5D, 2.0D), new Color3D(Double.NEGATIVE_INFINITY));
 		final Color3D e = Color3D.divide(new Color3D(1.0D, 1.5D, 2.0D), new Color3D(Double.POSITIVE_INFINITY));
 		
-		assertEquals(0.50D, a.getComponent1());
-		assertEquals(0.75D, a.getComponent2());
-		assertEquals(1.00D, a.getComponent3());
+		assertEquals(0.50D, a.r);
+		assertEquals(0.75D, a.g);
+		assertEquals(1.00D, a.b);
 		
-		assertEquals(0.0D, b.getComponent1());
-		assertEquals(0.0D, b.getComponent2());
-		assertEquals(0.0D, b.getComponent3());
+		assertEquals(0.0D, b.r);
+		assertEquals(0.0D, b.g);
+		assertEquals(0.0D, b.b);
 		
-		assertEquals(0.0D, c.getComponent1());
-		assertEquals(0.0D, c.getComponent2());
-		assertEquals(0.0D, c.getComponent3());
+		assertEquals(0.0D, c.r);
+		assertEquals(0.0D, c.g);
+		assertEquals(0.0D, c.b);
 		
-		assertEquals(-0.0D, d.getComponent1());
-		assertEquals(-0.0D, d.getComponent2());
-		assertEquals(-0.0D, d.getComponent3());
+		assertEquals(-0.0D, d.r);
+		assertEquals(-0.0D, d.g);
+		assertEquals(-0.0D, d.b);
 		
-		assertEquals(0.0D, e.getComponent1());
-		assertEquals(0.0D, e.getComponent2());
-		assertEquals(0.0D, e.getComponent3());
+		assertEquals(0.0D, e.r);
+		assertEquals(0.0D, e.g);
+		assertEquals(0.0D, e.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.divide(a, null));
 		assertThrows(NullPointerException.class, () -> Color3D.divide(null, a));
@@ -633,25 +633,25 @@ public final class Color3DUnitTests {
 		final Color3D d = Color3D.divide(new Color3D(1.0D, 1.5D, 2.0D), Double.NEGATIVE_INFINITY);
 		final Color3D e = Color3D.divide(new Color3D(1.0D, 1.5D, 2.0D), Double.POSITIVE_INFINITY);
 		
-		assertEquals(0.50D, a.getComponent1());
-		assertEquals(0.75D, a.getComponent2());
-		assertEquals(1.00D, a.getComponent3());
+		assertEquals(0.50D, a.r);
+		assertEquals(0.75D, a.g);
+		assertEquals(1.00D, a.b);
 		
-		assertEquals(0.0D, b.getComponent1());
-		assertEquals(0.0D, b.getComponent2());
-		assertEquals(0.0D, b.getComponent3());
+		assertEquals(0.0D, b.r);
+		assertEquals(0.0D, b.g);
+		assertEquals(0.0D, b.b);
 		
-		assertEquals(0.0D, c.getComponent1());
-		assertEquals(0.0D, c.getComponent2());
-		assertEquals(0.0D, c.getComponent3());
+		assertEquals(0.0D, c.r);
+		assertEquals(0.0D, c.g);
+		assertEquals(0.0D, c.b);
 		
-		assertEquals(-0.0D, d.getComponent1());
-		assertEquals(-0.0D, d.getComponent2());
-		assertEquals(-0.0D, d.getComponent3());
+		assertEquals(-0.0D, d.r);
+		assertEquals(-0.0D, d.g);
+		assertEquals(-0.0D, d.b);
 		
-		assertEquals(0.0D, e.getComponent1());
-		assertEquals(0.0D, e.getComponent2());
-		assertEquals(0.0D, e.getComponent3());
+		assertEquals(0.0D, e.r);
+		assertEquals(0.0D, e.g);
+		assertEquals(0.0D, e.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.divide(null, 2.0D));
 	}
@@ -700,310 +700,13 @@ public final class Color3DUnitTests {
 	}
 	
 	@Test
-	public void testGetAsByteB() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.0D, 0.5D);
-		final Color3D c = new Color3D(0.0D, 0.0D, 1.0D);
-		
-		assertEquals(   0, a.getAsByteB());
-		assertEquals(-128, b.getAsByteB());
-		assertEquals(-  1, c.getAsByteB());
-		
-		assertEquals(  0, a.getAsByteB() & 0xFF);
-		assertEquals(128, b.getAsByteB() & 0xFF);
-		assertEquals(255, c.getAsByteB() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteComponent1() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.5D, 0.0D, 0.0D);
-		final Color3D c = new Color3D(1.0D, 0.0D, 0.0D);
-		
-		assertEquals(   0, a.getAsByteComponent1());
-		assertEquals(-128, b.getAsByteComponent1());
-		assertEquals(-  1, c.getAsByteComponent1());
-		
-		assertEquals(  0, a.getAsByteComponent1() & 0xFF);
-		assertEquals(128, b.getAsByteComponent1() & 0xFF);
-		assertEquals(255, c.getAsByteComponent1() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteComponent2() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.5D, 0.0D);
-		final Color3D c = new Color3D(0.0D, 1.0D, 0.0D);
-		
-		assertEquals(   0, a.getAsByteComponent2());
-		assertEquals(-128, b.getAsByteComponent2());
-		assertEquals(-  1, c.getAsByteComponent2());
-		
-		assertEquals(  0, a.getAsByteComponent2() & 0xFF);
-		assertEquals(128, b.getAsByteComponent2() & 0xFF);
-		assertEquals(255, c.getAsByteComponent2() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteComponent3() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.0D, 0.5D);
-		final Color3D c = new Color3D(0.0D, 0.0D, 1.0D);
-		
-		assertEquals(   0, a.getAsByteComponent3());
-		assertEquals(-128, b.getAsByteComponent3());
-		assertEquals(-  1, c.getAsByteComponent3());
-		
-		assertEquals(  0, a.getAsByteComponent3() & 0xFF);
-		assertEquals(128, b.getAsByteComponent3() & 0xFF);
-		assertEquals(255, c.getAsByteComponent3() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteG() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.5D, 0.0D);
-		final Color3D c = new Color3D(0.0D, 1.0D, 0.0D);
-		
-		assertEquals(   0, a.getAsByteG());
-		assertEquals(-128, b.getAsByteG());
-		assertEquals(-  1, c.getAsByteG());
-		
-		assertEquals(  0, a.getAsByteG() & 0xFF);
-		assertEquals(128, b.getAsByteG() & 0xFF);
-		assertEquals(255, c.getAsByteG() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteR() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.5D, 0.0D, 0.0D);
-		final Color3D c = new Color3D(1.0D, 0.0D, 0.0D);
-		
-		assertEquals(   0, a.getAsByteR());
-		assertEquals(-128, b.getAsByteR());
-		assertEquals(-  1, c.getAsByteR());
-		
-		assertEquals(  0, a.getAsByteR() & 0xFF);
-		assertEquals(128, b.getAsByteR() & 0xFF);
-		assertEquals(255, c.getAsByteR() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteX() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.5D, 0.0D, 0.0D);
-		final Color3D c = new Color3D(1.0D, 0.0D, 0.0D);
-		
-		assertEquals(   0, a.getAsByteX());
-		assertEquals(-128, b.getAsByteX());
-		assertEquals(-  1, c.getAsByteX());
-		
-		assertEquals(  0, a.getAsByteX() & 0xFF);
-		assertEquals(128, b.getAsByteX() & 0xFF);
-		assertEquals(255, c.getAsByteX() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteY() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.5D, 0.0D);
-		final Color3D c = new Color3D(0.0D, 1.0D, 0.0D);
-		
-		assertEquals(   0, a.getAsByteY());
-		assertEquals(-128, b.getAsByteY());
-		assertEquals(-  1, c.getAsByteY());
-		
-		assertEquals(  0, a.getAsByteY() & 0xFF);
-		assertEquals(128, b.getAsByteY() & 0xFF);
-		assertEquals(255, c.getAsByteY() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteZ() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.0D, 0.5D);
-		final Color3D c = new Color3D(0.0D, 0.0D, 1.0D);
-		
-		assertEquals(   0, a.getAsByteZ());
-		assertEquals(-128, b.getAsByteZ());
-		assertEquals(-  1, c.getAsByteZ());
-		
-		assertEquals(  0, a.getAsByteZ() & 0xFF);
-		assertEquals(128, b.getAsByteZ() & 0xFF);
-		assertEquals(255, c.getAsByteZ() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsIntB() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.0D, 0.5D);
-		final Color3D c = new Color3D(0.0D, 0.0D, 1.0D);
-		
-		assertEquals(  0, a.getAsIntB());
-		assertEquals(128, b.getAsIntB());
-		assertEquals(255, c.getAsIntB());
-	}
-	
-	@Test
-	public void testGetAsIntComponent1() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.5D, 0.0D, 0.0D);
-		final Color3D c = new Color3D(1.0D, 0.0D, 0.0D);
-		
-		assertEquals(  0, a.getAsIntComponent1());
-		assertEquals(128, b.getAsIntComponent1());
-		assertEquals(255, c.getAsIntComponent1());
-	}
-	
-	@Test
-	public void testGetAsIntComponent2() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.5D, 0.0D);
-		final Color3D c = new Color3D(0.0D, 1.0D, 0.0D);
-		
-		assertEquals(  0, a.getAsIntComponent2());
-		assertEquals(128, b.getAsIntComponent2());
-		assertEquals(255, c.getAsIntComponent2());
-	}
-	
-	@Test
-	public void testGetAsIntComponent3() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.0D, 0.5D);
-		final Color3D c = new Color3D(0.0D, 0.0D, 1.0D);
-		
-		assertEquals(  0, a.getAsIntComponent3());
-		assertEquals(128, b.getAsIntComponent3());
-		assertEquals(255, c.getAsIntComponent3());
-	}
-	
-	@Test
-	public void testGetAsIntG() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.5D, 0.0D);
-		final Color3D c = new Color3D(0.0D, 1.0D, 0.0D);
-		
-		assertEquals(  0, a.getAsIntG());
-		assertEquals(128, b.getAsIntG());
-		assertEquals(255, c.getAsIntG());
-	}
-	
-	@Test
-	public void testGetAsIntR() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.5D, 0.0D, 0.0D);
-		final Color3D c = new Color3D(1.0D, 0.0D, 0.0D);
-		
-		assertEquals(  0, a.getAsIntR());
-		assertEquals(128, b.getAsIntR());
-		assertEquals(255, c.getAsIntR());
-	}
-	
-	@Test
-	public void testGetAsIntX() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.5D, 0.0D, 0.0D);
-		final Color3D c = new Color3D(1.0D, 0.0D, 0.0D);
-		
-		assertEquals(  0, a.getAsIntX());
-		assertEquals(128, b.getAsIntX());
-		assertEquals(255, c.getAsIntX());
-	}
-	
-	@Test
-	public void testGetAsIntY() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.5D, 0.0D);
-		final Color3D c = new Color3D(0.0D, 1.0D, 0.0D);
-		
-		assertEquals(  0, a.getAsIntY());
-		assertEquals(128, b.getAsIntY());
-		assertEquals(255, c.getAsIntY());
-	}
-	
-	@Test
-	public void testGetAsIntZ() {
-		final Color3D a = new Color3D(0.0D, 0.0D, 0.0D);
-		final Color3D b = new Color3D(0.0D, 0.0D, 0.5D);
-		final Color3D c = new Color3D(0.0D, 0.0D, 1.0D);
-		
-		assertEquals(  0, a.getAsIntZ());
-		assertEquals(128, b.getAsIntZ());
-		assertEquals(255, c.getAsIntZ());
-	}
-	
-	@Test
-	public void testGetB() {
-		final Color3D color = new Color3D(0.0D, 0.0D, 2.0D);
-		
-		assertEquals(2.0D, color.getB());
-	}
-	
-	@Test
-	public void testGetComponent1() {
-		final Color3D color = new Color3D(2.0D, 0.0D, 0.0D);
-		
-		assertEquals(2.0D, color.getComponent1());
-	}
-	
-	@Test
-	public void testGetComponent2() {
-		final Color3D color = new Color3D(0.0D, 2.0D, 0.0D);
-		
-		assertEquals(2.0D, color.getComponent2());
-	}
-	
-	@Test
-	public void testGetComponent3() {
-		final Color3D color = new Color3D(0.0D, 0.0D, 2.0D);
-		
-		assertEquals(2.0D, color.getComponent3());
-	}
-	
-	@Test
-	public void testGetG() {
-		final Color3D color = new Color3D(0.0D, 2.0D, 0.0D);
-		
-		assertEquals(2.0D, color.getG());
-	}
-	
-	@Test
-	public void testGetR() {
-		final Color3D color = new Color3D(2.0D, 0.0D, 0.0D);
-		
-		assertEquals(2.0D, color.getR());
-	}
-	
-	@Test
-	public void testGetX() {
-		final Color3D color = new Color3D(2.0D, 0.0D, 0.0D);
-		
-		assertEquals(2.0D, color.getX());
-	}
-	
-	@Test
-	public void testGetY() {
-		final Color3D color = new Color3D(0.0D, 2.0D, 0.0D);
-		
-		assertEquals(2.0D, color.getY());
-	}
-	
-	@Test
-	public void testGetZ() {
-		final Color3D color = new Color3D(0.0D, 0.0D, 2.0D);
-		
-		assertEquals(2.0D, color.getZ());
-	}
-	
-	@Test
 	public void testGrayscaleAverage() {
 		final Color3D a = new Color3D(0.0D, 0.5D, 1.0D);
 		final Color3D b = Color3D.grayscaleAverage(a);
 		
-		assertEquals(0.5D, b.getComponent1());
-		assertEquals(0.5D, b.getComponent2());
-		assertEquals(0.5D, b.getComponent3());
+		assertEquals(0.5D, b.r);
+		assertEquals(0.5D, b.g);
+		assertEquals(0.5D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.grayscaleAverage(null));
 	}
@@ -1013,9 +716,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(0.0D, 0.5D, 1.0D);
 		final Color3D b = Color3D.grayscaleComponent1(a);
 		
-		assertEquals(0.0D, b.getComponent1());
-		assertEquals(0.0D, b.getComponent2());
-		assertEquals(0.0D, b.getComponent3());
+		assertEquals(0.0D, b.r);
+		assertEquals(0.0D, b.g);
+		assertEquals(0.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.grayscaleComponent1(null));
 	}
@@ -1025,9 +728,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(0.0D, 0.5D, 1.0D);
 		final Color3D b = Color3D.grayscaleComponent2(a);
 		
-		assertEquals(0.5D, b.getComponent1());
-		assertEquals(0.5D, b.getComponent2());
-		assertEquals(0.5D, b.getComponent3());
+		assertEquals(0.5D, b.r);
+		assertEquals(0.5D, b.g);
+		assertEquals(0.5D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.grayscaleComponent2(null));
 	}
@@ -1037,9 +740,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(0.0D, 0.5D, 1.0D);
 		final Color3D b = Color3D.grayscaleComponent3(a);
 		
-		assertEquals(1.0D, b.getComponent1());
-		assertEquals(1.0D, b.getComponent2());
-		assertEquals(1.0D, b.getComponent3());
+		assertEquals(1.0D, b.r);
+		assertEquals(1.0D, b.g);
+		assertEquals(1.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.grayscaleComponent3(null));
 	}
@@ -1049,9 +752,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(1.0D, 2.0D, 3.0D);
 		final Color3D b = Color3D.grayscaleLightness(a);
 		
-		assertEquals(2.0D, b.getComponent1());
-		assertEquals(2.0D, b.getComponent2());
-		assertEquals(2.0D, b.getComponent3());
+		assertEquals(2.0D, b.r);
+		assertEquals(2.0D, b.g);
+		assertEquals(2.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.grayscaleLightness(null));
 	}
@@ -1061,9 +764,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(1.0D / 0.212671D, 1.0D / 0.715160D, 1.0D / 0.072169D);
 		final Color3D b = Color3D.grayscaleLuminance(a);
 		
-		assertEquals(3.0D, b.getComponent1());
-		assertEquals(3.0D, b.getComponent2());
-		assertEquals(3.0D, b.getComponent3());
+		assertEquals(3.0D, b.r);
+		assertEquals(3.0D, b.g);
+		assertEquals(3.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.grayscaleLuminance(null));
 	}
@@ -1073,9 +776,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(0.0D, 1.0D, 2.0D);
 		final Color3D b = Color3D.grayscaleMaximum(a);
 		
-		assertEquals(2.0D, b.getComponent1());
-		assertEquals(2.0D, b.getComponent2());
-		assertEquals(2.0D, b.getComponent3());
+		assertEquals(2.0D, b.r);
+		assertEquals(2.0D, b.g);
+		assertEquals(2.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.grayscaleMaximum(null));
 	}
@@ -1085,9 +788,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(0.0D, 1.0D, 2.0D);
 		final Color3D b = Color3D.grayscaleMinimum(a);
 		
-		assertEquals(0.0D, b.getComponent1());
-		assertEquals(0.0D, b.getComponent2());
-		assertEquals(0.0D, b.getComponent3());
+		assertEquals(0.0D, b.r);
+		assertEquals(0.0D, b.g);
+		assertEquals(0.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.grayscaleMinimum(null));
 	}
@@ -1132,9 +835,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(0.75D, 0.75D, 0.75D);
 		final Color3D b = Color3D.invert(a);
 		
-		assertEquals(0.25D, b.getComponent1());
-		assertEquals(0.25D, b.getComponent2());
-		assertEquals(0.25D, b.getComponent3());
+		assertEquals(0.25D, b.r);
+		assertEquals(0.25D, b.g);
+		assertEquals(0.25D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.invert(null));
 	}
@@ -1308,9 +1011,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(1.0D, 0.0D, 2.0D);
 		final Color3D c = Color3D.maximum(a, b);
 		
-		assertEquals(1.0D, c.getComponent1());
-		assertEquals(1.0D, c.getComponent2());
-		assertEquals(2.0D, c.getComponent3());
+		assertEquals(1.0D, c.r);
+		assertEquals(1.0D, c.g);
+		assertEquals(2.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.maximum(a, null));
 		assertThrows(NullPointerException.class, () -> Color3D.maximum(null, b));
@@ -1321,9 +1024,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(1.0D, 1.0D, 2.0D);
 		final Color3D b = Color3D.maximumTo1(a);
 		
-		assertEquals(0.5D, b.getComponent1());
-		assertEquals(0.5D, b.getComponent2());
-		assertEquals(1.0D, b.getComponent3());
+		assertEquals(0.5D, b.r);
+		assertEquals(0.5D, b.g);
+		assertEquals(1.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.maximumTo1(null));
 	}
@@ -1341,9 +1044,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(1.0D, 0.0D, 2.0D);
 		final Color3D c = Color3D.minimum(a, b);
 		
-		assertEquals(0.0D, c.getComponent1());
-		assertEquals(0.0D, c.getComponent2());
-		assertEquals(2.0D, c.getComponent3());
+		assertEquals(0.0D, c.r);
+		assertEquals(0.0D, c.g);
+		assertEquals(2.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.minimum(a, null));
 		assertThrows(NullPointerException.class, () -> Color3D.minimum(null, b));
@@ -1354,9 +1057,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(-1.0D, 0.0D, 1.0D);
 		final Color3D b = Color3D.minimumTo0(a);
 		
-		assertEquals(0.0D, b.getComponent1());
-		assertEquals(1.0D, b.getComponent2());
-		assertEquals(2.0D, b.getComponent3());
+		assertEquals(0.0D, b.r);
+		assertEquals(1.0D, b.g);
+		assertEquals(2.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.minimumTo0(null));
 	}
@@ -1367,13 +1070,13 @@ public final class Color3DUnitTests {
 		final Color3D b = Color3D.multiplyAndSaturateNegative(a, -2.0D);
 		final Color3D c = Color3D.multiplyAndSaturateNegative(a, +2.0D);
 		
-		assertEquals(0.0D, b.getComponent1());
-		assertEquals(0.0D, b.getComponent2());
-		assertEquals(0.0D, b.getComponent3());
+		assertEquals(0.0D, b.r);
+		assertEquals(0.0D, b.g);
+		assertEquals(0.0D, b.b);
 		
-		assertEquals(2.0D, c.getComponent1());
-		assertEquals(2.0D, c.getComponent2());
-		assertEquals(2.0D, c.getComponent3());
+		assertEquals(2.0D, c.r);
+		assertEquals(2.0D, c.g);
+		assertEquals(2.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.multiplyAndSaturateNegative(null, 2.0D));
 	}
@@ -1384,9 +1087,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(2.0D, 2.0D, 2.0D);
 		final Color3D c = Color3D.multiply(a, b);
 		
-		assertEquals(2.0D, c.getComponent1());
-		assertEquals(4.0D, c.getComponent2());
-		assertEquals(6.0D, c.getComponent3());
+		assertEquals(2.0D, c.r);
+		assertEquals(4.0D, c.g);
+		assertEquals(6.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.multiply(a, null));
 		assertThrows(NullPointerException.class, () -> Color3D.multiply(null, b));
@@ -1399,9 +1102,9 @@ public final class Color3DUnitTests {
 		final Color3D c = new Color3D(5.0D, 5.0D, 5.0D);
 		final Color3D d = Color3D.multiply(a, b, c);
 		
-		assertEquals(10.0D, d.getComponent1());
-		assertEquals(20.0D, d.getComponent2());
-		assertEquals(30.0D, d.getComponent3());
+		assertEquals(10.0D, d.r);
+		assertEquals(20.0D, d.g);
+		assertEquals(30.0D, d.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.multiply(a, b, null));
 		assertThrows(NullPointerException.class, () -> Color3D.multiply(a, null, c));
@@ -1416,9 +1119,9 @@ public final class Color3DUnitTests {
 		final Color3D d = new Color3D(2.0D, 2.0D, 2.0D);
 		final Color3D e = Color3D.multiply(a, b, c, d);
 		
-		assertEquals(20.0D, e.getComponent1());
-		assertEquals(40.0D, e.getComponent2());
-		assertEquals(60.0D, e.getComponent3());
+		assertEquals(20.0D, e.r);
+		assertEquals(40.0D, e.g);
+		assertEquals(60.0D, e.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.multiply(a, b, c, null));
 		assertThrows(NullPointerException.class, () -> Color3D.multiply(a, b, null, d));
@@ -1432,9 +1135,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(2.0D, 2.0D, 2.0D);
 		final Color3D c = Color3D.multiply(a, b, 5.0D);
 		
-		assertEquals(10.0D, c.getComponent1());
-		assertEquals(20.0D, c.getComponent2());
-		assertEquals(30.0D, c.getComponent3());
+		assertEquals(10.0D, c.r);
+		assertEquals(20.0D, c.g);
+		assertEquals(30.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.multiply(a, null, 5.0D));
 		assertThrows(NullPointerException.class, () -> Color3D.multiply(null, b, 5.0D));
@@ -1445,9 +1148,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(1.0D, 2.0D, 3.0D);
 		final Color3D b = Color3D.multiply(a, 2.0D);
 		
-		assertEquals(2.0D, b.getComponent1());
-		assertEquals(4.0D, b.getComponent2());
-		assertEquals(6.0D, b.getComponent3());
+		assertEquals(2.0D, b.r);
+		assertEquals(4.0D, b.g);
+		assertEquals(6.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.multiply(null, 2.0D));
 	}
@@ -1458,13 +1161,13 @@ public final class Color3DUnitTests {
 		final Color3D b = Color3D.negate(a);
 		final Color3D c = Color3D.negate(b);
 		
-		assertEquals(-1.0D, b.getComponent1());
-		assertEquals(-2.0D, b.getComponent2());
-		assertEquals(-3.0D, b.getComponent3());
+		assertEquals(-1.0D, b.r);
+		assertEquals(-2.0D, b.g);
+		assertEquals(-3.0D, b.b);
 		
-		assertEquals(+1.0D, c.getComponent1());
-		assertEquals(+2.0D, c.getComponent2());
-		assertEquals(+3.0D, c.getComponent3());
+		assertEquals(+1.0D, c.r);
+		assertEquals(+2.0D, c.g);
+		assertEquals(+3.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.negate(null));
 	}
@@ -1474,13 +1177,13 @@ public final class Color3DUnitTests {
 		final Color3D a = Color3D.normalize(new Color3D(0.0D, 0.0D, 0.0D));
 		final Color3D b = Color3D.normalize(new Color3D(1.0D, 1.0D, 1.0D));
 		
-		assertEquals(0.0D, a.getComponent1());
-		assertEquals(0.0D, a.getComponent2());
-		assertEquals(0.0D, a.getComponent3());
+		assertEquals(0.0D, a.r);
+		assertEquals(0.0D, a.g);
+		assertEquals(0.0D, a.b);
 		
-		assertEquals(0.3333333333333333D, b.getComponent1());
-		assertEquals(0.3333333333333333D, b.getComponent2());
-		assertEquals(0.3333333333333333D, b.getComponent3());
+		assertEquals(0.3333333333333333D, b.r);
+		assertEquals(0.3333333333333333D, b.g);
+		assertEquals(0.3333333333333333D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.normalize(null));
 	}
@@ -1490,13 +1193,13 @@ public final class Color3DUnitTests {
 		final Color3D a = Color3D.normalizeLuminance(new Color3D(0.0D, 0.0D, 0.0D));
 		final Color3D b = Color3D.normalizeLuminance(new Color3D(1.0D, 1.0D, 1.0D));
 		
-		assertEquals(1.0D, a.getComponent1());
-		assertEquals(1.0D, a.getComponent2());
-		assertEquals(1.0D, a.getComponent3());
+		assertEquals(1.0D, a.r);
+		assertEquals(1.0D, a.g);
+		assertEquals(1.0D, a.b);
 		
-		assertEquals(1.0D, b.getComponent1());
-		assertEquals(1.0D, b.getComponent2());
-		assertEquals(1.0D, b.getComponent3());
+		assertEquals(1.0D, b.r);
+		assertEquals(1.0D, b.g);
+		assertEquals(1.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.normalizeLuminance(null));
 	}
@@ -1549,36 +1252,36 @@ public final class Color3DUnitTests {
 	public void testRandom() {
 		final Color3D color = Color3D.random();
 		
-		assertTrue(color.getComponent1() >= 0.0D && color.getComponent1() < 1.0D);
-		assertTrue(color.getComponent2() >= 0.0D && color.getComponent2() < 1.0D);
-		assertTrue(color.getComponent3() >= 0.0D && color.getComponent3() < 1.0D);
+		assertTrue(color.r >= 0.0D && color.r < 1.0D);
+		assertTrue(color.g >= 0.0D && color.g < 1.0D);
+		assertTrue(color.b >= 0.0D && color.b < 1.0D);
 	}
 	
 	@Test
 	public void testRandomComponent1() {
 		final Color3D color = Color3D.randomComponent1();
 		
-		assertTrue(color.getComponent1() >= 0.0D && color.getComponent1() < 1.0D);
-		assertEquals(0.0D, color.getComponent2());
-		assertEquals(0.0D, color.getComponent3());
+		assertTrue(color.r >= 0.0D && color.r < 1.0D);
+		assertEquals(0.0D, color.g);
+		assertEquals(0.0D, color.b);
 	}
 	
 	@Test
 	public void testRandomComponent2() {
 		final Color3D color = Color3D.randomComponent2();
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertTrue(color.getComponent2() >= 0.0D && color.getComponent2() < 1.0D);
-		assertEquals(0.0D, color.getComponent3());
+		assertEquals(0.0D, color.r);
+		assertTrue(color.g >= 0.0D && color.g < 1.0D);
+		assertEquals(0.0D, color.b);
 	}
 	
 	@Test
 	public void testRandomComponent3() {
 		final Color3D color = Color3D.randomComponent3();
 		
-		assertEquals(0.0D, color.getComponent1());
-		assertEquals(0.0D, color.getComponent2());
-		assertTrue(color.getComponent3() >= 0.0D && color.getComponent3() < 1.0D);
+		assertEquals(0.0D, color.r);
+		assertEquals(0.0D, color.g);
+		assertTrue(color.b >= 0.0D && color.b < 1.0D);
 	}
 	
 	@Test
@@ -1589,9 +1292,9 @@ public final class Color3DUnitTests {
 		
 		final
 		DataOutput dataOutput = new DataOutputStream(byteArrayOutputStream);
-		dataOutput.writeDouble(a.getComponent1());
-		dataOutput.writeDouble(a.getComponent2());
-		dataOutput.writeDouble(a.getComponent3());
+		dataOutput.writeDouble(a.r);
+		dataOutput.writeDouble(a.g);
+		dataOutput.writeDouble(a.b);
 		
 		final byte[] bytes = byteArrayOutputStream.toByteArray();
 		
@@ -1609,17 +1312,17 @@ public final class Color3DUnitTests {
 		final Color3D b = Color3D.saturate(new Color3D(0.5D, 0.5D, 0.5D));
 		final Color3D c = Color3D.saturate(new Color3D(2.0D, 2.0D, 2.0D));
 		
-		assertEquals(0.0D, a.getComponent1());
-		assertEquals(0.0D, a.getComponent2());
-		assertEquals(0.0D, a.getComponent3());
+		assertEquals(0.0D, a.r);
+		assertEquals(0.0D, a.g);
+		assertEquals(0.0D, a.b);
 		
-		assertEquals(0.5D, b.getComponent1());
-		assertEquals(0.5D, b.getComponent2());
-		assertEquals(0.5D, b.getComponent3());
+		assertEquals(0.5D, b.r);
+		assertEquals(0.5D, b.g);
+		assertEquals(0.5D, b.b);
 		
-		assertEquals(1.0D, c.getComponent1());
-		assertEquals(1.0D, c.getComponent2());
-		assertEquals(1.0D, c.getComponent3());
+		assertEquals(1.0D, c.r);
+		assertEquals(1.0D, c.g);
+		assertEquals(1.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.saturate(null));
 	}
@@ -1633,29 +1336,29 @@ public final class Color3DUnitTests {
 		final Color3D e = Color3D.saturate(new Color3D(10.0D, 10.0D, 10.0D), -5.0D, +5.0D);
 		final Color3D f = Color3D.saturate(new Color3D(10.0D, 10.0D, 10.0D), +5.0D, -5.0D);
 		
-		assertEquals(-5.0D, a.getComponent1());
-		assertEquals(-5.0D, a.getComponent2());
-		assertEquals(-5.0D, a.getComponent3());
+		assertEquals(-5.0D, a.r);
+		assertEquals(-5.0D, a.g);
+		assertEquals(-5.0D, a.b);
 		
-		assertEquals(-5.0D, b.getComponent1());
-		assertEquals(-5.0D, b.getComponent2());
-		assertEquals(-5.0D, b.getComponent3());
+		assertEquals(-5.0D, b.r);
+		assertEquals(-5.0D, b.g);
+		assertEquals(-5.0D, b.b);
 		
-		assertEquals(2.0D, c.getComponent1());
-		assertEquals(2.0D, c.getComponent2());
-		assertEquals(2.0D, c.getComponent3());
+		assertEquals(2.0D, c.r);
+		assertEquals(2.0D, c.g);
+		assertEquals(2.0D, c.b);
 		
-		assertEquals(2.0D, d.getComponent1());
-		assertEquals(2.0D, d.getComponent2());
-		assertEquals(2.0D, d.getComponent3());
+		assertEquals(2.0D, d.r);
+		assertEquals(2.0D, d.g);
+		assertEquals(2.0D, d.b);
 		
-		assertEquals(5.0D, e.getComponent1());
-		assertEquals(5.0D, e.getComponent2());
-		assertEquals(5.0D, e.getComponent3());
+		assertEquals(5.0D, e.r);
+		assertEquals(5.0D, e.g);
+		assertEquals(5.0D, e.b);
 		
-		assertEquals(5.0D, f.getComponent1());
-		assertEquals(5.0D, f.getComponent2());
-		assertEquals(5.0D, f.getComponent3());
+		assertEquals(5.0D, f.r);
+		assertEquals(5.0D, f.g);
+		assertEquals(5.0D, f.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.saturate(null, -5.0D, +5.0D));
 	}
@@ -1665,9 +1368,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(1.0D, 1.0D, 1.0D);
 		final Color3D b = Color3D.sepia(a);
 		
-		assertEquals(1.351D, b.getComponent1());
-		assertEquals(1.203D, b.getComponent2());
-		assertEquals(0.937D, b.getComponent3());
+		assertEquals(1.351D, b.r);
+		assertEquals(1.203D, b.g);
+		assertEquals(0.937D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.sepia(null));
 	}
@@ -1677,9 +1380,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(16.0D, 25.0D, 36.0D);
 		final Color3D b = Color3D.sqrt(a);
 		
-		assertEquals(4.0D, b.getComponent1());
-		assertEquals(5.0D, b.getComponent2());
-		assertEquals(6.0D, b.getComponent3());
+		assertEquals(4.0D, b.r);
+		assertEquals(5.0D, b.g);
+		assertEquals(6.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.sqrt(null));
 	}
@@ -1690,9 +1393,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(2.0D, 3.0D, 4.0D);
 		final Color3D c = Color3D.subtract(a, b);
 		
-		assertEquals(3.0D, c.getComponent1());
-		assertEquals(3.0D, c.getComponent2());
-		assertEquals(3.0D, c.getComponent3());
+		assertEquals(3.0D, c.r);
+		assertEquals(3.0D, c.g);
+		assertEquals(3.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.subtract(a, null));
 		assertThrows(NullPointerException.class, () -> Color3D.subtract(null, b));
@@ -1705,9 +1408,9 @@ public final class Color3DUnitTests {
 		final Color3D c = new Color3D(2.0D, 3.0D, 4.0D);
 		final Color3D d = Color3D.subtract(a, b, c);
 		
-		assertEquals(3.0D, d.getComponent1());
-		assertEquals(2.0D, d.getComponent2());
-		assertEquals(1.0D, d.getComponent3());
+		assertEquals(3.0D, d.r);
+		assertEquals(2.0D, d.g);
+		assertEquals(1.0D, d.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.subtract(a, b, null));
 		assertThrows(NullPointerException.class, () -> Color3D.subtract(a, null, c));
@@ -1720,9 +1423,9 @@ public final class Color3DUnitTests {
 		final Color3D b = new Color3D(2.0D, 3.0D, 4.0D);
 		final Color3D c = Color3D.subtract(a, b, 2.0D);
 		
-		assertEquals(1.0D, c.getComponent1());
-		assertEquals(1.0D, c.getComponent2());
-		assertEquals(1.0D, c.getComponent3());
+		assertEquals(1.0D, c.r);
+		assertEquals(1.0D, c.g);
+		assertEquals(1.0D, c.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.subtract(a, null, 2.0D));
 		assertThrows(NullPointerException.class, () -> Color3D.subtract(null, b, 2.0D));
@@ -1733,9 +1436,9 @@ public final class Color3DUnitTests {
 		final Color3D a = new Color3D(5.0D, 6.0D, 7.0D);
 		final Color3D b = Color3D.subtract(a, 2.0D);
 		
-		assertEquals(3.0D, b.getComponent1());
-		assertEquals(4.0D, b.getComponent2());
-		assertEquals(5.0D, b.getComponent3());
+		assertEquals(3.0D, b.r);
+		assertEquals(4.0D, b.g);
+		assertEquals(5.0D, b.b);
 		
 		assertThrows(NullPointerException.class, () -> Color3D.subtract(null, 2.0D));
 	}
@@ -1755,25 +1458,25 @@ public final class Color3DUnitTests {
 		final Color3D d = Color3D.unpack(PackedIntComponentOrder.ARGB.pack(0, 0, 255));
 		final Color3D e = Color3D.unpack(PackedIntComponentOrder.ARGB.pack(255, 255, 255));
 		
-		assertEquals(0.0D, a.getComponent1());
-		assertEquals(0.0D, a.getComponent2());
-		assertEquals(0.0D, a.getComponent3());
+		assertEquals(0.0D, a.r);
+		assertEquals(0.0D, a.g);
+		assertEquals(0.0D, a.b);
 		
-		assertEquals(1.0D, b.getComponent1());
-		assertEquals(0.0D, b.getComponent2());
-		assertEquals(0.0D, b.getComponent3());
+		assertEquals(1.0D, b.r);
+		assertEquals(0.0D, b.g);
+		assertEquals(0.0D, b.b);
 		
-		assertEquals(0.0D, c.getComponent1());
-		assertEquals(1.0D, c.getComponent2());
-		assertEquals(0.0D, c.getComponent3());
+		assertEquals(0.0D, c.r);
+		assertEquals(1.0D, c.g);
+		assertEquals(0.0D, c.b);
 		
-		assertEquals(0.0D, d.getComponent1());
-		assertEquals(0.0D, d.getComponent2());
-		assertEquals(1.0D, d.getComponent3());
+		assertEquals(0.0D, d.r);
+		assertEquals(0.0D, d.g);
+		assertEquals(1.0D, d.b);
 		
-		assertEquals(1.0D, e.getComponent1());
-		assertEquals(1.0D, e.getComponent2());
-		assertEquals(1.0D, e.getComponent3());
+		assertEquals(1.0D, e.r);
+		assertEquals(1.0D, e.g);
+		assertEquals(1.0D, e.b);
 	}
 	
 	@Test
@@ -1785,25 +1488,25 @@ public final class Color3DUnitTests {
 			final Color3D d = Color3D.unpack(packedIntComponentOrder.pack(0, 0, 255), packedIntComponentOrder);
 			final Color3D e = Color3D.unpack(packedIntComponentOrder.pack(255, 255, 255), packedIntComponentOrder);
 			
-			assertEquals(0.0D, a.getComponent1());
-			assertEquals(0.0D, a.getComponent2());
-			assertEquals(0.0D, a.getComponent3());
+			assertEquals(0.0D, a.r);
+			assertEquals(0.0D, a.g);
+			assertEquals(0.0D, a.b);
 			
-			assertEquals(1.0D, b.getComponent1());
-			assertEquals(0.0D, b.getComponent2());
-			assertEquals(0.0D, b.getComponent3());
+			assertEquals(1.0D, b.r);
+			assertEquals(0.0D, b.g);
+			assertEquals(0.0D, b.b);
 			
-			assertEquals(0.0D, c.getComponent1());
-			assertEquals(1.0D, c.getComponent2());
-			assertEquals(0.0D, c.getComponent3());
+			assertEquals(0.0D, c.r);
+			assertEquals(1.0D, c.g);
+			assertEquals(0.0D, c.b);
 			
-			assertEquals(0.0D, d.getComponent1());
-			assertEquals(0.0D, d.getComponent2());
-			assertEquals(1.0D, d.getComponent3());
+			assertEquals(0.0D, d.r);
+			assertEquals(0.0D, d.g);
+			assertEquals(1.0D, d.b);
 			
-			assertEquals(1.0D, e.getComponent1());
-			assertEquals(1.0D, e.getComponent2());
-			assertEquals(1.0D, e.getComponent3());
+			assertEquals(1.0D, e.r);
+			assertEquals(1.0D, e.g);
+			assertEquals(1.0D, e.b);
 		}
 		
 		assertThrows(NullPointerException.class, () -> Color3D.unpack(PackedIntComponentOrder.ARGB.pack(0, 0, 0), null));

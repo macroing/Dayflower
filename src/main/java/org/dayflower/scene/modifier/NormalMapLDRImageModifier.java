@@ -289,9 +289,9 @@ public final class NormalMapLDRImageModifier extends AbstractLDRImageModifier {
 		
 		final Color3F colorRGB = getColorRGB(intersection.getTextureCoordinates());
 		
-		final float r = colorRGB.getR();
-		final float g = colorRGB.getG();
-		final float b = colorRGB.getB();
+		final float r = colorRGB.r;
+		final float g = colorRGB.g;
+		final float b = colorRGB.b;
 		
 		final float x = r * 2.0F - 1.0F;
 		final float y = g * 2.0F - 1.0F;

@@ -252,7 +252,7 @@ public final class HairBXDF extends BXDF {
 		
 		final float scale = 2.0F * cosGammaTransmission / cosThetaTransmission;
 		
-		final Color3F transmittance = new Color3F(exp(-this.sigmaA.getR() * scale), exp(-this.sigmaA.getG() * scale), exp(-this.sigmaA.getB() * scale));
+		final Color3F transmittance = new Color3F(exp(-this.sigmaA.r * scale), exp(-this.sigmaA.g * scale), exp(-this.sigmaA.b * scale));
 		
 		final float phi = phiIncoming - phiOutgoing;
 		
@@ -598,9 +598,9 @@ public final class HairBXDF extends BXDF {
 	public static Color3F computeSigmaAFromReflectance(final Color3F color, final float betaN) {
 		final float constant = (5.969F - 0.215F * betaN + 2.532F * (betaN * betaN) - 10.73F * powR(betaN, 3) + 5.574F * powR(betaN, 4) + 0.245F * powR(betaN, 5));
 		
-		final float component1 = log(color.getComponent1()) / constant;
-		final float component2 = log(color.getComponent2()) / constant;
-		final float component3 = log(color.getComponent3()) / constant;
+		final float component1 = log(color.r) / constant;
+		final float component2 = log(color.g) / constant;
+		final float component3 = log(color.b) / constant;
 		
 		return new Color3F(component1 * component1, component2 * component2, component3 * component3);
 	}
@@ -720,7 +720,7 @@ public final class HairBXDF extends BXDF {
 		
 		final float scale = 2.0F * cosGammaTransmission / cosThetaTransmission;
 		
-		final Color3F transmittance = new Color3F(exp(-sigmaA.getR() * scale), exp(-sigmaA.getG() * scale), exp(-sigmaA.getB() * scale));
+		final Color3F transmittance = new Color3F(exp(-sigmaA.r * scale), exp(-sigmaA.g * scale), exp(-sigmaA.b * scale));
 		
 		final Color3F[] colors = doComputeAP(transmittance, cosThetaOutgoing, eta, h);
 		

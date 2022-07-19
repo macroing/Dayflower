@@ -1703,7 +1703,7 @@ public abstract class ImageD extends Image {
 				colorRGB = Color3D.minimumTo0(colorRGB);
 				colorRGB = Color3D.maximumTo1(colorRGB);
 				
-				colorRGBA = new Color4D(colorRGB.getR(), colorRGB.getG(), colorRGB.getB(), colorRGBA.getA());
+				colorRGBA = new Color4D(colorRGB, colorRGBA.a);
 				
 				doSetColorRGBA(colorRGBA, x, y);
 			}
@@ -1783,7 +1783,7 @@ public abstract class ImageD extends Image {
 				colorRGB = Color3D.minimumTo0(colorRGB);
 				colorRGB = Color3D.maximumTo1(colorRGB);
 				
-				colorRGBA = new Color4D(colorRGB.getR(), colorRGB.getG(), colorRGB.getB(), colorRGBA.getA());
+				colorRGBA = new Color4D(colorRGB, colorRGBA.a);
 				
 				doSetColorRGBA(colorRGBA, x, y);
 			}
@@ -2229,7 +2229,7 @@ public abstract class ImageD extends Image {
 			final double luminance = color.luminance();
 			final double scale = (1.0D + luminance / (luminanceMaximum * luminanceMaximum)) / (1.0D + luminance);
 			
-			return new Color4D(Color3D.multiply(new Color3D(color), scale), color.getA());
+			return new Color4D(Color3D.multiply(new Color3D(color), scale), color.a);
 		});
 	}
 	
@@ -2243,7 +2243,7 @@ public abstract class ImageD extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageD transparency(final double transparency) {
-		return update((color, point) -> new Color4D(color.getComponent1(), color.getComponent2(), color.getComponent3(), transparency));
+		return update((color, point) -> new Color4D(color.r, color.g, color.b, transparency));
 	}
 	
 	/**
@@ -2459,19 +2459,19 @@ public abstract class ImageD extends Image {
 				final Color4D colorRGBA = getColorRGBA(x, y);
 				
 				if(arrayComponentOrder.hasOffsetR()) {
-					array[index + arrayComponentOrder.getOffsetR()] = colorRGBA.getR();
+					array[index + arrayComponentOrder.getOffsetR()] = colorRGBA.r;
 				}
 				
 				if(arrayComponentOrder.hasOffsetG()) {
-					array[index + arrayComponentOrder.getOffsetG()] = colorRGBA.getG();
+					array[index + arrayComponentOrder.getOffsetG()] = colorRGBA.g;
 				}
 				
 				if(arrayComponentOrder.hasOffsetB()) {
-					array[index + arrayComponentOrder.getOffsetB()] = colorRGBA.getB();
+					array[index + arrayComponentOrder.getOffsetB()] = colorRGBA.b;
 				}
 				
 				if(arrayComponentOrder.hasOffsetA()) {
-					array[index + arrayComponentOrder.getOffsetA()] = colorRGBA.getA();
+					array[index + arrayComponentOrder.getOffsetA()] = colorRGBA.a;
 				}
 			}
 		}

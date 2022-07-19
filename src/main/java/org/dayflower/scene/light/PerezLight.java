@@ -609,9 +609,9 @@ public final class PerezLight extends Light {
 		
 		final Color3F colorXYZ = ChromaticSpectralCurveF.getColorXYZ(toFloat(x), toFloat(y));
 		
-		final float x0 = toFloat(colorXYZ.getX() * relativeLuminance / colorXYZ.getY());
+		final float x0 = toFloat(colorXYZ.r * relativeLuminance / colorXYZ.g);
 		final float y0 = toFloat(relativeLuminance);
-		final float z0 = toFloat(colorXYZ.getZ() * relativeLuminance / colorXYZ.getY());
+		final float z0 = toFloat(colorXYZ.b * relativeLuminance / colorXYZ.g);
 		
 		return ColorSpaceF.getDefault().convertXYZToRGB(new Color3F(x0, y0, z0));
 	}
@@ -651,7 +651,7 @@ public final class PerezLight extends Light {
 				final Color3F colorRGB = Color3F.minimumTo0(doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV)));
 				
 //				final float luminance = colorRGB.luminance();
-				final float luminance = 0.2989F * colorRGB.getR() + 0.5866F * colorRGB.getG() + 0.1145F * colorRGB.getB();
+				final float luminance = 0.2989F * colorRGB.r + 0.5866F * colorRGB.g + 0.1145F * colorRGB.b;
 				
 				functions[u][v] = luminance * sinTheta;
 			}

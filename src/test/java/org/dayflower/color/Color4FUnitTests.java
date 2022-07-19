@@ -52,20 +52,20 @@ public final class Color4FUnitTests {
 	public void testConstructor() {
 		final Color4F color = new Color4F();
 		
-		assertEquals(0.0F, color.getComponent1());
-		assertEquals(0.0F, color.getComponent2());
-		assertEquals(0.0F, color.getComponent3());
-		assertEquals(1.0F, color.getComponent4());
+		assertEquals(0.0F, color.r);
+		assertEquals(0.0F, color.g);
+		assertEquals(0.0F, color.b);
+		assertEquals(1.0F, color.a);
 	}
 	
 	@Test
 	public void testConstructorColor3D() {
 		final Color4F color = new Color4F(new Color3D(1.0D, 1.0D, 1.0D));
 		
-		assertEquals(1.0F, color.getComponent1());
-		assertEquals(1.0F, color.getComponent2());
-		assertEquals(1.0F, color.getComponent3());
-		assertEquals(1.0F, color.getComponent4());
+		assertEquals(1.0F, color.r);
+		assertEquals(1.0F, color.g);
+		assertEquals(1.0F, color.b);
+		assertEquals(1.0F, color.a);
 		
 		assertThrows(NullPointerException.class, () -> new Color4F((Color3D)(null)));
 	}
@@ -74,10 +74,10 @@ public final class Color4FUnitTests {
 	public void testConstructorColor3DFloat() {
 		final Color4F color = new Color4F(new Color3D(1.0D, 1.0D, 1.0D), 0.5F);
 		
-		assertEquals(1.0F, color.getComponent1());
-		assertEquals(1.0F, color.getComponent2());
-		assertEquals(1.0F, color.getComponent3());
-		assertEquals(0.5F, color.getComponent4());
+		assertEquals(1.0F, color.r);
+		assertEquals(1.0F, color.g);
+		assertEquals(1.0F, color.b);
+		assertEquals(0.5F, color.a);
 		
 		assertThrows(NullPointerException.class, () -> new Color4F((Color3D)(null), 0.5F));
 	}
@@ -86,10 +86,10 @@ public final class Color4FUnitTests {
 	public void testConstructorColor3F() {
 		final Color4F color = new Color4F(new Color3F(1.0F, 1.0F, 1.0F));
 		
-		assertEquals(1.0F, color.getComponent1());
-		assertEquals(1.0F, color.getComponent2());
-		assertEquals(1.0F, color.getComponent3());
-		assertEquals(1.0F, color.getComponent4());
+		assertEquals(1.0F, color.r);
+		assertEquals(1.0F, color.g);
+		assertEquals(1.0F, color.b);
+		assertEquals(1.0F, color.a);
 		
 		assertThrows(NullPointerException.class, () -> new Color4F((Color3F)(null)));
 	}
@@ -98,10 +98,10 @@ public final class Color4FUnitTests {
 	public void testConstructorColor3FFloat() {
 		final Color4F color = new Color4F(new Color3F(1.0F, 1.0F, 1.0F), 0.5F);
 		
-		assertEquals(1.0F, color.getComponent1());
-		assertEquals(1.0F, color.getComponent2());
-		assertEquals(1.0F, color.getComponent3());
-		assertEquals(0.5F, color.getComponent4());
+		assertEquals(1.0F, color.r);
+		assertEquals(1.0F, color.g);
+		assertEquals(1.0F, color.b);
+		assertEquals(0.5F, color.a);
 		
 		assertThrows(NullPointerException.class, () -> new Color4F((Color3F)(null), 0.5F));
 	}
@@ -110,70 +110,70 @@ public final class Color4FUnitTests {
 	public void testConstructorFloat() {
 		final Color4F color = new Color4F(2.0F);
 		
-		assertEquals(2.0F, color.getComponent1());
-		assertEquals(2.0F, color.getComponent2());
-		assertEquals(2.0F, color.getComponent3());
-		assertEquals(1.0F, color.getComponent4());
+		assertEquals(2.0F, color.r);
+		assertEquals(2.0F, color.g);
+		assertEquals(2.0F, color.b);
+		assertEquals(1.0F, color.a);
 	}
 	
 	@Test
 	public void testConstructorFloatFloat() {
 		final Color4F color = new Color4F(2.0F, 0.5F);
 		
-		assertEquals(2.0F, color.getComponent1());
-		assertEquals(2.0F, color.getComponent2());
-		assertEquals(2.0F, color.getComponent3());
-		assertEquals(0.5F, color.getComponent4());
+		assertEquals(2.0F, color.r);
+		assertEquals(2.0F, color.g);
+		assertEquals(2.0F, color.b);
+		assertEquals(0.5F, color.a);
 	}
 	
 	@Test
 	public void testConstructorFloatFloatFloat() {
 		final Color4F color = new Color4F(0.0F, 1.0F, 2.0F);
 		
-		assertEquals(0.0F, color.getComponent1());
-		assertEquals(1.0F, color.getComponent2());
-		assertEquals(2.0F, color.getComponent3());
-		assertEquals(1.0F, color.getComponent4());
+		assertEquals(0.0F, color.r);
+		assertEquals(1.0F, color.g);
+		assertEquals(2.0F, color.b);
+		assertEquals(1.0F, color.a);
 	}
 	
 	@Test
 	public void testConstructorFloatFloatFloatFloat() {
 		final Color4F color = new Color4F(0.0F, 1.0F, 2.0F, 0.5F);
 		
-		assertEquals(0.0F, color.getComponent1());
-		assertEquals(1.0F, color.getComponent2());
-		assertEquals(2.0F, color.getComponent3());
-		assertEquals(0.5F, color.getComponent4());
+		assertEquals(0.0F, color.r);
+		assertEquals(1.0F, color.g);
+		assertEquals(2.0F, color.b);
+		assertEquals(0.5F, color.a);
 	}
 	
 	@Test
 	public void testConstructorInt() {
 		final Color4F color = new Color4F(255);
 		
-		assertEquals(1.0F, color.getComponent1());
-		assertEquals(1.0F, color.getComponent2());
-		assertEquals(1.0F, color.getComponent3());
-		assertEquals(1.0F, color.getComponent4());
+		assertEquals(1.0F, color.r);
+		assertEquals(1.0F, color.g);
+		assertEquals(1.0F, color.b);
+		assertEquals(1.0F, color.a);
 	}
 	
 	@Test
 	public void testConstructorIntIntInt() {
 		final Color4F color = new Color4F(0, 255, 300);
 		
-		assertEquals(0.0F, color.getComponent1());
-		assertEquals(1.0F, color.getComponent2());
-		assertEquals(1.0F, color.getComponent3());
-		assertEquals(1.0F, color.getComponent4());
+		assertEquals(0.0F, color.r);
+		assertEquals(1.0F, color.g);
+		assertEquals(1.0F, color.b);
+		assertEquals(1.0F, color.a);
 	}
 	
 	@Test
 	public void testConstructorIntIntIntInt() {
 		final Color4F color = new Color4F(0, 255, 300, 255);
 		
-		assertEquals(0.0F, color.getComponent1());
-		assertEquals(1.0F, color.getComponent2());
-		assertEquals(1.0F, color.getComponent3());
-		assertEquals(1.0F, color.getComponent4());
+		assertEquals(0.0F, color.r);
+		assertEquals(1.0F, color.g);
+		assertEquals(1.0F, color.b);
+		assertEquals(1.0F, color.a);
 	}
 	
 	@Test
@@ -223,186 +223,6 @@ public final class Color4FUnitTests {
 		assertNotEquals(f, a);
 		assertNotEquals(a, g);
 		assertNotEquals(g, a);
-	}
-	
-	@Test
-	public void testGetAsByteA() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.0F, 0.0F, 0.0F, 0.5F);
-		final Color4F c = new Color4F(0.0F, 0.0F, 0.0F, 1.0F);
-		
-		assertEquals(   0, a.getAsByteA());
-		assertEquals(-128, b.getAsByteA());
-		assertEquals(-  1, c.getAsByteA());
-		
-		assertEquals(  0, a.getAsByteA() & 0xFF);
-		assertEquals(128, b.getAsByteA() & 0xFF);
-		assertEquals(255, c.getAsByteA() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteB() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.0F, 0.0F, 0.5F, 0.0F);
-		final Color4F c = new Color4F(0.0F, 0.0F, 1.0F, 0.0F);
-		
-		assertEquals(   0, a.getAsByteB());
-		assertEquals(-128, b.getAsByteB());
-		assertEquals(-  1, c.getAsByteB());
-		
-		assertEquals(  0, a.getAsByteB() & 0xFF);
-		assertEquals(128, b.getAsByteB() & 0xFF);
-		assertEquals(255, c.getAsByteB() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteComponent1() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.5F, 0.0F, 0.0F, 0.0F);
-		final Color4F c = new Color4F(1.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(   0, a.getAsByteComponent1());
-		assertEquals(-128, b.getAsByteComponent1());
-		assertEquals(-  1, c.getAsByteComponent1());
-		
-		assertEquals(  0, a.getAsByteComponent1() & 0xFF);
-		assertEquals(128, b.getAsByteComponent1() & 0xFF);
-		assertEquals(255, c.getAsByteComponent1() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteComponent2() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.0F, 0.5F, 0.0F, 0.0F);
-		final Color4F c = new Color4F(0.0F, 1.0F, 0.0F, 0.0F);
-		
-		assertEquals(   0, a.getAsByteComponent2());
-		assertEquals(-128, b.getAsByteComponent2());
-		assertEquals(-  1, c.getAsByteComponent2());
-		
-		assertEquals(  0, a.getAsByteComponent2() & 0xFF);
-		assertEquals(128, b.getAsByteComponent2() & 0xFF);
-		assertEquals(255, c.getAsByteComponent2() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteComponent3() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.0F, 0.0F, 0.5F, 0.0F);
-		final Color4F c = new Color4F(0.0F, 0.0F, 1.0F, 0.0F);
-		
-		assertEquals(   0, a.getAsByteComponent3());
-		assertEquals(-128, b.getAsByteComponent3());
-		assertEquals(-  1, c.getAsByteComponent3());
-		
-		assertEquals(  0, a.getAsByteComponent3() & 0xFF);
-		assertEquals(128, b.getAsByteComponent3() & 0xFF);
-		assertEquals(255, c.getAsByteComponent3() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteComponent4() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.0F, 0.0F, 0.0F, 0.5F);
-		final Color4F c = new Color4F(0.0F, 0.0F, 0.0F, 1.0F);
-		
-		assertEquals(   0, a.getAsByteComponent4());
-		assertEquals(-128, b.getAsByteComponent4());
-		assertEquals(-  1, c.getAsByteComponent4());
-		
-		assertEquals(  0, a.getAsByteComponent4() & 0xFF);
-		assertEquals(128, b.getAsByteComponent4() & 0xFF);
-		assertEquals(255, c.getAsByteComponent4() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteG() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.0F, 0.5F, 0.0F, 0.0F);
-		final Color4F c = new Color4F(0.0F, 1.0F, 0.0F, 0.0F);
-		
-		assertEquals(   0, a.getAsByteG());
-		assertEquals(-128, b.getAsByteG());
-		assertEquals(-  1, c.getAsByteG());
-		
-		assertEquals(  0, a.getAsByteG() & 0xFF);
-		assertEquals(128, b.getAsByteG() & 0xFF);
-		assertEquals(255, c.getAsByteG() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteR() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.5F, 0.0F, 0.0F, 0.0F);
-		final Color4F c = new Color4F(1.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(   0, a.getAsByteR());
-		assertEquals(-128, b.getAsByteR());
-		assertEquals(-  1, c.getAsByteR());
-		
-		assertEquals(  0, a.getAsByteR() & 0xFF);
-		assertEquals(128, b.getAsByteR() & 0xFF);
-		assertEquals(255, c.getAsByteR() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteW() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.0F, 0.0F, 0.0F, 0.5F);
-		final Color4F c = new Color4F(0.0F, 0.0F, 0.0F, 1.0F);
-		
-		assertEquals(   0, a.getAsByteW());
-		assertEquals(-128, b.getAsByteW());
-		assertEquals(-  1, c.getAsByteW());
-		
-		assertEquals(  0, a.getAsByteW() & 0xFF);
-		assertEquals(128, b.getAsByteW() & 0xFF);
-		assertEquals(255, c.getAsByteW() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteX() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.5F, 0.0F, 0.0F, 0.0F);
-		final Color4F c = new Color4F(1.0F, 0.0F, 0.0F, 0.0F);
-		
-		assertEquals(   0, a.getAsByteX());
-		assertEquals(-128, b.getAsByteX());
-		assertEquals(-  1, c.getAsByteX());
-		
-		assertEquals(  0, a.getAsByteX() & 0xFF);
-		assertEquals(128, b.getAsByteX() & 0xFF);
-		assertEquals(255, c.getAsByteX() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteY() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.0F, 0.5F, 0.0F, 0.0F);
-		final Color4F c = new Color4F(0.0F, 1.0F, 0.0F, 0.0F);
-		
-		assertEquals(   0, a.getAsByteY());
-		assertEquals(-128, b.getAsByteY());
-		assertEquals(-  1, c.getAsByteY());
-		
-		assertEquals(  0, a.getAsByteY() & 0xFF);
-		assertEquals(128, b.getAsByteY() & 0xFF);
-		assertEquals(255, c.getAsByteY() & 0xFF);
-	}
-	
-	@Test
-	public void testGetAsByteZ() {
-		final Color4F a = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
-		final Color4F b = new Color4F(0.0F, 0.0F, 0.5F, 0.0F);
-		final Color4F c = new Color4F(0.0F, 0.0F, 1.0F, 0.0F);
-		
-		assertEquals(   0, a.getAsByteZ());
-		assertEquals(-128, b.getAsByteZ());
-		assertEquals(-  1, c.getAsByteZ());
-		
-		assertEquals(  0, a.getAsByteZ() & 0xFF);
-		assertEquals(128, b.getAsByteZ() & 0xFF);
-		assertEquals(255, c.getAsByteZ() & 0xFF);
 	}
 	
 	@Test

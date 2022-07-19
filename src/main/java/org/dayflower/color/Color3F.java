@@ -249,9 +249,20 @@ public final class Color3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final float component1;
-	private final float component2;
-	private final float component3;
+	/**
+	 * The B-component of this {@code Color3F} instance.
+	 */
+	public final float b;
+	
+	/**
+	 * The G-component of this {@code Color3F} instance.
+	 */
+	public final float g;
+	
+	/**
+	 * The R-component of this {@code Color3F} instance.
+	 */
+	public final float r;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -278,7 +289,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public Color3F(final Color3D color) {
-		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()));
+		this(toFloat(color.r), toFloat(color.g), toFloat(color.b));
 	}
 	
 	/**
@@ -291,7 +302,7 @@ public final class Color3F {
 	 */
 //	TODO: Add Unit Tests!
 	public Color3F(final Color4D color) {
-		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()));
+		this(toFloat(color.r), toFloat(color.g), toFloat(color.b));
 	}
 	
 	/**
@@ -303,7 +314,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public Color3F(final Color4F color) {
-		this(color.getComponent1(), color.getComponent2(), color.getComponent3());
+		this(color.r, color.g, color.b);
 	}
 	
 	/**
@@ -323,16 +334,16 @@ public final class Color3F {
 	}
 	
 	/**
-	 * Constructs a new {@code Color3F} instance given the component values {@code component1}, {@code component2} and {@code component3}.
+	 * Constructs a new {@code Color3F} instance given the component values {@code r}, {@code g} and {@code b}.
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
+	 * @param r the value of component 1
+	 * @param g the value of component 2
+	 * @param b the value of component 3
 	 */
-	public Color3F(final float component1, final float component2, final float component3) {
-		this.component1 = component1;
-		this.component2 = component2;
-		this.component3 = component3;
+	public Color3F(final float r, final float g, final float b) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
 	}
 	
 	/**
@@ -352,21 +363,21 @@ public final class Color3F {
 	}
 	
 	/**
-	 * Constructs a new {@code Color3F} instance given the component values {@code component1}, {@code component2} and {@code component3}.
+	 * Constructs a new {@code Color3F} instance given the component values {@code r}, {@code g} and {@code b}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Color3F(Ints.saturate(component1) / 255.0F, Ints.saturate(component2) / 255.0F, Ints.saturate(component3) / 255.0F);
+	 * new Color3F(Ints.saturate(r) / 255.0F, Ints.saturate(g) / 255.0F, Ints.saturate(b) / 255.0F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param component1 the value of component 1
-	 * @param component2 the value of component 2
-	 * @param component3 the value of component 3
+	 * @param r the value of component 1
+	 * @param g the value of component 2
+	 * @param b the value of component 3
 	 */
-	public Color3F(final int component1, final int component2, final int component3) {
-		this(Ints.saturate(component1) / 255.0F, Ints.saturate(component2) / 255.0F, Ints.saturate(component3) / 255.0F);
+	public Color3F(final int r, final int g, final int b) {
+		this(Ints.saturate(r) / 255.0F, Ints.saturate(g) / 255.0F, Ints.saturate(b) / 255.0F);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -378,7 +389,7 @@ public final class Color3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Color3F(%s, %s, %s)", Strings.toNonScientificNotationJava(this.component1), Strings.toNonScientificNotationJava(this.component2), Strings.toNonScientificNotationJava(this.component3));
+		return String.format("new Color3F(%s, %s, %s)", Strings.toNonScientificNotationJava(this.r), Strings.toNonScientificNotationJava(this.g), Strings.toNonScientificNotationJava(this.b));
 	}
 	
 	/**
@@ -394,11 +405,11 @@ public final class Color3F {
 			return true;
 		} else if(color == null) {
 			return false;
-		} else if(!equal(this.component1, color.component1)) {
+		} else if(!equal(this.r, color.r)) {
 			return false;
-		} else if(!equal(this.component2, color.component2)) {
+		} else if(!equal(this.g, color.g)) {
 			return false;
-		} else if(!equal(this.component3, color.component3)) {
+		} else if(!equal(this.b, color.b)) {
 			return false;
 		} else {
 			return true;
@@ -430,7 +441,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color3F} instance is infinite, {@code false} otherwise
 	 */
 	public boolean hasInfinites() {
-		return isInfinite(this.component1) || isInfinite(this.component2) || isInfinite(this.component3);
+		return isInfinite(this.r) || isInfinite(this.g) || isInfinite(this.b);
 	}
 	
 	/**
@@ -439,7 +450,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color3F} instance is equal to {@code Float.NaN}, {@code false} otherwise
 	 */
 	public boolean hasNaNs() {
-		return isNaN(this.component1) || isNaN(this.component2) || isNaN(this.component3);
+		return isNaN(this.r) || isNaN(this.g) || isNaN(this.b);
 	}
 	
 	/**
@@ -450,7 +461,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is black, {@code false} otherwise
 	 */
 	public boolean isBlack() {
-		return isGrayscale() && isZero(this.component1);
+		return isGrayscale() && isZero(this.r);
 	}
 	
 	/**
@@ -472,14 +483,14 @@ public final class Color3F {
 	/**
 	 * Returns {@code true} if, and only if, this {@code Color3F} instance is considered blue, {@code false} otherwise.
 	 * <p>
-	 * The {@code Color3F} instance {@code color} is considered blue if, and only if, {@code color.getB() - thresholdR >= color.getR()} and {@code color.getB() - thresholdG >= color.getG()}.
+	 * The {@code Color3F} instance {@code color} is considered blue if, and only if, {@code color.b - thresholdR >= color.r} and {@code color.b - thresholdG >= color.g}.
 	 * 
 	 * @param thresholdR the threshold for the R-component
 	 * @param thresholdG the threshold for the G-component
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is considered blue, {@code false} otherwise
 	 */
 	public boolean isBlue(final float thresholdR, final float thresholdG) {
-		return getB() - thresholdR >= getR() && getB() - thresholdG >= getG();
+		return this.b - thresholdR >= this.r && this.b - thresholdG >= this.g;
 	}
 	
 	/**
@@ -488,7 +499,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is considered cyan, {@code false} otherwise
 	 */
 	public boolean isCyan() {
-		return equal(this.component2, this.component3) && this.component1 < this.component2;
+		return equal(this.g, this.b) && this.r < this.g;
 	}
 	
 	/**
@@ -499,7 +510,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is a grayscale color, {@code false} otherwise
 	 */
 	public boolean isGrayscale() {
-		return equal(this.component1, this.component2, this.component3);
+		return equal(this.r, this.g, this.b);
 	}
 	
 	/**
@@ -521,14 +532,14 @@ public final class Color3F {
 	/**
 	 * Returns {@code true} if, and only if, this {@code Color3F} instance is considered green, {@code false} otherwise.
 	 * <p>
-	 * The {@code Color3F} instance {@code color} is considered green if, and only if, {@code color.getG() - thresholdR >= color.getR()} and {@code color.getG() - thresholdB >= color.getB()}.
+	 * The {@code Color3F} instance {@code color} is considered green if, and only if, {@code color.g - thresholdR >= color.r} and {@code color.g - thresholdB >= color.b}.
 	 * 
 	 * @param thresholdR the threshold for the R-component
 	 * @param thresholdB the threshold for the B-component
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is considered green, {@code false} otherwise
 	 */
 	public boolean isGreen(final float thresholdR, final float thresholdB) {
-		return getG() - thresholdR >= getR() && getG() - thresholdB >= getB();
+		return this.g - thresholdR >= this.r && this.g - thresholdB >= this.b;
 	}
 	
 	/**
@@ -537,7 +548,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is considered magenta, {@code false} otherwise
 	 */
 	public boolean isMagenta() {
-		return equal(this.component1, this.component3) && this.component2 < this.component3;
+		return equal(this.r, this.b) && this.g < this.b;
 	}
 	
 	/**
@@ -559,14 +570,14 @@ public final class Color3F {
 	/**
 	 * Returns {@code true} if, and only if, this {@code Color3F} instance is considered red, {@code false} otherwise.
 	 * <p>
-	 * The {@code Color3F} instance {@code color} is considered red if, and only if, {@code color.getR() - thresholdG >= color.getG()} and {@code color.getR() - thresholdB >= color.getB()}.
+	 * The {@code Color3F} instance {@code color} is considered red if, and only if, {@code color.r - thresholdG >= color.g} and {@code color.r - thresholdB >= color.b}.
 	 * 
 	 * @param thresholdG the threshold for the G-component
 	 * @param thresholdB the threshold for the B-component
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is considered red, {@code false} otherwise
 	 */
 	public boolean isRed(final float thresholdG, final float thresholdB) {
-		return getR() - thresholdG >= getG() && getR() - thresholdB >= getB();
+		return this.r - thresholdG >= this.g && this.r - thresholdB >= this.b;
 	}
 	
 	/**
@@ -577,7 +588,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is white, {@code false} otherwise
 	 */
 	public boolean isWhite() {
-		return isGrayscale() && this.component1 >= 1.0F;
+		return isGrayscale() && this.r >= 1.0F;
 	}
 	
 	/**
@@ -586,106 +597,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is considered yellow, {@code false} otherwise
 	 */
 	public boolean isYellow() {
-		return equal(this.component1, this.component2) && this.component3 < this.component1;
-	}
-	
-	/**
-	 * Returns the value of the B-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the B-component as a {@code byte}
-	 */
-	public byte getAsByteB() {
-		return (byte)(getAsIntB() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of component 1 as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 1 as a {@code byte}
-	 */
-	public byte getAsByteComponent1() {
-		return (byte)(getAsIntComponent1() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of component 2 as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 2 as a {@code byte}
-	 */
-	public byte getAsByteComponent2() {
-		return (byte)(getAsIntComponent2() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of component 3 as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 3 as a {@code byte}
-	 */
-	public byte getAsByteComponent3() {
-		return (byte)(getAsIntComponent3() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the G-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the G-component as a {@code byte}
-	 */
-	public byte getAsByteG() {
-		return (byte)(getAsIntG() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the R-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the R-component as a {@code byte}
-	 */
-	public byte getAsByteR() {
-		return (byte)(getAsIntR() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the X-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the X-component as a {@code byte}
-	 */
-	public byte getAsByteX() {
-		return (byte)(getAsIntX() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the Y-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Y-component as a {@code byte}
-	 */
-	public byte getAsByteY() {
-		return (byte)(getAsIntY() & 0xFF);
-	}
-	
-	/**
-	 * Returns the value of the Z-component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Z-component as a {@code byte}
-	 */
-	public byte getAsByteZ() {
-		return (byte)(getAsIntZ() & 0xFF);
+		return equal(this.r, this.g) && this.b < this.r;
 	}
 	
 	/**
@@ -694,88 +606,7 @@ public final class Color3F {
 	 * @return the average component value of this {@code Color3F} instance
 	 */
 	public float average() {
-		return (this.component1 + this.component2 + this.component3) / 3.0F;
-	}
-	
-	/**
-	 * Returns the value of the B-component.
-	 * 
-	 * @return the value of the B-component
-	 */
-	public float getB() {
-		return this.component3;
-	}
-	
-	/**
-	 * Returns the value of component 1.
-	 * 
-	 * @return the value of component 1
-	 */
-	public float getComponent1() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of component 2.
-	 * 
-	 * @return the value of component 2
-	 */
-	public float getComponent2() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of component 3.
-	 * 
-	 * @return the value of component 3
-	 */
-	public float getComponent3() {
-		return this.component3;
-	}
-	
-	/**
-	 * Returns the value of the G-component.
-	 * 
-	 * @return the value of the G-component
-	 */
-	public float getG() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the R-component.
-	 * 
-	 * @return the value of the R-component
-	 */
-	public float getR() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the X-component.
-	 * 
-	 * @return the value of the X-component
-	 */
-	public float getX() {
-		return this.component1;
-	}
-	
-	/**
-	 * Returns the value of the Y-component.
-	 * 
-	 * @return the value of the Y-component
-	 */
-	public float getY() {
-		return this.component2;
-	}
-	
-	/**
-	 * Returns the value of the Z-component.
-	 * 
-	 * @return the value of the Z-component
-	 */
-	public float getZ() {
-		return this.component3;
+		return (this.r + this.g + this.b) / 3.0F;
 	}
 	
 	/**
@@ -795,7 +626,7 @@ public final class Color3F {
 	 * @return the relative luminance of this {@code Color3F} instance
 	 */
 	public float luminance() {
-		return this.component1 * 0.212671F + this.component2 * 0.715160F + this.component3 * 0.072169F;
+		return this.r * 0.212671F + this.g * 0.715160F + this.b * 0.072169F;
 	}
 	
 	/**
@@ -804,7 +635,7 @@ public final class Color3F {
 	 * @return the largest component value
 	 */
 	public float maximum() {
-		return max(this.component1, this.component2, this.component3);
+		return max(this.r, this.g, this.b);
 	}
 	
 	/**
@@ -813,106 +644,7 @@ public final class Color3F {
 	 * @return the smallest component value
 	 */
 	public float minimum() {
-		return min(this.component1, this.component2, this.component3);
-	}
-	
-	/**
-	 * Returns the value of the B-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the B-component as an {@code int}
-	 */
-	public int getAsIntB() {
-		return toInt(Floats.saturate(getB()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of component 1 as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 1 as an {@code int}
-	 */
-	public int getAsIntComponent1() {
-		return toInt(Floats.saturate(getComponent1()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of component 2 as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 2 as an {@code int}
-	 */
-	public int getAsIntComponent2() {
-		return toInt(Floats.saturate(getComponent2()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of component 3 as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of component 3 as an {@code int}
-	 */
-	public int getAsIntComponent3() {
-		return toInt(Floats.saturate(getComponent3()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the G-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the G-component as an {@code int}
-	 */
-	public int getAsIntG() {
-		return toInt(Floats.saturate(getG()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the R-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the R-component as an {@code int}
-	 */
-	public int getAsIntR() {
-		return toInt(Floats.saturate(getR()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the X-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the X-component as an {@code int}
-	 */
-	public int getAsIntX() {
-		return toInt(Floats.saturate(getX()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the Y-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Y-component as an {@code int}
-	 */
-	public int getAsIntY() {
-		return toInt(Floats.saturate(getY()) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns the value of the Z-component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Z-component as an {@code int}
-	 */
-	public int getAsIntZ() {
-		return toInt(Floats.saturate(getZ()) * 255.0F + 0.5F);
+		return min(this.r, this.g, this.b);
 	}
 	
 	/**
@@ -922,7 +654,7 @@ public final class Color3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
+		return Objects.hash(Float.valueOf(this.r), Float.valueOf(this.g), Float.valueOf(this.b));
 	}
 	
 	/**
@@ -955,9 +687,9 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
 	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
-		final int r = getAsIntR();
-		final int g = getAsIntG();
-		final int b = getAsIntB();
+		final int r = toInt(Floats.saturate(this.r) * 255.0F + 0.5F);
+		final int g = toInt(Floats.saturate(this.g) * 255.0F + 0.5F);
+		final int b = toInt(Floats.saturate(this.b) * 255.0F + 0.5F);
 		
 		return packedIntComponentOrder.pack(r, g, b, 255);
 	}
@@ -969,7 +701,7 @@ public final class Color3F {
 	 */
 //	TODO: Add Unit Tests!
 	public int toRGBE() {
-		final float maximum = max(this.component1, this.component2, this.component3);
+		final float maximum = max(this.r, this.g, this.b);
 		
 		if(maximum < 1.0e-32F) {
 			return 0;
@@ -997,9 +729,9 @@ public final class Color3F {
 //		Performing multiple conversions seems to decrease the values over time.
 		final float multiplier = (mantissa * 255.0F) / maximum;
 		
-		final int r = toInt(this.component1 * multiplier) << 24;
-		final int g = toInt(this.component2 * multiplier) << 16;
-		final int b = toInt(this.component3 * multiplier) <<  8;
+		final int r = toInt(this.r * multiplier) << 24;
+		final int g = toInt(this.g * multiplier) << 16;
+		final int b = toInt(this.b * multiplier) <<  8;
 		final int e = exponent + 128;
 		
 		final int colorRGBE = r | g | b | e;
@@ -1020,9 +752,9 @@ public final class Color3F {
 	 */
 	public void write(final DataOutput dataOutput) {
 		try {
-			dataOutput.writeFloat(this.component1);
-			dataOutput.writeFloat(this.component2);
-			dataOutput.writeFloat(this.component3);
+			dataOutput.writeFloat(this.r);
+			dataOutput.writeFloat(this.g);
+			dataOutput.writeFloat(this.b);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -1043,11 +775,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
 	public static Color3F add(final Color3F colorLHS, final Color3F colorRHS) {
-		final float component1 = colorLHS.component1 + colorRHS.component1;
-		final float component2 = colorLHS.component2 + colorRHS.component2;
-		final float component3 = colorLHS.component3 + colorRHS.component3;
+		final float r = colorLHS.r + colorRHS.r;
+		final float g = colorLHS.g + colorRHS.g;
+		final float b = colorLHS.b + colorRHS.b;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1063,11 +795,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
 	public static Color3F add(final Color3F colorLHS, final float scalarRHS) {
-		final float component1 = colorLHS.component1 + scalarRHS;
-		final float component2 = colorLHS.component2 + scalarRHS;
-		final float component3 = colorLHS.component3 + scalarRHS;
+		final float r = colorLHS.r + scalarRHS;
+		final float g = colorLHS.g + scalarRHS;
+		final float b = colorLHS.b + scalarRHS;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1084,11 +816,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
 	 */
 	public static Color3F addAndMultiply(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB) {
-		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1;
-		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2;
-		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3;
+		final float r = colorAdd.r + colorMultiplyA.r * colorMultiplyB.r;
+		final float g = colorAdd.g + colorMultiplyA.g * colorMultiplyB.g;
+		final float b = colorAdd.b + colorMultiplyA.b * colorMultiplyB.b;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1106,11 +838,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
 	 */
 	public static Color3F addAndMultiply(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final float scalarMultiply) {
-		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * scalarMultiply;
-		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * scalarMultiply;
-		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3 * scalarMultiply;
+		final float r = colorAdd.r + colorMultiplyA.r * colorMultiplyB.r * scalarMultiply;
+		final float g = colorAdd.g + colorMultiplyA.g * colorMultiplyB.g * scalarMultiply;
+		final float b = colorAdd.b + colorMultiplyA.b * colorMultiplyB.b * scalarMultiply;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1137,11 +869,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA}, {@code colorMultiplyB} or {@code colorMultiplyC} are {@code null}
 	 */
 	public static Color3F addMultiplyAndDivide(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final Color3F colorMultiplyC, final float scalarMultiply, final float scalarDivide) {
-		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * colorMultiplyC.component1 * scalarMultiply / scalarDivide;
-		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * colorMultiplyC.component2 * scalarMultiply / scalarDivide;
-		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3 * colorMultiplyC.component3 * scalarMultiply / scalarDivide;
+		final float r = colorAdd.r + colorMultiplyA.r * colorMultiplyB.r * colorMultiplyC.r * scalarMultiply / scalarDivide;
+		final float g = colorAdd.g + colorMultiplyA.g * colorMultiplyB.g * colorMultiplyC.g * scalarMultiply / scalarDivide;
+		final float b = colorAdd.b + colorMultiplyA.b * colorMultiplyB.b * colorMultiplyC.b * scalarMultiply / scalarDivide;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1166,11 +898,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
 	 */
 	public static Color3F addMultiplyAndDivide(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final float scalarDivide) {
-		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 / scalarDivide;
-		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 / scalarDivide;
-		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3 / scalarDivide;
+		final float r = colorAdd.r + colorMultiplyA.r * colorMultiplyB.r / scalarDivide;
+		final float g = colorAdd.g + colorMultiplyA.g * colorMultiplyB.g / scalarDivide;
+		final float b = colorAdd.b + colorMultiplyA.b * colorMultiplyB.b / scalarDivide;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1196,11 +928,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
 	 */
 	public static Color3F addMultiplyAndDivide(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final float scalarMultiply, final float scalarDivide) {
-		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * scalarMultiply / scalarDivide;
-		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * scalarMultiply / scalarDivide;
-		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3 * scalarMultiply / scalarDivide;
+		final float r = colorAdd.r + colorMultiplyA.r * colorMultiplyB.r * scalarMultiply / scalarDivide;
+		final float g = colorAdd.g + colorMultiplyA.g * colorMultiplyB.g * scalarMultiply / scalarDivide;
+		final float b = colorAdd.b + colorMultiplyA.b * colorMultiplyB.b * scalarMultiply / scalarDivide;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1219,11 +951,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
 	public static Color3F addSample(final Color3F colorLHS, final Color3F colorRHS, final int sampleCount) {
-		final float component1 = colorLHS.component1 + ((colorRHS.component1 - colorLHS.component1) / sampleCount);
-		final float component2 = colorLHS.component2 + ((colorRHS.component2 - colorLHS.component2) / sampleCount);
-		final float component3 = colorLHS.component3 + ((colorRHS.component3 - colorLHS.component3) / sampleCount);
+		final float r = colorLHS.r + ((colorRHS.r - colorLHS.r) / sampleCount);
+		final float g = colorLHS.g + ((colorRHS.g - colorLHS.g) / sampleCount);
+		final float b = colorLHS.b + ((colorRHS.b - colorLHS.b) / sampleCount);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1317,11 +1049,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
 	public static Color3F blend(final Color3F colorLHS, final Color3F colorRHS, final float tComponent1, final float tComponent2, final float tComponent3) {
-		final float component1 = lerp(colorLHS.component1, colorRHS.component1, tComponent1);
-		final float component2 = lerp(colorLHS.component2, colorRHS.component2, tComponent2);
-		final float component3 = lerp(colorLHS.component3, colorRHS.component3, tComponent3);
+		final float r = lerp(colorLHS.r, colorRHS.r, tComponent1);
+		final float g = lerp(colorLHS.g, colorRHS.g, tComponent2);
+		final float b = lerp(colorLHS.b, colorRHS.b, tComponent3);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1337,11 +1069,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
 	public static Color3F divide(final Color3F colorLHS, final Color3F colorRHS) {
-		final float component1 = finiteOrDefault(colorLHS.component1 / colorRHS.component1, 0.0F);
-		final float component2 = finiteOrDefault(colorLHS.component2 / colorRHS.component2, 0.0F);
-		final float component3 = finiteOrDefault(colorLHS.component3 / colorRHS.component3, 0.0F);
+		final float r = finiteOrDefault(colorLHS.r / colorRHS.r, 0.0F);
+		final float g = finiteOrDefault(colorLHS.g / colorRHS.g, 0.0F);
+		final float b = finiteOrDefault(colorLHS.b / colorRHS.b, 0.0F);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1357,11 +1089,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
 	public static Color3F divide(final Color3F colorLHS, final float scalarRHS) {
-		final float component1 = finiteOrDefault(colorLHS.component1 / scalarRHS, 0.0F);
-		final float component2 = finiteOrDefault(colorLHS.component2 / scalarRHS, 0.0F);
-		final float component3 = finiteOrDefault(colorLHS.component3 / scalarRHS, 0.0F);
+		final float r = finiteOrDefault(colorLHS.r / scalarRHS, 0.0F);
+		final float g = finiteOrDefault(colorLHS.g / scalarRHS, 0.0F);
+		final float b = finiteOrDefault(colorLHS.b / scalarRHS, 0.0F);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1374,11 +1106,11 @@ public final class Color3F {
 	public static Color3F fromRGBE(final int colorRGBE) {
 		final float exponent = R_G_B_EXPONENTS[colorRGBE & 0xFF];
 		
-		final float component1 = exponent * ((colorRGBE >>> 24)         + 0.5F);
-		final float component2 = exponent * (((colorRGBE >> 16) & 0xFF) + 0.5F);
-		final float component3 = exponent * (((colorRGBE >>  8) & 0xFF) + 0.5F);
+		final float r = exponent * ((colorRGBE >>> 24)         + 0.5F);
+		final float g = exponent * (((colorRGBE >> 16) & 0xFF) + 0.5F);
+		final float b = exponent * (((colorRGBE >>  8) & 0xFF) + 0.5F);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1404,7 +1136,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F grayscaleComponent1(final Color3F color) {
-		return new Color3F(color.component1);
+		return new Color3F(color.r);
 	}
 	
 	/**
@@ -1417,7 +1149,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F grayscaleComponent2(final Color3F color) {
-		return new Color3F(color.component2);
+		return new Color3F(color.g);
 	}
 	
 	/**
@@ -1430,7 +1162,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F grayscaleComponent3(final Color3F color) {
-		return new Color3F(color.component3);
+		return new Color3F(color.b);
 	}
 	
 	/**
@@ -1497,11 +1229,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F invert(final Color3F color) {
-		final float component1 = 1.0F - color.component1;
-		final float component2 = 1.0F - color.component2;
-		final float component3 = 1.0F - color.component3;
+		final float r = 1.0F - color.r;
+		final float g = 1.0F - color.g;
+		final float b = 1.0F - color.b;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1515,11 +1247,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
 	public static Color3F maximum(final Color3F colorA, final Color3F colorB) {
-		final float component1 = max(colorA.component1, colorB.component1);
-		final float component2 = max(colorA.component2, colorB.component2);
-		final float component3 = max(colorA.component3, colorB.component3);
+		final float r = max(colorA.r, colorB.r);
+		final float g = max(colorA.g, colorB.g);
+		final float b = max(colorA.b, colorB.b);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1552,11 +1284,11 @@ public final class Color3F {
 		final float maximum = color.maximum();
 		
 		if(maximum > 1.0F) {
-			final float component1 = color.component1 / maximum;
-			final float component2 = color.component2 / maximum;
-			final float component3 = color.component3 / maximum;
+			final float r = color.r / maximum;
+			final float g = color.g / maximum;
+			final float b = color.b / maximum;
 			
-			return new Color3F(component1, component2, component3);
+			return new Color3F(r, g, b);
 		}
 		
 		return color;
@@ -1573,11 +1305,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
 	public static Color3F minimum(final Color3F colorA, final Color3F colorB) {
-		final float component1 = min(colorA.component1, colorB.component1);
-		final float component2 = min(colorA.component2, colorB.component2);
-		final float component3 = min(colorA.component3, colorB.component3);
+		final float r = min(colorA.r, colorB.r);
+		final float g = min(colorA.g, colorB.g);
+		final float b = min(colorA.b, colorB.b);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1610,11 +1342,11 @@ public final class Color3F {
 		final float minimum = color.minimum();
 		
 		if(minimum < 0.0F) {
-			final float component1 = color.component1 + -minimum;
-			final float component2 = color.component2 + -minimum;
-			final float component3 = color.component3 + -minimum;
+			final float r = color.r + -minimum;
+			final float g = color.g + -minimum;
+			final float b = color.b + -minimum;
 			
-			return new Color3F(component1, component2, component3);
+			return new Color3F(r, g, b);
 		}
 		
 		return color;
@@ -1633,11 +1365,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
 	public static Color3F multiply(final Color3F colorLHS, final Color3F colorRHS) {
-		final float component1 = colorLHS.component1 * colorRHS.component1;
-		final float component2 = colorLHS.component2 * colorRHS.component2;
-		final float component3 = colorLHS.component3 * colorRHS.component3;
+		final float r = colorLHS.r * colorRHS.r;
+		final float g = colorLHS.g * colorRHS.g;
+		final float b = colorLHS.b * colorRHS.b;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1654,11 +1386,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}
 	 */
 	public static Color3F multiply(final Color3F colorA, final Color3F colorB, final Color3F colorC) {
-		final float component1 = colorA.component1 * colorB.component1 * colorC.component1;
-		final float component2 = colorA.component2 * colorB.component2 * colorC.component2;
-		final float component3 = colorA.component3 * colorB.component3 * colorC.component3;
+		final float r = colorA.r * colorB.r * colorC.r;
+		final float g = colorA.g * colorB.g * colorC.g;
+		final float b = colorA.b * colorB.b * colorC.b;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1676,11 +1408,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB}, {@code colorC} or {@code colorD} are {@code null}
 	 */
 	public static Color3F multiply(final Color3F colorA, final Color3F colorB, final Color3F colorC, final Color3F colorD) {
-		final float component1 = colorA.component1 * colorB.component1 * colorC.component1 * colorD.component1;
-		final float component2 = colorA.component2 * colorB.component2 * colorC.component2 * colorD.component2;
-		final float component3 = colorA.component3 * colorB.component3 * colorC.component3 * colorD.component3;
+		final float r = colorA.r * colorB.r * colorC.r * colorD.r;
+		final float g = colorA.g * colorB.g * colorC.g * colorD.g;
+		final float b = colorA.b * colorB.b * colorC.b * colorD.b;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1697,11 +1429,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
 	public static Color3F multiply(final Color3F colorA, final Color3F colorB, final float scalarC) {
-		final float component1 = colorA.component1 * colorB.component1 * scalarC;
-		final float component2 = colorA.component2 * colorB.component2 * scalarC;
-		final float component3 = colorA.component3 * colorB.component3 * scalarC;
+		final float r = colorA.r * colorB.r * scalarC;
+		final float g = colorA.g * colorB.g * scalarC;
+		final float b = colorA.b * colorB.b * scalarC;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1717,11 +1449,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
 	public static Color3F multiply(final Color3F colorLHS, final float scalarRHS) {
-		final float component1 = colorLHS.component1 * scalarRHS;
-		final float component2 = colorLHS.component2 * scalarRHS;
-		final float component3 = colorLHS.component3 * scalarRHS;
+		final float r = colorLHS.r * scalarRHS;
+		final float g = colorLHS.g * scalarRHS;
+		final float b = colorLHS.b * scalarRHS;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1737,11 +1469,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
 	public static Color3F multiplyAndSaturateNegative(final Color3F colorLHS, final float scalarRHS) {
-		final float component1 = max(colorLHS.component1 * scalarRHS, 0.0F);
-		final float component2 = max(colorLHS.component2 * scalarRHS, 0.0F);
-		final float component3 = max(colorLHS.component3 * scalarRHS, 0.0F);
+		final float r = max(colorLHS.r * scalarRHS, 0.0F);
+		final float g = max(colorLHS.g * scalarRHS, 0.0F);
+		final float b = max(colorLHS.b * scalarRHS, 0.0F);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1756,11 +1488,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F negate(final Color3F color) {
-		final float component1 = -color.component1;
-		final float component2 = -color.component2;
-		final float component3 = -color.component3;
+		final float r = -color.r;
+		final float g = -color.g;
+		final float b = -color.b;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1775,7 +1507,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F normalize(final Color3F color) {
-		final float sum = color.component1 + color.component2 + color.component3;
+		final float sum = color.r + color.g + color.b;
 		
 		if(sum < 0.000001F) {
 			return color;
@@ -1783,11 +1515,11 @@ public final class Color3F {
 		
 		final float sumReciprocal = 1.0F / sum;
 		
-		final float component1 = color.component1 * sumReciprocal;
-		final float component2 = color.component2 * sumReciprocal;
-		final float component3 = color.component3 * sumReciprocal;
+		final float r = color.r * sumReciprocal;
+		final float g = color.g * sumReciprocal;
+		final float b = color.b * sumReciprocal;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1824,11 +1556,11 @@ public final class Color3F {
 	 * @return a {@code Color3F} instance with random component values
 	 */
 	public static Color3F random() {
-		final float component1 = Floats.random();
-		final float component2 = Floats.random();
-		final float component3 = Floats.random();
+		final float r = Floats.random();
+		final float g = Floats.random();
+		final float b = Floats.random();
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1844,11 +1576,11 @@ public final class Color3F {
 	 * @return a {@code Color3F} instance with a random component 1 value
 	 */
 	public static Color3F randomComponent1() {
-		final float component1 = Floats.random();
-		final float component2 = 0.0F;
-		final float component3 = 0.0F;
+		final float r = Floats.random();
+		final float g = 0.0F;
+		final float b = 0.0F;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1864,11 +1596,11 @@ public final class Color3F {
 	 * @return a {@code Color3F} instance with a random component 2 value
 	 */
 	public static Color3F randomComponent2() {
-		final float component1 = 0.0F;
-		final float component2 = Floats.random();
-		final float component3 = 0.0F;
+		final float r = 0.0F;
+		final float g = Floats.random();
+		final float b = 0.0F;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1884,11 +1616,11 @@ public final class Color3F {
 	 * @return a {@code Color3F} instance with a random component 3 value
 	 */
 	public static Color3F randomComponent3() {
-		final float component1 = 0.0F;
-		final float component2 = 0.0F;
-		final float component3 = Floats.random();
+		final float r = 0.0F;
+		final float g = 0.0F;
+		final float b = Floats.random();
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1905,11 +1637,11 @@ public final class Color3F {
 	 */
 	public static Color3F read(final DataInput dataInput) {
 		try {
-			final float component1 = dataInput.readFloat();
-			final float component2 = dataInput.readFloat();
-			final float component3 = dataInput.readFloat();
+			final float r = dataInput.readFloat();
+			final float g = dataInput.readFloat();
+			final float b = dataInput.readFloat();
 			
-			return new Color3F(component1, component2, component3);
+			return new Color3F(r, g, b);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -1951,11 +1683,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F saturate(final Color3F color, final float edgeA, final float edgeB) {
-		final float component1 = Floats.saturate(color.component1, edgeA, edgeB);
-		final float component2 = Floats.saturate(color.component2, edgeA, edgeB);
-		final float component3 = Floats.saturate(color.component3, edgeA, edgeB);
+		final float r = Floats.saturate(color.r, edgeA, edgeB);
+		final float g = Floats.saturate(color.g, edgeA, edgeB);
+		final float b = Floats.saturate(color.b, edgeA, edgeB);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1970,11 +1702,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F sepia(final Color3F color) {
-		final float component1 = color.component1 * 0.393F + color.component2 * 0.769F + color.component3 * 0.189F;
-		final float component2 = color.component1 * 0.349F + color.component2 * 0.686F + color.component3 * 0.168F;
-		final float component3 = color.component1 * 0.272F + color.component2 * 0.534F + color.component3 * 0.131F;
+		final float r = color.r * 0.393F + color.g * 0.769F + color.b * 0.189F;
+		final float g = color.r * 0.349F + color.g * 0.686F + color.b * 0.168F;
+		final float b = color.r * 0.272F + color.g * 0.534F + color.b * 0.131F;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -1987,11 +1719,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F sqrt(final Color3F color) {
-		final float component1 = Floats.sqrt(color.component1);
-		final float component2 = Floats.sqrt(color.component2);
-		final float component3 = Floats.sqrt(color.component3);
+		final float r = Floats.sqrt(color.r);
+		final float g = Floats.sqrt(color.g);
+		final float b = Floats.sqrt(color.b);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -2007,53 +1739,53 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
 	public static Color3F subtract(final Color3F colorLHS, final Color3F colorRHS) {
-		final float component1 = colorLHS.component1 - colorRHS.component1;
-		final float component2 = colorLHS.component2 - colorRHS.component2;
-		final float component3 = colorLHS.component3 - colorRHS.component3;
+		final float r = colorLHS.r - colorRHS.r;
+		final float g = colorLHS.g - colorRHS.g;
+		final float b = colorLHS.b - colorRHS.b;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
-	 * Subtracts the component values of {@code b} from the component values of {@code a} and the component values of {@code c} from the previous result.
+	 * Subtracts the component values of {@code colorB} from the component values of {@code colorA} and the component values of {@code colorC} from the previous result.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param a a {@code Color3F} instance
-	 * @param b a {@code Color3F} instance
-	 * @param c a {@code Color3F} instance
+	 * @param colorA a {@code Color3F} instance
+	 * @param colorB a {@code Color3F} instance
+	 * @param colorC a {@code Color3F} instance
 	 * @return a new {@code Color3F} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}
 	 */
-	public static Color3F subtract(final Color3F a, final Color3F b, final Color3F c) {
-		final float component1 = a.component1 - b.component1 - c.component1;
-		final float component2 = a.component2 - b.component2 - c.component2;
-		final float component3 = a.component3 - b.component3 - c.component3;
+	public static Color3F subtract(final Color3F colorA, final Color3F colorB, final Color3F colorC) {
+		final float r = colorA.r - colorB.r - colorC.r;
+		final float g = colorA.g - colorB.g - colorC.g;
+		final float b = colorA.b - colorB.b - colorC.b;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
-	 * Subtracts the component values of {@code b} from the component values of {@code a} and {@code c} from the previous result.
+	 * Subtracts the component values of {@code colorB} from the component values of {@code colorA} and {@code valueC} from the previous result.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorA} or {@code colorB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param a a {@code Color3F} instance
-	 * @param b a {@code Color3F} instance
-	 * @param c a {@code float} value
+	 * @param colorA a {@code Color3F} instance
+	 * @param colorB a {@code Color3F} instance
+	 * @param valueC a {@code float} value
 	 * @return a new {@code Color3F} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
 	 */
-	public static Color3F subtract(final Color3F a, final Color3F b, final float c) {
-		final float component1 = a.component1 - b.component1 - c;
-		final float component2 = a.component2 - b.component2 - c;
-		final float component3 = a.component3 - b.component3 - c;
+	public static Color3F subtract(final Color3F colorA, final Color3F colorB, final float valueC) {
+		final float r = colorA.r - colorB.r - valueC;
+		final float g = colorA.g - colorB.g - valueC;
+		final float b = colorA.b - colorB.b - valueC;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -2069,11 +1801,11 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
 	public static Color3F subtract(final Color3F colorLHS, final float scalarRHS) {
-		final float component1 = colorLHS.component1 - scalarRHS;
-		final float component2 = colorLHS.component2 - scalarRHS;
-		final float component3 = colorLHS.component3 - scalarRHS;
+		final float r = colorLHS.r - scalarRHS;
+		final float g = colorLHS.g - scalarRHS;
+		final float b = colorLHS.b - scalarRHS;
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -2115,8 +1847,8 @@ public final class Color3F {
 	 * This method is implemented in the following way for each component:
 	 * <pre>
 	 * {@code
-	 * float component11 = Floats.max(color.getComponent1() * exposure - subtract, minimum);
-	 * float component12 = Floats.saturate((component11 * (a * component11 + b)) / (component11 * (c * component11 + d) + e));
+	 * float r1 = Floats.max(color.getComponent1() * exposure - subtract, minimum);
+	 * float r2 = Floats.saturate((r1 * (a * r1 + b)) / (r1 * (c * r1 + d) + e));
 	 * }
 	 * </pre>
 	 * 
@@ -2134,15 +1866,15 @@ public final class Color3F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color3F toneMapFilmicCurve(final Color3F color, final float exposure, final float a, final float b, final float c, final float d, final float e, final float subtract, final float minimum) {
-		final float component11 = max(color.component1 * exposure - subtract, minimum);
-		final float component21 = max(color.component2 * exposure - subtract, minimum);
-		final float component31 = max(color.component3 * exposure - subtract, minimum);
+		final float r1 = max(color.r * exposure - subtract, minimum);
+		final float g1 = max(color.g * exposure - subtract, minimum);
+		final float b1 = max(color.b * exposure - subtract, minimum);
 		
-		final float component12 = Floats.saturate((component11 * (a * component11 + b)) / (component11 * (c * component11 + d) + e));
-		final float component22 = Floats.saturate((component21 * (a * component21 + b)) / (component21 * (c * component21 + d) + e));
-		final float component32 = Floats.saturate((component31 * (a * component31 + b)) / (component31 * (c * component31 + d) + e));
+		final float r2 = Floats.saturate((r1 * (a * r1 + b)) / (r1 * (c * r1 + d) + e));
+		final float g2 = Floats.saturate((g1 * (a * g1 + b)) / (g1 * (c * g1 + d) + e));
+		final float b2 = Floats.saturate((b1 * (a * b1 + b)) / (b1 * (c * b1 + d) + e));
 		
-		return new Color3F(component12, component22, component32);
+		return new Color3F(r2, g2, b2);
 	}
 	
 	/**
@@ -2213,15 +1945,15 @@ public final class Color3F {
 	public static Color3F toneMapReinhard(final Color3F color, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
-		final float component11 = color.component1 * exposure;
-		final float component21 = color.component2 * exposure;
-		final float component31 = color.component3 * exposure;
+		final float r1 = color.r * exposure;
+		final float g1 = color.g * exposure;
+		final float b1 = color.b * exposure;
 		
-		final float component12 = component11 / (1.0F + component11);
-		final float component22 = component21 / (1.0F + component21);
-		final float component32 = component31 / (1.0F + component31);
+		final float r2 = r1 / (1.0F + r1);
+		final float g2 = g1 / (1.0F + g1);
+		final float b2 = b1 / (1.0F + b1);
 		
-		return new Color3F(component12, component22, component32);
+		return new Color3F(r2, g2, b2);
 	}
 	
 	/**
@@ -2242,15 +1974,15 @@ public final class Color3F {
 		
 		final float lWhite = 4.0F;
 		
-		final float component11 = color.component1 * exposure;
-		final float component21 = color.component2 * exposure;
-		final float component31 = color.component3 * exposure;
+		final float r1 = color.r * exposure;
+		final float g1 = color.g * exposure;
+		final float b1 = color.b * exposure;
 		
-		final float component12 = component11 * (1.0F + component11 / (lWhite * lWhite)) / (1.0F + component11);
-		final float component22 = component21 * (1.0F + component21 / (lWhite * lWhite)) / (1.0F + component21);
-		final float component32 = component31 * (1.0F + component31 / (lWhite * lWhite)) / (1.0F + component31);
+		final float r2 = r1 * (1.0F + r1 / (lWhite * lWhite)) / (1.0F + r1);
+		final float g2 = g1 * (1.0F + g1 / (lWhite * lWhite)) / (1.0F + g1);
+		final float b2 = b1 * (1.0F + b1 / (lWhite * lWhite)) / (1.0F + b1);
 		
-		return new Color3F(component12, component22, component32);
+		return new Color3F(r2, g2, b2);
 	}
 	
 	/**
@@ -2267,15 +1999,15 @@ public final class Color3F {
 	 */
 //	TODO: Add Unit Tests!
 	public static Color3F toneMapReinhardModifiedVersion2(final Color3F color, final float exposure) {
-		final float component11 = color.component1 * exposure;
-		final float component21 = color.component2 * exposure;
-		final float component31 = color.component3 * exposure;
+		final float r1 = color.r * exposure;
+		final float g1 = color.g * exposure;
+		final float b1 = color.b * exposure;
 		
-		final float component12 = 1.0F - exp(-component11 * exposure);
-		final float component22 = 1.0F - exp(-component21 * exposure);
-		final float component32 = 1.0F - exp(-component31 * exposure);
+		final float r2 = 1.0F - exp(-r1 * exposure);
+		final float g2 = 1.0F - exp(-g1 * exposure);
+		final float b2 = 1.0F - exp(-b1 * exposure);
 		
-		return new Color3F(component12, component22, component32);
+		return new Color3F(r2, g2, b2);
 	}
 	
 	/**
@@ -2294,15 +2026,15 @@ public final class Color3F {
 	public static Color3F toneMapUnreal3(final Color3F color, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
-		final float component11 = color.component1 * exposure;
-		final float component21 = color.component2 * exposure;
-		final float component31 = color.component3 * exposure;
+		final float r1 = color.r * exposure;
+		final float g1 = color.g * exposure;
+		final float b1 = color.b * exposure;
 		
-		final float component12 = component11 / (component11 + 0.155F) * 1.019F;
-		final float component22 = component21 / (component21 + 0.155F) * 1.019F;
-		final float component32 = component31 / (component31 + 0.155F) * 1.019F;
+		final float r2 = r1 / (r1 + 0.155F) * 1.019F;
+		final float g2 = g1 / (g1 + 0.155F) * 1.019F;
+		final float b2 = b1 / (b1 + 0.155F) * 1.019F;
 		
-		return new Color3F(component12, component22, component32);
+		return new Color3F(r2, g2, b2);
 	}
 	
 	/**

@@ -149,9 +149,9 @@ public final class ColorSpaceF {
 	 */
 //	TODO: Add Unit Tests!
 	public Color3F convertRGBToXYZ(final Color3F colorRGB) {
-		final float r = colorRGB.getR();
-		final float g = colorRGB.getG();
-		final float b = colorRGB.getB();
+		final float r = colorRGB.r;
+		final float g = colorRGB.g;
+		final float b = colorRGB.b;
 		
 		final float x = this.matrixRGBToXYZ[0] * r + this.matrixRGBToXYZ[3] * g + this.matrixRGBToXYZ[6] * b;
 		final float y = this.matrixRGBToXYZ[1] * r + this.matrixRGBToXYZ[4] * g + this.matrixRGBToXYZ[7] * b;
@@ -173,9 +173,9 @@ public final class ColorSpaceF {
 	 */
 //	TODO: Add Unit Tests!
 	public Color3F convertXYZToRGB(final Color3F colorXYZ) {
-		final float x = colorXYZ.getX();
-		final float y = colorXYZ.getY();
-		final float z = colorXYZ.getZ();
+		final float x = colorXYZ.r;
+		final float y = colorXYZ.g;
+		final float z = colorXYZ.b;
 		
 		final float r = this.matrixXYZToRGB[0] * x + this.matrixXYZToRGB[1] * y + this.matrixXYZToRGB[2] * z;
 		final float g = this.matrixXYZToRGB[3] * x + this.matrixXYZToRGB[4] * y + this.matrixXYZToRGB[5] * z;
@@ -197,11 +197,11 @@ public final class ColorSpaceF {
 	 */
 //	TODO: Add Unit Tests!
 	public Color3F redoGammaCorrection(final Color3F color) {
-		final float component1 = doRedoGammaCorrection(color.getComponent1());
-		final float component2 = doRedoGammaCorrection(color.getComponent2());
-		final float component3 = doRedoGammaCorrection(color.getComponent3());
+		final float r = doRedoGammaCorrection(color.r);
+		final float g = doRedoGammaCorrection(color.g);
+		final float b = doRedoGammaCorrection(color.b);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -217,11 +217,11 @@ public final class ColorSpaceF {
 	 */
 //	TODO: Add Unit Tests!
 	public Color3F undoGammaCorrection(final Color3F color) {
-		final float component1 = doUndoGammaCorrection(color.getComponent1());
-		final float component2 = doUndoGammaCorrection(color.getComponent2());
-		final float component3 = doUndoGammaCorrection(color.getComponent3());
+		final float r = doUndoGammaCorrection(color.r);
+		final float g = doUndoGammaCorrection(color.g);
+		final float b = doUndoGammaCorrection(color.b);
 		
-		return new Color3F(component1, component2, component3);
+		return new Color3F(r, g, b);
 	}
 	
 	/**
@@ -237,10 +237,10 @@ public final class ColorSpaceF {
 	 */
 //	TODO: Add Unit Tests!
 	public Color4F convertRGBAToXYZA(final Color4F colorRGBA) {
-		final float r = colorRGBA.getR();
-		final float g = colorRGBA.getG();
-		final float b = colorRGBA.getB();
-		final float a = colorRGBA.getA();
+		final float r = colorRGBA.r;
+		final float g = colorRGBA.g;
+		final float b = colorRGBA.b;
+		final float a = colorRGBA.a;
 		
 		final float x = this.matrixRGBToXYZ[0] * r + this.matrixRGBToXYZ[3] * g + this.matrixRGBToXYZ[6] * b;
 		final float y = this.matrixRGBToXYZ[1] * r + this.matrixRGBToXYZ[4] * g + this.matrixRGBToXYZ[7] * b;
@@ -262,10 +262,10 @@ public final class ColorSpaceF {
 	 */
 //	TODO: Add Unit Tests!
 	public Color4F convertXYZAToRGBA(final Color4F colorXYZA) {
-		final float x = colorXYZA.getX();
-		final float y = colorXYZA.getY();
-		final float z = colorXYZA.getZ();
-		final float a = colorXYZA.getA();
+		final float x = colorXYZA.r;
+		final float y = colorXYZA.g;
+		final float z = colorXYZA.b;
+		final float a = colorXYZA.a;
 		
 		final float r = this.matrixXYZToRGB[0] * x + this.matrixXYZToRGB[1] * y + this.matrixXYZToRGB[2] * z;
 		final float g = this.matrixXYZToRGB[3] * x + this.matrixXYZToRGB[4] * y + this.matrixXYZToRGB[5] * z;
@@ -287,12 +287,12 @@ public final class ColorSpaceF {
 	 */
 //	TODO: Add Unit Tests!
 	public Color4F redoGammaCorrection(final Color4F color) {
-		final float component1 = doRedoGammaCorrection(color.getComponent1());
-		final float component2 = doRedoGammaCorrection(color.getComponent2());
-		final float component3 = doRedoGammaCorrection(color.getComponent3());
-		final float component4 = color.getComponent4();
+		final float r = doRedoGammaCorrection(color.r);
+		final float g = doRedoGammaCorrection(color.g);
+		final float b = doRedoGammaCorrection(color.b);
+		final float a = color.a;
 		
-		return new Color4F(component1, component2, component3, component4);
+		return new Color4F(r, g, b, a);
 	}
 	
 	/**
@@ -308,12 +308,12 @@ public final class ColorSpaceF {
 	 */
 //	TODO: Add Unit Tests!
 	public Color4F undoGammaCorrection(final Color4F color) {
-		final float component1 = doUndoGammaCorrection(color.getComponent1());
-		final float component2 = doUndoGammaCorrection(color.getComponent2());
-		final float component3 = doUndoGammaCorrection(color.getComponent3());
-		final float component4 = color.getComponent4();
+		final float r = doUndoGammaCorrection(color.r);
+		final float g = doUndoGammaCorrection(color.g);
+		final float b = doUndoGammaCorrection(color.b);
+		final float a = color.a;
 		
-		return new Color4F(component1, component2, component3, component4);
+		return new Color4F(r, g, b, a);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

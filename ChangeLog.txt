@@ -5,6 +5,7 @@
 	* ADD:		Add the ConvolutionKernelNF class.
 	* ADD:		Add new float-based methods to the Color class.
 	* CHANGE:	Update the Image 2 API.
+	* CHANGE:	Refactor the Color API and update all affected APIs.
 
 2022-07-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

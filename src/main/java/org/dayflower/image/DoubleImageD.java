@@ -661,10 +661,10 @@ public final class DoubleImageD extends ImageD {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
 		if(index >= 0 && index < getResolution()) {
-			this.data[index * 4 + 0] = colorRGBA.getR();
-			this.data[index * 4 + 1] = colorRGBA.getG();
-			this.data[index * 4 + 2] = colorRGBA.getB();
-			this.data[index * 4 + 3] = colorRGBA.getA();
+			this.data[index * 4 + 0] = colorRGBA.r;
+			this.data[index * 4 + 1] = colorRGBA.g;
+			this.data[index * 4 + 2] = colorRGBA.b;
+			this.data[index * 4 + 3] = colorRGBA.a;
 		}
 	}
 	

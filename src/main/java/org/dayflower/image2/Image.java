@@ -1361,7 +1361,7 @@ public final class Image {
 	public Image fillRegionColor4D(final int x, final int y, final BiFunction<Color4D, Point2I, Color4D> operator, final BiPredicate<Color4D, Point2I> filter) {
 		this.data.changeBegin();
 		
-		doFillRegionColor4D(x, y, operator, filter, getColorARGB(x, y));
+		doFillRegionColor4D(x, y, operator, filter, getColor4D(x, y));
 		
 		this.data.changeEnd();
 		
@@ -1476,7 +1476,7 @@ public final class Image {
 	public Image fillRegionColor4F(final int x, final int y, final BiFunction<Color4F, Point2I, Color4F> operator, final BiPredicate<Color4F, Point2I> filter) {
 		this.data.changeBegin();
 		
-		doFillRegionColor4F(x, y, operator, filter, getColorARGB(x, y));
+		doFillRegionColor4F(x, y, operator, filter, getColor4F(x, y));
 		
 		this.data.changeEnd();
 		
@@ -2724,7 +2724,7 @@ public final class Image {
 		return Arrays.stream(indices).filter(index -> index != -1).toArray();
 	}
 	
-	private void doFillRegionColor4D(final int x, final int y, final BiFunction<Color4D, Point2I, Color4D> operator, final BiPredicate<Color4D, Point2I> filter, final int oldColorARGB) {
+	private void doFillRegionColor4D(final int x, final int y, final BiFunction<Color4D, Point2I, Color4D> operator, final BiPredicate<Color4D, Point2I> filter, final Color4D oldColor) {
 		final int resolution = getResolution();
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
@@ -2761,28 +2761,28 @@ public final class Image {
 				
 				isFilled[currentY * resolutionX + currentX] = true;
 				
-				if(currentX + 1 <= maximumX && !isFilled[currentY * resolutionX + currentX + 1] && getColorARGB(currentX + 1, currentY) == oldColorARGB) {
+				if(currentX + 1 <= maximumX && !isFilled[currentY * resolutionX + currentX + 1] && getColor4D(currentX + 1, currentY).equals(oldColor)) {
 					stackX[stackLength] = currentX + 1;
 					stackY[stackLength] = currentY;
 					
 					stackLength++;
 				}
 				
-				if(currentX - 1 >= minimumX && !isFilled[currentY * resolutionX + currentX - 1] && getColorARGB(currentX - 1, currentY) == oldColorARGB) {
+				if(currentX - 1 >= minimumX && !isFilled[currentY * resolutionX + currentX - 1] && getColor4D(currentX - 1, currentY).equals(oldColor)) {
 					stackX[stackLength] = currentX - 1;
 					stackY[stackLength] = currentY;
 					
 					stackLength++;
 				}
 				
-				if(currentY + 1 <= maximumY && !isFilled[(currentY + 1) * resolutionX + currentX] && getColorARGB(currentX, currentY + 1) == oldColorARGB) {
+				if(currentY + 1 <= maximumY && !isFilled[(currentY + 1) * resolutionX + currentX] && getColor4D(currentX, currentY + 1).equals(oldColor)) {
 					stackX[stackLength] = currentX;
 					stackY[stackLength] = currentY + 1;
 					
 					stackLength++;
 				}
 				
-				if(currentY - 1 >= minimumY && !isFilled[(currentY - 1) * resolutionX + currentX] && getColorARGB(currentX, currentY - 1) == oldColorARGB) {
+				if(currentY - 1 >= minimumY && !isFilled[(currentY - 1) * resolutionX + currentX] && getColor4D(currentX, currentY - 1).equals(oldColor)) {
 					stackX[stackLength] = currentX;
 					stackY[stackLength] = currentY - 1;
 					
@@ -2792,7 +2792,7 @@ public final class Image {
 		}
 	}
 	
-	private void doFillRegionColor4F(final int x, final int y, final BiFunction<Color4F, Point2I, Color4F> operator, final BiPredicate<Color4F, Point2I> filter, final int oldColorARGB) {
+	private void doFillRegionColor4F(final int x, final int y, final BiFunction<Color4F, Point2I, Color4F> operator, final BiPredicate<Color4F, Point2I> filter, final Color4F oldColor) {
 		final int resolution = getResolution();
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
@@ -2829,28 +2829,28 @@ public final class Image {
 				
 				isFilled[currentY * resolutionX + currentX] = true;
 				
-				if(currentX + 1 <= maximumX && !isFilled[currentY * resolutionX + currentX + 1] && getColorARGB(currentX + 1, currentY) == oldColorARGB) {
+				if(currentX + 1 <= maximumX && !isFilled[currentY * resolutionX + currentX + 1] && getColor4F(currentX + 1, currentY).equals(oldColor)) {
 					stackX[stackLength] = currentX + 1;
 					stackY[stackLength] = currentY;
 					
 					stackLength++;
 				}
 				
-				if(currentX - 1 >= minimumX && !isFilled[currentY * resolutionX + currentX - 1] && getColorARGB(currentX - 1, currentY) == oldColorARGB) {
+				if(currentX - 1 >= minimumX && !isFilled[currentY * resolutionX + currentX - 1] && getColor4F(currentX - 1, currentY).equals(oldColor)) {
 					stackX[stackLength] = currentX - 1;
 					stackY[stackLength] = currentY;
 					
 					stackLength++;
 				}
 				
-				if(currentY + 1 <= maximumY && !isFilled[(currentY + 1) * resolutionX + currentX] && getColorARGB(currentX, currentY + 1) == oldColorARGB) {
+				if(currentY + 1 <= maximumY && !isFilled[(currentY + 1) * resolutionX + currentX] && getColor4F(currentX, currentY + 1).equals(oldColor)) {
 					stackX[stackLength] = currentX;
 					stackY[stackLength] = currentY + 1;
 					
 					stackLength++;
 				}
 				
-				if(currentY - 1 >= minimumY && !isFilled[(currentY - 1) * resolutionX + currentX] && getColorARGB(currentX, currentY - 1) == oldColorARGB) {
+				if(currentY - 1 >= minimumY && !isFilled[(currentY - 1) * resolutionX + currentX] && getColor4F(currentX, currentY - 1).equals(oldColor)) {
 					stackX[stackLength] = currentX;
 					stackY[stackLength] = currentY - 1;
 					

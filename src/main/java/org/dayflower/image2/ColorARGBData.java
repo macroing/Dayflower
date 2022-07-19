@@ -287,7 +287,7 @@ final class ColorARGBData extends Data {
 		final int[] oldColors = this.colors;
 		final int[] newColors = this.colors.clone();
 		
-		final double[] colors = doUnpackColorsAsDoubleArrayRGB();
+		final float[] colors = doUnpackColorsAsFloatArrayRGB();
 		
 		final boolean hasChangeBegun = changeBegin();
 		
@@ -1158,6 +1158,18 @@ final class ColorARGBData extends Data {
 			colors[j + 0] = Color.unpackRAsDouble(this.colors[i]);
 			colors[j + 1] = Color.unpackGAsDouble(this.colors[i]);
 			colors[j + 2] = Color.unpackBAsDouble(this.colors[i]);
+		}
+		
+		return colors;
+	}
+	
+	private float[] doUnpackColorsAsFloatArrayRGB() {
+		final float[] colors = new float[this.colors.length * 3];
+		
+		for(int i = 0, j = 0; i < this.colors.length; i++, j = i * 3) {
+			colors[j + 0] = Color.unpackRAsFloat(this.colors[i]);
+			colors[j + 1] = Color.unpackGAsFloat(this.colors[i]);
+			colors[j + 2] = Color.unpackBAsFloat(this.colors[i]);
 		}
 		
 		return colors;

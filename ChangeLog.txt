@@ -1,3 +1,7 @@
+2022-08-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* REMOVE:	Remove the Image 2 API again. The API has been moved to a separate library. This new library will likely replace the Change API, Color API, Filter API, Image API and Noise API in the future. It is currently in a private repository.
+
 2022-07-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods random(double), random(double, double) and rint(double) to the Doubles class.

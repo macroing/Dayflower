@@ -998,7 +998,7 @@ public final class Floats {
 	 * <p>
 	 * If two {@code double} values that are mathematical integers are equally close, the result is the integer value that is even.
 	 * 
-	 * @param value a {@code double} value
+	 * @param value a {@code float} value
 	 * @return the {@code float} representation of the {@code double} value that is closest in value to the argument and is equal to a mathematical integer
 	 */
 //	TODO: Add Unit Tests!

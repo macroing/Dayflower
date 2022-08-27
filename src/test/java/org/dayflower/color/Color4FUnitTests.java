@@ -59,30 +59,6 @@ public final class Color4FUnitTests {
 	}
 	
 	@Test
-	public void testConstructorColor3D() {
-		final Color4F color = new Color4F(new Color3D(1.0D, 1.0D, 1.0D));
-		
-		assertEquals(1.0F, color.r);
-		assertEquals(1.0F, color.g);
-		assertEquals(1.0F, color.b);
-		assertEquals(1.0F, color.a);
-		
-		assertThrows(NullPointerException.class, () -> new Color4F((Color3D)(null)));
-	}
-	
-	@Test
-	public void testConstructorColor3DFloat() {
-		final Color4F color = new Color4F(new Color3D(1.0D, 1.0D, 1.0D), 0.5F);
-		
-		assertEquals(1.0F, color.r);
-		assertEquals(1.0F, color.g);
-		assertEquals(1.0F, color.b);
-		assertEquals(0.5F, color.a);
-		
-		assertThrows(NullPointerException.class, () -> new Color4F((Color3D)(null), 0.5F));
-	}
-	
-	@Test
 	public void testConstructorColor3F() {
 		final Color4F color = new Color4F(new Color3F(1.0F, 1.0F, 1.0F));
 		

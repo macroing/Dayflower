@@ -43,6 +43,8 @@ import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.art4j.color.ArrayComponentOrder;
+import org.macroing.art4j.color.PackedIntComponentOrder;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -278,31 +280,6 @@ public final class Color3F {
 	 */
 	public Color3F() {
 		this(0.0F);
-	}
-	
-	/**
-	 * Constructs a new {@code Color3F} instance from {@code color}.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@link Color3D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public Color3F(final Color3D color) {
-		this(toFloat(color.r), toFloat(color.g), toFloat(color.b));
-	}
-	
-	/**
-	 * Constructs a new {@code Color3F} instance from {@code color}.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@link Color4D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public Color3F(final Color4D color) {
-		this(toFloat(color.r), toFloat(color.g), toFloat(color.b));
 	}
 	
 	/**

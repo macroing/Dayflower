@@ -27,8 +27,9 @@ import java.util.Objects;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point3F;
-import org.dayflower.noise.PerlinNoiseF;
 import org.dayflower.scene.Intersection;
+
+import org.macroing.art4j.noise.PerlinNoiseF;
 
 /**
  * A {@code MarbleTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between three {@code Color3F} instances in a marble pattern.

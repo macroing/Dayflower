@@ -29,7 +29,8 @@ import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.ConvolutionKernel33F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.IntImageF;
-import org.dayflower.noise.SimplexNoiseF;
+
+import org.macroing.art4j.noise.SimplexNoiseF;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;

@@ -1,3 +1,13 @@
+2022-08-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a dependency to Macroing Art4J. Its repository is currently in private mode.
+	* CHANGE:	Update the dependency to Macroing Java.
+	* REMOVE:	Remove ArrayComponentOrder and PackedIntComponentOrder from the Color API. They can be found in the Art4J library.
+	* REMOVE:	Remove the Filter API. It can be found in the Art4J library.
+	* REMOVE:	Remove the Noise API. It can be found in the Art4J library.
+	* REMOVE:	Remove ChromaticSpectralCurveD, Color, Color3D, Color4D, ColorSpaceD, ConstantSpectralCurveD, IrregularSpectralCurveD, RegularSpectralCurveD and SpectralCurveD from the Color API. Most of them can be found in the Art4J library.
+	* REMOVE:	Remove ByteImageD, ConvolutionKernel33D, ConvolutionKernel55D, DoubleImageD, ImageD, IntImageD and PixelImageD from the Image API. Some replacements for them can be found in the Art4J library.
+
 2022-08-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* REMOVE:	Remove the Image 2 API again. The API has been moved to a separate library. This new library will likely replace the Change API, Color API, Filter API, Image API and Noise API in the future. It is currently in a private repository.

@@ -42,6 +42,8 @@ import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.art4j.color.ArrayComponentOrder;
+import org.macroing.art4j.color.PackedIntComponentOrder;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -150,31 +152,6 @@ public final class Color4F {
 	 * <p>
 	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param color a {@link Color3D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public Color4F(final Color3D color) {
-		this(toFloat(color.r), toFloat(color.g), toFloat(color.b));
-	}
-	
-	/**
-	 * Constructs a new {@code Color4F} instance from {@code color} and {@code a}.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@link Color3D} instance
-	 * @param a the value of component 4
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-	public Color4F(final Color3D color, final float a) {
-		this(toFloat(color.r), toFloat(color.g), toFloat(color.b), a);
-	}
-	
-	/**
-	 * Constructs a new {@code Color4F} instance from {@code color}.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
 	 * @param color a {@link Color3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
@@ -193,19 +170,6 @@ public final class Color4F {
 	 */
 	public Color4F(final Color3F color, final float a) {
 		this(color.r, color.g, color.b, a);
-	}
-	
-	/**
-	 * Constructs a new {@code Color4F} instance from {@code color}.
-	 * <p>
-	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param color a {@link Color4D} instance
-	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public Color4F(final Color4D color) {
-		this(toFloat(color.r), toFloat(color.g), toFloat(color.b), toFloat(color.a));
 	}
 	
 	/**

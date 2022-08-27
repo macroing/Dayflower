@@ -30,12 +30,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 
 import org.dayflower.change.ChangeHistory;
-import org.dayflower.color.ArrayComponentOrder;
-import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Shape2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.art4j.color.ArrayComponentOrder;
+import org.macroing.art4j.color.PackedIntComponentOrder;
 import org.macroing.java.util.Arrays;
 
 import javafx.scene.image.PixelFormat;

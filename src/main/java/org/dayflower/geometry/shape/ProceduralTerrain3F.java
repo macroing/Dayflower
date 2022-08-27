@@ -36,9 +36,9 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.noise.SimplexNoiseF;
 import org.dayflower.utility.Floats;
 
+import org.macroing.art4j.noise.SimplexNoiseF;
 import org.macroing.java.util.function.FloatBinaryOperator;
 
 /**

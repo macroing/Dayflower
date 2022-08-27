@@ -42,7 +42,6 @@ import java.util.function.Function;
 import org.dayflower.change.Change;
 import org.dayflower.change.ChangeCombiner;
 import org.dayflower.change.ChangeHistory;
-import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.ColorSpaceF;
@@ -53,8 +52,9 @@ import org.dayflower.geometry.Shape2I;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.noise.SimplexNoiseF;
 
+import org.macroing.art4j.color.ArrayComponentOrder;
+import org.macroing.art4j.noise.SimplexNoiseF;
 import org.macroing.java.util.function.TriFunction;
 
 /**

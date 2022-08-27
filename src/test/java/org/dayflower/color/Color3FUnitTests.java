@@ -34,7 +34,11 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 
 import org.dayflower.mock.DataOutputMock;
+
 import org.junit.jupiter.api.Test;
+
+import org.macroing.art4j.color.ArrayComponentOrder;
+import org.macroing.art4j.color.PackedIntComponentOrder;
 
 @SuppressWarnings("static-method")
 public final class Color3FUnitTests {
@@ -533,17 +537,6 @@ public final class Color3FUnitTests {
 		assertEquals(0.0F, color.r);
 		assertEquals(0.0F, color.g);
 		assertEquals(0.0F, color.b);
-	}
-	
-	@Test
-	public void testConstructorColor3D() {
-		final Color3F color = new Color3F(new Color3D(1.0D, 1.0D, 1.0D));
-		
-		assertEquals(1.0F, color.r);
-		assertEquals(1.0F, color.g);
-		assertEquals(1.0F, color.b);
-		
-		assertThrows(NullPointerException.class, () -> new Color3F((Color3D)(null)));
 	}
 	
 	@Test

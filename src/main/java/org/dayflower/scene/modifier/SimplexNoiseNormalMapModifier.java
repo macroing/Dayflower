@@ -24,8 +24,9 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.noise.SimplexNoiseF;
 import org.dayflower.scene.Intersection;
+
+import org.macroing.art4j.noise.SimplexNoiseF;
 
 /**
  * A {@code SimplexNoiseNormalMapModifier} is a {@link Modifier} implementation that modifies the surface normal using Simplex noise.

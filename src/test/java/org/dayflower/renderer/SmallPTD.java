@@ -28,15 +28,17 @@ import static org.dayflower.utility.Doubles.sqrt;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3D;
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.SampleGeneratorD;
 import org.dayflower.geometry.Vector3D;
-import org.dayflower.image.PixelImageF;
 import org.dayflower.scene.fresnel.Schlick;
+
+import org.macroing.art4j.color.Color3D;
+import org.macroing.art4j.color.Color4D;
+import org.macroing.art4j.image.Image;
+import org.macroing.art4j.pixel.Color4DPixelOperator;
 
 public final class SmallPTD {
 	private SmallPTD() {
@@ -65,7 +67,7 @@ public final class SmallPTD {
 		Color3D albedo = sphere.getAlbedo();
 		
 		if(currentDepth > 5) {
-			final double probability = albedo.maximum();
+			final double probability = albedo.max();
 			
 			if(random() >= probability) {
 				return emission;
@@ -237,14 +239,14 @@ public final class SmallPTD {
 			}
 		}
 		
-		final PixelImageF pixelImage = new PixelImageF(resolutionX, resolutionY);
+		final Image image = new Image(resolutionX, resolutionY, Color4D.WHITE);
 		
 		for(int i = 0; i < colors.length; i++) {
-			pixelImage.setColorRGB(new Color3F(colors[i]), i);
+			image.setColor3D(colors[i], i);
 		}
 		
-		pixelImage.redoGammaCorrection();
-		pixelImage.save("./generated/SmallPT.png");
+		image.fillD(Color4DPixelOperator.redoGammaCorrection());
+		image.save("./generated/SmallPT.png");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

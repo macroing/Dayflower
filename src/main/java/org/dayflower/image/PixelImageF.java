@@ -18,7 +18,6 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.filter.Filter2F.FILTER_TABLE_SIZE;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.ceil;
 import static org.dayflower.utility.Floats.equal;
@@ -48,13 +47,13 @@ import javax.imageio.ImageIO;
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.ColorSpaceF;
-import org.dayflower.color.PackedIntComponentOrder;
-import org.dayflower.filter.Filter2F;
-import org.dayflower.filter.GaussianFilter2F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.art4j.color.PackedIntComponentOrder;
+import org.macroing.art4j.filter.Filter2F;
+import org.macroing.art4j.filter.GaussianFilter2F;
 import org.macroing.java.awt.image.BufferedImages;
 
 /**
@@ -134,7 +133,7 @@ public final class PixelImageF extends ImageF {
 		
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.pixels = PixelF.createPixels(bufferedImage);
-		this.filterTable = filter.createFilterTable();
+		this.filterTable = filter.getTable();
 	}
 	
 	/**
@@ -220,7 +219,7 @@ public final class PixelImageF extends ImageF {
 		
 		this.pixels = PixelF.createPixels(resolutionX, resolutionY, colorRGBA);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
-		this.filterTable = filter.createFilterTable();
+		this.filterTable = filter.getTable();
 	}
 	
 	/**
@@ -268,7 +267,7 @@ public final class PixelImageF extends ImageF {
 		
 		this.pixels = PixelF.createPixels(resolutionX, resolutionY, colorRGBAs);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
-		this.filterTable = filter.createFilterTable();
+		this.filterTable = filter.getTable();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -574,16 +573,16 @@ public final class PixelImageF extends ImageF {
 			final int[] filterOffsetY = new int[maximumFilterYMinimumFilterY + 1];
 			
 			for(int filterX = minimumFilterX; filterX <= maximumFilterX; filterX++) {
-				filterOffsetX[filterX - minimumFilterX] = min(toInt(floor(abs((filterX - deltaX) * filterResolutionXReciprocal * FILTER_TABLE_SIZE))), FILTER_TABLE_SIZE - 1);
+				filterOffsetX[filterX - minimumFilterX] = min(toInt(floor(abs((filterX - deltaX) * filterResolutionXReciprocal * Filter2F.TABLE_SIZE))), Filter2F.TABLE_SIZE - 1);
 			}
 			
 			for(int filterY = minimumFilterY; filterY <= maximumFilterY; filterY++) {
-				filterOffsetY[filterY - minimumFilterY] = min(toInt(floor(abs((filterY - deltaY) * filterResolutionYReciprocal * FILTER_TABLE_SIZE))), FILTER_TABLE_SIZE - 1);
+				filterOffsetY[filterY - minimumFilterY] = min(toInt(floor(abs((filterY - deltaY) * filterResolutionYReciprocal * Filter2F.TABLE_SIZE))), Filter2F.TABLE_SIZE - 1);
 			}
 			
 			for(int filterY = minimumFilterY; filterY <= maximumFilterY; filterY++) {
 				final int filterYResolutionX = filterY * resolutionX;
-				final int filterOffsetYOffsetFilterTableSize = filterOffsetY[filterY - minimumFilterY] * FILTER_TABLE_SIZE;
+				final int filterOffsetYOffsetFilterTableSize = filterOffsetY[filterY - minimumFilterY] * Filter2F.TABLE_SIZE;
 				
 				for(int filterX = minimumFilterX; filterX <= maximumFilterX; filterX++) {
 					final

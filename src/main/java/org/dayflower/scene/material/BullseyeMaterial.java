@@ -23,7 +23,6 @@ import static org.dayflower.utility.Floats.equal;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -33,6 +32,8 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code BullseyeMaterial} is an implementation of {@link Material} that alternates between two other {@code Material} instances in a bullseye pattern.
@@ -70,12 +71,12 @@ public final class BullseyeMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BullseyeMaterial(new MatteMaterial(Color3F.GRAY_0_50), new MatteMaterial(Color3F.WHITE));
+	 * new BullseyeMaterial(new MatteMaterial(Color3F.GRAY), new MatteMaterial(Color3F.WHITE));
 	 * }
 	 * </pre>
 	 */
 	public BullseyeMaterial() {
-		this(new MatteMaterial(Color3F.GRAY_0_50), new MatteMaterial(Color3F.WHITE));
+		this(new MatteMaterial(Color3F.GRAY), new MatteMaterial(Color3F.WHITE));
 	}
 	
 	/**

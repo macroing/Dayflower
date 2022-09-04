@@ -23,7 +23,6 @@ import static org.dayflower.utility.Floats.random;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
@@ -40,6 +39,8 @@ import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code ClearCoatMaterial} is an implementation of {@link Material} that represents a clear coat material.
@@ -77,12 +78,12 @@ public final class ClearCoatMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ClearCoatMaterial(Color3F.GRAY_0_50);
+	 * new ClearCoatMaterial(Color3F.GRAY);
 	 * }
 	 * </pre>
 	 */
 	public ClearCoatMaterial() {
-		this(Color3F.GRAY_0_50);
+		this(Color3F.GRAY);
 	}
 	
 	/**

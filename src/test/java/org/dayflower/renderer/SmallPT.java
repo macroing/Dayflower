@@ -27,8 +27,9 @@ import static org.dayflower.utility.Doubles.random;
 import static org.dayflower.utility.Doubles.sin;
 import static org.dayflower.utility.Doubles.sqrt;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.image.PixelImageF;
+
+import org.macroing.art4j.color.Color3F;
 
 public final class SmallPT {
 	private static final Sphere[] SPHERES = {

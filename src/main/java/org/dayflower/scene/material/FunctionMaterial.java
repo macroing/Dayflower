@@ -22,13 +22,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code FunctionMaterial} is an implementation of {@link Material} that alternates between different {@code Material} instances based on a {@code Function} instance.

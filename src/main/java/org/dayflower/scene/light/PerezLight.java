@@ -38,12 +38,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.ChromaticSpectralCurveF;
-import org.dayflower.color.Color3F;
-import org.dayflower.color.ColorSpaceF;
-import org.dayflower.color.IrregularSpectralCurveF;
-import org.dayflower.color.RegularSpectralCurveF;
-import org.dayflower.color.SpectralCurveF;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
@@ -59,6 +53,13 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
 import org.dayflower.scene.Transform;
+
+import org.macroing.art4j.color.Color3F;
+import org.macroing.art4j.color.ColorSpaceF;
+import org.macroing.art4j.curve.ChromaticSpectralCurveF;
+import org.macroing.art4j.curve.IrregularSpectralCurveF;
+import org.macroing.art4j.curve.RegularSpectralCurveF;
+import org.macroing.art4j.curve.SpectralCurveF;
 
 /**
  * A {@code PerezLight} is a {@link Light} implementation of the Perez algorithm.
@@ -193,7 +194,7 @@ public final class PerezLight extends Light {
 		final Vector3F incomingWorldSpace = ray.getDirection();
 		final Vector3F incomingObjectSpace = doTransformToObjectSpace(incomingWorldSpace);
 		
-		final Color3F result = Color3F.minimumTo0(doRadianceSky(incomingObjectSpace));
+		final Color3F result = Color3F.minTo0(doRadianceSky(incomingObjectSpace));
 		
 		return result;
 	}
@@ -216,7 +217,7 @@ public final class PerezLight extends Light {
 	public Color3F power() {
 		final Vector3F incomingObjectSpace = Vector3F.directionSpherical(0.5F, 0.5F);
 		
-		final Color3F result = Color3F.minimumTo0(doRadianceSky(incomingObjectSpace));
+		final Color3F result = Color3F.minTo0(doRadianceSky(incomingObjectSpace));
 		
 		return Color3F.multiply(result, PI * this.radius * this.radius);
 	}
@@ -252,7 +253,7 @@ public final class PerezLight extends Light {
 			for(int y = 0; y < resolutionY; y++) {
 				final float sphericalV = (y + 0.5F) * resolutionYReciprocal;
 				
-				final Color3F colorRGB = Color3F.maximumTo1(Color3F.minimumTo0(doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV))));
+				final Color3F colorRGB = Color3F.maxTo1(Color3F.minTo0(doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV))));
 				
 				pixelImage.setColorRGB(colorRGB, x, y);
 			}
@@ -321,7 +322,7 @@ public final class PerezLight extends Light {
 			return Optional.empty();
 		}
 		
-		final Color3F result = Color3F.minimumTo0(doRadianceSky(incomingObjectSpace));
+		final Color3F result = Color3F.minTo0(doRadianceSky(incomingObjectSpace));
 		
 		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
 		
@@ -607,7 +608,7 @@ public final class PerezLight extends Light {
 		final double x = doCalculatePerezFunction(this.perezX, theta, gamma, this.zenith[1]);
 		final double y = doCalculatePerezFunction(this.perezY, theta, gamma, this.zenith[2]);
 		
-		final Color3F colorXYZ = ChromaticSpectralCurveF.getColorXYZ(toFloat(x), toFloat(y));
+		final Color3F colorXYZ = ChromaticSpectralCurveF.toColorXYZ(toFloat(x), toFloat(y));
 		
 		final float x0 = toFloat(colorXYZ.r * relativeLuminance / colorXYZ.g);
 		final float y0 = toFloat(relativeLuminance);
@@ -648,10 +649,10 @@ public final class PerezLight extends Light {
 				final float sinTheta = sin(PI * sphericalV);
 				
 //				final Color3F colorRGB = doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV));
-				final Color3F colorRGB = Color3F.minimumTo0(doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV)));
+				final Color3F colorRGB = Color3F.minTo0(doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV)));
 				
-//				final float luminance = colorRGB.luminance();
-				final float luminance = 0.2989F * colorRGB.r + 0.5866F * colorRGB.g + 0.1145F * colorRGB.b;
+				final float luminance = colorRGB.relativeLuminance();
+//				final float luminance = 0.2989F * colorRGB.r + 0.5866F * colorRGB.g + 0.1145F * colorRGB.b;
 				
 				functions[u][v] = luminance * sinTheta;
 			}
@@ -693,7 +694,7 @@ public final class PerezLight extends Light {
 	
 	private void doSetSunColor() {
 		if(this.sunDirectionObjectSpace.z > 0.0F) {
-			this.sunColor = Color3F.minimumTo0(ColorSpaceF.getDefault().convertXYZToRGB(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(true), 0.0001F)));
+			this.sunColor = Color3F.minTo0(ColorSpaceF.getDefault().convertXYZToRGB(Color3F.multiply(doCalculateAttenuatedSunlight(this.theta, this.turbidity).toColorXYZ(), 0.0001F)));
 		} else {
 			this.sunColor = Color3F.BLACK;
 		}
@@ -747,7 +748,7 @@ public final class PerezLight extends Light {
 			final double tauOzoneAbsorptionAttenuation = exp(-relativeOpticalMass * K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * lozone);
 			final double tauGasAbsorptionAttenuation = exp(-1.41D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass / pow(1.0D + 118.93D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass, 0.45D));
 			final double tauWaterVaporAbsorptionAttenuation = exp(-0.2385D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass / pow(1.0D + 20.07D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass, 0.45D));
-			final double amplitude = SOL_SPECTRAL_CURVE.sample(lambda) * tauRayleighScattering * tauAerosolAttenuation * tauOzoneAbsorptionAttenuation * tauGasAbsorptionAttenuation * tauWaterVaporAbsorptionAttenuation;
+			final double amplitude = 100.0D * SOL_SPECTRAL_CURVE.sample(lambda) * tauRayleighScattering * tauAerosolAttenuation * tauOzoneAbsorptionAttenuation * tauGasAbsorptionAttenuation * tauWaterVaporAbsorptionAttenuation;
 			
 			spectrum[i] = toFloat(amplitude);
 		}

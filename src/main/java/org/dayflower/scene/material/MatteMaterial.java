@@ -25,7 +25,6 @@ import static org.dayflower.utility.Floats.saturate;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
@@ -40,6 +39,8 @@ import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code MatteMaterial} is an implementation of {@link Material} and is used for matte surfaces.
@@ -77,12 +78,12 @@ public final class MatteMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteMaterial(Color3F.GRAY_0_50);
+	 * new MatteMaterial(Color3F.GRAY);
 	 * }
 	 * </pre>
 	 */
 	public MatteMaterial() {
-		this(Color3F.GRAY_0_50);
+		this(Color3F.GRAY);
 	}
 	
 	/**

@@ -42,9 +42,6 @@ import java.util.function.Function;
 import org.dayflower.change.Change;
 import org.dayflower.change.ChangeCombiner;
 import org.dayflower.change.ChangeHistory;
-import org.dayflower.color.Color3F;
-import org.dayflower.color.Color4F;
-import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point2I;
@@ -54,6 +51,9 @@ import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
 
 import org.macroing.art4j.color.ArrayComponentOrder;
+import org.macroing.art4j.color.Color3F;
+import org.macroing.art4j.color.Color4F;
+import org.macroing.art4j.color.ColorSpaceF;
 import org.macroing.art4j.noise.SimplexNoiseF;
 import org.macroing.java.util.function.TriFunction;
 
@@ -1559,7 +1559,7 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleComponent1(Color4F)}.
+	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleR(Color4F)}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * 
@@ -1567,11 +1567,11 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageF grayscaleComponent1() {
-		return update((color, point) -> Color4F.grayscaleComponent1(color));
+		return update((color, point) -> Color4F.grayscaleR(color));
 	}
 	
 	/**
-	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleComponent2(Color4F)}.
+	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleG(Color4F)}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * 
@@ -1579,11 +1579,11 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageF grayscaleComponent2() {
-		return update((color, point) -> Color4F.grayscaleComponent2(color));
+		return update((color, point) -> Color4F.grayscaleG(color));
 	}
 	
 	/**
-	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleComponent3(Color4F)}.
+	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleB(Color4F)}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * 
@@ -1591,7 +1591,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageF grayscaleComponent3() {
-		return update((color, point) -> Color4F.grayscaleComponent3(color));
+		return update((color, point) -> Color4F.grayscaleB(color));
 	}
 	
 	/**
@@ -1607,7 +1607,7 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleLuminance(Color4F)}.
+	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleRelativeLuminance(Color4F)}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * 
@@ -1615,11 +1615,11 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageF grayscaleLuminance() {
-		return update((color, point) -> Color4F.grayscaleLuminance(color));
+		return update((color, point) -> Color4F.grayscaleRelativeLuminance(color));
 	}
 	
 	/**
-	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleMaximum(Color4F)}.
+	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleMax(Color4F)}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * 
@@ -1627,11 +1627,11 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageF grayscaleMaximum() {
-		return update((color, point) -> Color4F.grayscaleMaximum(color));
+		return update((color, point) -> Color4F.grayscaleMax(color));
 	}
 	
 	/**
-	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleMinimum(Color4F)}.
+	 * Converts this {@code ImageF} instance into grayscale using {@link Color4F#grayscaleMin(Color4F)}.
 	 * <p>
 	 * Returns this {@code ImageF} instance.
 	 * 
@@ -1639,7 +1639,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageF grayscaleMinimum() {
-		return update((color, point) -> Color4F.grayscaleMinimum(color));
+		return update((color, point) -> Color4F.grayscaleMin(color));
 	}
 	
 	/**
@@ -1700,8 +1700,8 @@ public abstract class ImageF extends Image {
 //				Multiply with the factor and add the bias:
 				colorRGB = Color3F.multiply(colorRGB, factor);
 				colorRGB = Color3F.add(colorRGB, bias);
-				colorRGB = Color3F.minimumTo0(colorRGB);
-				colorRGB = Color3F.maximumTo1(colorRGB);
+				colorRGB = Color3F.minTo0(colorRGB);
+				colorRGB = Color3F.maxTo1(colorRGB);
 				
 				colorRGBA = new Color4F(colorRGB, colorRGBA.a);
 				
@@ -1780,8 +1780,8 @@ public abstract class ImageF extends Image {
 //				Multiply with the factor and add the bias:
 				colorRGB = Color3F.multiply(colorRGB, factor);
 				colorRGB = Color3F.add(colorRGB, bias);
-				colorRGB = Color3F.minimumTo0(colorRGB);
-				colorRGB = Color3F.maximumTo1(colorRGB);
+				colorRGB = Color3F.minTo0(colorRGB);
+				colorRGB = Color3F.maxTo1(colorRGB);
 				
 				colorRGBA = new Color4F(colorRGB, colorRGBA.a);
 				
@@ -2226,7 +2226,7 @@ public abstract class ImageF extends Image {
 //	TODO: Add Unit Tests!
 	public final ImageF toneMap(final float luminanceMaximum) {
 		return update((color, point) -> {
-			final float luminance = color.luminance();
+			final float luminance = color.relativeLuminance();
 			final float scale = (1.0F + luminance / (luminanceMaximum * luminanceMaximum)) / (1.0F + luminance);
 			
 			return new Color4F(Color3F.multiply(new Color3F(color), scale), color.a);
@@ -2395,7 +2395,7 @@ public abstract class ImageF extends Image {
 		float luminanceMaximum = NaN;
 		
 		for(int i = 0; i < getResolution(); i++) {
-			luminanceMaximum = maxOrNaN(luminanceMaximum, getColorRGB(i).luminance());
+			luminanceMaximum = maxOrNaN(luminanceMaximum, getColorRGB(i).relativeLuminance());
 		}
 		
 		return luminanceMaximum;
@@ -2411,7 +2411,7 @@ public abstract class ImageF extends Image {
 		float luminanceMinimum = NaN;
 		
 		for(int i = 0; i < getResolution(); i++) {
-			luminanceMinimum = minOrNaN(luminanceMinimum, getColorRGB(i).luminance());
+			luminanceMinimum = minOrNaN(luminanceMinimum, getColorRGB(i).relativeLuminance());
 		}
 		
 		return luminanceMinimum;

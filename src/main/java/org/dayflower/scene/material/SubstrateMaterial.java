@@ -23,7 +23,6 @@ import static org.dayflower.utility.Floats.MAX_VALUE;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
@@ -38,6 +37,8 @@ import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code SubstrateMaterial} is an implementation of {@link Material} that represents a substrate material.
@@ -78,12 +79,12 @@ public final class SubstrateMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new SubstrateMaterial(Color3F.GRAY_0_50);
+	 * new SubstrateMaterial(Color3F.GRAY);
 	 * }
 	 * </pre>
 	 */
 	public SubstrateMaterial() {
-		this(Color3F.GRAY_0_50);
+		this(Color3F.GRAY);
 	}
 	
 	/**
@@ -94,7 +95,7 @@ public final class SubstrateMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new SubstrateMaterial(colorKD, Color3F.GRAY_0_50);
+	 * new SubstrateMaterial(colorKD, Color3F.GRAY);
 	 * }
 	 * </pre>
 	 * 
@@ -102,7 +103,7 @@ public final class SubstrateMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
 	public SubstrateMaterial(final Color3F colorKD) {
-		this(colorKD, Color3F.GRAY_0_50);
+		this(colorKD, Color3F.GRAY);
 	}
 	
 	/**

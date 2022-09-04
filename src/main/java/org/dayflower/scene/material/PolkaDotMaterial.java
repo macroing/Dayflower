@@ -26,7 +26,6 @@ import static org.dayflower.utility.Floats.sin;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
@@ -35,6 +34,8 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code PolkaDotMaterial} is an implementation of {@link Material} that alternates between two other {@code Material} instances in a polka dot pattern.
@@ -73,12 +74,12 @@ public final class PolkaDotMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PolkaDotMaterial(new MatteMaterial(Color3F.GRAY_0_50), new MatteMaterial(Color3F.WHITE));
+	 * new PolkaDotMaterial(new MatteMaterial(Color3F.GRAY), new MatteMaterial(Color3F.WHITE));
 	 * }
 	 * </pre>
 	 */
 	public PolkaDotMaterial() {
-		this(new MatteMaterial(Color3F.GRAY_0_50), new MatteMaterial(Color3F.WHITE));
+		this(new MatteMaterial(Color3F.GRAY), new MatteMaterial(Color3F.WHITE));
 	}
 	
 	/**

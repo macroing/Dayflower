@@ -41,7 +41,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
@@ -57,6 +56,8 @@ import org.dayflower.sampler.RandomSampler;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.
@@ -506,8 +507,8 @@ public final class Scene implements Node {
 				
 				final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
 				
-				if(russianRouletteThroughput.maximum() < 1.0F && currentBounce > minimumBounceRussianRoulette) {
-					final float probability = max(0.05F, 1.0F - russianRouletteThroughput.maximum());
+				if(russianRouletteThroughput.max() < 1.0F && currentBounce > minimumBounceRussianRoulette) {
+					final float probability = max(0.05F, 1.0F - russianRouletteThroughput.max());
 					
 					if(sampler.sample1().getU() < probability) {
 						break;
@@ -603,7 +604,7 @@ public final class Scene implements Node {
 			
 			final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
 			
-			radiance = Color3F.multiply(Color3F.GRAY_0_50, abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));
+			radiance = Color3F.multiply(Color3F.GRAY, abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));
 		} else if(isPreviewMode) {
 			return Color3F.WHITE;
 		} else {

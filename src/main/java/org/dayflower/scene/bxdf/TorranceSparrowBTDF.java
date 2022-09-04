@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
@@ -40,6 +39,8 @@ import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.fresnel.Fresnel;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code TorranceSparrowBTDF} is an implementation of {@link BXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for Torrance-Sparrow transmission using a microfacet distribution.

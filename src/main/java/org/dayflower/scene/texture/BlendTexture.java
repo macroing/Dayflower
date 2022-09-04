@@ -22,10 +22,11 @@ import static org.dayflower.utility.Floats.equal;
 
 import java.util.Objects;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code BlendTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by blending the result of two other {@code Texture} instances.

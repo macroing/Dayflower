@@ -1,7 +1,7 @@
 final Light light1 = new PerezLight();
 
 final Material material1 = new MatteMaterial(new CheckerboardTexture());
-final Material material2 = new CheckerboardMaterial(new MetalMaterial(), new MirrorMaterial(Color3F.GRAY_0_50), AngleF.degrees(0.0F), new Vector2F(8.0F, 8.0F));
+final Material material2 = new CheckerboardMaterial(new MetalMaterial(), new MirrorMaterial(Color3F.GRAY), AngleF.degrees(0.0F), new Vector2F(8.0F, 8.0F));
 
 final Shape3F shape1 = new Plane3F();
 final Shape3F shape2 = new Sphere3F();

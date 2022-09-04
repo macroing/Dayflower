@@ -20,11 +20,12 @@ package org.dayflower.renderer.cpu;
 
 import java.util.Objects;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;
 import org.dayflower.scene.Scene;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code CPURenderer} is an implementation of {@link AbstractCPURenderer} that supports various rendering algorithms.

@@ -18,8 +18,9 @@
  */
 package org.dayflower.scene;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Vector3F;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * An {@code AreaLight} is an implementation of {@link Light} that represents an area light.

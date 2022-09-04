@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
@@ -37,6 +36,8 @@ import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * An {@code OrenNayarBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Oren-Nayar.

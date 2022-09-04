@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
@@ -44,6 +43,8 @@ import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code PlasticMaterial} is an implementation of {@link Material} that represents plastic.
@@ -99,7 +100,7 @@ public final class PlasticMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PlasticMaterial(colorKD, Color3F.GRAY_0_50);
+	 * new PlasticMaterial(colorKD, Color3F.GRAY);
 	 * }
 	 * </pre>
 	 * 
@@ -107,7 +108,7 @@ public final class PlasticMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
 	public PlasticMaterial(final Color3F colorKD) {
-		this(colorKD, Color3F.GRAY_0_50);
+		this(colorKD, Color3F.GRAY);
 	}
 	
 	/**

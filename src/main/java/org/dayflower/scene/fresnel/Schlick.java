@@ -24,7 +24,7 @@ import static org.dayflower.utility.Floats.lerp;
 import static org.dayflower.utility.Floats.pow5;
 import static org.dayflower.utility.Floats.saturate;
 
-import org.dayflower.color.Color3F;
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A class that consists exclusively of static methods that performs Fresnel operations based on Schlicks approximation.

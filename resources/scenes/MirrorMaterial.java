@@ -1,7 +1,7 @@
 Material material1 = new MatteMaterial(new CheckerboardTexture());
-Material material2 = new MirrorMaterial(Color3F.GRAY_0_50);
-Material material3 = new MirrorMaterial(Color3F.GRAY_0_50);
-Material material4 = new MirrorMaterial(Color3F.GRAY_0_50);
+Material material2 = new MirrorMaterial(Color3F.GRAY);
+Material material3 = new MirrorMaterial(Color3F.GRAY);
+Material material4 = new MirrorMaterial(Color3F.GRAY);
 
 Shape3F shape1 = new Plane3F();
 Shape3F shape2 = new Torus3F();

@@ -21,15 +21,14 @@ package org.dayflower.javafx.application;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import org.dayflower.color.Color3F;
-import org.dayflower.color.Color4F;
-import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.ConvolutionKernel33F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.IntImageF;
-
+import org.macroing.art4j.color.Color3F;
+import org.macroing.art4j.color.Color4F;
+import org.macroing.art4j.color.ColorSpaceF;
 import org.macroing.art4j.noise.SimplexNoiseF;
 
 import javafx.animation.AnimationTimer;
@@ -195,15 +194,15 @@ public final class ScreenRendererApplication extends Application {
 			if(selectedItem != null) {
 				switch(selectedItem) {
 					case OPERATION_BLEND_BLUE:
-						doSetOperationBlend(function, Color4F.randomComponent3());
+						doSetOperationBlend(function, Color4F.randomBlue());
 						
 						break;
 					case OPERATION_BLEND_GREEN:
-						doSetOperationBlend(function, Color4F.randomComponent2());
+						doSetOperationBlend(function, Color4F.randomGreen());
 						
 						break;
 					case OPERATION_BLEND_RED:
-						doSetOperationBlend(function, Color4F.randomComponent1());
+						doSetOperationBlend(function, Color4F.randomRed());
 						
 						break;
 					case OPERATION_BOX_BLUR:
@@ -226,7 +225,7 @@ public final class ScreenRendererApplication extends Application {
 								
 								final float noise = SimplexNoiseF.fractionalBrownianMotionXY(x, y, 5.0F, 0.5F, 0.0F, 1.0F, 8);
 								
-								final Color3F color = colorSpace.redoGammaCorrection(Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(base, noise))));
+								final Color3F color = colorSpace.redoGammaCorrection(Color3F.maxTo1(Color3F.minTo0(Color3F.multiply(base, noise))));
 								
 								pixelImage.setColorRGB(Color3F.blend(pixelImage.getColorRGB(index), color, 0.5F), index);
 							}

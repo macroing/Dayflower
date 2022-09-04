@@ -1,5 +1,5 @@
 Material material1 = new MatteMaterial();
-Material material2 = new MatteMaterial(new CheckerboardTexture(Color3F.GRAY_0_50, Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F)));
+Material material2 = new MatteMaterial(new CheckerboardTexture(Color3F.GRAY, Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F)));
 
 Shape3F shape1 = new Plane3F();
 Shape3F shape2 = new Triangle3F();

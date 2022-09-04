@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector2F;
@@ -44,6 +43,7 @@ import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.utility.Document;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.art4j.color.Color3F;
 import org.macroing.java.util.Arrays;
 
 /**

@@ -25,11 +25,11 @@ import static org.dayflower.utility.Floats.sin;
 
 import java.util.Objects;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code PolkaDotTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between two other {@code Texture} instances in a polka dot pattern.
@@ -63,12 +63,12 @@ public final class PolkaDotTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PolkaDotTexture(Color3F.GRAY_0_50, Color3F.WHITE);
+	 * new PolkaDotTexture(Color3F.GRAY, Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
 	public PolkaDotTexture() {
-		this(Color3F.GRAY_0_50, Color3F.WHITE);
+		this(Color3F.GRAY, Color3F.WHITE);
 	}
 	
 	/**

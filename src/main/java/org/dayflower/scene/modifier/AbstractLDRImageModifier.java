@@ -25,12 +25,13 @@ import static org.dayflower.utility.Ints.toInt;
 
 import java.util.Objects;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.ImageF;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * An {@code AbstractLDRImageModifier} is an abstract {@link Modifier} implementation that contains a low-dynamic-range (LDR) image.

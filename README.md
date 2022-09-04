@@ -171,9 +171,8 @@ The following table describes the different APIs and their current status in the
 
 | Name                                   | Javadoc | Unit Test |
 | -------------------------------------- | ------- | --------- |
-| Dayflower                              | 100.0%  |  23.3%    |
+| Dayflower                              | 100.0%  |  17.9%    |
 | Change API                             | 100.0%  | 100.0%    |
-| Color API                              | 100.0%  |  84.6%    |
 | Geometry API                           | 100.0%  |  77.3%    |
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |

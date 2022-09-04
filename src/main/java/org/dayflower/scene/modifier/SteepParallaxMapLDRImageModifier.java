@@ -21,7 +21,6 @@ package org.dayflower.scene.modifier;
 import java.util.Arrays;
 import java.util.Objects;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
@@ -32,6 +31,8 @@ import org.dayflower.image.ImageF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code SteepParallaxMapLDRImageModifier} is an {@link AbstractLDRImageModifier} implementation that modifies the texture coordinates using a {@link Color3F} instance from a low-dynamic-range (LDR) image.

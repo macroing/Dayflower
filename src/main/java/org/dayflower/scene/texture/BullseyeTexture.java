@@ -22,12 +22,13 @@ import static org.dayflower.utility.Floats.equal;
 
 import java.util.Objects;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code BullseyeTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between two other {@code Texture} instances in a bullseye pattern.
@@ -60,12 +61,12 @@ public final class BullseyeTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BullseyeTexture(Color3F.GRAY_0_50, Color3F.WHITE);
+	 * new BullseyeTexture(Color3F.GRAY, Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
 	public BullseyeTexture() {
-		this(Color3F.GRAY_0_50, Color3F.WHITE);
+		this(Color3F.GRAY, Color3F.WHITE);
 	}
 	
 	/**

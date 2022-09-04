@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
@@ -54,6 +53,8 @@ import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code DisneyMaterial} is an implementation of {@link Material} that represents a Disney material.
@@ -104,12 +105,12 @@ public final class DisneyMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyMaterial(Color3F.GRAY_0_50);
+	 * new DisneyMaterial(Color3F.GRAY);
 	 * }
 	 * </pre>
 	 */
 	public DisneyMaterial() {
-		this(Color3F.GRAY_0_50);
+		this(Color3F.GRAY);
 	}
 	
 	/**
@@ -1137,7 +1138,7 @@ public final class DisneyMaterial implements Material {
 		final float floatSpecularTransmission = this.textureSpecularTransmission.getFloat(intersection);
 		
 		final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, MAX_VALUE);
-		final Color3F colorTint = Color3F.normalizeLuminance(colorColor);
+		final Color3F colorTint = Color3F.normalizeRelativeLuminance(colorColor);
 		final Color3F colorSheen = floatSheen > 0.0F ? Color3F.blend(Color3F.WHITE, colorTint, this.textureSheenTint.getFloat(intersection)) : Color3F.BLACK;
 		
 		final float diffuseWeight = (1.0F - floatMetallic) * (1.0F - floatSpecularTransmission);

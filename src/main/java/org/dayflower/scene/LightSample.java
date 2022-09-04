@@ -22,9 +22,10 @@ import static org.dayflower.utility.Floats.equal;
 
 import java.util.Objects;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code LightSample} is returned by a {@link Light} instance and contains the computed properties.

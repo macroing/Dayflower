@@ -6,7 +6,7 @@ final Material material3 = new MatteMaterial();
 final Material material4 = new MatteMaterial();
 final Material material5 = new MatteMaterial(new Color3F(0.25F, 0.25F, 0.75F));
 final Material material6 = new MatteMaterial(new Color3F(0.75F, 0.25F, 0.25F));
-final Material material7 = new MirrorMaterial(Color3F.GRAY_0_50);
+final Material material7 = new MirrorMaterial(Color3F.GRAY);
 final Material material8 = new GlassMaterial();
 
 final Shape3F shape1 = new Plane3F();

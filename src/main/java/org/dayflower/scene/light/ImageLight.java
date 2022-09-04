@@ -28,7 +28,6 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
@@ -49,6 +48,8 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
 import org.dayflower.scene.Transform;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * An {@code ImageLight} is a {@link Light} implementation backed by an {@link ImageF} instance.
@@ -567,7 +568,7 @@ public final class ImageLight extends Light {
 				
 				final Color3F colorRGB = doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV));
 				
-				functions[u][v] = colorRGB.luminance() * sinTheta;
+				functions[u][v] = colorRGB.relativeLuminance() * sinTheta;
 			}
 		}
 		

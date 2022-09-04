@@ -1,7 +1,7 @@
 final Light light1 = new PerezLight();
 
 final Material material1 = new MatteMaterial();
-final Material material2 = new MatteMaterial(new CheckerboardTexture(Color3F.GRAY_0_50, Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F)));
+final Material material2 = new MatteMaterial(new CheckerboardTexture(Color3F.GRAY, Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F)));
 
 final Shape3F shape1 = new Plane3F();
 final Shape3F shape2 = new CompoundShape3F(Curve3F.createCurvesByBezier());

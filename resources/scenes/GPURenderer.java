@@ -17,10 +17,10 @@ Material materialPlane = new MatteMaterial(new CheckerboardTexture());
 Material materialSphereA = new ClearCoatMaterial(new Color3F(1.0F, 0.01F, 0.01F));
 Material materialSphereB = new DisneyMaterial(new Color3F(255, 127, 80), Color3F.BLACK, Color3F.BLACK, 0.4F, 1.75F, 1.0F, 1.0F, 1.2F, 0.0F, 0.39F, 0.475F, 0.1F, 0.5F, 0.5F, 0.0F);
 Material materialSphereC = new GlassMaterial(Color3F.WHITE, new Color3F(1.0F, 1.0F, 0.5F));
-Material materialSphereD = new GlossyMaterial(Color3F.GRAY_0_50, Color3F.BLACK, 0.2F);
+Material materialSphereD = new GlossyMaterial(Color3F.GRAY, Color3F.BLACK, 0.2F);
 Material materialSphereE = new MatteMaterial(new Color3F(0.1F, 1.0F, 0.1F));
 Material materialSphereF = new MetalMaterial();
-Material materialSphereG = new MirrorMaterial(Color3F.GRAY_0_50);
+Material materialSphereG = new MirrorMaterial(Color3F.GRAY);
 Material materialSphereH = new PlasticMaterial();
 Material materialSphereI = new SubstrateMaterial(new Color3F(1.0F, 0.2F, 0.2F));
 

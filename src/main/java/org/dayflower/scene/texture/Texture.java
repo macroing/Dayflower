@@ -18,9 +18,10 @@
  */
 package org.dayflower.scene.texture;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.node.Node;
 import org.dayflower.scene.Intersection;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code Texture} represents a texture of a surface.

@@ -21,11 +21,10 @@ package org.dayflower.pbrt;
 import static org.dayflower.utility.Doubles.pow;
 import static org.dayflower.utility.Floats.pow;
 
-import org.dayflower.color.Color3F;
-import org.dayflower.color.ColorSpaceF;
-
 import org.macroing.art4j.color.Color3D;
+import org.macroing.art4j.color.Color3F;
 import org.macroing.art4j.color.ColorSpaceD;
+import org.macroing.art4j.color.ColorSpaceF;
 
 public final class ColorConversions {
 	private ColorConversions() {

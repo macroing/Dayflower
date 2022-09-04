@@ -25,10 +25,10 @@ import static org.dayflower.utility.Floats.sin;
 
 import java.util.Objects;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.scene.Intersection;
 
+import org.macroing.art4j.color.Color3F;
 import org.macroing.art4j.noise.PerlinNoiseF;
 
 /**

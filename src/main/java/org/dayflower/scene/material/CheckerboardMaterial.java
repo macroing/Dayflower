@@ -25,7 +25,6 @@ import static org.dayflower.utility.Floats.sin;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -35,6 +34,8 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code CheckerboardMaterial} is an implementation of {@link Material} that alternates between two other {@code Material} instances in a checkerboard pattern.
@@ -72,12 +73,12 @@ public final class CheckerboardMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardMaterial(new MatteMaterial(Color3F.GRAY_0_50), new MatteMaterial(Color3F.WHITE));
+	 * new CheckerboardMaterial(new MatteMaterial(Color3F.GRAY), new MatteMaterial(Color3F.WHITE));
 	 * }
 	 * </pre>
 	 */
 	public CheckerboardMaterial() {
-		this(new MatteMaterial(Color3F.GRAY_0_50), new MatteMaterial(Color3F.WHITE));
+		this(new MatteMaterial(Color3F.GRAY), new MatteMaterial(Color3F.WHITE));
 	}
 	
 	/**

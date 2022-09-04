@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
@@ -45,6 +44,8 @@ import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
+
+import org.macroing.art4j.color.Color3F;
 
 /**
  * An {@code UberMaterial} is an implementation of {@link Material} that can represent a wide variety of materials.
@@ -89,12 +90,12 @@ public final class UberMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberMaterial(Color3F.GRAY_0_25);
+	 * new UberMaterial(new Color3F(0.25F));
 	 * }
 	 * </pre>
 	 */
 	public UberMaterial() {
-		this(Color3F.GRAY_0_25);
+		this(new Color3F(0.25F));
 	}
 	
 	/**
@@ -124,7 +125,7 @@ public final class UberMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberMaterial(colorKD, colorKR, Color3F.GRAY_0_25);
+	 * new UberMaterial(colorKD, colorKR, new Color3F(0.25F));
 	 * }
 	 * </pre>
 	 * 
@@ -133,7 +134,7 @@ public final class UberMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorKR} are {@code null}
 	 */
 	public UberMaterial(final Color3F colorKD, final Color3F colorKR) {
-		this(colorKD, colorKR, Color3F.GRAY_0_25);
+		this(colorKD, colorKR, new Color3F(0.25F));
 	}
 	
 	/**

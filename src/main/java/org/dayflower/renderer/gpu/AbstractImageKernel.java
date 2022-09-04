@@ -18,8 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
-import org.dayflower.color.Color3F;
-
+import org.macroing.art4j.color.Color3F;
 import org.macroing.java.util.Arrays;
 
 /**
@@ -390,7 +389,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	/**
 	 * Sets a color in {@link #color3FLHSArray_$private$3}.
 	 * <p>
-	 * This method works like {@link Color3F#maximumTo1(Color3F)}.
+	 * This method works like {@link Color3F#maxTo1(Color3F)}.
 	 * 
 	 * @param component1 the value of component 1
 	 * @param component2 the value of component 2
@@ -409,7 +408,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	/**
 	 * Sets a color in {@link #color3FLHSArray_$private$3}.
 	 * <p>
-	 * This method works like {@link Color3F#minimumTo0(Color3F)}.
+	 * This method works like {@link Color3F#minTo0(Color3F)}.
 	 * 
 	 * @param component1 the value of component 1
 	 * @param component2 the value of component 2
@@ -654,7 +653,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	/**
 	 * Sets a color in {@link #color3FRHSArray_$private$3}.
 	 * <p>
-	 * This method works like {@link Color3F#maximumTo1(Color3F)}.
+	 * This method works like {@link Color3F#maxTo1(Color3F)}.
 	 * 
 	 * @param component1 the value of component 1
 	 * @param component2 the value of component 2
@@ -673,7 +672,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	/**
 	 * Sets a color in {@link #color3FRHSArray_$private$3}.
 	 * <p>
-	 * This method works like {@link Color3F#minimumTo0(Color3F)}.
+	 * This method works like {@link Color3F#minTo0(Color3F)}.
 	 * 
 	 * @param component1 the value of component 1
 	 * @param component2 the value of component 2

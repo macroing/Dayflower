@@ -1,3 +1,11 @@
+2022-09-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a dependency to the new "official" Aparapi from Syncleus. This was necessary in order to support newer OpenCL versions, such as version 3.0.
+	* ADD:		Add a dependency to Apache BCEL, in order for the new Aparapi dependency to work.
+	* CHANGE:	Update the AbstractGPURenderer and AbstractKernel classes. They now use the new Aparapi version.
+	* CHANGE:	Add a missing final modifier to the Doubles class.
+	* REMOVE:	Remove the old dependency to Macroing / Aparapi.
+
 2022-09-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the dependency to Macroing Art4J.

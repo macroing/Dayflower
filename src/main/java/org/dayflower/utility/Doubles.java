@@ -37,7 +37,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public class Doubles {
+public final class Doubles {
 	/**
 	 * The {@code double} value that represents a machine epsilon.
 	 */

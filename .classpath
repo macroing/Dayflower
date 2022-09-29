@@ -3,13 +3,15 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/aparapi.jar">
+	<classpathentry kind="lib" path="lib/aparapi/aparapi-3.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/aparapi/aparapi-jni-1.4.3.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="org.dayflower/lib"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="org.dayflower/lib/aparapi"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/org.macroing.art4j.jar"/>
+	<classpathentry kind="lib" path="lib/apache/bcel-6.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/macroing/org.macroing.art4j.jar"/>
+	<classpathentry kind="lib" path="lib/macroing/org.macroing.java.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="lib/org.macroing.java.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,2 +1,2 @@
-java -Djava.library.path=lib -jar Dayflower.jar
+java -Djava.library.path=lib/aparapi -jar Dayflower.jar
 pause

@@ -209,7 +209,8 @@ The following table describes the different APIs and their current status in the
 Dependencies
 ------------
  - [Java 8](http://www.java.com)
- - [Macroing / Aparapi](https://github.com/macroing/aparapi)
+ - [Aparapi](https://aparapi.com/)
+ - [Apache / Commons / BCEL](https://commons.apache.org/proper/commons-bcel/)
  - [Macroing / Java](https://github.com/macroing/Java)
  - [Macroing / Art4J](https://github.com/macroing/Art4J)
 

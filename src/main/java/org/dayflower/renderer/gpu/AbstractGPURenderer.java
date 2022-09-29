@@ -39,7 +39,7 @@ import org.macroing.art4j.color.Color3F;
 import org.macroing.art4j.color.ColorSpaceF;
 import org.macroing.java.util.Timer;
 
-import com.amd.aparapi.Range;
+import com.aparapi.Range;
 
 /**
  * An {@code AbstractGPURenderer} is an abstract implementation of {@link CombinedProgressiveImageOrderRenderer} that takes care of most aspects.

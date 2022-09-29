@@ -25,7 +25,7 @@ import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.util.Arrays;
 
-import com.amd.aparapi.Kernel;
+import com.aparapi.Kernel;
 
 /**
  * An {@code AbstractKernel} is an abstract implementation of {@code Kernel} that adds functionality.
@@ -345,13 +345,13 @@ public abstract class AbstractKernel extends Kernel {
 	 * If {@code x} is positive, the following occurs:
 	 * <pre>
 	 * {@code
-	 * float z = fmod(x, y);
+	 * float z = remainder(x, y);
 	 * }
 	 * </pre>
 	 * If {@code x} is negative, the following occurs:
 	 * <pre>
 	 * {@code
-	 * float z = fmod((fmod(x, y) + y), y);
+	 * float z = remainder((remainder(x, y) + y), y);
 	 * }
 	 * </pre>
 	 * 
@@ -360,7 +360,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @return a {@code float} value
 	 */
 	protected final float positiveModuloF(final float x, final float y) {
-		return x < 0.0F ? fmod(fmod(x, y) + y, y) : fmod(x, y);
+		return x < 0.0F ? remainder(remainder(x, y) + y, y) : remainder(x, y);
 	}
 	
 	/**

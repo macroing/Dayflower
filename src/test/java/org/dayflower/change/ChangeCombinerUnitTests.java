@@ -43,8 +43,8 @@ public final class ChangeCombinerUnitTests {
 //		Assert that the List returned by changeCombiner.getChanges() is empty:
 		assertTrue(changeCombiner.getChanges().isEmpty());
 		
-		changeCombiner.add(new Change(() -> {}, () -> {}));
-		changeCombiner.add(new Change(() -> {}, () -> {}));
+		changeCombiner.add(new Change(() -> {/* Do nothing. */}, () -> {/* Do nothing. */}));
+		changeCombiner.add(new Change(() -> {/* Do nothing. */}, () -> {/* Do nothing. */}));
 		
 //		Assert that the List returned by changeCombiner.getChanges() contains two elements:
 		assertEquals(2, changeCombiner.getChanges().size());

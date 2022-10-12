@@ -39,13 +39,13 @@ public final class ChangeUnitTests {
 	@Test
 	public void testNewNullAndUndoAction() {
 //		Assert that new Change(null, ...) throws a NullPointerException:
-		assertThrows(NullPointerException.class, () -> new Change(null, () -> {}));
+		assertThrows(NullPointerException.class, () -> new Change(null, () -> {/* Do nothing. */}));
 	}
 	
 	@Test
 	public void testNewRedoActionAndNull() {
 //		Assert that new Change(..., null) throws a NullPointerException:
-		assertThrows(NullPointerException.class, () -> new Change(() -> {}, null));
+		assertThrows(NullPointerException.class, () -> new Change(() -> {/* Do nothing. */}, null));
 	}
 	
 	@Test
@@ -53,7 +53,7 @@ public final class ChangeUnitTests {
 		final List<Integer> list = new ArrayList<>();
 		
 		final
-		Change change = new Change(() -> list.add(Integer.valueOf(list.size())), () -> {});
+		Change change = new Change(() -> list.add(Integer.valueOf(list.size())), () -> {/* Do nothing. */});
 		change.redo();
 		change.redo();
 		

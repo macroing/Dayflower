@@ -25,5 +25,5 @@ package org.dayflower.scene;
  * @author J&#246;rgen Lundgren
  */
 public interface BSSRDF {
-	
+//	TODO: Implement!
 }

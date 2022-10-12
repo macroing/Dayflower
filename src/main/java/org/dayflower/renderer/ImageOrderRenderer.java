@@ -25,5 +25,5 @@ package org.dayflower.renderer;
  * @author J&#246;rgen Lundgren
  */
 public interface ImageOrderRenderer extends Renderer {
-	
+//	This is a marker interface.
 }

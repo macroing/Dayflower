@@ -46,6 +46,12 @@ Transform transformSphereG = new Transform(new Point3F(+ 7.5F,  1.00F, 5.0F), Qu
 Transform transformSphereH = new Transform(new Point3F(+10.0F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
 Transform transformSphereI = new Transform(new Point3F(+12.5F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
 
+final
+Camera camera = new Camera(new Point3F(0.0F, 1.0F, -5.0F));
+camera.setResolution(2560.0F / 3.0F, 1440.0F / 3.0F);
+camera.setFieldOfViewX(AngleF.degrees(40.0F));
+camera.setFieldOfViewY();
+
 //scene.addLight(new DirectionalLight());
 //scene.addLight(new LDRImageLight(new PerezLight().toImage(800, 800)));
 scene.addLight(new PerezLight(turbidity, new Vector3F(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ)));
@@ -61,5 +67,5 @@ scene.addPrimitive(new Primitive(materialSphereF, shapeSphereF, transformSphereF
 scene.addPrimitive(new Primitive(materialSphereG, shapeSphereG, transformSphereG));
 scene.addPrimitive(new Primitive(materialSphereH, shapeSphereH, transformSphereH));
 scene.addPrimitive(new Primitive(materialSphereI, shapeSphereI, transformSphereI));
-scene.setCamera(new Camera(new Point3F(0.0F, 1.0F, -5.0F), AngleF.degrees(40.0F)));
+scene.setCamera(camera);
 scene.setName("GPURenderer");

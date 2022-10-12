@@ -56,7 +56,7 @@ public final class PredicateTask extends Task<Boolean> {
 	 * @throws NullPointerException thrown if, and only if, {@code callCallable} is {@code null}
 	 */
 	public PredicateTask(final Callable<Boolean> callCallable) {
-		this(callCallable, () -> {});
+		this(callCallable, () -> {/* Do nothing. */});
 	}
 	
 	/**

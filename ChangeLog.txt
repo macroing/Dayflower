@@ -1,4 +1,6 @@
-2022-09-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-10-12  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
+
+2022-09-29  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a dependency to the new "official" Aparapi from Syncleus. This was necessary in order to support newer OpenCL versions, such as version 3.0.
 	* ADD:		Add a dependency to Apache BCEL, in order for the new Aparapi dependency to work.
@@ -6,12 +8,12 @@
 	* CHANGE:	Add a missing final modifier to the Doubles class.
 	* REMOVE:	Remove the old dependency to Macroing / Aparapi.
 
-2022-09-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-09-04  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the dependency to Macroing Art4J.
 	* REMOVE:	Remove the Color API. It can be found in the Art4J library.
 
-2022-08-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-08-27  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a dependency to Macroing Art4J. Its repository is currently in private mode.
 	* CHANGE:	Update the dependency to Macroing Java.
@@ -21,11 +23,11 @@
 	* REMOVE:	Remove ChromaticSpectralCurveD, Color, Color3D, Color4D, ColorSpaceD, ConstantSpectralCurveD, IrregularSpectralCurveD, RegularSpectralCurveD and SpectralCurveD from the Color API. Most of them can be found in the Art4J library.
 	* REMOVE:	Remove ByteImageD, ConvolutionKernel33D, ConvolutionKernel55D, DoubleImageD, ImageD, IntImageD and PixelImageD from the Image API. Some replacements for them can be found in the Art4J library.
 
-2022-08-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-08-14  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* REMOVE:	Remove the Image 2 API again. The API has been moved to a separate library. This new library will likely replace the Change API, Color API, Filter API, Image API and Noise API in the future. It is currently in a private repository.
 
-2022-07-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-07-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods random(double), random(double, double) and rint(double) to the Doubles class.
 	* ADD:		Add the methods random(float), random(float, float) and rint(float) to the Floats class.
@@ -34,7 +36,7 @@
 	* CHANGE:	Update the Image 2 API.
 	* CHANGE:	Refactor the Color API and update all affected APIs.
 
-2022-07-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-07-18  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the NodeCacheUnitTests class.
 	* ADD:		Add the RenderingAlgorithmUnitTests class.
@@ -50,12 +52,12 @@
 	* ADD:		Add the constructor Color3D(Color4F) to the Color3D class.
 	* ADD:		Add the constructor Color3F(Color4D) to the Color3F class.
 
-2022-06-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-06-26  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods perspective(AngleD, double, double, double) and screenSpaceTransform(double, double) to the Matrix44D class.
 	* ADD:		Add the methods perspective(AngleF, float, float, float) and screenSpaceTransform(float, float) to the Matrix44F class.
 
-2022-06-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-06-25  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the DoublesUnitTests, FloatsUnitTests and IntsUnitTests classes.
 	* ADD:		Add unit tests to the AxisAlignedBoundingBox3DUnitTests, AxisAlignedBoundingBox3FUnitTests, BoundingSphere3DUnitTests, BoundingSphere3FUnitTests, InfiniteBoundingVolume3DUnitTests and InfiniteBoundingVolume3FUnitTests classes.
@@ -76,26 +78,26 @@
 	* REMOVE:	Remove the method findInterval(int, IntPredicate) from the Ints class. The method has been moved to the Distribution1F class.
 	* REMOVE:	Remove the AbstractReflectiveNodeHierarchicalVisitor class.
 
-2022-05-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-28  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Refactor parts of the GPU-renderer.
 
-2022-05-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-27  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Refactor parts of the GPU-renderer.
 
-2022-05-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-24  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Refactor parts of the GPU-renderer.
 
-2022-05-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-22  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Vector3DUnitTests and Vector3FUnitTests classes.
 	* CHANGE:	Refactor parts of the GPU-renderer.
 	* REMOVE:	Remove the method refraction2(Vector3D, Vector3D, double) from the Vector3D class.
 	* REMOVE:	Remove the method refraction2(Vector3F, Vector3F, float) from the Vector3F class.
 
-2022-05-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-21  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	The fields of the Matrix33D, Matrix33F, Matrix44D, Matrix44F, OrthonormalBasis33D and OrthonormalBasis33F classes have been made public.
 	* CHANGE:	Update all classes and unit tests that have been affected by the change in the Matrix33D, Matrix33F, Matrix44D, Matrix44F, OrthonormalBasis33D and OrthonormalBasis33F classes.
@@ -103,7 +105,7 @@
 	* REMOVE:	Remove the methods getElement11(), getElement12(), getElement13(), getElement14(), getElement21(), getElement22(), getElement23(), getElement24(), getElement31(), getElement32(), getElement33(), getElement34(), getElement41(), getElement42(), getElement43() and getElement44() from the Matrix44D and Matrix44F classes.
 	* REMOVE:	Remove the methods getU(), getV() and getW() from the OrthonormalBasis33D and OrthonormalBasis33F classes.
 
-2022-05-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Rename the methods negateComponent1(Vector3D), negateComponent2(Vector3D) and negateComponent3(Vector3D) in the Vector3D class to negateX(Vector3D), negateY(Vector3D) and negateZ(Vector3D), respectively.
 	* CHANGE:	Rename the methods faceForwardComponent3(Vector3D, Vector3D) and faceForwardComponent3Negated(Vector3D, Vector3D) in the Vector3D class to faceForwardZ(Vector3D, Vector3D) and faceForwardZNegated(Vector3D, Vector3D), respectively.
@@ -114,7 +116,7 @@
 	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getComponent3(), getU(), getV(), getW(), getX(), getY() and getZ() from the Vector3D and Vector3F classes.
 	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getComponent3(), getComponent4(), getW(), getX(), getY() and getZ() from the Quaternion4D and Quaternion4F classes.
 
-2022-05-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-17  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Rename the fields component1 and component2 in the Point2I and Vector2I classes to x and y, respectively. They have also been made public.
 	* CHANGE:	Update all classes and unit tests that have been affected by the change in the Point2I and Vector2I classes.
@@ -125,7 +127,7 @@
 	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getComponent3(), getComponent4(), getW(), getX(), getY() and getZ() from the Point4D, Point4F, Vector4D and Vector4F classes.
 	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getComponent3(), getU(), getV(), getW(), getX(), getY() and getZ() from the Point3D and Point3F classes.
 
-2022-05-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-15  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Rename the method rotate(Point2D, AngleD) in the Point2D class to rotateCounterclockwise(Point2D, AngleD).
 	* CHANGE:	Rename the method rotate(Point2F, AngleF) in the Point2F class to rotateCounterclockwise(Point2F, AngleF).
@@ -136,11 +138,11 @@
 	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getU(), getV(), getX(), getY(), negateComponent1(Vector2D), negateComponent2(Vector2D), u(), u(double), v() and v(double) from the Vector2D class.
 	* REMOVE:	Remove the methods getComponent1(), getComponent2(), getU(), getV(), getX(), getY(), negateComponent1(Vector2F), negateComponent2(Vector2F), u(), u(float), v() and v(float) from the Vector2F class.
 
-2022-05-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-03  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Sphere3DUnitTests class.
 
-2022-05-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-05-01  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Plane3FUnitTests class.
 	* CHANGE:	Update the Plane3D class so that it is located on the point [0.0, 0.0, 0.0] and has a surface normal of [0.0, 0.0, 1.0]. Its variables have been removed.
@@ -153,7 +155,7 @@
 	* CHANGE:	Update the AbstractSceneKernel, AbstractShape3FKernel and CompiledShape3FCache classes because of the changes to Plane3F and Sphere3F.
 	* REMOVE:	Remove the Demo class.
 
-2022-04-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-28  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Polygon2DReaderUnitTests, Polygon2DUnitTests, Polygon2FReaderUnitTests, Polygon2FUnitTests, Polygon2IReaderUnitTests and Polygon2IUnitTests classes.
 	* ADD:		Add the method getPoints() to the Polygon2D and Polygon2F classes.
@@ -162,23 +164,23 @@
 	* CHANGE:	The points B and D in the Rectangle2D, Rectangle2F and Rectangle2I classes have been swapped by default. Before they were counter clockwise and now they are clockwise.
 	* CHANGE:	Update the equals(Object) and hashCode() methods in the Plane3D and Plane3F classes.
 
-2022-04-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-27  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Triangle2DReaderUnitTests, Triangle2DUnitTests, Triangle2FReaderUnitTests, Triangle2FUnitTests and Triangle2IReaderUnitTests classes.
 	* CHANGE:	Fix spelling mistakes in the copyright notice of some unit test files.
 
-2022-04-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-26  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Rectangle2IUnitTests class.
 	* ADD:		Add the Rectangle2DReaderUnitTests, Rectangle2DUnitTests, Rectangle2FReaderUnitTests, Rectangle2FUnitTests, Rectangle2IReaderUnitTests and Triangle2IUnitTests classes.
 	* CHANGE:	Update the equals(Object), hashCode() and toString() methods in the Rectangle2D and Rectangle2F classes.
 	* CHANGE:	Update the equals(Object) and hashCode() methods in the Triangle2I class.
 
-2022-04-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-25  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Rectangle2IUnitTests class.
 
-2022-04-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-24  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the BoxFilter2DUnitTests, BoxFilter2FUnitTests, CatmullRomFilter2DUnitTests, CatmullRomFilter2FUnitTests, GaussianFilter2DUnitTests, GaussianFilter2FUnitTests, LanczosSincFilter2DUnitTests, LanczosSincFilter2FUnitTests, MitchellFilter2DUnitTests, MitchellFilter2FUnitTests, TriangleFilter2DUnitTests and TriangleFilter2FUnitTests classes.
 	* ADD:		Add the constructor CatmullRomFilter2D() to the CatmullRomFilter2D class.
@@ -192,7 +194,7 @@
 	* REMOVE:	Remove the method intersection(Rectangle2F, Rectangle2F) from the Rectangle2F class.
 	* REMOVE:	Remove the method intersection(Rectangle2I, Rectangle2I) from the Rectangle2I class.
 
-2022-04-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-23  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the IntsUnitTests class.
 	* CHANGE:	Update the dependency to Macroing Java.
@@ -200,7 +202,7 @@
 	* CHANGE:	Rename the method errorReciprocal(float) in the Floats class to errorInverse(float).
 	* REMOVE:	Remove the Timer class. It has been replaced by the Timer class in Macroing Java.
 
-2022-04-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-15  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the dependency to Macroing Java.
 	* REMOVE:	Remove the methods create(int), create(int, byte) and create(int, byte, byte, byte, byte) from the ByteArrays class. These methods have been replaced by Arrays.repeat(byte[], int) in Macroing Java.
@@ -220,11 +222,11 @@
 	* REMOVE:	Remove the FloatArrays class. The methods splice(float[], int), splice(float[], int, int), splice(float[], int, int, float[]) and splice(float[], int, int, float[], float[]) have been replaced by Arrays.splice(float[], int), Arrays.splice(float[], int, int) and Arrays.splice(float[], int, int, float[]) in Macroing Java.
 	* REMOVE:	Remove the IntArrays class. The methods splice(int[], int), splice(int[], int, int), splice(int[], int, int, int[]) and splice(int[], int, int, int[], int[]) have been replaced by Arrays.splice(int[], int), Arrays.splice(int[], int, int) and Arrays.splice(int[], int, int, int[]) in Macroing Java.
 
-2022-04-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix a bug in the GPU-based version of GlassMaterial. The DielectricFresnel-based SpecularBRDF type used the R-, G- and B-components in reverse order.
 
-2022-04-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-10  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a dependency to Macroing Java.
 	* CHANGE:	Move PixelD to PixelImageD.PixelD. It is now a nested class rather than a top level class.
@@ -236,7 +238,7 @@
 	* REMOVE:	Remove the Java Util Concurrent Atomic API.
 	* REMOVE:	Remove the Java Util Function API.
 
-2022-04-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-04-07  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the ByteArraysUnitTests, DoubleArraysUnitTests, DoublesUnitTests, IntsUnitTests and LongArraysUnitTests classes.
 	* ADD:		Add unit tests to the FloatsUnitTests class.
@@ -252,24 +254,24 @@
 	* REMOVE:	Remove the FilterNB interface and the EchoFilterNB class from the Filter API.
 	* REMOVE:	Remove the CircularBuffer and CircularBufferException classes from the Utility API.
 
-2022-03-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-03-27  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the FloatsUnitTests class.
 	* REMOVE:	Remove the method remainder(double, double) from the Doubles class. Use the % operator instead. It worked almost like %, with some differences for the sign.
 	* REMOVE:	Remove the method remainder(float, float) from the Floats class. Use the % operator instead. It worked almost like %, with some differences for the sign.
 
-2022-03-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-03-26  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the BytesUnitTests, LongsUnitTests and ParameterArgumentsUnitTests classes.
 	* CHANGE:	Move the tan-computations for the field of view of the camera from AbstractSceneKernel to CompiledCameraCache. This is a minor optimization.
 
-2022-03-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-03-24  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for ImageLight to the GPU renderer.
 	* CHANGE:	Refactor the classes AbstractLightKernel, AbstractSceneKernel, CompiledLightCache and CompiledSceneModifier in order to remove support for the LDRImageLight class and add support for the ImageLight class.
 	* REMOVE:	Remove the HDRImageLight and LDRImageLight classes.
 
-2022-03-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-03-22  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the ImageLight class. This one will soon replace the new HDRImageLight class and the old LDRImageLight class. Support for it on the GPU is required first.
 	* ADD:		Add the HDRImageLight class.
@@ -280,23 +282,23 @@
 	* CHANGE:	Fix a bug in the methods undoGammaCorrection() and update(BiFunction<Color4F, Point2I, Color4F>, Rectangle2I) in the ImageF class.
 	* TEST:		The updated JavaSceneLoader class has been tested using Java 11.
 
-2022-03-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-03-21  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a run.bat file that is copied to the distribution when building the project using Apache Ant.
 	* CHANGE:	Update the JavaSceneLoader class. The changes had to be made in order to support Java 11. In Java 9, Field.isAccessible() is deprecated. Calling Field.setAccessible(boolean) resulted in an illegal access in Java 11 (and possibly Java 9). In Java 9, ClassLoader.getSystemClassLoader() does not return a URLClassLoader anymore, which also had to be fixed. This change has only been partially tested in Java 11 at this point.
 
-2022-03-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-03-20  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix Javadoc issues in the TrowbridgeReitzMicrofacetDistribution class.
 	* CHANGE:	Fix Javadoc issues in the AbstractMaterialKernel class.
 
-2022-03-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-03-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Change the default values passed to the constructors of the PlasticMaterial class.
 	* CHANGE:	Update the GPURenderer and PlasticMaterial scenes to use the default PlasticMaterial configuration.
 	* CHANGE:	Update the native files for Aparapi. So Dayflower may work on other operating systems or architectures now. But it has not been tested yet.
 
-2022-03-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-03-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Rectangle2IUnitTests class.
 	* ADD:		Add the methods fillRegion(int, int, BiFunction<Color4D, Point2I, Color4D>) and fillRegion(int, int, BiFunction<Color4D, Point2I, Color4D>, BiPredicate<Color4D, Point2I>) to the ImageD class.
@@ -316,64 +318,64 @@
 	* REMOVE:	Remove the method image4DTextureGetColor4D(double[], double) from the Texture class in the Simplex API.
 	* REMOVE:	Remove the methods getHeight() and getWidth() from the Rectangle2D, Rectangle2F and Rectangle2I classes.
 
-2022-03-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-03-08  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	When DayflowerApplication was rendering and was closed, the program would not terminate. This has been fixed. The bug was described in issue #3.
 
-2022-02-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-02-20  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Color3DUnitTests, Color3FUnitTests, Color4DUnitTests and Color4FUnitTests classes.
 
-2022-02-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-02-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method sobel() to the ImageD and ImageF classes.
 	* ADD:		Add the method toBufferedImage(boolean) to the Image class. If the boolean parameter is true, the BufferedImage will use BufferedImage.TYPE_INT_RGB instead of BufferedImage.TYPE_INT_ARGB.
 	* CHANGE:	Fix the save(...) methods in the Image class to work with JPEG images. Previously images saved as JPEG would be somewhat pink. This was caused by the alpha-channel.
 
-2022-01-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-01-10  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method contains(Point3D) to the CompoundShape3D, Cone3D, ConstructiveSolidGeometry3D, Curve3D, Cylinder3D, Disk3D, Hyperboloid3D, Paraboloid3D, Torus3D and TriangleMesh3D classes.
 	* ADD:		Add the method contains(Point3F) to the CompoundShape3F, Cone3F, ConstructiveSolidGeometry3F, Curve3F, Cylinder3F, Disk3F, Hyperboloid3F, Paraboloid3F, Torus3F and TriangleMesh3F classes.
 	* ADD:		Add the method contains(Point3D) to the Shape3D interface.
 	* ADD:		Add the method contains(Point3F) to the Shape3F interface.
 
-2022-01-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-01-07  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the AngleDUnitTests and AngleFUnitTests classes.
 	* CHANGE:	Fix a bug in the method wrapAround(double, double, double) in the Doubles class.
 	* CHANGE:	Fix a bug in the method wrapAround(float, float, float) in the Floats class.
 	* CHANGE:	Fix unit tests in the AngleDUnitTests and AngleFUnitTests classes.
 
-2022-01-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-01-06  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the AngleDUnitTests and AngleFUnitTests classes.
 	* CHANGE:	Update the copyright notice for the Scene API, Scene BSSRDF API, Scene BXDF API, Scene Compiler API, Scene Demo API, Scene Fresnel API, Scene Light API, Scene Loader API, Scene Material API, Scene Microfacet API, Scene Modifier API, Scene Texture API, Simplex API, Sound API, Utility API, Wavefront Material API, Wavefront Object API and Test APIs.
 	* CHANGE:	Update the toString() method of the AngleD and AngleF classes.
 
-2022-01-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-01-05  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the copyright notice for the JavaFX Application API, JavaFX Concurrent API, JavaFX Scene Canvas API, JavaFX Scene Control API, JavaFX Scene Image API, JavaFX Scene Layout API, Node API, Noise API, Parameter API, Renderer API, Renderer CPU API, Renderer GPU API, Renderer Observer API and Sampler API.
 
-2022-01-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-01-02  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the copyright notice for the Geometry Bounding Volume API, Geometry Bounding Volume Hierarchy API, Geometry Rasterizer API, Geometry Shape API, Image API, Java AWT Image API, Java I/O API, Java Lang API, Java Util API, Java Util Concurrent Atomic API and Java Util Function API.
 
-2022-01-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-01-01  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the copyright notice for the Change API, Color API, Filter API and Geometry API.
 
-2021-12-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-28  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for creating a more compact form of the BVH in the GPU-renderer. It is a little bit faster in some cases.
 
-2021-12-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-27  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the AbstractBoundingVolume3FKernel and AbstractShape3FKernel classes.
 	* CHANGE:	Change the compiled representations of the AxisAlignedBoundingBox3F and BoundingSphere3F classes to be referenced using relative instead of absolute offsets.
 	* CHANGE:	Update the super class of the AbstractModifierKernel class from AbstractGeometryKernel to AbstractShape3FKernel.
 	* REMOVE:	Remove all methods related to BoundingVolume3F and Shape3F types from the AbstractGeometryKernel class.
 
-2021-12-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-26  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Circle2IUnitTests and LineSegment2IUnitTests classes.
 	* ADD:		Add the methods getMaximum() and getMinimum() to the Circle2I, LineSegment2I, Polygon2I, Rectangle2I and Triangle2I classes.
@@ -391,7 +393,7 @@
 	* CHANGE:	Update the union(Rectangle2I, Rectangle2I) method in the Rectangle2I class to handle rotated Rectangle2I instances correctly.
 	* REMOVE:	Remove the copy() and copy(Rectangle2I) methods from the ByteImageD, ByteImageF, DoubleImageD, FloatImageF, IntImageD, IntImageF, PixelImageD and PixelImageF classes.
 
-2021-12-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-25  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getSurfaceNormalGCorrectlyOriented() and getSurfaceNormalSCorrectlyOriented() to the Intersection class.
 	* CHANGE:	Update the GPU-renderer to use correctly oriented surface normals.
@@ -399,13 +401,13 @@
 	* CHANGE:	Update the NormalMapLDRImageModifier class. It now uses the surface normal of the geometry in the calculations, rather than the one for shading.
 	* CHANGE:	Update the NormalMapLDRImageModifier implementation in the AbstractGeometryKernel and AbstractModifierKernel classes. The bilinear interpolation is removed and the methods intersectionLHSSetOrthonormalBasisSWTransform(float, float, float) and intersectionRHSSetOrthonormalBasisSWTransform(float, float, float) now use the surface normal of the geometry in the calculations, rather than the one for shading.
 
-2021-12-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-23  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the methods ray3FSetFromSurfaceIntersectionPointAndVector3FLHS() and ray3FSetFromSurfaceIntersectionPointAndVector3FRHS() in the AbstractGeometryKernel class to work more like the CPU renderer.
 	* CHANGE:	Change back the precision of the cos() and sin() methods in the AngleF class. It did not work out in the end.
 	* CHANGE:	Update unit tests in the Matrix44FUnitTests class.
 
-2021-12-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-22  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods cos() and sin() to the AngleD and AngleF classes.
 	* ADD:		Add unit tests to the Matrix44DUnitTests and Matrix44FUnitTests classes.
@@ -416,11 +418,11 @@
 	* CHANGE:	Update the normalize(Quaternion4D) method in the Quaternion4D class. It now checks if it is normalized or not.
 	* CHANGE:	Update the normalize(Quaternion4F) method in the Quaternion4F class. It now checks if it is normalized or not.
 
-2021-12-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-20  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method orthonormalBasis33FSetFromUV(float, float, float, float, float, float) to the AbstractGeometryKernel class.
 
-2021-12-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F(), intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F(), intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F() and intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F() to the AbstractGeometryKernel class.
 	* ADD:		Add unit tests to the OrthonormalBasis33DUnitTests and OrthonormalBasis33FUnitTests classes.
@@ -432,43 +434,43 @@
 	* REMOVE:	Remove the methods coordinateSystem(Vector3D) and lerp(OrthonormalBasis33D, OrthonormalBasis33D, double) from the OrthonormalBasis33D class.
 	* REMOVE:	Remove the methods coordinateSystem(Vector3F) and lerp(OrthonormalBasis33F, OrthonormalBasis33F, float) from the OrthonormalBasis33F class.
 
-2021-12-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-18  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the OrthonormalBasis33DUnitTests and OrthonormalBasis33FUnitTests classes.
 	* CHANGE:	Fix a cache issue in the Vector3DUnitTests and Vector3FUnitTests classes.
 
-2021-12-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-17  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Quaternion4DUnitTests and Quaternion4FUnitTests classes.
 	* ADD:		Add unit tests to the Matrix44DUnitTests and Matrix44FUnitTests classes.
 	* CHANGE:	Change the aperture radius interval in the application.
 	* CHANGE:	Update the toString() method of the Quaternion4D and Quaternion4F classes.
 
-2021-12-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-16  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Point3DUnitTests and Point3FUnitTests classes.
 	* CHANGE:	Update the method testReciprocal() in the Vector2DUnitTests and Vector2FUnitTests classes.
 	* CHANGE:	Update the method reciprocal(Vector2D) in the Vector2D class.
 	* CHANGE:	Update the method reciprocal(Vector2F) in the Vector2F class.
 
-2021-12-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-15  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a unit test for Point2I.midpoint(Point2I, Point2I) to the Point2IUnitTests class.
 	* ADD:		Add the method midpoint(Point2I, Point2I) to the Point2I class.
 	* ADD:		Add the LineSegment2DUnitTests, LineSegment2FUnitTests and LineSegment2IUnitTests classes.
 
-2021-12-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-14  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Circle2DReaderUnitTests, Circle2FReaderUnitTests and Circle2IReaderUnitTests classes.
 	* CHANGE:	Update the method rotate(OrthonormalBasis33D) in the Matrix44D class. It may be slightly faster now.
 	* CHANGE:	Update the method rotate(OrthonormalBasis33F) in the Matrix44F class. It may be slightly faster now.
 
-2021-12-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Circle2DUnitTests and Circle2FUnitTests classes.
 	* ADD:		Add the Circle2IUnitTests class.
 
-2021-12-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-12  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a null check to the method read(DataInput, int) in all *Reader classes of the Geometry Shape API.
 	* ADD:		Add the AxisAlignedBoundingBox3DReaderUnitTests, AxisAlignedBoundingBox3FReaderUnitTests, Circle2DUnitTests, Circle2FUnitTests, DefaultBoundingVolume3DReaderUnitTests and DefaultBoundingVolume3FReaderUnitTests classes.
@@ -481,7 +483,7 @@
 	* CHANGE:	Update the method reciprocal(Vector3F) in the Vector3F class. It would return 0.0F for non-finite numbers, but that caused a bug in the AxisAlignedBoundingBox3F class, which relied on division by 0 to return infinity.
 	* CHANGE:	Update the method vector3FSetNormalize(float, float, float) in the AbstractGeometryKernel class to check if the vector is already normalized.
 
-2021-12-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-11  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the AxisAlignedBoundingBox3DUnitTests and AxisAlignedBoundingBox3FUnitTests classes.
 	* ADD:		Add the BoundingSphere3DReaderUnitTests, BoundingSphere3FReaderUnitTests, InfiniteBoundingVolume3DReaderUnitTests and InfiniteBoundingVolume3FReaderUnitTests classes.
@@ -495,7 +497,7 @@
 	* CHANGE:	Fix a bug in the method getClosestPointTo(Point3F) in the BoundingSphere3F class. It should return the Point3F supplied as a parameter if it is the closest point.
 	* CHANGE:	Update the toString() method of the BoundingSphere3D, BoundingSphere3F, Color3D, Color3F, Color4D, Color4F, Matrix33D, Matrix33F, Matrix44D, Matrix44F, Point2D, Point2F, Point3D, Point3F, Point4D, Point4F, Vector2D, Vector2F, Vector3D, Vector3F, Vector4D and Vector4F classes.
 
-2021-12-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-10  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method getMidpoint() to the InfiniteBoundingVolume3D and InfiniteBoundingVolume3F classes.
 	* ADD:		Add the BoundingSphere3DUnitTests, BoundingSphere3FUnitTests, InfiniteBoundingVolume3DUnitTests and InfiniteBoundingVolume3FUnitTests classes.
@@ -509,7 +511,7 @@
 	* REMOVE:	Remove the methods load(File), load(File, AngleF), load(File, AngleF, Vector2F), load(String), load(String, AngleF), load(String, AngleF, Vector2F), redoGammaCorrectionSRGB(LDRImageNormalMapModifier) and undoGammaCorrectionSRGB(LDRImageNormalMapModifier) from the LDRImageNormalMapModifier class. These operations can be performed by the Image API.
 	* REMOVE:	Remove the methods load(File), load(File, AngleF), load(File, AngleF, Vector2F), load(String), load(String, AngleF), load(String, AngleF, Vector2F), redoGammaCorrectionSRGB(LDRImageSteepParallaxMapModifier) and undoGammaCorrectionSRGB(LDRImageSteepParallaxMapModifier) from the LDRImageSteepParallaxMapModifier class. These operations can be performed by the Image API.
 
-2021-12-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-09  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods calculateBitangent() and calculateTangent() to the Triangle3D and Triangle3F classes.
 	* ADD:		Add support for Modifiers to the Ray Caster in the CPU renderer.
@@ -521,7 +523,7 @@
 	* CHANGE:	Update the methods divide(Vector4D, double) and normalize(Vector4D) in the Vector4D class.
 	* CHANGE:	Update the methods divide(Vector4F, float) and normalize(Vector4F) in the Vector4F class.
 
-2021-12-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-07  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a NodeHierarchicalVisitorMock class that implements NodeHierarchicalVisitor to traverse Nodes in different paths or throw a RuntimeException.
 	* ADD:		Add a NodeVisitorMock class that implements NodeVisitor to throw a RuntimeException.
@@ -530,12 +532,12 @@
 	* ADD:		Add unit tests to the Vector3DUnitTests class.
 	* ADD:		Add unit tests to the Vector3FUnitTests class.
 
-2021-12-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-06  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update Point4DUnitTests and Point4FUnitTests for full unit test coverage.
 	* CHANGE:	Update Vector2DUnitTests and Vector2FUnitTests for full unit test coverage.
 
-2021-12-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-05  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the WritableImageCacheUnitTests class.
 	* ADD:		Add the method size() to the WritableImageCache class.
@@ -550,7 +552,7 @@
 	* CHANGE:	Fix a bug in FloatUnaryOperator. The method identity() was not static, which it should be.
 	* CHANGE:	Update the testWrite() method in the Color3DUnitTests, Color3FUnitTests, Matrix33DUnitTests, Matrix33FUnitTests, Matrix44DUnitTests, Matrix44FUnitTests, Point2DUnitTests, Point2FUnitTests, Point2IUnitTests, Point3DUnitTests, Point3FUnitTests, Point4DUnitTests, Point4FUnitTests, Vector2DUnitTests and Vector2FUnitTests classes to use the DataOutputMock class.
 
-2021-12-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-04  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method perpendicular(Vector2D) to the Vector2D class.
 	* ADD:		Add the method perpendicular(Vector2F) to the Vector2F class.
@@ -570,11 +572,11 @@
 	* REMOVE:	Remove the methods nextDownPBRT(double) and nextUpPBRT(double) from the Doubles class. They are replaced with the methods nextDown(double) and nextUp(double).
 	* REMOVE:	Remove the methods nextDownPBRT(float) and nextUpPBRT(float) from the Floats class. They are replaced with the methods nextDown(float) and nextUp(float).
 
-2021-12-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-03  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the AngleDUnitTests and AngleFUnitTests classes.
 
-2021-12-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-12-02  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Matrix44DUnitTests and Matrix44FUnitTests classes.
 	* ADD:		Add unit tests to the Matrix33DUnitTests class.
@@ -588,7 +590,7 @@
 	* CHANGE:	Fix a bug in the determinant() method of the Matrix33F class.
 	* REMOVE:	Remove the method setupPRNG() and the fields seedArray_$private$1 and setupPRNG from the AbstractKernel class. The PRNG that used private memory was slightly faster in some cases, but it did not work out as expected. Some artifacts were introduced.
 
-2021-11-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-30  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Matrix33DUnitTests and Matrix33FUnitTests classes.
 	* ADD:		Add unit tests to the Point3DUnitTests class.
@@ -597,7 +599,7 @@
 	* CHANGE:	Fix a bug in the method centroid(Point3D, Point3D, Point3D, Point3D, Point3D, Point3D, Point3D, Point3D) in the Point3D class.
 	* CHANGE:	Fix a bug in the method centroid(Point3F, Point3F, Point3F, Point3F, Point3F, Point3F, Point3F, Point3F) in the Point3F class.
 
-2021-11-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-28  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Point2DUnitTests class.
 	* ADD:		Add unit tests to the Point2FUnitTests class.
@@ -608,17 +610,17 @@
 	* ADD:		Add unit tests to the Point4FUnitTests class.
 	* CHANGE:	Update the toString() method of the Point3D, Point3F, Point4D and Point4F classes.
 
-2021-11-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-27  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Point2DUnitTests class.
 	* ADD:		Add unit tests to the Point2FUnitTests class.
 
-2021-11-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-26  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Point2DUnitTests class.
 	* ADD:		Add unit tests to the Point2FUnitTests class.
 
-2021-11-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-25  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Point2DUnitTests, Point2FUnitTests, Point2IUnitTests, Point3DUnitTests, Point3FUnitTests, Point4DUnitTests and Point4FUnitTests classes.
 	* ADD:		Add the ChromaticSpectralCurveDUnitTests, ChromaticSpectralCurveFUnitTests, Color4DUnitTests, ColorSpaceDUnitTests, ColorSpaceFUnitTests, ConstantSpectralCurveDUnitTests, ConstantSpectralCurveFUnitTests, IrregularSpectralCurveDUnitTests, IrregularSpectralCurveFUnitTests, RegularSpectralCurveDUnitTests and RegularSpectralCurveFUnitTests classes.
@@ -626,13 +628,13 @@
 	* ADD:		Add the method equals(Color4F) to the Color4F class.
 	* CHANGE:	Update the toString() method of the Point2D and Point2F classes.
 
-2021-11-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-23  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a simple renderer implementation for the Ray Tracing option in the GPU-renderer.
 	* CHANGE:	Perform some optimizations to the GPU-renderer, including the PRNG.
 	* CHANGE:	Update the methods saturateF(float, float, float) and saturateI(int, int, int) in the AbstractKernel class. In the past, the two parameters at the end could be either minimum and maximum or maximum and minimum. Now they are assumed to be minimum and maximum.
 
-2021-11-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-20  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method equals(Color3D) to the Color3D class.
 	* ADD:		Add the method equals(Color3F) to the Color3F class.
@@ -640,7 +642,7 @@
 	* ADD:		Add the field bXDFMatchArray_$private$8 to the AbstractMaterialKernel class. It stores the IDs for matching BXDFs, to simplify selection.
 	* CHANGE:	Optimize the BSDF class.
 
-2021-11-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-18  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods drawShape(Shape2I), drawShape(Shape2I, BiFunction<Color4D, Point2I, Color4D>), drawShape(Shape2I, Color3D), drawShape(Shape2I, Color4D), drawShapeComplement(Shape2I), drawShapeComplement(Shape2I, BiFunction<Color4D, Point2I, Color4D>), drawShapeComplement(Shape2I, Color3D), drawShapeComplement(Shape2I, Color4D), fillShape(Shape2I), fillShape(Shape2I, BiFunction<Color4D, Point2I, Color4D>), fillShape(Shape2I, Color3D), fillShape(Shape2I, Color4D), fillShapeComplement(Shape2I), fillShapeComplement(Shape2I, BiFunction<Color4D, Point2I, Color4D>), fillShapeComplement(Shape2I, Color3D) and fillShapeComplement(Shape2I, Color4D) to the ImageD class.
 	* ADD:		Add the methods drawShape(Shape2I), drawShape(Shape2I, BiFunction<Color4F, Point2I, Color4F>), drawShape(Shape2I, Color3F), drawShape(Shape2I, Color4F), drawShapeComplement(Shape2I), drawShapeComplement(Shape2I, BiFunction<Color4F, Point2I, Color4F>), drawShapeComplement(Shape2I, Color3F), drawShapeComplement(Shape2I, Color4F), fillShape(Shape2I), fillShape(Shape2I, BiFunction<Color4F, Point2I, Color4F>), fillShape(Shape2I, Color3F), fillShape(Shape2I, Color4F), fillShapeComplement(Shape2I), fillShapeComplement(Shape2I, BiFunction<Color4F, Point2I, Color4F>), fillShapeComplement(Shape2I, Color3F) and fillShapeComplement(Shape2I, Color4F) to the ImageF class.
@@ -657,17 +659,17 @@
 	* REMOVE:	Remove the method contains(Point2I) from the Rectangle2I class.
 	* REMOVE:	Remove the method contains(Point2I) from the Triangle2I class.
 
-2021-11-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-17  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method toneMap(double) to the ImageD class.
 	* ADD:		Add the method toneMap(float) to the ImageF class.
 
-2021-11-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-16  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the intersection methods in the GPU renderer. Instead of one set of methods, two exists, such that information about intersected AreaLight instances can be stored.
 	* CHANGE:	Fix a bug in the SubstrateMaterial implementation in the GPU renderer.
 
-2021-11-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-14  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method getTurbidity() to the PerezLight class.
 	* ADD:		Add the methods color3FLHSSetConvertXYZToRGB(float, float, float) and color3FRHSSetConvertXYZToRGB(float, float, float) to the AbstractImageKernel class.
@@ -687,140 +689,140 @@
 	* REMOVE:	Remove the methods convertRGBAToXYZAUsingPBRT(Color4D), convertRGBAToXYZAUsingSRGB(Color4D), convertXYZAToRGBAUsingPBRT(Color4D), convertXYZAToRGBAUsingSRGB(Color4D), redoGammaCorrectionPBRT(Color4D), redoGammaCorrectionSRGB(Color4D), undoGammaCorrectionPBRT(Color4D) and undoGammaCorrectionSRGB(Color4D) from the Color4D class.
 	* REMOVE:	Remove the methods convertRGBAToXYZAUsingPBRT(Color4F), convertRGBAToXYZAUsingSRGB(Color4F), convertXYZAToRGBAUsingPBRT(Color4F), convertXYZAToRGBAUsingSRGB(Color4F), redoGammaCorrectionPBRT(Color4F), redoGammaCorrectionSRGB(Color4F), undoGammaCorrectionPBRT(Color4F) and undoGammaCorrectionSRGB(Color4F) from the Color4F class.
 
-2021-11-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Color3DUnitTests class.
 	* ADD:		Add unit tests to the Color3FUnitTests class.
 	* CHANGE:	Update the gamma correction in ColorSpaceD and ColorSpaceF to account for values outside the range [0.0, 1.0]. The results will then be similar to the PBRT version.
 	* CHANGE:	Change the maximum decimal places for the method toNonScientificNotation(double) in the Strings class from 8 to 16. The method toNonScientificNotation(float) is still using 8 as before.
 
-2021-11-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-11  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods toColorRGB(boolean) and toColorXYZ(boolean) to the SpectralCurveD and SpectralCurveF classes.
 	* ADD:		Add unit tests to the ArrayComponentOrderUnitTests class.
 	* CHANGE:	Update the PerezLight class to use the legacy version of SpectralCurveF.toColorXYZ(boolean).
 	* CHANGE:	Update the ChromaticSpectralCurveD and ChromaticSpectralCurveF classes to use the legacy versions of toColorXYZ(boolean).
 
-2021-11-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-09  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the ArrayComponentOrderUnitTests class.
 
-2021-11-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-08  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Color3DUnitTests class.
 	* ADD:		Add unit tests to the Color3FUnitTests class.
 
-2021-11-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-06  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Color4FUnitTests class.
 	* ADD:		Add the PackedIntComponentOrderUnitTests class.
 	* CHANGE:	Update the toString() method of the Color4D and Color4F classes.
 
-2021-11-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-05  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Color3DUnitTests class.
 	* ADD:		Add unit tests to the Color3FUnitTests class.
 
-2021-11-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-04  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Color3DUnitTests class.
 	* ADD:		Add unit tests to the Color3FUnitTests class.
 
-2021-11-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-02  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the ArrayComponentOrderUnitTests class.
 	* ADD:		Add unit tests to the Color3FUnitTests class.
 	* CHANGE:	Fix a bug in the method readRAsInt(byte[], int) of the ArrayComponentOrder enum. It returned a byte and not an int.
 
-2021-11-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-11-01  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add unit tests to the Color3FUnitTests class.
 
-2021-10-31  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-31  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the default Filter2D class used in PixelImageD from MitchellFilter2D to GaussianFilter2D. MitchellFilter2D creates negative filter weights whereas GaussianFilter2D does not.
 	* CHANGE:	Update the default Filter2F class used in PixelImageF from MitchellFilter2F to GaussianFilter2F. MitchellFilter2F creates negative filter weights whereas GaussianFilter2F does not.
 	* CHANGE:	Fix a bug in AbstractCPURenderer.
 
-2021-10-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-30  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Color3FUnitTests class.
 	* CHANGE:	Fix bugs in the isCyan(), isMagenta() and isYellow() methods of the Color3D, Color3F, Color4D and Color4F classes.
 	* CHANGE:	Update the toString() method of the Color3D and Color3F classes.
 	* CHANGE:	Update the ChangeCombinerUnitTests, ChangeHistoryUnitTests and ChangeUnitTests classes.
 
-2021-10-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-24  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Point class in the Simplex API.
 
-2021-10-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-23  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Vector class in the Simplex API.
 	* CHANGE:	Update Javadocs for the ChangeCombiner class in the Change API.
 	* CHANGE:	Update Javadocs for the ArrayComponentOrder enum, the Color3D, Color3F, ColorSpace3D and ColorSpace3F classes in the Color API.
 	* CHANGE:	Update Javadocs for the Matrix, OrthonormalBasis, Point and Vector classes in the Simplex API.
 
-2021-10-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-22  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Vector class in the Simplex API.
 
-2021-10-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-20  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Texture class in the Simplex API.
 
-2021-10-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Color class in the Simplex API.
 
-2021-10-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-18  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the ChangeCombinerUnitTests, ChangeHistoryUnitTests and ChangeUnitTests classes.
 	* REMOVE:	Remove the ChangeAPIUnitTests class.
 
-2021-10-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-16  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add new tests to the ChangeAPIUnitTests class.
 
-2021-10-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-15  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix Javadoc errors in the Renderer, AbstractCPURenderer, AbstractGPURenderer, AbstractModifierKernel, CompiledTextureCache and Color.
 
-2021-10-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-14  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the constructor ConstructiveSolidGeometry3D(Operation, Shape3D, Shape3D, Matrix44D, Matrix44D) to the ConstructiveSolidGeometry3D class.
 	* ADD:		Add the constructor ConstructiveSolidGeometry3F(Operation, Shape3F, Shape3F, Matrix44F, Matrix44F) to the ConstructiveSolidGeometry3F class.
 
-2021-10-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Unit Tests for the Change API to the ChangeAPIUnitTests class in the Test API.
 
-2021-10-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-10  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method materialBSDFResultBXDFHasTransmission() to the AbstractMaterialKernel class.
 	* CHANGE:	Update the way transmissive materials are handled for the Path Tracer in the GPURenderer class.
 
-2021-10-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-09  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method render(int) to the AbstractCPURenderer and AbstractGPURenderer classes.
 	* ADD:		Add the method render(int) to the Renderer interface.
 
-2021-10-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-08  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods rotateX(double), rotateX(double, boolean), rotateY(double), rotateY(double, boolean), rotateZ(double) and rotateZ(double, boolean) to the Matrix44D class.
 	* ADD:		Add the methods rotateX(float), rotateX(float, boolean), rotateY(float), rotateY(float, boolean), rotateZ(float) and rotateZ(float, boolean) to the Matrix44F class.
 
-2021-10-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-06  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods setObjectToWorld(Matrix44F) and setWorldToObject(Matrix44F) to the Transform class.
 
-2021-10-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-05  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods luminanceMaximum() and luminanceMinimum() to the ImageD class.
 	* ADD:		Add the methods luminanceMaximum() and luminanceMinimum() to the ImageF class.
 	* ADD:		Add the method maxOrNaN(double, double) to the Doubles class.
 	* ADD:		Add the method maxOrNaN(float, float) to the Floats class.
 
-2021-10-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-03  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for Polygon3F to the GPU-renderer.
 	* ADD:		Add the method checkIsNearlyEqual(float, float) to the AbstractKernel class.
@@ -831,7 +833,7 @@
 	* CHANGE:	Change the IDs for Cone3D, Cone3F, ConstructiveSolidGeometry3D, ConstructiveSolidGeometry3F, Curve3D and Curve3F.
 	* CHANGE:	Rename the constant POLYGON_3_F_OFFSET_POINT_3_F_2 to POLYGON_3_F_OFFSET_POINT_3_F_N in the CompiledShape3FCache class.
 
-2021-10-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-10-02  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getPoint(int) and getPointCount() to the Polygon2D class.
 	* ADD:		Add the methods getPoint(int) and getPointCount() to the Polygon2F class.
@@ -840,49 +842,49 @@
 	* ADD:		Add the constants POLYGON_3_F_OFFSET_POINT_2_F_COUNT, POLYGON_3_F_OFFSET_POINT_2_F, POLYGON_3_F_OFFSET_POINT_3_F_0, POLYGON_3_F_OFFSET_POINT_3_F_1, POLYGON_3_F_OFFSET_POINT_3_F_2 and POLYGON_3_F_OFFSET_SURFACE_NORMAL to the CompiledShape3FCache class.
 	* ADD:		Add the methods addPolygon3F(float[]), getPolygon3FCount(), getPolygon3FLength(Polygon3F), getPolygon3FOffsetAbsolute(float[]), getPolygon3FOffsetRelative(float[]), getPolygon3FOffsets(), getPolygon3Fs(), removePolygon3F(float[]), setPolygon3FOffsets(int[]), setPolygon3Fs(float[]), toPolygon3F(Polygon3F), toPolygon3FOffsets(List<Polygon3F>) and toPolygon3Fs(List<Polygon3F>) to the CompiledShape3FCache class.
 
-2021-09-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-28  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the BiModifier class.
 	* CHANGE:	Change the IDs of the LDRImageNormalMapModifier, NoOpModifier and SimplexNoiseNormalMapModifier classes.
 
-2021-09-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-27  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Simplex API.
 
-2021-09-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-15  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-09-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-09-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-11  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-09-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-10  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-09-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-09  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-09-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-08  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-09-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-07  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-09-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-06  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods isAxisAligned() and isRotated() to the Rectangle2D class.
 	* ADD:		Add the methods isAxisAligned() and isRotated() to the Rectangle2F class.
 
-2021-09-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-05  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods intersectionSetOrthonormalBasisSW(float, float, float) and intersectionSetOrthonormalBasisSWTransform(float, float, float) to the AbstractGeometryKernel class.
 	* ADD:		Add the AbstractModifierKernel class.
@@ -895,7 +897,7 @@
 	* CHANGE:	Change the signature of the methods to*Material(*Material, ToIntFunction<Texture>) and to*Materials(List<*Material>, ToIntFunction<Texture>) in the CompiledMaterialCache class to to*Material(*Material, ToIntFunction<Modifier>, ToIntFunction<Texture>) and to*Materials(List<*Material>, ToIntFunction<Modifier>, ToIntFunction<Texture>), respectively.
 	* CHANGE:	Change the structure for some compiled Material instances, in order to make room for their associated Modifier instances. Some constants were refactored.
 
-2021-09-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-04  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method getNormal() to the Triangle3D.Vertex3D class.
 	* ADD:		Add the method getNormal() to the Triangle3F.Vertex3F class.
@@ -904,7 +906,7 @@
 	* REMOVE:	Remove the constructors Vertex3D(Point2D, Point4D, OrthonormalBasis33D) and Vertex3D(Point2D, Point4D, Vector3D, Vector3D) from the Triangle3D.Vertex3D class.
 	* REMOVE:	Remove the constructors Vertex3F(Point2F, Point4F, OrthonormalBasis33F) and Vertex3F(Point2F, Point4F, Vector3F, Vector3F) from the Triangle3F.Vertex3F class.
 
-2021-09-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-03  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods readGeo(File) and readGeo(String) to the TriangleMesh3D class.
 	* ADD:		Add the methods readGeo(File) and readGeo(String) to the TriangleMesh3F class.
@@ -920,7 +922,7 @@
 	* CHANGE:	Update the methods contains(Point2F), getHeight() and getWidth() of the Rectangle2F class.
 	* CHANGE:	Update the methods contains(Point2I), getHeight() and getWidth() of the Rectangle2I class.
 
-2021-09-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-02  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the constructor Vector2D(Point3D) to the Vector2D class.
 	* ADD:		Add the constructor Vector2F(Point3F) to the Vector2F class.
@@ -928,38 +930,38 @@
 	* ADD:		Add the methods scale(Point3F, Vector2F), scale(Point3F, Vector3F) and sphericalPhi() to the Point3F class.
 	* CHANGE:	Update the Simplex API.
 
-2021-09-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-09-01  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the DotProductTexture class.
 	* CHANGE:	Change the IDs of the FunctionTexture, LDRImageTexture, MarbleTexture, PolkaDotTexture, SimplexFractionalBrownianMotionTexture, SurfaceNormalTexture and UVTexture classes.
 
-2021-08-31  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-31  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-08-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-30  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-08-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-29  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-08-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-28  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-08-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-27  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the Simplex API.
 
-2021-08-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-25  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add methods to compute the orthonormal basis, surface normal and texture coordinates for a Cone3D data structure in the Shape class in the Simplex API.
 	* ADD:		Add Javadocs to the Shape class in the Simplex API.
 	* CHANGE:	Add ID and size parameters to the Cone3D, Cylinder3D and Disk3D data structures in the Shape class in the Simplex API.
 
-2021-08-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-24  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods crossProduct(Vector2D, Vector2D), directionXY(Point3D), directionYZ(Point3D) and directionZY(Point3D) to the Vector2D class.
 	* ADD:		Add the methods crossProduct(Vector2F, Vector2F), directionXY(Point3F), directionYZ(Point3F) and directionZY(Point3F) to the Vector2F class.
@@ -971,18 +973,18 @@
 	* CHANGE:	Refactor the classes Rectangle3D and Rectangle3F.
 	* CHANGE:	Update the classes Rectangle3DReader and Rectangle3FReader.
 
-2021-08-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-23  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Image class in the Simplex API.
 
-2021-08-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-22  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method contains(Point3D) to the Plane3D, ProceduralTerrain3D, RectangularCuboid3D, Sphere3D and Triangle3D classes.
 	* ADD:		Add the method contains(Point3F) to the Plane3F, ProceduralTerrain3F, RectangularCuboid3F, Sphere3F and Triangle3F classes.
 	* CHANGE:	Fix the method contains(Point3D) in the BoundingSphere3D class.
 	* CHANGE:	Fix the method contains(Point3F) in the BoundingSphere3F class.
 
-2021-08-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-21  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a new accordion with primitive properties below the scene tree view in the application. It contains nothing at this point.
 	* ADD:		Add the methods createScreenCapture(Rectangle2I), difference(ImageD, ImageD), load(File), load(String) and load(URL) to the DoubleImageD class.
@@ -992,7 +994,7 @@
 	* CHANGE:	Update the menu bar in the application. The "Renderer" menu and its "GPU" checkbox are gone. Both the "New" and "Open" menu items are now menus with "CPU Renderer" and "GPU Renderer" as menu items. The "Save" and "Save As..." menu items are called "Save Image" and "Save Image As...", respectively.
 	* REMOVE:	Remove the method getSurfaceAreaSquared() from the Triangle3D and Triangle3F classes.
 
-2021-08-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-20  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the constructors FileRendererObserver(File, boolean, boolean, boolean, int) and FileRendererObserver(String, boolean, boolean, boolean, int) to the FileRendererObserver class.
 	* REMOVE:	Remove the parameter argument renderPasses from the methods onRenderPassComplete(Renderer, int, int, long) and onRenderPassProgress(Renderer, int, int, long) in the FileRendererObserver class.
@@ -1002,12 +1004,12 @@
 	* REMOVE:	Remove the methods getRenderPasses(), getRenderPassesPerDisplayUpdate(), setRenderPass(int), setRenderPasses(int), setRenderPassesPerDisplayUpdate(int) and setTimer(Timer) from the AbstractGPURenderer class.
 	* REMOVE:	Remove the methods getRenderPasses(), getRenderPassesPerDisplayUpdate(), setRenderPass(int), setRenderPasses(int), setRenderPassesPerDisplayUpdate(int) and setTimer(Timer) from the ProgressiveImageOrderRenderer interface.
 
-2021-08-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add methods to the Color class in the Simplex API.
 	* CHANGE:	Refactor the Image class in the Simplex API.
 
-2021-08-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-18  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for reading Polygon3D and Polygon3F to the DefaultShape3DReader and DefaultShape3FReader classes, respectively.
 	* ADD:		Add the Polygon3DReader and Polygon3FReader classes.
@@ -1020,7 +1022,7 @@
 	* ADD:		Add the LongArrayOutputStream class.
 	* REMOVE:	Remove the methods array(int), array(int, LongSupplier) and array(int, long) from the Longs class.
 
-2021-08-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-17  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method convert(byte[]) to the IntArrays class.
 	* ADD:		Add the method toNonScientificNotation(double) to the Strings class.
@@ -1041,7 +1043,7 @@
 	* CHANGE:	Move the class Strings from the Utility API to the Java Lang API.
 	* REMOVE:	Remove the method equal(double[], double[], int, int, int) from the Doubles class.
 
-2021-08-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-16  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add rectangle validation to the method rotate(Rectangle2D, AngleD) of the Rectangle2D class.
 	* ADD:		Add rectangle validation to the method rotate(Rectangle2F, AngleF) of the Rectangle2F class.
@@ -1054,7 +1056,7 @@
 	* ADD:		Add the methods distance(Point2I, Point2I) and distanceSquared(Point2I, Point2I) to the Point2I class.
 	* ADD:		Add the method length() to the Vector2I class.
 
-2021-08-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-15  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods containsDifference(Point2D, Shape2D, Shape2D), containsIntersection(Point2D, Shape2D, Shape2D) and containsUnion(Point2D, Shape2D, Shape2D) to the Shape2D interface.
 	* ADD:		Add the methods containsDifference(Point2F, Shape2F, Shape2F), containsIntersection(Point2F, Shape2F, Shape2F) and containsUnion(Point2F, Shape2F, Shape2F) to the Shape2F interface.
@@ -1063,7 +1065,7 @@
 	* ADD:		Add the LineSegment3D, LineSegment3DReader, LineSegment3FReader and Polygon3D classes.
 	* ADD:		Add the method contains(Point3F) to the LineSegment3F class.
 
-2021-08-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-14  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods drawPolygon(Polygon2I), drawPolygon(Polygon2I, Color4D), drawPolygon(Polygon2I, BiFunction<Color4D, Point2I, Color4D>), fillPolygon(Polygon2I), fillPolygon(Polygon2I, Color4D) and fillPolygon(Polygon2I, BiFunction<Color4D, Point2I, Color4D>) to the ImageD class.
 	* ADD:		Add the methods drawPolygon(Polygon2I), drawPolygon(Polygon2I, Color4F), drawPolygon(Polygon2I, BiFunction<Color4F, Point2I, Color4F>), fillPolygon(Polygon2I), fillPolygon(Polygon2I, Color4F) and fillPolygon(Polygon2I, BiFunction<Color4F, Point2I, Color4F>) to the ImageF class.
@@ -1098,13 +1100,13 @@
 	* CHANGE:	Refactor the Simplex API.
 	* CHANGE:	Change the return type of the methods readA(byte[], int), readB(byte[], int), readG(byte[], int) and readR(byte[], int) from int to byte in the ArrayComponentOrder enum.
 
-2021-08-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods load(URL) and load(URL, Filter2D) to the PixelImageD class.
 	* ADD:		Add the methods load(URL) and load(URL, Filter2F) to the PixelImageF class.
 	* CHANGE:	Refactor the Simplex API.
 
-2021-08-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-12  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for reading TriangleMesh3D and TriangleMesh3F to the DefaultShape3DReader and DefaultShape3FReader classes, respectively.
 	* ADD:		Add the TriangleMesh3DReader and TriangleMesh3FReader classes.
@@ -1118,7 +1120,7 @@
 	* CHANGE:	Change the names of Line2I and Line2IReader to LineSegment2I and LineSegment2IReader, respectively.
 	* CHANGE:	Change the name of Line3F to LineSegment3F.
 
-2021-08-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-11  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method contains(Point2D) to the interface Shape2D and the classes Circle2D and Triangle2D.
 	* ADD:		Add the method contains(Point2F) to the interface Shape2F and the classes Circle2F and Triangle2F.
@@ -1126,29 +1128,29 @@
 	* ADD:		Add the method lengthSquared() to the Vector2I class.
 	* ADD:		Add Javadocs to the Simplex API.
 
-2021-08-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-10  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Simplex API.
 	* CHANGE:	Refactor the Simplex API.
 
-2021-08-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-09  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Simplex API.
 	* CHANGE:	Refactor the Simplex API.
 
-2021-08-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-08  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Javadocs to the Matrix, Point and Vector classes in the new Simplex API.
 	* CHANGE:	Refactor the Point and Vector classes in the new Simplex API.
 
-2021-08-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-07  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Simplex API.
 	* ADD:		Add the constant NaN to the Doubles class.
 	* ADD:		Add the constant NaN to the Floats class.
 	* CHANGE:	Fix a message typo to an IllegalArgumentException in the Matrix44D class.
 
-2021-08-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-05  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the classes Line3F and Polygon3F.
 	* ADD:		Add the method fromPoints(Point3D...) to the AxisAlignedBoundingBox3D class.
@@ -1158,17 +1160,17 @@
 	* ADD:		Add the method tripleProduct(Vector3D, Vector3D, Vector3D) to the Vector3D class.
 	* ADD:		Add the method tripleProduct(Vector3F, Vector3F, Vector3F) to the Vector3F class.
 
-2021-08-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-08-04  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getLatitude(), getLongitude(), addDistanceKm(Point2D, double, double) and distanceKm(Point2D, Point2D) to the Point2D class.
 	* ADD:		Add the methods getLatitude(), getLongitude(), addDistanceKm(Point2F, float, float) and distanceKm(Point2F, Point2F) to the Point2F class.
 
-2021-07-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-27  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method splice(float[], int, int, float[], float[]) to the FloatArrays class.
 	* ADD:		Add the method splice(int[], int, int, int[], int[]) to the IntArrays class.
 
-2021-07-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-26  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method write(Document) to the CompiledBoundingVolume3FCache, CompiledMaterialCache, CompiledScene, CompiledShape3FCache and CompiledTextureCache classes.
 	* ADD:		Add the Document class to the Utility API.
@@ -1177,7 +1179,7 @@
 	* ADD:		Add the method isSupported(Primitive) to the CompiledPrimitiveCache class.
 	* ADD:		Add the method isSupported(Shape3F) to the CompiledShape3FCache class.
 
-2021-07-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-25  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method isSupported(BoundingVolume3F) to the CompiledBoundingVolume3FCache class.
 	* ADD:		Add the method isSupported(Light) to the CompiledLightCache class.
@@ -1188,11 +1190,11 @@
 	* ADD:		Add the methods addPrimitive(int[], float[]), getMatrix44FCount(), getPrimitiveOffsetAbsolute(int[]), getPrimitiveOffsetRelative(int[]) and removePrimitive(int[]) to the CompiledPrimitiveCache class.
 	* REMOVE:	Remove the constants PRIMITIVE_OFFSET_AREA_LIGHT_ID and PRIMITIVE_OFFSET_AREA_LIGHT_OFFSET from the CompiledPrimitiveCache class.
 
-2021-07-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-24  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Add additional parameter validation to the method setCamera(float[]) in the CompiledCameraCache class.
 
-2021-07-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-23  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the FloatArrays class to the Utility API.
 	* ADD:		Add the IntArrays class to the Utility API.
@@ -1200,7 +1202,7 @@
 	* REMOVE:	Remove the method equal(float[], float[], int, int, int) from the Floats class.
 	* REMOVE:	Remove the methods equal(int[], int[], int, int, int) and indexOf(int, int[]) from the Ints class.
 
-2021-07-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-22  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the constructor Triangle3D(Point3D, Point3D, Point3D) to the Triangle3D class.
 	* ADD:		Add the constructor Triangle3F(Point3F, Point3F, Point3F) to the Triangle3F class.
@@ -1240,7 +1242,7 @@
 	* CHANGE:	Add additional parameter validation to the methods getTriangle3FOffsetAbsolute(float[]), getTriangle3FOffsetRelative(float[]) and setTriangle3Fs(float[]) in the CompiledShape3FCache class.
 	* CHANGE:	Add additional parameter validation to the method setTriangleMesh3Fs(int[]) in the CompiledShape3FCache class.
 
-2021-07-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-21  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods addBullseyeMaterial(float[]) and removeBullseyeMaterial(float[]) to the CompiledMaterialCache class.
 	* ADD:		Add the methods addCheckerboardMaterial(float[]) and removeCheckerboardMaterial(float[]) to the CompiledMaterialCache class.
@@ -1258,7 +1260,7 @@
 	* CHANGE:	Add additional parameter validation to the methods getPolkaDotMaterialOffsetAbsolute(float[]), getPolkaDotMaterialOffsetRelative(float[]) and setPolkaDotMaterials(float[]) in the CompiledMaterialCache class.
 	* CHANGE:	Add additional parameter validation to the methods getSubstrateMaterialOffsetAbsolute(int[]), getSubstrateMaterialOffsetRelative(int[]) and setSubstrateMaterials(int[]) in the CompiledMaterialCache class.
 
-2021-07-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-20  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods addCheckerboardTexture(float[]) and removeCheckerboardTexture(float[]) to the CompiledTextureCache class.
 	* ADD:		Add the methods addConstantTexture(float[]) and removeConstantTexture(float[]) to the CompiledTextureCache class.
@@ -1275,7 +1277,7 @@
 	* CHANGE:	Add additional parameter validation to the methods getSimplexFractionalBrownianMotionTextureOffsetAbsolute(float[]), getSimplexFractionalBrownianMotionTextureOffsetRelative(float[]) and setSimplexFractionalBrownianMotionTextures(float[]) in the CompiledTextureCache class.
 	* CHANGE:	Add additional parameter validation to the methods setLDRImageTextureOffsets(int[]) and setLDRImageTextures(float[]) in the CompiledTextureCache class.
 
-2021-07-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods addBlendTexture(float[]) and removeBlendTexture(float[]) to the CompiledTextureCache class.
 	* ADD:		Add the methods addBullseyeTexture(float[]) and removeBullseyeTexture(float[]) to the CompiledTextureCache class.
@@ -1283,7 +1285,7 @@
 	* CHANGE:	Add additional parameter validation to the methods getBlendTextureOffsetAbsolute(float[]), getBlendTextureOffsetRelative(float[]) and setBlendTextures(float[]) in the CompiledTextureCache class.
 	* CHANGE:	Add additional parameter validation to the methods getBullseyeTextureOffsetAbsolute(float[]), getBullseyeTextureOffsetRelative(float[]) and setBullseyeTextures(float[]) in the CompiledTextureCache class.
 
-2021-07-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-18  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods addDiffuseAreaLight(float[]) and removeDiffuseAreaLight(float[]) to the CompiledLightCache class.
 	* ADD:		Add the methods addDirectionalLight(float[]) and removeDirectionalLight(float[]) to the CompiledLightCache class.
@@ -1293,7 +1295,7 @@
 	* CHANGE:	Refactor the method toLDRImageLightOffsets(List<LDRImageLight>, ToIntFunction<LDRImageLight>) to toLDRImageLightOffsets(List<LDRImageLight>).
 	* CHANGE:	Refactor the method toPerezLightOffsets(List<PerezLight>, ToIntFunction<PerezLight>) to toPerezLightOffsets(List<PerezLight>).
 
-2021-07-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-17  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method indexOf(int, int[]) to the Ints class.
 	* ADD:		Add the methods equals(Object) and hashCode() to the Distribution2F class.
@@ -1308,7 +1310,7 @@
 	* CHANGE:	Add additional parameter validation to the methods setDiffuseAreaLights(float[]), setDirectionalLights(float[]), setLDRImageLightOffsets(int[]), setLDRImageLights(float[]), setPerezLightOffsets(int[]), setPerezLights(float[]), setPointLights(float[]) and setSpotLights(float[]) in the CompiledLightCache class.
 	* CHANGE:	Add additional parameter validation to the methods requireExactArrayLength(byte[], int, String), requireFiniteValue(double, String), requireRange(double, double, double, String), requireExactArrayLength(double[], int, String), requireFiniteValue(float, String), requireRange(float, float, float, String), requireExactArrayLength(float[], int, String), requireExact(int, int, String), requireRange(int, int, int, String), requireRangef(int, int, int, String, Object[]) and requireExactArrayLength(int[], int, String) in the ParameterArguments class.
 
-2021-07-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-16  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add additional parameter validation to the methods getAxisAlignedBoundingBox3FOffsetAbsolute(float[]), getAxisAlignedBoundingBox3FOffsetRelative(float[]), getBoundingSphere3FOffsetAbsolute(float[]), getBoundingSphere3FOffsetRelative(float[]), setAxisAlignedBoundingBox3Fs(float[]) and setBoundingSphere3Fs(float[]) in the CompiledBoundingVolume3FCache class.
 	* ADD:		Add the methods addAxisAlignedBoundingBox3F(float[]), addBoundingSphere3F(float[]), removeAxisAlignedBoundingBox3F(float[]) and removeBoundingSphere3F(float[]) to the CompiledBoundingVolume3FCache class.
@@ -1316,14 +1318,14 @@
 	* ADD:		Add the methods getBoundingSphere3FCount(), getBoundingSphere3FOffsetAbsolute(float[]) and getBoundingSphere3FOffsetRelative(float[]) to the CompiledBoundingVolume3FCache class.
 	* CHANGE:	Refactor the method getMaterialBullseyeMaterialOffsetRelative(float[]) in the CompiledMaterialCache class to getBullseyeMaterialOffsetRelative(float[]).
 
-2021-07-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-15  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Optimized the Scene Compiler API.
 	* CHANGE:	Refactor the CompiledPrimitiveCache class.
 	* CHANGE:	Refactor the CompiledShape3FCache class.
 	* CHANGE:	Refactor the CompiledTextureCache class.
 
-2021-07-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-14  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Refactor the CompiledBoundingVolume3FCache class.
 	* CHANGE:	Refactor the CompiledCameraCache class.
@@ -1331,7 +1333,7 @@
 	* CHANGE:	Refactor the CompiledMaterialCache class.
 	* CHANGE:	Refactor the CompiledTextureCache class.
 
-2021-07-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods toArray(PolkaDotMaterial, ToIntFunction<Material>), toMaterialPolkaDotMaterialArray(List<PolkaDotMaterial>) and toMaterialPolkaDotMaterialArray(List<PolkaDotMaterial>, ToIntFunction<Material>) to the CompiledMaterialCache class.
 	* ADD:		Add the methods toArray(CheckerboardMaterial, ToIntFunction<Material>), toMaterialCheckerboardMaterialArray(List<CheckerboardMaterial>) and toMaterialCheckerboardMaterialArray(List<CheckerboardMaterial>, ToIntFunction<Material>) to the CompiledMaterialCache class.
@@ -1340,14 +1342,14 @@
 	* CHANGE:	Change the naming convention used by the CompiledBoundingVolume3FCache class.
 	* CHANGE:	Change the naming convention used by the CompiledCameraCache class.
 
-2021-07-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-12  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods toBoundingVolume3FAxisAlignedBoundingBox3FArray(List<AxisAlignedBoundingBox3F>) and toBoundingVolume3FBoundingSphere3FArray(List<BoundingSphere3F>) to the CompiledBoundingVolume3FCache class.
 	* ADD:		Add the methods toArray(Cone3F), toArray(Cylinder3F), toArray(Disk3F), toArray(Hyperboloid3F), toArray(Paraboloid3F), toArray(Plane3F), toArray(Rectangle3F), toArray(RectangularCuboid3F), toArray(Sphere3F), toArray(Torus3F), toArray(Triangle3F), toArray(TriangleMesh3F) and getLength(TriangleMesh3F) to the CompiledShape3FCache class.
 	* ADD:		Add the methods toArray(BullseyeMaterial), toArray(CheckerboardMaterial), toArray(ClearCoatMaterial), toArray(DisneyMaterial), toArray(GlassMaterial), toArray(GlossyMaterial), toArray(MatteMaterial), toArray(MetalMaterial), toArray(MirrorMaterial), toArray(PlasticMaterial), toArray(PolkaDotMaterial) and toArray(SubstrateMaterial) to the CompiledMaterialCache class.
 	* CHANGE:	The responsibility to create arrays with a length of at least 1 has been moved to the Renderer GPU API, rather than the Scene Compiler API. This "requirement" is Aparapi-specific and would cause a crash if left out. The Scene Compiler API can be used for other purposes than in combination with Aparapi.
 
-2021-07-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-11  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods toArray(BlendTexture), toArray(BullseyeTexture), toArray(CheckerboardTexture), toArray(ConstantTexture), toArray(LDRImageTexture), toArray(MarbleTexture), toArray(PolkaDotTexture), toArray(SimplexFractionalBrownianMotionTexture) and getLength(LDRImageTexture) to the CompiledTextureCache class.
 	* ADD:		Add the methods toArray(DiffuseAreaLight), toArray(DirectionalLight), toArray(LDRImageLight), toArray(PerezLight), toArray(PointLight), toArray(SpotLight), getLength(LDRImageLight) and getLength(PerezLight) to the CompiledLightCache class.
@@ -1363,7 +1365,7 @@
 	* CHANGE:	Change the default origin parameter of the BullseyeMaterial to 0.0, 10.0 and 0.0.
 	* CHANGE:	Change the default origin parameter of the BullseyeTexture to 0.0, 10.0 and 0.0.
 
-2021-07-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-10  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for BullseyeMaterial, CheckerboardMaterial and PolkaDotMaterial to the GPU-renderer.
 	* ADD:		Add the fields materialBullseyeMaterialArray, materialCheckerboardMaterialArray and materialPolkaDotMaterialArray to the AbstractMaterialKernel class.
@@ -1378,7 +1380,7 @@
 	* ADD:		Add the PolkaDotMaterial class.
 	* CHANGE:	Change the ID values of the SubstrateMaterial and UberMaterial classes.
 
-2021-07-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-09  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the PolkaDotTexture class.
 	* ADD:		Add constants to the CompiledCameraCache class.
@@ -1400,7 +1402,7 @@
 	* REMOVE:	Remove the method toArray() from the LDRImageLight, PerezLight, PointLight and SpotLight classes.
 	* REMOVE:	Remove the method getArrayLength() from the LDRImageLight and PerezLight classes.
 
-2021-07-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-08  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getRadiance() and getRadius() to the DirectionalLight class.
 	* ADD:		Add the methods getColor(), getFrequency(), getGain() and getOctaves() to the SimplexFractionalBrownianMotionTexture class.
@@ -1417,7 +1419,7 @@
 	* REMOVE:	Remove the method toArray() from the ClearCoatMaterial, DisneyMaterial, GlassMaterial, GlossyMaterial, MatteMaterial, MetalMaterial, MirrorMaterial, PlasticMaterial and SubstrateMaterial classes.
 	* REMOVE:	Remove the method toArray() from the BlendTexture, BullseyeTexture, CheckerboardTexture, ConstantTexture, LDRImageTexture, MarbleTexture and SimplexFractionalBrownianMotionTexture classes.
 
-2021-07-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-07  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method getRootBVHNode() to the TriangleMesh3D and TriangleMesh3F classes.
 	* ADD:		Add the methods getAH(), getCH(), getRMax(), getZMax() and getZMin() to the Hyperboloid3D and Hyperboloid3F classes.
@@ -1433,7 +1435,7 @@
 	* REMOVE:	Remove the method toArray(BVHNode3D, List<T>) from the BVHNode3Ds class.
 	* REMOVE:	Remove the method toArray(BVHNode3F, List<T>) from the BVHNode3Fs class.
 
-2021-07-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-06  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the NodeCache class.
 	* ADD:		Add the methods shape3FHyperboloid3FIntersects(int, float, float), shape3FHyperboloid3FIntersectionT(int, float, float) and shape3FHyperboloid3FIntersectionCompute(float, int, int) to the AbstractGeometryKernel class.
@@ -1445,7 +1447,7 @@
 	* ADD:		Add the constants ARRAY_LENGTH, ARRAY_OFFSET_A_H, ARRAY_OFFSET_C_H, ARRAY_OFFSET_PHI_MAX, ARRAY_OFFSET_POINT_A, ARRAY_OFFSET_POINT_B, ARRAY_OFFSET_R_MAX, ARRAY_OFFSET_Z_MAX and ARRAY_OFFSET_Z_MIN to the Hyperboloid3F class.
 	* CHANGE:	Optimized the Scene Compiler API.
 
-2021-07-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-03  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods findFilesFromDirectory(), findFilesFromDirectory(File), findFilesFromDirectory(File, Predicate<File>), findFilesFromDirectory(File, Predicate<File>, Predicate<File>) and readAllBytesToString(File) to the Files class.
 	* CHANGE:	Move the Files class from the Utility API to the Java I/O API.
@@ -1453,7 +1455,7 @@
 	* REMOVE:	Remove the methods splitAndDiscardEmptySubstrings(String, String), toConstantJavaField(String, double[]) and toConstantJavaField(String, float[]) from the Strings class.
 	* REMOVE:	Remove all example classes. Most of them can be found in the Javadocs.
 
-2021-07-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-02  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Java AWT Image API.
 	* ADD:		Add the Java Util API.
@@ -1461,7 +1463,7 @@
 	* CHANGE:	Move the MersenneTwisterRandom class from the Utility API to the Java Util API.
 	* CHANGE:	Move the XORShiftRandom class from the Utility API to the Java Util API.
 
-2021-07-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-07-01  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Java I/O API from the dependency org.macroing.java.
 	* ADD:		Add the Java Util Concurrent Atomic API from the dependency org.macroing.java.
@@ -1479,7 +1481,7 @@
 	* REMOVE:	Remove the dependency org.macroing.java.
 	* REMOVE:	Remove the method lightEvaluateRadianceEmittedAny() from the AbstractLightKernel class.
 
-2021-06-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-29  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method getPointAt(double) to the Ray2D class.
 	* ADD:		Add the method getPointAt(float) to the Ray2F class.
@@ -1492,13 +1494,13 @@
 	* ADD:		Add the constructor Vector2D(double) to the Vector2D class.
 	* ADD:		Add the constructor Vector2F(float) to the Vector2F class.
 
-2021-06-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-26  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the classes BVHItem3D and BVHItem3F.
 	* CHANGE:	Change the signature of the method create(List<LeafBVHNode3D>, Point3D, Point3D, int) in the class BVHNode3Ds to create(List<BVHItem3D<T>>, Point3D, Point3D, int). This is an optimization.
 	* CHANGE:	Change the signature of the method create(List<LeafBVHNode3F>, Point3F, Point3F, int) in the class BVHNode3Fs to create(List<BVHItem3F<T>>, Point3F, Point3F, int). This is an optimization.
 
-2021-06-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-25  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method addShapesTo(List<T>) to the LeafBVHNode3D class.
 	* ADD:		Add the method addShapesTo(List<T>) to the LeafBVHNode3F class.
@@ -1511,21 +1513,21 @@
 	* ADD:		Add the constructor Point2D(double) to the Point2D class.
 	* ADD:		Add the constructor Point2F(float) to the Point2F class.
 
-2021-06-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-24  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method equal(int[], int[], int, int, int) to the Ints class.
 	* ADD:		Add the methods getCompiledLightCache(), getCompiledCameraCache(), getCompiledMaterialCache(), getCompiledPrimitiveCache(), getCompiledShape3FCache() and getCompiledTextureCache() to the CompiledScene class.
 	* ADD:		Add the CompiledCameraCache, CompiledLightCache, CompiledMaterialCache, CompiledPrimitiveCache, CompiledShape3FCache and CompiledTextureCache classes.
 	* REMOVE:	Remove all methods related to the compiled Camera, Light, Material, Primitive, Shape3F and Texture types from the CompiledScene class.
 
-2021-06-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-23  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method getCompiledBoundingVolume3FCache() to the CompiledScene class.
 	* ADD:		Add the class CompiledBoundingVolume3FCache.
 	* ADD:		Add the methods getTextureBlendTextureCount(), getTextureBlendTextureOffsetAbsolute(float[]) and getTextureBlendTextureOffsetRelative(float[]) to the CompiledScene class.
 	* REMOVE:	Remove the methods getBoundingVolume3FAxisAlignedBoundingBox3FArray(), getBoundingVolume3FBoundingSphere3FArray(), setBoundingVolume3FAxisAlignedBoundingBox3FArray(float[]) and setBoundingVolume3FBoundingSphere3FArray(float[]) from the CompiledScene class.
 
-2021-06-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-22  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getShape3FTriangle3FCount(), getShape3FTriangle3FOffsetAbsolute(float[]) and getShape3FTriangle3FOffsetRelative(float[]) to the CompiledScene class.
 	* ADD:		Add the methods getShape3FTorus3FCount(), getShape3FTorus3FOffsetAbsolute(float[]) and getShape3FTorus3FOffsetRelative(float[]) to the CompiledScene class.
@@ -1540,11 +1542,11 @@
 	* ADD:		Add the method equal(double[], double[], int, int, int) to the Doubles class.
 	* ADD:		Add the method equal(float[], float[], int, int, int) to the Floats class.
 
-2021-06-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-21  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add sliders to change the aperture radius and focal distance of the camera in the GUI. They can be located in the camera configuration of the configuration view on the left-hand side.
 
-2021-06-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the keys 'Q' and 'E' in the GUI to move the camera up and down, respectively.
 	* ADD:		Add the method toString(boolean) to the Lens enum. If the parameter argument true is passed, the old String representation (which is now called the internal format) will be returned, otherwise the new external format will be used.
@@ -1555,7 +1557,7 @@
 	* CHANGE:	Some minor changes to the PerezLight class and its equivalent GPU-renderer version in the AbstractLightKernel class.
 	* CHANGE:	Refactor the TriangleMesh3D, TriangleMesh3F, AbstractGeometryKernel and Shape3FCache classes to use the new Geometry Bounding Volume Hierarchy API.
 
-2021-06-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-17  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add Vertex3D-caching to the Triangle3D class.
 	* ADD:		Add Vertex3F-caching to the Triangle3F class.
@@ -1574,7 +1576,7 @@
 	* CHANGE:	Optimized the Scene Compiler API.
 	* REMOVE:	Remove the method getBounds() from the Circle2I class.
 
-2021-06-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-16  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method add(Point2D, Vector2D, double) to the Point2D class.
 	* ADD:		Add the method add(Point2F, Vector2F, float) to the Point2F class.
@@ -1587,14 +1589,14 @@
 	* ADD:		Add the method drawCircleComplement(Circle2I, BiFunction<Color4D, Point2I, Color4D>) to the ImageD class.
 	* ADD:		Add the method drawCircleComplement(Circle2I, BiFunction<Color4F, Point2I, Color4F>) to the ImageF class.
 
-2021-06-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-15  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getBounds(), findPointsOfComplement(), findPointsOfComplement(Rectangle2I), findPointsOfComplement(Rectangle2I, boolean), findPointsOfIntersection(), findPointsOfIntersection(Rectangle2I) and findPointsOfIntersection(Rectangle2I, boolean) to the Circle2I class.
 	* ADD:		Add the method fillCircleComplement(Circle2I, BiFunction<Color4D, Point2I, Color4D>) to the ImageD class.
 	* ADD:		Add the method fillCircleComplement(Circle2I, BiFunction<Color4F, Point2I, Color4F>) to the ImageF class.
 	* ADD:		Add the methods createCurvesByBSpline() and createCurvesByBezier() to the Curve3D and Curve3F classes.
 
-2021-06-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods toRGBE() and fromRGBE(int) to the Color3D and Color3F classes.
 	* ADD:		Add the class DoubleImageD.
@@ -1605,15 +1607,15 @@
 	* CHANGE:	Some minor changes to the PerezLight class and its equivalent GPU-renderer version in the AbstractLightKernel class.
 	* CHANGE:	Refactor the package org.dayflower.javafx.canvas to org.dayflower.javafx.scene.canvas.
 
-2021-06-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-10  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a new Scene Compiler API. It used to be a private API in the Renderer GPU API.
 
-2021-06-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-09  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Change the order of UndoActions in the ChangeCombiner to the reverse of the order they were added.
 
-2021-06-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-08  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Noise API that includes the classes PerlinNoiseD, PerlinNoiseF, SimplexNoiseD and SimplexNoiseF.
 	* ADD:		Add the class FileParameter.
@@ -1627,7 +1629,7 @@
 	* REMOVE:	Remove the method getID() from BoundingVolume3D and BoundingVolume3F.
 	* REMOVE:	Remove the method isSupported(int) from BoundingVolume3DReader and BoundingVolume3FReader.
 
-2021-06-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-06  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for Rectangle3F in the GPU-renderer.
 	* ADD:		Add support for Rectangle3DReader in DefaultShape3DReader.
@@ -1636,19 +1638,19 @@
 	* CHANGE:	Fix a bug in the Specular BRDF that uses a constant Fresnel in the GPU-renderer. The red and blue components were swapped.
 	* CHANGE:	Change the IDs of RectangularCuboid3D, RectangularCuboid3F, Sphere3D, Sphere3F, Torus3D, Torus3F, Triangle3D, Triangle3F, TriangleMesh3D and TriangleMesh3F.
 
-2021-06-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-05  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method createScreenCapture(Rectangle2I) to the IntImageD and IntImageF classes.
 	* ADD:		Add the methods blend(ImageD, ImageD), blend(ImageD, ImageD, double) and blend(ImageD, ImageD, double, double, double, double) to the ByteImageD and IntImageD classes.
 	* ADD:		Add the methods blend(ImageF, ImageF), blend(ImageF, ImageF, float) and blend(ImageF, ImageF, float, float, float, float) to the ByteImageF and IntImageF classes.
 	* ADD:		Add the classes HBoxes and VBoxes.
 
-2021-06-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-04  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for the method hasFinishedSucceeded() of the PredicateTask class in the ConcurrentImageCanvas class.
 	* ADD:		Add the method hasFinishedSucceeded() to the PredicateTask class.
 
-2021-06-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-03  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods color3FLHSSetMaximumTo1(float, float, float) and color3FRHSSetMaximumTo1(float, float, float) to the AbstractImageKernel class.
 	* ADD:		Add support for window resizing in the GPU-renderer.
@@ -1656,7 +1658,7 @@
 	* ADD:		Add the methods isChangeHistoryEnabled(), setChangeHistoryEnabled(boolean), getChangeHistory(), redo() and undo() to the Image class.
 	* ADD:		Add the class ChangeCombiner.
 
-2021-06-02  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-02  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a simple Change API to handle undo and redo operations.
 	* ADD:		Add the method putColorRGBA(Color4D, int) to the ImageD, ByteImageD, IntImageD and PixelImageD classes.
@@ -1666,7 +1668,7 @@
 	* REMOVE:	Remove the methods setColorRGBA(Color4D, int, PixelOperation) and setColorRGBA(Color4D, int, int, PixelOperation) from the ByteImageD, IntImageD and PixelImageD classes.
 	* REMOVE:	Remove the methods setColorRGBA(Color4F, int, PixelOperation) and setColorRGBA(Color4F, int, int, PixelOperation) from the ByteImageF, IntImageF and PixelImageF classes.
 
-2021-06-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-06-01  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the class Files.
 	* ADD:		Add the methods addLater(Object) and addLater(Object, Consumer<Tab>) to the NodeSelectionTabPane class.
@@ -1675,36 +1677,36 @@
 	* ADD:		Add the class ConcurrentImageCanvas.ImageUpdater.
 	* REMOVE:	Remove the method setImage(Image) from the ConcurrentImageCanvas class.
 
-2021-05-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-30  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a generic type for the Image to the ConcurrentImageCanvas class.
 	* ADD:		Add a class called ConcurrentImageCanvasPane.
 	* CHANGE:	Change the type ImageF in the constructors of the ConcurrentImageCanvas class to a generic type T that extends Image.
 	* CHANGE:	Change the method signature of the single method in the ConcurrentImageCanvas.Observer interface.
 
-2021-05-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-29  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Change the BXDF for GlossyMaterial from AshikhminShirleyBRDF to TorranceSparrowBRDF. The change was also done in the GPU-renderer.
 	* REMOVE:	Remove the old material system in the GPU-renderer.
 	* REMOVE:	Remove the old Path Tracer implementations from the GPU-renderer.
 
-2021-05-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-24  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the classes Triangle3DReader and Triangle3FReader.
 
-2021-05-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-23  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for LDRImageLight to the new lighting system in the GPU-renderer.
 
-2021-05-19  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-19  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix a bug in the AbstractMaterialKernel class. The negation flag for the incoming direction was only accounted for in one case.
 
-2021-05-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-18  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the classes Triangle2DReader, Triangle2FReader and Triangle2IReader.
 
-2021-05-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-17  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add an extends clause with ShapeReader to Shape2DReader, Shape2FReader, Shape2IReader, Shape3DReader and Shape3FReader.
 	* ADD:		Add the interfaces Shape and ShapeReader.
@@ -1713,7 +1715,7 @@
 	* REMOVE:	Remove the methods getName(), getID(), write(DataOutput), write(File) and write(String) from Shape2D, Shape2F, Shape2I, Shape3D and Shape3F.
 	* REMOVE:	Remove the method isSupported(int) from Shape2DReader, Shape2FReader, Shape2IReader, Shape3DReader and Shape3FReader.
 
-2021-05-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-16  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method read(DataInput) to the interfaces BoundingVolume3DReader and BoundingVolume3FReader.
 	* ADD:		Add an IllegalArgumentException to the contract of the method read(DataInput, int) of the interfaces BoundingVolume3DReader and BoundingVolume3FReader.
@@ -1722,7 +1724,7 @@
 	* ADD:		Add the constructor Rectangle2I(Point2I, Point2I, Point2I, Point2I) to the Rectangle2I class.
 	* ADD:		Add the classes Plane3DReader, Plane3FReader, ProceduralTerrain3DReader, ProceduralTerrain3FReader, Rectangle2DReader, Rectangle2FReader and Rectangle2IReader.
 
-2021-05-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-15  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the default methods write(File) and write(String) to the interfaces Shape2D, Shape2F, Shape2I, Shape3D and Shape3F.
 	* ADD:		Add the constructor Hyperboloid3D(AngleD, Point3D, Point3D, double, double, double, double, double) to the Hyperboloid3D class.
@@ -1734,7 +1736,7 @@
 	* ADD:		Add the classes Cone3DReader, Cone3FReader, ConstructiveSolidGeometry3DReader, ConstructiveSolidGeometry3FReader, Curve3DReader, Curve3FReader, Curves3DReader, Curves3FReader, Cylinder3DReader, Cylinder3FReader, DefaultShape2DReader, DefaultShape2FReader, DefaultShape2IReader, DefaultShape3DReader, DefaultShape3FReader, Disk3DReader, Disk3FReader, Hyperboloid3DReader, Hyperboloid3FReader, Line2DReader, Line2FReader, Line2IReader, Paraboloid3DReader and Paraboloid3FReader.
 	* CHANGE:	A problem related to the renderShutdown() method in the AbstractGPURenderer class has been fixed. Movement using the WASD-keys in the JavaFX Application caused the Path Tracer to stop rendering, but not the Ambient Occlusion or Ray Caster.
 
-2021-05-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-14  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method write(DataOutput) to the classes Circle2D, Circle2F and Circle2I.
 	* ADD:		Add the classes Circle2DReader, Circle2FReader and Circle2IReader.
@@ -1748,18 +1750,18 @@
 	* ADD:		Add the methods createClearCoatMaterialScene(), createCone3FScene(), createConstructiveSolidGeometry3FScene(), createCylinder3FScene(), createDisk3FScene(), createDisneyMaterialScene(), createGlassMaterialScene() and createGlossyMaterialScene() to the Demo class.
 	* CHANGE:	Change the name of the method setThis(boolean) to setThin(boolean) in the class DisneyMaterial.Builder. It was not correctly spelled.
 
-2021-05-13  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-13  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a class called Ray2D.
 	* ADD:		Add a class called Ray2F.
 	* ADD:		Add new constructors to FileRendererObserver that accepts a parameter argument called isPrintingOnDisplay. If it is set to true, a message will be printed to standard output when the onRenderDisplay(Renderer, ImageF) method is called.
 
-2021-05-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-11  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a class called Vector2I.
 	* ADD:		Add a constructor that accepts a Vector2I instance as a parameter argument to the Point2I class.
 
-2021-05-10  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-10  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Change the use of Double.MAX_VALUE to Doubles.MAX_VALUE.
 	* CHANGE:	Change the use of Double.MIN_VALUE to Doubles.MIN_VALUE.
@@ -1768,7 +1770,7 @@
 	* CHANGE:	Change the value of Doubles.MIN_VALUE from Double.MIN_VALUE to -Double.MAX_VALUE.
 	* CHANGE:	Change the value of Floats.MIN_VALUE from Float.MIN_VALUE to -Float.MAX_VALUE.
 
-2021-05-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-09  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Refactor the return type of many methods in ImageD from void to ImageD, such that method chaining can be performed.
 	* CHANGE:	Refactor the return type of many methods in ImageF from void to ImageF, such that method chaining can be performed.
@@ -1779,7 +1781,7 @@
 	* CHANGE:	Refactor the return type of many methods in PixelImageD from void to PixelImageD, such that method chaining can be performed.
 	* CHANGE:	Refactor the return type of many methods in PixelImageF from void to PixelImageF, such that method chaining can be performed.
 
-2021-05-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-08  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a constant called TRANSPARENT to the Color4D class.
 	* ADD:		Add a constant called TRANSPARENT to the Color4F class.
@@ -1796,7 +1798,7 @@
 	* ADD:		Add a class called Matrix33D.
 	* ADD:		Add a class called Matrix33F.
 
-2021-05-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-07  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method negate(AngleD) to the AngleD class.
 	* ADD:		Add the method negate(AngleF) to the AngleF class.
@@ -1810,7 +1812,7 @@
 	* ADD:		Add the methods rotate(AngleF), scale(Vector2F) and scale(int, int) to the ImageF class.
 	* ADD:		Add the methods requireRange(double, double, double, String) and requireRange(float, float, float, String) to the ParameterArguments class.
 
-2021-05-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-06  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method contains(Point2D) to the Line2D class.
 	* ADD:		Add the method contains(Point2F) to the Line2F class.
@@ -1821,14 +1823,14 @@
 	* ADD:		Add the methods fillSimplexFractionalBrownianMotion(), fillSimplexFractionalBrownianMotion(Color3D) and fillSimplexFractionalBrownianMotion(Color3D, double, double, int) to the ImageD class.
 	* ADD:		Add the methods fillSimplexFractionalBrownianMotion(), fillSimplexFractionalBrownianMotion(Color3F) and fillSimplexFractionalBrownianMotion(Color3F, float, float, int) to the ImageF class.
 
-2021-05-05  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-05  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods maximum(Point2I, Point2I) and minimum(Point2I, Point2I) to the Point2I class.
 	* ADD:		Add the method intersection(Rectangle2I, Rectangle2I) to the Rectangle2I class.
 	* ADD:		Add the method copy(Rectangle2I) to the ImageD, ImageF, ByteImageD, ByteImageF, IntImageD, IntImageF, PixelImageD and PixelImageF classes.
 	* CHANGE:	Change the algorithm for the methods getHeight() and getWidth() in the Rectangle2D, Rectangle2F and Rectangle2I classes.
 
-2021-05-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-04  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods fillGradient() and fillGradient(Color3D, Color3D, Color3D, Color3D) to the ImageD class.
 	* ADD:		Add the methods fillGradient() and fillGradient(Color3F, Color3F, Color3F, Color3F) to the ImageF class.
@@ -1839,7 +1841,7 @@
 	* ADD:		Add the methods blendOver(ImageD), grayscaleAverage(), grayscaleComponent1(), grayscaleComponent2(), grayscaleComponent3(), grayscaleLightness(), grayscaleLuminance(), grayscaleMaximum(), grayscaleMinimum(), sepia() and transparency(double) to the ImageD class.
 	* ADD:		Add the methods blendOver(ImageF), grayscaleAverage(), grayscaleComponent1(), grayscaleComponent2(), grayscaleComponent3(), grayscaleLightness(), grayscaleLuminance(), grayscaleMaximum(), grayscaleMinimum(), sepia() and transparency(float) to the ImageF class.
 
-2021-05-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-05-03  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods update(BiFunction<Color4D, Point2I, Color4D>) and update(BiFunction<Color4D, Point2I, Color4D>, Rectangle2I) to the ImageD class.
 	* ADD:		Add the methods update(BiFunction<Color4F, Point2I, Color4F>) and update(BiFunction<Color4F, Point2I, Color4F>, Rectangle2I) to the ImageF class.
@@ -1848,21 +1850,21 @@
 	* ADD:		Add the methods load(File) and load(String) to the IntImageD class.
 	* ADD:		Add the methods load(File) and load(String) to the IntImageF class.
 
-2021-04-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-04-25  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods addAndMultiply(Color3D, Color3D, Color3D) and addAndMultiply(Color3D, Color3D, Color3D, double) to the Color3D class.
 	* ADD:		Add the methods addAndMultiply(Color3F, Color3F, Color3F) and addAndMultiply(Color3F, Color3F, Color3F, float) to the Color3F class.
 
-2021-04-18  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-04-18  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for changing the rendering algorithm in the AbstractGPURenderer and GPURenderer classes.
 
-2021-04-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-04-17  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add an inner class called Builder to the DisneyMaterial class.
 	* ADD:		Add an inner class called Builder to the ClearCoatMaterial class.
 
-2021-04-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-04-11  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method setImage() to the Renderer interface as well as an implementation of it in the AbstractCPURenderer and AbstractGPURenderer classes.
 	* ADD:		Add a class called Demo with methods to create Scene instances for demonstration purposes.
@@ -1871,16 +1873,16 @@
 	* ADD:		Add the methods toConstantJavaField(String, double[]) and toConstantJavaField(String, float[]) to the Strings class.
 	* REMOVE:	Remove the Previews class.
 
-2021-04-09  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-04-09  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Change the resolution of the Distribution2F that is created by the LDRImageLight class from the resolution of the image itself to 32x32.
 
-2021-04-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-04-04  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method pack(int, int, int, int) to the Ints class.
 	* CHANGE:	Update the memory requirement for ClearCoatMaterial, DisneyMaterial, GlassMaterial, GlossyMaterial, MatteMaterial, MetalMaterial, MirrorMaterial, PlasticMaterial and SubstrateMaterial on the GPU.
 
-2021-04-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2021-04-01  JÃ¶rgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add a dependency to org.macroing.java.
 	* CHANGE:	Update the sun sampling for the PerezLight class.

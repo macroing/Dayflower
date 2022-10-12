@@ -41,7 +41,7 @@ public final class ParameterList {
 	 * Constructs a new {@code ParameterList} instance.
 	 */
 	public ParameterList() {
-		this(parameters -> {});
+		this(parameters -> {/* Do nothing. */});
 	}
 	
 	/**

@@ -99,7 +99,7 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 	 * @throws NullPointerException thrown if, and only if, either {@code executorService}, {@code image} or {@code renderPredicate} are {@code null}
 	 */
 	public ConcurrentImageCanvas(final ExecutorService executorService, final T image, final Predicate<T> renderPredicate) {
-		this(executorService, image, renderPredicate, (concurrentImageCanvas, x, y) -> {});
+		this(executorService, image, renderPredicate, (concurrentImageCanvas, x, y) -> {/* Do nothing. */});
 	}
 	
 	/**
@@ -306,6 +306,7 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 	 * If the {@code ExecutorService} has been shutdown, nothing will happen. Otherwise, this method will create and execute a new {@link PredicateTask} using the {@code ExecutorService} if, and only if, there are no previous {@code PredicateTask} or
 	 * the previous {@code PredicateTask} is cancelled or done.
 	 */
+	@SuppressWarnings("unused")
 	public void render() {
 		final ExecutorService executorService = this.executorService;
 		

@@ -204,7 +204,7 @@ public final class NodeSelectionTabPane<T extends Node, U> extends TabPane {
 	 * @throws NullPointerException thrown if, and only if, {@code object} is {@code null}
 	 */
 	public void addLater(final U object) {
-		addLater(object, tab -> {});
+		addLater(object, tab -> {/* Do nothing. */});
 	}
 	
 	/**

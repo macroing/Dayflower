@@ -176,6 +176,7 @@ public final class DayflowerApplication extends Application {
 		animationTimer.start();
 	}
 	
+	@SuppressWarnings("unused")
 	private void doExit() {
 		for(final Tab tab : this.nodeSelectionTabPane.getTabs()) {
 			final Node content = tab.getContent();
@@ -191,7 +192,7 @@ public final class DayflowerApplication extends Application {
 			this.executorService.shutdown();
 			this.executorService.awaitTermination(10000L, TimeUnit.MILLISECONDS);
 		} catch(final InterruptedException e) {
-			
+//			Do nothing for now.
 		}
 		
 		Platform.exit();
@@ -230,6 +231,7 @@ public final class DayflowerApplication extends Application {
 		});
 	}
 	
+	@SuppressWarnings("unused")
 	private void doOpen(final boolean isUsingGPU) {
 		try {
 			final

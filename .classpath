@@ -2,7 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/aparapi/aparapi-3.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/aparapi/aparapi-jni-1.4.3.jar">
 		<attributes>
@@ -13,5 +17,6 @@
 	<classpathentry kind="lib" path="lib/macroing/org.macroing.art4j.jar"/>
 	<classpathentry kind="lib" path="lib/macroing/org.macroing.java.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX17"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -111,7 +111,7 @@ final class CenteredVBoxes {
 		if(renderer instanceof CombinedProgressiveImageOrderRenderer) {
 			final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = CombinedProgressiveImageOrderRenderer.class.cast(renderer);
 			
-			final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.RAY_CASTING, RenderingAlgorithm.RAY_TRACING), combinedProgressiveImageOrderRenderer.getRenderingAlgorithm());
+			final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.DEPTH_CAMERA, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.RAY_CASTING, RenderingAlgorithm.RAY_TRACING), combinedProgressiveImageOrderRenderer.getRenderingAlgorithm());
 			
 			centeredVBox.addButton("Update Renderer", actionEvent -> {
 				final RenderingAlgorithm renderingAlgorithm = comboBox.getValue();

@@ -66,6 +66,8 @@ public final class GPURenderer extends AbstractGPURenderer {
 	public void run() {
 		if(renderingAlgorithmIsAmbientOcclusion()) {
 			doRunAmbientOcclusion(getMaximumDistance(), getSamples());
+		} else if(renderingAlgorithmIsDepthCamera()) {
+			doRunDepthCamera();
 		} else if(renderingAlgorithmIsPathTracing()) {
 			doRunPathTracing(getMaximumBounce(), getMinimumBounceRussianRoulette());
 		} else if(renderingAlgorithmIsRayCasting()) {
@@ -100,6 +102,36 @@ public final class GPURenderer extends AbstractGPURenderer {
 			}
 			
 			radiance *= PI / samples * PI_RECIPROCAL;
+		}
+		
+		filmAddColor(radiance, radiance, radiance);
+		
+		imageBegin();
+		imageRedoGammaCorrection();
+		imageEnd();
+	}
+	
+	void doRunDepthCamera() {
+		float radiance = 0.0F;
+		
+		if(ray3FCameraGenerate(0.0F, 0.0F) && primitiveIntersectionComputeLHS()) {
+			final float eyeX = ray3FGetOriginX();
+			final float eyeY = ray3FGetOriginY();
+			final float eyeZ = ray3FGetOriginZ();
+			
+			final float lookAtX = intersectionLHSGetSurfaceIntersectionPointX();
+			final float lookAtY = intersectionLHSGetSurfaceIntersectionPointY();
+			final float lookAtZ = intersectionLHSGetSurfaceIntersectionPointZ();
+			
+			final float distanceSquared = super.point3FDistanceSquared(eyeX, eyeY, eyeZ, lookAtX, lookAtY, lookAtZ);
+			
+			final float scale = 0.5F;
+			
+			final float intensityA = 1.0F / (distanceSquared * scale);
+			final float intensityB = intensityA < 0.0F ? -intensityA : intensityA;
+			final float intensityC = intensityB > 1.0F ? 1.0F : intensityB;
+			
+			radiance = intensityC;
 		}
 		
 		filmAddColor(radiance, radiance, radiance);

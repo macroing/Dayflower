@@ -2,6 +2,7 @@
 
 	* ADD:		Add the methods isSamplingCenter() and setSamplingCenter(boolean) to the Camera class.
 	* ADD:		Add the DepthCamera.java scene file to simulate a depth camera.
+	* ADD:		Add a new Depth Camera rendering algorithm. It works in both CPU- and GPU-renderers.
 
 2022-09-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

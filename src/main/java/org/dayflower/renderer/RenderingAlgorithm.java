@@ -33,6 +33,11 @@ public enum RenderingAlgorithm {
 	AMBIENT_OCCLUSION("AmbientOcclusion", "Ambient Occlusion"),
 	
 	/**
+	 * A {@code RenderingAlgorithm} that represents a Depth Camera.
+	 */
+	DEPTH_CAMERA("DepthCamera", "Depth Camera"),
+	
+	/**
 	 * A {@code RenderingAlgorithm} that represents Path Tracing.
 	 */
 	PATH_TRACING("PathTracing", "Path Tracing"),

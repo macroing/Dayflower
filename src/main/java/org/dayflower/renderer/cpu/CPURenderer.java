@@ -78,6 +78,8 @@ public final class CPURenderer extends AbstractCPURenderer {
 		switch(getRenderingAlgorithm()) {
 			case AMBIENT_OCCLUSION:
 				return getScene().radianceAmbientOcclusion(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM, isPreviewMode(), getMaximumDistance(), getSamples());
+			case DEPTH_CAMERA:
+				return getScene().radianceDepthCamera(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM, isPreviewMode());
 			case PATH_TRACING:
 				return getScene().radiancePathTracer(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM, isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
 			case RAY_CASTING:

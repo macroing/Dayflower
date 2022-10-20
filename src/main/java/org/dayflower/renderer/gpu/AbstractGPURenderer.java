@@ -49,9 +49,10 @@ import com.aparapi.Range;
  */
 public abstract class AbstractGPURenderer extends AbstractSceneKernel implements CombinedProgressiveImageOrderRenderer {
 	private static final int RENDERING_ALGORITHM_ORDINAL_AMBIENT_OCCLUSION = 0;//RenderingAlgorithm.AMBIENT_OCCLUSION.ordinal();
-	private static final int RENDERING_ALGORITHM_ORDINAL_PATH_TRACING = 1;//RenderingAlgorithm.PATH_TRACING.ordinal();
-	private static final int RENDERING_ALGORITHM_ORDINAL_RAY_CASTING = 2;//RenderingAlgorithm.RAY_CASTING.ordinal();
-	private static final int RENDERING_ALGORITHM_ORDINAL_RAY_TRACING = 3;//RenderingAlgorithm.RAY_TRACING.ordinal();
+	private static final int RENDERING_ALGORITHM_ORDINAL_DEPTH_CAMERA = 1;//RenderingAlgorithm.DEPTH_CAMERA.ordinal();
+	private static final int RENDERING_ALGORITHM_ORDINAL_PATH_TRACING = 2;//RenderingAlgorithm.PATH_TRACING.ordinal();
+	private static final int RENDERING_ALGORITHM_ORDINAL_RAY_CASTING = 3;//RenderingAlgorithm.RAY_CASTING.ordinal();
+	private static final int RENDERING_ALGORITHM_ORDINAL_RAY_TRACING = 4;//RenderingAlgorithm.RAY_TRACING.ordinal();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -490,6 +491,15 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	protected final boolean renderingAlgorithmIsAmbientOcclusion() {
 		return this.renderingAlgorithmOrdinal == RENDERING_ALGORITHM_ORDINAL_AMBIENT_OCCLUSION;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current {@link RenderingAlgorithm} is set to {@link RenderingAlgorithm#DEPTH_CAMERA}, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the current {@code RenderingAlgorithm} is set to {@code RenderingAlgorithm.DEPTH_CAMERA}, {@code false} otherwise
+	 */
+	protected final boolean renderingAlgorithmIsDepthCamera() {
+		return this.renderingAlgorithmOrdinal == RENDERING_ALGORITHM_ORDINAL_DEPTH_CAMERA;
 	}
 	
 	/**

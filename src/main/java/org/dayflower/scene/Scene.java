@@ -318,6 +318,39 @@ public final class Scene implements Node {
 	}
 	
 	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Depth Camera algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Depth Camera algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceDepthCamera(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode) {
+		final Optional<Intersection> optionalIntersection = intersection(ray, tMinimum, tMaximum);
+		
+		if(optionalIntersection.isPresent()) {
+			final Intersection intersection = optionalIntersection.get();
+			
+			final Point3F eye = intersection.getRay().getOrigin();
+			final Point3F lookAt = intersection.getSurfaceIntersectionPoint();
+			
+			final float distanceSquared = Point3F.distanceSquared(eye, lookAt);
+			final float scale = 0.5F;
+			final float intensity = 1.0F / (distanceSquared * scale);
+			
+			return Color3F.maxTo1(Color3F.minTo0(new Color3F(intensity)));
+		} else if(isPreviewMode) {
+			return Color3F.WHITE;
+		} else {
+			return Color3F.BLACK;
+		}
+	}
+	
+	/**
 	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.

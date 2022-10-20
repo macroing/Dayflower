@@ -114,7 +114,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 	void doRunDepthCamera() {
 		float radiance = 0.0F;
 		
-		if(ray3FCameraGenerate(0.0F, 0.0F) && primitiveIntersectionComputeLHS()) {
+		if(ray3FCameraGenerate(0.5F, 0.5F) && primitiveIntersectionComputeLHS()) {
 			final float eyeX = ray3FGetOriginX();
 			final float eyeY = ray3FGetOriginY();
 			final float eyeZ = ray3FGetOriginZ();
@@ -123,15 +123,13 @@ public final class GPURenderer extends AbstractGPURenderer {
 			final float lookAtY = intersectionLHSGetSurfaceIntersectionPointY();
 			final float lookAtZ = intersectionLHSGetSurfaceIntersectionPointZ();
 			
-			final float distanceSquared = super.point3FDistanceSquared(eyeX, eyeY, eyeZ, lookAtX, lookAtY, lookAtZ);
+			final float distanceSquared = point3FDistanceSquared(eyeX, eyeY, eyeZ, lookAtX, lookAtY, lookAtZ);
 			
-			final float scale = 0.5F;
+			final float scale = 0.25F;
 			
-			final float intensityA = 1.0F / (distanceSquared * scale);
-			final float intensityB = intensityA < 0.0F ? -intensityA : intensityA;
-			final float intensityC = intensityB > 1.0F ? 1.0F : intensityB;
+			final float intensity = saturateF(1.0F / (distanceSquared * scale), 0.0F, 1.0F);
 			
-			radiance = intensityC;
+			radiance = intensity;
 		}
 		
 		filmAddColor(radiance, radiance, radiance);

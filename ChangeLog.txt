@@ -1,4 +1,7 @@
-2022-10-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+2022-10-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods isSamplingCenter() and setSamplingCenter(boolean) to the Camera class.
+	* ADD:		Add the DepthCamera.java scene file to simulate a depth camera.
 
 2022-09-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

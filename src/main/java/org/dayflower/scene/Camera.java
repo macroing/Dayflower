@@ -59,6 +59,7 @@ public final class Camera implements Node {
 	private List<CameraObserver> cameraObservers;
 	private OrthonormalBasis33F orthonormalBasis;
 	private Point3F eye;
+	private boolean isSamplingCenter;
 	private boolean isWalkLockEnabled;
 	private float apertureRadius;
 	private float focalDistance;
@@ -276,7 +277,7 @@ public final class Camera implements Node {
 			wFactor = sqrt(1.0F - dotProduct);
 		}
 		
-		final Point2F point = SampleGeneratorF.sampleDiskUniformDistribution();
+		final Point2F point = this.isSamplingCenter ? new Point2F() : SampleGeneratorF.sampleDiskUniformDistribution();
 		
 		final Point3F pointOnPlaneOneUnitAwayFromEye = new Point3F(Vector3F.add(Vector3F.add(Vector3F.multiply(u, fieldOfViewX * cameraX), Vector3F.multiply(v, fieldOfViewY * cameraY)), Vector3F.add(new Vector3F(eye), Vector3F.multiply(w, wFactor))));
 		final Point3F pointOnImagePlane = Point3F.add(eye, Vector3F.direction(eye, pointOnPlaneOneUnitAwayFromEye), focalDistance);
@@ -483,6 +484,15 @@ public final class Camera implements Node {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns the center sampling state associated with this {@code Camera} instance.
+	 * 
+	 * @return the center sampling state associated with this {@code Camera} instance
+	 */
+	public boolean isSamplingCenter() {
+		return this.isSamplingCenter;
 	}
 	
 	/**
@@ -1015,6 +1025,15 @@ public final class Camera implements Node {
 				cameraObserver.onChangeResolutionY(this, oldResolutionY, newResolutionY);
 			}
 		}
+	}
+	
+	/**
+	 * Sets the center sampling state associated with this {@code Camera} instance.
+	 * 
+	 * @param isSamplingCenter {@code true} if, and only if, center sampling should be enabled, {@code false} otherwise
+	 */
+	public void setSamplingCenter(final boolean isSamplingCenter) {
+		this.isSamplingCenter = isSamplingCenter;
 	}
 	
 	/**

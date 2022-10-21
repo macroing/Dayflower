@@ -76,6 +76,7 @@ The tables below show the main features of the renderer.
 | Name              | CPU | GPU |
 | ----------------- | --- | --- |
 | Ambient Occlusion | Yes | Yes |
+| Depth Camera      | Yes | Yes |
 | Path Tracing      | Yes | Yes |
 | Ray Casting       | Yes | Yes |
 | Ray Tracing       | Yes | Yes |
@@ -177,7 +178,7 @@ The following table describes the different APIs and their current status in the
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |
-| Geometry Shape API                     | 100.0%  |  17.7%    |
+| Geometry Shape API                     | 100.0%  |  17.8%    |
 | Image API                              | 100.0%  |   0.0%    |
 | JavaFX Concurrent API                  | 100.0%  |   0.0%    |
 | JavaFX Scene Canvas API                | 100.0%  |   0.0%    |
@@ -208,7 +209,7 @@ The following table describes the different APIs and their current status in the
 
 Dependencies
 ------------
- - [Java 8](http://www.java.com)
+ - [Java 8 - 17](http://www.java.com)
  - [Aparapi](https://aparapi.com/)
  - [Apache / Commons / BCEL](https://commons.apache.org/proper/commons-bcel/)
  - [Macroing / Java](https://github.com/macroing/Java)

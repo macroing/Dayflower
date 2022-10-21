@@ -1,3 +1,8 @@
+2022-10-21  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the dependency to Macroing Art4J.
+	* CHANGE:	Update the dependency to Macroing Java.
+
 2022-10-20  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods isSamplingCenter() and setSamplingCenter(boolean) to the Camera class.

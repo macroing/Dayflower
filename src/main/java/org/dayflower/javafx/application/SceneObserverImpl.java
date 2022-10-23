@@ -43,6 +43,13 @@ final class SceneObserverImpl implements SceneObserver {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
+	public boolean onUpdate(final Scene scene, final float delta) {
+		Objects.requireNonNull(scene, "scene == null");
+		
+		return false;
+	}
+	
+	@Override
 	public void onAddLight(final Scene scene, final Light newLight) {
 		Objects.requireNonNull(scene, "scene == null");
 		Objects.requireNonNull(newLight, "newLight == null");

@@ -32,7 +32,7 @@ import org.dayflower.javafx.scene.canvas.ConcurrentImageCanvasPane;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.scene.Camera;
-
+import org.dayflower.scene.Scene;
 import org.macroing.java.io.Files;
 import org.macroing.java.util.function.TriFunction;
 
@@ -143,7 +143,9 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	public void update() {
-		final Camera camera = this.combinedProgressiveImageOrderRenderer.getScene().getCamera();
+		final Scene scene = this.combinedProgressiveImageOrderRenderer.getScene();
+		
+		final Camera camera = scene.getCamera();
 		
 		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.A)) {
 			camera.moveLeft(0.3F);
@@ -175,6 +177,14 @@ final class RendererViewPane extends BorderPane {
 			}
 			
 			this.combinedProgressiveImageOrderRenderer.renderShutdown();
+			this.combinedProgressiveImageOrderRenderer.clear();
+		}
+		
+		if(scene.update()) {
+			if(this.combinedProgressiveImageOrderRenderer instanceof AbstractGPURenderer) {
+				AbstractGPURenderer.class.cast(this.combinedProgressiveImageOrderRenderer).updateMatrix44Fs();
+			}
+			
 			this.combinedProgressiveImageOrderRenderer.clear();
 		}
 	}

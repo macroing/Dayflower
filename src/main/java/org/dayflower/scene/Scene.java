@@ -90,6 +90,7 @@ public final class Scene implements Node {
 	private final PrimitiveObserver primitiveObserver;
 	private Sampler sampler;
 	private String name;
+	private long updatedAt;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -147,6 +148,7 @@ public final class Scene implements Node {
 		this.primitiveObserver = new PrimitiveObserverImpl(this, this.sceneObservers);
 		this.sampler = new RandomSampler();
 		this.name = Objects.requireNonNull(name, "name == null");
+		this.updatedAt = 0L;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1167,6 +1169,34 @@ public final class Scene implements Node {
 	 */
 	public boolean removeSceneObserver(final SceneObserver sceneObserver) {
 		return this.sceneObservers.remove(Objects.requireNonNull(sceneObserver, "sceneObserver == null"));
+	}
+	
+	/**
+	 * Updates this {@code Scene} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, anything was changed as a result of this method call, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, anything was changed as a result of this method call, {@code false} otherwise
+	 */
+	public boolean update() {
+		final long now = System.nanoTime();
+		final long updatedAt = this.updatedAt;
+		
+		final float delta = updatedAt == 0L ? 0.0F : (now - updatedAt) / 1000000000.0F;
+		
+		boolean hasUpdated = false;
+		
+		for(final SceneObserver sceneObserver : this.sceneObservers) {
+			if(sceneObserver.onUpdate(this, delta)) {
+				hasUpdated = true;
+			}
+		}
+		
+		if(hasUpdated) {
+			this.updatedAt = now;
+		}
+		
+		return hasUpdated;
 	}
 	
 	/**

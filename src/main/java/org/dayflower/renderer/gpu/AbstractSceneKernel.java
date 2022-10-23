@@ -160,6 +160,19 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(this.cameraArray = CompiledCameraCache.toCamera(getScene().getCamera()));
 	}
 	
+	/**
+	 * Updates the {@link Matrix44F} instances.
+	 */
+	public final void updateMatrix44Fs() {
+		final float[] oldPrimitiveMatrix44FArray = this.primitiveMatrix44FArray;
+		final float[] newPrimitiveMatrix44FArray = doGetCompatibleArray(CompiledPrimitiveCache.toMatrix44Fs(getScene().getPrimitives()));
+		
+//		It is possible that the GPU-renderer will crash if the length of the old array differs from the length of the new array:
+		if(oldPrimitiveMatrix44FArray.length == newPrimitiveMatrix44FArray.length) {
+			put(this.primitiveMatrix44FArray = newPrimitiveMatrix44FArray);
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

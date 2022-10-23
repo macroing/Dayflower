@@ -37,6 +37,25 @@ public abstract class AbstractSceneObserver implements SceneObserver {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * This method is called by {@code scene} when it is told to update.
+	 * <p>
+	 * Returns {@code true} if, and only if, anything was changed as a result of this method call, {@code false} otherwise.
+	 * <p>
+	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param scene the {@link Scene} instance that called this method
+	 * @param delta the delta in milliseconds since last update
+	 * @return {@code true} if, and only if, anything was changed as a result of this method call, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
+	 */
+	@Override
+	public boolean onUpdate(final Scene scene, final float delta) {
+		Objects.requireNonNull(scene, "scene == null");
+		
+		return false;
+	}
+	
+	/**
 	 * This method is called by {@code scene} when a {@link Light} is added.
 	 * <p>
 	 * If either {@code scene} or {@code newLight} are {@code null}, a {@code NullPointerException} will be thrown.

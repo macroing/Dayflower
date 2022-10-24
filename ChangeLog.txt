@@ -1,3 +1,8 @@
+2022-10-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the dependency to Macroing Art4J, for Java 8.
+	* CHANGE:	Update the dependency to Macroing Java, for Java 8.
+
 2022-10-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method onUpdate(Scene, float) to the SceneObserver interface and a default no-op implementation to the AbstractSceneObserver class.

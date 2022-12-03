@@ -183,6 +183,23 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns {@code true} if, and only if, the current {@link Light} instance is an {@link AreaLight} instance, {@code false} otherwise.
+	 * <p>
+	 * This method assumes the method {@link #lightSet(int, int)} has been called.
+	 * 
+	 * @return {@code true} if, and only if, the current {@code Light} instance is an {@code AreaLight} instance, {@code false} otherwise
+	 */
+	protected final boolean lightIsAreaLight() {
+		final int id = lightGetID();
+		
+		if(doLightDiffuseAreaLightIsMatchingID(id)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns {@code true} if, and only if, the current {@link Light} instance is using a delta distribution, {@code false} otherwise.
 	 * <p>
 	 * This method assumes the method {@link #lightSet(int, int)} has been called.
@@ -769,8 +786,16 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float worldToObjectElement43 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 14];
 		final float worldToObjectElement44 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 15];
 		
-//		TODO: Implement!
-		return 1.0F;
+		vector3FSetMatrix44FTransform(worldToObjectElement11, worldToObjectElement12, worldToObjectElement13, worldToObjectElement21, worldToObjectElement22, worldToObjectElement23, worldToObjectElement31, worldToObjectElement32, worldToObjectElement33, incomingX, incomingY, incomingZ);
+		
+		final float incomingOSX = vector3FGetX();
+		final float incomingOSY = vector3FGetY();
+		final float incomingOSZ = vector3FGetZ();
+		
+		intersectionLHSMoveToRHS();
+		intersectionRHSTransform(worldToObjectElement11, worldToObjectElement12, worldToObjectElement13, worldToObjectElement14, worldToObjectElement21, worldToObjectElement22, worldToObjectElement23, worldToObjectElement24, worldToObjectElement31, worldToObjectElement32, worldToObjectElement33, worldToObjectElement34, worldToObjectElement41, worldToObjectElement42, worldToObjectElement43, worldToObjectElement44, objectToWorldElement11, objectToWorldElement12, objectToWorldElement13, objectToWorldElement21, objectToWorldElement22, objectToWorldElement23, objectToWorldElement31, objectToWorldElement32, objectToWorldElement33);
+		
+		return shape3FSphere3FEvaluateProbabilityDensityFunction(incomingOSX, incomingOSY, incomingOSZ);
 	}
 	
 	private float doLightDiffuseAreaLightGetRadianceEmittedB() {

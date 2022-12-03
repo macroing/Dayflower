@@ -160,18 +160,35 @@ public final class GPURenderer extends AbstractGPURenderer {
 				final float rayDirectionY = ray3FGetDirectionY();
 				final float rayDirectionZ = ray3FGetDirectionZ();
 				
+				final float outgoingX = -rayDirectionX;
+				final float outgoingY = -rayDirectionY;
+				final float outgoingZ = -rayDirectionZ;
+				
 				if(primitiveIntersectionComputeLHS()) {
 					if(currentBounce == 0 || isSpecularBounce) {
-						materialEmittance(primitiveGetMaterialIDLHS(), primitiveGetMaterialOffsetLHS(), rayDirectionX, rayDirectionY, rayDirectionZ);
+						final int areaLightID = primitiveGetAreaLightIDLHS();
+						final int areaLightOffset = primitiveGetAreaLightOffsetLHS();
 						
-						radianceR += throughputR * color3FLHSGetComponent1();
-						radianceG += throughputG * color3FLHSGetComponent2();
-						radianceB += throughputB * color3FLHSGetComponent3();
+						if(areaLightID != 0) {
+							lightSet(areaLightID, areaLightOffset);
+							
+							lightEvaluateRadianceEmittedAreaLight(intersectionLHSGetOrthonormalBasisSWX(), intersectionLHSGetOrthonormalBasisSWY(), intersectionLHSGetOrthonormalBasisSWZ(), outgoingX, outgoingY, outgoingZ);
+							
+							radianceR += throughputR * color3FLHSGetComponent1();
+							radianceG += throughputG * color3FLHSGetComponent2();
+							radianceB += throughputB * color3FLHSGetComponent3();
+						} else {
+							materialEmittance(primitiveGetMaterialIDLHS(), primitiveGetMaterialOffsetLHS(), outgoingX, outgoingY, outgoingZ);
+							
+							radianceR += throughputR * color3FLHSGetComponent1();
+							radianceG += throughputG * color3FLHSGetComponent2();
+							radianceB += throughputB * color3FLHSGetComponent3();
+						}
 					}
 					
 					if(materialBSDFCompute(primitiveGetMaterialIDLHS(), primitiveGetMaterialOffsetLHS(), rayDirectionX, rayDirectionY, rayDirectionZ)) {
 						if(materialBSDFCountBXDFsBySpecularType(false) > 0) {
-							lightSampleOneLightUniformDistribution(rayDirectionX, rayDirectionY, rayDirectionZ);
+							lightSampleOneLightUniformDistribution();
 							
 							radianceR += throughputR * color3FLHSGetComponent1();
 							radianceG += throughputG * color3FLHSGetComponent2();
@@ -219,10 +236,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 							isSpecularBounce = materialBSDFResultBXDFIsSpecular();
 							
 							if(isSpecularBounce && materialBSDFResultBXDFHasTransmission()) {
-								final float outgoingX = -rayDirectionX;
-								final float outgoingY = -rayDirectionY;
-								final float outgoingZ = -rayDirectionZ;
-								
 								final float eta = materialBSDFGetEta();
 								
 								final float outgoingDotSurfaceNormalG = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, surfaceNormalGCorrectlyOrientedX, surfaceNormalGCorrectlyOrientedY, surfaceNormalGCorrectlyOrientedZ);

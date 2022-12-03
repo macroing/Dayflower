@@ -1880,6 +1880,93 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	}
 	
 	/**
+	 * Returns the probability density function (PDF) value.
+	 * 
+	 * @param incomingX the X-component of the incoming direction
+	 * @param incomingY the Y-component of the incoming direction
+	 * @param incomingZ the Z-component of the incoming direction
+	 * @return the probability density function (PDF) value
+	 */
+	protected final float shape3FSphere3FEvaluateProbabilityDensityFunction(final float incomingX, final float incomingY, final float incomingZ) {
+		final float currentRayOriginX = ray3FGetOriginX();
+		final float currentRayOriginY = ray3FGetOriginY();
+		final float currentRayOriginZ = ray3FGetOriginZ();
+		
+		final float currentRayDirectionX = ray3FGetDirectionX();
+		final float currentRayDirectionY = ray3FGetDirectionY();
+		final float currentRayDirectionZ = ray3FGetDirectionZ();
+		
+		final float surfaceIntersectionPointX = intersectionRHSGetSurfaceIntersectionPointX();
+		final float surfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointY();
+		final float surfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointZ();
+		
+		final float surfaceNormalSX = intersectionRHSGetOrthonormalBasisSWX();
+		final float surfaceNormalSY = intersectionRHSGetOrthonormalBasisSWY();
+		final float surfaceNormalSZ = intersectionRHSGetOrthonormalBasisSWZ();
+		final float surfaceNormalSDotRayDirection = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, currentRayDirectionX, currentRayDirectionY, currentRayDirectionZ);
+		final float surfaceNormalSCorrectlyOrientedX = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSX : surfaceNormalSX;
+		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
+		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
+		
+		final float directionX = vector3FGetX();
+		final float directionY = vector3FGetY();
+		final float directionZ = vector3FGetZ();
+		final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
+		final float directionNormalizedX = directionX * directionLengthReciprocal;
+		final float directionNormalizedY = directionY * directionLengthReciprocal;
+		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
+		
+		final float nDotD = vector3FDotProduct(surfaceNormalSCorrectlyOrientedX, surfaceNormalSCorrectlyOrientedY, surfaceNormalSCorrectlyOrientedZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		final float nDotE = 0.0F;
+		
+		final float offsetX = surfaceNormalSCorrectlyOrientedX * nDotE;
+		final float offsetY = surfaceNormalSCorrectlyOrientedY * nDotE;
+		final float offsetZ = surfaceNormalSCorrectlyOrientedZ * nDotE;
+		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
+		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
+		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
+		
+		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
+		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
+		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
+		final float originX = nextAfter(originOffsetX, originOffsetX > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originY = nextAfter(originOffsetY, originOffsetY > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originZ = nextAfter(originOffsetZ, originOffsetZ > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		
+		ray3FSetOrigin(originX, originY, originZ);
+		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		
+		final float t = shape3FSphere3FIntersectionT(DEFAULT_T_MINIMUM, DEFAULT_T_MAXIMUM);
+		
+		if(t != 0.0F) {
+			final float currentSurfaceIntersectionPointX = originX + directionNormalizedX * t;
+			final float currentSurfaceIntersectionPointY = originY + directionNormalizedY * t;
+			final float currentSurfaceIntersectionPointZ = originZ + directionNormalizedZ * t;
+			
+			final float distanceSquared = point3FDistanceSquared(currentSurfaceIntersectionPointX, currentSurfaceIntersectionPointY, currentSurfaceIntersectionPointZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+			
+			final float nDotO = vector3FDotProduct(currentSurfaceIntersectionPointX, currentSurfaceIntersectionPointY, currentSurfaceIntersectionPointZ, -incomingX, -incomingY, -incomingZ);
+			final float nDotOAbs = abs(nDotO);
+			
+			final float surfaceArea = 1.0F;
+			
+			final float probabilityDensityFunctionValue = distanceSquared / nDotOAbs * surfaceArea;
+			
+			if(!checkIsInfinite(probabilityDensityFunctionValue)) {
+				ray3FSetOrigin(currentRayOriginX, currentRayOriginY, currentRayOriginZ);
+				ray3FSetDirection(currentRayDirectionX, currentRayDirectionY, currentRayDirectionZ);
+				
+				return probabilityDensityFunctionValue;
+			}
+		}
+		
+		ray3FSetOrigin(currentRayOriginX, currentRayOriginY, currentRayOriginZ);
+		ray3FSetDirection(currentRayDirectionX, currentRayDirectionY, currentRayDirectionZ);
+		
+		return 0.0F;
+	}
+	
+	/**
 	 * Returns the parametric T value for a given sphere in object space, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @param rayTMinimum the minimum parametric T value

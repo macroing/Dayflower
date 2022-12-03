@@ -1123,9 +1123,16 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	}
 	
 	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		
 		final float rayDirectionX = ray3FGetDirectionX();
 		final float rayDirectionY = ray3FGetDirectionY();
 		final float rayDirectionZ = ray3FGetDirectionZ();
+		
+		final float rayTMaximum = ray3FGetTMaximum();
+		final float rayTMinimum = ray3FGetTMinimum();
 		
 		final int bitFlags = isSpecular ? B_X_D_F_TYPE_BIT_FLAG_ALL : B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR;
 		
@@ -1380,6 +1387,11 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				}
 			}
 		}
+		
+		ray3FSetOrigin(rayOriginX, rayOriginY, rayOriginZ);
+		ray3FSetDirection(rayDirectionX, rayDirectionY, rayDirectionZ);
+		ray3FSetTMaximum(rayTMaximum);
+		ray3FSetTMinimum(rayTMinimum);
 		
 		color3FLHSSet(lightDirectR, lightDirectG, lightDirectB);
 	}

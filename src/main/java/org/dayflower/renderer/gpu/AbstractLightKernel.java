@@ -734,40 +734,18 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		return false;
 	}
 	
-	@SuppressWarnings({"unused"})
 	private float doLightDiffuseAreaLightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
-		/*
-		 * 	final Transform transform = getTransform();
-		 * 	
-		 * 	final Matrix44F objectToWorld = transform.getObjectToWorld();
-		 * 	final Matrix44F worldToObject = transform.getWorldToObject();
-		 * 	
-		 * 	final Vector3F incomingObjectSpace = Vector3F.transform(worldToObject, incoming);
-		 * 	
-		 * 	final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
-		 * 	final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
-		 * 	
-		 * 	return this.shape.evaluateProbabilityDensityFunction(surfaceIntersectionObjectSpace, incomingObjectSpace);
-		 */
-		
 		final int offset = lightGetOffset();
 		
 		final float objectToWorldElement11 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  0];
 		final float objectToWorldElement12 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  1];
 		final float objectToWorldElement13 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  2];
-		final float objectToWorldElement14 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  3];
 		final float objectToWorldElement21 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  4];
 		final float objectToWorldElement22 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  5];
 		final float objectToWorldElement23 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  6];
-		final float objectToWorldElement24 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  7];
 		final float objectToWorldElement31 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  8];
 		final float objectToWorldElement32 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD +  9];
 		final float objectToWorldElement33 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 10];
-		final float objectToWorldElement34 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 11];
-		final float objectToWorldElement41 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 12];
-		final float objectToWorldElement42 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 13];
-		final float objectToWorldElement43 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 14];
-		final float objectToWorldElement44 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_OBJECT_TO_WORLD + 15];
 		
 		final float worldToObjectElement11 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  0];
 		final float worldToObjectElement12 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT +  1];

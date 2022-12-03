@@ -1908,9 +1908,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
 		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
 		
-		final float directionX = vector3FGetX();
-		final float directionY = vector3FGetY();
-		final float directionZ = vector3FGetZ();
+		final float directionX = incomingX;
+		final float directionY = incomingY;
+		final float directionZ = incomingZ;
 		final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
 		final float directionNormalizedX = directionX * directionLengthReciprocal;
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
@@ -1945,10 +1945,15 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			
 			final float distanceSquared = point3FDistanceSquared(currentSurfaceIntersectionPointX, currentSurfaceIntersectionPointY, currentSurfaceIntersectionPointZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 			
-			final float nDotO = vector3FDotProduct(currentSurfaceIntersectionPointX, currentSurfaceIntersectionPointY, currentSurfaceIntersectionPointZ, -incomingX, -incomingY, -incomingZ);
+			final float currentSurfaceNormalLengthReciprocal = vector3FLengthReciprocal(currentSurfaceIntersectionPointX, currentSurfaceIntersectionPointY, currentSurfaceIntersectionPointZ);
+			final float currentSurfaceNormalX = currentSurfaceIntersectionPointX * currentSurfaceNormalLengthReciprocal;
+			final float currentSurfaceNormalY = currentSurfaceIntersectionPointY * currentSurfaceNormalLengthReciprocal;
+			final float currentSurfaceNormalZ = currentSurfaceIntersectionPointZ * currentSurfaceNormalLengthReciprocal;
+			
+			final float nDotO = vector3FDotProduct(currentSurfaceNormalX, currentSurfaceNormalY, currentSurfaceNormalZ, -incomingX, -incomingY, -incomingZ);
 			final float nDotOAbs = abs(nDotO);
 			
-			final float surfaceArea = 1.0F;
+			final float surfaceArea = PI_MULTIPLIED_BY_4;
 			
 			final float probabilityDensityFunctionValue = distanceSquared / nDotOAbs * surfaceArea;
 			

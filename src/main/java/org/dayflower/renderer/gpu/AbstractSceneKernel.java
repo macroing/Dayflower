@@ -1289,6 +1289,16 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				ray3FSetTMaximum(tMaximum);
 				ray3FSetTMinimum(tMinimum);
 				
+				/*
+				if(primitiveIntersectionComputeRHS()) {
+					final int primitiveIndex = intersectionRHSGetPrimitiveIndex();
+					
+					final int areaLightIDAndOffset = this.primitiveArray[primitiveIndex + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET];
+					
+					if(areaLightIDAndOffset != 0) {
+						lightEvaluateRadianceEmittedAreaLight();
+					}
+				} else {*/
 				if(!primitiveIntersects()) {
 					lightEvaluateRadianceEmitted(ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ());
 					

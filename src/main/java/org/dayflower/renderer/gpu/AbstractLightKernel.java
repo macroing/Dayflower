@@ -678,7 +678,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float probabilityDensityFunctionValue = shape3FSphere3FSampleRHS(u, v);
 		
-		if(probabilityDensityFunctionValue > 0.0F) {
+		if(checkIsFinite(probabilityDensityFunctionValue) && probabilityDensityFunctionValue > 0.0F) {
 			final float pointOSX = point3FGetX();
 			final float pointOSY = point3FGetY();
 			final float pointOSZ = point3FGetZ();
@@ -706,9 +706,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 			final float incomingWSX = pointWSX - surfaceIntersectionPointX;
 			final float incomingWSY = pointWSY - surfaceIntersectionPointY;
 			final float incomingWSZ = pointWSZ - surfaceIntersectionPointZ;
-			
 			final float incomingWSLengthReciprocal = vector3FLengthReciprocal(incomingWSX, incomingWSY, incomingWSZ);
-			
 			final float incomingWSNormalizedX = incomingWSX * incomingWSLengthReciprocal;
 			final float incomingWSNormalizedY = incomingWSY * incomingWSLengthReciprocal;
 			final float incomingWSNormalizedZ = incomingWSZ * incomingWSLengthReciprocal;

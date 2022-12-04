@@ -467,25 +467,25 @@ public final class Point3DUnitTests {
 		final Point3D d = Point3D.offset(new Point3D(1.0D, 1.0D, 1.0D), Vector3D.y(), Vector3D.y(), Vector3D.y());
 		final Point3D e = Point3D.offset(new Point3D(1.0D, 1.0D, 1.0D), Vector3D.z(), Vector3D.z(), Vector3D.z());
 		
-		assertEquals(Math.nextDown(1.0D), a.x);
-		assertEquals(Math.nextDown(1.0D), a.y);
-		assertEquals(Math.nextDown(1.0D), a.z);
+		assertEquals(1.0D, a.x);
+		assertEquals(1.0D, a.y);
+		assertEquals(1.0D, a.z);
 		
-		assertEquals(Math.nextDown(1.0D), b.x);
-		assertEquals(Math.nextDown(1.0D), b.y);
-		assertEquals(Math.nextDown(1.0D), b.z);
+		assertEquals(1.0D, b.x);
+		assertEquals(1.0D, b.y);
+		assertEquals(1.0D, b.z);
 		
-		assertEquals(Math.nextUp(2.0D),   c.x);
-		assertEquals(Math.nextDown(1.0D), c.y);
-		assertEquals(Math.nextDown(1.0D), c.z);
+		assertEquals(Math.nextUp(2.0D), c.x);
+		assertEquals(1.0D,              c.y);
+		assertEquals(1.0D,              c.z);
 		
-		assertEquals(Math.nextDown(1.0D), d.x);
-		assertEquals(Math.nextUp(2.0D),   d.y);
-		assertEquals(Math.nextDown(1.0D), d.z);
+		assertEquals(1.0D,              d.x);
+		assertEquals(Math.nextUp(2.0D), d.y);
+		assertEquals(1.0D,              d.z);
 		
-		assertEquals(Math.nextDown(1.0D), e.x);
-		assertEquals(Math.nextDown(1.0D), e.y);
-		assertEquals(Math.nextUp(2.0D),   e.z);
+		assertEquals(1.0D,              e.x);
+		assertEquals(1.0D,              e.y);
+		assertEquals(Math.nextUp(2.0D), e.z);
 		
 		assertThrows(NullPointerException.class, () -> Point3D.offset(new Point3D(), new Vector3D(), new Vector3D(), null));
 		assertThrows(NullPointerException.class, () -> Point3D.offset(new Point3D(), new Vector3D(), null, new Vector3D()));

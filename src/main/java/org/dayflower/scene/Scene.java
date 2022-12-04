@@ -542,7 +542,7 @@ public final class Scene implements Node {
 				
 				final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
 				
-				if(russianRouletteThroughput.max() < 1.0F && currentBounce > minimumBounceRussianRoulette) {
+				if(russianRouletteThroughput.max() < 1.0F && currentBounce >= minimumBounceRussianRoulette) {
 					final float probability = max(0.05F, 1.0F - russianRouletteThroughput.max());
 					
 					if(sampler.sample1().getU() < probability) {

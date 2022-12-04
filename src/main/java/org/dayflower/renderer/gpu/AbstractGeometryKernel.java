@@ -1956,9 +1956,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
 		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
 		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
-		final float originX = nextAfter(originOffsetX, originOffsetX > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originY = nextAfter(originOffsetY, originOffsetY > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originZ = nextAfter(originOffsetZ, originOffsetZ > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
+		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
+		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
 		
 		ray3FSetOrigin(originX, originY, originZ);
 		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
@@ -2010,9 +2010,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
 		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
 		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
-		final float originX = nextAfter(originOffsetX, originOffsetX > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originY = nextAfter(originOffsetY, originOffsetY > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originZ = nextAfter(originOffsetZ, originOffsetZ > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
+		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
+		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
 		
 		ray3FSetOrigin(originX, originY, originZ);
 		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);

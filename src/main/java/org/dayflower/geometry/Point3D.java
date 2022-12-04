@@ -565,9 +565,9 @@ public final class Point3D implements Node {
 		
 		final Point3D pointOffset = add(point, offsetCorrectlyOriented);
 		
-		final double x = offset.x > 0.0D ? nextUp(pointOffset.x) : nextDown(pointOffset.x);
-		final double y = offset.y > 0.0D ? nextUp(pointOffset.y) : nextDown(pointOffset.y);
-		final double z = offset.z > 0.0D ? nextUp(pointOffset.z) : nextDown(pointOffset.z);
+		final double x = offset.x > 0.0D ? nextUp(pointOffset.x) : offset.x < 0.0D ? nextDown(pointOffset.x) : pointOffset.x;
+		final double y = offset.y > 0.0D ? nextUp(pointOffset.y) : offset.y < 0.0D ? nextDown(pointOffset.y) : pointOffset.y;
+		final double z = offset.z > 0.0D ? nextUp(pointOffset.z) : offset.z < 0.0D ? nextDown(pointOffset.z) : pointOffset.z;
 		
 		return new Point3D(x, y, z);
 	}

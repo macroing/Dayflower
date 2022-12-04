@@ -1903,10 +1903,6 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalSX = intersectionRHSGetOrthonormalBasisSWX();
 		final float surfaceNormalSY = intersectionRHSGetOrthonormalBasisSWY();
 		final float surfaceNormalSZ = intersectionRHSGetOrthonormalBasisSWZ();
-		final float surfaceNormalSDotRayDirection = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, currentRayDirectionX, currentRayDirectionY, currentRayDirectionZ);
-		final float surfaceNormalSCorrectlyOrientedX = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSX : surfaceNormalSX;
-		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
-		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
 		
 		final float directionX = incomingX;
 		final float directionY = incomingY;
@@ -1916,12 +1912,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
 		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
 		
-		final float nDotD = vector3FDotProduct(surfaceNormalSCorrectlyOrientedX, surfaceNormalSCorrectlyOrientedY, surfaceNormalSCorrectlyOrientedZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		final float nDotD = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
 		final float nDotE = 0.0F;
 		
-		final float offsetX = surfaceNormalSCorrectlyOrientedX * nDotE;
-		final float offsetY = surfaceNormalSCorrectlyOrientedY * nDotE;
-		final float offsetZ = surfaceNormalSCorrectlyOrientedZ * nDotE;
+		final float offsetX = surfaceNormalSX * nDotE;
+		final float offsetY = surfaceNormalSY * nDotE;
+		final float offsetZ = surfaceNormalSZ * nDotE;
 		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
 		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
 		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
@@ -1929,16 +1925,16 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
 		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
 		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
-		final float originX = nextAfter(originOffsetX, originOffsetX > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originY = nextAfter(originOffsetY, originOffsetY > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originZ = nextAfter(originOffsetZ, originOffsetZ > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
+		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
+		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
 		
 		ray3FSetOrigin(originX, originY, originZ);
 		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
 		
 		final float t = shape3FSphere3FIntersectionT(DEFAULT_T_MINIMUM, DEFAULT_T_MAXIMUM);
 		
-		if(t != 0.0F) {
+		if(t > 0.0F) {
 			final float currentSurfaceIntersectionPointX = originX + directionNormalizedX * t;
 			final float currentSurfaceIntersectionPointY = originY + directionNormalizedY * t;
 			final float currentSurfaceIntersectionPointZ = originZ + directionNormalizedZ * t;
@@ -1957,7 +1953,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			
 			final float probabilityDensityFunctionValue = distanceSquared / nDotOAbs * surfaceArea;
 			
-			if(!checkIsInfinite(probabilityDensityFunctionValue)) {
+			if(checkIsFinite(probabilityDensityFunctionValue) && probabilityDensityFunctionValue > 0.0F) {
 				ray3FSetOrigin(currentRayOriginX, currentRayOriginY, currentRayOriginZ);
 				ray3FSetDirection(currentRayDirectionX, currentRayDirectionY, currentRayDirectionZ);
 				
@@ -2013,11 +2009,11 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	/**
 	 * Samples a sphere.
 	 * <p>
-	 * Returns the probability density function (PDF) value or {@code 0.0F} if no sample were created.
+	 * Returns the probability density function (PDF) value or {@code 0.0F} if no sample was created.
 	 * 
 	 * @param u a random value between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive)
 	 * @param v a random value between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive)
-	 * @return the probability density function (PDF) value or {@code 0.0F} if no sample were created
+	 * @return the probability density function (PDF) value or {@code 0.0F} if no sample was created
 	 */
 	protected final float shape3FSphere3FSample(final float u, final float v) {
 		vector3FSetSampleSphereUniformDistribution(u, v);
@@ -2046,11 +2042,11 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	/**
 	 * Samples a sphere.
 	 * <p>
-	 * Returns the probability density function (PDF) value or {@code 0.0F} if no sample were created.
+	 * Returns the probability density function (PDF) value or {@code 0.0F} if no sample was created.
 	 * 
 	 * @param u a random value between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive)
 	 * @param v a random value between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive)
-	 * @return the probability density function (PDF) value or {@code 0.0F} if no sample were created
+	 * @return the probability density function (PDF) value or {@code 0.0F} if no sample was created
 	 */
 	protected final float shape3FSphere3FSampleRHS(final float u, final float v) {
 		final float centerX = 0.0F;
@@ -2069,9 +2065,22 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float directionY = centerY - surfaceIntersectionPointY;
 		final float directionZ = centerZ - surfaceIntersectionPointZ;
 		
-		final float originX = nextAfter(surfaceIntersectionPointX, surfaceIntersectionPointX - surfaceNormalX);
-		final float originY = nextAfter(surfaceIntersectionPointY, surfaceIntersectionPointY - surfaceNormalY);
-		final float originZ = nextAfter(surfaceIntersectionPointZ, surfaceIntersectionPointZ - surfaceNormalZ);
+		final float nDotD = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
+		final float nDotE = 0.0F;
+		
+		final float offsetX = surfaceNormalX * nDotE;
+		final float offsetY = surfaceNormalY * nDotE;
+		final float offsetZ = surfaceNormalZ * nDotE;
+		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
+		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
+		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
+		
+		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
+		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
+		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
+		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
+		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
+		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
 		
 		final float distanceSquared = point3FDistanceSquared(centerX, centerY, centerZ, originX, originY, originZ);
 		

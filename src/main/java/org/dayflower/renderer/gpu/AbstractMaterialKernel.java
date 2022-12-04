@@ -747,9 +747,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 					}
 				}
 				
-				if(matches > 1) {
-					probabilityDensityFunctionValue /= matches;
-				}
+				probabilityDensityFunctionValue /= matches;
 				
 				doBSDFResultSetBXDFID(matchingId);
 				doBSDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);

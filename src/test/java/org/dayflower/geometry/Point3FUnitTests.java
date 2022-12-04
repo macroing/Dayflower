@@ -467,25 +467,25 @@ public final class Point3FUnitTests {
 		final Point3F d = Point3F.offset(new Point3F(1.0F, 1.0F, 1.0F), Vector3F.y(), Vector3F.y(), Vector3F.y());
 		final Point3F e = Point3F.offset(new Point3F(1.0F, 1.0F, 1.0F), Vector3F.z(), Vector3F.z(), Vector3F.z());
 		
-		assertEquals(Math.nextDown(1.0F), a.x);
-		assertEquals(Math.nextDown(1.0F), a.y);
-		assertEquals(Math.nextDown(1.0F), a.z);
+		assertEquals(1.0F, a.x);
+		assertEquals(1.0F, a.y);
+		assertEquals(1.0F, a.z);
 		
-		assertEquals(Math.nextDown(1.0F), b.x);
-		assertEquals(Math.nextDown(1.0F), b.y);
-		assertEquals(Math.nextDown(1.0F), b.z);
+		assertEquals(1.0F, b.x);
+		assertEquals(1.0F, b.y);
+		assertEquals(1.0F, b.z);
 		
-		assertEquals(Math.nextUp(2.0F),   c.x);
-		assertEquals(Math.nextDown(1.0F), c.y);
-		assertEquals(Math.nextDown(1.0F), c.z);
+		assertEquals(Math.nextUp(2.0F), c.x);
+		assertEquals(1.0F,              c.y);
+		assertEquals(1.0F,              c.z);
 		
-		assertEquals(Math.nextDown(1.0F), d.x);
-		assertEquals(Math.nextUp(2.0F),   d.y);
-		assertEquals(Math.nextDown(1.0F), d.z);
+		assertEquals(1.0F,              d.x);
+		assertEquals(Math.nextUp(2.0F), d.y);
+		assertEquals(1.0F,              d.z);
 		
-		assertEquals(Math.nextDown(1.0F), e.x);
-		assertEquals(Math.nextDown(1.0F), e.y);
-		assertEquals(Math.nextUp(2.0F),   e.z);
+		assertEquals(1.0F,              e.x);
+		assertEquals(1.0F,              e.y);
+		assertEquals(Math.nextUp(2.0F), e.z);
 		
 		assertThrows(NullPointerException.class, () -> Point3F.offset(new Point3F(), new Vector3F(), new Vector3F(), null));
 		assertThrows(NullPointerException.class, () -> Point3F.offset(new Point3F(), new Vector3F(), null, new Vector3F()));

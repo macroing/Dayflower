@@ -210,7 +210,7 @@ public final class Ints {
 		ParameterArguments.requireRange(a, 0, 65535, "a");
 		ParameterArguments.requireRange(b, 0, 65535, "b");
 		
-		return (a << 16) | (b & 0xFFFF);
+		return ((a & 0xFFFF) << 16) | ((b & 0xFFFF) << 0);
 	}
 	
 	/**
@@ -233,7 +233,7 @@ public final class Ints {
 		ParameterArguments.requireRange(c, 0, 255, "c");
 		ParameterArguments.requireRange(d, 0, 255, "d");
 		
-		return (a << 0) | (b << 8) | (c << 16) | (d << 24);
+		return ((a & 0xFF) << 0) | ((b & 0xFF) << 8) | ((c & 0xFF) << 16) | ((d & 0xFF) << 24);
 	}
 	
 	/**

@@ -565,9 +565,9 @@ public final class Point3F implements Node {
 		
 		final Point3F pointOffset = add(point, offsetCorrectlyOriented);
 		
-		final float x = offset.x > 0.0F ? nextUp(pointOffset.x) : nextDown(pointOffset.x);
-		final float y = offset.y > 0.0F ? nextUp(pointOffset.y) : nextDown(pointOffset.y);
-		final float z = offset.z > 0.0F ? nextUp(pointOffset.z) : nextDown(pointOffset.z);
+		final float x = offset.x > 0.0F ? nextUp(pointOffset.x) : offset.x < 0.0F ? nextDown(pointOffset.x) : pointOffset.x;
+		final float y = offset.y > 0.0F ? nextUp(pointOffset.y) : offset.y < 0.0F ? nextDown(pointOffset.y) : pointOffset.y;
+		final float z = offset.z > 0.0F ? nextUp(pointOffset.z) : offset.z < 0.0F ? nextDown(pointOffset.z) : pointOffset.z;
 		
 		return new Point3F(x, y, z);
 	}

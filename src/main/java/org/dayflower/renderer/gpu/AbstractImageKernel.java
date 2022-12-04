@@ -135,7 +135,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * Call this method to hint to this {@code AbstractImageKernel} instance that it should clear the film before rendering to it in the next render pass.
 	 */
 	public final void filmClear() {
-		this.filmFlags |= FILM_FLAG_CLEAR;
+		this.filmFlags = FILM_FLAG_CLEAR;
 	}
 	
 	/**
@@ -922,28 +922,28 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		final int filmColorFloatArrayOffset = getGlobalId() * 3;
 		final int filmSampleIntArrayOffset = getGlobalId();
 		
-		if((this.filmFlags & FILM_FLAG_CLEAR) != 0) {
-			this.filmColorFloatArray[filmColorFloatArrayOffset + 0] = colorR;
-			this.filmColorFloatArray[filmColorFloatArrayOffset + 1] = colorG;
-			this.filmColorFloatArray[filmColorFloatArrayOffset + 2] = colorB;
-			this.filmSampleIntArray[filmSampleIntArrayOffset] = 1;
-		} else {
-			final int oldFilmSample = this.filmSampleIntArray[filmSampleIntArrayOffset];
-			final int newFilmSample = oldFilmSample + 1;
-			
-			final float oldFilmColorR = this.filmColorFloatArray[filmColorFloatArrayOffset + 0];
-			final float oldFilmColorG = this.filmColorFloatArray[filmColorFloatArrayOffset + 1];
-			final float oldFilmColorB = this.filmColorFloatArray[filmColorFloatArrayOffset + 2];
-			
-			final float newFilmColorR = oldFilmColorR + ((colorR - oldFilmColorR) / newFilmSample);
-			final float newFilmColorG = oldFilmColorG + ((colorG - oldFilmColorG) / newFilmSample);
-			final float newFilmColorB = oldFilmColorB + ((colorB - oldFilmColorB) / newFilmSample);
-			
-			this.filmColorFloatArray[filmColorFloatArrayOffset + 0] = newFilmColorR;
-			this.filmColorFloatArray[filmColorFloatArrayOffset + 1] = newFilmColorG;
-			this.filmColorFloatArray[filmColorFloatArrayOffset + 2] = newFilmColorB;
-			this.filmSampleIntArray[filmSampleIntArrayOffset] = newFilmSample;
+		if(this.filmFlags == FILM_FLAG_CLEAR) {
+			this.filmColorFloatArray[filmColorFloatArrayOffset + 0] = 0.0F;
+			this.filmColorFloatArray[filmColorFloatArrayOffset + 1] = 0.0F;
+			this.filmColorFloatArray[filmColorFloatArrayOffset + 2] = 0.0F;
+			this.filmSampleIntArray[filmSampleIntArrayOffset] = 0;
 		}
+		
+		final int oldFilmSample = this.filmSampleIntArray[filmSampleIntArrayOffset];
+		final int newFilmSample = oldFilmSample + 1;
+		
+		final float oldFilmColorR = this.filmColorFloatArray[filmColorFloatArrayOffset + 0];
+		final float oldFilmColorG = this.filmColorFloatArray[filmColorFloatArrayOffset + 1];
+		final float oldFilmColorB = this.filmColorFloatArray[filmColorFloatArrayOffset + 2];
+		
+		final float newFilmColorR = oldFilmColorR + ((colorR - oldFilmColorR) / newFilmSample);
+		final float newFilmColorG = oldFilmColorG + ((colorG - oldFilmColorG) / newFilmSample);
+		final float newFilmColorB = oldFilmColorB + ((colorB - oldFilmColorB) / newFilmSample);
+		
+		this.filmColorFloatArray[filmColorFloatArrayOffset + 0] = newFilmColorR;
+		this.filmColorFloatArray[filmColorFloatArrayOffset + 1] = newFilmColorG;
+		this.filmColorFloatArray[filmColorFloatArrayOffset + 2] = newFilmColorB;
+		this.filmSampleIntArray[filmSampleIntArrayOffset] = newFilmSample;
 	}
 	
 	/**

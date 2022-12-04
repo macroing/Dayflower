@@ -356,6 +356,40 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	}
 	
 	/**
+	 * Moves the intersection data from left-hand side to right-hand side.
+	 */
+	protected final void intersectionLHSMoveToRHS() {
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
+		
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX];
+		
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+		
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
+		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+	}
+	
+	/**
 	 * Sets the orthonormal basis for geometry in {@link #intersectionLHSArray_$private$24}.
 	 * 
 	 * @param uX the X-component of the U-direction
@@ -528,6 +562,121 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected final void intersectionLHSSetTextureCoordinates(final float x, final float y) {
 		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = x;
 		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = y;
+	}
+	
+	/**
+	 * Transforms the intersection on the left-hand side.
+	 * 
+	 * @param matrixElement11 the element at row 1 and column 1 in the matrix
+	 * @param matrixElement12 the element at row 1 and column 2 in the matrix
+	 * @param matrixElement13 the element at row 1 and column 3 in the matrix
+	 * @param matrixElement14 the element at row 1 and column 4 in the matrix
+	 * @param matrixElement21 the element at row 2 and column 1 in the matrix
+	 * @param matrixElement22 the element at row 2 and column 2 in the matrix
+	 * @param matrixElement23 the element at row 2 and column 3 in the matrix
+	 * @param matrixElement24 the element at row 2 and column 4 in the matrix
+	 * @param matrixElement31 the element at row 3 and column 1 in the matrix
+	 * @param matrixElement32 the element at row 3 and column 2 in the matrix
+	 * @param matrixElement33 the element at row 3 and column 3 in the matrix
+	 * @param matrixElement34 the element at row 3 and column 4 in the matrix
+	 * @param matrixElement41 the element at row 4 and column 1 in the matrix
+	 * @param matrixElement42 the element at row 4 and column 2 in the matrix
+	 * @param matrixElement43 the element at row 4 and column 3 in the matrix
+	 * @param matrixElement44 the element at row 4 and column 4 in the matrix
+	 * @param matrixInverseElement11 the element at row 1 and column 1 in the inverse matrix
+	 * @param matrixInverseElement12 the element at row 1 and column 2 in the inverse matrix
+	 * @param matrixInverseElement13 the element at row 1 and column 3 in the inverse matrix
+	 * @param matrixInverseElement21 the element at row 2 and column 1 in the inverse matrix
+	 * @param matrixInverseElement22 the element at row 2 and column 2 in the inverse matrix
+	 * @param matrixInverseElement23 the element at row 2 and column 3 in the inverse matrix
+	 * @param matrixInverseElement31 the element at row 3 and column 1 in the inverse matrix
+	 * @param matrixInverseElement32 the element at row 3 and column 2 in the inverse matrix
+	 * @param matrixInverseElement33 the element at row 3 and column 3 in the inverse matrix
+	 */
+	protected final void intersectionLHSTransform(final float matrixElement11, final float matrixElement12, final float matrixElement13, final float matrixElement14, final float matrixElement21, final float matrixElement22, final float matrixElement23, final float matrixElement24, final float matrixElement31, final float matrixElement32, final float matrixElement33, final float matrixElement34, final float matrixElement41, final float matrixElement42, final float matrixElement43, final float matrixElement44, final float matrixInverseElement11, final float matrixInverseElement12, final float matrixInverseElement13, final float matrixInverseElement21, final float matrixInverseElement22, final float matrixInverseElement23, final float matrixInverseElement31, final float matrixInverseElement32, final float matrixInverseElement33) {
+//		Retrieve the old variables from the intersection array:
+		final float oldOrthonormalBasisGUX = intersectionLHSGetOrthonormalBasisGUX();
+		final float oldOrthonormalBasisGUY = intersectionLHSGetOrthonormalBasisGUY();
+		final float oldOrthonormalBasisGUZ = intersectionLHSGetOrthonormalBasisGUZ();
+		final float oldOrthonormalBasisGVX = intersectionLHSGetOrthonormalBasisGVX();
+		final float oldOrthonormalBasisGVY = intersectionLHSGetOrthonormalBasisGVY();
+		final float oldOrthonormalBasisGVZ = intersectionLHSGetOrthonormalBasisGVZ();
+		final float oldOrthonormalBasisGWX = intersectionLHSGetOrthonormalBasisGWX();
+		final float oldOrthonormalBasisGWY = intersectionLHSGetOrthonormalBasisGWY();
+		final float oldOrthonormalBasisGWZ = intersectionLHSGetOrthonormalBasisGWZ();
+		final float oldOrthonormalBasisSUX = intersectionLHSGetOrthonormalBasisSUX();
+		final float oldOrthonormalBasisSUY = intersectionLHSGetOrthonormalBasisSUY();
+		final float oldOrthonormalBasisSUZ = intersectionLHSGetOrthonormalBasisSUZ();
+		final float oldOrthonormalBasisSVX = intersectionLHSGetOrthonormalBasisSVX();
+		final float oldOrthonormalBasisSVY = intersectionLHSGetOrthonormalBasisSVY();
+		final float oldOrthonormalBasisSVZ = intersectionLHSGetOrthonormalBasisSVZ();
+		final float oldOrthonormalBasisSWX = intersectionLHSGetOrthonormalBasisSWX();
+		final float oldOrthonormalBasisSWY = intersectionLHSGetOrthonormalBasisSWY();
+		final float oldOrthonormalBasisSWZ = intersectionLHSGetOrthonormalBasisSWZ();
+		final float oldSurfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
+		final float oldSurfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
+		final float oldSurfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointZ();
+		
+//		Transform the U-direction of the geometric orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
+		
+//		Retrieve the transformed U-direction of the geometric orthonormal basis:
+		final float newOrthonormalBasisGUX = vector3FGetX();
+		final float newOrthonormalBasisGUY = vector3FGetY();
+		final float newOrthonormalBasisGUZ = vector3FGetZ();
+		
+//		Transform the V-direction of the geometric orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGVX, oldOrthonormalBasisGVY, oldOrthonormalBasisGVZ);
+		
+//		Retrieve the transformed V-direction of the geometric orthonormal basis:
+		final float newOrthonormalBasisGVX = vector3FGetX();
+		final float newOrthonormalBasisGVY = vector3FGetY();
+		final float newOrthonormalBasisGVZ = vector3FGetZ();
+		
+//		Transform the W-direction of the geometric orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGWX, oldOrthonormalBasisGWY, oldOrthonormalBasisGWZ);
+		
+//		Retrieve the transformed W-direction of the geometric orthonormal basis:
+		final float newOrthonormalBasisGWX = vector3FGetX();
+		final float newOrthonormalBasisGWY = vector3FGetY();
+		final float newOrthonormalBasisGWZ = vector3FGetZ();
+		
+//		Transform the U-direction of the shading orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSUX, oldOrthonormalBasisSUY, oldOrthonormalBasisSUZ);
+		
+//		Retrieve the transformed U-direction of the shading orthonormal basis:
+		final float newOrthonormalBasisSUX = vector3FGetX();
+		final float newOrthonormalBasisSUY = vector3FGetY();
+		final float newOrthonormalBasisSUZ = vector3FGetZ();
+		
+//		Transform the V-direction of the shading orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSVX, oldOrthonormalBasisSVY, oldOrthonormalBasisSVZ);
+		
+//		Retrieve the transformed V-direction of the shading orthonormal basis:
+		final float newOrthonormalBasisSVX = vector3FGetX();
+		final float newOrthonormalBasisSVY = vector3FGetY();
+		final float newOrthonormalBasisSVZ = vector3FGetZ();
+		
+//		Transform the W-direction of the shading orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSWX, oldOrthonormalBasisSWY, oldOrthonormalBasisSWZ);
+		
+//		Retrieve the transformed W-direction of the shading orthonormal basis:
+		final float newOrthonormalBasisSWX = vector3FGetX();
+		final float newOrthonormalBasisSWY = vector3FGetY();
+		final float newOrthonormalBasisSWZ = vector3FGetZ();
+		
+//		Transform the surface intersection point:
+		point3FSetMatrix44FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
+		
+//		Retrieve the transformed surface intersection point:
+		final float newSurfaceIntersectionPointX = point3FGetX();
+		final float newSurfaceIntersectionPointY = point3FGetY();
+		final float newSurfaceIntersectionPointZ = point3FGetZ();
+		
+//		Update the intersection array:
+		intersectionLHSSetOrthonormalBasisG(newOrthonormalBasisGUX, newOrthonormalBasisGUY, newOrthonormalBasisGUZ, newOrthonormalBasisGVX, newOrthonormalBasisGVY, newOrthonormalBasisGVZ, newOrthonormalBasisGWX, newOrthonormalBasisGWY, newOrthonormalBasisGWZ);
+		intersectionLHSSetOrthonormalBasisS(newOrthonormalBasisSUX, newOrthonormalBasisSUY, newOrthonormalBasisSUZ, newOrthonormalBasisSVX, newOrthonormalBasisSVY, newOrthonormalBasisSVZ, newOrthonormalBasisSWX, newOrthonormalBasisSWY, newOrthonormalBasisSWZ);
+		intersectionLHSSetSurfaceIntersectionPoint(newSurfaceIntersectionPointX, newSurfaceIntersectionPointY, newSurfaceIntersectionPointZ);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -751,6 +900,40 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	}
 	
 	/**
+	 * Moves the intersection data from right-hand side to left-hand side.
+	 */
+	protected final void intersectionRHSMoveToLHS() {
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
+		
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX];
+		
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+		
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
+		this.intersectionLHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+	}
+	
+	/**
 	 * Sets the orthonormal basis for geometry in {@link #intersectionRHSArray_$private$24}.
 	 * 
 	 * @param uX the X-component of the U-direction
@@ -923,6 +1106,121 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected final void intersectionRHSSetTextureCoordinates(final float x, final float y) {
 		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = x;
 		this.intersectionRHSArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = y;
+	}
+	
+	/**
+	 * Transforms the intersection on the right-hand side.
+	 * 
+	 * @param matrixElement11 the element at row 1 and column 1 in the matrix
+	 * @param matrixElement12 the element at row 1 and column 2 in the matrix
+	 * @param matrixElement13 the element at row 1 and column 3 in the matrix
+	 * @param matrixElement14 the element at row 1 and column 4 in the matrix
+	 * @param matrixElement21 the element at row 2 and column 1 in the matrix
+	 * @param matrixElement22 the element at row 2 and column 2 in the matrix
+	 * @param matrixElement23 the element at row 2 and column 3 in the matrix
+	 * @param matrixElement24 the element at row 2 and column 4 in the matrix
+	 * @param matrixElement31 the element at row 3 and column 1 in the matrix
+	 * @param matrixElement32 the element at row 3 and column 2 in the matrix
+	 * @param matrixElement33 the element at row 3 and column 3 in the matrix
+	 * @param matrixElement34 the element at row 3 and column 4 in the matrix
+	 * @param matrixElement41 the element at row 4 and column 1 in the matrix
+	 * @param matrixElement42 the element at row 4 and column 2 in the matrix
+	 * @param matrixElement43 the element at row 4 and column 3 in the matrix
+	 * @param matrixElement44 the element at row 4 and column 4 in the matrix
+	 * @param matrixInverseElement11 the element at row 1 and column 1 in the inverse matrix
+	 * @param matrixInverseElement12 the element at row 1 and column 2 in the inverse matrix
+	 * @param matrixInverseElement13 the element at row 1 and column 3 in the inverse matrix
+	 * @param matrixInverseElement21 the element at row 2 and column 1 in the inverse matrix
+	 * @param matrixInverseElement22 the element at row 2 and column 2 in the inverse matrix
+	 * @param matrixInverseElement23 the element at row 2 and column 3 in the inverse matrix
+	 * @param matrixInverseElement31 the element at row 3 and column 1 in the inverse matrix
+	 * @param matrixInverseElement32 the element at row 3 and column 2 in the inverse matrix
+	 * @param matrixInverseElement33 the element at row 3 and column 3 in the inverse matrix
+	 */
+	protected final void intersectionRHSTransform(final float matrixElement11, final float matrixElement12, final float matrixElement13, final float matrixElement14, final float matrixElement21, final float matrixElement22, final float matrixElement23, final float matrixElement24, final float matrixElement31, final float matrixElement32, final float matrixElement33, final float matrixElement34, final float matrixElement41, final float matrixElement42, final float matrixElement43, final float matrixElement44, final float matrixInverseElement11, final float matrixInverseElement12, final float matrixInverseElement13, final float matrixInverseElement21, final float matrixInverseElement22, final float matrixInverseElement23, final float matrixInverseElement31, final float matrixInverseElement32, final float matrixInverseElement33) {
+//		Retrieve the old variables from the intersection array:
+		final float oldOrthonormalBasisGUX = intersectionRHSGetOrthonormalBasisGUX();
+		final float oldOrthonormalBasisGUY = intersectionRHSGetOrthonormalBasisGUY();
+		final float oldOrthonormalBasisGUZ = intersectionRHSGetOrthonormalBasisGUZ();
+		final float oldOrthonormalBasisGVX = intersectionRHSGetOrthonormalBasisGVX();
+		final float oldOrthonormalBasisGVY = intersectionRHSGetOrthonormalBasisGVY();
+		final float oldOrthonormalBasisGVZ = intersectionRHSGetOrthonormalBasisGVZ();
+		final float oldOrthonormalBasisGWX = intersectionRHSGetOrthonormalBasisGWX();
+		final float oldOrthonormalBasisGWY = intersectionRHSGetOrthonormalBasisGWY();
+		final float oldOrthonormalBasisGWZ = intersectionRHSGetOrthonormalBasisGWZ();
+		final float oldOrthonormalBasisSUX = intersectionRHSGetOrthonormalBasisSUX();
+		final float oldOrthonormalBasisSUY = intersectionRHSGetOrthonormalBasisSUY();
+		final float oldOrthonormalBasisSUZ = intersectionRHSGetOrthonormalBasisSUZ();
+		final float oldOrthonormalBasisSVX = intersectionRHSGetOrthonormalBasisSVX();
+		final float oldOrthonormalBasisSVY = intersectionRHSGetOrthonormalBasisSVY();
+		final float oldOrthonormalBasisSVZ = intersectionRHSGetOrthonormalBasisSVZ();
+		final float oldOrthonormalBasisSWX = intersectionRHSGetOrthonormalBasisSWX();
+		final float oldOrthonormalBasisSWY = intersectionRHSGetOrthonormalBasisSWY();
+		final float oldOrthonormalBasisSWZ = intersectionRHSGetOrthonormalBasisSWZ();
+		final float oldSurfaceIntersectionPointX = intersectionRHSGetSurfaceIntersectionPointX();
+		final float oldSurfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointY();
+		final float oldSurfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointZ();
+		
+//		Transform the U-direction of the geometric orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
+		
+//		Retrieve the transformed U-direction of the geometric orthonormal basis:
+		final float newOrthonormalBasisGUX = vector3FGetX();
+		final float newOrthonormalBasisGUY = vector3FGetY();
+		final float newOrthonormalBasisGUZ = vector3FGetZ();
+		
+//		Transform the V-direction of the geometric orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGVX, oldOrthonormalBasisGVY, oldOrthonormalBasisGVZ);
+		
+//		Retrieve the transformed V-direction of the geometric orthonormal basis:
+		final float newOrthonormalBasisGVX = vector3FGetX();
+		final float newOrthonormalBasisGVY = vector3FGetY();
+		final float newOrthonormalBasisGVZ = vector3FGetZ();
+		
+//		Transform the W-direction of the geometric orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGWX, oldOrthonormalBasisGWY, oldOrthonormalBasisGWZ);
+		
+//		Retrieve the transformed W-direction of the geometric orthonormal basis:
+		final float newOrthonormalBasisGWX = vector3FGetX();
+		final float newOrthonormalBasisGWY = vector3FGetY();
+		final float newOrthonormalBasisGWZ = vector3FGetZ();
+		
+//		Transform the U-direction of the shading orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSUX, oldOrthonormalBasisSUY, oldOrthonormalBasisSUZ);
+		
+//		Retrieve the transformed U-direction of the shading orthonormal basis:
+		final float newOrthonormalBasisSUX = vector3FGetX();
+		final float newOrthonormalBasisSUY = vector3FGetY();
+		final float newOrthonormalBasisSUZ = vector3FGetZ();
+		
+//		Transform the V-direction of the shading orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSVX, oldOrthonormalBasisSVY, oldOrthonormalBasisSVZ);
+		
+//		Retrieve the transformed V-direction of the shading orthonormal basis:
+		final float newOrthonormalBasisSVX = vector3FGetX();
+		final float newOrthonormalBasisSVY = vector3FGetY();
+		final float newOrthonormalBasisSVZ = vector3FGetZ();
+		
+//		Transform the W-direction of the shading orthonormal basis:
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSWX, oldOrthonormalBasisSWY, oldOrthonormalBasisSWZ);
+		
+//		Retrieve the transformed W-direction of the shading orthonormal basis:
+		final float newOrthonormalBasisSWX = vector3FGetX();
+		final float newOrthonormalBasisSWY = vector3FGetY();
+		final float newOrthonormalBasisSWZ = vector3FGetZ();
+		
+//		Transform the surface intersection point:
+		point3FSetMatrix44FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
+		
+//		Retrieve the transformed surface intersection point:
+		final float newSurfaceIntersectionPointX = point3FGetX();
+		final float newSurfaceIntersectionPointY = point3FGetY();
+		final float newSurfaceIntersectionPointZ = point3FGetZ();
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisG(newOrthonormalBasisGUX, newOrthonormalBasisGUY, newOrthonormalBasisGUZ, newOrthonormalBasisGVX, newOrthonormalBasisGVY, newOrthonormalBasisGVZ, newOrthonormalBasisGWX, newOrthonormalBasisGWY, newOrthonormalBasisGWZ);
+		intersectionRHSSetOrthonormalBasisS(newOrthonormalBasisSUX, newOrthonormalBasisSUY, newOrthonormalBasisSUZ, newOrthonormalBasisSVX, newOrthonormalBasisSVY, newOrthonormalBasisSVZ, newOrthonormalBasisSWX, newOrthonormalBasisSWY, newOrthonormalBasisSWZ);
+		intersectionRHSSetSurfaceIntersectionPoint(newSurfaceIntersectionPointX, newSurfaceIntersectionPointY, newSurfaceIntersectionPointZ);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1415,6 +1713,21 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets a point in {@link #point3FArray_$private$3}.
 	 * <p>
+	 * The point is constructed using the point represented by {@code x}, {@code y} and {@code z}.
+	 * 
+	 * @param x the value of the X-component of the point
+	 * @param y the value of the Y-component of the point
+	 * @param z the value of the Z-component of the point
+	 */
+	protected final void point3FSet(final float x, final float y, final float z) {
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_X] = x;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_Y] = y;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_Z] = z;
+	}
+	
+	/**
+	 * Sets a point in {@link #point3FArray_$private$3}.
+	 * <p>
 	 * The point is constructed by transforming the point represented by {@code x}, {@code y} and {@code z} with the supplied matrix.
 	 * 
 	 * @param element11 the value of the element at row 1 and column 1 in the matrix
@@ -1643,9 +1956,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
 		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
 		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
-		final float originX = nextAfter(originOffsetX, originOffsetX > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originY = nextAfter(originOffsetY, originOffsetY > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originZ = nextAfter(originOffsetZ, originOffsetZ > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
+		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
+		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
 		
 		ray3FSetOrigin(originX, originY, originZ);
 		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
@@ -1697,9 +2010,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
 		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
 		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
-		final float originX = nextAfter(originOffsetX, originOffsetX > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originY = nextAfter(originOffsetY, originOffsetY > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
-		final float originZ = nextAfter(originOffsetZ, originOffsetZ > 0.0F ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY);
+		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
+		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
+		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
 		
 		ray3FSetOrigin(originX, originY, originZ);
 		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
@@ -1900,6 +2213,36 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = x;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = y;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = z;
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed to point in the direction of the spherical coordinates given by {@code sinTheta}, {@code cosTheta}, {@code phi} and three direction vectors.
+	 * 
+	 * @param sinTheta the sine of the angle theta
+	 * @param cosTheta the cosine of the angle theta
+	 * @param phi the angle phi
+	 * @param uX the X-component of the U-direction
+	 * @param uY the Y-component of the U-direction
+	 * @param uZ the Z-component of the U-direction
+	 * @param vX the X-component of the V-direction
+	 * @param vY the Y-component of the V-direction
+	 * @param vZ the Z-component of the V-direction
+	 * @param wX the X-component of the W-direction
+	 * @param wY the Y-component of the W-direction
+	 * @param wZ the Z-component of the W-direction
+	 */
+	protected final void vector3FSetDirectionSpherical12(final float sinTheta, final float cosTheta, final float phi, final float uX, final float uY, final float uZ, final float vX, final float vY, final float vZ, final float wX, final float wY, final float wZ) {
+		final float u = sinTheta * cos(phi);
+		final float v = sinTheta * sin(phi);
+		final float w = cosTheta;
+		
+		final float x = uX * u + vX * v + wX * w;
+		final float y = uY * u + vY * v + wY * w;
+		final float z = uZ * u + vZ * v + wZ * w;
+		
+		vector3FSet(x, y, z);
 	}
 	
 	/**
@@ -2214,6 +2557,28 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final void vector3FSetSampleHemisphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = u;
+		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float phi = PI_MULTIPLIED_BY_2 * v;
+		
+		final float x = sinTheta * cos(phi);
+		final float y = sinTheta * sin(phi);
+		final float z = cosTheta;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = x;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = y;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = z;
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed by sampling a direction on a sphere with a uniform distribution.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 */
+	protected final void vector3FSetSampleSphereUniformDistribution(final float u, final float v) {
+		final float cosTheta = 1.0F - 2.0F * u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = PI_MULTIPLIED_BY_2 * v;
 		

@@ -63,7 +63,7 @@ public final class SurfaceSample3F {
 	public SurfaceSample3F(final Point3F point, final Vector3F pointError, final Vector3F surfaceNormal, final float probabilityDensityFunctionValue) {
 		this.point = Objects.requireNonNull(point, "point == null");
 		this.pointError = Objects.requireNonNull(pointError, "pointError == null");
-		this.surfaceNormal = Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
+		this.surfaceNormal = Vector3F.normalize(Objects.requireNonNull(surfaceNormal, "surfaceNormal == null"));
 		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
 	}
 	
@@ -210,7 +210,7 @@ public final class SurfaceSample3F {
 		final Vector3F pointErrorNewSpace = Vector3F.transformError(matrix, pointOldSpace, pointErrorOldSpace);
 		
 		final Vector3F surfaceNormalOldSpace = surfaceSample.surfaceNormal;
-		final Vector3F surfaceNormalNewSpace = Vector3F.transformTranspose(matrixInverse, surfaceNormalOldSpace);
+		final Vector3F surfaceNormalNewSpace = Vector3F.normalize(Vector3F.transformTranspose(matrixInverse, surfaceNormalOldSpace));
 		
 		final float probabilityDensityFunctionValue = surfaceSample.probabilityDensityFunctionValue;
 		

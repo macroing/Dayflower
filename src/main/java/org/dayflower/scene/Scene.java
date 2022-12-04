@@ -542,7 +542,7 @@ public final class Scene implements Node {
 				
 				final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
 				
-				if(russianRouletteThroughput.max() < 1.0F && currentBounce > minimumBounceRussianRoulette) {
+				if(russianRouletteThroughput.max() < 1.0F && currentBounce >= minimumBounceRussianRoulette) {
 					final float probability = max(0.05F, 1.0F - russianRouletteThroughput.max());
 					
 					if(sampler.sample1().getU() < probability) {
@@ -1453,37 +1453,29 @@ public final class Scene implements Node {
 	private Color3F doEstimateDirectLight(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final boolean isSpecular) {
 		Color3F lightDirect = Color3F.BLACK;
 		
-		if(light.isUsingDeltaDistribution()) {
-			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
+		final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
+		
+		final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
+		
+		final Vector3F normal = intersection.getSurfaceNormalSCorrectlyOriented();
+		
+		if(light.isUsingDeltaDistribution() && optionalLightSample.isPresent()) {
+			final LightSample lightSample = optionalLightSample.get();
 			
-			final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
+			final Color3F lightIncoming = lightSample.getResult();
 			
-			final Vector3F normal = intersection.getSurfaceNormalSCorrectlyOriented();
+			final Vector3F incoming = lightSample.getIncoming();
 			
-			if(optionalLightSample.isPresent()) {
-				final LightSample lightSample = optionalLightSample.get();
+			final float lightPDFValue = lightSample.getProbabilityDensityFunctionValue();
+			
+			if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
+				final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, incoming), abs(Vector3F.dotProduct(incoming, normal)));
 				
-				final Color3F lightIncoming = lightSample.getResult();
-				
-				final Vector3F incoming = lightSample.getIncoming();
-				
-				final float lightPDFValue = lightSample.getProbabilityDensityFunctionValue();
-				
-				if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, incoming), abs(Vector3F.dotProduct(incoming, normal)));
-					
-					if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
-						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, lightPDFValue);
-					}
+				if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
+					lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, lightPDFValue);
 				}
 			}
-		} else {
-			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
-			
-			final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
-			
-			final Vector3F normal = intersection.getSurfaceNormalSCorrectlyOriented();
-			
+		} else if(!light.isUsingDeltaDistribution()) {
 			if(optionalLightSample.isPresent()) {
 				final LightSample lightSample = optionalLightSample.get();
 				

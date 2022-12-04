@@ -744,6 +744,42 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	}
 	
 	/**
+	 * Returns the ID of the {@link AreaLight} instance that is used by the intersected {@link Primitive} instance.
+	 * 
+	 * @return the ID of the {@code AreaLight} instance that is used by the intersected {@code Primitive} instance
+	 */
+	protected final int primitiveGetAreaLightIDLHS() {
+		return (this.primitiveArray[intersectionLHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET] >>> 16) & 0xFFFF;
+	}
+	
+	/**
+	 * Returns the ID of the {@link AreaLight} instance that is used by the intersected {@link Primitive} instance.
+	 * 
+	 * @return the ID of the {@code AreaLight} instance that is used by the intersected {@code Primitive} instance
+	 */
+	protected final int primitiveGetAreaLightIDRHS() {
+		return (this.primitiveArray[intersectionRHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET] >>> 16) & 0xFFFF;
+	}
+	
+	/**
+	 * Returns the offset of the {@link AreaLight} instance that is used by the intersected {@link Primitive} instance.
+	 * 
+	 * @return the offset of the {@code AreaLight} instance that is used by the intersected {@code Primitive} instance
+	 */
+	protected final int primitiveGetAreaLightOffsetLHS() {
+		return this.primitiveArray[intersectionLHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET] & 0xFFFF;
+	}
+	
+	/**
+	 * Returns the offset of the {@link AreaLight} instance that is used by the intersected {@link Primitive} instance.
+	 * 
+	 * @return the offset of the {@code AreaLight} instance that is used by the intersected {@code Primitive} instance
+	 */
+	protected final int primitiveGetAreaLightOffsetRHS() {
+		return this.primitiveArray[intersectionRHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET] & 0xFFFF;
+	}
+	
+	/**
 	 * Returns the ID of the {@link Material} instance that is used by the intersected {@link Primitive} instance.
 	 * 
 	 * @return the ID of the {@code Material} instance that is used by the intersected {@code Primitive} instance
@@ -785,12 +821,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * The result will be set using {@link #color3FLHSSet(float, float, float)}.
 	 * <p>
 	 * To retrieve the color components of the result, the methods {@link #color3FLHSGetComponent1()}, {@link #color3FLHSGetComponent2()} or {@link #color3FLHSGetComponent3()} may be used.
-	 * 
-	 * @param rayDirectionX the X-component of the ray direction
-	 * @param rayDirectionY the Y-component of the ray direction
-	 * @param rayDirectionZ the Z-component of the ray direction
 	 */
-	protected final void lightSampleOneLightUniformDistribution(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
+	protected final void lightSampleOneLightUniformDistribution() {
 		final int lightCount = super.lightCount;
 		
 		if(lightCount == 0) {
@@ -809,7 +841,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		lightSet(lightID, lightOffset);
 		
-		doLightEstimateDirectLight(random(), random(), random(), random(), false, rayDirectionX, rayDirectionY, rayDirectionZ);
+		doLightEstimateDirectLight(random(), random(), random(), random(), false);
 		
 		final float lightR = finiteOrZero(color3FLHSGetComponent1() / probabilityDensityFunctionValue);
 		final float lightG = finiteOrZero(color3FLHSGetComponent2() / probabilityDensityFunctionValue);
@@ -1090,28 +1122,61 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		doIntersectionTransformRHS(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
 	}
 	
-	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
+	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
+//		Retrieve the current ray origin:
+		final float rayOriginX = ray3FGetOriginX();
+		final float rayOriginY = ray3FGetOriginY();
+		final float rayOriginZ = ray3FGetOriginZ();
+		
+//		Retrieve the current ray direction:
+		final float rayDirectionX = ray3FGetDirectionX();
+		final float rayDirectionY = ray3FGetDirectionY();
+		final float rayDirectionZ = ray3FGetDirectionZ();
+		
+//		Retrieve the parametric t values from the current ray:
+		final float rayTMaximum = ray3FGetTMaximum();
+		final float rayTMinimum = ray3FGetTMinimum();
+		
+//		Initialize the BXDF bit flags to use:
 		final int bitFlags = isSpecular ? B_X_D_F_TYPE_BIT_FLAG_ALL : B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR;
 		
+//		Retrieve the ID and offset for the current light source:
+		final int lightID = lightGetID();
+		final int lightOffset = lightGetOffset();
+		
+//		Initialize a flag that indicates whether the current light source is an area light or not:
+		final boolean isAreaLight = lightIsAreaLight();
+		
+//		Initialize a flag that indicates whether the current light source is using a delta distribution or not:
 		final boolean isUsingDeltaDistribution = lightIsUsingDeltaDistribution();
+		
+//		Attempt to compute a light sample for incoming radiance along the current ray direction:
 		final boolean isSampling = lightSampleRadianceIncoming(sampleAU, sampleAV, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
+//		Retrieve the surface normal from the current surface intersection:
 		final float normalX = intersectionLHSGetOrthonormalBasisSWX();
 		final float normalY = intersectionLHSGetOrthonormalBasisSWY();
 		final float normalZ = intersectionLHSGetOrthonormalBasisSWZ();
+		
+//		Compute the dot product between the surface normal and the current ray direction:
 		final float normalDotRayDirection = vector3FDotProduct(normalX, normalY, normalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+//		Compute the correctly oriented surface normal:
 		final float normalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -normalX : normalX;
 		final float normalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -normalY : normalY;
 		final float normalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -normalZ : normalZ;
 		
+//		Retrieve the surface intersection point from the current surface intersection:
 		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
 		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
 		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointZ();
 		
+//		Initialize the direct light to black:
 		float lightDirectR = 0.0F;
 		float lightDirectG = 0.0F;
 		float lightDirectB = 0.0F;
 		
+//		Perform the following if the current light source is using a delta distribution and a sample for incoming radiance was created:
 		if(isUsingDeltaDistribution && isSampling) {
 			final float lightResultR = lightSampleGetResultR();
 			final float lightResultG = lightSampleGetResultG();
@@ -1169,6 +1234,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			}
 		}
 		
+//		Perform the following if the current light source is not using a delta distribution and a sample for incoming radiance was created:
 		if(!isUsingDeltaDistribution && isSampling) {
 			final float lightResultR = lightSampleGetResultR();
 			final float lightResultG = lightSampleGetResultG();
@@ -1219,7 +1285,25 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				ray3FSetTMaximum(tMaximum);
 				ray3FSetTMinimum(tMinimum);
 				
-				if(hasScatteringResult && !primitiveIntersects()) {
+				if(hasScatteringResult && isAreaLight) {
+					final boolean isIntersecting = primitiveIntersectionComputeRHS();
+					final boolean isIntersectingAreaLight = isIntersecting && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset;
+					
+					if(isIntersectingAreaLight) {
+						materialBSDFEvaluateProbabilityDensityFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
+						
+						final float scatteringProbabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
+						final float scatteringProbabilityDensityFunctionValueSquared = scatteringProbabilityDensityFunctionValue * scatteringProbabilityDensityFunctionValue;
+						
+						final float weight = lightProbabilityDensityFunctionValueSquared / (lightProbabilityDensityFunctionValueSquared + scatteringProbabilityDensityFunctionValueSquared);
+						
+						lightDirectR += scatteringResultR * lightResultR * weight / lightProbabilityDensityFunctionValue;
+						lightDirectG += scatteringResultG * lightResultG * weight / lightProbabilityDensityFunctionValue;
+						lightDirectB += scatteringResultB * lightResultB * weight / lightProbabilityDensityFunctionValue;
+					}
+				}
+				
+				if(hasScatteringResult && !isAreaLight && !primitiveIntersects()) {
 					materialBSDFEvaluateProbabilityDensityFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
 					
 					final float scatteringProbabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
@@ -1234,6 +1318,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			}
 		}
 		
+//		Perform the following if the current light source is not using a delta distribution and a sample from the BSDF was created:
 		if(!isUsingDeltaDistribution && materialBSDFSampleDistributionFunction(bitFlags, sampleBU, sampleBV, rayDirectionX, rayDirectionY, rayDirectionZ)) {
 			final boolean hasSampledSpecular = materialBSDFResultBXDFIsSpecular();
 			
@@ -1289,7 +1374,23 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				ray3FSetTMaximum(tMaximum);
 				ray3FSetTMinimum(tMinimum);
 				
-				if(!primitiveIntersects()) {
+				if(isAreaLight && primitiveIntersectionComputeRHS() && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset) {
+					lightEvaluateRadianceEmittedAreaLight(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ, ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ());
+					
+					final float lightIncomingR = color3FLHSGetR();
+					final float lightIncomingG = color3FLHSGetG();
+					final float lightIncomingB = color3FLHSGetB();
+					
+					final boolean hasLightIncoming = !checkIsZero(lightIncomingR) || !checkIsZero(lightIncomingG) || !checkIsZero(lightIncomingB);
+					
+					if(hasLightIncoming) {
+						lightDirectR += scatteringResultR * lightIncomingR * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectG += scatteringResultG * lightIncomingG * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectB += scatteringResultB * lightIncomingB * weight / scatteringProbabilityDensityFunctionValue;
+					}
+				}
+				
+				if(!isAreaLight && !primitiveIntersects()) {
 					lightEvaluateRadianceEmitted(ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ());
 					
 					final float lightIncomingR = color3FLHSGetR();
@@ -1306,6 +1407,12 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				}
 			}
 		}
+		
+//		Reset the current ray:
+		ray3FSetOrigin(rayOriginX, rayOriginY, rayOriginZ);
+		ray3FSetDirection(rayDirectionX, rayDirectionY, rayDirectionZ);
+		ray3FSetTMaximum(rayTMaximum);
+		ray3FSetTMinimum(rayTMinimum);
 		
 		color3FLHSSet(lightDirectR, lightDirectG, lightDirectB);
 	}

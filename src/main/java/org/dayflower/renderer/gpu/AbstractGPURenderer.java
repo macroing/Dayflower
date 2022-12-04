@@ -197,48 +197,50 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		
 		final ImageF image = getImage();
 		
-		final int resolutionX = image.getResolutionX();
-		final int resolutionY = image.getResolutionY();
-		
-		if(resolutionX != getResolutionX() || resolutionY != getResolutionY()) {
-			setup(false);
-		}
-		
-		final Range range = this.range.get();
-		
-		if(this.isClearing.compareAndSet(true, false)) {
-			this.renderPass.set(0);
+		synchronized(image) {
+			final int resolutionX = image.getResolutionX();
+			final int resolutionY = image.getResolutionY();
 			
-			filmClear();
+			if(resolutionX != getResolutionX() || resolutionY != getResolutionY()) {
+				setup(false);
+			}
 			
-			doClearImageF(image);
+			final Range range = this.range.get();
 			
+			if(this.isClearing.compareAndSet(true, false)) {
+				this.renderPass.set(0);
+				
+				filmClear();
+				
+				doClearImageF(image);
+				
+				rendererObserver.onRenderDisplay(this, image);
+				
+				final
+				Timer timer = getTimer();
+				timer.restart();
+			} else {
+				filmClearFilmFlags();
+			}
+			
+			final int renderPass = this.renderPass.incrementAndGet();
+			
+			rendererObserver.onRenderPassProgress(this, renderPass, 0.0D);
+			
+			final long currentTimeMillis = System.currentTimeMillis();
+			
+			execute(range);
+			
+			doUpdateImageF(image);
+			
+			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
+			
+			rendererObserver.onRenderPassProgress(this, renderPass, 1.0D);
 			rendererObserver.onRenderDisplay(this, image);
+			rendererObserver.onRenderPassComplete(this, renderPass, elapsedTimeMillis);
 			
-			final
-			Timer timer = getTimer();
-			timer.restart();
-		} else {
-			filmClearFilmFlags();
+			this.isRendering.set(false);
 		}
-		
-		final int renderPass = this.renderPass.incrementAndGet();
-		
-		rendererObserver.onRenderPassProgress(this, renderPass, 0.0D);
-		
-		final long currentTimeMillis = System.currentTimeMillis();
-		
-		execute(range);
-		
-		doUpdateImageF(image);
-		
-		final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
-		
-		rendererObserver.onRenderPassProgress(this, renderPass, 1.0D);
-		rendererObserver.onRenderDisplay(this, image);
-		rendererObserver.onRenderPassComplete(this, renderPass, elapsedTimeMillis);
-		
-		this.isRendering.set(false);
 		
 		return true;
 	}
@@ -471,15 +473,17 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	public void setup(final boolean isSettingUpScene) {
 		final ImageF image = getImage();
 		
-		final Scene scene = getScene();
-		
-		final int resolutionX = image.getResolutionX();
-		final int resolutionY = image.getResolutionY();
-		
-		setResolution(resolutionX, resolutionY);
-		setScene(scene);
-		
-		super.setup(isSettingUpScene);
+		synchronized(image) {
+			final Scene scene = getScene();
+			
+			final int resolutionX = image.getResolutionX();
+			final int resolutionY = image.getResolutionY();
+			
+			setResolution(resolutionX, resolutionY);
+			setScene(scene);
+			
+			super.setup(isSettingUpScene);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -539,10 +543,12 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	}
 	
 	private void doUpdateImageF(final ImageF image) {
-		if(image instanceof ByteImageF) {
-			doUpdateByteImageF(ByteImageF.class.cast(image));
-		} else if(image instanceof PixelImageF) {
-			doUpdatePixelImageF(PixelImageF.class.cast(image));
+		synchronized(image) {
+			if(image instanceof ByteImageF) {
+				doUpdateByteImageF(ByteImageF.class.cast(image));
+			} else if(image instanceof PixelImageF) {
+				doUpdatePixelImageF(PixelImageF.class.cast(image));
+			}
 		}
 	}
 	
@@ -585,8 +591,10 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static void doClearImageF(final ImageF image) {
-		if(image instanceof PixelImageF) {
-			doClearPixelImageF(PixelImageF.class.cast(image));
+		synchronized(image) {
+			if(image instanceof PixelImageF) {
+				doClearPixelImageF(PixelImageF.class.cast(image));
+			}
 		}
 	}
 	

@@ -18,9 +18,11 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
 import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
@@ -1878,6 +1880,94 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	}
 	
 	/**
+	 * Returns the probability density function (PDF) value.
+	 * 
+	 * @param incomingX the X-component of the incoming direction
+	 * @param incomingY the Y-component of the incoming direction
+	 * @param incomingZ the Z-component of the incoming direction
+	 * @return the probability density function (PDF) value
+	 */
+	protected final float shape3FSphere3FEvaluateProbabilityDensityFunction(final float incomingX, final float incomingY, final float incomingZ) {
+		final float currentRayOriginX = ray3FGetOriginX();
+		final float currentRayOriginY = ray3FGetOriginY();
+		final float currentRayOriginZ = ray3FGetOriginZ();
+		
+		final float currentRayDirectionX = ray3FGetDirectionX();
+		final float currentRayDirectionY = ray3FGetDirectionY();
+		final float currentRayDirectionZ = ray3FGetDirectionZ();
+		
+		final float surfaceIntersectionPointX = intersectionRHSGetSurfaceIntersectionPointX();
+		final float surfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointY();
+		final float surfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointZ();
+		
+		final float surfaceNormalSX = intersectionRHSGetOrthonormalBasisSWX();
+		final float surfaceNormalSY = intersectionRHSGetOrthonormalBasisSWY();
+		final float surfaceNormalSZ = intersectionRHSGetOrthonormalBasisSWZ();
+		
+		final float directionX = incomingX;
+		final float directionY = incomingY;
+		final float directionZ = incomingZ;
+		final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
+		final float directionNormalizedX = directionX * directionLengthReciprocal;
+		final float directionNormalizedY = directionY * directionLengthReciprocal;
+		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
+		
+		final float nDotD = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		final float nDotE = 0.0F;
+		
+		final float offsetX = surfaceNormalSX * nDotE;
+		final float offsetY = surfaceNormalSY * nDotE;
+		final float offsetZ = surfaceNormalSZ * nDotE;
+		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
+		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
+		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
+		
+		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
+		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
+		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
+		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
+		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
+		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
+		
+		ray3FSetOrigin(originX, originY, originZ);
+		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		
+		final float t = shape3FSphere3FIntersectionT(DEFAULT_T_MINIMUM, DEFAULT_T_MAXIMUM);
+		
+		if(t > 0.0F) {
+			final float currentSurfaceIntersectionPointX = originX + directionNormalizedX * t;
+			final float currentSurfaceIntersectionPointY = originY + directionNormalizedY * t;
+			final float currentSurfaceIntersectionPointZ = originZ + directionNormalizedZ * t;
+			
+			final float distanceSquared = point3FDistanceSquared(currentSurfaceIntersectionPointX, currentSurfaceIntersectionPointY, currentSurfaceIntersectionPointZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+			
+			final float currentSurfaceNormalLengthReciprocal = vector3FLengthReciprocal(currentSurfaceIntersectionPointX, currentSurfaceIntersectionPointY, currentSurfaceIntersectionPointZ);
+			final float currentSurfaceNormalX = currentSurfaceIntersectionPointX * currentSurfaceNormalLengthReciprocal;
+			final float currentSurfaceNormalY = currentSurfaceIntersectionPointY * currentSurfaceNormalLengthReciprocal;
+			final float currentSurfaceNormalZ = currentSurfaceIntersectionPointZ * currentSurfaceNormalLengthReciprocal;
+			
+			final float nDotO = vector3FDotProduct(currentSurfaceNormalX, currentSurfaceNormalY, currentSurfaceNormalZ, -incomingX, -incomingY, -incomingZ);
+			final float nDotOAbs = abs(nDotO);
+			
+			final float surfaceArea = PI_MULTIPLIED_BY_4;
+			
+			final float probabilityDensityFunctionValue = distanceSquared / nDotOAbs * surfaceArea;
+			
+			if(checkIsFinite(probabilityDensityFunctionValue) && probabilityDensityFunctionValue > 0.0F) {
+				ray3FSetOrigin(currentRayOriginX, currentRayOriginY, currentRayOriginZ);
+				ray3FSetDirection(currentRayDirectionX, currentRayDirectionY, currentRayDirectionZ);
+				
+				return probabilityDensityFunctionValue;
+			}
+		}
+		
+		ray3FSetOrigin(currentRayOriginX, currentRayOriginY, currentRayOriginZ);
+		ray3FSetDirection(currentRayDirectionX, currentRayDirectionY, currentRayDirectionZ);
+		
+		return 0.0F;
+	}
+	
+	/**
 	 * Returns the parametric T value for a given sphere in object space, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @param rayTMinimum the minimum parametric T value
@@ -1914,6 +2004,174 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float t = solveQuadraticSystem(a, b, c, rayTMinimum, rayTMaximum);
 		
 		return t;
+	}
+	
+	/**
+	 * Samples a sphere.
+	 * <p>
+	 * Returns the probability density function (PDF) value or {@code 0.0F} if no sample was created.
+	 * 
+	 * @param u a random value between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive)
+	 * @param v a random value between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive)
+	 * @return the probability density function (PDF) value or {@code 0.0F} if no sample was created
+	 */
+	protected final float shape3FSphere3FSample(final float u, final float v) {
+		vector3FSetSampleSphereUniformDistribution(u, v);
+		
+		final float directionX = vector3FGetX();
+		final float directionY = vector3FGetY();
+		final float directionZ = vector3FGetZ();
+		
+		final float lengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
+		
+		final float pointX = directionX + lengthReciprocal;
+		final float pointY = directionY + lengthReciprocal;
+		final float pointZ = directionZ + lengthReciprocal;
+		
+		final float surfaceNormalX = directionX * lengthReciprocal;
+		final float surfaceNormalY = directionY * lengthReciprocal;
+		final float surfaceNormalZ = directionZ * lengthReciprocal;
+		
+		point3FSet(pointX, pointY, pointZ);
+		
+		vector3FSet(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+		
+		return 1.0F / PI_MULTIPLIED_BY_4;
+	}
+	
+	/**
+	 * Samples a sphere.
+	 * <p>
+	 * Returns the probability density function (PDF) value or {@code 0.0F} if no sample was created.
+	 * 
+	 * @param u a random value between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive)
+	 * @param v a random value between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive)
+	 * @return the probability density function (PDF) value or {@code 0.0F} if no sample was created
+	 */
+	protected final float shape3FSphere3FSampleRHS(final float u, final float v) {
+		final float centerX = 0.0F;
+		final float centerY = 0.0F;
+		final float centerZ = 0.0F;
+		
+		final float surfaceIntersectionPointX = intersectionRHSGetSurfaceIntersectionPointX();
+		final float surfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointY();
+		final float surfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointZ();
+		
+		final float surfaceNormalX = intersectionRHSGetOrthonormalBasisSWX();
+		final float surfaceNormalY = intersectionRHSGetOrthonormalBasisSWY();
+		final float surfaceNormalZ = intersectionRHSGetOrthonormalBasisSWZ();
+		
+		final float directionX = centerX - surfaceIntersectionPointX;
+		final float directionY = centerY - surfaceIntersectionPointY;
+		final float directionZ = centerZ - surfaceIntersectionPointZ;
+		
+		final float nDotD = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
+		final float nDotE = 0.0F;
+		
+		final float offsetX = surfaceNormalX * nDotE;
+		final float offsetY = surfaceNormalY * nDotE;
+		final float offsetZ = surfaceNormalZ * nDotE;
+		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
+		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
+		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
+		
+		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
+		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
+		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
+		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
+		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
+		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
+		
+		final float distanceSquared = point3FDistanceSquared(centerX, centerY, centerZ, originX, originY, originZ);
+		
+		if(distanceSquared <= 1.0F) {
+			shape3FSphere3FSample(u, v);
+			
+			final float pointX = point3FGetX();
+			final float pointY = point3FGetY();
+			final float pointZ = point3FGetZ();
+			
+			final float vectorX = vector3FGetX();
+			final float vectorY = vector3FGetY();
+			final float vectorZ = vector3FGetZ();
+			
+			final float incomingX = pointX - surfaceIntersectionPointX;
+			final float incomingY = pointY - surfaceIntersectionPointY;
+			final float incomingZ = pointZ - surfaceIntersectionPointZ;
+			
+			final float incomingLengthSquared = vector3FLengthSquared(incomingX, incomingY, incomingZ);
+			
+			if(checkIsZero(incomingLengthSquared)) {
+				return 0.0F;
+			}
+			
+			final float incomingLengthReciprocal = rsqrt(incomingLengthSquared);
+			
+			final float incomingNormalizedX = incomingX * incomingLengthReciprocal;
+			final float incomingNormalizedY = incomingY * incomingLengthReciprocal;
+			final float incomingNormalizedZ = incomingZ * incomingLengthReciprocal;
+			
+			final float incomingNormalizedNegatedX = -incomingNormalizedX;
+			final float incomingNormalizedNegatedY = -incomingNormalizedY;
+			final float incomingNormalizedNegatedZ = -incomingNormalizedZ;
+			
+			final float probabilityDensityFunctionValue = point3FDistanceSquared(pointX, pointY, pointZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ) / abs(vector3FDotProduct(vectorX, vectorY, vectorZ, incomingNormalizedNegatedX, incomingNormalizedNegatedY, incomingNormalizedNegatedZ));
+			
+			if(!checkIsFinite(probabilityDensityFunctionValue) || probabilityDensityFunctionValue <= 0.0F) {
+				return 0.0F;
+			}
+			
+			return probabilityDensityFunctionValue;
+		}
+		
+		final float distance = point3FDistance(centerX, centerY, centerZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		final float distanceReciprocal = 1.0F / distance;
+		
+		orthonormalBasis33FSetFromW(directionX * distanceReciprocal, directionY * distanceReciprocal, directionZ * distanceReciprocal);
+		
+		final float uX = orthonormalBasis33FGetUX();
+		final float uY = orthonormalBasis33FGetUY();
+		final float uZ = orthonormalBasis33FGetUZ();
+		
+		final float vX = orthonormalBasis33FGetVX();
+		final float vY = orthonormalBasis33FGetVY();
+		final float vZ = orthonormalBasis33FGetVZ();
+		
+		final float wX = orthonormalBasis33FGetWX();
+		final float wY = orthonormalBasis33FGetWY();
+		final float wZ = orthonormalBasis33FGetWZ();
+		
+		final float sinThetaMax = distanceReciprocal;
+		final float sinThetaMaxSquared = sinThetaMax * sinThetaMax;
+		final float sinThetaMaxReciprocal = 1.0F / sinThetaMax;
+		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
+		final float cosTheta = sinThetaMaxSquared < 0.00068523F ? sqrt(1.0F - sinThetaMaxSquared * u) : (cosThetaMax - 1.0F) * u + 1.0F;
+		final float sinThetaSquared = sinThetaMaxSquared < 0.00068523F ? sinThetaMaxSquared * u : 1.0F - cosTheta * cosTheta;
+		final float cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * sqrt(max(0.0F, 1.0F - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
+		final float sinAlpha = sqrt(max(0.0F, 1.0F - cosAlpha * cosAlpha));
+		final float phi = v * 2.0F * PI;
+		
+		vector3FSetDirectionSpherical12(sinAlpha, cosAlpha, phi, uX, uY, uZ, vX, vY, vZ, wX, wY, wZ);
+		
+		final float sphericalDirectionX = vector3FGetX();
+		final float sphericalDirectionY = vector3FGetY();
+		final float sphericalDirectionZ = vector3FGetZ();
+		
+		final float samplePointX = centerX + sphericalDirectionX;
+		final float samplePointY = centerY + sphericalDirectionY;
+		final float samplePointZ = centerZ + sphericalDirectionZ;
+		
+		final float sphericalDirectionLengthReciprocal = vector3FLengthReciprocal(sphericalDirectionX, sphericalDirectionY, sphericalDirectionZ);
+		
+		final float sphericalDirectionNormalizedX = sphericalDirectionX * sphericalDirectionLengthReciprocal;
+		final float sphericalDirectionNormalizedY = sphericalDirectionY * sphericalDirectionLengthReciprocal;
+		final float sphericalDirectionNormalizedZ = sphericalDirectionZ * sphericalDirectionLengthReciprocal;
+		
+		point3FSet(samplePointX, samplePointY, samplePointZ);
+		
+		vector3FSet(sphericalDirectionNormalizedX, sphericalDirectionNormalizedY, sphericalDirectionNormalizedZ);
+		
+		return 1.0F / (2.0F * PI * (1.0F - cosThetaMax));
 	}
 	
 	/**

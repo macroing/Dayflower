@@ -85,7 +85,7 @@ The tables below show the main features of the renderer.
 
 | Name                    | CPU | GPU |
 | ----------------------- | --- | --- |
-| Diffuse Area Light      | Yes | No  |
+| Diffuse Area Light      | Yes | Yes |
 | Directional Light       | Yes | Yes |
 | Image Light             | Yes | Yes |
 | Perez Light (Sun & Sky) | Yes | Yes |

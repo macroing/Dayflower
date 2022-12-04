@@ -11,7 +11,6 @@ Parameter API:
 
 Renderer GPU API:
 
-	* ADD:		Add support for DiffuseAreaLight.
 	* ADD:		Add support for PrimitiveAreaLight.
 	* ADD:		Add support for UberMaterial.
 	* ADD:		Add support for ConstructiveSolidGeometry3F.
@@ -19,6 +18,7 @@ Renderer GPU API:
 	* ADD:		Add support for the Ray Tracer algorithm.
 	* ADD:		Add support for the Scene-based BVH structure.
 	* FIX:		Fix the bug that resets the image occasionally using the Ambient Occlusion and Path Tracer algorithms.
+	* FIX:		Fix any potential bugs with DiffuseAreaLight.
 
 Scene BSSRDF API:
 

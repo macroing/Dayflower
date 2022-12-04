@@ -19,11 +19,11 @@ final Shape3F shape7 = new RectangularCuboid3F(new Point3F(-1.0F, -1.0F, -1.0F),
 final Shape3F shape8 = new Sphere3F();
 
 final Transform transform1 = new Transform(new Point3F( 0.0F, 0.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
-final Transform transform2 = new Transform(new Point3F( 0.0F, 5.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
-final Transform transform3 = new Transform(new Point3F( 0.0F, 0.0F,  0.0F));
+final Transform transform2 = new Transform(new Point3F( 0.0F, 5.0F,  0.0F), Quaternion4F.from(Matrix44F.multiply(Matrix44F.rotateX(AngleF.degrees(90.0F)), Matrix44F.rotateY(AngleF.degrees(180.0F)))));
+final Transform transform3 = new Transform(new Point3F( 0.0F, 0.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(180.0F))));
 final Transform transform4 = new Transform(new Point3F( 0.0F, 0.0F, 10.0F));
 final Transform transform5 = new Transform(new Point3F( 3.0F, 0.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateY(AngleF.degrees(90.0F))));
-final Transform transform6 = new Transform(new Point3F(-3.0F, 0.0F,  0.0F), Quaternion4F.from(Matrix44F.rotateY(AngleF.degrees(90.0F))));
+final Transform transform6 = new Transform(new Point3F(-3.0F, 0.0F,  0.0F), Quaternion4F.from(Matrix44F.multiply(Matrix44F.rotateY(AngleF.degrees(90.0F)), Matrix44F.rotateX(AngleF.degrees(180.0F)))));
 final Transform transform7 = new Transform(new Point3F(-1.5F, 1.0F,  8.0F));
 final Transform transform8 = new Transform(new Point3F( 1.5F, 1.0F,  7.0F));
 

@@ -2117,7 +2117,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			
 			final float probabilityDensityFunctionValue = point3FDistanceSquared(pointX, pointY, pointZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ) / abs(vector3FDotProduct(vectorX, vectorY, vectorZ, incomingNormalizedNegatedX, incomingNormalizedNegatedY, incomingNormalizedNegatedZ));
 			
-			if(checkIsInfinite(probabilityDensityFunctionValue)) {
+			if(!checkIsFinite(probabilityDensityFunctionValue) || probabilityDensityFunctionValue <= 0.0F) {
 				return 0.0F;
 			}
 			

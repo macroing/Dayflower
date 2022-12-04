@@ -1123,42 +1123,60 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	}
 	
 	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
+//		Retrieve the current ray origin:
 		final float rayOriginX = ray3FGetOriginX();
 		final float rayOriginY = ray3FGetOriginY();
 		final float rayOriginZ = ray3FGetOriginZ();
 		
+//		Retrieve the current ray direction:
 		final float rayDirectionX = ray3FGetDirectionX();
 		final float rayDirectionY = ray3FGetDirectionY();
 		final float rayDirectionZ = ray3FGetDirectionZ();
 		
+//		Retrieve the parametric t values from the current ray:
 		final float rayTMaximum = ray3FGetTMaximum();
 		final float rayTMinimum = ray3FGetTMinimum();
 		
+//		Initialize the BXDF bit flags to use:
 		final int bitFlags = isSpecular ? B_X_D_F_TYPE_BIT_FLAG_ALL : B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR;
 		
+//		Retrieve the ID and offset for the current light source:
 		final int lightID = lightGetID();
 		final int lightOffset = lightGetOffset();
 		
+//		Initialize a flag that indicates whether the current light source is an area light or not:
 		final boolean isAreaLight = lightIsAreaLight();
+		
+//		Initialize a flag that indicates whether the current light source is using a delta distribution or not:
 		final boolean isUsingDeltaDistribution = lightIsUsingDeltaDistribution();
+		
+//		Attempt to compute a light sample for incoming radiance along the current ray direction:
 		final boolean isSampling = lightSampleRadianceIncoming(sampleAU, sampleAV, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
+//		Retrieve the surface normal from the current surface intersection:
 		final float normalX = intersectionLHSGetOrthonormalBasisSWX();
 		final float normalY = intersectionLHSGetOrthonormalBasisSWY();
 		final float normalZ = intersectionLHSGetOrthonormalBasisSWZ();
+		
+//		Compute the dot product between the surface normal and the current ray direction:
 		final float normalDotRayDirection = vector3FDotProduct(normalX, normalY, normalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+//		Compute the correctly oriented surface normal:
 		final float normalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -normalX : normalX;
 		final float normalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -normalY : normalY;
 		final float normalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -normalZ : normalZ;
 		
+//		Retrieve the surface intersection point from the current surface intersection:
 		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
 		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
 		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointZ();
 		
+//		Initialize the direct light to black:
 		float lightDirectR = 0.0F;
 		float lightDirectG = 0.0F;
 		float lightDirectB = 0.0F;
 		
+//		Perform the following if the current light source is using a delta distribution and a sample for incoming radiance was created:
 		if(isUsingDeltaDistribution && isSampling) {
 			final float lightResultR = lightSampleGetResultR();
 			final float lightResultG = lightSampleGetResultG();
@@ -1216,6 +1234,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			}
 		}
 		
+//		Perform the following if the current light source is not using a delta distribution and a sample for incoming radiance was created:
 		if(!isUsingDeltaDistribution && isSampling) {
 			final float lightResultR = lightSampleGetResultR();
 			final float lightResultG = lightSampleGetResultG();
@@ -1299,6 +1318,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			}
 		}
 		
+//		Perform the following if the current light source is not using a delta distribution and a sample from the BSDF was created:
 		if(!isUsingDeltaDistribution && materialBSDFSampleDistributionFunction(bitFlags, sampleBU, sampleBV, rayDirectionX, rayDirectionY, rayDirectionZ)) {
 			final boolean hasSampledSpecular = materialBSDFResultBXDFIsSpecular();
 			
@@ -1388,6 +1408,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			}
 		}
 		
+//		Reset the current ray:
 		ray3FSetOrigin(rayOriginX, rayOriginY, rayOriginZ);
 		ray3FSetDirection(rayDirectionX, rayDirectionY, rayDirectionZ);
 		ray3FSetTMaximum(rayTMaximum);

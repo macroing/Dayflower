@@ -39,6 +39,7 @@ import org.dayflower.scene.light.SpotLight;
  * <p>
  * The features added are the following:
  * <ul>
+ * <li>{@link DiffuseAreaLight}</li>
  * <li>{@link DirectionalLight}</li>
  * <li>{@link ImageLight}</li>
  * <li>{@link PerezLight}</li>

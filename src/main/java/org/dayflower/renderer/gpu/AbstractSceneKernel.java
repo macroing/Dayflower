@@ -1192,7 +1192,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			
 			final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
 			
-			final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
+			final boolean hasLightResult = lightResultR != 0.0F || lightResultG != 0.0F || lightResultB != 0.0F;
 			
 			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
 				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ, rayDirectionX, rayDirectionY, rayDirectionZ);
@@ -1207,7 +1207,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
 				final float scatteringResultB = materialBSDFResultB * lightIncomingDotNormalAbs;
 				
-				final boolean hasScatteringResult = !checkIsZero(scatteringResultR) || !checkIsZero(scatteringResultG) || !checkIsZero(scatteringResultB);
+				final boolean hasScatteringResult = scatteringResultR != 0.0F || scatteringResultG != 0.0F || scatteringResultB != 0.0F;
 				
 				final float directionX = lightPointX - surfaceIntersectionPointX;
 				final float directionY = lightPointY - surfaceIntersectionPointY;
@@ -1221,7 +1221,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float tMaximum = abs(directionLength) + 0.001F;
 				final float tMinimum = DEFAULT_T_MINIMUM;
 				
-				ray3FSetOrigin(surfaceIntersectionPointX + directionNormalizedX * 0.001F, surfaceIntersectionPointY + directionNormalizedY * 0.001F, surfaceIntersectionPointZ + directionNormalizedZ * 0.001F);
+				ray3FSetOrigin(surfaceIntersectionPointX + normalCorrectlyOrientedX * 0.001F, surfaceIntersectionPointY + normalCorrectlyOrientedY * 0.001F, surfaceIntersectionPointZ + normalCorrectlyOrientedZ * 0.001F);
 				ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
 				ray3FSetTMaximum(tMaximum);
 				ray3FSetTMinimum(tMinimum);
@@ -1251,7 +1251,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
 			final float lightProbabilityDensityFunctionValueSquared = lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue;
 			
-			final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
+			final boolean hasLightResult = lightResultR != 0.0F || lightResultG != 0.0F || lightResultB != 0.0F;
 			
 			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
 				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ, rayDirectionX, rayDirectionY, rayDirectionZ);
@@ -1266,7 +1266,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
 				final float scatteringResultB = materialBSDFResultB * lightIncomingDotNormalAbs;
 				
-				final boolean hasScatteringResult = !checkIsZero(scatteringResultR) || !checkIsZero(scatteringResultG) || !checkIsZero(scatteringResultB);
+				final boolean hasScatteringResult = scatteringResultR != 0.0F || scatteringResultG != 0.0F || scatteringResultB != 0.0F;
 				
 				final float directionX = lightPointX - surfaceIntersectionPointX;
 				final float directionY = lightPointY - surfaceIntersectionPointY;
@@ -1280,7 +1280,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float tMaximum = abs(directionLength) + 0.001F;
 				final float tMinimum = DEFAULT_T_MINIMUM;
 				
-				ray3FSetOrigin(surfaceIntersectionPointX + directionNormalizedX * 0.001F, surfaceIntersectionPointY + directionNormalizedY * 0.001F, surfaceIntersectionPointZ + directionNormalizedZ * 0.001F);
+				ray3FSetOrigin(surfaceIntersectionPointX + normalCorrectlyOrientedX * 0.001F, surfaceIntersectionPointY + normalCorrectlyOrientedY * 0.001F, surfaceIntersectionPointZ + normalCorrectlyOrientedZ * 0.001F);
 				ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
 				ray3FSetTMaximum(tMaximum);
 				ray3FSetTMinimum(tMinimum);
@@ -1339,7 +1339,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final float scatteringResultG = resultG * incomingDotNormalAbs;
 			final float scatteringResultB = resultB * incomingDotNormalAbs;
 			
-			final boolean hasScatteringResult = !checkIsZero(scatteringResultR) || !checkIsZero(scatteringResultG) || !checkIsZero(scatteringResultB);
+			final boolean hasScatteringResult = scatteringResultR != 0.0F || scatteringResultG != 0.0F || scatteringResultB != 0.0F;
 			
 			if(hasScatteringResult && scatteringProbabilityDensityFunctionValue > 0.0F) {
 				float weight = 1.0F;
@@ -1348,7 +1348,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					final float lightProbabilityDensityFunctionValue = lightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
 					final float lightProbabilityDensityFunctionValueSquared = lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue;
 					
-					if(checkIsZero(lightProbabilityDensityFunctionValue)) {
+					if(lightProbabilityDensityFunctionValue == 0.0F) {
 						color3FLHSSet(lightDirectR, lightDirectG, lightDirectB);
 						
 						return;
@@ -1369,10 +1369,14 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float tMaximum = DEFAULT_T_MAXIMUM;
 				final float tMinimum = DEFAULT_T_MINIMUM;
 				
-				ray3FSetOrigin(surfaceIntersectionPointX + directionNormalizedX * 0.001F, surfaceIntersectionPointY + directionNormalizedY * 0.001F, surfaceIntersectionPointZ + directionNormalizedZ * 0.001F);
+				ray3FSetOrigin(surfaceIntersectionPointX + normalCorrectlyOrientedX * 0.001F, surfaceIntersectionPointY + normalCorrectlyOrientedY * 0.001F, surfaceIntersectionPointZ + normalCorrectlyOrientedZ * 0.001F);
 				ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
 				ray3FSetTMaximum(tMaximum);
 				ray3FSetTMinimum(tMinimum);
+				
+				final float transmittanceR = 1.0F;
+				final float transmittanceG = 1.0F;
+				final float transmittanceB = 1.0F;
 				
 				if(isAreaLight && primitiveIntersectionComputeRHS() && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset) {
 					lightEvaluateRadianceEmittedAreaLight(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ, ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ());
@@ -1381,12 +1385,12 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					final float lightIncomingG = color3FLHSGetG();
 					final float lightIncomingB = color3FLHSGetB();
 					
-					final boolean hasLightIncoming = !checkIsZero(lightIncomingR) || !checkIsZero(lightIncomingG) || !checkIsZero(lightIncomingB);
+					final boolean hasLightIncoming = lightIncomingR != 0.0F || lightIncomingG != 0.0F || lightIncomingB != 0.0F;
 					
 					if(hasLightIncoming) {
-						lightDirectR += scatteringResultR * lightIncomingR * weight / scatteringProbabilityDensityFunctionValue;
-						lightDirectG += scatteringResultG * lightIncomingG * weight / scatteringProbabilityDensityFunctionValue;
-						lightDirectB += scatteringResultB * lightIncomingB * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectR += scatteringResultR * lightIncomingR * transmittanceR * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectG += scatteringResultG * lightIncomingG * transmittanceG * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectB += scatteringResultB * lightIncomingB * transmittanceB * weight / scatteringProbabilityDensityFunctionValue;
 					}
 				}
 				
@@ -1397,12 +1401,12 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					final float lightIncomingG = color3FLHSGetG();
 					final float lightIncomingB = color3FLHSGetB();
 					
-					final boolean hasLightIncoming = !checkIsZero(lightIncomingR) || !checkIsZero(lightIncomingG) || !checkIsZero(lightIncomingB);
+					final boolean hasLightIncoming = lightIncomingR != 0.0F || lightIncomingG != 0.0F || lightIncomingB != 0.0F;
 					
 					if(hasLightIncoming) {
-						lightDirectR += scatteringResultR * lightIncomingR * weight / scatteringProbabilityDensityFunctionValue;
-						lightDirectG += scatteringResultG * lightIncomingG * weight / scatteringProbabilityDensityFunctionValue;
-						lightDirectB += scatteringResultB * lightIncomingB * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectR += scatteringResultR * lightIncomingR * transmittanceR * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectG += scatteringResultG * lightIncomingG * transmittanceG * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectB += scatteringResultB * lightIncomingB * transmittanceB * weight / scatteringProbabilityDensityFunctionValue;
 					}
 				}
 			}

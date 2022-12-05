@@ -178,7 +178,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float crossProduct = vectorAPX * vectorABY - vectorAPY * vectorABX;
 		
-		if(!checkIsZero(crossProduct)) {
+		if(crossProduct != 0.0F) {
 			return false;
 		}
 		
@@ -1900,10 +1900,6 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointY();
 		final float surfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointZ();
 		
-		final float surfaceNormalSX = intersectionRHSGetOrthonormalBasisSWX();
-		final float surfaceNormalSY = intersectionRHSGetOrthonormalBasisSWY();
-		final float surfaceNormalSZ = intersectionRHSGetOrthonormalBasisSWZ();
-		
 		final float directionX = incomingX;
 		final float directionY = incomingY;
 		final float directionZ = incomingZ;
@@ -1912,22 +1908,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
 		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
 		
-		final float nDotD = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, directionNormalizedX, directionNormalizedY, directionNormalizedZ);
-		final float nDotE = 0.0F;
-		
-		final float offsetX = surfaceNormalSX * nDotE;
-		final float offsetY = surfaceNormalSY * nDotE;
-		final float offsetZ = surfaceNormalSZ * nDotE;
-		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
-		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
-		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
-		
-		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
-		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
-		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
-		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
-		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
-		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
+		final float originX = surfaceIntersectionPointX;
+		final float originY = surfaceIntersectionPointY;
+		final float originZ = surfaceIntersectionPointZ;
 		
 		ray3FSetOrigin(originX, originY, originZ);
 		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
@@ -2057,30 +2040,13 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointY();
 		final float surfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointZ();
 		
-		final float surfaceNormalX = intersectionRHSGetOrthonormalBasisSWX();
-		final float surfaceNormalY = intersectionRHSGetOrthonormalBasisSWY();
-		final float surfaceNormalZ = intersectionRHSGetOrthonormalBasisSWZ();
-		
 		final float directionX = centerX - surfaceIntersectionPointX;
 		final float directionY = centerY - surfaceIntersectionPointY;
 		final float directionZ = centerZ - surfaceIntersectionPointZ;
 		
-		final float nDotD = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
-		final float nDotE = 0.0F;
-		
-		final float offsetX = surfaceNormalX * nDotE;
-		final float offsetY = surfaceNormalY * nDotE;
-		final float offsetZ = surfaceNormalZ * nDotE;
-		final float offsetCorrectlyOrientedX = nDotD < 0.0F ? -offsetX : offsetX;
-		final float offsetCorrectlyOrientedY = nDotD < 0.0F ? -offsetY : offsetY;
-		final float offsetCorrectlyOrientedZ = nDotD < 0.0F ? -offsetZ : offsetZ;
-		
-		final float originOffsetX = surfaceIntersectionPointX + offsetCorrectlyOrientedX;
-		final float originOffsetY = surfaceIntersectionPointY + offsetCorrectlyOrientedY;
-		final float originOffsetZ = surfaceIntersectionPointZ + offsetCorrectlyOrientedZ;
-		final float originX = offsetCorrectlyOrientedX > 0.0F ? nextAfter(originOffsetX, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedX < 0.0F ? nextAfter(originOffsetX, Float.NEGATIVE_INFINITY) : originOffsetX;
-		final float originY = offsetCorrectlyOrientedY > 0.0F ? nextAfter(originOffsetY, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedY < 0.0F ? nextAfter(originOffsetY, Float.NEGATIVE_INFINITY) : originOffsetY;
-		final float originZ = offsetCorrectlyOrientedZ > 0.0F ? nextAfter(originOffsetZ, Float.POSITIVE_INFINITY) : offsetCorrectlyOrientedZ < 0.0F ? nextAfter(originOffsetZ, Float.NEGATIVE_INFINITY) : originOffsetZ;
+		final float originX = surfaceIntersectionPointX;
+		final float originY = surfaceIntersectionPointY;
+		final float originZ = surfaceIntersectionPointZ;
 		
 		final float distanceSquared = point3FDistanceSquared(centerX, centerY, centerZ, originX, originY, originZ);
 		
@@ -2101,7 +2067,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			
 			final float incomingLengthSquared = vector3FLengthSquared(incomingX, incomingY, incomingZ);
 			
-			if(checkIsZero(incomingLengthSquared)) {
+			if(incomingLengthSquared == 0.0F) {
 				return 0.0F;
 			}
 			
@@ -2680,7 +2646,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
 		
 //		Compute the orthonormal basis for shading:
-		if(!checkIsZero(determinantUV)) {
+		if(determinantUV != 0.0F) {
 			final float determinantUVReciprocal = 1.0F / determinantUV;
 			
 			final float vSX = (-dU2 * (triangleAPositionX - triangleCPositionX) + dU1 * (triangleBPositionX - triangleCPositionX)) * determinantUVReciprocal;
@@ -2823,7 +2789,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
 		
 //		Compute the orthonormal basis for shading:
-		if(!checkIsZero(determinantUV)) {
+		if(determinantUV != 0.0F) {
 			final float determinantUVReciprocal = 1.0F / determinantUV;
 			
 			final float vSX = (-dU2 * (triangleAPositionX - triangleCPositionX) + dU1 * (triangleBPositionX - triangleCPositionX)) * determinantUVReciprocal;

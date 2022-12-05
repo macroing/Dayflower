@@ -629,7 +629,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private boolean doLightDiffuseAreaLightIsTwoSided() {
-		return !checkIsZero(this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_IS_TWO_SIDED]);
+		return this.lightDiffuseAreaLightArray[lightGetOffset() + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_IS_TWO_SIDED] != 0.0F;
 	}
 	
 	@SuppressWarnings("static-method")
@@ -977,7 +977,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float probabilityDensityFunctionValueRemapped = doLightImageLightDistribution2FContinuousProbabilityDensityFunctionRemapped(offsetDistribution, sampleRemappedU, sampleRemappedV);
 		
-		if(checkIsZero(probabilityDensityFunctionValueRemapped)) {
+		if(probabilityDensityFunctionValueRemapped == 0.0F) {
 			return false;
 		}
 		
@@ -995,7 +995,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float sinTheta = sqrt(max(0.0F, 1.0F - incomingObjectSpaceZ * incomingObjectSpaceZ));
 		
-		if(checkIsZero(sinTheta)) {
+		if(sinTheta == 0.0F) {
 			return false;
 		}
 		
@@ -1101,7 +1101,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float sinTheta = vector3FSphericalTheta(incomingObjectSpaceZ);
 		
-		if(checkIsZero(sinTheta)) {
+		if(sinTheta == 0.0F) {
 			return 0.0F;
 		}
 		
@@ -1387,7 +1387,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(offsetDistribution, sampleRemappedU, sampleRemappedV);
 		
-		if(checkIsZero(probabilityDensityFunctionValueRemapped)) {
+		if(probabilityDensityFunctionValueRemapped == 0.0F) {
 			return false;
 		}
 		
@@ -1405,7 +1405,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float sinTheta = sqrt(max(0.0F, 1.0F - incomingObjectSpaceZ * incomingObjectSpaceZ));
 		
-		if(checkIsZero(sinTheta)) {
+		if(sinTheta == 0.0F) {
 			return false;
 		}
 		
@@ -1513,7 +1513,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float sinTheta = vector3FSphericalTheta(incomingObjectSpaceZ);
 		
-		if(checkIsZero(sinTheta)) {
+		if(sinTheta == 0.0F) {
 			return 0.0F;
 		}
 		

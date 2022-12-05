@@ -221,17 +221,6 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code value} is zero, {@code false} otherwise.
-	 * 
-	 * @param value the {@code float} value to check
-	 * @return {@code true} if, and only if, {@code value} is zero, {@code false} otherwise
-	 */
-	@SuppressWarnings("static-method")
-	protected final boolean checkIsZero(final float value) {
-		return value == -0.0F || value == +0.0F;
-	}
-	
-	/**
 	 * Solves the cubic system for the quartic system based on the values {@code p}, {@code q} and {@code r}.
 	 * <p>
 	 * Returns a {@code double} with the result of the operation.

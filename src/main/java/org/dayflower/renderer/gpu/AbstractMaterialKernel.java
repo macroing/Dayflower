@@ -669,7 +669,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * @return {@code true} if, and only if, a sample was created, {@code false} otherwise
 	 */
 	protected final boolean materialBSDFSampleDistributionFunction(final int bitFlags, final float u, final float v, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
-		if(checkIsZero(doBXDFResultGetOutgoingZ())) {
+		if(doBXDFResultGetOutgoingZ() == 0.0F) {
 			return false;
 		}
 		
@@ -942,7 +942,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		float probabilityDensityFunctionValue = 0.0F;
 		
-		if(countBXDFs > 0 && !checkIsZero(doBXDFResultGetOutgoingZ())) {
+		if(countBXDFs > 0 && doBXDFResultGetOutgoingZ() != 0.0F) {
 			int matches = 0;
 			
 			for(int i = 0; i < countBXDFs; i++) {
@@ -1309,7 +1309,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 				doBSDFSetBXDFDisneyFakeSSBRDF(index++);
 				doBXDFDisneyFakeSSBRDFSetReflectanceScale(colorColorR * reflectance, colorColorG * reflectance, colorColorB * reflectance);
 				doBXDFDisneyFakeSSBRDFSetRoughness(floatRoughness);
-			} else if(!checkIsZero(colorScatterDistanceR) || !checkIsZero(colorScatterDistanceG) || !checkIsZero(colorScatterDistanceB)) {
+			} else if(colorScatterDistanceR != 0.0F || colorScatterDistanceG != 0.0F || colorScatterDistanceB != 0.0F) {
 //				Set SpecularBTDF:
 				doBSDFSetBXDFSpecularBTDFFresnelDielectric(index++);
 				doBXDFSpecularBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
@@ -1424,7 +1424,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
 		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
-		final boolean hasKR = !checkIsZero(colorKRR) || !checkIsZero(colorKRG) || !checkIsZero(colorKRB);
+		final boolean hasKR = colorKRR != 0.0F || colorKRG != 0.0F || colorKRB != 0.0F;
 		
 //		Evaluate the KT Texture:
 		textureEvaluate((textureKRAndTextureKT >> 16) & 0xFF, (textureKRAndTextureKT >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
@@ -1434,7 +1434,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKTG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
 		final float colorKTB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
-		final boolean hasKT = !checkIsZero(colorKTR) || !checkIsZero(colorKTG) || !checkIsZero(colorKTB);
+		final boolean hasKT = colorKTR != 0.0F || colorKTG != 0.0F || colorKTB != 0.0F;
 		
 //		Evaluate the Eta Texture:
 		final float floatEta = textureEvaluateFloat((textureEta >> 0) & 0xFF, (textureEta >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
@@ -1448,7 +1448,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float floatRoughnessVRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessV) : floatRoughnessV;
 		
 //		final boolean isAllowingMultipleLobes = true;
-		final boolean isSpecular = checkIsZero(floatRoughnessU) && checkIsZero(floatRoughnessV);
+		final boolean isSpecular = floatRoughnessU == 0.0F && floatRoughnessV == 0.0F;
 		
 		if(!hasKR && !hasKT) {
 			return false;
@@ -1596,7 +1596,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		Evaluate the Angle Texture:
 		final float floatAngle = textureEvaluateFloat((textureAngleAndTextureKD >> 0) & 0xFF, (textureAngleAndTextureKD >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		if(checkIsZero(colorKDR) && checkIsZero(colorKDG) && checkIsZero(colorKDB)) {
+		if(colorKDR == 0.0F && colorKDG == 0.0F && colorKDB == 0.0F) {
 			return false;
 		}
 		
@@ -1604,7 +1604,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 * Compute the BSDF:
 		 */
 		
-		if(checkIsZero(floatAngle)) {
+		if(floatAngle == 0.0F) {
 //			Initialize the BSDF:
 			doBSDFClear();
 			doBSDFSetBXDFCount(1);
@@ -1728,7 +1728,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
 		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
-		if(checkIsZero(colorKRR) && checkIsZero(colorKRG) && checkIsZero(colorKRB)) {
+		if(colorKRR == 0.0F && colorKRG == 0.0F && colorKRB == 0.0F) {
 			return false;
 		}
 		
@@ -1781,7 +1781,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
 		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
-		final boolean hasKD = !checkIsZero(colorKDR) || !checkIsZero(colorKDG) || !checkIsZero(colorKDB);
+		final boolean hasKD = colorKDR != 0.0F || colorKDG != 0.0F || colorKDB != 0.0F;
 		
 //		Evaluate the KS Texture:
 		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
@@ -1791,7 +1791,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
 		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
-		final boolean hasKS = !checkIsZero(colorKSR) || !checkIsZero(colorKSG) || !checkIsZero(colorKSB);
+		final boolean hasKS = colorKSR != 0.0F || colorKSG != 0.0F || colorKSB != 0.0F;
 		
 		if(!hasKD && !hasKS) {
 			return false;
@@ -1860,7 +1860,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
 		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
-		final boolean hasKD = !checkIsZero(colorKDR) || !checkIsZero(colorKDG) || !checkIsZero(colorKDB);
+		final boolean hasKD = colorKDR != 0.0F || colorKDG != 0.0F || colorKDB != 0.0F;
 		
 //		Evaluate the KS Texture:
 		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
@@ -1870,7 +1870,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
 		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
-		final boolean hasKS = !checkIsZero(colorKSR) || !checkIsZero(colorKSG) || !checkIsZero(colorKSB);
+		final boolean hasKS = colorKSR != 0.0F || colorKSG != 0.0F || colorKSB != 0.0F;
 		
 		if(!hasKD && !hasKS) {
 			return false;
@@ -2252,7 +2252,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float outgoingY = doBXDFResultGetOutgoingY();
 		final float outgoingZ = doBXDFResultGetOutgoingZ();
 		
-		if(checkIsZero(outgoingZ)) {
+		if(outgoingZ == 0.0F) {
 			return false;
 		}
 		
@@ -2310,7 +2310,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = incomingY + outgoingY;
 		final float normalZ = incomingZ + outgoingZ;
 		
-		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+		if(normalX == 0.0F && normalY == 0.0F && normalZ == 0.0F) {
 			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
 			
 			return 0.0F;
@@ -2365,7 +2365,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = incomingY + outgoingY;
 		final float normalZ = incomingZ + outgoingZ;
 		
-		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+		if(normalX == 0.0F && normalY == 0.0F && normalZ == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -2546,7 +2546,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = incomingY + outgoingY;
 		final float normalZ = incomingZ + outgoingZ;
 		
-		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+		if(normalX == 0.0F && normalY == 0.0F && normalZ == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -2654,7 +2654,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = incomingY + outgoingY;
 		final float normalZ = incomingZ + outgoingZ;
 		
-		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+		if(normalX == 0.0F && normalY == 0.0F && normalZ == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -2757,7 +2757,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = incomingY + outgoingY;
 		final float normalZ = incomingZ + outgoingZ;
 		
-		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+		if(normalX == 0.0F && normalY == 0.0F && normalZ == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -2799,7 +2799,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doBXDFFresnelBlendBRDFIsSeparableModel() {
-		return !checkIsZero(this.bXDFFresnelBlendBRDFArray_$private$16[B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_OFFSET_IS_SEPARABLE_MODEL]);
+		return this.bXDFFresnelBlendBRDFArray_$private$16[B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_OFFSET_IS_SEPARABLE_MODEL] != 0.0F;
 	}
 	
 	private boolean doBXDFFresnelBlendBRDFSampleDistributionFunction(final float u, final float v) {
@@ -2925,7 +2925,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = outgoingY + incomingY;
 		final float normalZ = outgoingZ + incomingZ;
 		
-		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+		if(normalX == 0.0F && normalY == 0.0F && normalZ == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -3193,14 +3193,14 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float sinThetaIncoming = sqrt(max(0.0F, 1.0F - incomingZ * incomingZ));
 		final float sinThetaOutgoing = sqrt(max(0.0F, 1.0F - outgoingZ * outgoingZ));
 		
-		final float cosPhiIncoming = checkIsZero(sinThetaIncoming) ? 1.0F : saturateF(incomingX / sinThetaIncoming, -1.0F, 1.0F);
-		final float cosPhiOutgoing = checkIsZero(sinThetaOutgoing) ? 1.0F : saturateF(outgoingX / sinThetaOutgoing, -1.0F, 1.0F);
+		final float cosPhiIncoming = sinThetaIncoming == 0.0F ? 1.0F : saturateF(incomingX / sinThetaIncoming, -1.0F, 1.0F);
+		final float cosPhiOutgoing = sinThetaOutgoing == 0.0F ? 1.0F : saturateF(outgoingX / sinThetaOutgoing, -1.0F, 1.0F);
 		
 		final float cosThetaAbsIncoming = abs(incomingZ);
 		final float cosThetaAbsOutgoing = abs(outgoingZ);
 		
-		final float sinPhiIncoming = checkIsZero(sinThetaIncoming) ? 0.0F : saturateF(incomingY / sinThetaIncoming, -1.0F, 1.0F);
-		final float sinPhiOutgoing = checkIsZero(sinThetaOutgoing) ? 0.0F : saturateF(outgoingY / sinThetaOutgoing, -1.0F, 1.0F);
+		final float sinPhiIncoming = sinThetaIncoming == 0.0F ? 0.0F : saturateF(incomingY / sinThetaIncoming, -1.0F, 1.0F);
+		final float sinPhiOutgoing = sinThetaOutgoing == 0.0F ? 0.0F : saturateF(outgoingY / sinThetaOutgoing, -1.0F, 1.0F);
 		
 		final float maxCos = sinThetaIncoming > 1.0e-4F && sinThetaOutgoing > 1.0e-4F ? max(0.0F, cosPhiIncoming * cosPhiOutgoing + sinPhiIncoming * sinPhiOutgoing) : 0.0F;
 		
@@ -3533,7 +3533,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doBXDFTorranceSparrowBRDFFresnelConductorIsSeparableModel() {
-		return !checkIsZero(this.bXDFTorranceSparrowBRDFFresnelConductorArray_$private$16[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ARRAY_OFFSET_IS_SEPARABLE_MODEL]);
+		return this.bXDFTorranceSparrowBRDFFresnelConductorArray_$private$16[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ARRAY_OFFSET_IS_SEPARABLE_MODEL] != 0.0F;
 	}
 	
 	private boolean doBXDFTorranceSparrowBRDFFresnelConductorSampleDistributionFunction(final float u, final float v) {
@@ -3541,7 +3541,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float outgoingY = doBXDFResultGetOutgoingY();
 		final float outgoingZ = doBXDFResultGetOutgoingZ();
 		
-		if(checkIsZero(outgoingZ)) {
+		if(outgoingZ == 0.0F) {
 			return false;
 		}
 		
@@ -3675,7 +3675,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float cosThetaAbsOutgoing = abs(outgoingZ);
 		final float cosThetaAbsIncoming = abs(incomingZ);
 		
-		if(checkIsZero(cosThetaAbsOutgoing) || checkIsZero(cosThetaAbsIncoming)) {
+		if(cosThetaAbsOutgoing == 0.0F || cosThetaAbsIncoming == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -3685,7 +3685,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = outgoingY + incomingY;
 		final float normalZ = outgoingZ + incomingZ;
 		
-		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+		if(normalX == 0.0F && normalY == 0.0F && normalZ == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -3778,7 +3778,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doBXDFTorranceSparrowBRDFFresnelDielectricIsSeparableModel() {
-		return !checkIsZero(this.bXDFTorranceSparrowBRDFFresnelDielectricArray_$private$8[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL]);
+		return this.bXDFTorranceSparrowBRDFFresnelDielectricArray_$private$8[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL] != 0.0F;
 	}
 	
 	private boolean doBXDFTorranceSparrowBRDFFresnelDielectricSampleDistributionFunction(final float u, final float v) {
@@ -3786,7 +3786,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float outgoingY = doBXDFResultGetOutgoingY();
 		final float outgoingZ = doBXDFResultGetOutgoingZ();
 		
-		if(checkIsZero(outgoingZ)) {
+		if(outgoingZ == 0.0F) {
 			return false;
 		}
 		
@@ -3892,7 +3892,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float cosThetaAbsOutgoing = abs(outgoingZ);
 		final float cosThetaAbsIncoming = abs(incomingZ);
 		
-		if(checkIsZero(cosThetaAbsOutgoing) || checkIsZero(cosThetaAbsIncoming)) {
+		if(cosThetaAbsOutgoing == 0.0F || cosThetaAbsIncoming == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -3902,7 +3902,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = outgoingY + incomingY;
 		final float normalZ = outgoingZ + incomingZ;
 		
-		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+		if(normalX == 0.0F && normalY == 0.0F && normalZ == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -3980,7 +3980,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doBXDFTorranceSparrowBRDFFresnelDisneyIsSeparableModel() {
-		return !checkIsZero(this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$16[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_IS_SEPARABLE_MODEL]);
+		return this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$16[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_IS_SEPARABLE_MODEL] != 0.0F;
 	}
 	
 	private boolean doBXDFTorranceSparrowBRDFFresnelDisneySampleDistributionFunction(final float u, final float v) {
@@ -3988,7 +3988,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float outgoingY = doBXDFResultGetOutgoingY();
 		final float outgoingZ = doBXDFResultGetOutgoingZ();
 		
-		if(checkIsZero(outgoingZ)) {
+		if(outgoingZ == 0.0F) {
 			return false;
 		}
 		
@@ -4106,7 +4106,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float cosThetaAbsOutgoing = abs(outgoingZ);
 		final float cosThetaAbsIncoming = abs(incomingZ);
 		
-		if(checkIsZero(cosThetaAbsOutgoing) || checkIsZero(cosThetaAbsIncoming)) {
+		if(cosThetaAbsOutgoing == 0.0F || cosThetaAbsIncoming == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -4116,7 +4116,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = outgoingY + incomingY;
 		final float normalZ = outgoingZ + incomingZ;
 		
-		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+		if(normalX == 0.0F && normalY == 0.0F && normalZ == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -4207,7 +4207,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doBXDFTorranceSparrowBTDFFresnelDielectricIsSeparableModel() {
-		return !checkIsZero(this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$8[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL]);
+		return this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$8[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL] != 0.0F;
 	}
 	
 	private boolean doBXDFTorranceSparrowBTDFFresnelDielectricSampleDistributionFunction(final float u, final float v) {
@@ -4215,7 +4215,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float outgoingY = doBXDFResultGetOutgoingY();
 		final float outgoingZ = doBXDFResultGetOutgoingZ();
 		
-		if(checkIsZero(outgoingZ)) {
+		if(outgoingZ == 0.0F) {
 			return false;
 		}
 		
@@ -4340,7 +4340,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float cosThetaOutgoing = outgoingZ;
 		final float cosThetaIncoming = incomingZ;
 		
-		if(checkIsZero(cosThetaOutgoing) || checkIsZero(cosThetaIncoming)) {
+		if(cosThetaOutgoing == 0.0F || cosThetaIncoming == 0.0F) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -4621,7 +4621,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private boolean doMicrofacetDistributionTrowbridgeReitzIsSeparableModel() {
-		return !checkIsZero(this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_IS_SEPARABLE_MODEL]);
+		return this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_IS_SEPARABLE_MODEL] != 0.0F;
 	}
 	
 	private float doMicrofacetDistributionTrowbridgeReitzComputeDifferentialArea(final float normalX, final float normalY, final float normalZ) {
@@ -4642,10 +4642,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float sinTheta = sqrt(sinThetaSquared);
 		
-		final float cosPhi = checkIsZero(sinTheta) ? 1.0F : saturateF(normalX / sinTheta, -1.0F, 1.0F);
+		final float cosPhi = sinTheta == 0.0F ? 1.0F : saturateF(normalX / sinTheta, -1.0F, 1.0F);
 		final float cosPhiSquared = cosPhi * cosPhi;
 		
-		final float sinPhi = checkIsZero(sinTheta) ? 0.0F : saturateF(normalY / sinTheta, -1.0F, 1.0F);
+		final float sinPhi = sinTheta == 0.0F ? 0.0F : saturateF(normalY / sinTheta, -1.0F, 1.0F);
 		final float sinPhiSquared = sinPhi * sinPhi;
 		
 		final float cosThetaQuartic = cosThetaSquared * cosThetaSquared;
@@ -4668,10 +4668,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float tanThetaAbs = abs(sinTheta / outgoingZ);
 		
-		final float cosPhi = checkIsZero(sinTheta) ? 1.0F : saturateF(outgoingX / sinTheta, -1.0F, 1.0F);
+		final float cosPhi = sinTheta == 0.0F ? 1.0F : saturateF(outgoingX / sinTheta, -1.0F, 1.0F);
 		final float cosPhiSquared = cosPhi * cosPhi;
 		
-		final float sinPhi = checkIsZero(sinTheta) ? 0.0F : saturateF(outgoingY / sinTheta, -1.0F, 1.0F);
+		final float sinPhi = sinTheta == 0.0F ? 0.0F : saturateF(outgoingY / sinTheta, -1.0F, 1.0F);
 		final float sinPhiSquared = sinPhi * sinPhi;
 		
 		final float alpha = sqrt(cosPhiSquared * alphaX * alphaX + sinPhiSquared * alphaY * alphaY);
@@ -4778,8 +4778,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingStretchedNormalizedZ = incomingStretchedZ * incomingStretchedLengthReciprocal;
 		
 		final float sinTheta = sqrt(max(0.0F, 1.0F - incomingStretchedNormalizedZ * incomingStretchedNormalizedZ));
-		final float cosPhi = checkIsZero(sinTheta) ? 1.0F : saturateF(incomingStretchedNormalizedX / sinTheta, -1.0F, 1.0F);
-		final float sinPhi = checkIsZero(sinTheta) ? 0.0F : saturateF(incomingStretchedNormalizedY / sinTheta, -1.0F, 1.0F);
+		final float cosPhi = sinTheta == 0.0F ? 1.0F : saturateF(incomingStretchedNormalizedX / sinTheta, -1.0F, 1.0F);
+		final float sinPhi = sinTheta == 0.0F ? 0.0F : saturateF(incomingStretchedNormalizedY / sinTheta, -1.0F, 1.0F);
 		final float cosTheta = incomingStretchedNormalizedZ;
 		
 		doMicrofacetDistributionTrowbridgeReitzComputeSlope(cosTheta, u, v);

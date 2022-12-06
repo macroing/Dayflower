@@ -1178,20 +1178,25 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 //		Perform the following if the current light source is using a delta distribution and a sample for incoming radiance was created:
 		if(isUsingDeltaDistribution && isSampling) {
+//			Retrieve the result from the sampled light source:
 			final float lightResultR = lightSampleGetResultR();
 			final float lightResultG = lightSampleGetResultG();
 			final float lightResultB = lightSampleGetResultB();
 			
+//			Retrieve the incoming direction to the sampled light source:
 			final float lightIncomingX = lightSampleGetIncomingX();
 			final float lightIncomingY = lightSampleGetIncomingY();
 			final float lightIncomingZ = lightSampleGetIncomingZ();
 			
+//			Retrieve the point from which the sampled light source originates:
 			final float lightPointX = lightSampleGetPointX();
 			final float lightPointY = lightSampleGetPointY();
 			final float lightPointZ = lightSampleGetPointZ();
 			
+//			Retrieve the probability density function (PDF) value for the direction that was sampled:
 			final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
 			
+//			Initialize a flag that indicates whether the result is valid or not:
 			final boolean hasLightResult = lightResultR != 0.0F || lightResultG != 0.0F || lightResultB != 0.0F;
 			
 			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
@@ -1236,21 +1241,26 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 //		Perform the following if the current light source is not using a delta distribution and a sample for incoming radiance was created:
 		if(!isUsingDeltaDistribution && isSampling) {
+//			Retrieve the result from the sampled light source:
 			final float lightResultR = lightSampleGetResultR();
 			final float lightResultG = lightSampleGetResultG();
 			final float lightResultB = lightSampleGetResultB();
 			
+//			Retrieve the incoming direction to the sampled light source:
 			final float lightIncomingX = lightSampleGetIncomingX();
 			final float lightIncomingY = lightSampleGetIncomingY();
 			final float lightIncomingZ = lightSampleGetIncomingZ();
 			
+//			Retrieve the point from which the sampled light source originates:
 			final float lightPointX = lightSampleGetPointX();
 			final float lightPointY = lightSampleGetPointY();
 			final float lightPointZ = lightSampleGetPointZ();
 			
+//			Retrieve the probability density function (PDF) value for the direction that was sampled and compute its squared representation for multiple importance sampling (MIS):
 			final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
 			final float lightProbabilityDensityFunctionValueSquared = lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue;
 			
+//			Initialize a flag that indicates whether the result is valid or not:
 			final boolean hasLightResult = lightResultR != 0.0F || lightResultG != 0.0F || lightResultB != 0.0F;
 			
 			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
@@ -1289,7 +1299,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					final boolean isIntersecting = primitiveIntersectionComputeRHS();
 					final boolean isIntersectingAreaLight = isIntersecting && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset;
 					
-					if(isIntersectingAreaLight) {
+					if(isIntersectingAreaLight || !isIntersecting) {
 						materialBSDFEvaluateProbabilityDensityFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
 						
 						final float scatteringProbabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
@@ -1378,19 +1388,24 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float transmittanceG = 1.0F;
 				final float transmittanceB = 1.0F;
 				
-				if(isAreaLight && primitiveIntersectionComputeRHS() && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset) {
-					lightEvaluateRadianceEmittedAreaLight(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ, ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ());
+				if(isAreaLight) {
+					final boolean isIntersecting = primitiveIntersectionComputeRHS();
+					final boolean isIntersectingAreaLight = isIntersecting && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset;
 					
-					final float lightIncomingR = color3FLHSGetR();
-					final float lightIncomingG = color3FLHSGetG();
-					final float lightIncomingB = color3FLHSGetB();
-					
-					final boolean hasLightIncoming = lightIncomingR != 0.0F || lightIncomingG != 0.0F || lightIncomingB != 0.0F;
-					
-					if(hasLightIncoming) {
-						lightDirectR += scatteringResultR * lightIncomingR * transmittanceR * weight / scatteringProbabilityDensityFunctionValue;
-						lightDirectG += scatteringResultG * lightIncomingG * transmittanceG * weight / scatteringProbabilityDensityFunctionValue;
-						lightDirectB += scatteringResultB * lightIncomingB * transmittanceB * weight / scatteringProbabilityDensityFunctionValue;
+					if(isIntersectingAreaLight || !isIntersecting) {
+						lightEvaluateRadianceEmittedAreaLight(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ, ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ());
+						
+						final float lightIncomingR = color3FLHSGetR();
+						final float lightIncomingG = color3FLHSGetG();
+						final float lightIncomingB = color3FLHSGetB();
+						
+						final boolean hasLightIncoming = lightIncomingR != 0.0F || lightIncomingG != 0.0F || lightIncomingB != 0.0F;
+						
+						if(hasLightIncoming) {
+							lightDirectR += scatteringResultR * lightIncomingR * transmittanceR * weight / scatteringProbabilityDensityFunctionValue;
+							lightDirectG += scatteringResultG * lightIncomingG * transmittanceG * weight / scatteringProbabilityDensityFunctionValue;
+							lightDirectB += scatteringResultB * lightIncomingB * transmittanceB * weight / scatteringProbabilityDensityFunctionValue;
+						}
 					}
 				}
 				

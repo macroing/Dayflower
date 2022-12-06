@@ -2828,7 +2828,9 @@ public final class CompiledShape3FCache {
 		}
 		
 		public void setShapeOffset(final int shapeOffset, final int offset) {
-			this.data[4 + offset] = shapeOffset;
+			if(4 + offset < this.data.length) {
+				this.data[4 + offset] = shapeOffset;
+			}
 		}
 		
 		public void updateLeft(final List<CompiledBVHNode3F> compiledBVHNode3Fs) {

@@ -223,7 +223,7 @@ public final class Intersection {
 	 * 
 	 * @return the {@code Vector3F} instance that represents the surface normal for the geometry in world space
 	 */
-	private Vector3F getSurfaceNormalG() {
+	public Vector3F getSurfaceNormalG() {
 		return this.orthonormalBasisG.w;
 	}
 	

@@ -772,7 +772,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		intersectionLHSMoveToRHS();
 		intersectionRHSTransform(worldToObjectElement11, worldToObjectElement12, worldToObjectElement13, worldToObjectElement14, worldToObjectElement21, worldToObjectElement22, worldToObjectElement23, worldToObjectElement24, worldToObjectElement31, worldToObjectElement32, worldToObjectElement33, worldToObjectElement34, worldToObjectElement41, worldToObjectElement42, worldToObjectElement43, worldToObjectElement44, objectToWorldElement11, objectToWorldElement12, objectToWorldElement13, objectToWorldElement21, objectToWorldElement22, objectToWorldElement23, objectToWorldElement31, objectToWorldElement32, objectToWorldElement33);
 		
-		return shape3FSphere3FEvaluateProbabilityDensityFunction(incomingOSX, incomingOSY, incomingOSZ);
+		return shape3FSphere3FEvaluateProbabilityDensityFunctionRHS(incomingOSX, incomingOSY, incomingOSZ);
 	}
 	
 	private float doLightDiffuseAreaLightGetRadianceEmittedB() {

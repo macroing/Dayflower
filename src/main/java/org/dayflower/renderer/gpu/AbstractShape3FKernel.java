@@ -1767,9 +1767,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float epsilon = 0.0001F;
 		
 //		Compute the face for each axis:
-		final int faceX = surfaceIntersectionPointX < midpointX && surfaceIntersectionPointX + halfDimensionX - epsilon < midpointX ? -1 : surfaceIntersectionPointX > midpointX && surfaceIntersectionPointX - halfDimensionX + epsilon > midpointX ? 1 : 0;
-		final int faceY = surfaceIntersectionPointY < midpointY && surfaceIntersectionPointY + halfDimensionY - epsilon < midpointY ? -1 : surfaceIntersectionPointY > midpointY && surfaceIntersectionPointY - halfDimensionY + epsilon > midpointY ? 1 : 0;
-		final int faceZ = surfaceIntersectionPointZ < midpointZ && surfaceIntersectionPointZ + halfDimensionZ - epsilon < midpointZ ? -1 : surfaceIntersectionPointZ > midpointZ && surfaceIntersectionPointZ - halfDimensionZ + epsilon > midpointZ ? 1 : 0;
+		final int faceX = surfaceIntersectionPointX + halfDimensionX - epsilon < midpointX ? -1 : surfaceIntersectionPointX - halfDimensionX + epsilon > midpointX ? 1 : 0;
+		final int faceY = surfaceIntersectionPointY + halfDimensionY - epsilon < midpointY ? -1 : surfaceIntersectionPointY - halfDimensionY + epsilon > midpointY ? 1 : 0;
+		final int faceZ = surfaceIntersectionPointZ + halfDimensionZ - epsilon < midpointZ ? -1 : surfaceIntersectionPointZ - halfDimensionZ + epsilon > midpointZ ? 1 : 0;
 		
 //		Compute the face to use:
 		final int face = faceX == -1 ? 1 : faceX == 1 ? 2 : faceY == -1 ? 3 : faceY == 1 ? 4 : faceZ == -1 ? 5 : faceZ == 1 ? 6 : 0;
@@ -1837,9 +1837,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float epsilon = 0.0001F;
 		
 //		Compute the face for each axis:
-		final int faceX = surfaceIntersectionPointX < midpointX && surfaceIntersectionPointX + halfDimensionX - epsilon < midpointX ? -1 : surfaceIntersectionPointX > midpointX && surfaceIntersectionPointX - halfDimensionX + epsilon > midpointX ? 1 : 0;
-		final int faceY = surfaceIntersectionPointY < midpointY && surfaceIntersectionPointY + halfDimensionY - epsilon < midpointY ? -1 : surfaceIntersectionPointY > midpointY && surfaceIntersectionPointY - halfDimensionY + epsilon > midpointY ? 1 : 0;
-		final int faceZ = surfaceIntersectionPointZ < midpointZ && surfaceIntersectionPointZ + halfDimensionZ - epsilon < midpointZ ? -1 : surfaceIntersectionPointZ > midpointZ && surfaceIntersectionPointZ - halfDimensionZ + epsilon > midpointZ ? 1 : 0;
+		final int faceX = surfaceIntersectionPointX + halfDimensionX - epsilon < midpointX ? -1 : surfaceIntersectionPointX - halfDimensionX + epsilon > midpointX ? 1 : 0;
+		final int faceY = surfaceIntersectionPointY + halfDimensionY - epsilon < midpointY ? -1 : surfaceIntersectionPointY - halfDimensionY + epsilon > midpointY ? 1 : 0;
+		final int faceZ = surfaceIntersectionPointZ + halfDimensionZ - epsilon < midpointZ ? -1 : surfaceIntersectionPointZ - halfDimensionZ + epsilon > midpointZ ? 1 : 0;
 		
 //		Compute the face to use:
 		final int face = faceX == -1 ? 1 : faceX == 1 ? 2 : faceY == -1 ? 3 : faceY == 1 ? 4 : faceZ == -1 ? 5 : faceZ == 1 ? 6 : 0;
@@ -1887,7 +1887,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 * @param incomingZ the Z-component of the incoming direction
 	 * @return the probability density function (PDF) value
 	 */
-	protected final float shape3FSphere3FEvaluateProbabilityDensityFunction(final float incomingX, final float incomingY, final float incomingZ) {
+	protected final float shape3FSphere3FEvaluateProbabilityDensityFunctionRHS(final float incomingX, final float incomingY, final float incomingZ) {
 		final float currentRayOriginX = ray3FGetOriginX();
 		final float currentRayOriginY = ray3FGetOriginY();
 		final float currentRayOriginZ = ray3FGetOriginZ();
@@ -1900,27 +1900,15 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointY();
 		final float surfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointZ();
 		
-		final float directionX = incomingX;
-		final float directionY = incomingY;
-		final float directionZ = incomingZ;
-		final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
-		final float directionNormalizedX = directionX * directionLengthReciprocal;
-		final float directionNormalizedY = directionY * directionLengthReciprocal;
-		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
-		
-		final float originX = surfaceIntersectionPointX;
-		final float originY = surfaceIntersectionPointY;
-		final float originZ = surfaceIntersectionPointZ;
-		
-		ray3FSetOrigin(originX, originY, originZ);
-		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		ray3FSetOrigin(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		ray3FSetDirection(incomingX, incomingY, incomingZ);
 		
 		final float t = shape3FSphere3FIntersectionT(DEFAULT_T_MINIMUM, DEFAULT_T_MAXIMUM);
 		
 		if(t > 0.0F) {
-			final float currentSurfaceIntersectionPointX = originX + directionNormalizedX * t;
-			final float currentSurfaceIntersectionPointY = originY + directionNormalizedY * t;
-			final float currentSurfaceIntersectionPointZ = originZ + directionNormalizedZ * t;
+			final float currentSurfaceIntersectionPointX = surfaceIntersectionPointX + incomingX * t;
+			final float currentSurfaceIntersectionPointY = surfaceIntersectionPointY + incomingY * t;
+			final float currentSurfaceIntersectionPointZ = surfaceIntersectionPointZ + incomingZ * t;
 			
 			final float distanceSquared = point3FDistanceSquared(currentSurfaceIntersectionPointX, currentSurfaceIntersectionPointY, currentSurfaceIntersectionPointZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 			

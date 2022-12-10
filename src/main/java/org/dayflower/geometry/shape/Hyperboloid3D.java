@@ -598,9 +598,7 @@ public final class Hyperboloid3D implements Shape3D {
 		
 		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
 		
-		final Vector3D surfaceIntersectionPointError = new Vector3D();
-		
-		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	private double doComputePhi(final Point3D surfaceIntersectionPoint) {

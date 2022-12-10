@@ -450,9 +450,7 @@ public final class RectangularCuboid3F implements Shape3F {
 		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
-		final Vector3F surfaceIntersectionPointError = new Vector3F();
-		
-		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

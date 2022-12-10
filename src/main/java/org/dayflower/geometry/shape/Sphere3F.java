@@ -22,7 +22,6 @@ import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Floats.gamma;
 import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
@@ -118,12 +117,11 @@ public final class Sphere3F implements Shape3F {
 		final Point3F point0 = Point3F.add(new Point3F(), direction, 1.0F);
 		final Point3F point1 = Point3F.add(point0, new Vector3F(1.0F), 1.0F / Point3F.distance(new Point3F(), point0));
 		
-		final Vector3F pointError = Vector3F.multiply(Vector3F.absolute(new Vector3F(point1)), gamma(5));
 		final Vector3F surfaceNormal = Vector3F.directionNormalized(new Point3F(), point0);
 		
 		final float probabilityDensityFunctionValue = 1.0F / getSurfaceArea();
 		
-		final SurfaceSample3F surfaceSample = new SurfaceSample3F(point1, pointError, surfaceNormal, probabilityDensityFunctionValue);
+		final SurfaceSample3F surfaceSample = new SurfaceSample3F(point1, surfaceNormal, probabilityDensityFunctionValue);
 		
 		return Optional.of(surfaceSample);
 	}
@@ -148,12 +146,7 @@ public final class Sphere3F implements Shape3F {
 		
 		final Point3F center = new Point3F();
 		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
-		
-		final Vector3F direction = Vector3F.direction(surfaceIntersectionPoint, center);
-		final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
-		final Vector3F surfaceIntersectionPointError = surfaceIntersection.getSurfaceIntersectionPointError();
-		
-		final Point3F origin = Point3F.offset(surfaceIntersectionPoint, direction, surfaceNormal, surfaceIntersectionPointError);
+		final Point3F origin = surfaceIntersectionPoint;
 		
 		final float radius = 1.0F;
 		final float radiusSquared = radius * radius;
@@ -181,7 +174,7 @@ public final class Sphere3F implements Shape3F {
 					return SurfaceSample3F.EMPTY;
 				}
 				
-				return Optional.of(new SurfaceSample3F(point, surfaceSample.getPointError(), surfaceSample.getSurfaceNormal(), probabilityDensityFunctionValue));
+				return Optional.of(new SurfaceSample3F(point, surfaceSample.getSurfaceNormal(), probabilityDensityFunctionValue));
 			}
 			
 			return SurfaceSample3F.EMPTY;
@@ -212,12 +205,11 @@ public final class Sphere3F implements Shape3F {
 		
 		final Point3F samplePoint = Point3F.add(center, sphericalDirection, radius);
 		
-		final Vector3F samplePointError = Vector3F.multiply(Vector3F.absolute(new Vector3F(samplePoint)), gamma(5));
 		final Vector3F sampleSurfaceNormal = Vector3F.normalize(sphericalDirection);
 		
 		final float probabilityDensityFunctionValue = SampleGeneratorF.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
 		
-		return Optional.of(new SurfaceSample3F(samplePoint, samplePointError, sampleSurfaceNormal, probabilityDensityFunctionValue));
+		return Optional.of(new SurfaceSample3F(samplePoint, sampleSurfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -478,9 +470,7 @@ public final class Sphere3F implements Shape3F {
 		
 		final Point2F textureCoordinates = Point2F.sphericalCoordinates(Vector3F.directionNormalized(new Point3F(), surfaceIntersectionPoint));
 		
-		final Vector3F surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(surfaceIntersectionPoint);
-		
-		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -494,9 +484,5 @@ public final class Sphere3F implements Shape3F {
 	
 	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
 		return Point3F.add(ray.getOrigin(), ray.getDirection(), t);
-	}
-	
-	private static Vector3F doCreateSurfaceIntersectionPointError(final Point3F surfaceIntersectionPoint) {
-		return Vector3F.multiply(Vector3F.absolute(new Vector3F(surfaceIntersectionPoint)), gamma(5));
 	}
 }

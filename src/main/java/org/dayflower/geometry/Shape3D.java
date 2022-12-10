@@ -151,9 +151,7 @@ public interface Shape3D extends Shape {
 				return Optional.empty();
 			}
 			
-			final Vector3D pointError = surfaceSample.getPointError();
-			
-			return Optional.of(new SurfaceSample3D(point, pointError, surfaceNormal, probabilityDensityFunctionValue));
+			return Optional.of(new SurfaceSample3D(point, surfaceNormal, probabilityDensityFunctionValue));
 		}
 		
 		return Optional.empty();

@@ -288,9 +288,7 @@ public final class Plane3F implements Shape3F {
 		
 		final Point2F textureCoordinates = new Point2F(Vector3F.dotProduct(orthonormalBasisG.u, direction), Vector3F.dotProduct(orthonormalBasisG.v, direction));
 		
-		final Vector3F surfaceIntersectionPointError = new Vector3F();
-		
-		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

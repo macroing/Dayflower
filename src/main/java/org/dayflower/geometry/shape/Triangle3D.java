@@ -19,7 +19,6 @@
 package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.gamma;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
 
@@ -195,15 +194,9 @@ public final class Triangle3D implements Shape3D {
 		
 		final Vector3D surfaceNormal = Vector3D.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
 		
-		final double pointErrorX = (abs(positionA.x * barycentricCoordinates.x) + abs(positionB.x * barycentricCoordinates.y) + abs(positionC.x * barycentricCoordinates.z)) * gamma(6);
-		final double pointErrorY = (abs(positionA.y * barycentricCoordinates.x) + abs(positionB.y * barycentricCoordinates.y) + abs(positionC.y * barycentricCoordinates.z)) * gamma(6);
-		final double pointErrorZ = (abs(positionA.z * barycentricCoordinates.x) + abs(positionB.z * barycentricCoordinates.y) + abs(positionC.z * barycentricCoordinates.z)) * gamma(6);
-		
-		final Vector3D pointError = new Vector3D(pointErrorX, pointErrorY, pointErrorZ);
-		
 		final double probabilityDensityFunctionValue = 1.0D / getSurfaceArea();
 		
-		return Optional.of(new SurfaceSample3D(point, pointError, surfaceNormal, probabilityDensityFunctionValue));
+		return Optional.of(new SurfaceSample3D(point, surfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -1060,21 +1053,7 @@ public final class Triangle3D implements Shape3D {
 		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG();
 		final OrthonormalBasis33D orthonormalBasisS = doCreateOrthonormalBasisS(barycentricCoordinates);
 		
-		final Vector3D surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(barycentricCoordinates);
-		
-		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
-	}
-	
-	private Vector3D doCreateSurfaceIntersectionPointError(final Point3D barycentricCoordinates) {
-		final Point4D a = this.a.getPosition();
-		final Point4D b = this.b.getPosition();
-		final Point4D c = this.c.getPosition();
-		
-		final double xAbsSum = abs(barycentricCoordinates.x + a.x) + abs(barycentricCoordinates.y + b.x) + abs(barycentricCoordinates.z + c.x);
-		final double yAbsSum = abs(barycentricCoordinates.x + a.y) + abs(barycentricCoordinates.y + b.y) + abs(barycentricCoordinates.z + c.y);
-		final double zAbsSum = abs(barycentricCoordinates.x + a.z) + abs(barycentricCoordinates.y + b.z) + abs(barycentricCoordinates.z + c.z);
-		
-		return Vector3D.multiply(new Vector3D(xAbsSum, yAbsSum, zAbsSum), gamma(7));
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -19,7 +19,6 @@
 package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.gamma;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
 
@@ -459,14 +458,6 @@ public final class Cylinder3D implements Shape3D {
 		
 		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
 		
-		final Vector3D surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(surfaceIntersectionPoint);
-		
-		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Vector3D doCreateSurfaceIntersectionPointError(final Point3D surfaceIntersectionPoint) {
-		return Vector3D.multiply(Vector3D.absolute(new Vector3D(surfaceIntersectionPoint.x, surfaceIntersectionPoint.y, 0.0D)), gamma(3));
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 }

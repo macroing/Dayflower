@@ -19,7 +19,6 @@
 package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.gamma;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.solveQuadraticSystem;
 
@@ -459,14 +458,6 @@ public final class Cylinder3F implements Shape3F {
 		
 		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
 		
-		final Vector3F surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(surfaceIntersectionPoint);
-		
-		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Vector3F doCreateSurfaceIntersectionPointError(final Point3F surfaceIntersectionPoint) {
-		return Vector3F.multiply(Vector3F.absolute(new Vector3F(surfaceIntersectionPoint.x, surfaceIntersectionPoint.y, 0.0F)), gamma(3));
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 }

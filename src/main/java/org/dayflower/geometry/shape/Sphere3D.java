@@ -22,7 +22,6 @@ import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.PI;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Doubles.gamma;
 import static org.dayflower.utility.Doubles.isInfinite;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
@@ -114,12 +113,11 @@ public final class Sphere3D implements Shape3D {
 		final Point3D point0 = Point3D.add(new Point3D(), direction, 1.0D);
 		final Point3D point1 = Point3D.add(point0, new Vector3D(1.0D), 1.0D / Point3D.distance(new Point3D(), point0));
 		
-		final Vector3D pointError = Vector3D.multiply(Vector3D.absolute(new Vector3D(point1)), gamma(5));
 		final Vector3D surfaceNormal = Vector3D.directionNormalized(new Point3D(), point0);
 		
 		final double probabilityDensityFunctionValue = 1.0D / getSurfaceArea();
 		
-		final SurfaceSample3D surfaceSample = new SurfaceSample3D(point1, pointError, surfaceNormal, probabilityDensityFunctionValue);
+		final SurfaceSample3D surfaceSample = new SurfaceSample3D(point1, surfaceNormal, probabilityDensityFunctionValue);
 		
 		return Optional.of(surfaceSample);
 	}
@@ -144,12 +142,7 @@ public final class Sphere3D implements Shape3D {
 		
 		final Point3D center = new Point3D();
 		final Point3D surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
-		
-		final Vector3D direction = Vector3D.direction(surfaceIntersectionPoint, center);
-		final Vector3D surfaceNormal = surfaceIntersection.getSurfaceNormalS();
-		final Vector3D surfaceIntersectionPointError = surfaceIntersection.getSurfaceIntersectionPointError();
-		
-		final Point3D origin = Point3D.offset(surfaceIntersectionPoint, direction, surfaceNormal, surfaceIntersectionPointError);
+		final Point3D origin = surfaceIntersectionPoint;
 		
 		final double radius = 1.0D;
 		final double radiusSquared = radius * radius;
@@ -177,7 +170,7 @@ public final class Sphere3D implements Shape3D {
 					return SurfaceSample3D.EMPTY;
 				}
 				
-				return Optional.of(new SurfaceSample3D(point, surfaceSample.getPointError(), surfaceSample.getSurfaceNormal(), probabilityDensityFunctionValue));
+				return Optional.of(new SurfaceSample3D(point, surfaceSample.getSurfaceNormal(), probabilityDensityFunctionValue));
 			}
 			
 			return SurfaceSample3D.EMPTY;
@@ -208,12 +201,11 @@ public final class Sphere3D implements Shape3D {
 		
 		final Point3D samplePoint = Point3D.add(center, sphericalDirection, radius);
 		
-		final Vector3D samplePointError = Vector3D.multiply(Vector3D.absolute(new Vector3D(samplePoint)), gamma(5));
 		final Vector3D sampleSurfaceNormal = Vector3D.normalize(sphericalDirection);
 		
 		final double probabilityDensityFunctionValue = SampleGeneratorD.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
 		
-		return Optional.of(new SurfaceSample3D(samplePoint, samplePointError, sampleSurfaceNormal, probabilityDensityFunctionValue));
+		return Optional.of(new SurfaceSample3D(samplePoint, sampleSurfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -464,9 +456,7 @@ public final class Sphere3D implements Shape3D {
 		
 		final Point2D textureCoordinates = Point2D.sphericalCoordinates(Vector3D.directionNormalized(new Point3D(), surfaceIntersectionPoint));
 		
-		final Vector3D surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(surfaceIntersectionPoint);
-		
-		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -480,9 +470,5 @@ public final class Sphere3D implements Shape3D {
 	
 	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
 		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
-	}
-	
-	private static Vector3D doCreateSurfaceIntersectionPointError(final Point3D surfaceIntersectionPoint) {
-		return Vector3D.multiply(Vector3D.absolute(new Vector3D(surfaceIntersectionPoint)), gamma(5));
 	}
 }

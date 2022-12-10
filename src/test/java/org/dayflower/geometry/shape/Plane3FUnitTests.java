@@ -163,7 +163,6 @@ public final class Plane3FUnitTests {
 		assertEquals(new Ray3F(new Point3F(1.0F, 3.0F, 2.0F), new Vector3F(0.0F, 0.0F, -1.0F)), surfaceIntersection.getRay());
 		assertEquals(plane, surfaceIntersection.getShape());
 		assertEquals(new Point3F(1.0F, 3.0F, 0.0F), surfaceIntersection.getSurfaceIntersectionPoint());
-		assertEquals(new Vector3F(), surfaceIntersection.getSurfaceIntersectionPointError());
 		assertEquals(new Vector3F(0.0F, 0.0F, 1.0F), surfaceIntersection.getSurfaceNormalG());
 		assertEquals(new Vector3F(0.0F, 0.0F, 1.0F), surfaceIntersection.getSurfaceNormalS());
 		assertEquals(2.0F, surfaceIntersection.getT());

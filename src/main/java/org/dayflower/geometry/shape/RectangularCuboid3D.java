@@ -450,9 +450,7 @@ public final class RectangularCuboid3D implements Shape3D {
 		final OrthonormalBasis33D orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
 		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 		
-		final Vector3D surfaceIntersectionPointError = new Vector3D();
-		
-		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

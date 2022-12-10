@@ -598,9 +598,7 @@ public final class Hyperboloid3F implements Shape3F {
 		
 		final Point2F textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
 		
-		final Vector3F surfaceIntersectionPointError = new Vector3F();
-		
-		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	private float doComputePhi(final Point3F surfaceIntersectionPoint) {

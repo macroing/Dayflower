@@ -1234,9 +1234,7 @@ public final class Curve3D implements Shape3D {
 		
 		final Point3D surfaceIntersectionPoint = Point3D.add(ray.getOrigin(), ray.getDirection(), t);
 		
-		final Vector3D surfaceIntersectionPointError = new Vector3D(2.0D * hitWidth);
-		
-		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t));
 	}
 	
 	private double doIntersectionTRecursive(final Ray3D ray, final double tMinimum, final double tMaximum, final Point3D pointA, final Point3D pointB, final Point3D pointC, final Point3D pointD, final double uMinimum, final double uMaximum, final int depth) {

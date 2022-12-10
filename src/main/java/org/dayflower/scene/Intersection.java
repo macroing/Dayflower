@@ -156,7 +156,7 @@ public final class Intersection {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	public Ray3F createRay(final Point3F point) {
-		return this.surfaceIntersectionWorldSpace.createRay(point, getSurfaceNormalSCorrectlyOriented());
+		return this.surfaceIntersectionWorldSpace.createRay(point);
 	}
 	
 	/**
@@ -169,7 +169,7 @@ public final class Intersection {
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
 	public Ray3F createRay(final Vector3F direction) {
-		return this.surfaceIntersectionWorldSpace.createRay(direction, getSurfaceNormalSCorrectlyOriented());
+		return this.surfaceIntersectionWorldSpace.createRay(direction);
 	}
 	
 	/**

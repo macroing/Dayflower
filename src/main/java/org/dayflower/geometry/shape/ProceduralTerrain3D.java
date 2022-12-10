@@ -355,9 +355,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 		
 		final Point2D textureCoordinates = doCreateTextureCoordinates(surfaceIntersectionPoint);
 		
-		final Vector3D surfaceIntersectionPointError = new Vector3D();
-		
-		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
+		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	private double doApplyAsDouble(final double x, final double y) {

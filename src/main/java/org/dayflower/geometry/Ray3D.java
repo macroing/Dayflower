@@ -223,16 +223,6 @@ public final class Ray3D implements Node {
 		final Vector3D directionOld = rayRHS.direction;
 		final Vector3D directionNew = Vector3D.transform(matrixLHS, directionOld);
 		
-		final Vector3D originError = Vector3D.transformError(matrixLHS, originOld);
-		
-		final double lengthSquared = directionNew.lengthSquared();
-		
-		if(lengthSquared > 0.0D) {
-			final double t = Vector3D.dotProduct(Vector3D.absolute(directionNew), originError);
-			
-			return new Ray3D(Point3D.add(originNew, directionNew, t), directionNew);
-		}
-		
 		return new Ray3D(originNew, directionNew);
 	}
 }

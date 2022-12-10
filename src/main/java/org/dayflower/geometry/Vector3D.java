@@ -1198,49 +1198,6 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
-	 * Transforms the error of the {@link Point3D} {@code p} with the {@link Matrix44D} {@code m}.
-	 * <p>
-	 * Returns a new {@code Vector3D} instance with the result of the transformation.
-	 * <p>
-	 * If either {@code m} or {@code p} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param m a {@code Matrix44D} instance
-	 * @param p a {@code Point3D} instance
-	 * @return a new {@code Vector3D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code m} or {@code p} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Vector3D transformError(final Matrix44D m, final Point3D p) {
-		final double x = gamma(3) * (abs(m.element11 * p.x) + abs(m.element12 * p.y) + abs(m.element13 * p.z) + abs(m.element14));
-		final double y = gamma(3) * (abs(m.element21 * p.x) + abs(m.element22 * p.y) + abs(m.element23 * p.z) + abs(m.element24));
-		final double z = gamma(3) * (abs(m.element31 * p.x) + abs(m.element32 * p.y) + abs(m.element33 * p.z) + abs(m.element34));
-		
-		return new Vector3D(x, y, z);
-	}
-	
-	/**
-	 * Transforms the error of the {@code Vector3D} {@code v} with the {@link Matrix44D} {@code m}.
-	 * <p>
-	 * Returns a new {@code Vector3D} instance with the result of the transformation.
-	 * <p>
-	 * If either {@code m}, {@code p} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param m a {@code Matrix44D} instance
-	 * @param p a {@link Point3D} instance
-	 * @param v a {@code Vector3D} instance
-	 * @return a new {@code Vector3D} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code m}, {@code p} or {@code v} are {@code null}
-	 */
-//	TODO: Add Unit Tests!
-	public static Vector3D transformError(final Matrix44D m, final Point3D p, final Vector3D v) {
-		final double x = (gamma(3) + 1.0D) * (abs(m.element11) * v.x + abs(m.element12) * v.y + abs(m.element13) * v.z) + gamma(3) * (abs(m.element11 * p.x) + abs(m.element12 * p.y) + abs(m.element13 * p.z) + abs(m.element14));
-		final double y = (gamma(3) + 1.0D) * (abs(m.element21) * v.x + abs(m.element22) * v.y + abs(m.element23) * v.z) + gamma(3) * (abs(m.element21 * p.x) + abs(m.element22 * p.y) + abs(m.element23 * p.z) + abs(m.element24));
-		final double z = (gamma(3) + 1.0D) * (abs(m.element31) * v.x + abs(m.element32) * v.y + abs(m.element33) * v.z) + gamma(3) * (abs(m.element31 * p.x) + abs(m.element32 * p.y) + abs(m.element33 * p.z) + abs(m.element34));
-		
-		return new Vector3D(x, y, z);
-	}
-	
-	/**
 	 * Transforms the {@code Vector3D} {@code vLHS} with the {@link OrthonormalBasis33D} {@code oRHS} in reverse order.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the transformation.

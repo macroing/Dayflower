@@ -223,16 +223,6 @@ public final class Ray3F implements Node {
 		final Vector3F directionOld = rayRHS.direction;
 		final Vector3F directionNew = Vector3F.transform(matrixLHS, directionOld);
 		
-		final Vector3F originError = Vector3F.transformError(matrixLHS, originOld);
-		
-		final float lengthSquared = directionNew.lengthSquared();
-		
-		if(lengthSquared > 0.0F) {
-			final float t = Vector3F.dotProduct(Vector3F.absolute(directionNew), originError);
-			
-			return new Ray3F(Point3F.add(originNew, directionNew, t), directionNew);
-		}
-		
 		return new Ray3F(originNew, directionNew);
 	}
 }

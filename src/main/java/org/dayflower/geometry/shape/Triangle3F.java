@@ -19,7 +19,6 @@
 package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.gamma;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
 
@@ -195,15 +194,9 @@ public final class Triangle3F implements Shape3F {
 		
 		final Vector3F surfaceNormal = Vector3F.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
 		
-		final float pointErrorX = (abs(positionA.x * barycentricCoordinates.x) + abs(positionB.x * barycentricCoordinates.y) + abs(positionC.x * barycentricCoordinates.z)) * gamma(6);
-		final float pointErrorY = (abs(positionA.y * barycentricCoordinates.x) + abs(positionB.y * barycentricCoordinates.y) + abs(positionC.y * barycentricCoordinates.z)) * gamma(6);
-		final float pointErrorZ = (abs(positionA.z * barycentricCoordinates.x) + abs(positionB.z * barycentricCoordinates.y) + abs(positionC.z * barycentricCoordinates.z)) * gamma(6);
-		
-		final Vector3F pointError = new Vector3F(pointErrorX, pointErrorY, pointErrorZ);
-		
 		final float probabilityDensityFunctionValue = 1.0F / getSurfaceArea();
 		
-		return Optional.of(new SurfaceSample3F(point, pointError, surfaceNormal, probabilityDensityFunctionValue));
+		return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -1060,21 +1053,7 @@ public final class Triangle3F implements Shape3F {
 		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG();
 		final OrthonormalBasis33F orthonormalBasisS = doCreateOrthonormalBasisS(barycentricCoordinates);
 		
-		final Vector3F surfaceIntersectionPointError = doCreateSurfaceIntersectionPointError(barycentricCoordinates);
-		
-		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
-	}
-	
-	private Vector3F doCreateSurfaceIntersectionPointError(final Point3F barycentricCoordinates) {
-		final Point4F a = this.a.getPosition();
-		final Point4F b = this.b.getPosition();
-		final Point4F c = this.c.getPosition();
-		
-		final float xAbsSum = abs(barycentricCoordinates.x + a.x) + abs(barycentricCoordinates.y + b.x) + abs(barycentricCoordinates.z + c.x);
-		final float yAbsSum = abs(barycentricCoordinates.x + a.y) + abs(barycentricCoordinates.y + b.y) + abs(barycentricCoordinates.z + c.y);
-		final float zAbsSum = abs(barycentricCoordinates.x + a.z) + abs(barycentricCoordinates.y + b.z) + abs(barycentricCoordinates.z + c.z);
-		
-		return Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
+		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

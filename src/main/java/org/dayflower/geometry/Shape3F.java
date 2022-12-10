@@ -151,9 +151,7 @@ public interface Shape3F extends Shape {
 				return Optional.empty();
 			}
 			
-			final Vector3F pointError = surfaceSample.getPointError();
-			
-			return Optional.of(new SurfaceSample3F(point, pointError, surfaceNormal, probabilityDensityFunctionValue));
+			return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
 		}
 		
 		return Optional.empty();

@@ -405,7 +405,7 @@ public final class CompiledShape3FCache {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final boolean IS_COMPACT_TRIANGLE_MESH_3_F = true;
+	private static final boolean IS_COMPACT_TRIANGLE_MESH_3_F = false;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -2484,6 +2484,8 @@ public final class CompiledShape3FCache {
 		
 		if(optionalRootBVHNode.isPresent()) {
 			final int lengthA = NodeFilter.filterAll(optionalRootBVHNode.get(), BVHNode3F.class).stream().mapToInt(bVHNode -> doGetBVHNode3FLength(bVHNode, IS_COMPACT_TRIANGLE_MESH_3_F)).sum();
+			
+			@SuppressWarnings("unused")
 			final int lengthB = IS_COMPACT_TRIANGLE_MESH_3_F && lengthA % 8 != 0 ? lengthA + 4 : lengthA;
 			
 			return lengthB;
@@ -2632,6 +2634,7 @@ public final class CompiledShape3FCache {
 		return -1;
 	}
 	
+	@SuppressWarnings("unused")
 	private static int doGetBVHNode3FLength(final BVHNode3F bVHNode3F, final boolean isCompact) {
 		if(bVHNode3F instanceof LeafBVHNode3F) {
 			final int a = 4;
@@ -2681,7 +2684,7 @@ public final class CompiledShape3FCache {
 				final List<?> shapes = leafBVHNode3F.getShapes();
 				
 				final
-				CompiledBVHNode3F compiledBVHNode3F = new CompiledBVHNode3F(8);
+				CompiledBVHNode3F compiledBVHNode3F = new CompiledBVHNode3F(IS_COMPACT_TRIANGLE_MESH_3_F ? 8 : 4 + shapeCount + padding(4 + shapeCount));
 				compiledBVHNode3F.setOffset(offset);
 				compiledBVHNode3F.setID(id);
 				compiledBVHNode3F.setBoundingVolumeOffset(boundingVolumeOffset);
@@ -2828,9 +2831,7 @@ public final class CompiledShape3FCache {
 		}
 		
 		public void setShapeOffset(final int shapeOffset, final int offset) {
-			if(4 + offset < this.data.length) {
-				this.data[4 + offset] = shapeOffset;
-			}
+			this.data[4 + offset] = shapeOffset;
 		}
 		
 		public void updateLeft(final List<CompiledBVHNode3F> compiledBVHNode3Fs) {

@@ -18,7 +18,6 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.utility.Bytes.toByte;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -118,7 +117,7 @@ public final class ByteImageF extends ImageF {
 	public ByteImageF(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
-		this.data = Arrays.repeat(new byte[] {toByte(0), toByte(0), toByte(0), toByte(255)}, resolutionX * resolutionY);
+		this.data = Arrays.repeat(new byte[] {(byte)(0), (byte)(0), (byte)(0), (byte)(255)}, resolutionX * resolutionY);
 	}
 	
 	/**

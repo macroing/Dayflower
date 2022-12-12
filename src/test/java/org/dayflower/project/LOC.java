@@ -91,6 +91,7 @@ public final class LOC {
 			this.files.add(fileLines);
 		}
 		
+		@SuppressWarnings("unused")
 		public void count(final String directory) {
 			final List<File> files = Files.findFilesFromDirectory(new File(directory), currentFile -> currentFile.getName().matches(".*" + this.extension + "$"));
 			

@@ -1380,8 +1380,8 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final boolean isY = wNormalizedYAbs < wNormalizedZAbs;
 		
 //		Compute the normalized V-direction of the orthonormal basis:
-		final float vX = isX ? +0.0F                         : isY ? +wNormalizedZ : +wNormalizedY;
-		final float vY = isX ? +wNormalizedZ : isY ? +0.0F                         : -wNormalizedX;
+		final float vX = isX ? +0.0F         : isY ? +wNormalizedZ : +wNormalizedY;
+		final float vY = isX ? +wNormalizedZ : isY ? +0.0F         : -wNormalizedX;
 		final float vZ = isX ? -wNormalizedY : isY ? -wNormalizedX : +0.0F;
 		final float vLengthReciprocal = vector3FLengthReciprocal(vX, vY, vZ);
 		final float vNormalizedX = vX * vLengthReciprocal;

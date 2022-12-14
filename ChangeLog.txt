@@ -1,6 +1,7 @@
 2022-12-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods imageToneMapFilmicCurve(float, float, float, float, float, float, float, float), imageToneMapFilmicCurveACESModifiedVersion1(float), imageToneMapReinhard(float), imageToneMapReinhardModifiedVersion1(float), imageToneMapReinhardModifiedVersion2(float) and imageToneMapUnreal3(float) to the AbstractImageKernel class.
+	* CHANGE:	Fix a bug with sphere sampling in the GPU-renderer.
 
 2022-12-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

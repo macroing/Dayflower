@@ -2028,10 +2028,6 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = intersectionRHSGetSurfaceIntersectionPointY();
 		final float surfaceIntersectionPointZ = intersectionRHSGetSurfaceIntersectionPointZ();
 		
-		final float directionX = centerX - surfaceIntersectionPointX;
-		final float directionY = centerY - surfaceIntersectionPointY;
-		final float directionZ = centerZ - surfaceIntersectionPointZ;
-		
 		final float originX = surfaceIntersectionPointX;
 		final float originY = surfaceIntersectionPointY;
 		final float originZ = surfaceIntersectionPointZ;
@@ -2045,9 +2041,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			final float pointY = point3FGetY();
 			final float pointZ = point3FGetZ();
 			
-			final float vectorX = vector3FGetX();
-			final float vectorY = vector3FGetY();
-			final float vectorZ = vector3FGetZ();
+			final float surfaceNormalX = vector3FGetX();
+			final float surfaceNormalY = vector3FGetY();
+			final float surfaceNormalZ = vector3FGetZ();
 			
 			final float incomingX = pointX - surfaceIntersectionPointX;
 			final float incomingY = pointY - surfaceIntersectionPointY;
@@ -2069,7 +2065,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			final float incomingNormalizedNegatedY = -incomingNormalizedY;
 			final float incomingNormalizedNegatedZ = -incomingNormalizedZ;
 			
-			final float probabilityDensityFunctionValue = point3FDistanceSquared(pointX, pointY, pointZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ) / abs(vector3FDotProduct(vectorX, vectorY, vectorZ, incomingNormalizedNegatedX, incomingNormalizedNegatedY, incomingNormalizedNegatedZ));
+			final float probabilityDensityFunctionValue = point3FDistanceSquared(pointX, pointY, pointZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ) / abs(vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, incomingNormalizedNegatedX, incomingNormalizedNegatedY, incomingNormalizedNegatedZ));
 			
 			if(!checkIsFinite(probabilityDensityFunctionValue) || probabilityDensityFunctionValue <= 0.0F) {
 				return 0.0F;
@@ -2078,22 +2074,26 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			return probabilityDensityFunctionValue;
 		}
 		
+		final float directionX = centerX - surfaceIntersectionPointX;
+		final float directionY = centerY - surfaceIntersectionPointY;
+		final float directionZ = centerZ - surfaceIntersectionPointZ;
+		
 		final float distance = point3FDistance(centerX, centerY, centerZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		final float distanceReciprocal = 1.0F / distance;
 		
 		orthonormalBasis33FSetFromW(directionX * distanceReciprocal, directionY * distanceReciprocal, directionZ * distanceReciprocal);
 		
-		final float uX = orthonormalBasis33FGetUX();
-		final float uY = orthonormalBasis33FGetUY();
-		final float uZ = orthonormalBasis33FGetUZ();
+		final float uX = -orthonormalBasis33FGetUX();
+		final float uY = -orthonormalBasis33FGetUY();
+		final float uZ = -orthonormalBasis33FGetUZ();
 		
-		final float vX = orthonormalBasis33FGetVX();
-		final float vY = orthonormalBasis33FGetVY();
-		final float vZ = orthonormalBasis33FGetVZ();
+		final float vX = -orthonormalBasis33FGetVX();
+		final float vY = -orthonormalBasis33FGetVY();
+		final float vZ = -orthonormalBasis33FGetVZ();
 		
-		final float wX = orthonormalBasis33FGetWX();
-		final float wY = orthonormalBasis33FGetWY();
-		final float wZ = orthonormalBasis33FGetWZ();
+		final float wX = -orthonormalBasis33FGetWX();
+		final float wY = -orthonormalBasis33FGetWY();
+		final float wZ = -orthonormalBasis33FGetWZ();
 		
 		final float sinThetaMax = distanceReciprocal;
 		final float sinThetaMaxSquared = sinThetaMax * sinThetaMax;

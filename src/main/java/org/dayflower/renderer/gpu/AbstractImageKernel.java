@@ -1136,6 +1136,149 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	/**
+	 * Applies a filmic curve tone map operator to the current pixel.
+	 * 
+	 * @param exposure the exposure to use
+	 * @param a a {@code float} value for the filmic curve itself
+	 * @param b a {@code float} value for the filmic curve itself
+	 * @param c a {@code float} value for the filmic curve itself
+	 * @param d a {@code float} value for the filmic curve itself
+	 * @param e a {@code float} value for the filmic curve itself
+	 * @param subtract a value to subtract from the component values when they have been multiplied by {@code exposure}
+	 * @param minimum the minimum component value allowed
+	 */
+	protected final void imageToneMapFilmicCurve(final float exposure, final float a, final float b, final float c, final float d, final float e, final float subtract, final float minimum) {
+		final int imageColorFloatArrayOffset = getGlobalId() * 3;
+		
+		final float aR = this.imageColorFloatArray[imageColorFloatArrayOffset + 0];
+		final float aG = this.imageColorFloatArray[imageColorFloatArrayOffset + 1];
+		final float aB = this.imageColorFloatArray[imageColorFloatArrayOffset + 2];
+		
+		final float bR = max(aR * exposure - subtract, minimum);
+		final float bG = max(aG * exposure - subtract, minimum);
+		final float bB = max(aB * exposure - subtract, minimum);
+		
+		final float cR = saturateF((bR * (a * bR + b)) / (bR * (c * bR + d) + e), 0.0F, 1.0F);
+		final float cG = saturateF((bG * (a * bG + b)) / (bG * (c * bG + d) + e), 0.0F, 1.0F);
+		final float cB = saturateF((bB * (a * bB + b)) / (bB * (c * bB + d) + e), 0.0F, 1.0F);
+		
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 0] = cR;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 1] = cG;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 2] = cB;
+	}
+	
+	/**
+	 * Applies a modified ACES filmic curve tone map operator to the current pixel.
+	 * 
+	 * @param exposure the exposure to use
+	 */
+	protected final void imageToneMapFilmicCurveACESModifiedVersion1(final float exposure) {
+		imageToneMapFilmicCurve(exposure, 2.51F, 0.03F, 2.43F, 0.59F, 0.14F, 0.0F, -Float.MAX_VALUE);
+	}
+	
+	/**
+	 * Applies a Reinhard tone map operator to the current pixel.
+	 * 
+	 * @param exposure the exposure to use
+	 */
+	protected final void imageToneMapReinhard(final float exposure) {
+		final int imageColorFloatArrayOffset = getGlobalId() * 3;
+		
+		final float aR = this.imageColorFloatArray[imageColorFloatArrayOffset + 0];
+		final float aG = this.imageColorFloatArray[imageColorFloatArrayOffset + 1];
+		final float aB = this.imageColorFloatArray[imageColorFloatArrayOffset + 2];
+		
+		final float bR = aR * exposure;
+		final float bG = aG * exposure;
+		final float bB = aB * exposure;
+		
+		final float cR = bR / (1.0F + bR);
+		final float cG = bG / (1.0F + bG);
+		final float cB = bB / (1.0F + bB);
+		
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 0] = cR;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 1] = cG;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 2] = cB;
+	}
+	
+	/**
+	 * Applies a modified Reinhard tone map operator to the current pixel.
+	 * 
+	 * @param exposure the exposure to use
+	 */
+	protected final void imageToneMapReinhardModifiedVersion1(final float exposure) {
+		final int imageColorFloatArrayOffset = getGlobalId() * 3;
+		
+		final float lWhite = 4.0F;
+		
+		final float aR = this.imageColorFloatArray[imageColorFloatArrayOffset + 0];
+		final float aG = this.imageColorFloatArray[imageColorFloatArrayOffset + 1];
+		final float aB = this.imageColorFloatArray[imageColorFloatArrayOffset + 2];
+		
+		final float bR = aR * exposure;
+		final float bG = aG * exposure;
+		final float bB = aB * exposure;
+		
+		final float cR = bR * (1.0F + bR / (lWhite * lWhite)) / (1.0F + bR);
+		final float cG = bG * (1.0F + bG / (lWhite * lWhite)) / (1.0F + bG);
+		final float cB = bB * (1.0F + bB / (lWhite * lWhite)) / (1.0F + bB);
+		
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 0] = cR;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 1] = cG;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 2] = cB;
+	}
+	
+	/**
+	 * Applies a modified Reinhard tone map operator to the current pixel.
+	 * 
+	 * @param exposure the exposure to use
+	 */
+	protected final void imageToneMapReinhardModifiedVersion2(final float exposure) {
+		final int imageColorFloatArrayOffset = getGlobalId() * 3;
+		
+		final float aR = this.imageColorFloatArray[imageColorFloatArrayOffset + 0];
+		final float aG = this.imageColorFloatArray[imageColorFloatArrayOffset + 1];
+		final float aB = this.imageColorFloatArray[imageColorFloatArrayOffset + 2];
+		
+		final float bR = aR * exposure;
+		final float bG = aG * exposure;
+		final float bB = aB * exposure;
+		
+		final float cR = 1.0F - exp(-bR * exposure);
+		final float cG = 1.0F - exp(-bG * exposure);
+		final float cB = 1.0F - exp(-bB * exposure);
+		
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 0] = cR;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 1] = cG;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 2] = cB;
+	}
+	
+	/**
+	 * Applies an Unreal 3 tone map operator to the current pixel.
+	 * 
+	 * @param exposure the exposure to use
+	 */
+	protected final void imageToneMapUnreal3(final float exposure) {
+		final int imageColorFloatArrayOffset = getGlobalId() * 3;
+		
+		final float aR = this.imageColorFloatArray[imageColorFloatArrayOffset + 0];
+		final float aG = this.imageColorFloatArray[imageColorFloatArrayOffset + 1];
+		final float aB = this.imageColorFloatArray[imageColorFloatArrayOffset + 2];
+		
+		final float bR = aR * exposure;
+		final float bG = aG * exposure;
+		final float bB = aB * exposure;
+		
+		final float cR = bR / (bR + 0.155F) * 1.019F;
+		final float cG = bG / (bG + 0.155F) * 1.019F;
+		final float cB = bB / (bB + 0.155F) * 1.019F;
+		
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 0] = cR;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 1] = cG;
+		this.imageColorFloatArray[imageColorFloatArrayOffset + 2] = cB;
+	}
+	
+	/**
 	 * Undoes the gamma correction for the current pixel of the image using sRGB.
 	 * <p>
 	 * This method assumes the RGB color for the current pixel is non-linear.

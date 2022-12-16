@@ -27,7 +27,7 @@ final Transform transform6 = new Transform(new Point3F(-3.0F, 0.0F,  0.0F), Quat
 final Transform transform7 = new Transform(new Point3F(-1.5F, 1.0F,  8.0F));
 final Transform transform8 = new Transform(new Point3F( 1.5F, 1.0F,  7.0F));
 
-final AreaLight areaLight8 = new DiffuseAreaLight(transform8, 1, new Color3F(2.0F), shape8, false);
+final AreaLight areaLight8 = new DiffuseAreaLight(transform8, 1, new Color3F(2.0F), shape8, true);
 
 final Primitive primitive1 = new Primitive(material1, shape1, transform1);
 final Primitive primitive2 = new Primitive(material2, shape2, transform2);

@@ -187,7 +187,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	protected final boolean primitiveIntersectionComputeLHS() {
 		int primitiveIndex = -1;
 		
-		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0] = -1;
+		super.shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayLHS_$private$1[0] = -1;
 		
 		for(int index = 0; index < this.primitiveCount; index++) {
 			final int primitiveArrayOffset = index * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
@@ -248,7 +248,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == Triangle3F.ID) {
 					tObjectSpace = shape3FTriangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == TriangleMesh3F.ID) {
-					tObjectSpace = shape3FTriangleMesh3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					tObjectSpace = shape3FTriangleMesh3FIntersectionTLHS(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				}
 				
 				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
@@ -323,7 +323,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	protected final boolean primitiveIntersectionComputeRHS() {
 		int primitiveIndex = -1;
 		
-		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0] = -1;
+		super.shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayRHS_$private$1[0] = -1;
 		
 		for(int index = 0; index < this.primitiveCount; index++) {
 			final int primitiveArrayOffset = index * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
@@ -384,7 +384,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == Triangle3F.ID) {
 					tObjectSpace = shape3FTriangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == TriangleMesh3F.ID) {
-					tObjectSpace = shape3FTriangleMesh3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					tObjectSpace = shape3FTriangleMesh3FIntersectionTRHS(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				}
 				
 				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
@@ -656,7 +656,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * 
 	 * @return the parametric T value for the closest primitive in world space, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float primitiveIntersectionT() {
+	protected final float primitiveIntersectionTLHS() {
 		boolean hasFoundIntersection = false;
 		
 		for(int index = 0; index < this.primitiveCount; index++) {
@@ -718,7 +718,90 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				} else if(shapeID == Triangle3F.ID) {
 					tObjectSpace = shape3FTriangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == TriangleMesh3F.ID) {
-					tObjectSpace = shape3FTriangleMesh3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					tObjectSpace = shape3FTriangleMesh3FIntersectionTLHS(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				}
+				
+				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
+					ray3FSetTMaximum(tObjectSpace);
+					
+					hasFoundIntersection = true;
+				}
+				
+				ray3FSetMatrix44FTransformObjectToWorld(index);
+			}
+		}
+		
+		return hasFoundIntersection ? ray3FGetTMaximum() : 0.0F;
+	}
+	
+	/**
+	 * Returns the parametric T value for the closest primitive in world space, or {@code 0.0F} if no intersection was found.
+	 * 
+	 * @return the parametric T value for the closest primitive in world space, or {@code 0.0F} if no intersection was found
+	 */
+	protected final float primitiveIntersectionTRHS() {
+		boolean hasFoundIntersection = false;
+		
+		for(int index = 0; index < this.primitiveCount; index++) {
+			final int primitiveArrayOffset = index * CompiledPrimitiveCache.PRIMITIVE_LENGTH;
+			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_ID;
+			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_BOUNDING_VOLUME_OFFSET;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + CompiledPrimitiveCache.PRIMITIVE_OFFSET_SHAPE_OFFSET;
+			
+			final int boundingVolumeID = this.primitiveArray[primitiveArrayOffsetBoundingVolumeID];
+			final int boundingVolumeOffset = this.primitiveArray[primitiveArrayOffsetBoundingVolumeOffset];
+			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
+			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
+			
+			final float tMinimumWorldSpace = ray3FGetTMinimum();
+			final float tMaximumWorldSpace = ray3FGetTMaximum();
+			
+			boolean isIntersectingBoundingVolume = false;
+			
+//			Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
+			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
+				isIntersectingBoundingVolume = true;
+			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
+				isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+			} else if(boundingVolumeID == BoundingSphere3F.ID) {
+				isIntersectingBoundingVolume = boundingVolume3FBoundingSphere3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+			}
+			
+			if(isIntersectingBoundingVolume) {
+				ray3FSetMatrix44FTransformWorldToObject(index);
+				
+				float tObjectSpace = 0.0F;
+				
+				final float tMinimumObjectSpace = ray3FGetTMinimum();
+				final float tMaximumObjectSpace = ray3FGetTMaximum();
+				
+				if(shapeID == Cone3F.ID) {
+					tObjectSpace = shape3FCone3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Cylinder3F.ID) {
+					tObjectSpace = shape3FCylinder3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Disk3F.ID) {
+					tObjectSpace = shape3FDisk3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Hyperboloid3F.ID) {
+					tObjectSpace = shape3FHyperboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Paraboloid3F.ID) {
+					tObjectSpace = shape3FParaboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Plane3F.ID) {
+					tObjectSpace = shape3FPlane3FIntersectionT(tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Polygon3F.ID) {
+					tObjectSpace = shape3FPolygon3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Rectangle3F.ID) {
+					tObjectSpace = shape3FRectangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == RectangularCuboid3F.ID) {
+					tObjectSpace = shape3FRectangularCuboid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Sphere3F.ID) {
+					tObjectSpace = shape3FSphere3FIntersectionT(tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Torus3F.ID) {
+					tObjectSpace = shape3FTorus3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Triangle3F.ID) {
+					tObjectSpace = shape3FTriangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == TriangleMesh3F.ID) {
+					tObjectSpace = shape3FTriangleMesh3FIntersectionTRHS(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				}
 				
 				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
@@ -1359,6 +1442,12 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					final float lightProbabilityDensityFunctionValueSquared = lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue;
 					
 					if(lightProbabilityDensityFunctionValue == 0.0F) {
+//						Reset the current ray:
+						ray3FSetOrigin(rayOriginX, rayOriginY, rayOriginZ);
+						ray3FSetDirection(rayDirectionX, rayDirectionY, rayDirectionZ);
+						ray3FSetTMaximum(rayTMaximum);
+						ray3FSetTMinimum(rayTMinimum);
+						
 						color3FLHSSet(lightDirectR, lightDirectG, lightDirectB);
 						
 						return;

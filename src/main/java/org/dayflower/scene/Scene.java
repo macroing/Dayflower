@@ -528,7 +528,7 @@ public final class Scene implements Node {
 				
 				final Vector3F incoming = bSDFResult.getIncoming();
 				
-				throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result, abs(Vector3F.dotProduct(incoming, surfaceNormalS))), probabilityDensityFunctionValue));
+				throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result, Vector3F.dotProductAbs(incoming, surfaceNormalS)), probabilityDensityFunctionValue));
 				
 				final BXDFType bXDFType = bSDFResult.getBXDFType();
 				
@@ -1469,7 +1469,7 @@ public final class Scene implements Node {
 			final float lightPDFValue = lightSample.getProbabilityDensityFunctionValue();
 			
 			if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
-				final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, incoming), abs(Vector3F.dotProduct(incoming, normal)));
+				final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, incoming), Vector3F.dotProductAbs(incoming, normal));
 				
 				if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
 					lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, lightPDFValue);
@@ -1486,7 +1486,7 @@ public final class Scene implements Node {
 				final float lightPDFValue = lightSample.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, incoming), abs(Vector3F.dotProduct(incoming, normal)));
+					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, incoming), Vector3F.dotProductAbs(incoming, normal));
 					
 					final float scatteringPDFValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, incoming);
 					
@@ -1505,7 +1505,7 @@ public final class Scene implements Node {
 				
 				final Vector3F incoming = bSDFResult.getIncoming();
 				
-				final Color3F scatteringResult = Color3F.multiply(bSDFResult.getResult(), abs(Vector3F.dotProduct(incoming, normal)));
+				final Color3F scatteringResult = Color3F.multiply(bSDFResult.getResult(), Vector3F.dotProductAbs(incoming, normal));
 				
 				final boolean hasSampledSpecular = bSDFResult.getBXDFType().isSpecular();
 				

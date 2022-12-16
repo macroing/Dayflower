@@ -124,7 +124,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	/**
 	 * An {@code int[]} that contains a triangle offset for a triangle mesh.
 	 */
-	protected int[] shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1;
+	protected int[] shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayLHS_$private$1;
+	
+	/**
+	 * An {@code int[]} that contains a triangle offset for a triangle mesh.
+	 */
+	protected int[] shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayRHS_$private$1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -143,7 +148,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		this.shape3FTorus3FArray = new float[1];
 		this.shape3FTriangle3FArray = new float[1];
 		this.shape3FTriangleMesh3FArray = new int[1];
-		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1 = new int[1];
+		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayLHS_$private$1 = new int[1];
+		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayRHS_$private$1 = new int[1];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2877,7 +2883,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 * @param rayTMaximum the maximum parametric T value
 	 * @return the parametric T value for a given triangle mesh in object space, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float shape3FTriangleMesh3FIntersectionT(final int shape3FTriangleMesh3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+	protected final float shape3FTriangleMesh3FIntersectionTLHS(final int shape3FTriangleMesh3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 		/*
 		 * T0 (Next = NO, Left = T1)
 		 *     T1 (Next = T4, Left = T2)
@@ -2918,7 +2924,75 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 					final float tObjectSpace = this.shape3FTriangle3FIntersectionT(triangleOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 					
 					if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
-						this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0] = triangleOffset;
+						this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayLHS_$private$1[0] = triangleOffset;
+						
+						tMaximumObjectSpace = tObjectSpace;
+						
+						t = tObjectSpace;
+					}
+				}
+				
+				relativeOffset = nextOffset;
+			} else if(isIntersectingBoundingVolume && id == TreeBVHNode3F.ID) {
+				relativeOffset = leftOffsetOrTriangleCount;
+			} else {
+				relativeOffset = nextOffset;
+			}
+		}
+		
+		return t;
+	}
+	
+	/**
+	 * Returns the parametric T value for a given triangle mesh in object space, or {@code 0.0F} if no intersection was found.
+	 * 
+	 * @param shape3FTriangleMesh3FArrayOffset the offset for the triangle mesh in {@link #shape3FTriangleMesh3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given triangle mesh in object space, or {@code 0.0F} if no intersection was found
+	 */
+	protected final float shape3FTriangleMesh3FIntersectionTRHS(final int shape3FTriangleMesh3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		/*
+		 * T0 (Next = NO, Left = T1)
+		 *     T1 (Next = T4, Left = T2)
+		 *         T2 (Next = T3, Left = L0)
+		 *             L0 (Next = L1)
+		 *             L1 (Next = L2)
+		 *             L2 (Next = T3)
+		 *         T3 (Next = T4, Left = L3)
+		 *             L3 (Next = L4)
+		 *             L4 (Next = L5)
+		 *             L5 (Next = T4)
+		 *     T4 (Next = NO, Left = L6)
+		 *         L6 (Next = L7)
+		 *         L7 (Next = L8)
+		 *         L8 (Next = NO)
+		 */
+		
+		float t = 0.0F;
+		float tMinimumObjectSpace = rayTMinimum;
+		float tMaximumObjectSpace = rayTMaximum;
+		
+		int absoluteOffset = shape3FTriangleMesh3FArrayOffset;
+		int relativeOffset = 0;
+		
+		while(relativeOffset != -1) {
+			final int offset = absoluteOffset + relativeOffset;
+			final int id = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_ID];
+			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_BOUNDING_VOLUME_OFFSET];
+			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_NEXT_OFFSET];
+			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT];
+			
+			final boolean isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+			
+			if(isIntersectingBoundingVolume && id == LeafBVHNode3F.ID) {
+				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
+					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + CompiledShape3FCache.TRIANGLE_MESH_3_F_B_V_H_NODE_3_F_OFFSET_LEFT_OFFSET_OR_SHAPE_COUNT + 1 + i];
+					
+					final float tObjectSpace = this.shape3FTriangle3FIntersectionT(triangleOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					
+					if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
+						this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayRHS_$private$1[0] = triangleOffset;
 						
 						tMaximumObjectSpace = tObjectSpace;
 						
@@ -2944,7 +3018,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 * @param primitiveIndex the index of the primitive
 	 */
 	protected final void shape3FTriangleMesh3FIntersectionComputeLHS(final float t, final int primitiveIndex) {
-		final int shape3FTriangle3FArrayOffset = this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0];
+		final int shape3FTriangle3FArrayOffset = this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayLHS_$private$1[0];
 		
 		if(shape3FTriangle3FArrayOffset != -1) {
 			shape3FTriangle3FIntersectionComputeLHS(t, primitiveIndex, shape3FTriangle3FArrayOffset);
@@ -2958,7 +3032,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 	 * @param primitiveIndex the index of the primitive
 	 */
 	protected final void shape3FTriangleMesh3FIntersectionComputeRHS(final float t, final int primitiveIndex) {
-		final int shape3FTriangle3FArrayOffset = this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0];
+		final int shape3FTriangle3FArrayOffset = this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArrayRHS_$private$1[0];
 		
 		if(shape3FTriangle3FArrayOffset != -1) {
 			shape3FTriangle3FIntersectionComputeRHS(t, primitiveIndex, shape3FTriangle3FArrayOffset);

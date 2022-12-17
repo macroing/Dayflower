@@ -21,6 +21,8 @@ package org.dayflower.renderer.gpu;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
@@ -44,11 +46,11 @@ import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.SceneObserver;
 import org.dayflower.scene.compiler.CompiledCameraCache;
 import org.dayflower.scene.compiler.CompiledPrimitiveCache;
 import org.dayflower.scene.compiler.CompiledScene;
 import org.dayflower.scene.compiler.SceneCompiler;
-
 import org.macroing.java.util.Arrays;
 
 /**
@@ -91,7 +93,10 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final AtomicBoolean isUpdateCompiledSceneRequested;
+	private CompiledScene compiledScene;
 	private Scene scene;
+	private SceneObserver sceneObserver;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -104,10 +109,22 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		this.pixelArray = new float[1];
 		this.primitiveCount = 0;
 		this.primitiveArray = new int[1];
+		this.isUpdateCompiledSceneRequested = new AtomicBoolean();
+		this.compiledScene = null;
 		this.scene = new Scene();
+		this.sceneObserver = new SceneObserverImpl(this);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the optional {@link CompiledScene} instance that is associated with this {@code AbstractSceneKernel} instance.
+	 * 
+	 * @return the optional {@code CompiledScene} instance that is associated with this {@code AbstractSceneKernel} instance
+	 */
+	public final Optional<CompiledScene> getCompiledScene() {
+		return Optional.ofNullable(this.compiledScene);
+	}
 	
 	/**
 	 * Returns the {@link Scene} instance that is associated with this {@code AbstractSceneKernel} instance.
@@ -128,6 +145,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 */
 	public final void setScene(final Scene scene) {
 		this.scene = Objects.requireNonNull(scene, "scene == null");
+		this.scene.addSceneObserver(this.sceneObserver);
 	}
 	
 	/**
@@ -158,6 +176,89 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 */
 	public final void updateCamera() {
 		put(this.cameraArray = CompiledCameraCache.toCamera(getScene().getCamera()));
+	}
+	
+	/**
+	 * Updates this {@code AbstractSceneKernel} instance with data from the {@link CompiledScene} instance.
+	 */
+	public final void updateCompiledScene() {
+		if(this.isUpdateCompiledSceneRequested.compareAndSet(true, false)) {
+			final CompiledScene compiledScene = this.compiledScene;
+			
+			if(compiledScene != null) {
+				put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getAxisAlignedBoundingBox3Fs()));
+				put(super.boundingVolume3FBoundingSphere3FArray = doGetCompatibleArray(compiledScene.getCompiledBoundingVolume3FCache().getBoundingSphere3Fs()));
+				
+				put(super.shape3FCone3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getCone3Fs()));
+				put(super.shape3FCylinder3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getCylinder3Fs()));
+				put(super.shape3FDisk3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getDisk3Fs()));
+				put(super.shape3FHyperboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getHyperboloid3Fs()));
+				put(super.shape3FParaboloid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getParaboloid3Fs()));
+				put(super.shape3FPolygon3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getPolygon3Fs()));
+				put(super.shape3FRectangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangle3Fs()));
+				put(super.shape3FRectangularCuboid3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getRectangularCuboid3Fs()));
+				put(super.shape3FTorus3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getTorus3Fs()));
+				put(super.shape3FTriangle3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getTriangle3Fs()));
+				put(super.shape3FTriangleMesh3FArray = doGetCompatibleArray(compiledScene.getCompiledShape3FCache().getTriangleMesh3Fs()));
+				
+				put(super.textureBlendTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getBlendTextures()));
+				put(super.textureBullseyeTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getBullseyeTextures()));
+				put(super.textureCheckerboardTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getCheckerboardTextures()));
+				put(super.textureConstantTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getConstantTextures()));
+				put(super.textureLDRImageTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getLDRImageTextures()));
+				put(super.textureLDRImageTextureOffsetArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getLDRImageTextureOffsets()));
+				put(super.textureMarbleTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getMarbleTextures()));
+				put(super.texturePolkaDotTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getPolkaDotTextures()));
+				put(super.textureSimplexFractionalBrownianMotionTextureArray = doGetCompatibleArray(compiledScene.getCompiledTextureCache().getSimplexFractionalBrownianMotionTextures()));
+				
+				put(super.materialBullseyeMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getBullseyeMaterials()));
+				put(super.materialCheckerboardMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getCheckerboardMaterials()));
+				put(super.materialClearCoatMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getClearCoatMaterials()));
+				put(super.materialDisneyMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getDisneyMaterials()));
+				put(super.materialGlassMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getGlassMaterials()));
+				put(super.materialGlossyMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getGlossyMaterials()));
+				put(super.materialMatteMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMatteMaterials()));
+				put(super.materialMetalMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMetalMaterials()));
+				put(super.materialMirrorMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getMirrorMaterials()));
+				put(super.materialPlasticMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPlasticMaterials()));
+				put(super.materialPolkaDotMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPolkaDotMaterials()));
+				put(super.materialSubstrateMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getSubstrateMaterials()));
+				
+				put(super.modifierNormalMapLDRImageModifierArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getNormalMapLDRImageModifiers()));
+				put(super.modifierNormalMapLDRImageModifierOffsetArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getNormalMapLDRImageModifierOffsets()));
+				put(super.modifierSimplexNoiseNormalMapModifierArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getSimplexNoiseNormalMapModifiers()));
+				
+				put(super.lightIDAndOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getLightIDsAndOffsets()));
+				put(super.lightDiffuseAreaLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDiffuseAreaLights()));
+				put(super.lightDirectionalLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getDirectionalLights()));
+				put(super.lightImageLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getImageLights()));
+				put(super.lightImageLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getImageLightOffsets()));
+				put(super.lightPerezLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLights()));
+				put(super.lightPerezLightOffsetArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPerezLightOffsets()));
+				put(super.lightPointLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getPointLights()));
+				put(super.lightSpotLightArray = doGetCompatibleArray(compiledScene.getCompiledLightCache().getSpotLights()));
+				
+				put(this.primitiveArray = doGetCompatibleArray(compiledScene.getCompiledPrimitiveCache().getPrimitives()));
+				put(this.primitiveMatrix44FArray = doGetCompatibleArray(compiledScene.getCompiledPrimitiveCache().getMatrix44Fs()));
+				
+				super.lightCount = compiledScene.getCompiledLightCache().getLightCount();
+				super.lightDiffuseAreaLightCount = compiledScene.getCompiledLightCache().getDiffuseAreaLightCount();
+				super.lightDirectionalLightCount = compiledScene.getCompiledLightCache().getDirectionalLightCount();
+				super.lightImageLightCount = compiledScene.getCompiledLightCache().getImageLightCount();
+				super.lightPerezLightCount = compiledScene.getCompiledLightCache().getPerezLightCount();
+				super.lightPointLightCount = compiledScene.getCompiledLightCache().getPointLightCount();
+				super.lightSpotLightCount = compiledScene.getCompiledLightCache().getSpotLightCount();
+				
+				this.primitiveCount = compiledScene.getCompiledPrimitiveCache().getPrimitiveCount();
+			}
+		}
+	}
+	
+	/**
+	 * Requests to update this {@code AbstractSceneKernel} instance with data from the {@link CompiledScene} instance.
+	 */
+	public final void updateCompiledSceneRequest() {
+		this.isUpdateCompiledSceneRequested.set(true);
 	}
 	
 	/**
@@ -1708,6 +1809,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		super.lightSpotLightCount = compiledScene.getCompiledLightCache().getSpotLightCount();
 		
 		this.primitiveCount = compiledScene.getCompiledPrimitiveCache().getPrimitiveCount();
+		
+		this.compiledScene = compiledScene;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

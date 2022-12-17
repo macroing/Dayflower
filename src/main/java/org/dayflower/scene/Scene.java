@@ -994,7 +994,13 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code sceneObserver} is {@code null}
 	 */
 	public boolean addSceneObserver(final SceneObserver sceneObserver) {
-		return this.sceneObservers.add(Objects.requireNonNull(sceneObserver, "sceneObserver == null"));
+		Objects.requireNonNull(sceneObserver, "sceneObserver == null");
+		
+		if(!this.sceneObservers.contains(sceneObserver)) {
+			return this.sceneObservers.add(sceneObserver);
+		}
+		
+		return false;
 	}
 	
 	/**

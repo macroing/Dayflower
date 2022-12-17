@@ -143,7 +143,7 @@ final class CenteredVBoxes {
 				Scene scene = renderer.getScene();
 				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(renderer, shape), doGetQuaternionByShape(shape))));
 			}
-		}, renderer instanceof GPURenderer);
+		}, false);
 		centeredVBox.addSeparator();
 		centeredVBox.addButton("Build Acceleration Structure", actionEvent -> {
 			renderer.getScene().buildAccelerationStructure();

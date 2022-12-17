@@ -1915,14 +1915,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets a ray in {@link #ray3FArray_$private$8}.
 	 * <p>
-	 * The ray direction is constructed using a normalized representation of the current vector in {@link #vector3FArray_$private$3}. The origin is constructed by offsetting the surface intersection point in {@link #intersectionLHSArray_$private$24}
-	 * slightly, in the direction of the ray itself.
-	 * 
-	 * @param rayDirectionX the X-coordinate of the ray direction
-	 * @param rayDirectionY the Y-coordinate of the ray direction
-	 * @param rayDirectionZ the Z-coordinate of the ray direction
+	 * The ray direction is constructed using a normalized representation of the current vector in {@link #vector3FArray_$private$3}.
 	 */
-	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FLHS(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
+	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3FLHS() {
 		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
 		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
 		final float surfaceIntersectionPointZ = intersectionLHSGetSurfaceIntersectionPointZ();

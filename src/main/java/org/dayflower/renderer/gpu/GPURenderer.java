@@ -89,7 +89,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 				vector3FSetSampleHemisphereUniformDistribution(random(), random());
 				vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
 				
-				ray3FSetFromSurfaceIntersectionPointAndVector3FLHS(ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ());
+				ray3FSetFromSurfaceIntersectionPointAndVector3FLHS();
 				
 				if(maximumDistance > 0.0F) {
 					final float t = primitiveIntersectionTLHS();
@@ -257,7 +257,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 							
 							vector3FSet(incomingX, incomingY, incomingZ);
 							
-							ray3FSetFromSurfaceIntersectionPointAndVector3FLHS(rayDirectionX, rayDirectionY, rayDirectionZ);
+							ray3FSetFromSurfaceIntersectionPointAndVector3FLHS();
 							
 							final float russianRouletteThroughputR = throughputR * etaScale;
 							final float russianRouletteThroughputG = throughputG * etaScale;

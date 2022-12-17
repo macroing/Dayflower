@@ -92,7 +92,7 @@ public final class DayflowerApplication extends Application {
 	public DayflowerApplication() {
 		this.stage = new AtomicReference<>();
 		this.borderPane = new BorderPane();
-		this.executorService = Executors.newFixedThreadPool(4);
+		this.executorService = Executors.newFixedThreadPool(1);
 		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererTabPane -> rendererTabPane.getCombinedProgressiveImageOrderRenderer(), renderer -> new RendererTabPane(renderer, this.executorService, doGetStage()), (a, b) -> a.equals(b), renderer -> renderer.getScene().getName());
 		this.pathMenuBar = new PathMenuBar();
 	}

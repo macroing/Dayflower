@@ -2165,8 +2165,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalGZ = surfaceIntersectionPointZ - sphereCenterZ;
 		
 //		Compute the V-direction of the geometric orthonormal basis:
-		final float vGX = -PI_MULTIPLIED_BY_2 * surfaceNormalGY;
-		final float vGY = +PI_MULTIPLIED_BY_2 * surfaceNormalGX;
+		final float vGX = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 0.0F : -PI_MULTIPLIED_BY_2 * surfaceNormalGY;
+		final float vGY = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 1.0F : +PI_MULTIPLIED_BY_2 * surfaceNormalGX;
 		final float vGZ = 0.0F;
 		
 //		Compute the texture coordinates:
@@ -2215,8 +2215,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalGZ = surfaceIntersectionPointZ - sphereCenterZ;
 		
 //		Compute the V-direction of the geometric orthonormal basis:
-		final float vGX = -PI_MULTIPLIED_BY_2 * surfaceNormalGY;
-		final float vGY = +PI_MULTIPLIED_BY_2 * surfaceNormalGX;
+		final float vGX = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 0.0F : -PI_MULTIPLIED_BY_2 * surfaceNormalGY;
+		final float vGY = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 1.0F : +PI_MULTIPLIED_BY_2 * surfaceNormalGX;
 		final float vGZ = 0.0F;
 		
 //		Compute the texture coordinates:

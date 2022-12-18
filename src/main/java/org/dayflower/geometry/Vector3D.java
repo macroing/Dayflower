@@ -18,24 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.NEXT_DOWN_1_3;
-import static org.dayflower.utility.Doubles.NEXT_UP_1_1;
-import static org.dayflower.utility.Doubles.PI;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.acos;
-import static org.dayflower.utility.Doubles.atan2;
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.finiteOrDefault;
-import static org.dayflower.utility.Doubles.gamma;
-import static org.dayflower.utility.Doubles.getOrAdd;
-import static org.dayflower.utility.Doubles.isZero;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.saturate;
-import static org.dayflower.utility.Doubles.sin;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -47,9 +29,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Doubles;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.Randoms;
 
 /**
  * A {@code Vector3D} represents a vector with three {@code double}-based components.
@@ -181,11 +163,11 @@ public final class Vector3D implements Node {
 			return true;
 		} else if(!(object instanceof Vector3D)) {
 			return false;
-		} else if(!equal(this.x, Vector3D.class.cast(object).x)) {
+		} else if(!Doubles.equals(this.x, Vector3D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Vector3D.class.cast(object).y)) {
+		} else if(!Doubles.equals(this.y, Vector3D.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Vector3D.class.cast(object).z)) {
+		} else if(!Doubles.equals(this.z, Vector3D.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -200,8 +182,8 @@ public final class Vector3D implements Node {
 	public boolean isUnitVector() {
 		final double length = length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Doubles.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Doubles.NEXT_UP_1_1;
 		
 		return isLengthGTEThreshold && isLengthLTEThreshold;
 	}
@@ -214,11 +196,11 @@ public final class Vector3D implements Node {
 	public double cosPhi() {
 		final double sinTheta = sinTheta();
 		
-		if(equal(sinTheta, 0.0D)) {
+		if(Doubles.isZero(sinTheta)) {
 			return 1.0D;
 		}
 		
-		return saturate(this.x / sinTheta, -1.0D, 1.0D);
+		return Doubles.saturate(this.x / sinTheta, -1.0D, 1.0D);
 	}
 	
 	/**
@@ -245,7 +227,7 @@ public final class Vector3D implements Node {
 	 * @return the cosine of the angle theta in absolute form
 	 */
 	public double cosThetaAbs() {
-		return abs(cosTheta());
+		return Doubles.abs(cosTheta());
 	}
 	
 	/**
@@ -272,7 +254,7 @@ public final class Vector3D implements Node {
 	 * @return the length of this {@code Vector3D} instance
 	 */
 	public double length() {
-		return sqrt(lengthSquared());
+		return Doubles.sqrt(lengthSquared());
 	}
 	
 	/**
@@ -292,11 +274,11 @@ public final class Vector3D implements Node {
 	public double sinPhi() {
 		final double sinTheta = sinTheta();
 		
-		if(isZero(sinTheta)) {
+		if(Doubles.isZero(sinTheta)) {
 			return 0.0D;
 		}
 		
-		return saturate(this.y / sinTheta, -1.0D, 1.0D);
+		return Doubles.saturate(this.y / sinTheta, -1.0D, 1.0D);
 	}
 	
 	/**
@@ -314,7 +296,7 @@ public final class Vector3D implements Node {
 	 * @return the sine of the angle theta
 	 */
 	public double sinTheta() {
-		return sqrt(sinThetaSquared());
+		return Doubles.sqrt(sinThetaSquared());
 	}
 	
 	/**
@@ -323,7 +305,7 @@ public final class Vector3D implements Node {
 	 * @return the sine of the angle theta in squared form
 	 */
 	public double sinThetaSquared() {
-		return max(0.0D, 1.0D - cosThetaSquared());
+		return Doubles.max(0.0D, 1.0D - cosThetaSquared());
 	}
 	
 	/**
@@ -333,7 +315,7 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public double sphericalPhi() {
-		return getOrAdd(atan2(this.y, this.x), 0.0D, PI_MULTIPLIED_BY_2);
+		return Doubles.addLessThan(Doubles.atan2(this.y, this.x), 0.0D, Doubles.PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -343,7 +325,7 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public double sphericalTheta() {
-		return acos(saturate(this.z, -1.0D, 1.0D));
+		return Doubles.acos(Doubles.saturate(this.z, -1.0D, 1.0D));
 	}
 	
 	/**
@@ -361,7 +343,7 @@ public final class Vector3D implements Node {
 	 * @return the tangent of the angle theta in absolute form
 	 */
 	public double tanThetaAbs() {
-		return abs(tanTheta());
+		return Doubles.abs(tanTheta());
 	}
 	
 	/**
@@ -428,14 +410,14 @@ public final class Vector3D implements Node {
 	 */
 	public static Optional<Vector3D> refraction(final Vector3D direction, final Vector3D normal, final double eta) {
 		final double cosThetaI = dotProduct(direction, normal);
-		final double sinThetaISquared = max(0.0D, 1.0D - cosThetaI * cosThetaI);
+		final double sinThetaISquared = Doubles.max(0.0D, 1.0D - cosThetaI * cosThetaI);
 		final double sinThetaTSquared = eta * eta * sinThetaISquared;
 		
 		if(sinThetaTSquared >= 1.0D) {
 			return Optional.empty();
 		}
 		
-		final double cosThetaT = sqrt(1.0D - sinThetaTSquared);
+		final double cosThetaT = Doubles.sqrt(1.0D - sinThetaTSquared);
 		
 		return Optional.of(add(multiply(negate(direction), eta), multiply(normal, eta * cosThetaI - cosThetaT)));
 	}
@@ -450,7 +432,7 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
 	public static Vector3D absolute(final Vector3D v) {
-		return new Vector3D(abs(v.x), abs(v.y), abs(v.z));
+		return new Vector3D(Doubles.abs(v.x), Doubles.abs(v.y), Doubles.abs(v.z));
 	}
 	
 	/**
@@ -502,9 +484,9 @@ public final class Vector3D implements Node {
 	public static Vector3D computeV(final Vector3D w) {
 		final Vector3D wNormalized = normalize(w);
 		
-		final double absWNormalizedComponent1 = abs(wNormalized.x);
-		final double absWNormalizedComponent2 = abs(wNormalized.y);
-		final double absWNormalizedComponent3 = abs(wNormalized.z);
+		final double absWNormalizedComponent1 = Doubles.abs(wNormalized.x);
+		final double absWNormalizedComponent2 = Doubles.abs(wNormalized.y);
+		final double absWNormalizedComponent3 = Doubles.abs(wNormalized.z);
 		
 		if(absWNormalizedComponent1 < absWNormalizedComponent2 && absWNormalizedComponent1 < absWNormalizedComponent3) {
 			return normalize(new Vector3D(0.0D, wNormalized.z, -wNormalized.y));
@@ -598,14 +580,14 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D directionSpherical(final double u, final double v) {
-		final double phi = u * PI_MULTIPLIED_BY_2;
-		final double theta = v * PI;
+		final double phi = u * Doubles.PI_MULTIPLIED_BY_2;
+		final double theta = v * Doubles.PI;
 		
-		return directionSpherical(sin(theta), cos(theta), phi);
+		return directionSpherical(Doubles.sin(theta), Doubles.cos(theta), phi);
 		
 //		final double cosTheta = 1.0D - 2.0D * u;
-//		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
-//		final double phi = v * PI_MULTIPLIED_BY_2;
+//		final double sinTheta = Doubles.sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
+//		final double phi = v * Doubles.PI_MULTIPLIED_BY_2;
 		
 //		return directionSpherical(sinTheta, cosTheta, phi);
 	}
@@ -622,7 +604,7 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D directionSpherical(final double sinTheta, final double cosTheta, final double phi) {
-		return new Vector3D(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta);
+		return new Vector3D(sinTheta * Doubles.cos(phi), sinTheta * Doubles.sin(phi), cosTheta);
 	}
 	
 	/**
@@ -643,7 +625,7 @@ public final class Vector3D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D directionSpherical(final double sinTheta, final double cosTheta, final double phi, final Vector3D x, final Vector3D y, final Vector3D z) {
-		return add(multiply(x, sinTheta * cos(phi)), multiply(y, sinTheta * sin(phi)), multiply(z, cosTheta));
+		return add(multiply(x, sinTheta * Doubles.cos(phi)), multiply(y, sinTheta * Doubles.sin(phi)), multiply(z, cosTheta));
 	}
 	
 	/**
@@ -673,7 +655,7 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
 	public static Vector3D divide(final Vector3D vLHS, final double sRHS) {
-		return new Vector3D(finiteOrDefault(vLHS.x / sRHS, 0.0D), finiteOrDefault(vLHS.y / sRHS, 0.0D), finiteOrDefault(vLHS.z / sRHS, 0.0D));
+		return new Vector3D(Doubles.finiteOrDefault(vLHS.x / sRHS, 0.0D), Doubles.finiteOrDefault(vLHS.y / sRHS, 0.0D), Doubles.finiteOrDefault(vLHS.z / sRHS, 0.0D));
 	}
 	
 	/**
@@ -975,8 +957,8 @@ public final class Vector3D implements Node {
 	public static Vector3D normalize(final Vector3D v) {
 		final double length = v.length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Doubles.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Doubles.NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return v;
@@ -991,7 +973,7 @@ public final class Vector3D implements Node {
 	 * @return a random {@code Vector3D} instance
 	 */
 	public static Vector3D random() {
-		return new Vector3D(Doubles.random() * 2.0D - 1.0D, Doubles.random() * 2.0D - 1.0D, Doubles.random() * 2.0D - 1.0D);
+		return new Vector3D(Randoms.nextDouble() * 2.0D - 1.0D, Randoms.nextDouble() * 2.0D - 1.0D, Randoms.nextDouble() * 2.0D - 1.0D);
 	}
 	
 	/**
@@ -1427,7 +1409,7 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
 	public static double dotProductAbs(final Vector3D vLHS, final Vector3D vRHS) {
-		return abs(dotProduct(vLHS, vRHS));
+		return Doubles.abs(dotProduct(vLHS, vRHS));
 	}
 	
 	/**

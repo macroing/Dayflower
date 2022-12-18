@@ -18,10 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -41,6 +37,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Rectangle3D} is an implementation of {@link Shape3D} that represents a rectangle.
@@ -146,7 +143,7 @@ public final class Rectangle3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -370,7 +367,7 @@ public final class Rectangle3D implements Shape3D {
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double dotProduct = Vector3D.dotProduct(this.surfaceNormal, ray.getDirection());
 		
-		if(isZero(dotProduct)) {
+		if(Doubles.isZero(dotProduct)) {
 			return Double.NaN;
 		}
 		
@@ -508,8 +505,8 @@ public final class Rectangle3D implements Shape3D {
 		final double distanceCD = Point3D.distance(c, d);
 		final double distanceDA = Point3D.distance(d, a);
 		
-		final double deltaABCD = abs(distanceAB - distanceCD);
-		final double deltaBCDA = abs(distanceBC - distanceDA);
+		final double deltaABCD = Doubles.abs(distanceAB - distanceCD);
+		final double deltaBCDA = Doubles.abs(distanceBC - distanceDA);
 		
 		final boolean isValidABCD = deltaABCD <= 0.00001D;
 		final boolean isValidBCDA = deltaBCDA <= 0.00001D;

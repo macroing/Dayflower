@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -42,6 +39,7 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Polygon3D} is an implementation of {@link Shape3D} that represents a polygon.
@@ -123,7 +121,7 @@ public final class Polygon3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -322,7 +320,7 @@ public final class Polygon3D implements Shape3D {
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double dotProduct = Vector3D.dotProduct(this.surfaceNormal, ray.getDirection());
 		
-		if(isZero(dotProduct)) {
+		if(Doubles.isZero(dotProduct)) {
 			return Double.NaN;
 		}
 		

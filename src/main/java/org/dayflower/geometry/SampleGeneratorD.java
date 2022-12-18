@@ -18,22 +18,10 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.PI;
-import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_2;
-import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_4;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4_RECIPROCAL;
-import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.isZero;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.pow;
-import static org.dayflower.utility.Doubles.random;
-import static org.dayflower.utility.Doubles.sin;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
+
+import org.macroing.java.lang.Doubles;
+import org.macroing.java.util.Randoms;
 
 /**
  * The class {@code SampleGeneratorD} contains methods to generate {@code double}-based samples.
@@ -56,7 +44,7 @@ public final class SampleGeneratorD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorD.sampleDiskUniformDistribution(Doubles.random(), Doubles.random());
+	 * SampleGeneratorD.sampleDiskUniformDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	 * }
 	 * </pre>
 	 * 
@@ -64,7 +52,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D sampleDiskUniformDistribution() {
-		return sampleDiskUniformDistribution(random(), random());
+		return sampleDiskUniformDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	}
 	
 	/**
@@ -78,11 +66,11 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D sampleDiskUniformDistribution(final double u, final double v) {
-		final double r = sqrt(u);
-		final double theta = PI_MULTIPLIED_BY_2 * v;
+		final double r = Doubles.sqrt(u);
+		final double theta = Doubles.PI_MULTIPLIED_BY_2 * v;
 		
-		final double component1 = r * cos(theta);
-		final double component2 = r * sin(theta);
+		final double component1 = r * Doubles.cos(theta);
+		final double component2 = r * Doubles.sin(theta);
 		
 		return new Point2D(component1, component2);
 	}
@@ -95,7 +83,7 @@ public final class SampleGeneratorD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorD.sampleDiskUniformDistributionByConcentricMapping(Doubles.random(), Doubles.random());
+	 * SampleGeneratorD.sampleDiskUniformDistributionByConcentricMapping(Randoms.nextDouble(), Randoms.nextDouble());
 	 * }
 	 * </pre>
 	 * 
@@ -103,7 +91,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D sampleDiskUniformDistributionByConcentricMapping() {
-		return sampleDiskUniformDistributionByConcentricMapping(random(), random());
+		return sampleDiskUniformDistributionByConcentricMapping(Randoms.nextDouble(), Randoms.nextDouble());
 	}
 	
 	/**
@@ -139,7 +127,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D sampleDiskUniformDistributionByConcentricMapping(final double u, final double v, final double radius) {
-		if(isZero(u) && isZero(v)) {
+		if(Doubles.isZero(u) && Doubles.isZero(v)) {
 			return new Point2D();
 		}
 		
@@ -147,20 +135,20 @@ public final class SampleGeneratorD {
 		final double b = v * 2.0D - 1.0D;
 		
 		if(a * a > b * b) {
-			final double phi = PI_DIVIDED_BY_4 * (b / a);
+			final double phi = Doubles.PI_DIVIDED_BY_4 * (b / a);
 			final double r = radius * a;
 			
-			final double component1 = r * cos(phi);
-			final double component2 = r * sin(phi);
+			final double component1 = r * Doubles.cos(phi);
+			final double component2 = r * Doubles.sin(phi);
 			
 			return new Point2D(component1, component2);
 		}
 		
-		final double phi = PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
+		final double phi = Doubles.PI_DIVIDED_BY_2 - Doubles.PI_DIVIDED_BY_4 * (a / b);
 		final double r = radius * b;
 		
-		final double component1 = r * cos(phi);
-		final double component2 = r * sin(phi);
+		final double component1 = r * Doubles.cos(phi);
+		final double component2 = r * Doubles.sin(phi);
 		
 		return new Point2D(component1, component2);
 	}
@@ -173,7 +161,7 @@ public final class SampleGeneratorD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorD.sampleExactInverseTentFilter(Doubles.random(), Doubles.random());
+	 * SampleGeneratorD.sampleExactInverseTentFilter(Randoms.nextDouble(), Randoms.nextDouble());
 	 * }
 	 * </pre>
 	 * 
@@ -181,7 +169,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D sampleExactInverseTentFilter() {
-		return sampleExactInverseTentFilter(random(), random());
+		return sampleExactInverseTentFilter(Randoms.nextDouble(), Randoms.nextDouble());
 	}
 	
 	/**
@@ -198,8 +186,8 @@ public final class SampleGeneratorD {
 		final double x = u * 2.0D;
 		final double y = v * 2.0D;
 		
-		final double component1 = x < 1.0D ? sqrt(x) - 1.0D : 1.0D - sqrt(2.0D - x);
-		final double component2 = y < 1.0D ? sqrt(y) - 1.0D : 1.0D - sqrt(2.0D - y);
+		final double component1 = x < 1.0D ? Doubles.sqrt(x) - 1.0D : 1.0D - Doubles.sqrt(2.0D - x);
+		final double component2 = y < 1.0D ? Doubles.sqrt(y) - 1.0D : 1.0D - Doubles.sqrt(2.0D - y);
 		
 		return new Point2D(component1, component2);
 	}
@@ -212,7 +200,7 @@ public final class SampleGeneratorD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorD.sampleTriangleUniformDistribution(Doubles.random(), Doubles.random());
+	 * SampleGeneratorD.sampleTriangleUniformDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	 * }
 	 * </pre>
 	 * 
@@ -220,7 +208,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point3D sampleTriangleUniformDistribution() {
-		return sampleTriangleUniformDistribution(random(), random());
+		return sampleTriangleUniformDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	}
 	
 	/**
@@ -234,7 +222,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point3D sampleTriangleUniformDistribution(final double u, final double v) {
-		final double sqrtU = sqrt(u);
+		final double sqrtU = Doubles.sqrt(u);
 		
 		final double component1 = 1.0D - sqrtU;
 		final double component2 = v * sqrtU;
@@ -256,11 +244,11 @@ public final class SampleGeneratorD {
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleConeUniformDistribution(final double u, final double v, final double cosThetaMax) {
 		final double cosTheta = (1.0D - u) + u * cosThetaMax;
-		final double sinTheta = sqrt(1.0D - cosTheta * cosTheta);
-		final double phi = v * PI_MULTIPLIED_BY_2;
+		final double sinTheta = Doubles.sqrt(1.0D - cosTheta * cosTheta);
+		final double phi = v * Doubles.PI_MULTIPLIED_BY_2;
 		
-		final double component1 = sinTheta * cos(phi);
-		final double component2 = sinTheta * sin(phi);
+		final double component1 = sinTheta * Doubles.cos(phi);
+		final double component2 = sinTheta * Doubles.sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);
@@ -274,7 +262,7 @@ public final class SampleGeneratorD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorD.sampleHemisphereCosineDistribution(Doubles.random(), Doubles.random());
+	 * SampleGeneratorD.sampleHemisphereCosineDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	 * }
 	 * </pre>
 	 * 
@@ -282,7 +270,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleHemisphereCosineDistribution() {
-		return sampleHemisphereCosineDistribution(random(), random());
+		return sampleHemisphereCosineDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	}
 	
 	/**
@@ -300,7 +288,7 @@ public final class SampleGeneratorD {
 		
 		final double component1 = point.x;
 		final double component2 = point.y;
-		final double component3 = sqrt(max(0.0D, 1.0D - component1 * component1 - component2 * component2));
+		final double component3 = Doubles.sqrt(Doubles.max(0.0D, 1.0D - component1 * component1 - component2 * component2));
 		
 		return new Vector3D(component1, component2, component3);
 	}
@@ -313,7 +301,7 @@ public final class SampleGeneratorD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorD.sampleHemisphereCosineDistribution2(Doubles.random(), Doubles.random());
+	 * SampleGeneratorD.sampleHemisphereCosineDistribution2(Randoms.nextDouble(), Randoms.nextDouble());
 	 * }
 	 * </pre>
 	 * 
@@ -321,7 +309,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleHemisphereCosineDistribution2() {
-		return sampleHemisphereCosineDistribution2(random(), random());
+		return sampleHemisphereCosineDistribution2(Randoms.nextDouble(), Randoms.nextDouble());
 	}
 	
 	/**
@@ -335,12 +323,12 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleHemisphereCosineDistribution2(final double u, final double v) {
-		final double sinTheta = sqrt(v);
-		final double cosTheta = sqrt(1.0D - v);
-		final double phi = PI_MULTIPLIED_BY_2 * u;
+		final double sinTheta = Doubles.sqrt(v);
+		final double cosTheta = Doubles.sqrt(1.0D - v);
+		final double phi = Doubles.PI_MULTIPLIED_BY_2 * u;
 		
-		final double component1 = sinTheta * cos(phi);
-		final double component2 = sinTheta * sin(phi);
+		final double component1 = sinTheta * Doubles.cos(phi);
+		final double component2 = sinTheta * Doubles.sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);
@@ -354,7 +342,7 @@ public final class SampleGeneratorD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorD.sampleHemispherePowerCosineDistribution(Doubles.random(), Doubles.random());
+	 * SampleGeneratorD.sampleHemispherePowerCosineDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	 * }
 	 * </pre>
 	 * 
@@ -362,7 +350,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleHemispherePowerCosineDistribution() {
-		return sampleHemispherePowerCosineDistribution(random(), random());
+		return sampleHemispherePowerCosineDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	}
 	
 	/**
@@ -398,12 +386,12 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleHemispherePowerCosineDistribution(final double u, final double v, final double exponent) {
-		final double cosTheta = pow(1.0D - u, 1.0D / (exponent + 1.0D));
-		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
-		final double phi = PI_MULTIPLIED_BY_2 * v;
+		final double cosTheta = Doubles.pow(1.0D - u, 1.0D / (exponent + 1.0D));
+		final double sinTheta = Doubles.sqrt(Doubles.max(0.0D, 1.0D - cosTheta * cosTheta));
+		final double phi = Doubles.PI_MULTIPLIED_BY_2 * v;
 		
-		final double component1 = sinTheta * cos(phi);
-		final double component2 = sinTheta * sin(phi);
+		final double component1 = sinTheta * Doubles.cos(phi);
+		final double component2 = sinTheta * Doubles.sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);
@@ -417,7 +405,7 @@ public final class SampleGeneratorD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorD.sampleHemisphereUniformDistribution(Doubles.random(), Doubles.random());
+	 * SampleGeneratorD.sampleHemisphereUniformDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	 * }
 	 * </pre>
 	 * 
@@ -425,7 +413,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleHemisphereUniformDistribution() {
-		return sampleHemisphereUniformDistribution(random(), random());
+		return sampleHemisphereUniformDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	}
 	
 	/**
@@ -440,11 +428,11 @@ public final class SampleGeneratorD {
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleHemisphereUniformDistribution(final double u, final double v) {
 		final double cosTheta = u;
-		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
-		final double phi = PI_MULTIPLIED_BY_2 * v;
+		final double sinTheta = Doubles.sqrt(Doubles.max(0.0D, 1.0D - cosTheta * cosTheta));
+		final double phi = Doubles.PI_MULTIPLIED_BY_2 * v;
 		
-		final double component1 = sinTheta * cos(phi);
-		final double component2 = sinTheta * sin(phi);
+		final double component1 = sinTheta * Doubles.cos(phi);
+		final double component2 = sinTheta * Doubles.sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);
@@ -458,7 +446,7 @@ public final class SampleGeneratorD {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorD.sampleSphereUniformDistribution(Doubles.random(), Doubles.random());
+	 * SampleGeneratorD.sampleSphereUniformDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	 * }
 	 * </pre>
 	 * 
@@ -466,7 +454,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleSphereUniformDistribution() {
-		return sampleSphereUniformDistribution(random(), random());
+		return sampleSphereUniformDistribution(Randoms.nextDouble(), Randoms.nextDouble());
 	}
 	
 	/**
@@ -481,11 +469,11 @@ public final class SampleGeneratorD {
 //	TODO: Add Unit Tests!
 	public static Vector3D sampleSphereUniformDistribution(final double u, final double v) {
 		final double cosTheta = 1.0D - 2.0D * u;
-		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
-		final double phi = v * PI_MULTIPLIED_BY_2;
+		final double sinTheta = Doubles.sqrt(Doubles.max(0.0D, 1.0D - cosTheta * cosTheta));
+		final double phi = v * Doubles.PI_MULTIPLIED_BY_2;
 		
-		final double component1 = sinTheta * cos(phi);
-		final double component2 = sinTheta * sin(phi);
+		final double component1 = sinTheta * Doubles.cos(phi);
+		final double component2 = sinTheta * Doubles.sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);
@@ -501,7 +489,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static double coneUniformDistributionProbabilityDensityFunction(final double cosThetaMax) {
-		return 1.0D / (2.0D * PI * (1.0D - cosThetaMax));
+		return 1.0D / (2.0D * Doubles.PI * (1.0D - cosThetaMax));
 	}
 	
 	/**
@@ -514,7 +502,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static double hemisphereCosineDistributionProbabilityDensityFunction(final double cosTheta) {
-		return cosTheta * PI_RECIPROCAL;
+		return cosTheta * Doubles.PI_RECIPROCAL;
 	}
 	
 	/**
@@ -526,7 +514,7 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static double hemisphereUniformDistributionProbabilityDensityFunction() {
-		return PI_MULTIPLIED_BY_2_RECIPROCAL;
+		return Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
 	}
 	
 	/**
@@ -573,6 +561,6 @@ public final class SampleGeneratorD {
 	 */
 //	TODO: Add Unit Tests!
 	public static double sphereUniformDistributionProbabilityDensityFunction() {
-		return PI_MULTIPLIED_BY_4_RECIPROCAL;
+		return Doubles.PI_MULTIPLIED_BY_4_RECIPROCAL;
 	}
 }

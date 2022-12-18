@@ -18,7 +18,7 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.isNaN;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code BoundingVolume3D} is a 3-dimensional extension of {@link BoundingVolume} that adds additional methods that operates on {@code double}-based data types.
@@ -147,6 +147,6 @@ public interface BoundingVolume3D extends BoundingVolume {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	default boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		return !isNaN(intersection(ray, tMinimum, tMaximum));
+		return !Doubles.isNaN(intersection(ray, tMinimum, tMaximum));
 	}
 }

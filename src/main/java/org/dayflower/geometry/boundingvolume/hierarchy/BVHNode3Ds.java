@@ -18,13 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume.hierarchy;
 
-import static org.dayflower.utility.Doubles.MAX_VALUE;
-import static org.dayflower.utility.Doubles.MIN_VALUE;
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +25,7 @@ import java.util.List;
 import org.dayflower.geometry.BoundingVolume3D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Shape3D;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@link BVHNode3D} instances.
@@ -84,7 +78,7 @@ public final class BVHNode3Ds {
 		final double sideZ = maximum.z - minimum.z;
 		
 		double minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
-		double bestSplit = MAX_VALUE;
+		double bestSplit = Doubles.MAX_VALUE;
 		
 		int bestAxis = -1;
 		
@@ -92,7 +86,7 @@ public final class BVHNode3Ds {
 			final double start = minimum.getComponent(axis);
 			final double stop  = maximum.getComponent(axis);
 			
-			if(abs(stop - start) < 1.0e-4D) {
+			if(Doubles.abs(stop - start) < 1.0e-4D) {
 				continue;
 			}
 			
@@ -100,22 +94,22 @@ public final class BVHNode3Ds {
 			
 			for(double oldSplit = 0.0D, newSplit = start + step; newSplit < stop - step; oldSplit = newSplit, newSplit += step) {
 //				The following test prevents an infinite loop from occurring (it might not be necessary anymore, due to a fix earlier):
-				if(equal(oldSplit, newSplit)) {
+				if(Doubles.equals(oldSplit, newSplit)) {
 					break;
 				}
 				
-				double maximumLX = MIN_VALUE;
-				double maximumLY = MIN_VALUE;
-				double maximumLZ = MIN_VALUE;
-				double minimumLX = MAX_VALUE;
-				double minimumLY = MAX_VALUE;
-				double minimumLZ = MAX_VALUE;
-				double maximumRX = MIN_VALUE;
-				double maximumRY = MIN_VALUE;
-				double maximumRZ = MIN_VALUE;
-				double minimumRX = MAX_VALUE;
-				double minimumRY = MAX_VALUE;
-				double minimumRZ = MAX_VALUE;
+				double maximumLX = Doubles.MIN_VALUE;
+				double maximumLY = Doubles.MIN_VALUE;
+				double maximumLZ = Doubles.MIN_VALUE;
+				double minimumLX = Doubles.MAX_VALUE;
+				double minimumLY = Doubles.MAX_VALUE;
+				double minimumLZ = Doubles.MAX_VALUE;
+				double maximumRX = Doubles.MIN_VALUE;
+				double maximumRY = Doubles.MIN_VALUE;
+				double maximumRZ = Doubles.MIN_VALUE;
+				double minimumRX = Doubles.MAX_VALUE;
+				double minimumRY = Doubles.MAX_VALUE;
+				double minimumRZ = Doubles.MAX_VALUE;
 				
 				int countL = 0;
 				int countR = 0;
@@ -130,21 +124,21 @@ public final class BVHNode3Ds {
 					final double value = mid.getComponent(axis);
 					
 					if(value < newSplit) {
-						maximumLX = max(maximumLX, max.x);
-						maximumLY = max(maximumLY, max.y);
-						maximumLZ = max(maximumLZ, max.z);
-						minimumLX = min(minimumLX, min.x);
-						minimumLY = min(minimumLY, min.y);
-						minimumLZ = min(minimumLZ, min.z);
+						maximumLX = Doubles.max(maximumLX, max.x);
+						maximumLY = Doubles.max(maximumLY, max.y);
+						maximumLZ = Doubles.max(maximumLZ, max.z);
+						minimumLX = Doubles.min(minimumLX, min.x);
+						minimumLY = Doubles.min(minimumLY, min.y);
+						minimumLZ = Doubles.min(minimumLZ, min.z);
 						
 						countL++;
 					} else {
-						maximumRX = max(maximumRX, max.x);
-						maximumRY = max(maximumRY, max.y);
-						maximumRZ = max(maximumRZ, max.z);
-						minimumRX = min(minimumRX, min.x);
-						minimumRY = min(minimumRY, min.y);
-						minimumRZ = min(minimumRZ, min.z);
+						maximumRX = Doubles.max(maximumRX, max.x);
+						maximumRY = Doubles.max(maximumRY, max.y);
+						maximumRZ = Doubles.max(maximumRZ, max.z);
+						minimumRX = Doubles.min(minimumRX, min.x);
+						minimumRY = Doubles.min(minimumRY, min.y);
+						minimumRZ = Doubles.min(minimumRZ, min.z);
 						
 						countR++;
 					}
@@ -187,18 +181,18 @@ public final class BVHNode3Ds {
 		final List<BVHItem3D<T>> processableBVHItemsL = new ArrayList<>(sizeHalf);
 		final List<BVHItem3D<T>> processableBVHItemsR = new ArrayList<>(sizeHalf);
 		
-		double maximumLX = MIN_VALUE;
-		double maximumLY = MIN_VALUE;
-		double maximumLZ = MIN_VALUE;
-		double minimumLX = MAX_VALUE;
-		double minimumLY = MAX_VALUE;
-		double minimumLZ = MAX_VALUE;
-		double maximumRX = MIN_VALUE;
-		double maximumRY = MIN_VALUE;
-		double maximumRZ = MIN_VALUE;
-		double minimumRX = MAX_VALUE;
-		double minimumRY = MAX_VALUE;
-		double minimumRZ = MAX_VALUE;
+		double maximumLX = Doubles.MIN_VALUE;
+		double maximumLY = Doubles.MIN_VALUE;
+		double maximumLZ = Doubles.MIN_VALUE;
+		double minimumLX = Doubles.MAX_VALUE;
+		double minimumLY = Doubles.MAX_VALUE;
+		double minimumLZ = Doubles.MAX_VALUE;
+		double maximumRX = Doubles.MIN_VALUE;
+		double maximumRY = Doubles.MIN_VALUE;
+		double maximumRZ = Doubles.MIN_VALUE;
+		double minimumRX = Doubles.MAX_VALUE;
+		double minimumRY = Doubles.MAX_VALUE;
+		double minimumRZ = Doubles.MAX_VALUE;
 		
 		for(final BVHItem3D<T> processableBVHItem : processableBVHItems) {
 			final BoundingVolume3D boundingVolume = processableBVHItem.getBoundingVolume();
@@ -212,21 +206,21 @@ public final class BVHNode3Ds {
 			if(value < bestSplit) {
 				processableBVHItemsL.add(processableBVHItem);
 				
-				maximumLX = max(maximumLX, max.x);
-				maximumLY = max(maximumLY, max.y);
-				maximumLZ = max(maximumLZ, max.z);
-				minimumLX = min(minimumLX, min.x);
-				minimumLY = min(minimumLY, min.y);
-				minimumLZ = min(minimumLZ, min.z);
+				maximumLX = Doubles.max(maximumLX, max.x);
+				maximumLY = Doubles.max(maximumLY, max.y);
+				maximumLZ = Doubles.max(maximumLZ, max.z);
+				minimumLX = Doubles.min(minimumLX, min.x);
+				minimumLY = Doubles.min(minimumLY, min.y);
+				minimumLZ = Doubles.min(minimumLZ, min.z);
 			} else {
 				processableBVHItemsR.add(processableBVHItem);
 				
-				maximumRX = max(maximumRX, max.x);
-				maximumRY = max(maximumRY, max.y);
-				maximumRZ = max(maximumRZ, max.z);
-				minimumRX = min(minimumRX, min.x);
-				minimumRY = min(minimumRY, min.y);
-				minimumRZ = min(minimumRZ, min.z);
+				maximumRX = Doubles.max(maximumRX, max.x);
+				maximumRY = Doubles.max(maximumRY, max.y);
+				maximumRZ = Doubles.max(maximumRZ, max.z);
+				minimumRX = Doubles.min(minimumRX, min.x);
+				minimumRY = Doubles.min(minimumRY, min.y);
+				minimumRZ = Doubles.min(minimumRZ, min.z);
 			}
 		}
 		

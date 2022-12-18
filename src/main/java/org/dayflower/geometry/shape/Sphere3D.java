@@ -18,17 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.MAX_VALUE;
-import static org.dayflower.utility.Doubles.PI;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Doubles.isInfinite;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isZero;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.solveQuadraticSystem;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -49,6 +38,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Sphere3D} is an implementation of {@link Shape3D} that represents a sphere.
@@ -157,7 +147,7 @@ public final class Sphere3D implements Shape3D {
 				
 				final Vector3D incoming = Vector3D.direction(surfaceIntersectionPoint, point);
 				
-				if(isZero(incoming.lengthSquared())) {
+				if(Doubles.isZero(incoming.lengthSquared())) {
 					return SurfaceSample3D.EMPTY;
 				}
 				
@@ -166,7 +156,7 @@ public final class Sphere3D implements Shape3D {
 				
 				final double probabilityDensityFunctionValue = Point3D.distanceSquared(point, surfaceIntersectionPoint) / Vector3D.dotProductAbs(surfaceSample.getSurfaceNormal(), incomingNormalizedNegated);
 				
-				if(isInfinite(probabilityDensityFunctionValue)) {
+				if(Doubles.isInfinite(probabilityDensityFunctionValue)) {
 					return SurfaceSample3D.EMPTY;
 				}
 				
@@ -190,12 +180,12 @@ public final class Sphere3D implements Shape3D {
 		final double sinThetaMax = radius * distanceReciprocal;
 		final double sinThetaMaxSquared = sinThetaMax * sinThetaMax;
 		final double sinThetaMaxReciprocal = 1.0D / sinThetaMax;
-		final double cosThetaMax = sqrt(max(0.0D, 1.0D - sinThetaMaxSquared));
-		final double cosTheta = sinThetaMaxSquared < 0.00068523D ? sqrt(1.0D - sinThetaMaxSquared * sample.x) : (cosThetaMax - 1.0D) * sample.x + 1.0D;
+		final double cosThetaMax = Doubles.sqrt(Doubles.max(0.0D, 1.0D - sinThetaMaxSquared));
+		final double cosTheta = sinThetaMaxSquared < 0.00068523D ? Doubles.sqrt(1.0D - sinThetaMaxSquared * sample.x) : (cosThetaMax - 1.0D) * sample.x + 1.0D;
 		final double sinThetaSquared = sinThetaMaxSquared < 0.00068523D ? sinThetaMaxSquared * sample.x : 1.0D - cosTheta * cosTheta;
-		final double cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * sqrt(max(0.0D, 1.0D - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
-		final double sinAlpha = sqrt(max(0.0D, 1.0D - cosAlpha * cosAlpha));
-		final double phi = sample.y * 2.0D * PI;
+		final double cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * Doubles.sqrt(Doubles.max(0.0D, 1.0D - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
+		final double sinAlpha = Doubles.sqrt(Doubles.max(0.0D, 1.0D - cosAlpha * cosAlpha));
+		final double phi = sample.y * 2.0D * Doubles.PI;
 		
 		final Vector3D sphericalDirection = Vector3D.directionSpherical(sinAlpha, cosAlpha, phi, x, y, z);
 		
@@ -226,7 +216,7 @@ public final class Sphere3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -342,14 +332,14 @@ public final class Sphere3D implements Shape3D {
 		
 		final Ray3D ray = surfaceIntersection.createRay(incoming);
 		
-		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, MAX_VALUE);
+		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, Doubles.MAX_VALUE);
 		
 		if(optionalSurfaceIntersectionShape.isPresent()) {
 			final SurfaceIntersection3D surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();
 			
 			final double probabilityDensityFunctionValue = Point3D.distanceSquared(surfaceIntersectionShape.getSurfaceIntersectionPoint(), surfaceIntersection.getSurfaceIntersectionPoint()) / Vector3D.dotProductAbs(surfaceIntersectionShape.getSurfaceNormalS(), Vector3D.negate(incoming)) * getSurfaceArea();
 			
-			if(!isInfinite(probabilityDensityFunctionValue)) {
+			if(!Doubles.isInfinite(probabilityDensityFunctionValue)) {
 				return probabilityDensityFunctionValue;
 			}
 		}
@@ -364,7 +354,7 @@ public final class Sphere3D implements Shape3D {
 	 */
 	@Override
 	public double getSurfaceArea() {
-		return PI_MULTIPLIED_BY_4;
+		return Doubles.PI_MULTIPLIED_BY_4;
 	}
 	
 	/**
@@ -389,12 +379,12 @@ public final class Sphere3D implements Shape3D {
 		final double b = 2.0D * Vector3D.dotProduct(centerToOrigin, direction);
 		final double c = centerToOrigin.lengthSquared() - 1.0D;
 		
-		final double[] ts = solveQuadraticSystem(a, b, c);
+		final double[] ts = Doubles.solveQuadraticSystem(a, b, c);
 		
 		for(int i = 0; i < ts.length; i++) {
 			final double t = ts[i];
 			
-			if(isNaN(t)) {
+			if(Doubles.isNaN(t)) {
 				return Double.NaN;
 			}
 			
@@ -463,7 +453,7 @@ public final class Sphere3D implements Shape3D {
 	
 	private static OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
 		final Vector3D w = Vector3D.directionNormalized(new Point3D(), surfaceIntersectionPoint);
-		final Vector3D v = new Vector3D(-PI_MULTIPLIED_BY_2 * w.y, PI_MULTIPLIED_BY_2 * w.x, 0.0D);
+		final Vector3D v = new Vector3D(-Doubles.PI_MULTIPLIED_BY_2 * w.y, Doubles.PI_MULTIPLIED_BY_2 * w.x, 0.0D);
 		
 		return new OrthonormalBasis33D(w, v);
 	}

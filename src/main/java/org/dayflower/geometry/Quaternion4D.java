@@ -18,15 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.NEXT_DOWN_1_3;
-import static org.dayflower.utility.Doubles.NEXT_UP_1_1;
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.atan2;
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.sin;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -35,7 +26,7 @@ import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -161,13 +152,13 @@ public final class Quaternion4D implements Node {
 			return true;
 		} else if(!(object instanceof Quaternion4D)) {
 			return false;
-		} else if(!equal(this.x, Quaternion4D.class.cast(object).x)) {
+		} else if(!Doubles.equals(this.x, Quaternion4D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Quaternion4D.class.cast(object).y)) {
+		} else if(!Doubles.equals(this.y, Quaternion4D.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Quaternion4D.class.cast(object).z)) {
+		} else if(!Doubles.equals(this.z, Quaternion4D.class.cast(object).z)) {
 			return false;
-		} else if(!equal(this.w, Quaternion4D.class.cast(object).w)) {
+		} else if(!Doubles.equals(this.w, Quaternion4D.class.cast(object).w)) {
 			return false;
 		} else {
 			return true;
@@ -180,7 +171,7 @@ public final class Quaternion4D implements Node {
 	 * @return the length of this {@code Quaternion4D} instance
 	 */
 	public double length() {
-		return sqrt(lengthSquared());
+		return Doubles.sqrt(lengthSquared());
 	}
 	
 	/**
@@ -291,8 +282,8 @@ public final class Quaternion4D implements Node {
 	public static Quaternion4D from(final AngleD a, final Vector3D v) {
 		final AngleD aHalf = AngleD.half(a);
 		
-		final double sin = sin(aHalf.getRadians());
-		final double cos = cos(aHalf.getRadians());
+		final double sin = Doubles.sin(aHalf.getRadians());
+		final double cos = Doubles.cos(aHalf.getRadians());
 		
 		final double x = v.x * sin;
 		final double y = v.y * sin;
@@ -324,7 +315,7 @@ public final class Quaternion4D implements Node {
 		final double element33 = m.element33;
 		
 		if(element11 + element22 + element33 > 0.0D) {
-			final double scalar = 0.5D / sqrt(element11 + element22 + element33 + 1.0D);
+			final double scalar = 0.5D / Doubles.sqrt(element11 + element22 + element33 + 1.0D);
 			
 			final double x = (element23 - element32) * scalar;
 			final double y = (element31 - element13) * scalar;
@@ -333,7 +324,7 @@ public final class Quaternion4D implements Node {
 			
 			return normalize(new Quaternion4D(x, y, z, w));
 		} else if(element11 > element22 && element11 > element33) {
-			final double scalar = 2.0D * sqrt(1.0D + element11 - element22 - element23);
+			final double scalar = 2.0D * Doubles.sqrt(1.0D + element11 - element22 - element23);
 			final double scalarReciprocal = 1.0D / scalar;
 			
 			final double x = 0.25D * scalar;
@@ -343,7 +334,7 @@ public final class Quaternion4D implements Node {
 			
 			return normalize(new Quaternion4D(x, y, z, w));
 		} else if(element22 > element33) {
-			final double scalar = 2.0D * sqrt(1.0D + element22 - element11 - element33);
+			final double scalar = 2.0D * Doubles.sqrt(1.0D + element22 - element11 - element33);
 			final double scalarReciprocal = 1.0D / scalar;
 			
 			final double x = (element21 + element12) * scalarReciprocal;
@@ -353,7 +344,7 @@ public final class Quaternion4D implements Node {
 			
 			return normalize(new Quaternion4D(x, y, z, w));
 		} else {
-			final double scalar = 2.0F * sqrt(1.0D + element33 - element11 - element22);
+			final double scalar = 2.0F * Doubles.sqrt(1.0D + element33 - element11 - element22);
 			final double scalarReciprocal = 1.0D / scalar;
 			
 			final double x = (element31 + element13) * scalarReciprocal;
@@ -522,17 +513,17 @@ public final class Quaternion4D implements Node {
 		final double cos = dotProduct(qLHS, qRHS);
 		
 		final double x = isInterpolatingShortest && cos < 0.0D ? -cos : cos;
-		final double y = sqrt(1.0D - x * x);
+		final double y = Doubles.sqrt(1.0D - x * x);
 		
 		final Quaternion4D quaternion1 = isInterpolatingShortest && cos < 0.0D ? negate(qRHS) : qRHS;
 		
-		if(abs(x) >= 1.0D - 1000.0D) {
+		if(Doubles.abs(x) >= 1.0D - 1000.0D) {
 			return linearInterpolationNormalized(qLHS, quaternion1, t);
 		}
 		
-		final double theta = atan2(y, x);
+		final double theta = Doubles.atan2(y, x);
 		
-		return add(multiply(qLHS, sin((1.0D - t) * theta) / y), multiply(quaternion1, sin(t * theta) / y));
+		return add(multiply(qLHS, Doubles.sin((1.0D - t) * theta) / y), multiply(quaternion1, Doubles.sin(t * theta) / y));
 	}
 	
 	/**
@@ -628,8 +619,8 @@ public final class Quaternion4D implements Node {
 	public static Quaternion4D normalize(final Quaternion4D q) {
 		final double length = q.length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Doubles.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Doubles.NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return q;

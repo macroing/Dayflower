@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.solveQuadraticSystem;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,6 +35,7 @@ import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Cone3D} is an implementation of {@link Shape3D} that represents a cone.
@@ -186,7 +182,7 @@ public final class Cone3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -247,9 +243,9 @@ public final class Cone3D implements Shape3D {
 			return false;
 		} else if(!Objects.equals(this.phiMax, Cone3D.class.cast(object).phiMax)) {
 			return false;
-		} else if(!equal(this.radius, Cone3D.class.cast(object).radius)) {
+		} else if(!Doubles.equals(this.radius, Cone3D.class.cast(object).radius)) {
 			return false;
-		} else if(!equal(this.zMax, Cone3D.class.cast(object).zMax)) {
+		} else if(!Doubles.equals(this.zMax, Cone3D.class.cast(object).zMax)) {
 			return false;
 		} else {
 			return true;
@@ -274,7 +270,7 @@ public final class Cone3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
-		return this.radius * sqrt((this.zMax * this.zMax) + (this.radius * this.radius)) * this.phiMax.getRadians() / 2.0D;
+		return this.radius * Doubles.sqrt((this.zMax * this.zMax) + (this.radius * this.radius)) * this.phiMax.getRadians() / 2.0D;
 	}
 	
 	/**
@@ -312,12 +308,12 @@ public final class Cone3D implements Shape3D {
 		final double b = 2.0D * (d.x * o.x + d.y * o.y - k * d.z * (o.z - this.zMax));
 		final double c = o.x * o.x + o.y * o.y - k * (o.z - this.zMax) * (o.z - this.zMax);
 		
-		final double[] ts = solveQuadraticSystem(a, b, c);
+		final double[] ts = Doubles.solveQuadraticSystem(a, b, c);
 		
 		for(int i = 0; i < ts.length; i++) {
 			final double t = ts[i];
 			
-			if(isNaN(t)) {
+			if(Doubles.isNaN(t)) {
 				return Double.NaN;
 			}
 			

@@ -18,10 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -48,6 +44,7 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Triangle3D} is an implementation of {@link Shape3D} that represents a triangle.
@@ -217,7 +214,7 @@ public final class Triangle3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -822,9 +819,9 @@ public final class Triangle3D implements Shape3D {
 		 */
 //		TODO: Add Unit Tests!
 		public boolean isInsideViewFrustum() {
-			final boolean isInsideViewFrustumX = abs(this.position.x) <= abs(this.position.w);
-			final boolean isInsideViewFrustumY = abs(this.position.y) <= abs(this.position.w);
-			final boolean isInsideViewFrustumZ = abs(this.position.z) <= abs(this.position.w);
+			final boolean isInsideViewFrustumX = Doubles.abs(this.position.x) <= Doubles.abs(this.position.w);
+			final boolean isInsideViewFrustumY = Doubles.abs(this.position.y) <= Doubles.abs(this.position.w);
+			final boolean isInsideViewFrustumZ = Doubles.abs(this.position.z) <= Doubles.abs(this.position.w);
 			
 			return isInsideViewFrustumX && isInsideViewFrustumY && isInsideViewFrustumZ;
 		}
@@ -994,7 +991,7 @@ public final class Triangle3D implements Shape3D {
 		
 		final double determinant = Vector2D.crossProduct(textureCoordinatesCA, textureCoordinatesCB);
 		
-		if(isZero(determinant)) {
+		if(Doubles.isZero(determinant)) {
 			return new OrthonormalBasis33D(w);
 		}
 		

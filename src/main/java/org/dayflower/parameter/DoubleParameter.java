@@ -18,10 +18,9 @@
  */
 package org.dayflower.parameter;
 
-import static org.dayflower.utility.Doubles.equal;
-
 import java.util.Objects;
 
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.util.concurrent.atomic.AtomicDouble;
 
 /**
@@ -99,7 +98,7 @@ public final class DoubleParameter extends Parameter {
 			return false;
 		} else if(!Objects.equals(getName(), DoubleParameter.class.cast(object).getName())) {
 			return false;
-		} else if(!equal(getValue(), DoubleParameter.class.cast(object).getValue())) {
+		} else if(!Doubles.equals(getValue(), DoubleParameter.class.cast(object).getValue())) {
 			return false;
 		} else {
 			return true;

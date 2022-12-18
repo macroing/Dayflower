@@ -1,5 +1,11 @@
 2022-12-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* CHANGE:	Replace most methods and constants in the Doubles class in the Utility API with methods and constants from the Doubles and Randoms classes in Macroing Java.
+	* REMOVE:	Remove the method radicalInverse(int, long) from the Floats class.
+	* REMOVE:	Remove the Longs class.
+
+2022-12-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
 	* ADD:		Add initial support for creating primitives via the GUI in the GPU renderer.
 
 2022-12-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>

@@ -18,18 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.MAX_VALUE;
-import static org.dayflower.utility.Doubles.MIN_VALUE;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Doubles.atan2;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.getOrAdd;
-import static org.dayflower.utility.Doubles.isZero;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
-import static org.dayflower.utility.Doubles.nextDown;
-import static org.dayflower.utility.Doubles.nextUp;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -39,9 +27,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Doubles;
 import org.dayflower.utility.ParameterArguments;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -193,11 +180,11 @@ public final class Point3D implements Node {
 			return true;
 		} else if(!(object instanceof Point3D)) {
 			return false;
-		} else if(!equal(this.x, Point3D.class.cast(object).x)) {
+		} else if(!Doubles.equals(this.x, Point3D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Point3D.class.cast(object).y)) {
+		} else if(!Doubles.equals(this.y, Point3D.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Point3D.class.cast(object).z)) {
+		} else if(!Doubles.equals(this.z, Point3D.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -232,7 +219,7 @@ public final class Point3D implements Node {
 	 * @return the spherical phi angle
 	 */
 	public double sphericalPhi() {
-		return getOrAdd(atan2(this.y, this.x), 0.0D, PI_MULTIPLIED_BY_2);
+		return Doubles.addLessThan(Doubles.atan2(this.y, this.x), 0.0D, Doubles.PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -429,7 +416,7 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the largest component values
 	 */
 	public static Point3D maximum() {
-		return new Point3D(MAX_VALUE, MAX_VALUE, MAX_VALUE);
+		return new Point3D(Doubles.MAX_VALUE, Doubles.MAX_VALUE, Doubles.MAX_VALUE);
 	}
 	
 	/**
@@ -443,7 +430,7 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point3D maximum(final Point3D a, final Point3D b) {
-		return new Point3D(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
+		return new Point3D(Doubles.max(a.x, b.x), Doubles.max(a.y, b.y), Doubles.max(a.z, b.z));
 	}
 	
 	/**
@@ -458,7 +445,7 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point3D maximum(final Point3D a, final Point3D b, final Point3D c) {
-		return new Point3D(max(a.x, b.x, c.x), max(a.y, b.y, c.y), max(a.z, b.z, c.z));
+		return new Point3D(Doubles.max(a.x, b.x, c.x), Doubles.max(a.y, b.y, c.y), Doubles.max(a.z, b.z, c.z));
 	}
 	
 	/**
@@ -474,7 +461,7 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point3D maximum(final Point3D a, final Point3D b, final Point3D c, final Point3D d) {
-		return new Point3D(max(a.x, b.x, c.x, d.x), max(a.y, b.y, c.y, d.y), max(a.z, b.z, c.z, d.z));
+		return new Point3D(Doubles.max(a.x, b.x, c.x, d.x), Doubles.max(a.y, b.y, c.y, d.y), Doubles.max(a.z, b.z, c.z, d.z));
 	}
 	
 	/**
@@ -497,7 +484,7 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the smallest component values
 	 */
 	public static Point3D minimum() {
-		return new Point3D(MIN_VALUE, MIN_VALUE, MIN_VALUE);
+		return new Point3D(Doubles.MIN_VALUE, Doubles.MIN_VALUE, Doubles.MIN_VALUE);
 	}
 	
 	/**
@@ -511,7 +498,7 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point3D minimum(final Point3D a, final Point3D b) {
-		return new Point3D(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
+		return new Point3D(Doubles.min(a.x, b.x), Doubles.min(a.y, b.y), Doubles.min(a.z, b.z));
 	}
 	
 	/**
@@ -526,7 +513,7 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point3D minimum(final Point3D a, final Point3D b, final Point3D c) {
-		return new Point3D(min(a.x, b.x, c.x), min(a.y, b.y, c.y), min(a.z, b.z, c.z));
+		return new Point3D(Doubles.min(a.x, b.x, c.x), Doubles.min(a.y, b.y, c.y), Doubles.min(a.z, b.z, c.z));
 	}
 	
 	/**
@@ -542,7 +529,7 @@ public final class Point3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point3D minimum(final Point3D a, final Point3D b, final Point3D c, final Point3D d) {
-		return new Point3D(min(a.x, b.x, c.x, d.x), min(a.y, b.y, c.y, d.y), min(a.z, b.z, c.z, d.z));
+		return new Point3D(Doubles.min(a.x, b.x, c.x, d.x), Doubles.min(a.y, b.y, c.y, d.y), Doubles.min(a.z, b.z, c.z, d.z));
 	}
 	
 	/**
@@ -565,9 +552,9 @@ public final class Point3D implements Node {
 		
 		final Point3D pointOffset = add(point, offsetCorrectlyOriented);
 		
-		final double x = offset.x > 0.0D ? nextUp(pointOffset.x) : offset.x < 0.0D ? nextDown(pointOffset.x) : pointOffset.x;
-		final double y = offset.y > 0.0D ? nextUp(pointOffset.y) : offset.y < 0.0D ? nextDown(pointOffset.y) : pointOffset.y;
-		final double z = offset.z > 0.0D ? nextUp(pointOffset.z) : offset.z < 0.0D ? nextDown(pointOffset.z) : pointOffset.z;
+		final double x = offset.x > 0.0D ? Doubles.nextUp(pointOffset.x) : offset.x < 0.0D ? Doubles.nextDown(pointOffset.x) : pointOffset.x;
+		final double y = offset.y > 0.0D ? Doubles.nextUp(pointOffset.y) : offset.y < 0.0D ? Doubles.nextDown(pointOffset.y) : pointOffset.y;
+		final double z = offset.z > 0.0D ? Doubles.nextUp(pointOffset.z) : offset.z < 0.0D ? Doubles.nextDown(pointOffset.z) : pointOffset.z;
 		
 		return new Point3D(x, y, z);
 	}
@@ -694,7 +681,7 @@ public final class Point3D implements Node {
 		final double z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34;
 		final double w = mLHS.element41 * pRHS.x + mLHS.element42 * pRHS.y + mLHS.element43 * pRHS.z + mLHS.element44;
 		
-		return equal(w, 1.0D) || isZero(w) ? new Point3D(x, y, z) : new Point3D(x / w, y / w, z / w);
+		return Doubles.equals(w, 1.0D) || Doubles.isZero(w) ? new Point3D(x, y, z) : new Point3D(x / w, y / w, z / w);
 	}
 	
 	/**
@@ -751,7 +738,7 @@ public final class Point3D implements Node {
 			
 			final Vector3D v2 = Vector3D.directionNormalized(p0, pI);
 			
-			if(!isZero(Vector3D.tripleProduct(v0, v2, v1))) {
+			if(!Doubles.isZero(Vector3D.tripleProduct(v0, v2, v1))) {
 				return false;
 			}
 		}

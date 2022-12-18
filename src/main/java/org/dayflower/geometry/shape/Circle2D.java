@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.equal;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -30,7 +28,7 @@ import org.dayflower.geometry.Shape2D;
 import org.dayflower.geometry.Vector2D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -218,7 +216,7 @@ public final class Circle2D implements Shape2D {
 			return false;
 		} else if(!Objects.equals(this.center, Circle2D.class.cast(object).center)) {
 			return false;
-		} else if(!equal(this.radius, Circle2D.class.cast(object).radius)) {
+		} else if(!Doubles.equals(this.radius, Circle2D.class.cast(object).radius)) {
 			return false;
 		} else {
 			return true;

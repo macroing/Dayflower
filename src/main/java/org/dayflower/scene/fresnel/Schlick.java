@@ -18,13 +18,12 @@
  */
 package org.dayflower.scene.fresnel;
 
-import static org.dayflower.utility.Doubles.lerp;
-import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Floats.lerp;
 import static org.dayflower.utility.Floats.pow5;
 import static org.dayflower.utility.Floats.saturate;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A class that consists exclusively of static methods that performs Fresnel operations based on Schlicks approximation.
@@ -71,7 +70,7 @@ public final class Schlick {
 	 * @return the weight for the Fresnel reflectance based on Schlicks approximation
 	 */
 	public static double fresnelWeight(final double cosTheta) {
-		final double m = saturate(1.0D - cosTheta);
+		final double m = Doubles.saturate(1.0D - cosTheta);
 		
 		return (m * m) * (m * m) * m;
 	}
@@ -84,7 +83,7 @@ public final class Schlick {
 	 * @return the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight
 	 */
 	public static double fresnelWeightLerp(final double cosTheta, final double r0) {
-		return lerp(r0, 1.0D, fresnelWeight(cosTheta));
+		return Doubles.lerp(r0, 1.0D, fresnelWeight(cosTheta));
 	}
 	
 	/**

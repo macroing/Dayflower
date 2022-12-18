@@ -18,17 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isInfinite;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isZero;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
-import static org.dayflower.utility.Doubles.sin;
-import static org.dayflower.utility.Doubles.solveQuadraticSystem;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -46,6 +35,7 @@ import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Hyperboloid3D} is an implementation of {@link Shape3D} that represents a hyperboloid.
@@ -155,14 +145,14 @@ public final class Hyperboloid3D implements Shape3D {
 		Objects.requireNonNull(a, "a == null");
 		Objects.requireNonNull(b, "b == null");
 		
-		Point3D pointA = isZero(a.z) ? a : isZero(b.z) ? b : a;
-		Point3D pointB = isZero(a.z) ? b : isZero(b.z) ? a : b;
+		Point3D pointA = Doubles.isZero(a.z) ? a : Doubles.isZero(b.z) ? b : a;
+		Point3D pointB = Doubles.isZero(a.z) ? b : Doubles.isZero(b.z) ? a : b;
 		Point3D pointC = pointA;
 		
 		double aH = Double.POSITIVE_INFINITY;
 		double cH = Double.POSITIVE_INFINITY;
 		
-		for(int i = 0; i < 10 && (isInfinite(aH) || isNaN(aH)); i++) {
+		for(int i = 0; i < 10 && (Doubles.isInfinite(aH) || Doubles.isNaN(aH)); i++) {
 			pointC = Point3D.add(pointC, Vector3D.multiply(Vector3D.direction(pointA, pointB), 2.0D));
 			
 			final double c = pointC.x * pointC.x + pointC.y * pointC.y;
@@ -172,7 +162,7 @@ public final class Hyperboloid3D implements Shape3D {
 			cH = (aH * d - 1.0D) / (pointB.z * pointB.z);
 		}
 		
-		if(isInfinite(aH) || isNaN(aH)) {
+		if(Doubles.isInfinite(aH) || Doubles.isNaN(aH)) {
 			throw new IllegalArgumentException();
 		}
 		
@@ -181,9 +171,9 @@ public final class Hyperboloid3D implements Shape3D {
 		this.b = pointB;
 		this.aH = aH;
 		this.cH = cH;
-		this.rMax = max(sqrt(a.x * a.x + a.y * a.y), sqrt(b.x * b.x + b.y * b.y));
-		this.zMax = max(a.z, b.z);
-		this.zMin = min(a.z, b.z);
+		this.rMax = Doubles.max(Doubles.sqrt(a.x * a.x + a.y * a.y), Doubles.sqrt(b.x * b.x + b.y * b.y));
+		this.zMax = Doubles.max(a.z, b.z);
+		this.zMin = Doubles.min(a.z, b.z);
 	}
 	
 	/**
@@ -254,7 +244,7 @@ public final class Hyperboloid3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -339,15 +329,15 @@ public final class Hyperboloid3D implements Shape3D {
 			return false;
 		} else if(!Objects.equals(this.b, Hyperboloid3D.class.cast(object).b)) {
 			return false;
-		} else if(!equal(this.aH, Hyperboloid3D.class.cast(object).aH)) {
+		} else if(!Doubles.equals(this.aH, Hyperboloid3D.class.cast(object).aH)) {
 			return false;
-		} else if(!equal(this.cH, Hyperboloid3D.class.cast(object).cH)) {
+		} else if(!Doubles.equals(this.cH, Hyperboloid3D.class.cast(object).cH)) {
 			return false;
-		} else if(!equal(this.rMax, Hyperboloid3D.class.cast(object).rMax)) {
+		} else if(!Doubles.equals(this.rMax, Hyperboloid3D.class.cast(object).rMax)) {
 			return false;
-		} else if(!equal(this.zMax, Hyperboloid3D.class.cast(object).zMax)) {
+		} else if(!Doubles.equals(this.zMax, Hyperboloid3D.class.cast(object).zMax)) {
 			return false;
-		} else if(!equal(this.zMin, Hyperboloid3D.class.cast(object).zMin)) {
+		} else if(!Doubles.equals(this.zMin, Hyperboloid3D.class.cast(object).zMin)) {
 			return false;
 		} else {
 			return true;
@@ -487,12 +477,12 @@ public final class Hyperboloid3D implements Shape3D {
 		final double b = 2.0D * (this.aH * d.x * o.x + this.aH * d.y * o.y - this.cH * d.z * o.z);
 		final double c = this.aH * o.x * o.x + this.aH * o.y * o.y - this.cH * o.z * o.z - 1.0D;
 		
-		final double[] ts = solveQuadraticSystem(a, b, c);
+		final double[] ts = Doubles.solveQuadraticSystem(a, b, c);
 		
 		for(int i = 0; i < ts.length; i++) {
 			final double t = ts[i];
 			
-			if(isNaN(t)) {
+			if(Doubles.isNaN(t)) {
 				return Double.NaN;
 			}
 			
@@ -565,8 +555,8 @@ public final class Hyperboloid3D implements Shape3D {
 	
 	private OrthonormalBasis33D doCreateOrthonormalBasisG(final Point3D surfaceIntersectionPoint) {
 		final double phi = doComputePhi(surfaceIntersectionPoint);
-		final double phiCos = cos(phi);
-		final double phiSin = sin(phi);
+		final double phiCos = Doubles.cos(phi);
+		final double phiSin = Doubles.sin(phi);
 		
 		final double uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
 		final double uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;

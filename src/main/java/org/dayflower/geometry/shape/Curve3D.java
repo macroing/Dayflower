@@ -18,18 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.acos;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isZero;
-import static org.dayflower.utility.Doubles.lerp;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
-import static org.dayflower.utility.Doubles.saturate;
-import static org.dayflower.utility.Doubles.sin;
-import static org.dayflower.utility.Doubles.sqrt;
-import static org.dayflower.utility.Doubles.toDouble;
 import static org.dayflower.utility.Ints.saturate;
 
 import java.io.DataOutput;
@@ -58,6 +46,7 @@ import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Curve3D} is an implementation of {@link Shape3D} that represents a curve.
@@ -124,9 +113,9 @@ public final class Curve3D implements Shape3D {
 		
 		final double widthA = data.getWidthA();
 		final double widthB = data.getWidthB();
-		final double widthC = lerp(widthA, widthB, uMinimum);
-		final double widthD = lerp(widthA, widthB, uMaximum);
-		final double widthE = max(widthC, widthD) * 0.5D;
+		final double widthC = Doubles.lerp(widthA, widthB, uMinimum);
+		final double widthD = Doubles.lerp(widthA, widthB, uMaximum);
+		final double widthE = Doubles.max(widthC, widthD) * 0.5D;
 		
 		final Point3D pointA = data.getPointA();
 		final Point3D pointB = data.getPointB();
@@ -169,9 +158,9 @@ public final class Curve3D implements Shape3D {
 		
 		final double widthA = data.getWidthA();
 		final double widthB = data.getWidthB();
-		final double widthC = lerp(widthA, widthB, uMinimum);
-		final double widthD = lerp(widthA, widthB, uMaximum);
-		final double widthE = max(widthC, widthD) * 0.5D;
+		final double widthC = Doubles.lerp(widthA, widthB, uMinimum);
+		final double widthD = Doubles.lerp(widthA, widthB, uMaximum);
+		final double widthE = Doubles.max(widthC, widthD) * 0.5D;
 		
 		final Point3D pointA = data.getPointA();
 		final Point3D pointB = data.getPointB();
@@ -202,23 +191,23 @@ public final class Curve3D implements Shape3D {
 		final double yMaximum = 0.0D;
 		final double zMaximum = ray.getDirection().length() * tMaximum;
 		
-		if(max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
+		if(Doubles.max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || Doubles.min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		if(max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
+		if(Doubles.max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || Doubles.min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		if(max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
+		if(Doubles.max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || Doubles.min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final double l01 = max(abs(pointI.x - 2.0D * pointJ.x + pointK.x), abs(pointI.y - 2.0D * pointJ.y + pointK.y), abs(pointI.z - 2.0D * pointJ.z + pointK.z));
-		final double l02 = max(abs(pointJ.x - 2.0D * pointK.x + pointL.x), abs(pointJ.y - 2.0D * pointK.y + pointL.y), abs(pointJ.z - 2.0D * pointK.z + pointL.z));
-		final double l03 = max(l01, l02);
+		final double l01 = Doubles.max(Doubles.abs(pointI.x - 2.0D * pointJ.x + pointK.x), Doubles.abs(pointI.y - 2.0D * pointJ.y + pointK.y), Doubles.abs(pointI.z - 2.0D * pointJ.z + pointK.z));
+		final double l02 = Doubles.max(Doubles.abs(pointJ.x - 2.0D * pointK.x + pointL.x), Doubles.abs(pointJ.y - 2.0D * pointK.y + pointL.y), Doubles.abs(pointJ.z - 2.0D * pointK.z + pointL.z));
+		final double l03 = Doubles.max(l01, l02);
 		
-		final int depth = saturate(doLog2(1.41421356237D * 6.0D * l03 / (8.0D * (max(widthA, widthB) * 0.05D))) / 2, 0, 10);
+		final int depth = saturate(doLog2(1.41421356237D * 6.0D * l03 / (8.0D * (Doubles.max(widthA, widthB) * 0.05D))) / 2, 0, 10);
 		
 		return doIntersectionRecursive(ray, tMinimum, tMaximum, objectToRay, rayToObject, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
 	}
@@ -320,9 +309,9 @@ public final class Curve3D implements Shape3D {
 			return false;
 		} else if(!Objects.equals(this.data, Curve3D.class.cast(object).data)) {
 			return false;
-		} else if(!equal(this.uMaximum, Curve3D.class.cast(object).uMaximum)) {
+		} else if(!Doubles.equals(this.uMaximum, Curve3D.class.cast(object).uMaximum)) {
 			return false;
-		} else if(!equal(this.uMinimum, Curve3D.class.cast(object).uMinimum)) {
+		} else if(!Doubles.equals(this.uMinimum, Curve3D.class.cast(object).uMinimum)) {
 			return false;
 		} else {
 			return true;
@@ -344,8 +333,8 @@ public final class Curve3D implements Shape3D {
 		
 		final double widthA = data.getWidthA();
 		final double widthB = data.getWidthB();
-		final double widthC = lerp(widthA, widthB, uMinimum);
-		final double widthD = lerp(widthA, widthB, uMaximum);
+		final double widthC = Doubles.lerp(widthA, widthB, uMinimum);
+		final double widthD = Doubles.lerp(widthA, widthB, uMaximum);
 		final double widthE = (widthC + widthD) * 0.5D;
 		
 		final Point3D pointA = data.getPointA();
@@ -386,9 +375,9 @@ public final class Curve3D implements Shape3D {
 		
 		final double widthA = data.getWidthA();
 		final double widthB = data.getWidthB();
-		final double widthC = lerp(widthA, widthB, uMinimum);
-		final double widthD = lerp(widthA, widthB, uMaximum);
-		final double widthE = max(widthC, widthD) * 0.5D;
+		final double widthC = Doubles.lerp(widthA, widthB, uMinimum);
+		final double widthD = Doubles.lerp(widthA, widthB, uMaximum);
+		final double widthE = Doubles.max(widthC, widthD) * 0.5D;
 		
 		final Point3D pointA = data.getPointA();
 		final Point3D pointB = data.getPointB();
@@ -419,23 +408,23 @@ public final class Curve3D implements Shape3D {
 		final double yMaximum = 0.0D;
 		final double zMaximum = ray.getDirection().length() * tMaximum;
 		
-		if(max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
+		if(Doubles.max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || Doubles.min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
 			return Double.NaN;
 		}
 		
-		if(max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
+		if(Doubles.max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || Doubles.min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
 			return Double.NaN;
 		}
 		
-		if(max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
+		if(Doubles.max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || Doubles.min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
 			return Double.NaN;
 		}
 		
-		final double l01 = max(abs(pointI.x - 2.0D * pointJ.x + pointK.x), abs(pointI.y - 2.0D * pointJ.y + pointK.y), abs(pointI.z - 2.0D * pointJ.z + pointK.z));
-		final double l02 = max(abs(pointJ.x - 2.0D * pointK.x + pointL.x), abs(pointJ.y - 2.0D * pointK.y + pointL.y), abs(pointJ.z - 2.0D * pointK.z + pointL.z));
-		final double l03 = max(l01, l02);
+		final double l01 = Doubles.max(Doubles.abs(pointI.x - 2.0D * pointJ.x + pointK.x), Doubles.abs(pointI.y - 2.0D * pointJ.y + pointK.y), Doubles.abs(pointI.z - 2.0D * pointJ.z + pointK.z));
+		final double l02 = Doubles.max(Doubles.abs(pointJ.x - 2.0D * pointK.x + pointL.x), Doubles.abs(pointJ.y - 2.0D * pointK.y + pointL.y), Doubles.abs(pointJ.z - 2.0D * pointK.z + pointL.z));
+		final double l03 = Doubles.max(l01, l02);
 		
-		final int depth = saturate(doLog2(1.41421356237D * 6.0D * l03 / (8.0D * (max(widthA, widthB) * 0.05D))) / 2, 0, 10);
+		final int depth = saturate(doLog2(1.41421356237D * 6.0D * l03 / (8.0D * (Doubles.max(widthA, widthB) * 0.05D))) / 2, 0, 10);
 		
 		return doIntersectionTRecursive(ray, tMinimum, tMaximum, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
 	}
@@ -525,8 +514,8 @@ public final class Curve3D implements Shape3D {
 		final int segments = 1 << splitDepth;
 		
 		for(int segment = 0; segment < segments; segment++) {
-			final double uMinimum = toDouble(segment + 0) / toDouble(segments);
-			final double uMaximum = toDouble(segment + 1) / toDouble(segments);
+			final double uMinimum = (double)(segment + 0) / (double)(segments);
+			final double uMaximum = (double)(segment + 1) / (double)(segments);
 			
 			curves.add(new Curve3D(data, uMinimum, uMaximum));
 		}
@@ -625,8 +614,8 @@ public final class Curve3D implements Shape3D {
 				final Vector3D normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3D();
 				final Vector3D normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3D();
 				
-				final double widthC = lerp(widthA, widthB, toDouble(segment + 0) / toDouble(segments));
-				final double widthD = lerp(widthA, widthB, toDouble(segment + 1) / toDouble(segments));
+				final double widthC = Doubles.lerp(widthA, widthB, (double)(segment + 0) / (double)(segments));
+				final double widthD = Doubles.lerp(widthA, widthB, (double)(segment + 1) / (double)(segments));
 				
 				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
 			} else {
@@ -651,8 +640,8 @@ public final class Curve3D implements Shape3D {
 				final Vector3D normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3D();
 				final Vector3D normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3D();
 				
-				final double widthC = lerp(widthA, widthB, toDouble(segment + 0) / toDouble(segments));
-				final double widthD = lerp(widthA, widthB, toDouble(segment + 1) / toDouble(segments));
+				final double widthC = Doubles.lerp(widthA, widthB, (double)(segment + 0) / (double)(segments));
+				final double widthD = Doubles.lerp(widthA, widthB, (double)(segment + 1) / (double)(segments));
 				
 				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
 			}
@@ -745,8 +734,8 @@ public final class Curve3D implements Shape3D {
 				final Vector3D normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3D();
 				final Vector3D normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3D();
 				
-				final double widthC = lerp(widthA, widthB, toDouble(segment + 0) / toDouble(segments));
-				final double widthD = lerp(widthA, widthB, toDouble(segment + 1) / toDouble(segments));
+				final double widthC = Doubles.lerp(widthA, widthB, (double)(segment + 0) / (double)(segments));
+				final double widthD = Doubles.lerp(widthA, widthB, (double)(segment + 1) / (double)(segments));
 				
 				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
 			} else {
@@ -758,8 +747,8 @@ public final class Curve3D implements Shape3D {
 				final Vector3D normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3D();
 				final Vector3D normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3D();
 				
-				final double widthC = lerp(widthA, widthB, toDouble(segment + 0) / toDouble(segments));
-				final double widthD = lerp(widthA, widthB, toDouble(segment + 1) / toDouble(segments));
+				final double widthC = Doubles.lerp(widthA, widthB, (double)(segment + 0) / (double)(segments));
+				final double widthD = Doubles.lerp(widthA, widthB, (double)(segment + 1) / (double)(segments));
 				
 				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
 			}
@@ -818,8 +807,8 @@ public final class Curve3D implements Shape3D {
 			this.type = Objects.requireNonNull(type, "type == null");
 			this.normalA = Vector3D.getCached(Vector3D.normalize(Objects.requireNonNull(normalA, "normalA == null")));
 			this.normalB = Vector3D.getCached(Vector3D.normalize(Objects.requireNonNull(normalB, "normalB == null")));
-			this.normalAngle = acos(saturate(Vector3D.dotProduct(normalA, normalB)));
-			this.normalAngleSinReciprocal = 1.0D / sin(this.normalAngle);
+			this.normalAngle = Doubles.acos(Doubles.saturate(Vector3D.dotProduct(normalA, normalB)));
+			this.normalAngleSinReciprocal = 1.0D / Doubles.sin(this.normalAngle);
 			this.widthA = widthA;
 			this.widthB = widthB;
 		}
@@ -995,13 +984,13 @@ public final class Curve3D implements Shape3D {
 				return false;
 			} else if(!Objects.equals(this.normalB, Data.class.cast(object).normalB)) {
 				return false;
-			} else if(!equal(this.normalAngle, Data.class.cast(object).normalAngle)) {
+			} else if(!Doubles.equals(this.normalAngle, Data.class.cast(object).normalAngle)) {
 				return false;
-			} else if(!equal(this.normalAngleSinReciprocal, Data.class.cast(object).normalAngleSinReciprocal)) {
+			} else if(!Doubles.equals(this.normalAngleSinReciprocal, Data.class.cast(object).normalAngleSinReciprocal)) {
 				return false;
-			} else if(!equal(this.widthA, Data.class.cast(object).widthA)) {
+			} else if(!Doubles.equals(this.widthA, Data.class.cast(object).widthA)) {
 				return false;
-			} else if(!equal(this.widthB, Data.class.cast(object).widthB)) {
+			} else if(!Doubles.equals(this.widthB, Data.class.cast(object).widthB)) {
 				return false;
 			} else {
 				return true;
@@ -1161,8 +1150,8 @@ public final class Curve3D implements Shape3D {
 			final double uB = (uMinimum + uMaximum) / 2.0D;
 			final double uC = uMaximum;
 			
-			final double widthC = max(lerp(widthA, widthB, uA), lerp(widthA, widthB, uB)) * 0.5D;
-			final double widthD = max(lerp(widthA, widthB, uB), lerp(widthA, widthB, uC)) * 0.5D;
+			final double widthC = Doubles.max(Doubles.lerp(widthA, widthB, uA), Doubles.lerp(widthA, widthB, uB)) * 0.5D;
+			final double widthD = Doubles.max(Doubles.lerp(widthA, widthB, uB), Doubles.lerp(widthA, widthB, uC)) * 0.5D;
 			
 			final double xMaximum = 0.0D;
 			final double yMaximum = 0.0D;
@@ -1198,17 +1187,17 @@ public final class Curve3D implements Shape3D {
 		
 		final double denominator = segmentDirection.lengthSquared();
 		
-		if(isZero(denominator)) {
+		if(Doubles.isZero(denominator)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
 		final double w = Vector2D.dotProduct(Vector2D.negate(new Vector2D(pointA.x, pointA.y)), segmentDirection) / denominator;
-		final double u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
+		final double u = Doubles.saturate(Doubles.lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
 		final double hitWidth = doComputeHitWidth(data, ray, u);
 		
-		final Point3D point = doBezierEvaluate(pointA, pointB, pointC, pointD, saturate(w));
+		final Point3D point = doBezierEvaluate(pointA, pointB, pointC, pointD, Doubles.saturate(w));
 		
-		final Vector3D derivative = doBezierEvaluateDerivative(pointA, pointB, pointC, pointD, saturate(w));
+		final Vector3D derivative = doBezierEvaluateDerivative(pointA, pointB, pointC, pointD, Doubles.saturate(w));
 		
 		final double pointCurveDistanceSquared = point.x * point.x + point.y * point.y;
 		
@@ -1222,7 +1211,7 @@ public final class Curve3D implements Shape3D {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final double pointCurveDistance = sqrt(pointCurveDistanceSquared);
+		final double pointCurveDistance = Doubles.sqrt(pointCurveDistanceSquared);
 		final double edgeFunction = derivative.x * -point.y + point.x * derivative.y;
 		final double v = edgeFunction > 0.0D ? 0.5D + pointCurveDistance / hitWidth : 0.5D - pointCurveDistance / hitWidth;
 		final double t = point.z / rayDirectionLength;
@@ -1252,8 +1241,8 @@ public final class Curve3D implements Shape3D {
 			final double uB = (uMinimum + uMaximum) / 2.0D;
 			final double uC = uMaximum;
 			
-			final double widthC = max(lerp(widthA, widthB, uA), lerp(widthA, widthB, uB)) * 0.5D;
-			final double widthD = max(lerp(widthA, widthB, uB), lerp(widthA, widthB, uC)) * 0.5D;
+			final double widthC = Doubles.max(Doubles.lerp(widthA, widthB, uA), Doubles.lerp(widthA, widthB, uB)) * 0.5D;
+			final double widthD = Doubles.max(Doubles.lerp(widthA, widthB, uB), Doubles.lerp(widthA, widthB, uC)) * 0.5D;
 			
 			final double xMaximum = 0.0D;
 			final double yMaximum = 0.0D;
@@ -1262,7 +1251,7 @@ public final class Curve3D implements Shape3D {
 			if(doIsInsideX(points, widthC, tMinimum, xMaximum, 0) && doIsInsideY(points, widthC, tMinimum, yMaximum, 0) && doIsInsideZ(points, widthC, tMinimum, zMaximum, 0)) {
 				final double t = doIntersectionTRecursive(ray, tMinimum, tMaximum, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
 				
-				if(!isNaN(t)) {
+				if(!Doubles.isNaN(t)) {
 					return t;
 				}
 			}
@@ -1270,7 +1259,7 @@ public final class Curve3D implements Shape3D {
 			if(doIsInsideX(points, widthD, tMinimum, xMaximum, 3) && doIsInsideY(points, widthD, tMinimum, yMaximum, 3) && doIsInsideZ(points, widthD, tMinimum, zMaximum, 3)) {
 				final double t = doIntersectionTRecursive(ray, tMinimum, tMaximum, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
 				
-				if(!isNaN(t)) {
+				if(!Doubles.isNaN(t)) {
 					return t;
 				}
 			}
@@ -1289,15 +1278,15 @@ public final class Curve3D implements Shape3D {
 		
 		final double denominator = segmentDirection.lengthSquared();
 		
-		if(isZero(denominator)) {
+		if(Doubles.isZero(denominator)) {
 			return Double.NaN;
 		}
 		
 		final double w = Vector2D.dotProduct(Vector2D.negate(new Vector2D(pointA.x, pointA.y)), segmentDirection) / denominator;
-		final double u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
+		final double u = Doubles.saturate(Doubles.lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
 		final double hitWidth = doComputeHitWidth(data, ray, u);
 		
-		final Point3D point = doBezierEvaluate(pointA, pointB, pointC, pointD, saturate(w));
+		final Point3D point = doBezierEvaluate(pointA, pointB, pointC, pointD, Doubles.saturate(w));
 		
 		final double pointCurveDistanceSquared = point.x * point.x + point.y * point.y;
 		
@@ -1323,7 +1312,7 @@ public final class Curve3D implements Shape3D {
 			case CYLINDER: {
 				final Vector3D directionU = Vector3D.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
 				final Vector3D directionUPlane = Vector3D.normalize(Vector3D.transform(objectToRay, directionU));
-				final Vector3D directionVPlane = Vector3D.normalize(Vector3D.transform(Matrix44D.rotate(AngleD.degrees(-lerp(-90.0D, 90.0D, v), -90.0D, 90.0D), directionUPlane), Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.y, directionUPlane.x, 0.0D)), hitWidth)));
+				final Vector3D directionVPlane = Vector3D.normalize(Vector3D.transform(Matrix44D.rotate(AngleD.degrees(-Doubles.lerp(-90.0D, 90.0D, v), -90.0D, 90.0D), directionUPlane), Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.y, directionUPlane.x, 0.0D)), hitWidth)));
 				final Vector3D directionV = Vector3D.normalize(Vector3D.transform(rayToObject, directionVPlane));
 				final Vector3D directionW = Vector3D.normalize(Vector3D.crossProduct(directionU, directionV));
 				
@@ -1339,8 +1328,8 @@ public final class Curve3D implements Shape3D {
 				return new OrthonormalBasis33D(directionW, directionV, directionU);
 			}
 			case RIBBON: {
-				final double sinA = sin((1.0D - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
-				final double sinB = sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+				final double sinA = Doubles.sin((1.0D - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+				final double sinB = Doubles.sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
 				
 				final Vector3D normal = Vector3D.normalize(Vector3D.add(Vector3D.multiply(data.getNormalA(), sinA), Vector3D.multiply(data.getNormalB(), sinB)));
 				
@@ -1411,9 +1400,9 @@ public final class Curve3D implements Shape3D {
 		final Vector3D directionR = ray.getDirection();
 		final Vector3D directionX = Vector3D.crossProduct(directionR, Vector3D.direction(eye, lookAt));
 		
-		if(!isZero(directionX.lengthSquared())) {
+		if(!Doubles.isZero(directionX.lengthSquared())) {
 			return directionX;
-		} else if(abs(directionR.x) > abs(directionR.y)) {
+		} else if(Doubles.abs(directionR.x) > Doubles.abs(directionR.y)) {
 			return Vector3D.normalize(new Vector3D(-directionR.z, 0.0D, directionR.x));
 		} else {
 			return Vector3D.normalize(new Vector3D(0.0D, directionR.z, -directionR.y));
@@ -1421,8 +1410,8 @@ public final class Curve3D implements Shape3D {
 	}
 	
 	private static boolean doIsInsideX(final Point3D[] points, final double width, final double minimum, final double maximum, final int offset) {
-		final double max = max(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
-		final double min = min(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
+		final double max = Doubles.max(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
+		final double min = Doubles.min(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1430,8 +1419,8 @@ public final class Curve3D implements Shape3D {
 	}
 	
 	private static boolean doIsInsideY(final Point3D[] points, final double width, final double minimum, final double maximum, final int offset) {
-		final double max = max(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
-		final double min = min(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
+		final double max = Doubles.max(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
+		final double min = Doubles.min(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1439,8 +1428,8 @@ public final class Curve3D implements Shape3D {
 	}
 	
 	private static boolean doIsInsideZ(final Point3D[] points, final double width, final double minimum, final double maximum, final int offset) {
-		final double max = max(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
-		final double min = min(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
+		final double max = Doubles.max(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
+		final double min = Doubles.min(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1449,15 +1438,15 @@ public final class Curve3D implements Shape3D {
 	
 	private static double doComputeHitWidth(final Data data, final Ray3D ray, final double u) {
 		if(data.getType() == Type.RIBBON) {
-			final double sinA = sin((1.0D - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
-			final double sinB = sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+			final double sinA = Doubles.sin((1.0D - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+			final double sinB = Doubles.sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
 			
 			final Vector3D normal = Vector3D.add(Vector3D.multiply(data.getNormalA(), sinA), Vector3D.multiply(data.getNormalB(), sinB));
 			
-			return lerp(data.getWidthA(), data.getWidthB(), u) * (abs(Vector3D.dotProduct(normal, ray.getDirection())) / ray.getDirection().length());
+			return Doubles.lerp(data.getWidthA(), data.getWidthB(), u) * (Doubles.abs(Vector3D.dotProduct(normal, ray.getDirection())) / ray.getDirection().length());
 		}
 		
-		return lerp(data.getWidthA(), data.getWidthB(), u);
+		return Doubles.lerp(data.getWidthA(), data.getWidthB(), u);
 	}
 	
 	private static int doLog2(final double value) {

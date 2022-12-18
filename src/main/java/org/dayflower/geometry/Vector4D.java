@@ -18,12 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.NEXT_DOWN_1_3;
-import static org.dayflower.utility.Doubles.NEXT_UP_1_1;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.finiteOrDefault;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -31,7 +25,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -157,13 +151,13 @@ public final class Vector4D implements Node {
 			return true;
 		} else if(!(object instanceof Vector4D)) {
 			return false;
-		} else if(!equal(this.w, Vector4D.class.cast(object).w)) {
+		} else if(!Doubles.equals(this.w, Vector4D.class.cast(object).w)) {
 			return false;
-		} else if(!equal(this.x, Vector4D.class.cast(object).x)) {
+		} else if(!Doubles.equals(this.x, Vector4D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Vector4D.class.cast(object).y)) {
+		} else if(!Doubles.equals(this.y, Vector4D.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Vector4D.class.cast(object).z)) {
+		} else if(!Doubles.equals(this.z, Vector4D.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -176,7 +170,7 @@ public final class Vector4D implements Node {
 	 * @return the length of this {@code Vector4D} instance
 	 */
 	public double length() {
-		return sqrt(lengthSquared());
+		return Doubles.sqrt(lengthSquared());
 	}
 	
 	/**
@@ -264,7 +258,7 @@ public final class Vector4D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
 	public static Vector4D divide(final Vector4D vLHS, final double sRHS) {
-		return new Vector4D(finiteOrDefault(vLHS.x / sRHS, 0.0D), finiteOrDefault(vLHS.y / sRHS, 0.0D), finiteOrDefault(vLHS.z / sRHS, 0.0D), finiteOrDefault(vLHS.w / sRHS, 0.0D));
+		return new Vector4D(Doubles.finiteOrDefault(vLHS.x / sRHS, 0.0D), Doubles.finiteOrDefault(vLHS.y / sRHS, 0.0D), Doubles.finiteOrDefault(vLHS.z / sRHS, 0.0D), Doubles.finiteOrDefault(vLHS.w / sRHS, 0.0D));
 	}
 	
 	/**
@@ -314,8 +308,8 @@ public final class Vector4D implements Node {
 	public static Vector4D normalize(final Vector4D v) {
 		final double length = v.length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Doubles.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Doubles.NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return v;

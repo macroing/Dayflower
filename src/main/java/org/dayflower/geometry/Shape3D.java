@@ -18,15 +18,11 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.MAX_VALUE;
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isInfinite;
-import static org.dayflower.utility.Doubles.isZero;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
+
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Shape3D} is a 3-dimensional extension of {@link Shape} that adds additional methods that operates on {@code double}-based data types.
@@ -138,16 +134,16 @@ public interface Shape3D extends Shape {
 			
 			final Vector3D incoming = Vector3D.direction(surfaceIntersectionPoint, point);
 			
-			if(isZero(incoming.lengthSquared())) {
+			if(Doubles.isZero(incoming.lengthSquared())) {
 				return Optional.empty();
 			}
 			
 			final Vector3D surfaceNormal = surfaceSample.getSurfaceNormal();
 			final Vector3D incomingNormalized = Vector3D.normalize(incoming);
 			
-			final double probabilityDensityFunctionValue = Point3D.distanceSquared(point, surfaceIntersectionPoint) / abs(Vector3D.dotProduct(surfaceNormal, Vector3D.negate(incomingNormalized)));
+			final double probabilityDensityFunctionValue = Point3D.distanceSquared(point, surfaceIntersectionPoint) / Doubles.abs(Vector3D.dotProduct(surfaceNormal, Vector3D.negate(incomingNormalized)));
 			
-			if(isInfinite(probabilityDensityFunctionValue)) {
+			if(Doubles.isInfinite(probabilityDensityFunctionValue)) {
 				return Optional.empty();
 			}
 			
@@ -184,7 +180,7 @@ public interface Shape3D extends Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	default boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
+		return !Doubles.isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -206,7 +202,7 @@ public interface Shape3D extends Shape {
 		
 		final Ray3D ray = surfaceIntersection.createRay(incoming);
 		
-		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, MAX_VALUE);
+		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, Doubles.MAX_VALUE);
 		
 		if(optionalSurfaceIntersectionShape.isPresent()) {
 			final SurfaceIntersection3D surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();
@@ -214,9 +210,9 @@ public interface Shape3D extends Shape {
 			final Point3D surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 			final Point3D surfaceIntersectionPointShape = surfaceIntersectionShape.getSurfaceIntersectionPoint();
 			
-			final double probabilityDensityFunctionValue = Point3D.distanceSquared(surfaceIntersectionPointShape, surfaceIntersectionPoint) / (abs(Vector3D.dotProduct(surfaceIntersectionShape.getSurfaceNormalS(), Vector3D.negate(incoming)) * getSurfaceArea()));
+			final double probabilityDensityFunctionValue = Point3D.distanceSquared(surfaceIntersectionPointShape, surfaceIntersectionPoint) / (Doubles.abs(Vector3D.dotProduct(surfaceIntersectionShape.getSurfaceNormalS(), Vector3D.negate(incoming)) * getSurfaceArea()));
 			
-			if(isInfinite(probabilityDensityFunctionValue)) {
+			if(Doubles.isInfinite(probabilityDensityFunctionValue)) {
 				return 0.0D;
 			}
 			

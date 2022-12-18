@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -33,6 +30,7 @@ import org.dayflower.geometry.Shape2D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code LineSegment2D} is an implementation of {@link Shape2D} that represents a line segment.
@@ -181,9 +179,9 @@ public final class LineSegment2D implements Shape2D {
 		
 		final double crossProduct = dAPX * dABY - dAPY * dABX;
 		
-		if(!isZero(crossProduct)) {
+		if(!Doubles.isZero(crossProduct)) {
 			return false;
-		} else if(abs(dABX) >= abs(dABY)) {
+		} else if(Doubles.abs(dABX) >= Doubles.abs(dABY)) {
 			return dABX > 0.0D ? aX <= pX && pX <= bX : bX <= pX && pX <= aX;
 		} else {
 			return dABY > 0.0D ? aY <= pY && pY <= bY : bY <= pY && pY <= aY;

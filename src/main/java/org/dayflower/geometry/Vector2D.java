@@ -18,14 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.NEXT_DOWN_1_3;
-import static org.dayflower.utility.Doubles.NEXT_UP_1_1;
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.finiteOrDefault;
-import static org.dayflower.utility.Doubles.isZero;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -35,9 +27,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Doubles;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.Randoms;
 
 /**
  * A {@code Vector2D} represents a vector with two {@code double}-based components.
@@ -181,9 +173,9 @@ public final class Vector2D implements Node {
 			return true;
 		} else if(!(object instanceof Vector2D)) {
 			return false;
-		} else if(!equal(this.x, Vector2D.class.cast(object).x)) {
+		} else if(!Doubles.equals(this.x, Vector2D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Vector2D.class.cast(object).y)) {
+		} else if(!Doubles.equals(this.y, Vector2D.class.cast(object).y)) {
 			return false;
 		} else {
 			return true;
@@ -198,8 +190,8 @@ public final class Vector2D implements Node {
 	public boolean isUnitVector() {
 		final double length = length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Doubles.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Doubles.NEXT_UP_1_1;
 		
 		return isLengthGTEThreshold && isLengthLTEThreshold;
 	}
@@ -210,7 +202,7 @@ public final class Vector2D implements Node {
 	 * @return the length of this {@code Vector2D} instance
 	 */
 	public double length() {
-		return sqrt(lengthSquared());
+		return Doubles.sqrt(lengthSquared());
 	}
 	
 	/**
@@ -273,7 +265,7 @@ public final class Vector2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
 	public static Vector2D absolute(final Vector2D v) {
-		return new Vector2D(abs(v.x), abs(v.y));
+		return new Vector2D(Doubles.abs(v.x), Doubles.abs(v.y));
 	}
 	
 	/**
@@ -395,7 +387,7 @@ public final class Vector2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
 	public static Vector2D divide(final Vector2D vLHS, final double sRHS) {
-		return new Vector2D(finiteOrDefault(vLHS.x / sRHS, 0.0D), finiteOrDefault(vLHS.y / sRHS, 0.0D));
+		return new Vector2D(Doubles.finiteOrDefault(vLHS.x / sRHS, 0.0D), Doubles.finiteOrDefault(vLHS.y / sRHS, 0.0D));
 	}
 	
 	/**
@@ -475,8 +467,8 @@ public final class Vector2D implements Node {
 	public static Vector2D normalize(final Vector2D v) {
 		final double length = v.length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Doubles.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Doubles.NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return v;
@@ -504,7 +496,7 @@ public final class Vector2D implements Node {
 	 * @return a random {@code Vector2D} instance
 	 */
 	public static Vector2D random() {
-		return new Vector2D(Doubles.random() * 2.0D - 1.0D, Doubles.random() * 2.0D - 1.0D);
+		return new Vector2D(Randoms.nextDouble() * 2.0D - 1.0D, Randoms.nextDouble() * 2.0D - 1.0D);
 	}
 	
 	/**
@@ -654,7 +646,7 @@ public final class Vector2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
 	public static boolean orthogonal(final Vector2D vLHS, final Vector2D vRHS) {
-		return isZero(dotProduct(vLHS, vRHS));
+		return Doubles.isZero(dotProduct(vLHS, vRHS));
 	}
 	
 	/**

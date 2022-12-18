@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.pow;
-import static org.dayflower.utility.Doubles.solveQuadraticSystem;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,6 +35,7 @@ import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Paraboloid3D} is an implementation of {@link Shape3D} that represents a paraboloid.
@@ -211,7 +207,7 @@ public final class Paraboloid3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -272,11 +268,11 @@ public final class Paraboloid3D implements Shape3D {
 			return false;
 		} else if(!Objects.equals(this.phiMax, Paraboloid3D.class.cast(object).phiMax)) {
 			return false;
-		} else if(!equal(this.radius, Paraboloid3D.class.cast(object).radius)) {
+		} else if(!Doubles.equals(this.radius, Paraboloid3D.class.cast(object).radius)) {
 			return false;
-		} else if(!equal(this.zMax, Paraboloid3D.class.cast(object).zMax)) {
+		} else if(!Doubles.equals(this.zMax, Paraboloid3D.class.cast(object).zMax)) {
 			return false;
-		} else if(!equal(this.zMin, Paraboloid3D.class.cast(object).zMin)) {
+		} else if(!Doubles.equals(this.zMin, Paraboloid3D.class.cast(object).zMin)) {
 			return false;
 		} else {
 			return true;
@@ -308,7 +304,7 @@ public final class Paraboloid3D implements Shape3D {
 		final double zMin = this.zMin;
 		final double k = 4.0D * zMax / radiusSquared;
 		final double a = radiusSquared * radiusSquared * phiMax / (12.0D * zMax * zMax);
-		final double b = pow(k * zMax + 1.0D, 1.5D) - pow(k * zMin + 1.0D, 1.5D);
+		final double b = Doubles.pow(k * zMax + 1.0D, 1.5D) - Doubles.pow(k * zMin + 1.0D, 1.5D);
 		
 		return a * b;
 	}
@@ -359,12 +355,12 @@ public final class Paraboloid3D implements Shape3D {
 		final double b = 2.0D * k * (d.x * o.x + d.y * o.y) - d.z;
 		final double c = k * (o.x * o.x + o.y * o.y) - o.z;
 		
-		final double[] ts = solveQuadraticSystem(a, b, c);
+		final double[] ts = Doubles.solveQuadraticSystem(a, b, c);
 		
 		for(int i = 0; i < ts.length; i++) {
 			final double t = ts[i];
 			
-			if(isNaN(t)) {
+			if(Doubles.isNaN(t)) {
 				return Double.NaN;
 			}
 			

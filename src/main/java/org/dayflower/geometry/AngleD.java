@@ -18,18 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Doubles.asin;
-import static org.dayflower.utility.Doubles.atan;
-import static org.dayflower.utility.Doubles.atan2;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
-import static org.dayflower.utility.Doubles.tan;
-import static org.dayflower.utility.Doubles.toDegrees;
-import static org.dayflower.utility.Doubles.toRadians;
-import static org.dayflower.utility.Doubles.wrapAround;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -37,8 +25,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
-import org.dayflower.utility.Doubles;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -54,7 +41,7 @@ public final class AngleD {
 	private static final double DEGREES_MAXIMUM_PITCH = 90.0D;
 	private static final double DEGREES_MINIMUM = 0.0D;
 	private static final double DEGREES_MINIMUM_PITCH = -90.0D;
-	private static final double RADIANS_MAXIMUM = PI_MULTIPLIED_BY_2;
+	private static final double RADIANS_MAXIMUM = Doubles.PI_MULTIPLIED_BY_2;
 	private static final double RADIANS_MINIMUM = 0.0D;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,11 +90,11 @@ public final class AngleD {
 			return true;
 		} else if(!(object instanceof AngleD)) {
 			return false;
-		} else if(!equal(this.degrees, AngleD.class.cast(object).degrees)) {
+		} else if(!Doubles.equals(this.degrees, AngleD.class.cast(object).degrees)) {
 			return false;
-		} else if(!equal(this.degreesMaximum, AngleD.class.cast(object).degreesMaximum)) {
+		} else if(!Doubles.equals(this.degreesMaximum, AngleD.class.cast(object).degreesMaximum)) {
 			return false;
-		} else if(!equal(this.degreesMinimum, AngleD.class.cast(object).degreesMinimum)) {
+		} else if(!Doubles.equals(this.degreesMinimum, AngleD.class.cast(object).degreesMinimum)) {
 			return false;
 		} else {
 			return true;
@@ -236,9 +223,9 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD add(final AngleD angleLHS, final AngleD angleRHS) {
-		final double degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
-		final double degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
-		final double degrees = wrapAround(angleLHS.degrees + angleRHS.degrees, degreesMinimum, degreesMaximum);
+		final double degreesMinimum = Doubles.min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
+		final double degreesMaximum = Doubles.max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
+		final double degrees = doWrapAround(angleLHS.degrees + angleRHS.degrees, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -269,13 +256,13 @@ public final class AngleD {
 	 * @return a new {@code AngleD} instance based on an angle in degrees and an interval of valid degrees
 	 */
 	public static AngleD degrees(final double degrees, final double degreesIntervalEndA, final double degreesIntervalEndB) {
-		final double newDegreesMinimum = min(degreesIntervalEndA, degreesIntervalEndB);
-		final double newDegreesMaximum = max(degreesIntervalEndA, degreesIntervalEndB);
-		final double newDegrees = wrapAround(degrees, newDegreesMinimum, newDegreesMaximum);
+		final double newDegreesMinimum = Doubles.min(degreesIntervalEndA, degreesIntervalEndB);
+		final double newDegreesMaximum = Doubles.max(degreesIntervalEndA, degreesIntervalEndB);
+		final double newDegrees = doWrapAround(degrees, newDegreesMinimum, newDegreesMaximum);
 		
-		final double newRadians = toRadians(newDegrees);
-		final double newRadiansMinimum = toRadians(newDegreesMinimum);
-		final double newRadiansMaximum = toRadians(newDegreesMaximum);
+		final double newRadians = Doubles.toRadians(newDegrees);
+		final double newRadiansMinimum = Doubles.toRadians(newDegreesMinimum);
+		final double newRadiansMaximum = Doubles.toRadians(newDegreesMaximum);
 		
 		return new AngleD(newDegrees, newDegreesMinimum, newDegreesMaximum, newRadians, newRadiansMinimum, newRadiansMaximum);
 	}
@@ -291,7 +278,7 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD fieldOfView(final double focalDistance, final double resolution) {
-		return radians(2.0D * atan(resolution * 0.5D / focalDistance));
+		return radians(2.0D * Doubles.atan(resolution * 0.5D / focalDistance));
 	}
 	
 	/**
@@ -307,7 +294,7 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD fieldOfViewX(final AngleD fieldOfViewY, final double resolutionX, final double resolutionY) {
-		return radians(2.0D * atan(tan(fieldOfViewY.radians * 0.5D) * (resolutionX / resolutionY)));
+		return radians(2.0D * Doubles.atan(Doubles.tan(fieldOfViewY.radians * 0.5D) * (resolutionX / resolutionY)));
 	}
 	
 	/**
@@ -323,7 +310,7 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD fieldOfViewY(final AngleD fieldOfViewX, final double resolutionX, final double resolutionY) {
-		return radians(2.0D * atan(tan(fieldOfViewX.radians * 0.5D) * (resolutionY / resolutionX)));
+		return radians(2.0D * Doubles.atan(Doubles.tan(fieldOfViewX.radians * 0.5D) * (resolutionY / resolutionX)));
 	}
 	
 	/**
@@ -339,7 +326,7 @@ public final class AngleD {
 	public static AngleD half(final AngleD angle) {
 		final double degreesMinimum = angle.degreesMinimum;
 		final double degreesMaximum = angle.degreesMaximum;
-		final double degrees = wrapAround(angle.degrees * 0.5D, degreesMinimum, degreesMaximum);
+		final double degrees = doWrapAround(angle.degrees * 0.5D, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -357,7 +344,7 @@ public final class AngleD {
 	public static AngleD negate(final AngleD angle) {
 		final double degreesMinimum = -angle.degreesMinimum;
 		final double degreesMaximum = -angle.degreesMaximum;
-		final double degrees = wrapAround(-angle.degrees, degreesMinimum, degreesMaximum);
+		final double degrees = doWrapAround(-angle.degrees, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -388,7 +375,7 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD pitch(final Vector3D direction) {
-		return degrees(toDegrees(asin(direction.y)), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
+		return degrees(Doubles.toDegrees(Doubles.asin(direction.y)), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
 	}
 	
 	/**
@@ -419,13 +406,13 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD radians(final double radians, final double radiansIntervalEndA, final double radiansIntervalEndB) {
-		final double newRadiansMinimum = min(radiansIntervalEndA, radiansIntervalEndB);
-		final double newRadiansMaximum = max(radiansIntervalEndA, radiansIntervalEndB);
-		final double newRadians = wrapAround(radians, newRadiansMinimum, newRadiansMaximum);
+		final double newRadiansMinimum = Doubles.min(radiansIntervalEndA, radiansIntervalEndB);
+		final double newRadiansMaximum = Doubles.max(radiansIntervalEndA, radiansIntervalEndB);
+		final double newRadians = doWrapAround(radians, newRadiansMinimum, newRadiansMaximum);
 		
-		final double newDegrees = toDegrees(newRadians);
-		final double newDegreesMinimum = toDegrees(newRadiansMinimum);
-		final double newDegreesMaximum = toDegrees(newRadiansMaximum);
+		final double newDegrees = Doubles.toDegrees(newRadians);
+		final double newDegreesMinimum = Doubles.toDegrees(newRadiansMinimum);
+		final double newDegreesMaximum = Doubles.toDegrees(newRadiansMaximum);
 		
 		return new AngleD(newDegrees, newDegreesMinimum, newDegreesMaximum, newRadians, newRadiansMinimum, newRadiansMaximum);
 	}
@@ -472,9 +459,9 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD subtract(final AngleD angleLHS, final AngleD angleRHS) {
-		final double degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
-		final double degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
-		final double degrees = wrapAround(angleLHS.degrees - angleRHS.degrees, degreesMinimum, degreesMaximum);
+		final double degreesMinimum = Doubles.min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
+		final double degreesMaximum = Doubles.max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
+		final double degrees = doWrapAround(angleLHS.degrees - angleRHS.degrees, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -505,6 +492,21 @@ public final class AngleD {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleD yaw(final Vector3D direction) {
-		return degrees(toDegrees(atan2(direction.x, direction.z)));
+		return degrees(Doubles.toDegrees(Doubles.atan2(direction.x, direction.z)));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static double doWrapAround(final double value, final double a, final double b) {
+		final double minimumValue = Doubles.min(a, b);
+		final double maximumValue = Doubles.max(a, b);
+		
+		if(value >= minimumValue && value <= maximumValue) {
+			return value;
+		} else if(value < minimumValue) {
+			return maximumValue - ((minimumValue - value) % Doubles.nextUp(maximumValue - minimumValue));
+		} else {
+			return minimumValue + ((value - maximumValue) % Doubles.nextUp(maximumValue - minimumValue));
+		}
 	}
 }

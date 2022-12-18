@@ -18,18 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.MAX_VALUE;
-import static org.dayflower.utility.Doubles.MIN_VALUE;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isZero;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
-import static org.dayflower.utility.Doubles.positiveModulo;
-import static org.dayflower.utility.Doubles.sin;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -40,9 +28,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Doubles;
 import org.dayflower.utility.ParameterArguments;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -187,9 +174,9 @@ public final class Point2D implements Node {
 			return true;
 		} else if(!(object instanceof Point2D)) {
 			return false;
-		} else if(!equal(this.x, Point2D.class.cast(object).x)) {
+		} else if(!Doubles.equals(this.x, Point2D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Point2D.class.cast(object).y)) {
+		} else if(!Doubles.equals(this.y, Point2D.class.cast(object).y)) {
 			return false;
 		} else {
 			return true;
@@ -439,7 +426,7 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the largest component values
 	 */
 	public static Point2D maximum() {
-		return new Point2D(MAX_VALUE, MAX_VALUE);
+		return new Point2D(Doubles.MAX_VALUE, Doubles.MAX_VALUE);
 	}
 	
 	/**
@@ -453,7 +440,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D maximum(final Point2D a, final Point2D b) {
-		return new Point2D(max(a.x, b.x), max(a.y, b.y));
+		return new Point2D(Doubles.max(a.x, b.x), Doubles.max(a.y, b.y));
 	}
 	
 	/**
@@ -468,7 +455,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2D maximum(final Point2D a, final Point2D b, final Point2D c) {
-		return new Point2D(max(a.x, b.x, c.x), max(a.y, b.y, c.y));
+		return new Point2D(Doubles.max(a.x, b.x, c.x), Doubles.max(a.y, b.y, c.y));
 	}
 	
 	/**
@@ -484,7 +471,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2D maximum(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
-		return new Point2D(max(a.x, b.x, c.x, d.x), max(a.y, b.y, c.y, d.y));
+		return new Point2D(Doubles.max(a.x, b.x, c.x, d.x), Doubles.max(a.y, b.y, c.y, d.y));
 	}
 	
 	/**
@@ -507,7 +494,7 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the smallest component values
 	 */
 	public static Point2D minimum() {
-		return new Point2D(MIN_VALUE, MIN_VALUE);
+		return new Point2D(Doubles.MIN_VALUE, Doubles.MIN_VALUE);
 	}
 	
 	/**
@@ -521,7 +508,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2D minimum(final Point2D a, final Point2D b) {
-		return new Point2D(min(a.x, b.x), min(a.y, b.y));
+		return new Point2D(Doubles.min(a.x, b.x), Doubles.min(a.y, b.y));
 	}
 	
 	/**
@@ -536,7 +523,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2D minimum(final Point2D a, final Point2D b, final Point2D c) {
-		return new Point2D(min(a.x, b.x, c.x), min(a.y, b.y, c.y));
+		return new Point2D(Doubles.min(a.x, b.x, c.x), Doubles.min(a.y, b.y, c.y));
 	}
 	
 	/**
@@ -552,7 +539,7 @@ public final class Point2D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2D minimum(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
-		return new Point2D(min(a.x, b.x, c.x, d.x), min(a.y, b.y, c.y, d.y));
+		return new Point2D(Doubles.min(a.x, b.x, c.x, d.x), Doubles.min(a.y, b.y, c.y, d.y));
 	}
 	
 	/**
@@ -589,8 +576,8 @@ public final class Point2D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D rotateCounterclockwise(final Point2D p, final AngleD a) {
-		final double cos = cos(a.getRadians());
-		final double sin = sin(a.getRadians());
+		final double cos = Doubles.cos(a.getRadians());
+		final double sin = Doubles.sin(a.getRadians());
 		
 		return new Point2D(p.x * cos - p.y * sin, p.y * cos + p.x * sin);
 	}
@@ -623,7 +610,7 @@ public final class Point2D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D sphericalCoordinates(final Vector3D direction) {
-		return new Point2D(direction.sphericalPhi() * PI_MULTIPLIED_BY_2_RECIPROCAL, direction.sphericalTheta() * PI_RECIPROCAL);
+		return new Point2D(direction.sphericalPhi() * Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL, direction.sphericalTheta() * Doubles.PI_RECIPROCAL);
 	}
 	
 	/**
@@ -671,7 +658,7 @@ public final class Point2D implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2D toImage(final Point2D p, final double resolutionX, final double resolutionY) {
-		return new Point2D(positiveModulo(p.x * resolutionX - 0.5D, resolutionX), positiveModulo(p.y * resolutionY - 0.5D, resolutionY));
+		return new Point2D(Doubles.positiveModulo(p.x * resolutionX - 0.5D, resolutionX), Doubles.positiveModulo(p.y * resolutionY - 0.5D, resolutionY));
 	}
 	
 	/**
@@ -710,7 +697,7 @@ public final class Point2D implements Node {
 		final double y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23;
 		final double z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33;
 		
-		return equal(z, 1.0D) || isZero(z) ? new Point2D(x, y) : new Point2D(x / z, y / z);
+		return Doubles.equals(z, 1.0D) || Doubles.isZero(z) ? new Point2D(x, y) : new Point2D(x / z, y / z);
 	}
 	
 	/**

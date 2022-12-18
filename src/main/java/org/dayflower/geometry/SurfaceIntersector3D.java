@@ -18,15 +18,11 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.MAX_VALUE;
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isZero;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
+
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code SurfaceIntersector3D} is an utility class that is useful for performing intersection tests on {@link Shape3D} instances.
@@ -41,7 +37,7 @@ public final class SurfaceIntersector3D {
 	 * The default minimum parametric {@code t} value.
 	 */
 //	TODO: Add Unit Tests!
-	public static final double T_MAXIMUM = MAX_VALUE;
+	public static final double T_MAXIMUM = Doubles.MAX_VALUE;
 	
 	/**
 	 * The default maximum parametric {@code t} value.
@@ -162,11 +158,11 @@ public final class SurfaceIntersector3D {
 			return false;
 		} else if(!Objects.equals(this.shape, SurfaceIntersector3D.class.cast(object).shape)) {
 			return false;
-		} else if(!equal(this.t, SurfaceIntersector3D.class.cast(object).t)) {
+		} else if(!Doubles.equals(this.t, SurfaceIntersector3D.class.cast(object).t)) {
 			return false;
-		} else if(!equal(this.tMaximum, SurfaceIntersector3D.class.cast(object).tMaximum)) {
+		} else if(!Doubles.equals(this.tMaximum, SurfaceIntersector3D.class.cast(object).tMaximum)) {
 			return false;
-		} else if(!equal(this.tMinimum, SurfaceIntersector3D.class.cast(object).tMinimum)) {
+		} else if(!Doubles.equals(this.tMinimum, SurfaceIntersector3D.class.cast(object).tMinimum)) {
 			return false;
 		} else {
 			return true;
@@ -190,7 +186,7 @@ public final class SurfaceIntersector3D {
 	public boolean intersection(final Shape3D shape) {
 		final double t = shape.intersectionT(this.ray, this.tMinimum, this.tMaximum);
 		
-		if(!isNaN(t) && (isNaN(this.t) || t < this.t) && t > this.tMinimum && t < this.tMaximum) {
+		if(!Doubles.isNaN(t) && (Doubles.isNaN(this.t) || t < this.t) && t > this.tMinimum && t < this.tMaximum) {
 			this.t = t;
 			this.tMaximum = t;
 			this.shape = shape;
@@ -208,7 +204,7 @@ public final class SurfaceIntersector3D {
 	 */
 //	TODO: Add Unit Tests!
 	public boolean isIntersecting() {
-		return this.shape != null && !isNaN(this.t);
+		return this.shape != null && !Doubles.isNaN(this.t);
 	}
 	
 	/**
@@ -336,6 +332,6 @@ public final class SurfaceIntersector3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static double doTransformT(final Matrix44D matrix, final Ray3D rayOldSpace, final Ray3D rayNewSpace, final double t) {
-		return !isNaN(t) && !isZero(t) && t < MAX_VALUE ? abs(Point3D.distance(rayNewSpace.getOrigin(), Point3D.transformAndDivide(matrix, Point3D.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+		return !Doubles.isNaN(t) && !Doubles.isZero(t) && t < Doubles.MAX_VALUE ? Doubles.abs(Point3D.distance(rayNewSpace.getOrigin(), Point3D.transformAndDivide(matrix, Point3D.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 }

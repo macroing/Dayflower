@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -38,6 +35,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Plane3D} is an implementation of {@link Shape3D} that represents a plane.
@@ -98,7 +96,7 @@ public final class Plane3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -172,7 +170,7 @@ public final class Plane3D implements Shape3D {
 	 */
 	@Override
 	public boolean contains(final Point3D point) {
-		return isZero(point.z);
+		return Doubles.isZero(point.z);
 	}
 	
 	/**
@@ -223,7 +221,7 @@ public final class Plane3D implements Shape3D {
 	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double dotProduct = Vector3D.dotProduct(Vector3D.z(), ray.getDirection());
 		
-		if(isZero(dotProduct)) {
+		if(Doubles.isZero(dotProduct)) {
 			return Double.NaN;
 		}
 		

@@ -18,13 +18,6 @@
  */
 package org.dayflower.renderer;
 
-import static org.dayflower.utility.Doubles.MAX_VALUE;
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.random;
-import static org.dayflower.utility.Doubles.solveQuadraticSystem;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.util.Objects;
 import java.util.Optional;
 
@@ -39,6 +32,8 @@ import org.macroing.art4j.color.Color3D;
 import org.macroing.art4j.color.Color4D;
 import org.macroing.art4j.image.Image;
 import org.macroing.art4j.pixel.Color4DPixelOperator;
+import org.macroing.java.lang.Doubles;
+import org.macroing.java.util.Randoms;
 
 public final class SmallPTD {
 	private SmallPTD() {
@@ -69,7 +64,7 @@ public final class SmallPTD {
 		if(currentDepth > 5) {
 			final double probability = albedo.max();
 			
-			if(random() >= probability) {
+			if(Randoms.nextDouble() >= probability) {
 				return emission;
 			}
 			
@@ -131,7 +126,7 @@ public final class SmallPTD {
 			final double probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
 			final double probabilityRussianRouletteTransmission = transmittance / (1.0D - probabilityRussianRoulette);
 			
-			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
+			final boolean isChoosingSpecularReflection = Randoms.nextDouble() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
 				return Color3D.multiply(radiance(reflectionRay, scene, depth), probabilityRussianRouletteReflection);
@@ -150,7 +145,7 @@ public final class SmallPTD {
 		final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution2();
 		
 		final Vector3D w = surfaceNormalCorrectlyOriented;
-		final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.x) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
+		final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(Doubles.abs(w.x) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
 		final Vector3D v = Vector3D.crossProduct(w, u);
 		
 		final Point3D newOrigin = intersection.getSurfaceIntersectionPoint();
@@ -165,7 +160,7 @@ public final class SmallPTD {
 	}
 	
 	public static Color3D radianceMetal(final Ray3D ray, final Scene scene, final int depth, final Intersection intersection) {
-		final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(random(), random(), 20.0D);
+		final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(Randoms.nextDouble(), Randoms.nextDouble(), 20.0D);
 		
 		final Vector3D w = Vector3D.normalize(Vector3D.reflection(ray.getDirection(), intersection.getSurfaceNormal(), true));
 		final Vector3D v = Vector3D.computeV(w);
@@ -203,7 +198,7 @@ public final class SmallPTD {
 			return Optional.empty();
 		}
 		
-		final double cosThetaT = sqrt(sinThetaTSquared);
+		final double cosThetaT = Doubles.sqrt(sinThetaTSquared);
 		
 		return Optional.of(Vector3D.subtract(Vector3D.multiply(direction, eta), Vector3D.multiply(normal, eta * cosThetaI + cosThetaT)));
 	}
@@ -391,7 +386,7 @@ public final class SmallPTD {
 			for(final Sphere3D sphere : this.spheres) {
 				final double t = sphere.intersection(ray);
 				
-				if(!isNaN(t) && (intersection == null || t < intersection.getT())) {
+				if(!Doubles.isNaN(t) && (intersection == null || t < intersection.getT())) {
 					intersection = sphere.toIntersection(ray, t);
 				}
 			}
@@ -462,7 +457,7 @@ public final class SmallPTD {
 		}
 		
 		public double intersection(final Ray3D ray) {
-			return intersection(ray, EPSILON, MAX_VALUE);
+			return intersection(ray, EPSILON, Doubles.MAX_VALUE);
 		}
 		
 		public double intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
@@ -478,12 +473,12 @@ public final class SmallPTD {
 			final double b = 2.0D * Vector3D.dotProduct(centerToOrigin, direction);
 			final double c = centerToOrigin.lengthSquared() - radiusSquared;
 			
-			final double[] ts = solveQuadraticSystem(a, b, c);
+			final double[] ts = Doubles.solveQuadraticSystem(a, b, c);
 			
 			final double t0 = ts[0];
 			final double t1 = ts[1];
 			
-			final double t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
+			final double t = !Doubles.isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !Doubles.isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
 			
 			return t;
 		}

@@ -18,12 +18,7 @@
  */
 package org.dayflower.test;
 
-import static org.dayflower.utility.Doubles.atan2;
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.sin;
-import static org.dayflower.utility.Doubles.sqrt;
-import static org.dayflower.utility.Doubles.toDegrees;
-import static org.dayflower.utility.Doubles.toRadians;
+import org.macroing.java.lang.Doubles;
 
 public final class Algorithms {
 	private Algorithms() {
@@ -35,16 +30,16 @@ public final class Algorithms {
 	public static double distanceKm(final double[] pointA, final double[] pointB) {
 		final double radius = 6371.0D;
 		
-		final double a = sin(toRadians(getLatitude(pointB) - getLatitude(pointA)) / 2.0D);
-		final double b = cos(toRadians(getLatitude(pointA)));
-		final double c = cos(toRadians(getLatitude(pointB)));
-		final double d = sin(toRadians(getLongitude(pointB) - getLongitude(pointA)) / 2.0D);
+		final double a = Doubles.sin(Doubles.toRadians(getLatitude(pointB) - getLatitude(pointA)) / 2.0D);
+		final double b = Doubles.cos(Doubles.toRadians(getLatitude(pointA)));
+		final double c = Doubles.cos(Doubles.toRadians(getLatitude(pointB)));
+		final double d = Doubles.sin(Doubles.toRadians(getLongitude(pointB) - getLongitude(pointA)) / 2.0D);
 		final double e = a * a + b * c * d * d;
 		
-		final double x = sqrt(1.0D - e);
-		final double y = sqrt(e);
+		final double x = Doubles.sqrt(1.0D - e);
+		final double y = Doubles.sqrt(e);
 		
-		final double distance = radius * 2.0D * atan2(y, x);
+		final double distance = radius * 2.0D * Doubles.atan2(y, x);
 		
 		return distance;
 	}
@@ -63,8 +58,8 @@ public final class Algorithms {
 		final double oldLongitude = getLongitude(point);
 		final double oldLatitude = getLatitude(point);
 		
-		final double newLongitude = oldLongitude + toDegrees(distanceKmLongitude / radius) / cos(toRadians(oldLatitude));
-		final double newLatitude = oldLatitude + toDegrees(distanceKmLatitude / radius);
+		final double newLongitude = oldLongitude + Doubles.toDegrees(distanceKmLongitude / radius) / Doubles.cos(Doubles.toRadians(oldLatitude));
+		final double newLatitude = oldLatitude + Doubles.toDegrees(distanceKmLatitude / radius);
 		
 		return new double[] {newLongitude, newLatitude};
 	}

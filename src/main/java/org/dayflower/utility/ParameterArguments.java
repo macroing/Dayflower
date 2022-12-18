@@ -18,8 +18,6 @@
  */
 package org.dayflower.utility;
 
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Ints.max;
@@ -28,6 +26,8 @@ import static org.dayflower.utility.Ints.min;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Objects;
+
+import org.macroing.java.lang.Doubles;
 
 /**
  * A class that consists exclusively of static methods that checks parameter argument validity.
@@ -166,8 +166,8 @@ public final class ParameterArguments {
 	public static double requireRange(final double value, final double edgeA, final double edgeB, final String name) {
 		Objects.requireNonNull(name, "name == null");
 		
-		final double minimum = min(edgeA, edgeB);
-		final double maximum = max(edgeA, edgeB);
+		final double minimum = Doubles.min(edgeA, edgeB);
+		final double maximum = Doubles.max(edgeA, edgeB);
 		
 		if(value < minimum) {
 			throw new IllegalArgumentException(String.format("%s < %f: %s == %f", name, Double.valueOf(minimum), name, Double.valueOf(value)));

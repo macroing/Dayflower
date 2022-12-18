@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isZero;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -30,8 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Doubles;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -215,13 +211,13 @@ public final class Point4D implements Node {
 			return true;
 		} else if(!(object instanceof Point4D)) {
 			return false;
-		} else if(!equal(this.w, Point4D.class.cast(object).w)) {
+		} else if(!Doubles.equals(this.w, Point4D.class.cast(object).w)) {
 			return false;
-		} else if(!equal(this.x, Point4D.class.cast(object).x)) {
+		} else if(!Doubles.equals(this.x, Point4D.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Point4D.class.cast(object).y)) {
+		} else if(!Doubles.equals(this.y, Point4D.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Point4D.class.cast(object).z)) {
+		} else if(!Doubles.equals(this.z, Point4D.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -384,7 +380,7 @@ public final class Point4D implements Node {
 		final double z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34 * pRHS.w;
 		final double w = mLHS.element41 * pRHS.x + mLHS.element42 * pRHS.y + mLHS.element43 * pRHS.z + mLHS.element44 * pRHS.w;
 		
-		return equal(w, 1.0D) || isZero(w) ? new Point4D(x, y, z, w) : new Point4D(x / w, y / w, z / w, w);
+		return Doubles.equals(w, 1.0D) || Doubles.isZero(w) ? new Point4D(x, y, z, w) : new Point4D(x / w, y / w, z / w, w);
 	}
 	
 	/**

@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.minOrNaN;
 
 import java.io.DataOutput;
@@ -40,6 +39,7 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code CompoundShape3D} is an implementation of {@link Shape3D} that contains a list of {@code Shape3D} instances.
@@ -271,7 +271,7 @@ public final class CompoundShape3D implements Shape3D {
 		for(final Shape3D shape : this.shapes) {
 			t = minOrNaN(t, shape.intersectionT(ray, tMin, tMax));
 			
-			if(!isNaN(t)) {
+			if(!Doubles.isNaN(t)) {
 				tMax = t;
 			}
 		}

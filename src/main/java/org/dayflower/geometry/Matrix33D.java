@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.sin;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -31,7 +26,7 @@ import java.util.Objects;
 
 import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -161,23 +156,23 @@ public final class Matrix33D implements Node {
 			return true;
 		} else if(!(object instanceof Matrix33D)) {
 			return false;
-		} else if(!equal(this.element11, Matrix33D.class.cast(object).element11)) {
+		} else if(!Doubles.equals(this.element11, Matrix33D.class.cast(object).element11)) {
 			return false;
-		} else if(!equal(this.element12, Matrix33D.class.cast(object).element12)) {
+		} else if(!Doubles.equals(this.element12, Matrix33D.class.cast(object).element12)) {
 			return false;
-		} else if(!equal(this.element13, Matrix33D.class.cast(object).element13)) {
+		} else if(!Doubles.equals(this.element13, Matrix33D.class.cast(object).element13)) {
 			return false;
-		} else if(!equal(this.element21, Matrix33D.class.cast(object).element21)) {
+		} else if(!Doubles.equals(this.element21, Matrix33D.class.cast(object).element21)) {
 			return false;
-		} else if(!equal(this.element22, Matrix33D.class.cast(object).element22)) {
+		} else if(!Doubles.equals(this.element22, Matrix33D.class.cast(object).element22)) {
 			return false;
-		} else if(!equal(this.element23, Matrix33D.class.cast(object).element23)) {
+		} else if(!Doubles.equals(this.element23, Matrix33D.class.cast(object).element23)) {
 			return false;
-		} else if(!equal(this.element31, Matrix33D.class.cast(object).element31)) {
+		} else if(!Doubles.equals(this.element31, Matrix33D.class.cast(object).element31)) {
 			return false;
-		} else if(!equal(this.element32, Matrix33D.class.cast(object).element32)) {
+		} else if(!Doubles.equals(this.element32, Matrix33D.class.cast(object).element32)) {
 			return false;
-		} else if(!equal(this.element33, Matrix33D.class.cast(object).element33)) {
+		} else if(!Doubles.equals(this.element33, Matrix33D.class.cast(object).element33)) {
 			return false;
 		} else {
 			return true;
@@ -190,7 +185,7 @@ public final class Matrix33D implements Node {
 	 * @return {@code true} if, and only if, this {@code Matrix33D} instance is invertible, {@code false} otherwise
 	 */
 	public boolean isInvertible() {
-		return abs(determinant()) >= 1.0e-12D;
+		return Doubles.abs(determinant()) >= 1.0e-12D;
 	}
 	
 	/**
@@ -414,8 +409,8 @@ public final class Matrix33D implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
 	 */
 	public static Matrix33D rotate(final AngleD a) {
-		final double cos = cos(a.getRadians());
-		final double sin = sin(a.getRadians());
+		final double cos = Doubles.cos(a.getRadians());
+		final double sin = Doubles.sin(a.getRadians());
 		
 		return new Matrix33D(cos, sin, 0.0D, -sin, cos, 0.0D, 0.0D, 0.0D, 1.0D);
 	}

@@ -18,10 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,6 +36,7 @@ import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Disk3D} is an implementation of {@link Shape3D} that represents a disk.
@@ -211,7 +208,7 @@ public final class Disk3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -274,11 +271,11 @@ public final class Disk3D implements Shape3D {
 			return false;
 		} else if(!Objects.equals(this.phiMax, Disk3D.class.cast(object).phiMax)) {
 			return false;
-		} else if(!equal(this.radiusInner, Disk3D.class.cast(object).radiusInner)) {
+		} else if(!Doubles.equals(this.radiusInner, Disk3D.class.cast(object).radiusInner)) {
 			return false;
-		} else if(!equal(this.radiusOuter, Disk3D.class.cast(object).radiusOuter)) {
+		} else if(!Doubles.equals(this.radiusOuter, Disk3D.class.cast(object).radiusOuter)) {
 			return false;
-		} else if(!equal(this.zMax, Disk3D.class.cast(object).zMax)) {
+		} else if(!Doubles.equals(this.zMax, Disk3D.class.cast(object).zMax)) {
 			return false;
 		} else {
 			return true;
@@ -346,7 +343,7 @@ public final class Disk3D implements Shape3D {
 		
 		final Vector3D direction = ray.getDirection();
 		
-		if(isZero(direction.z)) {
+		if(Doubles.isZero(direction.z)) {
 			return Double.NaN;
 		}
 		

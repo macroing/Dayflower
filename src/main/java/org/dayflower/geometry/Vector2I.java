@@ -18,14 +18,13 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.sqrt;
-import static org.dayflower.utility.Ints.toInt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
+
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Vector2I} represents a vector with two {@code int}-based components.
@@ -143,7 +142,7 @@ public final class Vector2I {
 	 * @return the length of this {@code Vector2I} instance
 	 */
 	public int length() {
-		return toInt(sqrt(lengthSquared()));
+		return (int)(Doubles.sqrt(lengthSquared()));
 	}
 	
 	/**

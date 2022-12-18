@@ -18,15 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume;
 
-import static org.dayflower.utility.Doubles.PI;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.pow;
-import static org.dayflower.utility.Doubles.solveQuadraticSystem;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -39,7 +30,7 @@ import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-
+import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -130,9 +121,9 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 		final double distanceSquaredFromCenterToX = Point3D.distanceSquared(center, x);
 		final double distanceSquaredFromCenterToY = Point3D.distanceSquared(center, y);
 		final double distanceSquaredFromCenterToZ = Point3D.distanceSquared(center, z);
-		final double distanceSquared = max(distanceSquaredFromCenterToX, distanceSquaredFromCenterToY, distanceSquaredFromCenterToZ);
+		final double distanceSquared = Doubles.max(distanceSquaredFromCenterToX, distanceSquaredFromCenterToY, distanceSquaredFromCenterToZ);
 		
-		final double radius = sqrt(distanceSquared);
+		final double radius = Doubles.sqrt(distanceSquared);
 		
 		return new BoundingSphere3D(radius, center);
 	}
@@ -263,7 +254,7 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 			return false;
 		} else if(!Objects.equals(this.center, BoundingSphere3D.class.cast(object).center)) {
 			return false;
-		} else if(!equal(this.radius, BoundingSphere3D.class.cast(object).radius)) {
+		} else if(!Doubles.equals(this.radius, BoundingSphere3D.class.cast(object).radius)) {
 			return false;
 		} else {
 			return true;
@@ -295,7 +286,7 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 */
 	@Override
 	public double getSurfaceArea() {
-		return PI_MULTIPLIED_BY_4 * getRadiusSquared();
+		return Doubles.PI_MULTIPLIED_BY_4 * getRadiusSquared();
 	}
 	
 	/**
@@ -305,7 +296,7 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 	 */
 	@Override
 	public double getVolume() {
-		return 4.0D / 3.0D * PI * pow(this.radius, 3.0D);
+		return 4.0D / 3.0D * Doubles.PI * Doubles.pow(this.radius, 3.0D);
 	}
 	
 	/**
@@ -335,16 +326,16 @@ public final class BoundingSphere3D implements BoundingVolume3D {
 		final double b = 2.0D * Vector3D.dotProduct(centerToOrigin, direction);
 		final double c = centerToOrigin.lengthSquared() - radiusSquared;
 		
-		final double[] ts = solveQuadraticSystem(a, b, c);
+		final double[] ts = Doubles.solveQuadraticSystem(a, b, c);
 		
 		final double t0 = ts[0];
 		final double t1 = ts[1];
 		
-		if(!isNaN(t0) && t0 > tMinimum && t0 < tMaximum) {
+		if(!Doubles.isNaN(t0) && t0 > tMinimum && t0 < tMaximum) {
 			return t0;
 		}
 		
-		if(!isNaN(t1) && t1 > tMinimum && t1 < tMaximum) {
+		if(!Doubles.isNaN(t1) && t1 > tMinimum && t1 < tMaximum) {
 			return t1;
 		}
 		

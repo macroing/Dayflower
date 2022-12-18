@@ -18,12 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.MAX_VALUE;
-import static org.dayflower.utility.Doubles.MIN_VALUE;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.minOrNaN;
 
 import java.io.BufferedReader;
@@ -61,6 +55,7 @@ import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code TriangleMesh3D} is an implementation of {@link Shape3D} that represents a triangle mesh.
@@ -370,7 +365,7 @@ public final class TriangleMesh3D implements Shape3D {
 			return false;
 		} else if(this.isUsingAccelerationStructure != TriangleMesh3D.class.cast(object).isUsingAccelerationStructure) {
 			return false;
-		} else if(!equal(this.surfaceArea, TriangleMesh3D.class.cast(object).surfaceArea)) {
+		} else if(!Doubles.equals(this.surfaceArea, TriangleMesh3D.class.cast(object).surfaceArea)) {
 			return false;
 		} else {
 			return true;
@@ -408,7 +403,7 @@ public final class TriangleMesh3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
-		return this.isUsingAccelerationStructure ? this.bVHNode.intersects(ray, tMinimum, tMaximum) : !isNaN(intersectionT(ray, tMinimum, tMaximum));
+		return this.isUsingAccelerationStructure ? this.bVHNode.intersects(ray, tMinimum, tMaximum) : !Doubles.isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -449,7 +444,7 @@ public final class TriangleMesh3D implements Shape3D {
 		for(final Triangle3D triangle : this.triangles) {
 			t = minOrNaN(t, triangle.intersectionT(ray, tMin, tMax));
 			
-			if(!isNaN(t)) {
+			if(!Doubles.isNaN(t)) {
 				tMax = t;
 			}
 		}
@@ -634,7 +629,7 @@ public final class TriangleMesh3D implements Shape3D {
 			String previousMaterialName = "";
 			String previousObjectName = "";
 			
-			final boolean isScaling = !equal(scale, 1.0D);
+			final boolean isScaling = !Doubles.equals(scale, 1.0D);
 			
 			final int maximumCount = Integer.MAX_VALUE;
 			
@@ -946,12 +941,12 @@ public final class TriangleMesh3D implements Shape3D {
 	private static BVHNode3D doCreateBVHNode(final List<Triangle3D> triangles) {
 		final List<BVHItem3D<Triangle3D>> processableBVHItems = new ArrayList<>(triangles.size());
 		
-		double maximumX = MIN_VALUE;
-		double maximumY = MIN_VALUE;
-		double maximumZ = MIN_VALUE;
-		double minimumX = MAX_VALUE;
-		double minimumY = MAX_VALUE;
-		double minimumZ = MAX_VALUE;
+		double maximumX = Doubles.MIN_VALUE;
+		double maximumY = Doubles.MIN_VALUE;
+		double maximumZ = Doubles.MIN_VALUE;
+		double minimumX = Doubles.MAX_VALUE;
+		double minimumY = Doubles.MAX_VALUE;
+		double minimumZ = Doubles.MAX_VALUE;
 		
 		for(final Triangle3D triangle : triangles) {
 			final Point3D a = new Point3D(triangle.getA().getPosition());
@@ -961,12 +956,12 @@ public final class TriangleMesh3D implements Shape3D {
 			final Point3D maximum = Point3D.maximum(a, b, c);
 			final Point3D minimum = Point3D.minimum(a, b, c);
 			
-			maximumX = max(maximumX, maximum.x);
-			maximumY = max(maximumY, maximum.y);
-			maximumZ = max(maximumZ, maximum.z);
-			minimumX = min(minimumX, minimum.x);
-			minimumY = min(minimumY, minimum.y);
-			minimumZ = min(minimumZ, minimum.z);
+			maximumX = Doubles.max(maximumX, maximum.x);
+			maximumY = Doubles.max(maximumY, maximum.y);
+			maximumZ = Doubles.max(maximumZ, maximum.z);
+			minimumX = Doubles.min(minimumX, minimum.x);
+			minimumY = Doubles.min(minimumY, minimum.y);
+			minimumZ = Doubles.min(minimumZ, minimum.z);
 			
 			processableBVHItems.add(new BVHItem3D<>(new AxisAlignedBoundingBox3D(maximum, minimum), triangle));
 		}

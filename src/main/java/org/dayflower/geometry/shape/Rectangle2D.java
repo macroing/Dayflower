@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -37,6 +32,7 @@ import org.dayflower.geometry.Vector2D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Rectangle2D} is an implementation of {@link Shape2D} that represents a rectangle.
@@ -89,10 +85,10 @@ public final class Rectangle2D implements Shape2D {
 	 * @throws NullPointerException thrown if, and only if, either {@code x} or {@code y} are {@code null}
 	 */
 	public Rectangle2D(final Point2D x, final Point2D y) {
-		this.a = new Point2D(min(x.x, y.x), min(x.y, y.y));
-		this.b = new Point2D(max(x.x, y.x), min(x.y, y.y));
-		this.c = new Point2D(max(x.x, y.x), max(x.y, y.y));
-		this.d = new Point2D(min(x.x, y.x), max(x.y, y.y));
+		this.a = new Point2D(Doubles.min(x.x, y.x), Doubles.min(x.y, y.y));
+		this.b = new Point2D(Doubles.max(x.x, y.x), Doubles.min(x.y, y.y));
+		this.c = new Point2D(Doubles.max(x.x, y.x), Doubles.max(x.y, y.y));
+		this.d = new Point2D(Doubles.min(x.x, y.x), Doubles.max(x.y, y.y));
 		this.lineSegments = LineSegment2D.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
@@ -296,10 +292,10 @@ public final class Rectangle2D implements Shape2D {
 	 * @return {@code true} if, and only if, this {@code Rectangle2D} instance is axis-aligned, {@code false} otherwise
 	 */
 	public boolean isAxisAligned() {
-		final boolean isAxisAlignedAB = equal(this.a.y, this.b.y);
-		final boolean isAxisAlignedBC = equal(this.b.x, this.c.x);
-		final boolean isAxisAlignedCD = equal(this.c.y, this.d.y);
-		final boolean isAxisAlignedDA = equal(this.d.x, this.a.x);
+		final boolean isAxisAlignedAB = Doubles.equals(this.a.y, this.b.y);
+		final boolean isAxisAlignedBC = Doubles.equals(this.b.x, this.c.x);
+		final boolean isAxisAlignedCD = Doubles.equals(this.c.y, this.d.y);
+		final boolean isAxisAlignedDA = Doubles.equals(this.d.x, this.a.x);
 		final boolean isAxisAligned = isAxisAlignedAB & isAxisAlignedBC & isAxisAlignedCD & isAxisAlignedDA;//TODO: Using & instead of && to get full code coverage. Should this be fixed?
 		
 		return isAxisAligned;
@@ -500,8 +496,8 @@ public final class Rectangle2D implements Shape2D {
 		final double distanceCD = Point2D.distance(c, d);
 		final double distanceDA = Point2D.distance(d, a);
 		
-		final double deltaABCD = abs(distanceAB - distanceCD);
-		final double deltaBCDA = abs(distanceBC - distanceDA);
+		final double deltaABCD = Doubles.abs(distanceAB - distanceCD);
+		final double deltaBCDA = Doubles.abs(distanceBC - distanceDA);
 		
 		final boolean isValidABCD = deltaABCD <= 0.00001D;
 		final boolean isValidBCDA = deltaBCDA <= 0.00001D;

@@ -18,17 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.PI;
-import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_2;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
-import static org.dayflower.utility.Doubles.asin;
-import static org.dayflower.utility.Doubles.atan2;
-import static org.dayflower.utility.Doubles.equal;
-import static org.dayflower.utility.Doubles.getOrAdd;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.solveQuartic;
 
 import java.io.DataOutput;
@@ -49,6 +38,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code Torus3D} is an implementation of {@link Shape3D} that represents a torus.
@@ -144,7 +134,7 @@ public final class Torus3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -248,13 +238,13 @@ public final class Torus3D implements Shape3D {
 			return false;
 		} else if(!Objects.equals(this.boundingVolume, Torus3D.class.cast(object).boundingVolume)) {
 			return false;
-		} else if(!equal(this.radiusInner, Torus3D.class.cast(object).radiusInner)) {
+		} else if(!Doubles.equals(this.radiusInner, Torus3D.class.cast(object).radiusInner)) {
 			return false;
-		} else if(!equal(this.radiusInnerSquared, Torus3D.class.cast(object).radiusInnerSquared)) {
+		} else if(!Doubles.equals(this.radiusInnerSquared, Torus3D.class.cast(object).radiusInnerSquared)) {
 			return false;
-		} else if(!equal(this.radiusOuter, Torus3D.class.cast(object).radiusOuter)) {
+		} else if(!Doubles.equals(this.radiusOuter, Torus3D.class.cast(object).radiusOuter)) {
 			return false;
-		} else if(!equal(this.radiusOuterSquared, Torus3D.class.cast(object).radiusOuterSquared)) {
+		} else if(!Doubles.equals(this.radiusOuterSquared, Torus3D.class.cast(object).radiusOuterSquared)) {
 			return false;
 		} else {
 			return true;
@@ -309,7 +299,7 @@ public final class Torus3D implements Shape3D {
 //	TODO: Add Unit Tests!
 	@Override
 	public double getSurfaceArea() {
-		return 4.0D * PI * PI * this.radiusOuter * this.radiusInner;
+		return 4.0D * Doubles.PI * Doubles.PI * this.radiusOuter * this.radiusInner;
 	}
 	
 	/**
@@ -319,7 +309,7 @@ public final class Torus3D implements Shape3D {
 	 */
 //	TODO: Add Unit Tests!
 	public double getVolume() {
-		return 2.0D * PI * PI * this.radiusOuter * this.radiusInnerSquared;
+		return 2.0D * Doubles.PI * Doubles.PI * this.radiusOuter * this.radiusInnerSquared;
 	}
 	
 	/**
@@ -438,11 +428,11 @@ public final class Torus3D implements Shape3D {
 	}
 	
 	private Point2D doCreateTextureCoordinates(final Point3D surfaceIntersectionPoint) {
-		final double phi = asin(saturate(surfaceIntersectionPoint.z / this.radiusInner, -1.0D, 1.0D));
-		final double theta = getOrAdd(atan2(surfaceIntersectionPoint.y, surfaceIntersectionPoint.x), 0.0D, PI_MULTIPLIED_BY_2);
+		final double phi = Doubles.asin(Doubles.saturate(surfaceIntersectionPoint.z / this.radiusInner, -1.0D, 1.0D));
+		final double theta = Doubles.addLessThan(Doubles.atan2(surfaceIntersectionPoint.y, surfaceIntersectionPoint.x), 0.0D, Doubles.PI_MULTIPLIED_BY_2);
 		
-		final double u = theta * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final double v = (phi + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
+		final double u = theta * Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final double v = (phi + Doubles.PI_DIVIDED_BY_2) * Doubles.PI_RECIPROCAL;
 		
 		return new Point2D(u, v);
 	}

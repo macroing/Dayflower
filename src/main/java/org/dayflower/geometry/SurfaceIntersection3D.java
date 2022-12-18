@@ -18,12 +18,11 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.equal;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
+
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code SurfaceIntersection3D} contains information about the surface of a {@link Shape3D} instance where a {@link Ray3D} instance intersects.
@@ -239,7 +238,7 @@ public final class SurfaceIntersection3D {
 			return false;
 		} else if(!Objects.equals(this.shape, SurfaceIntersection3D.class.cast(object).shape)) {
 			return false;
-		} else if(!equal(this.t, SurfaceIntersection3D.class.cast(object).t)) {
+		} else if(!Doubles.equals(this.t, SurfaceIntersection3D.class.cast(object).t)) {
 			return false;
 		} else {
 			return true;
@@ -387,7 +386,7 @@ public final class SurfaceIntersection3D {
 		
 		final Shape3D shape = surfaceIntersection.shape;
 		
-		final double tNewSpace = abs(Point3D.distance(rayNewSpace.getOrigin(), surfaceIntersectionPointNewSpace));
+		final double tNewSpace = Doubles.abs(Point3D.distance(rayNewSpace.getOrigin(), surfaceIntersectionPointNewSpace));
 		
 		return new SurfaceIntersection3D(orthonormalBasisGNewSpace, orthonormalBasisSNewSpaceCorrectlyOriented, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, tNewSpace);
 	}

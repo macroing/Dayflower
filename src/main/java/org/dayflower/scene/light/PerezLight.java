@@ -18,12 +18,6 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.utility.Doubles.acos;
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.exp;
-import static org.dayflower.utility.Doubles.pow;
-import static org.dayflower.utility.Doubles.saturate;
-import static org.dayflower.utility.Doubles.tan;
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.acos;
 import static org.dayflower.utility.Floats.equal;
@@ -60,6 +54,7 @@ import org.macroing.art4j.curve.ChromaticSpectralCurveF;
 import org.macroing.art4j.curve.IrregularSpectralCurveF;
 import org.macroing.art4j.curve.RegularSpectralCurveF;
 import org.macroing.art4j.curve.SpectralCurveF;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code PerezLight} is a {@link Light} implementation of the Perez algorithm.
@@ -602,8 +597,8 @@ public final class PerezLight extends Light {
 		
 		final Vector3F directionSaturated = Vector3F.normalize(new Vector3F(direction.x, direction.y, max(direction.z, 0.001F)));
 		
-		final double theta = acos(saturate(directionSaturated.z, -1.0D, 1.0D));
-		final double gamma = acos(saturate(Vector3F.dotProduct(directionSaturated, this.sunDirectionObjectSpace), -1.0D, 1.0D));
+		final double theta = Doubles.acos(Doubles.saturate(directionSaturated.z, -1.0D, 1.0D));
+		final double gamma = Doubles.acos(Doubles.saturate(Vector3F.dotProduct(directionSaturated, this.sunDirectionObjectSpace), -1.0D, 1.0D));
 		final double relativeLuminance = doCalculatePerezFunction(this.perezRelativeLuminance, theta, gamma, this.zenith[0]) * 0.0001D;
 		final double x = doCalculatePerezFunction(this.perezX, theta, gamma, this.zenith[1]);
 		final double y = doCalculatePerezFunction(this.perezY, theta, gamma, this.zenith[2]);
@@ -626,8 +621,8 @@ public final class PerezLight extends Light {
 	}
 	
 	private double doCalculatePerezFunction(final double[] lam, final double theta, final double gamma, final double lvz) {
-		final double den = ((1.0D + lam[0] * exp(lam[1])) * (1.0D + lam[2] * exp(lam[3] * this.theta) + lam[4] * cos(this.theta) * cos(this.theta)));
-		final double num = ((1.0D + lam[0] * exp(lam[1] / cos(theta))) * (1.0D + lam[2] * exp(lam[3] * gamma) + lam[4] * cos(gamma) * cos(gamma)));
+		final double den = ((1.0D + lam[0] * Doubles.exp(lam[1])) * (1.0D + lam[2] * Doubles.exp(lam[3] * this.theta) + lam[4] * Doubles.cos(this.theta) * Doubles.cos(this.theta)));
+		final double num = ((1.0D + lam[0] * Doubles.exp(lam[1] / Doubles.cos(theta))) * (1.0D + lam[2] * Doubles.exp(lam[3] * gamma) + lam[4] * Doubles.cos(gamma) * Doubles.cos(gamma)));
 		
 		return lvz * num / den;
 	}
@@ -722,7 +717,7 @@ public final class PerezLight extends Light {
 	
 	private void doSetZenith() {
 		this.zenith    = new double[3];
-		this.zenith[0] = ((4.0453D * this.turbidity - 4.9710D) * tan((4.0D / 9.0D - this.turbidity / 120.0D) * (Math.PI - 2.0D * this.theta)) - 0.2155D * this.turbidity + 2.4192D) * 1000.0D;
+		this.zenith[0] = ((4.0453D * this.turbidity - 4.9710D) * Doubles.tan((4.0D / 9.0D - this.turbidity / 120.0D) * (Math.PI - 2.0D * this.theta)) - 0.2155D * this.turbidity + 2.4192D) * 1000.0D;
 		this.zenith[1] = (0.00165D * (this.theta * this.theta * this.theta) - 0.00374D * (this.theta * this.theta) + 0.00208D * this.theta + 0.0D) * (this.turbidity * this.turbidity) + (-0.02902D * (this.theta * this.theta * this.theta) + 0.06377D * (this.theta * this.theta) - 0.03202D * this.theta + 0.00394D) * this.turbidity + (0.11693D * (this.theta * this.theta * this.theta) - 0.21196D * (this.theta * this.theta) + 0.06052D * this.theta + 0.25885D);
 		this.zenith[2] = (0.00275D * (this.theta * this.theta * this.theta) - 0.00610D * (this.theta * this.theta) + 0.00316D * this.theta + 0.0D) * (this.turbidity * this.turbidity) + (-0.04212D * (this.theta * this.theta * this.theta) + 0.08970D * (this.theta * this.theta) - 0.04153D * this.theta + 0.00515D) * this.turbidity + (0.15346D * (this.theta * this.theta * this.theta) - 0.26756D * (this.theta * this.theta) + 0.06669D * this.theta + 0.26688D);
 	}
@@ -736,18 +731,18 @@ public final class PerezLight extends Light {
 		final double lozone = 0.35D;
 		final double w = 2.0D;
 		final double beta = 0.04608365822050D * turbidity - 0.04586025928522D;
-		final double relativeOpticalMass = 1.0D / (cos(theta) + 0.000940D * pow(1.6386D - theta, -1.253D));
+		final double relativeOpticalMass = 1.0D / (Doubles.cos(theta) + 0.000940D * Doubles.pow(1.6386D - theta, -1.253D));
 		
 		final int wavelengthMin = 350;
 		final int wavelengthMax = 800;
 		final int wavelengthStep = 5;
 		
 		for(int i = 0, lambda = wavelengthMin; lambda <= wavelengthMax; i++, lambda += wavelengthStep) {
-			final double tauRayleighScattering = exp(-relativeOpticalMass * 0.008735D * pow(lambda / 1000.0D, -4.08D));
-			final double tauAerosolAttenuation = exp(-relativeOpticalMass * beta * pow(lambda / 1000.0D, -alpha));
-			final double tauOzoneAbsorptionAttenuation = exp(-relativeOpticalMass * K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * lozone);
-			final double tauGasAbsorptionAttenuation = exp(-1.41D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass / pow(1.0D + 118.93D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass, 0.45D));
-			final double tauWaterVaporAbsorptionAttenuation = exp(-0.2385D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass / pow(1.0D + 20.07D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass, 0.45D));
+			final double tauRayleighScattering = Doubles.exp(-relativeOpticalMass * 0.008735D * Doubles.pow(lambda / 1000.0D, -4.08D));
+			final double tauAerosolAttenuation = Doubles.exp(-relativeOpticalMass * beta * Doubles.pow(lambda / 1000.0D, -alpha));
+			final double tauOzoneAbsorptionAttenuation = Doubles.exp(-relativeOpticalMass * K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * lozone);
+			final double tauGasAbsorptionAttenuation = Doubles.exp(-1.41D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass / Doubles.pow(1.0D + 118.93D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass, 0.45D));
+			final double tauWaterVaporAbsorptionAttenuation = Doubles.exp(-0.2385D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass / Doubles.pow(1.0D + 20.07D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass, 0.45D));
 			final double amplitude = 100.0D * SOL_SPECTRAL_CURVE.sample(lambda) * tauRayleighScattering * tauAerosolAttenuation * tauOzoneAbsorptionAttenuation * tauGasAbsorptionAttenuation * tauWaterVaporAbsorptionAttenuation;
 			
 			spectrum[i] = toFloat(amplitude);

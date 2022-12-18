@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.PI;
-import static org.dayflower.utility.Doubles.cos;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -37,6 +34,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code LineSegment3D} is an implementation of {@link Shape3D} that represents a line segment.
@@ -63,8 +61,8 @@ public final class LineSegment3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final double LINE_WIDTH = PI * 0.5D / 4096.0D;
-	private static final double LINE_WIDTH_COS = cos(LINE_WIDTH);
+	private static final double LINE_WIDTH = Doubles.PI * 0.5D / 4096.0D;
+	private static final double LINE_WIDTH_COS = Doubles.cos(LINE_WIDTH);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

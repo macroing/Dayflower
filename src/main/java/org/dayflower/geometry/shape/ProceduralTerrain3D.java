@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.isNaN;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -37,9 +35,9 @@ import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
-import org.dayflower.utility.Doubles;
 
 import org.macroing.art4j.noise.SimplexNoiseD;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code ProceduralTerrain3D} is an implementation of {@link Shape3D} that represents a procedural terrain.
@@ -114,7 +112,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		final double t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Doubles.isNaN(t)) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		

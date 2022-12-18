@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume;
 
-import static org.dayflower.utility.Doubles.max;
-import static org.dayflower.utility.Doubles.min;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -34,6 +31,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.lang.Doubles;
 
 /**
  * An {@code AxisAlignedBoundingBox3D} is an implementation of {@link BoundingVolume3D} that represents an axis-aligned bounding box (AABB).
@@ -317,8 +315,8 @@ public final class AxisAlignedBoundingBox3D implements BoundingVolume3D {
 		final Vector3D directionA = Vector3D.hadamardProduct(Vector3D.direction(origin, maximum), directionReciprocal);
 		final Vector3D directionB = Vector3D.hadamardProduct(Vector3D.direction(origin, minimum), directionReciprocal);
 		
-		final double t0 = max(min(directionA.x, directionB.x), min(directionA.y, directionB.y), min(directionA.z, directionB.z));
-		final double t1 = min(max(directionA.x, directionB.x), max(directionA.y, directionB.y), max(directionA.z, directionB.z));
+		final double t0 = Doubles.max(Doubles.min(directionA.x, directionB.x), Doubles.min(directionA.y, directionB.y), Doubles.min(directionA.z, directionB.z));
+		final double t1 = Doubles.min(Doubles.max(directionA.x, directionB.x), Doubles.max(directionA.y, directionB.y), Doubles.max(directionA.z, directionB.z));
 		
 		return t0 > t1 ? Double.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
 	}

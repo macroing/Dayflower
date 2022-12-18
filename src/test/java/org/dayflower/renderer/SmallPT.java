@@ -18,18 +18,11 @@
  */
 package org.dayflower.renderer;
 
-import static org.dayflower.utility.Doubles.PI;
-import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.cos;
-import static org.dayflower.utility.Doubles.isNaN;
-import static org.dayflower.utility.Doubles.pow;
-import static org.dayflower.utility.Doubles.random;
-import static org.dayflower.utility.Doubles.sin;
-import static org.dayflower.utility.Doubles.sqrt;
-
 import org.dayflower.image.PixelImageF;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Doubles;
+import org.macroing.java.util.Randoms;
 
 public final class SmallPT {
 	private static final Sphere[] SPHERES = {
@@ -58,13 +51,13 @@ public final class SmallPT {
 		for(int i = 0; i < SPHERES.length; i++) {
 			final double currentT = SPHERES[i].intersect(r);
 			
-			if(!isNaN(currentT) && (isNaN(t[0]) || currentT < t[0])) {
+			if(!Doubles.isNaN(currentT) && (Doubles.isNaN(t[0]) || currentT < t[0])) {
 				t[0] = currentT;
 				id[0] = i;
 			}
 		}
 		
-		return !isNaN(t[0]);
+		return !Doubles.isNaN(t[0]);
 	}
 	
 	public static double clamp(final double v) {
@@ -72,7 +65,7 @@ public final class SmallPT {
 	}
 	
 	public static int toInt(final double v) {
-		return (int)(pow(clamp(v), 1.0D / 2.2D) * 255.0D + 0.5D);
+		return (int)(Doubles.pow(clamp(v), 1.0D / 2.2D) * 255.0D + 0.5D);
 	}
 	
 	public static Vec radiance(final Ray r, final int depth) {
@@ -97,7 +90,7 @@ public final class SmallPT {
 		if(currentDepth > 5) {
 			final double p = f.x > f.y && f.x > f.z ? f.x : f.y > f.z ? f.y : f.z;
 			
-			if(random() < p) {
+			if(Randoms.nextDouble() < p) {
 				f = f.multiply(1.0D / p);
 			} else {
 				return sphere.e;
@@ -105,14 +98,14 @@ public final class SmallPT {
 		}
 		
 		if(sphere.refl == Refl.DIFF) {
-			final double r1 = 2.0D * PI * random();
-			final double r2 = random();
-			final double r2s = sqrt(r2);
+			final double r1 = 2.0D * Doubles.PI * Randoms.nextDouble();
+			final double r2 = Randoms.nextDouble();
+			final double r2s = Doubles.sqrt(r2);
 			
 			final Vec w = nl;
-			final Vec u = (abs(w.x) > 0.1D ? new Vec(0.0D, 1.0D, 0.0D) : new Vec(1.0D, 0.0D, 0.0D)).crossProduct(w).normalize();
+			final Vec u = (Doubles.abs(w.x) > 0.1D ? new Vec(0.0D, 1.0D, 0.0D) : new Vec(1.0D, 0.0D, 0.0D)).crossProduct(w).normalize();
 			final Vec v = w.crossProduct(u);
-			final Vec d = u.multiply(cos(r1)).multiply(r2s).add(v.multiply(sin(r1)).multiply(r2s)).add(w.multiply(sqrt(1.0D - r2))).normalize();
+			final Vec d = u.multiply(Doubles.cos(r1)).multiply(r2s).add(v.multiply(Doubles.sin(r1)).multiply(r2s)).add(w.multiply(Doubles.sqrt(1.0D - r2))).normalize();
 			
 			return sphere.e.add(f.multiply(radiance(new Ray(x, d), currentDepth)));
 		} else if(sphere.refl == Refl.SPEC) {
@@ -133,7 +126,7 @@ public final class SmallPT {
 			return sphere.e.add(f.multiply(radiance(reflRay, currentDepth)));
 		}
 		
-		final Vec tDir = r.d.multiply(nnt).subtract(n.multiply((into ? 1.0D : -1.0D) * (ddn * nnt + sqrt(cos2t)))).normalize();
+		final Vec tDir = r.d.multiply(nnt).subtract(n.multiply((into ? 1.0D : -1.0D) * (ddn * nnt + Doubles.sqrt(cos2t)))).normalize();
 		
 		final double a = nt - nc;
 		final double b = nt + nc;
@@ -146,7 +139,7 @@ public final class SmallPT {
 		final double tP = tR / (1.0D - p);
 		
 		if(currentDepth > 2) {
-			if(random() < p) {
+			if(Randoms.nextDouble() < p) {
 				return sphere.e.add(f.multiply(radiance(reflRay, currentDepth).multiply(rP)));
 			}
 			
@@ -179,10 +172,10 @@ public final class SmallPT {
 						Vec r = new Vec();
 						
 						for(int s = 0; s < samps; s++) {
-							final double r1 = 2.0D * random();
-							final double dx = r1 < 1.0D ? sqrt(r1) - 1.0D : 1.0D - sqrt(2.0D - r1);
-							final double r2 = 2.0D * random();
-							final double dy = r2 < 1.0D ? sqrt(r2) - 1.0D : 1.0D - sqrt(2.0D - r2);
+							final double r1 = 2.0D * Randoms.nextDouble();
+							final double dx = r1 < 1.0D ? Doubles.sqrt(r1) - 1.0D : 1.0D - Doubles.sqrt(2.0D - r1);
+							final double r2 = 2.0D * Randoms.nextDouble();
+							final double dy = r2 < 1.0D ? Doubles.sqrt(r2) - 1.0D : 1.0D - Doubles.sqrt(2.0D - r2);
 							
 							final Vec d = cx.multiply(((sx + 0.5D + dx) / 2.0D + x) / w - 0.5D).add(cy.multiply(((sy + 0.5D + dy) / 2.0D + y) / h - 0.5D)).add(cam.d);
 							
@@ -250,7 +243,7 @@ public final class SmallPT {
 				return Double.NaN;
 			}
 			
-			final double detSqrt = sqrt(det);
+			final double detSqrt = Doubles.sqrt(det);
 			final double t0 = b - detSqrt;
 			
 			if(t0 > eps) {
@@ -309,7 +302,7 @@ public final class SmallPT {
 		}
 		
 		public Vec normalize() {
-			return multiply(1.0D / sqrt(this.x * this.x + this.y * this.y + this.z * this.z));
+			return multiply(1.0D / Doubles.sqrt(this.x * this.x + this.y * this.y + this.z * this.z));
 		}
 		
 		public Vec subtract(final Vec v) {

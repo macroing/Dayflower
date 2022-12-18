@@ -18,13 +18,13 @@
  */
 package org.dayflower.pbrt;
 
-import static org.dayflower.utility.Doubles.pow;
 import static org.dayflower.utility.Floats.pow;
 
 import org.macroing.art4j.color.Color3D;
 import org.macroing.art4j.color.Color3F;
 import org.macroing.art4j.color.ColorSpaceD;
 import org.macroing.art4j.color.ColorSpaceF;
+import org.macroing.java.lang.Doubles;
 
 public final class ColorConversions {
 	private ColorConversions() {
@@ -63,9 +63,9 @@ public final class ColorConversions {
 		final double slope = 12.92D;
 		final double slopeMatch = 1.055D;
 		
-		final double component1 = color.r <= breakPoint ? color.r * slope : slopeMatch * pow(color.r, 1.0D / gamma) - segmentOffset;
-		final double component2 = color.g <= breakPoint ? color.g * slope : slopeMatch * pow(color.g, 1.0D / gamma) - segmentOffset;
-		final double component3 = color.b <= breakPoint ? color.b * slope : slopeMatch * pow(color.b, 1.0D / gamma) - segmentOffset;
+		final double component1 = color.r <= breakPoint ? color.r * slope : slopeMatch * Doubles.pow(color.r, 1.0D / gamma) - segmentOffset;
+		final double component2 = color.g <= breakPoint ? color.g * slope : slopeMatch * Doubles.pow(color.g, 1.0D / gamma) - segmentOffset;
+		final double component3 = color.b <= breakPoint ? color.b * slope : slopeMatch * Doubles.pow(color.b, 1.0D / gamma) - segmentOffset;
 		
 		return new Color3D(component1, component2, component3);
 	}
@@ -77,9 +77,9 @@ public final class ColorConversions {
 		final double slope = 12.92D;
 		final double slopeMatch = 1.055D;
 		
-		final double component1 = color.r <= breakPoint * slope ? color.r / slope : pow((color.r + segmentOffset) / slopeMatch, gamma);
-		final double component2 = color.g <= breakPoint * slope ? color.g / slope : pow((color.g + segmentOffset) / slopeMatch, gamma);
-		final double component3 = color.b <= breakPoint * slope ? color.b / slope : pow((color.b + segmentOffset) / slopeMatch, gamma);
+		final double component1 = color.r <= breakPoint * slope ? color.r / slope : Doubles.pow((color.r + segmentOffset) / slopeMatch, gamma);
+		final double component2 = color.g <= breakPoint * slope ? color.g / slope : Doubles.pow((color.g + segmentOffset) / slopeMatch, gamma);
+		final double component3 = color.b <= breakPoint * slope ? color.b / slope : Doubles.pow((color.b + segmentOffset) / slopeMatch, gamma);
 		
 		return new Color3D(component1, component2, component3);
 	}

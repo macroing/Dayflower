@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume.hierarchy;
 
-import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.minOrNaN;
 
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
@@ -36,6 +35,7 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code LeafBVHNode3D} is an implementation of {@link BVHNode3D} that represents a leaf node.
@@ -323,7 +323,7 @@ public final class LeafBVHNode3D<T extends Shape3D> extends BVHNode3D {
 			for(final Shape3D shape : this.shapes) {
 				t = minOrNaN(t, shape.intersectionT(ray, tBounds[0], tBounds[1]));
 				
-				if(!isNaN(t)) {
+				if(!Doubles.isNaN(t)) {
 					tBounds[1] = t;
 				}
 			}

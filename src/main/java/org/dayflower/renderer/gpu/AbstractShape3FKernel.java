@@ -2001,13 +2001,13 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float lengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
 		
-		final float pointX = directionX + lengthReciprocal;
-		final float pointY = directionY + lengthReciprocal;
-		final float pointZ = directionZ + lengthReciprocal;
-		
 		final float surfaceNormalX = directionX * lengthReciprocal;
 		final float surfaceNormalY = directionY * lengthReciprocal;
 		final float surfaceNormalZ = directionZ * lengthReciprocal;
+		
+		final float pointX = surfaceNormalX;
+		final float pointY = surfaceNormalY;
+		final float pointZ = surfaceNormalZ;
 		
 		point3FSet(pointX, pointY, pointZ);
 		

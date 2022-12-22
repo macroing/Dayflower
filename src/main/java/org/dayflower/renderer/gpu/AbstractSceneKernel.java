@@ -136,52 +136,13 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	}
 	
 	/**
-	 * Sets the {@link Scene} instance that is associated with this {@code AbstractSceneKernel} instance to {@code scene}.
-	 * <p>
-	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param scene a {@code Scene} instance
-	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
-	 */
-	public final void setScene(final Scene scene) {
-		this.scene = Objects.requireNonNull(scene, "scene == null");
-		this.scene.addSceneObserver(this.sceneObserver);
-	}
-	
-	/**
-	 * Sets up all necessary resources for this {@code AbstractSceneKernel} instance.
-	 */
-	@Override
-	public void setup() {
-		setup(true);
-	}
-	
-	/**
-	 * Sets up all necessary resources for this {@code AbstractSceneKernel} instance.
-	 * 
-	 * @param isSettingUpScene {@code true} if, and only if, the scene should be setup, {@code false} otherwise
-	 */
-	public void setup(final boolean isSettingUpScene) {
-		super.setup();
-		
-		doSetupPixelArray();
-		
-		if(isSettingUpScene) {
-			doSetupScene();
-		}
-	}
-	
-	/**
-	 * Updates the {@link Camera} instance.
-	 */
-	public final void updateCamera() {
-		put(this.cameraArray = CompiledCameraCache.toCamera(getScene().getCamera()));
-	}
-	
-	/**
 	 * Updates this {@code AbstractSceneKernel} instance with data from the {@link CompiledScene} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, an update occurred, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, an update occurred, {@code false} otherwise
 	 */
-	public final void updateCompiledScene() {
+	public final boolean updateCompiledScene() {
 		if(this.isUpdateCompiledSceneRequested.compareAndSet(true, false)) {
 			final CompiledScene compiledScene = this.compiledScene;
 			
@@ -250,8 +211,55 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				super.lightSpotLightCount = compiledScene.getCompiledLightCache().getSpotLightCount();
 				
 				this.primitiveCount = compiledScene.getCompiledPrimitiveCache().getPrimitiveCount();
+				
+				return true;
 			}
 		}
+		
+		return false;
+	}
+	
+	/**
+	 * Sets the {@link Scene} instance that is associated with this {@code AbstractSceneKernel} instance to {@code scene}.
+	 * <p>
+	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param scene a {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
+	 */
+	public final void setScene(final Scene scene) {
+		this.scene = Objects.requireNonNull(scene, "scene == null");
+		this.scene.addSceneObserver(this.sceneObserver);
+	}
+	
+	/**
+	 * Sets up all necessary resources for this {@code AbstractSceneKernel} instance.
+	 */
+	@Override
+	public void setup() {
+		setup(true);
+	}
+	
+	/**
+	 * Sets up all necessary resources for this {@code AbstractSceneKernel} instance.
+	 * 
+	 * @param isSettingUpScene {@code true} if, and only if, the scene should be setup, {@code false} otherwise
+	 */
+	public void setup(final boolean isSettingUpScene) {
+		super.setup();
+		
+		doSetupPixelArray();
+		
+		if(isSettingUpScene) {
+			doSetupScene();
+		}
+	}
+	
+	/**
+	 * Updates the {@link Camera} instance.
+	 */
+	public final void updateCamera() {
+		put(this.cameraArray = CompiledCameraCache.toCamera(getScene().getCamera()));
 	}
 	
 	/**

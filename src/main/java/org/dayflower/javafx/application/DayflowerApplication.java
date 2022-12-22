@@ -20,6 +20,7 @@ package org.dayflower.javafx.application;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,12 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.loader.JavaSceneLoader;
-
+import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.DotProductTexture;
+import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
+import org.dayflower.scene.texture.SurfaceNormalTexture;
+import org.dayflower.scene.texture.Texture;
+import org.dayflower.scene.texture.UVTexture;
 import org.macroing.java.io.Files;
 
 import javafx.animation.AnimationTimer;
@@ -62,15 +68,25 @@ public final class DayflowerApplication extends Application {
 	private static final String PATH_ELEMENT_C_P_U_RENDERER = "CPU Renderer";
 	private static final String PATH_ELEMENT_FILE = "File";
 	private static final String PATH_ELEMENT_G_P_U_RENDERER = "GPU Renderer";
+	private static final String PATH_ELEMENT_SCENE = "Scene";
 	private static final String PATH_FILE = "File";
 	private static final String PATH_FILE_NEW = "File.New";
 	private static final String PATH_FILE_OPEN = "File.Open";
+	private static final String PATH_SCENE_MATERIAL = "Scene.Material";
+	private static final String PATH_SCENE_TEXTURE = "Scene.Texture";
 	private static final String TEXT_C_P_U_RENDERER = "CPU Renderer";
 	private static final String TEXT_EXIT = "Exit";
 	private static final String TEXT_FILE = "File";
 	private static final String TEXT_G_P_U_RENDERER = "GPU Renderer";
+	private static final String TEXT_NEW_MATERIAL = "New Material";
+	private static final String TEXT_NEW_TEXTURE_CONSTANT_TEXTURE = "New Constant Texture";
+	private static final String TEXT_NEW_TEXTURE_DOT_PRODUCT_TEXTURE = "New Dot Product Texture";
+	private static final String TEXT_NEW_TEXTURE_SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE = "New Simplex Fractional Brownian Motion Texture";
+	private static final String TEXT_NEW_TEXTURE_SURFACE_NORMAL_TEXTURE = "New Surface Normal Texture";
+	private static final String TEXT_NEW_TEXTURE_UV_TEXTURE = "New UV Texture";
 	private static final String TEXT_SAVE_IMAGE = "Save Image";
 	private static final String TEXT_SAVE_IMAGE_AS = "Save Image As...";
+	private static final String TEXT_SCENE = "Scene";
 	private static final String TITLE = "Dayflower";
 	private static final String TITLE_OPEN = "Open";
 	private static final double MINIMUM_RESOLUTION_X = 400.0D;
@@ -79,6 +95,7 @@ public final class DayflowerApplication extends Application {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final AtomicReference<Stage> stage;
+	private final AtomicReference<Texture> texture;
 	private final BorderPane borderPane;
 	private final ExecutorService executorService;
 	private final NodeSelectionTabPane<RendererTabPane, CombinedProgressiveImageOrderRenderer> nodeSelectionTabPane;
@@ -91,9 +108,10 @@ public final class DayflowerApplication extends Application {
 	 */
 	public DayflowerApplication() {
 		this.stage = new AtomicReference<>();
+		this.texture = new AtomicReference<>();
 		this.borderPane = new BorderPane();
 		this.executorService = Executors.newFixedThreadPool(1);
-		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererTabPane -> rendererTabPane.getCombinedProgressiveImageOrderRenderer(), renderer -> new RendererTabPane(renderer, this.executorService, doGetStage()), (a, b) -> a.equals(b), renderer -> renderer.getScene().getName());
+		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererTabPane -> rendererTabPane.getCombinedProgressiveImageOrderRenderer(), renderer -> new RendererTabPane(this.texture, renderer, this.executorService, doGetStage()), (a, b) -> a.equals(b), renderer -> renderer.getScene().getName());
 		this.pathMenuBar = new PathMenuBar();
 	}
 	
@@ -159,6 +177,7 @@ public final class DayflowerApplication extends Application {
 		this.pathMenuBar.setPathElementText(PATH_ELEMENT_C_P_U_RENDERER, TEXT_C_P_U_RENDERER);
 		this.pathMenuBar.setPathElementText(PATH_ELEMENT_FILE, TEXT_FILE);
 		this.pathMenuBar.setPathElementText(PATH_ELEMENT_G_P_U_RENDERER, TEXT_G_P_U_RENDERER);
+		this.pathMenuBar.setPathElementText(PATH_ELEMENT_SCENE, TEXT_SCENE);
 		this.pathMenuBar.addMenuItem(PATH_FILE_NEW, TEXT_C_P_U_RENDERER, e -> doNew(false), null, true);
 		this.pathMenuBar.addMenuItem(PATH_FILE_NEW, TEXT_G_P_U_RENDERER, e -> doNew(true), null, true);
 		this.pathMenuBar.addMenuItem(PATH_FILE_OPEN, TEXT_C_P_U_RENDERER, e -> doOpen(false), null, true);
@@ -168,6 +187,12 @@ public final class DayflowerApplication extends Application {
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_IMAGE_AS, e -> doSaveAs(), null, false);
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, e -> doExit(), null, true);
+		this.pathMenuBar.addMenuItem(PATH_SCENE_MATERIAL, TEXT_NEW_MATERIAL, e -> doNewMaterial(), null, true);
+		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_CONSTANT_TEXTURE, e -> doNewTexture(ConstantTexture.class), null, true);
+		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_DOT_PRODUCT_TEXTURE, e -> doNewTexture(DotProductTexture.class), null, true);
+		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE, e -> doNewTexture(SimplexFractionalBrownianMotionTexture.class), null, true);
+		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_SURFACE_NORMAL_TEXTURE, e -> doNewTexture(SurfaceNormalTexture.class), null, true);
+		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_UV_TEXTURE, e -> doNewTexture(UVTexture.class), null, true);
 	}
 	
 	private void doCreateAndStartAnimationTimer() {
@@ -229,6 +254,20 @@ public final class DayflowerApplication extends Application {
 			
 			this.nodeSelectionTabPane.addLater(combinedProgressiveImageOrderRenderer, tab -> tab.setOnClosed(new TabOnClosedEventHandler(combinedProgressiveImageOrderRenderer, tab)));
 		});
+	}
+	
+	private void doNewMaterial() {
+//		TODO: Implement!
+	}
+	
+	private void doNewTexture(final Class<? extends Texture> clazz) {
+		final TextureDialog textureDialog = new TextureDialog(clazz, doGetStage());
+		
+		final Optional<Texture> optionalTexture = textureDialog.showAndWait();
+		
+		if(optionalTexture.isPresent()) {
+			this.texture.set(optionalTexture.get());
+		}
 	}
 	
 	@SuppressWarnings("unused")

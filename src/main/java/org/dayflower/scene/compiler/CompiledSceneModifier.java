@@ -68,6 +68,7 @@ import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.DotProductTexture;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.PolkaDotTexture;
@@ -145,7 +146,6 @@ public final class CompiledSceneModifier {
 	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
 	 */
 	public boolean addPrimitive(final Primitive primitive) {
-//		TODO: Implement!
 		Objects.requireNonNull(primitive, "primitive == null");
 		
 		if(!CompiledPrimitiveCache.isSupported(primitive)) {
@@ -197,16 +197,19 @@ public final class CompiledSceneModifier {
 	 * @return {@code true} if, and only if, {@code primitive} was removed, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
 	 */
-	@SuppressWarnings("static-method")
 	public boolean removePrimitive(final Primitive primitive) {
-//		TODO: Implement!
 		Objects.requireNonNull(primitive, "primitive == null");
 		
 		if(!CompiledPrimitiveCache.isSupported(primitive)) {
 			return false;
 		}
 		
-		return false;
+		final int areaLightOffset = doAddOptionalAreaLight(primitive.getAreaLight());
+		final int boundingVolumeOffset = doAddBoundingVolume3F(primitive.getBoundingVolume());
+		final int materialOffset = doAddMaterial(primitive.getMaterial());
+		final int shapeOffset = doAddShape3F(primitive.getShape());
+		
+		return this.compiledScene.getCompiledPrimitiveCache().removePrimitive(CompiledPrimitiveCache.toPrimitive(primitive, areaLight -> areaLightOffset, boundingVolume3F -> boundingVolumeOffset, material -> materialOffset, shape3F -> shapeOffset));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,16 +221,14 @@ public final class CompiledSceneModifier {
 			final AxisAlignedBoundingBox3F axisAlignedBoundingBox3F = AxisAlignedBoundingBox3F.class.cast(boundingVolume3F);
 			
 			final int offsetRelative = compiledBoundingVolume3FCache.addAxisAlignedBoundingBox3F(CompiledBoundingVolume3FCache.toAxisAlignedBoundingBox3F(axisAlignedBoundingBox3F));
-			final int offsetAbsolute = offsetRelative * CompiledBoundingVolume3FCache.AXIS_ALIGNED_BOUNDING_BOX_3_F_LENGTH;
 			
-			return offsetAbsolute;
+			return offsetRelative;
 		} else if(boundingVolume3F instanceof BoundingSphere3F) {
 			final BoundingSphere3F boundingSphere3F = BoundingSphere3F.class.cast(boundingVolume3F);
 			
 			final int offsetRelative = compiledBoundingVolume3FCache.addBoundingSphere3F(CompiledBoundingVolume3FCache.toBoundingSphere3F(boundingSphere3F));
-			final int offsetAbsolute = offsetRelative * CompiledBoundingVolume3FCache.BOUNDING_SPHERE_3_F_LENGTH;
 			
-			return offsetAbsolute;
+			return offsetRelative;
 		} else if(boundingVolume3F instanceof InfiniteBoundingVolume3F) {
 			return 0;
 		} else {
@@ -506,6 +507,8 @@ public final class CompiledSceneModifier {
 			final int offsetRelative = compiledTextureCache.addConstantTexture(CompiledTextureCache.toConstantTexture(constantTexture));
 			
 			return offsetRelative;
+		} else if(texture instanceof DotProductTexture) {
+			return 0;
 		} else if(texture instanceof LDRImageTexture) {
 			final LDRImageTexture lDRImageTexture = LDRImageTexture.class.cast(texture);
 			

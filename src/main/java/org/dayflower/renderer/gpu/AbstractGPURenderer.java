@@ -193,13 +193,15 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	public final synchronized boolean render() {
 		this.isRendering.set(true);
 		
-		updateCompiledScene();
-		
 		final RendererObserver rendererObserver = getRendererObserver();
 		
 		final ImageF image = getImage();
 		
 		synchronized(image) {
+			if(updateCompiledScene()) {
+				clear();
+			}
+			
 			final int resolutionX = image.getResolutionX();
 			final int resolutionY = image.getResolutionY();
 			

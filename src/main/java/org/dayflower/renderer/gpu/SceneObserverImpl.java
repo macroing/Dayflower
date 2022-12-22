@@ -109,5 +109,19 @@ final class SceneObserverImpl implements SceneObserver {
 	public void onRemovePrimitive(final Scene scene, final Primitive oldPrimitive) {
 		Objects.requireNonNull(scene, "scene == null");
 		Objects.requireNonNull(oldPrimitive, "oldPrimitive == null");
+		
+		final Optional<CompiledScene> optionalCompiledScene = this.abstractSceneKernel.getCompiledScene();
+		
+		if(optionalCompiledScene.isPresent()) {
+			final CompiledScene compiledScene = optionalCompiledScene.get();
+			
+			final CompiledSceneModifier compiledSceneModifier = new CompiledSceneModifier(compiledScene);
+			
+			final boolean isRemoved = compiledSceneModifier.removePrimitive(oldPrimitive);
+			
+			if(isRemoved) {
+				this.abstractSceneKernel.updateCompiledSceneRequest();
+			}
+		}
 	}
 }

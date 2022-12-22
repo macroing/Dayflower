@@ -98,16 +98,13 @@ public final class Sphere3D implements Shape3D {
 	public Optional<SurfaceSample3D> sample(final Point2D sample) {
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3D direction = SampleGeneratorD.sampleSphereUniformDistribution(sample.x, sample.y);
+		final Vector3D surfaceNormal = Vector3D.normalize(SampleGeneratorD.sampleSphereUniformDistribution(sample.x, sample.y));
 		
-		final Point3D point0 = Point3D.add(new Point3D(), direction, 1.0D);
-		final Point3D point1 = Point3D.add(point0, new Vector3D(1.0D), 1.0D / Point3D.distance(new Point3D(), point0));
-		
-		final Vector3D surfaceNormal = Vector3D.directionNormalized(new Point3D(), point0);
+		final Point3D point = new Point3D(surfaceNormal);
 		
 		final double probabilityDensityFunctionValue = 1.0D / getSurfaceArea();
 		
-		final SurfaceSample3D surfaceSample = new SurfaceSample3D(point1, surfaceNormal, probabilityDensityFunctionValue);
+		final SurfaceSample3D surfaceSample = new SurfaceSample3D(point, surfaceNormal, probabilityDensityFunctionValue);
 		
 		return Optional.of(surfaceSample);
 	}

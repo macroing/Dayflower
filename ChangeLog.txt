@@ -1,3 +1,9 @@
+2022-12-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		It is now possible to add primitives to and remove primitives from the GPU renderer. Some optimizations should still be added when removing primitives. When no shapes, materials and textures etc. are used by any primitives, they should be removed to keep the scene size as small as possible.
+	* ADD:		It is now possible to define simple textures that will be used when adding primitives. This feature is not final and will be changed in the future. It is a temporary solution.
+	* CHANGE:	Fix a bug when sampling Sphere3D and Sphere3F.
+
 2022-12-17  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Replace most methods and constants in the Doubles class in the Utility API with methods and constants from the Doubles and Randoms classes in Macroing Java.

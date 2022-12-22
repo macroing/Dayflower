@@ -20,6 +20,7 @@ package org.dayflower.javafx.application;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
@@ -64,6 +65,8 @@ import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.material.UberMaterial;
+import org.dayflower.scene.texture.Texture;
+import org.macroing.art4j.color.Color3F;
 
 import javafx.application.Platform;
 import javafx.scene.control.ComboBox;
@@ -127,14 +130,14 @@ final class CenteredVBoxes {
 		return centeredVBox;
 	}
 	
-	public static CenteredVBox createCenteredVBoxForScene(final Renderer renderer) {
+	public static CenteredVBox createCenteredVBoxForScene(final AtomicReference<Texture> texture, final Renderer renderer) {
 		final CenteredVBox centeredVBox = new CenteredVBox();
 		
 		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(BullseyeMaterial.NAME, CheckerboardMaterial.NAME, ClearCoatMaterial.NAME, DisneyMaterial.NAME, GlassMaterial.NAME, GlossyMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, PolkaDotMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME), MatteMaterial.NAME);
 		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Cone3F.NAME, Cylinder3F.NAME, Disk3F.NAME, Hyperboloid3F.NAME, Paraboloid3F.NAME, Plane3F.NAME, Rectangle3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
 		
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
-			final Material material = doCreateMaterial(comboBoxMaterial);
+			final Material material = doCreateMaterial(texture, comboBoxMaterial);
 			
 			final Shape3F shape = doCreateShape(comboBoxShape);
 			
@@ -167,37 +170,39 @@ final class CenteredVBoxes {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Material doCreateMaterial(final ComboBox<String> comboBoxMaterial) {
+	private static Material doCreateMaterial(final AtomicReference<Texture> texture, final ComboBox<String> comboBoxMaterial) {
 		final String selectedItem = comboBoxMaterial.getSelectionModel().getSelectedItem();
+		
+		final Texture currentTexture = texture.get();
 		
 		if(selectedItem != null) {
 			switch(selectedItem) {
 				case BullseyeMaterial.NAME:
-					return new BullseyeMaterial();
+					return currentTexture != null ? new BullseyeMaterial(new MatteMaterial(currentTexture), new MatteMaterial(Color3F.WHITE)) : new BullseyeMaterial();
 				case CheckerboardMaterial.NAME:
-					return new CheckerboardMaterial();
+					return currentTexture != null ? new CheckerboardMaterial(new MatteMaterial(currentTexture), new MatteMaterial(Color3F.WHITE)) : new CheckerboardMaterial();
 				case ClearCoatMaterial.NAME:
-					return new ClearCoatMaterial();
+					return currentTexture != null ? new ClearCoatMaterial(currentTexture) : new ClearCoatMaterial();
 				case DisneyMaterial.NAME:
-					return new DisneyMaterial();
+					return currentTexture != null ? new DisneyMaterial(currentTexture) : new DisneyMaterial();
 				case GlassMaterial.NAME:
-					return new GlassMaterial();
+					return currentTexture != null ? new GlassMaterial(currentTexture) : new GlassMaterial();
 				case GlossyMaterial.NAME:
-					return new GlossyMaterial();
+					return currentTexture != null ? new GlossyMaterial(currentTexture) : new GlossyMaterial();
 				case HairMaterial.NAME:
 					return new HairMaterial();
 				case MatteMaterial.NAME:
-					return new MatteMaterial();
+					return currentTexture != null ? new MatteMaterial(currentTexture) : new MatteMaterial();
 				case MetalMaterial.NAME:
 					return new MetalMaterial();
 				case MirrorMaterial.NAME:
-					return new MirrorMaterial();
+					return currentTexture != null ? new MirrorMaterial(currentTexture) : new MirrorMaterial();
 				case PlasticMaterial.NAME:
-					return new PlasticMaterial();
+					return currentTexture != null ? new PlasticMaterial(currentTexture) : new PlasticMaterial();
 				case PolkaDotMaterial.NAME:
-					return new PolkaDotMaterial();
+					return currentTexture != null ? new PolkaDotMaterial(new MatteMaterial(currentTexture), new MatteMaterial(Color3F.WHITE)) : new PolkaDotMaterial();
 				case SubstrateMaterial.NAME:
-					return new SubstrateMaterial();
+					return currentTexture != null ? new SubstrateMaterial(currentTexture) : new SubstrateMaterial();
 				case UberMaterial.NAME:
 					return new UberMaterial();
 				default:

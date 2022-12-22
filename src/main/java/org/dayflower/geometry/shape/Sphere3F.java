@@ -112,16 +112,13 @@ public final class Sphere3F implements Shape3F {
 	public Optional<SurfaceSample3F> sample(final Point2F sample) {
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F direction = SampleGeneratorF.sampleSphereUniformDistribution(sample.x, sample.y);
+		final Vector3F surfaceNormal = Vector3F.normalize(SampleGeneratorF.sampleSphereUniformDistribution(sample.x, sample.y));
 		
-		final Point3F point0 = Point3F.add(new Point3F(), direction, 1.0F);
-		final Point3F point1 = Point3F.add(point0, new Vector3F(1.0F), 1.0F / Point3F.distance(new Point3F(), point0));
-		
-		final Vector3F surfaceNormal = Vector3F.directionNormalized(new Point3F(), point0);
+		final Point3F point = new Point3F(surfaceNormal);
 		
 		final float probabilityDensityFunctionValue = 1.0F / getSurfaceArea();
 		
-		final SurfaceSample3F surfaceSample = new SurfaceSample3F(point1, surfaceNormal, probabilityDensityFunctionValue);
+		final SurfaceSample3F surfaceSample = new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue);
 		
 		return Optional.of(surfaceSample);
 	}

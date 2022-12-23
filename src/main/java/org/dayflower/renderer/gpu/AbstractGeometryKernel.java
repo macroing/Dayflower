@@ -18,11 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
-import static org.dayflower.utility.Floats.PI_DIVIDED_BY_4;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
+import org.macroing.java.lang.Floats;
 
 /**
  * An {@code AbstractGeometryKernel} is an abstract extension of the {@code AbstractImageKernel} class that adds additional features.
@@ -43,7 +39,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * The default maximum parametric distance value.
 	 */
-	protected static final float DEFAULT_T_MAXIMUM = MAX_VALUE;
+	protected static final float DEFAULT_T_MAXIMUM = Floats.MAX_VALUE;
 	
 	/**
 	 * The default minimum parametric distance value.
@@ -1641,7 +1637,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 			
 			final boolean isCaseA = a * a > b * b;
 			
-			final float phi = isCaseA ? PI_DIVIDED_BY_4 * (b / a) : PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
+			final float phi = isCaseA ? Floats.PI_DIVIDED_BY_4 * (b / a) : Floats.PI_DIVIDED_BY_2 - Floats.PI_DIVIDED_BY_4 * (a / b);
 			final float r = isCaseA ? radius * a : radius * b;
 			
 			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_X] = r * cos(phi);
@@ -2140,7 +2136,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return the spherical phi angle
 	 */
 	protected final float vector3FSphericalPhi(final float x, final float y) {
-		return addIfLessThanThreshold(atan2(y, x), 0.0F, PI_MULTIPLIED_BY_2);
+		return addIfLessThanThreshold(atan2(y, x), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -2207,7 +2203,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param v the spherical V-coordinate
 	 */
 	protected final void vector3FSetDirectionSpherical2(final float u, final float v) {
-		vector3FSetDirectionSpherical3(sin(v * PI), cos(v * PI), u * PI_MULTIPLIED_BY_2);
+		vector3FSetDirectionSpherical3(sin(v * Floats.PI), cos(v * Floats.PI), u * Floats.PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -2511,7 +2507,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected final void vector3FSetSampleHemisphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_2 * v;
+		final float phi = Floats.PI_MULTIPLIED_BY_2 * v;
 		
 		final float x = sinTheta * cos(phi);
 		final float y = sinTheta * sin(phi);
@@ -2533,7 +2529,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected final void vector3FSetSampleSphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = 1.0F - 2.0F * u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_2 * v;
+		final float phi = Floats.PI_MULTIPLIED_BY_2 * v;
 		
 		final float x = sinTheta * cos(phi);
 		final float y = sinTheta * sin(phi);

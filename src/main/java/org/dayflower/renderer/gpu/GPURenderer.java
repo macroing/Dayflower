@@ -18,11 +18,10 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code GPURenderer} is an implementation of {@link AbstractGPURenderer} that supports various rendering algorithms.
@@ -101,7 +100,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 				}
 			}
 			
-			radiance *= PI / samples * PI_RECIPROCAL;
+			radiance *= Floats.PI / samples * Floats.PI_RECIPROCAL;
 		}
 		
 		filmAddColor(radiance, radiance, radiance);

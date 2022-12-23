@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry.rasterizer;
 
-import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.abs;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -138,7 +137,7 @@ public final class Rasterizer2I {
 		} else if(vertexA.y == vertexB.y) {
 			return doRasterizeTriangleBottomUp(vertexA, vertexB, vertexC, rectangle);
 		} else {
-			final Point2I vertexD = new Point2I(toInt(vertexA.x + (toFloat(vertexB.y - vertexA.y) / (vertexC.y - vertexA.y)) * (vertexC.x - vertexA.x)), vertexB.y);
+			final Point2I vertexD = new Point2I(toInt(vertexA.x + ((float)(vertexB.y - vertexA.y) / (vertexC.y - vertexA.y)) * (vertexC.x - vertexA.x)), vertexB.y);
 			
 			final Point2I[][] scanLinesTopDown = doRasterizeTriangleTopDown(vertexA, vertexB, vertexD, rectangle);
 			final Point2I[][] scanLinesBottomUp = doRasterizeTriangleBottomUp(vertexB, vertexD, vertexC, rectangle);
@@ -159,8 +158,8 @@ public final class Rasterizer2I {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Point2I[][] doRasterizeTriangleBottomUp(final Point2I vertexA, final Point2I vertexB, final Point2I vertexC, final Rectangle2I rectangle) {
-		final float slope0 = toFloat(vertexC.x - vertexA.x) / (vertexC.y - vertexA.y);
-		final float slope1 = toFloat(vertexC.x - vertexB.x) / (vertexC.y - vertexB.y);
+		final float slope0 = (float)(vertexC.x - vertexA.x) / (vertexC.y - vertexA.y);
+		final float slope1 = (float)(vertexC.x - vertexB.x) / (vertexC.y - vertexB.y);
 		
 		float x0 = vertexC.x;
 		float x1 = vertexC.x + 0.5F;
@@ -187,8 +186,8 @@ public final class Rasterizer2I {
 	}
 	
 	private static Point2I[][] doRasterizeTriangleTopDown(final Point2I vertexA, final Point2I vertexB, final Point2I vertexC, final Rectangle2I rectangle) {
-		final float slope0 = toFloat(vertexB.x - vertexA.x) / (vertexB.y - vertexA.y);
-		final float slope1 = toFloat(vertexC.x - vertexA.x) / (vertexC.y - vertexA.y);
+		final float slope0 = (float)(vertexB.x - vertexA.x) / (vertexB.y - vertexA.y);
+		final float slope1 = (float)(vertexC.x - vertexA.x) / (vertexC.y - vertexA.y);
 		
 		float x0 = vertexA.x;
 		float x1 = vertexA.x + 0.5F;

@@ -18,22 +18,10 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
-import static org.dayflower.utility.Floats.PI_DIVIDED_BY_4;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4_RECIPROCAL;
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.pow;
-import static org.dayflower.utility.Floats.random;
-import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
+
+import org.macroing.java.lang.Floats;
+import org.macroing.java.util.Randoms;
 
 /**
  * The class {@code SampleGeneratorF} contains methods to generate {@code float}-based samples.
@@ -56,7 +44,7 @@ public final class SampleGeneratorF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorF.sampleDiskUniformDistribution(Floats.random(), Floats.random());
+	 * SampleGeneratorF.sampleDiskUniformDistribution(Randoms.nextFloat()), Randoms.nextFloat());
 	 * }
 	 * </pre>
 	 * 
@@ -64,7 +52,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2F sampleDiskUniformDistribution() {
-		return sampleDiskUniformDistribution(random(), random());
+		return sampleDiskUniformDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	}
 	
 	/**
@@ -78,11 +66,11 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2F sampleDiskUniformDistribution(final float u, final float v) {
-		final float r = sqrt(u);
-		final float theta = PI_MULTIPLIED_BY_2 * v;
+		final float r = Floats.sqrt(u);
+		final float theta = Floats.PI_MULTIPLIED_BY_2 * v;
 		
-		final float component1 = r * cos(theta);
-		final float component2 = r * sin(theta);
+		final float component1 = r * Floats.cos(theta);
+		final float component2 = r * Floats.sin(theta);
 		
 		return new Point2F(component1, component2);
 	}
@@ -95,7 +83,7 @@ public final class SampleGeneratorF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorF.sampleDiskUniformDistributionByConcentricMapping(Floats.random(), Floats.random());
+	 * SampleGeneratorF.sampleDiskUniformDistributionByConcentricMapping(Randoms.nextFloat(), Randoms.nextFloat());
 	 * }
 	 * </pre>
 	 * 
@@ -103,7 +91,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2F sampleDiskUniformDistributionByConcentricMapping() {
-		return sampleDiskUniformDistributionByConcentricMapping(random(), random());
+		return sampleDiskUniformDistributionByConcentricMapping(Randoms.nextFloat(), Randoms.nextFloat());
 	}
 	
 	/**
@@ -139,7 +127,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2F sampleDiskUniformDistributionByConcentricMapping(final float u, final float v, final float radius) {
-		if(isZero(u) && isZero(v)) {
+		if(Floats.isZero(u) && Floats.isZero(v)) {
 			return new Point2F();
 		}
 		
@@ -147,20 +135,20 @@ public final class SampleGeneratorF {
 		final float b = v * 2.0F - 1.0F;
 		
 		if(a * a > b * b) {
-			final float phi = PI_DIVIDED_BY_4 * (b / a);
+			final float phi = Floats.PI_DIVIDED_BY_4 * (b / a);
 			final float r = radius * a;
 			
-			final float component1 = r * cos(phi);
-			final float component2 = r * sin(phi);
+			final float component1 = r * Floats.cos(phi);
+			final float component2 = r * Floats.sin(phi);
 			
 			return new Point2F(component1, component2);
 		}
 		
-		final float phi = PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
+		final float phi = Floats.PI_DIVIDED_BY_2 - Floats.PI_DIVIDED_BY_4 * (a / b);
 		final float r = radius * b;
 		
-		final float component1 = r * cos(phi);
-		final float component2 = r * sin(phi);
+		final float component1 = r * Floats.cos(phi);
+		final float component2 = r * Floats.sin(phi);
 		
 		return new Point2F(component1, component2);
 	}
@@ -173,7 +161,7 @@ public final class SampleGeneratorF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorF.sampleExactInverseTentFilter(Floats.random(), Floats.random());
+	 * SampleGeneratorF.sampleExactInverseTentFilter(Randoms.nextFloat(), Randoms.nextFloat());
 	 * }
 	 * </pre>
 	 * 
@@ -181,7 +169,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2F sampleExactInverseTentFilter() {
-		return sampleExactInverseTentFilter(random(), random());
+		return sampleExactInverseTentFilter(Randoms.nextFloat(), Randoms.nextFloat());
 	}
 	
 	/**
@@ -198,8 +186,8 @@ public final class SampleGeneratorF {
 		final float x = u * 2.0F;
 		final float y = v * 2.0F;
 		
-		final float component1 = x < 1.0F ? sqrt(x) - 1.0F : 1.0F - sqrt(2.0F - x);
-		final float component2 = y < 1.0F ? sqrt(y) - 1.0F : 1.0F - sqrt(2.0F - y);
+		final float component1 = x < 1.0F ? Floats.sqrt(x) - 1.0F : 1.0F - Floats.sqrt(2.0F - x);
+		final float component2 = y < 1.0F ? Floats.sqrt(y) - 1.0F : 1.0F - Floats.sqrt(2.0F - y);
 		
 		return new Point2F(component1, component2);
 	}
@@ -212,7 +200,7 @@ public final class SampleGeneratorF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorF.sampleTriangleUniformDistribution(Floats.random(), Floats.random());
+	 * SampleGeneratorF.sampleTriangleUniformDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	 * }
 	 * </pre>
 	 * 
@@ -220,7 +208,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point3F sampleTriangleUniformDistribution() {
-		return sampleTriangleUniformDistribution(random(), random());
+		return sampleTriangleUniformDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	}
 	
 	/**
@@ -234,7 +222,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point3F sampleTriangleUniformDistribution(final float u, final float v) {
-		final float sqrtU = sqrt(u);
+		final float sqrtU = Floats.sqrt(u);
 		
 		final float component1 = 1.0F - sqrtU;
 		final float component2 = v * sqrtU;
@@ -256,11 +244,11 @@ public final class SampleGeneratorF {
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleConeUniformDistribution(final float u, final float v, final float cosThetaMax) {
 		final float cosTheta = (1.0F - u) + u * cosThetaMax;
-		final float sinTheta = sqrt(1.0F - cosTheta * cosTheta);
-		final float phi = v * PI_MULTIPLIED_BY_2;
+		final float sinTheta = Floats.sqrt(1.0F - cosTheta * cosTheta);
+		final float phi = v * Floats.PI_MULTIPLIED_BY_2;
 		
-		final float component1 = sinTheta * cos(phi);
-		final float component2 = sinTheta * sin(phi);
+		final float component1 = sinTheta * Floats.cos(phi);
+		final float component2 = sinTheta * Floats.sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);
@@ -274,7 +262,7 @@ public final class SampleGeneratorF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorF.sampleHemisphereCosineDistribution(Floats.random(), Floats.random());
+	 * SampleGeneratorF.sampleHemisphereCosineDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	 * }
 	 * </pre>
 	 * 
@@ -282,7 +270,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereCosineDistribution() {
-		return sampleHemisphereCosineDistribution(random(), random());
+		return sampleHemisphereCosineDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	}
 	
 	/**
@@ -300,7 +288,7 @@ public final class SampleGeneratorF {
 		
 		final float component1 = point.x;
 		final float component2 = point.y;
-		final float component3 = sqrt(max(0.0F, 1.0F - component1 * component1 - component2 * component2));
+		final float component3 = Floats.sqrt(Floats.max(0.0F, 1.0F - component1 * component1 - component2 * component2));
 		
 		return new Vector3F(component1, component2, component3);
 	}
@@ -313,7 +301,7 @@ public final class SampleGeneratorF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorF.sampleHemisphereCosineDistribution2(Floats.random(), Floats.random());
+	 * SampleGeneratorF.sampleHemisphereCosineDistribution2(Randoms.nextFloat(), Randoms.nextFloat());
 	 * }
 	 * </pre>
 	 * 
@@ -321,7 +309,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereCosineDistribution2() {
-		return sampleHemisphereCosineDistribution2(random(), random());
+		return sampleHemisphereCosineDistribution2(Randoms.nextFloat(), Randoms.nextFloat());
 	}
 	
 	/**
@@ -335,12 +323,12 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereCosineDistribution2(final float u, final float v) {
-		final float sinTheta = sqrt(v);
-		final float cosTheta = sqrt(1.0F - v);
-		final float phi = PI_MULTIPLIED_BY_2 * u;
+		final float sinTheta = Floats.sqrt(v);
+		final float cosTheta = Floats.sqrt(1.0F - v);
+		final float phi = Floats.PI_MULTIPLIED_BY_2 * u;
 		
-		final float component1 = sinTheta * cos(phi);
-		final float component2 = sinTheta * sin(phi);
+		final float component1 = sinTheta * Floats.cos(phi);
+		final float component2 = sinTheta * Floats.sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);
@@ -354,7 +342,7 @@ public final class SampleGeneratorF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorF.sampleHemispherePowerCosineDistribution(Floats.random(), Floats.random());
+	 * SampleGeneratorF.sampleHemispherePowerCosineDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	 * }
 	 * </pre>
 	 * 
@@ -362,7 +350,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleHemispherePowerCosineDistribution() {
-		return sampleHemispherePowerCosineDistribution(random(), random());
+		return sampleHemispherePowerCosineDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	}
 	
 	/**
@@ -398,12 +386,12 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleHemispherePowerCosineDistribution(final float u, final float v, final float exponent) {
-		final float cosTheta = pow(1.0F - u, 1.0F / (exponent + 1.0F));
-		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_2 * v;
+		final float cosTheta = Floats.pow(1.0F - u, 1.0F / (exponent + 1.0F));
+		final float sinTheta = Floats.sqrt(Floats.max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float phi = Floats.PI_MULTIPLIED_BY_2 * v;
 		
-		final float component1 = sinTheta * cos(phi);
-		final float component2 = sinTheta * sin(phi);
+		final float component1 = sinTheta * Floats.cos(phi);
+		final float component2 = sinTheta * Floats.sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);
@@ -417,7 +405,7 @@ public final class SampleGeneratorF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorF.sampleHemisphereUniformDistribution(Floats.random(), Floats.random());
+	 * SampleGeneratorF.sampleHemisphereUniformDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	 * }
 	 * </pre>
 	 * 
@@ -425,7 +413,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereUniformDistribution() {
-		return sampleHemisphereUniformDistribution(random(), random());
+		return sampleHemisphereUniformDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	}
 	
 	/**
@@ -440,11 +428,11 @@ public final class SampleGeneratorF {
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleHemisphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = u;
-		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_2 * v;
+		final float sinTheta = Floats.sqrt(Floats.max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float phi = Floats.PI_MULTIPLIED_BY_2 * v;
 		
-		final float component1 = sinTheta * cos(phi);
-		final float component2 = sinTheta * sin(phi);
+		final float component1 = sinTheta * Floats.cos(phi);
+		final float component2 = sinTheta * Floats.sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);
@@ -458,7 +446,7 @@ public final class SampleGeneratorF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * SampleGeneratorF.sampleSphereUniformDistribution(Floats.random(), Floats.random());
+	 * SampleGeneratorF.sampleSphereUniformDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	 * }
 	 * </pre>
 	 * 
@@ -466,7 +454,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleSphereUniformDistribution() {
-		return sampleSphereUniformDistribution(random(), random());
+		return sampleSphereUniformDistribution(Randoms.nextFloat(), Randoms.nextFloat());
 	}
 	
 	/**
@@ -481,11 +469,11 @@ public final class SampleGeneratorF {
 //	TODO: Add Unit Tests!
 	public static Vector3F sampleSphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = 1.0F - 2.0F * u;
-		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = v * PI_MULTIPLIED_BY_2;
+		final float sinTheta = Floats.sqrt(Floats.max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float phi = v * Floats.PI_MULTIPLIED_BY_2;
 		
-		final float component1 = sinTheta * cos(phi);
-		final float component2 = sinTheta * sin(phi);
+		final float component1 = sinTheta * Floats.cos(phi);
+		final float component2 = sinTheta * Floats.sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);
@@ -501,7 +489,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static float coneUniformDistributionProbabilityDensityFunction(final float cosThetaMax) {
-		return 1.0F / (2.0F * PI * (1.0F - cosThetaMax));
+		return 1.0F / (2.0F * Floats.PI * (1.0F - cosThetaMax));
 	}
 	
 	/**
@@ -514,7 +502,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static float hemisphereCosineDistributionProbabilityDensityFunction(final float cosTheta) {
-		return cosTheta * PI_RECIPROCAL;
+		return cosTheta * Floats.PI_RECIPROCAL;
 	}
 	
 	/**
@@ -526,7 +514,7 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static float hemisphereUniformDistributionProbabilityDensityFunction() {
-		return PI_MULTIPLIED_BY_2_RECIPROCAL;
+		return Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 	}
 	
 	/**
@@ -573,6 +561,6 @@ public final class SampleGeneratorF {
 	 */
 //	TODO: Add Unit Tests!
 	public static float sphereUniformDistributionProbabilityDensityFunction() {
-		return PI_MULTIPLIED_BY_4_RECIPROCAL;
+		return Floats.PI_MULTIPLIED_BY_4_RECIPROCAL;
 	}
 }

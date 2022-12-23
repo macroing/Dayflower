@@ -18,15 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume;
 
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.pow;
-import static org.dayflower.utility.Floats.solveQuadraticSystem;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,6 +31,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -130,9 +122,9 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 		final float distanceSquaredFromCenterToX = Point3F.distanceSquared(center, x);
 		final float distanceSquaredFromCenterToY = Point3F.distanceSquared(center, y);
 		final float distanceSquaredFromCenterToZ = Point3F.distanceSquared(center, z);
-		final float distanceSquared = max(distanceSquaredFromCenterToX, distanceSquaredFromCenterToY, distanceSquaredFromCenterToZ);
+		final float distanceSquared = Floats.max(distanceSquaredFromCenterToX, distanceSquaredFromCenterToY, distanceSquaredFromCenterToZ);
 		
-		final float radius = sqrt(distanceSquared);
+		final float radius = Floats.sqrt(distanceSquared);
 		
 		return new BoundingSphere3F(radius, center);
 	}
@@ -263,7 +255,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 			return false;
 		} else if(!Objects.equals(this.center, BoundingSphere3F.class.cast(object).center)) {
 			return false;
-		} else if(!equal(this.radius, BoundingSphere3F.class.cast(object).radius)) {
+		} else if(!Floats.equals(this.radius, BoundingSphere3F.class.cast(object).radius)) {
 			return false;
 		} else {
 			return true;
@@ -295,7 +287,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		return PI_MULTIPLIED_BY_4 * getRadiusSquared();
+		return Floats.PI_MULTIPLIED_BY_4 * getRadiusSquared();
 	}
 	
 	/**
@@ -305,7 +297,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 */
 	@Override
 	public float getVolume() {
-		return 4.0F / 3.0F * PI * pow(this.radius, 3.0F);
+		return 4.0F / 3.0F * Floats.PI * Floats.pow(this.radius, 3.0F);
 	}
 	
 	/**
@@ -335,16 +327,16 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
 		final float c = centerToOrigin.lengthSquared() - radiusSquared;
 		
-		final float[] ts = solveQuadraticSystem(a, b, c);
+		final float[] ts = Floats.solveQuadraticSystem(a, b, c);
 		
 		final float t0 = ts[0];
 		final float t1 = ts[1];
 		
-		if(!isNaN(t0) && t0 > tMinimum && t0 < tMaximum) {
+		if(!Floats.isNaN(t0) && t0 > tMinimum && t0 < tMaximum) {
 			return t0;
 		}
 		
-		if(!isNaN(t1) && t1 > tMinimum && t1 < tMaximum) {
+		if(!Floats.isNaN(t1) && t1 > tMinimum && t1 < tMaximum) {
 			return t1;
 		}
 		

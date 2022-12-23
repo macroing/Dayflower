@@ -18,13 +18,6 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.ceil;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.floor;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
@@ -54,6 +47,7 @@ import org.macroing.art4j.color.PackedIntComponentOrder;
 import org.macroing.art4j.filter.Filter2F;
 import org.macroing.art4j.filter.GaussianFilter2F;
 import org.macroing.java.awt.image.BufferedImages;
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code PixelImageF} is an {@link ImageF} implementation that stores individual pixels as {@link PixelF} instances.
@@ -560,10 +554,10 @@ public final class PixelImageF extends ImageF {
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
 		
-		final int minimumFilterX = toInt(max(ceil(deltaX - filterResolutionX), 0));
-		final int maximumFilterX = toInt(min(floor(deltaX + filterResolutionX), resolutionX - 1));
-		final int minimumFilterY = toInt(max(ceil(deltaY - filterResolutionY), 0));
-		final int maximumFilterY = toInt(min(floor(deltaY + filterResolutionY), resolutionY - 1));
+		final int minimumFilterX = toInt(Floats.max(Floats.ceil(deltaX - filterResolutionX), 0));
+		final int maximumFilterX = toInt(Floats.min(Floats.floor(deltaX + filterResolutionX), resolutionX - 1));
+		final int minimumFilterY = toInt(Floats.max(Floats.ceil(deltaY - filterResolutionY), 0));
+		final int maximumFilterY = toInt(Floats.min(Floats.floor(deltaY + filterResolutionY), resolutionY - 1));
 		final int maximumFilterXMinimumFilterX = maximumFilterX - minimumFilterX;
 		final int maximumFilterYMinimumFilterY = maximumFilterY - minimumFilterY;
 		
@@ -572,11 +566,11 @@ public final class PixelImageF extends ImageF {
 			final int[] filterOffsetY = new int[maximumFilterYMinimumFilterY + 1];
 			
 			for(int filterX = minimumFilterX; filterX <= maximumFilterX; filterX++) {
-				filterOffsetX[filterX - minimumFilterX] = min(toInt(floor(abs((filterX - deltaX) * filterResolutionXReciprocal * Filter2F.TABLE_SIZE))), Filter2F.TABLE_SIZE - 1);
+				filterOffsetX[filterX - minimumFilterX] = min(toInt(Floats.floor(Floats.abs((filterX - deltaX) * filterResolutionXReciprocal * Filter2F.TABLE_SIZE))), Filter2F.TABLE_SIZE - 1);
 			}
 			
 			for(int filterY = minimumFilterY; filterY <= maximumFilterY; filterY++) {
-				filterOffsetY[filterY - minimumFilterY] = min(toInt(floor(abs((filterY - deltaY) * filterResolutionYReciprocal * Filter2F.TABLE_SIZE))), Filter2F.TABLE_SIZE - 1);
+				filterOffsetY[filterY - minimumFilterY] = min(toInt(Floats.floor(Floats.abs((filterY - deltaY) * filterResolutionYReciprocal * Filter2F.TABLE_SIZE))), Filter2F.TABLE_SIZE - 1);
 			}
 			
 			for(int filterY = minimumFilterY; filterY <= maximumFilterY; filterY++) {
@@ -611,7 +605,7 @@ public final class PixelImageF extends ImageF {
 	 */
 //	TODO: Add Unit Tests!
 	public void filmAddSplatXYZ(final float x, final float y, final Color3F splatXYZ) {
-		filmAddSplatXYZ(toInt(floor(x)), toInt(floor(y)), splatXYZ);
+		filmAddSplatXYZ(toInt(Floats.floor(x)), toInt(Floats.floor(y)), splatXYZ);
 	}
 	
 	/**
@@ -670,7 +664,7 @@ public final class PixelImageF extends ImageF {
 		for(final PixelF pixel : this.pixels) {
 			Color3F colorRGB = colorSpace.convertXYZToRGB(pixel.getColorXYZ());
 			
-			if(!isZero(pixel.getFilterWeightSum())) {
+			if(!Floats.isZero(pixel.getFilterWeightSum())) {
 				colorRGB = Color3F.multiplyAndSaturateNegative(colorRGB, 1.0F / pixel.getFilterWeightSum());
 			}
 			
@@ -1159,7 +1153,7 @@ public final class PixelImageF extends ImageF {
 				return false;
 			} else if(!Objects.equals(this.colorRGBA, PixelF.class.cast(object).colorRGBA)) {
 				return false;
-			} else if(!equal(this.filterWeightSum, PixelF.class.cast(object).filterWeightSum)) {
+			} else if(!Floats.equals(this.filterWeightSum, PixelF.class.cast(object).filterWeightSum)) {
 				return false;
 			} else if(this.index != PixelF.class.cast(object).index) {
 				return false;

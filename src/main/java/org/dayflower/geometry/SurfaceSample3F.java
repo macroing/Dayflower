@@ -18,11 +18,11 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code SurfaceSample3F} contains information about the surface of a {@link Shape3F} instance where it is being sampled.
@@ -116,7 +116,7 @@ public final class SurfaceSample3F {
 			return false;
 		} else if(!(Objects.equals(this.surfaceNormal, SurfaceSample3F.class.cast(object).surfaceNormal))) {
 			return false;
-		} else if(!equal(this.probabilityDensityFunctionValue, SurfaceSample3F.class.cast(object).probabilityDensityFunctionValue)) {
+		} else if(!Floats.equals(this.probabilityDensityFunctionValue, SurfaceSample3F.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
 		} else {
 			return true;

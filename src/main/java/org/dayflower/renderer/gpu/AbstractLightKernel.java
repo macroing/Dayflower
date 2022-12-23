@@ -18,12 +18,6 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
 import org.dayflower.scene.compiler.CompiledLightCache;
@@ -33,6 +27,8 @@ import org.dayflower.scene.light.ImageLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * An {@code AbstractLightKernel} is an abstract extension of the {@link AbstractMaterialKernel} class that adds additional features.
@@ -834,7 +830,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final boolean isTwoSided = doLightDiffuseAreaLightIsTwoSided();
 		
-		final float scale = (isTwoSided ? 2.0F : 1.0F) * shapeSurfaceArea * PI;
+		final float scale = (isTwoSided ? 2.0F : 1.0F) * shapeSurfaceArea * Floats.PI;
 		
 		final float powerR = radianceEmittedR * scale;
 		final float powerG = radianceEmittedG * scale;
@@ -936,7 +932,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float radius = doLightDirectionalLightGetRadius();
 		
-		final float scale = PI * radius * radius;
+		final float scale = Floats.PI * radius * radius;
 		
 		final float powerR = radianceR * scale;
 		final float powerG = radianceG * scale;
@@ -1009,7 +1005,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float pointY = surfaceIntersectionPointY + incomingWorldSpaceY * 2.0F * radius;
 		final float pointZ = surfaceIntersectionPointZ + incomingWorldSpaceZ * 2.0F * radius;
 		
-		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * Floats.PI * Floats.PI * sinTheta);
 		
 		lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
 		lightSampleSetPoint(pointX, pointY, pointZ);
@@ -1105,10 +1101,10 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 			return 0.0F;
 		}
 		
-		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float v = vector3FSphericalTheta(incomingObjectSpaceZ) * PI_RECIPROCAL;
+		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float v = vector3FSphericalTheta(incomingObjectSpaceZ) * Floats.PI_RECIPROCAL;
 		
-		final float probabilityDensityFunctionValue = doLightImageLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + CompiledLightCache.IMAGE_LIGHT_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = doLightImageLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + CompiledLightCache.IMAGE_LIGHT_OFFSET_DISTRIBUTION, u, v) / (2.0F * Floats.PI * Floats.PI * sinTheta);
 		
 		return probabilityDensityFunctionValue;
 	}
@@ -1206,8 +1202,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int resolutionX = doLightImageLightGetResolutionX(offset);
 		final int resolutionY = doLightImageLightGetResolutionY(offset);
 		
-		final float textureCoordinatesU = vector3FSphericalPhi(directionX, directionY) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = vector3FSphericalTheta(directionZ) * PI_RECIPROCAL;
+		final float textureCoordinatesU = vector3FSphericalPhi(directionX, directionY) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = vector3FSphericalTheta(directionZ) * Floats.PI_RECIPROCAL;
 		
 		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
 		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
@@ -1421,7 +1417,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float pointY = surfaceIntersectionPointY + incomingWorldSpaceY * 2.0F * radius;
 		final float pointZ = surfaceIntersectionPointZ + incomingWorldSpaceZ * 2.0F * radius;
 		
-		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * Floats.PI * Floats.PI * sinTheta);
 		
 		lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
 		lightSampleSetPoint(pointX, pointY, pointZ);
@@ -1517,10 +1513,10 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 			return 0.0F;
 		}
 		
-		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float v = vector3FSphericalTheta(incomingObjectSpaceZ) * PI_RECIPROCAL;
+		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float v = vector3FSphericalTheta(incomingObjectSpaceZ) * Floats.PI_RECIPROCAL;
 		
-		final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + CompiledLightCache.PEREZ_LIGHT_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + CompiledLightCache.PEREZ_LIGHT_OFFSET_DISTRIBUTION, u, v) / (2.0F * Floats.PI * Floats.PI * sinTheta);
 		
 		return probabilityDensityFunctionValue;
 	}
@@ -1626,7 +1622,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float radius = doLightPerezLightGetRadius(offset);
 		
-		final float resultFactor = PI * radius * radius;
+		final float resultFactor = Floats.PI * radius * radius;
 		
 		vector3FSetDirectionSpherical2(0.5F, 0.5F);
 		
@@ -1834,9 +1830,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float intensityG = doLightPointLightGetIntensityG();
 		final float intensityB = doLightPointLightGetIntensityB();
 		
-		final float powerR = intensityR * PI_MULTIPLIED_BY_4;
-		final float powerG = intensityG * PI_MULTIPLIED_BY_4;
-		final float powerB = intensityB * PI_MULTIPLIED_BY_4;
+		final float powerR = intensityR * Floats.PI_MULTIPLIED_BY_4;
+		final float powerG = intensityG * Floats.PI_MULTIPLIED_BY_4;
+		final float powerB = intensityB * Floats.PI_MULTIPLIED_BY_4;
 		
 		color3FLHSSet(powerR, powerG, powerB);
 	}
@@ -1988,7 +1984,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float cosConeAngle = doLightSpotLightGetCosConeAngle();
 		final float cosConeAngleMinusConeAngleDelta = doLightSpotLightGetCosConeAngleMinusConeAngleDelta();
 		
-		final float scale = PI_MULTIPLIED_BY_2 * (1.0F - 0.5F * (cosConeAngleMinusConeAngleDelta + cosConeAngle));
+		final float scale = Floats.PI_MULTIPLIED_BY_2 * (1.0F - 0.5F * (cosConeAngleMinusConeAngleDelta + cosConeAngle));
 		
 		final float powerR = intensityR * scale;
 		final float powerG = intensityG * scale;

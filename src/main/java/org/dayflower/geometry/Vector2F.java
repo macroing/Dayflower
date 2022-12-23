@@ -18,14 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.NEXT_DOWN_1_3;
-import static org.dayflower.utility.Floats.NEXT_UP_1_1;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.finiteOrDefault;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -35,9 +27,10 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Floats;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.Randoms;
 
 /**
  * A {@code Vector2F} represents a vector with two {@code float}-based components.
@@ -181,9 +174,9 @@ public final class Vector2F implements Node {
 			return true;
 		} else if(!(object instanceof Vector2F)) {
 			return false;
-		} else if(!equal(this.x, Vector2F.class.cast(object).x)) {
+		} else if(!Floats.equals(this.x, Vector2F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Vector2F.class.cast(object).y)) {
+		} else if(!Floats.equals(this.y, Vector2F.class.cast(object).y)) {
 			return false;
 		} else {
 			return true;
@@ -198,8 +191,8 @@ public final class Vector2F implements Node {
 	public boolean isUnitVector() {
 		final float length = length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Floats.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Floats.NEXT_UP_1_1;
 		
 		return isLengthGTEThreshold && isLengthLTEThreshold;
 	}
@@ -210,7 +203,7 @@ public final class Vector2F implements Node {
 	 * @return the length of this {@code Vector2F} instance
 	 */
 	public float length() {
-		return sqrt(lengthSquared());
+		return Floats.sqrt(lengthSquared());
 	}
 	
 	/**
@@ -273,7 +266,7 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
 	public static Vector2F absolute(final Vector2F v) {
-		return new Vector2F(abs(v.x), abs(v.y));
+		return new Vector2F(Floats.abs(v.x), Floats.abs(v.y));
 	}
 	
 	/**
@@ -395,7 +388,7 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
 	public static Vector2F divide(final Vector2F vLHS, final float sRHS) {
-		return new Vector2F(finiteOrDefault(vLHS.x / sRHS, 0.0F), finiteOrDefault(vLHS.y / sRHS, 0.0F));
+		return new Vector2F(Floats.finiteOrDefault(vLHS.x / sRHS, 0.0F), Floats.finiteOrDefault(vLHS.y / sRHS, 0.0F));
 	}
 	
 	/**
@@ -475,8 +468,8 @@ public final class Vector2F implements Node {
 	public static Vector2F normalize(final Vector2F v) {
 		final float length = v.length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Floats.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Floats.NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return v;
@@ -504,7 +497,7 @@ public final class Vector2F implements Node {
 	 * @return a random {@code Vector2F} instance
 	 */
 	public static Vector2F random() {
-		return new Vector2F(Floats.random() * 2.0F - 1.0F, Floats.random() * 2.0F - 1.0F);
+		return new Vector2F(Randoms.nextFloat() * 2.0F - 1.0F, Randoms.nextFloat() * 2.0F - 1.0F);
 	}
 	
 	/**
@@ -654,7 +647,7 @@ public final class Vector2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
 	public static boolean orthogonal(final Vector2F vLHS, final Vector2F vRHS) {
-		return isZero(dotProduct(vLHS, vRHS));
+		return Floats.isZero(dotProduct(vLHS, vRHS));
 	}
 	
 	/**

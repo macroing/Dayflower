@@ -18,18 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.asin;
-import static org.dayflower.utility.Floats.atan;
-import static org.dayflower.utility.Floats.atan2;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.tan;
-import static org.dayflower.utility.Floats.toDegrees;
-import static org.dayflower.utility.Floats.toRadians;
-import static org.dayflower.utility.Floats.wrapAround;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -37,8 +25,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
-import org.dayflower.utility.Floats;
-
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -54,7 +41,7 @@ public final class AngleF {
 	private static final float DEGREES_MAXIMUM_PITCH = 90.0F;
 	private static final float DEGREES_MINIMUM = 0.0F;
 	private static final float DEGREES_MINIMUM_PITCH = -90.0F;
-	private static final float RADIANS_MAXIMUM = PI_MULTIPLIED_BY_2;
+	private static final float RADIANS_MAXIMUM = Floats.PI_MULTIPLIED_BY_2;
 	private static final float RADIANS_MINIMUM = 0.0F;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,11 +90,11 @@ public final class AngleF {
 			return true;
 		} else if(!(object instanceof AngleF)) {
 			return false;
-		} else if(!equal(this.degrees, AngleF.class.cast(object).degrees)) {
+		} else if(!Floats.equals(this.degrees, AngleF.class.cast(object).degrees)) {
 			return false;
-		} else if(!equal(this.degreesMaximum, AngleF.class.cast(object).degreesMaximum)) {
+		} else if(!Floats.equals(this.degreesMaximum, AngleF.class.cast(object).degreesMaximum)) {
 			return false;
-		} else if(!equal(this.degreesMinimum, AngleF.class.cast(object).degreesMinimum)) {
+		} else if(!Floats.equals(this.degreesMinimum, AngleF.class.cast(object).degreesMinimum)) {
 			return false;
 		} else {
 			return true;
@@ -236,9 +223,9 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF add(final AngleF angleLHS, final AngleF angleRHS) {
-		final float degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
-		final float degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
-		final float degrees = wrapAround(angleLHS.degrees + angleRHS.degrees, degreesMinimum, degreesMaximum);
+		final float degreesMinimum = Floats.min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
+		final float degreesMaximum = Floats.max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
+		final float degrees = doWrapAround(angleLHS.degrees + angleRHS.degrees, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -269,13 +256,13 @@ public final class AngleF {
 	 * @return a new {@code AngleF} instance based on an angle in degrees and an interval of valid degrees
 	 */
 	public static AngleF degrees(final float degrees, final float degreesIntervalEndA, final float degreesIntervalEndB) {
-		final float newDegreesMinimum = min(degreesIntervalEndA, degreesIntervalEndB);
-		final float newDegreesMaximum = max(degreesIntervalEndA, degreesIntervalEndB);
-		final float newDegrees = wrapAround(degrees, newDegreesMinimum, newDegreesMaximum);
+		final float newDegreesMinimum = Floats.min(degreesIntervalEndA, degreesIntervalEndB);
+		final float newDegreesMaximum = Floats.max(degreesIntervalEndA, degreesIntervalEndB);
+		final float newDegrees = doWrapAround(degrees, newDegreesMinimum, newDegreesMaximum);
 		
-		final float newRadians = toRadians(newDegrees);
-		final float newRadiansMinimum = toRadians(newDegreesMinimum);
-		final float newRadiansMaximum = toRadians(newDegreesMaximum);
+		final float newRadians = Floats.toRadians(newDegrees);
+		final float newRadiansMinimum = Floats.toRadians(newDegreesMinimum);
+		final float newRadiansMaximum = Floats.toRadians(newDegreesMaximum);
 		
 		return new AngleF(newDegrees, newDegreesMinimum, newDegreesMaximum, newRadians, newRadiansMinimum, newRadiansMaximum);
 	}
@@ -291,7 +278,7 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF fieldOfView(final float focalDistance, final float resolution) {
-		return radians(2.0F * atan(resolution * 0.5F / focalDistance));
+		return radians(2.0F * Floats.atan(resolution * 0.5F / focalDistance));
 	}
 	
 	/**
@@ -307,7 +294,7 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF fieldOfViewX(final AngleF fieldOfViewY, final float resolutionX, final float resolutionY) {
-		return radians(2.0F * atan(tan(fieldOfViewY.radians * 0.5F) * (resolutionX / resolutionY)));
+		return radians(2.0F * Floats.atan(Floats.tan(fieldOfViewY.radians * 0.5F) * (resolutionX / resolutionY)));
 	}
 	
 	/**
@@ -323,7 +310,7 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF fieldOfViewY(final AngleF fieldOfViewX, final float resolutionX, final float resolutionY) {
-		return radians(2.0F * atan(tan(fieldOfViewX.radians * 0.5F) * (resolutionY / resolutionX)));
+		return radians(2.0F * Floats.atan(Floats.tan(fieldOfViewX.radians * 0.5F) * (resolutionY / resolutionX)));
 	}
 	
 	/**
@@ -339,7 +326,7 @@ public final class AngleF {
 	public static AngleF half(final AngleF angle) {
 		final float degreesMinimum = angle.degreesMinimum;
 		final float degreesMaximum = angle.degreesMaximum;
-		final float degrees = wrapAround(angle.degrees * 0.5F, degreesMinimum, degreesMaximum);
+		final float degrees = doWrapAround(angle.degrees * 0.5F, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -357,7 +344,7 @@ public final class AngleF {
 	public static AngleF negate(final AngleF angle) {
 		final float degreesMinimum = -angle.degreesMinimum;
 		final float degreesMaximum = -angle.degreesMaximum;
-		final float degrees = wrapAround(-angle.degrees, degreesMinimum, degreesMaximum);
+		final float degrees = doWrapAround(-angle.degrees, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -388,7 +375,7 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF pitch(final Vector3F direction) {
-		return degrees(toDegrees(asin(direction.y)), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
+		return degrees(Floats.toDegrees(Floats.asin(direction.y)), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
 	}
 	
 	/**
@@ -419,13 +406,13 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF radians(final float radians, final float radiansIntervalEndA, final float radiansIntervalEndB) {
-		final float newRadiansMinimum = min(radiansIntervalEndA, radiansIntervalEndB);
-		final float newRadiansMaximum = max(radiansIntervalEndA, radiansIntervalEndB);
-		final float newRadians = wrapAround(radians, newRadiansMinimum, newRadiansMaximum);
+		final float newRadiansMinimum = Floats.min(radiansIntervalEndA, radiansIntervalEndB);
+		final float newRadiansMaximum = Floats.max(radiansIntervalEndA, radiansIntervalEndB);
+		final float newRadians = doWrapAround(radians, newRadiansMinimum, newRadiansMaximum);
 		
-		final float newDegrees = toDegrees(newRadians);
-		final float newDegreesMinimum = toDegrees(newRadiansMinimum);
-		final float newDegreesMaximum = toDegrees(newRadiansMaximum);
+		final float newDegrees = Floats.toDegrees(newRadians);
+		final float newDegreesMinimum = Floats.toDegrees(newRadiansMinimum);
+		final float newDegreesMaximum = Floats.toDegrees(newRadiansMaximum);
 		
 		return new AngleF(newDegrees, newDegreesMinimum, newDegreesMaximum, newRadians, newRadiansMinimum, newRadiansMaximum);
 	}
@@ -472,9 +459,9 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF subtract(final AngleF angleLHS, final AngleF angleRHS) {
-		final float degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
-		final float degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
-		final float degrees = wrapAround(angleLHS.degrees - angleRHS.degrees, degreesMinimum, degreesMaximum);
+		final float degreesMinimum = Floats.min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
+		final float degreesMaximum = Floats.max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
+		final float degrees = doWrapAround(angleLHS.degrees - angleRHS.degrees, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -505,6 +492,21 @@ public final class AngleF {
 	 */
 //	TODO: Add Unit Tests!
 	public static AngleF yaw(final Vector3F direction) {
-		return degrees(toDegrees(atan2(direction.x, direction.z)));
+		return degrees(Floats.toDegrees(Floats.atan2(direction.x, direction.z)));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static float doWrapAround(final float value, final float a, final float b) {
+		final float minimumValue = Floats.min(a, b);
+		final float maximumValue = Floats.max(a, b);
+		
+		if(value >= minimumValue && value <= maximumValue) {
+			return value;
+		} else if(value < minimumValue) {
+			return maximumValue - ((minimumValue - value) % Floats.nextUp(maximumValue - minimumValue));
+		} else {
+			return minimumValue + ((value - maximumValue) % Floats.nextUp(maximumValue - minimumValue));
+		}
 	}
 }

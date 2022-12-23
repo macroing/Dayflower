@@ -18,10 +18,9 @@
  */
 package org.dayflower.parameter;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.util.Objects;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.util.concurrent.atomic.AtomicFloat;
 
 /**
@@ -99,7 +98,7 @@ public final class FloatParameter extends Parameter {
 			return false;
 		} else if(!Objects.equals(getName(), FloatParameter.class.cast(object).getName())) {
 			return false;
-		} else if(!equal(getValue(), FloatParameter.class.cast(object).getValue())) {
+		} else if(!Floats.equals(getValue(), FloatParameter.class.cast(object).getValue())) {
 			return false;
 		} else {
 			return true;

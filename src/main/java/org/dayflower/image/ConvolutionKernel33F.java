@@ -18,12 +18,11 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code ConvolutionKernel33F} is a convolution kernel with 9 {@code float}-based elements in three rows and three columns.
@@ -200,27 +199,27 @@ public final class ConvolutionKernel33F {
 			return true;
 		} else if(!(object instanceof ConvolutionKernel33F)) {
 			return false;
-		} else if(!equal(this.bias, ConvolutionKernel33F.class.cast(object).bias)) {
+		} else if(!Floats.equals(this.bias, ConvolutionKernel33F.class.cast(object).bias)) {
 			return false;
-		} else if(!equal(this.element11, ConvolutionKernel33F.class.cast(object).element11)) {
+		} else if(!Floats.equals(this.element11, ConvolutionKernel33F.class.cast(object).element11)) {
 			return false;
-		} else if(!equal(this.element12, ConvolutionKernel33F.class.cast(object).element12)) {
+		} else if(!Floats.equals(this.element12, ConvolutionKernel33F.class.cast(object).element12)) {
 			return false;
-		} else if(!equal(this.element13, ConvolutionKernel33F.class.cast(object).element13)) {
+		} else if(!Floats.equals(this.element13, ConvolutionKernel33F.class.cast(object).element13)) {
 			return false;
-		} else if(!equal(this.element21, ConvolutionKernel33F.class.cast(object).element21)) {
+		} else if(!Floats.equals(this.element21, ConvolutionKernel33F.class.cast(object).element21)) {
 			return false;
-		} else if(!equal(this.element22, ConvolutionKernel33F.class.cast(object).element22)) {
+		} else if(!Floats.equals(this.element22, ConvolutionKernel33F.class.cast(object).element22)) {
 			return false;
-		} else if(!equal(this.element23, ConvolutionKernel33F.class.cast(object).element23)) {
+		} else if(!Floats.equals(this.element23, ConvolutionKernel33F.class.cast(object).element23)) {
 			return false;
-		} else if(!equal(this.element31, ConvolutionKernel33F.class.cast(object).element31)) {
+		} else if(!Floats.equals(this.element31, ConvolutionKernel33F.class.cast(object).element31)) {
 			return false;
-		} else if(!equal(this.element32, ConvolutionKernel33F.class.cast(object).element32)) {
+		} else if(!Floats.equals(this.element32, ConvolutionKernel33F.class.cast(object).element32)) {
 			return false;
-		} else if(!equal(this.element33, ConvolutionKernel33F.class.cast(object).element33)) {
+		} else if(!Floats.equals(this.element33, ConvolutionKernel33F.class.cast(object).element33)) {
 			return false;
-		} else if(!equal(this.factor, ConvolutionKernel33F.class.cast(object).factor)) {
+		} else if(!Floats.equals(this.factor, ConvolutionKernel33F.class.cast(object).factor)) {
 			return false;
 		} else {
 			return true;
@@ -393,7 +392,7 @@ public final class ConvolutionKernel33F {
 		final boolean isFactorBasedOnRandomFloat = doNextBoolean();
 		final boolean isBiasBasedOnRandomFloat = doNextBoolean();
 		
-		final float factorBasedOnElementTotal = isZero(elementTotal) ? 1.0F : 1.0F / elementTotal;
+		final float factorBasedOnElementTotal = Floats.isZero(elementTotal) ? 1.0F : 1.0F / elementTotal;
 		
 		final float factor = isFactorBasedOnElementTotal ? factorBasedOnElementTotal : isFactorBasedOnRandomFloat ? doNextFloat() : 1.0F;
 		final float bias = isBiasBasedOnRandomFloat ? doNextFloat() : 0.0F;

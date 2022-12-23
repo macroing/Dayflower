@@ -18,8 +18,6 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -51,6 +49,8 @@ import org.dayflower.scene.compiler.CompiledCameraCache;
 import org.dayflower.scene.compiler.CompiledPrimitiveCache;
 import org.dayflower.scene.compiler.CompiledScene;
 import org.dayflower.scene.compiler.SceneCompiler;
+
+import org.macroing.java.lang.Floats;
 import org.macroing.java.util.Arrays;
 
 /**
@@ -695,7 +695,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float u = random();
 		final float v = random();
 		final float r = sqrt(u);
-		final float theta = PI_MULTIPLIED_BY_2 * v;
+		final float theta = Floats.PI_MULTIPLIED_BY_2 * v;
 		final float diskX = r * cos(theta);
 		final float diskY = r * sin(theta);
 		

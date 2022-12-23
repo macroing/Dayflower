@@ -18,7 +18,7 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.isNaN;
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code BoundingVolume3F} is a 3-dimensional extension of {@link BoundingVolume} that adds additional methods that operates on {@code float}-based data types.
@@ -147,6 +147,6 @@ public interface BoundingVolume3F extends BoundingVolume {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	default boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return !isNaN(intersection(ray, tMinimum, tMaximum));
+		return !Floats.isNaN(intersection(ray, tMinimum, tMaximum));
 	}
 }

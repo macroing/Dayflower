@@ -18,11 +18,6 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDF;
@@ -61,6 +56,8 @@ import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.Texture;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * An {@code AbstractMaterialKernel} is an abstract extension of the {@link AbstractTextureKernel} class that adds additional features.
@@ -1265,9 +1262,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		textureEvaluate((textureColorAndTextureDiffuseTransmission >> 0) & 0xFF, (textureColorAndTextureDiffuseTransmission >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float colorColorR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
-		final float colorColorG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
-		final float colorColorB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
+		final float colorColorR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorColorG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorColorB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
 		
 		final float luminance = colorColorR * 0.212671F + colorColorG * 0.715160F + colorColorB * 0.072169F;
 		
@@ -1420,9 +1417,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate((textureKRAndTextureKT >> 0) & 0xFF, (textureKRAndTextureKT >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KR Texture:
-		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
-		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
-		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
+		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
 		
 		final boolean hasKR = colorKRR != 0.0F || colorKRG != 0.0F || colorKRB != 0.0F;
 		
@@ -1430,9 +1427,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate((textureKRAndTextureKT >> 16) & 0xFF, (textureKRAndTextureKT >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KT Texture:
-		final float colorKTR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
-		final float colorKTG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
-		final float colorKTB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
+		final float colorKTR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorKTG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorKTB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
 		
 		final boolean hasKT = colorKTR != 0.0F || colorKTG != 0.0F || colorKTB != 0.0F;
 		
@@ -1724,9 +1721,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate((textureKR >> 0) & 0xFF, (textureKR >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KR Texture:
-		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
-		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
-		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
+		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
 		
 		if(colorKRR == 0.0F && colorKRG == 0.0F && colorKRB == 0.0F) {
 			return false;
@@ -1777,9 +1774,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate((textureKDAndTextureKS >> 0) & 0xFF, (textureKDAndTextureKS >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KD Texture:
-		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
-		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
-		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
+		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
 		
 		final boolean hasKD = colorKDR != 0.0F || colorKDG != 0.0F || colorKDB != 0.0F;
 		
@@ -1787,9 +1784,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KS Texture:
-		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
-		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
-		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
+		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
 		
 		final boolean hasKS = colorKSR != 0.0F || colorKSG != 0.0F || colorKSB != 0.0F;
 		
@@ -1856,9 +1853,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate((textureKDAndTextureKS >> 0) & 0xFF, (textureKDAndTextureKS >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KD Texture:
-		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
-		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
-		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
+		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
 		
 		final boolean hasKD = colorKDR != 0.0F || colorKDG != 0.0F || colorKDB != 0.0F;
 		
@@ -1866,9 +1863,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 //		Retrieve the color from the KS Texture:
-		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
-		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
-		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
+		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
 		
 		final boolean hasKS = colorKSR != 0.0F || colorKSG != 0.0F || colorKSB != 0.0F;
 		
@@ -2261,7 +2258,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float cosTheta = sqrt(max(0.0F, (1.0F - pow(glossSquared, 1.0F - u)) / (1.0F - glossSquared)));
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_2 * v;
+		final float phi = Floats.PI_MULTIPLIED_BY_2 * v;
 		
 		final float normalSampleX = sinTheta * cos(phi);
 		final float normalSampleY = sinTheta * sin(phi);
@@ -2337,7 +2334,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private float doBXDFDisneyClearCoatBRDFGTR1(final float cosTheta, final float alpha) {
-		return (alpha * alpha - 1.0F) / (PI * log(alpha * alpha) * (1.0F + (alpha * alpha - 1.0F) * cosTheta * cosTheta));
+		return (alpha * alpha - 1.0F) / (Floats.PI * log(alpha * alpha) * (1.0F + (alpha * alpha - 1.0F) * cosTheta * cosTheta));
 	}
 	
 	private float doBXDFDisneyClearCoatBRDFGetGloss() {
@@ -2429,7 +2426,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * PI_RECIPROCAL : 0.0F;
+		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * Floats.PI_RECIPROCAL : 0.0F;
 		
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 		
@@ -2470,9 +2467,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float reflectanceScaleG = doBXDFDisneyDiffuseBRDFGetReflectanceScaleG();
 		final float reflectanceScaleB = doBXDFDisneyDiffuseBRDFGetReflectanceScaleB();
 		
-		final float resultR = reflectanceScaleR * PI_RECIPROCAL * a * b;
-		final float resultG = reflectanceScaleG * PI_RECIPROCAL * a * b;
-		final float resultB = reflectanceScaleB * PI_RECIPROCAL * a * b;
+		final float resultR = reflectanceScaleR * Floats.PI_RECIPROCAL * a * b;
+		final float resultG = reflectanceScaleG * Floats.PI_RECIPROCAL * a * b;
+		final float resultB = reflectanceScaleB * Floats.PI_RECIPROCAL * a * b;
 		
 		doBXDFResultSetResult(resultR, resultG, resultB);
 	}
@@ -2510,7 +2507,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * PI_RECIPROCAL : 0.0F;
+		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * Floats.PI_RECIPROCAL : 0.0F;
 		
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 		
@@ -2574,9 +2571,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float scaleSS = 1.25F * (fresnelSS * (1.0F / (cosThetaAbsOutgoing + cosThetaAbsIncoming) - 0.5F) + 0.5F);
 		
-		final float resultR = reflectanceScaleR * PI_RECIPROCAL * scaleSS;
-		final float resultG = reflectanceScaleG * PI_RECIPROCAL * scaleSS;
-		final float resultB = reflectanceScaleB * PI_RECIPROCAL * scaleSS;
+		final float resultR = reflectanceScaleR * Floats.PI_RECIPROCAL * scaleSS;
+		final float resultG = reflectanceScaleG * Floats.PI_RECIPROCAL * scaleSS;
+		final float resultB = reflectanceScaleB * Floats.PI_RECIPROCAL * scaleSS;
 		
 		doBXDFResultSetResult(resultR, resultG, resultB);
 	}
@@ -2618,7 +2615,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * PI_RECIPROCAL : 0.0F;
+		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * Floats.PI_RECIPROCAL : 0.0F;
 		
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 		
@@ -2681,9 +2678,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float a = 2.0F * roughness * cosThetaD * cosThetaD;
 		final float b = fresnelOutgoing + fresnelIncoming + fresnelOutgoing * fresnelIncoming * (a - 1.0F);
 		
-		final float resultR = reflectanceScaleR * PI_RECIPROCAL * a * b;
-		final float resultG = reflectanceScaleG * PI_RECIPROCAL * a * b;
-		final float resultB = reflectanceScaleB * PI_RECIPROCAL * a * b;
+		final float resultR = reflectanceScaleR * Floats.PI_RECIPROCAL * a * b;
+		final float resultG = reflectanceScaleG * Floats.PI_RECIPROCAL * a * b;
+		final float resultB = reflectanceScaleB * Floats.PI_RECIPROCAL * a * b;
 		
 		doBXDFResultSetResult(resultR, resultG, resultB);
 	}
@@ -2725,7 +2722,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * PI_RECIPROCAL : 0.0F;
+		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * Floats.PI_RECIPROCAL : 0.0F;
 		
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 		
@@ -2873,7 +2870,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFFresnelBlendBRDFInitializeMicrofacetDistributionTrowbridgeReitz();
 		
 		final float probabilityDensityFunctionValue0 = doMicrofacetDistributionTrowbridgeReitzComputeProbabilityDensityFunctionValue(outgoingX, outgoingY, outgoingZ, normalNormalizedX, normalNormalizedY, normalNormalizedZ);
-		final float probabilityDensityFunctionValue1 = 0.5F * (abs(incomingZ) * PI_RECIPROCAL + probabilityDensityFunctionValue0 / (4.0F * outgoingDotNormal));
+		final float probabilityDensityFunctionValue1 = 0.5F * (abs(incomingZ) * Floats.PI_RECIPROCAL + probabilityDensityFunctionValue0 / (4.0F * outgoingDotNormal));
 		
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue1);
 		
@@ -2943,7 +2940,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float incomingDotNormal = vector3FDotProduct(incomingX, incomingY, incomingZ, normalNormalizedX, normalNormalizedY, normalNormalizedZ);
 		
-		final float a = 28.0F / (23.0F * PI);
+		final float a = 28.0F / (23.0F * Floats.PI);
 		final float b = 1.0F - pow5(1.0F - 0.5F * cosThetaAbsIncoming);
 		final float c = 1.0F - pow5(1.0F - 0.5F * cosThetaAbsOutgoing);
 		final float d = doMicrofacetDistributionTrowbridgeReitzComputeDifferentialArea(normalNormalizedX, normalNormalizedY, normalNormalizedZ);
@@ -3026,7 +3023,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * PI_RECIPROCAL : 0.0F;
+		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * Floats.PI_RECIPROCAL : 0.0F;
 		
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 		
@@ -3050,9 +3047,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float reflectanceScaleG = doBXDFLambertianBRDFGetReflectanceScaleG();
 		final float reflectanceScaleB = doBXDFLambertianBRDFGetReflectanceScaleB();
 		
-		final float resultR = reflectanceScaleR * PI_RECIPROCAL;
-		final float resultG = reflectanceScaleG * PI_RECIPROCAL;
-		final float resultB = reflectanceScaleB * PI_RECIPROCAL;
+		final float resultR = reflectanceScaleR * Floats.PI_RECIPROCAL;
+		final float resultG = reflectanceScaleG * Floats.PI_RECIPROCAL;
+		final float resultB = reflectanceScaleB * Floats.PI_RECIPROCAL;
 		
 		doBXDFResultSetResult(resultR, resultG, resultB);
 	}
@@ -3090,7 +3087,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? 0.0F : abs(incomingZ) * PI_RECIPROCAL;
+		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? 0.0F : abs(incomingZ) * Floats.PI_RECIPROCAL;
 		
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 		
@@ -3114,9 +3111,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float transmittanceScaleG = doBXDFLambertianBTDFGetTransmittanceScaleG();
 		final float transmittanceScaleB = doBXDFLambertianBTDFGetTransmittanceScaleB();
 		
-		final float resultR = transmittanceScaleR * PI_RECIPROCAL;
-		final float resultG = transmittanceScaleG * PI_RECIPROCAL;
-		final float resultB = transmittanceScaleB * PI_RECIPROCAL;
+		final float resultR = transmittanceScaleR * Floats.PI_RECIPROCAL;
+		final float resultG = transmittanceScaleG * Floats.PI_RECIPROCAL;
+		final float resultB = transmittanceScaleB * Floats.PI_RECIPROCAL;
 		
 		doBXDFResultSetResult(resultR, resultG, resultB);
 	}
@@ -3154,7 +3151,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		final float incomingY = doBXDFResultGetIncomingY();
 		final float incomingZ = doBXDFResultGetIncomingZ();
 		
-		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * PI_RECIPROCAL : 0.0F;
+		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? abs(incomingZ) * Floats.PI_RECIPROCAL : 0.0F;
 		
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 		
@@ -3215,9 +3212,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float reflectanceScaleG = doBXDFOrenNayarBRDFGetReflectanceScaleG();
 		final float reflectanceScaleB = doBXDFOrenNayarBRDFGetReflectanceScaleB();
 		
-		final float resultR = reflectanceScaleR * PI_RECIPROCAL * c;
-		final float resultG = reflectanceScaleG * PI_RECIPROCAL * c;
-		final float resultB = reflectanceScaleB * PI_RECIPROCAL * c;
+		final float resultR = reflectanceScaleR * Floats.PI_RECIPROCAL * c;
+		final float resultG = reflectanceScaleG * Floats.PI_RECIPROCAL * c;
+		final float resultB = reflectanceScaleB * Floats.PI_RECIPROCAL * c;
 		
 		doBXDFResultSetResult(resultR, resultG, resultB);
 	}
@@ -4652,7 +4649,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float exponent = (cosPhiSquared / alphaXSquared + sinPhiSquared / alphaYSquared) * tanThetaSquared;
 		
-		final float differentialArea = 1.0F / (PI * alphaX * alphaY * cosThetaQuartic * (1.0F + exponent) * (1.0F + exponent));
+		final float differentialArea = 1.0F / (Floats.PI * alphaX * alphaY * cosThetaQuartic * (1.0F + exponent) * (1.0F + exponent));
 		
 		return differentialArea;
 	}
@@ -4732,7 +4729,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private void doMicrofacetDistributionTrowbridgeReitzComputeSlope(final float cosTheta, final float u, final float v) {
 		if(cosTheta > 0.9999F) {
 			final float r = sqrt(u / (1.0F - u));
-			final float phi = v * PI_MULTIPLIED_BY_2;
+			final float phi = v * Floats.PI_MULTIPLIED_BY_2;
 			
 			final float x = r * cos(phi);
 			final float y = r * sin(phi);

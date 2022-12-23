@@ -18,12 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.NEXT_DOWN_1_3;
-import static org.dayflower.utility.Floats.NEXT_UP_1_1;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.finiteOrDefault;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -32,6 +26,7 @@ import java.util.Objects;
 
 import org.dayflower.node.Node;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -157,13 +152,13 @@ public final class Vector4F implements Node {
 			return true;
 		} else if(!(object instanceof Vector4F)) {
 			return false;
-		} else if(!equal(this.w, Vector4F.class.cast(object).w)) {
+		} else if(!Floats.equals(this.w, Vector4F.class.cast(object).w)) {
 			return false;
-		} else if(!equal(this.x, Vector4F.class.cast(object).x)) {
+		} else if(!Floats.equals(this.x, Vector4F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Vector4F.class.cast(object).y)) {
+		} else if(!Floats.equals(this.y, Vector4F.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Vector4F.class.cast(object).z)) {
+		} else if(!Floats.equals(this.z, Vector4F.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -176,7 +171,7 @@ public final class Vector4F implements Node {
 	 * @return the length of this {@code Vector4F} instance
 	 */
 	public float length() {
-		return sqrt(lengthSquared());
+		return Floats.sqrt(lengthSquared());
 	}
 	
 	/**
@@ -264,7 +259,7 @@ public final class Vector4F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
 	public static Vector4F divide(final Vector4F vLHS, final float sRHS) {
-		return new Vector4F(finiteOrDefault(vLHS.x / sRHS, 0.0F), finiteOrDefault(vLHS.y / sRHS, 0.0F), finiteOrDefault(vLHS.z / sRHS, 0.0F), finiteOrDefault(vLHS.w / sRHS, 0.0F));
+		return new Vector4F(Floats.finiteOrDefault(vLHS.x / sRHS, 0.0F), Floats.finiteOrDefault(vLHS.y / sRHS, 0.0F), Floats.finiteOrDefault(vLHS.z / sRHS, 0.0F), Floats.finiteOrDefault(vLHS.w / sRHS, 0.0F));
 	}
 	
 	/**
@@ -314,8 +309,8 @@ public final class Vector4F implements Node {
 	public static Vector4F normalize(final Vector4F v) {
 		final float length = v.length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Floats.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Floats.NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return v;

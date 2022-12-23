@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume;
 
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -34,6 +31,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * An {@code AxisAlignedBoundingBox3F} is an implementation of {@link BoundingVolume3F} that represents an axis-aligned bounding box (AABB).
@@ -317,8 +316,8 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 		final Vector3F directionA = Vector3F.hadamardProduct(Vector3F.direction(origin, maximum), directionReciprocal);
 		final Vector3F directionB = Vector3F.hadamardProduct(Vector3F.direction(origin, minimum), directionReciprocal);
 		
-		final float t0 = max(min(directionA.x, directionB.x), min(directionA.y, directionB.y), min(directionA.z, directionB.z));
-		final float t1 = min(max(directionA.x, directionB.x), max(directionA.y, directionB.y), max(directionA.z, directionB.z));
+		final float t0 = Floats.max(Floats.min(directionA.x, directionB.x), Floats.min(directionA.y, directionB.y), Floats.min(directionA.z, directionB.z));
+		final float t1 = Floats.min(Floats.max(directionA.x, directionB.x), Floats.max(directionA.y, directionB.y), Floats.max(directionA.z, directionB.z));
 		
 		return t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
 	}

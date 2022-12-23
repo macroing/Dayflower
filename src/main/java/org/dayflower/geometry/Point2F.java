@@ -18,19 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.MIN_VALUE;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.positiveModulo;
-import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.Floats.toFloat;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -41,9 +28,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -105,7 +92,7 @@ public final class Point2F implements Node {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point2F(Floats.toFloat(p.x), Floats.toFloat(p.y));
+	 * new Point2F((float)(p.x), (float)(p.y));
 	 * }
 	 * </pre>
 	 * 
@@ -113,7 +100,7 @@ public final class Point2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
 	 */
 	public Point2F(final Point2D p) {
-		this(toFloat(p.x), toFloat(p.y));
+		this((float)(p.x), (float)(p.y));
 	}
 	
 	/**
@@ -188,9 +175,9 @@ public final class Point2F implements Node {
 			return true;
 		} else if(!(object instanceof Point2F)) {
 			return false;
-		} else if(!equal(this.x, Point2F.class.cast(object).x)) {
+		} else if(!Floats.equals(this.x, Point2F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Point2F.class.cast(object).y)) {
+		} else if(!Floats.equals(this.y, Point2F.class.cast(object).y)) {
 			return false;
 		} else {
 			return true;
@@ -440,7 +427,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the largest component values
 	 */
 	public static Point2F maximum() {
-		return new Point2F(MAX_VALUE, MAX_VALUE);
+		return new Point2F(Floats.MAX_VALUE, Floats.MAX_VALUE);
 	}
 	
 	/**
@@ -454,7 +441,7 @@ public final class Point2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2F maximum(final Point2F a, final Point2F b) {
-		return new Point2F(max(a.x, b.x), max(a.y, b.y));
+		return new Point2F(Floats.max(a.x, b.x), Floats.max(a.y, b.y));
 	}
 	
 	/**
@@ -469,7 +456,7 @@ public final class Point2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2F maximum(final Point2F a, final Point2F b, final Point2F c) {
-		return new Point2F(max(a.x, b.x, c.x), max(a.y, b.y, c.y));
+		return new Point2F(Floats.max(a.x, b.x, c.x), Floats.max(a.y, b.y, c.y));
 	}
 	
 	/**
@@ -485,7 +472,7 @@ public final class Point2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2F maximum(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
-		return new Point2F(max(a.x, b.x, c.x, d.x), max(a.y, b.y, c.y, d.y));
+		return new Point2F(Floats.max(a.x, b.x, c.x, d.x), Floats.max(a.y, b.y, c.y, d.y));
 	}
 	
 	/**
@@ -508,7 +495,7 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the smallest component values
 	 */
 	public static Point2F minimum() {
-		return new Point2F(MIN_VALUE, MIN_VALUE);
+		return new Point2F(Floats.MIN_VALUE, Floats.MIN_VALUE);
 	}
 	
 	/**
@@ -522,7 +509,7 @@ public final class Point2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point2F minimum(final Point2F a, final Point2F b) {
-		return new Point2F(min(a.x, b.x), min(a.y, b.y));
+		return new Point2F(Floats.min(a.x, b.x), Floats.min(a.y, b.y));
 	}
 	
 	/**
@@ -537,7 +524,7 @@ public final class Point2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point2F minimum(final Point2F a, final Point2F b, final Point2F c) {
-		return new Point2F(min(a.x, b.x, c.x), min(a.y, b.y, c.y));
+		return new Point2F(Floats.min(a.x, b.x, c.x), Floats.min(a.y, b.y, c.y));
 	}
 	
 	/**
@@ -553,7 +540,7 @@ public final class Point2F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point2F minimum(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
-		return new Point2F(min(a.x, b.x, c.x, d.x), min(a.y, b.y, c.y, d.y));
+		return new Point2F(Floats.min(a.x, b.x, c.x, d.x), Floats.min(a.y, b.y, c.y, d.y));
 	}
 	
 	/**
@@ -590,8 +577,8 @@ public final class Point2F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2F rotateCounterclockwise(final Point2F p, final AngleF a) {
-		final float cos = cos(a.getRadians());
-		final float sin = sin(a.getRadians());
+		final float cos = Floats.cos(a.getRadians());
+		final float sin = Floats.sin(a.getRadians());
 		
 		return new Point2F(p.x * cos - p.y * sin, p.y * cos + p.x * sin);
 	}
@@ -624,7 +611,7 @@ public final class Point2F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2F sphericalCoordinates(final Vector3F direction) {
-		return new Point2F(direction.sphericalPhi() * PI_MULTIPLIED_BY_2_RECIPROCAL, direction.sphericalTheta() * PI_RECIPROCAL);
+		return new Point2F(direction.sphericalPhi() * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL, direction.sphericalTheta() * Floats.PI_RECIPROCAL);
 	}
 	
 	/**
@@ -672,7 +659,7 @@ public final class Point2F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Point2F toImage(final Point2F p, final float resolutionX, final float resolutionY) {
-		return new Point2F(positiveModulo(p.x * resolutionX - 0.5F, resolutionX), positiveModulo(p.y * resolutionY - 0.5F, resolutionY));
+		return new Point2F(Floats.positiveModulo(p.x * resolutionX - 0.5F, resolutionX), Floats.positiveModulo(p.y * resolutionY - 0.5F, resolutionY));
 	}
 	
 	/**
@@ -711,7 +698,7 @@ public final class Point2F implements Node {
 		final float y = mLHS.element21 * pRHS.x + mLHS.element22 * pRHS.y + mLHS.element23;
 		final float z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33;
 		
-		return equal(z, 1.0F) || isZero(z) ? new Point2F(x, y) : new Point2F(x / z, y / z);
+		return Floats.equals(z, 1.0F) || Floats.isZero(z) ? new Point2F(x, y) : new Point2F(x / z, y / z);
 	}
 	
 	/**

@@ -18,18 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.MIN_VALUE;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.atan2;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.getOrAdd;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.nextDown;
-import static org.dayflower.utility.Floats.nextUp;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -39,9 +27,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -193,11 +181,11 @@ public final class Point3F implements Node {
 			return true;
 		} else if(!(object instanceof Point3F)) {
 			return false;
-		} else if(!equal(this.x, Point3F.class.cast(object).x)) {
+		} else if(!Floats.equals(this.x, Point3F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Point3F.class.cast(object).y)) {
+		} else if(!Floats.equals(this.y, Point3F.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Point3F.class.cast(object).z)) {
+		} else if(!Floats.equals(this.z, Point3F.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -232,7 +220,7 @@ public final class Point3F implements Node {
 	 * @return the spherical phi angle
 	 */
 	public float sphericalPhi() {
-		return getOrAdd(atan2(this.y, this.x), 0.0F, PI_MULTIPLIED_BY_2);
+		return Floats.addLessThan(Floats.atan2(this.y, this.x), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -429,7 +417,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the largest component values
 	 */
 	public static Point3F maximum() {
-		return new Point3F(MAX_VALUE, MAX_VALUE, MAX_VALUE);
+		return new Point3F(Floats.MAX_VALUE, Floats.MAX_VALUE, Floats.MAX_VALUE);
 	}
 	
 	/**
@@ -443,7 +431,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point3F maximum(final Point3F a, final Point3F b) {
-		return new Point3F(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
+		return new Point3F(Floats.max(a.x, b.x), Floats.max(a.y, b.y), Floats.max(a.z, b.z));
 	}
 	
 	/**
@@ -458,7 +446,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point3F maximum(final Point3F a, final Point3F b, final Point3F c) {
-		return new Point3F(max(a.x, b.x, c.x), max(a.y, b.y, c.y), max(a.z, b.z, c.z));
+		return new Point3F(Floats.max(a.x, b.x, c.x), Floats.max(a.y, b.y, c.y), Floats.max(a.z, b.z, c.z));
 	}
 	
 	/**
@@ -474,7 +462,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point3F maximum(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
-		return new Point3F(max(a.x, b.x, c.x, d.x), max(a.y, b.y, c.y, d.y), max(a.z, b.z, c.z, d.z));
+		return new Point3F(Floats.max(a.x, b.x, c.x, d.x), Floats.max(a.y, b.y, c.y, d.y), Floats.max(a.z, b.z, c.z, d.z));
 	}
 	
 	/**
@@ -497,7 +485,7 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the smallest component values
 	 */
 	public static Point3F minimum() {
-		return new Point3F(MIN_VALUE, MIN_VALUE, MIN_VALUE);
+		return new Point3F(Floats.MIN_VALUE, Floats.MIN_VALUE, Floats.MIN_VALUE);
 	}
 	
 	/**
@@ -511,7 +499,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public static Point3F minimum(final Point3F a, final Point3F b) {
-		return new Point3F(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
+		return new Point3F(Floats.min(a.x, b.x), Floats.min(a.y, b.y), Floats.min(a.z, b.z));
 	}
 	
 	/**
@@ -526,7 +514,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public static Point3F minimum(final Point3F a, final Point3F b, final Point3F c) {
-		return new Point3F(min(a.x, b.x, c.x), min(a.y, b.y, c.y), min(a.z, b.z, c.z));
+		return new Point3F(Floats.min(a.x, b.x, c.x), Floats.min(a.y, b.y, c.y), Floats.min(a.z, b.z, c.z));
 	}
 	
 	/**
@@ -542,7 +530,7 @@ public final class Point3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
 	 */
 	public static Point3F minimum(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
-		return new Point3F(min(a.x, b.x, c.x, d.x), min(a.y, b.y, c.y, d.y), min(a.z, b.z, c.z, d.z));
+		return new Point3F(Floats.min(a.x, b.x, c.x, d.x), Floats.min(a.y, b.y, c.y, d.y), Floats.min(a.z, b.z, c.z, d.z));
 	}
 	
 	/**
@@ -565,9 +553,9 @@ public final class Point3F implements Node {
 		
 		final Point3F pointOffset = add(point, offsetCorrectlyOriented);
 		
-		final float x = offset.x > 0.0F ? nextUp(pointOffset.x) : offset.x < 0.0F ? nextDown(pointOffset.x) : pointOffset.x;
-		final float y = offset.y > 0.0F ? nextUp(pointOffset.y) : offset.y < 0.0F ? nextDown(pointOffset.y) : pointOffset.y;
-		final float z = offset.z > 0.0F ? nextUp(pointOffset.z) : offset.z < 0.0F ? nextDown(pointOffset.z) : pointOffset.z;
+		final float x = offset.x > 0.0F ? Floats.nextUp(pointOffset.x) : offset.x < 0.0F ? Floats.nextDown(pointOffset.x) : pointOffset.x;
+		final float y = offset.y > 0.0F ? Floats.nextUp(pointOffset.y) : offset.y < 0.0F ? Floats.nextDown(pointOffset.y) : pointOffset.y;
+		final float z = offset.z > 0.0F ? Floats.nextUp(pointOffset.z) : offset.z < 0.0F ? Floats.nextDown(pointOffset.z) : pointOffset.z;
 		
 		return new Point3F(x, y, z);
 	}
@@ -694,7 +682,7 @@ public final class Point3F implements Node {
 		final float z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34;
 		final float w = mLHS.element41 * pRHS.x + mLHS.element42 * pRHS.y + mLHS.element43 * pRHS.z + mLHS.element44;
 		
-		return equal(w, 1.0F) || isZero(w) ? new Point3F(x, y, z) : new Point3F(x / w, y / w, z / w);
+		return Floats.equals(w, 1.0F) || Floats.isZero(w) ? new Point3F(x, y, z) : new Point3F(x / w, y / w, z / w);
 	}
 	
 	/**
@@ -751,7 +739,7 @@ public final class Point3F implements Node {
 			
 			final Vector3F v2 = Vector3F.directionNormalized(p0, pI);
 			
-			if(!isZero(Vector3F.tripleProduct(v0, v2, v1))) {
+			if(!Floats.isZero(Vector3F.tripleProduct(v0, v2, v1))) {
 				return false;
 			}
 		}

@@ -18,12 +18,11 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.equal;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code SurfaceIntersection3F} contains information about the surface of a {@link Shape3F} instance where a {@link Ray3F} instance intersects.
@@ -239,7 +238,7 @@ public final class SurfaceIntersection3F {
 			return false;
 		} else if(!Objects.equals(this.shape, SurfaceIntersection3F.class.cast(object).shape)) {
 			return false;
-		} else if(!equal(this.t, SurfaceIntersection3F.class.cast(object).t)) {
+		} else if(!Floats.equals(this.t, SurfaceIntersection3F.class.cast(object).t)) {
 			return false;
 		} else {
 			return true;
@@ -387,7 +386,7 @@ public final class SurfaceIntersection3F {
 		
 		final Shape3F shape = surfaceIntersection.shape;
 		
-		final float tNewSpace = abs(Point3F.distance(rayNewSpace.getOrigin(), surfaceIntersectionPointNewSpace));
+		final float tNewSpace = Floats.abs(Point3F.distance(rayNewSpace.getOrigin(), surfaceIntersectionPointNewSpace));
 		
 		return new SurfaceIntersection3F(orthonormalBasisGNewSpace, orthonormalBasisSNewSpaceCorrectlyOriented, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, tNewSpace);
 	}

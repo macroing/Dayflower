@@ -18,24 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.NEXT_DOWN_1_3;
-import static org.dayflower.utility.Floats.NEXT_UP_1_1;
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.acos;
-import static org.dayflower.utility.Floats.atan2;
-import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.finiteOrDefault;
-import static org.dayflower.utility.Floats.gamma;
-import static org.dayflower.utility.Floats.getOrAdd;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.saturate;
-import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -47,9 +29,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Floats;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.Randoms;
 
 /**
  * A {@code Vector3F} represents a vector with three {@code float}-based components.
@@ -181,11 +164,11 @@ public final class Vector3F implements Node {
 			return true;
 		} else if(!(object instanceof Vector3F)) {
 			return false;
-		} else if(!equal(this.x, Vector3F.class.cast(object).x)) {
+		} else if(!Floats.equals(this.x, Vector3F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Vector3F.class.cast(object).y)) {
+		} else if(!Floats.equals(this.y, Vector3F.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Vector3F.class.cast(object).z)) {
+		} else if(!Floats.equals(this.z, Vector3F.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -200,8 +183,8 @@ public final class Vector3F implements Node {
 	public boolean isUnitVector() {
 		final float length = length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Floats.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Floats.NEXT_UP_1_1;
 		
 		return isLengthGTEThreshold && isLengthLTEThreshold;
 	}
@@ -214,11 +197,11 @@ public final class Vector3F implements Node {
 	public float cosPhi() {
 		final float sinTheta = sinTheta();
 		
-		if(equal(sinTheta, 0.0F)) {
+		if(Floats.isZero(sinTheta)) {
 			return 1.0F;
 		}
 		
-		return saturate(this.x / sinTheta, -1.0F, 1.0F);
+		return Floats.saturate(this.x / sinTheta, -1.0F, 1.0F);
 	}
 	
 	/**
@@ -245,7 +228,7 @@ public final class Vector3F implements Node {
 	 * @return the cosine of the angle theta in absolute form
 	 */
 	public float cosThetaAbs() {
-		return abs(cosTheta());
+		return Floats.abs(cosTheta());
 	}
 	
 	/**
@@ -272,7 +255,7 @@ public final class Vector3F implements Node {
 	 * @return the length of this {@code Vector3F} instance
 	 */
 	public float length() {
-		return sqrt(lengthSquared());
+		return Floats.sqrt(lengthSquared());
 	}
 	
 	/**
@@ -292,11 +275,11 @@ public final class Vector3F implements Node {
 	public float sinPhi() {
 		final float sinTheta = sinTheta();
 		
-		if(isZero(sinTheta)) {
+		if(Floats.isZero(sinTheta)) {
 			return 0.0F;
 		}
 		
-		return saturate(this.y / sinTheta, -1.0F, 1.0F);
+		return Floats.saturate(this.y / sinTheta, -1.0F, 1.0F);
 	}
 	
 	/**
@@ -314,7 +297,7 @@ public final class Vector3F implements Node {
 	 * @return the sine of the angle theta
 	 */
 	public float sinTheta() {
-		return sqrt(sinThetaSquared());
+		return Floats.sqrt(sinThetaSquared());
 	}
 	
 	/**
@@ -323,7 +306,7 @@ public final class Vector3F implements Node {
 	 * @return the sine of the angle theta in squared form
 	 */
 	public float sinThetaSquared() {
-		return max(0.0F, 1.0F - cosThetaSquared());
+		return Floats.max(0.0F, 1.0F - cosThetaSquared());
 	}
 	
 	/**
@@ -333,7 +316,7 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public float sphericalPhi() {
-		return getOrAdd(atan2(this.y, this.x), 0.0F, PI_MULTIPLIED_BY_2);
+		return Floats.addLessThan(Floats.atan2(this.y, this.x), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 	}
 	
 	/**
@@ -343,7 +326,7 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public float sphericalTheta() {
-		return acos(saturate(this.z, -1.0F, 1.0F));
+		return Floats.acos(Floats.saturate(this.z, -1.0F, 1.0F));
 	}
 	
 	/**
@@ -361,7 +344,7 @@ public final class Vector3F implements Node {
 	 * @return the tangent of the angle theta in absolute form
 	 */
 	public float tanThetaAbs() {
-		return abs(tanTheta());
+		return Floats.abs(tanTheta());
 	}
 	
 	/**
@@ -428,14 +411,14 @@ public final class Vector3F implements Node {
 	 */
 	public static Optional<Vector3F> refraction(final Vector3F direction, final Vector3F normal, final float eta) {
 		final float cosThetaI = dotProduct(direction, normal);
-		final float sinThetaISquared = max(0.0F, 1.0F - cosThetaI * cosThetaI);
+		final float sinThetaISquared = Floats.max(0.0F, 1.0F - cosThetaI * cosThetaI);
 		final float sinThetaTSquared = eta * eta * sinThetaISquared;
 		
 		if(sinThetaTSquared >= 1.0F) {
 			return Optional.empty();
 		}
 		
-		final float cosThetaT = sqrt(1.0F - sinThetaTSquared);
+		final float cosThetaT = Floats.sqrt(1.0F - sinThetaTSquared);
 		
 		return Optional.of(add(multiply(negate(direction), eta), multiply(normal, eta * cosThetaI - cosThetaT)));
 	}
@@ -450,7 +433,7 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
 	 */
 	public static Vector3F absolute(final Vector3F v) {
-		return new Vector3F(abs(v.x), abs(v.y), abs(v.z));
+		return new Vector3F(Floats.abs(v.x), Floats.abs(v.y), Floats.abs(v.z));
 	}
 	
 	/**
@@ -502,9 +485,9 @@ public final class Vector3F implements Node {
 	public static Vector3F computeV(final Vector3F w) {
 		final Vector3F wNormalized = normalize(w);
 		
-		final float absWNormalizedComponent1 = abs(wNormalized.x);
-		final float absWNormalizedComponent2 = abs(wNormalized.y);
-		final float absWNormalizedComponent3 = abs(wNormalized.z);
+		final float absWNormalizedComponent1 = Floats.abs(wNormalized.x);
+		final float absWNormalizedComponent2 = Floats.abs(wNormalized.y);
+		final float absWNormalizedComponent3 = Floats.abs(wNormalized.z);
 		
 		if(absWNormalizedComponent1 < absWNormalizedComponent2 && absWNormalizedComponent1 < absWNormalizedComponent3) {
 			return normalize(new Vector3F(0.0F, wNormalized.z, -wNormalized.y));
@@ -598,14 +581,14 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F directionSpherical(final float u, final float v) {
-		final float phi = u * PI_MULTIPLIED_BY_2;
-		final float theta = v * PI;
+		final float phi = u * Floats.PI_MULTIPLIED_BY_2;
+		final float theta = v * Floats.PI;
 		
-		return directionSpherical(sin(theta), cos(theta), phi);
+		return directionSpherical(Floats.sin(theta), Floats.cos(theta), phi);
 		
 //		final float cosTheta = 1.0F - 2.0F * u;
-//		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-//		final float phi = v * PI_MULTIPLIED_BY_2;
+//		final float sinTheta = Floats.sqrt(Floats.max(0.0F, 1.0F - cosTheta * cosTheta));
+//		final float phi = v * Floats.PI_MULTIPLIED_BY_2;
 		
 //		return directionSpherical(sinTheta, cosTheta, phi);
 	}
@@ -622,7 +605,7 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F directionSpherical(final float sinTheta, final float cosTheta, final float phi) {
-		return new Vector3F(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta);
+		return new Vector3F(sinTheta * Floats.cos(phi), sinTheta * Floats.sin(phi), cosTheta);
 	}
 	
 	/**
@@ -643,7 +626,7 @@ public final class Vector3F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Vector3F directionSpherical(final float sinTheta, final float cosTheta, final float phi, final Vector3F x, final Vector3F y, final Vector3F z) {
-		return add(multiply(x, sinTheta * cos(phi)), multiply(y, sinTheta * sin(phi)), multiply(z, cosTheta));
+		return add(multiply(x, sinTheta * Floats.cos(phi)), multiply(y, sinTheta * Floats.sin(phi)), multiply(z, cosTheta));
 	}
 	
 	/**
@@ -673,7 +656,7 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code vLHS} is {@code null}
 	 */
 	public static Vector3F divide(final Vector3F vLHS, final float sRHS) {
-		return new Vector3F(finiteOrDefault(vLHS.x / sRHS, 0.0F), finiteOrDefault(vLHS.y / sRHS, 0.0F), finiteOrDefault(vLHS.z / sRHS, 0.0F));
+		return new Vector3F(Floats.finiteOrDefault(vLHS.x / sRHS, 0.0F), Floats.finiteOrDefault(vLHS.y / sRHS, 0.0F), Floats.finiteOrDefault(vLHS.z / sRHS, 0.0F));
 	}
 	
 	/**
@@ -975,8 +958,8 @@ public final class Vector3F implements Node {
 	public static Vector3F normalize(final Vector3F v) {
 		final float length = v.length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Floats.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Floats.NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return v;
@@ -991,7 +974,7 @@ public final class Vector3F implements Node {
 	 * @return a random {@code Vector3F} instance
 	 */
 	public static Vector3F random() {
-		return new Vector3F(Floats.random() * 2.0F - 1.0F, Floats.random() * 2.0F - 1.0F, Floats.random() * 2.0F - 1.0F);
+		return new Vector3F(Randoms.nextFloat() * 2.0F - 1.0F, Randoms.nextFloat() * 2.0F - 1.0F, Randoms.nextFloat() * 2.0F - 1.0F);
 	}
 	
 	/**
@@ -1427,7 +1410,7 @@ public final class Vector3F implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
 	 */
 	public static float dotProductAbs(final Vector3F vLHS, final Vector3F vRHS) {
-		return abs(dotProduct(vLHS, vRHS));
+		return Floats.abs(dotProduct(vLHS, vRHS));
 	}
 	
 	/**

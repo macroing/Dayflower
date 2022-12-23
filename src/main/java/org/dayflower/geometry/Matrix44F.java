@@ -18,13 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.Floats.tan;
-import static org.dayflower.utility.Floats.toRadians;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -35,6 +28,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -301,37 +295,37 @@ public final class Matrix44F implements Node {
 			return true;
 		} else if(!(object instanceof Matrix44F)) {
 			return false;
-		} else if(!equal(this.element11, Matrix44F.class.cast(object).element11)) {
+		} else if(!Floats.equals(this.element11, Matrix44F.class.cast(object).element11)) {
 			return false;
-		} else if(!equal(this.element12, Matrix44F.class.cast(object).element12)) {
+		} else if(!Floats.equals(this.element12, Matrix44F.class.cast(object).element12)) {
 			return false;
-		} else if(!equal(this.element13, Matrix44F.class.cast(object).element13)) {
+		} else if(!Floats.equals(this.element13, Matrix44F.class.cast(object).element13)) {
 			return false;
-		} else if(!equal(this.element14, Matrix44F.class.cast(object).element14)) {
+		} else if(!Floats.equals(this.element14, Matrix44F.class.cast(object).element14)) {
 			return false;
-		} else if(!equal(this.element21, Matrix44F.class.cast(object).element21)) {
+		} else if(!Floats.equals(this.element21, Matrix44F.class.cast(object).element21)) {
 			return false;
-		} else if(!equal(this.element22, Matrix44F.class.cast(object).element22)) {
+		} else if(!Floats.equals(this.element22, Matrix44F.class.cast(object).element22)) {
 			return false;
-		} else if(!equal(this.element23, Matrix44F.class.cast(object).element23)) {
+		} else if(!Floats.equals(this.element23, Matrix44F.class.cast(object).element23)) {
 			return false;
-		} else if(!equal(this.element24, Matrix44F.class.cast(object).element24)) {
+		} else if(!Floats.equals(this.element24, Matrix44F.class.cast(object).element24)) {
 			return false;
-		} else if(!equal(this.element31, Matrix44F.class.cast(object).element31)) {
+		} else if(!Floats.equals(this.element31, Matrix44F.class.cast(object).element31)) {
 			return false;
-		} else if(!equal(this.element32, Matrix44F.class.cast(object).element32)) {
+		} else if(!Floats.equals(this.element32, Matrix44F.class.cast(object).element32)) {
 			return false;
-		} else if(!equal(this.element33, Matrix44F.class.cast(object).element33)) {
+		} else if(!Floats.equals(this.element33, Matrix44F.class.cast(object).element33)) {
 			return false;
-		} else if(!equal(this.element34, Matrix44F.class.cast(object).element34)) {
+		} else if(!Floats.equals(this.element34, Matrix44F.class.cast(object).element34)) {
 			return false;
-		} else if(!equal(this.element41, Matrix44F.class.cast(object).element41)) {
+		} else if(!Floats.equals(this.element41, Matrix44F.class.cast(object).element41)) {
 			return false;
-		} else if(!equal(this.element42, Matrix44F.class.cast(object).element42)) {
+		} else if(!Floats.equals(this.element42, Matrix44F.class.cast(object).element42)) {
 			return false;
-		} else if(!equal(this.element43, Matrix44F.class.cast(object).element43)) {
+		} else if(!Floats.equals(this.element43, Matrix44F.class.cast(object).element43)) {
 			return false;
-		} else if(!equal(this.element44, Matrix44F.class.cast(object).element44)) {
+		} else if(!Floats.equals(this.element44, Matrix44F.class.cast(object).element44)) {
 			return false;
 		} else {
 			return true;
@@ -344,7 +338,7 @@ public final class Matrix44F implements Node {
 	 * @return {@code true} if, and only if, this {@code Matrix44F} instance is invertible, {@code false} otherwise
 	 */
 	public boolean isInvertible() {
-		return abs(determinant()) >= 1.0e-12F;
+		return Floats.abs(determinant()) >= 1.0e-12F;
 	}
 	
 	/**
@@ -555,7 +549,7 @@ public final class Matrix44F implements Node {
 		final float determinant = a * l - b * k + c * j + d * i - e * h + f * g;
 		final float determinantReciprocal = 1.0F / determinant;
 		
-		if(abs(determinant) < 1.0e-12F) {
+		if(Floats.abs(determinant) < 1.0e-12F) {
 			throw new IllegalArgumentException("The Matrix44F 'm' cannot be inverted!");
 		}
 		
@@ -669,7 +663,7 @@ public final class Matrix44F implements Node {
 	 */
 //	TODO: Add Unit Tests!
 	public static Matrix44F perspective(final AngleF fieldOfView, final float aspectRatio, final float zNear, final float zFar) {
-		final float tanHalfFieldOfView = tan(fieldOfView.getRadians() / 2.0F);
+		final float tanHalfFieldOfView = Floats.tan(fieldOfView.getRadians() / 2.0F);
 		
 		final float element11 = 1.0F / (tanHalfFieldOfView * aspectRatio);
 		final float element12 = 0.0F;
@@ -942,10 +936,10 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the X-axis
 	 */
 	public static Matrix44F rotateX(final float a, final boolean isRadians) {
-		final float radians = isRadians ? a : toRadians(a);
+		final float radians = isRadians ? a : Floats.toRadians(a);
 		
-		final float cos = cos(radians);
-		final float sin = sin(radians);
+		final float cos = Floats.cos(radians);
+		final float sin = Floats.sin(radians);
 		
 		return new Matrix44F(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -1020,10 +1014,10 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the Y-axis
 	 */
 	public static Matrix44F rotateY(final float a, final boolean isRadians) {
-		final float radians = isRadians ? a : toRadians(a);
+		final float radians = isRadians ? a : Floats.toRadians(a);
 		
-		final float cos = cos(radians);
-		final float sin = sin(radians);
+		final float cos = Floats.cos(radians);
+		final float sin = Floats.sin(radians);
 		
 		return new Matrix44F(cos, 0.0F, sin, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, -sin, 0.0F, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -1098,10 +1092,10 @@ public final class Matrix44F implements Node {
 	 * @return a {@code Matrix44F} instance that rotates along the Z-axis
 	 */
 	public static Matrix44F rotateZ(final float a, final boolean isRadians) {
-		final float radians = isRadians ? a : toRadians(a);
+		final float radians = isRadians ? a : Floats.toRadians(a);
 		
-		final float cos = cos(radians);
-		final float sin = sin(radians);
+		final float cos = Floats.cos(radians);
+		final float sin = Floats.sin(radians);
 		
 		return new Matrix44F(cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}

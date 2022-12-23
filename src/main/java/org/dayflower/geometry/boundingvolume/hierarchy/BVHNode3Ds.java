@@ -25,6 +25,7 @@ import java.util.List;
 import org.dayflower.geometry.BoundingVolume3D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Shape3D;
+
 import org.macroing.java.lang.Doubles;
 
 /**

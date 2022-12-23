@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.sin;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -32,6 +27,7 @@ import java.util.Objects;
 import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -161,23 +157,23 @@ public final class Matrix33F implements Node {
 			return true;
 		} else if(!(object instanceof Matrix33F)) {
 			return false;
-		} else if(!equal(this.element11, Matrix33F.class.cast(object).element11)) {
+		} else if(!Floats.equals(this.element11, Matrix33F.class.cast(object).element11)) {
 			return false;
-		} else if(!equal(this.element12, Matrix33F.class.cast(object).element12)) {
+		} else if(!Floats.equals(this.element12, Matrix33F.class.cast(object).element12)) {
 			return false;
-		} else if(!equal(this.element13, Matrix33F.class.cast(object).element13)) {
+		} else if(!Floats.equals(this.element13, Matrix33F.class.cast(object).element13)) {
 			return false;
-		} else if(!equal(this.element21, Matrix33F.class.cast(object).element21)) {
+		} else if(!Floats.equals(this.element21, Matrix33F.class.cast(object).element21)) {
 			return false;
-		} else if(!equal(this.element22, Matrix33F.class.cast(object).element22)) {
+		} else if(!Floats.equals(this.element22, Matrix33F.class.cast(object).element22)) {
 			return false;
-		} else if(!equal(this.element23, Matrix33F.class.cast(object).element23)) {
+		} else if(!Floats.equals(this.element23, Matrix33F.class.cast(object).element23)) {
 			return false;
-		} else if(!equal(this.element31, Matrix33F.class.cast(object).element31)) {
+		} else if(!Floats.equals(this.element31, Matrix33F.class.cast(object).element31)) {
 			return false;
-		} else if(!equal(this.element32, Matrix33F.class.cast(object).element32)) {
+		} else if(!Floats.equals(this.element32, Matrix33F.class.cast(object).element32)) {
 			return false;
-		} else if(!equal(this.element33, Matrix33F.class.cast(object).element33)) {
+		} else if(!Floats.equals(this.element33, Matrix33F.class.cast(object).element33)) {
 			return false;
 		} else {
 			return true;
@@ -190,7 +186,7 @@ public final class Matrix33F implements Node {
 	 * @return {@code true} if, and only if, this {@code Matrix33F} instance is invertible, {@code false} otherwise
 	 */
 	public boolean isInvertible() {
-		return abs(determinant()) >= 1.0e-12F;
+		return Floats.abs(determinant()) >= 1.0e-12F;
 	}
 	
 	/**
@@ -414,8 +410,8 @@ public final class Matrix33F implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
 	 */
 	public static Matrix33F rotate(final AngleF a) {
-		final float cos = cos(a.getRadians());
-		final float sin = sin(a.getRadians());
+		final float cos = Floats.cos(a.getRadians());
+		final float sin = Floats.sin(a.getRadians());
 		
 		return new Matrix33F(cos, sin, 0.0F, -sin, cos, 0.0F, 0.0F, 0.0F, 1.0F);
 	}

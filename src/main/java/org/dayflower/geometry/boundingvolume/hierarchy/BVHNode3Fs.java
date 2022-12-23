@@ -18,13 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume.hierarchy;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.MIN_VALUE;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +25,8 @@ import java.util.List;
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A class that consists exclusively of static methods that returns or performs various operations on {@link BVHNode3F} instances.
@@ -84,7 +79,7 @@ public final class BVHNode3Fs {
 		final float sideZ = maximum.z - minimum.z;
 		
 		float minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
-		float bestSplit = MAX_VALUE;
+		float bestSplit = Floats.MAX_VALUE;
 		
 		int bestAxis = -1;
 		
@@ -92,7 +87,7 @@ public final class BVHNode3Fs {
 			final float start = minimum.getComponent(axis);
 			final float stop  = maximum.getComponent(axis);
 			
-			if(abs(stop - start) < 1.0e-4F) {
+			if(Floats.abs(stop - start) < 1.0e-4F) {
 				continue;
 			}
 			
@@ -100,22 +95,22 @@ public final class BVHNode3Fs {
 			
 			for(float oldSplit = 0.0F, newSplit = start + step; newSplit < stop - step; oldSplit = newSplit, newSplit += step) {
 //				The following test prevents an infinite loop from occurring (it might not be necessary anymore, due to a fix earlier):
-				if(equal(oldSplit, newSplit)) {
+				if(Floats.equals(oldSplit, newSplit)) {
 					break;
 				}
 				
-				float maximumLX = MIN_VALUE;
-				float maximumLY = MIN_VALUE;
-				float maximumLZ = MIN_VALUE;
-				float minimumLX = MAX_VALUE;
-				float minimumLY = MAX_VALUE;
-				float minimumLZ = MAX_VALUE;
-				float maximumRX = MIN_VALUE;
-				float maximumRY = MIN_VALUE;
-				float maximumRZ = MIN_VALUE;
-				float minimumRX = MAX_VALUE;
-				float minimumRY = MAX_VALUE;
-				float minimumRZ = MAX_VALUE;
+				float maximumLX = Floats.MIN_VALUE;
+				float maximumLY = Floats.MIN_VALUE;
+				float maximumLZ = Floats.MIN_VALUE;
+				float minimumLX = Floats.MAX_VALUE;
+				float minimumLY = Floats.MAX_VALUE;
+				float minimumLZ = Floats.MAX_VALUE;
+				float maximumRX = Floats.MIN_VALUE;
+				float maximumRY = Floats.MIN_VALUE;
+				float maximumRZ = Floats.MIN_VALUE;
+				float minimumRX = Floats.MAX_VALUE;
+				float minimumRY = Floats.MAX_VALUE;
+				float minimumRZ = Floats.MAX_VALUE;
 				
 				int countL = 0;
 				int countR = 0;
@@ -130,21 +125,21 @@ public final class BVHNode3Fs {
 					final float value = mid.getComponent(axis);
 					
 					if(value < newSplit) {
-						maximumLX = max(maximumLX, max.x);
-						maximumLY = max(maximumLY, max.y);
-						maximumLZ = max(maximumLZ, max.z);
-						minimumLX = min(minimumLX, min.x);
-						minimumLY = min(minimumLY, min.y);
-						minimumLZ = min(minimumLZ, min.z);
+						maximumLX = Floats.max(maximumLX, max.x);
+						maximumLY = Floats.max(maximumLY, max.y);
+						maximumLZ = Floats.max(maximumLZ, max.z);
+						minimumLX = Floats.min(minimumLX, min.x);
+						minimumLY = Floats.min(minimumLY, min.y);
+						minimumLZ = Floats.min(minimumLZ, min.z);
 						
 						countL++;
 					} else {
-						maximumRX = max(maximumRX, max.x);
-						maximumRY = max(maximumRY, max.y);
-						maximumRZ = max(maximumRZ, max.z);
-						minimumRX = min(minimumRX, min.x);
-						minimumRY = min(minimumRY, min.y);
-						minimumRZ = min(minimumRZ, min.z);
+						maximumRX = Floats.max(maximumRX, max.x);
+						maximumRY = Floats.max(maximumRY, max.y);
+						maximumRZ = Floats.max(maximumRZ, max.z);
+						minimumRX = Floats.min(minimumRX, min.x);
+						minimumRY = Floats.min(minimumRY, min.y);
+						minimumRZ = Floats.min(minimumRZ, min.z);
 						
 						countR++;
 					}
@@ -187,18 +182,18 @@ public final class BVHNode3Fs {
 		final List<BVHItem3F<T>> processableBVHItemsL = new ArrayList<>(sizeHalf);
 		final List<BVHItem3F<T>> processableBVHItemsR = new ArrayList<>(sizeHalf);
 		
-		float maximumLX = MIN_VALUE;
-		float maximumLY = MIN_VALUE;
-		float maximumLZ = MIN_VALUE;
-		float minimumLX = MAX_VALUE;
-		float minimumLY = MAX_VALUE;
-		float minimumLZ = MAX_VALUE;
-		float maximumRX = MIN_VALUE;
-		float maximumRY = MIN_VALUE;
-		float maximumRZ = MIN_VALUE;
-		float minimumRX = MAX_VALUE;
-		float minimumRY = MAX_VALUE;
-		float minimumRZ = MAX_VALUE;
+		float maximumLX = Floats.MIN_VALUE;
+		float maximumLY = Floats.MIN_VALUE;
+		float maximumLZ = Floats.MIN_VALUE;
+		float minimumLX = Floats.MAX_VALUE;
+		float minimumLY = Floats.MAX_VALUE;
+		float minimumLZ = Floats.MAX_VALUE;
+		float maximumRX = Floats.MIN_VALUE;
+		float maximumRY = Floats.MIN_VALUE;
+		float maximumRZ = Floats.MIN_VALUE;
+		float minimumRX = Floats.MAX_VALUE;
+		float minimumRY = Floats.MAX_VALUE;
+		float minimumRZ = Floats.MAX_VALUE;
 		
 		for(final BVHItem3F<T> processableBVHItem : processableBVHItems) {
 			final BoundingVolume3F boundingVolume = processableBVHItem.getBoundingVolume();
@@ -212,21 +207,21 @@ public final class BVHNode3Fs {
 			if(value < bestSplit) {
 				processableBVHItemsL.add(processableBVHItem);
 				
-				maximumLX = max(maximumLX, max.x);
-				maximumLY = max(maximumLY, max.y);
-				maximumLZ = max(maximumLZ, max.z);
-				minimumLX = min(minimumLX, min.x);
-				minimumLY = min(minimumLY, min.y);
-				minimumLZ = min(minimumLZ, min.z);
+				maximumLX = Floats.max(maximumLX, max.x);
+				maximumLY = Floats.max(maximumLY, max.y);
+				maximumLZ = Floats.max(maximumLZ, max.z);
+				minimumLX = Floats.min(minimumLX, min.x);
+				minimumLY = Floats.min(minimumLY, min.y);
+				minimumLZ = Floats.min(minimumLZ, min.z);
 			} else {
 				processableBVHItemsR.add(processableBVHItem);
 				
-				maximumRX = max(maximumRX, max.x);
-				maximumRY = max(maximumRY, max.y);
-				maximumRZ = max(maximumRZ, max.z);
-				minimumRX = min(minimumRX, min.x);
-				minimumRY = min(minimumRY, min.y);
-				minimumRZ = min(minimumRZ, min.z);
+				maximumRX = Floats.max(maximumRX, max.x);
+				maximumRY = Floats.max(maximumRY, max.y);
+				maximumRZ = Floats.max(maximumRZ, max.z);
+				minimumRX = Floats.min(minimumRX, min.x);
+				minimumRY = Floats.min(minimumRY, min.y);
+				minimumRZ = Floats.min(minimumRZ, min.z);
 			}
 		}
 		

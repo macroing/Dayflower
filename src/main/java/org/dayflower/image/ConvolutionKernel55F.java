@@ -18,12 +18,11 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code ConvolutionKernel55F} is a convolution kernel with 25 {@code float}-based elements in five rows and five columns.
@@ -236,59 +235,59 @@ public final class ConvolutionKernel55F {
 			return true;
 		} else if(!(object instanceof ConvolutionKernel55F)) {
 			return false;
-		} else if(!equal(this.bias, ConvolutionKernel55F.class.cast(object).bias)) {
+		} else if(!Floats.equals(this.bias, ConvolutionKernel55F.class.cast(object).bias)) {
 			return false;
-		} else if(!equal(this.element11, ConvolutionKernel55F.class.cast(object).element11)) {
+		} else if(!Floats.equals(this.element11, ConvolutionKernel55F.class.cast(object).element11)) {
 			return false;
-		} else if(!equal(this.element12, ConvolutionKernel55F.class.cast(object).element12)) {
+		} else if(!Floats.equals(this.element12, ConvolutionKernel55F.class.cast(object).element12)) {
 			return false;
-		} else if(!equal(this.element13, ConvolutionKernel55F.class.cast(object).element13)) {
+		} else if(!Floats.equals(this.element13, ConvolutionKernel55F.class.cast(object).element13)) {
 			return false;
-		} else if(!equal(this.element14, ConvolutionKernel55F.class.cast(object).element14)) {
+		} else if(!Floats.equals(this.element14, ConvolutionKernel55F.class.cast(object).element14)) {
 			return false;
-		} else if(!equal(this.element15, ConvolutionKernel55F.class.cast(object).element15)) {
+		} else if(!Floats.equals(this.element15, ConvolutionKernel55F.class.cast(object).element15)) {
 			return false;
-		} else if(!equal(this.element21, ConvolutionKernel55F.class.cast(object).element21)) {
+		} else if(!Floats.equals(this.element21, ConvolutionKernel55F.class.cast(object).element21)) {
 			return false;
-		} else if(!equal(this.element22, ConvolutionKernel55F.class.cast(object).element22)) {
+		} else if(!Floats.equals(this.element22, ConvolutionKernel55F.class.cast(object).element22)) {
 			return false;
-		} else if(!equal(this.element23, ConvolutionKernel55F.class.cast(object).element23)) {
+		} else if(!Floats.equals(this.element23, ConvolutionKernel55F.class.cast(object).element23)) {
 			return false;
-		} else if(!equal(this.element24, ConvolutionKernel55F.class.cast(object).element24)) {
+		} else if(!Floats.equals(this.element24, ConvolutionKernel55F.class.cast(object).element24)) {
 			return false;
-		} else if(!equal(this.element25, ConvolutionKernel55F.class.cast(object).element25)) {
+		} else if(!Floats.equals(this.element25, ConvolutionKernel55F.class.cast(object).element25)) {
 			return false;
-		} else if(!equal(this.element31, ConvolutionKernel55F.class.cast(object).element31)) {
+		} else if(!Floats.equals(this.element31, ConvolutionKernel55F.class.cast(object).element31)) {
 			return false;
-		} else if(!equal(this.element32, ConvolutionKernel55F.class.cast(object).element32)) {
+		} else if(!Floats.equals(this.element32, ConvolutionKernel55F.class.cast(object).element32)) {
 			return false;
-		} else if(!equal(this.element33, ConvolutionKernel55F.class.cast(object).element33)) {
+		} else if(!Floats.equals(this.element33, ConvolutionKernel55F.class.cast(object).element33)) {
 			return false;
-		} else if(!equal(this.element34, ConvolutionKernel55F.class.cast(object).element34)) {
+		} else if(!Floats.equals(this.element34, ConvolutionKernel55F.class.cast(object).element34)) {
 			return false;
-		} else if(!equal(this.element35, ConvolutionKernel55F.class.cast(object).element35)) {
+		} else if(!Floats.equals(this.element35, ConvolutionKernel55F.class.cast(object).element35)) {
 			return false;
-		} else if(!equal(this.element41, ConvolutionKernel55F.class.cast(object).element41)) {
+		} else if(!Floats.equals(this.element41, ConvolutionKernel55F.class.cast(object).element41)) {
 			return false;
-		} else if(!equal(this.element42, ConvolutionKernel55F.class.cast(object).element42)) {
+		} else if(!Floats.equals(this.element42, ConvolutionKernel55F.class.cast(object).element42)) {
 			return false;
-		} else if(!equal(this.element43, ConvolutionKernel55F.class.cast(object).element43)) {
+		} else if(!Floats.equals(this.element43, ConvolutionKernel55F.class.cast(object).element43)) {
 			return false;
-		} else if(!equal(this.element44, ConvolutionKernel55F.class.cast(object).element44)) {
+		} else if(!Floats.equals(this.element44, ConvolutionKernel55F.class.cast(object).element44)) {
 			return false;
-		} else if(!equal(this.element45, ConvolutionKernel55F.class.cast(object).element45)) {
+		} else if(!Floats.equals(this.element45, ConvolutionKernel55F.class.cast(object).element45)) {
 			return false;
-		} else if(!equal(this.element51, ConvolutionKernel55F.class.cast(object).element51)) {
+		} else if(!Floats.equals(this.element51, ConvolutionKernel55F.class.cast(object).element51)) {
 			return false;
-		} else if(!equal(this.element52, ConvolutionKernel55F.class.cast(object).element52)) {
+		} else if(!Floats.equals(this.element52, ConvolutionKernel55F.class.cast(object).element52)) {
 			return false;
-		} else if(!equal(this.element53, ConvolutionKernel55F.class.cast(object).element53)) {
+		} else if(!Floats.equals(this.element53, ConvolutionKernel55F.class.cast(object).element53)) {
 			return false;
-		} else if(!equal(this.element54, ConvolutionKernel55F.class.cast(object).element54)) {
+		} else if(!Floats.equals(this.element54, ConvolutionKernel55F.class.cast(object).element54)) {
 			return false;
-		} else if(!equal(this.element55, ConvolutionKernel55F.class.cast(object).element55)) {
+		} else if(!Floats.equals(this.element55, ConvolutionKernel55F.class.cast(object).element55)) {
 			return false;
-		} else if(!equal(this.factor, ConvolutionKernel55F.class.cast(object).factor)) {
+		} else if(!Floats.equals(this.factor, ConvolutionKernel55F.class.cast(object).factor)) {
 			return false;
 		} else {
 			return true;
@@ -655,7 +654,7 @@ public final class ConvolutionKernel55F {
 		final boolean isFactorBasedOnRandomFloat = doNextBoolean();
 		final boolean isBiasBasedOnRandomFloat = doNextBoolean();
 		
-		final float factorBasedOnElementTotal = isZero(elementTotal) ? 1.0F : 1.0F / elementTotal;
+		final float factorBasedOnElementTotal = Floats.isZero(elementTotal) ? 1.0F : 1.0F / elementTotal;
 		
 		final float factor = isFactorBasedOnElementTotal ? factorBasedOnElementTotal : isFactorBasedOnRandomFloat ? doNextFloat() : 1.0F;
 		final float bias = isBiasBasedOnRandomFloat ? doNextFloat() : 0.0F;

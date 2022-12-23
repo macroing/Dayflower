@@ -18,15 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.NEXT_DOWN_1_3;
-import static org.dayflower.utility.Floats.NEXT_UP_1_1;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.atan2;
-import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -36,6 +27,7 @@ import java.util.Objects;
 
 import org.dayflower.node.Node;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -161,13 +153,13 @@ public final class Quaternion4F implements Node {
 			return true;
 		} else if(!(object instanceof Quaternion4F)) {
 			return false;
-		} else if(!equal(this.x, Quaternion4F.class.cast(object).x)) {
+		} else if(!Floats.equals(this.x, Quaternion4F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Quaternion4F.class.cast(object).y)) {
+		} else if(!Floats.equals(this.y, Quaternion4F.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Quaternion4F.class.cast(object).z)) {
+		} else if(!Floats.equals(this.z, Quaternion4F.class.cast(object).z)) {
 			return false;
-		} else if(!equal(this.w, Quaternion4F.class.cast(object).w)) {
+		} else if(!Floats.equals(this.w, Quaternion4F.class.cast(object).w)) {
 			return false;
 		} else {
 			return true;
@@ -180,7 +172,7 @@ public final class Quaternion4F implements Node {
 	 * @return the length of this {@code Quaternion4F} instance
 	 */
 	public float length() {
-		return sqrt(lengthSquared());
+		return Floats.sqrt(lengthSquared());
 	}
 	
 	/**
@@ -291,8 +283,8 @@ public final class Quaternion4F implements Node {
 	public static Quaternion4F from(final AngleF a, final Vector3F v) {
 		final AngleF aHalf = AngleF.half(a);
 		
-		final float sin = sin(aHalf.getRadians());
-		final float cos = cos(aHalf.getRadians());
+		final float sin = Floats.sin(aHalf.getRadians());
+		final float cos = Floats.cos(aHalf.getRadians());
 		
 		final float x = v.x * sin;
 		final float y = v.y * sin;
@@ -324,7 +316,7 @@ public final class Quaternion4F implements Node {
 		final float element33 = m.element33;
 		
 		if(element11 + element22 + element33 > 0.0F) {
-			final float scalar = 0.5F / sqrt(element11 + element22 + element33 + 1.0F);
+			final float scalar = 0.5F / Floats.sqrt(element11 + element22 + element33 + 1.0F);
 			
 			final float x = (element23 - element32) * scalar;
 			final float y = (element31 - element13) * scalar;
@@ -333,7 +325,7 @@ public final class Quaternion4F implements Node {
 			
 			return normalize(new Quaternion4F(x, y, z, w));
 		} else if(element11 > element22 && element11 > element33) {
-			final float scalar = 2.0F * sqrt(1.0F + element11 - element22 - element23);
+			final float scalar = 2.0F * Floats.sqrt(1.0F + element11 - element22 - element23);
 			final float scalarReciprocal = 1.0F / scalar;
 			
 			final float x = 0.25F * scalar;
@@ -343,7 +335,7 @@ public final class Quaternion4F implements Node {
 			
 			return normalize(new Quaternion4F(x, y, z, w));
 		} else if(element22 > element33) {
-			final float scalar = 2.0F * sqrt(1.0F + element22 - element11 - element33);
+			final float scalar = 2.0F * Floats.sqrt(1.0F + element22 - element11 - element33);
 			final float scalarReciprocal = 1.0F / scalar;
 			
 			final float x = (element21 + element12) * scalarReciprocal;
@@ -353,7 +345,7 @@ public final class Quaternion4F implements Node {
 			
 			return normalize(new Quaternion4F(x, y, z, w));
 		} else {
-			final float scalar = 2.0F * sqrt(1.0F + element33 - element11 - element22);
+			final float scalar = 2.0F * Floats.sqrt(1.0F + element33 - element11 - element22);
 			final float scalarReciprocal = 1.0F / scalar;
 			
 			final float x = (element31 + element13) * scalarReciprocal;
@@ -522,17 +514,17 @@ public final class Quaternion4F implements Node {
 		final float cos = dotProduct(qLHS, qRHS);
 		
 		final float x = isInterpolatingShortest && cos < 0.0F ? -cos : cos;
-		final float y = sqrt(1.0F - x * x);
+		final float y = Floats.sqrt(1.0F - x * x);
 		
 		final Quaternion4F quaternion1 = isInterpolatingShortest && cos < 0.0F ? negate(qRHS) : qRHS;
 		
-		if(abs(x) >= 1.0F - 1000.0F) {
+		if(Floats.abs(x) >= 1.0F - 1000.0F) {
 			return linearInterpolationNormalized(qLHS, quaternion1, t);
 		}
 		
-		final float theta = atan2(y, x);
+		final float theta = Floats.atan2(y, x);
 		
-		return add(multiply(qLHS, sin((1.0F - t) * theta) / y), multiply(quaternion1, sin(t * theta) / y));
+		return add(multiply(qLHS, Floats.sin((1.0F - t) * theta) / y), multiply(quaternion1, Floats.sin(t * theta) / y));
 	}
 	
 	/**
@@ -628,8 +620,8 @@ public final class Quaternion4F implements Node {
 	public static Quaternion4F normalize(final Quaternion4F q) {
 		final float length = q.length();
 		
-		final boolean isLengthGTEThreshold = length >= NEXT_DOWN_1_3;
-		final boolean isLengthLTEThreshold = length <= NEXT_UP_1_1;
+		final boolean isLengthGTEThreshold = length >= Floats.NEXT_DOWN_1_3;
+		final boolean isLengthLTEThreshold = length <= Floats.NEXT_UP_1_1;
 		
 		if(isLengthGTEThreshold && isLengthLTEThreshold) {
 			return q;

@@ -18,13 +18,6 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-
 import org.dayflower.geometry.boundingvolume.hierarchy.LeafBVHNode3F;
 import org.dayflower.geometry.boundingvolume.hierarchy.TreeBVHNode3F;
 import org.dayflower.geometry.shape.Cone3F;
@@ -41,6 +34,8 @@ import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.compiler.CompiledShape3FCache;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * An {@code AbstractShape3FKernel} is an abstract extension of the {@code AbstractBoundingVolume3FKernel} class that adds additional features.
@@ -252,7 +247,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float yMinimum = rayOriginY + rayDirectionY * tMinimum;
 		final float zMinimum = rayOriginZ + rayDirectionZ * tMinimum;
 		
-		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum, xMinimum), 0.0F, PI_MULTIPLIED_BY_2);
+		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum, xMinimum), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 		
 		if(zMinimum < 0.0F || zMinimum > coneZMax || phiMinimum > conePhiMax) {
 			if(tMaximum == 0.0F) {
@@ -263,7 +258,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			final float yMaximum = rayOriginY + rayDirectionY * tMaximum;
 			final float zMaximum = rayOriginZ + rayDirectionZ * tMaximum;
 			
-			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum, xMaximum), 0.0F, PI_MULTIPLIED_BY_2);
+			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum, xMaximum), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 			
 			if(zMaximum < 0.0F || zMaximum > coneZMax || phiMaximum > conePhiMax) {
 				return 0.0F;
@@ -299,7 +294,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / conePhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) / conePhiMax;
 		final float textureCoordinatesV = surfaceIntersectionPointZ / coneZMax;
 		
 //		Compute the orthonormal basis:
@@ -337,7 +332,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / conePhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) / conePhiMax;
 		final float textureCoordinatesV = surfaceIntersectionPointZ / coneZMax;
 		
 //		Compute the orthonormal basis:
@@ -413,7 +408,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float yMinimum1 = yMinimum0 * (cylinderRadius / radiusMinimum);
 		final float zMinimum1 = zMinimum0;
 		
-		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum1, xMinimum1), 0.0F, PI_MULTIPLIED_BY_2);
+		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum1, xMinimum1), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 		
 		if(zMinimum1 < cylinderZMin || zMinimum1 > cylinderZMax || phiMinimum > cylinderPhiMax) {
 			if(tMaximum == 0.0F) {
@@ -430,7 +425,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			final float yMaximum1 = yMaximum0 * (cylinderRadius / radiusMaximum);
 			final float zMaximum1 = zMaximum0;
 			
-			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum1, xMaximum1), 0.0F, PI_MULTIPLIED_BY_2);
+			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum1, xMaximum1), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 			
 			if(zMaximum1 < cylinderZMin || zMaximum1 > cylinderZMax || phiMaximum > cylinderPhiMax) {
 				return 0.0F;
@@ -474,7 +469,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = y * (cylinderRadius / radius);
 		final float surfaceIntersectionPointZ = z;
 		
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / cylinderPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) / cylinderPhiMax;
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - cylinderZMin) / (cylinderZMax - cylinderZMin);
 		
 //		Compute the orthonormal basis:
@@ -520,7 +515,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = y * (cylinderRadius / radius);
 		final float surfaceIntersectionPointZ = z;
 		
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / cylinderPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) / cylinderPhiMax;
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - cylinderZMin) / (cylinderZMax - cylinderZMin);
 		
 //		Compute the orthonormal basis:
@@ -592,7 +587,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			return 0.0F;
 		}
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 		
 		if(phi > diskPhiMax) {
 			return 0.0F;
@@ -627,7 +622,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float distance = sqrt(surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY);
 		
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / diskPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) / diskPhiMax;
 		final float textureCoordinatesV = (diskRadiusOuter - distance) / (diskRadiusOuter - diskRadiusInner);
 		
 //		Compute the orthonormal basis:
@@ -667,7 +662,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float distance = sqrt(surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY);
 		
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / diskPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) / diskPhiMax;
 		final float textureCoordinatesV = (diskRadiusOuter - distance) / (diskRadiusOuter - diskRadiusInner);
 		
 //		Compute the orthonormal basis:
@@ -747,7 +742,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float xMinimumR = (1.0F - vMinimum) * hyperboloidAX + vMinimum * hyperboloidBX;
 		final float yMinimumR = (1.0F - vMinimum) * hyperboloidAY + vMinimum * hyperboloidBY;
 		
-		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum * xMinimumR - xMinimum * yMinimumR, xMinimum * xMinimumR + yMinimum * yMinimumR), 0.0F, PI_MULTIPLIED_BY_2);
+		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum * xMinimumR - xMinimum * yMinimumR, xMinimum * xMinimumR + yMinimum * yMinimumR), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 		
 		if(zMinimum < hyperboloidZMin || zMinimum > hyperboloidZMax || phiMinimum > hyperboloidPhiMax) {
 			if(tMaximum == 0.0F) {
@@ -761,7 +756,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			final float xMaximumR = (1.0F - vMaximum) * hyperboloidAX + vMaximum * hyperboloidBX;
 			final float yMaximumR = (1.0F - vMaximum) * hyperboloidAY + vMaximum * hyperboloidBY;
 			
-			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum * xMaximumR - xMaximum * yMaximumR, xMaximum * xMaximumR + yMaximum * yMaximumR), 0.0F, PI_MULTIPLIED_BY_2);
+			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum * xMaximumR - xMaximum * yMaximumR, xMaximum * xMaximumR + yMaximum * yMaximumR), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 			
 			if(zMaximum < hyperboloidZMin || zMaximum > hyperboloidZMax || phiMaximum > hyperboloidPhiMax) {
 				return 0.0F;
@@ -802,7 +797,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 		
 		final float cosPhi = cos(phi);
 		final float sinPhi = sin(phi);
@@ -850,7 +845,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 		
 		final float cosPhi = cos(phi);
 		final float sinPhi = sin(phi);
@@ -927,7 +922,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float yMinimum = rayOriginY + rayDirectionY * tMinimum;
 		final float zMinimum = rayOriginZ + rayDirectionZ * tMinimum;
 		
-		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum, xMinimum), 0.0F, PI_MULTIPLIED_BY_2);
+		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum, xMinimum), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 		
 		if(zMinimum < paraboloidZMin || zMinimum > paraboloidZMax || phiMinimum > paraboloidPhiMax) {
 			if(tMaximum == 0.0F) {
@@ -938,7 +933,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			final float yMaximum = rayOriginY + rayDirectionY * tMaximum;
 			final float zMaximum = rayOriginZ + rayDirectionZ * tMaximum;
 			
-			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum, xMaximum), 0.0F, PI_MULTIPLIED_BY_2);
+			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum, xMaximum), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 			
 			if(zMaximum < paraboloidZMin || zMaximum > paraboloidZMax || phiMaximum > paraboloidPhiMax) {
 				return 0.0F;
@@ -975,7 +970,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / paraboloidPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) / paraboloidPhiMax;
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - paraboloidZMin) / (paraboloidZMax - paraboloidZMin);
 		
 //		Compute the orthonormal basis:
@@ -1014,7 +1009,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) / paraboloidPhiMax;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) / paraboloidPhiMax;
 		final float textureCoordinatesV = (surfaceIntersectionPointZ - paraboloidZMin) / (paraboloidZMax - paraboloidZMin);
 		
 //		Compute the orthonormal basis:
@@ -1926,7 +1921,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			final float nDotO = vector3FDotProduct(currentSurfaceNormalX, currentSurfaceNormalY, currentSurfaceNormalZ, -incomingX, -incomingY, -incomingZ);
 			final float nDotOAbs = abs(nDotO);
 			
-			final float surfaceArea = PI_MULTIPLIED_BY_4;
+			final float surfaceArea = Floats.PI_MULTIPLIED_BY_4;
 			
 			final float probabilityDensityFunctionValue = distanceSquared / nDotOAbs * surfaceArea;
 			
@@ -2013,7 +2008,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		vector3FSet(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 		
-		return 1.0F / PI_MULTIPLIED_BY_4;
+		return 1.0F / Floats.PI_MULTIPLIED_BY_4;
 	}
 	
 	/**
@@ -2109,7 +2104,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float sinThetaSquared = sinThetaMaxSquared < 0.00068523F ? sinThetaMaxSquared * u : 1.0F - cosTheta * cosTheta;
 		final float cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * sqrt(max(0.0F, 1.0F - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
 		final float sinAlpha = sqrt(max(0.0F, 1.0F - cosAlpha * cosAlpha));
-		final float phi = v * 2.0F * PI;
+		final float phi = v * 2.0F * Floats.PI;
 		
 		vector3FSetDirectionSpherical12(sinAlpha, cosAlpha, phi, uX, uY, uZ, vX, vY, vZ, wX, wY, wZ);
 		
@@ -2131,7 +2126,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		vector3FSet(sphericalDirectionNormalizedX, sphericalDirectionNormalizedY, sphericalDirectionNormalizedZ);
 		
-		return 1.0F / (2.0F * PI * (1.0F - cosThetaMax));
+		return 1.0F / (2.0F * Floats.PI * (1.0F - cosThetaMax));
 	}
 	
 	/**
@@ -2165,13 +2160,13 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalGZ = surfaceIntersectionPointZ - sphereCenterZ;
 		
 //		Compute the V-direction of the geometric orthonormal basis:
-		final float vGX = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 0.0F : -PI_MULTIPLIED_BY_2 * surfaceNormalGY;
-		final float vGY = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 1.0F : +PI_MULTIPLIED_BY_2 * surfaceNormalGX;
+		final float vGX = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 0.0F : -Floats.PI_MULTIPLIED_BY_2 * surfaceNormalGY;
+		final float vGY = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 1.0F : +Floats.PI_MULTIPLIED_BY_2 * surfaceNormalGX;
 		final float vGZ = 0.0F;
 		
 //		Compute the texture coordinates:
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceNormalGY, surfaceNormalGX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = acos(saturateF(surfaceNormalGZ, -1.0F, 1.0F)) * PI_RECIPROCAL;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceNormalGY, surfaceNormalGX), 0.0F, Floats.PI_MULTIPLIED_BY_2) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = acos(saturateF(surfaceNormalGZ, -1.0F, 1.0F)) * Floats.PI_RECIPROCAL;
 		
 //		Compute the geometric orthonormal basis:
 		orthonormalBasis33FSetFromWV(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, vGX, vGY, vGZ);
@@ -2215,13 +2210,13 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalGZ = surfaceIntersectionPointZ - sphereCenterZ;
 		
 //		Compute the V-direction of the geometric orthonormal basis:
-		final float vGX = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 0.0F : -PI_MULTIPLIED_BY_2 * surfaceNormalGY;
-		final float vGY = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 1.0F : +PI_MULTIPLIED_BY_2 * surfaceNormalGX;
+		final float vGX = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 0.0F : -Floats.PI_MULTIPLIED_BY_2 * surfaceNormalGY;
+		final float vGY = surfaceNormalGX == 0.0F && surfaceNormalGY == 0.0F ? 1.0F : +Floats.PI_MULTIPLIED_BY_2 * surfaceNormalGX;
 		final float vGZ = 0.0F;
 		
 //		Compute the texture coordinates:
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceNormalGY, surfaceNormalGX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = acos(saturateF(surfaceNormalGZ, -1.0F, 1.0F)) * PI_RECIPROCAL;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceNormalGY, surfaceNormalGX), 0.0F, Floats.PI_MULTIPLIED_BY_2) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = acos(saturateF(surfaceNormalGZ, -1.0F, 1.0F)) * Floats.PI_RECIPROCAL;
 		
 //		Compute the geometric orthonormal basis:
 		orthonormalBasis33FSetFromWV(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, vGX, vGY, vGZ);
@@ -2357,8 +2352,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalZ = surfaceIntersectionPointZ * derivative + 2.0F * torusRadiusOuterSquared * surfaceIntersectionPointZ;
 		
 //		Compute the texture coordinates:
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = (asin(saturateF(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = (asin(saturateF(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + Floats.PI_DIVIDED_BY_2) * Floats.PI_RECIPROCAL;
 		
 //		Compute the orthonormal basis:
 		orthonormalBasis33FSetFromW(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
@@ -2407,8 +2402,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalZ = surfaceIntersectionPointZ * derivative + 2.0F * torusRadiusOuterSquared * surfaceIntersectionPointZ;
 		
 //		Compute the texture coordinates:
-		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = (asin(saturateF(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
+		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, Floats.PI_MULTIPLIED_BY_2) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = (asin(saturateF(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + Floats.PI_DIVIDED_BY_2) * Floats.PI_RECIPROCAL;
 		
 //		Compute the orthonormal basis:
 		orthonormalBasis33FSetFromW(surfaceNormalX, surfaceNormalY, surfaceNormalZ);

@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -30,8 +27,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.utility.Floats;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -215,13 +212,13 @@ public final class Point4F implements Node {
 			return true;
 		} else if(!(object instanceof Point4F)) {
 			return false;
-		} else if(!equal(this.w, Point4F.class.cast(object).w)) {
+		} else if(!Floats.equals(this.w, Point4F.class.cast(object).w)) {
 			return false;
-		} else if(!equal(this.x, Point4F.class.cast(object).x)) {
+		} else if(!Floats.equals(this.x, Point4F.class.cast(object).x)) {
 			return false;
-		} else if(!equal(this.y, Point4F.class.cast(object).y)) {
+		} else if(!Floats.equals(this.y, Point4F.class.cast(object).y)) {
 			return false;
-		} else if(!equal(this.z, Point4F.class.cast(object).z)) {
+		} else if(!Floats.equals(this.z, Point4F.class.cast(object).z)) {
 			return false;
 		} else {
 			return true;
@@ -384,7 +381,7 @@ public final class Point4F implements Node {
 		final float z = mLHS.element31 * pRHS.x + mLHS.element32 * pRHS.y + mLHS.element33 * pRHS.z + mLHS.element34 * pRHS.w;
 		final float w = mLHS.element41 * pRHS.x + mLHS.element42 * pRHS.y + mLHS.element43 * pRHS.z + mLHS.element44 * pRHS.w;
 		
-		return equal(w, 1.0F) || isZero(w) ? new Point4F(x, y, z, w) : new Point4F(x / w, y / w, z / w, w);
+		return Floats.equals(w, 1.0F) || Floats.isZero(w) ? new Point4F(x, y, z, w) : new Point4F(x / w, y / w, z / w, w);
 	}
 	
 	/**

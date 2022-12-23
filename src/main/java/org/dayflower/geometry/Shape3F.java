@@ -18,15 +18,11 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.isInfinite;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Shape3F} is a 3-dimensional extension of {@link Shape} that adds additional methods that operates on {@code float}-based data types.
@@ -138,16 +134,16 @@ public interface Shape3F extends Shape {
 			
 			final Vector3F incoming = Vector3F.direction(surfaceIntersectionPoint, point);
 			
-			if(isZero(incoming.lengthSquared())) {
+			if(Floats.isZero(incoming.lengthSquared())) {
 				return Optional.empty();
 			}
 			
 			final Vector3F surfaceNormal = surfaceSample.getSurfaceNormal();
 			final Vector3F incomingNormalized = Vector3F.normalize(incoming);
 			
-			final float probabilityDensityFunctionValue = Point3F.distanceSquared(point, surfaceIntersectionPoint) / abs(Vector3F.dotProduct(surfaceNormal, Vector3F.negate(incomingNormalized)));
+			final float probabilityDensityFunctionValue = Point3F.distanceSquared(point, surfaceIntersectionPoint) / Floats.abs(Vector3F.dotProduct(surfaceNormal, Vector3F.negate(incomingNormalized)));
 			
-			if(isInfinite(probabilityDensityFunctionValue)) {
+			if(Floats.isInfinite(probabilityDensityFunctionValue) || Floats.isNaN(probabilityDensityFunctionValue)) {
 				return Optional.empty();
 			}
 			
@@ -184,7 +180,7 @@ public interface Shape3F extends Shape {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	default boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
+		return !Floats.isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -206,7 +202,7 @@ public interface Shape3F extends Shape {
 		
 		final Ray3F ray = surfaceIntersection.createRay(incoming);
 		
-		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionShape = intersection(ray, 0.001F, MAX_VALUE);
+		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionShape = intersection(ray, 0.001F, Floats.MAX_VALUE);
 		
 		if(optionalSurfaceIntersectionShape.isPresent()) {
 			final SurfaceIntersection3F surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();
@@ -214,9 +210,9 @@ public interface Shape3F extends Shape {
 			final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 			final Point3F surfaceIntersectionPointShape = surfaceIntersectionShape.getSurfaceIntersectionPoint();
 			
-			final float probabilityDensityFunctionValue = Point3F.distanceSquared(surfaceIntersectionPointShape, surfaceIntersectionPoint) / (abs(Vector3F.dotProduct(surfaceIntersectionShape.getSurfaceNormalS(), Vector3F.negate(incoming)) * getSurfaceArea()));
+			final float probabilityDensityFunctionValue = Point3F.distanceSquared(surfaceIntersectionPointShape, surfaceIntersectionPoint) / (Floats.abs(Vector3F.dotProduct(surfaceIntersectionShape.getSurfaceNormalS(), Vector3F.negate(incoming)) * getSurfaceArea()));
 			
-			if(isInfinite(probabilityDensityFunctionValue)) {
+			if(Floats.isInfinite(probabilityDensityFunctionValue) || Floats.isNaN(probabilityDensityFunctionValue)) {
 				return 0.0F;
 			}
 			

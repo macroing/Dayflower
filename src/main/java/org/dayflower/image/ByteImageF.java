@@ -35,13 +35,13 @@ import javax.imageio.ImageIO;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.utility.Floats;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.art4j.color.ArrayComponentOrder;
 import org.macroing.art4j.color.Color4F;
 import org.macroing.art4j.color.PackedIntComponentOrder;
 import org.macroing.java.awt.image.BufferedImages;
+import org.macroing.java.lang.Floats;
 import org.macroing.java.util.Arrays;
 
 /**

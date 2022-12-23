@@ -18,15 +18,8 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.utility.Floats.NaN;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.ceil;
-import static org.dayflower.utility.Floats.floor;
 import static org.dayflower.utility.Floats.maxOrNaN;
-import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.minOrNaN;
-import static org.dayflower.utility.Floats.sqrt;
-import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
@@ -55,6 +48,7 @@ import org.macroing.art4j.color.Color3F;
 import org.macroing.art4j.color.Color4F;
 import org.macroing.art4j.color.ColorSpaceF;
 import org.macroing.art4j.noise.SimplexNoiseF;
+import org.macroing.java.lang.Floats;
 import org.macroing.java.util.function.TriFunction;
 
 /**
@@ -218,11 +212,11 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color3F getColorRGB(final float x, final float y, final PixelOperation pixelOperation) {
-		final int minimumX = toInt(floor(x));
-		final int maximumX = toInt(ceil(x));
+		final int minimumX = toInt(Floats.floor(x));
+		final int maximumX = toInt(Floats.ceil(x));
 		
-		final int minimumY = toInt(floor(y));
-		final int maximumY = toInt(ceil(y));
+		final int minimumY = toInt(Floats.floor(y));
+		final int maximumY = toInt(Floats.ceil(y));
 		
 		if(minimumX == maximumX && minimumY == maximumY) {
 			return getColorRGB(minimumX, minimumY, pixelOperation);
@@ -491,11 +485,11 @@ public abstract class ImageF extends Image {
 	public final Color4F getColorRGBA(final float x, final float y, final Function<Point2I, Color4F> function) {
 		Objects.requireNonNull(function, "function == null");
 		
-		final int minimumX = toInt(floor(x));
-		final int maximumX = toInt(ceil(x));
+		final int minimumX = toInt(Floats.floor(x));
+		final int maximumX = toInt(Floats.ceil(x));
 		
-		final int minimumY = toInt(floor(y));
-		final int maximumY = toInt(ceil(y));
+		final int minimumY = toInt(Floats.floor(y));
+		final int maximumY = toInt(Floats.ceil(y));
 		
 		if(minimumX == maximumX && minimumY == maximumY) {
 			return getColorRGBA(minimumX, minimumY, function);
@@ -531,11 +525,11 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final Color4F getColorRGBA(final float x, final float y, final PixelOperation pixelOperation) {
-		final int minimumX = toInt(floor(x));
-		final int maximumX = toInt(ceil(x));
+		final int minimumX = toInt(Floats.floor(x));
+		final int maximumX = toInt(Floats.ceil(x));
 		
-		final int minimumY = toInt(floor(y));
-		final int maximumY = toInt(ceil(y));
+		final int minimumY = toInt(Floats.floor(y));
+		final int maximumY = toInt(Floats.ceil(y));
 		
 		if(minimumX == maximumX && minimumY == maximumY) {
 			return getColorRGBA(minimumX, minimumY, pixelOperation);
@@ -1892,7 +1886,7 @@ public abstract class ImageF extends Image {
 		final Point2F maximum = Point2F.maximum(rectangleC.getA(), rectangleC.getB(), rectangleC.getC(), rectangleC.getD());
 		
 //		Compute the second translation direction for the new and old ImageF instances:
-		final Vector2F directionBToNewImage = new Vector2F(abs(min(minimum.x, 0.0F)), abs(min(minimum.y, 0.0F)));
+		final Vector2F directionBToNewImage = new Vector2F(Floats.abs(Floats.min(minimum.x, 0.0F)), Floats.abs(Floats.min(minimum.y, 0.0F)));
 		final Vector2F directionBToOldImage = Vector2F.negate(directionBToNewImage);
 		
 //		Compute the resolution for the new ImageF instance:
@@ -1935,7 +1929,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final ImageF scale(final Vector2F scale) {
-		return scale(toInt(ceil(getResolutionX() * scale.x)), toInt(ceil(getResolutionY() * scale.y)));
+		return scale(toInt(Floats.ceil(getResolutionX() * scale.x)), toInt(Floats.ceil(getResolutionY() * scale.y)));
 	}
 	
 	/**
@@ -1955,8 +1949,8 @@ public abstract class ImageF extends Image {
 		final ImageF oldImage = this;
 		final ImageF newImage = oldImage.newImage(resolutionX, resolutionY);
 		
-		final float scaleX = resolutionX == 0 ? 0.0F : toFloat(getResolutionX()) / toFloat(resolutionX);
-		final float scaleY = resolutionY == 0 ? 0.0F : toFloat(getResolutionY()) / toFloat(resolutionY);
+		final float scaleX = resolutionX == 0 ? 0.0F : (float)(getResolutionX()) / (float)(resolutionX);
+		final float scaleY = resolutionY == 0 ? 0.0F : (float)(getResolutionY()) / (float)(resolutionY);
 		
 		for(int y = 0; y < resolutionY; y++) {
 			for(int x = 0; x < resolutionX; x++) {
@@ -2206,7 +2200,7 @@ public abstract class ImageF extends Image {
 					}
 				}
 				
-				doSetColorRGBA(new Color4F(sqrt(magnitudeX * magnitudeX + magnitudeY * magnitudeY)), x, y);
+				doSetColorRGBA(new Color4F(Floats.sqrt(magnitudeX * magnitudeX + magnitudeY * magnitudeY)), x, y);
 			}
 		}
 		
@@ -2392,7 +2386,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final float luminanceMaximum() {
-		float luminanceMaximum = NaN;
+		float luminanceMaximum = Floats.NaN;
 		
 		for(int i = 0; i < getResolution(); i++) {
 			luminanceMaximum = maxOrNaN(luminanceMaximum, getColorRGB(i).relativeLuminance());
@@ -2408,7 +2402,7 @@ public abstract class ImageF extends Image {
 	 */
 //	TODO: Add Unit Tests!
 	public final float luminanceMinimum() {
-		float luminanceMinimum = NaN;
+		float luminanceMinimum = Floats.NaN;
 		
 		for(int i = 0; i < getResolution(); i++) {
 			luminanceMinimum = minOrNaN(luminanceMinimum, getColorRGB(i).relativeLuminance());

@@ -28,10 +28,12 @@ import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.IntImageF;
 import org.dayflower.javafx.scene.control.TextFields;
 import org.dayflower.scene.texture.BullseyeTexture;
+import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.DotProductTexture;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
+import org.dayflower.scene.texture.PolkaDotTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
@@ -54,10 +56,12 @@ import javafx.stage.Stage;
 
 final class TextureDialog extends Dialog<Texture> {
 	private static final String NAME_BULLSEYE_TEXTURE = "BullseyeTexture";
+	private static final String NAME_CHECKERBOARD_TEXTURE = "CheckerboardTexture";
 	private static final String NAME_CONSTANT_TEXTURE = "ConstantTexture";
 	private static final String NAME_DOT_PRODUCT_TEXTURE = "DotProductTexture";
 	private static final String NAME_L_D_R_IMAGE_TEXTURE = "LDRImageTexture";
 	private static final String NAME_MARBLE_TEXTURE = "MarbleTexture";
+	private static final String NAME_POLKA_DOT_TEXTURE = "PolkaDotTexture";
 	private static final String NAME_SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE = "SimplexFractionalBrownianMotionTexture";
 	private static final String NAME_SURFACE_NORMAL_TEXTURE = "SurfaceNormalTexture";
 	private static final String NAME_U_V_TEXTURE = "UVTexture";
@@ -96,6 +100,10 @@ final class TextureDialog extends Dialog<Texture> {
 				doConfigureTextureBullseyeTexture(gridPane);
 				
 				break;
+			case NAME_CHECKERBOARD_TEXTURE:
+				doConfigureTextureCheckerboardTexture(gridPane);
+				
+				break;
 			case NAME_CONSTANT_TEXTURE:
 				doConfigureTextureConstantTexture(gridPane);
 				
@@ -108,6 +116,10 @@ final class TextureDialog extends Dialog<Texture> {
 				break;
 			case NAME_MARBLE_TEXTURE:
 				doConfigureTextureMarbleTexture(gridPane);
+				
+				break;
+			case NAME_POLKA_DOT_TEXTURE:
+				doConfigureTexturePolkaDotTexture(gridPane);
 				
 				break;
 			case NAME_SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE:
@@ -129,6 +141,8 @@ final class TextureDialog extends Dialog<Texture> {
 		switch(clazz.getSimpleName()) {
 			case NAME_BULLSEYE_TEXTURE:
 				return "New Bullseye Texture";
+			case NAME_CHECKERBOARD_TEXTURE:
+				return "New Checkerboard Texture";
 			case NAME_CONSTANT_TEXTURE:
 				return "New Constant Texture";
 			case NAME_DOT_PRODUCT_TEXTURE:
@@ -137,6 +151,8 @@ final class TextureDialog extends Dialog<Texture> {
 				return "New LDR Image Texture";
 			case NAME_MARBLE_TEXTURE:
 				return "New Marble Texture";
+			case NAME_POLKA_DOT_TEXTURE:
+				return "New Polka Dot Texture";
 			case NAME_SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE:
 				return "New Simplex Fractional Brownian Motion Texture";
 			case NAME_SURFACE_NORMAL_TEXTURE:
@@ -152,6 +168,8 @@ final class TextureDialog extends Dialog<Texture> {
 		switch(clazz.getSimpleName()) {
 			case NAME_BULLSEYE_TEXTURE:
 				return doCreateTextureBullseyeTexture(gridPane);
+			case NAME_CHECKERBOARD_TEXTURE:
+				return doCreateTextureCheckerboardTexture(gridPane);
 			case NAME_CONSTANT_TEXTURE:
 				return doCreateTextureConstantTexture(gridPane);
 			case NAME_DOT_PRODUCT_TEXTURE:
@@ -160,6 +178,8 @@ final class TextureDialog extends Dialog<Texture> {
 				return doCreateTextureLDRImageTexture(gridPane);
 			case NAME_MARBLE_TEXTURE:
 				return doCreateTextureMarbleTexture(gridPane);
+			case NAME_POLKA_DOT_TEXTURE:
+				return doCreateTexturePolkaDotTexture(gridPane);
 			case NAME_SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE:
 				return doCreateTextureSimplexFractionalBrownianMotionTexture(gridPane);
 			case NAME_SURFACE_NORMAL_TEXTURE:
@@ -169,24 +189,6 @@ final class TextureDialog extends Dialog<Texture> {
 			default:
 				return doCreateTextureDefault();
 		}
-	}
-	
-	private static Texture doCreateTextureConstantTexture(final GridPane gridPane) {
-		final Node node = gridPane.getChildren().get(1);
-		
-		if(node instanceof ColorPicker) {
-			final ColorPicker colorPicker = ColorPicker.class.cast(node);
-			
-			final Color color = colorPicker.getValue();
-			
-			final float r = (float)(color.getRed());
-			final float g = (float)(color.getGreen());
-			final float b = (float)(color.getBlue());
-			
-			return new ConstantTexture(new Color3F(r, g, b));
-		}
-		
-		return new ConstantTexture();
 	}
 	
 	private static Texture doCreateTextureBullseyeTexture(final GridPane gridPane) {
@@ -228,6 +230,60 @@ final class TextureDialog extends Dialog<Texture> {
 		}
 		
 		return new BullseyeTexture();
+	}
+	
+	private static Texture doCreateTextureCheckerboardTexture(final GridPane gridPane) {
+		final Node nodeColorPickerColorA = gridPane.getChildren().get(1);
+		final Node nodeColorPickerColorB = gridPane.getChildren().get(3);
+		final Node nodeTextFieldAngle = gridPane.getChildren().get(5);
+		final Node nodeTextFieldScaleU = gridPane.getChildren().get(7);
+		final Node nodeTextFieldScaleV = gridPane.getChildren().get(9);
+		
+		if(nodeColorPickerColorA instanceof ColorPicker && nodeColorPickerColorB instanceof ColorPicker && nodeTextFieldAngle instanceof TextField && nodeTextFieldScaleU instanceof TextField && nodeTextFieldScaleV instanceof TextField) {
+			final ColorPicker colorPickerColorA = ColorPicker.class.cast(nodeColorPickerColorA);
+			final ColorPicker colorPickerColorB = ColorPicker.class.cast(nodeColorPickerColorB);
+			
+			final TextField textFieldAngle = TextField.class.cast(nodeTextFieldAngle);
+			final TextField textFieldScaleU = TextField.class.cast(nodeTextFieldScaleU);
+			final TextField textFieldScaleV = TextField.class.cast(nodeTextFieldScaleV);
+			
+			final Color colorA = colorPickerColorA.getValue();
+			final Color colorB = colorPickerColorB.getValue();
+			
+			final float colorAR = (float)(colorA.getRed());
+			final float colorAG = (float)(colorA.getGreen());
+			final float colorAB = (float)(colorA.getBlue());
+			
+			final float colorBR = (float)(colorB.getRed());
+			final float colorBG = (float)(colorB.getGreen());
+			final float colorBB = (float)(colorB.getBlue());
+			
+			final AngleF angle = AngleF.degrees(Float.parseFloat(textFieldAngle.getText()));
+			
+			final Vector2F scale = new Vector2F(Float.parseFloat(textFieldScaleU.getText()), Float.parseFloat(textFieldScaleV.getText()));
+			
+			return new CheckerboardTexture(new Color3F(colorAR, colorAG, colorAB), new Color3F(colorBR, colorBG, colorBB), angle, scale);
+		}
+		
+		return new CheckerboardTexture();
+	}
+	
+	private static Texture doCreateTextureConstantTexture(final GridPane gridPane) {
+		final Node node = gridPane.getChildren().get(1);
+		
+		if(node instanceof ColorPicker) {
+			final ColorPicker colorPicker = ColorPicker.class.cast(node);
+			
+			final Color color = colorPicker.getValue();
+			
+			final float r = (float)(color.getRed());
+			final float g = (float)(color.getGreen());
+			final float b = (float)(color.getBlue());
+			
+			return new ConstantTexture(new Color3F(r, g, b));
+		}
+		
+		return new ConstantTexture();
 	}
 	
 	private static Texture doCreateTextureDefault() {
@@ -315,6 +371,43 @@ final class TextureDialog extends Dialog<Texture> {
 		return new MarbleTexture();
 	}
 	
+	private static Texture doCreateTexturePolkaDotTexture(final GridPane gridPane) {
+		final Node nodeColorPickerColorA = gridPane.getChildren().get(1);
+		final Node nodeColorPickerColorB = gridPane.getChildren().get(3);
+		final Node nodeTextFieldAngle = gridPane.getChildren().get(5);
+		final Node nodeTextFieldCellResolution = gridPane.getChildren().get(7);
+		final Node nodeTextFieldPolkaDotRadius = gridPane.getChildren().get(9);
+		
+		if(nodeColorPickerColorA instanceof ColorPicker && nodeColorPickerColorB instanceof ColorPicker && nodeTextFieldAngle instanceof TextField && nodeTextFieldCellResolution instanceof TextField && nodeTextFieldPolkaDotRadius instanceof TextField) {
+			final ColorPicker colorPickerColorA = ColorPicker.class.cast(nodeColorPickerColorA);
+			final ColorPicker colorPickerColorB = ColorPicker.class.cast(nodeColorPickerColorB);
+			
+			final TextField textFieldAngle = TextField.class.cast(nodeTextFieldAngle);
+			final TextField textFieldCellResolution = TextField.class.cast(nodeTextFieldCellResolution);
+			final TextField textFieldPolkaDotRadius = TextField.class.cast(nodeTextFieldPolkaDotRadius);
+			
+			final Color colorA = colorPickerColorA.getValue();
+			final Color colorB = colorPickerColorB.getValue();
+			
+			final float colorAR = (float)(colorA.getRed());
+			final float colorAG = (float)(colorA.getGreen());
+			final float colorAB = (float)(colorA.getBlue());
+			
+			final float colorBR = (float)(colorB.getRed());
+			final float colorBG = (float)(colorB.getGreen());
+			final float colorBB = (float)(colorB.getBlue());
+			
+			final AngleF angle = AngleF.degrees(Float.parseFloat(textFieldAngle.getText()));
+			
+			final float cellResolution = Float.parseFloat(textFieldCellResolution.getText());
+			final float polkaDotRadius = Float.parseFloat(textFieldPolkaDotRadius.getText());
+			
+			return new PolkaDotTexture(new Color3F(colorAR, colorAG, colorAB), new Color3F(colorBR, colorBG, colorBB), angle, cellResolution, polkaDotRadius);
+		}
+		
+		return new PolkaDotTexture();
+	}
+	
 	private static Texture doCreateTextureSimplexFractionalBrownianMotionTexture(final GridPane gridPane) {
 		final Node nodeColorPicker = gridPane.getChildren().get(1);
 		final Node nodeTextFieldFrequency = gridPane.getChildren().get(3);
@@ -377,6 +470,26 @@ final class TextureDialog extends Dialog<Texture> {
 		gridPane.add(textFieldScale, 1, 5);
 	}
 	
+	private static void doConfigureTextureCheckerboardTexture(final GridPane gridPane) {
+		final ColorPicker colorPickerColorA = new ColorPicker(Color.rgb(128, 128, 128));
+		final ColorPicker colorPickerColorB = new ColorPicker(Color.rgb(255, 255, 255));
+		
+		final TextField textFieldAngle = TextFields.createTextField(0.0F);
+		final TextField textFieldScaleU = TextFields.createTextField(1.0F);
+		final TextField textFieldScaleV = TextFields.createTextField(1.0F);
+		
+		gridPane.add(new Text("Color A"), 0, 0);
+		gridPane.add(colorPickerColorA, 1, 0);
+		gridPane.add(new Text("Color B"), 0, 1);
+		gridPane.add(colorPickerColorB, 1, 1);
+		gridPane.add(new Text("Angle"), 0, 2);
+		gridPane.add(textFieldAngle, 1, 2);
+		gridPane.add(new Text("Scale U"), 0, 3);
+		gridPane.add(textFieldScaleU, 1, 3);
+		gridPane.add(new Text("Scale V"), 0, 4);
+		gridPane.add(textFieldScaleV, 1, 4);
+	}
+	
 	private static void doConfigureTextureConstantTexture(final GridPane gridPane) {
 		final ColorPicker colorPicker = new ColorPicker();
 		
@@ -421,6 +534,26 @@ final class TextureDialog extends Dialog<Texture> {
 		gridPane.add(textFieldStripes, 1, 4);
 		gridPane.add(new Text("Octaves"), 0, 5);
 		gridPane.add(textFieldOctaves, 1, 5);
+	}
+	
+	private static void doConfigureTexturePolkaDotTexture(final GridPane gridPane) {
+		final ColorPicker colorPickerColorA = new ColorPicker(Color.rgb(128, 128, 128));
+		final ColorPicker colorPickerColorB = new ColorPicker(Color.rgb(255, 255, 255));
+		
+		final TextField textFieldAngle = TextFields.createTextField(0.0F);
+		final TextField textFieldCellResolution = TextFields.createTextField(10.0F);
+		final TextField textFieldPolkaDotRadius = TextFields.createTextField(0.25F);
+		
+		gridPane.add(new Text("Color A"), 0, 0);
+		gridPane.add(colorPickerColorA, 1, 0);
+		gridPane.add(new Text("Color B"), 0, 1);
+		gridPane.add(colorPickerColorB, 1, 1);
+		gridPane.add(new Text("Angle"), 0, 2);
+		gridPane.add(textFieldAngle, 1, 2);
+		gridPane.add(new Text("Cell Resolution"), 0, 3);
+		gridPane.add(textFieldCellResolution, 1, 3);
+		gridPane.add(new Text("Polka Dot Radius"), 0, 4);
+		gridPane.add(textFieldPolkaDotRadius, 1, 4);
 	}
 	
 	private static void doConfigureTextureSimplexFractionalBrownianMotionTexture(final GridPane gridPane) {

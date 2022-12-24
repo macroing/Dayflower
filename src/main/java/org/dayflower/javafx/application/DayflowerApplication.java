@@ -77,7 +77,7 @@ public final class DayflowerApplication extends Application {
 	private static final String PATH_FILE = "File";
 	private static final String PATH_FILE_NEW = "File.New";
 	private static final String PATH_FILE_OPEN = "File.Open";
-	private static final String PATH_SCENE_MATERIAL = "Scene.Material";
+//	private static final String PATH_SCENE_MATERIAL = "Scene.Material";
 	private static final String PATH_SCENE_TEXTURE = "Scene.Texture";
 	private static final String TEXT_C_P_U_RENDERER = "CPU Renderer";
 	private static final String TEXT_EXIT = "Exit";
@@ -197,7 +197,7 @@ public final class DayflowerApplication extends Application {
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_IMAGE_AS, e -> doSaveAs(), null, false);
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, e -> doExit(), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_MATERIAL, TEXT_NEW_MATERIAL, e -> doNewMaterial(), null, true);
+//		this.pathMenuBar.addMenuItem(PATH_SCENE_MATERIAL, TEXT_NEW_MATERIAL, e -> doNewMaterial(), null, true);
 		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_BULLSEYE_TEXTURE, e -> doNewTexture(BullseyeTexture.class), null, true);
 		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_CHECKERBOARD_TEXTURE, e -> doNewTexture(CheckerboardTexture.class), null, true);
 		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_CONSTANT_TEXTURE, e -> doNewTexture(ConstantTexture.class), null, true);
@@ -271,9 +271,9 @@ public final class DayflowerApplication extends Application {
 		});
 	}
 	
-	private void doNewMaterial() {
+//	private void doNewMaterial() {
 //		TODO: Implement!
-	}
+//	}
 	
 	private void doNewTexture(final Class<? extends Texture> clazz) {
 		final TextureDialog textureDialog = new TextureDialog(clazz, doGetStage());

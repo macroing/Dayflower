@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.compiler;
 
-import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.pack;
 import static org.dayflower.utility.Ints.padding;
 
@@ -1564,9 +1563,9 @@ public final class CompiledLightCache {
 //		Block #6:
 		array[PEREZ_LIGHT_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2] = sunDirectionWorldSpace.z;
 		array[PEREZ_LIGHT_OFFSET_TURBIDITY] = turbidity;
-		array[PEREZ_LIGHT_OFFSET_ZENITH + 0] = toFloat(zenith[0]);
-		array[PEREZ_LIGHT_OFFSET_ZENITH + 1] = toFloat(zenith[1]);
-		array[PEREZ_LIGHT_OFFSET_ZENITH + 2] = toFloat(zenith[2]);
+		array[PEREZ_LIGHT_OFFSET_ZENITH + 0] = (float)(zenith[0]);
+		array[PEREZ_LIGHT_OFFSET_ZENITH + 1] = (float)(zenith[1]);
+		array[PEREZ_LIGHT_OFFSET_ZENITH + 2] = (float)(zenith[2]);
 		array[PEREZ_LIGHT_OFFSET_RADIUS] = radius;
 		array[PEREZ_LIGHT_OFFSET_THETA] = theta;
 		

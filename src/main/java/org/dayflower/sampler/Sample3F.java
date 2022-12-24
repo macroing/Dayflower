@@ -18,9 +18,9 @@
  */
 package org.dayflower.sampler;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.util.Objects;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Sample3F} denotes a 3-dimensional sample with three components, of type {@code float}.
@@ -128,11 +128,11 @@ public final class Sample3F {
 			return true;
 		} else if(!(object instanceof Sample3F)) {
 			return false;
-		} else if(!equal(this.component1, Sample3F.class.cast(object).component1)) {
+		} else if(!Floats.equals(this.component1, Sample3F.class.cast(object).component1)) {
 			return false;
-		} else if(!equal(this.component2, Sample3F.class.cast(object).component2)) {
+		} else if(!Floats.equals(this.component2, Sample3F.class.cast(object).component2)) {
 			return false;
-		} else if(!equal(this.component3, Sample3F.class.cast(object).component3)) {
+		} else if(!Floats.equals(this.component3, Sample3F.class.cast(object).component3)) {
 			return false;
 		} else {
 			return true;

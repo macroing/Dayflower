@@ -18,18 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.acos;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.lerp;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.saturate;
-import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.Floats.sqrt;
-import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.saturate;
 
 import java.io.DataOutput;
@@ -58,6 +46,8 @@ import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Curve3F} is an implementation of {@link Shape3F} that represents a curve.
@@ -124,9 +114,9 @@ public final class Curve3F implements Shape3F {
 		
 		final float widthA = data.getWidthA();
 		final float widthB = data.getWidthB();
-		final float widthC = lerp(widthA, widthB, uMinimum);
-		final float widthD = lerp(widthA, widthB, uMaximum);
-		final float widthE = max(widthC, widthD) * 0.5F;
+		final float widthC = Floats.lerp(widthA, widthB, uMinimum);
+		final float widthD = Floats.lerp(widthA, widthB, uMaximum);
+		final float widthE = Floats.max(widthC, widthD) * 0.5F;
 		
 		final Point3F pointA = data.getPointA();
 		final Point3F pointB = data.getPointB();
@@ -169,9 +159,9 @@ public final class Curve3F implements Shape3F {
 		
 		final float widthA = data.getWidthA();
 		final float widthB = data.getWidthB();
-		final float widthC = lerp(widthA, widthB, uMinimum);
-		final float widthD = lerp(widthA, widthB, uMaximum);
-		final float widthE = max(widthC, widthD) * 0.5F;
+		final float widthC = Floats.lerp(widthA, widthB, uMinimum);
+		final float widthD = Floats.lerp(widthA, widthB, uMaximum);
+		final float widthE = Floats.max(widthC, widthD) * 0.5F;
 		
 		final Point3F pointA = data.getPointA();
 		final Point3F pointB = data.getPointB();
@@ -202,23 +192,23 @@ public final class Curve3F implements Shape3F {
 		final float yMaximum = 0.0F;
 		final float zMaximum = ray.getDirection().length() * tMaximum;
 		
-		if(max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
+		if(Floats.max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || Floats.min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		if(max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
+		if(Floats.max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || Floats.min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		if(max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
+		if(Floats.max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || Floats.min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final float l01 = max(abs(pointI.x - 2.0F * pointJ.x + pointK.x), abs(pointI.y - 2.0F * pointJ.y + pointK.y), abs(pointI.z - 2.0F * pointJ.z + pointK.z));
-		final float l02 = max(abs(pointJ.x - 2.0F * pointK.x + pointL.x), abs(pointJ.y - 2.0F * pointK.y + pointL.y), abs(pointJ.z - 2.0F * pointK.z + pointL.z));
-		final float l03 = max(l01, l02);
+		final float l01 = Floats.max(Floats.abs(pointI.x - 2.0F * pointJ.x + pointK.x), Floats.abs(pointI.y - 2.0F * pointJ.y + pointK.y), Floats.abs(pointI.z - 2.0F * pointJ.z + pointK.z));
+		final float l02 = Floats.max(Floats.abs(pointJ.x - 2.0F * pointK.x + pointL.x), Floats.abs(pointJ.y - 2.0F * pointK.y + pointL.y), Floats.abs(pointJ.z - 2.0F * pointK.z + pointL.z));
+		final float l03 = Floats.max(l01, l02);
 		
-		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
+		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (Floats.max(widthA, widthB) * 0.05F))) / 2, 0, 10);
 		
 		return doIntersectionRecursive(ray, tMinimum, tMaximum, objectToRay, rayToObject, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
 	}
@@ -320,9 +310,9 @@ public final class Curve3F implements Shape3F {
 			return false;
 		} else if(!Objects.equals(this.data, Curve3F.class.cast(object).data)) {
 			return false;
-		} else if(!equal(this.uMaximum, Curve3F.class.cast(object).uMaximum)) {
+		} else if(!Floats.equals(this.uMaximum, Curve3F.class.cast(object).uMaximum)) {
 			return false;
-		} else if(!equal(this.uMinimum, Curve3F.class.cast(object).uMinimum)) {
+		} else if(!Floats.equals(this.uMinimum, Curve3F.class.cast(object).uMinimum)) {
 			return false;
 		} else {
 			return true;
@@ -344,8 +334,8 @@ public final class Curve3F implements Shape3F {
 		
 		final float widthA = data.getWidthA();
 		final float widthB = data.getWidthB();
-		final float widthC = lerp(widthA, widthB, uMinimum);
-		final float widthD = lerp(widthA, widthB, uMaximum);
+		final float widthC = Floats.lerp(widthA, widthB, uMinimum);
+		final float widthD = Floats.lerp(widthA, widthB, uMaximum);
 		final float widthE = (widthC + widthD) * 0.5F;
 		
 		final Point3F pointA = data.getPointA();
@@ -386,9 +376,9 @@ public final class Curve3F implements Shape3F {
 		
 		final float widthA = data.getWidthA();
 		final float widthB = data.getWidthB();
-		final float widthC = lerp(widthA, widthB, uMinimum);
-		final float widthD = lerp(widthA, widthB, uMaximum);
-		final float widthE = max(widthC, widthD) * 0.5F;
+		final float widthC = Floats.lerp(widthA, widthB, uMinimum);
+		final float widthD = Floats.lerp(widthA, widthB, uMaximum);
+		final float widthE = Floats.max(widthC, widthD) * 0.5F;
 		
 		final Point3F pointA = data.getPointA();
 		final Point3F pointB = data.getPointB();
@@ -419,23 +409,23 @@ public final class Curve3F implements Shape3F {
 		final float yMaximum = 0.0F;
 		final float zMaximum = ray.getDirection().length() * tMaximum;
 		
-		if(max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
+		if(Floats.max(pointI.x, pointJ.x, pointK.x, pointL.x) + widthE < tMinimum || Floats.min(pointI.x, pointJ.x, pointK.x, pointL.x) - widthE > xMaximum) {
 			return Float.NaN;
 		}
 		
-		if(max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
+		if(Floats.max(pointI.y, pointJ.y, pointK.y, pointL.y) + widthE < tMinimum || Floats.min(pointI.y, pointJ.y, pointK.y, pointL.y) - widthE > yMaximum) {
 			return Float.NaN;
 		}
 		
-		if(max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
+		if(Floats.max(pointI.z, pointJ.z, pointK.z, pointL.z) + widthE < tMinimum || Floats.min(pointI.z, pointJ.z, pointK.z, pointL.z) - widthE > zMaximum) {
 			return Float.NaN;
 		}
 		
-		final float l01 = max(abs(pointI.x - 2.0F * pointJ.x + pointK.x), abs(pointI.y - 2.0F * pointJ.y + pointK.y), abs(pointI.z - 2.0F * pointJ.z + pointK.z));
-		final float l02 = max(abs(pointJ.x - 2.0F * pointK.x + pointL.x), abs(pointJ.y - 2.0F * pointK.y + pointL.y), abs(pointJ.z - 2.0F * pointK.z + pointL.z));
-		final float l03 = max(l01, l02);
+		final float l01 = Floats.max(Floats.abs(pointI.x - 2.0F * pointJ.x + pointK.x), Floats.abs(pointI.y - 2.0F * pointJ.y + pointK.y), Floats.abs(pointI.z - 2.0F * pointJ.z + pointK.z));
+		final float l02 = Floats.max(Floats.abs(pointJ.x - 2.0F * pointK.x + pointL.x), Floats.abs(pointJ.y - 2.0F * pointK.y + pointL.y), Floats.abs(pointJ.z - 2.0F * pointK.z + pointL.z));
+		final float l03 = Floats.max(l01, l02);
 		
-		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
+		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (Floats.max(widthA, widthB) * 0.05F))) / 2, 0, 10);
 		
 		return doIntersectionTRecursive(ray, tMinimum, tMaximum, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
 	}
@@ -525,8 +515,8 @@ public final class Curve3F implements Shape3F {
 		final int segments = 1 << splitDepth;
 		
 		for(int segment = 0; segment < segments; segment++) {
-			final float uMinimum = toFloat(segment + 0) / toFloat(segments);
-			final float uMaximum = toFloat(segment + 1) / toFloat(segments);
+			final float uMinimum = (float)(segment + 0) / (float)(segments);
+			final float uMaximum = (float)(segment + 1) / (float)(segments);
 			
 			curves.add(new Curve3F(data, uMinimum, uMaximum));
 		}
@@ -625,8 +615,8 @@ public final class Curve3F implements Shape3F {
 				final Vector3F normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3F();
 				final Vector3F normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3F();
 				
-				final float widthC = lerp(widthA, widthB, toFloat(segment + 0) / toFloat(segments));
-				final float widthD = lerp(widthA, widthB, toFloat(segment + 1) / toFloat(segments));
+				final float widthC = Floats.lerp(widthA, widthB, (float)(segment + 0) / (float)(segments));
+				final float widthD = Floats.lerp(widthA, widthB, (float)(segment + 1) / (float)(segments));
 				
 				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
 			} else {
@@ -651,8 +641,8 @@ public final class Curve3F implements Shape3F {
 				final Vector3F normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3F();
 				final Vector3F normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3F();
 				
-				final float widthC = lerp(widthA, widthB, toFloat(segment + 0) / toFloat(segments));
-				final float widthD = lerp(widthA, widthB, toFloat(segment + 1) / toFloat(segments));
+				final float widthC = Floats.lerp(widthA, widthB, (float)(segment + 0) / (float)(segments));
+				final float widthD = Floats.lerp(widthA, widthB, (float)(segment + 1) / (float)(segments));
 				
 				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
 			}
@@ -745,8 +735,8 @@ public final class Curve3F implements Shape3F {
 				final Vector3F normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3F();
 				final Vector3F normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3F();
 				
-				final float widthC = lerp(widthA, widthB, toFloat(segment + 0) / toFloat(segments));
-				final float widthD = lerp(widthA, widthB, toFloat(segment + 1) / toFloat(segments));
+				final float widthC = Floats.lerp(widthA, widthB, (float)(segment + 0) / (float)(segments));
+				final float widthD = Floats.lerp(widthA, widthB, (float)(segment + 1) / (float)(segments));
 				
 				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
 			} else {
@@ -758,8 +748,8 @@ public final class Curve3F implements Shape3F {
 				final Vector3F normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3F();
 				final Vector3F normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3F();
 				
-				final float widthC = lerp(widthA, widthB, toFloat(segment + 0) / toFloat(segments));
-				final float widthD = lerp(widthA, widthB, toFloat(segment + 1) / toFloat(segments));
+				final float widthC = Floats.lerp(widthA, widthB, (float)(segment + 0) / (float)(segments));
+				final float widthD = Floats.lerp(widthA, widthB, (float)(segment + 1) / (float)(segments));
 				
 				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
 			}
@@ -818,8 +808,8 @@ public final class Curve3F implements Shape3F {
 			this.type = Objects.requireNonNull(type, "type == null");
 			this.normalA = Vector3F.getCached(Vector3F.normalize(Objects.requireNonNull(normalA, "normalA == null")));
 			this.normalB = Vector3F.getCached(Vector3F.normalize(Objects.requireNonNull(normalB, "normalB == null")));
-			this.normalAngle = acos(saturate(Vector3F.dotProduct(normalA, normalB)));
-			this.normalAngleSinReciprocal = 1.0F / sin(this.normalAngle);
+			this.normalAngle = Floats.acos(Floats.saturate(Vector3F.dotProduct(normalA, normalB)));
+			this.normalAngleSinReciprocal = 1.0F / Floats.sin(this.normalAngle);
 			this.widthA = widthA;
 			this.widthB = widthB;
 		}
@@ -995,13 +985,13 @@ public final class Curve3F implements Shape3F {
 				return false;
 			} else if(!Objects.equals(this.normalB, Data.class.cast(object).normalB)) {
 				return false;
-			} else if(!equal(this.normalAngle, Data.class.cast(object).normalAngle)) {
+			} else if(!Floats.equals(this.normalAngle, Data.class.cast(object).normalAngle)) {
 				return false;
-			} else if(!equal(this.normalAngleSinReciprocal, Data.class.cast(object).normalAngleSinReciprocal)) {
+			} else if(!Floats.equals(this.normalAngleSinReciprocal, Data.class.cast(object).normalAngleSinReciprocal)) {
 				return false;
-			} else if(!equal(this.widthA, Data.class.cast(object).widthA)) {
+			} else if(!Floats.equals(this.widthA, Data.class.cast(object).widthA)) {
 				return false;
-			} else if(!equal(this.widthB, Data.class.cast(object).widthB)) {
+			} else if(!Floats.equals(this.widthB, Data.class.cast(object).widthB)) {
 				return false;
 			} else {
 				return true;
@@ -1161,8 +1151,8 @@ public final class Curve3F implements Shape3F {
 			final float uB = (uMinimum + uMaximum) / 2.0F;
 			final float uC = uMaximum;
 			
-			final float widthC = max(lerp(widthA, widthB, uA), lerp(widthA, widthB, uB)) * 0.5F;
-			final float widthD = max(lerp(widthA, widthB, uB), lerp(widthA, widthB, uC)) * 0.5F;
+			final float widthC = Floats.max(Floats.lerp(widthA, widthB, uA), Floats.lerp(widthA, widthB, uB)) * 0.5F;
+			final float widthD = Floats.max(Floats.lerp(widthA, widthB, uB), Floats.lerp(widthA, widthB, uC)) * 0.5F;
 			
 			final float xMaximum = 0.0F;
 			final float yMaximum = 0.0F;
@@ -1198,17 +1188,17 @@ public final class Curve3F implements Shape3F {
 		
 		final float denominator = segmentDirection.lengthSquared();
 		
-		if(isZero(denominator)) {
+		if(Floats.isZero(denominator)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
 		final float w = Vector2F.dotProduct(Vector2F.negate(new Vector2F(pointA.x, pointA.y)), segmentDirection) / denominator;
-		final float u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
+		final float u = Floats.saturate(Floats.lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
 		final float hitWidth = doComputeHitWidth(data, ray, u);
 		
-		final Point3F point = doBezierEvaluate(pointA, pointB, pointC, pointD, saturate(w));
+		final Point3F point = doBezierEvaluate(pointA, pointB, pointC, pointD, Floats.saturate(w));
 		
-		final Vector3F derivative = doBezierEvaluateDerivative(pointA, pointB, pointC, pointD, saturate(w));
+		final Vector3F derivative = doBezierEvaluateDerivative(pointA, pointB, pointC, pointD, Floats.saturate(w));
 		
 		final float pointCurveDistanceSquared = point.x * point.x + point.y * point.y;
 		
@@ -1222,7 +1212,7 @@ public final class Curve3F implements Shape3F {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final float pointCurveDistance = sqrt(pointCurveDistanceSquared);
+		final float pointCurveDistance = Floats.sqrt(pointCurveDistanceSquared);
 		final float edgeFunction = derivative.x * -point.y + point.x * derivative.y;
 		final float v = edgeFunction > 0.0F ? 0.5F + pointCurveDistance / hitWidth : 0.5F - pointCurveDistance / hitWidth;
 		final float t = point.z / rayDirectionLength;
@@ -1252,8 +1242,8 @@ public final class Curve3F implements Shape3F {
 			final float uB = (uMinimum + uMaximum) / 2.0F;
 			final float uC = uMaximum;
 			
-			final float widthC = max(lerp(widthA, widthB, uA), lerp(widthA, widthB, uB)) * 0.5F;
-			final float widthD = max(lerp(widthA, widthB, uB), lerp(widthA, widthB, uC)) * 0.5F;
+			final float widthC = Floats.max(Floats.lerp(widthA, widthB, uA), Floats.lerp(widthA, widthB, uB)) * 0.5F;
+			final float widthD = Floats.max(Floats.lerp(widthA, widthB, uB), Floats.lerp(widthA, widthB, uC)) * 0.5F;
 			
 			final float xMaximum = 0.0F;
 			final float yMaximum = 0.0F;
@@ -1262,7 +1252,7 @@ public final class Curve3F implements Shape3F {
 			if(doIsInsideX(points, widthC, tMinimum, xMaximum, 0) && doIsInsideY(points, widthC, tMinimum, yMaximum, 0) && doIsInsideZ(points, widthC, tMinimum, zMaximum, 0)) {
 				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
 				
-				if(!isNaN(t)) {
+				if(!Floats.isNaN(t)) {
 					return t;
 				}
 			}
@@ -1270,7 +1260,7 @@ public final class Curve3F implements Shape3F {
 			if(doIsInsideX(points, widthD, tMinimum, xMaximum, 3) && doIsInsideY(points, widthD, tMinimum, yMaximum, 3) && doIsInsideZ(points, widthD, tMinimum, zMaximum, 3)) {
 				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
 				
-				if(!isNaN(t)) {
+				if(!Floats.isNaN(t)) {
 					return t;
 				}
 			}
@@ -1289,15 +1279,15 @@ public final class Curve3F implements Shape3F {
 		
 		final float denominator = segmentDirection.lengthSquared();
 		
-		if(isZero(denominator)) {
+		if(Floats.isZero(denominator)) {
 			return Float.NaN;
 		}
 		
 		final float w = Vector2F.dotProduct(Vector2F.negate(new Vector2F(pointA.x, pointA.y)), segmentDirection) / denominator;
-		final float u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
+		final float u = Floats.saturate(Floats.lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
 		final float hitWidth = doComputeHitWidth(data, ray, u);
 		
-		final Point3F point = doBezierEvaluate(pointA, pointB, pointC, pointD, saturate(w));
+		final Point3F point = doBezierEvaluate(pointA, pointB, pointC, pointD, Floats.saturate(w));
 		
 		final float pointCurveDistanceSquared = point.x * point.x + point.y * point.y;
 		
@@ -1323,7 +1313,7 @@ public final class Curve3F implements Shape3F {
 			case CYLINDER: {
 				final Vector3F directionU = Vector3F.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
 				final Vector3F directionUPlane = Vector3F.normalize(Vector3F.transform(objectToRay, directionU));
-				final Vector3F directionVPlane = Vector3F.normalize(Vector3F.transform(Matrix44F.rotate(AngleF.degrees(-lerp(-90.0F, 90.0F, v), -90.0F, 90.0F), directionUPlane), Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.y, directionUPlane.x, 0.0F)), hitWidth)));
+				final Vector3F directionVPlane = Vector3F.normalize(Vector3F.transform(Matrix44F.rotate(AngleF.degrees(-Floats.lerp(-90.0F, 90.0F, v), -90.0F, 90.0F), directionUPlane), Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.y, directionUPlane.x, 0.0F)), hitWidth)));
 				final Vector3F directionV = Vector3F.normalize(Vector3F.transform(rayToObject, directionVPlane));
 				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
 				
@@ -1339,8 +1329,8 @@ public final class Curve3F implements Shape3F {
 				return new OrthonormalBasis33F(directionW, directionV, directionU);
 			}
 			case RIBBON: {
-				final float sinA = sin((1.0F - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
-				final float sinB = sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+				final float sinA = Floats.sin((1.0F - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+				final float sinB = Floats.sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
 				
 				final Vector3F normal = Vector3F.normalize(Vector3F.add(Vector3F.multiply(data.getNormalA(), sinA), Vector3F.multiply(data.getNormalB(), sinB)));
 				
@@ -1411,9 +1401,9 @@ public final class Curve3F implements Shape3F {
 		final Vector3F directionR = ray.getDirection();
 		final Vector3F directionX = Vector3F.crossProduct(directionR, Vector3F.direction(eye, lookAt));
 		
-		if(!isZero(directionX.lengthSquared())) {
+		if(!Floats.isZero(directionX.lengthSquared())) {
 			return directionX;
-		} else if(abs(directionR.x) > abs(directionR.y)) {
+		} else if(Floats.abs(directionR.x) > Floats.abs(directionR.y)) {
 			return Vector3F.normalize(new Vector3F(-directionR.z, 0.0F, directionR.x));
 		} else {
 			return Vector3F.normalize(new Vector3F(0.0F, directionR.z, -directionR.y));
@@ -1421,8 +1411,8 @@ public final class Curve3F implements Shape3F {
 	}
 	
 	private static boolean doIsInsideX(final Point3F[] points, final float width, final float minimum, final float maximum, final int offset) {
-		final float max = max(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
-		final float min = min(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
+		final float max = Floats.max(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
+		final float min = Floats.min(points[offset + 0].x, points[offset + 1].x, points[offset + 2].x, points[offset + 3].x);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1430,8 +1420,8 @@ public final class Curve3F implements Shape3F {
 	}
 	
 	private static boolean doIsInsideY(final Point3F[] points, final float width, final float minimum, final float maximum, final int offset) {
-		final float max = max(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
-		final float min = min(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
+		final float max = Floats.max(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
+		final float min = Floats.min(points[offset + 0].y, points[offset + 1].y, points[offset + 2].y, points[offset + 3].y);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1439,8 +1429,8 @@ public final class Curve3F implements Shape3F {
 	}
 	
 	private static boolean doIsInsideZ(final Point3F[] points, final float width, final float minimum, final float maximum, final int offset) {
-		final float max = max(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
-		final float min = min(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
+		final float max = Floats.max(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
+		final float min = Floats.min(points[offset + 0].z, points[offset + 1].z, points[offset + 2].z, points[offset + 3].z);
 		
 		final boolean isInside = max + width >= minimum && min - width <= maximum;
 		
@@ -1449,15 +1439,15 @@ public final class Curve3F implements Shape3F {
 	
 	private static float doComputeHitWidth(final Data data, final Ray3F ray, final float u) {
 		if(data.getType() == Type.RIBBON) {
-			final float sinA = sin((1.0F - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
-			final float sinB = sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+			final float sinA = Floats.sin((1.0F - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+			final float sinB = Floats.sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
 			
 			final Vector3F normal = Vector3F.add(Vector3F.multiply(data.getNormalA(), sinA), Vector3F.multiply(data.getNormalB(), sinB));
 			
-			return lerp(data.getWidthA(), data.getWidthB(), u) * (abs(Vector3F.dotProduct(normal, ray.getDirection())) / ray.getDirection().length());
+			return Floats.lerp(data.getWidthA(), data.getWidthB(), u) * (Floats.abs(Vector3F.dotProduct(normal, ray.getDirection())) / ray.getDirection().length());
 		}
 		
-		return lerp(data.getWidthA(), data.getWidthB(), u);
+		return Floats.lerp(data.getWidthA(), data.getWidthB(), u);
 	}
 	
 	private static int doLog2(final float value) {

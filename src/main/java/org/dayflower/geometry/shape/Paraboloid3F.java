@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.pow;
-import static org.dayflower.utility.Floats.solveQuadraticSystem;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,6 +35,8 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Paraboloid3F} is an implementation of {@link Shape3F} that represents a paraboloid.
@@ -211,7 +208,7 @@ public final class Paraboloid3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -272,11 +269,11 @@ public final class Paraboloid3F implements Shape3F {
 			return false;
 		} else if(!Objects.equals(this.phiMax, Paraboloid3F.class.cast(object).phiMax)) {
 			return false;
-		} else if(!equal(this.radius, Paraboloid3F.class.cast(object).radius)) {
+		} else if(!Floats.equals(this.radius, Paraboloid3F.class.cast(object).radius)) {
 			return false;
-		} else if(!equal(this.zMax, Paraboloid3F.class.cast(object).zMax)) {
+		} else if(!Floats.equals(this.zMax, Paraboloid3F.class.cast(object).zMax)) {
 			return false;
-		} else if(!equal(this.zMin, Paraboloid3F.class.cast(object).zMin)) {
+		} else if(!Floats.equals(this.zMin, Paraboloid3F.class.cast(object).zMin)) {
 			return false;
 		} else {
 			return true;
@@ -308,7 +305,7 @@ public final class Paraboloid3F implements Shape3F {
 		final float zMin = this.zMin;
 		final float k = 4.0F * zMax / radiusSquared;
 		final float a = radiusSquared * radiusSquared * phiMax / (12.0F * zMax * zMax);
-		final float b = pow(k * zMax + 1.0F, 1.5F) - pow(k * zMin + 1.0F, 1.5F);
+		final float b = Floats.pow(k * zMax + 1.0F, 1.5F) - Floats.pow(k * zMin + 1.0F, 1.5F);
 		
 		return a * b;
 	}
@@ -359,12 +356,12 @@ public final class Paraboloid3F implements Shape3F {
 		final float b = 2.0F * k * (d.x * o.x + d.y * o.y) - d.z;
 		final float c = k * (o.x * o.x + o.y * o.y) - o.z;
 		
-		final float[] ts = solveQuadraticSystem(a, b, c);
+		final float[] ts = Floats.solveQuadraticSystem(a, b, c);
 		
 		for(int i = 0; i < ts.length; i++) {
 			final float t = ts[i];
 			
-			if(isNaN(t)) {
+			if(Floats.isNaN(t)) {
 				return Float.NaN;
 			}
 			

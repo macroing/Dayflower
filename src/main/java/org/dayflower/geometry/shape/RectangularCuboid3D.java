@@ -36,6 +36,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
 import org.macroing.java.lang.Doubles;
 
 /**

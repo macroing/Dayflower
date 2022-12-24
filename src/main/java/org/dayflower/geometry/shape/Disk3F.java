@@ -18,10 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,6 +36,8 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Disk3F} is an implementation of {@link Shape3F} that represents a disk.
@@ -211,7 +209,7 @@ public final class Disk3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -274,11 +272,11 @@ public final class Disk3F implements Shape3F {
 			return false;
 		} else if(!Objects.equals(this.phiMax, Disk3F.class.cast(object).phiMax)) {
 			return false;
-		} else if(!equal(this.radiusInner, Disk3F.class.cast(object).radiusInner)) {
+		} else if(!Floats.equals(this.radiusInner, Disk3F.class.cast(object).radiusInner)) {
 			return false;
-		} else if(!equal(this.radiusOuter, Disk3F.class.cast(object).radiusOuter)) {
+		} else if(!Floats.equals(this.radiusOuter, Disk3F.class.cast(object).radiusOuter)) {
 			return false;
-		} else if(!equal(this.zMax, Disk3F.class.cast(object).zMax)) {
+		} else if(!Floats.equals(this.zMax, Disk3F.class.cast(object).zMax)) {
 			return false;
 		} else {
 			return true;
@@ -346,7 +344,7 @@ public final class Disk3F implements Shape3F {
 		
 		final Vector3F direction = ray.getDirection();
 		
-		if(isZero(direction.z)) {
+		if(Floats.isZero(direction.z)) {
 			return Float.NaN;
 		}
 		

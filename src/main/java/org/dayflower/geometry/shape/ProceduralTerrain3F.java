@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.isNaN;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -36,9 +34,9 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.utility.Floats;
 
 import org.macroing.art4j.noise.SimplexNoiseF;
+import org.macroing.java.lang.Floats;
 import org.macroing.java.util.function.FloatBinaryOperator;
 
 /**
@@ -114,7 +112,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		

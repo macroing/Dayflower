@@ -18,17 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Floats.isInfinite;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.solveQuadraticSystem;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -49,6 +38,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Sphere3F} is an implementation of {@link Shape3F} that represents a sphere.
@@ -158,7 +149,7 @@ public final class Sphere3F implements Shape3F {
 				
 				final Vector3F incoming = Vector3F.direction(surfaceIntersectionPoint, point);
 				
-				if(isZero(incoming.lengthSquared())) {
+				if(Floats.isZero(incoming.lengthSquared())) {
 					return SurfaceSample3F.EMPTY;
 				}
 				
@@ -167,7 +158,7 @@ public final class Sphere3F implements Shape3F {
 				
 				final float probabilityDensityFunctionValue = Point3F.distanceSquared(point, surfaceIntersectionPoint) / Vector3F.dotProductAbs(surfaceSample.getSurfaceNormal(), incomingNormalizedNegated);
 				
-				if(isInfinite(probabilityDensityFunctionValue)) {
+				if(Floats.isInfinite(probabilityDensityFunctionValue) || Floats.isNaN(probabilityDensityFunctionValue)) {
 					return SurfaceSample3F.EMPTY;
 				}
 				
@@ -191,12 +182,12 @@ public final class Sphere3F implements Shape3F {
 		final float sinThetaMax = radius * distanceReciprocal;
 		final float sinThetaMaxSquared = sinThetaMax * sinThetaMax;
 		final float sinThetaMaxReciprocal = 1.0F / sinThetaMax;
-		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
-		final float cosTheta = sinThetaMaxSquared < 0.00068523F ? sqrt(1.0F - sinThetaMaxSquared * sample.x) : (cosThetaMax - 1.0F) * sample.x + 1.0F;
+		final float cosThetaMax = Floats.sqrt(Floats.max(0.0F, 1.0F - sinThetaMaxSquared));
+		final float cosTheta = sinThetaMaxSquared < 0.00068523F ? Floats.sqrt(1.0F - sinThetaMaxSquared * sample.x) : (cosThetaMax - 1.0F) * sample.x + 1.0F;
 		final float sinThetaSquared = sinThetaMaxSquared < 0.00068523F ? sinThetaMaxSquared * sample.x : 1.0F - cosTheta * cosTheta;
-		final float cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * sqrt(max(0.0F, 1.0F - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
-		final float sinAlpha = sqrt(max(0.0F, 1.0F - cosAlpha * cosAlpha));
-		final float phi = sample.y * 2.0F * PI;
+		final float cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * Floats.sqrt(Floats.max(0.0F, 1.0F - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
+		final float sinAlpha = Floats.sqrt(Floats.max(0.0F, 1.0F - cosAlpha * cosAlpha));
+		final float phi = sample.y * 2.0F * Floats.PI;
 		
 		final Vector3F sphericalDirection = Vector3F.directionSpherical(sinAlpha, cosAlpha, phi, x, y, z);
 		
@@ -227,7 +218,7 @@ public final class Sphere3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -348,14 +339,14 @@ public final class Sphere3F implements Shape3F {
 		
 		final Ray3F ray = surfaceIntersection.createRay(incoming);
 		
-		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionShape = intersection(ray, 0.001F, MAX_VALUE);
+		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionShape = intersection(ray, 0.001F, Floats.MAX_VALUE);
 		
 		if(optionalSurfaceIntersectionShape.isPresent()) {
 			final SurfaceIntersection3F surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();
 			
 			final float probabilityDensityFunctionValue = Point3F.distanceSquared(surfaceIntersectionShape.getSurfaceIntersectionPoint(), surfaceIntersection.getSurfaceIntersectionPoint()) / Vector3F.dotProductAbs(surfaceIntersectionShape.getSurfaceNormalS(), Vector3F.negate(incoming)) * getSurfaceArea();
 			
-			if(!isInfinite(probabilityDensityFunctionValue)) {
+			if(!Floats.isInfinite(probabilityDensityFunctionValue) || Floats.isNaN(probabilityDensityFunctionValue)) {
 				return probabilityDensityFunctionValue;
 			}
 		}
@@ -371,7 +362,7 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
-		return PI_MULTIPLIED_BY_4;
+		return Floats.PI_MULTIPLIED_BY_4;
 	}
 	
 	/**
@@ -397,12 +388,12 @@ public final class Sphere3F implements Shape3F {
 		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
 		final float c = centerToOrigin.lengthSquared() - 1.0F;
 		
-		final float[] ts = solveQuadraticSystem(a, b, c);
+		final float[] ts = Floats.solveQuadraticSystem(a, b, c);
 		
 		for(int i = 0; i < ts.length; i++) {
 			final float t = ts[i];
 			
-			if(isNaN(t)) {
+			if(Floats.isNaN(t)) {
 				return Float.NaN;
 			}
 			
@@ -474,7 +465,7 @@ public final class Sphere3F implements Shape3F {
 	
 	private static OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
 		final Vector3F w = Vector3F.directionNormalized(new Point3F(), surfaceIntersectionPoint);
-		final Vector3F v = new Vector3F(-PI_MULTIPLIED_BY_2 * w.y, PI_MULTIPLIED_BY_2 * w.x, 0.0F);
+		final Vector3F v = new Vector3F(-Floats.PI_MULTIPLIED_BY_2 * w.y, Floats.PI_MULTIPLIED_BY_2 * w.x, 0.0F);
 		
 		return new OrthonormalBasis33F(w, v);
 	}

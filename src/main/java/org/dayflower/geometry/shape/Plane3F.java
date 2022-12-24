@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -38,6 +35,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Plane3F} is an implementation of {@link Shape3F} that represents a plane.
@@ -98,7 +97,7 @@ public final class Plane3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -172,7 +171,7 @@ public final class Plane3F implements Shape3F {
 	 */
 	@Override
 	public boolean contains(final Point3F point) {
-		return isZero(point.z);
+		return Floats.isZero(point.z);
 	}
 	
 	/**
@@ -223,7 +222,7 @@ public final class Plane3F implements Shape3F {
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float dotProduct = Vector3F.dotProduct(Vector3F.z(), ray.getDirection());
 		
-		if(isZero(dotProduct)) {
+		if(Floats.isZero(dotProduct)) {
 			return Float.NaN;
 		}
 		

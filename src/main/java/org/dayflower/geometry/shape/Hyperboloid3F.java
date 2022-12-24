@@ -18,17 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isInfinite;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.Floats.solveQuadraticSystem;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -46,6 +35,8 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Hyperboloid3F} is an implementation of {@link Shape3F} that represents a hyperboloid.
@@ -155,14 +146,14 @@ public final class Hyperboloid3F implements Shape3F {
 		Objects.requireNonNull(a, "a == null");
 		Objects.requireNonNull(b, "b == null");
 		
-		Point3F pointA = isZero(a.z) ? a : isZero(b.z) ? b : a;
-		Point3F pointB = isZero(a.z) ? b : isZero(b.z) ? a : b;
+		Point3F pointA = Floats.isZero(a.z) ? a : Floats.isZero(b.z) ? b : a;
+		Point3F pointB = Floats.isZero(a.z) ? b : Floats.isZero(b.z) ? a : b;
 		Point3F pointC = pointA;
 		
 		float aH = Float.POSITIVE_INFINITY;
 		float cH = Float.POSITIVE_INFINITY;
 		
-		for(int i = 0; i < 10 && (isInfinite(aH) || isNaN(aH)); i++) {
+		for(int i = 0; i < 10 && (Floats.isInfinite(aH) || Floats.isNaN(aH)); i++) {
 			pointC = Point3F.add(pointC, Vector3F.multiply(Vector3F.direction(pointA, pointB), 2.0F));
 			
 			final float c = pointC.x * pointC.x + pointC.y * pointC.y;
@@ -172,7 +163,7 @@ public final class Hyperboloid3F implements Shape3F {
 			cH = (aH * d - 1.0F) / (pointB.z * pointB.z);
 		}
 		
-		if(isInfinite(aH) || isNaN(aH)) {
+		if(Floats.isInfinite(aH) || Floats.isNaN(aH)) {
 			throw new IllegalArgumentException();
 		}
 		
@@ -181,9 +172,9 @@ public final class Hyperboloid3F implements Shape3F {
 		this.b = pointB;
 		this.aH = aH;
 		this.cH = cH;
-		this.rMax = max(sqrt(a.x * a.x + a.y * a.y), sqrt(b.x * b.x + b.y * b.y));
-		this.zMax = max(a.z, b.z);
-		this.zMin = min(a.z, b.z);
+		this.rMax = Floats.max(Floats.sqrt(a.x * a.x + a.y * a.y), Floats.sqrt(b.x * b.x + b.y * b.y));
+		this.zMax = Floats.max(a.z, b.z);
+		this.zMin = Floats.min(a.z, b.z);
 	}
 	
 	/**
@@ -254,7 +245,7 @@ public final class Hyperboloid3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -339,15 +330,15 @@ public final class Hyperboloid3F implements Shape3F {
 			return false;
 		} else if(!Objects.equals(this.b, Hyperboloid3F.class.cast(object).b)) {
 			return false;
-		} else if(!equal(this.aH, Hyperboloid3F.class.cast(object).aH)) {
+		} else if(!Floats.equals(this.aH, Hyperboloid3F.class.cast(object).aH)) {
 			return false;
-		} else if(!equal(this.cH, Hyperboloid3F.class.cast(object).cH)) {
+		} else if(!Floats.equals(this.cH, Hyperboloid3F.class.cast(object).cH)) {
 			return false;
-		} else if(!equal(this.rMax, Hyperboloid3F.class.cast(object).rMax)) {
+		} else if(!Floats.equals(this.rMax, Hyperboloid3F.class.cast(object).rMax)) {
 			return false;
-		} else if(!equal(this.zMax, Hyperboloid3F.class.cast(object).zMax)) {
+		} else if(!Floats.equals(this.zMax, Hyperboloid3F.class.cast(object).zMax)) {
 			return false;
-		} else if(!equal(this.zMin, Hyperboloid3F.class.cast(object).zMin)) {
+		} else if(!Floats.equals(this.zMin, Hyperboloid3F.class.cast(object).zMin)) {
 			return false;
 		} else {
 			return true;
@@ -487,12 +478,12 @@ public final class Hyperboloid3F implements Shape3F {
 		final float b = 2.0F * (this.aH * d.x * o.x + this.aH * d.y * o.y - this.cH * d.z * o.z);
 		final float c = this.aH * o.x * o.x + this.aH * o.y * o.y - this.cH * o.z * o.z - 1.0F;
 		
-		final float[] ts = solveQuadraticSystem(a, b, c);
+		final float[] ts = Floats.solveQuadraticSystem(a, b, c);
 		
 		for(int i = 0; i < ts.length; i++) {
 			final float t = ts[i];
 			
-			if(isNaN(t)) {
+			if(Floats.isNaN(t)) {
 				return Float.NaN;
 			}
 			
@@ -565,8 +556,8 @@ public final class Hyperboloid3F implements Shape3F {
 	
 	private OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
 		final float phi = doComputePhi(surfaceIntersectionPoint);
-		final float phiCos = cos(phi);
-		final float phiSin = sin(phi);
+		final float phiCos = Floats.cos(phi);
+		final float phiSin = Floats.sin(phi);
 		
 		final float uX = -this.phiMax.getRadians() * surfaceIntersectionPoint.y;
 		final float uY = +this.phiMax.getRadians() * surfaceIntersectionPoint.x;

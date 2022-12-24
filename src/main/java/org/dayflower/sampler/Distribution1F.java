@@ -18,9 +18,6 @@
  */
 package org.dayflower.sampler;
 
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.saturate;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -29,6 +26,8 @@ import java.util.Objects;
 import java.util.function.IntPredicate;
 
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Distribution1F} represents a 1-dimensional distribution and contains methods to sample it in a continuous or discrete way.
@@ -82,9 +81,9 @@ public final class Distribution1F {
 		
 		this.functionIntegral = this.cumulativeDistributionFunction[this.function.length];
 		
-		if(isZero(this.functionIntegral)) {
+		if(Floats.isZero(this.functionIntegral)) {
 			for(int i = 1; i < this.cumulativeDistributionFunction.length; i++) {
-				this.cumulativeDistributionFunction[i] = toFloat(i) / toFloat(this.function.length);
+				this.cumulativeDistributionFunction[i] = (float)(i) / (float)(this.function.length);
 			}
 		} else {
 			for(int i = 1; i < this.cumulativeDistributionFunction.length; i++) {
@@ -113,7 +112,7 @@ public final class Distribution1F {
 			return false;
 		} else if(!Arrays.equals(this.function, Distribution1F.class.cast(object).function)) {
 			return false;
-		} else if(!equal(this.functionIntegral, Distribution1F.class.cast(object).functionIntegral)) {
+		} else if(!Floats.equals(this.functionIntegral, Distribution1F.class.cast(object).functionIntegral)) {
 			return false;
 		} else {
 			return true;

@@ -18,11 +18,10 @@
  */
 package org.dayflower.scene.fresnel;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.util.Objects;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code DisneyFresnel} is used to compute the Fresnel equation for materials in a Disney-specific way.
@@ -103,9 +102,9 @@ public final class DisneyFresnel implements Fresnel {
 			return false;
 		} else if(!Objects.equals(this.r0, DisneyFresnel.class.cast(object).r0)) {
 			return false;
-		} else if(!equal(this.eta, DisneyFresnel.class.cast(object).eta)) {
+		} else if(!Floats.equals(this.eta, DisneyFresnel.class.cast(object).eta)) {
 			return false;
-		} else if(!equal(this.metallic, DisneyFresnel.class.cast(object).metallic)) {
+		} else if(!Floats.equals(this.metallic, DisneyFresnel.class.cast(object).metallic)) {
 			return false;
 		} else {
 			return true;

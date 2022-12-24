@@ -18,10 +18,6 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.floor;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Ints.min;
 
 import java.util.ArrayList;
@@ -35,6 +31,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code BSDF} represents a BSDF (Bidirectional Scattering Distribution Function).
@@ -309,7 +306,7 @@ public final class BSDF {
 		final Vector3F outgoing = this.outgoingLocalSpace;
 		final Vector3F normal = this.normalLocalSpace;
 		
-		if(isZero(outgoing.z)) {
+		if(Floats.isZero(outgoing.z)) {
 			return Optional.empty();
 		}
 		
@@ -321,11 +318,11 @@ public final class BSDF {
 			return Optional.empty();
 		}
 		
-		final int match = min((int)(floor(sample.x * matches)), matches - 1);
+		final int match = min((int)(Floats.floor(sample.x * matches)), matches - 1);
 		
 		final BXDF matchingBXDF = matchingBXDFs[match];
 		
-		final Point2F sampleRemapped = new Point2F(min(sample.x * matches - match, 0.99999994F), sample.y);
+		final Point2F sampleRemapped = new Point2F(Floats.min(sample.x * matches - match, 0.99999994F), sample.y);
 		
 		final Optional<BXDFResult> optionalBXDFResult = matchingBXDF.sampleDistributionFunction(outgoing, normal, sampleRemapped);
 		
@@ -409,7 +406,7 @@ public final class BSDF {
 			return false;
 		} else if(this.isNegatingIncoming != bSDF.isNegatingIncoming) {
 			return false;
-		} else if(!equal(this.eta, bSDF.eta)) {
+		} else if(!Floats.equals(this.eta, bSDF.eta)) {
 			return false;
 		} else {
 			return true;
@@ -460,7 +457,7 @@ public final class BSDF {
 		final Vector3F normal = this.normalLocalSpace;
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpaceCorrectlyOriented);
 		
-		if(isZero(outgoing.z)) {
+		if(Floats.isZero(outgoing.z)) {
 			return 0.0F;
 		}
 		

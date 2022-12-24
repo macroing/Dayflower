@@ -18,14 +18,6 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.Floats.sqrt;
-import static org.dayflower.utility.Floats.tan;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +33,8 @@ import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Camera} represents a camera.
@@ -248,8 +242,8 @@ public final class Camera implements Node {
 	 */
 	public Optional<Ray3F> createPrimaryRay(final float imageX, final float imageY, final float pixelX, final float pixelY) {
 		final float apertureRadius = this.apertureRadius;
-		final float fieldOfViewX = tan(+this.fieldOfViewX.getRadians() * 0.5F);
-		final float fieldOfViewY = tan(-this.fieldOfViewY.getRadians() * 0.5F);
+		final float fieldOfViewX = Floats.tan(+this.fieldOfViewX.getRadians() * 0.5F);
+		final float fieldOfViewY = Floats.tan(-this.fieldOfViewY.getRadians() * 0.5F);
 		final float focalDistance = this.focalDistance;
 		final float resolutionX = this.resolutionX;
 		final float resolutionY = this.resolutionY;
@@ -274,7 +268,7 @@ public final class Camera implements Node {
 				return Optional.empty();
 			}
 			
-			wFactor = sqrt(1.0F - dotProduct);
+			wFactor = Floats.sqrt(1.0F - dotProduct);
 		}
 		
 		final Point2F point = this.isSamplingCenter ? new Point2F() : SampleGeneratorF.sampleDiskUniformDistribution();
@@ -473,13 +467,13 @@ public final class Camera implements Node {
 			return false;
 		} else if(this.isWalkLockEnabled != Camera.class.cast(object).isWalkLockEnabled) {
 			return false;
-		} else if(!equal(this.apertureRadius, Camera.class.cast(object).apertureRadius)) {
+		} else if(!Floats.equals(this.apertureRadius, Camera.class.cast(object).apertureRadius)) {
 			return false;
-		} else if(!equal(this.focalDistance, Camera.class.cast(object).focalDistance)) {
+		} else if(!Floats.equals(this.focalDistance, Camera.class.cast(object).focalDistance)) {
 			return false;
-		} else if(!equal(this.resolutionX, Camera.class.cast(object).resolutionX)) {
+		} else if(!Floats.equals(this.resolutionX, Camera.class.cast(object).resolutionX)) {
 			return false;
-		} else if(!equal(this.resolutionY, Camera.class.cast(object).resolutionY)) {
+		} else if(!Floats.equals(this.resolutionY, Camera.class.cast(object).resolutionY)) {
 			return false;
 		} else {
 			return true;
@@ -703,7 +697,7 @@ public final class Camera implements Node {
 		final AngleF newYaw = AngleF.add(oldYaw, AngleF.degrees(-x * 0.25F));
 		
 		final AngleF oldPitch = getPitch();
-		final AngleF newPitch = AngleF.degrees(max(min(oldPitch.getDegrees() + AngleF.degrees(y * 0.25F, -90.0F, 90.0F).getDegrees(), 90.00F), -90.00F), -90.00F, 90.00F);
+		final AngleF newPitch = AngleF.degrees(Floats.max(Floats.min(oldPitch.getDegrees() + AngleF.degrees(y * 0.25F, -90.0F, 90.0F).getDegrees(), 90.00F), -90.00F), -90.00F, 90.00F);
 		
 		setYaw(newYaw);
 		setPitch(newPitch);
@@ -752,7 +746,7 @@ public final class Camera implements Node {
 	 * @param apertureRadius a {@code float} representing the aperture radius associated with this {@code Camera} instance
 	 */
 	public void setApertureRadius(final float apertureRadius) {
-		if(!equal(this.apertureRadius, apertureRadius)) {
+		if(!Floats.equals(this.apertureRadius, apertureRadius)) {
 			final float oldApertureRadius = this.apertureRadius;
 			final float newApertureRadius =      apertureRadius;
 			
@@ -876,7 +870,7 @@ public final class Camera implements Node {
 	 * @param focalDistance a {@code float} representing the focal distance associated with this {@code Camera} instance
 	 */
 	public void setFocalDistance(final float focalDistance) {
-		if(!equal(this.focalDistance, focalDistance)) {
+		if(!Floats.equals(this.focalDistance, focalDistance)) {
 			final float oldFocalDistance = this.focalDistance;
 			final float newFocalDistance =      focalDistance;
 			
@@ -920,9 +914,9 @@ public final class Camera implements Node {
 		final float pitch = this.pitch.getRadians();
 		final float yaw = this.yaw.getRadians();
 		
-		final float x = sin(yaw) * cos(pitch);
-		final float y = sin(pitch);
-		final float z = cos(yaw) * cos(pitch);
+		final float x = Floats.sin(yaw) * Floats.cos(pitch);
+		final float y = Floats.sin(pitch);
+		final float z = Floats.cos(yaw) * Floats.cos(pitch);
 		
 		final Vector3F w = new Vector3F(x, y, z);
 		final Vector3F v = Vector3F.v();
@@ -997,7 +991,7 @@ public final class Camera implements Node {
 	 * @param resolutionX a {@code float} representing the resolution on the X-axis that is associated with this {@code Camera} instance
 	 */
 	public void setResolutionX(final float resolutionX) {
-		if(!equal(this.resolutionX, resolutionX)) {
+		if(!Floats.equals(this.resolutionX, resolutionX)) {
 			final float oldResolutionX = this.resolutionX;
 			final float newResolutionX =      resolutionX;
 			
@@ -1015,7 +1009,7 @@ public final class Camera implements Node {
 	 * @param resolutionY a {@code float} representing the resolution on the Y-axis that is associated with this {@code Camera} instance
 	 */
 	public void setResolutionY(final float resolutionY) {
-		if(!equal(this.resolutionY, resolutionY)) {
+		if(!Floats.equals(this.resolutionY, resolutionY)) {
 			final float oldResolutionY = this.resolutionY;
 			final float newResolutionY =      resolutionY;
 			

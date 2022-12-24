@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.cos;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -37,6 +34,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code LineSegment3F} is an implementation of {@link Shape3F} that represents a line segment.
@@ -63,8 +62,8 @@ public final class LineSegment3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final float LINE_WIDTH = PI * 0.5F / 4096.0F;
-	private static final float LINE_WIDTH_COS = cos(LINE_WIDTH);
+	private static final float LINE_WIDTH = Floats.PI * 0.5F / 4096.0F;
+	private static final float LINE_WIDTH_COS = Floats.cos(LINE_WIDTH);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

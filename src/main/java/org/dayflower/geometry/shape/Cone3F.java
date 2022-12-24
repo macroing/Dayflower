@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.solveQuadraticSystem;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,6 +35,8 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Cone3F} is an implementation of {@link Shape3F} that represents a cone.
@@ -186,7 +183,7 @@ public final class Cone3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -247,9 +244,9 @@ public final class Cone3F implements Shape3F {
 			return false;
 		} else if(!Objects.equals(this.phiMax, Cone3F.class.cast(object).phiMax)) {
 			return false;
-		} else if(!equal(this.radius, Cone3F.class.cast(object).radius)) {
+		} else if(!Floats.equals(this.radius, Cone3F.class.cast(object).radius)) {
 			return false;
-		} else if(!equal(this.zMax, Cone3F.class.cast(object).zMax)) {
+		} else if(!Floats.equals(this.zMax, Cone3F.class.cast(object).zMax)) {
 			return false;
 		} else {
 			return true;
@@ -274,7 +271,7 @@ public final class Cone3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
-		return this.radius * sqrt((this.zMax * this.zMax) + (this.radius * this.radius)) * this.phiMax.getRadians() / 2.0F;
+		return this.radius * Floats.sqrt((this.zMax * this.zMax) + (this.radius * this.radius)) * this.phiMax.getRadians() / 2.0F;
 	}
 	
 	/**
@@ -312,12 +309,12 @@ public final class Cone3F implements Shape3F {
 		final float b = 2.0F * (d.x * o.x + d.y * o.y - k * d.z * (o.z - this.zMax));
 		final float c = o.x * o.x + o.y * o.y - k * (o.z - this.zMax) * (o.z - this.zMax);
 		
-		final float[] ts = solveQuadraticSystem(a, b, c);
+		final float[] ts = Floats.solveQuadraticSystem(a, b, c);
 		
 		for(int i = 0; i < ts.length; i++) {
 			final float t = ts[i];
 			
-			if(isNaN(t)) {
+			if(Floats.isNaN(t)) {
 				return Float.NaN;
 			}
 			

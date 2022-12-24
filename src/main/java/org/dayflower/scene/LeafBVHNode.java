@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.minOrNaN;
 
 import java.util.List;
@@ -29,6 +28,8 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 final class LeafBVHNode extends BVHNode {
 	private final List<Primitive> primitives;
@@ -125,7 +126,7 @@ final class LeafBVHNode extends BVHNode {
 			for(final Primitive primitive : this.primitives) {
 				t = minOrNaN(t, primitive.intersectionT(ray, tBounds[0], tBounds[1]));
 				
-				if(!isNaN(t)) {
+				if(!Floats.isNaN(t)) {
 					tBounds[1] = t;
 				}
 			}

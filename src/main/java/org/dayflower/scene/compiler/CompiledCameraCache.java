@@ -18,8 +18,6 @@
  */
 package org.dayflower.scene.compiler;
 
-import static org.dayflower.utility.Floats.tan;
-
 import java.util.Objects;
 
 import org.dayflower.geometry.AngleF;
@@ -29,6 +27,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Lens;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code CompiledCameraCache} contains the {@link Camera} instance in compiled form.
@@ -173,8 +173,8 @@ public final class CompiledCameraCache {
 		
 		final float[] array = new float[CAMERA_LENGTH];
 		
-		array[CAMERA_OFFSET_FIELD_OF_VIEW_X] = tan(+fieldOfViewX.getRadians() * 0.5F);
-		array[CAMERA_OFFSET_FIELD_OF_VIEW_Y] = tan(-fieldOfViewY.getRadians() * 0.5F);
+		array[CAMERA_OFFSET_FIELD_OF_VIEW_X] = Floats.tan(+fieldOfViewX.getRadians() * 0.5F);
+		array[CAMERA_OFFSET_FIELD_OF_VIEW_Y] = Floats.tan(-fieldOfViewY.getRadians() * 0.5F);
 		array[CAMERA_OFFSET_LENS] = lens.ordinal();
 		array[CAMERA_OFFSET_ORTHONORMAL_BASIS_U + 0] = orthonormalBasis.u.x;
 		array[CAMERA_OFFSET_ORTHONORMAL_BASIS_U + 1] = orthonormalBasis.u.y;

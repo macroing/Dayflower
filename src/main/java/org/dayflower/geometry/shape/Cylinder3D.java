@@ -36,6 +36,7 @@ import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
+
 import org.macroing.java.lang.Doubles;
 
 /**

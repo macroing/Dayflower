@@ -18,8 +18,6 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,6 +27,8 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceIntersector3F;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * An {@code Intersector} is an utility useful for performing intersection tests.
@@ -42,7 +42,7 @@ public final class Intersector {
 	/**
 	 * The default minimum parametric {@code t} value.
 	 */
-	public static final float T_MAXIMUM = MAX_VALUE;
+	public static final float T_MAXIMUM = Floats.MAX_VALUE;
 	
 	/**
 	 * The default maximum parametric {@code t} value.

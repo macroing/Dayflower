@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -37,6 +32,8 @@ import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Rectangle2F} is an implementation of {@link Shape2F} that represents a rectangle.
@@ -89,10 +86,10 @@ public final class Rectangle2F implements Shape2F {
 	 * @throws NullPointerException thrown if, and only if, either {@code x} or {@code y} are {@code null}
 	 */
 	public Rectangle2F(final Point2F x, final Point2F y) {
-		this.a = new Point2F(min(x.x, y.x), min(x.y, y.y));
-		this.b = new Point2F(max(x.x, y.x), min(x.y, y.y));
-		this.c = new Point2F(max(x.x, y.x), max(x.y, y.y));
-		this.d = new Point2F(min(x.x, y.x), max(x.y, y.y));
+		this.a = new Point2F(Floats.min(x.x, y.x), Floats.min(x.y, y.y));
+		this.b = new Point2F(Floats.max(x.x, y.x), Floats.min(x.y, y.y));
+		this.c = new Point2F(Floats.max(x.x, y.x), Floats.max(x.y, y.y));
+		this.d = new Point2F(Floats.min(x.x, y.x), Floats.max(x.y, y.y));
 		this.lineSegments = LineSegment2F.fromPoints(this.a, this.b, this.c, this.d);
 	}
 	
@@ -296,10 +293,10 @@ public final class Rectangle2F implements Shape2F {
 	 * @return {@code true} if, and only if, this {@code Rectangle2F} instance is axis-aligned, {@code false} otherwise
 	 */
 	public boolean isAxisAligned() {
-		final boolean isAxisAlignedAB = equal(this.a.y, this.b.y);
-		final boolean isAxisAlignedBC = equal(this.b.x, this.c.x);
-		final boolean isAxisAlignedCD = equal(this.c.y, this.d.y);
-		final boolean isAxisAlignedDA = equal(this.d.x, this.a.x);
+		final boolean isAxisAlignedAB = Floats.equals(this.a.y, this.b.y);
+		final boolean isAxisAlignedBC = Floats.equals(this.b.x, this.c.x);
+		final boolean isAxisAlignedCD = Floats.equals(this.c.y, this.d.y);
+		final boolean isAxisAlignedDA = Floats.equals(this.d.x, this.a.x);
 		final boolean isAxisAligned = isAxisAlignedAB & isAxisAlignedBC & isAxisAlignedCD & isAxisAlignedDA;//TODO: Using & instead of && to get full code coverage. Should this be fixed?
 		
 		return isAxisAligned;
@@ -500,8 +497,8 @@ public final class Rectangle2F implements Shape2F {
 		final float distanceCD = Point2F.distance(c, d);
 		final float distanceDA = Point2F.distance(d, a);
 		
-		final float deltaABCD = abs(distanceAB - distanceCD);
-		final float deltaBCDA = abs(distanceBC - distanceDA);
+		final float deltaABCD = Floats.abs(distanceAB - distanceCD);
+		final float deltaBCDA = Floats.abs(distanceBC - distanceDA);
 		
 		final boolean isValidABCD = deltaABCD <= 0.1F;
 		final boolean isValidBCDA = deltaBCDA <= 0.1F;

@@ -19,18 +19,6 @@
 package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Doubles.solveQuartic;
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-import static org.dayflower.utility.Floats.asin;
-import static org.dayflower.utility.Floats.atan2;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.getOrAdd;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.saturate;
-import static org.dayflower.utility.Floats.toFloat;
 
 import java.io.DataOutput;
 import java.io.IOException;
@@ -50,6 +38,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Torus3F} is an implementation of {@link Shape3F} that represents a torus.
@@ -145,7 +135,7 @@ public final class Torus3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -249,13 +239,13 @@ public final class Torus3F implements Shape3F {
 			return false;
 		} else if(!Objects.equals(this.boundingVolume, Torus3F.class.cast(object).boundingVolume)) {
 			return false;
-		} else if(!equal(this.radiusInner, Torus3F.class.cast(object).radiusInner)) {
+		} else if(!Floats.equals(this.radiusInner, Torus3F.class.cast(object).radiusInner)) {
 			return false;
-		} else if(!equal(this.radiusInnerSquared, Torus3F.class.cast(object).radiusInnerSquared)) {
+		} else if(!Floats.equals(this.radiusInnerSquared, Torus3F.class.cast(object).radiusInnerSquared)) {
 			return false;
-		} else if(!equal(this.radiusOuter, Torus3F.class.cast(object).radiusOuter)) {
+		} else if(!Floats.equals(this.radiusOuter, Torus3F.class.cast(object).radiusOuter)) {
 			return false;
-		} else if(!equal(this.radiusOuterSquared, Torus3F.class.cast(object).radiusOuterSquared)) {
+		} else if(!Floats.equals(this.radiusOuterSquared, Torus3F.class.cast(object).radiusOuterSquared)) {
 			return false;
 		} else {
 			return true;
@@ -310,7 +300,7 @@ public final class Torus3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float getSurfaceArea() {
-		return 4.0F * PI * PI * this.radiusOuter * this.radiusInner;
+		return 4.0F * Floats.PI * Floats.PI * this.radiusOuter * this.radiusInner;
 	}
 	
 	/**
@@ -320,7 +310,7 @@ public final class Torus3F implements Shape3F {
 	 */
 //	TODO: Add Unit Tests!
 	public float getVolume() {
-		return 2.0F * PI * PI * this.radiusOuter * this.radiusInnerSquared;
+		return 2.0F * Floats.PI * Floats.PI * this.radiusOuter * this.radiusInnerSquared;
 	}
 	
 	/**
@@ -370,7 +360,7 @@ public final class Torus3F implements Shape3F {
 		
 		for(int i = 0; i < ts.length; i++) {
 			if(ts[i] > tMinimum) {
-				return toFloat(ts[i]);
+				return (float)(ts[i]);
 			}
 		}
 		
@@ -439,11 +429,11 @@ public final class Torus3F implements Shape3F {
 	}
 	
 	private Point2F doCreateTextureCoordinates(final Point3F surfaceIntersectionPoint) {
-		final float phi = asin(saturate(surfaceIntersectionPoint.z / this.radiusInner, -1.0F, 1.0F));
-		final float theta = getOrAdd(atan2(surfaceIntersectionPoint.y, surfaceIntersectionPoint.x), 0.0F, PI_MULTIPLIED_BY_2);
+		final float phi = Floats.asin(Floats.saturate(surfaceIntersectionPoint.z / this.radiusInner, -1.0F, 1.0F));
+		final float theta = Floats.addLessThan(Floats.atan2(surfaceIntersectionPoint.y, surfaceIntersectionPoint.x), 0.0F, Floats.PI_MULTIPLIED_BY_2);
 		
-		final float u = theta * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float v = (phi + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
+		final float u = theta * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float v = (phi + Floats.PI_DIVIDED_BY_2) * Floats.PI_RECIPROCAL;
 		
 		return new Point2F(u, v);
 	}

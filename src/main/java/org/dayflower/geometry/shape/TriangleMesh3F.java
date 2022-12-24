@@ -18,12 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.MIN_VALUE;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.minOrNaN;
 
 import java.io.BufferedReader;
@@ -61,6 +55,8 @@ import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code TriangleMesh3F} is an implementation of {@link Shape3F} that represents a triangle mesh.
@@ -370,7 +366,7 @@ public final class TriangleMesh3F implements Shape3F {
 			return false;
 		} else if(this.isUsingAccelerationStructure != TriangleMesh3F.class.cast(object).isUsingAccelerationStructure) {
 			return false;
-		} else if(!equal(this.surfaceArea, TriangleMesh3F.class.cast(object).surfaceArea)) {
+		} else if(!Floats.equals(this.surfaceArea, TriangleMesh3F.class.cast(object).surfaceArea)) {
 			return false;
 		} else {
 			return true;
@@ -408,7 +404,7 @@ public final class TriangleMesh3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.isUsingAccelerationStructure ? this.bVHNode.intersects(ray, tMinimum, tMaximum) : !isNaN(intersectionT(ray, tMinimum, tMaximum));
+		return this.isUsingAccelerationStructure ? this.bVHNode.intersects(ray, tMinimum, tMaximum) : !Floats.isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -449,7 +445,7 @@ public final class TriangleMesh3F implements Shape3F {
 		for(final Triangle3F triangle : this.triangles) {
 			t = minOrNaN(t, triangle.intersectionT(ray, tMin, tMax));
 			
-			if(!isNaN(t)) {
+			if(!Floats.isNaN(t)) {
 				tMax = t;
 			}
 		}
@@ -634,7 +630,7 @@ public final class TriangleMesh3F implements Shape3F {
 			String previousMaterialName = "";
 			String previousObjectName = "";
 			
-			final boolean isScaling = !equal(scale, 1.0F);
+			final boolean isScaling = !Floats.equals(scale, 1.0F);
 			
 			final int maximumCount = Integer.MAX_VALUE;
 			
@@ -946,12 +942,12 @@ public final class TriangleMesh3F implements Shape3F {
 	private static BVHNode3F doCreateBVHNode(final List<Triangle3F> triangles) {
 		final List<BVHItem3F<Triangle3F>> processableBVHItems = new ArrayList<>(triangles.size());
 		
-		float maximumX = MIN_VALUE;
-		float maximumY = MIN_VALUE;
-		float maximumZ = MIN_VALUE;
-		float minimumX = MAX_VALUE;
-		float minimumY = MAX_VALUE;
-		float minimumZ = MAX_VALUE;
+		float maximumX = Floats.MIN_VALUE;
+		float maximumY = Floats.MIN_VALUE;
+		float maximumZ = Floats.MIN_VALUE;
+		float minimumX = Floats.MAX_VALUE;
+		float minimumY = Floats.MAX_VALUE;
+		float minimumZ = Floats.MAX_VALUE;
 		
 		for(final Triangle3F triangle : triangles) {
 			final Point3F a = new Point3F(triangle.getA().getPosition());
@@ -961,12 +957,12 @@ public final class TriangleMesh3F implements Shape3F {
 			final Point3F maximum = Point3F.maximum(a, b, c);
 			final Point3F minimum = Point3F.minimum(a, b, c);
 			
-			maximumX = max(maximumX, maximum.x);
-			maximumY = max(maximumY, maximum.y);
-			maximumZ = max(maximumZ, maximum.z);
-			minimumX = min(minimumX, minimum.x);
-			minimumY = min(minimumY, minimum.y);
-			minimumZ = min(minimumZ, minimum.z);
+			maximumX = Floats.max(maximumX, maximum.x);
+			maximumY = Floats.max(maximumY, maximum.y);
+			maximumZ = Floats.max(maximumZ, maximum.z);
+			minimumX = Floats.min(minimumX, minimum.x);
+			minimumY = Floats.min(minimumY, minimum.y);
+			minimumZ = Floats.min(minimumZ, minimum.z);
 			
 			processableBVHItems.add(new BVHItem3F<>(new AxisAlignedBoundingBox3F(maximum, minimum), triangle));
 		}

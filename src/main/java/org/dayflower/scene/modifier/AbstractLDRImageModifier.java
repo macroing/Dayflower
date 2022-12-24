@@ -18,8 +18,6 @@
  */
 package org.dayflower.scene.modifier;
 
-import static org.dayflower.utility.Floats.ceil;
-import static org.dayflower.utility.Floats.floor;
 import static org.dayflower.utility.Ints.positiveModulo;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -32,6 +30,7 @@ import org.dayflower.image.ImageF;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Floats;
 
 /**
  * An {@code AbstractLDRImageModifier} is an abstract {@link Modifier} implementation that contains a low-dynamic-range (LDR) image.
@@ -333,11 +332,11 @@ public abstract class AbstractLDRImageModifier implements Modifier {
 	}
 	
 	private Color3F doGetColorRGBBilinearInterpolation(final float x, final float y) {
-		final int minimumX = toInt(floor(x));
-		final int maximumX = toInt(ceil(x));
+		final int minimumX = toInt(Floats.floor(x));
+		final int maximumX = toInt(Floats.ceil(x));
 		
-		final int minimumY = toInt(floor(y));
-		final int maximumY = toInt(ceil(y));
+		final int minimumY = toInt(Floats.floor(y));
+		final int maximumY = toInt(Floats.ceil(y));
 		
 		if(minimumX == maximumX && minimumY == maximumY) {
 			return doGetColorRGB(minimumX, minimumY);

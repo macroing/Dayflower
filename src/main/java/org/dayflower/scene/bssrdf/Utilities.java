@@ -18,13 +18,9 @@
  */
 package org.dayflower.scene.bssrdf;
 
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4_RECIPROCAL;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.exp;
-import static org.dayflower.utility.Floats.log;
-import static org.dayflower.utility.Floats.sqrt;
-
 import org.dayflower.scene.fresnel.DielectricFresnel;
+
+import org.macroing.java.lang.Floats;
 
 final class Utilities {
 	private Utilities() {
@@ -38,7 +34,7 @@ final class Utilities {
 		final float sigmaPT = sigmaA + sigmaPS;
 		final float albedo = sigmaPS / sigmaPT;
 		final float diffusionCoefficient = (2.0F * sigmaA + sigmaS) / (3.0F * sigmaPT * sigmaPT);
-		final float sigmaTransport = sqrt(sigmaA / diffusionCoefficient);
+		final float sigmaTransport = Floats.sqrt(sigmaA / diffusionCoefficient);
 		final float fresnelMoment1 = computeFresnelMoment1(eta);
 		final float fresnelMoment2 = computeFresnelMoment2(eta);
 		final float depthE = -2.0F * diffusionCoefficient * (1.0F + 3.0F * fresnelMoment2) / (1.0F - 2.0F * fresnelMoment1);
@@ -50,20 +46,20 @@ final class Utilities {
 		float result = 0.0F;
 		
 		for(int i = 0; i < samples; i++) {
-			final float depthR = -log(1.0F - (i + 0.5F) / samples) / sigmaPT;
+			final float depthR = -Floats.log(1.0F - (i + 0.5F) / samples) / sigmaPT;
 			final float depthV = -depthR + 2.0F * depthE;
-			final float dipoleR = sqrt(r * r + depthR * depthR);
+			final float dipoleR = Floats.sqrt(r * r + depthR * depthR);
 			final float dipoleRCubed = dipoleR * dipoleR * dipoleR;
-			final float dipoleV = sqrt(r * r + depthV * depthV);
+			final float dipoleV = Floats.sqrt(r * r + depthV * depthV);
 			final float dipoleVCubed = dipoleV * dipoleV * dipoleV;
-			final float dipoleFluenceRateR = exp(-sigmaTransport * dipoleR) / dipoleR;
-			final float dipoleFluenceRateV = exp(-sigmaTransport * dipoleV) / dipoleV;
-			final float dipoleFluenceRate = PI_MULTIPLIED_BY_4_RECIPROCAL / diffusionCoefficient * (dipoleFluenceRateR - dipoleFluenceRateV);
-			final float dipoleVectorIrradianceR = depthR * (1.0F + sigmaTransport * dipoleR) * exp(-sigmaTransport * dipoleR) / dipoleRCubed;
-			final float dipoleVectorIrradianceV = depthV * (1.0F + sigmaTransport * dipoleV) * exp(-sigmaTransport * dipoleV) / dipoleVCubed;
-			final float dipoleVectorIrradiance = PI_MULTIPLIED_BY_4_RECIPROCAL * (dipoleVectorIrradianceR - dipoleVectorIrradianceV);
+			final float dipoleFluenceRateR = Floats.exp(-sigmaTransport * dipoleR) / dipoleR;
+			final float dipoleFluenceRateV = Floats.exp(-sigmaTransport * dipoleV) / dipoleV;
+			final float dipoleFluenceRate = Floats.PI_MULTIPLIED_BY_4_RECIPROCAL / diffusionCoefficient * (dipoleFluenceRateR - dipoleFluenceRateV);
+			final float dipoleVectorIrradianceR = depthR * (1.0F + sigmaTransport * dipoleR) * Floats.exp(-sigmaTransport * dipoleR) / dipoleRCubed;
+			final float dipoleVectorIrradianceV = depthV * (1.0F + sigmaTransport * dipoleV) * Floats.exp(-sigmaTransport * dipoleV) / dipoleVCubed;
+			final float dipoleVectorIrradiance = Floats.PI_MULTIPLIED_BY_4_RECIPROCAL * (dipoleVectorIrradianceR - dipoleVectorIrradianceV);
 			
-			result += (1.0F - exp(-2.0F * sigmaPT * (dipoleR + depthR))) * albedo * albedo * (dipoleFluenceRate * cPhi + dipoleVectorIrradiance * cExitance);
+			result += (1.0F - Floats.exp(-2.0F * sigmaPT * (dipoleR + depthR))) * albedo * albedo * (dipoleFluenceRate * cPhi + dipoleVectorIrradiance * cExitance);
 		}
 		
 		return result / samples;
@@ -72,18 +68,18 @@ final class Utilities {
 	public static float computeBeamDiffusionSS(final float sigmaS, final float sigmaA, final float g, final float eta, final float r) {
 		final float sigmaT = sigmaA + sigmaS;
 		final float albedo = sigmaS / sigmaT;
-		final float tCriticalAngle = r * sqrt(eta * eta - 1.0F);
+		final float tCriticalAngle = r * Floats.sqrt(eta * eta - 1.0F);
 		
 		final int samples = 100;
 		
 		float result = 0.0F;
 		
 		for(int i = 0; i < samples; i++) {
-			final float tCurrent = tCriticalAngle - log(1.0F - (i + 0.5F) / samples) / sigmaT;
-			final float depth = sqrt(r * r + tCurrent * tCurrent);
+			final float tCurrent = tCriticalAngle - Floats.log(1.0F - (i + 0.5F) / samples) / sigmaT;
+			final float depth = Floats.sqrt(r * r + tCurrent * tCurrent);
 			final float cosThetaO = tCurrent / depth;
 			
-			result += albedo * exp(-sigmaT * (depth + tCriticalAngle)) / (depth * depth) * computePhaseHG(cosThetaO, g) * (1.0F - DielectricFresnel.evaluate(-cosThetaO, 1.0F, eta)) * abs(cosThetaO);
+			result += albedo * Floats.exp(-sigmaT * (depth + tCriticalAngle)) / (depth * depth) * computePhaseHG(cosThetaO, g) * (1.0F - DielectricFresnel.evaluate(-cosThetaO, 1.0F, eta)) * Floats.abs(cosThetaO);
 		}
 		
 		return result / samples;
@@ -125,7 +121,7 @@ final class Utilities {
 	
 	public static float computePhaseHG(final float cosTheta, final float g) {
 		final float denominator = 1.0F + g * g + 2.0F * g * cosTheta;
-		final float phaseHG = PI_MULTIPLIED_BY_4_RECIPROCAL * (1.0F - g * g) / (denominator * sqrt(denominator));
+		final float phaseHG = Floats.PI_MULTIPLIED_BY_4_RECIPROCAL * (1.0F - g * g) / (denominator * Floats.sqrt(denominator));
 		
 		return phaseHG;
 	}

@@ -18,10 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -48,6 +44,8 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Triangle3F} is an implementation of {@link Shape3F} that represents a triangle.
@@ -217,7 +215,7 @@ public final class Triangle3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -822,9 +820,9 @@ public final class Triangle3F implements Shape3F {
 		 */
 //		TODO: Add Unit Tests!
 		public boolean isInsideViewFrustum() {
-			final boolean isInsideViewFrustumX = abs(this.position.x) <= abs(this.position.w);
-			final boolean isInsideViewFrustumY = abs(this.position.y) <= abs(this.position.w);
-			final boolean isInsideViewFrustumZ = abs(this.position.z) <= abs(this.position.w);
+			final boolean isInsideViewFrustumX = Floats.abs(this.position.x) <= Floats.abs(this.position.w);
+			final boolean isInsideViewFrustumY = Floats.abs(this.position.y) <= Floats.abs(this.position.w);
+			final boolean isInsideViewFrustumZ = Floats.abs(this.position.z) <= Floats.abs(this.position.w);
 			
 			return isInsideViewFrustumX && isInsideViewFrustumY && isInsideViewFrustumZ;
 		}
@@ -994,7 +992,7 @@ public final class Triangle3F implements Shape3F {
 		
 		final float determinant = Vector2F.crossProduct(textureCoordinatesCA, textureCoordinatesCB);
 		
-		if(isZero(determinant)) {
+		if(Floats.isZero(determinant)) {
 			return new OrthonormalBasis33F(w);
 		}
 		

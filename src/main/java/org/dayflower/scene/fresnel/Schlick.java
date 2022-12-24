@@ -18,12 +18,9 @@
  */
 package org.dayflower.scene.fresnel;
 
-import static org.dayflower.utility.Floats.lerp;
-import static org.dayflower.utility.Floats.pow5;
-import static org.dayflower.utility.Floats.saturate;
-
 import org.macroing.art4j.color.Color3F;
 import org.macroing.java.lang.Doubles;
+import org.macroing.java.lang.Floats;
 
 /**
  * A class that consists exclusively of static methods that performs Fresnel operations based on Schlicks approximation.
@@ -49,7 +46,7 @@ public final class Schlick {
 	 * @throws NullPointerException thrown if, and only if, {@code r0} is {@code null}
 	 */
 	public static Color3F fresnelDielectric(final float cosTheta, final Color3F r0) {
-		return Color3F.add(r0, Color3F.multiply(Color3F.subtract(Color3F.WHITE, r0), pow5(1.0F - cosTheta)));
+		return Color3F.add(r0, Color3F.multiply(Color3F.subtract(Color3F.WHITE, r0), Floats.pow5(1.0F - cosTheta)));
 	}
 	
 	/**
@@ -104,7 +101,7 @@ public final class Schlick {
 	 * @return the weight for the Fresnel reflectance based on Schlicks approximation
 	 */
 	public static float fresnelWeight(final float cosTheta) {
-		final float m = saturate(1.0F - cosTheta);
+		final float m = Floats.saturate(1.0F - cosTheta);
 		
 		return (m * m) * (m * m) * m;
 	}
@@ -117,6 +114,6 @@ public final class Schlick {
 	 * @return the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight
 	 */
 	public static float fresnelWeightLerp(final float cosTheta, final float r0) {
-		return lerp(r0, 1.0F, fresnelWeight(cosTheta));
+		return Floats.lerp(r0, 1.0F, fresnelWeight(cosTheta));
 	}
 }

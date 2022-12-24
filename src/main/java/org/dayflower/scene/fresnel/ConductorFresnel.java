@@ -18,13 +18,10 @@
  */
 package org.dayflower.scene.fresnel;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.saturate;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.util.Objects;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code ConductorFresnel} is used to compute the Fresnel equation for materials that are conductors.
@@ -67,7 +64,7 @@ public final class ConductorFresnel implements Fresnel {
 	 */
 	@Override
 	public Color3F evaluate(final float cosThetaI) {
-		return evaluate(abs(cosThetaI), this.etaI, this.etaT, this.k);
+		return evaluate(Floats.abs(cosThetaI), this.etaI, this.etaT, this.k);
 	}
 	
 	/**
@@ -157,7 +154,7 @@ public final class ConductorFresnel implements Fresnel {
 	 * @throws NullPointerException thrown if, and only if, either {@code etaI}, {@code etaT} or {@code k} are {@code null}
 	 */
 	public static Color3F evaluate(final float cosThetaI, final Color3F etaI, final Color3F etaT, final Color3F k) {
-		final float saturateCosThetaI = saturate(cosThetaI, -1.0F, 1.0F);
+		final float saturateCosThetaI = Floats.saturate(cosThetaI, -1.0F, 1.0F);
 		final float saturateCosThetaIMultipliedBy2 = saturateCosThetaI * 2.0F;
 		
 		final float etaR = etaT.r / etaI.r;
@@ -188,17 +185,17 @@ public final class ConductorFresnel implements Fresnel {
 		final float t0SquaredG = t0G * t0G;
 		final float t0SquaredB = t0B * t0B;
 		
-		final float aSquaredPlusBSquaredR = sqrt(t0SquaredR + etaSquaredR * etaKSquaredR * 4.0F);
-		final float aSquaredPlusBSquaredG = sqrt(t0SquaredG + etaSquaredG * etaKSquaredG * 4.0F);
-		final float aSquaredPlusBSquaredB = sqrt(t0SquaredB + etaSquaredB * etaKSquaredB * 4.0F);
+		final float aSquaredPlusBSquaredR = Floats.sqrt(t0SquaredR + etaSquaredR * etaKSquaredR * 4.0F);
+		final float aSquaredPlusBSquaredG = Floats.sqrt(t0SquaredG + etaSquaredG * etaKSquaredG * 4.0F);
+		final float aSquaredPlusBSquaredB = Floats.sqrt(t0SquaredB + etaSquaredB * etaKSquaredB * 4.0F);
 		
 		final float t1R = aSquaredPlusBSquaredR + cosThetaISquared;
 		final float t1G = aSquaredPlusBSquaredG + cosThetaISquared;
 		final float t1B = aSquaredPlusBSquaredB + cosThetaISquared;
 		
-		final float t2R = sqrt((aSquaredPlusBSquaredR + t0R) * 0.5F) * saturateCosThetaIMultipliedBy2;
-		final float t2G = sqrt((aSquaredPlusBSquaredG + t0G) * 0.5F) * saturateCosThetaIMultipliedBy2;
-		final float t2B = sqrt((aSquaredPlusBSquaredB + t0B) * 0.5F) * saturateCosThetaIMultipliedBy2;
+		final float t2R = Floats.sqrt((aSquaredPlusBSquaredR + t0R) * 0.5F) * saturateCosThetaIMultipliedBy2;
+		final float t2G = Floats.sqrt((aSquaredPlusBSquaredG + t0G) * 0.5F) * saturateCosThetaIMultipliedBy2;
+		final float t2B = Floats.sqrt((aSquaredPlusBSquaredB + t0B) * 0.5F) * saturateCosThetaIMultipliedBy2;
 		
 		final float t3R = aSquaredPlusBSquaredR * cosThetaISquared + sinThetaISquaredSquared;
 		final float t3G = aSquaredPlusBSquaredG * cosThetaISquared + sinThetaISquaredSquared;

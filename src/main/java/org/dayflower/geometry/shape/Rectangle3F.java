@@ -18,10 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -41,6 +37,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Rectangle3F} is an implementation of {@link Shape3F} that represents a rectangle.
@@ -146,7 +144,7 @@ public final class Rectangle3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -370,7 +368,7 @@ public final class Rectangle3F implements Shape3F {
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float dotProduct = Vector3F.dotProduct(this.surfaceNormal, ray.getDirection());
 		
-		if(isZero(dotProduct)) {
+		if(Floats.isZero(dotProduct)) {
 			return Float.NaN;
 		}
 		
@@ -508,8 +506,8 @@ public final class Rectangle3F implements Shape3F {
 		final float distanceCD = Point3F.distance(c, d);
 		final float distanceDA = Point3F.distance(d, a);
 		
-		final float deltaABCD = abs(distanceAB - distanceCD);
-		final float deltaBCDA = abs(distanceBC - distanceDA);
+		final float deltaABCD = Floats.abs(distanceAB - distanceCD);
+		final float deltaBCDA = Floats.abs(distanceBC - distanceDA);
 		
 		final boolean isValidABCD = deltaABCD <= 0.00001F;
 		final boolean isValidBCDA = deltaBCDA <= 0.00001F;

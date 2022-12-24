@@ -18,19 +18,7 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.MIN_VALUE;
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.minOrNaN;
-import static org.dayflower.utility.Floats.normalize;
-import static org.dayflower.utility.Floats.random;
-import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -58,6 +46,8 @@ import org.dayflower.sampler.Sampler;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Floats;
+import org.macroing.java.util.Randoms;
 
 /**
  * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.
@@ -71,7 +61,7 @@ public final class Scene implements Node {
 	/**
 	 * The default maximum parametric distance value that is equal to {@code Floats.MAX_VALUE}.
 	 */
-	public static final float T_MAXIMUM = MAX_VALUE;
+	public static final float T_MAXIMUM = Floats.MAX_VALUE;
 	
 	/**
 	 * The default minimum parametric distance value that is equal to {@code 0.001F}.
@@ -299,7 +289,7 @@ public final class Scene implements Node {
 						
 						final float t = intersectionShadow.getT();
 						
-						radiance = Color3F.add(radiance, new Color3F(normalize(saturate(t, 0.0F, maximumDistance), 0.0F, maximumDistance)));
+						radiance = Color3F.add(radiance, new Color3F(Floats.normalize(Floats.saturate(t, 0.0F, maximumDistance), 0.0F, maximumDistance)));
 					} else {
 						radiance = Color3F.add(radiance, Color3F.WHITE);
 					}
@@ -308,8 +298,8 @@ public final class Scene implements Node {
 				}
 			}
 			
-			radiance = Color3F.multiply(radiance, PI / samples);
-			radiance = Color3F.divide(radiance, PI);
+			radiance = Color3F.multiply(radiance, Floats.PI / samples);
+			radiance = Color3F.divide(radiance, Floats.PI);
 			
 			return radiance;
 		} else if(isPreviewMode) {
@@ -522,7 +512,7 @@ public final class Scene implements Node {
 				
 				final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 				
-				if(result.isBlack() || isZero(probabilityDensityFunctionValue)) {
+				if(result.isBlack() || Floats.isZero(probabilityDensityFunctionValue)) {
 					break;
 				}
 				
@@ -543,7 +533,7 @@ public final class Scene implements Node {
 				final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
 				
 				if(russianRouletteThroughput.max() < 1.0F && currentBounce >= minimumBounceRussianRoulette) {
-					final float probability = max(0.05F, 1.0F - russianRouletteThroughput.max());
+					final float probability = Floats.max(0.05F, 1.0F - russianRouletteThroughput.max());
 					
 					if(sampler.sample1().getU() < probability) {
 						break;
@@ -639,7 +629,7 @@ public final class Scene implements Node {
 			
 			final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
 			
-			radiance = Color3F.multiply(Color3F.GRAY, abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));
+			radiance = Color3F.multiply(Color3F.GRAY, Floats.abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));
 		} else if(isPreviewMode) {
 			return Color3F.WHITE;
 		} else {
@@ -752,7 +742,7 @@ public final class Scene implements Node {
 			return Color3F.BLACK;
 		}
 		
-		final Light light = getLight(min(toInt(random() * lightCount), lightCount - 1));
+		final Light light = getLight(min(toInt(Randoms.nextFloat() * lightCount), lightCount - 1));
 		
 		final Sample2F sampleA = this.sampler.sample2();
 		final Sample2F sampleB = this.sampler.sample2();
@@ -1025,7 +1015,7 @@ public final class Scene implements Node {
 		final Ray3F ray = intersection.createRay(point);
 		
 		final float tMinimum = 0.001F;
-		final float tMaximum = abs(Point3F.distance(surfaceIntersectionPoint, point)) + 0.001F;
+		final float tMaximum = Floats.abs(Point3F.distance(surfaceIntersectionPoint, point)) + 0.001F;
 		
 		if(light instanceof AreaLight) {
 			final Optional<Intersection> optionalIntersection = intersection(ray, tMinimum, tMaximum);
@@ -1229,7 +1219,7 @@ public final class Scene implements Node {
 			for(final Primitive primitive : this.primitivesExternalToBVH) {
 				t = minOrNaN(t, primitive.intersectionT(ray, tMin, tMax));
 				
-				if(!isNaN(t)) {
+				if(!Floats.isNaN(t)) {
 					tMax = t;
 				}
 			}
@@ -1242,7 +1232,7 @@ public final class Scene implements Node {
 		for(final Primitive primitive : this.primitives) {
 			t = minOrNaN(t, primitive.intersectionT(ray, tMin, tMax));
 			
-			if(!isNaN(t)) {
+			if(!Floats.isNaN(t)) {
 				tMax = t;
 			}
 		}
@@ -1419,7 +1409,7 @@ public final class Scene implements Node {
 			final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 			
 			final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
-			final float incomingDotNormalAbs = abs(incomingDotNormal);
+			final float incomingDotNormalAbs = Floats.abs(incomingDotNormal);
 			
 			if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F && incomingDotNormalAbs > 0.0F) {
 				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, doRadianceRayTracer(intersection.createRay(incoming), tMinimum, tMaximum, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
@@ -1446,7 +1436,7 @@ public final class Scene implements Node {
 			final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 			
 			final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
-			final float incomingDotNormalAbs = abs(incomingDotNormal);
+			final float incomingDotNormalAbs = Floats.abs(incomingDotNormal);
 			
 			if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F && incomingDotNormalAbs > 0.0F) {
 				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, doRadianceRayTracer(intersection.createRay(incoming), tMinimum, tMaximum, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
@@ -1523,7 +1513,7 @@ public final class Scene implements Node {
 					if(!hasSampledSpecular) {
 						final float lightPDFValue = light.evaluateProbabilityDensityFunctionRadianceIncoming(intersection, incoming);
 						
-						if(isZero(lightPDFValue)) {
+						if(Floats.isZero(lightPDFValue)) {
 							return lightDirect;
 						}
 						
@@ -1534,7 +1524,7 @@ public final class Scene implements Node {
 					
 					final Color3F transmittance = Color3F.WHITE;
 					
-					final Optional<Intersection> optionalIntersectionLight = intersection(ray, 0.001F, MAX_VALUE);
+					final Optional<Intersection> optionalIntersectionLight = intersection(ray, 0.001F, Floats.MAX_VALUE);
 					
 					if(optionalIntersectionLight.isPresent()) {
 						final Intersection intersectionLight = optionalIntersectionLight.get();
@@ -1605,7 +1595,7 @@ public final class Scene implements Node {
 						final Color3F scatteringResult = bSDF.evaluateDistributionFunction(BXDFType.ALL, incoming);
 						
 						if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
-							radiance = Color3F.addMultiplyAndDivide(radiance, scatteringResult, result, abs(Vector3F.dotProduct(incoming, normal)), probabilityDensityFunctionValue);
+							radiance = Color3F.addMultiplyAndDivide(radiance, scatteringResult, result, Floats.abs(Vector3F.dotProduct(incoming, normal)), probabilityDensityFunctionValue);
 						}
 					}
 				}
@@ -1647,7 +1637,7 @@ public final class Scene implements Node {
 		final float sideZ = maximum.z - minimum.z;
 		
 		float minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
-		float bestSplit = MAX_VALUE;
+		float bestSplit = Floats.MAX_VALUE;
 		
 		int bestAxis = -1;
 		
@@ -1655,7 +1645,7 @@ public final class Scene implements Node {
 			final float start = minimum.getComponent(axis);
 			final float stop  = maximum.getComponent(axis);
 			
-			if(abs(stop - start) < 1.0e-4F) {
+			if(Floats.abs(stop - start) < 1.0e-4F) {
 				continue;
 			}
 			
@@ -1663,22 +1653,22 @@ public final class Scene implements Node {
 			
 			for(float oldSplit = 0.0F, newSplit = start + step; newSplit < stop - step; oldSplit = newSplit, newSplit += step) {
 //				The following test prevents an infinite loop from occurring:
-				if(equal(oldSplit, newSplit)) {
+				if(Floats.equals(oldSplit, newSplit)) {
 					break;
 				}
 				
-				float maximumLX = MIN_VALUE;
-				float maximumLY = MIN_VALUE;
-				float maximumLZ = MIN_VALUE;
-				float minimumLX = MAX_VALUE;
-				float minimumLY = MAX_VALUE;
-				float minimumLZ = MAX_VALUE;
-				float maximumRX = MIN_VALUE;
-				float maximumRY = MIN_VALUE;
-				float maximumRZ = MIN_VALUE;
-				float minimumRX = MAX_VALUE;
-				float minimumRY = MAX_VALUE;
-				float minimumRZ = MAX_VALUE;
+				float maximumLX = Floats.MIN_VALUE;
+				float maximumLY = Floats.MIN_VALUE;
+				float maximumLZ = Floats.MIN_VALUE;
+				float minimumLX = Floats.MAX_VALUE;
+				float minimumLY = Floats.MAX_VALUE;
+				float minimumLZ = Floats.MAX_VALUE;
+				float maximumRX = Floats.MIN_VALUE;
+				float maximumRY = Floats.MIN_VALUE;
+				float maximumRZ = Floats.MIN_VALUE;
+				float minimumRX = Floats.MAX_VALUE;
+				float minimumRY = Floats.MAX_VALUE;
+				float minimumRZ = Floats.MAX_VALUE;
 				
 				int countL = 0;
 				int countR = 0;
@@ -1693,21 +1683,21 @@ public final class Scene implements Node {
 					final float value = mid.getComponent(axis);
 					
 					if(value < newSplit) {
-						maximumLX = max(maximumLX, max.x);
-						maximumLY = max(maximumLY, max.y);
-						maximumLZ = max(maximumLZ, max.z);
-						minimumLX = min(minimumLX, min.x);
-						minimumLY = min(minimumLY, min.y);
-						minimumLZ = min(minimumLZ, min.z);
+						maximumLX = Floats.max(maximumLX, max.x);
+						maximumLY = Floats.max(maximumLY, max.y);
+						maximumLZ = Floats.max(maximumLZ, max.z);
+						minimumLX = Floats.min(minimumLX, min.x);
+						minimumLY = Floats.min(minimumLY, min.y);
+						minimumLZ = Floats.min(minimumLZ, min.z);
 						
 						countL++;
 					} else {
-						maximumRX = max(maximumRX, max.x);
-						maximumRY = max(maximumRY, max.y);
-						maximumRZ = max(maximumRZ, max.z);
-						minimumRX = min(minimumRX, min.x);
-						minimumRY = min(minimumRY, min.y);
-						minimumRZ = min(minimumRZ, min.z);
+						maximumRX = Floats.max(maximumRX, max.x);
+						maximumRY = Floats.max(maximumRY, max.y);
+						maximumRZ = Floats.max(maximumRZ, max.z);
+						minimumRX = Floats.min(minimumRX, min.x);
+						minimumRY = Floats.min(minimumRY, min.y);
+						minimumRZ = Floats.min(minimumRZ, min.z);
 						
 						countR++;
 					}
@@ -1752,18 +1742,18 @@ public final class Scene implements Node {
 		final List<LeafBVHNode> leafBVHNodesL = new ArrayList<>(sizeHalf);
 		final List<LeafBVHNode> leafBVHNodesR = new ArrayList<>(sizeHalf);
 		
-		float maximumLX = MIN_VALUE;
-		float maximumLY = MIN_VALUE;
-		float maximumLZ = MIN_VALUE;
-		float minimumLX = MAX_VALUE;
-		float minimumLY = MAX_VALUE;
-		float minimumLZ = MAX_VALUE;
-		float maximumRX = MIN_VALUE;
-		float maximumRY = MIN_VALUE;
-		float maximumRZ = MIN_VALUE;
-		float minimumRX = MAX_VALUE;
-		float minimumRY = MAX_VALUE;
-		float minimumRZ = MAX_VALUE;
+		float maximumLX = Floats.MIN_VALUE;
+		float maximumLY = Floats.MIN_VALUE;
+		float maximumLZ = Floats.MIN_VALUE;
+		float minimumLX = Floats.MAX_VALUE;
+		float minimumLY = Floats.MAX_VALUE;
+		float minimumLZ = Floats.MAX_VALUE;
+		float maximumRX = Floats.MIN_VALUE;
+		float maximumRY = Floats.MIN_VALUE;
+		float maximumRZ = Floats.MIN_VALUE;
+		float minimumRX = Floats.MAX_VALUE;
+		float minimumRY = Floats.MAX_VALUE;
+		float minimumRZ = Floats.MAX_VALUE;
 		
 		for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
 			final BoundingVolume3F boundingVolume = processableLeafBVHNode.getBoundingVolume();
@@ -1777,21 +1767,21 @@ public final class Scene implements Node {
 			if(value < bestSplit) {
 				leafBVHNodesL.add(processableLeafBVHNode);
 				
-				maximumLX = max(maximumLX, max.x);
-				maximumLY = max(maximumLY, max.y);
-				maximumLZ = max(maximumLZ, max.z);
-				minimumLX = min(minimumLX, min.x);
-				minimumLY = min(minimumLY, min.y);
-				minimumLZ = min(minimumLZ, min.z);
+				maximumLX = Floats.max(maximumLX, max.x);
+				maximumLY = Floats.max(maximumLY, max.y);
+				maximumLZ = Floats.max(maximumLZ, max.z);
+				minimumLX = Floats.min(minimumLX, min.x);
+				minimumLY = Floats.min(minimumLY, min.y);
+				minimumLZ = Floats.min(minimumLZ, min.z);
 			} else {
 				leafBVHNodesR.add(processableLeafBVHNode);
 				
-				maximumRX = max(maximumRX, max.x);
-				maximumRY = max(maximumRY, max.y);
-				maximumRZ = max(maximumRZ, max.z);
-				minimumRX = min(minimumRX, min.x);
-				minimumRY = min(minimumRY, min.y);
-				minimumRZ = min(minimumRZ, min.z);
+				maximumRX = Floats.max(maximumRX, max.x);
+				maximumRY = Floats.max(maximumRY, max.y);
+				maximumRZ = Floats.max(maximumRZ, max.z);
+				minimumRX = Floats.min(minimumRX, min.x);
+				minimumRY = Floats.min(minimumRY, min.y);
+				minimumRZ = Floats.min(minimumRZ, min.z);
 			}
 		}
 		
@@ -1811,12 +1801,12 @@ public final class Scene implements Node {
 		
 		final List<LeafBVHNode> processableLeafBVHNodes = new ArrayList<>(primitives.size());
 		
-		float maximumX = MIN_VALUE;
-		float maximumY = MIN_VALUE;
-		float maximumZ = MIN_VALUE;
-		float minimumX = MAX_VALUE;
-		float minimumY = MAX_VALUE;
-		float minimumZ = MAX_VALUE;
+		float maximumX = Floats.MIN_VALUE;
+		float maximumY = Floats.MIN_VALUE;
+		float maximumZ = Floats.MIN_VALUE;
+		float minimumX = Floats.MAX_VALUE;
+		float minimumY = Floats.MAX_VALUE;
+		float minimumZ = Floats.MAX_VALUE;
 		
 		for(final Primitive primitive : primitives) {
 			final BoundingVolume3F boundingVolume = primitive.getBoundingVolume();
@@ -1830,12 +1820,12 @@ public final class Scene implements Node {
 			final Point3F maximum = boundingVolume.getMaximum();
 			final Point3F minimum = boundingVolume.getMinimum();
 			
-			maximumX = max(maximumX, maximum.x);
-			maximumY = max(maximumY, maximum.y);
-			maximumZ = max(maximumZ, maximum.z);
-			minimumX = min(minimumX, minimum.x);
-			minimumY = min(minimumY, minimum.y);
-			minimumZ = min(minimumZ, minimum.z);
+			maximumX = Floats.max(maximumX, maximum.x);
+			maximumY = Floats.max(maximumY, maximum.y);
+			maximumZ = Floats.max(maximumZ, maximum.z);
+			minimumX = Floats.min(minimumX, minimum.x);
+			minimumY = Floats.min(minimumY, minimum.y);
+			minimumZ = Floats.min(minimumZ, minimum.z);
 			
 			processableLeafBVHNodes.add(new LeafBVHNode(maximum, minimum, 0, Arrays.asList(primitive)));
 		}

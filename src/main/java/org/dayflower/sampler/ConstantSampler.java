@@ -18,9 +18,9 @@
  */
 package org.dayflower.sampler;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.util.Objects;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code ConstantSampler} is a {@link Sampler} implementation that uses constant values as samples.
@@ -118,11 +118,11 @@ public final class ConstantSampler implements Sampler {
 			return true;
 		} else if(!(object instanceof ConstantSampler)) {
 			return false;
-		} else if(!equal(this.component1, ConstantSampler.class.cast(object).component1)) {
+		} else if(!Floats.equals(this.component1, ConstantSampler.class.cast(object).component1)) {
 			return false;
-		} else if(!equal(this.component2, ConstantSampler.class.cast(object).component2)) {
+		} else if(!Floats.equals(this.component2, ConstantSampler.class.cast(object).component2)) {
 			return false;
-		} else if(!equal(this.component3, ConstantSampler.class.cast(object).component3)) {
+		} else if(!Floats.equals(this.component3, ConstantSampler.class.cast(object).component3)) {
 			return false;
 		} else {
 			return true;

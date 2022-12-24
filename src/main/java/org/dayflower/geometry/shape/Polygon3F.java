@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -42,6 +39,8 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Polygon3F} is an implementation of {@link Shape3F} that represents a polygon.
@@ -123,7 +122,7 @@ public final class Polygon3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -322,7 +321,7 @@ public final class Polygon3F implements Shape3F {
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float dotProduct = Vector3F.dotProduct(this.surfaceNormal, ray.getDirection());
 		
-		if(isZero(dotProduct)) {
+		if(Floats.isZero(dotProduct)) {
 			return Float.NaN;
 		}
 		

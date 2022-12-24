@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.minOrNaN;
 
 import java.io.DataOutput;
@@ -41,6 +36,8 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code ConstructiveSolidGeometry3F} is an implementation of {@link Shape3F} that can be used for constructive solid geometry (CSG).
@@ -191,12 +188,12 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 				final float tObjectSpaceR1 = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR1);
 				
 //				No intersection with L and nothing to subtract from:
-				if(isNaN(tObjectSpaceL0)) {
+				if(Floats.isNaN(tObjectSpaceL0)) {
 					return SurfaceIntersection3F.EMPTY;
 				}
 				
 //				No intersection with R and nothing to subtract:
-				if(isNaN(tObjectSpaceR0)) {
+				if(Floats.isNaN(tObjectSpaceR0)) {
 					return this.shapeL.intersection(rayShapeSpaceL, tMinimumShapeSpaceL, tMaximumShapeSpaceL).map(surfaceIntersection -> SurfaceIntersection3F.transform(surfaceIntersection, this.shapeLToObject, this.objectToShapeL));
 				}
 				
@@ -206,12 +203,12 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 				}
 				
 //				No secondary intersection for L and nothing to subtract from:
-				if(isNaN(tObjectSpaceL1)) {
+				if(Floats.isNaN(tObjectSpaceL1)) {
 					return SurfaceIntersection3F.EMPTY;
 				}
 				
 //				No secondary intersection for R:
-				if(isNaN(tObjectSpaceR1)) {
+				if(Floats.isNaN(tObjectSpaceR1)) {
 					return this.shapeR.intersection(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR).map(surfaceIntersection -> SurfaceIntersection3F.transform(surfaceIntersection, this.shapeRToObject, this.objectToShapeR));
 				}
 				
@@ -449,11 +446,11 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 				final float tObjectSpaceR0 = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR0);
 				final float tObjectSpaceR1 = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR1);
 				
-				if(isNaN(tShapeSpaceL0)) {
+				if(Floats.isNaN(tShapeSpaceL0)) {
 					return Float.NaN;
 				}
 				
-				if(isNaN(tShapeSpaceR0)) {
+				if(Floats.isNaN(tShapeSpaceR0)) {
 					return tObjectSpaceL0;
 				}
 				
@@ -461,11 +458,11 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 					return tObjectSpaceL0;
 				}
 				
-				if(isNaN(tObjectSpaceL1)) {
+				if(Floats.isNaN(tObjectSpaceL1)) {
 					return Float.NaN;
 				}
 				
-				if(isNaN(tObjectSpaceR1)) {
+				if(Floats.isNaN(tObjectSpaceR1)) {
 					return tObjectSpaceR0;
 				}
 				
@@ -484,7 +481,7 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 				final float tShapeSpaceR = this.shapeR.intersectionT(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR);
 				final float tObjectSpaceL = doTransformT(this.shapeLToObject, rayShapeSpaceL, ray, tShapeSpaceL);
 				final float tObjectSpaceR = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR);
-				final float t = !isNaN(tObjectSpaceL) && !isNaN(tObjectSpaceR) ? min(tObjectSpaceL, tObjectSpaceR) : Float.NaN;
+				final float t = !Floats.isNaN(tObjectSpaceL) && !Floats.isNaN(tObjectSpaceR) ? Floats.min(tObjectSpaceL, tObjectSpaceR) : Float.NaN;
 				
 				return t;
 			}
@@ -609,7 +606,7 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float doTransformT(final Matrix44F matrix, final Ray3F rayOldSpace, final Ray3F rayNewSpace, final float t) {
-		return !isNaN(t) && !isZero(t) && t < MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+		return !Floats.isNaN(t) && !Floats.isZero(t) && t < Floats.MAX_VALUE ? Floats.abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 	
 	private static float[] doFindTInterval(final Ray3F ray, final float tMinimum, final float tMaximum, final Shape3F shape) {
@@ -619,10 +616,10 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 		float currentTMaximum = tMaximum;
 		
 		for(int i = 0; i < tInterval.length; i++) {
-			if(isNaN(tInterval[i])) {
+			if(Floats.isNaN(tInterval[i])) {
 				final float t = shape.intersectionT(ray, currentTMinimum, currentTMaximum);
 				
-				if(isNaN(t)) {
+				if(Floats.isNaN(t)) {
 					return tInterval;
 				}
 				

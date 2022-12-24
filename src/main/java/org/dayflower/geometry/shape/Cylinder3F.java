@@ -18,10 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.solveQuadraticSystem;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,6 +36,8 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Cylinder3F} is an implementation of {@link Shape3F} that represents a cylinder.
@@ -211,7 +209,7 @@ public final class Cylinder3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -272,11 +270,11 @@ public final class Cylinder3F implements Shape3F {
 			return false;
 		} else if(!Objects.equals(this.phiMax, Cylinder3F.class.cast(object).phiMax)) {
 			return false;
-		} else if(!equal(this.radius, Cylinder3F.class.cast(object).radius)) {
+		} else if(!Floats.equals(this.radius, Cylinder3F.class.cast(object).radius)) {
 			return false;
-		} else if(!equal(this.zMax, Cylinder3F.class.cast(object).zMax)) {
+		} else if(!Floats.equals(this.zMax, Cylinder3F.class.cast(object).zMax)) {
 			return false;
-		} else if(!equal(this.zMin, Cylinder3F.class.cast(object).zMin)) {
+		} else if(!Floats.equals(this.zMin, Cylinder3F.class.cast(object).zMin)) {
 			return false;
 		} else {
 			return true;
@@ -348,12 +346,12 @@ public final class Cylinder3F implements Shape3F {
 		final float b = 2.0F * (d.x * o.x + d.y * o.y);
 		final float c = o.x * o.x + o.y * o.y - this.radius * this.radius;
 		
-		final float[] ts = solveQuadraticSystem(a, b, c);
+		final float[] ts = Floats.solveQuadraticSystem(a, b, c);
 		
 		for(int i = 0; i < ts.length; i++) {
 			final float t = ts[i];
 			
-			if(isNaN(t)) {
+			if(Floats.isNaN(t)) {
 				return Float.NaN;
 			}
 			

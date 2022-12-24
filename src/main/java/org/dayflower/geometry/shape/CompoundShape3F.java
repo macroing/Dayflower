@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.minOrNaN;
 
 import java.io.DataOutput;
@@ -40,6 +39,8 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code CompoundShape3F} is an implementation of {@link Shape3F} that contains a list of {@code Shape3F} instances.
@@ -271,7 +272,7 @@ public final class CompoundShape3F implements Shape3F {
 		for(final Shape3F shape : this.shapes) {
 			t = minOrNaN(t, shape.intersectionT(ray, tMin, tMax));
 			
-			if(!isNaN(t)) {
+			if(!Floats.isNaN(t)) {
 				tMax = t;
 			}
 		}

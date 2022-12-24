@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -31,6 +29,7 @@ import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
+import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 
 /**
@@ -218,7 +217,7 @@ public final class Circle2F implements Shape2F {
 			return false;
 		} else if(!Objects.equals(this.center, Circle2F.class.cast(object).center)) {
 			return false;
-		} else if(!equal(this.radius, Circle2F.class.cast(object).radius)) {
+		} else if(!Floats.equals(this.radius, Circle2F.class.cast(object).radius)) {
 			return false;
 		} else {
 			return true;

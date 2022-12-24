@@ -18,11 +18,6 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.utility.Floats.MAX_VALUE;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +38,8 @@ import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Primitive} represents a primitive and is associated with a {@link Material} instance, a {@link Shape3F} instance and some other properties.
@@ -405,7 +402,7 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
+		return !Floats.isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -481,7 +478,7 @@ public final class Primitive implements Node {
 		
 		final float tObjectSpace = shape.intersectionT(rayObjectSpace, tMinimumObjectSpace, tMaximumObjectSpace);
 		
-		if(isNaN(tObjectSpace)) {
+		if(Floats.isNaN(tObjectSpace)) {
 			return Float.NaN;
 		}
 		
@@ -678,7 +675,7 @@ public final class Primitive implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float doTransformT(final Matrix44F matrix, final Ray3F rayOldSpace, final Ray3F rayNewSpace, final float t) {
-		return !isNaN(t) && !isZero(t) && t < MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+		return !Floats.isNaN(t) && !Floats.isZero(t) && t < Floats.MAX_VALUE ? Floats.abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

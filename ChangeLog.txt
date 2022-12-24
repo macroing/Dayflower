@@ -1,6 +1,11 @@
+2022-12-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Replace some usage of methods and constants in the Floats class in the Utility API with methods and constants from the Floats and Randoms classes in Macroing Java.
+
 2022-12-23  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for more textures in the GUI.
+	* CHANGE:	Replace some usage of methods and constants in the Floats class in the Utility API with methods and constants from the Floats and Randoms classes in Macroing Java.
 
 2022-12-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

@@ -38,6 +38,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
 import org.macroing.java.lang.Doubles;
 
 /**
@@ -153,7 +154,7 @@ public final class Sphere3D implements Shape3D {
 				
 				final double probabilityDensityFunctionValue = Point3D.distanceSquared(point, surfaceIntersectionPoint) / Vector3D.dotProductAbs(surfaceSample.getSurfaceNormal(), incomingNormalizedNegated);
 				
-				if(Doubles.isInfinite(probabilityDensityFunctionValue)) {
+				if(Doubles.isInfinite(probabilityDensityFunctionValue) || Doubles.isNaN(probabilityDensityFunctionValue)) {
 					return SurfaceSample3D.EMPTY;
 				}
 				
@@ -336,7 +337,7 @@ public final class Sphere3D implements Shape3D {
 			
 			final double probabilityDensityFunctionValue = Point3D.distanceSquared(surfaceIntersectionShape.getSurfaceIntersectionPoint(), surfaceIntersection.getSurfaceIntersectionPoint()) / Vector3D.dotProductAbs(surfaceIntersectionShape.getSurfaceNormalS(), Vector3D.negate(incoming)) * getSurfaceArea();
 			
-			if(!Doubles.isInfinite(probabilityDensityFunctionValue)) {
+			if(!Doubles.isInfinite(probabilityDensityFunctionValue) || Doubles.isNaN(probabilityDensityFunctionValue)) {
 				return probabilityDensityFunctionValue;
 			}
 		}

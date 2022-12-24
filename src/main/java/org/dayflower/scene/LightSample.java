@@ -18,14 +18,13 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code LightSample} is returned by a {@link Light} instance and contains the computed properties.
@@ -120,7 +119,7 @@ public final class LightSample {
 			return false;
 		} else if(!Objects.equals(this.incoming, LightSample.class.cast(object).incoming)) {
 			return false;
-		} else if(!equal(this.probabilityDensityFunctionValue, LightSample.class.cast(object).probabilityDensityFunctionValue)) {
+		} else if(!Floats.equals(this.probabilityDensityFunctionValue, LightSample.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
 		} else {
 			return true;

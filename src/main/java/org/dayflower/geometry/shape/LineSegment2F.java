@@ -18,9 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.isZero;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -33,6 +30,8 @@ import org.dayflower.geometry.Shape2F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code LineSegment2F} is an implementation of {@link Shape2F} that represents a line segment.
@@ -181,9 +180,9 @@ public final class LineSegment2F implements Shape2F {
 		
 		final float crossProduct = dAPX * dABY - dAPY * dABX;
 		
-		if(!isZero(crossProduct)) {
+		if(!Floats.isZero(crossProduct)) {
 			return false;
-		} else if(abs(dABX) >= abs(dABY)) {
+		} else if(Floats.abs(dABX) >= Floats.abs(dABY)) {
 			return dABX > 0.0F ? aX <= pX && pX <= bX : bX <= pX && pX <= aX;
 		} else {
 			return dABY > 0.0F ? aY <= pY && pY <= bY : bY <= pY && pY <= aY;

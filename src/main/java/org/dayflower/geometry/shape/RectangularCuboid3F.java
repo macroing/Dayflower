@@ -18,11 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Floats.isNaN;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.min;
-import static org.dayflower.utility.Floats.normalize;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -41,6 +36,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code RectangularCuboid3F} is an implementation of {@link Shape3F} that represents a rectangular cuboid.
@@ -133,7 +130,7 @@ public final class RectangularCuboid3F implements Shape3F {
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final float t = intersectionT(ray, tMinimum, tMaximum);
 		
-		if(isNaN(t)) {
+		if(Floats.isNaN(t)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -315,8 +312,8 @@ public final class RectangularCuboid3F implements Shape3F {
 		final Vector3F directionA = Vector3F.hadamardProduct(Vector3F.direction(ray.getOrigin(), getMinimum()), directionReciprocal);
 		final Vector3F directionB = Vector3F.hadamardProduct(Vector3F.direction(ray.getOrigin(), getMaximum()), directionReciprocal);
 		
-		final float t0 = max(min(directionA.x, directionB.x), min(directionA.y, directionB.y), min(directionA.z, directionB.z));
-		final float t1 = min(max(directionA.x, directionB.x), max(directionA.y, directionB.y), max(directionA.z, directionB.z));
+		final float t0 = Floats.max(Floats.min(directionA.x, directionB.x), Floats.min(directionA.y, directionB.y), Floats.min(directionA.z, directionB.z));
+		final float t1 = Floats.min(Floats.max(directionA.x, directionB.x), Floats.max(directionA.y, directionB.y), Floats.max(directionA.z, directionB.z));
 		
 		if(t0 > t1) {
 			return Float.NaN;
@@ -419,22 +416,22 @@ public final class RectangularCuboid3F implements Shape3F {
 		final Vector3F halfDirection = Vector3F.multiply(Vector3F.direction(this.minimum, this.maximum), 0.5F);
 		
 		if(surfaceIntersectionPoint.x + halfDirection.x - 0.0001F < midpoint.x || surfaceIntersectionPoint.x - halfDirection.x + 0.0001F > midpoint.x) {
-			final float u = normalize(surfaceIntersectionPoint.z, this.minimum.z, this.maximum.z);
-			final float v = normalize(surfaceIntersectionPoint.y, this.minimum.y, this.maximum.y);
+			final float u = Floats.normalize(surfaceIntersectionPoint.z, this.minimum.z, this.maximum.z);
+			final float v = Floats.normalize(surfaceIntersectionPoint.y, this.minimum.y, this.maximum.y);
 			
 			return new Point2F(u, v);
 		}
 		
 		if(surfaceIntersectionPoint.y + halfDirection.y - 0.0001F < midpoint.y || surfaceIntersectionPoint.y - halfDirection.y + 0.0001F > midpoint.y) {
-			final float u = normalize(surfaceIntersectionPoint.x, this.minimum.x, this.maximum.x);
-			final float v = normalize(surfaceIntersectionPoint.z, this.minimum.z, this.maximum.z);
+			final float u = Floats.normalize(surfaceIntersectionPoint.x, this.minimum.x, this.maximum.x);
+			final float v = Floats.normalize(surfaceIntersectionPoint.z, this.minimum.z, this.maximum.z);
 			
 			return new Point2F(u, v);
 		}
 		
 		if(surfaceIntersectionPoint.z + halfDirection.z - 0.0001F < midpoint.z || surfaceIntersectionPoint.z - halfDirection.z + 0.0001F > midpoint.z) {
-			final float u = normalize(surfaceIntersectionPoint.x, this.minimum.x, this.maximum.x);
-			final float v = normalize(surfaceIntersectionPoint.y, this.minimum.y, this.maximum.y);
+			final float u = Floats.normalize(surfaceIntersectionPoint.x, this.minimum.x, this.maximum.x);
+			final float v = Floats.normalize(surfaceIntersectionPoint.y, this.minimum.y, this.maximum.y);
 			
 			return new Point2F(u, v);
 		}

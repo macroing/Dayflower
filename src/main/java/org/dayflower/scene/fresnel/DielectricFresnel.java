@@ -18,15 +18,10 @@
  */
 package org.dayflower.scene.fresnel;
 
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.saturate;
-import static org.dayflower.utility.Floats.sqrt;
-
 import java.util.Objects;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code DielectricFresnel} is used to compute the Fresnel equation for materials that are dielectric.
@@ -90,9 +85,9 @@ public final class DielectricFresnel implements Fresnel {
 			return true;
 		} else if(!(object instanceof DielectricFresnel)) {
 			return false;
-		} else if(!equal(this.etaI, DielectricFresnel.class.cast(object).etaI)) {
+		} else if(!Floats.equals(this.etaI, DielectricFresnel.class.cast(object).etaI)) {
 			return false;
-		} else if(!equal(this.etaT, DielectricFresnel.class.cast(object).etaT)) {
+		} else if(!Floats.equals(this.etaT, DielectricFresnel.class.cast(object).etaT)) {
 			return false;
 		} else {
 			return true;
@@ -138,22 +133,22 @@ public final class DielectricFresnel implements Fresnel {
 	 * @return a {@code float} with the amount of light reflected by the surface
 	 */
 	public static float evaluate(final float cosThetaI, final float etaI, final float etaT) {
-		final float saturateCosThetaI = saturate(cosThetaI, -1.0F, 1.0F);
+		final float saturateCosThetaI = Floats.saturate(cosThetaI, -1.0F, 1.0F);
 		
 		final boolean isEntering = saturateCosThetaI > 0.0F;
 		
-		final float currentCosThetaI = isEntering ? saturateCosThetaI : abs(saturateCosThetaI);
+		final float currentCosThetaI = isEntering ? saturateCosThetaI : Floats.abs(saturateCosThetaI);
 		final float currentEtaI = isEntering ? etaI : etaT;
 		final float currentEtaT = isEntering ? etaT : etaI;
 		
-		final float currentSinThetaI = sqrt(max(0.0F, 1.0F - currentCosThetaI * currentCosThetaI));
+		final float currentSinThetaI = Floats.sqrt(Floats.max(0.0F, 1.0F - currentCosThetaI * currentCosThetaI));
 		final float currentSinThetaT = currentEtaI / currentEtaT * currentSinThetaI;
 		
 		if(currentSinThetaT >= 1.0F) {
 			return 1.0F;
 		}
 		
-		final float currentCosThetaT = sqrt(max(0.0F, 1.0F - currentSinThetaT * currentSinThetaT));
+		final float currentCosThetaT = Floats.sqrt(Floats.max(0.0F, 1.0F - currentSinThetaT * currentSinThetaT));
 		
 		final float reflectancePara = ((currentEtaT * currentCosThetaI) - (currentEtaI * currentCosThetaT)) / ((currentEtaT * currentCosThetaI) + (currentEtaI * currentCosThetaT));
 		final float reflectancePerp = ((currentEtaI * currentCosThetaI) - (currentEtaT * currentCosThetaT)) / ((currentEtaI * currentCosThetaI) + (currentEtaT * currentCosThetaT));

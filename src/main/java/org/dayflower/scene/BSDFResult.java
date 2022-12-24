@@ -18,13 +18,12 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.util.Objects;
 
 import org.dayflower.geometry.Vector3F;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code BSDFResult} contains the result produced by sampling the distribution function by a {@link BSDF} instance.
@@ -194,7 +193,7 @@ public final class BSDFResult {
 			return false;
 		} else if(!Objects.equals(this.outgoing, BSDFResult.class.cast(object).outgoing)) {
 			return false;
-		} else if(!equal(this.probabilityDensityFunctionValue, BSDFResult.class.cast(object).probabilityDensityFunctionValue)) {
+		} else if(!Floats.equals(this.probabilityDensityFunctionValue, BSDFResult.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
 		} else {
 			return true;

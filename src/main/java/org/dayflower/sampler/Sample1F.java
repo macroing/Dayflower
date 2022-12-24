@@ -18,9 +18,9 @@
  */
 package org.dayflower.sampler;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.util.Objects;
+
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code Sample1F} denotes a 1-dimensional sample with one component, of type {@code float}.
@@ -122,7 +122,7 @@ public final class Sample1F {
 			return true;
 		} else if(!(object instanceof Sample1F)) {
 			return false;
-		} else if(!equal(this.component1, Sample1F.class.cast(object).component1)) {
+		} else if(!Floats.equals(this.component1, Sample1F.class.cast(object).component1)) {
 			return false;
 		} else {
 			return true;

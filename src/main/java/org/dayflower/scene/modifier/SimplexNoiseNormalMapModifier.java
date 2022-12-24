@@ -18,8 +18,6 @@
  */
 package org.dayflower.scene.modifier;
 
-import static org.dayflower.utility.Floats.equal;
-
 import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
@@ -27,6 +25,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Intersection;
 
 import org.macroing.art4j.noise.SimplexNoiseF;
+import org.macroing.java.lang.Floats;
 
 /**
  * A {@code SimplexNoiseNormalMapModifier} is a {@link Modifier} implementation that modifies the surface normal using Simplex noise.
@@ -100,9 +99,9 @@ public final class SimplexNoiseNormalMapModifier implements Modifier {
 			return true;
 		} else if(!(object instanceof SimplexNoiseNormalMapModifier)) {
 			return false;
-		} else if(!equal(this.frequency, SimplexNoiseNormalMapModifier.class.cast(object).frequency)) {
+		} else if(!Floats.equals(this.frequency, SimplexNoiseNormalMapModifier.class.cast(object).frequency)) {
 			return false;
-		} else if(!equal(this.scale, SimplexNoiseNormalMapModifier.class.cast(object).scale)) {
+		} else if(!Floats.equals(this.scale, SimplexNoiseNormalMapModifier.class.cast(object).scale)) {
 			return false;
 		} else {
 			return true;

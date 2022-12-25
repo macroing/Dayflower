@@ -19,6 +19,9 @@
 	<property name="project.directory.source.java" location="src/main/java"/>
 	<property name="project.directory.source.resources" location="src/main/resources"/>
 	
+	<!--The following property defines the name for environment variables.-->
+	<property environment="environment"/>
+	
 	<target name="clean" description="Deletes generated directories and files for project ${project.name}.">
 		<delete dir="${project.directory.binary}"/>
 		<delete dir="${project.directory.distribution}"/>
@@ -31,8 +34,10 @@
 		<mkdir dir="${project.directory.resources}"/>
 		<mkdir dir="${project.directory.source.java}"/>
 		
+		<!--Initialize the library path.-->
 		<path id="library.path">
 			<fileset dir="${project.directory.library}" includes="**/*.jar"/>
+			<fileset dir="${environment.JAVAFX_HOME}/lib" includes="**/*.jar"/>
 		</path>
 		
 		<!--Perform Java compilation.-->

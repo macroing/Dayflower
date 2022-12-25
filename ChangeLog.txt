@@ -1,3 +1,7 @@
+2022-12-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a requirement to the environment variable JAVAFX_HOME in the Apache Ant build file. It should point to the root of JavaFX, which contains the bin and lib directories. This is a fix for an issue that started recently. For some reason the build script started to fail. Perhaps due to a recent upgrade to Windows 11.
+
 2022-12-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Replace some usage of methods and constants in the Floats class in the Utility API with methods and constants from the Floats and Randoms classes in Macroing Java.

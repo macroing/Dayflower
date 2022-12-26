@@ -20,7 +20,6 @@ package org.dayflower.javafx.application;
 
 import java.io.File;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -34,17 +33,7 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.loader.JavaSceneLoader;
-import org.dayflower.scene.texture.BullseyeTexture;
-import org.dayflower.scene.texture.CheckerboardTexture;
-import org.dayflower.scene.texture.ConstantTexture;
-import org.dayflower.scene.texture.DotProductTexture;
-import org.dayflower.scene.texture.LDRImageTexture;
-import org.dayflower.scene.texture.MarbleTexture;
-import org.dayflower.scene.texture.PolkaDotTexture;
-import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
-import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
-import org.dayflower.scene.texture.UVTexture;
 import org.macroing.java.io.Files;
 
 import javafx.animation.AnimationTimer;
@@ -83,17 +72,8 @@ public final class DayflowerApplication extends Application {
 	private static final String TEXT_EXIT = "Exit";
 	private static final String TEXT_FILE = "File";
 	private static final String TEXT_G_P_U_RENDERER = "GPU Renderer";
-	private static final String TEXT_NEW_MATERIAL = "New Material";
-	private static final String TEXT_NEW_TEXTURE_BULLSEYE_TEXTURE = "New Bullseye Texture";
-	private static final String TEXT_NEW_TEXTURE_CHECKERBOARD_TEXTURE = "New Checkerboard Texture";
-	private static final String TEXT_NEW_TEXTURE_CONSTANT_TEXTURE = "New Constant Texture";
-	private static final String TEXT_NEW_TEXTURE_DOT_PRODUCT_TEXTURE = "New Dot Product Texture";
-	private static final String TEXT_NEW_TEXTURE_L_D_R_IMAGE_TEXTURE = "New LDR Image Texture";
-	private static final String TEXT_NEW_TEXTURE_MARBLE_TEXTURE = "New Marble Texture";
-	private static final String TEXT_NEW_TEXTURE_POLKA_DOT_TEXTURE = "New Polka Dot Texture";
-	private static final String TEXT_NEW_TEXTURE_SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE = "New Simplex Fractional Brownian Motion Texture";
-	private static final String TEXT_NEW_TEXTURE_SURFACE_NORMAL_TEXTURE = "New Surface Normal Texture";
-	private static final String TEXT_NEW_TEXTURE_U_V_TEXTURE = "New UV Texture";
+//	private static final String TEXT_NEW_MATERIAL = "New Material";
+	private static final String TEXT_NEW_TEXTURE = "New Texture";
 	private static final String TEXT_SAVE_IMAGE = "Save Image";
 	private static final String TEXT_SAVE_IMAGE_AS = "Save Image As...";
 	private static final String TEXT_SCENE = "Scene";
@@ -198,16 +178,7 @@ public final class DayflowerApplication extends Application {
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, e -> doExit(), null, true);
 //		this.pathMenuBar.addMenuItem(PATH_SCENE_MATERIAL, TEXT_NEW_MATERIAL, e -> doNewMaterial(), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_BULLSEYE_TEXTURE, e -> doNewTexture(BullseyeTexture.class), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_CHECKERBOARD_TEXTURE, e -> doNewTexture(CheckerboardTexture.class), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_CONSTANT_TEXTURE, e -> doNewTexture(ConstantTexture.class), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_DOT_PRODUCT_TEXTURE, e -> doNewTexture(DotProductTexture.class), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_L_D_R_IMAGE_TEXTURE, e -> doNewTexture(LDRImageTexture.class), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_MARBLE_TEXTURE, e -> doNewTexture(MarbleTexture.class), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_POLKA_DOT_TEXTURE, e -> doNewTexture(PolkaDotTexture.class), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE, e -> doNewTexture(SimplexFractionalBrownianMotionTexture.class), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_SURFACE_NORMAL_TEXTURE, e -> doNewTexture(SurfaceNormalTexture.class), null, true);
-		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE_U_V_TEXTURE, e -> doNewTexture(UVTexture.class), null, true);
+		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE, e -> doNewTexture(), null, true);
 	}
 	
 	private void doCreateAndStartAnimationTimer() {
@@ -275,14 +246,10 @@ public final class DayflowerApplication extends Application {
 //		TODO: Implement!
 //	}
 	
-	private void doNewTexture(final Class<? extends Texture> clazz) {
-		final TextureDialog textureDialog = new TextureDialog(clazz, doGetStage());
-		
-		final Optional<Texture> optionalTexture = textureDialog.showAndWait();
-		
-		if(optionalTexture.isPresent()) {
-			this.texture.set(optionalTexture.get());
-		}
+	private void doNewTexture() {
+		final
+		TextureDialog textureDialog = new TextureDialog(doGetStage(), texture -> this.texture.set(texture));
+		textureDialog.showAndWait();
 	}
 	
 	@SuppressWarnings("unused")

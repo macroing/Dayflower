@@ -21,6 +21,8 @@ package org.dayflower.javafx.application;
 import java.io.File;
 import java.io.UncheckedIOException;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point3F;
@@ -40,12 +42,16 @@ import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Doubles;
 
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
@@ -68,24 +74,67 @@ final class TextureDialog extends Dialog<Texture> {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public TextureDialog(final Class<? extends Texture> clazz, final Stage stage) {
-		Objects.requireNonNull(clazz, "clazz == null");
+	public TextureDialog(final Stage stage, final Consumer<Texture> consumer) {
 		Objects.requireNonNull(stage, "stage == null");
 		
-		final GridPane gridPane = doCreateGridPane(clazz);
+		final AtomicReference<Class<? extends Texture>> clazz = new AtomicReference<>(ConstantTexture.class);
 		
 		final
 		DialogPane dialogPane = getDialogPane();
-		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-		dialogPane.setContent(gridPane);
+		dialogPane.getButtonTypes().addAll(ButtonType.NEXT, ButtonType.CANCEL);
+		dialogPane.setContent(doCreateGridPane((options, oldValue, newValue) -> {
+			clazz.set(newValue.getClazz());
+		}));
+		
+		final
+		Button button = Button.class.cast(dialogPane.lookupButton(ButtonType.NEXT));
+		button.setOnAction(e -> {
+			show();
+			
+			final GridPane gridPane = doCreateGridPane(clazz.get());
+			
+			dialogPane.getButtonTypes().clear();
+			dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+			dialogPane.setContent(gridPane);
+			dialogPane.getScene().getWindow().sizeToScene();
+			
+			setResultConverter(buttonType -> buttonType.getButtonData() == ButtonType.OK.getButtonData() ? doCreateTexture(gridPane, clazz.get()) : null);
+			setTitle(doCreateTitle(clazz.get()));
+		});
 		
 		initOwner(stage);
 		
-		setResultConverter(buttonType -> buttonType.getButtonData() == ButtonType.OK.getButtonData() ? doCreateTexture(gridPane, clazz) : null);
-		setTitle(doCreateTitle(clazz));
+		setResultConverter(buttonType -> buttonType.getButtonData() == ButtonType.OK.getButtonData() ? new ConstantTexture() : null);
+		setTitle("New Texture");
+		
+		resultProperty().addListener((observableList, oldValue, newValue) -> {
+			if(newValue != null) {
+				consumer.accept(Texture.class.cast(newValue));
+			}
+		});
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static GridPane doCreateGridPane(final ChangeListener<? super TextureInfo> changeListener) {
+		final
+		ComboBox<TextureInfo> comboBox = new ComboBox<>();
+		comboBox.getItems().addAll(new TextureInfo(BullseyeTexture.class), new TextureInfo(CheckerboardTexture.class), new TextureInfo(ConstantTexture.class), new TextureInfo(DotProductTexture.class), new TextureInfo(LDRImageTexture.class), new TextureInfo(MarbleTexture.class), new TextureInfo(PolkaDotTexture.class), new TextureInfo(SimplexFractionalBrownianMotionTexture.class), new TextureInfo(SurfaceNormalTexture.class), new TextureInfo(UVTexture.class));
+		comboBox.setMaxWidth(Doubles.MAX_VALUE);
+		comboBox.setValue(new TextureInfo(ConstantTexture.class));
+		comboBox.getSelectionModel().selectedItemProperty().addListener(changeListener);
+		
+		final
+		GridPane gridPane = new GridPane();
+		gridPane.setAlignment(Pos.CENTER);
+		gridPane.setHgap(10.0D);
+		gridPane.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
+		gridPane.setVgap(10.0D);
+		gridPane.add(new Text("Texture"), 0, 0);
+		gridPane.add(comboBox, 1, 0);
+		
+		return gridPane;
+	}
 	
 	private static GridPane doCreateGridPane(final Class<? extends Texture> clazz) {
 		final
@@ -571,5 +620,69 @@ final class TextureDialog extends Dialog<Texture> {
 		gridPane.add(textFieldGain, 1, 2);
 		gridPane.add(new Text("Octaves"), 0, 3);
 		gridPane.add(textFieldOctaves, 1, 3);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class TextureInfo {
+		private final Class<? extends Texture> clazz;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public TextureInfo(final Class<? extends Texture> clazz) {
+			this.clazz = Objects.requireNonNull(clazz, "clazz == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Class<? extends Texture> getClazz() {
+			return this.clazz;
+		}
+		
+		@Override
+		public String toString() {
+			switch(this.clazz.getSimpleName()) {
+			case NAME_BULLSEYE_TEXTURE:
+				return "New Bullseye Texture";
+			case NAME_CHECKERBOARD_TEXTURE:
+				return "New Checkerboard Texture";
+			case NAME_CONSTANT_TEXTURE:
+				return "New Constant Texture";
+			case NAME_DOT_PRODUCT_TEXTURE:
+				return "New Dot Product Texture";
+			case NAME_L_D_R_IMAGE_TEXTURE:
+				return "New LDR Image Texture";
+			case NAME_MARBLE_TEXTURE:
+				return "New Marble Texture";
+			case NAME_POLKA_DOT_TEXTURE:
+				return "New Polka Dot Texture";
+			case NAME_SIMPLEX_FRACTIONAL_BROWNIAN_MOTION_TEXTURE:
+				return "New Simplex Fractional Brownian Motion Texture";
+			case NAME_SURFACE_NORMAL_TEXTURE:
+				return "New Surface Normal Texture";
+			case NAME_U_V_TEXTURE:
+				return "New UV Texture";
+			default:
+				return "New Texture";
+		}
+		}
+		
+		@Override
+		public boolean equals(final Object object) {
+			if(object == this) {
+				return true;
+			} else if(!(object instanceof TextureInfo)) {
+				return false;
+			} else if(!Objects.equals(this.clazz, TextureInfo.class.cast(object).clazz)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(this.clazz);
+		}
 	}
 }

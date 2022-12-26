@@ -147,6 +147,10 @@ public final class GPURenderer extends AbstractGPURenderer {
 		float throughputG = 1.0F;
 		float throughputB = 1.0F;
 		
+		float selectionR = 0.0F;
+		float selectionG = 0.0F;
+		float selectionB = 0.0F;
+		
 		/*
 		 * A call to ray3FCameraGenerateTriangleFilter() will compute a ray in world space, if it returns true.
 		 */
@@ -172,6 +176,12 @@ public final class GPURenderer extends AbstractGPURenderer {
 				 */
 				
 				if(primitiveIntersectionComputeLHS()) {
+					if(currentBounce == 0 && primitiveGetInstanceIDLHS() == super.primitiveInstanceID) {
+						selectionR = 0.0F;
+						selectionG = 1.0F;
+						selectionB = 0.0F;
+					}
+					
 					if(currentBounce == 0 || isSpecularBounce) {
 						final int areaLightID = primitiveGetAreaLightIDLHS();
 						final int areaLightOffset = primitiveGetAreaLightOffsetLHS();
@@ -301,6 +311,10 @@ public final class GPURenderer extends AbstractGPURenderer {
 			radianceG = 1.0F;
 			radianceB = 1.0F;
 		}
+		
+		radianceR += throughputR * selectionR;
+		radianceG += throughputG * selectionG;
+		radianceB += throughputB * selectionB;
 		
 		filmAddColor(radianceR, radianceG, radianceB);
 		

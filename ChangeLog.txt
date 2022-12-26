@@ -1,5 +1,8 @@
 2022-12-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add the methods getPrimitiveInstanceID() and togglePrimitiveInstanceID(int) to the Scene class.
+	* ADD:		Add the methods setPrimitiveInstanceID(int), primitiveGetInstanceIDLHS() and primitiveGetInstanceIDRHS() to the AbstractSceneKernel class.
+	* ADD:		Add primitive toggle support to the GPU renderer.
 	* CHANGE:	Change the UI for the texture creation tool in the application.
 
 2022-12-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>

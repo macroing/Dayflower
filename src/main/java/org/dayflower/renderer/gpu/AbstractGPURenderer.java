@@ -198,6 +198,15 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		final ImageF image = getImage();
 		
 		synchronized(image) {
+			final int oldPrimitiveInstanceID = super.primitiveInstanceID;
+			final int newPrimitiveInstanceID = getScene().getPrimitiveInstanceID();
+			
+			setPrimitiveInstanceID(newPrimitiveInstanceID);
+			
+			if(oldPrimitiveInstanceID != newPrimitiveInstanceID) {
+				clear();
+			}
+			
 			if(updateCompiledScene()) {
 				clear();
 			}

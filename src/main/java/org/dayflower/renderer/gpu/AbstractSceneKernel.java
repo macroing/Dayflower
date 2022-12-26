@@ -87,6 +87,11 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	protected int primitiveCount;
 	
 	/**
+	 * The current {@link Primitive} instance ID.
+	 */
+	protected int primitiveInstanceID;
+	
+	/**
 	 * An {@code int[]} that contains {@link Primitive} instances.
 	 */
 	protected int[] primitiveArray;
@@ -108,6 +113,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		this.primitiveMatrix44FArray = new float[1];
 		this.pixelArray = new float[1];
 		this.primitiveCount = 0;
+		this.primitiveInstanceID = -1;
 		this.primitiveArray = new int[1];
 		this.isUpdateCompiledSceneRequested = new AtomicBoolean();
 		this.compiledScene = null;
@@ -217,6 +223,15 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Sets the current {@link Primitive} instance ID.
+	 * 
+	 * @param primitiveInstanceID the current {@code Primitive} instance ID
+	 */
+	public final void setPrimitiveInstanceID(final int primitiveInstanceID) {
+		this.primitiveInstanceID = primitiveInstanceID;
 	}
 	
 	/**
@@ -969,6 +984,24 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 */
 	protected final int primitiveGetAreaLightOffsetRHS() {
 		return this.primitiveArray[intersectionRHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_AREA_LIGHT_ID_AND_OFFSET] & 0xFFFF;
+	}
+	
+	/**
+	 * Returns the instance ID of the intersected {@link Primitive} instance.
+	 * 
+	 * @return the instance ID of the intersected {@code Primitive} instance
+	 */
+	protected final int primitiveGetInstanceIDLHS() {
+		return this.primitiveArray[intersectionLHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_INSTANCE_ID];
+	}
+	
+	/**
+	 * Returns the instance ID of the intersected {@link Primitive} instance.
+	 * 
+	 * @return the instance ID of the intersected {@code Primitive} instance
+	 */
+	protected final int primitiveGetInstanceIDRHS() {
+		return this.primitiveArray[intersectionRHSGetPrimitiveIndex() * CompiledPrimitiveCache.PRIMITIVE_LENGTH + CompiledPrimitiveCache.PRIMITIVE_OFFSET_INSTANCE_ID];
 	}
 	
 	/**

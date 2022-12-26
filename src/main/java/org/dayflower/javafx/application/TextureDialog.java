@@ -76,6 +76,7 @@ final class TextureDialog extends Dialog<Texture> {
 	
 	public TextureDialog(final Stage stage, final Consumer<Texture> consumer) {
 		Objects.requireNonNull(stage, "stage == null");
+		Objects.requireNonNull(consumer, "consumer == null");
 		
 		final AtomicReference<Class<? extends Texture>> clazz = new AtomicReference<>(ConstantTexture.class);
 		

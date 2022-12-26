@@ -80,6 +80,7 @@ public final class Scene implements Node {
 	private final PrimitiveObserver primitiveObserver;
 	private Sampler sampler;
 	private String name;
+	private int primitiveInstanceID;
 	private long updatedAt;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,6 +139,7 @@ public final class Scene implements Node {
 		this.primitiveObserver = new PrimitiveObserverImpl(this, this.sceneObservers);
 		this.sampler = new RandomSampler();
 		this.name = Objects.requireNonNull(name, "name == null");
+		this.primitiveInstanceID = -1;
 		this.updatedAt = 0L;
 	}
 	
@@ -1250,6 +1252,15 @@ public final class Scene implements Node {
 	}
 	
 	/**
+	 * Returns the currently toggled {@link Primitive} instance ID, or {@code -1}.
+	 * 
+	 * @return the currently toggled {@code Primitive} instance ID, or {@code -1}
+	 */
+	public int getPrimitiveInstanceID() {
+		return this.primitiveInstanceID;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Scene} instance.
 	 * 
 	 * @return a hash code for this {@code Scene} instance
@@ -1388,6 +1399,19 @@ public final class Scene implements Node {
 	public void setSceneObservers(final List<SceneObserver> sceneObservers) {
 		this.sceneObservers.clear();
 		this.sceneObservers.addAll(ParameterArguments.requireNonNullList(sceneObservers, "sceneObservers"));
+	}
+	
+	/**
+	 * Toggles the current {@link Primitive} instance ID.
+	 * 
+	 * @param primitiveInstanceID the current {@code Primitive} instance ID
+	 */
+	public void togglePrimitiveInstanceID(final int primitiveInstanceID) {
+		if(this.primitiveInstanceID == primitiveInstanceID) {
+			this.primitiveInstanceID = -1;
+		} else {
+			this.primitiveInstanceID = primitiveInstanceID;
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

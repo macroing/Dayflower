@@ -86,13 +86,19 @@ final class ScenePropertyView extends VBox {
 		return object -> {
 			if(object instanceof Primitive) {
 				final
-				MenuItem menuItem = new MenuItem();
-				menuItem.setOnAction(actionEvent -> scene.removePrimitive(Primitive.class.cast(object)));
-				menuItem.setText("Delete");
+				MenuItem menuItemDelete = new MenuItem();
+				menuItemDelete.setOnAction(actionEvent -> scene.removePrimitive(Primitive.class.cast(object)));
+				menuItemDelete.setText("Delete");
+				
+				final
+				MenuItem menuItemToggle = new MenuItem();
+				menuItemToggle.setOnAction(actionEvent -> scene.togglePrimitiveInstanceID(Primitive.class.cast(object).getInstanceID()));
+				menuItemToggle.setText("Toggle");
 				
 				final
 				ContextMenu contextMenu = new ContextMenu();
-				contextMenu.getItems().add(menuItem);
+				contextMenu.getItems().add(menuItemDelete);
+				contextMenu.getItems().add(menuItemToggle);
 				
 				return contextMenu;
 			}

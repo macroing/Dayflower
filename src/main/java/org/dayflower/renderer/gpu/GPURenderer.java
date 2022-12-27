@@ -147,9 +147,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		float throughputG = 1.0F;
 		float throughputB = 1.0F;
 		
-		float selectionR = 0.0F;
-		float selectionG = 0.0F;
-		float selectionB = 0.0F;
+		boolean isSelected = false;
 		
 		/*
 		 * A call to ray3FCameraGenerateTriangleFilter() will compute a ray in world space, if it returns true.
@@ -177,9 +175,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 				
 				if(primitiveIntersectionComputeLHS()) {
 					if(currentBounce == 0 && primitiveGetInstanceIDLHS() == super.primitiveInstanceID) {
-						selectionR = 0.0F;
-						selectionG = 1.0F;
-						selectionB = 0.0F;
+						isSelected = true;
 					}
 					
 					if(currentBounce == 0 || isSpecularBounce) {
@@ -312,9 +308,11 @@ public final class GPURenderer extends AbstractGPURenderer {
 			radianceB = 1.0F;
 		}
 		
-		radianceR += throughputR * selectionR;
-		radianceG += throughputG * selectionG;
-		radianceB += throughputB * selectionB;
+		if(isSelected) {
+			radianceR = 0.0F;
+			radianceG = 1.0F;
+			radianceB = 0.0F;
+		}
 		
 		filmAddColor(radianceR, radianceG, radianceB);
 		
@@ -326,6 +324,8 @@ public final class GPURenderer extends AbstractGPURenderer {
 	void doRunRayCasting() {
 		if(ray3FCameraGenerate(random(), random())) {
 			if(primitiveIntersectionComputeLHS()) {
+				final boolean isSelected = primitiveGetInstanceIDLHS() == super.primitiveInstanceID;
+				
 				final float rayDirectionX = ray3FGetDirectionX();
 				final float rayDirectionY = ray3FGetDirectionY();
 				final float rayDirectionZ = ray3FGetDirectionZ();
@@ -337,9 +337,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 				final float rayDirectionDotSurfaceNormal = vector3FDotProduct(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 				final float rayDirectionDotSurfaceNormalAbs = abs(rayDirectionDotSurfaceNormal);
 				
-				final float r = 0.5F * rayDirectionDotSurfaceNormalAbs;
-				final float g = 0.5F * rayDirectionDotSurfaceNormalAbs;
-				final float b = 0.5F * rayDirectionDotSurfaceNormalAbs;
+				final float r = isSelected ? 0.0F : 0.5F * rayDirectionDotSurfaceNormalAbs;
+				final float g = isSelected ? 1.0F : 0.5F * rayDirectionDotSurfaceNormalAbs;
+				final float b = isSelected ? 0.0F : 0.5F * rayDirectionDotSurfaceNormalAbs;
 				
 				filmAddColor(r, g, b);
 			} else {
@@ -357,6 +357,8 @@ public final class GPURenderer extends AbstractGPURenderer {
 	void doRunRayTracing() {
 		if(ray3FCameraGenerateTriangleFilter()) {
 			if(primitiveIntersectionComputeLHS() && materialBSDFCompute(primitiveGetMaterialIDLHS(), primitiveGetMaterialOffsetLHS(), ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ()) && materialBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL, random(), random(), ray3FGetDirectionX(), ray3FGetDirectionY(), ray3FGetDirectionZ())) {
+				final boolean isSelected = primitiveGetInstanceIDLHS() == super.primitiveInstanceID;
+				
 				final float incomingX = materialBSDFResultGetIncomingX();
 				final float incomingY = materialBSDFResultGetIncomingY();
 				final float incomingZ = materialBSDFResultGetIncomingZ();
@@ -383,9 +385,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 				
 				final boolean isProbabilityDensityFunctionValueValid = checkIsFinite(probabilityDensityFunctionValue) && probabilityDensityFunctionValue > 0.0F;
 				
-				final float r = isProbabilityDensityFunctionValueValid ? resultR * incomingDotSurfaceNormalAbs / probabilityDensityFunctionValue * rayDirectionDotSurfaceNormalAbs : 0.0F;
-				final float g = isProbabilityDensityFunctionValueValid ? resultG * incomingDotSurfaceNormalAbs / probabilityDensityFunctionValue * rayDirectionDotSurfaceNormalAbs : 0.0F;
-				final float b = isProbabilityDensityFunctionValueValid ? resultB * incomingDotSurfaceNormalAbs / probabilityDensityFunctionValue * rayDirectionDotSurfaceNormalAbs : 0.0F;
+				final float r = isSelected ? 0.0F : isProbabilityDensityFunctionValueValid ? resultR * incomingDotSurfaceNormalAbs / probabilityDensityFunctionValue * rayDirectionDotSurfaceNormalAbs : 0.0F;
+				final float g = isSelected ? 1.0F : isProbabilityDensityFunctionValueValid ? resultG * incomingDotSurfaceNormalAbs / probabilityDensityFunctionValue * rayDirectionDotSurfaceNormalAbs : 0.0F;
+				final float b = isSelected ? 0.0F : isProbabilityDensityFunctionValueValid ? resultB * incomingDotSurfaceNormalAbs / probabilityDensityFunctionValue * rayDirectionDotSurfaceNormalAbs : 0.0F;
 				
 				filmAddColor(r, g, b);
 			} else {

@@ -1,3 +1,7 @@
+2022-12-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the primitive toggle feature. The selection is more pronounced. It is now also supported by the ray casting and ray tracing algorithms.
+
 2022-12-26  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods getPrimitiveInstanceID() and togglePrimitiveInstanceID(int) to the Scene class.

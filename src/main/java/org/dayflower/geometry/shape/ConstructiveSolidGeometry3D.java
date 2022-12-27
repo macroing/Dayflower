@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.minOrNaN;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -490,7 +488,7 @@ public final class ConstructiveSolidGeometry3D implements Shape3D {
 				final double tShapeSpaceR = this.shapeR.intersectionT(rayShapeSpaceR, tMinimumShapeSpaceR, tMaximumShapeSpaceR);
 				final double tObjectSpaceL = doTransformT(this.shapeLToObject, rayShapeSpaceL, ray, tShapeSpaceL);
 				final double tObjectSpaceR = doTransformT(this.shapeRToObject, rayShapeSpaceR, ray, tShapeSpaceR);
-				final double t = minOrNaN(tObjectSpaceL, tObjectSpaceR);
+				final double t = Doubles.minOrDefault(tObjectSpaceL, tObjectSpaceR, Double.NaN);
 				
 				return t;
 			}

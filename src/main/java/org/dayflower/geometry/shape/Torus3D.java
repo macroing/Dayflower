@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.solveQuartic;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -348,7 +346,7 @@ public final class Torus3D implements Shape3D {
 		final double d = f1 * 2.0D * f4 + 8.0D * f3 * f6 * f5;
 		final double e = f4 * f4 + 4.0D * f3 * f6 * f6 - 4.0D * f3 * f2;
 		
-		final double[] ts = solveQuartic(a, b, c, d, e);
+		final double[] ts = doSolveQuartic(a, b, c, d, e);
 		
 		if(ts.length == 0) {
 			return Double.NaN;
@@ -453,5 +451,105 @@ public final class Torus3D implements Shape3D {
 	
 	private static Point3D doCreateSurfaceIntersectionPoint(final Ray3D ray, final double t) {
 		return Point3D.add(ray.getOrigin(), ray.getDirection(), t);
+	}
+	
+	private static double doSolveCubicForQuartic(final double p, final double q, final double r) {
+		final double pSquared = p * p;
+		final double q0 = (pSquared - 3.0D * q) / 9.0D;
+		final double q0Cubed = q0 * q0 * q0;
+		final double r0 = (p * (pSquared - 4.5D * q) + 13.5D * r) / 27.0D;
+		final double r0Squared = r0 * r0;
+		final double d = q0Cubed - r0Squared;
+		final double e = p / 3.0D;
+		
+		if(d >= 0.0D) {
+			final double d0 = r0 / Math.sqrt(q0Cubed);
+			final double theta = Math.acos(d0) / 3.0D;
+			final double q1 = -2.0D * Math.sqrt(q0);
+			final double q2 = q1 * Math.cos(theta) - e;
+			
+			return q2;
+		}
+		
+		final double q1 = Math.pow(Math.sqrt(r0Squared - q0Cubed) + Math.abs(r0), 1.0D / 3.0D);
+		final double q2 = r0 < 0.0D ? (q1 + q0 / q1) - e : -(q1 + q0 / q1) - e;
+		
+		return q2;
+	}
+	
+	private static double[] doSolveQuartic(final double a, final double b, final double c, final double d, final double e) {
+		final double aReciprocal = 1.0D / a;
+		final double bA = b * aReciprocal;
+		final double bASquared = bA * bA;
+		final double cA = c * aReciprocal;
+		final double dA = d * aReciprocal;
+		final double eA = e * aReciprocal;
+		final double p = -0.375D * bASquared + cA;
+		final double q = 0.125D * bASquared * bA - 0.5D * bA * cA + dA;
+		final double r = -0.01171875D * bASquared * bASquared + 0.0625D * bASquared * cA - 0.25D * bA * dA + eA;
+		final double z = doSolveCubicForQuartic(-0.5D * p, -r, 0.5D * r * p - 0.125D * q * q);
+		
+		double d1 = 2.0D * z - p;
+		double d2;
+		
+		if(d1 < 0.0D) {
+			return new double[0];
+		} else if(d1 < 1.0e-10D) {
+			d2 = z * z - r;
+			
+			if(d2 < 0.0D) {
+				return new double[0];
+			}
+			
+			d2 = Math.sqrt(d2);
+		} else {
+			d1 = Math.sqrt(d1);
+			d2 = 0.5D * q / d1;
+		}
+		
+		final double q1 = d1 * d1;
+		final double q2 = -0.25D * bA;
+		final double pm = q1 - 4.0D * (z - d2);
+		final double pp = q1 - 4.0D * (z + d2);
+		
+		if(pm >= 0.0D && pp >= 0.0D) {
+			final double pmSqrt = Math.sqrt(pm);
+			final double ppSqrt = Math.sqrt(pp);
+			
+			final double[] results = new double[4];
+			
+			results[0] = -0.5D * (d1 + pmSqrt) + q2;
+			results[1] = -0.5D * (d1 - pmSqrt) + q2;
+			results[2] = +0.5D * (d1 + ppSqrt) + q2;
+			results[3] = +0.5D * (d1 - ppSqrt) + q2;
+			
+			for(int i = 1; i < 4; i++) {
+				for(int j = i; j > 0 && results[j - 1] > results[j]; j--) {
+					final double resultJ0 = results[j - 0];
+					final double resultJ1 = results[j - 1];
+					
+					results[j - 0] = resultJ1;
+					results[j - 1] = resultJ0;
+				}
+			}
+			
+			return results;
+		} else if(pm >= 0.0D) {
+			final double pmSqrt = Math.sqrt(pm);
+			
+			return new double[] {
+				-0.5D * (d1 + pmSqrt) + q2,
+				-0.5D * (d1 - pmSqrt) + q2
+			};
+		} else if(pp >= 0.0D) {
+			final double ppSqrt = Math.sqrt(pp);
+			
+			return new double[] {
+				+0.5D * (d1 - ppSqrt) + q2,
+				+0.5D * (d1 + ppSqrt) + q2
+			};
+		} else {
+			return new double[0];
+		}
 	}
 }

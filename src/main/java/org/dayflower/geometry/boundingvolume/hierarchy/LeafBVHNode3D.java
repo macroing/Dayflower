@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume.hierarchy;
 
-import static org.dayflower.utility.Doubles.minOrNaN;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
 import java.util.List;
@@ -322,7 +320,7 @@ public final class LeafBVHNode3D<T extends Shape3D> extends BVHNode3D {
 		
 		if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
 			for(final Shape3D shape : this.shapes) {
-				t = minOrNaN(t, shape.intersectionT(ray, tBounds[0], tBounds[1]));
+				t = Doubles.minOrDefault(t, shape.intersectionT(ray, tBounds[0], tBounds[1]), Double.NaN);
 				
 				if(!Doubles.isNaN(t)) {
 					tBounds[1] = t;

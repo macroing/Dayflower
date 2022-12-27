@@ -35,6 +35,7 @@ import org.dayflower.scene.SceneLoader;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.loader.JavaSceneLoader;
 import org.dayflower.scene.texture.Texture;
+
 import org.macroing.java.io.Files;
 
 import javafx.animation.AnimationTimer;

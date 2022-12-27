@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.minOrNaN;
-
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -270,7 +268,7 @@ public final class CompoundShape3D implements Shape3D {
 		double tMin = tMinimum;
 		
 		for(final Shape3D shape : this.shapes) {
-			t = minOrNaN(t, shape.intersectionT(ray, tMin, tMax));
+			t = Doubles.minOrDefault(t, shape.intersectionT(ray, tMin, tMax), Double.NaN);
 			
 			if(!Doubles.isNaN(t)) {
 				tMax = t;

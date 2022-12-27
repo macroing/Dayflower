@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.boundingvolume.hierarchy;
 
-import static org.dayflower.utility.Doubles.minOrNaN;
-
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 import java.util.Optional;
@@ -31,6 +29,8 @@ import org.dayflower.geometry.SurfaceIntersector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.lang.Doubles;
 
 /**
  * A {@code TreeBVHNode3D} is an implementation of {@link BVHNode3D} that represents a tree node.
@@ -249,6 +249,6 @@ public final class TreeBVHNode3D extends BVHNode3D {
 //	TODO: Add Unit Tests!
 	@Override
 	protected double intersectionT(final Ray3D ray, final double[] tBounds) {
-		return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.bVHNodeL.intersectionT(ray, tBounds), this.bVHNodeR.intersectionT(ray, tBounds)) : Double.NaN;
+		return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? Doubles.minOrDefault(this.bVHNodeL.intersectionT(ray, tBounds), this.bVHNodeR.intersectionT(ray, tBounds), Double.NaN) : Double.NaN;
 	}
 }

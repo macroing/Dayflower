@@ -113,7 +113,7 @@ public final class TextureWizard {
 		Dialog<Texture> dialog = new Dialog<>();
 		dialog.initOwner(this.owner);
 		dialog.setResultConverter(buttonType -> buttonType.getButtonData() == ButtonType.OK.getButtonData() ? textureGridPane.createTexture() : null);
-		dialog.setTitle("New Texture");
+		dialog.setTitle(textureInfo.getTitle());
 		
 		final
 		DialogPane dialogPane = dialog.getDialogPane();

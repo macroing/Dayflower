@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.utility.Doubles.minOrNaN;
-
 import java.io.BufferedReader;
 import java.io.DataOutput;
 import java.io.File;
@@ -443,7 +441,7 @@ public final class TriangleMesh3D implements Shape3D {
 		double tMin = tMinimum;
 		
 		for(final Triangle3D triangle : this.triangles) {
-			t = minOrNaN(t, triangle.intersectionT(ray, tMin, tMax));
+			t = Doubles.minOrDefault(t, triangle.intersectionT(ray, tMin, tMax), Double.NaN);
 			
 			if(!Doubles.isNaN(t)) {
 				tMax = t;

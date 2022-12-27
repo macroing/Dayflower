@@ -182,6 +182,7 @@ The following table describes the different APIs and their current status in the
 | JavaFX Scene Control API               | 100.0%  |   0.0%    |
 | JavaFX Scene Image API                 | 100.0%  | 100.0%    |
 | JavaFX Scene Layout API                | 100.0%  |   0.0%    |
+| JavaFX Texture API                     | 100.0%  |   0.0%    |
 | Node API                               | 100.0%  | 100.0%    |
 | Parameter API                          | 100.0%  |   0.0%    |
 | Renderer API                           | 100.0%  | 100.0%    |

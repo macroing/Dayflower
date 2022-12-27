@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
+import org.dayflower.javafx.texture.TextureWizard;
 import org.dayflower.parameter.ParameterList;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.scene.Scene;
@@ -248,8 +249,8 @@ public final class DayflowerApplication extends Application {
 	
 	private void doNewTexture() {
 		final
-		TextureDialog textureDialog = new TextureDialog(doGetStage(), texture -> this.texture.set(texture));
-		textureDialog.showAndWait();
+		TextureWizard textureWizard = new TextureWizard(doGetStage());
+		textureWizard.showAndWait().ifPresent(texture -> this.texture.set(texture));
 	}
 	
 	@SuppressWarnings("unused")

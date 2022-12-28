@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.renderer.Renderer;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.texture.Texture;
 
 import javafx.scene.control.Accordion;
@@ -34,12 +35,12 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
 final class RendererConfigurationView extends Accordion {
-	public RendererConfigurationView(final AtomicReference<Texture> texture, final Renderer renderer) {
+	public RendererConfigurationView(final AtomicReference<Material> material, final AtomicReference<Texture> texture, final Renderer renderer) {
 		Objects.requireNonNull(renderer, "renderer == null");
 		
 		getPanes().add(new TitledPane("Camera", CenteredVBoxes.createCenteredVBoxForCamera(renderer)));
 		getPanes().add(new TitledPane("Renderer", CenteredVBoxes.createCenteredVBoxForRenderer(renderer)));
-		getPanes().add(new TitledPane("Scene", CenteredVBoxes.createCenteredVBoxForScene(texture, renderer)));
+		getPanes().add(new TitledPane("Scene", CenteredVBoxes.createCenteredVBoxForScene(material, texture, renderer)));
 		
 		setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 1.0D, 0.0D, 0.0D))));
 	}

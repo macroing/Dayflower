@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.texture.Texture;
 
 import javafx.scene.control.Tab;
@@ -39,10 +40,10 @@ final class RendererTabPane extends TabPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public RendererTabPane(final AtomicReference<Texture> texture, final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService, final Stage stage) {
+	public RendererTabPane(final AtomicReference<Material> material, final AtomicReference<Texture> texture, final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService, final Stage stage) {
 		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
 		this.combinedProgressiveImageOrderRenderer.getScene().addSceneObserver(new SceneObserverImpl(combinedProgressiveImageOrderRenderer, this));
-		this.rendererViewPane = new RendererViewPane(texture, combinedProgressiveImageOrderRenderer, executorService, stage);
+		this.rendererViewPane = new RendererViewPane(material, texture, combinedProgressiveImageOrderRenderer, executorService, stage);
 		
 		getTabs().add(new Tab(TEXT_VIEW, this.rendererViewPane));
 		getSelectionModel().select(0);

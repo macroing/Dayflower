@@ -25,11 +25,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.javafx.material.MaterialWizard;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
 import org.dayflower.javafx.texture.TextureWizard;
 import org.dayflower.parameter.ParameterList;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
 import org.dayflower.scene.light.PerezLight;
@@ -68,13 +70,13 @@ public final class DayflowerApplication extends Application {
 	private static final String PATH_FILE = "File";
 	private static final String PATH_FILE_NEW = "File.New";
 	private static final String PATH_FILE_OPEN = "File.Open";
-//	private static final String PATH_SCENE_MATERIAL = "Scene.Material";
+	private static final String PATH_SCENE_MATERIAL = "Scene.Material";
 	private static final String PATH_SCENE_TEXTURE = "Scene.Texture";
 	private static final String TEXT_C_P_U_RENDERER = "CPU Renderer";
 	private static final String TEXT_EXIT = "Exit";
 	private static final String TEXT_FILE = "File";
 	private static final String TEXT_G_P_U_RENDERER = "GPU Renderer";
-//	private static final String TEXT_NEW_MATERIAL = "New Material";
+	private static final String TEXT_NEW_MATERIAL = "New Material";
 	private static final String TEXT_NEW_TEXTURE = "New Texture";
 	private static final String TEXT_SAVE_IMAGE = "Save Image";
 	private static final String TEXT_SAVE_IMAGE_AS = "Save Image As...";
@@ -86,6 +88,7 @@ public final class DayflowerApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final AtomicReference<Material> material;
 	private final AtomicReference<Stage> stage;
 	private final AtomicReference<Texture> texture;
 	private final BorderPane borderPane;
@@ -99,11 +102,12 @@ public final class DayflowerApplication extends Application {
 	 * Constructs a new {@code DayflowerApplication} instance.
 	 */
 	public DayflowerApplication() {
+		this.material = new AtomicReference<>();
 		this.stage = new AtomicReference<>();
 		this.texture = new AtomicReference<>();
 		this.borderPane = new BorderPane();
 		this.executorService = Executors.newFixedThreadPool(1);
-		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererTabPane -> rendererTabPane.getCombinedProgressiveImageOrderRenderer(), renderer -> new RendererTabPane(this.texture, renderer, this.executorService, doGetStage()), (a, b) -> a.equals(b), renderer -> renderer.getScene().getName());
+		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererTabPane -> rendererTabPane.getCombinedProgressiveImageOrderRenderer(), renderer -> new RendererTabPane(this.material, this.texture, renderer, this.executorService, doGetStage()), (a, b) -> a.equals(b), renderer -> renderer.getScene().getName());
 		this.pathMenuBar = new PathMenuBar();
 	}
 	
@@ -179,7 +183,7 @@ public final class DayflowerApplication extends Application {
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_IMAGE_AS, e -> doSaveAs(), null, false);
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, e -> doExit(), null, true);
-//		this.pathMenuBar.addMenuItem(PATH_SCENE_MATERIAL, TEXT_NEW_MATERIAL, e -> doNewMaterial(), null, true);
+		this.pathMenuBar.addMenuItem(PATH_SCENE_MATERIAL, TEXT_NEW_MATERIAL, e -> doNewMaterial(), null, true);
 		this.pathMenuBar.addMenuItem(PATH_SCENE_TEXTURE, TEXT_NEW_TEXTURE, e -> doNewTexture(), null, true);
 	}
 	
@@ -244,9 +248,11 @@ public final class DayflowerApplication extends Application {
 		});
 	}
 	
-//	private void doNewMaterial() {
-//		TODO: Implement!
-//	}
+	private void doNewMaterial() {
+		final
+		MaterialWizard materialWizard = new MaterialWizard(doGetStage());
+		materialWizard.showAndWait().ifPresent(material -> this.material.set(material));
+	}
 	
 	private void doNewTexture() {
 		final

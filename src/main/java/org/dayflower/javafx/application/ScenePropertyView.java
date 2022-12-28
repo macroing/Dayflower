@@ -27,6 +27,7 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
@@ -169,6 +170,12 @@ final class ScenePropertyView extends VBox {
 				return String.format("[%+.10f, %+.10f, %+.10f, %+.10f]", Float.valueOf(rotation.x), Float.valueOf(rotation.y), Float.valueOf(rotation.z), Float.valueOf(rotation.w));
 			} else if(object instanceof Scene) {
 				return Scene.class.cast(object).getName();
+			} else if(object instanceof TriangleMesh3F) {
+				final TriangleMesh3F triangleMesh = TriangleMesh3F.class.cast(object);
+				
+				final String string = (triangleMesh.getName() + " " + triangleMesh.getGroupName() + " " + triangleMesh.getObjectName() + " " + triangleMesh.getMaterialName()).trim().replaceAll("\\s\\s+", " ");
+				
+				return string;
 			} else if(object instanceof Shape3F) {
 				return Shape3F.class.cast(object).getName();
 			} else if(object instanceof Transform) {

@@ -130,21 +130,22 @@ final class CenteredVBoxes {
 		return centeredVBox;
 	}
 	
-	public static CenteredVBox createCenteredVBoxForScene(final AtomicReference<Texture> texture, final Renderer renderer) {
+	public static CenteredVBox createCenteredVBoxForScene(final AtomicReference<Material> material, final AtomicReference<Texture> texture, final Renderer renderer) {
 		final CenteredVBox centeredVBox = new CenteredVBox();
 		
 		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(BullseyeMaterial.NAME, CheckerboardMaterial.NAME, ClearCoatMaterial.NAME, DisneyMaterial.NAME, GlassMaterial.NAME, GlossyMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, PolkaDotMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME), MatteMaterial.NAME);
 		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Cone3F.NAME, Cylinder3F.NAME, Disk3F.NAME, Hyperboloid3F.NAME, Paraboloid3F.NAME, Plane3F.NAME, Rectangle3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
 		
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
-			final Material material = doCreateMaterial(texture, comboBoxMaterial);
+			final Material materialA = material.get();
+			final Material materialB = materialA != null ? materialA : doCreateMaterial(texture, comboBoxMaterial);
 			
 			final Shape3F shape = doCreateShape(comboBoxShape);
 			
-			if(material != null && shape != null) {
+			if(materialB != null && shape != null) {
 				final
 				Scene scene = renderer.getScene();
-				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(renderer, shape), doGetQuaternionByShape(shape))));
+				scene.addPrimitive(new Primitive(materialB, shape, new Transform(doGetPointByShape(renderer, shape), doGetQuaternionByShape(shape))));
 			}
 		}, false);
 		centeredVBox.addSeparator();

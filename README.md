@@ -178,6 +178,7 @@ The following table describes the different APIs and their current status in the
 | Geometry Shape API                     | 100.0%  |  17.9%    |
 | Image API                              | 100.0%  |   0.0%    |
 | JavaFX Concurrent API                  | 100.0%  |   0.0%    |
+| JavaFX Material API                    | 100.0%  |   0.0%    |
 | JavaFX Scene Canvas API                | 100.0%  |   0.0%    |
 | JavaFX Scene Control API               | 100.0%  |   0.0%    |
 | JavaFX Scene Image API                 | 100.0%  | 100.0%    |

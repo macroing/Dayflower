@@ -1,5 +1,7 @@
 2022-12-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add group name, object name and material name for triangle meshes in the scene property view of the GUI.
+	* ADD:		Add the JavaFX Material API.
 	* ADD:		Add support for BlendTexture in the GUI.
 	* ADD:		Add a TexturePicker class to the JavaFX Texture API.
 	* CHANGE:	Update the BullseyeTextureGridPane, CheckerboardTextureGridPane and PolkaDotTextureGridPane classes to use the TexturePicker instead of ColorPicker.

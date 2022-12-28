@@ -20,7 +20,6 @@ package org.dayflower.javafx.application;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
@@ -38,6 +37,7 @@ import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
+import org.dayflower.javafx.material.MaterialPicker;
 import org.dayflower.javafx.scene.layout.CenteredVBox;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.ProgressiveImageOrderRenderer;
@@ -51,22 +51,6 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
-import org.dayflower.scene.material.BullseyeMaterial;
-import org.dayflower.scene.material.CheckerboardMaterial;
-import org.dayflower.scene.material.ClearCoatMaterial;
-import org.dayflower.scene.material.DisneyMaterial;
-import org.dayflower.scene.material.GlassMaterial;
-import org.dayflower.scene.material.GlossyMaterial;
-import org.dayflower.scene.material.HairMaterial;
-import org.dayflower.scene.material.MatteMaterial;
-import org.dayflower.scene.material.MetalMaterial;
-import org.dayflower.scene.material.MirrorMaterial;
-import org.dayflower.scene.material.PlasticMaterial;
-import org.dayflower.scene.material.PolkaDotMaterial;
-import org.dayflower.scene.material.SubstrateMaterial;
-import org.dayflower.scene.material.UberMaterial;
-import org.dayflower.scene.texture.Texture;
-import org.macroing.art4j.color.Color3F;
 
 import javafx.application.Platform;
 import javafx.scene.control.ComboBox;
@@ -130,22 +114,23 @@ final class CenteredVBoxes {
 		return centeredVBox;
 	}
 	
-	public static CenteredVBox createCenteredVBoxForScene(final AtomicReference<Material> material, final AtomicReference<Texture> texture, final Renderer renderer) {
+	public static CenteredVBox createCenteredVBoxForScene(final Renderer renderer) {
 		final CenteredVBox centeredVBox = new CenteredVBox();
 		
-		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(BullseyeMaterial.NAME, CheckerboardMaterial.NAME, ClearCoatMaterial.NAME, DisneyMaterial.NAME, GlassMaterial.NAME, GlossyMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, PolkaDotMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME), MatteMaterial.NAME);
 		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Cone3F.NAME, Cylinder3F.NAME, Disk3F.NAME, Hyperboloid3F.NAME, Paraboloid3F.NAME, Plane3F.NAME, Rectangle3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
 		
+		final MaterialPicker materialPicker = new MaterialPicker();
+		
+		centeredVBox.getChildren().add(materialPicker);
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
-			final Material materialA = material.get();
-			final Material materialB = materialA != null ? materialA : doCreateMaterial(texture, comboBoxMaterial);
+			final Material material = materialPicker.getMaterial();
 			
 			final Shape3F shape = doCreateShape(comboBoxShape);
 			
-			if(materialB != null && shape != null) {
+			if(material != null && shape != null) {
 				final
 				Scene scene = renderer.getScene();
-				scene.addPrimitive(new Primitive(materialB, shape, new Transform(doGetPointByShape(renderer, shape), doGetQuaternionByShape(shape))));
+				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(renderer, shape), doGetQuaternionByShape(shape))));
 			}
 		}, false);
 		centeredVBox.addSeparator();
@@ -170,49 +155,6 @@ final class CenteredVBoxes {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Material doCreateMaterial(final AtomicReference<Texture> texture, final ComboBox<String> comboBoxMaterial) {
-		final String selectedItem = comboBoxMaterial.getSelectionModel().getSelectedItem();
-		
-		final Texture currentTexture = texture.get();
-		
-		if(selectedItem != null) {
-			switch(selectedItem) {
-				case BullseyeMaterial.NAME:
-					return currentTexture != null ? new BullseyeMaterial(new MatteMaterial(currentTexture), new MatteMaterial(Color3F.WHITE)) : new BullseyeMaterial();
-				case CheckerboardMaterial.NAME:
-					return currentTexture != null ? new CheckerboardMaterial(new MatteMaterial(currentTexture), new MatteMaterial(Color3F.WHITE)) : new CheckerboardMaterial();
-				case ClearCoatMaterial.NAME:
-					return currentTexture != null ? new ClearCoatMaterial(currentTexture) : new ClearCoatMaterial();
-				case DisneyMaterial.NAME:
-					return currentTexture != null ? new DisneyMaterial(currentTexture) : new DisneyMaterial();
-				case GlassMaterial.NAME:
-					return currentTexture != null ? new GlassMaterial(currentTexture) : new GlassMaterial();
-				case GlossyMaterial.NAME:
-					return currentTexture != null ? new GlossyMaterial(currentTexture) : new GlossyMaterial();
-				case HairMaterial.NAME:
-					return new HairMaterial();
-				case MatteMaterial.NAME:
-					return currentTexture != null ? new MatteMaterial(currentTexture) : new MatteMaterial();
-				case MetalMaterial.NAME:
-					return new MetalMaterial();
-				case MirrorMaterial.NAME:
-					return currentTexture != null ? new MirrorMaterial(currentTexture) : new MirrorMaterial();
-				case PlasticMaterial.NAME:
-					return currentTexture != null ? new PlasticMaterial(currentTexture) : new PlasticMaterial();
-				case PolkaDotMaterial.NAME:
-					return currentTexture != null ? new PolkaDotMaterial(new MatteMaterial(currentTexture), new MatteMaterial(Color3F.WHITE)) : new PolkaDotMaterial();
-				case SubstrateMaterial.NAME:
-					return currentTexture != null ? new SubstrateMaterial(currentTexture) : new SubstrateMaterial();
-				case UberMaterial.NAME:
-					return new UberMaterial();
-				default:
-					return null;
-			}
-		}
-		
-		return null;
-	}
 	
 	private static Point3F doGetPointByShape(final Renderer renderer, final Shape3F shape) {
 		if(shape instanceof Cone3F) {

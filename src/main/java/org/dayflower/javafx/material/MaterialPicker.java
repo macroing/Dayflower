@@ -35,6 +35,8 @@ import javafx.scene.layout.BorderPane;
  * @author J&#246;rgen Lundgren
  */
 public final class MaterialPicker extends BorderPane {
+	private static final String NAME_BULLSEYE_MATERIAL = "BullseyeMaterial";
+	private static final String NAME_CHECKERBOARD_MATERIAL = "CheckerboardMaterial";
 	private static final String NAME_CLEAR_COAT_MATERIAL = "ClearCoatMaterial";
 	private static final String NAME_GLASS_MATERIAL = "GlassMaterial";
 	private static final String NAME_GLOSSY_MATERIAL = "GlossyMaterial";
@@ -97,6 +99,10 @@ public final class MaterialPicker extends BorderPane {
 	
 	private String doGetName() {
 		switch(getMaterial().getClass().getSimpleName()) {
+			case NAME_BULLSEYE_MATERIAL:
+				return "Bullseye Material";
+			case NAME_CHECKERBOARD_MATERIAL:
+				return "Checkerboard Material";
 			case NAME_CLEAR_COAT_MATERIAL:
 				return "Clear Coat Material";
 			case NAME_GLASS_MATERIAL:

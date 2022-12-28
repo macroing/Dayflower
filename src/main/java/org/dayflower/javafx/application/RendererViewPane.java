@@ -32,9 +32,7 @@ import org.dayflower.javafx.scene.canvas.ConcurrentImageCanvasPane;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.scene.Camera;
-import org.dayflower.scene.Material;
 import org.dayflower.scene.Scene;
-import org.dayflower.scene.texture.Texture;
 import org.macroing.java.io.Files;
 import org.macroing.java.util.function.TriFunction;
 
@@ -62,14 +60,14 @@ final class RendererViewPane extends BorderPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public RendererViewPane(final AtomicReference<Material> material, final AtomicReference<Texture> texture, final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService, final Stage stage) {
+	public RendererViewPane(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService, final Stage stage) {
 		this.isCameraUpdateRequired = new AtomicBoolean();
 		this.lastResizeTimeMillis = new AtomicLong();
 		this.file = new AtomicReference<>();
 		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
 		this.concurrentImageCanvas = new ConcurrentImageCanvas<>(executorService, combinedProgressiveImageOrderRenderer.getImage(), this::doRender, new ObserverImpl(combinedProgressiveImageOrderRenderer));
 		this.concurrentImageCanvasPane = doCreateConcurrentImageCanvasPane();
-		this.rendererConfigurationView = new RendererConfigurationView(material, texture, combinedProgressiveImageOrderRenderer);
+		this.rendererConfigurationView = new RendererConfigurationView(combinedProgressiveImageOrderRenderer);
 		this.rendererStatusBar = new RendererStatusBar(combinedProgressiveImageOrderRenderer);
 		this.scenePropertyView = new ScenePropertyView(combinedProgressiveImageOrderRenderer.getScene());
 		this.stage = Objects.requireNonNull(stage, "stage == null");

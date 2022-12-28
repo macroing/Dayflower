@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.scene.Material;
+import org.dayflower.scene.material.BullseyeMaterial;
+import org.dayflower.scene.material.CheckerboardMaterial;
 import org.dayflower.scene.material.ClearCoatMaterial;
 import org.dayflower.scene.material.GlassMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
@@ -50,6 +52,8 @@ import javafx.stage.Window;
  * @author J&#246;rgen Lundgren
  */
 public final class MaterialWizard {
+	private static final String NAME_BULLSEYE_MATERIAL = "BullseyeMaterial";
+	private static final String NAME_CHECKERBOARD_MATERIAL = "CheckerboardMaterial";
 	private static final String NAME_CLEAR_COAT_MATERIAL = "ClearCoatMaterial";
 	private static final String NAME_GLASS_MATERIAL = "GlassMaterial";
 	private static final String NAME_GLOSSY_MATERIAL = "GlossyMaterial";
@@ -124,7 +128,7 @@ public final class MaterialWizard {
 		
 		final
 		ComboBox<MaterialInfo> comboBox = new ComboBox<>();
-		comboBox.getItems().addAll(new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(GlassMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class), new MaterialInfo(MetalMaterial.class), new MaterialInfo(MirrorMaterial.class), new MaterialInfo(PlasticMaterial.class), new MaterialInfo(SubstrateMaterial.class));
+		comboBox.getItems().addAll(new MaterialInfo(BullseyeMaterial.class), new MaterialInfo(CheckerboardMaterial.class), new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(GlassMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class), new MaterialInfo(MetalMaterial.class), new MaterialInfo(MirrorMaterial.class), new MaterialInfo(PlasticMaterial.class), new MaterialInfo(SubstrateMaterial.class));
 		comboBox.setMaxWidth(Doubles.MAX_VALUE);
 		comboBox.setValue(new MaterialInfo(MatteMaterial.class));
 		comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> materialInfo.set(newValue));
@@ -167,6 +171,10 @@ public final class MaterialWizard {
 		
 		public String getTitle() {
 			switch(this.clazz.getSimpleName()) {
+				case NAME_BULLSEYE_MATERIAL:
+					return "New Bullseye Material";
+				case NAME_CHECKERBOARD_MATERIAL:
+					return "New Checkerboard Material";
 				case NAME_CLEAR_COAT_MATERIAL:
 					return "New Clear Coat Material";
 				case NAME_GLASS_MATERIAL:
@@ -195,6 +203,10 @@ public final class MaterialWizard {
 		
 		public MaterialGridPane createMaterialGridPane() {
 			switch(this.clazz.getSimpleName()) {
+				case NAME_BULLSEYE_MATERIAL:
+					return new BullseyeMaterialGridPane();
+				case NAME_CHECKERBOARD_MATERIAL:
+					return new CheckerboardMaterialGridPane();
 				case NAME_CLEAR_COAT_MATERIAL:
 					return new ClearCoatMaterialGridPane();
 				case NAME_GLASS_MATERIAL:

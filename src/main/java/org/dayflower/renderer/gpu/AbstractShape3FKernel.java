@@ -1283,14 +1283,20 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float polygonSurfaceNormalY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1];
 		final float polygonSurfaceNormalZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2];
 		
+		final float normalDotRayDirection = vector3FDotProduct(polygonSurfaceNormalX, polygonSurfaceNormalY, polygonSurfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float polygonSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalX : polygonSurfaceNormalX;
+		final float polygonSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalY : polygonSurfaceNormalY;
+		final float polygonSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalZ : polygonSurfaceNormalZ;
+		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
 //		Compute variables necessary for computing the texture coordinates:
-		final boolean isXLarger = abs(polygonSurfaceNormalX) > abs(polygonSurfaceNormalY) && abs(polygonSurfaceNormalX) > abs(polygonSurfaceNormalZ);
-		final boolean isYLarger = abs(polygonSurfaceNormalY) > abs(polygonSurfaceNormalZ);
+		final boolean isXLarger = abs(polygonSurfaceNormalCorrectlyOrientedX) > abs(polygonSurfaceNormalCorrectlyOrientedY) && abs(polygonSurfaceNormalCorrectlyOrientedX) > abs(polygonSurfaceNormalCorrectlyOrientedZ);
+		final boolean isYLarger = abs(polygonSurfaceNormalCorrectlyOrientedY) > abs(polygonSurfaceNormalCorrectlyOrientedZ);
 		
 //		Compute variables necessary for computing the texture coordinates:
 		final float aX = isXLarger ? polygonAY      : isYLarger ? polygonAZ      : polygonAX;
@@ -1313,7 +1319,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
 		
 //		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(polygonSurfaceNormalX, polygonSurfaceNormalY, polygonSurfaceNormalZ);
+		orthonormalBasis33FSetFromW(polygonSurfaceNormalCorrectlyOrientedX, polygonSurfaceNormalCorrectlyOrientedY, polygonSurfaceNormalCorrectlyOrientedZ);
 		
 //		Update the intersection array:
 		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -1353,14 +1359,20 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float polygonSurfaceNormalY = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 1];
 		final float polygonSurfaceNormalZ = this.shape3FPolygon3FArray[shape3FPolygon3FArrayOffset + CompiledShape3FCache.POLYGON_3_F_OFFSET_SURFACE_NORMAL + 2];
 		
+		final float normalDotRayDirection = vector3FDotProduct(polygonSurfaceNormalX, polygonSurfaceNormalY, polygonSurfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float polygonSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalX : polygonSurfaceNormalX;
+		final float polygonSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalY : polygonSurfaceNormalY;
+		final float polygonSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalZ : polygonSurfaceNormalZ;
+		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
 //		Compute variables necessary for computing the texture coordinates:
-		final boolean isXLarger = abs(polygonSurfaceNormalX) > abs(polygonSurfaceNormalY) && abs(polygonSurfaceNormalX) > abs(polygonSurfaceNormalZ);
-		final boolean isYLarger = abs(polygonSurfaceNormalY) > abs(polygonSurfaceNormalZ);
+		final boolean isXLarger = abs(polygonSurfaceNormalCorrectlyOrientedX) > abs(polygonSurfaceNormalCorrectlyOrientedY) && abs(polygonSurfaceNormalCorrectlyOrientedX) > abs(polygonSurfaceNormalCorrectlyOrientedZ);
+		final boolean isYLarger = abs(polygonSurfaceNormalCorrectlyOrientedY) > abs(polygonSurfaceNormalCorrectlyOrientedZ);
 		
 //		Compute variables necessary for computing the texture coordinates:
 		final float aX = isXLarger ? polygonAY      : isYLarger ? polygonAZ      : polygonAX;
@@ -1383,7 +1395,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
 		
 //		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(polygonSurfaceNormalX, polygonSurfaceNormalY, polygonSurfaceNormalZ);
+		orthonormalBasis33FSetFromW(polygonSurfaceNormalCorrectlyOrientedX, polygonSurfaceNormalCorrectlyOrientedY, polygonSurfaceNormalCorrectlyOrientedZ);
 		
 //		Update the intersection array:
 		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -1527,14 +1539,20 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rectangleSurfaceNormalY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 1];
 		final float rectangleSurfaceNormalZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 2];
 		
+		final float normalDotRayDirection = vector3FDotProduct(rectangleSurfaceNormalX, rectangleSurfaceNormalY, rectangleSurfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float rectangleSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalX : rectangleSurfaceNormalX;
+		final float rectangleSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalY : rectangleSurfaceNormalY;
+		final float rectangleSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalZ : rectangleSurfaceNormalZ;
+		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
 //		Compute variables necessary for computing the texture coordinates:
-		final boolean isXLarger = abs(rectangleSurfaceNormalX) > abs(rectangleSurfaceNormalY) && abs(rectangleSurfaceNormalX) > abs(rectangleSurfaceNormalZ);
-		final boolean isYLarger = abs(rectangleSurfaceNormalY) > abs(rectangleSurfaceNormalZ);
+		final boolean isXLarger = abs(rectangleSurfaceNormalCorrectlyOrientedX) > abs(rectangleSurfaceNormalCorrectlyOrientedY) && abs(rectangleSurfaceNormalCorrectlyOrientedX) > abs(rectangleSurfaceNormalCorrectlyOrientedZ);
+		final boolean isYLarger = abs(rectangleSurfaceNormalCorrectlyOrientedY) > abs(rectangleSurfaceNormalCorrectlyOrientedZ);
 		
 //		Compute three points:
 		final float rectangleAX = rectanglePositionX;
@@ -1568,7 +1586,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
 		
 //		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(rectangleSurfaceNormalX, rectangleSurfaceNormalY, rectangleSurfaceNormalZ);
+		orthonormalBasis33FSetFromW(rectangleSurfaceNormalCorrectlyOrientedX, rectangleSurfaceNormalCorrectlyOrientedY, rectangleSurfaceNormalCorrectlyOrientedZ);
 		
 //		Update the intersection array:
 		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -1608,14 +1626,20 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rectangleSurfaceNormalY = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 1];
 		final float rectangleSurfaceNormalZ = this.shape3FRectangle3FArray[shape3FRectangle3FArrayOffset + CompiledShape3FCache.RECTANGLE_3_F_OFFSET_SURFACE_NORMAL + 2];
 		
+		final float normalDotRayDirection = vector3FDotProduct(rectangleSurfaceNormalX, rectangleSurfaceNormalY, rectangleSurfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float rectangleSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalX : rectangleSurfaceNormalX;
+		final float rectangleSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalY : rectangleSurfaceNormalY;
+		final float rectangleSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalZ : rectangleSurfaceNormalZ;
+		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
 //		Compute variables necessary for computing the texture coordinates:
-		final boolean isXLarger = abs(rectangleSurfaceNormalX) > abs(rectangleSurfaceNormalY) && abs(rectangleSurfaceNormalX) > abs(rectangleSurfaceNormalZ);
-		final boolean isYLarger = abs(rectangleSurfaceNormalY) > abs(rectangleSurfaceNormalZ);
+		final boolean isXLarger = abs(rectangleSurfaceNormalCorrectlyOrientedX) > abs(rectangleSurfaceNormalCorrectlyOrientedY) && abs(rectangleSurfaceNormalCorrectlyOrientedX) > abs(rectangleSurfaceNormalCorrectlyOrientedZ);
+		final boolean isYLarger = abs(rectangleSurfaceNormalCorrectlyOrientedY) > abs(rectangleSurfaceNormalCorrectlyOrientedZ);
 		
 //		Compute three points:
 		final float rectangleAX = rectanglePositionX;
@@ -1649,7 +1673,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float textureCoordinatesV = u * (+cY * determinantReciprocal) + v * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
 		
 //		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(rectangleSurfaceNormalX, rectangleSurfaceNormalY, rectangleSurfaceNormalZ);
+		orthonormalBasis33FSetFromW(rectangleSurfaceNormalCorrectlyOrientedX, rectangleSurfaceNormalCorrectlyOrientedY, rectangleSurfaceNormalCorrectlyOrientedZ);
 		
 //		Update the intersection array:
 		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -1780,12 +1804,18 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalY = face == 3 ? -1.0F : face == 4 ? +1.0F : 0.0F;
 		final float surfaceNormalZ = face == 5 ? -1.0F : face == 6 ? +1.0F : 0.0F;
 		
+		final float normalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float surfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
+		final float surfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
+		final float surfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
+		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = faceX != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointX, rectangularCuboidMinimumX, rectangularCuboidMaximumX);
 		final float textureCoordinatesV = faceY != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointY, rectangularCuboidMinimumY, rectangularCuboidMaximumY);
 		
 //		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+		orthonormalBasis33FSetFromW(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 		
 //		Update the intersection array:
 		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -1850,12 +1880,18 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalY = face == 3 ? -1.0F : face == 4 ? +1.0F : 0.0F;
 		final float surfaceNormalZ = face == 5 ? -1.0F : face == 6 ? +1.0F : 0.0F;
 		
+		final float normalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float surfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
+		final float surfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
+		final float surfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
+		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = faceX != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointX, rectangularCuboidMinimumX, rectangularCuboidMaximumX);
 		final float textureCoordinatesV = faceY != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointY, rectangularCuboidMinimumY, rectangularCuboidMaximumY);
 		
 //		Compute the orthonormal basis:
-		orthonormalBasis33FSetFromW(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+		orthonormalBasis33FSetFromW(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 		
 //		Update the intersection array:
 		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -2621,6 +2657,17 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalSY = triangleAOrthonormalBasisWY * w + triangleBOrthonormalBasisWY * u + triangleCOrthonormalBasisWY * v;
 		final float surfaceNormalSZ = triangleAOrthonormalBasisWZ * w + triangleBOrthonormalBasisWZ * u + triangleCOrthonormalBasisWZ * v;
 		
+		final float surfaceNormalGDotRayDirection = vector3FDotProduct(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float surfaceNormalSDotRayDirection = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float surfaceNormalGCorrectlyOrientedX = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGX : surfaceNormalGX;
+		final float surfaceNormalGCorrectlyOrientedY = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGY : surfaceNormalGY;
+		final float surfaceNormalGCorrectlyOrientedZ = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGZ : surfaceNormalGZ;
+		
+		final float surfaceNormalSCorrectlyOrientedX = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSX : surfaceNormalSX;
+		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
+		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
+		
 		final float dU1 = triangleATextureCoordinatesU - triangleCTextureCoordinatesU;
 		final float dU2 = triangleBTextureCoordinatesU - triangleCTextureCoordinatesU;
 		final float dV1 = triangleATextureCoordinatesV - triangleCTextureCoordinatesV;
@@ -2629,7 +2676,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float determinantUV = dU1 * dV2 - dV1 * dU2;
 		
 //		Compute the orthonormal basis for the geometry:
-		orthonormalBasis33FSetFromW(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
+		orthonormalBasis33FSetFromW(surfaceNormalGCorrectlyOrientedX, surfaceNormalGCorrectlyOrientedY, surfaceNormalGCorrectlyOrientedZ);
 		
 //		Update the intersection array:
 		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -2642,9 +2689,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			final float vSY = (-dU2 * (triangleAPositionY - triangleCPositionY) + dU1 * (triangleBPositionY - triangleCPositionY)) * determinantUVReciprocal;
 			final float vSZ = (-dU2 * (triangleAPositionZ - triangleCPositionZ) + dU1 * (triangleBPositionZ - triangleCPositionZ)) * determinantUVReciprocal;
 			
-			orthonormalBasis33FSetFromWV(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, vSX, vSY, vSZ);
+			orthonormalBasis33FSetFromWV(surfaceNormalSCorrectlyOrientedX, surfaceNormalSCorrectlyOrientedY, surfaceNormalSCorrectlyOrientedZ, vSX, vSY, vSZ);
 		} else {
-			orthonormalBasis33FSetFromW(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
+			orthonormalBasis33FSetFromW(surfaceNormalSCorrectlyOrientedX, surfaceNormalSCorrectlyOrientedY, surfaceNormalSCorrectlyOrientedZ);
 		}
 		
 //		Compute the texture coordinates:
@@ -2764,6 +2811,17 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float surfaceNormalSY = triangleAOrthonormalBasisWY * w + triangleBOrthonormalBasisWY * u + triangleCOrthonormalBasisWY * v;
 		final float surfaceNormalSZ = triangleAOrthonormalBasisWZ * w + triangleBOrthonormalBasisWZ * u + triangleCOrthonormalBasisWZ * v;
 		
+		final float surfaceNormalGDotRayDirection = vector3FDotProduct(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float surfaceNormalSDotRayDirection = vector3FDotProduct(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float surfaceNormalGCorrectlyOrientedX = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGX : surfaceNormalGX;
+		final float surfaceNormalGCorrectlyOrientedY = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGY : surfaceNormalGY;
+		final float surfaceNormalGCorrectlyOrientedZ = surfaceNormalGDotRayDirection > 0.0F ? -surfaceNormalGZ : surfaceNormalGZ;
+		
+		final float surfaceNormalSCorrectlyOrientedX = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSX : surfaceNormalSX;
+		final float surfaceNormalSCorrectlyOrientedY = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSY : surfaceNormalSY;
+		final float surfaceNormalSCorrectlyOrientedZ = surfaceNormalSDotRayDirection > 0.0F ? -surfaceNormalSZ : surfaceNormalSZ;
+		
 		final float dU1 = triangleATextureCoordinatesU - triangleCTextureCoordinatesU;
 		final float dU2 = triangleBTextureCoordinatesU - triangleCTextureCoordinatesU;
 		final float dV1 = triangleATextureCoordinatesV - triangleCTextureCoordinatesV;
@@ -2772,7 +2830,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float determinantUV = dU1 * dV2 - dV1 * dU2;
 		
 //		Compute the orthonormal basis for the geometry:
-		orthonormalBasis33FSetFromW(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
+		orthonormalBasis33FSetFromW(surfaceNormalGCorrectlyOrientedX, surfaceNormalGCorrectlyOrientedY, surfaceNormalGCorrectlyOrientedZ);
 		
 //		Update the intersection array:
 		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
@@ -2785,9 +2843,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 			final float vSY = (-dU2 * (triangleAPositionY - triangleCPositionY) + dU1 * (triangleBPositionY - triangleCPositionY)) * determinantUVReciprocal;
 			final float vSZ = (-dU2 * (triangleAPositionZ - triangleCPositionZ) + dU1 * (triangleBPositionZ - triangleCPositionZ)) * determinantUVReciprocal;
 			
-			orthonormalBasis33FSetFromWV(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, vSX, vSY, vSZ);
+			orthonormalBasis33FSetFromWV(surfaceNormalSCorrectlyOrientedX, surfaceNormalSCorrectlyOrientedY, surfaceNormalSCorrectlyOrientedZ, vSX, vSY, vSZ);
 		} else {
-			orthonormalBasis33FSetFromW(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
+			orthonormalBasis33FSetFromW(surfaceNormalSCorrectlyOrientedX, surfaceNormalSCorrectlyOrientedY, surfaceNormalSCorrectlyOrientedZ);
 		}
 		
 //		Compute the texture coordinates:

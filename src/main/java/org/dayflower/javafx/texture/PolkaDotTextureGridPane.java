@@ -20,14 +20,13 @@ package org.dayflower.javafx.texture;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.javafx.scene.control.TextFields;
+import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.PolkaDotTexture;
 import org.dayflower.scene.texture.Texture;
 
 import org.macroing.art4j.color.Color3F;
 
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -37,11 +36,11 @@ import javafx.scene.text.Text;
  * @author J&#246;rgen Lundgren
  */
 public final class PolkaDotTextureGridPane extends TextureGridPane {
-	private final ColorPicker colorPickerColorA;
-	private final ColorPicker colorPickerColorB;
 	private final TextField textFieldAngle;
 	private final TextField textFieldCellResolution;
 	private final TextField textFieldPolkaDotRadius;
+	private final TexturePicker texturePickerA;
+	private final TexturePicker texturePickerB;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -49,16 +48,16 @@ public final class PolkaDotTextureGridPane extends TextureGridPane {
 	 * Constructs a new {@code PolkaDotTextureGridPane} instance.
 	 */
 	public PolkaDotTextureGridPane() {
-		this.colorPickerColorA = new ColorPicker(Color.rgb(128, 128, 128));
-		this.colorPickerColorB = new ColorPicker(Color.rgb(255, 255, 255));
 		this.textFieldAngle = TextFields.createTextField(0.0F);
 		this.textFieldCellResolution = TextFields.createTextField(10.0F);
 		this.textFieldPolkaDotRadius = TextFields.createTextField(0.25F);
+		this.texturePickerA = new TexturePicker(new ConstantTexture(Color3F.GRAY));
+		this.texturePickerB = new TexturePicker(new ConstantTexture(Color3F.WHITE));
 		
-		add(new Text("Color A"), 0, 0);
-		add(this.colorPickerColorA, 1, 0);
-		add(new Text("Color B"), 0, 1);
-		add(this.colorPickerColorB, 1, 1);
+		add(new Text("Texture A"), 0, 0);
+		add(this.texturePickerA, 1, 0);
+		add(new Text("Texture B"), 0, 1);
+		add(this.texturePickerB, 1, 1);
 		add(new Text("Angle"), 0, 2);
 		add(this.textFieldAngle, 1, 2);
 		add(new Text("Cell Resolution"), 0, 3);
@@ -76,7 +75,7 @@ public final class PolkaDotTextureGridPane extends TextureGridPane {
 	 */
 	@Override
 	public Texture createTexture() {
-		return new PolkaDotTexture(doGetColorA(), doGetColorB(), doGetAngle(), doGetCellResolution(), doGetPolkaDotRadius());
+		return new PolkaDotTexture(doGetTextureA(), doGetTextureB(), doGetAngle(), doGetCellResolution(), doGetPolkaDotRadius());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,24 +84,12 @@ public final class PolkaDotTextureGridPane extends TextureGridPane {
 		return AngleF.degrees(Float.parseFloat(this.textFieldAngle.getText()));
 	}
 	
-	private Color3F doGetColorA() {
-		final Color colorA = this.colorPickerColorA.getValue();
-		
-		final float colorAR = (float)(colorA.getRed());
-		final float colorAG = (float)(colorA.getGreen());
-		final float colorAB = (float)(colorA.getBlue());
-		
-		return new Color3F(colorAR, colorAG, colorAB);
+	private Texture doGetTextureA() {
+		return this.texturePickerA.getTexture();
 	}
 	
-	private Color3F doGetColorB() {
-		final Color colorB = this.colorPickerColorB.getValue();
-		
-		final float colorBR = (float)(colorB.getRed());
-		final float colorBG = (float)(colorB.getGreen());
-		final float colorBB = (float)(colorB.getBlue());
-		
-		return new Color3F(colorBR, colorBG, colorBB);
+	private Texture doGetTextureB() {
+		return this.texturePickerB.getTexture();
 	}
 	
 	private float doGetCellResolution() {

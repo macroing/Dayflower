@@ -38,6 +38,9 @@ public final class MaterialPicker extends BorderPane {
 	private static final String NAME_CLEAR_COAT_MATERIAL = "ClearCoatMaterial";
 	private static final String NAME_GLOSSY_MATERIAL = "GlossyMaterial";
 	private static final String NAME_MATTE_MATERIAL = "MatteMaterial";
+	private static final String NAME_MIRROR_MATERIAL = "MirrorMaterial";
+	private static final String NAME_PLASTIC_MATERIAL = "PlasticMaterial";
+	private static final String NAME_SUBSTRATE_MATERIAL = "SubstrateMaterial";
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -98,6 +101,12 @@ public final class MaterialPicker extends BorderPane {
 				return "Glossy Material";
 			case NAME_MATTE_MATERIAL:
 				return "Matte Material";
+			case NAME_MIRROR_MATERIAL:
+				return "Mirror Material";
+			case NAME_PLASTIC_MATERIAL:
+				return "Plastic Material";
+			case NAME_SUBSTRATE_MATERIAL:
+				return "Substrate Material";
 			default:
 				return "Material";
 		}

@@ -26,7 +26,9 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.material.ClearCoatMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
 import org.dayflower.scene.material.MatteMaterial;
-
+import org.dayflower.scene.material.MirrorMaterial;
+import org.dayflower.scene.material.PlasticMaterial;
+import org.dayflower.scene.material.SubstrateMaterial;
 import org.macroing.java.lang.Doubles;
 
 import javafx.geometry.Insets;
@@ -49,6 +51,9 @@ public final class MaterialWizard {
 	private static final String NAME_CLEAR_COAT_MATERIAL = "ClearCoatMaterial";
 	private static final String NAME_GLOSSY_MATERIAL = "GlossyMaterial";
 	private static final String NAME_MATTE_MATERIAL = "MatteMaterial";
+	private static final String NAME_MIRROR_MATERIAL = "MirrorMaterial";
+	private static final String NAME_PLASTIC_MATERIAL = "PlasticMaterial";
+	private static final String NAME_SUBSTRATE_MATERIAL = "SubstrateMaterial";
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -115,7 +120,7 @@ public final class MaterialWizard {
 		
 		final
 		ComboBox<MaterialInfo> comboBox = new ComboBox<>();
-		comboBox.getItems().addAll(new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class));
+		comboBox.getItems().addAll(new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class), new MaterialInfo(MirrorMaterial.class), new MaterialInfo(PlasticMaterial.class), new MaterialInfo(SubstrateMaterial.class));
 		comboBox.setMaxWidth(Doubles.MAX_VALUE);
 		comboBox.setValue(new MaterialInfo(MatteMaterial.class));
 		comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> materialInfo.set(newValue));
@@ -164,6 +169,12 @@ public final class MaterialWizard {
 					return "New Glossy Material";
 				case NAME_MATTE_MATERIAL:
 					return "New Matte Material";
+				case NAME_MIRROR_MATERIAL:
+					return "New Mirror Material";
+				case NAME_PLASTIC_MATERIAL:
+					return "New Plastic Material";
+				case NAME_SUBSTRATE_MATERIAL:
+					return "New Substrate Material";
 				default:
 					return "New Material";
 			}
@@ -182,6 +193,12 @@ public final class MaterialWizard {
 					return new GlossyMaterialGridPane();
 				case NAME_MATTE_MATERIAL:
 					return new MatteMaterialGridPane();
+				case NAME_MIRROR_MATERIAL:
+					return new MirrorMaterialGridPane();
+				case NAME_PLASTIC_MATERIAL:
+					return new PlasticMaterialGridPane();
+				case NAME_SUBSTRATE_MATERIAL:
+					return new SubstrateMaterialGridPane();
 				default:
 					return new MatteMaterialGridPane();
 			}

@@ -34,6 +34,7 @@ import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
+
 import org.macroing.java.lang.Doubles;
 
 import javafx.geometry.Insets;

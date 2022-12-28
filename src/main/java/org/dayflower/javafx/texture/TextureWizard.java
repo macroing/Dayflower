@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -52,6 +53,7 @@ import javafx.stage.Window;
  * @author J&#246;rgen Lundgren
  */
 public final class TextureWizard {
+	private static final String NAME_BLEND_TEXTURE = "BlendTexture";
 	private static final String NAME_BULLSEYE_TEXTURE = "BullseyeTexture";
 	private static final String NAME_CHECKERBOARD_TEXTURE = "CheckerboardTexture";
 	private static final String NAME_CONSTANT_TEXTURE = "ConstantTexture";
@@ -128,7 +130,7 @@ public final class TextureWizard {
 		
 		final
 		ComboBox<TextureInfo> comboBox = new ComboBox<>();
-		comboBox.getItems().addAll(new TextureInfo(BullseyeTexture.class), new TextureInfo(CheckerboardTexture.class), new TextureInfo(ConstantTexture.class), new TextureInfo(DotProductTexture.class), new TextureInfo(LDRImageTexture.class), new TextureInfo(MarbleTexture.class), new TextureInfo(PolkaDotTexture.class), new TextureInfo(SimplexFractionalBrownianMotionTexture.class), new TextureInfo(SurfaceNormalTexture.class), new TextureInfo(UVTexture.class));
+		comboBox.getItems().addAll(new TextureInfo(BlendTexture.class), new TextureInfo(BullseyeTexture.class), new TextureInfo(CheckerboardTexture.class), new TextureInfo(ConstantTexture.class), new TextureInfo(DotProductTexture.class), new TextureInfo(LDRImageTexture.class), new TextureInfo(MarbleTexture.class), new TextureInfo(PolkaDotTexture.class), new TextureInfo(SimplexFractionalBrownianMotionTexture.class), new TextureInfo(SurfaceNormalTexture.class), new TextureInfo(UVTexture.class));
 		comboBox.setMaxWidth(Doubles.MAX_VALUE);
 		comboBox.setValue(new TextureInfo(ConstantTexture.class));
 		comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> textureInfo.set(newValue));
@@ -171,6 +173,8 @@ public final class TextureWizard {
 		
 		public String getTitle() {
 			switch(this.clazz.getSimpleName()) {
+				case NAME_BLEND_TEXTURE:
+					return "New Blend Texture";
 				case NAME_BULLSEYE_TEXTURE:
 					return "New Bullseye Texture";
 				case NAME_CHECKERBOARD_TEXTURE:
@@ -203,6 +207,8 @@ public final class TextureWizard {
 		
 		public TextureGridPane createTextureGridPane() {
 			switch(this.clazz.getSimpleName()) {
+				case NAME_BLEND_TEXTURE:
+					return new BlendTextureGridPane();
 				case NAME_BULLSEYE_TEXTURE:
 					return new BullseyeTextureGridPane();
 				case NAME_CHECKERBOARD_TEXTURE:

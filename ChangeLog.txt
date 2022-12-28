@@ -1,5 +1,6 @@
 2022-12-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add support for BlendTexture in the GUI.
 	* ADD:		Add a TexturePicker class to the JavaFX Texture API.
 	* CHANGE:	Update the BullseyeTextureGridPane, CheckerboardTextureGridPane and PolkaDotTextureGridPane classes to use the TexturePicker instead of ColorPicker.
 	* CHANGE:	Update the copyright notice.

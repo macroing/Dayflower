@@ -35,6 +35,7 @@ import javafx.scene.layout.BorderPane;
  * @author J&#246;rgen Lundgren
  */
 public final class TexturePicker extends BorderPane {
+	private static final String NAME_BLEND_TEXTURE = "BlendTexture";
 	private static final String NAME_BULLSEYE_TEXTURE = "BullseyeTexture";
 	private static final String NAME_CHECKERBOARD_TEXTURE = "CheckerboardTexture";
 	private static final String NAME_CONSTANT_TEXTURE = "ConstantTexture";
@@ -99,6 +100,8 @@ public final class TexturePicker extends BorderPane {
 	
 	private String doGetName() {
 		switch(getTexture().getClass().getSimpleName()) {
+			case NAME_BLEND_TEXTURE:
+				return "Blend Texture";
 			case NAME_BULLSEYE_TEXTURE:
 				return "Bullseye Texture";
 			case NAME_CHECKERBOARD_TEXTURE:

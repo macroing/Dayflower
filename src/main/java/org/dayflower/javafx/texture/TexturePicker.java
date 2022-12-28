@@ -96,6 +96,18 @@ public final class TexturePicker extends BorderPane {
 		return this.texture.get();
 	}
 	
+	/**
+	 * Sets the current {@link Texture} instance to {@code texture}.
+	 * <p>
+	 * If {@code texture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param texture the current {@code Texture} instance
+	 * @throws NullPointerException thrown if, and only if, {@code texture} is {@code null}
+	 */
+	public void setTexture(final Texture texture) {
+		this.texture.set(Objects.requireNonNull(texture, "texture == null"));
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private String doGetName() {

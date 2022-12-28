@@ -24,8 +24,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.scene.Material;
 import org.dayflower.scene.material.ClearCoatMaterial;
+import org.dayflower.scene.material.GlassMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
 import org.dayflower.scene.material.MatteMaterial;
+import org.dayflower.scene.material.MetalMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
@@ -49,8 +51,10 @@ import javafx.stage.Window;
  */
 public final class MaterialWizard {
 	private static final String NAME_CLEAR_COAT_MATERIAL = "ClearCoatMaterial";
+	private static final String NAME_GLASS_MATERIAL = "GlassMaterial";
 	private static final String NAME_GLOSSY_MATERIAL = "GlossyMaterial";
 	private static final String NAME_MATTE_MATERIAL = "MatteMaterial";
+	private static final String NAME_METAL_MATERIAL = "MetalMaterial";
 	private static final String NAME_MIRROR_MATERIAL = "MirrorMaterial";
 	private static final String NAME_PLASTIC_MATERIAL = "PlasticMaterial";
 	private static final String NAME_SUBSTRATE_MATERIAL = "SubstrateMaterial";
@@ -120,7 +124,7 @@ public final class MaterialWizard {
 		
 		final
 		ComboBox<MaterialInfo> comboBox = new ComboBox<>();
-		comboBox.getItems().addAll(new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class), new MaterialInfo(MirrorMaterial.class), new MaterialInfo(PlasticMaterial.class), new MaterialInfo(SubstrateMaterial.class));
+		comboBox.getItems().addAll(new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(GlassMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class), new MaterialInfo(MetalMaterial.class), new MaterialInfo(MirrorMaterial.class), new MaterialInfo(PlasticMaterial.class), new MaterialInfo(SubstrateMaterial.class));
 		comboBox.setMaxWidth(Doubles.MAX_VALUE);
 		comboBox.setValue(new MaterialInfo(MatteMaterial.class));
 		comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> materialInfo.set(newValue));
@@ -165,10 +169,14 @@ public final class MaterialWizard {
 			switch(this.clazz.getSimpleName()) {
 				case NAME_CLEAR_COAT_MATERIAL:
 					return "New Clear Coat Material";
+				case NAME_GLASS_MATERIAL:
+					return "New Glass Material";
 				case NAME_GLOSSY_MATERIAL:
 					return "New Glossy Material";
 				case NAME_MATTE_MATERIAL:
 					return "New Matte Material";
+				case NAME_METAL_MATERIAL:
+					return "New Metal Material";
 				case NAME_MIRROR_MATERIAL:
 					return "New Mirror Material";
 				case NAME_PLASTIC_MATERIAL:
@@ -189,10 +197,14 @@ public final class MaterialWizard {
 			switch(this.clazz.getSimpleName()) {
 				case NAME_CLEAR_COAT_MATERIAL:
 					return new ClearCoatMaterialGridPane();
+				case NAME_GLASS_MATERIAL:
+					return new GlassMaterialGridPane();
 				case NAME_GLOSSY_MATERIAL:
 					return new GlossyMaterialGridPane();
 				case NAME_MATTE_MATERIAL:
 					return new MatteMaterialGridPane();
+				case NAME_METAL_MATERIAL:
+					return new MetalMaterialGridPane();
 				case NAME_MIRROR_MATERIAL:
 					return new MirrorMaterialGridPane();
 				case NAME_PLASTIC_MATERIAL:

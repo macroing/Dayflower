@@ -36,8 +36,10 @@ import javafx.scene.layout.BorderPane;
  */
 public final class MaterialPicker extends BorderPane {
 	private static final String NAME_CLEAR_COAT_MATERIAL = "ClearCoatMaterial";
+	private static final String NAME_GLASS_MATERIAL = "GlassMaterial";
 	private static final String NAME_GLOSSY_MATERIAL = "GlossyMaterial";
 	private static final String NAME_MATTE_MATERIAL = "MatteMaterial";
+	private static final String NAME_METAL_MATERIAL = "MetalMaterial";
 	private static final String NAME_MIRROR_MATERIAL = "MirrorMaterial";
 	private static final String NAME_PLASTIC_MATERIAL = "PlasticMaterial";
 	private static final String NAME_SUBSTRATE_MATERIAL = "SubstrateMaterial";
@@ -97,10 +99,14 @@ public final class MaterialPicker extends BorderPane {
 		switch(getMaterial().getClass().getSimpleName()) {
 			case NAME_CLEAR_COAT_MATERIAL:
 				return "Clear Coat Material";
+			case NAME_GLASS_MATERIAL:
+				return "Glass Material";
 			case NAME_GLOSSY_MATERIAL:
 				return "Glossy Material";
 			case NAME_MATTE_MATERIAL:
 				return "Matte Material";
+			case NAME_METAL_MATERIAL:
+				return "Metal Material";
 			case NAME_MIRROR_MATERIAL:
 				return "Mirror Material";
 			case NAME_PLASTIC_MATERIAL:

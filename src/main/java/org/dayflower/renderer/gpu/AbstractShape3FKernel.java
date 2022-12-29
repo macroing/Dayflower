@@ -1084,6 +1084,26 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rayDirectionY = ray3FGetDirectionY();
 		final float rayDirectionZ = ray3FGetDirectionZ();
 		
+		final float uX = 1.0F;
+		final float uY = 0.0F;
+		final float uZ = 0.0F;
+		final float vX = 0.0F;
+		final float vY = 1.0F;
+		final float vZ = 0.0F;
+		final float wX = 0.0F;
+		final float wY = 0.0F;
+		final float wZ = 1.0F;
+		
+		final float wDotRayDirection = vector3FDotProduct(wX, wY, wZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float uCorrectlyOrientedX = wDotRayDirection > 0.0F ? -uX : uX;
+		final float uCorrectlyOrientedY = wDotRayDirection > 0.0F ? -uY : uY;
+		final float uCorrectlyOrientedZ = wDotRayDirection > 0.0F ? -uZ : uZ;
+		
+		final float wCorrectlyOrientedX = wDotRayDirection > 0.0F ? -wX : wX;
+		final float wCorrectlyOrientedY = wDotRayDirection > 0.0F ? -wY : wY;
+		final float wCorrectlyOrientedZ = wDotRayDirection > 0.0F ? -wZ : wZ;
+		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
@@ -1094,8 +1114,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float textureCoordinatesV = vector3FDotProduct(0.0F, 1.0F, 0.0F, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F);
-		intersectionLHSSetOrthonormalBasisS(1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+		intersectionLHSSetOrthonormalBasisG(uCorrectlyOrientedX, uCorrectlyOrientedY, uCorrectlyOrientedZ, vX, vY, vZ, wCorrectlyOrientedX, wCorrectlyOrientedY, wCorrectlyOrientedZ);
+		intersectionLHSSetOrthonormalBasisS(uCorrectlyOrientedX, uCorrectlyOrientedY, uCorrectlyOrientedZ, vX, vY, vZ, wCorrectlyOrientedX, wCorrectlyOrientedY, wCorrectlyOrientedZ);
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -1116,6 +1136,26 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rayDirectionY = ray3FGetDirectionY();
 		final float rayDirectionZ = ray3FGetDirectionZ();
 		
+		final float uX = 1.0F;
+		final float uY = 0.0F;
+		final float uZ = 0.0F;
+		final float vX = 0.0F;
+		final float vY = 1.0F;
+		final float vZ = 0.0F;
+		final float wX = 0.0F;
+		final float wY = 0.0F;
+		final float wZ = 1.0F;
+		
+		final float wDotRayDirection = vector3FDotProduct(wX, wY, wZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float uCorrectlyOrientedX = wDotRayDirection > 0.0F ? -uX : uX;
+		final float uCorrectlyOrientedY = wDotRayDirection > 0.0F ? -uY : uY;
+		final float uCorrectlyOrientedZ = wDotRayDirection > 0.0F ? -uZ : uZ;
+		
+		final float wCorrectlyOrientedX = wDotRayDirection > 0.0F ? -wX : wX;
+		final float wCorrectlyOrientedY = wDotRayDirection > 0.0F ? -wY : wY;
+		final float wCorrectlyOrientedZ = wDotRayDirection > 0.0F ? -wZ : wZ;
+		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
@@ -1126,8 +1166,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float textureCoordinatesV = vector3FDotProduct(0.0F, 1.0F, 0.0F, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		
 //		Update the intersection array:
-		intersectionRHSSetOrthonormalBasisG(1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F);
-		intersectionRHSSetOrthonormalBasisS(1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+		intersectionRHSSetOrthonormalBasisG(uCorrectlyOrientedX, uCorrectlyOrientedY, uCorrectlyOrientedZ, vX, vY, vZ, wCorrectlyOrientedX, wCorrectlyOrientedY, wCorrectlyOrientedZ);
+		intersectionRHSSetOrthonormalBasisS(uCorrectlyOrientedX, uCorrectlyOrientedY, uCorrectlyOrientedZ, vX, vY, vZ, wCorrectlyOrientedX, wCorrectlyOrientedY, wCorrectlyOrientedZ);
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);

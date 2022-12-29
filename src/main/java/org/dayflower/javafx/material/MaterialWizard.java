@@ -32,6 +32,7 @@ import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.MetalMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
+import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.macroing.java.lang.Doubles;
 
@@ -61,6 +62,7 @@ public final class MaterialWizard {
 	private static final String NAME_METAL_MATERIAL = "MetalMaterial";
 	private static final String NAME_MIRROR_MATERIAL = "MirrorMaterial";
 	private static final String NAME_PLASTIC_MATERIAL = "PlasticMaterial";
+	private static final String NAME_POLKA_DOT_MATERIAL = "PolkaDotMaterial";
 	private static final String NAME_SUBSTRATE_MATERIAL = "SubstrateMaterial";
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +130,7 @@ public final class MaterialWizard {
 		
 		final
 		ComboBox<MaterialInfo> comboBox = new ComboBox<>();
-		comboBox.getItems().addAll(new MaterialInfo(BullseyeMaterial.class), new MaterialInfo(CheckerboardMaterial.class), new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(GlassMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class), new MaterialInfo(MetalMaterial.class), new MaterialInfo(MirrorMaterial.class), new MaterialInfo(PlasticMaterial.class), new MaterialInfo(SubstrateMaterial.class));
+		comboBox.getItems().addAll(new MaterialInfo(BullseyeMaterial.class), new MaterialInfo(CheckerboardMaterial.class), new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(GlassMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class), new MaterialInfo(MetalMaterial.class), new MaterialInfo(MirrorMaterial.class), new MaterialInfo(PlasticMaterial.class), new MaterialInfo(PolkaDotMaterial.class), new MaterialInfo(SubstrateMaterial.class));
 		comboBox.setMaxWidth(Doubles.MAX_VALUE);
 		comboBox.setValue(new MaterialInfo(MatteMaterial.class));
 		comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> materialInfo.set(newValue));
@@ -189,6 +191,8 @@ public final class MaterialWizard {
 					return "New Mirror Material";
 				case NAME_PLASTIC_MATERIAL:
 					return "New Plastic Material";
+				case NAME_POLKA_DOT_MATERIAL:
+					return "New Polka Dot Material";
 				case NAME_SUBSTRATE_MATERIAL:
 					return "New Substrate Material";
 				default:
@@ -221,6 +225,8 @@ public final class MaterialWizard {
 					return new MirrorMaterialGridPane();
 				case NAME_PLASTIC_MATERIAL:
 					return new PlasticMaterialGridPane();
+				case NAME_POLKA_DOT_MATERIAL:
+					return new PolkaDotMaterialGridPane();
 				case NAME_SUBSTRATE_MATERIAL:
 					return new SubstrateMaterialGridPane();
 				default:

@@ -134,8 +134,8 @@ public final class MetalMaterialGridPane extends MaterialGridPane {
 			}
 		});
 		
-		add(comboBox, 0, 6, 2, 1);
-		add(button, 0, 7, 2, 1);
+		add(comboBox, 0, 6);
+		add(button, 1, 6);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

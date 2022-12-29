@@ -108,6 +108,9 @@ public final class TexturePicker extends BorderPane {
 	 */
 	public void setTexture(final Texture texture) {
 		this.texture.set(Objects.requireNonNull(texture, "texture == null"));
+		
+		this.button.setGraphic(new ImageView(WritableImageCaches.get(this.texture.get())));
+		this.button.setText(doGetName());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,8 @@
 2022-12-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
+	* ADD:		Add support for PolkaDotMaterial in the GUI.
 	* ADD:		Add preview images to MaterialPicker and TexturePicker.
+	* CHANGE:	Update MetalMaterialGridPane.
 
 2022-12-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

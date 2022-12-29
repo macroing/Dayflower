@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.javafx.application;
+package org.dayflower.javafx.texture;
 
 import java.util.Objects;
 
@@ -42,6 +42,7 @@ import org.dayflower.scene.Transform;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.material.MatteMaterial;
+import org.dayflower.scene.texture.Texture;
 
 import org.macroing.art4j.color.Color3F;
 import org.macroing.art4j.color.Color4F;
@@ -50,8 +51,7 @@ import org.macroing.art4j.filter.BoxFilter2F;
 import javafx.scene.image.WritableImage;
 
 final class WritableImageCaches {
-	private static final WritableImageCache<Material> WRITABLE_IMAGE_CACHE_MATERIAL = new WritableImageCache<>(WritableImageCaches::doCreateWritableImageMaterial);
-	private static final WritableImageCache<Shape3F> WRITABLE_IMAGE_CACHE_SHAPE = new WritableImageCache<>(WritableImageCaches::doCreateWritableImageShape);
+	private static final WritableImageCache<Texture> WRITABLE_IMAGE_CACHE_TEXTURE = new WritableImageCache<>(WritableImageCaches::doCreateWritableImageTexture);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -61,12 +61,8 @@ final class WritableImageCaches {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static WritableImage get(final Material material) {
-		return WRITABLE_IMAGE_CACHE_MATERIAL.get(Objects.requireNonNull(material, "material == null"));
-	}
-	
-	public static WritableImage get(final Shape3F shape) {
-		return WRITABLE_IMAGE_CACHE_SHAPE.get(Objects.requireNonNull(shape, "shape == null"));
+	public static WritableImage get(final Texture texture) {
+		return WRITABLE_IMAGE_CACHE_TEXTURE.get(Objects.requireNonNull(texture, "texture == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +72,7 @@ final class WritableImageCaches {
 		
 		final
 		Camera camera = new Camera();
-		camera.setResolution(32.0F, 32.0F);
+		camera.setResolution(16.0F, 16.0F);
 		camera.setFieldOfViewY();
 		camera.setOrthonormalBasis();
 		
@@ -111,13 +107,13 @@ final class WritableImageCaches {
 		return scene;
 	}
 	
-	private static WritableImage doCreateWritableImageMaterial(final Material material) {
+	private static WritableImage doCreateWritableImageTexture(final Texture texture) {
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
-		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(32, 32, Color4F.BLACK, new BoxFilter2F()));
+		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(16, 16, Color4F.BLACK, new BoxFilter2F()));
 		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
-		combinedProgressiveImageOrderRenderer.setScene(doCreateMaterialPreviewScene(material));
+		combinedProgressiveImageOrderRenderer.setScene(doCreateMaterialPreviewScene(new MatteMaterial(texture)));
 		
 		for(int i = 0; i < 10; i++) {
 			combinedProgressiveImageOrderRenderer.render();
@@ -125,15 +121,6 @@ final class WritableImageCaches {
 		
 		final
 		ImageF imageF = combinedProgressiveImageOrderRenderer.getImage();
-		imageF.drawShape(new Rectangle2I(new Point2I(0, 0), new Point2I(imageF.getResolutionX() - 1, imageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
-		
-		return imageF.toWritableImage();
-	}
-	
-	@SuppressWarnings("unused")
-	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
-		final
-		ImageF imageF = new PixelImageF(32, 32, Color4F.WHITE);
 		imageF.drawShape(new Rectangle2I(new Point2I(0, 0), new Point2I(imageF.getResolutionX() - 1, imageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
 		
 		return imageF.toWritableImage();

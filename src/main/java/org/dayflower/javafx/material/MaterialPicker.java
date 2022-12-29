@@ -26,6 +26,7 @@ import org.dayflower.scene.material.MatteMaterial;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -78,6 +79,7 @@ public final class MaterialPicker extends BorderPane {
 	public MaterialPicker(final Material material) {
 		this.material = new AtomicReference<>(Objects.requireNonNull(material, "material == null"));
 		this.button = new Button(doGetName());
+		this.button.setGraphic(new ImageView(WritableImageCaches.get(material)));
 		this.button.setMaxWidth(Double.MAX_VALUE);
 		this.button.setOnAction(this::doOnAction);
 		
@@ -130,6 +132,7 @@ public final class MaterialPicker extends BorderPane {
 		MaterialWizard materialWizard = new MaterialWizard(getScene().getWindow());
 		materialWizard.showAndWait().ifPresent(material -> this.material.set(material));
 		
+		this.button.setGraphic(new ImageView(WritableImageCaches.get(this.material.get())));
 		this.button.setText(doGetName());
 	}
 }

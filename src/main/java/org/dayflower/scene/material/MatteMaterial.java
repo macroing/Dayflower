@@ -295,9 +295,10 @@ public final class MatteMaterial implements Material {
 		
 		final AngleF angle = AngleF.degrees(saturate(floatAngle, 0.0F, 90.0F));
 		
-		if(colorKD.isBlack()) {
-			return Optional.empty();
-		}
+//		This prevents preview mode from rendering black textures:
+//		if(colorKD.isBlack()) {
+//			return Optional.empty();
+//		}
 		
 		if(isZero(angle.getDegrees())) {
 			return Optional.of(new BSDF(intersection, new LambertianBRDF(colorKD)));

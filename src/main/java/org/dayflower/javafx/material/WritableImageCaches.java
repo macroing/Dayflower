@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.javafx.application;
+package org.dayflower.javafx.material;
 
 import java.util.Objects;
 
@@ -51,7 +51,6 @@ import javafx.scene.image.WritableImage;
 
 final class WritableImageCaches {
 	private static final WritableImageCache<Material> WRITABLE_IMAGE_CACHE_MATERIAL = new WritableImageCache<>(WritableImageCaches::doCreateWritableImageMaterial);
-	private static final WritableImageCache<Shape3F> WRITABLE_IMAGE_CACHE_SHAPE = new WritableImageCache<>(WritableImageCaches::doCreateWritableImageShape);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -65,10 +64,6 @@ final class WritableImageCaches {
 		return WRITABLE_IMAGE_CACHE_MATERIAL.get(Objects.requireNonNull(material, "material == null"));
 	}
 	
-	public static WritableImage get(final Shape3F shape) {
-		return WRITABLE_IMAGE_CACHE_SHAPE.get(Objects.requireNonNull(shape, "shape == null"));
-	}
-	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Scene doCreateMaterialPreviewScene(final Material material) {
@@ -76,7 +71,7 @@ final class WritableImageCaches {
 		
 		final
 		Camera camera = new Camera();
-		camera.setResolution(32.0F, 32.0F);
+		camera.setResolution(16.0F, 16.0F);
 		camera.setFieldOfViewY();
 		camera.setOrthonormalBasis();
 		
@@ -114,7 +109,7 @@ final class WritableImageCaches {
 	private static WritableImage doCreateWritableImageMaterial(final Material material) {
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
-		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(32, 32, Color4F.BLACK, new BoxFilter2F()));
+		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(16, 16, Color4F.BLACK, new BoxFilter2F()));
 		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
 		combinedProgressiveImageOrderRenderer.setScene(doCreateMaterialPreviewScene(material));
@@ -125,15 +120,6 @@ final class WritableImageCaches {
 		
 		final
 		ImageF imageF = combinedProgressiveImageOrderRenderer.getImage();
-		imageF.drawShape(new Rectangle2I(new Point2I(0, 0), new Point2I(imageF.getResolutionX() - 1, imageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
-		
-		return imageF.toWritableImage();
-	}
-	
-	@SuppressWarnings("unused")
-	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
-		final
-		ImageF imageF = new PixelImageF(32, 32, Color4F.WHITE);
 		imageF.drawShape(new Rectangle2I(new Point2I(0, 0), new Point2I(imageF.getResolutionX() - 1, imageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
 		
 		return imageF.toWritableImage();

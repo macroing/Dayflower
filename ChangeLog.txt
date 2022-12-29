@@ -1,3 +1,7 @@
+2022-12-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add preview images to MaterialPicker and TexturePicker.
+
 2022-12-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add group name, object name and material name for triangle meshes in the scene property view of the GUI.

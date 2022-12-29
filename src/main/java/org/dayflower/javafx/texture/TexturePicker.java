@@ -26,6 +26,7 @@ import org.dayflower.scene.texture.Texture;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -79,6 +80,7 @@ public final class TexturePicker extends BorderPane {
 	public TexturePicker(final Texture texture) {
 		this.texture = new AtomicReference<>(Objects.requireNonNull(texture, "texture == null"));
 		this.button = new Button(doGetName());
+		this.button.setGraphic(new ImageView(WritableImageCaches.get(texture)));
 		this.button.setMaxWidth(Double.MAX_VALUE);
 		this.button.setOnAction(this::doOnAction);
 		
@@ -145,6 +147,7 @@ public final class TexturePicker extends BorderPane {
 		TextureWizard textureWizard = new TextureWizard(getScene().getWindow());
 		textureWizard.showAndWait().ifPresent(texture -> this.texture.set(texture));
 		
+		this.button.setGraphic(new ImageView(WritableImageCaches.get(this.texture.get())));
 		this.button.setText(doGetName());
 	}
 }

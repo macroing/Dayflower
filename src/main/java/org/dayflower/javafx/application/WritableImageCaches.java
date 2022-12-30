@@ -28,7 +28,6 @@ import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
-import org.dayflower.javafx.scene.image.WritableImageCache;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.cpu.CPURenderer;
@@ -46,6 +45,7 @@ import org.dayflower.scene.material.MatteMaterial;
 import org.macroing.art4j.color.Color3F;
 import org.macroing.art4j.color.Color4F;
 import org.macroing.art4j.filter.BoxFilter2F;
+import org.macroing.javafx.scene.image.WritableImageCache;
 
 import javafx.scene.image.WritableImage;
 

@@ -177,12 +177,8 @@ The following table describes the different APIs and their current status in the
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |
 | Geometry Shape API                     | 100.0%  |  17.9%    |
 | Image API                              | 100.0%  |   0.0%    |
-| JavaFX Concurrent API                  | 100.0%  |   0.0%    |
 | JavaFX Material API                    | 100.0%  |   0.0%    |
 | JavaFX Scene Canvas API                | 100.0%  |   0.0%    |
-| JavaFX Scene Control API               | 100.0%  |   0.0%    |
-| JavaFX Scene Image API                 | 100.0%  | 100.0%    |
-| JavaFX Scene Layout API                | 100.0%  |   0.0%    |
 | JavaFX Texture API                     | 100.0%  |   0.0%    |
 | Node API                               | 100.0%  | 100.0%    |
 | Parameter API                          | 100.0%  |   0.0%    |
@@ -212,6 +208,7 @@ Dependencies
  - [Aparapi](https://aparapi.com/)
  - [Apache / Commons / BCEL](https://commons.apache.org/proper/commons-bcel/)
  - [Macroing / Java](https://github.com/macroing/Java)
+ - [Macroing / JavaFX](https://github.com/macroing/JavaFX)
  - [Macroing / Art4J](https://github.com/macroing/Art4J)
 
 References

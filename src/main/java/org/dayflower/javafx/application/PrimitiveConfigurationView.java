@@ -20,8 +20,9 @@ package org.dayflower.javafx.application;
 
 import java.util.Objects;
 
-import org.dayflower.javafx.scene.layout.CenteredVBox;
 import org.dayflower.scene.Primitive;
+
+import org.macroing.javafx.scene.layout.CenteredVBox;
 
 import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;

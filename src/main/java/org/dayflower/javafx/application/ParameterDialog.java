@@ -143,7 +143,7 @@ final class ParameterDialog extends Dialog<Boolean> {
 				Double.parseDouble(change.getControlNewText());
 				
 				return change;
-			} catch(final NumberFormatException e) {
+			} catch(@SuppressWarnings("unused") final NumberFormatException e) {
 				return null;
 			}
 		});
@@ -162,7 +162,7 @@ final class ParameterDialog extends Dialog<Boolean> {
 				Float.parseFloat(change.getControlNewText());
 				
 				return change;
-			} catch(final NumberFormatException e) {
+			} catch(@SuppressWarnings("unused") final NumberFormatException e) {
 				return null;
 			}
 		});
@@ -181,7 +181,7 @@ final class ParameterDialog extends Dialog<Boolean> {
 				Integer.parseInt(change.getControlNewText());
 				
 				return change;
-			} catch(final NumberFormatException e) {
+			} catch(@SuppressWarnings("unused") final NumberFormatException e) {
 				return null;
 			}
 		});
@@ -201,7 +201,7 @@ final class ParameterDialog extends Dialog<Boolean> {
 	private static void doUpdateDoubleParameter(final DoubleParameter doubleParameter, final TextField textField) {
 		try {
 			doubleParameter.setValue(Double.parseDouble(textField.getText()));
-		} catch(final NumberFormatException e) {
+		} catch(@SuppressWarnings("unused") final NumberFormatException e) {
 //			Do nothing for now.
 		}
 	}
@@ -209,7 +209,7 @@ final class ParameterDialog extends Dialog<Boolean> {
 	private static void doUpdateFloatParameter(final FloatParameter floatParameter, final TextField textField) {
 		try {
 			floatParameter.setValue(Float.parseFloat(textField.getText()));
-		} catch(final NumberFormatException e) {
+		} catch(@SuppressWarnings("unused") final NumberFormatException e) {
 //			Do nothing for now.
 		}
 	}
@@ -217,7 +217,7 @@ final class ParameterDialog extends Dialog<Boolean> {
 	private static void doUpdateIntParameter(final IntParameter intParameter, final TextField textField) {
 		try {
 			intParameter.setValue(Integer.parseInt(textField.getText()));
-		} catch(final NumberFormatException e) {
+		} catch(@SuppressWarnings("unused") final NumberFormatException e) {
 //			Do nothing for now.
 		}
 	}

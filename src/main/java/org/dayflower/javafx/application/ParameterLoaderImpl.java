@@ -58,7 +58,7 @@ final class ParameterLoaderImpl implements ParameterLoader {
 		
 		try {
 			countDownLatch.await();
-		} catch(final InterruptedException e) {
+		} catch(@SuppressWarnings("unused") final InterruptedException e) {
 //			Do nothing for now.
 		}
 	}

@@ -26,6 +26,7 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.material.BullseyeMaterial;
 import org.dayflower.scene.material.CheckerboardMaterial;
 import org.dayflower.scene.material.ClearCoatMaterial;
+import org.dayflower.scene.material.DisneyMaterial;
 import org.dayflower.scene.material.GlassMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
 import org.dayflower.scene.material.MatteMaterial;
@@ -56,6 +57,7 @@ public final class MaterialWizard {
 	private static final String NAME_BULLSEYE_MATERIAL = "BullseyeMaterial";
 	private static final String NAME_CHECKERBOARD_MATERIAL = "CheckerboardMaterial";
 	private static final String NAME_CLEAR_COAT_MATERIAL = "ClearCoatMaterial";
+	private static final String NAME_DISNEY_MATERIAL = "DisneyMaterial";
 	private static final String NAME_GLASS_MATERIAL = "GlassMaterial";
 	private static final String NAME_GLOSSY_MATERIAL = "GlossyMaterial";
 	private static final String NAME_MATTE_MATERIAL = "MatteMaterial";
@@ -130,7 +132,7 @@ public final class MaterialWizard {
 		
 		final
 		ComboBox<MaterialInfo> comboBox = new ComboBox<>();
-		comboBox.getItems().addAll(new MaterialInfo(BullseyeMaterial.class), new MaterialInfo(CheckerboardMaterial.class), new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(GlassMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class), new MaterialInfo(MetalMaterial.class), new MaterialInfo(MirrorMaterial.class), new MaterialInfo(PlasticMaterial.class), new MaterialInfo(PolkaDotMaterial.class), new MaterialInfo(SubstrateMaterial.class));
+		comboBox.getItems().addAll(new MaterialInfo(BullseyeMaterial.class), new MaterialInfo(CheckerboardMaterial.class), new MaterialInfo(ClearCoatMaterial.class), new MaterialInfo(DisneyMaterial.class), new MaterialInfo(GlassMaterial.class), new MaterialInfo(GlossyMaterial.class), new MaterialInfo(MatteMaterial.class), new MaterialInfo(MetalMaterial.class), new MaterialInfo(MirrorMaterial.class), new MaterialInfo(PlasticMaterial.class), new MaterialInfo(PolkaDotMaterial.class), new MaterialInfo(SubstrateMaterial.class));
 		comboBox.setMaxWidth(Doubles.MAX_VALUE);
 		comboBox.setValue(new MaterialInfo(MatteMaterial.class));
 		comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> materialInfo.set(newValue));
@@ -179,6 +181,8 @@ public final class MaterialWizard {
 					return "New Checkerboard Material";
 				case NAME_CLEAR_COAT_MATERIAL:
 					return "New Clear Coat Material";
+				case NAME_DISNEY_MATERIAL:
+					return "New Disney Material";
 				case NAME_GLASS_MATERIAL:
 					return "New Glass Material";
 				case NAME_GLOSSY_MATERIAL:
@@ -213,6 +217,8 @@ public final class MaterialWizard {
 					return new CheckerboardMaterialGridPane();
 				case NAME_CLEAR_COAT_MATERIAL:
 					return new ClearCoatMaterialGridPane();
+				case NAME_DISNEY_MATERIAL:
+					return new DisneyMaterialGridPane();
 				case NAME_GLASS_MATERIAL:
 					return new GlassMaterialGridPane();
 				case NAME_GLOSSY_MATERIAL:

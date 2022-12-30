@@ -39,6 +39,7 @@ public final class MaterialPicker extends BorderPane {
 	private static final String NAME_BULLSEYE_MATERIAL = "BullseyeMaterial";
 	private static final String NAME_CHECKERBOARD_MATERIAL = "CheckerboardMaterial";
 	private static final String NAME_CLEAR_COAT_MATERIAL = "ClearCoatMaterial";
+	private static final String NAME_DISNEY_MATERIAL = "DisneyMaterial";
 	private static final String NAME_GLASS_MATERIAL = "GlassMaterial";
 	private static final String NAME_GLOSSY_MATERIAL = "GlossyMaterial";
 	private static final String NAME_MATTE_MATERIAL = "MatteMaterial";
@@ -108,6 +109,8 @@ public final class MaterialPicker extends BorderPane {
 				return "Checkerboard Material";
 			case NAME_CLEAR_COAT_MATERIAL:
 				return "Clear Coat Material";
+			case NAME_DISNEY_MATERIAL:
+				return "Disney Material";
 			case NAME_GLASS_MATERIAL:
 				return "Glass Material";
 			case NAME_GLOSSY_MATERIAL:

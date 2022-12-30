@@ -19,7 +19,7 @@ ant
 If you have cloned this repository and built the project using Apache Ant as presented above, you can run the project using its GUI in the following way.
 ```bash
 cd distribution/Dayflower
-java -Djava.library.path=lib -jar Dayflower.jar
+java -Djava.library.path=lib/aparapi -jar Dayflower.jar
 ```
 
 If you prefer to use Dayflower as a library and not as an application, the following Java source code demonstrates how you can use the CPU- and GPU renderers.

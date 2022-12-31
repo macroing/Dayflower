@@ -12,7 +12,6 @@ Parameter API:
 Renderer GPU API:
 
 	* ADD:		Add support for PrimitiveAreaLight.
-	* ADD:		Add support for UberMaterial.
 	* ADD:		Add support for ConstructiveSolidGeometry3F.
 	* ADD:		Add support for BiModifier.
 	* ADD:		Add support for the Ray Tracer algorithm.

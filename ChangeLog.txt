@@ -1,6 +1,7 @@
 2022-12-31  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for UberMaterial in the GUI.
+	* ADD:		Add support for UberMaterial in the Scene Compiler API.
 
 2022-12-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

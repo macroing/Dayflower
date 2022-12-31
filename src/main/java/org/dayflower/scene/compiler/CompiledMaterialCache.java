@@ -40,6 +40,7 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.material.UberMaterial;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.utility.Document;
@@ -64,6 +65,7 @@ import org.macroing.java.util.Arrays;
  * <li>{@link PlasticMaterial}</li>
  * <li>{@link PolkaDotMaterial}</li>
  * <li>{@link SubstrateMaterial}</li>
+ * <li>{@link UberMaterial}</li>
  * </ul>
  * 
  * @since 1.0.0
@@ -335,6 +337,36 @@ public final class CompiledMaterialCache {
 	 */
 	public static final int SUBSTRATE_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
 	
+	/**
+	 * The length of a compiled {@link UberMaterial} instance.
+	 */
+	public static final int UBER_MATERIAL_LENGTH = 8;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KD} and {@code KR} in a compiled {@link UberMaterial} instance.
+	 */
+	public static final int UBER_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_R = 1;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KS} and {@code KT} in a compiled {@link UberMaterial} instance.
+	 */
+	public static final int UBER_MATERIAL_OFFSET_TEXTURE_K_S_AND_TEXTURE_K_T = 2;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Eta} and {@code Opacity} in a compiled {@link UberMaterial} instance.
+	 */
+	public static final int UBER_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_OPACITY = 3;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Roughness U} and {@code Roughness V} in a compiled {@link UberMaterial} instance.
+	 */
+	public static final int UBER_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 4;
+	
+	/**
+	 * The offset for the roughness remapping flag in a compiled {@link UberMaterial} instance.
+	 */
+	public static final int UBER_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS = 5;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private float[] bullseyeMaterials;
@@ -349,6 +381,7 @@ public final class CompiledMaterialCache {
 	private int[] mirrorMaterials;
 	private int[] plasticMaterials;
 	private int[] substrateMaterials;
+	private int[] uberMaterials;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -368,6 +401,7 @@ public final class CompiledMaterialCache {
 		setPlasticMaterials(new int[0]);
 		setPolkaDotMaterials(new float[0]);
 		setSubstrateMaterials(new int[0]);
+		setUberMaterials(new int[0]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -677,6 +711,32 @@ public final class CompiledMaterialCache {
 		
 		if(absoluteOffset != -1) {
 			setSubstrateMaterials(Arrays.splice(getSubstrateMaterials(), absoluteOffset, SUBSTRATE_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code uberMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code uberMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code uberMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code uberMaterial.length} is not equal to {@code CompiledMaterialCache.UBER_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param uberMaterial an {@link UberMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code uberMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code uberMaterial.length} is not equal to {@code CompiledMaterialCache.UBER_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code uberMaterial} is {@code null}
+	 */
+	public boolean removeUberMaterial(final int[] uberMaterial) {
+		final int absoluteOffset = getUberMaterialOffsetAbsolute(uberMaterial);
+		
+		if(absoluteOffset != -1) {
+			setUberMaterials(Arrays.splice(getUberMaterials(), absoluteOffset, UBER_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -1031,6 +1091,33 @@ public final class CompiledMaterialCache {
 		}
 		
 		setSubstrateMaterials(Arrays.merge(getSubstrateMaterials(), substrateMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code uberMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code uberMaterial}.
+	 * <p>
+	 * If {@code uberMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code uberMaterial.length} is not equal to {@code CompiledMaterialCache.UBER_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param uberMaterial an {@link UberMaterial} instance in compiled form
+	 * @return the relative offset to {@code uberMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code uberMaterial.length} is not equal to {@code CompiledMaterialCache.UBER_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code uberMaterial} is {@code null}
+	 */
+	public int addUberMaterial(final int[] uberMaterial) {
+		final int relativeOffsetOld = getUberMaterialOffsetRelative(uberMaterial);
+		final int relativeOffsetNew = getUberMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setUberMaterials(Arrays.merge(getUberMaterials(), uberMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -1624,6 +1711,55 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
+	 * Returns the {@link UberMaterial} count in this {@code CompiledMaterialCache} instance.
+	 * 
+	 * @return the {@code UberMaterial} count in this {@code CompiledMaterialCache} instance
+	 */
+	public int getUberMaterialCount() {
+		return Structures.getStructureCount(this.uberMaterials, UBER_MATERIAL_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code uberMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code uberMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code uberMaterial.length} is not equal to {@code CompiledMaterialCache.UBER_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param uberMaterial an {@link UberMaterial} instance in compiled form
+	 * @return the absolute offset of {@code uberMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code uberMaterial.length} is not equal to {@code CompiledMaterialCache.UBER_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code uberMaterial} is {@code null}
+	 */
+	public int getUberMaterialOffsetAbsolute(final int[] uberMaterial) {
+		Objects.requireNonNull(uberMaterial, "uberMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(uberMaterial, UBER_MATERIAL_LENGTH, "uberMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.uberMaterials, uberMaterial);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code uberMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code uberMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code uberMaterial.length} is not equal to {@code CompiledMaterialCache.UBER_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param uberMaterial an {@link UberMaterial} instance in compiled form
+	 * @return the relative offset of {@code uberMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code uberMaterial.length} is not equal to {@code CompiledMaterialCache.UBER_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code uberMaterial} is {@code null}
+	 */
+	public int getUberMaterialOffsetRelative(final int[] uberMaterial) {
+		Objects.requireNonNull(uberMaterial, "uberMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(uberMaterial, UBER_MATERIAL_LENGTH, "uberMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.uberMaterials, uberMaterial);
+	}
+	
+	/**
 	 * Returns an {@code int[]} that contains all {@link ClearCoatMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance.
 	 * 
 	 * @return an {@code int[]} that contains all {@code ClearCoatMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
@@ -1702,6 +1838,15 @@ public final class CompiledMaterialCache {
 	 */
 	public int[] getSubstrateMaterials() {
 		return this.substrateMaterials;
+	}
+	
+	/**
+	 * Returns an {@code int[]} that contains all {@link UberMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance.
+	 * 
+	 * @return an {@code int[]} that contains all {@code UberMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
+	 */
+	public int[] getUberMaterials() {
+		return this.uberMaterials;
 	}
 	
 	/**
@@ -1933,6 +2078,25 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
+	 * Sets all {@link UberMaterial} instances in compiled form to {@code uberMaterials}.
+	 * <p>
+	 * If {@code uberMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code uberMaterials.length % CompiledMaterialCache.UBER_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param uberMaterials the {@code UberMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code uberMaterials.length % CompiledMaterialCache.UBER_MATERIAL_LENGTH} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code uberMaterials} is {@code null}
+	 */
+	public void setUberMaterials(final int[] uberMaterials) {
+		Objects.requireNonNull(uberMaterials, "uberMaterials == null");
+		
+		ParameterArguments.requireExact(uberMaterials.length % UBER_MATERIAL_LENGTH, 0, "uberMaterials.length % CompiledMaterialCache.UBER_MATERIAL_LENGTH");
+		
+		this.uberMaterials = uberMaterials;
+	}
+	
+	/**
 	 * Writes this {@code CompiledMaterialCache} instance to {@code document}.
 	 * <p>
 	 * If {@code document} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1955,6 +2119,7 @@ public final class CompiledMaterialCache {
 		document.linef("plasticMaterials[%d]", Integer.valueOf(getPlasticMaterialCount()));
 		document.linef("polkaDotMaterials[%d]", Integer.valueOf(getPolkaDotMaterialCount()));
 		document.linef("substrateMaterials[%d]", Integer.valueOf(getSubstrateMaterialCount()));
+		document.linef("uberMaterials[%d]", Integer.valueOf(getUberMaterialCount()));
 		document.outdent();
 		document.line("}");
 	}
@@ -1997,6 +2162,8 @@ public final class CompiledMaterialCache {
 			return doIsSupported(PolkaDotMaterial.class.cast(material));
 		} else if(material instanceof SubstrateMaterial) {
 			return doIsSupported(SubstrateMaterial.class.cast(material));
+		} else if(material instanceof UberMaterial) {
+			return doIsSupported(UberMaterial.class.cast(material));
 		} else {
 			return false;
 		}
@@ -3095,6 +3262,106 @@ public final class CompiledMaterialCache {
 		return Arrays.toIntArray(substrateMaterials, substrateMaterial -> toSubstrateMaterial(substrateMaterial, modifierOffsetFunction, textureOffsetFunction));
 	}
 	
+	/**
+	 * Returns an {@code int[]} with {@code uberMaterial} in compiled form.
+	 * <p>
+	 * If {@code uberMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toUberMaterial(uberMaterial, modifier -> 0, texture -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param uberMaterial an {@link UberMaterial} instance
+	 * @return an {@code int[]} with {@code uberMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code uberMaterial} is {@code null}
+	 */
+	public static int[] toUberMaterial(final UberMaterial uberMaterial) {
+		return toUberMaterial(uberMaterial, modifier -> 0, texture -> 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code uberMaterial} in compiled form.
+	 * <p>
+	 * If either {@code uberMaterial}, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param uberMaterial an {@link UberMaterial} instance
+	 * @param modifierOffsetFunction a {@code ToIntFunction} that returns {@link Modifier} offsets
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return an {@code int[]} with {@code uberMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code uberMaterial}, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static int[] toUberMaterial(final UberMaterial uberMaterial, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
+		final Modifier modifier = uberMaterial.getModifier();
+		
+		final Texture textureEmission = uberMaterial.getTextureEmission();
+		final Texture textureEta = uberMaterial.getTextureEta();
+		final Texture textureKD = uberMaterial.getTextureKD();
+		final Texture textureKR = uberMaterial.getTextureKR();
+		final Texture textureKS = uberMaterial.getTextureKS();
+		final Texture textureKT = uberMaterial.getTextureKT();
+		final Texture textureOpacity = uberMaterial.getTextureOpacity();
+		final Texture textureRoughnessU = uberMaterial.getTextureRoughnessU();
+		final Texture textureRoughnessV = uberMaterial.getTextureRoughnessV();
+		
+		final boolean isRemappingRoughness = uberMaterial.isRemappingRoughness();
+		
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), modifier.getID(), modifierOffsetFunction.applyAsInt(modifier));
+		final int textureKDAndTextureKRValue = pack(textureKD.getID(), textureOffsetFunction.applyAsInt(textureKD), textureKR.getID(), textureOffsetFunction.applyAsInt(textureKR));
+		final int textureKSAndTextureKTValue = pack(textureKS.getID(), textureOffsetFunction.applyAsInt(textureKS), textureKT.getID(), textureOffsetFunction.applyAsInt(textureKT));
+		final int textureEtaAndTextureOpacityValue = pack(textureEta.getID(), textureOffsetFunction.applyAsInt(textureEta), textureOpacity.getID(), textureOffsetFunction.applyAsInt(textureOpacity));
+		final int textureRoughnessUAndTextureRoughnessVValue = pack(textureRoughnessU.getID(), textureOffsetFunction.applyAsInt(textureRoughnessU), textureRoughnessV.getID(), textureOffsetFunction.applyAsInt(textureRoughnessV));
+		
+		final int[] array = new int[UBER_MATERIAL_LENGTH];
+		
+//		Because the UberMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;									//Block #1
+		array[UBER_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_R] = textureKDAndTextureKRValue;									//Block #1
+		array[UBER_MATERIAL_OFFSET_TEXTURE_K_S_AND_TEXTURE_K_T] = textureKSAndTextureKTValue;									//Block #1
+		array[UBER_MATERIAL_OFFSET_TEXTURE_ETA_AND_TEXTURE_OPACITY] = textureEtaAndTextureOpacityValue;							//Block #1
+		array[UBER_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = textureRoughnessUAndTextureRoughnessVValue;	//Block #1
+		array[UBER_MATERIAL_OFFSET_IS_REMAPPING_ROUGHNESS] = isRemappingRoughness ? 1 : 0;										//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with all {@link UberMaterial} instances in {@code uberMaterials} in compiled form.
+	 * <p>
+	 * If {@code uberMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toUberMaterials(uberMaterials, modifier -> 0, texture -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param uberMaterials a {@code List} of {@code UberMaterial} instances
+	 * @return an {@code int[]} with all {@code UberMaterial} instances in {@code uberMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code uberMaterials} or at least one of its elements are {@code null}
+	 */
+	public static int[] toUberMaterials(final List<UberMaterial> uberMaterials) {
+		return toUberMaterials(uberMaterials, modifier -> 0, texture -> 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with all {@link UberMaterial} instances in {@code uberMaterials} in compiled form.
+	 * <p>
+	 * If either {@code uberMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param uberMaterials a {@code List} of {@code UberMaterial} instances
+	 * @param modifierOffsetFunction a {@code ToIntFunction} that returns {@link Modifier} offsets
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return an {@code int[]} with all {@code UberMaterial} instances in {@code uberMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code uberMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static int[] toUberMaterials(final List<UberMaterial> uberMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Arrays.toIntArray(uberMaterials, uberMaterial -> toUberMaterial(uberMaterial, modifierOffsetFunction, textureOffsetFunction));
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static boolean doIsSupported(final BullseyeMaterial bullseyeMaterial) {
@@ -3379,6 +3646,50 @@ public final class CompiledMaterialCache {
 		}
 		
 		if(!CompiledTextureCache.isSupported(substrateMaterial.getTextureRoughnessV())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final UberMaterial uberMaterial) {
+		if(!CompiledModifierCache.isSupported(uberMaterial.getModifier())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(uberMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(uberMaterial.getTextureEta())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(uberMaterial.getTextureKD())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(uberMaterial.getTextureKR())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(uberMaterial.getTextureKS())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(uberMaterial.getTextureKT())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(uberMaterial.getTextureOpacity())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(uberMaterial.getTextureRoughnessU())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(uberMaterial.getTextureRoughnessV())) {
 			return false;
 		}
 		

@@ -759,7 +759,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float worldToObjectElement43 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 14];
 		final float worldToObjectElement44 = this.lightDiffuseAreaLightArray[offset + CompiledLightCache.DIFFUSE_AREA_LIGHT_OFFSET_WORLD_TO_OBJECT + 15];
 		
-		vector3FSetMatrix44FTransform(worldToObjectElement11, worldToObjectElement12, worldToObjectElement13, worldToObjectElement21, worldToObjectElement22, worldToObjectElement23, worldToObjectElement31, worldToObjectElement32, worldToObjectElement33, incomingX, incomingY, incomingZ);
+		vector3FSetMatrix44FTransformNormalize(worldToObjectElement11, worldToObjectElement12, worldToObjectElement13, worldToObjectElement21, worldToObjectElement22, worldToObjectElement23, worldToObjectElement31, worldToObjectElement32, worldToObjectElement33, incomingX, incomingY, incomingZ);
 		
 		final float incomingOSX = vector3FGetX();
 		final float incomingOSY = vector3FGetY();

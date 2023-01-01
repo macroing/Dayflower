@@ -1613,7 +1613,17 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					final boolean isIntersectingAreaLight = isIntersecting && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset;
 					
 					if(isIntersectingAreaLight) {
-						lightEvaluateRadianceEmittedAreaLight(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ, -incomingX, -incomingY, -incomingZ);
+						final float normalLightX = intersectionRHSGetOrthonormalBasisSWX();
+						final float normalLightY = intersectionRHSGetOrthonormalBasisSWY();
+						final float normalLightZ = intersectionRHSGetOrthonormalBasisSWZ();
+						
+						final float normalLightDotIncoming = vector3FDotProduct(normalLightX, normalLightY, normalLightZ, incomingX, incomingY, incomingZ);
+						
+						final float normalLightCorrectlyOrientedX = normalLightDotIncoming > 0.0F ? -normalLightX : normalLightX;
+						final float normalLightCorrectlyOrientedY = normalLightDotIncoming > 0.0F ? -normalLightY : normalLightY;
+						final float normalLightCorrectlyOrientedZ = normalLightDotIncoming > 0.0F ? -normalLightZ : normalLightZ;
+						
+						lightEvaluateRadianceEmittedAreaLight(normalLightCorrectlyOrientedX, normalLightCorrectlyOrientedY, normalLightCorrectlyOrientedZ, -incomingX, -incomingY, -incomingZ);
 						
 						final float lightIncomingR = color3FLHSGetR();
 						final float lightIncomingG = color3FLHSGetG();

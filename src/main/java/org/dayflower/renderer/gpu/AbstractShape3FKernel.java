@@ -1096,13 +1096,13 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float wDotRayDirection = vector3FDotProduct(wX, wY, wZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float uCorrectlyOrientedX = wDotRayDirection > 0.0F ? -uX : uX;
-		final float uCorrectlyOrientedY = wDotRayDirection > 0.0F ? -uY : uY;
-		final float uCorrectlyOrientedZ = wDotRayDirection > 0.0F ? -uZ : uZ;
+		final float uCorrectlyOrientedX = wDotRayDirection > 0.0F ? uX : uX;
+		final float uCorrectlyOrientedY = wDotRayDirection > 0.0F ? uY : uY;
+		final float uCorrectlyOrientedZ = wDotRayDirection > 0.0F ? uZ : uZ;
 		
-		final float wCorrectlyOrientedX = wDotRayDirection > 0.0F ? -wX : wX;
-		final float wCorrectlyOrientedY = wDotRayDirection > 0.0F ? -wY : wY;
-		final float wCorrectlyOrientedZ = wDotRayDirection > 0.0F ? -wZ : wZ;
+		final float wCorrectlyOrientedX = wDotRayDirection > 0.0F ? wX : wX;
+		final float wCorrectlyOrientedY = wDotRayDirection > 0.0F ? wY : wY;
+		final float wCorrectlyOrientedZ = wDotRayDirection > 0.0F ? wZ : wZ;
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -1114,8 +1114,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float textureCoordinatesV = vector3FDotProduct(0.0F, 1.0F, 0.0F, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(uCorrectlyOrientedX, uCorrectlyOrientedY, uCorrectlyOrientedZ, vX, vY, vZ, wCorrectlyOrientedX, wCorrectlyOrientedY, wCorrectlyOrientedZ);
-		intersectionLHSSetOrthonormalBasisS(uCorrectlyOrientedX, uCorrectlyOrientedY, uCorrectlyOrientedZ, vX, vY, vZ, wCorrectlyOrientedX, wCorrectlyOrientedY, wCorrectlyOrientedZ);
+		intersectionLHSSetOrthonormalBasisG(uX, uY, uZ, vX, vY, vZ, wX, wY, wZ);
+		intersectionLHSSetOrthonormalBasisS(uX, uY, uZ, vX, vY, vZ, wX, wY, wZ);
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -1148,13 +1148,13 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float wDotRayDirection = vector3FDotProduct(wX, wY, wZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float uCorrectlyOrientedX = wDotRayDirection > 0.0F ? -uX : uX;
-		final float uCorrectlyOrientedY = wDotRayDirection > 0.0F ? -uY : uY;
-		final float uCorrectlyOrientedZ = wDotRayDirection > 0.0F ? -uZ : uZ;
+		final float uCorrectlyOrientedX = wDotRayDirection > 0.0F ? uX : uX;
+		final float uCorrectlyOrientedY = wDotRayDirection > 0.0F ? uY : uY;
+		final float uCorrectlyOrientedZ = wDotRayDirection > 0.0F ? uZ : uZ;
 		
-		final float wCorrectlyOrientedX = wDotRayDirection > 0.0F ? -wX : wX;
-		final float wCorrectlyOrientedY = wDotRayDirection > 0.0F ? -wY : wY;
-		final float wCorrectlyOrientedZ = wDotRayDirection > 0.0F ? -wZ : wZ;
+		final float wCorrectlyOrientedX = wDotRayDirection > 0.0F ? wX : wX;
+		final float wCorrectlyOrientedY = wDotRayDirection > 0.0F ? wY : wY;
+		final float wCorrectlyOrientedZ = wDotRayDirection > 0.0F ? wZ : wZ;
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -1325,9 +1325,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float normalDotRayDirection = vector3FDotProduct(polygonSurfaceNormalX, polygonSurfaceNormalY, polygonSurfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float polygonSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalX : polygonSurfaceNormalX;
-		final float polygonSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalY : polygonSurfaceNormalY;
-		final float polygonSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalZ : polygonSurfaceNormalZ;
+		final float polygonSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? polygonSurfaceNormalX : polygonSurfaceNormalX;
+		final float polygonSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? polygonSurfaceNormalY : polygonSurfaceNormalY;
+		final float polygonSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? polygonSurfaceNormalZ : polygonSurfaceNormalZ;
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -1401,9 +1401,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float normalDotRayDirection = vector3FDotProduct(polygonSurfaceNormalX, polygonSurfaceNormalY, polygonSurfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float polygonSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalX : polygonSurfaceNormalX;
-		final float polygonSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalY : polygonSurfaceNormalY;
-		final float polygonSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -polygonSurfaceNormalZ : polygonSurfaceNormalZ;
+		final float polygonSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? polygonSurfaceNormalX : polygonSurfaceNormalX;
+		final float polygonSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? polygonSurfaceNormalY : polygonSurfaceNormalY;
+		final float polygonSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? polygonSurfaceNormalZ : polygonSurfaceNormalZ;
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -1581,9 +1581,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float normalDotRayDirection = vector3FDotProduct(rectangleSurfaceNormalX, rectangleSurfaceNormalY, rectangleSurfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float rectangleSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalX : rectangleSurfaceNormalX;
-		final float rectangleSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalY : rectangleSurfaceNormalY;
-		final float rectangleSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalZ : rectangleSurfaceNormalZ;
+		final float rectangleSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? rectangleSurfaceNormalX : rectangleSurfaceNormalX;
+		final float rectangleSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? rectangleSurfaceNormalY : rectangleSurfaceNormalY;
+		final float rectangleSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? rectangleSurfaceNormalZ : rectangleSurfaceNormalZ;
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -1668,9 +1668,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float normalDotRayDirection = vector3FDotProduct(rectangleSurfaceNormalX, rectangleSurfaceNormalY, rectangleSurfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float rectangleSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalX : rectangleSurfaceNormalX;
-		final float rectangleSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalY : rectangleSurfaceNormalY;
-		final float rectangleSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -rectangleSurfaceNormalZ : rectangleSurfaceNormalZ;
+		final float rectangleSurfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? rectangleSurfaceNormalX : rectangleSurfaceNormalX;
+		final float rectangleSurfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? rectangleSurfaceNormalY : rectangleSurfaceNormalY;
+		final float rectangleSurfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? rectangleSurfaceNormalZ : rectangleSurfaceNormalZ;
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -1846,9 +1846,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float normalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float surfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
-		final float surfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
-		final float surfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
+		final float surfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? surfaceNormalX : surfaceNormalX;
+		final float surfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? surfaceNormalY : surfaceNormalY;
+		final float surfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? surfaceNormalZ : surfaceNormalZ;
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = faceX != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointX, rectangularCuboidMinimumX, rectangularCuboidMaximumX);
@@ -1922,9 +1922,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float normalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 		
-		final float surfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
-		final float surfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
-		final float surfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
+		final float surfaceNormalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? surfaceNormalX : surfaceNormalX;
+		final float surfaceNormalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? surfaceNormalY : surfaceNormalY;
+		final float surfaceNormalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? surfaceNormalZ : surfaceNormalZ;
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = faceX != 0 ? normalize(surfaceIntersectionPointZ, rectangularCuboidMinimumZ, rectangularCuboidMaximumZ) : normalize(surfaceIntersectionPointX, rectangularCuboidMinimumX, rectangularCuboidMaximumX);

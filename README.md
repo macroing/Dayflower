@@ -179,6 +179,7 @@ The following table describes the different APIs and their current status in the
 | Image API                              | 100.0%  |   0.0%    |
 | JavaFX Material API                    | 100.0%  |   0.0%    |
 | JavaFX Scene Canvas API                | 100.0%  |   0.0%    |
+| JavaFX Shape API                       | 100.0%  |   0.0%    |
 | JavaFX Texture API                     | 100.0%  |   0.0%    |
 | Node API                               | 100.0%  | 100.0%    |
 | Parameter API                          | 100.0%  |   0.0%    |

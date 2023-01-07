@@ -38,6 +38,7 @@ import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.javafx.material.MaterialPicker;
+import org.dayflower.javafx.shape.ShapePicker;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
@@ -118,15 +119,16 @@ final class CenteredVBoxes {
 	public static CenteredVBox createCenteredVBoxForScene(final Renderer renderer) {
 		final CenteredVBox centeredVBox = new CenteredVBox();
 		
-		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Cone3F.NAME, Cylinder3F.NAME, Disk3F.NAME, Hyperboloid3F.NAME, Paraboloid3F.NAME, Plane3F.NAME, Rectangle3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
-		
 		final MaterialPicker materialPicker = new MaterialPicker();
 		
+		final ShapePicker shapePicker = new ShapePicker();
+		
 		centeredVBox.getChildren().add(materialPicker);
+		centeredVBox.getChildren().add(shapePicker);
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
 			final Material material = materialPicker.getMaterial();
 			
-			final Shape3F shape = doCreateShape(comboBoxShape);
+			final Shape3F shape = shapePicker.getPickedShape();
 			
 			if(material != null && shape != null) {
 				final
@@ -187,41 +189,6 @@ final class CenteredVBoxes {
 	
 	private static Quaternion4F doGetQuaternionByShape(final Shape3F shape) {
 		return shape instanceof Plane3F ? Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))) : new Quaternion4F();
-	}
-	
-	private static Shape3F doCreateShape(final ComboBox<String> comboBoxShape) {
-		final String selectedItem = comboBoxShape.getSelectionModel().getSelectedItem();
-		
-		if(selectedItem != null) {
-			switch(selectedItem) {
-				case Cone3F.NAME:
-					return new Cone3F();
-				case Cylinder3F.NAME:
-					return new Cylinder3F();
-				case Disk3F.NAME:
-					return new Disk3F();
-				case Hyperboloid3F.NAME:
-					return new Hyperboloid3F();
-				case Paraboloid3F.NAME:
-					return new Paraboloid3F();
-				case Plane3F.NAME:
-					return new Plane3F();
-				case Rectangle3F.NAME:
-					return new Rectangle3F();
-				case RectangularCuboid3F.NAME:
-					return new RectangularCuboid3F();
-				case Sphere3F.NAME:
-					return new Sphere3F();
-				case Torus3F.NAME:
-					return new Torus3F();
-				case Triangle3F.NAME:
-					return new Triangle3F();
-				default:
-					return null;
-			}
-		}
-		
-		return null;
 	}
 	
 	private static void doHandleCameraApertureRadiusChange(final Camera camera, final float value) {

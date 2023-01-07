@@ -1114,8 +1114,8 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float textureCoordinatesV = vector3FDotProduct(0.0F, 1.0F, 0.0F, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		
 //		Update the intersection array:
-		intersectionLHSSetOrthonormalBasisG(uX, uY, uZ, vX, vY, vZ, wX, wY, wZ);
-		intersectionLHSSetOrthonormalBasisS(uX, uY, uZ, vX, vY, vZ, wX, wY, wZ);
+		intersectionLHSSetOrthonormalBasisG(uCorrectlyOrientedX, uCorrectlyOrientedY, uCorrectlyOrientedZ, vX, vY, vZ, wCorrectlyOrientedX, wCorrectlyOrientedY, wCorrectlyOrientedZ);
+		intersectionLHSSetOrthonormalBasisS(uCorrectlyOrientedX, uCorrectlyOrientedY, uCorrectlyOrientedZ, vX, vY, vZ, wCorrectlyOrientedX, wCorrectlyOrientedY, wCorrectlyOrientedZ);
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
@@ -2158,7 +2158,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float distance = point3FDistance(centerX, centerY, centerZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		final float distanceReciprocal = 1.0F / distance;
 		
-		orthonormalBasis33FSetFromW(directionX * distanceReciprocal, directionY * distanceReciprocal, directionZ * distanceReciprocal);
+		orthonormalBasis33FSetFromW(directionX, directionY, directionZ);
 		
 		final float uX = -orthonormalBasis33FGetUX();
 		final float uY = -orthonormalBasis33FGetUY();
@@ -2174,7 +2174,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		final float sinThetaMax = distanceReciprocal;
 		final float sinThetaMaxSquared = sinThetaMax * sinThetaMax;
-		final float sinThetaMaxReciprocal = 1.0F / sinThetaMax;
+		final float sinThetaMaxReciprocal = distance;
 		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
 		final float cosTheta = sinThetaMaxSquared < 0.00068523F ? sqrt(1.0F - sinThetaMaxSquared * u) : (cosThetaMax - 1.0F) * u + 1.0F;
 		final float sinThetaSquared = sinThetaMaxSquared < 0.00068523F ? sinThetaMaxSquared * u : 1.0F - cosTheta * cosTheta;

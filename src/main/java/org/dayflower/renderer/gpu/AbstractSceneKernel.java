@@ -1502,7 +1502,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
 				final float scatteringResultB = materialBSDFResultB * lightIncomingDotNormalAbs;
 				
-				final boolean hasScatteringResult = scatteringResultR != 0.0F || scatteringResultG != 0.0F || scatteringResultB != 0.0F;
+				final boolean hasScatteringResult = scatteringResultR > 0.0F || scatteringResultG > 0.0F || scatteringResultB > 0.0F;
 				
 				final float directionX = lightPointX - surfaceIntersectionPointX;
 				final float directionY = lightPointY - surfaceIntersectionPointY;
@@ -1524,6 +1524,11 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				if(hasScatteringResult && isAreaLight) {
 					final boolean isIntersecting = primitiveIntersectionComputeRHS();
 					final boolean isIntersectingAreaLight = isIntersecting && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset;
+					
+					ray3FSetOrigin(rayOriginX, rayOriginY, rayOriginZ);
+					ray3FSetDirection(rayDirectionX, rayDirectionY, rayDirectionZ);
+					ray3FSetTMaximum(rayTMaximum);
+					ray3FSetTMinimum(rayTMinimum);
 					
 					if(isIntersectingAreaLight) {
 						materialBSDFEvaluateProbabilityDensityFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
@@ -1612,18 +1617,17 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					final boolean isIntersecting = primitiveIntersectionComputeRHS();
 					final boolean isIntersectingAreaLight = isIntersecting && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset;
 					
+					ray3FSetOrigin(rayOriginX, rayOriginY, rayOriginZ);
+					ray3FSetDirection(rayDirectionX, rayDirectionY, rayDirectionZ);
+					ray3FSetTMaximum(rayTMaximum);
+					ray3FSetTMinimum(rayTMinimum);
+					
 					if(isIntersectingAreaLight) {
 						final float normalLightX = intersectionRHSGetOrthonormalBasisSWX();
 						final float normalLightY = intersectionRHSGetOrthonormalBasisSWY();
 						final float normalLightZ = intersectionRHSGetOrthonormalBasisSWZ();
 						
-						final float normalLightDotIncoming = vector3FDotProduct(normalLightX, normalLightY, normalLightZ, incomingX, incomingY, incomingZ);
-						
-						final float normalLightCorrectlyOrientedX = normalLightDotIncoming > 0.0F ? -normalLightX : normalLightX;
-						final float normalLightCorrectlyOrientedY = normalLightDotIncoming > 0.0F ? -normalLightY : normalLightY;
-						final float normalLightCorrectlyOrientedZ = normalLightDotIncoming > 0.0F ? -normalLightZ : normalLightZ;
-						
-						lightEvaluateRadianceEmittedAreaLight(normalLightCorrectlyOrientedX, normalLightCorrectlyOrientedY, normalLightCorrectlyOrientedZ, -incomingX, -incomingY, -incomingZ);
+						lightEvaluateRadianceEmittedAreaLight(normalLightX, normalLightY, normalLightZ, -incomingX, -incomingY, -incomingZ);
 						
 						final float lightIncomingR = color3FLHSGetR();
 						final float lightIncomingG = color3FLHSGetG();

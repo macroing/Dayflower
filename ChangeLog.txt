@@ -1,6 +1,7 @@
 2023-01-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for Hyperboloid3F, Rectangle3F, RectangularCuboid3F and Triangle3F in the GUI.
+	* ADD:		Add a car scene. The model and textures were created by Martin Sandgren (https://github.com/carlmartus).
 
 2023-01-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

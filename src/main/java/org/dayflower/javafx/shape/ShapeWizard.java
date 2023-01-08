@@ -26,10 +26,14 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
+import org.dayflower.geometry.shape.Hyperboloid3F;
 import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.Rectangle3F;
+import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
+import org.dayflower.geometry.shape.Triangle3F;
 
 import org.macroing.java.lang.Doubles;
 
@@ -53,10 +57,14 @@ public final class ShapeWizard {
 	private static final String NAME_CONE = "Cone3F";
 	private static final String NAME_CYLINDER = "Cylinder3F";
 	private static final String NAME_DISK = "Disk3F";
+	private static final String NAME_HYPERBOLOID = "Hyperboloid3F";
 	private static final String NAME_PARABOLOID = "Paraboloid3F";
 	private static final String NAME_PLANE = "Plane3F";
+	private static final String NAME_RECTANGLE = "Rectangle3F";
+	private static final String NAME_RECTANGULAR_CUBOID = "RectangularCuboid3F";
 	private static final String NAME_SPHERE = "Sphere3F";
 	private static final String NAME_TORUS = "Torus3F";
+	private static final String NAME_TRIANGLE = "Triangle3F";
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -123,7 +131,7 @@ public final class ShapeWizard {
 		
 		final
 		ComboBox<ShapeInfo> comboBox = new ComboBox<>();
-		comboBox.getItems().addAll(new ShapeInfo(Cone3F.class), new ShapeInfo(Cylinder3F.class), new ShapeInfo(Disk3F.class), new ShapeInfo(Paraboloid3F.class), new ShapeInfo(Plane3F.class), new ShapeInfo(Sphere3F.class), new ShapeInfo(Torus3F.class));
+		comboBox.getItems().addAll(new ShapeInfo(Cone3F.class), new ShapeInfo(Cylinder3F.class), new ShapeInfo(Disk3F.class), new ShapeInfo(Hyperboloid3F.class), new ShapeInfo(Paraboloid3F.class), new ShapeInfo(Plane3F.class), new ShapeInfo(Rectangle3F.class), new ShapeInfo(RectangularCuboid3F.class), new ShapeInfo(Sphere3F.class), new ShapeInfo(Torus3F.class), new ShapeInfo(Triangle3F.class));
 		comboBox.setMaxWidth(Doubles.MAX_VALUE);
 		comboBox.setValue(new ShapeInfo(Plane3F.class));
 		comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> shapeInfo.set(newValue));
@@ -172,14 +180,22 @@ public final class ShapeWizard {
 					return "New Cylinder";
 				case NAME_DISK:
 					return "New Disk";
+				case NAME_HYPERBOLOID:
+					return "New Hyperboloid";
 				case NAME_PARABOLOID:
 					return "New Paraboloid";
 				case NAME_PLANE:
 					return "New Plane";
+				case NAME_RECTANGLE:
+					return "New Rectangle";
+				case NAME_RECTANGULAR_CUBOID:
+					return "New Rectangular Cuboid";
 				case NAME_SPHERE:
 					return "New Sphere";
 				case NAME_TORUS:
 					return "New Torus";
+				case NAME_TRIANGLE:
+					return "New Triangle";
 				default:
 					return "New Plane";
 			}
@@ -198,14 +214,22 @@ public final class ShapeWizard {
 					return new CylinderGridPane();
 				case NAME_DISK:
 					return new DiskGridPane();
+				case NAME_HYPERBOLOID:
+					return new HyperboloidGridPane();
 				case NAME_PARABOLOID:
 					return new ParaboloidGridPane();
 				case NAME_PLANE:
 					return new PlaneGridPane();
+				case NAME_RECTANGLE:
+					return new RectangleGridPane();
+				case NAME_RECTANGULAR_CUBOID:
+					return new RectangularCuboidGridPane();
 				case NAME_SPHERE:
 					return new SphereGridPane();
 				case NAME_TORUS:
 					return new TorusGridPane();
+				case NAME_TRIANGLE:
+					return new TriangleGridPane();
 				default:
 					return new PlaneGridPane();
 			}

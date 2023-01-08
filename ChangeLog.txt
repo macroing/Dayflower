@@ -1,3 +1,7 @@
+2023-01-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for Hyperboloid3F, Rectangle3F, RectangularCuboid3F and Triangle3F in the GUI.
+
 2023-01-07  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the JavaFX Shape API. It is now being used by the GUI when adding primitives.

@@ -38,10 +38,14 @@ public final class ShapePicker extends BorderPane {
 	private static final String NAME_CONE = "Cone3F";
 	private static final String NAME_CYLINDER = "Cylinder3F";
 	private static final String NAME_DISK = "Disk3F";
+	private static final String NAME_HYPERBOLOID = "Hyperboloid3F";
 	private static final String NAME_PARABOLOID = "Paraboloid3F";
 	private static final String NAME_PLANE = "Plane3F";
+	private static final String NAME_RECTANGLE = "Rectangle3F";
+	private static final String NAME_RECTANGULAR_CUBOID = "RectangularCuboid3F";
 	private static final String NAME_SPHERE = "Sphere3F";
 	private static final String NAME_TORUS = "Torus3F";
+	private static final String NAME_TRIANGLE = "Triangle3F";
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -102,14 +106,22 @@ public final class ShapePicker extends BorderPane {
 				return "Cylinder";
 			case NAME_DISK:
 				return "Disk";
+			case NAME_HYPERBOLOID:
+				return "Hyperboloid";
 			case NAME_PARABOLOID:
 				return "Paraboloid";
 			case NAME_PLANE:
 				return "Plane";
+			case NAME_RECTANGLE:
+				return "Rectangle";
+			case NAME_RECTANGULAR_CUBOID:
+				return "Rectangular Cuboid";
 			case NAME_SPHERE:
 				return "Sphere";
 			case NAME_TORUS:
 				return "Torus";
+			case NAME_TRIANGLE:
+				return "Triangle";
 			default:
 				return "Shape";
 		}

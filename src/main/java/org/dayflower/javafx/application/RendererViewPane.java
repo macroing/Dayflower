@@ -33,6 +33,7 @@ import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
+
 import org.macroing.java.io.Files;
 import org.macroing.java.util.function.TriFunction;
 
@@ -48,6 +49,7 @@ final class RendererViewPane extends BorderPane {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final AtomicBoolean isCameraUpdateRequired;
+	private final AtomicBoolean isTransformUpdateRequired;
 	private final AtomicLong lastResizeTimeMillis;
 	private final AtomicReference<File> file;
 	private final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer;
@@ -62,6 +64,7 @@ final class RendererViewPane extends BorderPane {
 	
 	public RendererViewPane(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService, final Stage stage) {
 		this.isCameraUpdateRequired = new AtomicBoolean();
+		this.isTransformUpdateRequired = new AtomicBoolean();
 		this.lastResizeTimeMillis = new AtomicLong();
 		this.file = new AtomicReference<>();
 		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
@@ -142,6 +145,10 @@ final class RendererViewPane extends BorderPane {
 		this.file.set(Objects.requireNonNull(file, "file == null"));
 	}
 	
+	public void setTransformUpdateRequired(final boolean isTransformUpdateRequired) {
+		this.isTransformUpdateRequired.set(isTransformUpdateRequired);
+	}
+	
 	public void update() {
 		final Scene scene = this.combinedProgressiveImageOrderRenderer.getScene();
 		
@@ -174,6 +181,15 @@ final class RendererViewPane extends BorderPane {
 		if(this.isCameraUpdateRequired.compareAndSet(true, false)) {
 			if(this.combinedProgressiveImageOrderRenderer instanceof AbstractGPURenderer) {
 				AbstractGPURenderer.class.cast(this.combinedProgressiveImageOrderRenderer).updateCamera();
+			}
+			
+			this.combinedProgressiveImageOrderRenderer.renderShutdown();
+			this.combinedProgressiveImageOrderRenderer.clear();
+		}
+		
+		if(this.isTransformUpdateRequired.compareAndSet(true, false)) {
+			if(this.combinedProgressiveImageOrderRenderer instanceof AbstractGPURenderer) {
+				AbstractGPURenderer.class.cast(this.combinedProgressiveImageOrderRenderer).updateMatrix44Fs();
 			}
 			
 			this.combinedProgressiveImageOrderRenderer.renderShutdown();

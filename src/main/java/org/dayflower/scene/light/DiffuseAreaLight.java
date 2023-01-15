@@ -412,7 +412,7 @@ public final class DiffuseAreaLight extends AreaLight {
 		final Matrix44F objectToWorld = transform.getObjectToWorld();
 		final Matrix44F worldToObject = transform.getWorldToObject();
 		
-		final Vector3F incomingObjectSpace = Vector3F.transform(worldToObject, incoming);
+		final Vector3F incomingObjectSpace = Vector3F.normalize(Vector3F.transform(worldToObject, incoming));
 		
 		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
 		final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);

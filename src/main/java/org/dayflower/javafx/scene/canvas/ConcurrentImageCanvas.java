@@ -321,42 +321,48 @@ public final class ConcurrentImageCanvas<T extends Image> extends Canvas {
 				if(imageUpdater != null) {
 					final T image = imageUpdater.update(getImage());
 					
-					doSetImage(image);
-					
-					setHeight(image.getResolutionY());
-					setWidth(image.getResolutionX());
+					synchronized(image) {
+						doSetImage(image);
+						
+						setHeight(image.getResolutionY());
+						setWidth(image.getResolutionX());
+					}
 				}
 				
 				final ByteBuffer byteBuffer = this.byteBuffer.get();
 				
 				final T image = getImage();
 				
-				final double resolutionX = image.getResolutionX();
-				final double resolutionY = image.getResolutionY();
-				
-				final Predicate<T> renderPredicate = this.renderPredicate;
-				
-				final WritableImage writableImage = this.writableImage.get();
-				
-				final PredicateTask newPredicateTask = new PredicateTask(() -> Boolean.valueOf(renderPredicate.test(image)), () -> {
-					image.copyTo(byteBuffer.array(), ArrayComponentOrder.BGRA);
+				synchronized(image) {
+					final double resolutionX = image.getResolutionX();
+					final double resolutionY = image.getResolutionY();
 					
-					final
-					PixelWriter pixelWriter = writableImage.getPixelWriter();
-					pixelWriter.setPixels(0, 0, image.getResolutionX(), image.getResolutionY(), PIXEL_FORMAT, byteBuffer, image.getResolutionX() * 4);
+					final Predicate<T> renderPredicate = this.renderPredicate;
 					
-					final
-					GraphicsContext graphicsContext = getGraphicsContext2D();
-					graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, resolutionX, resolutionY);
-				});
-				
-				predicateTask.set(newPredicateTask);
-				
-				try {
-					executorService.execute(newPredicateTask);
-				} catch(final RejectedExecutionException e) {
-//					One of the methods shutdown() and shutdownNow() of the ExecutorService has been called.
-//					The next time this render() method is called, nothing will happen.
+					final WritableImage writableImage = this.writableImage.get();
+					
+					final PredicateTask newPredicateTask = new PredicateTask(() -> Boolean.valueOf(renderPredicate.test(image)), () -> {
+						synchronized(image) {
+							image.copyTo(byteBuffer.array(), ArrayComponentOrder.BGRA);
+							
+							final
+							PixelWriter pixelWriter = writableImage.getPixelWriter();
+							pixelWriter.setPixels(0, 0, image.getResolutionX(), image.getResolutionY(), PIXEL_FORMAT, byteBuffer, image.getResolutionX() * 4);
+							
+							final
+							GraphicsContext graphicsContext = getGraphicsContext2D();
+							graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, resolutionX, resolutionY);
+						}
+					});
+					
+					predicateTask.set(newPredicateTask);
+					
+					try {
+						executorService.execute(newPredicateTask);
+					} catch(final RejectedExecutionException e) {
+//						One of the methods shutdown() and shutdownNow() of the ExecutorService has been called.
+//						The next time this render() method is called, nothing will happen.
+					}
 				}
 			}
 		}

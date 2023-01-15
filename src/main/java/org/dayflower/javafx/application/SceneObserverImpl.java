@@ -20,16 +20,22 @@ package org.dayflower.javafx.application;
 
 import java.util.Objects;
 
+import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Quaternion4F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneObserver;
+import org.dayflower.scene.Transform;
+import org.dayflower.scene.TransformObserver;
 
 import javafx.application.Platform;
 
-final class SceneObserverImpl implements SceneObserver {
+final class SceneObserverImpl implements SceneObserver, TransformObserver {
 	private final ProgressiveImageOrderRenderer progressiveImageOrderRenderer;
 	private final RendererTabPane rendererTabPane;
 	
@@ -38,6 +44,10 @@ final class SceneObserverImpl implements SceneObserver {
 	public SceneObserverImpl(final ProgressiveImageOrderRenderer progressiveImageOrderRenderer, final RendererTabPane rendererTabPane) {
 		this.progressiveImageOrderRenderer = Objects.requireNonNull(progressiveImageOrderRenderer, "progressiveImageOrderRenderer == null");
 		this.rendererTabPane = Objects.requireNonNull(rendererTabPane, "rendererTabPane == null");
+		
+		for(final Primitive primitive : progressiveImageOrderRenderer.getScene().getPrimitives()) {
+			primitive.getTransform().addTransformObserver(this);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +74,8 @@ final class SceneObserverImpl implements SceneObserver {
 		
 		this.progressiveImageOrderRenderer.renderShutdown();
 		this.progressiveImageOrderRenderer.clear();
+		
+		newPrimitive.getTransform().addTransformObserver(this);
 	}
 	
 	@Override
@@ -91,9 +103,48 @@ final class SceneObserverImpl implements SceneObserver {
 	}
 	
 	@Override
+	public void onChangeObjectToWorld(final Transform transform, final Matrix44F newObjectToWorld) {
+		Objects.requireNonNull(transform, "transform == null");
+		Objects.requireNonNull(newObjectToWorld, "newObjectToWorld == null");
+	}
+	
+	@Override
+	public void onChangePosition(final Transform transform, final Point3F oldPosition, final Point3F newPosition) {
+		Objects.requireNonNull(transform, "transform == null");
+		Objects.requireNonNull(oldPosition, "oldPosition == null");
+		Objects.requireNonNull(newPosition, "newPosition == null");
+		
+		this.rendererTabPane.getRendererViewPane().setTransformUpdateRequired(true);
+	}
+	
+	@Override
 	public void onChangePrimitive(final Scene scene, final Primitive oldPrimitive) {
 		Objects.requireNonNull(scene, "scene == null");
 		Objects.requireNonNull(oldPrimitive, "oldPrimitive == null");
+	}
+	
+	@Override
+	public void onChangeRotation(final Transform transform, final Quaternion4F oldRotation, final Quaternion4F newRotation) {
+		Objects.requireNonNull(transform, "transform == null");
+		Objects.requireNonNull(oldRotation, "oldRotation == null");
+		Objects.requireNonNull(newRotation, "newRotation == null");
+		
+		this.rendererTabPane.getRendererViewPane().setTransformUpdateRequired(true);
+	}
+	
+	@Override
+	public void onChangeScale(final Transform transform, final Vector3F oldScale, final Vector3F newScale) {
+		Objects.requireNonNull(transform, "transform == null");
+		Objects.requireNonNull(oldScale, "oldScale == null");
+		Objects.requireNonNull(newScale, "newScale == null");
+		
+		this.rendererTabPane.getRendererViewPane().setTransformUpdateRequired(true);
+	}
+	
+	@Override
+	public void onChangeWorldToObject(final Transform transform, final Matrix44F newWorldToObject) {
+		Objects.requireNonNull(transform, "transform == null");
+		Objects.requireNonNull(newWorldToObject, "newWorldToObject == null");
 	}
 	
 	@Override
@@ -111,5 +162,7 @@ final class SceneObserverImpl implements SceneObserver {
 		
 		this.progressiveImageOrderRenderer.renderShutdown();
 		this.progressiveImageOrderRenderer.clear();
+		
+		oldPrimitive.getTransform().removeTransformObserver(this);
 	}
 }

@@ -6,6 +6,7 @@ Its primary focus is photorealistic 3D-rendering, preferably in realtime. Howeve
 
 ![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-019.png "Dayflower")
 ![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-020.png "Dayflower")
+![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-021.png "Dayflower")
 
 Getting Started
 ---------------

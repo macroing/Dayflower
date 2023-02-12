@@ -1487,9 +1487,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final float lightProbabilityDensityFunctionValueSquared = lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue;
 			
 //			Initialize a flag that indicates whether the result is valid or not:
-			final boolean hasLightResult = lightResultR > 0.0F || lightResultG > 0.0F || lightResultB > 0.0F;
+			final boolean hasLightResult = checkIsFinite(lightResultR) && checkIsFinite(lightResultG) && checkIsFinite(lightResultB) && (lightResultR > 0.0F || lightResultG > 0.0F || lightResultB > 0.0F);
 			
-			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
+			if(hasLightResult && checkIsFinite(lightProbabilityDensityFunctionValue) && lightProbabilityDensityFunctionValue > 0.0F) {
 				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ, rayDirectionX, rayDirectionY, rayDirectionZ);
 				
 				final float materialBSDFResultR = materialBSDFResultGetResultR();
@@ -1502,7 +1502,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
 				final float scatteringResultB = materialBSDFResultB * lightIncomingDotNormalAbs;
 				
-				final boolean hasScatteringResult = scatteringResultR > 0.0F || scatteringResultG > 0.0F || scatteringResultB > 0.0F;
+				final boolean hasScatteringResult = checkIsFinite(scatteringResultR) && checkIsFinite(scatteringResultG) && checkIsFinite(scatteringResultB) && (scatteringResultR > 0.0F || scatteringResultG > 0.0F || scatteringResultB > 0.0F);
 				
 				final float directionX = lightPointX - surfaceIntersectionPointX;
 				final float directionY = lightPointY - surfaceIntersectionPointY;
@@ -1521,7 +1521,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				ray3FSetTMaximum(tMaximum);
 				ray3FSetTMinimum(tMinimum);
 				
-				if(hasScatteringResult && isAreaLight) {
+				if(hasScatteringResult) {
 					final boolean isIntersecting = primitiveIntersectionComputeRHS();
 					final boolean isIntersectingAreaLight = isIntersecting && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset;
 					
@@ -1530,7 +1530,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					ray3FSetTMaximum(rayTMaximum);
 					ray3FSetTMinimum(rayTMinimum);
 					
-					if(isIntersectingAreaLight) {
+					if(isAreaLight && isIntersectingAreaLight || !isAreaLight && !isIntersecting) {
 						materialBSDFEvaluateProbabilityDensityFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
 						
 						final float scatteringProbabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
@@ -1542,19 +1542,6 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 						lightDirectG += scatteringResultG * lightResultG * weight / lightProbabilityDensityFunctionValue;
 						lightDirectB += scatteringResultB * lightResultB * weight / lightProbabilityDensityFunctionValue;
 					}
-				}
-				
-				if(hasScatteringResult && !isAreaLight && !primitiveIntersects()) {
-					materialBSDFEvaluateProbabilityDensityFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
-					
-					final float scatteringProbabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
-					final float scatteringProbabilityDensityFunctionValueSquared = scatteringProbabilityDensityFunctionValue * scatteringProbabilityDensityFunctionValue;
-					
-					final float weight = lightProbabilityDensityFunctionValueSquared / (lightProbabilityDensityFunctionValueSquared + scatteringProbabilityDensityFunctionValueSquared);
-					
-					lightDirectR += scatteringResultR * lightResultR * weight / lightProbabilityDensityFunctionValue;
-					lightDirectG += scatteringResultG * lightResultG * weight / lightProbabilityDensityFunctionValue;
-					lightDirectB += scatteringResultB * lightResultB * weight / lightProbabilityDensityFunctionValue;
 				}
 			}
 		}
@@ -1580,9 +1567,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final float scatteringResultG = resultG * incomingDotNormalAbs;
 			final float scatteringResultB = resultB * incomingDotNormalAbs;
 			
-			final boolean hasScatteringResult = scatteringResultR > 0.0F || scatteringResultG > 0.0F || scatteringResultB > 0.0F;
+			final boolean hasScatteringResult = checkIsFinite(scatteringResultR) && checkIsFinite(scatteringResultG) && checkIsFinite(scatteringResultB) && (scatteringResultR > 0.0F || scatteringResultG > 0.0F || scatteringResultB > 0.0F);
 			
-			if(hasScatteringResult && scatteringProbabilityDensityFunctionValue > 0.0F) {
+			if(hasScatteringResult && checkIsFinite(scatteringProbabilityDensityFunctionValue) && scatteringProbabilityDensityFunctionValue > 0.0F) {
 				float weight = 1.0F;
 				
 				if(!hasSampledSpecular) {

@@ -346,7 +346,7 @@ public final class Sphere3F implements Shape3F {
 			
 			final float probabilityDensityFunctionValue = Point3F.distanceSquared(surfaceIntersectionShape.getSurfaceIntersectionPoint(), surfaceIntersection.getSurfaceIntersectionPoint()) / Vector3F.dotProductAbs(surfaceIntersectionShape.getSurfaceNormalS(), Vector3F.negate(incoming)) * getSurfaceArea();
 			
-			if(!Floats.isInfinite(probabilityDensityFunctionValue) || Floats.isNaN(probabilityDensityFunctionValue)) {
+			if(!Floats.isInfinite(probabilityDensityFunctionValue) && !Floats.isNaN(probabilityDensityFunctionValue)) {
 				return probabilityDensityFunctionValue;
 			}
 		}

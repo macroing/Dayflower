@@ -110,6 +110,7 @@ The tables below show the main features of the renderer.
 | Plastic Material      | Yes | Yes |
 | Polka Dot Material    | Yes | Yes |
 | Substrate Material    | Yes | Yes |
+| Translucent Material  | Yes | No  |
 | Uber Material         | Yes | Yes |
 
 #### Supported Modifiers

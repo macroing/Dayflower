@@ -1026,7 +1026,7 @@ public final class Scene implements Node {
 				return optionalIntersection.get().getPrimitive().getAreaLight().orElse(null) == light;
 			}
 			
-			return true;
+			return false;
 		}
 		
 		return !intersects(ray, tMinimum, tMaximum);

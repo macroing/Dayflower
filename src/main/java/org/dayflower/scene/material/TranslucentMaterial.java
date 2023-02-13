@@ -96,6 +96,32 @@ public final class TranslucentMaterial implements Material {
 	}
 	
 	/**
+	 * Constructs a new {@code PlasticMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorKS}, {@code colorEmission}, {@code colorReflectance}, {@code colorTransmittance} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatRoughness a {@code float} for the roughness
+	 * @param colorReflectance a {@code Color3F} instance for reflectance
+	 * @param colorTransmittance a {@code Color3F} instance for transmittance
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS}, {@code colorEmission}, {@code colorReflectance}, {@code colorTransmittance} or {@code modifier} are {@code null}
+	 */
+	public TranslucentMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission, final float floatRoughness, final Color3F colorReflectance, final Color3F colorTransmittance, final boolean isRemappingRoughness, final Modifier modifier) {
+		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
+		this.textureKS = new ConstantTexture(Objects.requireNonNull(colorKS, "colorKS == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureReflectance = new ConstantTexture(Objects.requireNonNull(colorReflectance, "colorReflectance == null"));
+		this.textureRoughness = new ConstantTexture(floatRoughness);
+		this.textureTransmittance = new ConstantTexture(Objects.requireNonNull(colorTransmittance, "colorTransmittance == null"));
+		this.isRemappingRoughness = isRemappingRoughness;
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
+	}
+	
+	/**
 	 * Constructs a new {@code TranslucentMaterial} instance.
 	 * <p>
 	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.

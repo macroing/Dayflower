@@ -96,7 +96,7 @@ public final class TranslucentMaterial implements Material {
 	}
 	
 	/**
-	 * Constructs a new {@code PlasticMaterial} instance.
+	 * Constructs a new {@code TranslucentMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKS}, {@code colorEmission}, {@code colorReflectance}, {@code colorTransmittance} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 

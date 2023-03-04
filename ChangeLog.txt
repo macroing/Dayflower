@@ -1,3 +1,7 @@
+2023-03-04  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for FresnelSpecularBXDF to the GlassMaterial implementation in the GPU-renderer.
+
 2023-02-12  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add TranslucentMaterial.

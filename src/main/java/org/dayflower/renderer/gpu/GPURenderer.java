@@ -82,7 +82,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		float radiance = 0.0F;
 		
 		if(ray3FCameraGenerate(random(), random()) && primitiveIntersectionComputeLHS()) {
-			orthonormalBasis33FSetIntersectionOrthonormalBasisGLHS();
+			orthonormalBasis33FSetIntersectionOrthonormalBasisSLHS();
 			
 			for(int sample = 0; sample < samples; sample++) {
 				vector3FSetSampleHemisphereUniformDistribution(random(), random());

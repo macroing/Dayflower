@@ -1500,8 +1500,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 		if(isSpecular && isAllowingMultipleLobes) {
-//			TODO: Implement FresnelSpecularBXDF! The value of isAllowingMultipleLobes should be true when using Path Tracing.
-			
 //			Initialize the BSDF:
 			doBSDFClear();
 			doBSDFSetBXDFCount(1);

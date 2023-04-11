@@ -1516,12 +1516,12 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float tMaximum = abs(directionLength) + 0.001F;
 				final float tMinimum = DEFAULT_T_MINIMUM;
 				
-				ray3FSetOrigin(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-				ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
-				ray3FSetTMaximum(tMaximum);
-				ray3FSetTMinimum(tMinimum);
-				
 				if(hasScatteringResult) {
+					ray3FSetOrigin(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+					ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+					ray3FSetTMaximum(tMaximum);
+					ray3FSetTMinimum(tMinimum);
+					
 					final boolean isIntersecting = primitiveIntersectionComputeRHS();
 					final boolean isIntersectingAreaLight = isIntersecting && primitiveGetAreaLightIDRHS() == lightID && primitiveGetAreaLightOffsetRHS() == lightOffset;
 					

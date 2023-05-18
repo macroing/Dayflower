@@ -2158,7 +2158,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float distance = point3FDistance(centerX, centerY, centerZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		final float distanceReciprocal = 1.0F / distance;
 		
-		orthonormalBasis33FSetFromW(directionX, directionY, directionZ);
+		orthonormalBasis33FSetFromW(directionX * distanceReciprocal, directionY * distanceReciprocal, directionZ * distanceReciprocal);
 		
 		final float uX = -orthonormalBasis33FGetUX();
 		final float uY = -orthonormalBasis33FGetUY();

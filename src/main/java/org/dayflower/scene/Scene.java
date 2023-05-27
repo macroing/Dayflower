@@ -1588,7 +1588,7 @@ public final class Scene implements Node {
 			
 			final Material material = primitive.getMaterial();
 			
-			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
+			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, false);
 			
 			if(!optionalBSDF.isPresent()) {
 				return doRadianceRayTracer(intersection.createRay(ray.getDirection()), tMinimum, tMaximum, isPreviewMode, maximumBounce, currentBounce);

@@ -1,3 +1,7 @@
+2023-06-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for TranslucentMaterial to the GPU-renderer.
+
 2023-05-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix a bug in the Scene class related to the Ray Tracing algorithm. It should not allow multiple lobes when computing BSDF instances.

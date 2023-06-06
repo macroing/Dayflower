@@ -55,6 +55,7 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.material.TranslucentMaterial;
 import org.dayflower.scene.material.UberMaterial;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.Texture;
@@ -78,6 +79,7 @@ import org.macroing.java.lang.Floats;
  * <li>{@link PlasticMaterial}</li>
  * <li>{@link PolkaDotMaterial}</li>
  * <li>{@link SubstrateMaterial}</li>
+ * <li>{@link TranslucentMaterial}</li>
  * <li>{@link UberMaterial}</li>
  * </ul>
  * 
@@ -487,6 +489,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected int[] materialSubstrateMaterialArray;
 	
 	/**
+	 * An {@code int[]} that contains {@link TranslucentMaterial} instances.
+	 */
+	protected int[] materialTranslucentMaterialArray;
+	
+	/**
 	 * An {@code int[]} that contains {@link UberMaterial} instances.
 	 */
 	protected int[] materialUberMaterialArray;
@@ -532,6 +539,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.materialPlasticMaterialArray = new int[1];
 		this.materialPolkaDotMaterialArray = new float[1];
 		this.materialSubstrateMaterialArray = new int[1];
+		this.materialTranslucentMaterialArray = new int[1];
 		this.materialUberMaterialArray = new int[1];
 	}
 	
@@ -659,6 +667,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return doMaterialPlasticMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == SubstrateMaterial.ID) {
 			return doMaterialSubstrateMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
+		} else if(currentMaterialID == TranslucentMaterial.ID) {
+			return doMaterialTranslucentMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else if(currentMaterialID == UberMaterial.ID) {
 			return doMaterialUberMaterialComputeBSDF(currentMaterialOffset, rayDirectionX, rayDirectionY, rayDirectionZ);
 		} else {
@@ -1126,6 +1136,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			textureEmission = this.materialPlasticMaterialArray[materialOffsetTextureEmission];
 		} else if(currentMaterialID == SubstrateMaterial.ID) {
 			textureEmission = this.materialSubstrateMaterialArray[materialOffsetTextureEmission];
+		} else if(currentMaterialID == TranslucentMaterial.ID) {
+			textureEmission = this.materialTranslucentMaterialArray[materialOffsetTextureEmission];
 		} else if(currentMaterialID == UberMaterial.ID) {
 			textureEmission = this.materialUberMaterialArray[materialOffsetTextureEmission];
 		}
@@ -1959,6 +1971,111 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
 		
 		return true;
+	}
+	
+	private boolean doMaterialTranslucentMaterialComputeBSDF(final int materialTranslucentMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
+		/*
+		 * Load data:
+		 */
+		
+		final int textureEmissionAndModifier = this.materialTranslucentMaterialArray[materialTranslucentMaterialArrayOffset + CompiledMaterialCache.MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER];
+		final int textureKDAndTextureKS = this.materialTranslucentMaterialArray[materialTranslucentMaterialArrayOffset + CompiledMaterialCache.TRANSLUCENT_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S];
+		final int textureReflectanceAndTextureTransmittance = this.materialTranslucentMaterialArray[materialTranslucentMaterialArrayOffset + CompiledMaterialCache.TRANSLUCENT_MATERIAL_OFFSET_TEXTURE_REFLECTANCE_AND_TEXTURE_TRANSMITTANCE];
+		final int textureRoughnessAndIsRemappingRoughness = this.materialTranslucentMaterialArray[materialTranslucentMaterialArrayOffset + CompiledMaterialCache.TRANSLUCENT_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_AND_IS_REMAPPING_ROUGHNESS];
+		
+		final boolean isRemappingRoughness = ((textureRoughnessAndIsRemappingRoughness >> 16) & 0xFF) != 0;
+		
+		/*
+		 * Modify the surface using the Modifier instance:
+		 */
+		
+		modifierModify((textureEmissionAndModifier >> 16) & 0xFF, (textureEmissionAndModifier >> 24) & 0xFF);
+		
+		/*
+		 * Evaluate the Texture instances:
+		 */
+		
+//		Evaluate the Reflectance Texture:
+		textureEvaluate((textureReflectanceAndTextureTransmittance >> 0) & 0xFF, (textureReflectanceAndTextureTransmittance >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+//		Retrieve the color from the Reflectance Texture:
+		final float colorReflectanceR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorReflectanceG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorReflectanceB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
+		
+//		Evaluate the Transmittance Texture:
+		textureEvaluate((textureReflectanceAndTextureTransmittance >> 16) & 0xFF, (textureReflectanceAndTextureTransmittance >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+//		Retrieve the color from the Transmittance Texture:
+		final float colorTransmittanceR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorTransmittanceG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorTransmittanceB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
+		
+		if(colorReflectanceR == 0.0F && colorReflectanceG == 0.0F && colorReflectanceB == 0.0F && colorTransmittanceR == 0.0F && colorTransmittanceG == 0.0F && colorTransmittanceB == 0.0F) {
+			return false;
+		}
+		
+//		Evaluate the KD Texture:
+		textureEvaluate((textureKDAndTextureKS >> 0) & 0xFF, (textureKDAndTextureKS >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+//		Retrieve the color from the KD Texture:
+		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
+		
+//		Evaluate the KS Texture:
+		textureEvaluate((textureKDAndTextureKS >> 16) & 0xFF, (textureKDAndTextureKS >> 24) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+//		Retrieve the color from the KS Texture:
+		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, Floats.MAX_VALUE);
+		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, Floats.MAX_VALUE);
+		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, Floats.MAX_VALUE);
+		
+//		Evaluate the Roughness Texture:
+		final float floatRoughness = textureEvaluateFloat((textureRoughnessAndIsRemappingRoughness >> 0) & 0xFF, (textureRoughnessAndIsRemappingRoughness >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
+		final float floatRoughnessRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughness) : floatRoughness;
+		
+		int index = 0;
+		
+//		Initialize the BSDF:
+		doBSDFClear();
+		doBSDFSetBXDFCount(0);
+		doBSDFSetEta(1.0F);
+		
+		if((colorKDR != 0.0F || colorKDG != 0.0F || colorKDB != 0.0F) && (colorReflectanceR != 0.0F || colorReflectanceG != 0.0F || colorReflectanceB != 0.0F)) {
+//			Set LambertianBRDF:
+			doBSDFSetBXDFLambertianBRDF(index++);
+			doBXDFLambertianBRDFSetReflectanceScale(colorKDR * colorReflectanceR, colorKDG * colorReflectanceG, colorKDB * colorReflectanceB);
+		}
+		
+		if((colorKDR != 0.0F || colorKDG != 0.0F || colorKDB != 0.0F) && (colorTransmittanceR != 0.0F || colorTransmittanceG != 0.0F || colorTransmittanceB != 0.0F)) {
+//			Set LambertianBRDF:
+			doBSDFSetBXDFLambertianBTDF(index++);
+			doBXDFLambertianBTDFSetTransmittanceScale(colorKDR * colorTransmittanceR, colorKDG * colorTransmittanceG, colorKDB * colorTransmittanceB);
+		}
+		
+		if((colorKSR != 0.0F || colorKSG != 0.0F || colorKSB != 0.0F) && (colorReflectanceR != 0.0F || colorReflectanceG != 0.0F || colorReflectanceB != 0.0F)) {
+//			Set TorranceSparrowBRDF:
+			doBSDFSetBXDFTorranceSparrowBRDFFresnelDielectric(index++);
+			doBXDFTorranceSparrowBRDFFresnelDielectricSetFresnelDielectric(1.0F, 1.5F);
+			doBXDFTorranceSparrowBRDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(false, floatRoughnessRemapped, floatRoughnessRemapped);
+			doBXDFTorranceSparrowBRDFFresnelDielectricSetReflectanceScale(colorKSR * colorReflectanceR, colorKSG * colorReflectanceG, colorKSB * colorReflectanceB);
+		}
+		
+		if((colorKSR != 0.0F || colorKSG != 0.0F || colorKSB != 0.0F) && (colorTransmittanceR != 0.0F || colorTransmittanceG != 0.0F || colorTransmittanceB != 0.0F)) {
+//			Set TorranceSparrowBTDF:
+			doBSDFSetBXDFTorranceSparrowBTDFFresnelDielectric(index++);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetFresnelDielectric(1.0F, 1.5F);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(false, floatRoughnessRemapped, floatRoughnessRemapped);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetTransmittanceScale(colorKSR * colorTransmittanceR, colorKSG * colorTransmittanceG, colorKSB * colorTransmittanceB);
+		}
+		
+		doBSDFSetBXDFCount(index);
+		
+//		Initialize the BSDFResult:
+		doBSDFResultInitialize(rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		return index > 0;
 	}
 	
 	private boolean doMaterialUberMaterialComputeBSDF(final int materialUberMaterialArrayOffset, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {

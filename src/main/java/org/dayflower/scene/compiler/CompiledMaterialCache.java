@@ -40,6 +40,7 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.material.TranslucentMaterial;
 import org.dayflower.scene.material.UberMaterial;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.texture.Texture;
@@ -64,7 +65,9 @@ import org.macroing.java.util.Arrays;
  * <li>{@link MirrorMaterial}</li>
  * <li>{@link PlasticMaterial}</li>
  * <li>{@link PolkaDotMaterial}</li>
+ * <li>{@link TranslucentMaterial}</li>
  * <li>{@link SubstrateMaterial}</li>
+ * 
  * <li>{@link UberMaterial}</li>
  * </ul>
  * 
@@ -338,6 +341,26 @@ public final class CompiledMaterialCache {
 	public static final int SUBSTRATE_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
 	
 	/**
+	 * The length of a compiled {@link TranslucentMaterial} instance.
+	 */
+	public static final int TRANSLUCENT_MATERIAL_LENGTH = 4;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KD} and {@code KS} in a compiled {@link TranslucentMaterial} instance.
+	 */
+	public static final int TRANSLUCENT_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S = 1;
+	
+	/**
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Reflectance} and {@code Transmittance} in a compiled {@link TranslucentMaterial} instance.
+	 */
+	public static final int TRANSLUCENT_MATERIAL_OFFSET_TEXTURE_REFLECTANCE_AND_TEXTURE_TRANSMITTANCE = 2;
+	
+	/**
+	 * The ID and offset for the {@link Texture} instance denoted by {@code Roughness} and the offset for the roughness remapping flag in a compiled {@link TranslucentMaterial} instance.
+	 */
+	public static final int TRANSLUCENT_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_AND_IS_REMAPPING_ROUGHNESS = 3;
+	
+	/**
 	 * The length of a compiled {@link UberMaterial} instance.
 	 */
 	public static final int UBER_MATERIAL_LENGTH = 8;
@@ -381,6 +404,7 @@ public final class CompiledMaterialCache {
 	private int[] mirrorMaterials;
 	private int[] plasticMaterials;
 	private int[] substrateMaterials;
+	private int[] translucentMaterials;
 	private int[] uberMaterials;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -401,6 +425,7 @@ public final class CompiledMaterialCache {
 		setPlasticMaterials(new int[0]);
 		setPolkaDotMaterials(new float[0]);
 		setSubstrateMaterials(new int[0]);
+		setTranslucentMaterials(new int[0]);
 		setUberMaterials(new int[0]);
 	}
 	
@@ -711,6 +736,32 @@ public final class CompiledMaterialCache {
 		
 		if(absoluteOffset != -1) {
 			setSubstrateMaterials(Arrays.splice(getSubstrateMaterials(), absoluteOffset, SUBSTRATE_MATERIAL_LENGTH));
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Removes {@code translucentMaterial} from this {@code CompiledMaterialCache} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code translucentMaterial} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code translucentMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code translucentMaterial.length} is not equal to {@code CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param translucentMaterial a {@link TranslucentMaterial} instance in compiled form
+	 * @return {@code true} if, and only if, {@code translucentMaterial} was removed, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code translucentMaterial.length} is not equal to {@code CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code translucentMaterial} is {@code null}
+	 */
+	public boolean removeTranslucentMaterial(final int[] translucentMaterial) {
+		final int absoluteOffset = getTranslucentMaterialOffsetAbsolute(translucentMaterial);
+		
+		if(absoluteOffset != -1) {
+			setTranslucentMaterials(Arrays.splice(getTranslucentMaterials(), absoluteOffset, TRANSLUCENT_MATERIAL_LENGTH));
 			
 			return true;
 		}
@@ -1091,6 +1142,33 @@ public final class CompiledMaterialCache {
 		}
 		
 		setSubstrateMaterials(Arrays.merge(getSubstrateMaterials(), substrateMaterial));
+		
+		return relativeOffsetNew;
+	}
+	
+	/**
+	 * Adds {@code translucentMaterial} to this {@code CompiledMaterialCache} instance, if absent.
+	 * <p>
+	 * Returns the relative offset to {@code translucentMaterial}.
+	 * <p>
+	 * If {@code translucentMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code translucentMaterial.length} is not equal to {@code CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param translucentMaterial a {@link TranslucentMaterial} instance in compiled form
+	 * @return the relative offset to {@code translucentMaterial}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code translucentMaterial.length} is not equal to {@code CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code translucentMaterial} is {@code null}
+	 */
+	public int addTranslucentMaterial(final int[] translucentMaterial) {
+		final int relativeOffsetOld = getTranslucentMaterialOffsetRelative(translucentMaterial);
+		final int relativeOffsetNew = getTranslucentMaterialCount();
+		
+		if(relativeOffsetOld != -1) {
+			return relativeOffsetOld;
+		}
+		
+		setTranslucentMaterials(Arrays.merge(getTranslucentMaterials(), translucentMaterial));
 		
 		return relativeOffsetNew;
 	}
@@ -1711,6 +1789,55 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
+	 * Returns the {@link TranslucentMaterial} count in this {@code CompiledMaterialCache} instance.
+	 * 
+	 * @return the {@code TranslucentMaterial} count in this {@code CompiledMaterialCache} instance
+	 */
+	public int getTranslucentMaterialCount() {
+		return Structures.getStructureCount(this.translucentMaterials, TRANSLUCENT_MATERIAL_LENGTH);
+	}
+	
+	/**
+	 * Returns the absolute offset of {@code translucentMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code translucentMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code translucentMaterial.length} is not equal to {@code CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param translucentMaterial a {@link TranslucentMaterial} instance in compiled form
+	 * @return the absolute offset of {@code translucentMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code translucentMaterial.length} is not equal to {@code CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code translucentMaterial} is {@code null}
+	 */
+	public int getTranslucentMaterialOffsetAbsolute(final int[] translucentMaterial) {
+		Objects.requireNonNull(translucentMaterial, "translucentMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(translucentMaterial, TRANSLUCENT_MATERIAL_LENGTH, "translucentMaterial");
+		
+		return Structures.getStructureOffsetAbsolute(this.translucentMaterials, translucentMaterial);
+	}
+	
+	/**
+	 * Returns the relative offset of {@code translucentMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found.
+	 * <p>
+	 * If {@code translucentMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code translucentMaterial.length} is not equal to {@code CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param translucentMaterial a {@link TranslucentMaterial} instance in compiled form
+	 * @return the relative offset of {@code translucentMaterial} in this {@code CompiledMaterialCache} instance, or {@code -1} if it cannot be found
+	 * @throws IllegalArgumentException thrown if, and only if, {@code translucentMaterial.length} is not equal to {@code CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH}
+	 * @throws NullPointerException thrown if, and only if, {@code translucentMaterial} is {@code null}
+	 */
+	public int getTranslucentMaterialOffsetRelative(final int[] translucentMaterial) {
+		Objects.requireNonNull(translucentMaterial, "translucentMaterial == null");
+		
+		ParameterArguments.requireExactArrayLength(translucentMaterial, TRANSLUCENT_MATERIAL_LENGTH, "translucentMaterial");
+		
+		return Structures.getStructureOffsetRelative(this.translucentMaterials, translucentMaterial);
+	}
+	
+	/**
 	 * Returns the {@link UberMaterial} count in this {@code CompiledMaterialCache} instance.
 	 * 
 	 * @return the {@code UberMaterial} count in this {@code CompiledMaterialCache} instance
@@ -1838,6 +1965,15 @@ public final class CompiledMaterialCache {
 	 */
 	public int[] getSubstrateMaterials() {
 		return this.substrateMaterials;
+	}
+	
+	/**
+	 * Returns an {@code int[]} that contains all {@link TranslucentMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance.
+	 * 
+	 * @return an {@code int[]} that contains all {@code TranslucentMaterial} instances in compiled form that are associated with this {@code CompiledMaterialCache} instance
+	 */
+	public int[] getTranslucentMaterials() {
+		return this.translucentMaterials;
 	}
 	
 	/**
@@ -2078,6 +2214,25 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
+	 * Sets all {@link TranslucentMaterial} instances in compiled form to {@code translucentMaterials}.
+	 * <p>
+	 * If {@code translucentMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code translucentMaterials.length % CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH} is not equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param translucentMaterials the {@code TranslucentMaterial} instances in compiled form
+	 * @throws IllegalArgumentException thrown if, and only if, {@code translucentMaterials.length % CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH} is not equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code translucentMaterials} is {@code null}
+	 */
+	public void setTranslucentMaterials(final int[] translucentMaterials) {
+		Objects.requireNonNull(translucentMaterials, "translucentMaterials == null");
+		
+		ParameterArguments.requireExact(translucentMaterials.length % TRANSLUCENT_MATERIAL_LENGTH, 0, "translucentMaterials.length % CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH");
+		
+		this.translucentMaterials = translucentMaterials;
+	}
+	
+	/**
 	 * Sets all {@link UberMaterial} instances in compiled form to {@code uberMaterials}.
 	 * <p>
 	 * If {@code uberMaterials} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -2119,6 +2274,7 @@ public final class CompiledMaterialCache {
 		document.linef("plasticMaterials[%d]", Integer.valueOf(getPlasticMaterialCount()));
 		document.linef("polkaDotMaterials[%d]", Integer.valueOf(getPolkaDotMaterialCount()));
 		document.linef("substrateMaterials[%d]", Integer.valueOf(getSubstrateMaterialCount()));
+		document.linef("translucentMaterials[%d]", Integer.valueOf(getTranslucentMaterialCount()));
 		document.linef("uberMaterials[%d]", Integer.valueOf(getUberMaterialCount()));
 		document.outdent();
 		document.line("}");
@@ -2162,6 +2318,8 @@ public final class CompiledMaterialCache {
 			return doIsSupported(PolkaDotMaterial.class.cast(material));
 		} else if(material instanceof SubstrateMaterial) {
 			return doIsSupported(SubstrateMaterial.class.cast(material));
+		} else if(material instanceof TranslucentMaterial) {
+			return doIsSupported(TranslucentMaterial.class.cast(material));
 		} else if(material instanceof UberMaterial) {
 			return doIsSupported(UberMaterial.class.cast(material));
 		} else {
@@ -3263,6 +3421,100 @@ public final class CompiledMaterialCache {
 	}
 	
 	/**
+	 * Returns an {@code int[]} with {@code translucentMaterial} in compiled form.
+	 * <p>
+	 * If {@code translucentMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toTranslucentMaterial(translucentMaterial, modifier -> 0, texture -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param translucentMaterial a {@link TranslucentMaterial} instance
+	 * @return an {@code int[]} with {@code translucentMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code translucentMaterial} is {@code null}
+	 */
+	public static int[] toTranslucentMaterial(final TranslucentMaterial translucentMaterial) {
+		return toTranslucentMaterial(translucentMaterial, modifier -> 0, texture -> 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with {@code translucentMaterial} in compiled form.
+	 * <p>
+	 * If either {@code translucentMaterial}, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param translucentMaterial a {@link TranslucentMaterial} instance
+	 * @param modifierOffsetFunction a {@code ToIntFunction} that returns {@link Modifier} offsets
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return an {@code int[]} with {@code translucentMaterial} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code translucentMaterial}, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static int[] toTranslucentMaterial(final TranslucentMaterial translucentMaterial, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
+		final Modifier modifier = translucentMaterial.getModifier();
+		
+		final Texture textureEmission = translucentMaterial.getTextureEmission();
+		final Texture textureKD = translucentMaterial.getTextureKD();
+		final Texture textureKS = translucentMaterial.getTextureKS();
+		final Texture textureReflectance = translucentMaterial.getTextureReflectance();
+		final Texture textureRoughness = translucentMaterial.getTextureRoughness();
+		final Texture textureTransmittance = translucentMaterial.getTextureTransmittance();
+		
+		final boolean isRemappingRoughness = translucentMaterial.isRemappingRoughness();
+		
+		final int textureEmissionAndModifierValue = pack(textureEmission.getID(), textureOffsetFunction.applyAsInt(textureEmission), modifier.getID(), modifierOffsetFunction.applyAsInt(modifier));
+		final int textureKDAndTextureKSValue = pack(textureKD.getID(), textureOffsetFunction.applyAsInt(textureKD), textureKS.getID(), textureOffsetFunction.applyAsInt(textureKS));
+		final int textureReflectanceAndTextureTransmittanceValue = pack(textureReflectance.getID(), textureOffsetFunction.applyAsInt(textureReflectance), textureTransmittance.getID(), textureOffsetFunction.applyAsInt(textureTransmittance));
+		final int textureRoughnessAndIsRemappingRoughness = pack(textureRoughness.getID(), textureOffsetFunction.applyAsInt(textureRoughness), isRemappingRoughness ? 1 : 0, 0);
+		
+		final int[] array = new int[SUBSTRATE_MATERIAL_LENGTH];
+		
+//		Because the TranslucentMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[MATERIAL_OFFSET_TEXTURE_EMISSION_AND_MODIFIER] = textureEmissionAndModifierValue;												//Block #1
+		array[TRANSLUCENT_MATERIAL_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = textureKDAndTextureKSValue;										//Block #1
+		array[TRANSLUCENT_MATERIAL_OFFSET_TEXTURE_REFLECTANCE_AND_TEXTURE_TRANSMITTANCE] = textureReflectanceAndTextureTransmittanceValue;	//Block #1
+		array[TRANSLUCENT_MATERIAL_OFFSET_TEXTURE_ROUGHNESS_AND_IS_REMAPPING_ROUGHNESS] = textureRoughnessAndIsRemappingRoughness;			//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with all {@link TranslucentMaterial} instances in {@code translucentMaterials} in compiled form.
+	 * <p>
+	 * If {@code translucentMaterials} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * compiledMaterialCache.toTranslucentMaterials(translucentMaterials, modifier -> 0, texture -> 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param translucentMaterials a {@code List} of {@code SubstrateMaterial} instances
+	 * @return an {@code int[]} with all {@code TranslucentMaterial} instances in {@code translucentMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, {@code translucentMaterials} or at least one of its elements are {@code null}
+	 */
+	public static int[] toTranslucentMaterials(final List<TranslucentMaterial> translucentMaterials) {
+		return toTranslucentMaterials(translucentMaterials, modifier -> 0, texture -> 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with all {@link TranslucentMaterial} instances in {@code translucentMaterials} in compiled form.
+	 * <p>
+	 * If either {@code translucentMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param translucentMaterials a {@code List} of {@code TranslucentMaterial} instances
+	 * @param modifierOffsetFunction a {@code ToIntFunction} that returns {@link Modifier} offsets
+	 * @param textureOffsetFunction a {@code ToIntFunction} that returns {@link Texture} offsets
+	 * @return an {@code int[]} with all {@code TranslucentMaterial} instances in {@code translucentMaterials} in compiled form
+	 * @throws NullPointerException thrown if, and only if, either {@code translucentMaterials}, at least one of its elements, {@code modifierOffsetFunction} or {@code textureOffsetFunction} are {@code null}
+	 */
+	public static int[] toTranslucentMaterials(final List<TranslucentMaterial> translucentMaterials, final ToIntFunction<Modifier> modifierOffsetFunction, final ToIntFunction<Texture> textureOffsetFunction) {
+		return Arrays.toIntArray(translucentMaterials, translucentMaterial -> toTranslucentMaterial(translucentMaterial, modifierOffsetFunction, textureOffsetFunction));
+	}
+	
+	/**
 	 * Returns an {@code int[]} with {@code uberMaterial} in compiled form.
 	 * <p>
 	 * If {@code uberMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -3646,6 +3898,38 @@ public final class CompiledMaterialCache {
 		}
 		
 		if(!CompiledTextureCache.isSupported(substrateMaterial.getTextureRoughnessV())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean doIsSupported(final TranslucentMaterial translucentMaterial) {
+		if(!CompiledModifierCache.isSupported(translucentMaterial.getModifier())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(translucentMaterial.getTextureEmission())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(translucentMaterial.getTextureKD())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(translucentMaterial.getTextureKS())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(translucentMaterial.getTextureReflectance())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(translucentMaterial.getTextureRoughness())) {
+			return false;
+		}
+		
+		if(!CompiledTextureCache.isSupported(translucentMaterial.getTextureTransmittance())) {
 			return false;
 		}
 		

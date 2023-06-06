@@ -190,6 +190,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				put(super.materialPlasticMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPlasticMaterials()));
 				put(super.materialPolkaDotMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPolkaDotMaterials()));
 				put(super.materialSubstrateMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getSubstrateMaterials()));
+				put(super.materialTranslucentMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getTranslucentMaterials()));
 				put(super.materialUberMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getUberMaterials()));
 				
 				put(super.modifierNormalMapLDRImageModifierArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getNormalMapLDRImageModifiers()));
@@ -1823,6 +1824,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.materialPlasticMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPlasticMaterials()));
 		put(super.materialPolkaDotMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getPolkaDotMaterials()));
 		put(super.materialSubstrateMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getSubstrateMaterials()));
+		put(super.materialTranslucentMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getTranslucentMaterials()));
 		put(super.materialUberMaterialArray = doGetCompatibleArray(compiledScene.getCompiledMaterialCache().getUberMaterials()));
 		
 		put(super.modifierNormalMapLDRImageModifierArray = doGetCompatibleArray(compiledScene.getCompiledModifierCache().getNormalMapLDRImageModifiers()));

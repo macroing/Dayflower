@@ -40,6 +40,7 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.material.TranslucentMaterial;
 import org.dayflower.scene.material.UberMaterial;
 
 final class MaterialCache {
@@ -56,6 +57,7 @@ final class MaterialCache {
 	private final List<PlasticMaterial> distinctPlasticMaterials;
 	private final List<PolkaDotMaterial> distinctPolkaDotMaterials;
 	private final List<SubstrateMaterial> distinctSubstrateMaterials;
+	private final List<TranslucentMaterial> distinctTranslucentMaterials;
 	private final List<UberMaterial> distinctUberMaterials;
 	private final Map<BullseyeMaterial, Integer> distinctToOffsetsBullseyeMaterials;
 	private final Map<CheckerboardMaterial, Integer> distinctToOffsetsCheckerboardMaterials;
@@ -69,6 +71,7 @@ final class MaterialCache {
 	private final Map<PlasticMaterial, Integer> distinctToOffsetsPlasticMaterials;
 	private final Map<PolkaDotMaterial, Integer> distinctToOffsetsPolkaDotMaterials;
 	private final Map<SubstrateMaterial, Integer> distinctToOffsetsSubstrateMaterials;
+	private final Map<TranslucentMaterial, Integer> distinctToOffsetsTranslucentMaterials;
 	private final Map<UberMaterial, Integer> distinctToOffsetsUberMaterials;
 	private final ModifierCache modifierCache;
 	private final NodeCache nodeCache;
@@ -93,6 +96,7 @@ final class MaterialCache {
 		this.distinctPlasticMaterials = new ArrayList<>();
 		this.distinctPolkaDotMaterials = new ArrayList<>();
 		this.distinctSubstrateMaterials = new ArrayList<>();
+		this.distinctTranslucentMaterials = new ArrayList<>();
 		this.distinctUberMaterials = new ArrayList<>();
 		this.distinctToOffsetsBullseyeMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsCheckerboardMaterials = new LinkedHashMap<>();
@@ -106,6 +110,7 @@ final class MaterialCache {
 		this.distinctToOffsetsPlasticMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsPolkaDotMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsSubstrateMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsTranslucentMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsUberMaterials = new LinkedHashMap<>();
 	}
 	
@@ -154,6 +159,8 @@ final class MaterialCache {
 			return this.distinctToOffsetsPolkaDotMaterials.get(material).intValue();
 		} else if(material instanceof SubstrateMaterial) {
 			return this.distinctToOffsetsSubstrateMaterials.get(material).intValue();
+		} else if(material instanceof TranslucentMaterial) {
+			return this.distinctToOffsetsTranslucentMaterials.get(material).intValue();
 		} else if(material instanceof UberMaterial) {
 			return this.distinctToOffsetsUberMaterials.get(material).intValue();
 		} else {
@@ -197,6 +204,10 @@ final class MaterialCache {
 		return CompiledMaterialCache.toSubstrateMaterials(this.distinctSubstrateMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
 	
+	public int[] toTranslucentMaterials() {
+		return CompiledMaterialCache.toTranslucentMaterials(this.distinctTranslucentMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
+	}
+	
 	public int[] toUberMaterials() {
 		return CompiledMaterialCache.toUberMaterials(this.distinctUberMaterials, this.modifierCache::findOffsetFor, this.textureCache::findOffsetFor);
 	}
@@ -214,6 +225,7 @@ final class MaterialCache {
 		compiledMaterialCache.setPlasticMaterials(toPlasticMaterials());
 		compiledMaterialCache.setPolkaDotMaterials(toPolkaDotMaterials());
 		compiledMaterialCache.setSubstrateMaterials(toSubstrateMaterials());
+		compiledMaterialCache.setTranslucentMaterials(toTranslucentMaterials());
 		compiledMaterialCache.setUberMaterials(toUberMaterials());
 	}
 	
@@ -235,6 +247,7 @@ final class MaterialCache {
 		this.distinctPlasticMaterials.clear();
 		this.distinctPolkaDotMaterials.clear();
 		this.distinctSubstrateMaterials.clear();
+		this.distinctTranslucentMaterials.clear();
 		this.distinctUberMaterials.clear();
 		this.distinctToOffsetsBullseyeMaterials.clear();
 		this.distinctToOffsetsCheckerboardMaterials.clear();
@@ -248,6 +261,7 @@ final class MaterialCache {
 		this.distinctToOffsetsPlasticMaterials.clear();
 		this.distinctToOffsetsPolkaDotMaterials.clear();
 		this.distinctToOffsetsSubstrateMaterials.clear();
+		this.distinctToOffsetsTranslucentMaterials.clear();
 		this.distinctToOffsetsUberMaterials.clear();
 	}
 	
@@ -300,6 +314,10 @@ final class MaterialCache {
 		this.distinctSubstrateMaterials.clear();
 		this.distinctSubstrateMaterials.addAll(this.nodeCache.getAllDistinct(SubstrateMaterial.class));
 		
+//		Add all distinct TranslucentMaterial instances:
+		this.distinctTranslucentMaterials.clear();
+		this.distinctTranslucentMaterials.addAll(this.nodeCache.getAllDistinct(TranslucentMaterial.class));
+		
 //		Add all distinct UberMaterial instances:
 		this.distinctUberMaterials.clear();
 		this.distinctUberMaterials.addAll(this.nodeCache.getAllDistinct(UberMaterial.class));
@@ -318,6 +336,7 @@ final class MaterialCache {
 		this.distinctMaterials.addAll(this.distinctPlasticMaterials);
 		this.distinctMaterials.addAll(this.distinctPolkaDotMaterials);
 		this.distinctMaterials.addAll(this.distinctSubstrateMaterials);
+		this.distinctMaterials.addAll(this.distinctTranslucentMaterials);
 		this.distinctMaterials.addAll(this.distinctUberMaterials);
 		
 //		Create offset mappings for all distinct BullseyeMaterial instances:
@@ -367,6 +386,10 @@ final class MaterialCache {
 //		Create offset mappings for all distinct SubstrateMaterial instances:
 		this.distinctToOffsetsSubstrateMaterials.clear();
 		this.distinctToOffsetsSubstrateMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSubstrateMaterials, CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH));
+		
+//		Create offset mappings for all distinct TranslucentMaterial instances:
+		this.distinctToOffsetsTranslucentMaterials.clear();
+		this.distinctToOffsetsTranslucentMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctTranslucentMaterials, CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH));
 		
 //		Create offset mappings for all distinct UberMaterial instances:
 		this.distinctToOffsetsUberMaterials.clear();

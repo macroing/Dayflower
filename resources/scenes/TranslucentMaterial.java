@@ -1,7 +1,7 @@
 final Light light1 = new PerezLight();
 
 final Material material1 = new CheckerboardMaterial();
-final Material material2 = new TranslucentMaterial();
+final Material material2 = new TranslucentMaterial(new Color3F(0.75F, 0.25F, 0.25F), Color3F.GRAY, Color3F.BLACK, 0.001F, Color3F.GRAY, Color3F.GRAY, true, new NoOpModifier());
 
 final Shape3F shape1 = new Plane3F();
 final Shape3F shape2 = new Disk3F();

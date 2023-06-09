@@ -23,6 +23,8 @@ Material materialSphereF = new MetalMaterial();
 Material materialSphereG = new MirrorMaterial(Color3F.GRAY);
 Material materialSphereH = new PlasticMaterial();
 Material materialSphereI = new SubstrateMaterial(new Color3F(1.0F, 0.2F, 0.2F));
+Material materialSphereJ = new TranslucentMaterial(new Color3F(0.75F, 0.25F, 0.25F), new Color3F(0.75F), Color3F.BLACK, 0.01F, Color3F.GRAY, Color3F.GRAY, true, new NoOpModifier());
+Material materialSphereK = new UberMaterial(new Color3F(0.25F, 0.75F, 0.25F));
 
 Shape3F shapePlane = new Plane3F();
 Shape3F shapeSphereA = new Sphere3F();
@@ -34,6 +36,8 @@ Shape3F shapeSphereF = new Sphere3F();
 Shape3F shapeSphereG = new Sphere3F();
 Shape3F shapeSphereH = new Sphere3F();
 Shape3F shapeSphereI = new Sphere3F();
+Shape3F shapeSphereJ = new Sphere3F();
+Shape3F shapeSphereK = new Sphere3F();
 
 Transform transformPlane = new Transform(new Point3F(0.0F, 0.0F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))));
 Transform transformSphereA = new Transform(new Point3F(- 7.5F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
@@ -45,6 +49,8 @@ Transform transformSphereF = new Transform(new Point3F(+ 5.0F,  1.00F, 5.0F), Qu
 Transform transformSphereG = new Transform(new Point3F(+ 7.5F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
 Transform transformSphereH = new Transform(new Point3F(+10.0F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
 Transform transformSphereI = new Transform(new Point3F(+12.5F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
+Transform transformSphereJ = new Transform(new Point3F(+15.0F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
+Transform transformSphereK = new Transform(new Point3F(+17.5F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
 
 final
 Camera camera = new Camera(new Point3F(0.0F, 1.0F, -5.0F));
@@ -67,5 +73,7 @@ scene.addPrimitive(new Primitive(materialSphereF, shapeSphereF, transformSphereF
 scene.addPrimitive(new Primitive(materialSphereG, shapeSphereG, transformSphereG));
 scene.addPrimitive(new Primitive(materialSphereH, shapeSphereH, transformSphereH));
 scene.addPrimitive(new Primitive(materialSphereI, shapeSphereI, transformSphereI));
+scene.addPrimitive(new Primitive(materialSphereJ, shapeSphereJ, transformSphereJ));
+scene.addPrimitive(new Primitive(materialSphereK, shapeSphereK, transformSphereK));
 scene.setCamera(camera);
 scene.setName("GPURenderer");

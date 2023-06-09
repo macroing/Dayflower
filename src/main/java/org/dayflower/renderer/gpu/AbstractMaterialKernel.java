@@ -2049,7 +2049,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 		if((colorKDR != 0.0F || colorKDG != 0.0F || colorKDB != 0.0F) && (colorTransmittanceR != 0.0F || colorTransmittanceG != 0.0F || colorTransmittanceB != 0.0F)) {
-//			Set LambertianBRDF:
+//			Set LambertianBTDF:
 			doBSDFSetBXDFLambertianBTDF(index++);
 			doBXDFLambertianBTDFSetTransmittanceScale(colorKDR * colorTransmittanceR, colorKDG * colorTransmittanceG, colorKDB * colorTransmittanceB);
 		}

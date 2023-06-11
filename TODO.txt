@@ -33,9 +33,11 @@ Scene Compiler API:
 
 Scene Material API:
 
+	* ADD:		Add more constructors to the TranslucentMaterial class.
 	* ADD:		Add a Builder to the HairMaterial class.
 	* ADD:		Add a Builder to the MetalMaterial class.
 	* ADD:		Add a Builder to the SubstrateMaterial class.
+	* ADD:		Add a Builder to the TranslucentMaterial class.
 	* ADD:		Add a Builder to the UberMaterial class.
 	* FIX:		Fix the HairMaterial class.
 

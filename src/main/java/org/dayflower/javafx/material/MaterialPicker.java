@@ -48,6 +48,7 @@ public final class MaterialPicker extends BorderPane {
 	private static final String NAME_PLASTIC_MATERIAL = "PlasticMaterial";
 	private static final String NAME_POLKA_DOT_MATERIAL = "PolkaDotMaterial";
 	private static final String NAME_SUBSTRATE_MATERIAL = "SubstrateMaterial";
+	private static final String NAME_TRANSLUCENT_MATERIAL = "TranslucentMaterial";
 	private static final String NAME_UBER_MATERIAL = "UberMaterial";
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,6 +129,8 @@ public final class MaterialPicker extends BorderPane {
 				return "Polka Dot Material";
 			case NAME_SUBSTRATE_MATERIAL:
 				return "Substrate Material";
+			case NAME_TRANSLUCENT_MATERIAL:
+				return "Translucent Material";
 			case NAME_UBER_MATERIAL:
 				return "Uber Material";
 			default:

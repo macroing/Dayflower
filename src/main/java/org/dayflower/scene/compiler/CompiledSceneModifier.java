@@ -60,6 +60,7 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.material.TranslucentMaterial;
 import org.dayflower.scene.material.UberMaterial;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
@@ -366,6 +367,13 @@ public final class CompiledSceneModifier {
 			
 			final int offsetRelative = compiledMaterialCache.addSubstrateMaterial(CompiledMaterialCache.toSubstrateMaterial(substrateMaterial, this::doAddModifier, this::doAddTexture));
 			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.SUBSTRATE_MATERIAL_LENGTH;
+			
+			return offsetAbsolute;
+		} else if(material instanceof TranslucentMaterial) {
+			final TranslucentMaterial translucentMaterial = TranslucentMaterial.class.cast(material);
+			
+			final int offsetRelative = compiledMaterialCache.addTranslucentMaterial(CompiledMaterialCache.toTranslucentMaterial(translucentMaterial, this::doAddModifier, this::doAddTexture));
+			final int offsetAbsolute = offsetRelative * CompiledMaterialCache.TRANSLUCENT_MATERIAL_LENGTH;
 			
 			return offsetAbsolute;
 		} else if(material instanceof UberMaterial) {

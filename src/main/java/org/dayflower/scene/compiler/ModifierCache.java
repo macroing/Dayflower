@@ -24,13 +24,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeCache;
-import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.modifier.NormalMapLDRImageModifier;
 import org.dayflower.scene.modifier.SimplexNoiseNormalMapModifier;
+
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeCache;
+import org.macroing.java.util.visitor.NodeFilter;
 
 final class ModifierCache {
 	private final List<NoOpModifier> distinctNoOpModifiers;

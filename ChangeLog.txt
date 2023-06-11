@@ -1,6 +1,7 @@
 2023-06-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for TranslucentMaterial in the GUI.
+	* CHANGE:	Replace the Node API with the Visitor API in Macroing Java.
 
 2023-06-06  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 

@@ -31,10 +31,10 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Floats;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Camera} represents a camera.

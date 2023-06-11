@@ -27,8 +27,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.AngleF;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
@@ -36,6 +34,8 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code PolkaDotMaterial} is an implementation of {@link Material} that alternates between two other {@code Material} instances in a polka dot pattern.

@@ -22,7 +22,8 @@ import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.node.Node;
+
+import org.macroing.java.util.visitor.Node;
 
 abstract class BVHNode implements Node {
 	private final BoundingVolume3F boundingVolume;

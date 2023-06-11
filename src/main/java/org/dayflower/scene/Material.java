@@ -20,9 +20,8 @@ package org.dayflower.scene;
 
 import java.util.Optional;
 
-import org.dayflower.node.Node;
-
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Material} represents a material.

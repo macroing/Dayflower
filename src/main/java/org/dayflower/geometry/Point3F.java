@@ -26,11 +26,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Point3F} represents a point with three {@code float}-based components.

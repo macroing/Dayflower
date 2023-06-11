@@ -32,10 +32,10 @@ import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 
 import org.macroing.java.lang.Doubles;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code ConstructiveSolidGeometry3D} is an implementation of {@link Shape3D} that can be used for constructive solid geometry (CSG).

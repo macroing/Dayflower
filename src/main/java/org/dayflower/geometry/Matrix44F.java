@@ -25,11 +25,11 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
-import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Matrix44F} represents a 4 x 4 matrix with 16 {@code float}-based elements.

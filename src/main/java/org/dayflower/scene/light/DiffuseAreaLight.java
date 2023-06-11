@@ -31,14 +31,14 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Sphere3F;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.LightSample;
 import org.dayflower.scene.Transform;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code DiffuseAreaLight} is an implementation of {@link AreaLight} that represents a diffuse area light.

@@ -28,9 +28,9 @@ import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeCache;
-import org.dayflower.node.NodeFilter;
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeCache;
+import org.macroing.java.util.visitor.NodeFilter;
 
 final class BoundingVolume3FCache {
 	private final List<AxisAlignedBoundingBox3F> distinctAxisAlignedBoundingBox3Fs;

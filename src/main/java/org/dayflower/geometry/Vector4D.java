@@ -24,10 +24,9 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
-
 import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Vector4D} represents a vector with four {@code double}-based components.

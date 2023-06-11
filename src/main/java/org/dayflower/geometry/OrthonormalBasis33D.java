@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * An {@code OrthonormalBasis33D} represents an orthonormal basis constructed by three {@link Vector3D} instances.

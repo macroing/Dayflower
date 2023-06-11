@@ -36,11 +36,11 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceIntersector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Floats;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code CompoundShape3F} is an implementation of {@link Shape3F} that contains a list of {@code Shape3F} instances.

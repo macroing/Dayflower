@@ -28,8 +28,9 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceIntersector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code BVHNode3F} is a {@code float}-based node in a bounding volume hierarchy (BVH) structure.

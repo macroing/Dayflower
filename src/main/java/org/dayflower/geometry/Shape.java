@@ -27,7 +27,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.Objects;
 
-import org.dayflower.node.Node;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Shape} represents a shape.

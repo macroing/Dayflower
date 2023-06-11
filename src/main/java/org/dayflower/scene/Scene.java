@@ -37,9 +37,6 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
@@ -48,6 +45,9 @@ import org.dayflower.utility.ParameterArguments;
 import org.macroing.art4j.color.Color3F;
 import org.macroing.java.lang.Floats;
 import org.macroing.java.util.Randoms;
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.

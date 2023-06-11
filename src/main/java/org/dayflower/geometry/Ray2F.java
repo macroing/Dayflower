@@ -23,9 +23,9 @@ import java.io.DataOutput;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code Ray2F} represents a 2-dimensional ray with a point of type {@link Point2F} and a vector of type {@link Vector2F}.

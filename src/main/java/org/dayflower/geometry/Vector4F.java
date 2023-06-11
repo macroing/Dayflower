@@ -24,10 +24,9 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
-
 import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Vector4F} represents a vector with four {@code float}-based components.

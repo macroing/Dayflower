@@ -24,11 +24,11 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Matrix33D} represents a 3 x 3 matrix with 9 {@code double}-based elements.

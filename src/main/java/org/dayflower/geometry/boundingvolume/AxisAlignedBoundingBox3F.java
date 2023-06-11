@@ -28,11 +28,11 @@ import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Floats;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * An {@code AxisAlignedBoundingBox3F} is an implementation of {@link BoundingVolume3F} that represents an axis-aligned bounding box (AABB).

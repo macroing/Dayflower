@@ -24,10 +24,10 @@ import java.util.Optional;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Light} represents a light.

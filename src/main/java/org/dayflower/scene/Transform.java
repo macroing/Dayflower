@@ -26,10 +26,11 @@ import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code Transform} contains a position, a rotation and a scale.

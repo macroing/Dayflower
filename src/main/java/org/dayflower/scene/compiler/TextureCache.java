@@ -24,9 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeCache;
-import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -39,6 +36,10 @@ import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
+
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeCache;
+import org.macroing.java.util.visitor.NodeFilter;
 
 final class TextureCache {
 	private final List<BlendTexture> distinctBlendTextures;

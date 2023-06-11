@@ -24,9 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeCache;
-import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.material.BullseyeMaterial;
 import org.dayflower.scene.material.CheckerboardMaterial;
@@ -42,6 +39,10 @@ import org.dayflower.scene.material.PolkaDotMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.material.TranslucentMaterial;
 import org.dayflower.scene.material.UberMaterial;
+
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeCache;
+import org.macroing.java.util.visitor.NodeFilter;
 
 final class MaterialCache {
 	private final List<BullseyeMaterial> distinctBullseyeMaterials;

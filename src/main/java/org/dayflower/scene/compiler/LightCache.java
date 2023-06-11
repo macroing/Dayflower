@@ -27,9 +27,6 @@ import java.util.Objects;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Triangle3F;
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeCache;
-import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.DirectionalLight;
@@ -37,6 +34,10 @@ import org.dayflower.scene.light.ImageLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
+
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeCache;
+import org.macroing.java.util.visitor.NodeFilter;
 
 final class LightCache {
 	private final List<DiffuseAreaLight> distinctDiffuseAreaLights;

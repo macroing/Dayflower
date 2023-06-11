@@ -19,8 +19,9 @@
 package org.dayflower.scene.modifier;
 
 import org.dayflower.geometry.SurfaceIntersection3F;
-import org.dayflower.node.Node;
 import org.dayflower.scene.Intersection;
+
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Modifier} represents a modifier of a surface.

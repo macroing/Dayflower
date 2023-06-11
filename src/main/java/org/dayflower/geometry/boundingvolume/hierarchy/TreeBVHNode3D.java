@@ -27,10 +27,10 @@ import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.SurfaceIntersector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 
 import org.macroing.java.lang.Doubles;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code TreeBVHNode3D} is an implementation of {@link BVHNode3D} that represents a tree node.

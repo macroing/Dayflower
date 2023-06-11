@@ -35,10 +35,10 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 
 import org.macroing.java.lang.Floats;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code Rectangle3F} is an implementation of {@link Shape3F} that represents a rectangle.

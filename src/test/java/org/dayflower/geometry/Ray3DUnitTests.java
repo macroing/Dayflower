@@ -34,10 +34,12 @@ import java.io.UncheckedIOException;
 import org.dayflower.mock.DataOutputMock;
 import org.dayflower.mock.NodeHierarchicalVisitorMock;
 import org.dayflower.mock.NodeVisitorMock;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
-import org.dayflower.node.NodeVisitor;
+
 import org.junit.jupiter.api.Test;
+
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
+import org.macroing.java.util.visitor.NodeVisitor;
 
 @SuppressWarnings("static-method")
 public final class Ray3DUnitTests {

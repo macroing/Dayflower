@@ -38,9 +38,10 @@ import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeCache;
-import org.dayflower.node.NodeFilter;
+
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeCache;
+import org.macroing.java.util.visitor.NodeFilter;
 
 final class Shape3FCache {
 	private final BoundingVolume3FCache boundingVolume3FCache;

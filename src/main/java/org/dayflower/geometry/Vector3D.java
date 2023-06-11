@@ -28,11 +28,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.node.Node;
-
 import org.macroing.java.lang.Doubles;
 import org.macroing.java.lang.Strings;
 import org.macroing.java.util.Randoms;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Vector3D} represents a vector with three {@code double}-based components.

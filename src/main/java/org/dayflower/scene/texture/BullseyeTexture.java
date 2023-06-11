@@ -24,11 +24,11 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code BullseyeTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between two other {@code Texture} instances in a bullseye pattern.

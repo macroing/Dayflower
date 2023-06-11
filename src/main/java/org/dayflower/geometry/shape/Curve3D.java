@@ -42,12 +42,12 @@ import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Doubles;
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code Curve3D} is an implementation of {@link Shape3D} that represents a curve.

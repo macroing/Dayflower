@@ -24,8 +24,6 @@ import static org.dayflower.utility.Floats.max;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
@@ -38,6 +36,8 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code HairMaterial} is an implementation of {@link Material} that represents hair.

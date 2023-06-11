@@ -25,6 +25,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 import org.macroing.java.lang.Doubles;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Vector2I} represents a vector with two {@code int}-based components.
@@ -34,7 +35,7 @@ import org.macroing.java.lang.Doubles;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Vector2I {
+public final class Vector2I implements Node {
 	/**
 	 * The X-component of this {@code Vector2I} instance.
 	 */

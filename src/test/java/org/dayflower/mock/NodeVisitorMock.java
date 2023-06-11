@@ -18,8 +18,8 @@
  */
 package org.dayflower.mock;
 
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeVisitor;
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeVisitor;
 
 public final class NodeVisitorMock implements NodeVisitor {
 	private final boolean isThrowingRuntimeException;

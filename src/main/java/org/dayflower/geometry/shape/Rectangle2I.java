@@ -31,9 +31,10 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Shape2I;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code Rectangle2I} is an implementation of {@link Shape2I} that represents a rectangle.

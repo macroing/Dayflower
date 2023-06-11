@@ -34,10 +34,10 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 
 import org.macroing.java.lang.Floats;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code ConstructiveSolidGeometry3F} is an implementation of {@link Shape3F} that can be used for constructive solid geometry (CSG).

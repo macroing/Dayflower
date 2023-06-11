@@ -34,12 +34,12 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Floats;
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code Primitive} represents a primitive and is associated with a {@link Material} instance, a {@link Shape3F} instance and some other properties.

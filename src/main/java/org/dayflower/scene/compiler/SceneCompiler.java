@@ -22,9 +22,10 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeCache;
 import org.dayflower.scene.Scene;
+
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeCache;
 
 /**
  * A {@code SceneCompiler} compiles a {@link Scene} instance into a {@link CompiledScene} instance.

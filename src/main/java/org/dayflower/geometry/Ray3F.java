@@ -23,9 +23,9 @@ import java.io.DataOutput;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code Ray3F} represents a 3-dimensional ray with a point of type {@link Point3F} and a vector of type {@link Vector3F}.

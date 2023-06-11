@@ -26,10 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
-
 import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Point4F} represents a point with four {@code float}-based components.

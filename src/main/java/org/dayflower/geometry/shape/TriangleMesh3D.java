@@ -49,12 +49,12 @@ import org.dayflower.geometry.boundingvolume.hierarchy.BVHItem3D;
 import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3D;
 import org.dayflower.geometry.boundingvolume.hierarchy.BVHNode3Ds;
 import org.dayflower.geometry.shape.Triangle3D.Vertex3D;
-import org.dayflower.node.NodeFilter;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Doubles;
+import org.macroing.java.util.visitor.NodeFilter;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code TriangleMesh3D} is an implementation of {@link Shape3D} that represents a triangle mesh.

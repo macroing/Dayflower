@@ -27,11 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
 
 import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Point2F} represents a point with two {@code float}-based components.

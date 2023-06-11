@@ -24,8 +24,9 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 final class TreeBVHNode extends BVHNode {
 	private final BVHNode bVHNodeL;

@@ -30,8 +30,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code Point2I} represents a point with two {@code int}-based components.

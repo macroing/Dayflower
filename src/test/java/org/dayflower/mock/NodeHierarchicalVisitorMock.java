@@ -20,8 +20,8 @@ package org.dayflower.mock;
 
 import java.util.function.Predicate;
 
-import org.dayflower.node.Node;
-import org.dayflower.node.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.Node;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
 
 public final class NodeHierarchicalVisitorMock implements NodeHierarchicalVisitor {
 	private final Predicate<Node> predicateEnter;

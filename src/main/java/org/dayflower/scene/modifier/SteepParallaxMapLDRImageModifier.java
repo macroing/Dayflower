@@ -28,11 +28,11 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ImageF;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code SteepParallaxMapLDRImageModifier} is an {@link AbstractLDRImageModifier} implementation that modifies the texture coordinates using a {@link Color3F} instance from a low-dynamic-range (LDR) image.

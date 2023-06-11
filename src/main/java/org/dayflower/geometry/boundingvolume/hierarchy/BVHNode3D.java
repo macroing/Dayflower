@@ -28,8 +28,9 @@ import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.SurfaceIntersector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
-import org.dayflower.node.Node;
 import org.dayflower.utility.ParameterArguments;
+
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code BVHNode3D} is a {@code double}-based node in a bounding volume hierarchy (BVH) structure.

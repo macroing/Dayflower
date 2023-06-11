@@ -25,8 +25,9 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Shape2D;
-import org.dayflower.node.NodeHierarchicalVisitor;
-import org.dayflower.node.NodeTraversalException;
+
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
 /**
  * A {@code Triangle2D} is an implementation of {@link Shape2D} that represents a triangle.

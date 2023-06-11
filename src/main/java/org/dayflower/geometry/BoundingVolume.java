@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.dayflower.node.Node;
+import org.macroing.java.util.visitor.Node;
 
 /**
  * A {@code BoundingVolume} represents a bounding volume.

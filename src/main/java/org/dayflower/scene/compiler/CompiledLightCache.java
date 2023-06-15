@@ -40,7 +40,7 @@ import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
 import org.dayflower.utility.ParameterArguments;
-
+import org.macroing.art4j.color.ArrayComponentOrder;
 import org.macroing.art4j.color.Color3F;
 import org.macroing.java.util.Arrays;
 
@@ -1404,7 +1404,7 @@ public final class CompiledLightCache {
 		final int resolutionX = imageLight.getImage().getResolutionX();
 		final int resolutionY = imageLight.getImage().getResolutionY();
 		
-		final int[] image = imageLight.getImage().toIntArrayPackedForm();
+		final float[] image = imageLight.getImage().toFloatArray(ArrayComponentOrder.RGB);
 		
 		final float[] array = new float[getImageLightLength(imageLight)];
 		
@@ -1707,7 +1707,7 @@ public final class CompiledLightCache {
 	public static int getImageLightLength(final ImageLight imageLight) {
 		final int a = 16 + 16 + 1 + 2 + 1 + 1 + 1;
 		final int b = imageLight.getDistribution().toArray().length;
-		final int c = imageLight.getImage().getResolution();
+		final int c = imageLight.getImage().getResolution() * 3;
 		
 		return a + b + c + padding(a + b + c);
 	}

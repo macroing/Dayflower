@@ -1221,22 +1221,39 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int maximumY = (int)(ceil(y));
 		
 		final int offsetImage = offset + CompiledLightCache.IMAGE_LIGHT_OFFSET_IMAGE;
-		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
+		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX)) * 3;
+		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX)) * 3;
+		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX)) * 3;
+		final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX)) * 3;
 		
-		final int color00RGB = (int)(this.lightImageLightArray[offsetColor00RGB]);
-		final int color01RGB = (int)(this.lightImageLightArray[offsetColor01RGB]);
-		final int color10RGB = (int)(this.lightImageLightArray[offsetColor10RGB]);
-		final int color11RGB = (int)(this.lightImageLightArray[offsetColor11RGB]);
+		final float color00R = this.lightImageLightArray[offsetColor00RGB + 0];
+		final float color00G = this.lightImageLightArray[offsetColor00RGB + 1];
+		final float color00B = this.lightImageLightArray[offsetColor00RGB + 2];
+		final float color01R = this.lightImageLightArray[offsetColor01RGB + 0];
+		final float color01G = this.lightImageLightArray[offsetColor01RGB + 1];
+		final float color01B = this.lightImageLightArray[offsetColor01RGB + 2];
+		final float color10R = this.lightImageLightArray[offsetColor10RGB + 0];
+		final float color10G = this.lightImageLightArray[offsetColor10RGB + 1];
+		final float color10B = this.lightImageLightArray[offsetColor10RGB + 2];
+		final float color11R = this.lightImageLightArray[offsetColor11RGB + 0];
+		final float color11G = this.lightImageLightArray[offsetColor11RGB + 1];
+		final float color11B = this.lightImageLightArray[offsetColor11RGB + 2];
+		
+//		final int color00RGB = (int)(this.lightImageLightArray[offsetColor00RGB]);
+//		final int color01RGB = (int)(this.lightImageLightArray[offsetColor01RGB]);
+//		final int color10RGB = (int)(this.lightImageLightArray[offsetColor10RGB]);
+//		final int color11RGB = (int)(this.lightImageLightArray[offsetColor11RGB]);
 		
 		final float tX = x - minimumX;
 		final float tY = y - minimumY;
 		
-		final float r = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
-		final float g = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
-		final float b = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
+		final float r = lerp(lerp(color00R, color01R, tX), lerp(color10R, color11R, tX), tY);
+		final float g = lerp(lerp(color00G, color01G, tX), lerp(color10G, color11G, tX), tY);
+		final float b = lerp(lerp(color00B, color01B, tX), lerp(color10B, color11B, tX), tY);
+		
+//		final float r = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
+//		final float g = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
+//		final float b = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
 		
 		color3FLHSSet(r, g, b);
 	}

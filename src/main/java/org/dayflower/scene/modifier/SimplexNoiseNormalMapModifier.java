@@ -171,9 +171,9 @@ public final class SimplexNoiseNormalMapModifier implements Modifier {
 		final float y0 = surfaceIntersectionPoint.y * frequencyReciprocal;
 		final float z0 = surfaceIntersectionPoint.z * frequencyReciprocal;
 		
-		final float x1 = SimplexNoiseF.fractionalBrownianMotionXYZ(x0, y0, z0, frequency, 0.5F, surfaceNormalS.x - 0.25F, surfaceNormalS.x + 0.25F, 16) * scale;
-		final float y1 = SimplexNoiseF.fractionalBrownianMotionXYZ(y0, z0, x0, frequency, 0.5F, surfaceNormalS.y - 0.25F, surfaceNormalS.y + 0.25F, 16) * scale;
-		final float z1 = SimplexNoiseF.fractionalBrownianMotionXYZ(z0, x0, y0, frequency, 0.5F, surfaceNormalS.z - 0.25F, surfaceNormalS.z + 0.25F, 16) * scale;
+		final float x1 = surfaceNormalS.x + SimplexNoiseF.fractionalBrownianMotionXYZ(x0, y0, z0, frequency, 0.5F,  -0.25F, 0.25F, 16) * scale;
+		final float y1 = surfaceNormalS.y + SimplexNoiseF.fractionalBrownianMotionXYZ(y0, z0, x0, frequency, 0.5F,  -0.25F, 0.25F, 16) * scale;
+		final float z1 = surfaceNormalS.z + SimplexNoiseF.fractionalBrownianMotionXYZ(z0, x0, y0, frequency, 0.5F,  -0.25F, 0.25F, 16) * scale;
 		
 		intersection.setSurfaceNormalS(Vector3F.normalize(new Vector3F(x1, y1, z1)));
 	}

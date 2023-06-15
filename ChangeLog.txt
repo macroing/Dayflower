@@ -1,3 +1,8 @@
+2023-06-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the method loadHDR(File) to the PixelImageF class.
+	* ADD:		Add the method toIntArrayRGBE() to the ImageF class.
+
 2023-06-11  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add support for TranslucentMaterial in the GUI.

@@ -132,9 +132,9 @@ public abstract class AbstractModifierKernel extends AbstractShape3FKernel {
 			final float y0 = surfaceIntersectionPointY * frequencyReciprocal;
 			final float z0 = surfaceIntersectionPointZ * frequencyReciprocal;
 			
-			final float x1 = simplexFractionalBrownianMotionXYZ(x0, y0, z0, frequency, 0.5F, surfaceNormalSX - 0.25F, surfaceNormalSX + 0.25F, 16) * scale;
-			final float y1 = simplexFractionalBrownianMotionXYZ(y0, z0, x0, frequency, 0.5F, surfaceNormalSY - 0.25F, surfaceNormalSY + 0.25F, 16) * scale;
-			final float z1 = simplexFractionalBrownianMotionXYZ(z0, x0, y0, frequency, 0.5F, surfaceNormalSZ - 0.25F, surfaceNormalSZ + 0.25F, 16) * scale;
+			final float x1 = surfaceNormalSX + simplexFractionalBrownianMotionXYZ(x0, y0, z0, frequency, 0.5F, -0.25F, 0.25F, 16) * scale;
+			final float y1 = surfaceNormalSY + simplexFractionalBrownianMotionXYZ(y0, z0, x0, frequency, 0.5F, -0.25F, 0.25F, 16) * scale;
+			final float z1 = surfaceNormalSZ + simplexFractionalBrownianMotionXYZ(z0, x0, y0, frequency, 0.5F, -0.25F, 0.25F, 16) * scale;
 			
 			final float lengthReciprocal = vector3FLengthReciprocal(x1, y1, z1);
 			

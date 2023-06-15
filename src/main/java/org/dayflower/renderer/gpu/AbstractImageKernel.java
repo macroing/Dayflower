@@ -72,6 +72,11 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	protected float[] color3FRHSArray_$private$3;
 	
 	/**
+	 * A {@code float[]} that contains exponents for RGBE.
+	 */
+	protected float[] exponents;
+	
+	/**
 	 * A {@code float[]} with film colors.
 	 */
 	protected float[] filmColorFloatArray;
@@ -97,6 +102,8 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * Constructs a new {@code AbstractImageKernel} instance.
 	 */
 	protected AbstractImageKernel() {
+		this.exponents = doCreateExponents();
+		
 //		Initialize the color variable:
 		this.color3FLHSArray_$private$3 = new float[COLOR_3_F_L_H_S_ARRAY_SIZE];
 		this.color3FRHSArray_$private$3 = new float[COLOR_3_F_R_H_S_ARRAY_SIZE];
@@ -154,6 +161,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	public void setup() {
 		super.setup();
 		
+		doSetupExponents();
 		doSetupFilmColorFloatArray();
 		doSetupFilmSampleIntArray();
 		doSetupImageColorByteArray();
@@ -735,6 +743,36 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns the B-component of {@code colorRGBE} as a {@code float} in the interval [0.0, 1.0].
+	 * 
+	 * @param colorRGBE an {@code int} with a color in packed form using either RGBE
+	 * @return the B-component of {@code colorRGBE} as a {@code float} in the interval [0.0, 1.0]
+	 */
+	protected final float colorRGBEIntToBFloat(final int colorRGBE) {
+		return this.exponents[colorRGBE & 0xFF] * (((colorRGBE >> 8) & 0xFF) + 0.5F);
+	}
+	
+	/**
+	 * Returns the G-component of {@code colorRGBE} as a {@code float} in the interval [0.0, 1.0].
+	 * 
+	 * @param colorRGBE an {@code int} with a color in packed form using either RGBE
+	 * @return the G-component of {@code colorRGBE} as a {@code float} in the interval [0.0, 1.0]
+	 */
+	protected final float colorRGBEIntToGFloat(final int colorRGBE) {
+        return this.exponents[colorRGBE & 0xFF] * (((colorRGBE >> 16) & 0xFF) + 0.5F);
+	}
+	
+	/**
+	 * Returns the R-component of {@code colorRGBE} as a {@code float} in the interval [0.0, 1.0].
+	 * 
+	 * @param colorRGBE an {@code int} with a color in packed form using either RGBE
+	 * @return the R-component of {@code colorRGBE} as a {@code float} in the interval [0.0, 1.0]
+	 */
+	protected final float colorRGBEIntToRFloat(final int colorRGBE) {
+        return this.exponents[colorRGBE & 0xFF] * ((colorRGBE >>> 24) + 0.5F);
+	}
+	
+	/**
 	 * Returns the B-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0].
 	 * 
 	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
@@ -1301,6 +1339,10 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private void doSetupExponents() {
+		put(this.exponents);
+	}
+	
 	private void doSetupFilmColorFloatArray() {
 		put(this.filmColorFloatArray = Arrays.repeat(new float[] {0.0F}, getResolution() * 3));
 	}
@@ -1315,5 +1357,33 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	
 	private void doSetupImageColorFloatArray() {
 		put(this.imageColorFloatArray = Arrays.repeat(new float[] {0.0F}, getResolution() * 3));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static float[] doCreateExponents() {
+		final float[] exponents = new float[256];
+		
+		exponents[0] = 0.0F;
+		
+		for(int i = 1; i < 256; i++) {
+			float f = 1.0F;
+			
+			int e = i - (128 + 8);
+			
+			if(e > 0) {
+				for(int j = 0; j < e; j++) {
+					f *= 2.0F;
+				}
+			} else {
+				for(int j = 0; j < -e; j++) {
+					f *= 0.5F;
+				}
+			}
+			
+			exponents[i] = f;
+		}
+		
+		return exponents;
 	}
 }

@@ -24,6 +24,7 @@ import static org.dayflower.utility.Ints.toInt;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
@@ -64,9 +65,37 @@ import org.macroing.java.lang.Floats;
  * @author J&#246;rgen Lundgren
  */
 public final class PixelImageF extends ImageF {
+	private static final float[] EXPONENT = new float[256];
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Filter2F filter;
 	private final PixelF[] pixels;
 	private final float[] filterTable;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	static {
+		EXPONENT[0] = 0;
+		
+		for(int i = 1; i < 256; i++) {
+			float f = 1.0F;
+			
+			int e = i - (128 + 8);
+			
+			if(e > 0) {
+				for(int j = 0; j < e; j++) {
+					f *= 2.0F;
+				}
+			} else {
+				for(int j = 0; j < -e; j++) {
+					f *= 0.5F;
+				}
+			}
+			
+			EXPONENT[i] = f;
+		}
+	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -991,6 +1020,174 @@ public final class PixelImageF extends ImageF {
 	}
 	
 	/**
+	 * Returns a {@code PixelImageF} instance that contains data read from a .HDR image.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} that represents the file to read from
+	 * @return a {@code PixelImageF} instance that contains data read from a .HDR image
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+//	TODO: Add Unit Tests!
+	public static PixelImageF loadHDR(final File file) {
+		try(final FileInputStream fileInputStream = new FileInputStream(file)) {
+			boolean parseResolutionX = false;
+			boolean parseResolutionY = false;
+			
+			int resolutionX = 0;
+			int resolutionY = 0;
+			
+			int last = 0;
+			
+			while(resolutionX == 0 || resolutionY == 0 || last != '\n') {
+				int n = fileInputStream.read();
+				
+				switch (n) {
+					case 'Y':
+						parseResolutionY = last == '-';
+						parseResolutionX = false;
+						
+						break;
+					case 'X':
+						parseResolutionY = false;
+						parseResolutionX = last == '+';
+						
+						break;
+					case ' ':
+						parseResolutionX &= resolutionX == 0;
+						parseResolutionY &= resolutionY == 0;
+						
+						break;
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+						if(parseResolutionY) {
+							resolutionY = 10 * resolutionY + (n - '0');
+						} else if(parseResolutionX) {
+							resolutionX = 10 * resolutionX + (n - '0');
+						}
+						
+						break;
+					default:
+						parseResolutionX = parseResolutionY = false;
+						
+						break;
+				}
+				
+				last = n;
+			}
+			
+			final int[] pixels = new int[resolutionX * resolutionY];
+			
+			if(resolutionX < 8 || resolutionX > 0x7FFF) {
+				doReadFlatRGBE(fileInputStream, 0, resolutionX * resolutionY, pixels);
+				
+				return doCreatePixelImageF(pixels, resolutionX, resolutionY);
+			}
+			
+			int rasterPos = 0;
+			int numScanlines = resolutionY;
+			
+			int[] scanlineBuffer = new int[4 * resolutionX];
+			
+			while(numScanlines > 0) {
+				int r = fileInputStream.read();
+				int g = fileInputStream.read();
+				int b = fileInputStream.read();
+				int e = fileInputStream.read();
+				
+				if(r != 2 || g != 2 || (b & 0x80) != 0) {
+					pixels[rasterPos] = (r << 24) | (g << 16) | (b << 8) | e;
+					
+					doReadFlatRGBE(fileInputStream, rasterPos + 1, resolutionX * numScanlines - 1, pixels);
+					
+					return doCreatePixelImageF(pixels, resolutionX, resolutionY);
+				}
+				
+				if(((b << 8) | e) != resolutionX) {
+					System.out.println("Invalid scanline width");
+					
+					return doCreatePixelImageF(pixels, resolutionX, resolutionY);
+				}
+				
+				int p = 0;
+				
+				for(int i = 0; i < 4; i++) {
+					if(p % resolutionX != 0) {
+						System.out.println("Unaligned access to scanline data");
+					}
+					
+					int end = (i + 1) * resolutionX;
+					
+					while(p < end) {
+						int b0 = fileInputStream.read();
+						int b1 = fileInputStream.read();
+						
+						if(b0 > 128) {
+							int count = b0 - 128;
+							
+							if(count == 0 || count > end - p) {
+								System.out.println("Bad scanline data - invalid RLE run");
+								
+								return doCreatePixelImageF(pixels, resolutionX, resolutionY);
+							}
+							
+							while(count-- > 0) {
+								scanlineBuffer[p++] = b1;
+							}
+						} else {
+							int count = b0;
+							
+							if ((count == 0) || (count > (end - p))) {
+								System.out.println("Bad scanline data - invalid count");
+								
+								return doCreatePixelImageF(pixels, resolutionX, resolutionY);
+							}
+							
+							scanlineBuffer[p++] = b1;
+							
+							if(--count > 0) {
+								for(int x = 0; x < count; x++) {
+									scanlineBuffer[p + x] = fileInputStream.read();
+								}
+								
+								p += count;
+							}
+						}
+					}
+				}
+				
+				for(int i = 0; i < resolutionX; i++) {
+					r = scanlineBuffer[i];
+					g = scanlineBuffer[i + resolutionX];
+					b = scanlineBuffer[i + 2 * resolutionX];
+					e = scanlineBuffer[i + 3 * resolutionX];
+					
+					pixels[rasterPos] = (r << 24) | (g << 16) | (b << 8) | e;
+					
+					rasterPos++;
+				}
+				
+				numScanlines--;
+			}
+			
+			return doCreatePixelImageF(pixels, resolutionX, resolutionY);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
 	 * Returns a new {@code PixelImageF} instance filled with random {@link Color4F} instances.
 	 * <p>
 	 * Calling this method is equivalent to the following:
@@ -1533,6 +1730,42 @@ public final class PixelImageF extends ImageF {
 		
 		if(index >= 0 && index < this.pixels.length) {
 			this.pixels[index].setColorRGBA(colorRGBA);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static PixelImageF doCreatePixelImageF(final int[] pixels, final int resolutionX, final int resolutionY) {
+		final PixelImageF pixelImageF = new PixelImageF(resolutionX, resolutionY);
+		
+		for(int i = 0; i < pixels.length; i++) {
+			final int colorRGBE = pixels[i];
+			
+			final float f = EXPONENT[colorRGBE & 0xFF];
+			
+			final float r = f * ((colorRGBE >>> 24) + 0.5F);
+			final float g = f * (((colorRGBE >> 16) & 0xFF) + 0.5F);
+			final float b = f * (((colorRGBE >>  8) & 0xFF) + 0.5F);
+			
+			pixelImageF.setColorRGB(new Color3F(r, g, b), i);
+		}
+		
+		return pixelImageF;
+	}
+	
+	private static void doReadFlatRGBE(final FileInputStream fileInputStream, final int rasterPos, final int numPixels, final int[] pixels) throws IOException {
+		int currentNumPixels = numPixels;
+		int currentRasterPos = rasterPos;
+		
+		while(currentNumPixels-- > 0) {
+			int r = fileInputStream.read();
+			int g = fileInputStream.read();
+			int b = fileInputStream.read();
+			int e = fileInputStream.read();
+			
+			pixels[currentRasterPos] = (r << 24) | (g << 16) | (b << 8) | e;
+			
+			currentRasterPos++;
 		}
 	}
 }

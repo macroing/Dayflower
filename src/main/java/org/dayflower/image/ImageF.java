@@ -2473,6 +2473,60 @@ public abstract class ImageF extends Image {
 		return array;
 	}
 	
+	/**
+	 * Returns an {@code int[]} with the colors in RGBE-format.
+	 * 
+	 * @return an {@code int[]} with the colors in RGBE-format
+	 */
+//	TODO: Add Unit Tests!
+	public final int[] toIntArrayRGBE() {
+		final int[] array = new int[getResolution()];
+		
+		for(int i = 0; i < array.length; i++) {
+			final Color3F color = getColorRGB(i);
+			
+			final float r = color.r;
+			final float g = color.g;
+			final float b = color.b;
+			
+			float v = Floats.max(r, g, b);
+			
+			if(v < 1e-32F) {
+				array[i] = 0;
+			} else {
+				float m = v;
+				
+				int e = 0;
+				
+				if(v > 1.0F) {
+					while(m > 1.0F) {
+						m *= 0.5F;
+						
+						e++;
+					}
+				} else if(v <= 0.5F) {
+					while(m <= 0.5F) {
+						m *= 2.0F;
+						
+						e--;
+					}
+				}
+				
+				v = (m * 255.0F) / v;
+				
+				int c = (e + 128);
+				
+				c |= ((int)(r * v) << 24);
+				c |= ((int)(g * v) << 16);
+				c |= ((int)(b * v) <<  8);
+				
+				array[i] = c;
+			}
+		}
+		
+		return array;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

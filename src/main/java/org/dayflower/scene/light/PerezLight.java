@@ -279,25 +279,26 @@ public final class PerezLight extends Light {
 		final boolean isSamplingSun = Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalGCorrectlyOriented()) > random && Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalSCorrectlyOriented()) > random;
 		
 		if(isSamplingSun) {
-//			final Vector3F incomingObjectSpace = this.sunDirection;
+			final Vector3F incomingObjectSpace = this.sunDirectionObjectSpace;
 			final Vector3F incomingWorldSpace = this.sunDirectionWorldSpace;
 			
-//			final float sinTheta = incomingObjectSpace.sinTheta();
+			final float sinTheta = incomingObjectSpace.sinTheta();
 			
-//			if(!isZero(sinTheta)) {
+			if(!isZero(sinTheta)) {
 				final Color3F result = this.sunColor;
 				
 				final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
 				
-//				final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
+				final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
 				
-//				final Sample2F sampleRemapped = new Sample2F(sphericalCoordinates.x, sphericalCoordinates.y);
+				final Sample2F sampleRemapped = new Sample2F(sphericalCoordinates.x, sphericalCoordinates.y);
 				
-//				final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true) / (2.0F * PI * PI * sinTheta);
-				final float probabilityDensityFunctionValue = 1.0F;
+				final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true) / (2.0F * PI * PI * sinTheta);
 				
-				return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue));
-//			}
+				if(!isZero(probabilityDensityFunctionValue)) {
+					return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue));
+				}
+			}
 		}
 		
 		final Sample2F sampleRemapped = this.distribution.continuousRemap(new Sample2F(sample.x, sample.y));
@@ -743,7 +744,7 @@ public final class PerezLight extends Light {
 			final double tauOzoneAbsorptionAttenuation = Doubles.exp(-relativeOpticalMass * K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * lozone);
 			final double tauGasAbsorptionAttenuation = Doubles.exp(-1.41D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass / Doubles.pow(1.0D + 118.93D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass, 0.45D));
 			final double tauWaterVaporAbsorptionAttenuation = Doubles.exp(-0.2385D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass / Doubles.pow(1.0D + 20.07D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass, 0.45D));
-			final double amplitude = 100.0D * SOL_SPECTRAL_CURVE.sample(lambda) * tauRayleighScattering * tauAerosolAttenuation * tauOzoneAbsorptionAttenuation * tauGasAbsorptionAttenuation * tauWaterVaporAbsorptionAttenuation;
+			final double amplitude = /*100.0D **/ SOL_SPECTRAL_CURVE.sample(lambda) * tauRayleighScattering * tauAerosolAttenuation * tauOzoneAbsorptionAttenuation * tauGasAbsorptionAttenuation * tauWaterVaporAbsorptionAttenuation;
 			
 			spectrum[i] = toFloat(amplitude);
 		}

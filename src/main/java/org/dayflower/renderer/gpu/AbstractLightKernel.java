@@ -1239,21 +1239,12 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float color11G = this.lightImageLightArray[offsetColor11RGB + 1];
 		final float color11B = this.lightImageLightArray[offsetColor11RGB + 2];
 		
-//		final int color00RGB = (int)(this.lightImageLightArray[offsetColor00RGB]);
-//		final int color01RGB = (int)(this.lightImageLightArray[offsetColor01RGB]);
-//		final int color10RGB = (int)(this.lightImageLightArray[offsetColor10RGB]);
-//		final int color11RGB = (int)(this.lightImageLightArray[offsetColor11RGB]);
-		
 		final float tX = x - minimumX;
 		final float tY = y - minimumY;
 		
 		final float r = lerp(lerp(color00R, color01R, tX), lerp(color10R, color11R, tX), tY);
 		final float g = lerp(lerp(color00G, color01G, tX), lerp(color10G, color11G, tX), tY);
 		final float b = lerp(lerp(color00B, color01B, tX), lerp(color10B, color11B, tX), tY);
-		
-//		final float r = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
-//		final float g = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
-//		final float b = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
 		
 		color3FLHSSet(r, g, b);
 	}
@@ -1347,17 +1338,17 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int offsetDistribution = offset + CompiledLightCache.PEREZ_LIGHT_OFFSET_DISTRIBUTION;
 		
 		if(isSamplingSun) {
-//			final float incomingObjectSpaceX = sunDirectionObjectSpaceX;
-//			final float incomingObjectSpaceY = sunDirectionObjectSpaceY;
-//			final float incomingObjectSpaceZ = sunDirectionObjectSpaceZ;
+			final float incomingObjectSpaceX = sunDirectionObjectSpaceX;
+			final float incomingObjectSpaceY = sunDirectionObjectSpaceY;
+			final float incomingObjectSpaceZ = sunDirectionObjectSpaceZ;
 			
 			final float incomingWorldSpaceX = sunDirectionWorldSpaceX;
 			final float incomingWorldSpaceY = sunDirectionWorldSpaceY;
 			final float incomingWorldSpaceZ = sunDirectionWorldSpaceZ;
 			
-//			final float sinTheta = vector3FSinTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+			final float sinTheta = sqrt(max(0.0F, 1.0F - incomingObjectSpaceZ * incomingObjectSpaceZ));
 			
-//			if(!checkIsZero(sinTheta)) {
+			if(sinTheta != 0.0F) {
 				final float resultR = doLightPerezLightGetSunColorR(offset);
 				final float resultG = doLightPerezLightGetSunColorG(offset);
 				final float resultB = doLightPerezLightGetSunColorB(offset);
@@ -1366,31 +1357,31 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 				final float pointY = surfaceIntersectionPointY + incomingWorldSpaceY * 2.0F * radius;
 				final float pointZ = surfaceIntersectionPointZ + incomingWorldSpaceZ * 2.0F * radius;
 				
-				final float probabilityDensityFunctionValue = 1.0F;
+//				final float probabilityDensityFunctionValue = 1.0F;
 				
-				lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
-				lightSampleSetPoint(pointX, pointY, pointZ);
-				lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
-				lightSampleSetResult(resultR, resultG, resultB);
+//				lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
+//				lightSampleSetPoint(pointX, pointY, pointZ);
+//				lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+//				lightSampleSetResult(resultR, resultG, resultB);
 				
-				return true;
+//				return true;
 				
-//				final float sampleRemappedU = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-//				final float sampleRemappedV = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
+				final float sampleRemappedU = addIfLessThanThreshold(atan2(incomingObjectSpaceY, incomingObjectSpaceX), 0.0F, Floats.PI_MULTIPLIED_BY_2) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+				final float sampleRemappedV = acos(saturateF(incomingObjectSpaceZ, -1.0F, 1.0F)) * Floats.PI_RECIPROCAL;
 				
-//				final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(offsetDistribution, sampleRemappedU, sampleRemappedV);
+				final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(offsetDistribution, sampleRemappedU, sampleRemappedV);
 				
-//				if(!checkIsZero(probabilityDensityFunctionValueRemapped)) {
-//					final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * PI * PI * sinTheta);
+				if(probabilityDensityFunctionValueRemapped != 0.0F) {
+					final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * Floats.PI * Floats.PI * sinTheta);
 					
-//					lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
-//					lightSampleSetPoint(pointX, pointY, pointZ);
-//					lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
-//					lightSampleSetResult(resultR, resultG, resultB);
+					lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
+					lightSampleSetPoint(pointX, pointY, pointZ);
+					lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+					lightSampleSetResult(resultR, resultG, resultB);
 					
-//					return true;
-//				}
-//			}
+					return true;
+				}
+			}
 		}
 		
 		doLightPerezLightDistribution2FContinuousRemap(offsetDistribution, u, v);

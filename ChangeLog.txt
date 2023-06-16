@@ -1,3 +1,7 @@
+2023-06-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Fix PerezLight in the CPU- and GPU renderers.
+
 2023-06-15  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the method loadHDR(File) to the PixelImageF class.

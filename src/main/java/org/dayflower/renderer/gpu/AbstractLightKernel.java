@@ -1357,8 +1357,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 				final float pointY = surfaceIntersectionPointY + incomingWorldSpaceY * 2.0F * radius;
 				final float pointZ = surfaceIntersectionPointZ + incomingWorldSpaceZ * 2.0F * radius;
 				
-				final float sampleRemappedU = addIfLessThanThreshold(atan2(incomingObjectSpaceY, incomingObjectSpaceX), 0.0F, Floats.PI_MULTIPLIED_BY_2) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-				final float sampleRemappedV = acos(saturateF(incomingObjectSpaceZ, -1.0F, 1.0F)) * Floats.PI_RECIPROCAL;
+				final float sampleRemappedU = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY) * Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+				final float sampleRemappedV = vector3FSphericalTheta(incomingObjectSpaceZ) * Floats.PI_RECIPROCAL;
 				
 				final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(offsetDistribution, sampleRemappedU, sampleRemappedV);
 				

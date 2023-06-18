@@ -1045,7 +1045,7 @@ public final class PixelImageF extends ImageF {
 			while(resolutionX == 0 || resolutionY == 0 || last != '\n') {
 				int n = fileInputStream.read();
 				
-				switch (n) {
+				switch(n) {
 					case 'Y':
 						parseResolutionY = last == '-';
 						parseResolutionX = false;
@@ -1148,7 +1148,7 @@ public final class PixelImageF extends ImageF {
 						} else {
 							int count = b0;
 							
-							if ((count == 0) || (count > (end - p))) {
+							if(count == 0 || count > end - p) {
 								System.out.println("Bad scanline data - invalid count");
 								
 								return doCreatePixelImageF(pixels, resolutionX, resolutionY);

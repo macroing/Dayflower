@@ -50,7 +50,6 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	private static final int LIGHT_ARRAY_LENGTH = 2;
 	private static final int LIGHT_ARRAY_OFFSET_ID = 0;
 	private static final int LIGHT_ARRAY_OFFSET_OFFSET = 1;
-	
 	private static final int LIGHT_SAMPLE_ARRAY_LENGTH = 10;
 	private static final int LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING = 6;
 	private static final int LIGHT_SAMPLE_ARRAY_OFFSET_POINT = 3;

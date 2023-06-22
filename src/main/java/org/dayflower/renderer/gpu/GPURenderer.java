@@ -317,6 +317,27 @@ public final class GPURenderer extends AbstractGPURenderer {
 		filmAddColor(radianceR, radianceG, radianceB);
 		
 		imageBegin();
+		
+		if(toneMapperIsFilmicCurveACESModifiedVersion1()) {
+			imageToneMapFilmicCurveACESModifiedVersion1(1.0F);
+		}
+		
+		if(toneMapperIsReinhard()) {
+			imageToneMapReinhard(1.0F);
+		}
+		
+		if(toneMapperIsReinhardModifiedVersion1()) {
+			imageToneMapReinhardModifiedVersion1(1.0F);
+		}
+		
+		if(toneMapperIsReinhardModifiedVersion2()) {
+			imageToneMapReinhardModifiedVersion2(1.0F);
+		}
+		
+		if(toneMapperIsUnreal3()) {
+			imageToneMapUnreal3(1.0F);
+		}
+		
 		imageRedoGammaCorrection();
 		imageEnd();
 	}

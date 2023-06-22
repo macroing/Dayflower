@@ -43,6 +43,7 @@ import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RenderingAlgorithm;
+import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.scene.AbstractCameraObserver;
 import org.dayflower.scene.Camera;
@@ -110,6 +111,20 @@ final class CenteredVBoxes {
 					combinedProgressiveImageOrderRenderer.renderShutdown();
 					combinedProgressiveImageOrderRenderer.clear();
 				}
+			}, false);
+		}
+		
+		if(renderer instanceof AbstractGPURenderer) {
+			final AbstractGPURenderer abstractGPURenderer = AbstractGPURenderer.class.cast(renderer);
+			
+			final ComboBox<ToneMapper> comboBox = centeredVBox.addComboBox(Arrays.asList(new ToneMapper(AbstractGPURenderer.TONE_MAPPER_FILMIC_CURVE_ACES_MODIFIED_VERSION_1), new ToneMapper(AbstractGPURenderer.TONE_MAPPER_NONE), new ToneMapper(AbstractGPURenderer.TONE_MAPPER_REINHARD), new ToneMapper(AbstractGPURenderer.TONE_MAPPER_REINHARD_MODIFIED_VERSION_1), new ToneMapper(AbstractGPURenderer.TONE_MAPPER_REINHARD_MODIFIED_VERSION_2), new ToneMapper(AbstractGPURenderer.TONE_MAPPER_UNREAL_3)), new ToneMapper(abstractGPURenderer.getToneMapper()));
+			
+			centeredVBox.addButton("Update Tone Mapper", actionEvent -> {
+				final int toneMapper = comboBox.getValue().getToneMapper();
+				
+				abstractGPURenderer.setToneMapper(toneMapper);
+				abstractGPURenderer.renderShutdown();
+				abstractGPURenderer.clear();
 			}, false);
 		}
 		
@@ -268,6 +283,62 @@ final class CenteredVBoxes {
 			} else {
 				Platform.runLater(runnable);
 			}
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class ToneMapper {
+		private final int toneMapper;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public ToneMapper(final int toneMapper) {
+			this.toneMapper = toneMapper;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public String toString() {
+			switch(this.toneMapper) {
+				case AbstractGPURenderer.TONE_MAPPER_FILMIC_CURVE_ACES_MODIFIED_VERSION_1:
+					return "Filmic Curve ACES Modified Version 1";
+				case AbstractGPURenderer.TONE_MAPPER_NONE:
+					return "None";
+				case AbstractGPURenderer.TONE_MAPPER_REINHARD:
+					return "Reinhard";
+				case AbstractGPURenderer.TONE_MAPPER_REINHARD_MODIFIED_VERSION_1:
+					return "Reinhard Modified Version 1";
+				case AbstractGPURenderer.TONE_MAPPER_REINHARD_MODIFIED_VERSION_2:
+					return "Reinhard Modified Version 2";
+				case AbstractGPURenderer.TONE_MAPPER_UNREAL_3:
+					return "Unreal 3";
+				default:
+					return "";
+			}
+		}
+		
+		@Override
+		public boolean equals(final Object object) {
+			if(object == this) {
+				return true;
+			} else if(!(object instanceof ToneMapper)) {
+				return false;
+			} else if(this.toneMapper != ToneMapper.class.cast(object).toneMapper) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		public int getToneMapper() {
+			return this.toneMapper;
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(Integer.valueOf(this.toneMapper));
 		}
 	}
 }

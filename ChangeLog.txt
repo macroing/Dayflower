@@ -1,3 +1,7 @@
+2023-06-22  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add support for tone map operators to the GPU-renderer. They can be changed in the GUI.
+
 2023-06-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix PerezLight in the CPU- and GPU renderers.

@@ -48,6 +48,15 @@ import com.aparapi.Range;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractGPURenderer extends AbstractSceneKernel implements CombinedProgressiveImageOrderRenderer {
+	public static final int TONE_MAPPER_FILMIC_CURVE_ACES_MODIFIED_VERSION_1 = 0;
+	public static final int TONE_MAPPER_NONE = 1;
+	public static final int TONE_MAPPER_REINHARD = 2;
+	public static final int TONE_MAPPER_REINHARD_MODIFIED_VERSION_1 = 3;
+	public static final int TONE_MAPPER_REINHARD_MODIFIED_VERSION_2 = 4;
+	public static final int TONE_MAPPER_UNREAL_3 = 5;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static final int RENDERING_ALGORITHM_ORDINAL_AMBIENT_OCCLUSION = 0;//RenderingAlgorithm.AMBIENT_OCCLUSION.ordinal();
 	private static final int RENDERING_ALGORITHM_ORDINAL_DEPTH_CAMERA = 1;//RenderingAlgorithm.DEPTH_CAMERA.ordinal();
 	private static final int RENDERING_ALGORITHM_ORDINAL_PATH_TRACING = 2;//RenderingAlgorithm.PATH_TRACING.ordinal();
@@ -80,6 +89,11 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 * The samples to use per render pass.
 	 */
 	protected int samples;
+	
+	/**
+	 * The tone map operator to use.
+	 */
+	protected int toneMapper;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -118,6 +132,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		this.maximumBounce = 20;
 		this.minimumBounceRussianRoulette = 5;
 		this.samples = 10;
+		this.toneMapper = TONE_MAPPER_NONE;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -356,6 +371,15 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	}
 	
 	/**
+	 * Returns the tone map operator.
+	 * 
+	 * @return the tone map operator
+	 */
+	public final int getToneMapper() {
+		return this.toneMapper;
+	}
+	
+	/**
 	 * Call this method to clear the {@link ImageF} in the next {@link #render()} call.
 	 */
 	@Override
@@ -470,6 +494,15 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	}
 	
 	/**
+	 * Sets the tone map operator to {@code toneMapper}.
+	 * 
+	 * @param toneMapper the tone map operator to set
+	 */
+	public final void setToneMapper(final int toneMapper) {
+		this.toneMapper = toneMapper;
+	}
+	
+	/**
 	 * Sets up all necessary resources for this {@code AbstractGPURenderer} instance.
 	 */
 	@Override
@@ -544,6 +577,60 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	protected final boolean renderingAlgorithmIsRayTracing() {
 		return this.renderingAlgorithmOrdinal == RENDERING_ALGORITHM_ORDINAL_RAY_TRACING;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the tone map operator is Filmic Curve ACES Modified Version 1, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the tone map operator is Filmic Curve ACES Modified Version 1, {@code false} otherwise
+	 */
+	protected final boolean toneMapperIsFilmicCurveACESModifiedVersion1() {
+		return this.toneMapper == TONE_MAPPER_FILMIC_CURVE_ACES_MODIFIED_VERSION_1;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the tone map operator is None, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the tone map operator is None, {@code false} otherwise
+	 */
+	protected final boolean toneMapperIsNone() {
+		return this.toneMapper == TONE_MAPPER_NONE;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the tone map operator is Reinhard, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the tone map operator is Reinhard, {@code false} otherwise
+	 */
+	protected final boolean toneMapperIsReinhard() {
+		return this.toneMapper == TONE_MAPPER_REINHARD;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the tone map operator is Reinhard Modified Version 1, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the tone map operator is Reinhard Modified Version 1, {@code false} otherwise
+	 */
+	protected final boolean toneMapperIsReinhardModifiedVersion1() {
+		return this.toneMapper == TONE_MAPPER_REINHARD_MODIFIED_VERSION_1;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the tone map operator is Reinhard Modified Version 2, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the tone map operator is Reinhard Modified Version 2, {@code false} otherwise
+	 */
+	protected final boolean toneMapperIsReinhardModifiedVersion2() {
+		return this.toneMapper == TONE_MAPPER_REINHARD_MODIFIED_VERSION_2;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the tone map operator is Unreal 3, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the tone map operator is Unreal 3, {@code false} otherwise
+	 */
+	protected final boolean toneMapperIsUnreal3() {
+		return this.toneMapper == TONE_MAPPER_UNREAL_3;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

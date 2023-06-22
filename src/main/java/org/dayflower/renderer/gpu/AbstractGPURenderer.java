@@ -48,11 +48,34 @@ import com.aparapi.Range;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractGPURenderer extends AbstractSceneKernel implements CombinedProgressiveImageOrderRenderer {
+	/**
+	 * The ID of the tone map operator Filmic Curve ACES Modified Version 1.
+	 */
 	public static final int TONE_MAPPER_FILMIC_CURVE_ACES_MODIFIED_VERSION_1 = 0;
+	
+	/**
+	 * The ID of the tone map operator None.
+	 */
 	public static final int TONE_MAPPER_NONE = 1;
+	
+	/**
+	 * The ID of the tone map operator Reinhard.
+	 */
 	public static final int TONE_MAPPER_REINHARD = 2;
+	
+	/**
+	 * The ID of the tone map operator Reinhard Modified Version 1.
+	 */
 	public static final int TONE_MAPPER_REINHARD_MODIFIED_VERSION_1 = 3;
+	
+	/**
+	 * The ID of the tone map operator Reinhard Modified Version 2.
+	 */
 	public static final int TONE_MAPPER_REINHARD_MODIFIED_VERSION_2 = 4;
+	
+	/**
+	 * The ID of the tone map operator Unreal 3.
+	 */
 	public static final int TONE_MAPPER_UNREAL_3 = 5;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

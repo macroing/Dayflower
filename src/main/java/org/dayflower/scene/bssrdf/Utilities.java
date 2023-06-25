@@ -32,6 +32,54 @@ final class Utilities {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	public static boolean catmullRomWeights(final int size, final float[] nodes, final float x, final int[] offset, final float[] weights) {
+		if(!(x >= nodes[0] && x <= nodes[size - 1])) {
+			return false;
+		}
+		
+		final int index = findInterval(size, i -> nodes[i] <= x);
+		
+		offset[0] = index - 1;
+		
+		final float x0 = nodes[index + 0];
+		final float x1 = nodes[index + 1];
+		
+		final float t1 = (x - x0) / (x1 - x0);
+		final float t2 = t1 * t1;
+		final float t3 = t2 * t1;
+		
+		weights[1] = +2.0F * t3 - 3.0F * t2 + 1.0F;
+		weights[2] = -2.0F * t3 + 3.0F * t2;
+		
+		if(index > 0) {
+			final float w0 = (t3 - 2.0F * t2 + t1) * (x1 - x0) / (x1 - nodes[index - 1]);
+			
+			weights[0] = -w0;
+			weights[2] += w0;
+		} else {
+			final float w0 = t3 - 2.0F * t2 + t1;
+			
+			weights[0] = 0.0F;
+			weights[1] -= w0;
+			weights[2] += w0;
+		}
+		
+		if(index + 2 < size) {
+			final float w3 = (t3 - t2) * (x1 - x0) / (nodes[index + 2] - x0);
+			
+			weights[1] -= w3;
+			weights[3] = w3;
+		} else {
+			final float w3 = t3 - t2;
+			
+			weights[1] -= w3;
+			weights[2] += w3;
+			weights[3] = 0.0F;
+		}
+		
+		return true;
+	}
+	
 	public static float catmullRom(final int size, final float[] nodes, final float[] values, final float x) {
 		if(!(x >= nodes[0] && x <= nodes[size - 1])) {
 			return 0.0F;

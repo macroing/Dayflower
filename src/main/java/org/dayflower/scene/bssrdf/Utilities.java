@@ -18,9 +18,12 @@
  */
 package org.dayflower.scene.bssrdf;
 
+import java.util.function.IntPredicate;
+
 import org.dayflower.scene.fresnel.DielectricFresnel;
 
 import org.macroing.java.lang.Floats;
+import org.macroing.java.lang.Ints;
 
 final class Utilities {
 	private Utilities() {
@@ -28,6 +31,43 @@ final class Utilities {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static float catmullRom(final int size, final float[] nodes, final float[] values, final float x) {
+		if(!(x >= nodes[0] && x <= nodes[size - 1])) {
+			return 0.0F;
+		}
+		
+		final int index = findInterval(size, i -> nodes[i] <= x);
+		
+		final float x0 = nodes[index + 0];
+		final float x1 = nodes[index + 1];
+		
+		final float f0 = values[index + 0];
+		final float f1 = values[index + 1];
+		
+		final float width = x1 - x0;
+		
+		float d0;
+		float d1;
+		
+		if(index > 0) {
+			d0 = width * (f1 - values[index - 1]) / (x1 - nodes[index - 1]);
+		} else {
+			d0 = f1 - f0;
+		}
+		
+		if(index + 2 < size) {
+			d1 = width * (values[index + 2] - f0) / (nodes[index + 2] - x0);
+		} else {
+			d1 = f1 - f0;
+		}
+		
+		final float t1 = (x - x0) / (x1 - x0);
+		final float t2 = t1 * t1;
+		final float t3 = t2 * t1;
+		
+		return (2.0F * t3 - 3.0F * t2 + 1.0F) * f0 + (-2.0F * t3 + 3.0F * t2) * f1 + (t3 - 2.0F * t2 + t1) * d0 + (t3 - t2) * d1;
+	}
 	
 	public static float computeBeamDiffusionMS(final float sigmaS, final float sigmaA, final float g, final float eta, final float r) {
 		final float sigmaPS = sigmaS * (1.0F - g);
@@ -124,5 +164,61 @@ final class Utilities {
 		final float phaseHG = Floats.PI_MULTIPLIED_BY_4_RECIPROCAL * (1.0F - g * g) / (denominator * Floats.sqrt(denominator));
 		
 		return phaseHG;
+	}
+	
+	public static float integrateCatmullRom(final int n, final float[] x, final float[] values, final float[] cDF) {
+		float sum = 0.0F;
+		
+		cDF[0] = 0.0F;
+		
+		for(int i = 0; i < n - 1; i++) {
+			final float x0 = x[i + 0];
+			final float x1 = x[i + 1];
+			
+			final float f0 = values[i + 0];
+			final float f1 = values[i + 1];
+			
+			final float width = x1 - x0;
+			
+			float d0;
+			float d1;
+			
+			if(i > 0) {
+				d0 = width * (f1 - values[i - 1]) / (x1 - x[i - 1]);
+			} else {
+				d0 = f1 - f0;
+			}
+			
+			if(i + 2 < n) {
+				d1 = width * (values[i + 2] - f0) / (x[i + 2] - x0);
+			} else {
+				d1 = f1 - f0;
+			}
+			
+			sum += ((d0 - d1) * (1.0F / 12.0F) + (f0 + f1) * 0.5F) * width;
+			
+			cDF[i + 1] = sum;
+		}
+		
+		return sum;
+	}
+	
+	public static int findInterval(final int size, final IntPredicate predicate) {
+		int first = 0;
+		int length = size;
+		
+		while(length > 0) {
+			final int half = length >> 1;
+			final int middle = first + half;
+			
+			if(predicate.test(middle)) {
+				first = middle + 1;
+				length -= half + 1;
+			} else {
+				length = half;
+			}
+		}
+		
+		return Ints.saturate(first - 1, 0, size - 2);
 	}
 }

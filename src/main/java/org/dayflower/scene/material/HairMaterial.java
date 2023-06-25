@@ -22,12 +22,11 @@ import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.max;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import org.dayflower.scene.BSDF;
-import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
+import org.dayflower.scene.ScatteringFunctions;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.HairBXDF;
 import org.dayflower.scene.modifier.Modifier;
@@ -597,20 +596,20 @@ public final class HairMaterial implements Material {
 	}
 	
 	/**
-	 * Computes the {@link BSDF} at {@code intersection}.
+	 * Computes the {@link ScatteringFunctions} at {@code intersection}.
 	 * <p>
-	 * Returns an optional {@code BSDF} instance.
+	 * Returns a {@code ScatteringFunctions} instance.
 	 * <p>
 	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param intersection the {@link Intersection} to compute the {@code ScatteringFunctions} for
 	 * @param transportMode the {@link TransportMode} to use
 	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSDF} instance
+	 * @return a {@code ScatteringFunctions} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+	public ScatteringFunctions computeScatteringFunctions(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
@@ -625,28 +624,7 @@ public final class HairMaterial implements Material {
 		
 		final float h = -1.0F + 2.0F * intersection.getTextureCoordinates().y;
 		
-		return Optional.of(new BSDF(intersection, new HairBXDF(sigmaA, alpha, betaM, betaN, eta, h), false, eta));
-	}
-	
-	/**
-	 * Computes the {@link BSSRDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code BSSRDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSSRDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		return Optional.empty();
+		return new ScatteringFunctions(new BSDF(intersection, new HairBXDF(sigmaA, alpha, betaM, betaN, eta, h), false, eta));
 	}
 	
 	/**

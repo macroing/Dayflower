@@ -24,13 +24,12 @@ import static org.dayflower.utility.Floats.isZero;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.dayflower.scene.BSDF;
-import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
+import org.dayflower.scene.ScatteringFunctions;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.FresnelSpecularBXDF;
 import org.dayflower.scene.bxdf.SpecularBRDF;
@@ -486,20 +485,20 @@ public final class GlassMaterial implements Material {
 	}
 	
 	/**
-	 * Computes the {@link BSDF} at {@code intersection}.
+	 * Computes the {@link ScatteringFunctions} at {@code intersection}.
 	 * <p>
-	 * Returns an optional {@code BSDF} instance.
+	 * Returns a {@code ScatteringFunctions} instance.
 	 * <p>
 	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param intersection the {@link Intersection} to compute the {@code ScatteringFunctions} for
 	 * @param transportMode the {@link TransportMode} to use
 	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSDF} instance
+	 * @return a {@code ScatteringFunctions} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+	public ScatteringFunctions computeScatteringFunctions(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
@@ -513,13 +512,13 @@ public final class GlassMaterial implements Material {
 		final float roughnessV = this.textureRoughnessV.getFloat(intersection);
 		
 		if(colorKR.isBlack() && colorKT.isBlack()) {
-			return Optional.empty();
+			return new ScatteringFunctions();
 		}
 		
 		final boolean isSpecular = isZero(roughnessU) && isZero(roughnessV);
 		
 		if(isSpecular && isAllowingMultipleLobes) {
-			return Optional.of(new BSDF(intersection, new FresnelSpecularBXDF(colorKR, colorKT, transportMode, 1.0F, eta), false, eta));
+			return new ScatteringFunctions(new BSDF(intersection, new FresnelSpecularBXDF(colorKR, colorKT, transportMode, 1.0F, eta), false, eta));
 		}
 		
 		if(isSpecular) {
@@ -535,7 +534,7 @@ public final class GlassMaterial implements Material {
 				bXDFs.add(new SpecularBTDF(colorKT, transportMode, 1.0F, eta));
 			}
 			
-			return Optional.of(new BSDF(intersection, bXDFs, false, eta));
+			return new ScatteringFunctions(new BSDF(intersection, bXDFs, false, eta));
 		}
 		
 		final List<BXDF> bXDFs = new ArrayList<>();
@@ -555,28 +554,7 @@ public final class GlassMaterial implements Material {
 			bXDFs.add(new TorranceSparrowBTDF(colorKT, microfacetDistribution, transportMode, 1.0F, eta));
 		}
 		
-		return Optional.of(new BSDF(intersection, bXDFs, false, eta));
-	}
-	
-	/**
-	 * Computes the {@link BSSRDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code BSSRDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSSRDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		return Optional.empty();
+		return new ScatteringFunctions(new BSDF(intersection, bXDFs, false, eta));
 	}
 	
 	/**

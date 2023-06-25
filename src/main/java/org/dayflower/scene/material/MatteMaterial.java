@@ -23,13 +23,12 @@ import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.saturate;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.scene.BSDF;
-import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
+import org.dayflower.scene.ScatteringFunctions;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.LambertianBRDF;
 import org.dayflower.scene.bxdf.OrenNayarBRDF;
@@ -270,20 +269,20 @@ public final class MatteMaterial implements Material {
 	}
 	
 	/**
-	 * Computes the {@link BSDF} at {@code intersection}.
+	 * Computes the {@link ScatteringFunctions} at {@code intersection}.
 	 * <p>
-	 * Returns an optional {@code BSDF} instance.
+	 * Returns a {@code ScatteringFunctions} instance.
 	 * <p>
 	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param intersection the {@link Intersection} to compute the {@code ScatteringFunctions} for
 	 * @param transportMode the {@link TransportMode} to use
 	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSDF} instance
+	 * @return a {@code ScatteringFunctions} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+	public ScatteringFunctions computeScatteringFunctions(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
@@ -297,35 +296,14 @@ public final class MatteMaterial implements Material {
 		
 //		This prevents preview mode from rendering black textures:
 //		if(colorKD.isBlack()) {
-//			return Optional.empty();
+//			return new ScatteringFunctions();
 //		}
 		
 		if(isZero(angle.getDegrees())) {
-			return Optional.of(new BSDF(intersection, new LambertianBRDF(colorKD)));
+			return new ScatteringFunctions(new BSDF(intersection, new LambertianBRDF(colorKD)));
 		}
 		
-		return Optional.of(new BSDF(intersection, new OrenNayarBRDF(angle, colorKD)));
-	}
-	
-	/**
-	 * Computes the {@link BSSRDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code BSSRDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSSRDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		return Optional.empty();
+		return new ScatteringFunctions(new BSDF(intersection, new OrenNayarBRDF(angle, colorKD)));
 	}
 	
 	/**

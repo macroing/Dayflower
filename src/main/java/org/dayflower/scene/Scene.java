@@ -481,7 +481,9 @@ public final class Scene implements Node {
 				
 				final Material material = primitive.getMaterial();
 				
-				final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
+				final ScatteringFunctions scatteringFunctions = material.computeScatteringFunctions(intersection, TransportMode.RADIANCE, true);
+				
+				final Optional<BSDF> optionalBSDF = scatteringFunctions.getBSDF();
 				
 				if(!optionalBSDF.isPresent()) {
 					currentRay = intersection.createRay(currentRay.getDirection());
@@ -627,7 +629,7 @@ public final class Scene implements Node {
 			
 			final
 			Material material = primitive.getMaterial();
-			material.computeBSDF(intersection, TransportMode.RADIANCE, true);
+			material.computeScatteringFunctions(intersection, TransportMode.RADIANCE, true);
 			
 			final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
 			
@@ -1588,7 +1590,9 @@ public final class Scene implements Node {
 			
 			final Material material = primitive.getMaterial();
 			
-			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, false);
+			final ScatteringFunctions scatteringFunctions = material.computeScatteringFunctions(intersection, TransportMode.RADIANCE, false);
+			
+			final Optional<BSDF> optionalBSDF = scatteringFunctions.getBSDF();
 			
 			if(!optionalBSDF.isPresent()) {
 				return doRadianceRayTracer(intersection.createRay(ray.getDirection()), tMinimum, tMaximum, isPreviewMode, maximumBounce, currentBounce);

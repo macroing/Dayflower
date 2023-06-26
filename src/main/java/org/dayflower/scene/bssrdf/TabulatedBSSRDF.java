@@ -19,7 +19,6 @@
 package org.dayflower.scene.bssrdf;
 
 import org.dayflower.geometry.Point2F;
-import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Scene;
@@ -52,19 +51,15 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Evaluates the distribution function.
+	 * Evaluates the distribution function for {@code distance}.
 	 * <p>
 	 * Returns a {@code Color3F} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @param incoming a {@link Vector3F} instance that contains the incoming direction
+	 * @param distance a {@code float} that contains the distance
 	 * @return a {@code Color3F} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public Color3F evaluateDistributionFunction(final Intersection intersection, final Vector3F incoming) {
+	public Color3F evaluateDistributionFunctionR(final float distance) {
 		return Color3F.BLACK;
 	}
 	

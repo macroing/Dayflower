@@ -251,6 +251,166 @@ final class Utilities {
 		return sum;
 	}
 	
+	public static float interpolate(final float[] array, final int index, final float[] weights, final int offset, final int size) {
+		float value = 0.0F;
+		
+		for(int i = 0; i < 4; i++) {
+			if(weights[i] != 0.0F) {
+				value += array[(offset + i) * size + index] * weights[i];
+			}
+		}
+		
+		return value;
+	}
+	
+	public static float invertCatmullRom(final int n, final float[] x, final float[] values, final float u) {
+		if(!(u > values[0])) {
+			return x[0];
+		} else if(!(u < values[n - 1])) {
+			return x[n - 1];
+		}
+		
+		final int index = findInterval(n, i -> values[i] <= u);
+		
+		final float x0 = x[index + 0];
+		final float x1 = x[index + 1];
+		
+		final float f0 = values[index + 0];
+		final float f1 = values[index + 1];
+		
+		final float width = x1 - x0;
+		
+		float d0;
+		float d1;
+		
+		if(index > 0) {
+			d0 = width * (f1 - values[index - 1]) / (x1 - x[index - 1]);
+		} else {
+			d0 = f1 - f0;
+		}
+		
+		if(index + 2 < n) {
+			d1 = width * (values[index + 2] - f0) / (x[index + 2] - x0);
+		} else {
+			d1 = f1 - f0;
+		}
+		
+		float a = 0.0F;
+		float b = 1.0F;
+		
+		float t1 = 0.5F;
+		
+		while(true) {
+			if(!(t1 > a && t1 < b)) {
+				t1 = 0.5F * (a + b);
+			}
+			
+			final float t2 = t1 * t1;
+			final float t3 = t2 * t1;
+			
+			final float fHat1 = (2.0F * t3 - 3.0F * t2 + 1.0F) * f0 + (-2.0F * t3 + 3.0F * t2) * f1 + (t3 - 2.0F * t2 + t1) * d0 + (t3 - t2) * d1;
+			final float fHat2 = (6.0F * t2 - 6.0F * t1) * f0 + (-6.0F * t2 + 6.0F * t1) * f1 + (3.0F * t2 - 4.0F * t1 + 1.0F) * d0 + (3.0F * t2 - 2.0F * t1) * d1;
+			
+			if(Floats.abs(fHat1 - u) < 1.0e-6F || b - a < 1.0e-6F) {
+				break;
+			}
+			
+			if(fHat1 - u < 0.0F) {
+				a = t1;
+			} else {
+				b = t1;
+			}
+			
+			t1 -= (fHat1 - u) / fHat2;
+		}
+		
+		return x0 + t1 * width;
+	}
+	
+	public static float sampleCatmullRom2D(final int size1, final int size2, final float[] nodes1, final float[] nodes2, final float[] values, final float[] cDF, final float alpha, final float u, final float[] fVal, final float[] pDF) {
+		final int[] offset = new int[1];
+		
+		final float[] weights = new float[4];
+		
+		if(!catmullRomWeights(size1, nodes1, alpha, offset, weights)) {
+			return 0.0F;
+		}
+		
+		final float maximum = interpolate(cDF, size2 - 1, weights, offset[0], size2);
+		
+		float v = u * maximum;
+		
+		final float w = v;
+		
+		final int index = findInterval(size2, i -> interpolate(cDF, i, weights, offset[0], size2) <= w);
+		
+		final float f0 = interpolate(values, index + 0, weights, offset[0], size2);
+		final float f1 = interpolate(values, index + 1, weights, offset[0], size2);
+		
+		final float x0 = nodes2[index + 0];
+		final float x1 = nodes2[index + 1];
+		
+		final float width = x1 - x0;
+		
+		float d0;
+		float d1;
+		
+		v = (v - interpolate(cDF, index, weights, offset[0], size2)) / width;
+		
+		if(index > 0) {
+			d0 = width * (f1 - interpolate(values, index - 1, weights, offset[0], size2)) / (nodes2[index + 2] - x0);
+		} else {
+			d0 = f1 - f0;
+		}
+		
+		if(index + 2 < size2) {
+			d1 = width * (interpolate(values, index + 2, weights, offset[0], size2) - f0) / (nodes2[index + 2] - x0);
+		} else {
+			d1 = f1 - f0;
+		}
+		
+		float t;
+		
+		if(f0 != f1) {
+			t = (f0 - Floats.sqrt(Floats.max(0.0F, f0 * f0 + 2.0F * v * (f1 - f0)))) / (f0 - f1);
+		} else {
+			t = v / f0;
+		}
+		
+		float a = 0.0F;
+		float b = 1.0F;
+		
+		float fHat1;
+		float fHat2;
+		
+		while(true) {
+			if(!(t >= a && t <= b)) {
+				t = 0.5F * (a + b);
+			}
+			
+			fHat1 = t * (f0 + t * (0.5F * d0 + t * ((1.0F / 3.0F) * (-2.0F * d0 - d1) + f1 - f0 + t * (0.25F * (d0 + d1) + 0.5F * (f0 - f1)))));
+			fHat2 = f0 + t * (d0 + t * (-2.0F * d0 - d1 + 3.0F * (f1 - f0) + t * (d0 + d1 + 2.0F * (f0 - f1))));
+			
+			if(Floats.abs(fHat1 - v) < 1.0e-6F || b - a < 1.0e-6F) {
+				break;
+			}
+			
+			if(fHat1 - v < 0.0F) {
+				a = t;
+			} else {
+				b = t;
+			}
+			
+			t -= (fHat1 - v) / fHat2;
+		}
+		
+		fVal[0] = fHat2;
+		
+		pDF[0] = fHat2 / maximum;
+		
+		return x0 + width * t;
+	}
+	
 	public static int findInterval(final int size, final IntPredicate predicate) {
 		int first = 0;
 		int length = size;
